@@ -361,7 +361,7 @@ class xarVarValidator_bool extends xarVarValidator {
             return false;
         }
 
-        $convValue = $value;
+        $convValue = $this->subject;
         return true;
     }
 }
