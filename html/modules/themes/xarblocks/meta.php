@@ -114,8 +114,10 @@ function themes_metablock_display($blockinfo)
         $meta['glossary'] = '';
     }
     //Pager Buttons
-    $meta['first'] = xarVarGetCached('Pager.first','leftarrow');
-    $meta['last']  = xarVarGetCached('Pager.last','rightarrow');
+    $meta['refreshurl']     = xarVarGetCached('Meta.refresh','url');
+    $meta['refreshtime']    = xarVarGetCached('Meta.refresh','time');
+    $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
+    $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
 
     $blockinfo['content'] = $meta;
     return $blockinfo;

@@ -96,7 +96,12 @@ function roles_user_getvalidation()
 	            		$msg = xarML('Problem sending welcome email');
 	                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
 	            	}
-                }                         
+                } 
+                
+                $url = xarModUrl('roles', 'user', 'register');
+                $time = '3';
+                xarVarSetCached('Meta.refresh','url', $url);
+                xarVarSetCached('Meta.refresh','time', $time);
             }
 			
             if (xarModGetVar('roles', 'sendnotice')){

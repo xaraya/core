@@ -3,6 +3,9 @@
 	<meta name="Keywords" content="#$keywords#" />
 	<meta name="Description" content="#$description#" />
 	<meta name="rating" content="General" />
+	<xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
+	<meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#">
+	</xar:if>
 	<xar:if condition="!empty($latitude)">
 		<meta name="ICBM" content="#$latitude#, #$longitude#" />
 		<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
