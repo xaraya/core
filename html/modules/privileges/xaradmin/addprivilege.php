@@ -26,6 +26,7 @@ function privileges_admin_addprivilege()
                         XARVAR_NOT_REQUIRED | XARVAR_DONT_REUSE) && $pinstance ) {
         $i++;
         $instance .= $pinstance . ":";
+        $pinstance = null;
     }
     if ($instance =="") {
         $instance = "All";
