@@ -159,31 +159,6 @@ document.forms[0].submit();}
 						&nbsp;
 					</td>
 					<td>
-						<xar:mlstring>Instance</xar:mlstring>
-					</td>
-					<td>
-						<select name="pinstance" id="pinstance" size="1" tabindex="5">
-							<xar:loop name="$instances">
-								<xar:if condition="$name eq $pinstance">
-									<option value="#$name#" selected="selected">#$name#</option>
-								<xar:else />
-									<option value="#$name#">#$name#</option>
-								</xar:if>
-							</xar:loop>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						&nbsp;
-					</td>
-					<td>
-						&nbsp;
-					</td>
-					<td width="20">
-						&nbsp;
-					</td>
-					<td>
 						<xar:mlstring>Level</xar:mlstring>
 					</td>
 					<td>
@@ -239,6 +214,57 @@ document.forms[0].submit();}
 			</xar:if>
 			</xar:if>
 		</table>			
+		<xar:if condition="$ptype eq 'empty'">
+		<xar:else />
+			<xar:if condition="$pcomponent ne 'All'">
+			<table border="0" cellpadding="0" width="100%">
+				<tr>
+					<td>
+					<hr>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					Allow instances of component #$pcomponent# that have:
+					</td>
+				</tr>
+			</table>			
+			<table border="0" cellpadding="0">
+				<tr>
+					<xar:loop name="$instances">
+						<td>
+							#$header#
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</xar:loop>
+				</tr>
+				<tr>
+					<xar:loop name="$instances">
+						<td>
+							<xar:if condition="$type eq 'manual'">
+								<input type="text" name="pinstance#$_bl_loop_index1#" value="#$default#" size="20" />
+							<xar:else />
+								<select name="pinstance#$_bl_loop_index1#" size="1" tabindex="5">
+									<xar:loop name="$dropdown">
+										<xar:if condition="$name eq $default">
+											<option value="#$name#" selected="selected">#$name#</option>
+										<xar:else />
+											<option value="#$name#">#$name#</option>
+										</xar:if>
+									</xar:loop>
+								</select>
+							</xar:if>
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</xar:loop>
+				</tr>
+			</table>			
+		</xar:if>
+		</xar:if>
 					
 		<br /><br />
 

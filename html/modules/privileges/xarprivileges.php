@@ -480,29 +480,35 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-	function defineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='')
+	function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
 	{
-		$nextID = $this->dbconn->genID($this->instancestable);
-		$nextIDprep = xarVarPrepForStore($nextID);
-		$moduleprep = xarVarPrepForStore($module);
-		$typeprep = xarVarPrepForStore($type);
-		$queryprep = xarVarPrepForStore($query);
-		$propagateprep = xarVarPrepForStore($propagate);
-		$table2prep = xarVarPrepForStore($table2);
-		$childIDprep = xarVarPrepForStore($childID);
-		$parentIDprep = xarVarPrepForStore($parentID);
-		$descriptionprep = xarVarPrepForStore($description);
-		$query = "INSERT INTO $this->instancestable
-												VALUES ($nextIDprep,
-												'$moduleprep',
-												'$typeprep',
-												'$queryprep',
-												$propagateprep,
-												'$table2prep',
-												'$childIDprep',
-												'$parentIDprep',
-												'$descriptionprep')";
-		if (!$this->dbconn->Execute($query)) return;
+		foreach($instances as $instance) {
+			$nextID = $this->dbconn->genID($this->instancestable);
+			$nextIDprep = xarVarPrepForStore($nextID);
+			$moduleprep = xarVarPrepForStore($module);
+			$typeprep = xarVarPrepForStore($type);
+			$headerprep = xarVarPrepForStore($instance['header']);
+			$queryprep = xarVarPrepForStore($instance['query']);
+			$limitprep = xarVarPrepForStore($instance['limit']);
+			$propagateprep = xarVarPrepForStore($propagate);
+			$table2prep = xarVarPrepForStore($table2);
+			$childIDprep = xarVarPrepForStore($childID);
+			$parentIDprep = xarVarPrepForStore($parentID);
+			$descriptionprep = xarVarPrepForStore($description);
+			$query = "INSERT INTO $this->instancestable
+													VALUES ($nextIDprep,
+													'$moduleprep',
+													'$typeprep',
+													'$headerprep',
+													'$queryprep',
+													'$limitprep',
+													$propagateprep,
+													'$table2prep',
+													'$childIDprep',
+													'$parentIDprep',
+													'$descriptionprep')";
+			if (!$this->dbconn->Execute($query)) return;
+		}
 		return true;
 	}
 
@@ -738,12 +744,12 @@ class xarPrivileges extends xarMasks
 
 // add some extra lines we want
 			$realms = array();
-			$realms[0] = array('rid' => -2,
-							   'name' => ' ');
+//			$realms[0] = array('rid' => -2,
+//							   'name' => ' ');
 			$realms[1] = array('rid' => -1,
 							   'name' => 'All');
-			$realms[2] = array('rid' => 0,
-							   'name' => 'None');
+//			$realms[2] = array('rid' => 0,
+//							   'name' => 'None');
 
 // add the realms from the database
 // TODO: maybe remove the key, don't really need it
@@ -790,12 +796,12 @@ class xarPrivileges extends xarMasks
 
 // add some extra lines we want
 			$modules = array();
-			$modules[0] = array('id' => -2,
-							   'name' => ' ');
+//			$modules[0] = array('id' => -2,
+//							   'name' => ' ');
 			$modules[1] = array('id' => -1,
 							   'name' => 'All');
-			$modules[2] = array('id' => 0,
-							   'name' => 'None');
+//			$modules[2] = array('id' => 0,
+//							   'name' => 'None');
 
 // add the modules from the database
 // TODO: maybe remove the key, don't really need it
@@ -831,8 +837,7 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
 */
     function getcomponents($module) {
-		$query = "SELECT DISTINCT xar_instances.xar_iid,
-					xar_instances.xar_component
+		$query = "SELECT DISTINCT xar_instances.xar_component
 					FROM $this->instancestable
 					WHERE xar_instances.xar_module= '$module'
 					ORDER BY xar_component";
@@ -842,26 +847,26 @@ class xarPrivileges extends xarMasks
 
 		$components = array();
 		if ($module ==''){
-			$components[1] = array('id' => -2,
-							   'name' => '');
+			$components[] = array('id' => -2,
+							   'name' => 'All');
 		}
 		elseif(count($result->fields) == 0) {
-			$components[1] = array('id' => -1,
+			$components[] = array('id' => -1,
 							   'name' => 'All');
-			$components[2] = array('id' => 0,
-							   'name' => 'None');
+//			$components[] = array('id' => 0,
+//							   'name' => 'None');
 		}
 		else {
-			$components[1] = array('id' => -1,
+			$components[] = array('id' => -1,
 							   'name' => 'All');
-			$components[2] = array('id' => 0,
-							   'name' => 'None');
+//			$components[] = array('id' => 0,
+//							   'name' => 'None');
 			$ind = 2;
 			while(!$result->EOF) {
-				list($mid, $name) = $result->fields;
+				list($name) = $result->fields;
 				if (($name != 'All') && ($name != 'None')){
 					$ind = $ind + 1;
-					$components[$ind] = array('id' => $mid,
+					$components[] = array('id' => $name,
 									   'name' => $name);
 				}
 				$result->MoveNext();
@@ -891,8 +896,7 @@ class xarPrivileges extends xarMasks
     	else {
     		$componentstring = "AND xar_component= '$component'";
     	}
-		$query = "SELECT xar_component,
-					xar_query
+		$query = "SELECT xar_header, xar_query, xar_limit
 					FROM $this->instancestable
 					WHERE xar_module= '$module' "
 					. $componentstring .
@@ -902,42 +906,48 @@ class xarPrivileges extends xarMasks
 		if (!$result) return;
 
 		$instances = array();
-		if ($module ==''){
-			$instances[1] = array('id' => -2,
-							   'name' => '');
-		}
-		elseif($result->EOF) {
-			$instances[1] = array('id' => -1,
-							   'name' => 'All');
-			$instances[2] = array('id' => 0,
-							   'name' => 'None');
-		}
-		else {
-			$instances[1] = array('id' => -1,
-							   'name' => 'All');
-			$instances[2] = array('id' => 0,
-							   'name' => 'None');
-			$ind = 2;
-			while(!$result->EOF) {
-				list($type, $query) = $result->fields;
-				$result1 = $this->dbconn->Execute($query);
-				if (!$result1) return;
+		while(!$result->EOF) {
+			list($header,$selection,$limit) = $result->fields;
+			$result1 = $this->dbconn->Execute($selection);
+			if (!$result1) return;
 
-				while(!$result1->EOF) {
-					$instance = '';
-					foreach($result1->fields as $field) {
-						$instance .= $field . ":";
-					}
-					$instance = substr_replace($instance,"",strlen($instance)-1);
-					if (($instance != 'All') && ($instance != 'None')){
-						$ind = $ind + 1;
-						$instances[$ind] = array('id' => $instance,
-										   'name' => $instance);
-					}
-					$result1->MoveNext();
-				}
-				$result->MoveNext();
+			$dropdown = array();
+			if ($module ==''){
+				$dropdown[] = array('id' => -2,
+								   'name' => '');
 			}
+			elseif($result->EOF) {
+				$dropdown[] = array('id' => -1,
+								   'name' => 'All');
+	//			$dropdown[] = array('id' => 0,
+	//							   'name' => 'None');
+			}
+			else {
+				$dropdown[] = array('id' => -1,
+								   'name' => 'All');
+	//			$dropdown[] = array('id' => 0,
+	//							   'name' => 'None');
+			}
+			while(!$result1->EOF) {
+				list($dropdownline) = $result1->fields;
+				if (($dropdownline != 'All') && ($dropdownline != 'None')){
+					$dropdown[] = array('id' => $dropdownline,
+									   'name' => $dropdownline);
+				}
+				$result1->MoveNext();
+			}
+
+			if (count($dropdown) > $limit) {
+				$type = "manual";
+			}
+			else {
+				$type = "dropdown";
+			}
+			$instances[] = array('header' => $header,
+								'dropdown' => $dropdown,
+								'type' => $type
+								);
+			$result->MoveNext();
 		}
 		return $instances;
     }
@@ -1471,74 +1481,92 @@ function drawindent() {
  * @todo    none
 */
 	function implies($mask,$comparing) {
-		if($comparing) {
-			if (
-				($this->getRealm() == 'All') ||
-				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
-			)
-			{$xRealm = true;}
-			else {$xRealm = false;}
+
+// take care of the case that one of the instances may be "All"
+//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
+		$instance1 = explode(':',$this->getInstance());
+		$instance2 = explode(':',$mask->getInstance());
+		if ($this->getInstance() == "All") {
+			$instance1 = array();
+			for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
 		}
-		else {
-			if (
-				($this->getRealm() == 'All') ||
-				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
-			)
-			{$xRealm = true;}
-			else {$xRealm = false;}
+		elseif ($mask->getInstance() == "All") {
+			$instance2 = array();
+			for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
+		}
+
+		if (count($instance1) != count($instance2)) {
+			$msg = xarML('Mask and privilege do not have the same instances');
+			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+						   new SystemException($msg));
 		}
 
 		if($comparing) {
-			if (
+			if (!(
+				($this->getRealm() == 'All') ||
+				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+			))
+			{return false;}
+
+			if (!(
 				($this->getModule() == $mask->getModule()) ||
 				($this->getModule() != 'All') && ($mask->getModule() == 'All')
-			)
-			{$xModule = true;}
-			else {$xModule = false;}
+			))
+			{return false;}
+
+			if (!(
+				($this->getComponent() == $mask->getComponent()) ||
+				($this->getComponent() != 'All') && ($mask->getComponent() == 'All')
+			))
+			{return false;}
+
+			for ($i=0;$i<count($instance1);$i++) {
+				if (!(
+					($instance1[$i] == $instance2[$i]) ||
+					($instance1[$i] != 'All') && ($instance2[i] == 'All')
+				))
+				{return false;}
+			}
 		}
 		else {
-			if (
+			if (!(
+				($this->getRealm() == 'All') ||
+				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+			))
+			{return false;}
+
+			if (!(
 				($this->getModule() == $mask->getModule()) ||
 				($mask->getModule() == 'All') ||
 				($this->getModule() == 'All') && ($mask->getModule() != 'None')
-			)
-			{$xModule = true;}
-			else {$xModule = false;}
-		}
+			))
+			{return false;}
 
-		if($comparing) {
-			if (
-				($this->getComponent() == $mask->getComponent()) ||
-				($this->getComponent() != 'All') && ($mask->getComponent() == 'All')
-			)
-			{$xComponent = true;}
-			else {$xComponent = false;}
-		}
-		else {
-			if (
+			if (!(
 				($this->getComponent() == $mask->getComponent()) ||
 				($mask->getComponent() == 'All') ||
 				($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
-			)
-			{$xComponent = true;}
-			else {$xComponent = false;}
+			))
+			{return false;}
+
+			for ($i=0;$i<count($instance1);$i++) {
+				if (!(
+					($instance1[$i] == $instance2[$i]) ||
+					($instance2[$i] == 'All') ||
+					($instance1[$i] == 'All') && ($instance2[$i] != 'None')
+				))
+				{return false;}
+			}
 		}
 
-		if (
-			($this->getInstance() == 'All') ||
-			($this->getInstance() == 'None') && ($mask->getInstance() != 'All')
-			)
-		{$xInstance = true;}
-		else {$xInstance = false;}
 
-		$xLevel = $this->getLevel() >= $mask->getLevel();
 
-		$implies = $xRealm && $xModule && $xComponent && $xInstance && $xLevel;
+		if (!($this->getLevel() >= $mask->getLevel())) return false;
+
 
 //if ($this->getName() == "NoAccess")
-//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName() . ": " . $implies;
 
-		return $implies;
+		return true;
 	}
 
 	function getID()              {return $this->sid;}

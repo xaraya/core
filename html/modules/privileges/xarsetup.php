@@ -115,41 +115,185 @@ function initializeSetup() {
     * xarDefineInstance(Module,Component,Querystring,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-	$query = "SELECT xar_name,xar_id FROM xar_block_groups";
-    xarDefineInstance('blocks','BlockGroups',$query);
-	$query = "SELECT types.xar_type,instances.xar_title,instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
-    xarDefineInstance('blocks','Blocks',$query);
+// -------------------------------------------------------------- Blocks Module
+	$query1 = "SELECT DISTINCT xar_name FROM xar_block_groups";
+	$query2 = "SELECT DISTINCT xar_id FROM xar_block_groups";
+		$instances = array(
+							array('header' => 'Group Name:',
+									'query' => $query1,
+									'limit' => 20
+								),
+							array('header' => 'Group ID:',
+									'query' => $query2,
+									'limit' => 20
+								)
+						);
+    xarDefineInstance('blocks','BlockGroups',$instances);
 
-	$query = "SELECT xar_name FROM xar_admin_menu";
-    xarDefineInstance('adminpanels','adminmenu',$query);
-	$query = "SELECT xar_name FROM xar_admin_menu";
-    xarDefineInstance('adminpanels','adminmenublock',$query);
-	$query = "SELECT xar_name FROM xar_admin_menu";
-    xarDefineInstance('adminpanels','admintopblock',$query);
-	$query = "SELECT xar_name FROM xar_admin_menu";
-    xarDefineInstance('adminpanels','Waitingcontentblock',$query);
-	$query = "SELECT modules.xar_name,wc.xar_itemid FROM xar_admin_wc as wc LEFT JOIN xar_modules as modules ON wc.xar_moduleid = modules.xar_regid";
-    xarDefineInstance('adminpanels','Item',$query);
+	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+	$instances = array(
+						array('header' => 'Block Type:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Block Title:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Block ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('blocks','Blocks',$instances);
 
-	$query = "SELECT xar_name FROM xar_roles";
-    xarDefineInstance('roles','Roles',$query,0,'xar_rolemembers','xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
-	$query = "SELECT xar_name FROM xar_privileges";
-    xarDefineInstance('privileges','Privileges',$query,0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+// -------------------------------------------------------------- Adminpanels Module
 
-	$query = "SELECT xar_name,xar_id FROM xar_allowed_vars";
-    xarDefineInstance('base','Base',$query);
+	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types WHERE xar_module = 'adminpanels'";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
+	$instances = array(
+						array('header' => 'Block Type:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Block Title:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Block ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('adminpanels','Block',$instances);
 
-// the follwing are apparently used in the base module
-	$query = "SELECT types.xar_type,instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
-    xarDefineInstance('blocks','PHPBlock',$query);
-    xarDefineInstance('blocks','Block',$query);
-    xarDefineInstance('blocks','HTMLBlock',$query);
+	$query1 = "SELECT DISTINCT modules.xar_name FROM xar_admin_wc as wc LEFT JOIN xar_modules as modules ON wc.xar_moduleid = modules.xar_regid";
+	$query2 = "SELECT DISTINCT modules.xar_name,wc.xar_itemid FROM xar_admin_wc as wc LEFT JOIN xar_modules as modules ON wc.xar_moduleid = modules.xar_regid";
+	$instances = array(
+						array('header' => 'Module Name:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Item ID:',
+								'query' => $query2,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('adminpanels','Item',$instances);
 
-//    xarDefineInstance('xproject','Projects','xar_xproject','xar_projectid','xar_name');
+// -------------------------------------------------------------- Roles Module
 
-	$query = "SELECT xar_name,xar_regid FROM xar_themes";
-    xarDefineInstance('themes','Themes',$query);
+	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types WHERE xar_module = 'roles'";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
+	$instances = array(
+						array('header' => 'Block Type:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Block Title:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Block ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('roles','Block',$instances);
 
+	$query = "SELECT DISTINCT xar_name FROM xar_roles";
+	$instances = array(
+						array('header' => 'Users and Groups',
+								'query' => $query,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('roles','Roles',$instances,0,'xar_rolemembers','xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+
+// -------------------------------------------------------------- Privileges Module
+
+	$query = "SELECT DISTINCT xar_name FROM xar_privileges";
+	$instances = array(
+						array('header' => 'Privileges',
+								'query' => $query,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('privileges','Privileges',$instances,0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+
+// -------------------------------------------------------------- Base Module
+
+	$query1 = "SELECT DISTINCT xar_name FROM xar_allowed_vars";
+	$query2 = "SELECT DISTINCT xar_id FROM xar_allowed_vars";
+	$instances = array(
+						array('header' => 'Allowed Var Name:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Allowed Var ID:',
+								'query' => $query2,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('base','Base',$instances);
+
+	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types WHERE xar_module = 'base'";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+	$instances = array(
+						array('header' => 'Block Type:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Block Title:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Block ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('base','Block',$instances);
+
+// -------------------------------------------------------------- Themes Module
+
+	$query1 = "SELECT DISTINCT xar_name FROM xar_themes";
+	$query2 = "SELECT DISTINCT xar_regid FROM xar_themes";
+	$instances = array(
+						array('header' => 'Theme Name:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Theme ID:',
+								'query' => $query2,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('themes','Themes',$instances);
+
+	$query1 = "SELECT DISTINCT xar_type FROM xar_block_types WHERE xar_module = 'themes'";
+	$query2 = "SELECT DISTINCT instances.xar_title FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
+	$query3 = "SELECT DISTINCT instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
+	$instances = array(
+						array('header' => 'Block Type:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Block Title:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Block ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('themes','Block',$instances);
 
     /*********************************************************************
     * Register the module components that are privileges objects
@@ -157,21 +301,21 @@ function initializeSetup() {
     * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterMask('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW);
+    xarRegisterMask('ViewLogin','All','All','Loginblock','All:All:ALL',ACCESS_OVERVIEW);
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW);
-    xarRegisterMask('EditBlock','All','base','Block','All',ACCESS_EDIT);
-    xarRegisterMask('AddBlock','All','base','Block','All',ACCESS_ADD);
-    xarRegisterMask('DeleteBlock','All','base','Block','All',ACCESS_DELETE);
-    xarRegisterMask('AdminBlock','All','base','Block','All',ACCESS_ADMIN);
+    xarRegisterMask('ViewBlocks','All','base','Block','All:All:ALL',ACCESS_OVERVIEW);
+    xarRegisterMask('EditBlock','All','base','Block','All:All:ALL',ACCESS_EDIT);
+    xarRegisterMask('AddBlock','All','base','Block','All:All:ALL',ACCESS_ADD);
+    xarRegisterMask('DeleteBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
+    xarRegisterMask('AdminBlock','All','base','Block','All:All:ALL',ACCESS_ADMIN);
     xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadBase','All','base','All','All',ACCESS_READ);
     xarRegisterMask('AdminBase','All','base','All','All',ACCESS_ADMIN);
 
 	xarRegisterMask('AdminInstaller','All','installer','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('ViewThemes','All','themes','metablock','All',ACCESS_OVERVIEW);
+    xarRegisterMask('ViewThemes','All','themes','Block','All:All:ALL',ACCESS_OVERVIEW);
     xarRegisterMask('AdminTheme','All','themes','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('EditPanel','All','adminpanels','All','All',ACCESS_EDIT);

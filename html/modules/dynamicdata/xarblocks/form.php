@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -41,7 +41,7 @@ function dynamicdata_formblock_display($blockinfo)
     // Security check
     if (!xarSecAuthAction(0,
                          'DynamicData:Formblock:',
-                         "$blockinfo[title]::",
+                         "$blockinfo[title]:All:All",
                          ACCESS_READ)) {
         return;
     }

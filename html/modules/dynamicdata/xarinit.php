@@ -501,11 +501,43 @@ function dynamicdata_init()
     * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-	$query = "SELECT xar_prop_name,xar_prop_type,xar_prop_id FROM xar_dynamic_properties";
-    xarDefineInstance('dynamicdata','Type',$query);
+	$query1 = "SELECT DISTINCT xar_prop_name FROM xar_dynamic_properties";
+	$query2 = "SELECT DISTINCT xar_prop_type FROM xar_dynamic_properties";
+	$query3 = "SELECT DISTINCT xar_prop_id FROM xar_dynamic_properties";
+	$instances = array(
+						array('header' => 'Property Name:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Property Type:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Property ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('dynamicdata','Type',$instances);
 
-	$query = "SELECT modules.xar_name,objects.xar_object_itemtype,objects.xar_object_id FROM xar_dynamic_objects as objects LEFT JOIN xar_modules as modules ON objects.xar_object_moduleid = modules.xar_regid";
-    xarDefineInstance('dynamicdata','Item',$query);
+	$query1 = "SELECT DISTINCT xar_name FROM  xar_modules";
+	$query2 = "SELECT DISTINCT xar_object_itemtype FROM xar_dynamic_objects";
+	$query3 = "SELECT DISTINCT xar_object_id FROM xar_dynamic_objects";
+	$instances = array(
+						array('header' => 'Module Name:',
+								'query' => $query1,
+								'limit' => 20
+							),
+						array('header' => 'Object Type:',
+								'query' => $query2,
+								'limit' => 20
+							),
+						array('header' => 'Object ID:',
+								'query' => $query3,
+								'limit' => 20
+							)
+					);
+    xarDefineInstance('dynamicdata','Item',$instances);
 
     // Initialisation successful
     return true;

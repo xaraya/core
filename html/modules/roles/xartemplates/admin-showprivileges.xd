@@ -188,7 +188,7 @@
 				<td>
 					<select name="privid" id="privid">
 						<xar:loop name="$allprivileges">
-							<option value="#$uid#">#$name#
+							<option value="#$pid#">#$name#
 						</xar:loop>
 					</select>
 				</td>
