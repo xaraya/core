@@ -29,5 +29,5 @@ $systemConfiguration['Log.LoggerArgs'] = array();
  * This is an advanced option, leave it to false if unsure.
  * TODO: review this in code, it is known to hide some errors
  */
-$systemConfiguration['Exception.EnablePHPErrorHandler'] = '0';
+$systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
 ?>
