@@ -902,7 +902,7 @@ class xarRole {
     }
 
     /**
-     * getUsers: get the members of a group that are users 
+     * getUsers: get the members of a group that are users
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
@@ -950,7 +950,7 @@ class xarRole {
                         AND rm.xar_parentid = $this->uid";
         }
         if (isset($selection)) $query .= $selection;
-        $query .= " ORDER BY xar_" . $order;       
+        $query .= " ORDER BY xar_" . $order;
         if ($startnum != 0) {
             $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1);
         } else {
@@ -1080,10 +1080,9 @@ class xarRole {
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
-     * @param none $
-     * @return array of role objects
+     * @param none
+     * @return array of role objects. The objects can be queried with the getLevel() method to show their relationship (1=prents, 2=grandparents etc.).
      * @throws none
-     * @todo if PHP does static variables we can make this a lot easier
      */
     function getAncestors()
     {
@@ -1101,7 +1100,7 @@ class xarRole {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $key1 => $ancestor) {
                 $ancestors[$key1]->setLevel($plevel);
-                array_push($parents, $ancestors[$key1]);
+                $parents[] = $ancestors[$key1];
             }
         }
 
@@ -1115,7 +1114,7 @@ class xarRole {
                     break;
                 }
             }
-            if (!$iscontained) array_push($ancestors, $parent);
+            if (!$iscontained) $ancestors[] = $parent;
         }
         // done
         return $ancestors;
