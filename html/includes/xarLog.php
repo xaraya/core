@@ -86,7 +86,7 @@ function logger_adminapi_getLogLevelInfo($level)
     switch ($level) {
         case XARLOG_LEVEL_DEBUG:
             $name = xarML('Debug level');
-            $description = xarML('Logs everuthing.');
+            $description = xarML('Logs everything.');
             break;
         case XARLOG_LEVEL_NOTICE:
             $name = xarML('Notice level');
@@ -390,14 +390,14 @@ class xarLog__HTMLLogger extends xarLog__Logger
 
 }
 
-function xarLog__JavaScriptLogger_OnPostBodyStart($value)
+function xarLog__JavaScriptLogger_OnStartBodyTag($value)
 {
     // This function is called whenever the <body> tag has being sent to the browser
     global $xarLog_logger;
     echo $xarLog_logger->getWindowLoaderScript();
 }
 
-function xarLog__JavaScriptLogger_OnPreBodyEnd($value)
+function xarLog__JavaScriptLogger_OnEndBodyTag($value)
 {
     // This function is called whenever the </body> tag is going to be sent to the browser
     global $xarLog_logger;
@@ -411,8 +411,8 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
     function xarLog__JavaScriptLogger($args)
     {
         // Register proper callback functions at EMS
-        xarEvt_subscribeRawCallback('PostBodyStart', 'xarLog__JavaScriptLogger_OnPostBodyStart');
-        xarEvt_subscribeRawCallback('PreBodyEnd', 'xarLog__JavaScriptLogger_OnPreBodyEnd');
+        xarEvt_subscribeRawCallback('StartBodyTag', 'xarLog__JavaScriptLogger_OnStartBodyTag');
+        xarEvt_subscribeRawCallback('EndBodyTag', 'xarLog__JavaScriptLogger_OnEndBodyTag');
         // Set the HTML format
         $this->setFormat('html');
     }

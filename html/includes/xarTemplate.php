@@ -49,16 +49,19 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         $templateName = xarVarPrepForOS($templateName);
     }
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
+    if (!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
+    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
-    }
+        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
+        if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'template', $tplName) === NULL) return;
+        $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";
+    } /*else {
+        TODO: <marco> Handle i18n for this case
+    }*/
 
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
@@ -91,10 +94,10 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
+    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/xarblocks/$blockName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
+        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$blockName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -102,6 +105,8 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
 
 function xarTplString($templateCode, $tplData)
 {
+    $blCompiler = xarTpl__getCompilerInstance();
+    $templateCode = $blCompiler->compileFile($templateCode);
     return xarTpl__execute($templateCode, $tplData);
 }
 
@@ -138,8 +143,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageN
     // Override all admin modules types to is pages/admin exist.
     // TODO --> Allow master admin template.
     if($modType == 'admin'){
-        $pageName = xarVarPrepForOS($pageName);
-        $sourceFileName = "$xarTpl_themeDir/admin/$pageName.xt";
+        $sourceFileName = "$xarnTpl_themeDir/pages/$modType.xt";
         if (!file_exists($sourceFileName)) {
             // Revert to main theme
             $pageName = xarVarPrepForOS($pageName);
@@ -176,7 +180,7 @@ function xarTpl_renderWidget($widgetName, $tplData)
 {
     global $xarTpl_themeDir;
 
-    $sourceFileName = "$xarTpl_themeDir/widgets/$widgetName.xar";
+    $sourceFileName = "$xarTpl_themeDir/widgets/$widgetName.xd";
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -257,7 +261,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             return xarTpl__execute($templateCode, $tplData);
         }
     }
-        $tplData['_bl_data'] = $tplData;
+
+
+    $tplData['_bl_data'] = $tplData;
     // $__tplData should be an array (-even-if- it only has one value in it), 
     // if it's not throw an exception.
     if (is_array($tplData)) {
@@ -273,13 +279,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     ob_start();
     
     // Load cached template file
-    if (xarCoreIsDebuggerActive()) {
-        $res = include $cachedFileName;
-    } else {
-        // Suppress error report when debugger is not active to prevent
-        // that the var dir hash key could be stolen
-        $res = @include $cachedFileName;
-    }
+    $res = include $cachedFileName;
     
     // Fetch output and clean buffer
     $output = ob_get_contents();

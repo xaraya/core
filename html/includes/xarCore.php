@@ -96,7 +96,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     
     //Comment this line to disable debugging
 //    xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
-    xarCoreActivateDebugger(XARDBG_SQL);
+    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS);
+    //xarCoreActivateDebugger(0);
 
     // Hack for some weird PHP systems that should have the
     // LC_* constants defined, but don't
@@ -150,8 +151,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs);
 
-    xarEvt_registerEvent('PostBodyStart');
-    xarEvt_registerEvent('PreBodyEnd');
+    xarEvt_registerEvent('BodyStartTag');
+    xarEvt_registerEvent('BodyEndTag');
 
     // Start Logging Facilities
     $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
@@ -189,7 +190,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
                             'duration' => xarCore_getSiteVar('Session.Duration'),
                             'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
-                            'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'));
+                            'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'),
+                            'useOldPHPSessions' => true);
         xarSession_init($systemArgs);
     }
 
@@ -296,12 +298,23 @@ function xarCoreGetVarDirPath()
 function xarCoreActivateDebugger($flags)
 {
     global $xarDebug, $xarDebug_sqlCalls, $xarDebug_startTime;
-    $xarDebug = XARDBG_ACTIVE | $flags;
-    // Proper error reporting
-    error_reporting(E_ALL);
-    $xarDebug_sqlCalls = 0;
-    $lmtime = explode(' ', microtime());
-    $xarDebug_startTime = $lmtime[1] + $lmtime[0];
+    $xarDebug = $flags;
+    if ($xarDebug & XARDBG_ACTIVE) {
+        // Proper error reporting
+        error_reporting(E_ALL);
+        // Activate assertions
+        assert_options(ASSERT_ACTIVE, 1);
+        assert_options(ASSERT_WARNING, 1);
+        assert_options(ASSERT_BAIL, 1);
+        $xarDebug_sqlCalls = 0;
+        $lmtime = explode(' ', microtime());
+        $xarDebug_startTime = $lmtime[1] + $lmtime[0];
+    } else {
+        // Turn off error reporting
+        error_reporting(0);
+        // Turn off assertion evaluation
+        assert_options(ASSERT_ACTIVE, 0);
+    }
 }
 
 /**
@@ -330,7 +343,7 @@ function xarCoreIsDebugFlagSet($flag)
 {
     global $xarDebug;
 
-    return $xarDebug & $flag;
+    return ($xarDebug & XARDBG_ACTIVE) && ($xarDebug & $flag);
 }
 
 // PROTECTED FUNCTIONS

@@ -450,7 +450,7 @@ function xarMLS_setCurrentLocale($locale)
         }
 
         // Load core translations
-        xarMLS_loadModuleTranslations('base', 'base', 'core');
+        xarMLS_loadTranslations('core', 'xaraya', 'locales', 'file', 'core');
 
         // Load global language defines
         $localeData = xarMLSLoadLocaleData($locale);
@@ -497,9 +497,12 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 
     $alternatives = xarMLS__getLocaleAlternatives($locale);
     foreach ($alternatives as $testLocale) {
-        $ctx = array('name' => $modName,
+        if ($modName == 'translations') $testLocale = 'it';
+        $ctx = array('type' => 'module',
+                     'name' => $modName,
                      'baseDir' => 'modules/'.$modOsDir,
-                     'type' => $modType,
+                     'subtype' => 'file',
+                     'subname' => 'pn'.$modType,
                      'locale' => $testLocale);
 
         $res = $xarMLS_backend->load($ctx);
@@ -532,7 +535,75 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
 
     return false;
 }
+*/
+/**
+ * Loads translations for the specified context
+ *
+ * @access protected
+ * @param translationCtx
+ * @param modOnDir module directory
+ * @param modType module type
+ * @returns bool
+ * @return
+ */
+function xarMLS_loadTranslations($type, $name, $baseDir, $subtype, $subname)
+{
+    global $xarMLS_backend;
+    static $loadedCommons = array();
 
+    if ($type == 'module') {
+        // Handle in a special way the module type
+        // for which it's necessary to load common translations
+        if (!isset($loadedCommons[$name])) {
+            $loadedCommons[$name] = true;
+            if (xarMLS_loadTranslations($type, $name, $baseDir, 'file', 'common') === NULL) return;
+        }
+    }
+
+    $locale = xarMLSGetCurrentLocale();
+    $testLocale = $locale;
+    //$alternatives = xarMLS__getLocaleAlternatives($locale);
+    //foreach ($alternatives as $testLocale) {
+        if ($name == 'translations') $testLocale = 'it';
+        $ctx = array('type' => $type,
+                     'name' => $name,
+                     'baseDir' => $baseDir,
+                     'subtype' => $subtype,
+                     'subname' => $subname,
+                     'locale' => $testLocale);
+if($subtype == 'template')
+xarLogVariable('ctx', $ctx);
+        if ($xarMLS_backend->hasContext($ctx, $loadCtx)) {
+            if (!$xarMLS_backend->load($loadCtx)) return;
+            return true;
+        } else {
+            xarEvt_fire('MLSMissingTranslationContext', $ctx);
+        }
+    //}
+
+    // No valid translations set loaded, try with old style translations
+
+    /* Old style language packs */
+    // TODO: <marco> Recode if we want to keep old language packs
+    /*
+    $localeData = xarMLSLoadLocaleData($locale);
+    if (!isset($localeData)) return; // throw back
+    $lang = $localeData['/language/iso3code'];
+    $fileName = "modules/$modOsDir/xarlang/$lang/$modType.php";
+    if (file_exists($fileName)) {
+        include $fileName;
+    } else {
+        // Oh, bad thing guys
+        // Now since all this will become obsolete we can load eng and don't care of details
+        $fileName = "modules/$modOsDir/xarlang/eng/$modType.php";
+        if (file_exists($fileName)) {
+            include $fileName;
+        }
+    }
+    */
+    return false;
+}
+/*
 function xarMLS_loadTemplateTranslations($tplName, $baseOsDir)
 {
     global $xarMLS_backend;
@@ -552,7 +623,7 @@ function xarMLS_loadTemplateTranslations($tplName, $baseOsDir)
     xarEvt_fire('MLSMissingTranslationContext', $ctx);
     return false;
 }
-
+/*
 function xarMLS_loadBlockTranslations($blockName, $modOsDir)
 {
     global $xarMLS_backend;
@@ -590,8 +661,8 @@ function xarMLS_loadBlockTranslations($blockName, $modOsDir)
 
     return false;
 }
-
-function xarMLS_convertFromInput($var, $method)
+*/
+function pnMLS_convertFromInput($var, $method)
 {
     // FIXME: <marco> Can we trust browsers?
     if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
@@ -944,11 +1015,16 @@ class xarMLS__TranslationsBackend
     function translateByKey($key)
     { die('abstract'); }
     /**
-     * Loads a set of translations into the backend. This set is identified
-     * by a translation context that contains an object name, base directory,
-     * type and locale.
+     * Checks if this backend supports a scpecified translation context.
+     * If success the loadCtx parameter is set to the load context value.
      */
-    function load($translationCtx)
+    function hasContext($translationCtx, &$loadCtx)
+    { die('abstract'); }
+    /**
+     * Loads a set of translations into the backend. This set is identified
+     * by a load context that can be aquired by hasContext static method.
+     */
+    function load($loadCtx)
     { die('abstract'); }
 }
 
@@ -1013,6 +1089,31 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     var $transInd = 0;
     var $transKeyInd = 0;
 
+    function hasContext($translationCtx, &$loadCtx)
+    {
+        // Only module typed contexts are allowed
+        //if ($translationCtx['type'] != 'module') return false;
+
+        $fileName = "$translationCtx[baseDir]/xarlang/xml/$translationCtx[locale]/";
+        switch ($translationCtx['subtype']) {
+            case 'file':
+                $fileName .= 'xar'.$translationCtx['subname'];
+            break;
+            case 'template':
+                $fileName .= "templates/$translationCtx[subname]";
+            break;
+            case 'block':
+                $fileName .= "blocks/$translationCtx[subname]";
+        }
+        $fileName .= '.xml';
+
+        if (!file_exists($fileName)) {
+            return false;
+        }
+        $loadCtx = $fileName;
+        return true;
+    }
+
     function translate($string)
     {
         if (!isset($this->transEntries[$string])) {
@@ -1031,22 +1132,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         return $this->trans[$ind]['translation'];
     }
 
-    function load($translationCtx)
+    function load($loadCtx)
     {
-        list($ostype, $oslocale) = xarVarPrepForOS($translationCtx['type'],
-                                                  $translationCtx['locale']);
-
-        $fileName = "$translationCtx[baseDir]/xarlang/xml/$oslocale/";
-        if ($ostype == 'block') {
-            $fileName .= 'blocks/'.xarVarPrepForOS($translationCtx['name']).'.xml';
-        } elseif ($ostype == 'template') {
-            $fileName .= 'templates/'.xarVarPrepForOS($translationCtx['name']).'.xml';
-        } else {
-            $fileName .= "xar$ostype.xml";
-        }
-        if (!file_exists($fileName)) {
-            return false;
-        }
         $this->curData = '';
 
         $this->parser = xml_parser_create('UTF-8');
@@ -1055,9 +1142,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_element_handler($this->parser, "beginElement", "endElement");
         xml_set_character_data_handler($this->parser, "characterData");
 
-        if (!($fp = fopen($fileName, 'r'))) {
-            return;
-        }
+        $fp = fopen($loadCtx, 'r');
 
         while ($data = fread($fp, 4096)) {
             if (!xml_parse($this->parser, $data, feof($fp))) {
@@ -1208,36 +1293,48 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
  */
 class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 {
+    function hasContext($translationCtx, &$loadCtx)
+    {
+        // Only module typed contexts are allowed
+        //if ($translationCtx['type'] != 'module') return false;
+
+        $fileName = "$translationCtx[baseDir]/xarlang/php/$translationCtx[locale]/";
+        switch ($translationCtx['subtype']) {
+            case 'file':
+                $fileName .= 'xar'.$translationCtx['subname'];
+            break;
+            case 'template':
+                $fileName .= "templates/$translationCtx[subname]";
+            break;
+            case 'block':
+                $fileName .= "blocks/$translationCtx[subname]";
+        }
+        $fileName .= '.php';
+
+        if (!file_exists($fileName)) {
+            return false;
+        }
+        $loadCtx = $fileName;
+        return true;
+    }
+
     function translate($string)
     {
         global $xarML_PHPBackend_entries;
-        return @$xarML_PHPBackend_entries[$string];
+        if (isset($xarML_PHPBackend_entries[$string]))
+            return $xarML_PHPBackend_entries[$string];
     }
 
     function translateByKey($key)
     {
         global $xarML_PHPBackend_keyEntries;
-        return @$xarML_PHPBackend_keyEntries[$key];
+        if (isset($xarML_PHPBackend_keyEntries[$key]))
+            return $xarML_PHPBackend_keyEntries[$key];
     }
 
-    function load($translationCtx)
+    function load($loadCtx)
     {
-        list($ostype, $oslocale) = xarVarPrepForOS($translationCtx['type'],
-                                                  $translationCtx['locale']);
-
-        $fileName = "$translationCtx[baseDir]/xarlang/php/$oslocale/";
-        if ($ostype == 'block') {
-            $fileName .= 'blocks/'.xarVarPrepForOS($translationCtx['name']).'.php';
-        } elseif ($ostype == 'template') {
-            $fileName .= 'templates/'.xarVarPrepForOS($translationCtx['name']).'.php';
-        } else {
-            $fileName .= "xar$ostype.php";
-        }
-        if (!file_exists($fileName)) {
-            return false;
-        }
-
-        include $fileName;
+        include $loadCtx;
 
         return true;
     }
@@ -1245,4 +1342,3 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 }
 
 
-?>

@@ -28,15 +28,16 @@ function xarSession_init($args)
 
     xarSession__setup($args);
 
-    // First thing we do is ensure that there is no attempted pollution
-    // of the session namespace (yes, we still need this for now)
-    foreach($GLOBALS as $k=>$v) {
-        if (preg_match('/^XARSV/', $k)) {
-            xarCore_die('xarSession_init: Session Support initialisation failed.');
+    if ($xarSession_systemArgs['useOldPHPSessions']) {
+        // First thing we do is ensure that there is no attempted pollution
+        // of the session namespace (yes, we still need this for now)
+        foreach($GLOBALS as $k=>$v) {
+            if (preg_match('/^XARSV/', $k)) {
+                xarCore_die('xarSession_init: Session Support initialisation failed.');
+            }
         }
     }
-
-    // Start the session, this will call xarSession__phpRead, and
+    // Start the session, this will call pnSession__phpRead, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
     session_start();
@@ -102,6 +103,14 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
+    global $xarSession_systemArgs;
+	if (!$xarSession_systemArgs['useOldPHPSessions']) {
+        if (isset($_SESSION[$name])) {
+            return $_SESSION[$name];
+        }
+        return;
+    }
+
 //    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
 
@@ -127,9 +136,16 @@ function xarSessionGetVar($name)
  */
 function xarSessionSetVar($name, $value)
 {
+    global $xarSession_systemArgs;
     if ($name == 'uid') {
         return false;
     }
+
+    if (!$xarSession_systemArgs['useOldPHPSessions']) {
+        $_SESSION[$name] = $value;
+        return true;
+    }
+
 //    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
 
@@ -150,9 +166,19 @@ function xarSessionSetVar($name, $value)
  */
 function xarSessionDelVar($name)
 {
+    global $xarSession_systemArgs;
     if ($name == 'uid') {
         return false;
     }
+
+    if (!$xarSession_systemArgs['useOldPHPSessions']) {
+        if (!isset($_SESSION[$name])) {
+            return false;
+        }
+        unset($_SESSION[$name]);
+		return true;
+    }
+
 //    global $HTTP_SESSION_VARS;
     $var = 'XARSV' . $name;
 
@@ -181,7 +207,7 @@ function xarSessionGetId()
 
 function xarSession_setUserInfo($userId, $rememberSession)
 {
-    global $XARSVuid;
+    global $xarSession_systemArgs;
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -199,7 +225,12 @@ function xarSession_setUserInfo($userId, $rememberSession)
         return;
     }
 
-    $XARSVuid = $userId;
+    if ($xarSession_systemArgs['useOldPHPSessions']) {
+        global $XARSVuid;
+        $XARSVuid = $userId;
+    } else {
+        $_SESSION['uid'] = $userId;
+    }
     return true;
 }
 
@@ -393,7 +424,7 @@ function xarSession__phpClose()
 function xarSession__phpRead($sessionId)
 {
     global $xarSession_isNewSession, $xarSession_ipAddress;
-    global $XARSVuid;
+    global $xarSession_systemArgs;
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -413,13 +444,21 @@ function xarSession__phpRead($sessionId)
 
     if (!$result->EOF) {
         $xarSession_isNewSession = false;
+        if ($xarSession_systemArgs['useOldPHPSessions']) {
+            global $XARSVuid;
+        }
         list($XARSVuid, $xarSession_ipAddress, $vars) = $result->fields;
     } else {
         $xarSession_isNewSession = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
         // the session_info table, we use a little hack: $XARSVuid will appear to be
         // a session variable even if it's not registered as so!
-        $XARSVuid = 0;
+        if ($xarSession_systemArgs['useOldPHPSessions']) {
+            global $XARSVuid;
+            $XARSVuid = 0;
+        } else {
+            $_SESSION['uid'] = 0;
+        }
         $xarSession_ipAddress = '';
         $vars = '';
     }
@@ -574,4 +613,3 @@ function xarSession__sniff()
     return true;
 }
 
-?>

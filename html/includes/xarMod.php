@@ -614,10 +614,7 @@ function xarModLoad($modName, $modType = 'user')
     $loadedModuleCache["$modName$modType"] = true;
 
     // Load the module translations files
-    $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
+    if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType) === NULL) return;
 
     // Load database info
     xarMod__loadDbInfo($modName, $modOsDir);
@@ -685,10 +682,7 @@ function xarModAPILoad($modName, $modType = 'user')
     $loadedAPICache["$modName$modType"] = true;
 
     // Load the API translations files
-    $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType.'api');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
+    if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType.'api') === NULL) return;
 
     // Load database info
     xarMod__loadDbInfo($modName, $modOsDir);
@@ -1253,13 +1247,13 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['id']             = $modversion['id'];
     $modFileInfo['version']        = $modversion['version'];
     // FIXME: <marco> admin or admin capable?
-    $modFileInfo['admin']          = @$modversion['admin'];
-    $modFileInfo['admin_capable']  = @$modversion['admin'];
-    $modFileInfo['user']           = @$modversion['user'];
-    $modFileInfo['user_capable']   = @$modversion['user'];
-    $modFileInfo['securityschema'] = @$modversion['securityschema'];
-    $modFileInfo['class']          = @$modversion['class'];
-    $modFileInfo['category']       = @$modversion['category'];
+    $modFileInfo['admin']          = isset($modversion['admin']) ? $modversion['admin'] : false;
+    $modFileInfo['admin_capable']  = isset($modversion['admin']) ? $modversion['admin'] : false;
+    $modFileInfo['user']           = isset($modversion['user']) ? $modversion['user'] : false;
+    $modFileInfo['user_capable']   = isset($modversion['user']) ? $modversion['user'] : false;
+    $modFileInfo['securityschema'] = isset($modversion['securityschema']) ? $modversion['securityschema'] : false;
+    $modFileInfo['class']          = isset($modversion['class']) ? $modversion['class'] : false;
+    $modFileInfo['category']       = isset($modversion['category']) ? $modversion['category'] : false;
     $modFileInfo['locale']         = isset($modversion['locale']) ? $modversion['locale'] : 'en_US.iso-8859-1';
 
     return $modFileInfo;

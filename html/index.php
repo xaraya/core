@@ -91,13 +91,23 @@ function xarMain()
     return true;
 }
 
-$res = xarMain();
-if (!isset($res)) {
+if (!xarMain()) {
 
     // If we're here there must be surely an uncaught exception
-    $text = xarML('Caught exception');
-    $text .= '<br />';
-    $text .= xarExceptionRender('html');
+    if (xarCoreIsDebuggerActive()) {
+        $text = xarML('Caught exception');
+        $text .= '<br />';
+        $text .= xarExceptionRender('html');
+    } else {
+        $text = xarML('An error occurred while processing your request. The details are:');
+        $text .= '<br />';
+        $value = xarExceptionValue();
+        if (is_object($value) && method_exists($value, 'toHTML')) {
+            $text .= '<span style="color: red">'.$value->toHTML().'</span>';
+        } else {
+            $text .= '<span style="color: purple">'.xarExceptionId().'</span>';
+        }
+    }
 
     xarLogException(XARLOG_LEVEL_ERROR);
 

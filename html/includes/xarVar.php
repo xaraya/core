@@ -103,7 +103,7 @@ function xarVarCleanUntrusted($var)
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
-// FIXME: <marco> This function will not work is the security system is not loaded!
+// FIXME: <marco> This function will not work if the security system is not loaded!
 function xarVarCleanFromInput()
 {
     $search = array('|</?\s*SCRIPT.*?>|si',
@@ -550,6 +550,11 @@ function xarVar_stripSlashes(&$var)
     } else {
         array_walk($var,'xarVar_stripSlashes');
     }
+}
+
+function pnVar_addSlashes($var)
+{
+    return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
 }
 
 ?>

@@ -65,10 +65,12 @@ class SystemException
 class DefaultUserException
 {
     var $msg;
+    var $link;
 
-    function DefaultUserException($msg)
+    function DefaultUserException($msg, $link = NULL)
     {
         $this->msg = $msg;
+        $this->link = $link;
     }
 
     function toString()
@@ -78,7 +80,11 @@ class DefaultUserException
     
     function toHTML()
     {
-        return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
+        $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
+        if ($this->link) {
+            $str .= '<a href="'.$this->link[1].'">'.$this->link[0].'</a><br/>';
+        }
+        return $str;
     }
 
 }
@@ -259,9 +265,9 @@ function xarExceptionRender($format)
             return '';
     }
     if ($format == 'html') {
-        $text = '<font color="purple">('.$type.')</font> <b>'.$xarException_exceptionId.'</b>:<br />';
+        $text = '<span style="color: purple">('.$type.')</span> <b>'.$xarException_exceptionId.'</b>:<br />';
         if (method_exists($xarException_value, 'toHTML')) {
-            $text .= '<font color="red">'.$xarException_value->toHTML().'</font>';
+            $text .= '<span style="color: red">'.$xarException_value->toHTML().'</span>';
         }
         if ($xarException_useXDebug) {
             $stack = $xarException_value->__stack;
