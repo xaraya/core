@@ -57,17 +57,17 @@
 						</td>
 					</tr>
 				   <xar:if condition="isset($properties)">
-				   <xar:foreach in="$properties" key="$name">
-					<tr align="left" valign="middle">
-						<td>
-							%%#$name#%%
-						</td>
-						<td>
-							(<xar:mlstring>dynamic property</xar:mlstring>)
-							<xar:data-label property="$properties[$name]" />
-						</td>
-					</tr>
-				   </xar:foreach>
+					   <xar:foreach in="$properties" key="$name">
+						<tr align="left" valign="middle">
+							<td>
+								%%#$name#%%
+							</td>
+							<td>
+								(<xar:mlstring>dynamic property</xar:mlstring>)
+								<xar:data-label property="$properties[$name]" />
+							</td>
+						</tr>
+					   </xar:foreach>
 				   </xar:if>
 				</table>
 			</td>
