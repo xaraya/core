@@ -413,7 +413,7 @@ class xarXmlParser
  * this class with your own methods with the same name to create
  * a xml handler object which handles the parsing for you.
  * 
- *
+ * @package xml
  * @todo test,test,test
  * @todo document the strange xml_set_object thingie
  */

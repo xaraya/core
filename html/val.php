@@ -4,14 +4,16 @@
  *
  * Redirect for validating users
  *
- * @package Xaraya eXtensible Management System
+ * @package server
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
  * @author John Cox
 */
 
-// initialize the Xaraya core
+/**
+ *  initialize the Xaraya core
+ */
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
