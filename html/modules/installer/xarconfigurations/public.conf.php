@@ -150,7 +150,7 @@ function installer_public_readnoncore()
     xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Exclude access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Exclude access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Exclude access to the Themes module');
-    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
+//    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
     xarMakePrivilegeRoot('ReadNonCore');
     xarMakePrivilegeRoot('ReadAccess');
     xarMakePrivilegeRoot('DenyPrivileges');
@@ -159,7 +159,7 @@ function installer_public_readnoncore()
     xarMakePrivilegeRoot('DenyMail');
     xarMakePrivilegeRoot('DenyModules');
     xarMakePrivilegeRoot('DenyThemes');
-    xarMakePrivilegeRoot('DenyDynamicData');
+//    xarMakePrivilegeRoot('DenyDynamicData');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
@@ -167,6 +167,6 @@ function installer_public_readnoncore()
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
+//    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
 }
 ?>
