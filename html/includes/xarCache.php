@@ -77,7 +77,7 @@ function xarPageIsCached($cacheKey, $name = '')
 {
     global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheCode;
 
-    global $xarTpl_themeDir;
+    $xarTpl_themeDir = xarTplGetThemeDir();
     $page = $xarTpl_themeDir . xarServerGetVar('REQUEST_URI');
     $param = xarServerGetVar('QUERY_STRING');
     if (!empty($param)) {
@@ -250,7 +250,8 @@ function xarBlockGetCached($cacheKey, $name = '')
 function xarPageSetCached($cacheKey, $name, $value)
 {
     global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheShowTime, $xarOutput_cacheSizeLimit, $xarPage_cacheCode;
-    global $xarTpl_themeDir;
+    
+    $xarTpl_themeDir = xarTplGetThemeDir();
 
 // CHECKME: use $name for something someday ?
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
