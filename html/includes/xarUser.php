@@ -112,6 +112,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         if (!isset($userId)) return; // throw back
         elseif ($userId != XARUSER_AUTH_FAILED) break; // Someone authenticated us
         // if here $userId is XARUSER_AUTH_FAILED, try with next auth module
+        // but free exceptions set by previous auth module
+        xarExceptionFree();
     }
     if ($userId == XARUSER_AUTH_FAILED) return false;
 
