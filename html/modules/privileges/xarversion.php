@@ -14,6 +14,8 @@ $modversion['contact'] = 'http://www.xaraya.com/';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Privileges::' => '::');
-$modversion['class'] = 'Core Admin';
+// During integration phase classify as admin
+//$modversion['class'] = 'Core Admin';
+$modversion['class'] = 'Admin';
 $modversion['category'] = 'Users & Groups';
 ?>
