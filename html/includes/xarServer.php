@@ -598,13 +598,10 @@ function xarResponseRedirect($redirectURL)
  * @author Marco Canini
  * @access public
  * @global xarResponse_redirectCalled bool
- * @deprec 2004-01-10
  * @return bool
  */
 function xarResponseIsRedirected()
 {
-    // Issue a WARNING as this function is deprecated
-    xarLogMessage('Using deprecated function xarResponseIsRedirected, use ??? instead',XARLOG_LEVEL_WARNING);
     return $GLOBALS['xarResponse_redirectCalled'];
 }
 
