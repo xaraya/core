@@ -873,6 +873,8 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         '_bl_mainModuleOutput'     => $mainModuleOutput,
     );
 
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -898,8 +900,10 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
     } else {
         // We must fall back to the default, as the template passed in could be the group
         // name, allowing an optional template to be utilised.
+        $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
     }
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
