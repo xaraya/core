@@ -324,6 +324,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  * @package blocklayout
  * @access private
  * @todo this is an xml parser type functionality, can't we use an xml parser for this?
+ * @todo the nodesfactory doesnt have to be a member of this class, it only clutters the method calling
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
@@ -332,6 +333,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     var $tagIds;
     var $tagRootSeen;
 
+    // FIXME: if we remove the factory as a member this can go
     function xarTpl__Parser()
     {
         $this->nodesFactory =& new xarTpl__NodesFactory();
@@ -1066,7 +1068,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     {
         // If the root tag comes along, check if we already have it
         if($tagName == XAR_ROOTTAG_NAME && $parser->tagRootSeen) {
-            $this->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
+            $parser->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
             return;
         }
 
@@ -1092,7 +1094,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         }
 
         // If we get here, the tag doesn't exist so we raise a user exception
-        $this->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
+        $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
         return;
     }
 
@@ -1110,7 +1112,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node->parameters = $parameters;
             return $node;
         }
-        $this->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'.", $parser);
+        $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'.", $parser);
         return;
     }
 
@@ -1129,7 +1131,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             return $node;
         }
 
-        $this->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent or invalid instruction '". XAR_TOKEN_CI_DELIM .
+        $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent or invalid instruction '". XAR_TOKEN_CI_DELIM .
                           "$instruction" . XAR_TOKEN_CI_DELIM . "'.", $parser);
         return;
     }
