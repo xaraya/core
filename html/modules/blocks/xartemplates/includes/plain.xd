@@ -57,7 +57,7 @@
                         </xar:mlstring>
                     </a>
                     | 
-                    <a href="#xarModUrl('blocks', 'admin', 'delete_instance', array('bid' => $loop:item['bid'], 'authid' => $authid))#" onClick="return xar_base_confirmLink(this, '#xarML('Delete instance').' '.xarVarPrepfordisplay($loop:item['title'])#?')">
+                    <a href="#$loop:item['deleteurl']#" onClick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                         Delete 
                     </a>
                 </td>

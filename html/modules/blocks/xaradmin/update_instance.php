@@ -22,7 +22,7 @@ function blocks_admin_update_instance()
     if (!xarVarFetch('block_groups', 'keylist:id;checkbox', $block_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:100', $name)) {return;}
     if (!xarVarFetch('block_title', 'str:1:255', $title, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_state', 'int:1:4', $state)) {return;}
+    if (!xarVarFetch('block_state', 'int:0:4', $state)) {return;}
     if (!xarVarFetch('block_template', 'strlist:;,:pre:trim:lower:ftoken', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('group_templates', 'keylist:id;strlist:;,:pre:trim:lower:ftoken', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
     // TODO: deprecate 'block_content' - make sure each block handles its own content entirely.

@@ -18,21 +18,23 @@
 function blocks_admin_view_instances()
 {
 // Security Check
-	if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
+	if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
     // Get all block instances (whether they have group membership or not.
     $instances =& xarModAPIfunc('blocks', 'user', 'getall');
 
-/*
-        // TODO: JS in the template? We must get a better way to pass ML text to JavaScript functions.
-        $block['javascript'] = "return xar_base_confirmLink(this, '" . xarML('Delete instance') . " $block[title] ?')";
-        $block['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_instance', array('bid' => $block['id'], 'authid' => $authid));
-        $blocks[] = $block;
-*/
-
     // Get current style.
-    $data['selstyle']                               = xarModGetUserVar('blocks', 'selstyle');
+    $data['selstyle'] = xarModGetUserVar('blocks', 'selstyle');
+
+    // Create extra links and confirmation text.
+    foreach ($instances as $index => $instance) {
+        $instances[$index]['deleteurl'] = xarModUrl(
+            'blocks', 'admin', 'delete_instance',
+            array('bid' => $instance['bid'], 'authid' => $authid)
+        );
+        $instances[$index]['deleteconfirm'] = xarML('Delete instance "#(1)"', addslashes($instance['name']));
+    }
 
     // Set default style if none selected.
     if (empty($data['selstyle'])){
