@@ -991,6 +991,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $this->column = 0;
             $this->lineText = '';
         }
+        // <mrb> do we really need the overhead of recursive calling here?
         if ($len != 1) {
             $token .= $this->getNextToken($len - 1);
         }
@@ -1006,25 +1007,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->lineText = substr($this->lineText, 0, strlen($this->lineText) - $len);
     }
 
-    function peek($len = 1, $start = '')
+    function peek($len = 1, $start = 0)
     {
-        if ($start == '') {
-            $start = $this->pos;
-        }
-        if ($start < 0) {
-            $start = 0;
-        }
+        assert('$start >= 0; /* The start position for peeking needs to be zero or greater, a call to parser->peek was wrong */');
+        if($start == 0) $start = $this->pos; // can't do this in param init
 
-        $token = substr($this->templateSource, $start, 1);
+        $token = substr($this->templateSource, $start, $len);
         if ($token === false) {
             return;
         }
-
-        if ($len != 1) {
-            $token .= $this->peek($len - 1, $start);
-        }
-        //xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
-
         return $token;
     }
 }
