@@ -526,6 +526,10 @@ class xarMasks
 
         $parents = array();
         foreach ($roles as $role) {
+            // FIXME: evaluate why role is empty
+            // Below (hack) fix added by Rabbitt (suggested by mikespub on the devel mailing list)
+            if (empty($role)) continue;
+
             $privs = $role->getAssignedPrivileges();
             $privileges = array();
             foreach ($privs as $priv) {
