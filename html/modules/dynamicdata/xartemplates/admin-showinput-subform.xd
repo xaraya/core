@@ -11,29 +11,30 @@
   <xar:if condition="!empty($object)">
     <table class="xar-norm">
       <xar:if condition="!empty($dropdown) and !empty($title)">
-      <tr>
-        <td>
-          <xar:mlstring>Select item</xar:mlstring>
-        </td>
-        <td>
-          <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
-          <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-            <option value="0">[ <xar:mlstring>new item</xar:mlstring> ]</option>
-            <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
-              <xar:if condition="!empty($value) and $value eq $dropid">
-                <option value="#$dropid#" selected="selected">[#$dropid#] #$dropvalue[$title]#</option>
-              <xar:else/>
-                <option value="#$dropid#">[#$dropid#] #$dropvalue[$title]#</option>
-              </xar:if>
-            </xar:foreach>
-          </select>
-        </td>
-      </tr>
+          <tr>
+            <td>
+              <xar:mlstring>Select item</xar:mlstring>
+            </td>
+            <td>
+              <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+              <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
+                <option value="0">[ <xar:mlstring>new item</xar:mlstring> ]</option>
+                <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
+                  <xar:if condition="!empty($value) and $value eq $dropid">
+                    <option value="#$dropid#" selected="selected">[#$dropid#] #$dropvalue[$title]#</option>
+                  <xar:else/>
+                    <option value="#$dropid#">[#$dropid#] #$dropvalue[$title]#</option>
+                  </xar:if>
+                </xar:foreach>
+              </select>
+            </td>
+          </tr>
       <xar:else/>
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       </xar:if>
-
-      <xar:data-form object="$object" />
+      <tr>  
+        <td colspan="2"><xar:data-form object="$object" /></td>
+      </tr>
     </table>
   </xar:if>
 
