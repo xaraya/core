@@ -11,17 +11,17 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<xsl:template match="xaraya_module" mode="xarhookapi_item_create" xml:space="default">
+<xsl:template match="xaraya_module" mode="xarhook_module_modifyconfig" xml:space="default">
 
-    <xsl:message>      * item_create()</xsl:message>
+    <xsl:message>      * module_modifyconfig()</xsl:message>
 
-    <xsl:document href="{$output}/xarhookapi/item_create.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xarhook/module_modifyconfig.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-            <xsl:with-param name="filename">xarhookapi/item_create</xsl:with-param>
+            <xsl:with-param name="filename">xarhook/module_modifyconfig.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates select="." mode="xarhookapi_item_create_func" />
+        <xsl:apply-templates select="." mode="xarhook_module_modifyconfig_func" />
 
         <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
 
@@ -30,9 +30,9 @@
 </xsl:template>
 
 <!-- =========================================================================
-     TEMPLATE FOR <module>_hookapi_item_create()
+     TEMPLATE FOR <module>_hook_module_modifyconfig()
 -->
-<xsl:template match="xaraya_module" mode="xarhookapi_item_create_func">
+<xsl:template match="xaraya_module" mode="xarhook_module_modifyconfig_func">
 
 <xsl:variable name="module_prefix" select="registry/name" />
 <xsl:if test="$gCommentsLevel >= 1">
@@ -46,7 +46,7 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hookapi_item_create ( $args ) {
+function <xsl:value-of select="$module_prefix" />_hook_module_modifyconfig ( $args ) {
 
     extract( $args );
 
@@ -64,20 +64,20 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_create ( $args ) 
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'item_create', '<xsl:value-of select="$module_prefix" />');
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'module_modifyconfig', '<xsl:value-of select="$module_prefix" />');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
-    /*
-     * ADD YOUR CODE HERE
-     */
+    return xarTplModule(
+        '<xsl:value-of select="$module_prefix" />'
+        ,'hook'
+        ,'module_modifyconfig'
+        ,array()
+        );
 
-    return $extrainfo;
 }
 </xsl:template>
 
 <!-- END OF FILE -->
 </xsl:stylesheet>
-
-

@@ -822,6 +822,32 @@ class Dynamic_Object extends Dynamic_Object_Master
     }
 
     /**
+     * Get the names and values of
+     */
+    function getFieldValues($args = array())
+    {
+        if (empty($args['fieldlist'])) {
+
+            if (count($this->fieldlist) > 0) {
+                $fieldlist = $this->fieldlist;
+            } else {
+                $fieldlist = array_keys($this->properties);
+            }
+        }
+
+        $fields = array();
+        foreach ($fieldlist as $name) {
+            $property = $this->properties[$name];
+            if(xarSecurityCheck('ReadDynamicDataField',0,'Field',$property->name.':'.$property->type.':'.$property->id)) {
+                $fields[$name] = $property->value;
+            }
+        }
+
+        return $fields;
+    }
+
+
+    /**
      * Get the labels and values to include in some output display for this item
      */
     function getDisplayValues($args = array())
@@ -929,7 +955,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $item['module'] = $modinfo['name'];
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'create', $this->itemid, $item, $modinfo['name']); 
+            xarModCallHooks('item', 'create', $this->itemid, $item, $modinfo['name']);
         }
 
         return $this->itemid;
@@ -978,7 +1004,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $item['module'] = $modinfo['name'];
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'update', $this->itemid, $item, $modinfo['name']); 
+            xarModCallHooks('item', 'update', $this->itemid, $item, $modinfo['name']);
         }
 
         return $this->itemid;
@@ -1020,7 +1046,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $item['module'] = $modinfo['name'];
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'delete', $this->itemid, $item, $modinfo['name']); 
+            xarModCallHooks('item', 'delete', $this->itemid, $item, $modinfo['name']);
         }
 
         return $this->itemid;

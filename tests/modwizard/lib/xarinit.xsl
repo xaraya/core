@@ -102,6 +102,123 @@
     </xsl:for-each>
 </xsl:template>
 
+<!-- =========================================================================
+
+    MATCH: xaraya_module                    MODE: xarinit_register_module_hooks
+
+    Register the hooks
+
+-->
+<xsl:template mode="xarinit_register_module_hooks" match="xaraya_module">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    if (!xarModRegisterHook(
+            'module'
+            ,'modifyconfig'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'module_modifyconfig' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'module'
+            ,'remove'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'module_remove' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'module'
+            ,'updateconfig'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'module_updateconfig' ))
+        {
+        return false;
+        }
+</xsl:template>
+
+
+
+<!-- =========================================================================
+
+    MATCH: xaraya_module                    MODE: xarinit_register_item_hooks
+
+    Register the hooks
+
+-->
+<xsl:template mode="xarinit_register_item_hooks" match="xaraya_module">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    if (!xarModRegisterHook(
+            'item'
+            ,'display'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_display' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'item'
+            ,'new'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_new' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'item'
+            ,'delete'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_delete' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'item'
+            ,'update'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_update' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'item'
+            ,'create'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_create' ))
+        {
+        return false;
+        }
+
+    if (!xarModRegisterHook(
+            'item'
+            ,'modify'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_modify' ))
+        {
+        return false;
+        }
+</xsl:template>
+
 
 <!-- =========================================================================
 
@@ -117,21 +234,6 @@
      * REGISTER HOOKS
      */
 <xsl:for-each select="configuration/hooks/hook">
-<!-- check if the hook is required -->
-<xsl:choose>
-<xsl:when test="@required = 'no'">
-    // Hook for module <xsl:value-of select="@module" />
-    if ( xarModIsAvailable('<xsl:value-of select="@module" />' )) {
-        xarModAPIFunc(
-            'modules'
-            ,'admin'
-            ,'enablehooks'
-            ,array(
-                'hookModName'       => '<xsl:value-of select="@module" />'
-                ,'callerModName'    => '<xsl:value-of select="../../../registry/name" />'));
-    }
-</xsl:when>
-<xsl:otherwise>
     // Hook for module <xsl:value-of select="@module" />
     xarModAPIFunc(
         'modules'
@@ -140,11 +242,86 @@
         ,array(
             'hookModName'       => '<xsl:value-of select="@module" />'
             ,'callerModName'    => '<xsl:value-of select="../../../registry/name" />'));
-</xsl:otherwise>
-</xsl:choose>
 </xsl:for-each>
 </xsl:template>
 
+
+<!-- =========================================================================
+
+    MATCH: xaraya_module                    MODE: xarinit_register_transform_hooks
+
+    Register the hooks
+
+-->
+<xsl:template mode="xarinit_register_transform_hooks" match="xaraya_module">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    if (!xarModRegisterHook(
+            'item'
+            ,'transform'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_transformoutput' ))
+        {
+        return false;
+        }
+    if (!xarModRegisterHook(
+            'item'
+            ,'transform-input'
+            ,'API'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'item_transforminput' ))
+        {
+        return false;
+        }
+</xsl:template>
+
+<!-- =========================================================================
+
+    MATCH: xaraya_module                    MODE: xarinit_register_waiting_content_hook
+
+    Register the hooks
+
+-->
+<xsl:template mode="xarinit_register_waiting_content_hook" match="xaraya_module">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    if (!xarModRegisterHook(
+            'item'
+            ,'waitingcontent'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'waitingcontent' ))
+        {
+        return false;
+        }
+</xsl:template>
+
+
+<!-- =========================================================================
+
+    MATCH: xaraya_module                    MODE: xarinit_register_search_hook
+
+    Register the hooks
+
+-->
+<xsl:template mode="xarinit_register_search_hook" match="xaraya_module">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    if (!xarModRegisterHook(
+            'item'
+            ,'search'
+            ,'GUI'
+            ,'<xsl:value-of select="$module_prefix" />'
+            ,'hook'
+            ,'search' ))
+        {
+        return false;
+        }
+</xsl:template>
 
 <!-- =========================================================================
 
@@ -273,11 +450,46 @@ function <xsl:value-of select="$module_prefix" />_init()
         <xsl:apply-templates mode="xarinit_init_blocks" select="." />
     </xsl:if>
 
-    <!-- Register the modvars -->
+    <!-- Install the hooks -->
     <xsl:if test="boolean( configuration/hooks/hook )">
         <xsl:apply-templates mode="xarinit_init_hooks" select="." />
     </xsl:if>
 
+    <!-- register module hooks -->
+    <xsl:if test="configuration/capabilities/item_hooks/text() = 'yes'
+               or configuration/capabilities/transform_hooks/text() = 'yes'" >
+
+    <xsl:message>       * register module hooks</xsl:message>
+    <xsl:apply-templates mode="xarinit_register_module_hooks" select="." />
+    </xsl:if>
+
+    <!-- Register transform hooks -->
+    <xsl:if test="configuration/capabilities/transform_hooks/text() = 'yes'">
+
+    <xsl:message>       * register transform hooks</xsl:message>
+    <xsl:apply-templates mode="xarinit_register_transform_hooks" select="." />
+    </xsl:if>
+
+    <!-- Register item hooks -->
+    <xsl:if test="configuration/capabilities/item_hooks/text() = 'yes'">
+
+    <xsl:message>       * register item hooks</xsl:message>
+    <xsl:apply-templates mode="xarinit_register_item_hooks" select="." />
+    </xsl:if>
+
+    <!-- Register search hook -->
+    <xsl:if test="configuration/capabilities/search_hook/text() = 'yes'">
+
+    <xsl:message>       * register search hook</xsl:message>
+    <xsl:apply-templates mode="xarinit_register_search_hook" select="." />
+    </xsl:if>
+
+    <!-- Register waiting content hook -->
+    <xsl:if test="configuration/capabilities/waiting_content_hook/text() = 'yes'">
+
+    <xsl:message>       * register waiting content hook</xsl:message>
+    <xsl:apply-templates mode="xarinit_register_waiting_content_hook" select="." />
+    </xsl:if>
 
     /*
      * REGISTER MASKS

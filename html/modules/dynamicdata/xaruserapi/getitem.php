@@ -116,20 +116,8 @@ function &dynamicdata_userapi_getitem($args)
         return $object;
     }
 
-    if (count($object->fieldlist) > 0) {
-        $fieldlist = $object->fieldlist;
-    } else {
-        $fieldlist = array_keys($object->properties);
-    }
-    $fields = array();
-    foreach ($fieldlist as $name) {
-        $property = $object->properties[$name];
-		if(xarSecurityCheck('ReadDynamicDataField',0,'Field',$property->name.':'.$property->type.':'.$property->id)) {
-            $fields[$name] = $property->value;
-        }
-    }
+    return $object->getFieldValues();
 
-    return $fields;
 }
 
 ?>

@@ -39,6 +39,7 @@
         <span style="float: right; width: 78%; text-align: left;">
             <xsl:element name="xar:data-input" xml:space="default">
                 <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+                <xsl:attribute name="value">$object_values['<xsl:value-of select="@name" />']</xsl:attribute>
             </xsl:element>
         </span>
         </div>

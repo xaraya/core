@@ -48,6 +48,10 @@ function <xsl:value-of select="$module_prefix" />_userapi_get( $args ) {
 
     extract( $args );
 
+    if ( !isset( $getobject ) ) {
+        $getobject = 1;
+    }
+
     // Retrieve the object via the dynamicdata module api.
     $object = xarModAPIFunc(
         'dynamicdata'
@@ -58,7 +62,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_get( $args ) {
             ,'itemtype'  => $itemtype
             ,'itemid'    => $itemid
             ,'status'    => 1
-            ,'getobject' => 1
+            ,'getobject' => $getobject
         ));
     if ( empty($object) ) return;
 

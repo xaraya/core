@@ -69,18 +69,12 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_delete ( $args ) 
         return;
     }
 
-    // Security check. Adjust.
-    // if (!xarSecurityCheck('SubmitCategoryLink',0,'Link',"$modid:All:All:All")) return '';
+    /*
+     * ADD YOUR CODE HERE
+     */
 
-    return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
-        ,'hook'
-        ,'item_delete'
-        ,array()
-        );
-
+    return $extrainfo;
 }
 </xsl:template>
 
-<!-- END OF FILE -->
 </xsl:stylesheet>

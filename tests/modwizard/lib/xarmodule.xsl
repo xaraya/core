@@ -59,6 +59,7 @@
 <xsl:include href="xaritemtypeapi.xsl" />
 <xsl:include href="xarprivateapi.xsl" />
 <xsl:include href="xarhookapi.xsl" />
+<xsl:include href="xarhook.xsl" />
 <xsl:include href="xaruserapi.xsl" />
 <xsl:include href="xaruser.xsl" />
 <xsl:include href="xaradmin.xsl" />
@@ -88,7 +89,7 @@
 ### Verifying the xml file</xsl:message>
 
     <!-- VERIFY -->
-    <xsl:apply-templates mode="verify" select="xaraya_module" />
+    <xsl:apply-templates mode="verify" select="." />
 
     <xsl:message>
 ### Begin of code generation</xsl:message>
@@ -103,6 +104,7 @@
     <xsl:apply-templates mode="xaritemtypeapi"        select="." />
     <xsl:apply-templates mode="xarprivateapi"         select="." />
     <xsl:apply-templates mode="xarhookapi"            select="." />
+    <xsl:apply-templates mode="xarhook"               select="." />
     <xsl:apply-templates mode="xaradminapi"           select="." />
     <xsl:apply-templates mode="xaradmin"              select="." />
     <xsl:apply-templates mode="xaruserapi"            select="." />

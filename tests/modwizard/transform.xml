@@ -34,6 +34,10 @@
             *   # doesn't use hooks
             *   # provide transform hook
             * </long>
+
+            <category>Content</category>
+            <class>Complete</class>
+
         </description>
 
     </about>
@@ -70,7 +74,12 @@
                  module hooks are generated if either transform_hooks or item_hooks are generated
             -->
             <item_hooks>no</item_hooks>
+            <module_hooks>yes</module_hooks>
+            <search_hook>no</search_hook>
             <transform_hooks>yes</transform_hooks>
+            <user_menu_hook>no</user_menu_hook>
+            <waiting_content_hook>no</waiting_content_hook>
+
 
         </capabilities>
 

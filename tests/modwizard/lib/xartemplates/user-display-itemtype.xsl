@@ -26,12 +26,13 @@
         <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
             <xsl:element name="xar:data-label" xml:space="default">
-                  <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+                <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
             </xsl:element>:
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xsl:element name="xar:data-output" xml:space="default">
                 <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+                <xsl:attribute name="value">$object_values['<xsl:value-of select="@name" />']</xsl:attribute>
             </xsl:element>
         </span>
         </div>

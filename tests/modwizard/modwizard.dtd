@@ -82,7 +82,8 @@
      default     CDATA #IMPLIED
      increment   ( true | false ) 'false'
      overview    ( true | false ) 'true'
-     unsigned    ( true | false ) 'false' >
+     unsigned    ( true | false ) 'false'
+     transform   ( true | false ) 'false' >
 
 <!ELEMENT dd_type       ( #PCDATA )>
 <!ELEMENT dd_validation ( #PCDATA )>
@@ -101,12 +102,16 @@
 -->
 <!ELEMENT configuration ( dependency?, capabilities, modvars, hooks, security )>
 
-<!ELEMENT capabilities ( supportshorturls, setpagetitle, item_hooks, transform_hooks )* >
+<!ELEMENT capabilities ( supportshorturls, setpagetitle, item_hooks, module_hooks, search_hook, transform_hooks, user_menu_hook, waiting_content_hook )* >
 <!ELEMENT supportshorturls ( #PCDATA )>
 <!ELEMENT dependency ( #PCDATA )>
 <!ELEMENT setpagetitle ( #PCDATA )>
 <!ELEMENT item_hooks ( #PCDATA )>
 <!ELEMENT transform_hooks ( #PCDATA )>
+<!ELEMENT user_menu_hook ( #PCDATA )>
+<!ELEMENT waiting_content_hook ( #PCDATA )>
+<!ELEMENT module_hooks ( #PCDATA )>
+<!ELEMENT search_hook ( #PCDATA )>
 
 <!ELEMENT modvars ( var )*>
 
@@ -117,13 +122,11 @@
 
 
 <!ELEMENT hooks ( hook )* >
-<!ATTLIST hooks
-    enable   ( true | false ) 'false'>
 
 <!ELEMENT hook EMPTY>
 <!ATTLIST hook
     module      CDATA #REQUIRED
-    require     ( yes | no ) 'no' >
+    >
 
 <!ELEMENT security ( component )*>
 <!ELEMENT component ( query+, mask+ )+>

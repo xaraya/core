@@ -90,11 +90,11 @@
                 module initialization.
 
         -->
-        <hooks enable="true">
-            <hook module="hitcount"   require="yes" />
-            <hook module="ratings"    require="no" />
-            <hook module="comments"   require="yes" />
-            <hook module="categories" require="no" />
+        <hooks>
+            <hook module="hitcount"    />
+            <hook module="ratings"     />
+            <hook module="comments"    />
+            <hook module="categories"  />
         </hooks>
 
         <!-- SECURITY related stuff ( ROLES / PRIVILEGES )

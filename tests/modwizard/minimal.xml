@@ -65,7 +65,11 @@
             <setpagetitle>yes</setpagetitle>
 
             <item_hooks>no</item_hooks>
+            <module_hooks>no</user_menu_hook>
+            <search_hook>no</search_hook>
             <transform_hooks>no</transform_hooks>
+            <user_menu_hook>no</user_menu_hook>
+            <waiting_content_hook>no</waiting_content_hook>
 
         </capabilities>
 

@@ -75,8 +75,12 @@
 
                  module hooks are generated if either transform_hooks or item_hooks are generated
             -->
-            <item_hooks>no</item_hooks>
+            <item_hooks>yes</item_hooks>
+            <module_hooks>yes</module_hooks>
+            <search_hook>no</search_hook>
             <transform_hooks>no</transform_hooks>
+            <user_menu_hook>no</user_menu_hook>
+            <waiting_content_hook>no</waiting_content_hook>
 
         </capabilities>
 
@@ -104,11 +108,11 @@
                 module initialization.
 
         -->
-        <hooks enable="true">
-            <hook module="hitcount"   require="yes" />
-            <hook module="ratings"    require="no" />
-            <hook module="comments"   require="yes" />
-            <hook module="categories" require="no" />
+        <hooks>
+            <hook module="hitcount"   />
+            <hook module="ratings"    />
+            <hook module="comments"   />
+            <hook module="categories" />
         </hooks>
 
         <!-- SECURITY related stuff ( ROLES / PRIVILEGES )
@@ -165,7 +169,7 @@
                 </field>
 
                 <!-- Default Input type is textbox. No need to specify ourselve -->
-                <field name="lastname"  type="varchar" size="32" notnull="true" overview="true">
+                <field name="lastname"  type="varchar" size="32" notnull="true" overview="true" transform="true">
                     <label>Lastname</label>
                 </field>
 
@@ -173,7 +177,7 @@
                     <label>Firstname</label>
                 </field>
 
-                <field name="shortname" type="varchar" size="32" overview="true">
+                <field name="shortname" type="varchar" size="32" overview="true" transform="true">
                     <label>Shortname</label>
                 </field>
 

@@ -48,34 +48,41 @@
 </xsl:if>
 function <xsl:value-of select="$module_prefix" />_hookapi_module_remove ( $args ) {
 
-    extract( $args );
+    extract($args);
 
     if (!isset($extrainfo)) {
         $extrainfo = array();
     }
 
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
-    } else {
-        $modname = $extrainfo['module'];
+    // When called via hooks, we should get the real module name from objectid
+    // here, because the current module is probably going to be 'modules' !!!
+    if (!isset($objectid) || !is_string($objectid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object ID (= module name)', 'hook', 'module_remove', '<xsl:value-of select="$module_prefix" />');
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
     }
 
-    $modid = xarModGetIDFromName($modname);
+    $modid = xarModGetIDFromName($objectid);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'module_remove', '<xsl:value-of select="$module_prefix" />');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module ID', 'hook', 'module_remove', '<xsl:value-of select="$module_prefix" />');
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
     }
 
-    return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
-        ,'hook'
-        ,'module_remove'
-        ,array()
-        );
+    /*
+     * ADD YOUR CODE HERE
+     */
 
+    // Return the extra info
+    return $extrainfo;
 }
 </xsl:template>
 

@@ -22,10 +22,13 @@
 
 <xsl:template mode="verify" match="xaraya_module">
 
-    <xsl:message>      * Database</xsl:message>
+    <xsl:message>      * Hooks</xsl:message>
 
-    <xsl:if test="configuration/hooks/@enable = 'no' and count(configuration/hooks/hook) > 0 ">hooks disabled but configured !!!
-        <xsl:message terminate="yes" />
+    <xsl:if test="database/table/structure/field[@transform = 'true' and @overview = 'true']">
+        <xsl:message>
+WARNING: you have configured fields to show in overview and also as subject to hook
+transformation. This is currently not implemented. Transform hooks are only
+called for dispay() not for view():</xsl:message>
     </xsl:if>
 
 </xsl:template>

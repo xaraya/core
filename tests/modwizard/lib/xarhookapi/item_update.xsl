@@ -69,16 +69,11 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_update ( $args ) 
         return;
     }
 
-    // Security check. Adjust.
-    // if (!xarSecurityCheck('SubmitCategoryLink',0,'Link',"$modid:All:All:All")) return '';
+    /*
+     * ADD YOUR CODE HERE
+     */
 
-    return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
-        ,'hook'
-        ,'item_update'
-        ,array()
-        );
-
+    return $extrainfo;
 }
 </xsl:template>
 
