@@ -137,7 +137,7 @@ function modules_admin_list()
         if($mod['admin']){
             $modconfigurl = xarModURL($mod['name'], 'admin');
         } else {
-            $modconfigurl = 0;
+            $modconfigurl = '';
         }
         
         // common urls
