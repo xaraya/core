@@ -138,7 +138,8 @@ function pnTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageNa
     // Override all admin modules types to is pages/admin exist.
     // TODO --> Allow master admin template.
     if($modType == 'admin'){
-        $sourceFileName = "$pnTpl_themeDir/pages/admin.pnt";
+        $pageName = pnVarPrepForOS($pageName);
+        $sourceFileName = "$pnTpl_themeDir/admin/$pageName.pnt";
         if (!file_exists($sourceFileName)) {
             // Revert to main theme
             $pageName = pnVarPrepForOS($pageName);
