@@ -23,10 +23,6 @@ function roles_user_view($args)
     if(!xarVarFetch('phase', 'enum:active:viewall', $phase, 'active', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('name', 'notempty', $data['name'], '', XARVAR_NOT_REQUIRED)) {return;}
 
-    // This $filter variable isnt being used for anything...
-    // It is set later on.
-    if(!xarVarFetch('filter', 'str', $filter, NULL, XARVAR_DONT_SET)) {return;}
-
     if(!xarVarFetch('letter', 'str:1:2', $letter, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('search', 'str:1:100', $search, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'enum:name:uname:email:uid:state:date_reg', $order, 'name', XARVAR_NOT_REQUIRED)) {return;}
@@ -93,35 +89,28 @@ function roles_user_view($args)
         'Y', 'Z'
     );
 
-    $filter['startnum'] = $startnum;
-
     switch(strtolower($phase)) {
         case 'active':
             $data['phase'] = 'active';
             $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
             $data['title'] = xarML('Online Members');
-            // The user API function is called. First pass to get the total number of records
-            // for the pager. Not very efficient, but there you are.
-            $items = xarModAPIFunc(
-                'roles', 'user', 'getallactive',
+
+            $data['total'] = xarModAPIFunc(
+                'roles', 'user', 'countallactive',
                 array(
-                    'startnum' => 0,
                     'filter'   => $filter,
-                    'order'   => $order,
                     'selection'   => $selection,
                     'include_anonymous' => false,
-                    'include_myself' => false,
-                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                    'include_myself' => false
                 )
             );
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
 
-            if (!$items) {
+            if (!$data['total']) {
                 $data['message'] = xarML('There are no online members selected');
                 $data['total'] = 0;
                 return $data;
             }
-            $data['total'] = count($items);
 
             // Now get the actual records to be displayed
             $items = xarModAPIFunc(
@@ -142,8 +131,6 @@ function roles_user_view($args)
             $data['phase'] = 'viewall';
             $data['title'] = xarML('All Members');
 
-            // The user API function is called. First pass to get the total number of records
-            // for the pager. Not very efficient, but there you are.
             $data['total'] = xarModAPIFunc(
                 'roles', 'user', 'countall',
                 array(
@@ -153,13 +140,13 @@ function roles_user_view($args)
                 )
             );
 
-            if (!$data['total']){
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Members')));
+
+            if (!$data['total']) {
                 $data['message'] = xarML('There are no members selected');
                 $data['total'] = 0;
                 return $data;
             }
-
-            xarTplSetPageTitle(xarML('All Members'));
 
             // Now get the actual records to be displayed
             $items = xarModAPIFunc(

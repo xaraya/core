@@ -99,6 +99,10 @@ function roles_userapi_encode_shorturl($args)
 
     // add some other module arguments as standard URL parameters
     if (!empty($path)) {
+        if (isset($search)) {
+            $path .= $join . 'search=' . $search;
+            $join = '&';
+        }
         if (isset($startnum)) {
             $path .= $join . 'startnum=' . $startnum;
             $join = '&';

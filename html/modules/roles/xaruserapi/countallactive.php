@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Get all active users
+ * Count all active users
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -12,12 +12,12 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * get all active users
+ * count all active users
  * @param bool $include_anonymous whether or not to include anonymous user
- * @returns array
- * @return array of users, or false on failure
+ * @returns integer
+ * @return number of users
  */
-function roles_userapi_getallactive($args)
+function roles_userapi_countallactive($args)
 {
     extract($args);
 
@@ -28,21 +28,9 @@ function roles_userapi_getallactive($args)
     }
 
     // Optional arguments.
-    if (!isset($startnum)) {
-        $startnum = 1;
-    }
-    if (!isset($numitems)) {
-        $numitems = -1;
-    }
-    if (!isset($order)) {
-        $order = "name";
-    }
-
     if (empty($filter)){
         $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     }
-
-    $roles = array();
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
@@ -55,11 +43,7 @@ function roles_userapi_getallactive($args)
     $rolestable = $xartable['roles'];
 
     $bindvars = array();
-    $query = "SELECT a.xar_uid,
-                     a.xar_uname,
-                     a.xar_name,
-                     a.xar_email,
-                     b.xar_ipaddr
+    $query = "SELECT COUNT(*)
               FROM $rolestable a, $sessioninfoTable b
               WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > 1";
     $bindvars[] = $filter;
@@ -80,45 +64,24 @@ function roles_userapi_getallactive($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
+    $query .= " AND xar_type = 0";
 
 // cfr. xarcachemanager - this approach might change later
-    $expire = xarModGetVar('roles','cache.userapi.getallactive');
-    if ($startnum == 0) { // deprecated - use countallactive() instead
-        if (!empty($expire)){
-            $result = $dbconn->CacheExecute($expire,$query,$bindvars);
-        } else {
-            $result = $dbconn->Execute($query,$bindvars);
-        }
+    $expire = xarModGetVar('roles','cache.userapi.countallactive');
+    if (!empty($expire)){
+        $result = $dbconn->CacheExecute($expire,$query,$bindvars);
     } else {
-        if (!empty($expire)){
-            $result = $dbconn->CacheSelectLimit($expire, $query, $numitems, $startnum-1,$bindvars);
-        } else {
-            $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
-        }
+        $result = $dbconn->Execute($query,$bindvars);
     }
     if (!$result) return;
 
-    // Put users into result array
-    for (; !$result->EOF; $result->MoveNext()) {
-        list($uid, $uname, $name, $email, $ipaddr) = $result->fields;
-        if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
-            $sessions[] = array('uid'       => (int) $uid,
-                                'name'      => $name,
-                                'email'     => $email,
-                                'ipaddr'    => $ipaddr);
-        }
-    }
+    // Obtain the number of users
+    list($numroles) = $result->fields;
 
-    // Return the users
+    $result->Close();
 
-    if (empty($sessions)){
-        $sessions = '';
-    }
-
-    return $sessions;
+    // Return the number of users
+    return $numroles;
 }
-
-
 
 ?>

@@ -81,14 +81,14 @@ function roles_userapi_get($args)
 //    if (xarSecurityCheck('ViewRoles')) return;
 
 // Create the user array
-    $user = array('uid'         => $row['xar_uid'],
+    $user = array('uid'         => (int) $row['xar_uid'],
                   'uname'       => $row['xar_uname'],
                   'name'        => $row['xar_name'],
                   'email'       => $row['xar_email'],
                   'pass'        => $row['xar_pass'],
                   'date_reg'    => $row['xar_date_reg'],
                   'valcode'     => $row['xar_valcode'],
-                  'state'       => $row['xar_state']);
+                  'state'       => (int) $row['xar_state']);
     // Return the user array
     return $user;
 }

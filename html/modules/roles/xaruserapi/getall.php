@@ -162,7 +162,7 @@ function roles_userapi_getall($args)
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.getall');
-    if ($startnum == 0) {
+    if ($startnum == 0) { // deprecated - use countall() instead
         if (!empty($expire)){
             $result = $dbconn->CacheExecute($expire,$query,$bindvars);
         } else {
@@ -184,7 +184,7 @@ function roles_userapi_getall($args)
         if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
             if (!empty($uidlist)) {
                 $roles[$uid] = array(
-                    'uid'       => $uid,
+                    'uid'       => (int) $uid,
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,
@@ -193,7 +193,7 @@ function roles_userapi_getall($args)
                 );
             } else {
                 $roles[] = array(
-                    'uid'       => $uid,
+                    'uid'       => (int) $uid,
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,

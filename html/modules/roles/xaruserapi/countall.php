@@ -32,7 +32,7 @@ function roles_userapi_countall($args)
     $bindvars = array();
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
         $query = "SELECT COUNT(xar_uid) FROM $rolestable WHERE xar_state = ?";
-        $bindvars[] = $state;
+        $bindvars[] = (int) $state;
     } else {
         $query = "SELECT COUNT(xar_uid) FROM $rolestable WHERE xar_state != ?";
         $bindvars[] = ROLES_STATE_DELETED;
@@ -50,18 +50,24 @@ function roles_userapi_countall($args)
    if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
         $query .= " AND xar_uid != ?";
-        $bindvars[] =  $thisrole['uid'];
+        $bindvars[] =  (int) $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
         $query .= " AND xar_uid != ?";
-        $bindvars[] = $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['uid'];
     }
 
     $query .= " AND xar_type = 0";
 
-    $result = $dbconn->Execute($query,$bindvars);
+// cfr. xarcachemanager - this approach might change later
+    $expire = xarModGetVar('roles','cache.userapi.countall');
+    if (!empty($expire)){
+        $result = $dbconn->CacheExecute($expire,$query,$bindvars);
+    } else {
+        $result = $dbconn->Execute($query,$bindvars);
+    }
     if (!$result) return;
 
     // Obtain the number of users
