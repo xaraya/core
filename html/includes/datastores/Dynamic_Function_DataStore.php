@@ -88,6 +88,44 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
             }
         }
     }
+
+    /* fetch a list of the values for all items in the datastore */
+    function getItems($args)
+    {   
+        /* don't bother if there are no item ids set */
+        if (empty($this->itemids)) {
+            return array();
+        }
+
+        /* default values - you shouldn't rely on these! */
+        if (!array_key_exists('modname', $args)) {
+            list($mod, $type, $func) = xarRequestGetInfo();
+            $args['modname'] = $mod;
+        }
+        if (!array_key_exists('modid', $args)) {
+            $args['modid'] = xarModGetIDFromName($mod);
+        }
+        if (!array_key_exists('itemtype', $args)) {
+            $args['itemtype'] = $this->itemtype;
+        }
+        if (!array_key_exists('objectid', $args)) {
+            $args['objectid'] = '';
+        }
+        $items = array();
+
+        /* fetch the items */
+        //xarLogMessage(var_export($this, true));
+        foreach ($this->itemids as $itemid) {
+            $args['itemid'] = $itemid;
+            $this->getItem($args);
+
+            /* save the result */
+            foreach (array_keys($this->fields) as $function) {
+                $this->fields[$function]->setItemValue($itemid,
+                        $this->fields[$function]->getValue());
+            }
+        }
+    } /* getItems */
 }
 
 ?>
