@@ -357,6 +357,17 @@ class xarQuery
                 break;
             }
     }
+    function setalias($name='',$alias='')
+    {
+        if($name == '' || $alias == '') return false;
+        for($i=0;$i<count($this->tables);$i++) {
+            if ($this->tables[$i]['name'] == $name) {
+                $this->tables[$i]['alias'] = $alias;
+                return true;
+            }
+        }
+        return false;
+    }
     function getcondition($mycondition)
     {
         foreach ($this->conditions as $condition)
