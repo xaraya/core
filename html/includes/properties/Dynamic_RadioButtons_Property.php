@@ -32,14 +32,16 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
             $name = 'dd_'.$this->id;
         }
         $out = '';
-    // CHECKME: can you use id="..." here ? For the first radio-button perhaps ?
+        $idx = 1;
         foreach ($options as $option) {
-            $out .= '<input type="radio" name="'.$name.'" value="'.$option['id'].'"';
+            $out .= '<input type="radio" name="'.$name.'" id="'.$name.'_'.$idx.'" value="'.$option['id'].'"';
             if ($option['id'] == $value) {
-                $out .= ' checked="checked"> '.$option['name'].' </input>';
+                $out .= ' checked="checked">';
             } else {
-                $out .= '> '.$option['name'].' </input>';
+                $out .= '>';
             }
+            $out .= '<label for="'.$name.'_'.$idx.'"> '.$option['name'].' </label></input>';
+            $idx++;
         }
         $out .= (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         return $out;

@@ -33,21 +33,27 @@ class Dynamic_Select_Property extends Dynamic_Property
                     }
                 }
 
-            // or if it contains a ; we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
-            } elseif (strchr($this->validation, ';')) {
-                $options = explode(';', $this->validation);
+            // or if it contains a ; or a , we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
+            } elseif (strchr($this->validation,';') || strchr($this->validation,',')) {
+                // allow escaping \; for values that need a semi-colon
+                $options = preg_split('/(?<!\\\);/', $this->validation);
                 foreach ($options as $option) {
-                    if (strchr($option, ',')) {
+                    $option = strtr($option,array('\;' => ';'));
+                    // allow escaping \, for values that need a comma
+                    if (preg_match('/(?<!\\\),/', $option)) {
                         // if the option contains a , we'll assume it's an id,name combination
-                        list($id,$name) = explode(',', $option);
+                        list($id,$name) = preg_split('/(?<!\\\),/', $option);
+                        $id = strtr($id,array('\,' => ','));
+                        $name = strtr($name,array('\,' => ','));
                         array_push($this->options, array('id' => $id, 'name' => $name));
                     } else {
                         // otherwise we'll use the option for both id and name
+                        $option = strtr($option,array('\,' => ','));
                         array_push($this->options, array('id' => $option, 'name' => $option));
                     }
                 }
 
-            // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList below)
+            // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList, or basedir for ImageList, or ...)
             } else {
             }
         }
