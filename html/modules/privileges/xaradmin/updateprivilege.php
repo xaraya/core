@@ -11,19 +11,14 @@ function privileges_admin_updateprivilege()
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
 
-    list($pid,
-         $name,
-         $realm,
-         $module,
-         $component,
-         $type,
-         $level) = xarVarCleanFromInput('pid',
-                                       'pname',
-                                       'prealm',
-                                       'pmodule',
-                                       'pcomponent',
-                                       'ptype',
-                                       'plevel');
+    if(!xarVarFetch('pid',        'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prealm',     'isset', $realm,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pmodule',    'isset', $module,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pcomponent', 'isset', $component,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
+
 
     $i = 0;
     $instance = "";
