@@ -51,7 +51,7 @@
             <p><xar:mlstring>There are no included hooks.</xar:mlstring></p>
         </div>
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found in </xar:mlstring><a href="http://docs.xaraya.com/docs/rfcs/rfc0030.html">RFC-30.</a></p>
+            <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://docs.xaraya.com/docs/rfcs/rfc0030.html">RFC-30</a>.</p>
         </div>
     </div>
 </div>
