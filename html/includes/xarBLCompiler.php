@@ -3022,6 +3022,8 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
             break;
         case 'module':
+            // FIXME: $_bl_module_name is unknown in the compiled template if
+            // the include is from an include.
             return "xarTpl_includeModuleTemplate(\$_bl_module_name, \"$file\", $subdata)";
             break;
         default:
