@@ -450,6 +450,9 @@ function xarException__formatStack($format,$stacktype = "ERROR")
 
         $error = $stack->pop();
 
+        // FIXME: skip noexception because it's not rendered well
+        if (empty($error->major)) continue;
+
         if ($format == 'template' || $format == 'rawhtml') {
             include_once "includes/exceptions/htmlexceptionrendering.class.php";
             $msg = new HTMLExceptionRendering($error);
