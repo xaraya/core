@@ -8,7 +8,7 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
@@ -27,10 +27,12 @@ function adminpanels_adminapi_updatemenudb($args)
     // no args yet
     extract($args);
 
+    if(!isset($force)) $force = false;
+
     // what admin mods do we have here?
-    $mods = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+    $mods = xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('AdminCapable' => 1)));
     if(empty($mods)) {
         // none, so dont do anything
@@ -54,7 +56,7 @@ function adminpanels_adminapi_updatemenudb($args)
         // Obtain the number of items
         list($num) = $result->fields;
 
-        if($num == count($mods)){
+        if($num == count($mods) && !$force){
             // just return
             return true;
         }else{
