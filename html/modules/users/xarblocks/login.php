@@ -46,7 +46,7 @@ function users_loginblock_display($blockinfo)
 
     // Display logout block if user is already logged in
     // e.g. when the login/logout block also contains a search box
-    if (xarUserLoggedIn()) {
+    if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
             $blockinfo['content'] = xarTplBlock('users', 'logout', $args);

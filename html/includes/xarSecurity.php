@@ -130,7 +130,7 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarGetRequestInfo();
+        list($modName) = xarRequestGetInfo();
     }
 
 // Date gives extra security but leave it out for now

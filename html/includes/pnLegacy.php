@@ -208,7 +208,21 @@ function pnUserGetAll($startnum = 1, $numitems = -1)
  * @return string the name of the current top-level module, false if not in a module
  */
 function pnModGetName() {
-    list($modName) = pnRequestGetInfo();
+    list($modName) = xarRequestGetInfo();
+
+    return $modName;
+}
+
+/**
+ * get name of current top-level module
+ *
+ * @deprec
+ * @access public
+ * @return string the name of the current top-level module, false if not in a module
+ */
+function xarModGetName() {
+    //TODO Work around for the prefix.
+    list($modName) = xarRequestGetInfo();
 
     return $modName;
 }
@@ -501,6 +515,19 @@ function pnModGetUserMods()
  */
 function pnModGetAdminMods()
 {
+    return xarModGetList(array('AdminCapable' => 1));
+}
+
+/**
+ * Gets a list of active modules that have an administrative interface.
+ *
+ * @returns array
+ * @return array of module information arrays
+ * @raise DATABASE_ERROR
+ */
+function xarModGetAdminMods()
+{
+    //TODO Workaround for admin panels.
     return xarModGetList(array('AdminCapable' => 1));
 }
 

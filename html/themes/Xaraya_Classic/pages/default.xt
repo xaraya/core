@@ -6,9 +6,9 @@
         <meta name="Keywords" content="#xarConfigGetVar('Site.Core.MetaKeywords')#" />
         <meta name="Description" content="#xarConfigGetVar('Site.Core.MetaDescription')#" />
         <title> #xarConfigGetVar('Site.Core.SiteName')# :: #xarConfigGetVar('Site.Core.Slogan')#</title>
-        <base href="&xart-baseurl;index.php" />
-        <link rel="StyleSheet" href="&xart-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
-        <style type="text/css">@import url(&xart-baseurl;themes/Xaraya_Classic/style/style.css); </style>
+        <base href="&xar-baseurl;index.php" />
+        <link rel="StyleSheet" href="&xar-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
+        <style type="text/css">@import url(&xar-baseurl;themes/Xaraya_Classic/style/style.css); </style>
     </head>
     <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -30,7 +30,7 @@
 <!--
     <tr>
         <td align="center" colspan="3">-->
-            <!--xart:blockgroup name="top" id="top" /-->
+            <!--xar:blockgroup name="top" id="top" /-->
         <!--</td>
     </tr>
 -->
@@ -44,8 +44,8 @@
         <td width="18%" align=left valign=top>
             <table width="100%" border=0 cellpadding=0 cellspacing=0>
                 <tr>
-                    <td bgcolor="##f0f0f0">
-                        <xart:blockgroup name="left" id="left" />
+                    <td bgcolor="#f0f0f0">
+                        <xar:blockgroup name="left" id="left" />
                     </td>
                 </tr>
                 <tr height=200>
@@ -57,19 +57,19 @@
         <td width="1%" background="themes/Xaraya_Classic/images/vline.gif">   
         </td>
         <td width="60%" class=main_copy valign=top>
-            <xart:blockgroup name="center" id="center" />
-            <xart:module id="modulespace" main="true" />
+            <xar:blockgroup name="center" id="center" />
+            <xar:module id="modulespace" main="true" />
         </td>
         <td width="1%">   
         </td>
         <td width="20%" align=left valign=top background="themes/Xaraya_Classic/images/side_all.gif">
-            <xart:blockgroup name="right" id="right" />
+            <xar:blockgroup name="right" id="right" />
         </td>
     </tr>
 </table>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
     <tr>
-        <td align=right bgcolor="##f0f0f0">
+        <td align=right bgcolor="#f0f0f0">
             <b>#xarConfigGetVar('Site.Core.Slogan')#</b>
         </td>
     </tr>
