@@ -25,6 +25,7 @@ define('XAR_TOKEN_ENDTAG_START'      , '/'      ); // Start of an end tag
 // Entities
 define('XAR_TOKEN_ENTITY_START'      , '&'      ); // Start of an entity
 define('XAR_TOKEN_ENTITY_END'        , ';'      ); // End of an entity
+define('XAR_TOKEN_ENTITY_SEP'        , '-'      ); // separates the different parts of xar entities
 
 // Tag tokens
 define('XAR_TOKEN_NONMARKUP_START'   , '!'      ); // Start of non markup inside tag
@@ -43,10 +44,15 @@ define('XAR_TOKEN_VAR_START'         , '$'    );          // Start of a variable
 define('XAR_TOKEN_CI_DELIM'          , '#'    );          // Delimiter for variables, functions and other the CI stands for Code Item
 define('XAR_TOKEN_MLVAR_START'       , '('    );          // Start of MLS placeholders like #(1)
 define('XAR_TOKEN_MLVAR_END'         , ')'    );          // End of MLS placeholders like #(1)
+define('XAR_TOKEN_EQUAL_SIGN'        , '='    );
+define('XAR_TOKEN_APOS'              , "'"    );
+define('XAR_TOKEN_QUOTE'             , '"'    );
+define('XAR_TOKEN_SPACE'             , ' '    );
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
 define('XAR_NODES_LOCATION'          , 'includes/blnodes/'); // Where do we keep our nodes classes
+
 
 /**
  * Defines for errors
@@ -128,6 +134,7 @@ class xarTpl__CompilerError extends SystemException
  * @access private
  * @todo evaluate whether the exception needs to be a system exception
  * @todo ML for the error message?
+ * @todo Does the exception need to be a system exception?
  */
 class xarTpl__ParserError extends SystemException
 {
@@ -137,10 +144,7 @@ class xarTpl__ParserError extends SystemException
         $out .= $msg."\n\n";
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
-        // Next lines assume monospaced rendering
-        //$out .= str_repeat('-', max(0,$posInfo->column - 1));
-        //$out .= '^';
-        // FIXME: evaluate whether this needs to be a system exception.
+
         xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$out);
     }
 }
@@ -584,8 +588,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             break;
                         case XAR_TOKEN_ENDTAG_START: 
                             // Check for xar end tag
-                            if ($this->peek(4) == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
-                                $xarToken = $this->getNextToken(4);
+                            $nsLength = strlen(XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM);
+                            if ($this->peek($nsLength) == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                                $xarToken = $this->getNextToken($nsLength);
                                 if(!isset($xarToken)) return;
                                 // Situation: [...text...]</xar:...
                                 $trimmer='xmltrim';
@@ -860,6 +865,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseBeginTag()
     {
+        // Parse the name of the tag
         $tagName = '';
         while (true) {
             $token = $this->getNextToken();
@@ -869,7 +875,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                 return;
             }
-            if ($token == ' ' || $token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START) {
+            if ($token == XAR_TOKEN_SPACE || $token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START) {
                 break;
             }
             $tagName .= $token;
@@ -878,8 +884,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $this->raiseError(XAR_BL_INVALID_TAG,"Unnamed tag.", $this);
             return;
         }
+        
+        // Parse the attributes
         $attributes = array();
-        if ($token == ' ') {
+        if ($token == XAR_TOKEN_SPACE) {
             while (true) {
                 $attribute = $this->parseTagAttribute();
                 if (!isset($attribute)) return; // throw back
@@ -913,38 +921,42 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseTagAttribute()
     {
-        // Tag attribute
+        // First parse the name part
         $name = '';
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) return;
         
-            if ($token == '"' || $token == "'") {
-                $quote = $token;
-                $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$token' character in attribute name.", $this);
-                return;
-            } elseif ($token == XAR_TOKEN_TAG_START) {
-                $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                return;
-            } elseif ($token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START || $token == XAR_TOKEN_PI_DELIM) {
-                if (trim($name) != '') {
-                    $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$name' attribute.", $this);
+            switch($token) {
+                case XAR_TOKEN_QUOTE:
+                case XAR_TOKEN_APOS:
+                    $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$token' character in attribute name.", $this);
                     return;
-                }
-                return $token;
-            } elseif ($token == '=') {
-                break;
+                case  XAR_TOKEN_TAG_START:
+                    $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
+                    return;
+                case XAR_TOKEN_TAG_END:
+                case XAR_TOKEN_ENDTAG_START:
+                case XAR_TOKEN_PI_DELIM:
+                    if (trim($name) != '') {
+                        $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$name' attribute.", $this);
+                        return;
+                    }
+                    return $token;
+                case XAR_TOKEN_EQUAL_SIGN:
+                    break 2;
             }
             $name .= $token;
         }
+        
         $name = trim($name);
         if ($name == '') {
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Unnamed attribute.", $this);
             return;
         }
-        $value = '';
-        $quote = '';
-        $ok = false;
+        
+        // Then the value part
+        $value = '';  $quote = '';  $ok = false;
         while (true) {
             $token = $this->getNextToken();
             if (!isset($token)) return;
@@ -957,11 +969,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             }
             if ($ok) {
                 $value .= $token;
-            } elseif ($token == '"') {
-                $quote = '"';
+            } elseif ($token == XAR_TOKEN_QUOTE) {
+                $quote = XAR_TOKEN_QUOTE;
                 $ok = true;
-            } elseif ($token == "'") {
-                $quote = "'";
+            } elseif ($token == XAR_TOKEN_APOS) {
+                $quote = XAR_TOKEN_APOS;
                 $ok = true;
             }
         }
@@ -1003,7 +1015,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $token = $this->getNextToken();
             if (!isset($token)) return;
             
-            if($token == '-' || $token == XAR_TOKEN_ENTITY_END) {
+            if($token == XAR_TOKEN_ENTITY_SEP || $token == XAR_TOKEN_ENTITY_END) {
                 break;
             }
             $entityType .= $token;
@@ -1013,7 +1025,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             return;
         }
         $parameters = array();
-        if ($token == '-') {
+        if ($token == XAR_TOKEN_ENTITY_SEP) {
             $parameter = '';
             while (true) {
                 $token = $this->getNextToken();
@@ -1026,7 +1038,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     $parameters[] = $parameter;
                     break;
-                } elseif ($token == '-') {
+                } elseif ($token == XAR_TOKEN_ENTITY_SEP) {
                     $parameters[] = $parameter;
                     $parameter = '';
                 } else {
@@ -1074,17 +1086,20 @@ class xarTpl__Parser extends xarTpl__PositionInfo
      * and null is returned
      *
      * @todo this does a literal search on the needle, no smart finding of end tags
-     * @todo investigate border situation when needle is found but between text is empty
+     * @todo investigate border situation when needle is found but between text is empty (e.g. an empty entity (&;)
      */
     function windTo($needle)
     {
         assert('strlen($needle) > 0; /* The search needle in parser->windTo has zero length */');
         
-        // Take a peek first
+        // Take a peek first, raise exception explicitly, cos peek* doesnt
         $peek = $this->peekTo($needle);
-        if(!isset($peek)) return;
+        if(!isset($peek)) {
+            $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
+            return;
+        }
            
-        // We found sumtin, advance the pointer
+        // We found sumtin, advance the pointer, cos we can
         $this->getNextToken(strlen($peek));
         return $peek;
     }
