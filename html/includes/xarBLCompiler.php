@@ -428,6 +428,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $result;
     }
         
+    /**
+     * parseNode
+     * 
+     * top level parse function for a node
+     *
+     * @todo why only allow PI targets of size 3?
+     */
     function parseNode(&$parent)
     {
         // Start of parsing a node, initialize our result variables
@@ -441,203 +448,196 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             // #  ==> replacement (variable or function)
             switch ($token) {
                 case XAR_TOKEN_TAG_START: // <
-                    // We distinguish :
-                    // ? -> Processing instructions
-                    // ! -> Comments, doctypes, CDATA etc (non markup start)
-                    // x -> Possible xar stuff
-                    // / -> end tag
-                    // other -> rest
                     $nextToken = $this->getNextToken();
-                    if ($nextToken == XAR_TOKEN_PI_DELIM) { // < ?
-                        // TODO: why the specific 3 characters?, could easily scan to first whitespace
-                        $res = $this->parseProcessingInstruction($this->getNextToken(3));
-                        if(!isset($res)) return; //throw back
-                        $token = $res;
-                        break;
-                    } elseif ($nextToken == 'x') {
-                        // Check for xar tag (<xar:)
-                        $xarToken = $this->getNextToken(3);
-                        if ($nextToken . $xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
-                            // <xar: tag
-                            if (!$parent->hasChildren()) {
-                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
-                                return;
-                            }
-                            // Add text to parent, if there is any
-                            // Situation: [...text...]<xar:...
-                            // NOTE: WHITESPACE EATER HERE
-                            $trimmer='xmltrim'; 
-                            // If we're in native php tags which always have xar children, trim it
-                            $natives = array('set','ml','blockgroup');
-                            if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
-                            if ($trimmer($text) != '') {
-                                if ($parent->hasText()) {
-                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
-                                } else {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
+                    switch($nextToken) {
+                        case XAR_TOKEN_PI_DELIM: // < ?
+                            $res = $this->parseProcessingInstruction($this->getNextToken(3));
+                            if(!isset($res)) return; //throw back
+                            $token = $res;
+                            break 2;
+                        case 'x': // <x
+                            $xarToken = $this->getNextToken(3);
+                            if ($nextToken . $xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                                // <xar: tag
+                                if (!$parent->hasChildren()) {
+                                    $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
                                     return;
+                                }   
+                            
+                                // Situation: [...text...]<xar:...
+                                $trimmer='xmltrim'; 
+                                // If we're in native php tags which always have xar children, trim it
+                                $natives = array('set','ml','blockgroup');
+                                if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
+                                if ($trimmer($text) != '') {
+                                    if ($parent->hasText()) {
+                                        $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
+                                    } else {
+                                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
+                                        return;
+                                    }
+                                    $text = '';
                                 }
-                                $text = '';
-                            }
 
-                            // Handle Begin Tag
-                            $res = $this->parseBeginTag();
-                            if (!isset($res)) return; // throw back
-
-                            list($tagName, $attributes, $closed) = $res;
-                            // Check for uniqueness of id attribute
-                            if (isset($attributes['id'])) {
-                                if (isset($this->tagIds[$attributes['id']])) {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"Not unique id in '".$tagName."' tag.", $this);
-                                    return;
-                                }
-                                if ($attributes['id'] == '') {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"Empty id in '".$tagName."' tag.", $this);
-                                    return;
-                                }
-                                $this->tagIds[$attributes['id']] = true;
-                            }
-
-                            $tplType = $this->tplVars->get('type');
-                            if($tplType == 'module' && $tagName == XAR_ROOTTAG_NAME) {
-                                // root tag found in module template
-                                $this->raiseError(XAR_BL_INVALID_SYNTAX,
-                                              'Root tag found in module template or before <?xar type="page" ?> instruction',$this);
-                                return;
-                            }
-
-                            if($tplType == 'page' && $tagName != XAR_ROOTTAG_NAME && !$this->tagRootSeen) {
-                                $this->raiseError(XAR_BL_INVALID_SYNTAX,"Found a  xar:$tagName tag before the xar:blocklayout tag, this is invalid",$this);
-                                return;
-                            }
-
-                            // Create the node we parsed.
-                            $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
-                            if (!isset($node)) return; // throw back
-
-                            if (!$closed) {
-                                array_push($this->tagNamesStack, $tagName);
-                                $res = $this->parseNode($node);
+                                // Handle Begin Tag
+                                $res = $this->parseBeginTag();
                                 if (!isset($res)) return; // throw back
 
-                                $node->children = $res;
-                            }
-                            $children[] = $node;
-                            // Here we set token to an empty string so that $text .= $token will result in $text
-                            $token = '';
-                            break;
-                        }
-                        $this->stepBack(3);
-                    } elseif ($nextToken == XAR_TOKEN_ENDTAG_START) {
-                        // Check for xar end tag
-                        $xarToken = $this->getNextToken(4);
-                        if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
-                            // Add text to parent
-                            // Situation: [...text...]</xar:...
-                            $trimmer='xmltrim';
-                            $natives = array('set', 'ml', 'mlvar');
-                            if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
-                            if ($trimmer($text) != '') {
-                                if ($parent->hasText()) {
-                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
-                                } else {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
+                                list($tagName, $attributes, $closed) = $res;
+                                // Check for uniqueness of id attribute
+                                if (isset($attributes['id'])) {
+                                    if (isset($this->tagIds[$attributes['id']])) {
+                                        $this->raiseError(XAR_BL_INVALID_TAG,"Not unique id in '".$tagName."' tag.", $this);
+                                        return;
+                                    }
+                                    if ($attributes['id'] == '') {
+                                        $this->raiseError(XAR_BL_INVALID_TAG,"Empty id in '".$tagName."' tag.", $this);
+                                        return;
+                                    }
+                                    $this->tagIds[$attributes['id']] = true;
+                                }
+
+                                $tplType = $this->tplVars->get('type');
+                                if($tplType == 'module' && $tagName == XAR_ROOTTAG_NAME) {
+                                    // root tag found in module template
+                                    $this->raiseError(XAR_BL_INVALID_SYNTAX,
+                                              'Root tag found in module template or before <?xar type="page" ?> instruction',$this);
                                     return;
                                 }
-                                $text = '';
-                            }
-                            // Handle End Tag
-                            $tagName = $this->parseEndTag();
-                            if (!isset($tagName)) return; // throw back
 
-                            $stackTagName = array_pop($this->tagNamesStack);
-                            if ($tagName != $stackTagName) {
-                                $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where closed '$stackTagName' was expected.", $this);
-                                return;
+                                if($tplType == 'page' && $tagName != XAR_ROOTTAG_NAME && !$this->tagRootSeen) {
+                                    $this->raiseError(XAR_BL_INVALID_SYNTAX,"Found a  xar:$tagName tag before the xar:blocklayout tag, this is invalid",$this);
+                                    return;
+                                }
+
+                                // Create the node we parsed.
+                                $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
+                                if (!isset($node)) return; // throw back
+
+                                if (!$closed) {
+                                    array_push($this->tagNamesStack, $tagName);
+                                    $res = $this->parseNode($node);
+                                    if (!isset($res)) return; // throw back
+                                    $node->children = $res;
+                                }
+                                $children[] = $node;
+                                // Here we set token to an empty string so that $text .= $token will result in $text
+                                $token = '';
+                                break 2;
                             }
-                            return $children;
-                        }
-                        $this->stepBack(4);
-                    } elseif ($nextToken == XAR_TOKEN_NONMARKUP_START) {
-                        $token .= $nextToken; // <!
-                        $buildup=''; unset($identifier);unset($remember);
-                        // Get all tokens till the first whitespace char, and check whether we found any tokens
-                        $nextChar = $this->getNextToken();
-                        while(trim($nextChar)) {
-                            $buildup .= $nextChar;
-                            switch($buildup) {
-                                case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                                    $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                    break 2; // done
-                                case XAR_TOKEN_CDATA_START:
-                                    // Treat it as text
-                                    // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
-                                    $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
-                                    break 3;
+                            $this->stepBack(3);
+                            break;
+                        case XAR_TOKEN_ENDTAG_START: 
+                            // Check for xar end tag
+                            $xarToken = $this->getNextToken(4);
+                            if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                                // Add text to parent
+                                // Situation: [...text...]</xar:...
+                                $trimmer='xmltrim';
+                                $natives = array('set', 'ml', 'mlvar');
+                                if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
+                                if ($trimmer($text) != '') {
+                                    if ($parent->hasText()) {
+                                        $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
+                                    } else {
+                                        $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
+                                        return;
+                                    }
+                                    $text = '';
+                                }
+                                // Handle End Tag
+                                $tagName = $this->parseEndTag();
+                                if (!isset($tagName)) return; // throw back
+
+                                $stackTagName = array_pop($this->tagNamesStack);
+                                if ($tagName != $stackTagName) {
+                                    $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where closed '$stackTagName' was expected.", $this);
+                                    return;
+                                }
+                                return $children;
                             }
+                            $this->stepBack(4);
+                            break;
+                        case XAR_TOKEN_NONMARKUP_START:
+                            $token .= $nextToken; // <!
+                            $buildup=''; unset($identifier);unset($remember);
+                            // Get all tokens till the first whitespace char, and check whether we found any tokens
                             $nextChar = $this->getNextToken();
-                        }
-                        if(!isset($identifier)) {
-                            // Remember what was after the buildup
-                            $remember = $nextChar;
-                        }
-                        // identifier is now a token or free form (in our case  -- or the first whitespace char)
-
-                        // Get the rest of the non markup tag, recording along the way
-                        $matchToken=''; $match = '';
-                        $nextChar = $this->getNextToken();
-                        if(isset($identifier)) {
-                            while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END){
-                                $match .= $nextChar;
-                                // Match on the length of the identifier
+                            while(trim($nextChar)) {
+                                $buildup .= $nextChar;
+                                switch($buildup) {
+                                    case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                                        $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
+                                        break 3; // done
+                                    case XAR_TOKEN_CDATA_START:
+                                        // Treat it as text
+                                        // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
+                                        $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
+                                        break 4;
+                                }
                                 $nextChar = $this->getNextToken();
-                                $matchToken = substr($match,-1 * strlen($identifier));
                             }
-                        }
-                        // Forward to the end token
-                        while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
-                            $match .= $nextChar;
-                            $nextChar = $this->getNextToken();
-                        }
+                            if(!isset($identifier)) {
+                                // Remember what was after the buildup
+                                $remember = $nextChar;
+                            }
+                            // identifier is now a token or free form (in our case  -- or the first whitespace char)
 
-                        if(isset($identifier)) {
-                            $tagrest = substr($match,0,-1 * strlen($identifier));
-                        } else {
-                            $tagrest = $match;
-                            $matchToken = $remember;
-                            $identifier = $remember;
-                        }
-                    
-                        // Was it properly ended?
-                        if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
-                            // the tag was properly ended.
-                            $invalid = strpos($tagrest,$matchToken);
-                            switch($identifier) {
-                                case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                                    // <!-- HTML comment, copy to output
-                                    $token .= $identifier . $tagrest . $matchToken . $nextChar;
-                                    break;
-                                default:
-                                    // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
-                                    $invalid = false;
-                                    // Take the $tagrest and resolve stuff #...#
-                                    $token .= $buildup . $identifier . $tagrest . $nextChar;
+                            // Get the rest of the non markup tag, recording along the way
+                            $matchToken=''; $match = '';
+                            $nextChar = $this->getNextToken();
+                            if(isset($identifier)) {
+                                while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END){
+                                    $match .= $nextChar;
+                                    // Match on the length of the identifier
+                                    $nextChar = $this->getNextToken();
+                                    $matchToken = substr($match,-1 * strlen($identifier));
+                                }
                             }
-                            if($invalid) {
-                                $this->raiseError(XAR_BL_INVALID_TAG,
+                            // Forward to the end token
+                            while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
+                                $match .= $nextChar;
+                                $nextChar = $this->getNextToken();
+                            }
+
+                            if(isset($identifier)) {
+                                $tagrest = substr($match,0,-1 * strlen($identifier));
+                            } else {
+                                $tagrest = $match;
+                                $matchToken = $remember;
+                                $identifier = $remember;
+                            }
+                    
+                            // Was it properly ended?
+                            if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
+                                // the tag was properly ended.
+                                $invalid = strpos($tagrest,$matchToken);
+                                switch($identifier) {
+                                    case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                                        // <!-- HTML comment, copy to output
+                                        $token .= $identifier . $tagrest . $matchToken . $nextChar;
+                                        break;
+                                    default:
+                                        // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
+                                        $invalid = false;
+                                        // Take the $tagrest and resolve stuff #...#
+                                        $token .= $buildup . $identifier . $tagrest . $nextChar;
+                                }
+                                if($invalid) {
+                                    $this->raiseError(XAR_BL_INVALID_TAG,
                                               "A non-markup tag (probably a comment) contains its identifier (".
                                               $matchToken.") in its contents. This is invalid XML syntax",$this);
-                                return;
-                            }
-                        } else {
-                            xarLogMessage("[$token][$buildup][$identifier][$tagrest][$matchToken][$nextChar]");
-                            $this->raiseError(XAR_BL_INVALID_TAG,
+                                    return;
+                                }
+                            } else {
+                                xarLogMessage("[$token][$buildup][$identifier][$tagrest][$matchToken][$nextChar]");
+                                $this->raiseError(XAR_BL_INVALID_TAG,
                                           "A non-markup tag (probably a comment) wasn't properly matched ('".
                                           $identifier."' vs. '". $matchToken ."') This is invalid XML syntax",$this);
-                            return;
-                        }
-                        break;
-                    } // end elseif
+                                return;
+                            }
+                            break 2;
+                    } // end case
 
                     //<Dracos>  Stop tag embedding, ie <a href="<xar
                     $tagcounter = 0;
@@ -660,10 +660,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Check for xar entity
                     $nextToken = $this->getNextToken(4);
                     if ($nextToken == 'xar-') {
-                        if (!$parent->hasChildren()) {
-                            $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
-                            return;
-                        }
+                            if (!$parent->hasChildren()) {
+                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
+                                return;
+                            }
                         // Add text to parent
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
