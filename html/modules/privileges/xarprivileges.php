@@ -176,6 +176,7 @@ class xarMasks
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         // Check if the mask has already been registered, and update it if necessary.
+// FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
         $query = 'SELECT xar_sid FROM ' . $this->maskstable
             . ' WHERE xar_module = ? AND xar_name = ?';
@@ -353,6 +354,7 @@ class xarMasks
 
     function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
+        $maskname = $mask;
         $mask =  $this->getMask($mask);
 //        if($mask->getName() == "pnLegacyMask") {
 //            echo "realm: " . $pnrealm . "\n" . "level: " . $pnlevel;exit;
@@ -375,10 +377,10 @@ class xarMasks
             $module = xarVarGetCached('Security.Variables','currentmodule');
 
             if ($component == "") {
-                $msg = xarML('Did not find a mask registered for an unspecified component in module #(1)', $module);
+                $msg = xarML('Did not find mask #(1) registered for an unspecified component in module #(2)', $maskname, $module);
             }
             else {
-                $msg = xarML('No masks registered for component #(1) in module #(2)', $component, $module);
+                $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
             xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
                            new DefaultUserException($msg));
@@ -690,6 +692,7 @@ class xarMasks
         if (!xarVarIsCached('Security.Masks',$name)) {
 //Set up the query and get the data from the xarmasks table
             $bindvars = array();
+// FIXME: make mask names unique across modules (+ across realms) ?
             if ($module == "All") {
                 $query = "SELECT * FROM $this->maskstable WHERE xar_name= ?";
                 $bindvars = array($name);
