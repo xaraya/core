@@ -1578,7 +1578,7 @@ class xarTemplateTag
     return $this->_handler;
     }
 
-    function callHandler($args)
+    function callHandler($args, $handler_type='render')
     {
         // FIXME: get rid of this once installation includes the right serialized info
         if (empty($this->_type) || empty($this->_func)) {
@@ -1596,6 +1596,8 @@ class xarTemplateTag
                 return;
             }
         }
+        // Add the type to the args
+        $args['handler_type'] = $handler_type;
         $code = xarModAPIFunc($this->_module, $this->_type, $this->_func, $args);
         assert('is_string($code); /* A custom tag should return a string with the code to put into the compiled template */');
         // Make sure the code has UNIX line endings too
