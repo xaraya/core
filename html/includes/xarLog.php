@@ -34,15 +34,12 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
 {
 
     $GLOBALS['xarLog_loggers'] = array();
-
-    $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
-
     $xarLogConfig = array();
 
-    if (file_exists($logConfigFile)) {
-
+    if (xarLogConfigReadable()) 
+    {
         //We can't use xarInclude here.
-        if (!include_once ($logConfigFile)) {
+        if (!include_once (xarLogConfigFile())) {
             xarCore_die('xarLog_init: Log configuration file is invalid!');
         }
 
@@ -94,6 +91,38 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
 }
 
 /**
+ * Will return the log configuration file directory and name
+ */
+function xarLogConfigFile()
+{
+    static $logConfigFile;
+    
+    if (isset($logConfigFile)) return $logConfigFile;
+    
+    $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
+
+    if (file_exists($logConfigFile)) {
+        $logConfigFile = realpath($logConfigFile);
+    }
+    
+    return $logConfigFile;
+}
+
+/**
+ * Will return true if the log config file exists and is readable, and false if not
+ */
+function xarLogConfigReadable()
+{
+    $logConfigFile = xarLogConfigFile();
+    
+    if (file_exists($logConfigFile) && is_readable($logConfigFile)) {
+        return true;
+    }
+    
+    return false;
+}
+
+/**
  * Will return the log file directory and name
  */
 function xarLogFallbackFile ()
@@ -104,7 +133,7 @@ function xarLogFallbackFile ()
     
     $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
 
-    if (file_exists($logFile) && is_writeable($logFile)) {
+    if (file_exists($logFile)) {
         $logFile = realpath($logFile);
     }
     
