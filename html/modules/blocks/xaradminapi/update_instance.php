@@ -39,7 +39,7 @@ function blocks_adminapi_update_instance($args)
     }
 
     // Argument check
-    if ((!isset($name)) ||
+    if (!xarVarValidate('pre:lower:ftoken:passthru:str:1', $name) ||
         (!isset($bid) || !is_numeric($bid)) ||
         (!isset($title)) ||
         (!isset($refresh) || !is_numeric($refresh)) ||

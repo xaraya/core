@@ -27,8 +27,8 @@ function blocks_adminapi_create_instance($args)
     extract($args);
 
     // Argument check
-    if ((!isset($title)) ||
-        (!isset($name)) ||
+    if (!isset($title) ||
+        !xarVarValidate('pre:lower:ftoken:passthru:str:1', $name) ||
         (!isset($type) || !is_numeric($type)) ||
         (!isset($state) || !is_numeric($state))) {
         // TODO: this type of error to be handled automatically
@@ -52,7 +52,7 @@ function blocks_adminapi_create_instance($args)
 
     // If the content is not set, attempt to get initial content from
     // the block initialization function.
-    if (!isset($content) || !is_array($content)) {
+    if (!isset($content)) {
         $content = '';
 
         // The initialisation function to execute.
@@ -89,6 +89,12 @@ function blocks_adminapi_create_instance($args)
                 $content = $initresult;
             }
         }
+    }
+
+    if (is_array($content)) {
+        // Serialize the content, so arrays of initial content
+        // can be passed directly into this API.
+        $content = serialize($content);
     }
 
     // Load up database details.
