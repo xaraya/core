@@ -15,6 +15,7 @@
             <th><xar:mlstring>Value</xar:mlstring></th>
             <th><xar:mlstring>Description</xar:mlstring></th>
             <th><xar:mlstring>Actions</xar:mlstring></th>
+        </tr>
     <xar:if condition="count($themevars) gt 0">
         <xar:loop name="$themevars">
         <tr>

@@ -173,7 +173,6 @@
                             </td>
                         </tr>
                     </xar:foreach>
-                    </tr>
                 </table>
             </div>
         </xar:if>
