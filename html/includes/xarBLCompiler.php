@@ -641,7 +641,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     } else {
                         xarLogMessage("[$token][$buildup][$identifier][$tagrest][$matchToken][$nextChar]");
                         $this->raiseError(XAR_BL_INVALID_TAG,
-                                          "A non-markup tag (probably a comment) wasn't properly matches ('".
+                                          "A non-markup tag (probably a comment) wasn't properly matched ('".
                                           $identifier."' vs. '". $matchToken ."') This is invalid XML syntax",$this);
                         return;
                     }
@@ -664,7 +664,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                 }
                 $this->Stepback($tagcounter+1);
-                // xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
                 break;
             case XAR_TOKEN_ENTITY_START:
                 // Check for xar entity
@@ -761,7 +760,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         } elseif ($nextToken == XAR_TOKEN_CI_DELIM) {
                             // We seem to be at the end, stop here.
                             break;
-                            // end patch
                         }
                         elseif ($this->peek() == chr(10)) {
                             $this->stepBack($distance);
@@ -772,19 +770,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         $instruction .= $nextToken;
                     }
-                    // Convert decimal entities for ASCII characters.
-                    // Character encoding could be ASCII or UTF-8, so only expand
-                    // the shared ASCII character for now.
-                    // (Actually this doesn't work due to the way the file is parsed. We should
-                    // actually parse the XML first, converting entities as appropriate, *THEN*
-                    // start looking for BL processing statements. Even then, entities should be
-                    // recognised in context, so &amp;#123; in a BL processing instruction is
-                    // handled as a literal string '&#123;' and not as a processing instruction
-                    // terminator.)
-                    //$instruction = preg_replace('/&#(\d+);/me', "chr('\\1')", $instruction);
+
                     // Replace XML entities with their ASCII equivalents.
                     // An XML parser would do this for us automatically.
-                    // FIXME: this is assuming too much html like systems
                     $instruction = str_replace(
                         array('&amp;', '&gt;', '&lt;', '&quot;'),
                         array('&', '>', '<', '"'),
@@ -867,8 +855,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseBeginTag()
     {
-        //xarLogMessage('parseBeginTag', XARLOG_LEVEL_ERROR);
-        // Tag name
         $tagName = '';
         while (true) {
             $token = $this->getNextToken();
@@ -926,7 +912,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseTagAttribute()
     {
-        //xarLogMessage('parseTagAttribute', XARLOG_LEVEL_ERROR);
         // Tag attribute
         $name = '';
         while (true) {
@@ -995,7 +980,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseEndTag()
     {
-        //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Tag name
         $tagName = '';
         while (true) {
@@ -1021,7 +1005,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parseEntity()
     {
-        //xarLogMessage('parseEntity', XARLOG_LEVEL_ERROR);
         // Entity type
         $entityType = '';
         while (true) {
@@ -1127,6 +1110,8 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         // Otherwise we instantiate the right class
         $tagClass ='xarTpl__Xar' .$tagName.'Node';
         
+        // FIXME: sync the implementation of core / custom tags, handle them
+        // the same way
         if(class_exists($tagClass)) {
             $node =& new $tagClass($parser, $tagName);
         } else {
@@ -1155,8 +1140,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node->parameters = $parameters;
             return $node;
         }
-        // FIXME: how do you handle new entities registered by module developers ?
-        // TODO: how do you register new entities in the first place ?
         $this->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'.", $parser);
         return;
     }
