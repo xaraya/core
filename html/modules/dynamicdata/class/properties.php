@@ -893,6 +893,8 @@ class Dynamic_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
         if (!isset($value)) {
             $value = xarVarCleanFromInput($name);
         }
