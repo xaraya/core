@@ -431,21 +431,19 @@ ul li.xar-menu-section {
 	f\loat:none;
 }
 
-* html  li.xar-menu-section {
-	display: inline;
+* html .xar-menu-section ul {
+	height: 0;
 }
 
 * html .xar-menu-section a {
 	width:170px;
 	w\idth:160px;
-	
-}  
+}
 
 * html .xar-menu-section ul ul a {
 	width:160px;
 	w\idth:140px;
-}
- /* End hide from IE5/mac -the above rules are for the benefit of older ie-win 
+} /* End hide from IE5/mac -the above rules are for the benefit of older ie-win 
  browsers which have broken box model, however for ie6 in strict mode we must
  provide genuine figures or it will not behave as expected - it can have escaped rules.
  there is also extra space between listitems in IE5+, floating links seems to be a fix 
