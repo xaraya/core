@@ -118,30 +118,30 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-		$args = array();
-	 	$baseInfo = array(
-							 'id'         => 40,
-							  'name'       => 'affero',
-							  'label'      => 'Affero Username',
-							  'format'     => '40',
-							  'validation' => '',
+     **/
+     function getBasePropertyInfo()
+     {
+        $args = array();
+         $baseInfo = array(
+                             'id'         => 40,
+                              'name'       => 'affero',
+                              'label'      => 'Affero Username',
+                              'format'     => '40',
+                              'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 }
 
 ?>

@@ -243,29 +243,29 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $baseInfo = array(
                               'id'         => 37,
                               'name'       => 'userlist',
                               'label'      => 'User List',
                               'format'     => '37',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => '',
-							'args'         => '',
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases' => '',
+                            'args'         => '',
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

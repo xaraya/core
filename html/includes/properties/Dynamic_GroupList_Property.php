@@ -210,16 +210,16 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         =>45,
                               'name'       => 'grouplist',
                               'label'      => 'Group List',
@@ -229,11 +229,11 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

@@ -40,14 +40,14 @@ class Dynamic_PassBox_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-	if (is_array($value) && $value[0] == $value[1]) {
-	    $value = $value[0];
-	} else {
-	    $this->invalid = xarML('text : Passwords did not match');
+    if (is_array($value) && $value[0] == $value[1]) {
+        $value = $value[0];
+    } else {
+        $this->invalid = xarML('text : Passwords did not match');
             $this->value = null;
-	    return false;
-	}
-			
+        return false;
+    }
+            
         if (!empty($value) && strlen($value) > $this->maxlength) {
             $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
             $this->value = null;
@@ -85,7 +85,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' /> &nbsp;&nbsp;&nbsp;&nbsp;Type again:' .
-	       '<input type="password"'.
+           '<input type="password"'.
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id).'[1]' . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
@@ -111,41 +111,41 @@ class Dynamic_PassBox_Property extends Dynamic_Property
 
     function showOutput($value = null)
     {
-	//we don't really want to show the password, do we?
-	$data=array();
-	$data['value']='';
+    //we don't really want to show the password, do we?
+    $data=array();
+    $data['value']='';
 
     $template="password";
     return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
 
-	//return '';
+    //return '';
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                                  'id'         => 46,
                                  'name'       => 'password',
                                  'label'      => 'Password Text Box',
-								 'format'     => '46',
+                                 'format'     => '46',
                                  'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

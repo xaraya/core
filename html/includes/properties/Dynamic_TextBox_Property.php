@@ -120,16 +120,16 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 2,
                               'name'       => 'textbox',
                               'label'      => 'Text Box',
@@ -140,10 +140,10 @@ class Dynamic_TextBox_Property extends Dynamic_Property
                               'requiresmodule' => '',
                               'aliases' => '',
                               'args'       => serialize( $args ),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

@@ -41,11 +41,11 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
-	if (defined('XARCACHE_IS_ENABLED') && file_exists($outputCachePath . 'cache.blocklevel')) {
-    	xarCore_SetCached('xarcache', 'blockCaching', true);
-	} else {
-		xarCore_SetCached('xarcache', 'blockCaching', false);
-	}
+    if (defined('XARCACHE_IS_ENABLED') && file_exists($outputCachePath . 'cache.blocklevel')) {
+        xarCore_SetCached('xarcache', 'blockCaching', true);
+    } else {
+        xarCore_SetCached('xarcache', 'blockCaching', false);
+    }
 
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarBlocks__shutdown_handler');
@@ -302,12 +302,12 @@ function xarBlock_renderBlock($args)
     $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
-    	if ($blockCaching) {
+        if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . '-blockid' . $blockinfo['bid'] . '-noGroup';
             $args = array('cacheKey' => $cacheKey,
-		            	  'name' => 'block',
-		            	  'blockid' => $blockinfo['bid'],
-		            	  'blockinfo' => $blockinfo);
+                          'name' => 'block',
+                          'blockid' => $blockinfo['bid'],
+                          'blockinfo' => $blockinfo);
         }
 
         if ($blockCaching && xarBlockIsCached($args)) {
@@ -315,8 +315,8 @@ function xarBlock_renderBlock($args)
             $output = xarBlockGetCached($cacheKey,'block');
 
         } else {
-        	$blockoutput = xarBlock_render($blockinfo);
-        	
+            $blockoutput = xarBlock_render($blockinfo);
+            
             if ($blockCaching) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }

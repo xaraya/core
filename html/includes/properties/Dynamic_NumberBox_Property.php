@@ -71,16 +71,16 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
     // default showOutput() from Dynamic_TextBox_Property
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 15,
                               'name'       => 'integerbox',
                               'label'      => 'Number Box',
@@ -90,11 +90,11 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

@@ -120,16 +120,16 @@ else
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 28,
                               'name'       => 'icq',
                               'label'      => 'ICQ Number',
@@ -139,11 +139,11 @@ else
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 }
 
 ?>

@@ -302,16 +302,16 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 9,
                               'name'       => 'fileupload',
                               'label'      => 'File Upload',
@@ -321,11 +321,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

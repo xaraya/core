@@ -40,16 +40,16 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     // default methods from Dynamic_Select_Property
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 19,
                               'name'       => 'module',
                               'label'      => 'Module',
@@ -59,11 +59,11 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

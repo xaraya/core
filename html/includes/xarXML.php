@@ -50,16 +50,16 @@ define('XARXML_ENTITY_SEP', chr(12));
 if(!defined('XML_ELEMENT_NODE'))       define('XML_ELEMENT_NODE'      , 1);
 if(!defined('XML_ATTRIBUTE_NODE'))     define('XML_ATTRIBUTE_NODE'    , 2);
 if(!defined('XML_TEXT_NODE'))          define('XML_TEXT_NODE'         , 3);
-if(!defined('XML_CDATA_SECTION_NODE')) define('XML_CDATA_SECTION_NODE', 4);	 
-if(!defined('XML_ENTITY_REF_NODE'))    define('XML_ENTITY_REF_NODE'   ,	5);	 
+if(!defined('XML_CDATA_SECTION_NODE')) define('XML_CDATA_SECTION_NODE', 4);     
+if(!defined('XML_ENTITY_REF_NODE'))    define('XML_ENTITY_REF_NODE'   ,    5);     
 if(!defined('XML_ENTITY_NODE'))        define('XML_ENTITY_NODE'       , 6);
 if(!defined('XML_PI_NODE'))            define('XML_PI_NODE'           , 7);
 if(!defined('XML_COMMENT_NODE'))       define('XML_COMMENT_NODE'      , 8);
 if(!defined('XML_DOCUMENT_NODE'))      define('XML_DOCUMENT_NODE'     , 9);
-if(!defined('XML_DOCUMENT_TYPE_NODE')) define('XML_DOCUMENT_TYPE_NODE',10);	 
-if(!defined('XML_DOCUMENT_FRAG_NODE')) define('XML_DOCUMENT_FRAG_NODE',11);	 
+if(!defined('XML_DOCUMENT_TYPE_NODE')) define('XML_DOCUMENT_TYPE_NODE',10);     
+if(!defined('XML_DOCUMENT_FRAG_NODE')) define('XML_DOCUMENT_FRAG_NODE',11);     
 if(!defined('XML_NOTATION_NODE'))      define('XML_NOTATION_NODE'     ,12);
-	 
+     
 if(!defined('XML_ENTITY_DECL_NODE'))   define('XML_ENTITY_DECL_NODE'  ,17);
 
 if(!defined('XML_GLOBAL_NAMESPACE')) define('XML_GLOBAL_NAMESPACE', 1);

@@ -174,6 +174,7 @@ function xarVarBatchFetch()
  *   XARVAR_PREP_FOR_NOTHING:    no prep (default)
  *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
  *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
+ *  // FIXME: DELETE THIS once deprecation is complete
  *   XARVAR_PREP_FOR_STORE:      xarVarPrepForStore($value)
  *   XARVAR_PREP_TRIM:           trim($value)
  *
@@ -247,6 +248,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
             $value = xarVarPrepHTMLDisplay($value);
         }
 
+        // FIXME: DELETE THIS once deprecation is complete
         if ($prep & XARVAR_PREP_FOR_STORE) {
             $value = xarVarPrepForStore($value);
         }
@@ -1081,8 +1083,6 @@ function xarVarEscape ($string, $targetContext, $extras = array())
 
     They produce a false feeling of security... Handy for stopping script kids, but the holes
     are still there, just harder to find.
-
-    * xarVarPrepForStore should work thru ADODB
 
     * xarVarPrep* -- the rest, only one of them is needed usually, maybe one to
          - escape XML

@@ -46,16 +46,16 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
     }
     // default methods from Dynamic_NumberBox_Property
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 21,
                               'name'       => 'itemid',
                               'label'      => 'Item ID',
@@ -65,11 +65,11 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 }
 
 ?>

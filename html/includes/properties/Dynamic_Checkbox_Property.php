@@ -94,16 +94,16 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
 
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 14,
                               'name'       => 'checkbox',
                               'label'      => 'Checkbox',
@@ -113,11 +113,11 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 }
 
 ?>

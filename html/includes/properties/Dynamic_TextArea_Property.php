@@ -83,59 +83,59 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-		$args['rows'] = 8;	 
-		$aliases[] = array(
-							'id'         => 4,
-							'name'       => 'textarea_medium',
-							'label'      => 'Medium Text Area',
-							'format'     => '4',
-							'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'args' => serialize( $args ),
-							
-							// ...
-						   );
-	 
-		$args['rows'] = 20;	 
-		$aliases[] = array(
+     **/
+     function getBasePropertyInfo()
+     {
+        $args['rows'] = 8;     
+        $aliases[] = array(
+                            'id'         => 4,
+                            'name'       => 'textarea_medium',
+                            'label'      => 'Medium Text Area',
+                            'format'     => '4',
+                            'validation' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'args' => serialize( $args ),
+                            
+                            // ...
+                           );
+     
+        $args['rows'] = 20;     
+        $aliases[] = array(
                               'id'         => 5,
                               'name'       => 'textarea_large',
                               'label'      => 'Large Text Area',
                               'format'     => '5',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'args' => serialize( $args ),
-							// ...
-						   );
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'args' => serialize( $args ),
+                            // ...
+                           );
 
-		$args['rows'] = 2;	 
-	 	$baseInfo = array(
-							'id'         => 3,
-							'name'       => 'textarea_small',
-							'label'      => 'Small Text Area',
-							'format'     => '3',
-							'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => $aliases,
-							'args' => serialize( $args ),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+        $args['rows'] = 2;     
+         $baseInfo = array(
+                            'id'         => 3,
+                            'name'       => 'textarea_small',
+                            'label'      => 'Small Text Area',
+                            'format'     => '3',
+                            'validation' => '',
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases' => $aliases,
+                            'args' => serialize( $args ),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

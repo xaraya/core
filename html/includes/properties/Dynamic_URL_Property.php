@@ -107,29 +107,29 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         return '';
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $baseInfo = array(
                               'id'         => 11,
                               'name'       => 'url',
                               'label'      => 'URL',
                               'format'     => '11',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => '',
-							'args'         => '',
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases' => '',
+                            'args'         => '',
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 ?>

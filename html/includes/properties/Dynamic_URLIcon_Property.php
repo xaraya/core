@@ -118,29 +118,29 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         return '';
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $baseInfo = array(
                               'id'         => 27,
                               'name'       => 'urlicon',
                               'label'      => 'URL Icon',
                               'format'     => '27',
                               'validation' => '',
-							'source'     => '',
-							'dependancies' => '',
-							'requiresmodule' => '',
-							'aliases' => '',
-							'args'         => '',
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'source'     => '',
+                            'dependancies' => '',
+                            'requiresmodule' => '',
+                            'aliases' => '',
+                            'args'         => '',
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

@@ -152,16 +152,16 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 39,
                               'name'       => 'multiselect',
                               'label'      => 'Multi Select',
@@ -171,11 +171,11 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 
 }

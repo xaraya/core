@@ -196,16 +196,16 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
 
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 43,
                               'name'       => 'statelisting',
                               'label'      => 'State Dropdown',
@@ -215,11 +215,11 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 
 

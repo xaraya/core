@@ -171,10 +171,10 @@ class xarLogger_simple extends xarLogger
     */
     function _destructor()
     {
-		//At this time, we can't send output to the screen,
-		//fwrite doesnt seem to be working, how to know if
-		//the destructor is being called?
-		//Anyone with a nice debugger around?
+        //At this time, we can't send output to the screen,
+        //fwrite doesnt seem to be working, how to know if
+        //the destructor is being called?
+        //Anyone with a nice debugger around?
         $this->writeOut();
 
         // Close the Log file
@@ -240,16 +240,16 @@ class xarLogger_simple extends xarLogger
     * @param file $file Path to the logger file 
     * @access private
     */
-	function _ensureFileWriteable() 
+    function _ensureFileWriteable() 
     {
         if (!file_exists($this->_filename) && 
             !is_writable(dirname($this->_filename))) {
-       		die ('Logger file path given is not writeable: '.$this->_filename);
+               die ('Logger file path given is not writeable: '.$this->_filename);
         }
         
         $this->_isFileWriteable = true;
         return true;
-	}
+    }
 
     /**
     * Opens the logfile for appending. File should always exist, as
@@ -263,25 +263,25 @@ class xarLogger_simple extends xarLogger
             return true;
         }   // else {
 
-		if (!$this->_isFileWriteable) {
-			die('File is not writeable');
-		}
-		
-		if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
-			$insert_header = true;
+        if (!$this->_isFileWriteable) {
+            die('File is not writeable');
+        }
+        
+        if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
+            $insert_header = true;
             $option = 'w'; //write over
-		} else {       
+        } else {       
             $insert_header = false;
             $option = 'a'; //append
         }
-		
+        
         if (($this->_fp = fopen($this->_filename, $option)) == false) {
-	        die('unable to open log file '.$this->_filename);
+            die('unable to open log file '.$this->_filename);
             return false;
         }  // else {
 
         if ($insert_header) {
-        	fwrite($this->_fp, $this->_fileheader);
+            fwrite($this->_fp, $this->_fileheader);
         }
 
         $this->_isFileOpen = true;

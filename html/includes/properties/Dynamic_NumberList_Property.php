@@ -99,16 +99,16 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
     // default showOutput() from Dynamic_Select_Property
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 16,
                               'name'       => 'integerlist',
                               'label'      => 'Number List',
@@ -118,11 +118,11 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 

@@ -297,29 +297,29 @@ function xarTplGetPageTitle()
  */
 function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder='')
 { 
-	if (empty($styleName) || (empty($modName) && empty($themeFolder))) return;
+    if (empty($styleName) || (empty($modName) && empty($themeFolder))) return;
     $modulePath = "/$styleName.$fileExt";
-	
-	if (!empty($modName)){
-		$info = xarMod_getBaseInfo($modName);
-		if (!isset($info)) return;		
-		$modulePath = 'modules/' . $info['directory'] . '/xarstyles/' . "$styleName.$fileExt";
-	}
+    
+    if (!empty($modName)){
+        $info = xarMod_getBaseInfo($modName);
+        if (!isset($info)) return;        
+        $modulePath = 'modules/' . $info['directory'] . '/xarstyles/' . "$styleName.$fileExt";
+    }
 
-	$themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
-	
-	if (file_exists($themePath)) {
-		$fileName = $themePath;
-	} else {		
-		$fileName = $modulePath;
-		if (!file_exists($fileName)) {		
-			return false;
-		}	
-	}	
-	$url = xarServerGetBaseURL().$fileName;
+    $themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
+    
+    if (file_exists($themePath)) {
+        $fileName = $themePath;
+    } else {        
+        $fileName = $modulePath;
+        if (!file_exists($fileName)) {        
+            return false;
+        }    
+    }    
+    $url = xarServerGetBaseURL().$fileName;
     // FIXME: this doesn't belong here, it's hardcoded and not output agnostic
     $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
-	return true;
+    return true;
 }
 
 /**

@@ -25,9 +25,9 @@
             'short' => xarML('The Blocklayout compiler encountered an error.'),
             'long' => xarML('The Blocklayout compiler encountered an error it could not recover from. No specific information is available.') ),
         'CONFIG_ERROR' => array(
-	    'title' => xarML('Xaraya is not properly configured'),
+        'title' => xarML('Xaraya is not properly configured'),
             'short' => xarML('The combination of configuration settings has led to a conflict'),
-            'long'  => xarML('Xaraya is configured with some settings which lead to a conflicting situation. Some configuration settings cannot be used simultaneously') ),	    
+            'long'  => xarML('Xaraya is configured with some settings which lead to a conflicting situation. Some configuration settings cannot be used simultaneously') ),        
         'CONTEXT_NOT_EXIST' => array(
             'title' => xarML('Context does not exist'),
             'short' => xarML('A context element was not found.'),

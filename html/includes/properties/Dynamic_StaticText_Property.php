@@ -45,8 +45,8 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-		$data['name']     = $name;
-		$data['id']       = $id;
+        $data['name']     = $name;
+        $data['id']       = $id;
 
 
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -75,16 +75,16 @@ class Dynamic_StaticText_Property extends Dynamic_Property
     }
 
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 1,
                               'name'       => 'static',
                               'label'      => 'Static Text',
@@ -94,11 +94,11 @@ class Dynamic_StaticText_Property extends Dynamic_Property
                             'dependancies' => '',
                             'requiresmodule' => '',
                             'aliases'        => '',
-							'args'           => serialize($args)
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                            'args'           => serialize($args)
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 }
 
