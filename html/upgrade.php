@@ -630,18 +630,16 @@ if (empty($step)) {
                                           'block_type_exists',
                                            array('modName'      => 'themes',
                                                  'blockType'    => 'syndicate'));
-    if (!$upgrade['syndicate']) {
-        echo "Syndicate block type does not exist, attempting to create... ";
-        $blockGroupsTable = $tables['block_groups'];
+    if ($upgrade['syndicate']) {
+        echo "Syndicate block exists, attempting to remove... ";
+        $blockGroupsTable = xarDBGetSiteTablePrefix() . '_block_groups';
         // Register blocks
         if (!xarModAPIFunc('blocks',
                            'admin',
-                           'register_block_type',
+                           'unregister_block_type',
                            array('modName'  => 'themes',
                                  'blockType'=> 'syndicate'))) return;
 
-        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
-                                                                    'template' => 'syndicate'))) return;
         $query = "SELECT    xar_id as id
                   FROM      $blockGroupsTable
                   WHERE     xar_name = 'syndicate'";
@@ -657,28 +655,15 @@ if (empty($step)) {
             return;
         }
         list ($syndicateBlockGroup) = $result->fields;
-        $syndicateBlockId= xarModAPIFunc('blocks',
-                                         'admin',
-                                         'block_type_exists',
-                                         array('modName'  => 'themes',
-                                               'blockType'=> 'syndicate'));
-        if (!isset($syndicateBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) return;
-        if (!xarModAPIFunc('blocks',
-                           'admin',
-                           'create_instance', array('title'    => 'Syndicate',
-                                                    'type'     => $syndicateBlockId,
-                                                    'group'    => $syndicateBlockGroup,
-                                                    'template' => '',
-                                                    'state'    => 2))) {
-            return;
-        }
+        if (!xarModAPIFunc('blocks', 'admin', 'delete_group', array('gid'     => $syndicateBlockGroup))) return;
+
         if (!$result){
             echo "failed</font><br/>\r\n";
         } else {
             echo "done!</font><br/>\r\n";
         }
     } else {
-        echo "Syndicate block type exists, moving to next check. <br />";
+        echo "Syndicate block type does not exist, moving to next check. <br />";
     }
 
     // Set any empty modvars.
@@ -690,6 +675,9 @@ if (empty($step)) {
                        array('name'    =>  'selstyle',
                              'module'  =>  'themes',
                              'set'     =>  'plain'),
+                       array('name'    =>  'rssxml',
+                             'module'  =>  'themes',
+                             'set'     =>  '<?xml version="1.0" encoding="utf-8"?>'),
                        array('name'    =>  'selfilter',
                              'module'  =>  'themes',
                              'set'     =>  'XARMOD_STATE_ANY'),
