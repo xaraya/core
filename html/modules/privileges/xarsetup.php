@@ -214,6 +214,7 @@ function initializeSetup()
     * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
+    xarRegisterMask('pnLegacyMask','All','All','All','All','ACCESS_NONE');
     xarRegisterMask('AdminAll','All','All','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('ViewBaseBlocks','All','base','Block','All:All:All','ACCESS_OVERVIEW');
