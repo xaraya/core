@@ -103,14 +103,13 @@ function modules_adminapi_setstate($args)
               SET xar_state = " . xarVarPrepForStore($state) . "
               WHERE xar_regid = " . xarVarPrepForStore($regid);
     $result =& $dbconn->Execute($query);
-
     if (!$result) {return;}
-
     // We're update module state here we must update at least
     // the base info in the cache.
     $modInfo['state']=$state;
     xarVarSetCached('Mod.Infos',$regid,$modInfo);
     //xarVarSetCached('Mod.BaseInfos',$modInfo['name'],$modInfo);
+
     return true;
 }
 

@@ -41,10 +41,10 @@ function modules_adminapi_remove($args)
                   WHERE xar_regid = '" . xarVarPrepForStore($modinfo['regid']) . "'";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
-    $query = "DELETE FROM $tables[system/module_states]
-              WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
+        $query = "DELETE FROM $tables[system/module_states]
+                  WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
     }
     else {
         // Module deletion function
@@ -80,7 +80,7 @@ function modules_adminapi_remove($args)
         $res = xarModAPIFunc('modules',
                             'admin',
                             'setstate',
-                            array('regid' => $regid,
+                             array('regid' => $regid,
                                   'state' => XARMOD_STATE_UNINITIALISED));
     }
     return true;

@@ -87,30 +87,21 @@ function modules_adminapi_regenerate()
 
         } else {
 // From here on we have something in the file system or the db
-          // BEGIN bugfix (561802) - cmgrote
-            if ($dbModules[$name]['version'] != $modinfo['version'] && $dbModules[$name]['state'] != XARMOD_STATE_UNINITIALISED) {
-                    $set = xarModAPIFunc('modules',
-                                        'admin',
-                                        'setstate',
-                                        array('regid' => $dbModules[$name]['regid'],
-                                              'state' => XARMOD_STATE_UPGRADED));
-                    if (!isset($set)) die('upgrade');
-                }
 
-        switch ($dbModules[$name]['state']) {
-            case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
-                $newstate = XARMOD_STATE_UNINITIALISED;
-                break;
-            case XARMOD_STATE_MISSING_FROM_INACTIVE:
-                $newstate = XARMOD_STATE_INACTIVE;
-                break;
-            case XARMOD_STATE_MISSING_FROM_ACTIVE:
-                $newstate = XARMOD_STATE_ACTIVE;
-                break;
-            case XARMOD_STATE_MISSING_FROM_UPGRADED:
-                $newstate = XARMOD_STATE_UPGRADED;
-                break;
-        }
+          switch ($dbModules[$name]['state']) {
+                case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
+                    $newstate = XARMOD_STATE_UNINITIALISED;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_INACTIVE:
+                    $newstate = XARMOD_STATE_INACTIVE;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_ACTIVE:
+                    $newstate = XARMOD_STATE_ACTIVE;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_UPGRADED:
+                    $newstate = XARMOD_STATE_UPGRADED;
+                    break;
+            }
 
             if (isset($newstate)) {
                 $set = xarModAPIFunc('modules',
@@ -118,6 +109,8 @@ function modules_adminapi_regenerate()
                                     'setstate',
                                      array('regid' => $dbModules[$name]['regid'],
                                            'state' => $newstate));
+        // Check if there was a version change and adjust
+        xarModAPIFunc('modules','admin','checkversion');
             }
         }
     }
