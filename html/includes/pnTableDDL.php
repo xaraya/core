@@ -53,7 +53,16 @@ $sql = pnDBAlterTable($pntable['nascar_tracks'],
         'primary_key'       => true,
     )
 );  */
-
+/**
+ * Generate the SQL to create a database
+ *
+ * @access public
+ * @param databaseName
+ * @param databaseType
+ * @returns string
+ * @return sql statement for database creation
+ * @raise BAD_PARAM
+ */
 function pnDBCreateDatabase($databaseName, $databaseType = NULL)
 {
     // perform validations on input arguments
@@ -79,26 +88,26 @@ function pnDBCreateDatabase($databaseName, $databaseType = NULL)
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
-    
+    return $sql;
+
 }
 
 /**
-  * Alter database table
-  *
-  * @access public
-  * @param tableName the table to alter
-  * @param args['command'] command to perform on table(add,modify,drop,rename)
-  * @param args['field_name'] field to alter
-  * @param args['new_field_name'] new field name
-  * @param args['type'] field type
-  * @param args['null'] null or not
-  * @param args['increment'] auto incrementing files
-  * @param args['primary_key'] primary key
-  * @param databaseType the database type (optional)
-  * @returns sql
-  * @return generated sql
-  */
+ * Alter database table
+ *
+ * @access public
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on table(add,modify,drop,rename)
+ * @param args['field_name'] field to alter
+ * @param args['new_field_name'] new field name
+ * @param args['type'] field type
+ * @param args['null'] null or not
+ * @param args['increment'] auto incrementing files
+ * @param args['primary_key'] primary key
+ * @param databaseType the database type (optional)
+ * @returns string
+ * @return generated sql
+ */
 function pnDBAlterTable($tableName, $args, $databaseType = NULL)
 {
     // perform validations on input arguments
@@ -118,7 +127,7 @@ function pnDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = pnDBGetType();
     }
-    // Select the correct database type    
+    // Select the correct database type
     switch($databaseType) {
         case 'mysql':
             $sql = pnDB__mysqlAlterTable($tableName, $args);
@@ -133,17 +142,17 @@ function pnDBAlterTable($tableName, $args, $databaseType = NULL)
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
+    return $sql;
 }
 
 /**
- * generate the SQL to create a table
+ * Generate the SQL to create a table
  *
  * @access public
- * @param tableName the physical table name 
+ * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @param databaseType database type (optional)
- * @returns data|false
+ * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
 function pnDBCreateTable($tableName, $fields, $databaseType="")
@@ -161,18 +170,18 @@ function pnDBCreateTable($tableName, $fields, $databaseType="")
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
-       
+
     if (empty($databaseType)) {
         $databaseType = pnDBGetType();
     }
-    // Select the correct database type    
+    // Select the correct database type
     switch($databaseType) {
         case 'mysql':
             $sql = pnDB__mysqlCreateTable($tableName, $fields);
             break;
         case 'postgres':
-            $sql = pnDB__postgresqlCreateTable($tableName, $fields);        
-            break;       
+            $sql = pnDB__postgresqlCreateTable($tableName, $fields);
+            break;
         // Other DBs go here
         default:
             $msg = pnML('Unknown database type: \'#(1)\'.', $databaseType);
@@ -180,14 +189,14 @@ function pnDBCreateTable($tableName, $fields, $databaseType="")
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
+    return $sql;
 }
 
 /**
- * generate the SQL to delete a table
+ * Generate the SQL to delete a table
  *
  * @access public
- * @param tableName the physical table name 
+ * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @returns data|false
  * @return the generated SQL statement, or false on failure
@@ -217,16 +226,17 @@ function pnDBDropTable($tableName, $databaseType = NULL)
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
+    return $sql;
 
 }
- 
+
 /**
- * generate the SQL to create a table index
- * @param tableName the physical table name 
+ * Generate the SQL to create a table index
+ *
+ * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @param databaseType is an optional parameter to specify the database type
- * @returns data|false
+ * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
 function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
@@ -244,11 +254,16 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
+    // default for unique
+    if (!isset($index['unique'])) {
+        $index['unique'] = false;
+    }
+
     if (empty($databaseType)) {
         $databaseType = pnDBGetType();
     }
-    
-    // Select the correct database type    
+
+    // Select the correct database type
     switch($databaseType) {
         case 'mysql':
         case 'postgres':
@@ -267,9 +282,19 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL) {
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
+    return $sql;
 }
- 
+/**
+ * Generate the SQL to drop an index
+ *
+ * @access public
+ * @param tableName
+ * @param fields array of database index fields?
+ * @param databaseType
+ * @returns string|false
+ * @return generated sql to drop an index
+ * @raise BAD_PARAM
+ */
 function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
 {
     // perform validations on input arguments
@@ -288,13 +313,13 @@ function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = pnDBGetType();
     }
-    
-    // Select the correct database type    
+
+    // Select the correct database type
     switch($databaseType) {
         case 'mysql':
             $sql .= 'DROP INDEX '.$index['name'].' ON '.$tableName;
             break;
-        case 'postgres':            
+        case 'postgres':
             $sql .= 'DROP INDEX '.$index['name'];
             break;
         // Other DBs go here
@@ -304,14 +329,23 @@ function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
-    return $sql;    
-
+    return $sql;
 }
 
 // PRIVATE FUNCTIONS BELOW - do not call directly
 
 /**
+ * Mysql specific function to alter a table
+ *
  * @access private
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on the table
+ * @param args['fields']
+ * @param args['after_field']
+ * @param args['new_name'] new name of table
+ * @returns string|false
+ * @return mysql specific sql to alter a table
+ * @raise BAD_PARAM
  */
 function pnDB__mysqlAlterTable($tableName, $args)
 {
@@ -331,27 +365,29 @@ function pnDB__mysqlAlterTable($tableName, $args)
                 $sql .= ' AFTER '.$args['after_field'];
             }
             break;
-// Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
-//        case 'modify':
-//            if (empty($args['field'])) {
-//              $msg = pnML('Invalid args (field key must be set).');
-//                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-//                return;
-//            }
-//            $sql = 'ALTER TABLE '.$tableName.' CHANGE ';
-//            $sql .= join(' ', pnDB__mysqlColumnDefinition($args['field'], $args));
-//            break;
-// Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
-//        case 'drop':
-//            if (empty($args['field'])) {
-//              $msg = pnML('Invalid args (field key must be set).');
-//                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-//                return;
-//            }
-//            $sql = 'ALTER TABLE '.$tableName.' DROP COLUMN '.$args['field'];
-//            break;
+        /* Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
+        case 'modify':
+            if (empty($args['field'])) {
+              $msg = pnML('Invalid args (field key must be set).');
+                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+            $sql = 'ALTER TABLE '.$tableName.' CHANGE ';
+            $sql .= join(' ', pnDB__mysqlColumnDefinition($args['field'], $args));
+            break;
+        */
+        /* Disabled July 12, 2002 by Gary Mitchell - not supported by postgres
+        case 'drop':
+            if (empty($args['field'])) {
+              $msg = pnML('Invalid args (field key must be set).');
+                pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+            $sql = 'ALTER TABLE '.$tableName.' DROP COLUMN '.$args['field'];
+            break;
+        */
         case 'rename':
             if (empty($args['new_name'])) {
                 $msg = pnML('Invalid args (new_name key must be set.)');
@@ -368,10 +404,19 @@ function pnDB__mysqlAlterTable($tableName, $args)
             return;
     }
     return $sql;
-} 
+}
 
 /**
+ * Postgres specific function to alter a table
+ *
  * @access private
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on the table
+ * @param args['fields'] fields to modify
+ * @param args['new_name'] new name of table
+ * @returns string|false
+ * @return postgres specific sql to alter a table
+ * @raise BAD_PARAM
  */
 function pnDB_postgresqlAlterTable($tableName, $args)
 {
@@ -384,7 +429,7 @@ function pnDB_postgresqlAlterTable($tableName, $args)
                 return;
             }
             $sql = 'ALTER TABLE '.$tableName.' ADD ';
-            $sql .= join(' ', pnPostgresColumnDefinition($args['field'], $args));
+            $sql .= join(' ', pnDB__postgresColumnDefinition($args['field'], $args));
             break;
         case 'rename':
             if (empty($args['new_name'])) {
@@ -402,14 +447,15 @@ function pnDB_postgresqlAlterTable($tableName, $args)
             return;
     }
     return $sql;
-} 
+}
 
 /**
- * Private Function to generate the MySQL to create a table
+ * Generate the MySQL specific SQL to create a table
+ *
  * @access private
- * @param tableName the physical table name 
+ * @param tableName the physical table name
  * @param fields an array containing the fields to create
- * @returns data|false
+ * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
 function pnDB__mysqlCreateTable($tableName, $fields)
@@ -426,7 +472,12 @@ function pnDB__mysqlCreateTable($tableName, $fields)
 }
 
 /**
+ * Mysql specific column type generation
+ *
  * @access private
+ * @param field_name
+ * @param parameters
+ *
  */
 function pnDB__mysqlColumnDefinition($field_name, $parameters)
 {
@@ -453,7 +504,7 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
                     break;
                 default:
                     $this_field[] = 'INTEGER';
-            } // switch ($parameters['size']) 
+            } // switch ($parameters['size'])
             break;
 
         case 'char':
@@ -462,7 +513,7 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
             } else {
                 $this_field[] = 'CHAR('.$parameters['size'].')';
             }
-            break;   
+            break;
 
         case 'varchar':
             if (empty($parameters['size'])) {
@@ -470,7 +521,7 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
             } else {
                 $this_field[] = 'VARCHAR('.$parameters['size'].')';
             }
-            break;   
+            break;
 
         case 'text':
             if (empty($parameters['size'])) {
@@ -511,8 +562,8 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
             break;
 
         case 'boolean':
-            $this_field[] = "BOOL";            
-            break;   
+            $this_field[] = "BOOL";
+            break;
 
         case 'datetime':
             $this_field[] = "DATETIME";
@@ -525,9 +576,9 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
                                          '-'.$datetime_defaults['day'].
                                          ' '.$datetime_defaults['hour'].
                                          ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];                                                                                
+                                         ':'.$datetime_defaults['second'];
             }
-            break;                                 
+            break;
 
         case 'date':
             $this_field[] = "DATE";
@@ -539,7 +590,7 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'];
             }
-            break;                                 
+            break;
 
         case 'float':
             if (empty($parameters['size'])) {
@@ -615,12 +666,12 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
             $this_field[] = "DEFAULT '".$parameters['default']."'";
         }
     }
-                
+
     // Test for AUTO_INCREMENT
     if (isset($parameters['increment']) && $parameters['increment'] == true) {
         $this_field[] = "AUTO_INCREMENT";
     }
-                
+
     // Test for PRIMARY KEY
     if (isset($parameters['primary_key']) && $parameters['primary_key'] == true) {
         $this_field[] = "PRIMARY KEY";
@@ -629,10 +680,12 @@ function pnDB__mysqlColumnDefinition($field_name, $parameters)
 }
 
 /**
- * Private Function to generate the PostgreSQL to create a table
- * @param tableName the physical table name 
+ * Generate the PostgreSQL specific SQL to create a table
+ *
+ * @access private
+ * @param tableName the physical table name
  * @param fields an array containing the fields to create
- * @returns data|false
+ * @returns string|false
  * @return the generated SQL statement, or false on failure
  */
 function pnDB__postgresqlCreateTable($tableName, $fields)
@@ -641,7 +694,7 @@ function pnDB__postgresqlCreateTable($tableName, $fields)
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
-        $this_field = pnPostgresColumnDefinition($field_name, $parameters);
+        $this_field = pnDB__postgresColumnDefinition($field_name, $parameters);
         $sql_fields[] = implode(' ', $this_field);
     }
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
@@ -649,9 +702,14 @@ function pnDB__postgresqlCreateTable($tableName, $fields)
 }
 
 /**
+ * Postgres specific column type generation
+ *
  * @access private
+ * @param field_name
+ * @param parameters
+ *
  */
-function pnPostgresColumnDefinition($field_name, $parameters)
+function pnDB__postgresColumnDefinition($field_name, $parameters)
 {
     $this_field = array($field_name);
 
@@ -679,7 +737,7 @@ function pnPostgresColumnDefinition($field_name, $parameters)
                     default:
                         $this_field[] = 'INTEGER';
                 }
-            } // switch ($parameters['size']) 
+            } // switch ($parameters['size'])
             break;
 
         case 'char':
@@ -708,7 +766,7 @@ function pnPostgresColumnDefinition($field_name, $parameters)
 
         case 'boolean':
             $this_field[] = 'BOOLEAN';
-            break;   
+            break;
 
         case 'timestamp':
         case 'datetime':
@@ -727,12 +785,12 @@ function pnPostgresColumnDefinition($field_name, $parameters)
                     // FIXME: <marco> Gary, are you sure of this assigment?
                     $parameters['default'] = $datetime_defaults['timezone'];
                 }
-            // only for timestamps - default them to the current time 
+            // only for timestamps - default them to the current time
             } elseif ($parameters['type'] == 'timestamp') {
                 $parameters['default'] = 'CURRENT_TIMESTAMP';
             }
-            break;                                 
-                
+            break;
+
         case 'date':
             $this_field[] = "DATE";
             // convert parameter array back to string for datetime
@@ -761,7 +819,7 @@ function pnPostgresColumnDefinition($field_name, $parameters)
                 default:
                     $data_type = 'REAL';
             }
-            $this_field[] = $data_type;                
+            $this_field[] = $data_type;
             break;
 
         // undefined type
