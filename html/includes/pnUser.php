@@ -124,6 +124,13 @@ function pnUserLogIn($userName, $password, $rememberMe)
         return false;
     }
 
+    // Catch common variations (0, false, '', ...)
+    if (empty($rememberMe)) {
+        $rememberMe = 0;
+    } else {
+        $rememberMe = 1;
+    }
+
     // Set user session information
     $res = pnSession_setUserInfo($userId, $rememberMe);
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {

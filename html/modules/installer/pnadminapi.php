@@ -39,10 +39,11 @@ function installer_adminapi_bootstrap()
     pnCoreInit(PNCORE_SYSTEM_USER);
     
     // log in admin user
-    $res = pnUserLogIn('admin', 'password', false);
+    $res = pnUserLogIn('admin', 'password', 0);
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
+// your wish is my command :-)
     die('user loggedin');
     // load modules API
     $res = pnModAPILoad('modules', 'admin');
