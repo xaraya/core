@@ -22,9 +22,12 @@ function blocks_xartables()
     // but helps in the following statements and keeps them readable
     $userblocks = xarDBGetSiteTablePrefix() . '_userblocks';
     $blocktypes = xarDBGetSiteTablePrefix() . '_block_types';
+    $cacheblocks = xarDBGetSiteTablePrefix() . '_cache_blocks';
+
     // Set the table name
     $xartable['userblocks'] = $userblocks;
     $xartable['block_types'] = $blocktypes;
+    $xartable['cache_blocks'] = $cacheblocks;
 
     // Return the table information
     return $xartable;
