@@ -80,8 +80,15 @@ function themes_adminapi_getthemelist($args)
 
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
-            $whereClauses[] = 'states.xar_state = ?';
-            $bindvars[] = $filter['State'];
+            if ($filter['State'] != XARTHEME_STATE_INSTALLED) {
+                $whereClauses[] = 'states.xar_state = ?';
+                $bindvars[] = $filter['State'];
+            } else {
+                $whereClauses[] = 'states.xar_state != ? AND states.xar_state < ? AND states.xar_state != ?';
+                $bindvars[] = XARTHEME_STATE_UNINITIALISED;
+                $bindvars[] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
+                $bindvars[] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+            }
         }
     } else {
         $whereClauses[] = 'states.xar_state = ?';
