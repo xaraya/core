@@ -38,7 +38,7 @@ function xarCache_init($args)
         return FALSE;
     }
 
-    $xarOutput_cacheCollection = $cacheDir;
+    $xarOutput_cacheCollection = realpath($cacheDir);
     $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
         $cachingConfiguration['Output.DefaultTheme'] : '';
     $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
@@ -419,7 +419,7 @@ function xarPageSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
         xarPage_checkUserCaching()) {
-        $tmp_cache_file = $cache_file . '.' . getmypid();
+        $tmp_cache_file = tempnam($xarOutput_cacheCollection,"$cacheKey-$xarPage_cacheCode");
         $fp = @fopen($tmp_cache_file, "w");
         if (!empty($fp)) {
             if ($xarPage_cacheShowTime == 1) {
@@ -432,7 +432,13 @@ function xarPageSetCached($cacheKey, $name, $value)
             }
             @fwrite($fp, $value);
             @fclose($fp);
-            @rename($tmp_cache_file, $cache_file);
+            // rename() doesn't overwrite existing files in Windows
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                @copy($tmp_cache_file, $cache_file);
+                @unlink($tmp_cache_file);
+            } else {
+                @rename($tmp_cache_file, $cache_file);
+            }
 
             // create another copy for session-less page caching if necessary
             if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
@@ -480,13 +486,19 @@ function xarBlockSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
-        $tmp_cache_file = $cache_file . '.' . getmypid();
+        $tmp_cache_file = tempnam($xarOutput_cacheCollection,"$cacheKey-$xarBlock_cacheCode");
         $fp = @fopen($tmp_cache_file, "w");
         if (!empty($fp)) {
             //$value .= 'Cached Block';// This line is used for testing
             @fwrite($fp, $value);
             @fclose($fp);
-            @rename($tmp_cache_file, $cache_file);
+            // rename() doesn't overwrite existing files in Windows
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                @copy($tmp_cache_file, $cache_file);
+                @unlink($tmp_cache_file);
+            } else {
+                @rename($tmp_cache_file, $cache_file);
+            }
         }
     }
 }
