@@ -140,9 +140,10 @@ function modules_init()
     'xar_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),
-    'xar_tfunc'   => array('type'=>'varchar','size'=>64,'null'=>false)
+    'xar_tfunc'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_order'   => array('type'=>'integer','null'=>false,'default'=>'0')
     );
-     
+
     $query = xarDBCreateTable($tables['hooks'],$fields);
 
     $result =& $dbconn->Execute($query);
