@@ -16,6 +16,12 @@ function roles_userapi_getall($args)
     if (!isset($numitems)) {
         $numitems = -1;
     }
+    if (!isset($order)){
+        $order = 'name';
+    }
+    if (!isset($startat)) {
+        $startat = 1;
+    }
 
     $roles = array();
 
