@@ -1133,7 +1133,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
             //Here we serialize the configuration variables
             //so they can effectively contain more than one value
-            $value = serialize($value);
+            $serialvalue = serialize($value);
 
             //Insert
             $seqId = $dbconn->GenId($config_varsTable);
@@ -1143,7 +1143,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                        xar_value)
                       VALUES ('$seqId',
                               '" . xarVarPrepForStore($name) . "',
-                              '" . xarVarPrepForStore($value). "')";
+                              '" . xarVarPrepForStore($serialvalue). "')";
 
             break;
     }
