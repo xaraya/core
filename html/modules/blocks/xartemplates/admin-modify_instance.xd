@@ -131,6 +131,10 @@
 
             <xar:if condition="!empty($extra_fields)">
                 #$extra_fields#
+            <xar:else />
+                <p>
+                    <xar:mlstring>No extra settings for this block type.</xar:mlstring>
+                </p>
             </xar:if>
 
         </fieldset>
