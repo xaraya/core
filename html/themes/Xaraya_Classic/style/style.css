@@ -4,6 +4,9 @@ A {
    color: #6A5ACD;
    font-weight: bold;
 }
+A:hover {
+   color: #003366;
+}
 BLOCKQUOTE {
    color: #191970;
    font-size:11px;
@@ -180,7 +183,12 @@ CHECKBOX {
    font-size: 10px;
    font-weight: normal;
 }
-
+.xar-menu-item-current > .xar-menu-subitem > A {
+   color: #193970;
+}
+.xar-menu-item-current > .xar-menu-subitem > A:visited {
+   color: #003366;
+}
 /*  XARAYA REQUIRED INDIVIDUAL CLASSES */
 TD.xar-norm {}
 TD.xar-alt {}
@@ -199,7 +207,12 @@ TD.xar-alt {}
    font-weight: bold;
    font-size: 12px;
 }
-.xar-mod-title {}
+.xar-mod-title {
+   color: #191970;
+   font-size: 12px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+}
 .xar-mod-body {}
 .xar-mod-foot {}
 .xar-alt {background-color: #E47C55; }
@@ -223,12 +236,18 @@ TD.xar-alt {}
    font-family: Verdana,Arial,Helvetica,sans-serif;
    padding-left: .5em;
 }
+.xar-menu-item:hover {
+   background-color: #f0f0f0;
+}
 .xar-menu-subitem {
    font-size: 10px;
    font-weight: bold;
    font-family: Verdana,Arial,Helvetica,sans-serif;
    margin-left: 4px;
    padding-left: 0px;
+}
+.xar-menu-subitem:hover {
+   background-color: #CDD5F8;
 }
 .xar-menu-section-current {
    background-color: #CCE6FF;
