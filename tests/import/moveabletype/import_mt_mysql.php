@@ -345,7 +345,7 @@
                             $new_article['status']      = $article_status_map[$article['status']];
                             $new_article['pubdate']     = $article['pubdate'];
                             $new_article['ptid']        = $pubid;
-                            $new_article['auhtorid']    = $userid[$article['uid']];
+                            $new_article['authorid']    = $userid[$article['uid']];
                             $new_article['cids']        = $new_catid;
 
                             $new_aid = xarModAPIFunc('articles','admin','create',$new_article);
@@ -406,6 +406,4 @@
     } else {
         echo '<br /><span style="color: red">Unable to add Blog pubtype</span>';
     }
-
-
 ?>
