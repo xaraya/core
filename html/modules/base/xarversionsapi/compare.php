@@ -54,7 +54,7 @@ function base_versionsapi_compare($args)
     }
 
     // Default the version numbers to either a positional
-    // parameters or to '0' if nothing passed in at all.
+    // parameter value or to '0' if nothing passed in at all.
     if (!isset($ver1)) {
         $ver1 = (isset($p_0) ? $p_0 : '0');
     }
@@ -87,7 +87,8 @@ function base_versionsapi_compare($args)
 
     // Clean up the input strings.
     // JDJ: I would like to move these pregs out to a support function as it is useful
-    // in its own right to normalise version numbers for display.
+    // in its own right to normalise version numbers for display or other purposes.
+    // The cleanup could be optional, based on a system setting or argument.
     list($ver1, $ver2) = preg_replace(
         array(
            ($strict ? '/(?<=\d)[^\d'.$sep2.']+(?=\d)/' : '//'), // '1x2' => '1.2' if strict
@@ -122,20 +123,22 @@ function base_versionsapi_compare($args)
         $limitlevels = $levels;
     }
 
-    // Pad out version arrays where necessary.
-    $ver1 = array_pad($ver1, $limitlevels, '0');
-    $ver2 = array_pad($ver2, $limitlevels, '0');
-
+    // Default return if no differences are found.
     $latest = 0;
 
     // Loop through each level to find out which is the latest.
     for ($i=0; $i<$limitlevels; $i++)
     {
+        // If either array has run out of elements, then it is
+        // the shorter and therefore the lower version.
+        if (!isset($ver2[$i])) {$latest = (-1); break;}
+        if (!isset($ver1[$i])) {$latest = (+1); break;}
+
         // Note, we are comparing strings, BUT if both values happen
         // to be numeric, then PHP will do a numeric comparison.
         // PHP's behaviour saves us some work type-casting.
-        if ($ver1[$i] > $ver2[$i]) {$latest = (-1); break;}
-        if ($ver1[$i] < $ver2[$i]) {$latest = (+1); break;}
+        if ($ver1[$i] > $ver2[$i]) {$latest = (-1); break; }
+        if ($ver1[$i] < $ver2[$i]) {$latest = (+1); break; }
     }
     
     return $reverse ? $latest * (-1) : $latest;
