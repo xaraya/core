@@ -50,7 +50,6 @@
 
 /**
  * Include the base file
- *
  */
 include_once ('./includes/log/loggers/xarLogger.php');
 
@@ -61,271 +60,244 @@ include_once ('./includes/log/loggers/xarLogger.php');
  */
 class xarLogger_simple extends xarLogger
 {
-    /**
-    * String holding the filename of the logfile.
-    * @var string
-    */
+    // String holding the filename of the logfile.
+    // @var string
     var $_filename;
 
-    /**
-    * Integer holding the file handle.
-    * @var integer
-    */
-    var $_fp;
+    // Integer holding the file handle.
+    // NULL if the file is not open.
+    // @var integer
+    var $_fp = NULL;
 
-    /**
-    * Integer (in octal) containing the logfile's permissions mode.
-    * @var integer
-    */
-    var $_mode = 0644;
+    // Integer containing the logfile's permissions mode.
+    // Written in octal, the permissions mimic the Unix 'chmod' format.
+    // If zero, then no changes are made to the file mode when created.
+    // Typical value: 0644
+    // @var integer
+    var $_mode = 0;
 
-    /**
-    * Buffer holding what is to go to the file
-    * @var array
-    */
+    // Output buffer. Log records are buffered before being written to
+    // the log file either explicitly, or on destroying the class.
+    // @var array
     var $_buffer;
 
-    /**
-    * Boolean which if true will mean
-    * the lines are written out.
-    */
-    var $_writeOut;
+    // Maximum file size
+    // TODO: allow formats such as '2M', '100k' etc. That conversion could
+    // be a core function, as there are many places it could be used.
+    var $_maxFileSize = 1048576; // 1Mb
 
-    /**
-    * Boolean which if true will mean
-    * the file is open.
-    */
-    var $_isFileOpen;
+    // End of line marker for writing to the log file.
+    // TODO: automatically determine the OS-specific EOL characters.
+    var $EOL = "\r\n";
 
-    /**
-    * Boolean which if true will mean
-    * the file has already been opened,
-    * assumes it wont disapear during a php execution.
-    */
-    var $_isFileWriteable;
-
-    /**
-    * Header to be inserted when creating the file
-    */
-    var $_fileheader;
-
-    /**
-    * Maximum file size
-    */
-    var $_maxFileSize = 1048576; // 1Mb == 1024 * 1024 byte
-
-    /**
-    * Set up the configuration of the specific Log Observer.
-    *
-    * @param  array $conf  with
-    *               'fileName'     => string      The filename of the logfile.
-    *               'maxLevel'     => int         Maximum level at which to log.
-    *               'mode'         => string      File mode of te log file (optional)
-    *               'timeFormat'   => string      Time format to be used in the file (optional)
-    * @access public
-    */
+    // Configure the logging object.
+    // @param $conf['fileName'] string The filename of the logfile
+    // @param $conf['mode'] string File mode of the log file, in Octal (optional)
+    // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
+    // @access public
     function setConfig($conf)
     {
         parent::setConfig($conf);
 
-        /* If a file mode has been provided, use it. */
+        // If a file mode has been provided, use it.
+        // Note the mode is passed in as an Octal string.
         if (!empty($conf['mode'])) {
-            $this->_mode = $conf['mode'];
+            $this->_mode = octdec((string)$conf['mode']);
         }
 
-        /* If a file mode has been provided, use it. */
+        // If a maximum size has been supplied, use it.
         if (!empty($conf['maxFileSize'])) {
             $this->_maxFileSize = $conf['maxFileSize'];
         }
 
-        $this->_buffer          = '--------------------------------------------------------------------------------------------------------------------------------------'
-                                           ."\r\n";
+        // Start with a horizontal rule.
+        $this->_buffer = str_repeat('-', 79) . $this->EOL;
 
-         if (isset($_SERVER["REQUEST_URI"])) {
-            $this->_buffer .= "REQUEST_URI:  {$_SERVER['REQUEST_URI']} \r\n";
-         }
+        // Write the request details.
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $this->_buffer .= 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'] . $this->EOL;
+        }
 
-         if (isset($_SERVER["HTTP_REFERER"])) {
-            $this->_buffer .= "HTTP_REFERER:  {$_SERVER['HTTP_REFERER']} \r\n";
-         }
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this->_buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
+        }
 
-        $this->_writeOut        = true;
-        $this->_isFileOpen      = false;
-        $this->_isFileWriteable = false;
-        $this->_fileheader      = '';
+        $this->_filename = $conf['fileName'];
 
-        $this->_filename        = $conf['fileName'];
-        $this->_ensureFileWriteable();
+        // Set the log file up for writing.
+        $this->_prepareLogfile();
 
-        /* register the destructor */
-        //Let's see if the destructors can work by themselves
-        //This is not working, find out why later on
-//      register_shutdown_function(array(&$this, '_destructor'));
+        // Register the destructor.
+        register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
     }
 
-    /**
-    * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
-    * method has been called, in which case it won't.
-    *
-    * @access private
-    */
-    function _destructor()
+    // Destructor. This will write outstanding records to the logfile.
+    // @access private
+    function _xarLogger_simple_destructor()
     {
-        //At this time, we can't send output to the screen,
-        //fwrite doesnt seem to be working, how to know if
-        //the destructor is being called?
-        //Anyone with a nice debugger around?
-        $this->writeOut();
+        // Push a final message to the log.
+        $this->notify('Shutdown simple logger', XARLOG_LEVEL_DEBUG);
 
-        // Close the Log file
-        $this->_closeLogfile();
+        // Flush any remaining records and stop logging.
+        $this->flushBuffer(true);
     }
 
-    /**
-    * Updates the Observer, gets the actual State in the observable class and logs the message if it is appropriate
-    *
-    * @return boolean  True on success or false on failure.
-    * @access public
-    */
+    // Add a message, applying appropriate formatting, to the output buffer.
+    // @return boolean true on success or false on failure.
+    // @access public
     function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
         // Add to loglines array
         $this->_buffer .= $this->_formatMessage($message, $level);
 
-        //This shouldnt be necessary, fix afterwards
-        //The destructor doesnt seem to be called, or
-        //the script is not able to execute the fwrite(?) during shutdown
-        $this->writeOut();
-
         return true;
     }
 
-    /**
-    * This function will prevent the destructor from logging.
-    *
-    * @access public
-    */
-    function dontLog()
+    // Clear the output buffer (and optionally stop logging).
+    // @access public
+    function clearBuffer($stop_logging = false)
     {
-        $this->_writeOut = false;
+        $this->_buffer = '';
+
+        if ($stop_logging) {
+            $this->_filename = NULL;
+        }
     }
 
-    /**
-    * Function to force writing out of log *now*. Will clear the queue.
-    * Using this function does not cancel the writeout in the destructor.
-    * Handy for long running processes.
-    *
-    * @access public
-    */
-    function writeOut()
+    // Flush the current buffer to the log file (and optionally stop logging).
+    // Handy for long running processes.
+    // @access public
+    function flushBuffer($stop_logging = false)
     {
-        if (!empty($this->_buffer) AND ($this->_writeOut) AND $this->_openLogfile()) {
+        if (!empty($this->_buffer) && $this->_openLogfile()) {
             fwrite($this->_fp, $this->_buffer);
             $this->_buffer = '';
         }
 
-        if (!$this->_closeLogfile()) return false;
+        // Close the log file.
+        // It will be opened again if further records need to be written.
+        $this->_closeLogfile();
+
+        if ($stop_logging) {
+            $this->_filename = NULL;
+        }
     }
 
-    /**
-    * Checks if the directory where the log file shoud be exists
-    * then checks if the log file already exists,
-    * if not then creates it.
-    *
-    * Sets $this->_filename to the file path then
-    *
-    * @param file $file Path to the logger file
-    * @access private
-    */
-    function _ensureFileWriteable()
+    // Prepares the logfile for writing
+    // @param file $file Path to the logger file
+    // @access private
+    function _prepareLogfile()
     {
-        if (!file_exists($this->_filename)) {
-            if (!is_writable(dirname($this->_filename))) {
-               xarCore_die ('Logger file path given (' . $this->_filename . ') is not writeable: '.$this->_filename);
-            }
-            else
-            {
-                if (!touch($this->_filename))
-                    xarCore_die ('Unable to create logger file: '.$this->_filename);
-            }
+        if (!is_writable(dirname($this->_filename))) {
+            xarCore_die ('Logger directory is not writeable: ' . dirname($this->_filename));
         }
 
-        $this->_isFileWriteable = true;
+        if (file_exists($this->_filename)) {
+            if (!touch($this->_filename)) {
+                xarCore_die (
+                    'Unable to write to logger file: ' . $this->_filename
+                    . (!empty($php_errormsg) ? ' (' . $php_errormsg . ')' : '')
+                );
+            }
+        } else {
+            $this->_newLogFile();
+        }
+
+        // The realpath() function requires a file to exist before it will work,
+        // so it can not be applied earlier than this point.
         $this->_filename = realpath($this->_filename);
 
         return true;
     }
 
-    /**
-    * Opens the logfile for appending. File should always exist, as
-    * constructor will create it if it doesn't.
-    *
-    * @access private
-    */
+    // Opens the logfile for writing. File should always exist, as
+    // setConfig() will have created it if it doesn't.
+    // @access private
     function _openLogfile()
     {
-        if ($this->_isFileOpen) {
+        // Log file is already open.
+        if (!empty($this->_fp)) {
             return true;
-        }   // else {
-
-        if (!$this->_isFileWriteable) {
-            xarCore_die('File is not writeable');
         }
 
-        if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
-            $insert_header = true;
-            $option = 'w'; //write over
-        } else {
-            $insert_header = false;
-            $option = 'a'; //append
-        }
-
-        if (($this->_fp = fopen($this->_filename, $option)) == false) {
-            xarCore_die('unable to open log file '.$this->_filename);
+        // The logger has aleady been shut down.
+        if (empty($this->_filename)) {
             return false;
-        }  // else {
-
-        if ($insert_header) {
-            fwrite($this->_fp, $this->_fileheader);
         }
 
-        $this->_isFileOpen = true;
+        // The config stage will have ensured the file exists and is
+        // writable. If the file has exceeded its max size, then
+        // start a new logfile.
+        if (filesize($this->_filename) > $this->_maxFileSize) {
+            // Start a new logfile.
+            $this->_newLogFile();
+        }
+
+        // Always append - the will be a log file ready.
+        if (($this->_fp = @fopen($this->_filename, 'a')) == false) {
+            xarCore_die(
+                'Unable to open log file for writing: ' . $this->_filename
+                . (!empty($php_errormsg) ? ' (' . $php_errormsg . ')' : '')
+            );
+            return false;
+        }
+
         return true;
     }
 
-    /**
-    * Closes the logfile file pointer.
-    *
-    * @access private
-    */
+    // Closes the logfile, if open.
+    // @return boolean True if the log file is (or was) closed, false if not
+    // @access private
     function _closeLogfile()
     {
-        if (!$this->_isFileOpen) {
+        if (empty($this->_fp)) {
             return true;
         }
         if (!fclose($this->_fp)) {
             return false;
         }
-
-        $this->_isFileOpen = false;
-
+        $this->_fp = NULL;
         return true;
     }
 
-    /**
-    * Format a message to the logfile
-    *
-    * @param  string  $message  The line to write
-    * @param  integer $level    The level of priority of this line/msg
-    * @return integer           Number of bytes written or -1 on error
-    * @access private
-    */
+    // Create the log file if it does not exist.
+    // In here, truncate the file if it already exists.
+    // TODO: if a non-empty file exists, rename it with some
+    // timestamp or sequential suffix.
+    function _newLogFile()
+    {
+        if (!file_exists($this->_filename)) {
+            // Create a new file.
+            touch($this->_filename);
+            if (!empty($this->_mode)) {
+                // Set the default mode for the file.
+                chmod($this->_filename, $this->_mode);
+            }
+        } else {
+            // File exists.
+            // If it is not empty then truncate it.
+            if (filesize($this->_filename) > 0) {
+                if ($this->_fp = fopen($this->_filename, 'w')) {
+                    fclose($this->_fp);
+                }
+            }
+        }
+    }
+
+    // Format a message.
+    // @param string $message The message detail text
+    // @param integer $level The priority level of this record
+    // @return string The formatted log record
+    // @access private
     function _formatMessage($message, $level)
     {
-        return $this->getTime() . ' [' . $this->levelToString($level) . '] ' . $message . "\r\n";
+        return $this->getTime() . ' [' . $this->levelToString($level) . '] ' . $message . $this->EOL;
     }
-} // End of class
+}
+
 ?>

@@ -15,7 +15,7 @@
 
 // Do not allow this script to run if the install script has been removed.
 // This assumes the install.php and index.php are in the same directory.
-if (!file_exists('install.php')) die(xarML('Already installed'));
+if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
 
 /**
  * Dead

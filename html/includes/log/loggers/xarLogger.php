@@ -37,6 +37,9 @@ class xarLogger
     */
     var $_timeFormat = '%b %d %H:%M:%S';
 
+    // Elapsed time.
+    var $_elapsed = 0;
+
     /**
      * Sets up the configuration specific parameters for each driver
      *
@@ -48,6 +51,9 @@ class xarLogger
     function setConfig(&$conf) 
     {
         $this->_logLevel = $conf['logLevel'];
+
+        $microtime = explode(" ", microtime());
+        $this->_elapsed = ((float)$microtime[0] + (float)$microtime[1]);
 
 /*
         // If no identity is given yet to this page view, then create it 
@@ -107,7 +113,10 @@ class xarLogger
     {
         $microtime = microtime();
         $microtime = explode(' ', $microtime);
-        return strftime($this->_timeFormat).' '.$microtime[0];
+
+        $secs = ((float)$microtime[0] + (float)$microtime[1]); 
+
+        return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . round($secs - $this->_elapsed, 3);
     }
 }
 
