@@ -539,14 +539,14 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            $modState = xarMod__getState($modInfo['regid'], $modInfo['mode']);
+            $modState = xarMod_getState($modInfo['regid'], $modInfo['mode']);
             if (!isset($modState)) $modState = XARMOD_STATE_MISSING; //return; // throw back
             $modInfo['state'] = $modState;
 
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
             break;
         case 'theme':
-            $modState = xarMod__getState($modInfo['regid'], $modInfo['mode'], $type = 'theme');
+            $modState = xarMod_getState($modInfo['regid'], $modInfo['mode'], $type = 'theme');
             if (!isset($modState)) $modState = XARTHEME_STATE_MISSING; //return; // throw back
             $modInfo['state'] = $modState;
 
@@ -1644,13 +1644,13 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
+            $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode']);
             if (!isset($modState)) return; // throw back
             $modBaseInfo['state'] = $modState;
             xarVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
             break;
         case 'theme':
-            $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode'], $type = 'theme');
+            $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode'], $type = 'theme');
             if (!isset($modState)) return; // throw back
             $modBaseInfo['state'] = $modState;
             xarVarSetCached('Theme.BaseInfos', $modName, $modBaseInfo);
@@ -1870,7 +1870,7 @@ function xarMod__loadDbInfo($modName, $modDir)
 /**
  * Get the module's current state
  *
- * @access private
+ * @access public
  * @param modRegId integer the module's registered id
  * @param modMode integer the module's site mode
  * @param type determines theme or module
@@ -1878,7 +1878,7 @@ function xarMod__loadDbInfo($modName, $modDir)
  * @raise DATABASE_ERROR, MODULE_NOT_EXIST
  * @todo implement the xarMod__setState reciproke
  */
-function xarMod__getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
+function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {
     if ($modRegId < 1) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
