@@ -215,5 +215,4 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
     // Single point of exit.
     return $return;
 }
-
 ?>
