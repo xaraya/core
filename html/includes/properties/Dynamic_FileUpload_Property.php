@@ -49,7 +49,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $name = 'dd_'.$this->id;
+        if (isset($this->fieldname)) {
+            $name = $this->fieldname;
+        } else {
+            $name = 'dd_'.$this->id;
+        }
         $upname = $name .'_upload';
         $filetype = $this->filetype;
         if (!empty($_FILES) && !empty($_FILES[$upname]) && !empty($_FILES[$upname]['tmp_name'])

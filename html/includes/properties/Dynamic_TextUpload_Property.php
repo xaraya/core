@@ -39,7 +39,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $name = 'dd_'.$this->id;
+        if (isset($this->fieldname)) {
+            $name = $this->fieldname;
+        } else {
+            $name = 'dd_'.$this->id;
+        }
         $upname = $name .'_upload';
         if (!empty($_FILES) && !empty($_FILES[$upname]) && !empty($_FILES[$upname]['tmp_name'])
             // is_uploaded_file() : PHP 4 >= 4.0.3
