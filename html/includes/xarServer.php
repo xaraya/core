@@ -566,6 +566,14 @@ function xarResponseRedirect($redirectURL)
 
     // As this is a redirect we can stop processing
     // It gave some errors on some installations if we just returned true here.
+
+// But this means we need to close the session and dispose of the debugger here too...
+    // Close the session
+    xarSession_close();
+
+    // Kill the debugger
+    xarCore_disposeDebugger();
+
     exit();
 
     // return true;
