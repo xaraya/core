@@ -58,6 +58,10 @@ function blocks_init()
                                    'xar_type_id'     => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0'),
+                                   'xar_name'       => array('type'        => 'varchar',
+                                                             'size'        => 100,
+                                                             'null'        => false,
+                                                             'default'     => NULL),
                                    'xar_title'       => array('type'        => 'varchar',
                                                              'size'        => 255,
                                                              'null'        => true,
@@ -86,6 +90,13 @@ function blocks_init()
                              array('name'   => 'i_' . $prefix . '_block_instances',
                                    'fields' => array('xar_type_id'),
                                    'unique' => false));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $query = xarDBCreateIndex($prefix . '_block_instances',
+                             array('name'   => 'i_' . $prefix . '_block_instances_u2',
+                                   'fields' => array('xar_name'),
+                                   'unique' => true));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -134,6 +145,10 @@ function blocks_init()
                                    'xar_instance_id' => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0'),
+                                   'xar_template'    => array('type'        => 'varchar',
+                                                             'size'        => 100,
+                                                             'null'        => true,
+                                                             'default'     => NULL),
                                    'xar_position'    => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0')));

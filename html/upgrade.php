@@ -622,14 +622,77 @@ if (empty($step)) {
         echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";
     }
 
+    // Bugs 1581/1586/1838: Update the blocks table definitions.
+    // Use the data dictionary to do the checking and altering.
+    echo "<h5>Checking Block Table Definitions</h5>";
+    list($dbconn) = xarDBGetConn();
+    $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
+
+    // Upgrade the xar_block_instances table.
+    $blockinstancestable = xarDBGetSiteTablePrefix() . '_block_instances';
+    // Get column definitions for block instances table.
+    $columns = $datadict->getColumns($blockinstancestable);
+    // Do we have a xar_name column?
+    $blocks_column_found = false;
+    foreach($columns as $column) {
+        if ($column->name == 'xar_name') {
+            $blocks_column_found = true;
+            break;
+        }
+    }
+    // Upgrade the table (xar_block_instances) if the name column is not found.
+    if (!$blocks_column_found) {
+        // Create the column.
+        $result = $datadict->addColumn($blockinstancestable, 'xar_name C(100) Null');
+        // Update the name column with unique values.
+        $query = "UPDATE $blockinstancestable"
+            . " SET xar_name = " . $dbconn->Concat("'block_'", 'xar_id')
+            . " WHERE xar_name IS NULL";
+        $dbconn->Execute($query);
+        // Now make it mandatory, and add a unique index.
+        $result = $datadict->alterColumn($blockinstancestable, 'xar_name C(100) NotNull');
+        $result = $datadict->createIndex(
+            'i_'.xarDBGetSiteTablePrefix().'_block_instances_u2',
+            $blockinstancestable,
+            'xar_name',
+            array('UNIQUE')
+        );
+        echo "Added column xar_name to table $blockinstancestable<br/>";
+    } else {
+        echo "Table $blockinstancestable is up-to-date<br/>";
+    }
+
+    // Upgrade the xar_block_group_instances table.
+    $blockgroupinstancestable = xarDBGetSiteTablePrefix() . '_block_group_instances';
+    // Get column definitions for block instances table.
+    $columns = $datadict->getColumns($blockgroupinstancestable);
+    // Do we have a xar_template column?
+    $blocks_column_found = false;
+    foreach($columns as $column) {
+        if ($column->name == 'xar_template') {
+            $blocks_column_found = true;
+            break;
+        }
+    }
+    if (!$blocks_column_found) {
+        // Create the column.
+        $result = $datadict->addColumn($blockgroupinstancestable, 'xar_template C(100) Null');
+        echo "Added column xar_template to table $blockgroupinstancestable<br/>";
+    } else {
+        echo "Table $blockgroupinstancestable is up-to-date<br/>";
+    }
+
+
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
 
-    $upgrade['syndicate'] = xarModAPIFunc('blocks',
-                                          'admin',
-                                          'block_type_exists',
-                                           array('modName'      => 'themes',
-                                                 'blockType'    => 'syndicate'));
+    $upgrade['syndicate'] = xarModAPIFunc(
+        'blocks', 'admin', 'block_type_exists',
+        array(
+            'modName'      => 'themes',
+            'blockType'    => 'syndicate'
+        )
+    );
     if ($upgrade['syndicate']) {
         echo "Syndicate block exists, attempting to remove... ";
         $blockGroupsTable = xarDBGetSiteTablePrefix() . '_block_groups';
@@ -655,7 +718,7 @@ if (empty($step)) {
             return;
         }
         list ($syndicateBlockGroup) = $result->fields;
-        if (!xarModAPIFunc('blocks', 'admin', 'delete_group', array('gid'     => $syndicateBlockGroup))) return;
+        $result = xarModAPIFunc('blocks', 'admin', 'delete_group', array('gid' => $syndicateBlockGroup));
 
         if (!$result){
             echo "failed</font><br/>\r\n";
