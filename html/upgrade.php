@@ -271,7 +271,7 @@ if (empty($step)) {
                 xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
                 xarAssignPrivilege('Administration','Administrators');
                 xarAssignPrivilege('GeneralLock','Everybody');
-                //xarAssignPrivilege('GeneralLock','Administrators');
+                xarAssignPrivilege('GeneralLock','Administrators');
                 xarAssignPrivilege('GeneralLock','Users');
 
                 //Make sure we have the correct stuff for Anonymous and Everybody
