@@ -25,6 +25,7 @@ function roles_userapi_getUsers($args)
 
     $users = $role->getUsers();
 
+    flatusers = array();
     foreach($users as $user) {
         $flatusers[] = array('uid' => $user->getID(),
                         'uname' => $user->getUser()
