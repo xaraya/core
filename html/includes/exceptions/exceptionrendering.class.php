@@ -1,0 +1,130 @@
+<?php
+/**
+ * File: $Id$
+ *
+ * Exception Handling System
+ *
+ * @package exceptions
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
+
+class ExceptionRendering
+{
+    var $exception;
+    var $id;
+    var $major;
+    var $defaults;
+    var $title;
+    var $short;
+    var $long;
+    var $hint;
+    var $stack;
+    var $linebreak;
+
+
+    function ExceptionRendering($exception = NULL){
+        $this->exception = $exception;
+        $this->linebreak = "<br/>";
+        $this->id = $exception->getID();
+        switch ($exception->getMajor()) {
+            case XAR_SYSTEM_EXCEPTION:
+                include "includes/exceptions/systemexception.defaults.php";
+                if (!array_key_exists($this->id, $this->defaults)) {
+                    $this->id = "EXCEPTION_FAILURE";
+                }
+                $this->load();
+                break;
+            case XAR_USER_EXCEPTION:
+                include "includes/exceptions/defaultuserexception.defaults.php";
+                if (array_key_exists($this->id, $this->defaults)) {
+                    $this->load();
+                }
+                else {
+                    $this->title = $this->id;
+                    $this->short = xarML("No further information available");
+                    $this->long = "";
+                    $this->hint = "";
+                }
+                break;
+            default:
+                include "includes/exceptions/systemexception.defaults.php";
+                break;
+        }
+    }
+
+    function load() {
+        $id = $this->id;
+        $this->title = array_key_exists("title", $this->defaults[$id]) ? $this->defaults[$id]['title'] : '';
+        $this->short = array_key_exists("short", $this->defaults[$id]) ? $this->defaults[$id]['short'] : '';
+        $this->long = array_key_exists("long", $this->defaults[$id]) ? $this->defaults[$id]['long'] : '';
+        $this->hint = array_key_exists("hint", $this->defaults[$id]) ? $this->defaults[$id]['hint'] : '';
+    }
+
+    function getTitle() { return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle(); }
+    function getLong() { return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); }
+    function getHint() { return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); }
+    function getShort() { return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); }
+
+    function isadmin(){
+        if(!xarVarGetCached('installer','installing')) {
+            $roles = new xarRoles();
+            $admins = "Administrators";
+            $admingroup = $roles->findRole("Administrators");
+            $me = $roles->getRole(xarSessionGetVar('uid'));
+            return $me->isParent($admingroup);
+        }
+        else return true;
+    }
+
+    function iserrorcollection(){ return get_class($this->exception) == 'errorcollection';}
+
+    function getID() {
+        if ($this->iserrorcollection()) $this->id = "PHP_ERROR";
+        else $this->id = $this->exception->getID();
+    }
+
+    function getMsg() {
+        if ($this->iserrorcollection()) {
+          $collection = $this->exception->exceptions;
+          $message = "One or more PHP errors were encountered." . $this->linebreak . $this->linebreak;
+          foreach($collection as $collecteditem) {
+              $message .= $collecteditem['id'] . $this->linebreak;
+              $message .= xarVarPrepForDisplay($collecteditem['value']->msg) . $this->linebreak;
+          }
+          return $message;
+        }
+        else return $this->exception->getMsg();
+    }
+
+    function getStack() {
+        $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
+
+        if ($this->exception->getMajor() != XAR_USER_EXCEPTION && $this->isadmin()) {
+            $stack = $this->exception->getStack();
+            $text = "";
+            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
+                if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
+                else $function = '{}';
+                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
+                // Note: eval() doesn't generate file or line
+                if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
+                if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
+                $text .= ')' . $this->linebreak;
+                if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
+                    ob_start();
+                    print_r($stack[$i]['args']);
+                    $dump = ob_get_contents();
+                    ob_end_clean();
+                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
+                    $text .= $this->linebreak;
+                }
+            }
+            return $text;
+        }
+        else return "";
+    }
+}
+?>

@@ -26,321 +26,14 @@ define('XAR_SYSTEM_EXCEPTION', 2);
 
 /* Xaraya System Exceptions */
 
-/**
- * SystemException
- *
- * @package exceptions
- */
-class Exception
-{
-    var $msg;
-    var $id;
-    var $defaults;
-    var $title;
-    var $short;
-    var $long;
-    var $hint;
+include "includes/exceptions/exceptionstack.class.php";
+global $ExceptionStack;
+$ExceptionStack = new xarExceptionStack();
 
-    function Exception() {
-
-    }
-
-    function toString() { return $this->msg; }
-    function load($id) {
-        if (array_key_exists("title", $this->defaults[$id])) $this->title = $this->defaults[$id]['title'];
-        if (array_key_exists("short", $this->defaults[$id])) $this->short = $this->defaults[$id]['short'];
-        if (array_key_exists("long", $this->defaults[$id])) $this->long = $this->defaults[$id]['long'];
-        if (array_key_exists("hint", $this->defaults[$id])) $this->hint = $this->defaults[$id]['hint'];
-    }
-    function getTitle() { return $this->title; }
-    function getShort() {
-        if ($this->msg != '') return $this->msg;
-        else return $this->short;
-    }
-    function getLong() { return $this->long; }
-    function getHint() { return $this->hint; }
-
-    function setID($id) { $this->id = $id; }
-    function setTitle($id) { $this->title = $id; }
-    function setShort($id) { $this->short = $id; }
-    function setLong($id) { $this->long = $id; }
-    function setHint($id) { $this->hint = $id; }
-    function setMsg($id) { $this->msg = $id; }
-}
-
-class SystemException extends Exception
-{
-    function SystemException($msg = '') {
-
-        $this->msg = $msg;
-        $this->defaults = array(
-            'BAD_PARAM' => array(
-                'title' => xarML('Bad Parameter'),
-                'short' => xarML('A parameter encountered was bad.'),
-                'long' => xarML('A parameter provided during this operation could not be validated, or was not accepted for other reasons.') ),
-            'COMPILER ERROR' => array(
-                'title' => xarML('Compliler error'),
-                'short' => xarML('The Blocklayout compiler encountered an error.'),
-                'long' => xarML('The Blocklayout compiler encountered an error it could not recover from. No specific information is available.') ),
-            'CONTEXT_NOT_EXIST' => array(
-                'title' => xarML('Context does not exist'),
-                'short' => xarML('A context element was not found.'),
-                'long' => xarML('This error is a catchall to describe situations where a context element (block, template, include) was expected but not found.') ),
-            'DATABASE_ERROR' => array(
-                'title' => xarML('Database Error'),
-                'short' => xarML('An error was encountered while attempting a database operation.'),
-                'long' => xarML('No further information is available.') ),
-            'DATABASE_ERROR_QUERY' => array(
-                'title' => xarML('Database Query Error'),
-                'short' => xarML('An error was encountered while trying to execute a database query.'),
-                'long' => xarML('A database query could not be executed, either because the query could not be understood or because it returned unexpected results.') ),
-            'DEPRECATED_API' => array(
-                'title' => xarML('Deprecated API'),
-                'short' => xarML('A function call encountered belongs to a deprecated API.'),
-                'long' => xarML('A function call encountered belongs to an old API and is therefore no longer supported.') ),
-            'DEPRECATED_ATTRIBUTE' => array(
-                'title' => xarML('Deprecated Blocklayout Attribute'),
-                'short' => xarML('A tag in a template contains a deprecated attribute.'),
-                'long' => xarML('A tag in a template contains a deprecated attribute and needs to be replaced by a new one, or be left out, see BL documentation for the right syntax.') ),
-            'EMPTY_PARAM' => array(
-                'title' => xarML('Empty Parameter'),
-                'short' => xarML('A parameter value was not provided.'),
-                'long' => xarML('A parameter was expected during this operation, but none was found.') ),
-            'EVENT_NOT_REGISTERED' => array(
-                'title' => xarML('Event is not registered'),
-                'short' => xarML('An unknown event was encountered.'),
-                'long' => xarML('A reference to an event was encountered that is unknown to the system.') ),
-            'EXCEPTION_FAILURE' => array(
-                'title' => xarML('Unknown system error'),
-                'short' => xarML('An unknown system error was encountered.'),
-                'long' => xarML('The error system has encountered an error it cannot identify. Please help us correct this by filing a bug at <a href="http://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core">bugs.xaraya.com</a>.') ),
-            'FUNCTION_FAILED' => array(
-                'title' => xarML('Function failed'),
-                'short' => xarML('A call to a function returned a bad result.'),
-                'long' => xarML('The function executed correctly, but the result was a failure.') ),
-            'ID_NOT_EXIST' => array(
-                'title' => xarML('Unknown ID'),
-                'short' => xarML('An expected ID was not found.'),
-                'long' => xarML('An item was requested by an ID that is not recognized. This could mean the item has been moved, changed, or does not exist.') ),
-            'INVALID_ATTRIBUTE' => array(
-                'title' => xarML('Invalid attribute'),
-                'short' => xarML('The Blocklayout parser encountered an invalid attribute.'),
-                'long' => xarML('No further information is available.') ),
-            'INVALID_ENTITY' => array(
-                'title' => xarML('Invalid entity'),
-                'short' => xarML('The Blocklayout parser encountered an invalid entity.'),
-                'long' => xarML('No further information is available.') ),
-            'INVALID_FILE' => array(
-                'title' => xarML('Invalid file'),
-                'short' => xarML('The Blocklayout parser encountered an invalid file.'),
-                'long' => xarML('The file was either not found, or could not be read properly.') ),
-            'INVALID_INSTRUCTION' => array(
-                'title' => xarML('Invalid instruction'),
-                'short' => xarML('The Blocklayout parser encountered an invalid instruction.'),
-                'long' => xarML('No further information is available.') ),
-            'INVALID_SPECIALVARIABLE' => array(
-                'title' => xarML('Invalid special variable'),
-                'short' => xarML('The Blocklayout parser encountered a problem with a special variable.'),
-                'long' => xarML('No further information is available.') ),
-            'INVALID_SYNTAX' => array(
-                'title' => xarML('Invalid syntax'),
-                'short' => xarML('The Blocklayout parser encountered a syntax error.'),
-                'long' => xarML('No further information is available.') ),
-            'INVALID_TAG' => array(
-                'title' => xarML('Invalid tag'),
-                'short' => xarML('The Blocklayout parser encountered an invalid tag.'),
-                'long' => xarML('The tag encountered does not conform to XML syntax.') ),
-            'LOCALE_NOT_AVAILABLE' => array(
-                'title' => xarML('Locale not available') ),
-            'LOCALE_NOT_EXIST' => array(
-                'title' => xarML('Locale does not exist'),
-                'short' => xarML('An unknown locale was encountered.'),
-                'long' => xarML('A reference to a locale was encountered that is unknown to the system.') ),
-            'MISSING_ATTRIBUTE' => array(
-                'title' => xarML('Missing attribute'),
-                'short' => xarML('The Blocklayout parser could not find a tag attribute.'),
-                'long' => xarML('A tag attribute required by syntax was not found.') ),
-            'MISSING_PARAMETER' => array(
-                'title' => xarML('Missing parameter'),
-                'short' => xarML('The Blocklayout parser could not resolve a tag parameter.'),
-                'long' => xarML('A tag parameter could not be resolved because of bad syntax.') ),
-            'MODULE_DEPENDENCY' => array(
-                'title' => xarML('Module Dependency'),
-                'short' => xarML('A module call failed because of an unsatisifed dependency.'),
-                'long' => xarML('The current module cannot execute because another module that must first be installed is not present.') ),
-            'MODULE_FILE_NOT_EXIST' => array(
-                'title' => xarML('Module file does not exist'),
-                'short' => xarML('An operation requires a module file that cannot be found.'),
-                'long' => xarML('The file may be missing, or its name may have changed.')),
-            'MODULE_FUNCTION_NOT_EXIST' => array(
-                'title' => xarML('Module function does not exist'),
-                'short' => xarML('A call has been made to a module function that cannot be found.'),
-                'long' => xarML('The file in which the function was expected may be missing. If not, then the error may have occurred because the actual function has a different name, or does not exist.')),
-            'MODULE_NOT_ACTIVE' => array(
-                'title' => xarML('Module is not active'),
-                'short' => xarML('A call has been made to a module that is not active.'),
-                'long' => xarML('A module was called that has not yet been activated/installed. Use the activate link in the modules module (Modules->ViewAll) to install modules.')),
-            'MODULE_NOT_EXIST' => array(
-                'title' => xarML('Module does not exist'),
-                'short' => xarML('A call has been made to a module that cannot be found'),
-                'long' => xarML('A module was called that has not yet been installed or is not present. Use the activate link in the modules module (Modules->ViewAll) to install modules.')),
-            'NO_PERMISSION' => array(
-                'title' => xarML('No Privilege'),
-                'short' => xarML('You do not have the privileges for this operation.'),
-                'long' => xarML('An operation was attempted for which your user has not been assigned privileges. Privileges must be assigned by the system administrator(s).')),
-            'NOT_LOGGED_IN' => array(
-                'title' => xarML('Not logged in'),
-                'short' => xarML('You are attempting an operation that is not allowed for the Anonymous user.'),
-                'long' => xarML('An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.')),
-            'NOT_IMPLEMENTED' => array(
-                'title' => xarML('Not implemented'),
-                'short' => xarML('The requested feature is not available.'),
-                'long' => xarML('An request was made to access a feature that is not available in this installation. The feature is either missing or unavailable in the current version of Xaraya.')),
-            'PHP_ERROR' => array(
-                'title' => xarML('PHP error'),
-                'short' => xarML('A system error was received from the PHP interpreter.'),
-                'long' => xarML('There is an error in the PHP code that is being processed.')),
-            'SYSTEM_ERROR' => array(
-                'title' => xarML('System error'),
-                'short' => xarML('A system error was encountered.'),
-                'long' => xarML('No further information is available.')),
-            'TEMPLATE_NOT_EXIST' => array(
-                'title' => xarML('Template does not exist'),
-                'short' => xarML('An unknown template name was encountered.'),
-                'long' => xarML('An attempt was made to render a template that was not found. The template may have been removed or does not exist, or its name may have changed.') ),
-            'THEME_NOT_EXIST' => array(
-                'title' => xarML('Theme does not exist'),
-                'short' => xarML('An unknown theme name was encountered.'),
-                'long' => xarML('An attempt was made to display a theme that was not found. The theme may have been removed or does not exist, or its name may have changed.') ),
-            'UNABLE_TO_LOAD' => array(
-                'title' => xarML('Unable to load'),
-                'short' => xarML('An error was encountered during a load operation.'),
-                'long' => xarML('The system was unable to successfully load a component, such as a module or theme.') ),
-            'UNKNOWN' => array(
-                'title' => xarML('Unknown Error'),
-                'short' => xarML('An unknown error was encountered.'),
-                'long' => xarML('No further information is available.') ),
-            'VARIABLE_NOT_REGISTERED' => array(
-                'title' => xarML('Variable is not registered'),
-                'short' => xarML('You are attempting to call a variable that the system does not recognize.'),
-                'long' => xarML('An error was encountered during a call to a variable. The variable may have been removed, or its name changed.') ),
-            'XML_PARSER_ERROR' => array(
-                'title' => xarML('XML Parser Error'),
-                'short' => xarML('The XML parser has encountered an error.'),
-                'long' => xarML('The XML parser tried to execute a line that was not well formed.'))
-        );
-    }
-
-
-    function load($id) {
-        if (!array_key_exists($id, $this->defaults)) $id = "EXCEPTION_FAILURE";
-        parent::load($id);
-    }
-
-    function toHTML() { return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>'; }
-}
-
-class DefaultUserException extends Exception
-{
-    var $link;
-
-    function DefaultUserException($msg = '', $link = NULL)
-    {
-        $this->msg = $msg;
-        $this->link = $link;
-        $this->defaults = array(
-            'ALREADY EXISTS' => array(
-                'title' => xarML('Block type already exists'),
-                'short' => xarML('An attempt was made to register a block type in a module that already exists.')),
-            'BAD_DATA' => array(
-                'title' => xarML('Bad Data'),
-                'short' => xarML('The data provided was bad.'),
-                'long' => xarML('The value provided during this operation could not be validated, or was not accepted for other reasons.')),
-            'DUPLICATE_DATA' => array(
-                'title' => xarML('Duplicate Data'),
-                'short' => xarML('The data provided was a duplicate.'),
-                'long' => xarML('A unique value was expected during this operation, but the value provided is a duplicate of an existing value.')),
-            'FORBIDDEN_OPERATION' => array(
-                'title' => xarML('Forbidden Operation'),
-                'short' => xarML('The operation you are attempting is not allowed in the current circumstances.'),
-                'long' => xarML("You may have clicked on the browser's back or refresh button and reattempted an operation that may not be repeated, or your browser may not have cookies enabled.")),
-            'LOGIN_ERROR' => array(
-                'title' => xarML('Login error'),
-                'short' => xarML('A problem was encountered during the login process.'),
-                'long' => xarML('No further information is available.')),
-            'MISSING_DATA' => array(
-                'title' => xarML('Missing Data'),
-                'short' => xarML('The data is incomplete.'),
-                'long' => xarML('A value was expected during this operation, but none was found.')),
-            'MULTIPLE_INSTANCES' => array(
-                'title' => xarML('Multiple instances'),
-                'short' => xarML('A module contains more than once instance of the same block type.')),
-            'WRONG_VERSION' => array(
-                'title' => xarML('Wrong version'),
-                'short' => xarML('The application version supplied is wrong.'))
-        );
-    }
-
-    function load($id) {
-        if (array_key_exists($id, $this->defaults)) parent::load($id);
-        else {
-            $this->title = $id;
-            $this->short = "No further information available";
-        }
-    }
-
-    function toHTML()
-    {
-        $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
-        if ($this->link) {
-            $str .= '<a href="'.$this->link[1].'">'.$this->link[0].'</a><br/>';
-        }
-        return $str;
-    }
-
-}
-
-/**
- * ErrorCollection
- *
- * it has to be raised as user exception
- * it's a container of error/exceptions
- * for now it's used only by the PHP error handler bridge
- * @package exceptions
- */
-class ErrorCollection extends SystemException
-{
-    var $exceptions = array();
-
-    function toString()
-    {
-        $text = "";
-        foreach($this->exceptions as $exc) {
-//            $text .= "Exception $exc[id]\n";
-            if (method_exists($exc['value'], 'toString')) {
-                $text .= $exc['value']->toString();
-                $text .= "\n";
-            }
-        }
-        return $text;
-    }
-
-    function toHTML()
-    {
-        $text = "";
-        foreach($this->exceptions as $exc) {
-//            $text .= "Exception identifier: <b>$exc[id]</b><br />";
-            if (method_exists($exc['value'], 'toHTML')) {
-                $text .= $exc['value']->toHTML();
-                $text .= '<br />';
-            }
-        }
-        return $text;
-    }
-
-    function foobar(){}
-
-}
+include "includes/exceptions/systemexception.class.php";
+include "includes/exceptions/defaultuserexception.class.php";
+include "includes/exceptions/noexception.class.php";
+include "includes/exceptions/errorcollection.class.php";
 
 /* Exception Handling System implementation */
 
@@ -376,6 +69,7 @@ function xarException_init($args, $whatElseIsGoingLoaded)
  */
 function xarExceptionSet($major, $exceptionId, $value = NULL)
 {
+    global $ExceptionStack;
     if ($major != XAR_NO_EXCEPTION &&
         $major != XAR_USER_EXCEPTION &&
         $major != XAR_SYSTEM_EXCEPTION) {
@@ -403,21 +97,26 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
         }
 
         if ($major == XAR_SYSTEM_EXCEPTION) {
-            $value = new SystemException($value);
+            $obj = new SystemException($value);
+        } elseif ($major == XAR_USER_EXCEPTION){
+            $obj = new DefaultUserException($value);
         } else {
-            $value = new DefaultUserException($value);
+            $obj = new NoException($value);
         }
-    }
-    // value is now the appropriate exception object
-    // add the exception ID
-    $value->setID($exceptionId);
 
-    // Set new status
-    $GLOBALS['xarException_stack'][] = array ('major' => $major,
-                                              'exceptionId' => $exceptionId,
-                                              'value' => $value,
-                                              'stack' => $stack);
-//echo $value->toString()."\n";
+    }
+    else {
+        $obj = $value;
+    }
+
+    // At this point we have a nice exception object
+    // Now add whatever properties are still missing
+    $obj->setID($exceptionId);
+    $obj->setStack($stack);
+    $obj->major = $major;
+
+    // Stick the object on the exception stack
+    $ExceptionStack->push($obj);
 
     // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
     // This can be useful in debugging since EHS is not so perfect as a native
@@ -425,7 +124,7 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
     if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
         xarLogMessage('The following exception is logged because the XARDBG_EXCEPTIONS flag is set.');
     // TODO: remove again once xarLogException works
-        xarLogMessage($value->toString(), XARLOG_LEVEL_ERROR);
+        xarLogMessage($obj->toString(), XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
 }
@@ -442,7 +141,10 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
  */
 function xarExceptionMajor()
 {
-    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['major'];
+    global $ExceptionStack;
+    if ($ExceptionStack->isempty()) return '';
+    $exp = $ExceptionStack->peek();
+    return $exp->getMajor();
 }
 
 /**
@@ -457,7 +159,10 @@ function xarExceptionMajor()
  */
 function xarExceptionId()
 {
-    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['exceptionId'];
+    global $ExceptionStack;
+    if ($ExceptionStack->isempty()) return '';
+    $exp = $ExceptionStack->peek();
+    return $exp->getID();
 }
 
 /**
@@ -472,7 +177,9 @@ function xarExceptionId()
  */
 function xarExceptionValue()
 {
-    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['value'];
+    global $ExceptionStack;
+    if ($ExceptionStack->isempty()) return '';
+    return $ExceptionStack->peek();
 }
 
 /**
@@ -488,8 +195,8 @@ function xarExceptionValue()
  */
 function xarExceptionFree()
 {
-    $GLOBALS['xarException_stack'] = array ();
-    $GLOBALS['xarException_stack'][] = array ('major' => XAR_NO_EXCEPTION, 'exceptionId' => NULL, 'value' => NULL);
+    global $ExceptionStack;
+    $ExceptionStack->initialize();
 }
 
 /**
@@ -503,11 +210,12 @@ function xarExceptionFree()
  */
 function xarExceptionHandled()
 {
-    if (xarExceptionMajor() == XAR_NO_EXCEPTION) {
-            xarCore_die('xarExceptionHandled: Invalid major value: XAR_NO_EXCEPTION');
-    }
+//    if (xarExceptionMajor() == XAR_NO_EXCEPTION) {
+//            xarCore_die('xarExceptionHandled: Invalid major value: XAR_NO_EXCEPTION');
+//    }
 
-    array_pop($GLOBALS['xarException_stack']);
+    global $ExceptionStack;
+    $ExceptionStack->pop();
 }
 
 /**
@@ -525,20 +233,17 @@ function xarExceptionHandled()
 function xarExceptionRender($format)
 {
 
-    foreach($GLOBALS['xarException_stack'] as $exception) {
-        $data = array();
+    global $ExceptionStack;
 
-        if ($format == 'html') {
-            if (method_exists($exception['value'], 'toHTML')) {
-                $data['short'] = $exception['value']->toHTML();
-            }
-        } else {
-            if (method_exists($exception['value'], 'toString')) {
-                $data['short'] = $exception['value']->toString();
-            }
-        }
+    while (!$ExceptionStack->isempty()) {
+//    if ($ExceptionStack->size() == 1) {
+//        $exception = $ExceptionStack->peek();
+//        echo $exception->getTitle();
+//        exit;
+//    }
+        $exception = $ExceptionStack->pop();
 
-        switch ($exception['major']) {
+        switch ($exception->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
                 $type = 'System Error';
                 $template = "system";
@@ -552,110 +257,25 @@ function xarExceptionRender($format)
             default:
                 continue 2;
         }
-        $data['type'] = $type;
 
-        $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
-        $text = '';
-
-        if(!xarVarGetCached('installer','installing')) {
-            $roles = new xarRoles();
-            $admins = "Administrators";
-            $admingroup = $roles->findRole("Administrators");
-            $me = $roles->getRole(xarSessionGetVar('uid'));
-            $imadmin = $me->isParent($admingroup);
-        }
-        else $imadmin = true;
         if ($format == 'html') {
-          if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (method_exists($exception['value'],"foobar")) {
-                  $collection = $exception['value']->exceptions;
-                  $message = "One or more PHP errors were encountered. <BR /><BR />";
-                  foreach($collection as $collecteditem) {
-                      $message .= $collecteditem['id'] . "<BR />";
-                      $message .= xarVarPrepForDisplay($collecteditem['value']->msg) . "<BR />";
-                  }
-                  $exception['exceptionId'] = "PHP_ERROR";
-                  $exception['value']->setMsg($message);
-               $thisexception = $exception['value'];
-               $thisexception->load($exception['exceptionId']);
-               $data['short'] = $thisexception->getShort();
-              }
-              else {
-               $thisexception = $exception['value'];
-               $thisexception->load($exception['exceptionId']);
-               $data['short'] = xarVarPrepForDisplay($thisexception->getShort());
-              }
-                $stack = $exception['stack'];
-                $text = "";
-                for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
-                    if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-                    else $function = '{}';
-                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
-                    // Note: eval() doesn't generate file or line
-                    if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
-                    if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                    $text .= ')<br />';
-                    if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
-                        ob_start();
-                        print_r($stack[$i]['args']);
-                        $dump = ob_get_contents();
-                        ob_end_clean();
-                        $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
-                        $text .= '<br />';
-                    }
-                }
-            } else {
-            // FIXME: this probably needs a bunch of other stuff
-               $thisexception = $exception['value'];
-               $thisexception->load($exception['exceptionId']);
-            }
-           $data['title'] = xarVarPrepForDisplay($thisexception->getTitle());
-           $data['long'] = xarVarPrepForDisplay($thisexception->getLong());
-           $data['hint'] = xarVarPrepForDisplay($thisexception->getHint());
-           $data['stack'] = $text;
-        } else {
-            if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (method_exists($exception['value'],"foobar")) {
-                  $collection = $exception['value']->exceptions;
-                  $message = "One or more PHP errors were encountered. \n\n";
-                  foreach($collection as $collecteditem) {
-                      $message .= $collecteditem['id'] . "\n";
-                      $message .= $collecteditem['value']->msg . "\n";
-                  }
-                  $exception['exceptionId'] = "PHP_ERROR";
-                  $exception['value']->setMsg($message);
-              }
-                $stack = $exception['stack'];
-                $text = "";
-                for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
-                    if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-                    else $function = '{}';
-                    $text .= '     at '.$function.'(';
-                    // Note: eval() doesn't generate file or line
-                    if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
-                    if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                    $text .= ")\n";
-                    if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
-                        ob_start();
-                        print_r($stack[$i]['args']);
-                        $dump = ob_get_contents();
-                        ob_end_clean();
-                        $text .= $dump;
-                        $text .= "\n";
-                    }
-                }
-            }
-
-           $thisexception = $exception['value'];
-           $thisexception->load($exception['exceptionId']);
-           $data['title'] = $thisexception->getTitle();
-           $data['short'] = $thisexception->getShort();
-           $data['long'] = $thisexception->getLong();
-           $data['hint'] = $thisexception->getHint();
-           $data['stack'] = $text;
+            include_once "includes/exceptions/htmlexceptionrendering.class.php";
+            $rendering = new HTMLExceptionRendering($exception);
         }
-    }
+        else {
+            include_once "includes/exceptions/textexceptionrendering.class.php";
+            $rendering = new TextExceptionRendering($exception);
+        }
 
+        $data = array();
+        $data['type'] = $type;
+        $data['title'] = $rendering->getTitle();
+        $data['short'] = $rendering->getShort();
+        $data['long'] = $rendering->getLong();
+        $data['hint'] = $rendering->getHint();
+        $data['stack'] = $rendering->getStack();
+//        echo $ExceptionStack->size();exit;
+    }
    return  xarTplModule('base',$template, 'exception', $data);
 }
 
@@ -670,6 +290,8 @@ function xarExceptionRender($format)
  */
 function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {
+    global $ExceptionStack;
+
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
 
@@ -700,32 +322,39 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             $msg = $file.'('.$line."):\n". $errorString ;
             if(isset($sourcetmpl)) $msg .= "\n[".$sourcetmpl."]";
 
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                $id = xarExceptionId();
-                $value = xarExceptionValue();
-                if ($id == 'ERROR_COLLECTION') {
-                    // add an exception to error collection
-                    $value->exceptions[] = array('id' => 'PHP_ERROR',
-                                                 'value' => new SystemException($msg));
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $value);
-                    $value->setID('PHP_ERROR');
+            if($ExceptionStack->isempty()) {
+                $ExceptionStack->initialize();
+            }
+            else {
+                $exception = $ExceptionStack->peek();
+                if ($exception->getMajor() != XAR_NO_EXCEPTION) {
+                    $id = xarExceptionId();
+                    $value = xarExceptionValue();
+                    if ($exception->getID() == 'ERROR_COLLECTION') {
+                        // add an exception to error collection
+                        $thisexcp = new SystemException($msg);
+                        $thisexcp->setID('PHP_ERROR');
+                        $exception->exceptions[] = $thisexcp;
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $value);
+                    } else {
+                        // raise an error collection
+                        $exc = new ErrorCollection();
+                        $thisexcp = $exception;
+                        $exc->exceptions[] = $thisexcp;
+                        $thisexcp = new SystemException($msg);
+                        $thisexcp->setID('PHP_ERROR');
+                        $exception->exceptions[] = $thisexcp;
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
+                    }
                 } else {
                     // raise an error collection
+//                    echo $ExceptionStack->size();
                     $exc = new ErrorCollection();
-                    $exc->exceptions[] = array('id' => $id,
-                                               'value' => $value);
-                    $exc->exceptions[] = array('id' => 'PHP_ERROR',
-                                               'value' => new SystemException($msg));
+                    $thisexcp = new SystemException($msg);
+                    $thisexcp->setID('PHP_ERROR');
+                    $exception->exceptions[] = $thisexcp;
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
-                    $exc->setID('PHP_ERROR');
                 }
-            } else {
-                // raise an error collection
-                $exc = new ErrorCollection();
-                $exc->exceptions[] = array('id' => 'PHP_ERROR',
-                                           'value' => new SystemException($msg));
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
-                $exc->setID('PHP_ERROR');
             }
             break;
         default:

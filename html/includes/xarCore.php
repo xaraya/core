@@ -147,7 +147,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start Exception Handling System
      *
      * Before we do anything make sure we can except out of code in a predictable matter
-     * 
+     *
      */
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
     xarException_init($systemArgs, $whatToLoad);
@@ -216,8 +216,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     /*
      * Start Configuration System
      *
-     * Ok, we can  except, we can log our actions, we can access the db and we can 
-     * send events out of the core. It's time we start the configuration system, so we 
+     * Ok, we can  except, we can log our actions, we can access the db and we can
+     * send events out of the core. It's time we start the configuration system, so we
      * can start configuring the framework
      *
      */
@@ -239,7 +239,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * Before anything fancy is loaded, let's start the legacy systems
      *
-     * @todo <mrb> check if this is on/off by default. 
+     * @todo <mrb> check if this is on/off by default.
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
         // {ML_dont_parse 'includes/pnHTML.php'}
@@ -283,7 +283,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     $anonuid = xarConfigGetVar('Site.User.AnonymousUID');
-    // FIXME: <mrb> what's this 1 doing here ? 
+    // FIXME: <mrb> what's this 1 doing here ?
     $anonuid = !empty($anonuid) ? $anonuid : 1;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
@@ -334,7 +334,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     }
 
-    /** 
+    /**
      * We've got basically all we want, start the interface
      * Start BlockLayout Template Engine
      *
@@ -355,7 +355,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         include 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include 'includes/xarSecurity.php';
-        
+
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);
@@ -554,10 +554,6 @@ function xarCore_die($msg)
     if($dying) return;
     $dying = true;
 
-    // Cant we standardize errors for both this and Exceptions????
-    // It is useful for the developer to know this is happening before the
-    // Exceptions is loaded, still for the end user it is still just an error.
-    
     // Sorry, this is a no go here: The core died!
     //$url = xarServerGetBaseURL() . 'index.php';
 
