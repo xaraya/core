@@ -63,8 +63,23 @@ function pnMain()
         return; // throw back
     }
 
+// TODO: formalize this and put code in pnTpl_renderPage ?
+    // Override default page template
+    if (pnVarIsCached('PageSettings','template')) {
+        $template = pnVarGetCached('PageSettings','template');
+    } else {
+        $template = 'default';
+    }
+    // Override default page title
+    if (pnVarIsCached('PageSettings','title')) {
+       $title = pnVarGetCached('PageSettings','title');
+       // dirty trick :-)
+       pnVarSetCached('Config.Variables', 'SiteSlogan', $title);
+    }
+
     // Render page
-    $pageOutput = pnTpl_renderPage($mainModuleOutput);
+    $pageOutput = pnTpl_renderPage($mainModuleOutput, NULL, $template);
+//    $pageOutput = pnTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
     if (pnExceptionMajor() != PN_NO_EXCEPTION) {
