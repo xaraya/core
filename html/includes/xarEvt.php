@@ -1,13 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Event Messagging System
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Event Messagging System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Evt
+ * @link xarEvt.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
 /* TODO:
  * Document EMS
@@ -19,62 +23,70 @@
  */
 
 /**
- * Start Event Messaging System
- * 
- * @access private
+ * Intializes Event Messaging System
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access protected
  * @param args['loadLevel']
- * returns bool
+ * @return bool true
  */
 function xarEvt_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarEvt_subscribed, $xarEvt_knownEvents;
-
-    $xarEvt_subscribed = array();
-
-    $xarEvt_knownEvents = array();
+    $GLOBALS['xarEvt_subscribed'] = array();
+    $GLOBALS['xarEvt_knownEvents'] = array();
 
     return true;
 }
 
 /**
- * Subscribe to an event
+ * Subscribes to an event
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @param eventName
  * @param modName
  * @param modType
- * @returns
+ * @return void
  */
 function xarEvtSubscribe($eventName, $modName, $modType)
 {
-    global $xarEvt_subscribed;
-    
-    assert('validEventName($eventName) && validModName($modName) && validModType($modType)');
-    
-    if (!xarEvt__checkEvent($eventName)) {
-        $msg = xarML('Unknown event: #(1).', $eventName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+    if (!xarEvt__checkEvent($eventName)) return; // throw back
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if ($modType != 'user' && $modType != 'admin') {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
 
-    $xarEvt_subscribed[$eventName][] = array($modName, $modType);
+    $GLOBALS['xarEvt_subscribed'][$eventName][] = array($modName, $modType);
 }
 
 /**
- * Unsubscribe from an event
+ * Unsubscribes from an event
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @param eventName
  * @param modName
  * @param modType
- * @returns
+ * @return void
  */
 function xarEvtUnsubscribe($eventName, $modName, $modType)
 {
     global $xarEvt_subscribed;
-    
-    assert('validEventName($eventName) && validModName($modName) && validModType($modType)');
-    
+
+    if (!xarEvt__checkEvent($eventName)) return; // throw back
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if ($modType != 'user' && $modType != 'admin') {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+        return;
+    }
+
     if (!isset($xarEvt_subscribed[$eventName])) return;
 
     for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
@@ -90,9 +102,9 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
 function xarEvt_fire($eventName, $value = NULL)
 {
     global $xarEvt_subscribed;
-    
-    assert('validEventName($eventName)');
-    
+
+    if (!xarEvt__checkEvent($eventName)) return; // throw back
+
     if (!isset($xarEvt_subscribed[$eventName])) return;
 
     for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
@@ -112,7 +124,15 @@ function xarEvt_fire($eventName, $value = NULL)
 
 function xarEvt_notify($modName, $modType, $eventName, $value)
 {
-    assert('validModName($modName) && validModType($modType) && validEventName($eventName)');
+    if (!xarEvt__checkEvent($eventName)) return; // throw back
+    if (empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    if ($modType != 'user' && $modType != 'admin') {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+        return;
+    }
 
     $funcName = "{$modName}_{$modType}evt_On$eventName";
     if (function_exists($funcName)) {
@@ -130,11 +150,11 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 function xarEvt_subscribeRawCallback($eventName, $funcName)
 {
     global $xarEvt_subscribed;
-    
-    assert('validEventName($eventName) && validFuncName($funcName)');
-    
-    if (!xarEvt__checkEvent($eventName)) {
-        xarCore_die("xarEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
+
+    if (!xarEvt__checkEvent($eventName)) return; // throw back
+    if (empty($funcName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
+        return;
     }
 
     $xarEvt_subscribed[$eventName][] = $funcName;
@@ -143,9 +163,12 @@ function xarEvt_subscribeRawCallback($eventName, $funcName)
 function xarEvt_registerEvent($eventName)
 {
     global $xarEvt_knownEvents;
-    
-    assert('validEventName($eventName)');
-    
+
+    if (empty($eventName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
+        return;
+    }
+
     $xarEvt_knownEvents[$eventName] = true;
 }
 
@@ -153,9 +176,11 @@ function xarEvt_registerEvent($eventName)
 
 function xarEvt__checkEvent($eventName)
 {
-    global $xarEvt_knownEvents;
-
-    return isset($xarEvt_knownEvents[$eventName]);
+    if (!isset($GLOBALS['xarEvt_knownEvents'][$eventName])) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
+        return;
+    }
+    return true;
     /*
     Current list is:
     ModLoad
@@ -164,7 +189,7 @@ function xarEvt__checkEvent($eventName)
     BodyEnd
     MLSMissingTranslationString
     MLSMissingTranslationKey
-    MLSMissingTranslationContext
+    MLSMissingTranslationDomain
     */
 }
 

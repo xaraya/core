@@ -162,6 +162,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * 'bool' matches a string that can be 'true' or 'false'
  * 'str:<min len>:<max len>' matches a string which has a lenght between <min len> and <max len>, if <min len>
  *                           is omitted no control is done on mininum lenght, the same applies to <max len>
+ *                           Note that this string can't carry html.
  * 'regex:<pattern>' matches against the <pattern> regular expression, because preg_match is used internally the pattern
  *                   must be contained into delimiters (/ or !)
  * 'html:<level>' validates the subject by searching unallowed html tags, allowed tags are defined by specifying <level>
@@ -252,6 +253,7 @@ function xarVarValidate($validation, $subject, &$convValue)
                 return false;
             }
         }
+        if (preg_match("|</?(\w+)(\s+.*?)?/?>|", $subject, $matches)) return false;
         $convValue = $subject;
         break;
 
@@ -814,18 +816,25 @@ function xarVar__getAllowedTags($level)
     static $enhanced = NULL;
     switch ($level) {
         case 'restricted':
+        if ($restricted == NULL) { 
             $restricted = unserialize('a:15:{s:3:"!--";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:2:"em";i:1;s:2:"hr";i:1;s:1:"i";i:1;s:2:"li";i:1;s:2:"ol";i:1;s:1:"p";i:2;s:3:"pre";i:1;s:6:"strong";i:1;s:2:"tt";i:1;s:2:"ul";i:1;}');
-            return $restricted;
+        }
+        return $restricted;
         break;
         case 'basic':
+        if ($basic == NULL) {
             $basic = unserialize('a:21:{s:3:"!--";i:2;s:1:"a";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:3:"div";i:1;s:2:"em";i:1;s:2:"hr";i:2;s:1:"i";i:2;s:2:"li";i:2;s:2:"ol";i:2;s:1:"p";i:2;s:3:"pre";i:2;s:6:"strong";i:2;s:2:"tt";i:2;s:2:"ul";i:2;s:5:"table";i:2;s:2:"td";i:2;s:2:"th";i:2;s:2:"tr";i:2;}');
-            return $basic;
+        }
+        return $basic;
         break;
         case 'enhanced':
+        if ($enhanced == NULL) {
             $enhanced = unserialize('a:21:{s:3:"!--";i:2;s:1:"a";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:3:"div";i:2;s:2:"em";i:1;s:2:"hr";i:2;s:1:"i";i:2;s:2:"li";i:2;s:2:"ol";i:2;s:1:"p";i:2;s:3:"pre";i:2;s:6:"strong";i:2;s:2:"tt";i:2;s:2:"ul";i:2;s:5:"table";i:2;s:2:"td";i:2;s:2:"th";i:2;s:2:"tr";i:2;}');
-            return $enhanced;
+        }
+        return $enhanced;
         break;
     }
+    return array();
 }
 
 ?>

@@ -123,7 +123,7 @@ function pnIsRedirected()
  * check to see if this is a local referral
  *
  * @deprec
- * @access ?????
+ * @access public
  * @returns bool
  * @return true if locally referred, false if not
  */
@@ -909,4 +909,84 @@ function pnVarPrepHTMLDisplay($var)
 {
     return xarVarPrepHTMLDisplay($var);
 }
+
+function xarModGetAlias($var)
+{
+    return xarRequest__resolveModuleAlias($var);
+}
+
+function xarModSetAlias($modName, $alias)
+{
+    if (!xarModAPILoad('modules', 'admin')) return;
+    $args = array('modName'=>$alias, 'aliasModName'=>$modName);
+    return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
+}
+
+function xarModDelAlias($modName, $alias)
+{
+    if (!xarModAPILoad('modules', 'admin')) return;
+    $args = array('aliasModName'=>$modName);
+    return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
+}
+
+function xarBlockTypeExists($modName, $blockType)
+{
+    if (!xarModAPILoad('blocks', 'admin')) return;
+    $args = array('modName'=>$modName, 'blockType'=>$blockType);
+    return xarModAPIFunc('blocks', 'admin', 'block_type_exists', $args);
+}
+
+function xarBlockTypeRegister($modName, $blockType)
+{
+    if (!xarModAPILoad('blocks', 'admin')) return;
+    $args = array('modName'=>$modName, 'blockType'=>$blockType);
+    return xarModAPIFunc('blocks', 'admin', 'register_block_type', $args);
+}
+
+function xarBlockTypeUnregister($modName, $blockType)
+{
+    if (!xarModAPILoad('blocks', 'admin')) return;
+    $args = array('modName'=>$modName, 'blockType'=>$blockType);
+    return xarModAPIFunc('blocks', 'admin', 'unregister_block_type', $args);
+}
+
+/**
+ * get the user's language
+ *
+ * @returns string
+ * @return the name of the user's language
+ * @raise DATABASE_ERROR
+ */
+function xarUserGetLang()
+{
+    // FIXME: <marco> DEPRECATED?
+    $locale = xarUserGetNavigationLocale();
+    $data = xarMLSLoadLocaleData($locale);
+    if (!isset($data)) return; // throw back
+    return $data['/language/iso3code'];
+}
+
+/**
+ * Get the user's theme directory path
+ *
+ * @returns string
+ * @return the user's theme directory path if successful, void otherwise
+ */
+function xarUser_getThemeName()
+{
+    if (!xarUserIsLoggedIn()) {
+        return;
+    }
+    $themeName = xarUserGetVar('Theme');
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        // Here we can't raise an exception
+        // so what we can do here is only to log the exception
+        // and call xarExceptionFree
+        xarLogException(XARLOG_LEVEL_ERROR);
+        xarExceptionFree();
+        return;
+    }
+    return $themeName;
+}
+
 ?>

@@ -1,26 +1,25 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Multi Language System
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Multi Language System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage MLS
+ * @link xarMLS.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
 /* TODO:
- * This is the list of things that need to be done:
  * Dynamic Translations
  * Timezone and DST support
- * Patch module loader to use xarML_Load, integrate old style language pack into xarML_Load
  * Write standard core translations
- * Integrate ML support into BL
- * Translation context is changed, change translations module properly
  * Complete changes as described in version 0.9 of MLS RFC
  * Implements the request(ed) locale APIs for backend interactions
  * See how utf-8 works for xml backend
- * finish phpdoc tags
  */
 
 define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
@@ -35,26 +34,25 @@ define('XARMLS_CTXTYPE_TEMPLATE', 2);
 define('XARMLS_CTXTYPE_BLOCK', 3);
 
 /**
- * Initialise the Multi Language System
- * @access private
- * @returns bool
- * @return true on success
+ * Initializes the Multi Language System
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access protected
+ * @return bool true
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarMLS_mode, $xarMLS_backendName;
-    global $xarMLS_localeDataLoader, $xarMLS_localeDataCache;
-    global $xarMLS_currentLocale, $xarMLS_defaultLocale, $xarMLS_allowedLocales;
+    global $xarMLS_backendName;
 
     switch ($args['MLSMode']) {
         case 'SINGLE':
-            $xarMLS_mode = XARMLS_SINGLE_LANGUAGE_MODE;
+            $GLOBALS['xarMLS_mode'] = XARMLS_SINGLE_LANGUAGE_MODE;
             break;
         case 'BOXED':
-            $xarMLS_mode = XARMLS_BOXED_MULTI_LANGUAGE_MODE;
+            $GLOBALS['xarMLS_mode'] = XARMLS_BOXED_MULTI_LANGUAGE_MODE;
             break;
         case 'UNBOXED':
-            $xarMLS_mode = XARMLS_UNBOXED_MULTI_LANGUAGE_MODE;
+            $GLOBALS['xarMLS_mode'] = XARMLS_UNBOXED_MULTI_LANGUAGE_MODE;
             if (!function_exists('mb_http_input')) {
                 // mbstring required
                 xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
@@ -66,26 +64,26 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
 
     $xarMLS_backendName = $args['translationsBackend'];
     if ($xarMLS_backendName != 'php' && $xarMLS_backendName != 'xml') {
-        xarCore_die('xarML_init: Unknown translations backend: '.$backendName);
+        xarCore_die('xarML_init: Unknown translations backend: '.$xarMLS_backendName);
     }
 
-    $xarMLS_localeDataLoader = new xarMLS__LocaleDataLoader();
-    $xarMLS_localeDataCache = array();
+    $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
+    $GLOBALS['xarMLS_localeDataCache'] = array();
 
-    $xarMLS_currentLocale = '';
-    $xarMLS_defaultLocale = $args['defaultLocale'];
-    $xarMLS_allowedLocales = $args['allowedLocales'];
+    $GLOBALS['xarMLS_currentLocale'] = '';
+    $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
+    $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
-    if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER) {
+    if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
         // The User System won't be started
         // MLS will use the default locale
-        xarMLS_setCurrentLocale($xarMLS_defaultLocale);
+        xarMLS_setCurrentLocale($args['defaultLocale']);
     }
 
     // Register MLS events
     xarEvt_registerEvent('MLSMissingTranslationString');
     xarEvt_registerEvent('MLSMissingTranslationKey');
-    xarEvt_registerEvent('MLSMissingTranslationContext');
+    xarEvt_registerEvent('MLSMissingTranslationDomain');
 
     return true;
 }
@@ -94,48 +92,43 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
  * Gets the current MLS mode
  *
  * @access public
- * @returns string
- * @return MLS Mode
+ * @author Marco Canini <m.canini@libero.it>
+ * @return integer MLS Mode
  */
 function xarMLSGetMode()
 {
-    global $xarMLS_mode;
-
-    return $xarMLS_mode;
+    return $GLOBALS['xarMLS_mode'];
 }
 
 /**
  * Returns the site locale if running in SINGLE mode,
  * returns the site default locale if running in BOXED or UNBOXED mode
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return the site locale
+ * @return string the site locale
  */
 // TODO: check
 function xarMLSGetSiteLocale()
 {
-    global $xarMLS_defaultLocale;
-
-    return $xarMLS_defaultLocale;
+    return $GLOBALS['xarMLS_defaultLocale'];
 }
 
 /**
  * Returns an array of locales available in the site
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns array
  * @return array of locales
  */
 // TODO: check
 function xarMLSListSiteLocales()
 {
-    global $xarMLS_defaultLocale, $xarMLS_allowedLocales;
     $mode = xarMLSGetMode();
     if ($mode == XARMLS_SINGLE_LANGUAGE_MODE) {
-        return array($xarMLS_defaultLocale);
+        return array($GLOBALS['xarMLS_defaultLocale']);
     } else {
-        return $xarMLS_allowedLocales;
+        return $GLOBALS['xarMLS_allowedLocales'];
     }
 }
 
@@ -144,10 +137,10 @@ function xarMLSListSiteLocales()
  * Locale data is an associative array, its keys are described at the top
  * of this file
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns array
- * @return locale data
- * @raise LOCALE_NOT_FOUND
+ * @return array locale data
+ * @raise LOCALE_NOT_EXIST
  */
 function xarMLSLoadLocaleData($locale = NULL)
 {
@@ -159,8 +152,7 @@ function xarMLSLoadLocaleData($locale = NULL)
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
     if (!in_array($locale, $siteLocales)) {
-        $msg = xarML('Unavailable locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
         return;
     }
 
@@ -168,61 +160,53 @@ function xarMLSLoadLocaleData($locale = NULL)
         $res = $xarMLS_localeDataLoader->load($locale);
         if (!isset($res)) return; // Throw back
         if ($res == false) {
-            $msg = xarML('Cannot find the requested locale (#(1)).', $locale);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
-            new SystemException($msg));
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST');
             return;
         }
         $xarMLS_localeDataCache[$locale] = $xarMLS_localeDataLoader->getLocaleData();
     }
     return $xarMLS_localeDataCache[$locale];
 }
+
 /**
  * Gets the current locale
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns
- * @return current locale
+ * @return string current locale
  */
-
 function xarMLSGetCurrentLocale()
 {
-    global $xarMLS_currentLocale;
-
-    return $xarMLS_currentLocale;
+    return $GLOBALS['xarMLS_currentLocale'];
 }
 
 /**
  * Gets the charset component from a locale
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return the charset name
+ * @return string the charset name
  * @raise BAD_PARAM
  */
-
 function xarMLSGetCharsetFromLocale($locale)
 {
-    assert('!empty($locale)');
-    
-    $parsedLocale = xarMLS__parseLocaleString($locale);
-    if (!isset($parsedLocale)) return; // throw back
+    if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return; // throw back
     return $parsedLocale['charset'];
 }
 
 // I18N API
 
 /**
- * Translate a string
+ * Translates a string
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return the translated string, or the original string if no translation is available
+ * @return string the translated string, or the original string if no translation is available
  */
 function xarML($string/*, ...*/)
 {
     global $xarMLS_backend;
-    
+
     assert('!empty($string)');
 
     if (isset($xarMLS_backend)) {
@@ -237,8 +221,8 @@ function xarML($string/*, ...*/)
     }
     if (func_num_args() > 1) {
         $args = func_get_args();
-        unset($args[0]); // Unset $string argument
         if (is_array($args[1])) $args = $args[1]; // Only the second argument is considered if it's an array
+        else array_shift($args); // Drop $string argument
         $trans = xarMLS__bindVariables($trans, $args);
     }
 
@@ -248,15 +232,15 @@ function xarML($string/*, ...*/)
 /**
  * Return the translation associated to passed key
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return the translation string, or the key if no translation is available
+ * @return string the translation string, or the key if no translation is available
  */
 function xarMLByKey($key/*, ...*/)
 {
     global $xarMLS_backend;
 
-    //assert('!empty($key) && strpos($key, " ") === false');
+    assert('!empty($key) && strpos($key, " ") === false');
 
     if (isset($xarMLS_backend)) {
         $trans = $xarMLS_backend->translateByKey($key);
@@ -270,8 +254,8 @@ function xarMLByKey($key/*, ...*/)
     }
     if (func_num_args() > 1) {
         $args = func_get_args();
-        unset($args[0]); // Unset $string argument
         if (is_array($args[1])) $args = $args[1]; // Only the second argument is considered if it's an array
+        else array_shift($args); // Unset $string argument
         $trans = xarMLS__bindVariables($trans, $args);
     }
 
@@ -298,9 +282,9 @@ function xarMLGetDynamic($refid, $table_name, $fields)
  * Gets the locale info for the specified locale string.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns array
- * @return locale info
+ * @return array locale info
  */
 function xarLocaleGetInfo($locale)
 {
@@ -311,25 +295,24 @@ function xarLocaleGetInfo($locale)
  * Gets the locale string for the specified locale info.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return locale string
+ * @return string locale string
  */
 function xarLocaleGetString($localeInfo)
 {
-    assert('isset($localeInfo["lang"]) && isset($localeInfo["country"]) &&
-            isset($localeInfo["specializer"]) && isset($localeInfo["charset"])');
-
+    if (!isset($localeInfo['lang']) || !isset($localeInfo['country']) || !isset($localeInfo['specializer']) || !isset($localeInfo['charset'])) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
+        return;
+    }
     if (strlen($localeInfo['lang']) != 2) {
-        $msg = xarML('Invalid lang.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
         return;
     }
     $locale = strtolower($localeInfo['lang']);
     if (!empty($localeInfo['country'])) {
         if (strlen($localeInfo['country']) != 2) {
-            $msg = xarML('Invalid country.');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
             return;
         }
         $locale .= '_'.strtoupper($localeInfo['country']);
@@ -350,14 +333,12 @@ function xarLocaleGetString($localeInfo)
  * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
  * lang, country, specializer, charset.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns array
- * @return locale list
+ * @return array locale list
  */
 function xarLocaleGetList($filter)
 {
-    assert('is_array($filter)');
-
     $list = array();
     $locales = xarMLSListSiteLocales();
     foreach ($locales as $locale) {
@@ -374,15 +355,13 @@ function xarLocaleGetList($filter)
 /**
  * Formats a currency according to specified locale data
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return formatted currency
+ * @return string formatted currency
  */
 function xarLocaleFormatCurrency($currency, $localeData = NULL)
 {
-    if (!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
+    if ($localeData == NULL) $localeData = xarMLSLoadLocaleData();
     $currencySym = $localeData['/monetary/currencySymbol'];
     return $currencySym.' '.xarLocaleFormatNumber($currency, $localeData, true);
 }
@@ -390,27 +369,22 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
 /**
  * Formats a number according to specified locale data
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return formatted number
+ * @return string formatted number
  * @raise BAD_PARAM
  */
 function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 {
     if (!is_numeric($number)) {
-        $msg = xarML('Number is not of numeric type.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $number = (float) $number;
     }
-    if (!isset($localeData)) {
-        $localeData = xarMLSLoadLocaleData();
-    }
-    if ($isCurrency == true) {
-        $bp = 'monetary';
-    } else {
-        $bp = 'numeric';
-    }
+
+    if ($localeData == NULL) $localeData = xarMLSLoadLocaleData();
+
+    if ($isCurrency == true) $bp = 'monetary';
+    else $bp = 'numeric';
+
     $groupSize = $localeData["/$bp/groupingSize"];
     $groupSep = $localeData["/$bp/groupingSeparator"];
     $decSep = $localeData["/$bp/decimalSeparator"];
@@ -488,14 +462,15 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Sets current locale
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @param locale site locale
  */
 function xarMLS_setCurrentLocale($locale)
 {
-    global $xarMLS_currentLocale, $xarMLS_backendName, $xarMLS_backend;
-    
-    assert('!empty($locale)');
+    static $called = 0;
+    assert('$called == 0');
+    $called++;
 
     $mode = xarMLSGetMode();
     switch ($mode) {
@@ -511,10 +486,8 @@ function xarMLS_setCurrentLocale($locale)
                 $locale = xarMLSGetSiteLocale();
             }
     }
-    if ($locale == $xarMLS_currentLocale) return; // Nothing to do
-
-    // Adjust new current locale
-    $xarMLS_currentLocale = $locale;
+    // Set current locale
+    $GLOBALS['xarMLS_currentLocale'] = $locale;
 
     $curCharset = xarMLSGetCharsetFromLocale($locale);
     if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
@@ -532,13 +505,13 @@ function xarMLS_setCurrentLocale($locale)
     header("Content-Type: text/html; charset=$curCharset");
 
     $alternatives = xarMLS__getLocaleAlternatives($locale);
-    switch ($xarMLS_backendName) {
+    switch ($GLOBALS['xarMLS_backendName']) {
         case 'xml':
         include_once 'includes/xarMLSXMLBackend.php';
-        $xarMLS_backend = new xarMLS__XMLTranslationsBackend($alternatives);
+        $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
         break;
         case 'php':
-        $xarMLS_backend = new xarMLS__PHPTranslationsBackend($alternatives);
+        $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
         break;
     }
 
@@ -551,12 +524,9 @@ function xarMLS_setCurrentLocale($locale)
 /**
  * Loads translations for the specified context
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @param translationCtx
- * @param modOnDir module directory
- * @param modType module type
- * @returns bool
- * @return
+ * @return bool
  */
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
@@ -630,8 +600,8 @@ function xarMLS__bindVariables($string, $args)
  * Gets a list of alternatives for a certain locale.
  * The first alternative is the locale itself
  *
- * @returns array
- * @return array of alternative locales
+ * @author Marco Canini <m.canini@libero.it>
+ * @return array alternative locales
  */
 function xarMLS__getLocaleAlternatives($locale)
 {
@@ -649,17 +619,14 @@ function xarMLS__getLocaleAlternatives($locale)
  * Parses a locale string into an associative array composed of
  * lang, country, specializer and charset keys
  *
- * @returns array
- * @return parsed locale
+ * @author Marco Canini <m.canini@libero.it>
+ * @return array parsed locale
  */
 function xarMLS__parseLocaleString($locale)
 {
-    assert('!empty($locale)');
-    
     $res = array('lang'=>'', 'country'=>'', 'specializer'=>'', 'charset'=>'UTF-8');
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(@([0-9a-zA-Z]+))?(\.([0-9A-Z\-]+))?/', $locale, $matches)) {
-        $msg = xarML('Invalid locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
         return;
     }
 
@@ -675,8 +642,8 @@ function xarMLS__parseLocaleString($locale)
  * Gets the single byte charset most typically used in the Web for the
  * requested language
  *
- * @returns string
- * @return the charset
+ * @author Marco Canini <m.canini@libero.it>
+ * @return string the charset
  */
 function xarMLS__getSingleByteCharset($langISO2Code) {
     static $charsets = array('af' => 'ISO-8859-1', 'sq' => 'ISO-8859-1',
@@ -1059,7 +1026,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_FOUND', new SystemException($ctxType.': '.$ctxName));
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;
         }
         include $fileName;
@@ -1089,4 +1056,4 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
     }
 }
 
-
+?>

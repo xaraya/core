@@ -1,13 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file: User System
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * User System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage User
+ * @link xarUser.php
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Jan Schrage, Gregor Rothfuss
+ */
 
 // TODO: <marco> user status field
 
@@ -43,14 +47,14 @@ define('XARUSER_AUTH_USER_ENUMERABLE', 128);
 define('XARUSER_AUTH_FAILED', -1);
 
 /**
- * Initialise the User System
- * @returns bool
- * @return true on success
+ * Initializes the User System
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access protected
+ * @return bool true
  */
 function xarUser_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarUser_authenticationModules;
-
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
@@ -65,7 +69,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
 
     xarDB_importTables($tables);
 
-    $xarUser_authenticationModules = $args['authenticationModules'];
+    $GLOBALS['xarUser_authenticationModules'] = $args['authenticationModules'];
 
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
     xarTplSetThemeName(xarUserGetNavigationThemeName());
@@ -77,53 +81,46 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
 /**
  * Log the user in
  *
- * @author Marco Canini
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @param userName the name of the user logging in
  * @param password the password of the user logging in
  * @param rememberMe whether or not to remember this login
- * @returns bool
- * @return true if the user successfully logged in
+ * @return bool true if the user successfully logged in
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
 function xarUserLogIn($userName, $password, $rememberMe)
 {
-    global $xarUser_authenticationModules;
-
     if (xarUserIsLoggedIn()) {
         return true;
     }
 
-    assert('!empty($userName) && isset($password)');
+    if (empty($userName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
+        return;
+    }
+    if (empty($password)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'password');
+        return;
+    }
 
     $userId = XARUSER_AUTH_FAILED;
-    foreach($xarUser_authenticationModules as $authModName) {
+    $args = array('uname' => $userName, 'pass' => $password);
+    foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
         // Every authentication module must at least implement the
         // Authentication interface so there's at least the authenticate_user
         // user api function
-
         if (!xarModAPILoad($authModName, 'user')) return; // throw back
 
-        $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user',
-                            array('uname' => $userName, 'pass' => $password));
-
-        if (!isset($userId)) {
-            return; // throw back
-        } elseif ($userId != XARUSER_AUTH_FAILED) {
-            // Someone authenticated us
-            break;
-        }
-        // $userId is XARUSER_AUTH_FAILED, try with next auth module
+        $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
+        if (!isset($userId)) return; // throw back
+        elseif ($userId != XARUSER_AUTH_FAILED) break; // Someone authenticated us
+        // if here $userId is XARUSER_AUTH_FAILED, try with next auth module
     }
-    if ($userId == XARUSER_AUTH_FAILED) {
-        return false;
-    }
+    if ($userId == XARUSER_AUTH_FAILED) return false;
 
     // Catch common variations (0, false, '', ...)
-    if (empty($rememberMe)) {
-        $rememberMe = 0;
-    } else {
-        $rememberMe = 1;
-    }
+    if (empty($rememberMe)) $rememberMe = 0;
+    else $rememberMe = 1;
 
     // Set user session information
     if (!xarSession_setUserInfo($userId, $rememberMe)) return; // throw back
@@ -156,8 +153,8 @@ function xarUserLogIn($userName, $password, $rememberMe)
 /**
  * Log the user out
  *
- * @returns bool
- * @return true if the user successfully logged out
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ * @return bool true if the user successfully logged out
  * @raise DATABASE_ERROR
  */
 function xarUserLogOut()
@@ -182,36 +179,19 @@ function xarUserLogOut()
 /**
  * Checks if the user logged in.
  *
+ * @author Jim McDonald
  * @returns bool
  * @return true if the user is logged in, false if they are not
  */
 function xarUserIsLoggedIn()
 {
-    if (xarSessionGetVar('uid') != 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * get the user's language
- *
- * @returns string
- * @return the name of the user's language
- * @raise DATABASE_ERROR
- */
-function xarUserGetLang()
-{
-    // FIXME: <marco> DEPRECATED?
-    $locale = xarUserGetNavigationLocale();
-    $data = xarMLSLoadLocaleData($locale);
-    if (!isset($data)) return; // throw back
-    return $data['/language/iso3code'];
+    return xarSessionGetVar('uid') != 0;
 }
 
 /**
  * Gets the user navigation theme name
+ *
+ * @author Marco Canini <m.canini@libero.it>
  */
 function xarUserGetNavigationThemeName()
 {
@@ -243,15 +223,18 @@ function xarUserGetNavigationThemeName()
 
 /**
  * Sets the user navigation theme name
+ *
+ * @author Marco Canini <m.canini@libero.it>
  */
 function xarUserSetNavigationThemeName($themeName)
 {
-    assert('$themeName != ""');
     xarSessionSetVar('navigationThemeName', $themeName);
 }
 
 /**
  * Gets the user navigation locale
+ *
+ * @author Marco Canini <m.canini@libero.it>
  */
 function xarUserGetNavigationLocale()
 {
@@ -277,6 +260,8 @@ function xarUserGetNavigationLocale()
 
 /**
  * Sets the user navigation locale
+ *
+ * @author Marco Canini <m.canini@libero.it>
  */
 function xarUserSetNavigationLocale($locale)
 {
@@ -293,7 +278,7 @@ function xarUserSetNavigationLocale($locale)
 /**
  * get a user variable
  *
- * @author Marco Canini
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @param name the name of the variable
  * @param uid the user to get the variable for
  * @returns mixed
@@ -303,9 +288,7 @@ function xarUserSetNavigationLocale($locale)
 function xarUserGetVar($name, $userId = NULL)
 {
     if (empty($name)) {
-        $msg = xarML('Empty name.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -316,14 +299,13 @@ function xarUserGetVar($name, $userId = NULL)
         // User id for Anonymous is NULL, so we check later for this
         return $userId;
     }
-    if (empty($userId)) {
+    if ($userId == 0) {
         // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         if ($name == 'name' || $name == 'uname') {
-            return xarML('Anonymous');
+            return xarMLByKey('ANONYMOUS');
         }
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
-                       new SystemException(__FILE__.'('.__LINE__.')'));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
         return;
     }
 
@@ -365,57 +347,39 @@ function xarUserGetVar($name, $userId = NULL)
         extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
 
         $authModName = xarUser__getAuthModule($userId);
-        if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
-        $useAuthSystem = false; // Used for debug
-        //$useAuthSystem = ($authModName == 'authsystem') ? true : false;
+        if (!isset($authModName)) return; // throw back
+        //$useAuthSystem = false; // Used for debug
+        $useAuthSystem = ($authModName == 'authsystem') ? true : false;
 
         if (!$useAuthSystem) {
             $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-                                array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
+                                 array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+            if (!isset($res)) return; // throw back
             if ($res) {
                 // $authModName supports the UserDataHandler interface
                 $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable',
-                                    array('name' => $name));
-                if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                    return; // throw back
-                }
-                if ($res == false) {
-                    // $name variable is retrieved from authsystem module
-                    $useAuthSystem = true;
-                }
+                                     array('name' => $name));
+                if (!isset($res)) return; // throw back
+                if ($res == false) $useAuthSystem = true; // $name variable is retrieved from authsystem module
+            } else {
+                // $name variable is retrieved from authsystem module
+                $useAuthSystem = true;
             }
-        } else {
-            // $name variable is retrieved from authsystem module
-            $useAuthSystem = true;
         }
 
         if ($useAuthSystem == true) {
             $authModName = 'authsystem';
-            $res = xarModAPILoad($authModName, 'user');
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
+            if (!xarModAPILoad($authModName, 'user')) return; // throw back
         }
 
         $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
-                              array('uid' => $userId,
-                                    'name' => $name,
-                                    'prop_id' => $prop_id,
-                                    'prop_dtype' => $prop_dtype));
-        if (!isset($value) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
-
+                               array('uid' => $userId,
+                                     'name' => $name,
+                                     'prop_id' => $prop_id,
+                                     'prop_dtype' => $prop_dtype));
+        if (!isset($value)) return; // throw back
         if ($value === false) {
-            if (isset($prop_default)) {
-                // Use the metainfo default value if any
-                $value = $prop_default;
-            }
+            if (isset($prop_default)) $value = $prop_default; // Use the metainfo default value if any
             // else
             // Variable doesn't exist
             // false is here a special value to denote that variable was searched
@@ -451,8 +415,7 @@ function xarUserGetVar($name, $userId = NULL)
 /**
  * set a user variable
  *
- * @author Marco Canini
- * @since 1.23 - 2002/02/01
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @param name the name of the variable
  * @param value the value of the variable
  * @returns bool
@@ -462,21 +425,24 @@ function xarUserGetVar($name, $userId = NULL)
 function xarUserSetVar($name, $value, $userId = NULL)
 {
     // check that $name is valid
-    if (empty($name) || $name == 'uid' || $name == 'authenticationModule') {
-        $msg = xarML('Empty name (#(1)) or invalid name.', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+    if ($name == 'uid' || $name == 'authenticationModule') {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
 
     if (empty($userId)) {
         $userId = xarSessionGetVar('uid');
     }
-    if (empty($userId)) {
+    if ($userId == 0) {
         // Anonymous user
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
-                       new SystemException(__FILE__.'('.__LINE__.')'));return;
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
     }
+    /*
+    Disabled for now!
     if ($userId != xarSessionGetVar('uid')) {
         // If you want to set a variable owned by another user
         // you must have ACCESS_EDIT permission
@@ -491,14 +457,13 @@ function xarUserSetVar($name, $value, $userId = NULL)
             return;
         }
     }
+    */
 
 
     // check that $name variable appears in the dynamic user data fields
     $infos = xarUser__getUserVarInfo($name);
-    if (!isset($infos)) {
-        // Of sure got an exception
-        return; // throw back
-    }
+    if (!isset($infos)) return; // throw back
+
     extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
 
     // FIXME: <marco> Do we want this?
@@ -519,70 +484,46 @@ function xarUserSetVar($name, $value, $userId = NULL)
 
     if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
         // Keep in sync core fields
-        $res = xarUser__setUsersTableUserVar($name, $value, $userId);
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
+        if (!xarUser__setUsersTableUserVar($name, $value, $userId)) return;
     }
 
     $authModName = xarUser__getAuthModule($userId);
-    if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
-    $useAuthSystem = false; // Used for debug
-    //$useAuthSystem = ($authModName == 'authsystem') ? true : false;
+    if (!isset($authModName)) return; // throw back
+
+    //$useAuthSystem = false; // Used for debug
+    $useAuthSystem = ($authModName == 'authsystem') ? true : false;
 
     if (!$useAuthSystem) {
         $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-        array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
+                             array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+        if (!isset($res)) return; // throw back
         if ($res) {
             // $authModName supports the UserDataHandler interface
-            $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable',
-            array('name' => $name));
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
-            if ($res == false) {
-                // $name variable is handled by authsystem module
-                $useAuthSystem = true;
-            }
+            $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable', array('name' => $name));
+            if (!isset($res)) return; // throw back
+            if ($res == false) $useAuthSystem = true; // $name variable is handled by authsystem module
+        } else {
+            // $name variable is retrieved from authsystem module
+            $useAuthSystem = true;
         }
-    } else {
-        // $name variable is handled by authsystem module
-        $useAuthSystem = true;
     }
 
     if ($useAuthSystem == true) {
-        if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
-            // Already updated
-            return true;
-        }
+        if ($prop_dtype == XARUSER_DUD_TYPE_CORE) return true; // Already updated
         $authModName = 'authsystem';
-        $res = xarModAPILoad($authModName, 'user');
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
+        if (!xarModAPILoad($authModName, 'user')) return; // throw back
     }
 
-    $res = xarModAPIFunc($authModName, 'user', 'set_user_variable',
-                        array('uid' => $userId,
-                              'name' => $name,
-                              'value' => $value,
-                              'prop_id' => $prop_id,
-                              'prop_dtype' => $prop_dtype));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
-
-    if ($res != true) {
-        $msg = xarML('For an unknown reason the function set_user_variable of module #(1) didn\'t return true and didn\'t throw an exception.', $authModName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
+    if (!xarModAPIFunc($authModName, 'user', 'set_user_variable',
+                       array('uid' => $userId,
+                             'name' => $name,
+                             'value' => $value,
+                             'prop_id' => $prop_id,
+                             'prop_dtype' => $prop_dtype))) {
+        assert('xarExceptionMajor() != XAR_NO_EXCEPTION');
         return;
     }
+
     // Keep in sync the UserVariables cache
     xarVarSetCached('User.Variables.'.$userId, $name, $value);
 
@@ -592,8 +533,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
 /**
  * validate a user variable
  *
- * @since 1.60 - 2002/05/02
- * @author Marco Canini
+ * @author Marco Canini <m.canini@libero.it>
  * @param name user variable name
  * @param value value to be validated
  * @returns bool
@@ -602,14 +542,6 @@ function xarUserSetVar($name, $value, $userId = NULL)
  */
 function xarUserValidateVar($name, $value)
 {
-    // check that $name is valid
-    if (empty($name)) {
-        $msg = xarML('Empty name.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-
     if (xarVarIsCached('User.Variables.Validated', $name) &&
         xarVarGetCached('User.Variables.Validated', $name) == $value) {
         return true;
@@ -635,13 +567,8 @@ function xarUserValidateVar($name, $value)
 
         // Do validation
         $res = xarUser__validationApply($prop_validation, $value);
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
-        if ($res == false) {
-            // Validation failed
-            return false;
-        }
+        if (!isset($res)) return; // throw back
+        if (!$res) return false; // Validation failed
     }
 
     xarVarSetCached('User.Variables.Validated', $name, $value);
@@ -660,6 +587,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
     $compare2crypt = true;
     $compare2text = true;
 
+    // FIXME: <marco> What's this for?
     $system = xarConfigGetVar('system');
 
     $md5pass = md5($givenPassword);
@@ -684,29 +612,6 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 
 // PROTECTED FUNCTIONS
 
-/**
- * Get the user's theme directory path
- *
- * @returns string
- * @return the user's theme directory path if successful, void otherwise
- */
-function xarUser_getThemeName()
-{
-    if (!xarUserIsLoggedIn()) {
-        return;
-    }
-    $themeName = xarUserGetVar('Theme');
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        // Here we can't raise an exception
-        // so what we can do here is only to log the exception
-        // and call xarExceptionFree
-        xarLogException(XARLOG_LEVEL_ERROR);
-        xarExceptionFree();
-        return;
-    }
-    return $themeName;
-}
-
 // PRIVATE FUNCTIONS
 
 /*
@@ -715,17 +620,9 @@ function xarUser_getThemeName()
  */
 function xarUser__getAuthModule($userId)
 {
-    // FIXME: what happens for anonymous users ???
-    // TODO: check coherence 1 vs. 0 for Anonymous users !!!
     if ($userId == xarSessionGetVar('uid')) {
         $authModName = xarSessionGetVar('authenticationModule');
-        if (!isset($authModName)) {
-            // Should never happen, however ...
-            $msg = xarML('Auth module isn\'t set as session variable.');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
-        }
+        assert('isset($authModName)');
     } else {
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
@@ -752,10 +649,7 @@ function xarUser__getAuthModule($userId)
         }
         $result->Close();
     }
-    $res = xarModAPILoad($authModName, 'user');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (!xarModAPILoad($authModName, 'user')) return;
 
     return $authModName;
 }
@@ -887,55 +781,29 @@ function xarUser__getUserVarInfo($name)
 function xarUser__syncUsersTableFields()
 {
     $userId = xarSessionGetVar('uid');
-    if (empty($userId)) {
-        $msg = xarML('Empty uid.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN',
-                       new SystemException($msg));return;
-    }
+    assert('$userId != 0');
 
     $authModName = xarUser__getAuthModule($userId);
-    if (!isset($authModName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
-    if ($authModName == 'authsystem') {
-        // Already synced
-        return true;
-    }
+    if (!isset($authModName)) return; // throw back
+    if ($authModName == 'authsystem') return true; // Already synced
 
     $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-                        array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
-    if ($res == false) {
-        // Impossible to go out of sync
-        return true;
-    }
+                         array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
+    if (!isset($res)) return; // throw back
+    if ($res == false) return true; // Impossible to go out of sync
 
     $name = xarUserGetVar('name');
-    if (!isset($name)) {
-        return; // throw back
-    }
+    if (!isset($name)) return; // throw back
     $res = xarUser__setUsersTableUserVar('name', $name, $userId);
-    if (!isset($res)) {
-        return; // throw back
-    }
+    if (!isset($res)) return; // throw back
     $uname = xarUserGetVar('uname');
-    if (!isset($uname)) {
-        return; // throw back
-    }
+    if (!isset($uname)) return; // throw back
     $res = xarUser__setUsersTableUserVar('uname', $uname, $userId);
-    if (!isset($res)) {
-        return; // throw back
-    }
+    if (!isset($res)) return; // throw back
     $email = xarUserGetVar('email');
-    if (!isset($email)) {
-        return; // throw back
-    }
+    if (!isset($email)) return; // throw back
     $res = xarUser__setUsersTableUserVar('email', $email, $userId);
-    if (!isset($res)) {
-        return; // throw back
-    }
+    if (!isset($res)) return; // throw back
 
     return true;
 }

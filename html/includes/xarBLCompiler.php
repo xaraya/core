@@ -1,13 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Block Layout Template Engine Compiler
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * BlockLayout Template Engine
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage BLCompiler
+ * @link xarBLCompiler.php
+ * @author Marco Canini <m.canini@libero.it>, Paul Rosania
+ */
 
 class xarTpl__CompilerError extends DefaultUserException
 {
@@ -2118,7 +2122,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 
         // Calculate block ID - theme dependent
         // FIXME: <marco> What is this for?
-        $bid = md5(xarUserGetTheme().$id);
+        $bid = md5(xarTplGetThemeName().$id);
 
         if (isset($this->children) && count($this->children) > 0) {
             $contentNode = $this->children[0];
@@ -2280,6 +2284,16 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $key = '';
+        if (count($this->children) == 0) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('Missing the key inside <xar:mlkey> tag.', $this));
+            return;
+        }
+        if (count($this->attributes) != 0) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('The <xar:mlkey> tag takes no attributes.', $this));
+            return;
+        }
         // Children are only of text type
         foreach($this->children as $node) {
             $key .= $node->render();
@@ -2314,6 +2328,16 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $string = '';
+        if (count($this->children) == 0) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('Missing the string inside <xar:mlstring> tag.', $this));
+            return;
+        }
+        if (count($this->attributes) != 0) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('The <xar:mlstring> tag takes no attributes.', $this));
+            return;
+        }
         // Children are only of text type
         foreach($this->children as $node) {
             $string .= $node->render();
@@ -2356,9 +2380,14 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
             return $this->cachedOutput;
         }
 
-        if (count($this->children) > 1) {
+        if (count($this->children) != 1) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:mlvar> tag can contain only one child tag.', $this));
+            return;
+        }
+        if (count($this->attributes) != 0) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('The <xar:mlvar> tag takes no attributes.', $this));
             return;
         }
 
@@ -2464,46 +2493,10 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
 
-        if (!isset($file)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'file\' attribute in <xar:include> tag.', $this));
-            return;
-        }
+        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('The <xar:include> tag has been deprecated, you must use <xar:template>.', $this));
+        return;
 
-        if (!isset($type)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'type\' attribute in <xar:include> tag.', $this));
-            return;
-        }
-        
-        $themeName = xarCore_getSiteVar('BL.DefaultTheme');
-        $directories = array();
-        if ($type == 'theme') {
-            $directories[] = "themes/$themeName/includes/";
-        } elseif ($type == 'module') {
-            $directories[] = "themes/$themeName/modules/$_bl_module_name/includes/";
-            $directories[] = "modules/$_bl_module_name/xarinclude/";
-        } else {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:include> tag.", $this));
-            return;
-        }
-
-        $path = implode('; ', $directories);
-        if (strstr($file, '..') != false) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError("File '$file' may not be located outside search path. (Path: '$path')", $this));
-            return;
-        }
-
-        foreach ($directories as $directory) {
-            if (file_exists($directory . '/' . $file)) {
-                return "include ('$directory/$file'); ";
-            }
-        }
-
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                       new xarTpl__ParserError("File '$file' not found. (Search path: '$path')", $this));
     }
 }
 
@@ -2513,53 +2506,43 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
 
-        if (!isset($file)) {
+        if (isset($file)) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                           new xarTpl__ParserError('The \'file\' attribute has been deprecated, use \'name\' instead.', $this));
+            return;
+        }
+
+        if (!isset($name)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'file\' attribute in <xar:include> tag.', $this));
+                           new xarTpl__ParserError('Missing \'name\' attribute in <xar:template> tag.', $this));
             return;
         }
 
         if (!isset($type)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'type\' attribute in <xar:include> tag.', $this));
+                           new xarTpl__ParserError('Missing \'type\' attribute in <xar:template> tag.', $this));
             return;
         }
-        
-        $themeName = xarCore_getSiteVar('BL.DefaultTheme');
-        $directories = array();
+
+        if (!isset($subdata)) {
+            $subdata = '$_bl_data';
+        }
+
         if ($type == 'theme') {
-            $directories[] = "themes/$themeName/includes";
+            return "xarTpl_includeThemeTemplate('$name', $subdata)";
         } elseif ($type == 'module') {
-            //$directories[] = "themes/$themeName/modules/\$_bl_module_name/includes";
-            $directories[] = "modules/\$_bl_module_name/xartemplates/includes";
+            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$name', $subdata)";
         } else {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:include> tag.", $this));
+                           new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this));
             return;
         }
-
-        $path = implode('; ', $directories);
-        if (strstr($file, '..') != false) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError("File '$file' may not be located outside search path. (Path: '$path')", $this));
-            return;
-        }
-
-        //foreach ($directories as $directory) {
-        //    if (file_exists($directory . '/' . $file)) {
-                $directory = $directories[0];
-                return "xarTplFile(\"$directory/$file.xd\", \$_bl_data) ";
-        //    }
-        //}
-
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                       new xarTpl__ParserError("File '$file' not found. (Search path: '$path')", $this));
     }
 
-    /*function isAssignable()
+    function needExceptionsControl()
     {
-        return false;
-    }*/
+        return true;
+    }
 }
 
 class xarTpl__XarSetNode extends xarTpl__TplTagNode

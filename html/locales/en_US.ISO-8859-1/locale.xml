@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xarlocale:description xmlns:xarlocale="http://www.mondowap.com/2002/xarlocale-ns" locale="en_US">
+  <xarlocale:language>
+    <xarlocale:iso3code>eng</xarlocale:iso3code>
+    <xarlocale:display locale="en_US">English</xarlocale:display>
+    <xarlocale:display locale="en_US"><!-- TODO: complete this with the right display string for language name (Use an UTF-8 editor).--></xarlocale:display>
+  </xarlocale:language>
+  <xarlocale:country>
+    <xarlocale:iso3code>USA</xarlocale:iso3code>
+    <xarlocale:display locale="en_US">United States</xarlocale:display>
+    <xarlocale:display locale="en_US"><!-- TODO: complete this with the right display string for country name (Use an UTF-8 editor).--></xarlocale:display>
+  </xarlocale:country>
+  <xarlocale:monetary>
+    <xarlocale:currencySymbol>$</xarlocale:currencySymbol>
+    <xarlocale:internationalCurrencySymbol>USD</xarlocale:internationalCurrencySymbol>
+    <xarlocale:decimalSeparator>.</xarlocale:decimalSeparator>
+    <xarlocale:isDecimalSeparatorAlwaysShown>false</xarlocale:isDecimalSeparatorAlwaysShown>
+    <xarlocale:groupingSeparator>,</xarlocale:groupingSeparator>
+    <xarlocale:groupingSize>3</xarlocale:groupingSize>
+    <xarlocale:fractionDigits>
+      <xarlocale:maximum>2</xarlocale:maximum>
+      <xarlocale:minimum>2</xarlocale:minimum>
+    </xarlocale:fractionDigits>
+    <xarlocale:integerDigits>
+      <xarlocale:maximum>309</xarlocale:maximum>
+      <xarlocale:minimum>1</xarlocale:minimum>
+    </xarlocale:integerDigits>
+  </xarlocale:monetary>
+  <xarlocale:numeric>
+    <xarlocale:decimalSeparator>.</xarlocale:decimalSeparator>
+    <xarlocale:isDecimalSeparatorAlwaysShown>false</xarlocale:isDecimalSeparatorAlwaysShown>
+    <xarlocale:groupingSeparator>,</xarlocale:groupingSeparator>
+    <xarlocale:groupingSize>3</xarlocale:groupingSize>
+    <xarlocale:fractionDigits>
+      <xarlocale:maximum>3</xarlocale:maximum>
+      <xarlocale:minimum>0</xarlocale:minimum>
+    </xarlocale:fractionDigits>
+    <xarlocale:integerDigits>
+      <xarlocale:maximum>309</xarlocale:maximum>
+      <xarlocale:minimum>1</xarlocale:minimum>
+    </xarlocale:integerDigits>
+  </xarlocale:numeric>
+  <xarlocale:decimalSymbols>
+    <xarlocale:infinity>?</xarlocale:infinity>
+    <xarlocale:minusSign>-</xarlocale:minusSign>
+    <xarlocale:notANumber>?</xarlocale:notANumber>
+    <xarlocale:percent>%</xarlocale:percent>
+    <xarlocale:perMill>?</xarlocale:perMill>
+    <xarlocale:zeroDigit>0</xarlocale:zeroDigit>
+  </xarlocale:decimalSymbols>
+  <xarlocale:dateSymbols>
+    <xarlocale:am>AM</xarlocale:am>
+    <xarlocale:pm>PM</xarlocale:pm>
+    <xarlocale:months>
+      <xarlocale:month full="January" short="Jan" />
+      <xarlocale:month full="February" short="Feb" />
+      <xarlocale:month full="March" short="Mar" />
+      <xarlocale:month full="April" short="Apr" />
+      <xarlocale:month full="May" short="May" />
+      <xarlocale:month full="June" short="Jun" />
+      <xarlocale:month full="July" short="Jul" />
+      <xarlocale:month full="August" short="Aug" />
+      <xarlocale:month full="September" short="Sep" />
+      <xarlocale:month full="October" short="Oct" />
+      <xarlocale:month full="November" short="Nov" />
+      <xarlocale:month full="December" short="Dec" />
+    </xarlocale:months>
+    <xarlocale:weekdays>
+      <xarlocale:weekday full="Sunday" short="Sun" />
+      <xarlocale:weekday full="Monday" short="Mon" />
+      <xarlocale:weekday full="Tuesday" short="Tue" />
+      <xarlocale:weekday full="Wednesday" short="Wed" />
+      <xarlocale:weekday full="Thursday" short="Thu" />
+      <xarlocale:weekday full="Friday" short="Fri" />
+      <xarlocale:weekday full="Saturday" short="Sat" />
+    </xarlocale:weekdays>
+  </xarlocale:dateSymbols>
+  <xarlocale:dateFormats>
+    <xarlocale:short>M/d/yy</xarlocale:short>
+    <xarlocale:medium>MMM d, yyyy</xarlocale:medium>
+    <xarlocale:long>MMMM d, yyyy</xarlocale:long>
+  </xarlocale:dateFormats>
+  <xarlocale:timeFormats>
+    <xarlocale:short>h:mm a</xarlocale:short>
+    <xarlocale:medium>h:mm:ss a</xarlocale:medium>
+    <xarlocale:long>h:mm:ss a z</xarlocale:long>
+  </xarlocale:timeFormats>
+  <xarlocale:textDirection>LeftToRight</xarlocale:textDirection>
+</xarlocale:description>
+

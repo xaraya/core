@@ -1,32 +1,34 @@
 <?php
-// File: $Id: s.xarTemplate.php 1.69 02/12/14 18:32:47+01:00 marco@jabawack.canini.org $
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Paul Rosania <paul@postnuke.com>
-// Purpose of file: The BlockLayout template engine
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * BlockLayout Template Engine
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage MLS
+ * @link xarMLS.php
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ */
 
-//  Find specifications at the following address
-//  http://developer.hostnuke.com/modules.php?op=modload&name=Sections&file=index&req=viewarticle&artid=1&page=1
-
+/**
+ * Initializes the BlockLayout Template Engine
+ *
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @return bool true
+ */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarTpl_cacheTemplates, $xarTpl_themesBaseDir, $xarTpl_defaultThemeName;
-    global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
+    $GLOBALS['xarTpl_themesBaseDir'] = $args['themesBaseDirectory'];
+    $GLOBALS['xarTpl_defaultThemeName'] = $args['defaultThemeName'];
 
-    $xarTpl_themesBaseDir = $args['themesBaseDirectory'];
-    $xarTpl_defaultThemeName = $args['defaultThemeName'];
-    
-    if (!xarTplSetThemeName($xarTpl_defaultThemeName)) {
-        global $xarTpl_themeDir;
-        xarCore_die("xarTpl_init: Unexistent theme directory '$xarTpl_themeDir'.");
+    if (!xarTplSetThemeName($args['defaultThemeName'])) {
+        xarCore_die("xarTpl_init: Unexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     if (!xarTplSetPageTemplateName('default')) {
-        global $xarTpl_themeDir;
-        xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$xarTpl_themeDir'.");
+        xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
         xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
@@ -34,80 +36,80 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
                    "'. Control directory permissions.");
     }
 
-    $xarTpl_cacheTemplates = $args['enableTemplatesCaching'];
-    
-    $xarTpl_additionalStyles = '';
-    $xarTpl_headJavaScript = '';
-    $xarTpl_bodyJavaScript = '';
+    $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
+
+    $GLOBALS['xarTpl_additionalStyles'] = '';
+    $GLOBALS['xarTpl_headJavaScript'] = '';
+    $GLOBALS['xarTpl_bodyJavaScript'] = '';
 
     return true;
 }
 
 function xarTplGetThemeName()
 {
-    global $xarTpl_themeName;
-    return $xarTpl_themeName;
+    return $GLOBALS['xarTpl_themeName'];
 }
 
 function xarTplSetThemeName($themeName)
 {
-    global $xarTpl_themesBaseDir, $xarTpl_themeName, $xarTpl_themeDir;
-    assert('$themeName != "" && $themeName{0} != "/"');
+    global $xarTpl_themesBaseDir;
+
+    if (empty($themeName) || $themeName{0} == '/') return false;
+
     if (!file_exists($xarTpl_themesBaseDir.'/'.$themeName)) {
         return false;
     }
-    $xarTpl_themeName = $themeName;
-    $xarTpl_themeDir = $xarTpl_themesBaseDir.'/'.$xarTpl_themeName;
+    $GLOBALS['xarTpl_themeName'] = $themeName;
+    $GLOBALS['xarTpl_themeDir'] = $xarTpl_themesBaseDir.'/'.$themeName;
     return true;
 }
 
 function xarTplGetPageTemplateName()
 {
-    global $xarTpl_pageTemplateName;
-	return $xarTpl_pageTemplateName;
+	return $GLOBALS['xarTpl_pageTemplateName'];
 }
 
 function xarTplSetPageTemplateName($templateName)
 {
-    global $xarTpl_pageTemplateName, $xarTpl_themeDir;
-    assert('$templateName != ""');
-    if (!file_exists("$xarTpl_themeDir/pages/$templateName.xt")) {
+    if (empty($templateName)) return false;
+
+    if (!file_exists("$GLOBALS[xarTpl_themeDir]/pages/$templateName.xt")) {
         return false;
     }
-    $xarTpl_pageTemplateName = $templateName;
+    $GLOBALS['xarTpl_pageTemplateName'] = $templateName;
     return true;
 }
 
 function xarTplSetPageTitle($title)
 {
-    global $xarTpl_pageTitle;
-    $xarTpl_pageTitle = $title;
+    $GLOBALS['xarTpl_pageTitle'] = $title;
     return true;
 }
 
 function xarTplAddStyleLink($modName, $styleName)
 {
-    global $xarTpl_additionalStyles;
     $info = xarMod_getBaseInfo($modName);
     if (!isset($info)) return;
+
     $fileName = "modules/$info[directory]/styles/$styleName.css";
-    if (!file_exists($fileName)) {
-        return false;
-    }
+    if (!file_exists($fileName)) return false;
+
     $url = xarServerGetBaseURL().$fileName;
-    $xarTpl_additionalStyles .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
+    $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
     return true;
 }
 
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
-    assert('$position == "head" || $position == "body"');
-    if ($position == 'head') {
-        global $xarTpl_headJavaScript;
-        $xarTpl_headJavaScript .= "\n// JavaScript code from {$owner}\n{$code}\n";
-    } else {
-        global $xarTpl_bodyJavaScript;
-        $xarTpl_bodyJavaScript  .= "\n// JavaScript code from {$owner}\n{$code}\n";
+    switch ($position) {
+        case 'head':
+        $GLOBALS['xarTpl_headJavaScript'] .= "\n// JavaScript code from {$owner}\n{$code}\n";
+        break;
+        case 'body':
+        $GLOBALS['xarTpl_bodyJavaScript']  .= "\n// JavaScript code from {$owner}\n{$code}\n";
+        break;
+        default:
+        return false;
     }
     return true;
 }
@@ -115,6 +117,7 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
 /**
  * Turns module output into a template.
  *
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
  * @param modName the module name
  * @param modType user|admin
@@ -126,8 +129,6 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
  **/
 function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
-    global $xarTpl_themeDir;
-
     if (!empty($templateName)) {
         $templateName = xarVarPrepForOS($templateName);
     }
@@ -136,7 +137,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
+    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
@@ -156,6 +157,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Turns block output into a template.
  *
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
  * @param modName the module name
  * @param blockName the block name
@@ -166,8 +168,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  **/
 function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
 {
-    global $xarTpl_themeDir;
-
     if (!empty($templateName)) {
         $templateName = xarVarPrepForOS($templateName);
     }
@@ -177,7 +177,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
+    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$blockName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
@@ -208,6 +208,7 @@ function xarTplCompileString($templateSource)
 /**
  * Rendes a page template.
  *
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
  * @param mainModuleOutput the module output
  * @param otherModulesOutput TODO
@@ -217,26 +218,25 @@ function xarTplCompileString($templateSource)
  **/
 function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
 {
-    global $xarTpl_themeDir, $xarTpl_pageTemplateName, $xarTpl_pageTitle;
-    global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
+    global $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
 
     if (empty($templateName)) {
-        $templateName = $xarTpl_pageTemplateName;
+        $templateName = $GLOBALS['xarTpl_pageTemplateName'];
     }
 
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = "$xarTpl_themeDir/pages/$templateName.xt";
+    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/pages/$templateName.xt";
 
-    if ($xarTpl_headJavaScript !='') {
+    if ($xarTpl_headJavaScript != '') {
         $xarTpl_headJavaScript = "<script type=\"text/javascript\">\n<!--\n{$xarTpl_headJavaScript}\n// -->\n</script>";
     }
-    if ($xarTpl_bodyJavaScript !='') {
+    if ($xarTpl_bodyJavaScript != '') {
         $xarTpl_bodyJavaScript = "<script type=\"text/javascript\">\n<!--\n{$xarTpl_bodyJavaScript}\n// -->\n</script>";
     }
     
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput,
-                     '_bl_page_title' => $xarTpl_pageTitle,
-                     '_bl_additional_styles' => $xarTpl_additionalStyles,
+                     '_bl_page_title' => $GLOBALS['xarTpl_pageTitle'],
+                     '_bl_additional_styles' => $GLOBALS['xarTpl_additionalStyles'],
                      '_bl_head_javascript' => $xarTpl_headJavaScript,
                      '_bl_body_javascript' => $xarTpl_bodyJavaScript);
 
@@ -269,6 +269,23 @@ function xarTpl_renderWidget($widgetName, $tplData)
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
+function xarTpl_includeThemeTemplate($templateName, $tplData)
+{
+    $templateName = xarVarPrepForOS($templateName);
+    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/includes/$templateName.xt";
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
+}
+
+function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
+{
+    $templateName = xarVarPrepForOS($templateName);
+    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modName/includes/$templateName.xt";
+    if (!file_exists($sourceFileName)) {
+        $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
+    }
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
+}
+
 // PRIVATE FUNCTIONS
 
 function xarTpl__getCompilerInstance()
@@ -277,32 +294,25 @@ function xarTpl__getCompilerInstance()
     return new xarTpl__Compiler();
 }
 
-// Now featuring *eval()* for your anti-caching pleasure :-)
 function xarTpl__execute($templateCode, $tplData)
 {
+    // $tplData should be an array (-even-if- it only has one value in it) 
+    assert('is_array($tplData)');
+
     $tplData['_bl_data'] = $tplData;
 
-    // $__tplData should be an array (-even-if- it only has one value in it), 
-    // if it's not throw an exception.
-    if (is_array($tplData)) {
-        extract($tplData, EXTR_OVERWRITE);
-    } else {  
-        $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-    
+    extract($tplData, EXTR_OVERWRITE);
+
     // Start output buffering
     ob_start();
-    
+
     // Kick it
     eval("?>".$templateCode);
-    
+
     // Grab output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
-    
+
     // Return output
     return $output;
 }
@@ -310,6 +320,9 @@ function xarTpl__execute($templateCode, $tplData)
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     global $xarTpl_cacheTemplates;
+
+    // $tplData should be an array (-even-if- it only has one value in it) 
+    assert('is_array($tplData)');
 
     $needCompilation = true;
 
@@ -324,9 +337,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     }
     
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        $msg = xarML('Could not locate template source, missing file path is: \'#(1)\'.', $sourceFileName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
     
@@ -352,23 +363,14 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 
 
     $tplData['_bl_data'] = $tplData;
-    // $__tplData should be an array (-even-if- it only has one value in it), 
-    // if it's not throw an exception.
-    if (is_array($tplData)) {
-        extract($tplData, EXTR_OVERWRITE);
-    } else {
-        $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-    
+    extract($tplData, EXTR_OVERWRITE);
+
     // Start output buffering
     ob_start();
-    
+
     // Load cached template file
     $res = include $cachedFileName;
-    
+
     // Fetch output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
@@ -376,6 +378,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Return output
     return $output;
 }
+
+/// OLD STUFF //////////////////////////////////
 
 define ('XAR_TPL_OPTIONAL', 2);
 define ('XAR_TPL_REQUIRED', 0); // default for attributes

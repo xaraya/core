@@ -1,14 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file: Provide a low-level security access mechanism
-// ----------------------------------------------------------------------
-
+/**
+ * File: $Id$
+ *
+ * Security Access Mechanism
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Sec
+ * @link xarSec.php
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ */
 
 /*
  * Notes on security system
@@ -181,7 +184,7 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
 //    }
     if ((md5($partkey)) == $authid) {
         // Match - generate new random number for next key and leave happy
-        srand((double)microtime()*1000000);
+        srand((double) microtime() * 1000000);
         xarSessionSetVar('rand', rand());
 
         return true;
@@ -465,12 +468,6 @@ function xarSec__getModulesInstanceSchemaInfo()
     while ($modName = readdir($moddir)) {
         $osfile = 'modules/' . xarVarPrepForOS($modName) . '/xarversion.php';
         @include $osfile;
-
-        // pnAPI compatibility
-        if (!file_exists($osfile)) {
-           $osfile2 = 'modules/' . xarVarPrepForOS($modName) . '/pnversion.php';
-           @include $osfile2;
-        }
 
         if (!empty($modversion['securityschema'])) {
             foreach ($modversion['securityschema'] as $component => $instance) {

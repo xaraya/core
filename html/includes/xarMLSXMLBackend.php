@@ -1,13 +1,17 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Multi Language System - XML Translations Backend
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Multi Language System - XML Translations Backend
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage MLSXMLBackend
+ * @link xarMLSXMLBackend.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
 /**
  * Implements a concrete translations backend based on the XML language.
@@ -116,7 +120,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_FOUND', new SystemException($ctxType.': '.$ctxName));
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;
         }
         $fp = fopen($fileName, 'r');
@@ -126,7 +130,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TRANSLATION_EXCEPTION',
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
                                 new SystemException("XML parser error in $fileName: $errstr at line $line."));
                 return;
             }

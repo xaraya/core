@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: The Core
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Xaraya
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @link xarCore.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
 /*
  * Core version informations - should be upgraded on each release for
@@ -66,15 +69,16 @@ define('XARCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
 define('XARDBG_ACTIVE', 1);
 define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
+define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
 
 /**
- * Start the core engine.
+ * Initializes the core engine
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @param whatToLoad What optional systems to load.
- * @returns bool
- * @return true on success,false on failure
+ * @param whatToLoad integer which optional systems to load
+ * @return bool true
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
@@ -84,7 +88,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     
     //Comment this line to disable debugging
     //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
-    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS);
+    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
     //xarCoreActivateDebugger(0);
 
     //Johnny: POSSIBLY LEGACY????? i guess we'll test it now
@@ -99,7 +103,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include_once 'includes/xarLog.php';
     // {ML_dont_parse 'includes/xarEvt.php'}
     include_once 'includes/xarEvt.php';
-    // {ML_dont_parse 'includes/xarException.php'}
+
     include_once 'includes/xarException.php';
     // {ML_dont_parse 'includes/xarVar.php'}
     include_once 'includes/xarVar.php';
@@ -107,16 +111,29 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include_once 'includes/xarServer.php';
     // {ML_dont_parse 'includes/xarMLS.php'}
     include_once 'includes/xarMLS.php';
+    // {ML_dont_parse 'includes/xarTemplate.php'}
     include_once 'includes/xarTemplate.php';
-
+    // {ML_dont_parse 'includes/xarTheme.php'}
+    include_once 'includes/xarTheme.php';
     // Legacy systems
     // {ML_dont_parse 'includes/pnHTML.php'}
     include_once 'includes/pnHTML.php';
     // {ML_dont_parse 'includes/pnLegacy.php'}
     include_once 'includes/pnLegacy.php';
 
-    // Initialise system args array
-    //$systemArgs = array();
+    // Start Exception Handling System
+    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
+    xarException_init($systemArgs, $whatToLoad);
+
+    // Start Logging Facilities
+    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
+                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
+                        'level' => xarCore_getSiteVar('Log.LogLevel'));
+    xarLog_init($systemArgs, $whatToLoad);
+
+    // Start Event Messaging System
+    $systemArgs = array('loadLevel' => $whatToLoad);
+    xarEvt_init($systemArgs, $whatToLoad);
 
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
@@ -140,22 +157,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarDB_init($systemArgs, $whatToLoad);
     }
 
-    // Start Event Messaging System
-    $systemArgs = array('loadLevel' => $whatToLoad);
-    xarEvt_init($systemArgs, $whatToLoad);
 
+    // TODO: <marco> Drop them
     xarEvt_registerEvent('StartBodyTag');
     xarEvt_registerEvent('EndBodyTag');
 
-    // Start Logging Facilities
-    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
-                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
-                        'level' => xarCore_getSiteVar('Log.LogLevel'));
-    xarLog_init($systemArgs, $whatToLoad);
+    
 
-    // Start Exception Handling System
-    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
-    xarException_init($systemArgs, $whatToLoad);
 
     // Start Variables utilities
     // FIXME: <marco> No more sure of this!
@@ -172,12 +180,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                         'defaultModuleName' => xarCore_getSiteVar('Core.DefaultModuleName'),
                         'defaultModuleType' => xarCore_getSiteVar('Core.DefaultModuleType'),
-                        'defaultModuleFunction' => xarCore_getSiteVar('Core.DefaultModuleFunction'));
+                        'defaultModuleFunction' => xarCore_getSiteVar('Core.DefaultModuleFunction'),
+                        'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
-        // {ML_dont_parse 'includes/xarSession.php'}
-        include_once 'includes/xarSession.php';
+        // {ML_dont_parse 'includes/xarSession2.php'}
+        include_once 'includes/xarSession2.php';
 
         // Start Session Support
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
@@ -196,6 +205,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarMLS_init($systemArgs, $whatToLoad);
 
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
+        // {ML_dont_parse 'includes/xarConfig.php'}
         include_once 'includes/xarConfig.php';
 
         // Start Configuration Unit
@@ -206,6 +216,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
+        // {ML_dont_parse 'includes/xarMod.php'}
         include_once 'includes/xarMod.php';
 
         // Start Modules Support
@@ -220,10 +231,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
                         'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
                         'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
-	include_once 'includes/xarTheme.php';
     xarTpl_init($systemArgs, $whatToLoad);
 
     if ($whatToLoad & XARCORE_SYSTEM_USER) {
+        // {ML_dont_parse 'includes/xarUser.php'}
         include_once 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include_once 'includes/xarSecurity.php';
@@ -234,6 +245,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
+        // {ML_dont_parse 'includes/xarBlocks.php'}
         include_once 'includes/xarBlocks.php';
 
         // Start Blocks Support Sytem
@@ -245,11 +257,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 }
 
 /**
- * Returns the relative path name for the var directory.
+ * Returns the relative path name for the var directory
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns string
- * @return the var directory path name
+ * @return string the var directory path name
  */
 function xarCoreGetVarDirPath()
 {
@@ -263,26 +275,25 @@ function xarCoreGetVarDirPath()
 /**
  * Activates the debugger.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @param flags bit mask for the debugger flags to render actives
- * @returns void
+ * @param flags integer bit mask for the debugger flags
+ * @return void
  */
 function xarCoreActivateDebugger($flags)
 {
-    global $xarDebug, $xarDebug_sqlCalls, $xarDebug_startTime;
-    $xarDebug = $flags;
-    if ($xarDebug & XARDBG_ACTIVE) {
+    $GLOBALS['xarDebug'] = $flags;
+    if ($flags & XARDBG_ACTIVE) {
         // Proper error reporting
         error_reporting(E_ALL);
         // Activate assertions
         assert_options(ASSERT_ACTIVE, 1);
         assert_options(ASSERT_WARNING, 1);
         assert_options(ASSERT_BAIL, 1);
-        include_once 'includes/assert.php';
 
-        $xarDebug_sqlCalls = 0;
+        $GLOBALS['xarDebug_sqlCalls'] = 0;
         $lmtime = explode(' ', microtime());
-        $xarDebug_startTime = $lmtime[1] + $lmtime[0];
+        $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];
     } else {
         // Turn off error reporting
         error_reporting(0);
@@ -292,43 +303,39 @@ function xarCoreActivateDebugger($flags)
 }
 
 /**
- * Checks if the debugger is active..
+ * Checks if the debugger is active
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @returns bool
- * @return true if the debugger is active, false otherwise
+ * @return bool true if the debugger is active, false otherwise
  */
 function xarCoreIsDebuggerActive()
 {
-    global $xarDebug;
-
-    return $xarDebug & XARDBG_ACTIVE;
+    return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
 }
 
 /**
  * Checks for specified debugger flag.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @param flag the debugger flag to check for activity
- * @returns bool
- * @return true if the flag is active, false otherwise
+ * @param flag integer the debugger flag to check for activity
+ * @return bool true if the flag is active, false otherwise
  */
 function xarCoreIsDebugFlagSet($flag)
 {
-    global $xarDebug;
-
-    return ($xarDebug & XARDBG_ACTIVE) && ($xarDebug & $flag);
+    return ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) && ($GLOBALS['xarDebug'] & $flag);
 }
 
 // PROTECTED FUNCTIONS
 
 /**
- * Gets a core system variable..
+ * Gets a core system variable
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @param name name of core system variable to get
- * @returns mixed
- * @return variable on success, die with error on failure
+ * @param name string name of core system variable to get
+ * @return mixed variable value
  */
 function xarCore_getSystemVar($name)
 {
@@ -351,12 +358,12 @@ function xarCore_getSystemVar($name)
 }
 
 /**
- * Gets a core site variable..
+ * Gets a core site variable
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @param name name of core site variable to get
- * @returns bool
- * @return variable on success, die with error on failure
+ * @param name string name of core site variable to get
+ * @return mixed variable value
  */
 function xarCore_getSiteVar($name)
 {
@@ -381,34 +388,61 @@ function xarCore_getSiteVar($name)
 /**
  * Disposes the debugger.
  *
+ * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @returns void
+ * @return void
  */
 function xarCore_disposeDebugger()
 {
-    global $xarDebug, $xarDebug_sqlCalls, $xarDebug_startTime;
-    if ($xarDebug & XARDBG_SQL) {
-        xarLogMessage("Total SQL queries: $xarDebug_sqlCalls.");
+    if ($GLOBALS['xarDebug'] & XARDBG_SQL) {
+        xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
     }
-    if ($xarDebug & XARDBG_ACTIVE) {
+    if ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) {
         $lmtime = explode(' ', microtime());
         $endTime = $lmtime[1] + $lmtime[0];
-        $totalTime = ($endTime - $xarDebug_startTime);
+        $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
         xarLogMessage("Response was served in $totalTime seconds.");
     }
 }
 
+/**
+ * Dies
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ */
 function xarCore_die($msg)
 {
-    // TODO: <marco> Write a good text here! Can we send the 500 http code from php?
-    $errPage = "<html><head><title>Fatal Error</title></head><body><p>
-                A fatal error occurred bla bla, we're sorry bla bla, retry,
-                or contact us bla bla</p>";
+    $url = xarServerGetBaseURL() . 'index.php';
     if (xarCoreIsDebuggerActive()) {
-        $errPage .= "<p><b>Technical motivation is</b>: " . nl2br($msg) . "</p>";
+        $msg = nl2br($msg);
+$debug = <<<EOD
+<p>Technical information</p>
+<p>Xaraya has failed to serve the request, and the failure could not be handled.</p>
+<p>This is a bad sign and probably means that Xaraya is not configured properly.</p>
+<p>The failure reason is: $msg</p>
+EOD;
+    } else {
+        $debug = '';
     }
-    $errPage .= "</body></html";
+$errPage = <<<EOM
+<html>
+  <head>
+    <title>Fatal Error</title>
+  </head>
+  <body>
+    <p>A fatal error occurred while serving your request.</p>
+    <p>We are sorry for this inconvenience.</p>
+    <p>If this is the first time you see this message try to <a href="$url">click here to continue.</a><br/>
+    If you see this message all the times you tried to access to this service, it is probable that our server
+    is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
+    If you see this message from days we ask you to report the unavailablity of service to our webmaster. Thanks.
+    </p>
+    $debug
+  </body>
+</html>
+EOM;
     echo $errPage;
+    xarCore_disposeDebugger();
     die();
 }
 

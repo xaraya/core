@@ -1,26 +1,37 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: HTTP Protocol Server/Request/Response utilities
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * HTTP Protocol Server/Request/Response utilities
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage SerReqRes
+ * @link xarServer.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
+/**
+ * Initializes the HTTP Protocol Server/Request/Response utilities
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access protected
+ * @return bool true
+ */
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarRequest_allowShortURLs, $xarRequest_defaultModule,
-           $xarRequest_shortURLVariables;
+    $GLOBALS['xarServer_generateXMLURLs'] = $args['generateXMLURLs'];
 
-    $xarRequest_allowShortURLs = $args['enableShortURLsSupport'];
+    $GLOBALS['xarRequest_allowShortURLs'] = $args['enableShortURLsSupport'];
+    $GLOBALS['xarRequest_defaultRequestInfo'] = array($args['defaultModuleName'],
+                                                      $args['defaultModuleType'],
+                                                      $args['defaultModuleFunction']);
+    $GLOBALS['xarRequest_shortURLVariables'] = array();
 
-    $xarRequest_defaultModule = array('module' => $args['defaultModuleName'],
-                                     'type' => $args['defaultModuleType'],
-                                     'func' => $args['defaultModuleFunction']);
-
-    $xarRequest_shortURLVariables = array();
+    $GLOBALS['xarResponse_closeSession'] = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
+    $GLOBALS['xarResponse_redirectCalled'] = false;
 
     return true;
 }
@@ -28,13 +39,17 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 // SERVER FUNCTIONS
 
 /**
- * get a server (or environment) variable
+ * Gets a server variable
  *
- * Gets a SERVER variable, or an ENVironment variable if that fails. Tries the
- * new superglobals first.
+ * Returns the value of $name server variable.
+ * Accepted values for $name are exactly the ones described by the
+ * {@link http://www.php.net/manual/en/reserved.variables.html#reserved.variables.server PHP manual}.
+ * If the server variable doesn't exist void is returned.
+ *
+ * @author Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
  * @param name the name of the variable
- * @return mixed value of the variable, or void if variable doesn't exist
+ * @return mixed value of the variable
  */
 function xarServerGetVar($name)
 {
@@ -52,8 +67,7 @@ function xarServerGetVar($name)
     if (isset($HTTP_ENV_VARS[$name])) {
         return $HTTP_ENV_VARS[$name];
     }
-    $val = getenv($name);
-    if (!empty($val)) {
+    if ($val = getenv($name)) {
         return $val;
     }
     return; // we found nothing here
@@ -101,6 +115,45 @@ function xarServerGetBaseURI()
 }
 
 /**
+ * Gets the host name
+ *
+ * Returns the server host name fetched from HTTP headers when possible.
+ * The host name is in the canonical form (host + : + port) when the port is different than 80.
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @return string HTTP host name
+ */
+
+function xarServerGetHost()
+{
+    $server = xarServerGetVar('HTTP_HOST');
+    if (empty($server)) {
+        // HTTP_HOST is reliable only for HTTP 1.1
+        $server = xarServerGetVar('SERVER_NAME');
+        $port = xarServerGetVar('SERVER_PORT');
+        if ($port != '80') $server .= ":$port";
+    }
+    return $server;
+}
+
+/**
+ * Gets the current protocol
+ *
+ * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @return string current HTTP protocol
+ */
+function xarServerGetProtocol()
+{
+    $HTTPS = xarServerGetVar('HTTPS');
+    // IIS seems to set HTTPS = off for some reason
+    return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+}
+
+/**
  * get base URL for Xaraya
  *
  * @access public
@@ -109,20 +162,11 @@ function xarServerGetBaseURI()
  */
 function xarServerGetBaseURL()
 {
-    $server = xarServerGetVar('HTTP_HOST');
-    $isHTTPS = xarServerGetVar('HTTPS');
-
-    // IIS seems to set HTTPS = off for some reason
-    if (!empty($isHTTPS) && $isHTTPS != 'off') {
-        $proto = 'https://';
-    } else {
-        $proto = 'http://';
-    }
-
+    $server = xarServerGetHost();
+    $protocol = xarServerGetProtocol();
     $path = xarServerGetBaseURI();
 
-    // TODO : this still doesn't work for non-standard ports !
-    return "$proto$server$path/";
+    return "$protocol://$server$path/";
 }
 
 /**
@@ -135,37 +179,38 @@ function xarServerGetBaseURL()
  */
 function xarServerGetCurrentURL($args = array())
 {
-    // get base URL
-    $baseurl = xarServerGetBaseURL();
-    // strip off everything except protocol, server (and port)
-    $baseurl = preg_replace('#^(https?://[^/]+)/.*$#','\\1',$baseurl);
+    $server = xarServerGetHost();
+    $protocol = xarServerGetProtocol();
+    $baseurl = "$protocol://$server";
 
     // get current URI
     $request = xarServerGetVar('REQUEST_URI');
-// TODO: cfr. BaseURI() for other possible ways, or try PHP_SELF
     if (empty($request)) {
-        $request = '/';
+        $request = xarServerGetVar('SCRIPT_NAME');
+        if (!empty($request)) {
+            $qs = xarServerGetVar('QUERY_STRING');
+            if (!empty($qs)) $request .= "?$qs";
+        } else {
+            $request = '/';
+        }
     }
 
     // add optional parameters
-    if (strpos($request,'?') === false) {
-        $join = '?';
-    } else {
-        $join = '&';
-    }
+    if (strpos($request,'?') === false) $request .= '?';
+    else $request .= '&';
+
     foreach ($args as $k=>$v) {
         if (is_array($v)) {
             foreach($v as $l=>$w) {
-                if (isset($w)) {
-                    $request .= $join . $k . "[$l]=$w";
-                    $join = '&';
-                }
+                if (!empty($w)) $request .= $k . "[$l]=$w&";
             }
-        } elseif (isset($v)) {
-            $request .= $join . "$k=$v";
-            $join = '&';
+        } elseif (!empty($v)) {
+            $request .= "$k=$v&";
         }
     }
+
+    $request = substr($request, 0, -1);
+    if ($GLOBALS['xarServer_generateXMLURLs']) $request = htmlspecialchars($request);
 
     return $baseurl . $request;
 }
@@ -174,12 +219,10 @@ function xarServerGetCurrentURL($args = array())
 
 function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
-    global $xarRequest_shortURLVariables, $xarRequest_allowShortURLs;
-
     if ($allowOnlyMethod == 'GET') {
         // Short URLs variables override GET variables
-        if ($xarRequest_allowShortURLs && isset($xarRequest_shortURLVariables[$name])) {
-            $value = $xarRequest_shortURLVariables[$name];
+        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
+            $value = $GLOBALS['xarRequest_shortURLVariables'][$name];
         // Then check in $_GET
         } elseif (isset($_GET[$name])) {
             $value = $_GET[$name];
@@ -204,27 +247,26 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         }
         $method = $allowOnlyMethod;
     } else {
-// TODO: change order (POST normally overrides GET)
         // Short URLs variables override GET and POST variables
-        if ($xarRequest_allowShortURLs && isset($xarRequest_shortURLVariables[$name])) {
-            $value = $xarRequest_shortURLVariables[$name];
-            $method = 'GET';
-        // Then check in $_GET
-        } elseif (isset($_GET[$name])) {
-            $value = $_GET[$name];
+        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
+            $value = $GLOBALS['xarRequest_shortURLVariables'][$name];
             $method = 'GET';
         // Then check in $_POST
         } elseif (isset($_POST[$name])) {
             $value = $_POST[$name];
             $method = 'POST';
-        // Try to fallback to global $HTTP_GET_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
-            $value = $GLOBALS['HTTP_GET_VARS'][$name];
-            $method = 'GET';
         // Try to fallback to global $HTTP_POST_VARS for older php versions
         } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
             $value = $GLOBALS['HTTP_POST_VARS'][$name];
             $method = 'POST';
+        // Then check in $_GET
+        } elseif (isset($_GET[$name])) {
+            $value = $_GET[$name];
+            $method = 'GET';
+        // Try to fallback to global $HTTP_GET_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
+            $value = $GLOBALS['HTTP_GET_VARS'][$name];
+            $method = 'GET';
         // Nothing found, return void
         } else {
             return;
@@ -241,7 +283,23 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 }
 
 /**
- * get request info for current page 
+ * Gets request info for current page. 
+ *
+ * Example of short URL support :
+ *
+ * index.php/<module>/<something translated in xaruserapi.php of that module>, or
+ * index.php/<module>/admin/<something translated in xaradminapi.php>
+ *
+ * We rely on function <module>_<type>_decode_shorturl() to translate PATH_INFO
+ * into something the module can work with for the input variables.
+ * On output, the short URLs are generated by <module>_<type>_encode_shorturl(),
+ * that is called automatically by xarModURL().
+ *
+ * Short URLs are enabled/disabled globally based on a base configuration
+ * setting, and can be disabled per module via its admin configuration
+ *
+ * TODO: evaluate and improve this, obviously :-)
+ * + check security impact of people combining PATH_INFO with func/type param
  *
  * @author Marco Canini, Michel Dalle
  * @access public
@@ -250,137 +308,74 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  */
 function xarRequestGetInfo()
 {
-    global $xarRequest_allowShortURLs, $xarRequest_defaultModule;
-
     static $requestInfo = NULL;
     if (is_array($requestInfo)) {
         return $requestInfo;
     }
 
     // Get variables
-    // FIXME: <marco> Do we want to use xarVarCleanUntrusted here?
-    $modName =  xarVarCleanUntrusted(xarRequestGetVar('module'));
-    $modType =  xarVarCleanUntrusted(xarRequestGetVar('type'));
-    $funcName = xarVarCleanUntrusted(xarRequestGetVar('func'));
-    // Defaults for variables
-    if (empty($modType)) {
-        $modType = 'user';
-    }
-    if (empty($funcName)) {
-        $funcName = 'main';
-    }
+    xarVarFetch('module', 'str:1:', $modName, NULL, XARVAR_NOT_REQUIRED);
+    xarVarFetch('type', 'str:1:', $modType, 'user');
+    xarVarFetch('func', 'str:1:', $funcName, 'main');
 
-    // Example of short URL support :
-    //
-    // index.php/<module>/<something translated in xaruserapi.php of that module>, or
-    // index.php/<module>/admin/<something translated in xaradminapi.php>
-    //
-    // We rely on function <module>_<type>_decode_shorturl() to translate PATH_INFO
-    // into something the module can work with for the input variables.
-    // On output, the short URLs are generated by <module>_<type>_encode_shorturl(),
-    // that is called automatically by xarModURL().
-    //
-    // Short URLs are enabled/disabled globally based on a base configuration
-    // setting, and can be disabled per module via its admin configuration
-    //
-    // TODO: evaluate and improve this, obviously :-)
-    // + check security impact of people combining PATH_INFO with func/type param
-
-    if ($xarRequest_allowShortURLs && empty($modName)) {
-        $path = xarServerGetVar('PATH_INFO');
-        if (!empty($path)) {
-            // FIXME: <marco> Do we want to use xarVarCleanUntrusted here?
-            $path = xarVarCleanUntrusted($path);
-            $path = trim($path, '/');
-            $params = explode('/', $path);
-            if (count($params) > 0 &&
-                preg_match('/^[a-z0-9_-]+$/i', $params[0])) {
-                $modName = $params[0];
-                // if the second part is not admin, it's user by default
-                if (!empty($params[1]) && $params[1] == 'admin') {
-                    $modType = 'admin';
-                    // FIXME: <marco> Do we need to do a preg_match on $params[1] here?
-                    // <mikespub> you mean for upper-case Admin, or to support
-                    // other funcs than user and admin someday ?
-                } else {
-                    $modType = 'user';
-                }
-                // FIXME: <marco> Investigate this aliases thing before to integrate and promote it!
-                // Check if this is an alias for some other module
-                $modName = xarModGetAlias($modName);
-                // Call the appropriate decode_shorturl function
-                if (xarModGetVar($modName, 'SupportShortURLs') &&
-                    xarModAPILoad($modName, $modType)) {
-
-                    $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
-                    if (is_array($res)) {
-                        list($funcName, $args) = $res;
-                        if (!empty($funcName)) { // bingo
-                            // Forward decoded args to xarRequestGetVar
-                            if (isset($args) && is_array($args)) {
-                                $args['module'] = $modName;
-                                $args['type'] = $modType;
-                                $args['func'] = $funcName;
-                                xarRequest__setShortURLVars($args);
-                            } else {
-                                xarRequest__setShortURLVars(array('module' => $modName,
-                                                                 'type' => $modType,
-                                                                 'func' => $funcName));
-                            }
+    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != '') {
+        // NOTE: <marco> The '-' character is not allowed in modules, types and function names,
+        //               so it's not present in this regex
+        preg_match_all('|/([a-z0-9_]+)|i', $path, $matches);
+        $params = $matches[1];
+        if (count($params) > 0) {
+            $modName = $params[0];
+            // if the second part is not admin, it's user by default
+            if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
+            else $modType = 'user';
+            // Check if this is an alias for some other module
+            $modName = xarRequest__resolveModuleAlias($modName);
+            // Call the appropriate decode_shorturl function
+            if (xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
+                $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                if (is_array($res)) {
+                    list($funcName, $args) = $res;
+                    if (!empty($funcName)) { // bingo
+                        // Forward decoded args to xarRequestGetVar
+                        if (isset($args) && is_array($args)) {
+                            $args['module'] = $modName;
+                            $args['type'] = $modType;
+                            $args['func'] = $funcName;
+                            xarRequest__setShortURLVars($args);
+                        } else {
+                            xarRequest__setShortURLVars(array('module' => $modName,
+                            'type' => $modType,
+                            'func' => $funcName));
                         }
                     }
                 }
-                if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                    // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-                    // this exception means that the module does not support short urls
-                    // for this $modType.
-                    // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-                    // this exception means that the module does not have the $modType API.
-                    if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
-                        xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
-                        // In all other cases we just log the exception since we must always
-                        // return a valid request info.
-                        xarLogException(XARDBG_LEVEL_ERROR);
-                    }
-                    xarExceptionFree();
+            }
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
+                // this exception means that the module does not support short urls
+                // for this $modType.
+                // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
+                // this exception means that the module does not have the $modType API.
+                if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' && xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
+                    // In all other cases we just log the exception since we must always
+                    // return a valid request info.
+                    xarLogException(XARDBG_LEVEL_ERROR);
                 }
+                xarExceptionFree();
             }
         }
     }
 
-    // If $modName is still empty we use the default module/type/func to be loaded in that such case
-    if (empty($modName)) {
-        // Get Default Module -- Defined in Base Config or from config.site.xml
-        // TODO -- Allow user select start page
-        if (function_exists('xarConfigGetVar')){
-            $modName = xarConfigGetVar('Site.Core.DefaultModuleName');
-        } else {
-            if (empty($modName)){
-                $modName = $xarRequest_defaultModule['module'];
-            }
-        }
-    // Get Default Module Type -- Defined in Base Config or from config.site.xml
-        if (function_exists('xarConfigGetVar')){
-            $modType = xarConfigGetVar('Site.Core.DefaultModuleType');
-            if (!isset($modType)){
-            if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
-            }
-        } else {
-            if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
-        }
-        // Get Default Module Type -- Defined in Base Config or from config.site.xml
-        if (function_exists('xarConfigGetVar')){
-            $funcName = xarConfigGetVar('Site.Core.DefaultModuleFunction');
-            if (empty($funcName)){
-            if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
-            }
-        } else {
-            if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
-        }
+    if (!empty($modName)) {
+        // Check if this is an alias for some other module
+        $modName = xarRequest__resolveModuleAlias($modName);
+        // Cache values into info static var
+        $requestInfo = array($modName, $modType, $funcName);
+    } else {
+        // If $modName is still empty we use the default module/type/func to be loaded in that such case
+        $requestInfo = $GLOBALS['xarRequest_defaultRequestInfo'];
     }
 
-    // Cache values into info static var
-    $requestInfo = array($modName, $modType, $funcName);
     return $requestInfo;
 }
 
@@ -393,7 +388,7 @@ function xarRequestGetInfo()
  */
 function xarRequestIsLocalReferer()
 {
-    $server = xarServerGetVar('HTTP_HOST');
+    $server = xarServerGetHost();
     $referer = xarServerGetVar('HTTP_REFERER');
 
     if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
@@ -407,9 +402,28 @@ function xarRequestIsLocalReferer()
 
 function xarRequest__setShortURLVars($vars)
 {
-    global $xarRequest_shortURLVariables;
+    $GLOBALS['xarRequest_shortURLVariables'] = $vars;
+}
 
-    $xarRequest_shortURLVariables = $vars;
+/**
+ * Checks if a module name is an alias for some other module
+ *
+ * @access private
+ * @param aliasModName name of the module
+ * @returns mixed
+ * @return string containing the module name
+ * @raise BAD_PARAM
+ */
+function xarRequest__resolveModuleAlias($aliasModName)
+{
+    $aliasesMap = xarConfigGetVar('System.ModuleAliases');
+    //$aliasesMap = $GLOBALS['xarRequest_aliasesMap'];
+
+    if (!empty($aliasesMap[$aliasModName])) {
+        return $aliasesMap[$aliasModName];
+    } else {
+        return $aliasModName;
+    }
 }
 
 // RESPONSE FUNCTIONS
@@ -428,15 +442,14 @@ function xarResponseRedirect($redirectURL)
     // First checks if there's a pending exception, if so does not redirect browser
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;
 
-    if (isset($xarResponse_redirectCalled) && $xarResponse_redirectCalled == true) {
+    if ($xarResponse_redirectCalled == true) {
         if (headers_sent() == true) return false;
     }
     $xarResponse_redirectCalled = true;
 
-    if (preg_match('!^http!', $redirectURL)) {
+    if (substr($redirectURL, 0, 4) == 'http') {
         // Absolute URL - simple redirect
         $header = "Location: $redirectURL";
-
     } else {
         // Removing leading slashes from redirect url
         $redirectURL = preg_replace('!^/*!', '', $redirectURL);
@@ -446,9 +459,7 @@ function xarResponseRedirect($redirectURL)
 
         $header = "Location: $baseurl$redirectURL";
     }
-    if (!function_exists('xarSession_close')){
-        session_write_close();
-    } else {
+    if ($GLOBALS['xarResponse_closeSession']) {
         xarSession_close();
     }
 
@@ -458,7 +469,7 @@ function xarResponseRedirect($redirectURL)
 }
 
 /**
- * Check if a redirection header was yet sent
+ * Checks if a redirection header has already been sent.
  *
  * @access public
  * @author Marco Canini
@@ -466,11 +477,7 @@ function xarResponseRedirect($redirectURL)
  */
 function xarResponseIsRedirected()
 {
-    global $xarResponse_redirectCalled;
-    if (isset($xarResponse_redirectCalled) && $xarResponse_redirectCalled == true) {
-        return true;
-    }
-    return false;
+    return $GLOBALS['xarResponse_redirectCalled'];
 }
 
 ?>

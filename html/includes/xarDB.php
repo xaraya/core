@@ -1,21 +1,26 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: ADODB Database Abstraction Layer API
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * ADODB Database Abstraction Layer API
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage DB
+ * @link xarDB.php
+ * @author Marco Canini <m.canini@libero.it>
+ */
 
 /**
- * Initialise the database connection.
- * <br>
+ * Initializes the database connection.
+ *
  * This function loads up ADODB  and starts the database
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
- * <br>
+ *
+ * @author Marco Canini <m.canini@libero.it>
  * @access private
  * @param args[databaseType] database type to use
  * @param args[databaseHost] database hostname
@@ -24,13 +29,11 @@
  * @param args[password] database password
  * @param args[systemTablePrefix] system table prefix
  * @param args[siteTablePrefix] site table prefix
- * @returns bool
- * @return true on success, false on failure
+ * @return bool true
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarDB_systemArgs;
-    $xarDB_systemArgs = $args;
+    $GLOBALS['xarDB_systemArgs'] = $args;
 
     // Get database parameters
     $dbtype = $args['databaseType'];
@@ -40,42 +43,30 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $dbpass = $args['password'];
 
     // ADODB configuration
-    //if (!defined('ADODB_DIR')) {
-        define('ADODB_DIR', 'xaradodb');
-    //}
+    define('ADODB_DIR', 'xaradodb');
 
     include_once 'xaradodb/adodb.inc.php';
 
 	// ADODB-to-Xaraya error-to-exception bridge
 	define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
 
-    // Database connection is a global (for now)
-    global $dbconn;
-
     // Start connection
     $dbconn = ADONewConnection($dbtype);
-    $dbh = $dbconn->Connect($dbhost, $dbuname, $dbpass, $dbname);
-    if (!$dbh) {
+    if (!$dbconn->Connect($dbhost, $dbuname, $dbpass, $dbname)) {
         xarCore_die("xarDB_init: Failed to connect to $dbtype://$dbuname@$dbhost/$dbname, error message: " . $dbconn->ErrorMsg());
     }
-    global $ADODB_FETCH_MODE;
-    $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+    $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
 
     // force oracle to a consistent date format for comparison methods later on
     if (strcmp($dbtype, 'oci8') == 0) {
         $dbconn->Execute("alter session set NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 
-    // Initialise xartables
-    // FIXME: <marco> Can we get rid of globale $prefix? $xartable should become $xarDB_tables
-    global $xartable, $prefix;
-    $prefix = $args['systemTablePrefix'];
-    $xartable = array();
+    $GLOBALS['xarDB_connections'] = array($dbconn);
+    $GLOBALS['xarDB_tables'] = array();
 
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
-    // TODO: <marco> for now i'm leaving all the tables to use the system prefix
-    //       which of them could be site prefixed?
 
     // BlockLayout Template Engine Tables
     $xartable['template_tags']         = $systemPrefix . '_template_tags';
@@ -84,22 +75,19 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
- * Get a list of database connections
+ * Gets an array of database connections
  *
+ * @author Jim McDonald
  * @access public
- * @param none
  * @return array array of database connections
- * @returns
  */
 function xarDBGetConn()
 {
-    global $dbconn;
-
-    return array($dbconn);
+    return $GLOBALS['xarDB_connections'];
 }
 
 /**
- * Get a list of database tables
+ * Gets an array of database table names
  *
  * @access public
  * @param none
@@ -107,9 +95,7 @@ function xarDBGetConn()
  */
 function xarDBGetTables()
 {
-    global $xartable;
-
-    return $xartable;
+    return $GLOBALS['xarDB_tables'];
 }
 
 /**
@@ -135,9 +121,7 @@ function xarDBLoadTableMaintenanceAPI()
  */
 function xarDBGetHost()
 {
-    global $xarDB_systemArgs;
-
-    return $xarDB_systemArgs['databaseHost'];
+    return $GLOBALS['xarDB_systemArgs']['databaseHost'];
 }
 
 /**
@@ -148,9 +132,7 @@ function xarDBGetHost()
  */
 function xarDBGetType()
 {
-    global $xarDB_systemArgs;
-
-    return $xarDB_systemArgs['databaseType'];
+    return $GLOBALS['xarDB_systemArgs']['databaseType'];
 }
 
 /**
@@ -161,9 +143,7 @@ function xarDBGetType()
  */
 function xarDBGetName()
 {
-    global $xarDB_systemArgs;
-
-    return $xarDB_systemArgs['databaseName'];
+    return $GLOBALS['xarDB_systemArgs']['databaseName'];
 }
 
 /**
@@ -174,9 +154,7 @@ function xarDBGetName()
  */
 function xarDBGetSystemTablePrefix()
 {
-    global $xarDB_systemArgs;
-
-    return $xarDB_systemArgs['systemTablePrefix'];
+    return $GLOBALS['xarDB_systemArgs']['systemTablePrefix'];
 }
 
 /**
@@ -187,9 +165,7 @@ function xarDBGetSystemTablePrefix()
  */
 function xarDBGetSiteTablePrefix()
 {
-    global $xarDB_systemArgs;
-
-    return $xarDB_systemArgs['siteTablePrefix'];
+    return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
 }
 
 // PROTECTED FUNCTIONS
@@ -202,11 +178,9 @@ function xarDBGetSiteTablePrefix()
  */
 function xarDB_importTables($tables)
 {
-    global $xartable;
-
+    global $xarDB_tables;
     assert('is_array($tables)');
-
-    $xartable = array_merge($xartable, $tables);
+    $xarDB_tables = array_merge($xarDB_tables, $tables);
 }
 
 // PRIVATE FUNCTIONS
@@ -214,11 +188,10 @@ function xarDB_importTables($tables)
 function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1=false, $param2=false)
 {
     if ($funcName == 'EXECUTE') {
-        $msg = xarML('The following query failed: "#(1)", cause is: #(2)', $param1, $errMsg);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($msg));
+        $msg = xarMLByKey('DATABASE_ERROR_QUERY', $param1, $errMsg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException($msg));
     } else {
-        $msg = xarML('Unknown database error, cause is: #(1)', $errMsg);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
     }
 }
 ?>
