@@ -25,8 +25,8 @@ function privileges_xartables()
     $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
     $roles = xarDBGetSiteTablePrefix() . '_roles';
     $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
-    $acl = xarDBGetSiteTablePrefix() . '_acl';
-    $masks = xarDBGetSiteTablePrefix() . '_masks';
+    $acl = xarDBGetSiteTablePrefix() . '_security_acl';
+    $masks = xarDBGetSiteTablePrefix() . '_security_masks';
     $instances = xarDBGetSiteTablePrefix() . '_instances';
 
     // Set the table name
@@ -34,8 +34,8 @@ function privileges_xartables()
     $xartable['privmembers'] = $privmembers;
     $xartable['roles'] = $roles;
     $xartable['rolemembers'] = $rolemembers;
-    $xartable['acl'] = $acl;
-    $xartable['masks'] = $masks;
+    $xartable['security_acl'] = $acl;
+    $xartable['security_masks'] = $masks;
     $xartable['instances'] = $instances;
 
 	// Return the table information

@@ -41,14 +41,14 @@ define('ACCESS_ADMIN', 800);
 
     include_once 'modules/privileges/xarprivileges.php';
     include_once 'modules/roles/xarroles.php';
-    $tables = array('masks' => 'xar' . '_masks',
-                    'acl' => 'xar'. '_acl',
+    $tables = array('security_masks' => 'xar' . '_security_masks',
+                    'security_acl' => 'xar'. '_security_acl',
                     'privileges' => 'xar'. '_privileges',
                     'privmembers' => 'xar'. '_privmembers',
-                    'realms' => 'xar'. '_realms',
+                    'security_realms' => 'xar'. '_security_realms',
 //                    'roles' => 'xar'. '_roles',
 //                    'rolemembers' => 'xar'. '_rolemembers',
-                    'instances' => 'xar'. '_instances');
+                    'security_instances' => 'xar'. '_security_instances');
 
     xarDB_importTables($tables);
 
@@ -61,13 +61,6 @@ define('ACCESS_ADMIN', 800);
 
 function xarSecurity_init()
 {
-
-
-//    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    // Add tables
-//    $tables = array('masks' => $systemPrefix . '_masks');
-
     return true;
 }
 
@@ -620,7 +613,7 @@ function xarSec__getAuthInfo($userId)
     $userpermtable = $xartable['user_perms'];
     $groupmembershiptable = $xartable['group_membership'];
     $grouppermtable = $xartable['group_perms'];
-    $realmtable = $xartable['realms'];
+    $realmtable = $xartable['security_realms'];
 
     // Empty arrays
     $userPerms = array();

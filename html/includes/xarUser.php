@@ -54,7 +54,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     $tables = array('roles'            => $systemPrefix . '_roles',
                     'user_data'        => $systemPrefix . '_user_data',
                     'user_property'    => $systemPrefix . '_user_property',
-                    'realms'           => $systemPrefix . '_realms',
+                    'realms'           => $systemPrefix . '_security_realms',
                     'rolemembers' => $systemPrefix . '_rolemembers');
 
     xarDB_importTables($tables);

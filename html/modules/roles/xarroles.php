@@ -779,7 +779,7 @@ function drawindent() {
 		$this->rolestable = $xartable['roles'];
 		$this->rolememberstable = $xartable['rolemembers'];
 		$this->privilegestable = $xartable['privileges'];
-		$this->acltable = $xartable['acl'];
+		$this->acltable = $xartable['security_acl'];
 
         $this->uid          = $uid;
         $this->name         = $name;
@@ -1088,8 +1088,8 @@ function drawindent() {
 					xar_level,
 					xar_description
 					FROM $this->privilegestable INNER JOIN $this->acltable
-					ON xar_privileges.xar_pid = xar_acl.xar_permid
-					WHERE xar_acl.xar_partid = $this->uid";
+					ON xar_privileges.xar_pid = xar_security_acl.xar_permid
+					WHERE xar_security_acl.xar_partid = $this->uid";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;

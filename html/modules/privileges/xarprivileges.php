@@ -53,11 +53,11 @@ class xarMasks
 		$xartable = xarDBGetTables();
 		$this->privilegestable = $xartable['privileges'];
 		$this->privmemberstable = $xartable['privmembers'];
-		$this->maskstable = $xartable['masks'];
+		$this->maskstable = $xartable['security_masks'];
 		$this->modulestable = $xartable['modules'];
-		$this->realmstable = $xartable['realms'];
-		$this->acltable = $xartable['acl'];
-		$this->instancestable = $xartable['instances'];
+		$this->realmstable = $xartable['security_realms'];
+		$this->acltable = $xartable['security_acl'];
+		$this->instancestable = $xartable['security_instances'];
 
 // hack this for display purposes
 // probably should be defined elsewhere
@@ -449,7 +449,7 @@ class xarMasks
 	{
 //Set up the query and get the data from the xarmasks table
 		$query = "SELECT * FROM $this->maskstable
-					WHERE xar_masks.xar_name= '$name'";
+					WHERE xar_name= '$name'";
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 		if ($result->EOF) return false;
@@ -754,8 +754,8 @@ class xarPrivileges extends xarMasks
 */
     function getrealms() {
 	if ((!isset($allrealms)) || count($allrealms)==0) {
-			$query = "SELECT xar_realms.xar_rid,
-						xar_realms.xar_name
+			$query = "SELECT xar_security_realms.xar_rid,
+						xar_security_realms.xar_name
 						FROM $this->realmstable";
 
 			$result = $this->dbconn->Execute($query);
@@ -856,9 +856,9 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
 */
     function getcomponents($module) {
-		$query = "SELECT DISTINCT xar_instances.xar_component
+		$query = "SELECT DISTINCT xar_component
 					FROM $this->instancestable
-					WHERE xar_instances.xar_module= '$module'
+					WHERE xar_module= '$module'
 					ORDER BY xar_component";
 
 		$result = $this->dbconn->Execute($query);
@@ -1474,7 +1474,7 @@ function drawindent() {
 		$this->privilegestable = $xartable['privileges'];
 		$this->privmemberstable = $xartable['privmembers'];
 		$this->rolestable = $xartable['roles'];
-		$this->acltable = $xartable['acl'];
+		$this->acltable = $xartable['security_acl'];
 
         $this->sid          = $sid;
         $this->name         = $name;
@@ -1657,7 +1657,7 @@ class xarPrivilege extends xarMask
 		$this->privilegestable = $xartable['privileges'];
 		$this->privmemberstable = $xartable['privmembers'];
 		$this->rolestable = $xartable['roles'];
-		$this->acltable = $xartable['acl'];
+		$this->acltable = $xartable['security_acl'];
 
         $this->pid          = $pid;
         $this->name         = $name;
@@ -1906,8 +1906,8 @@ class xarPrivilege extends xarMask
 					xar_roles.xar_url,
 					xar_roles.xar_auth_module
 					FROM $this->rolestable INNER JOIN $this->acltable
-					ON xar_roles.xar_uid = xar_acl.xar_partid
-					WHERE xar_acl.xar_permid = $this->pid";
+					ON xar_roles.xar_uid = xar_security_acl.xar_partid
+					WHERE xar_security_acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;

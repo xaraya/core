@@ -18,8 +18,8 @@ function roles_xartables()
     $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
     $privileges = xarDBGetSiteTablePrefix() . '_privileges';
     $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
-    $acl = xarDBGetSiteTablePrefix() . '_acl';
-    $masks = xarDBGetSiteTablePrefix() . '_masks';
+    $acl = xarDBGetSiteTablePrefix() . '_security_acl';
+    $masks = xarDBGetSiteTablePrefix() . '_security_masks';
     $instances = xarDBGetSiteTablePrefix() . '_instances';
     $xartable['users_column'] = array(
         'uid'            => $roles . '.xar_uid',
@@ -71,8 +71,8 @@ function roles_xartables()
     $xartable['rolemembers'] = $rolemembers;
     $xartable['privileges'] = $privileges;
     $xartable['privmembers'] = $privmembers;
-    $xartable['acl'] = $acl;
-    $xartable['masks'] = $masks;
+    $xartable['security_acl'] = $acl;
+    $xartable['security_masks'] = $masks;
     $xartable['instances'] = $instances;
     $xartable['user_status'] = $user_status;
 

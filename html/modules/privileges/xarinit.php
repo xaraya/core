@@ -38,10 +38,10 @@ function privileges_init()
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['privileges'] = $sitePrefix . '_privileges';
     $tables['privmembers'] = $sitePrefix . '_privmembers';
-    $tables['acl'] = $sitePrefix . '_acl';
-    $tables['masks'] = $sitePrefix . '_masks';
-    $tables['instances'] = $sitePrefix . '_instances';
-    $tables['realms']      = $sitePrefix . '_realms';
+    $tables['security_acl'] = $sitePrefix . '_security_acl';
+    $tables['security_masks'] = $sitePrefix . '_security_masks';
+    $tables['security_instances'] = $sitePrefix . '_security_instances';
+    $tables['security_realms']      = $sitePrefix . '_security_realms';
 
     // Create tables
     /*********************************************************************
@@ -49,21 +49,21 @@ function privileges_init()
      *
      * prefix_privileges       - holds privileges info
      * prefix_privmembers 	   - holds info on privileges group membership
-     * prefix_acl		 	   - holds info on privileges assignments to roles
-     * prefix_masks		 	   - holds info on masks for security checks
-     * prefix_instances 	   - holds module instance definitions
-     * prefix_realms	 	   - holds realsm info
+     * prefix_security_acl	   - holds info on privileges assignments to roles
+     * prefix_security_masks   - holds info on masks for security checks
+     * prefix_security_instances 	   - holds module instance definitions
+     * prefix_security_realms  - holds realsm info
      ********************************************************************/
 
-    // prefix_realms
+    // prefix_security_realms
     /*********************************************************************
-    * CREATE TABLE xar_realms (
+    * CREATE TABLE xar_security_realms (
     *  xar_rid int(11) NOT NULL auto_increment,
     *  xar_name varchar(255) NOT NULL default '',
     *  PRIMARY KEY  (xar_rid)
     * )
     *********************************************************************/
-    $query = xarDBCreateTable($tables['realms'],
+    $query = xarDBCreateTable($tables['security_realms'],
              array('xar_rid'  => array('type'        => 'integer',
                                       'null'        => false,
                                       'default'     => '0',
@@ -151,16 +151,16 @@ function privileges_init()
 
     xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
 
-    // prefix_acl
+    // prefix_security_acl
     /*********************************************************************
-    * CREATE TABLE xar_acl (
+    * CREATE TABLE xar_security_acl (
     *   xar_partmember int(11) NOT NULL default '0',
     *   xar_permmember int(11) NOT NULL default '0',
     *   KEY xar_pid (xar_pid,xar_parentid)
     * )
     *********************************************************************/
 
-    $query = xarDBCreateTable($tables['acl'],
+    $query = xarDBCreateTable($tables['security_acl'],
              array('xar_partid'       => array('type'  => 'integer',
                                            'null'        => false,
                                            'default'     => '0',
@@ -171,11 +171,11 @@ function privileges_init()
                                            'key'         => true)));
     if (!$dbconn->Execute($query)) return;
 
-    xarDB_importTables(array('acl' => xarDBGetSiteTablePrefix() . '_acl'));
+    xarDB_importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
 
-    // prefix_masks
+    // prefix_security_masks
     /*********************************************************************
-    * CREATE TABLE xar_masks (
+    * CREATE TABLE xar_security_masks (
     *   xar_sid int(11) NOT NULL default '0',
     *   xar_name varchar(100) NOT NULL default '',
     *   xar_realm varchar(100) NOT NULL default '',
@@ -195,7 +195,7 @@ function privileges_init()
     * )
     *********************************************************************/
 
-    $query = xarDBCreateTable($tables['masks'],
+    $query = xarDBCreateTable($tables['security_masks'],
              array('xar_sid'  => array('type'       => 'integer',
                                       'null'        => false,
                                       'default'     => '0',
@@ -231,11 +231,11 @@ function privileges_init()
 
     if (!$dbconn->Execute($query)) return;
 
-    xarDB_importTables(array('masks' => xarDBGetSiteTablePrefix() . '_masks'));
+    xarDB_importTables(array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks'));
 
-    // prefix_instances
+    // prefix_security_instances
     /*********************************************************************
-    * CREATE TABLE xar_instances (
+    * CREATE TABLE xar_security_instances (
     *   xar_iid int(11) NOT NULL default '0',
     *   xar_name varchar(100) NOT NULL default '',
     *   xar_module varchar(100) NOT NULL default '',
@@ -252,7 +252,7 @@ function privileges_init()
     * )
     *********************************************************************/
 
-    $query = xarDBCreateTable($tables['instances'],
+    $query = xarDBCreateTable($tables['security_instances'],
              array('xar_iid'  => array('type'       => 'integer',
                                       'null'        => false,
                                       'default'     => '0',
@@ -299,7 +299,7 @@ function privileges_init()
 
     if (!$dbconn->Execute($query)) return;
 
-    xarDB_importTables(array('instances' => xarDBGetSiteTablePrefix() . '_instances'));
+    xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
     // Initialisation successful
     return true;
@@ -344,15 +344,19 @@ function privileges_delete()
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 
-    $query = xarDBDropTable($tables['acl']);
+    $query = xarDBDropTable($tables['security_realms']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 
-    $query = xarDBDropTable($tables['masks']);
+    $query = xarDBDropTable($tables['security_acl']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 
-    $query = xarDBDropTable($tables['instances']);
+    $query = xarDBDropTable($tables['security_masks']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
+
+    $query = xarDBDropTable($tables['security_instances']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 
