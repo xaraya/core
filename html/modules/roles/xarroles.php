@@ -748,7 +748,7 @@ class xarRole
     /**
      * Gets all the privileges in the database.
      *
-     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege arrays like ('pid' => x, 'name' => y)
      */
     function getAllPrivileges()
@@ -780,7 +780,7 @@ class xarRole
     /**
      * Gets all the privileges assigned directly to this role.
      *
-     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege objects
      */
     function getAssignedPrivileges()
@@ -817,7 +817,7 @@ class xarRole
     /**
      * Gets all the privileges inherited by this role.
      *
-     * @author unknown (probably Marc Lutolf <marcinmilan@xaraya.com>)
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege objects
      */
     function getInheritedPrivileges()
@@ -831,6 +831,23 @@ class xarRole
             }
         }
         return $inherited;
+    }
+
+    /**
+     * Checks whether this role has a specific privilege assigned or inherited.
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @return boolean
+     */
+    function hasPrivilege($privname)
+    {
+        $privs = getAssignedPrivileges();
+        foreach ($privs as $privilege)
+            if ($privilege->getName() == $privname) return true;
+        $privs = getInheritedPrivileges();
+        foreach ($privs as $privilege)
+            if ($privilege->getName() == $privname) return true;
+        return false;
     }
 
     /**
