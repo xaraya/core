@@ -480,7 +480,7 @@ function installer_admin_create_administrator()
                              'name'     => 'reminder',
                              'content'  => $msg,
                              'type'     => $htmlBlockTypeId,
-                             'group'    => array(array('gid'      => $leftBlockGroup,
+                             'groups'    => array(array('gid'      => $leftBlockGroup,
                                                        'template' => '')),
                              'template' => '',
                              'state'    => 2))) {
@@ -766,7 +766,7 @@ function installer_admin_confirm_configuration()
 
         $menuBlockTypeId = $menuBlockType['tid'];
 
-        xarModAPIFunc('blocks', 'admin', 'create_instance',
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                       array('title' => 'Main Menu',
                             'name'  => 'mainmenu',
                             'type'  => $menuBlockTypeId,
@@ -774,7 +774,9 @@ function installer_admin_confirm_configuration()
                                                     'template' => '',)),
                             'template' => '',
                             'content' => serialize($content),
-                            'state' => 2));
+                            'state' => 2))) {
+            return;
+        }
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
     }
@@ -846,7 +848,7 @@ function installer_admin_cleanup() {
                        array('title'    => 'Login',
                              'name'     => 'login',
                              'type'     => $loginBlockTypeId,
-                             'group'    => array(array('gid'      => $rightBlockGroup,
+                             'groups'    => array(array('gid'      => $rightBlockGroup,
                                                        'template' => '')),
                              'template' => '',
                              'state'    => 2))) {
@@ -885,7 +887,7 @@ function installer_admin_cleanup() {
                        array('title'    => 'Meta',
                              'name'     => 'meta',
                              'type'     => $metaBlockTypeId,
-                             'group'    => array(array('gid'      => $headerBlockGroup,
+                             'groups'    => array(array('gid'      => $headerBlockGroup,
                                                        'template' => '')),
                              'template' => '',
                              'state'    => 2))) {
@@ -924,7 +926,7 @@ function installer_admin_cleanup() {
                        array('title'    => 'Syndicate',
                              'name'     => 'syndicate',
                              'type'     => $syndicateBlockTypeId,
-                             'group'    => array(array('gid'      => $syndicateBlockGroup,
+                             'groups'    => array(array('gid'      => $syndicateBlockGroup,
                                                        'template' => '')),
                              'template' => '',
                              'state'    => 2))) {
