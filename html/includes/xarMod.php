@@ -239,7 +239,7 @@ function xarModDelAllVars($modName)
     // MySql: multiple table delete only from 4.0 up
     // Select the id's which need to be removed
     $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
-    $result =& $dbconn->Execute($sql,array($modBaseInfo['systemid']));
+    $result =& $dbconn->Execute($sql, array($modBaseInfo['systemid']));
     if(!$result) return;
 
     // Seems that at least mysql and pgsql support the scalar IN operator
@@ -250,18 +250,18 @@ function xarModDelAllVars($modName)
         $idlist[] = (int) $id;
     }
 
-    if(count($idlist) != 0 ) {
-            $idlist = join(', ',$idlist);
+    if (count($idlist) != 0) {
+            $idlist = join(', ', $idlist);
             // CHECKME: can bind variables be used here?
             $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$idlist.")";
             $result =& $dbconn->Execute($sql);
-            if(!$result) return;
+            if (!$result) return;
             $result->Close();
     }
 
     // Now delete the module vars
-    $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
-    $result =& $dbconn->Execute($query,array($modBaseInfo['systemid']));
+    $query = 'DELETE FROM '.$module_varstable.' WHERE xar_modid = ?';
+    $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
     if (!$result) return;
 
     return true;
@@ -405,8 +405,8 @@ function xarModGetVarId($modName, $name)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
-    if (xarCore_IsCached('Mod.GetVarID', $modName . $name)) {
-        return xarCore_GetCached('Mod.GetVarID', $modName . $name);
+    if (xarCore_IsCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+        return xarCore_GetCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
     }
 
     $dbconn =& xarDBGetConn();
@@ -419,25 +419,16 @@ function xarModGetVarId($modName, $name)
         $module_varstable = $tables['site/module_vars'];
     }
 
-    $query = "SELECT xar_id FROM $module_varstable
-              WHERE xar_modid = ? AND xar_name = ?";
-    $result =& $dbconn -> Execute($query,array((int)$modBaseInfo['systemid'],$name));
+    $query = 'SELECT xar_id FROM '.$module_varstable.' WHERE xar_modid = ? AND xar_name = ?';
+    $result =& $dbconn->Execute($query, array((int)$modBaseInfo['systemid'], $name));
 
     if(!$result) return;
 
-    // If there was no such thing return
-    /*
-    if ($result->EOF) {
-        $result->Close();
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', xarML('modvarid for module #(1) variable #(2)',$modName,$name));
-        return;
-       }
-    */
     list($modvarid) = $result->fields;
     $result->Close();
 
     $modvarid = (int) $modvarid;
-    xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
+    xarCore_SetCached('Mod.GetVarID', $modBaseInfo['name'] . $name, $modvarid);
 
     return $modvarid;
 }
@@ -466,7 +457,7 @@ function xarModGetIDFromName($modName, $type = 'module')
             $modBaseInfo = xarMod_getBaseInfo($modName);
             break;
         case 'theme':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            $modBaseInfo = xarMod_getBaseInfo($modName, 'theme');
             break;
     }
 
@@ -646,10 +637,10 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     }
 
     // Make sure we access the cache with lower case key
-    //Why to repeat a functionality already present in the PHP functions?
-    //Better complain with the PHP team if include_once has any problem...
-    if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
-        // Already loaded (or tried to) from somewhere else
+    // Q: Why to repeat a functionality already present in the PHP functions?
+    // A: because the function may be missing, and we only want to try once.
+    if (isset($loadedModuleCache[strtolower($modName . $modType)])) {
+        // Already loaded (or tried to) from somewhere else.
         return true;
     }
 
@@ -662,58 +653,58 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     }
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modBaseInfo['name']);
         return;
     }
 
-// TODO: use the xarVarPrepForOS()'d version for $modDir and $modType
+    // TODO: use the xarVarPrepForOS()'d version for $modDir and $modType
 
     // Load the module files
     $modDir = $modBaseInfo['directory'];
 
-    $fileName = "modules/$modDir/xar$modType.php";
+    $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
 
     if (!file_exists($fileName)){
-        $fileName = "modules/$modDir/pn$modType.php";
+        $fileName = 'modules/'.$modDir.'/pn'.$modType.'.php';
     }
 
-    // Removed the execption.  Causing some wierd results with modules without an api.
+    // Removed the exception.  Causing some wierd results with modules without an api.
     // <nuncanada> But now we wont know if something was loaded or not!
     // <nuncanada> We need some way to find it out.
     if (file_exists($fileName)) {
         xarInclude($fileName);
 
         // Make sure we access the case with lower case key
-        $loadedModuleCache[strtolower("$modName$modType")] = true;
-    } elseif (is_dir("modules/$modDir/xar$modType")) {
+        $loadedModuleCache[strtolower($modBaseInfo['name'] . $modType)] = true;
+    } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
         // this is OK too - do nothing
 
         // Make sure we access the case with lower case key
-        $loadedModuleCache[strtolower("$modName$modType")] = true;
+        $loadedModuleCache[strtolower($modBaseInfo['name'] . $modType)] = true;
     } else {
         // this is not OK - we don't have this -> set cache to false
 
         // Make sure we access the case with lower case key
-        $loadedModuleCache[strtolower("$modName$modType")] = false;
+        $loadedModuleCache[strtolower($modBaseInfo['name'] . $modType)] = false;
     }
 
     // Load the module translations files (common functions, uncut functions etc.)
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:', $modType) === NULL) return;
 
-    //Try to load PN style translations -- Bridge mechanism -- Should disappear later on
-    //How to find out what language is being used and what is the correspondent in pn style?
-    $fileName = "modules/$modDir/pnlang/eng/$modType.php";
+    // Try to load PN style translations -- Bridge mechanism -- Should disappear later on
+    // How to find out what language is being used and what is the correspondent in pn style?
+    $fileName = 'modules/'.$modDir.'/pnlang/eng/'.$modType.'.php';
     if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
 
     // FIXME: <marco> Remove it when the old language packs are gone
-    $fileName = "modules/$modDir/xarlang/eng/$modType.php";
+    $fileName = 'modules/'.$modDir.'/xarlang/eng/'.$modType.'.php';
     if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
 
     // Load database info
-    xarMod__loadDbInfo($modName, $modDir);
+    xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
 
     // Module loaded successfully, trigger the proper event
-    xarEvt_trigger('ModLoad',$modName);
+    xarEvt_trigger('ModLoad', $modBaseInfo['name']);
 
     return true;
 }
@@ -781,7 +772,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
                 $modBaseInfo = xarMod_getBaseInfo($modName);
                 break;
             case 'theme':
-                $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+                $modBaseInfo = xarMod_getBaseInfo($modName, 'theme');
                 break;
         }
         if (!isset($modBaseInfo)) return; // throw back
@@ -792,7 +783,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            xarMod__loadDbInfo($modName, $modDir);
+            xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
             return true;
             break;
         case 'theme':
@@ -875,7 +866,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:'.$modType, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
@@ -889,7 +880,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         $templateName = $tplData['_bl_template'];
     }
 
-    $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+    $tplOutput = xarTplModule($modBaseInfo['name'], $modType, $funcName, $tplData, $templateName);
 
     xarLogMessage("xarModFunc: end $modName:$modType:$funcName");
 
@@ -934,12 +925,13 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
     // Build function name and call function
     $funcName = strtolower($funcName);
+    $modName = strtolower($modName); // Bug 2870
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     $found = true;
     $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
-        xarModAPILoad($modName,$modType);
+        xarModAPILoad($modName, $modType);
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
             // good thing this information is cached :)
@@ -965,7 +957,14 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
                 }
             }
         }
+
+        if ($found) {
+            // Load the translations file.
+            // Load only if we have loaded the API function for the first time here.
+            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
+        }
     }
+
     if (!$found) {
         if ($throwException) {
             if (!$isLoaded || empty($msg)) {
@@ -976,13 +975,10 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
             // here, the error is never shown !!!! (xmlrpc for example)
             // TODO: the isloaded stuff -should- fix the problem above
             //       someone needs to double check this to be sure
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                            new SystemException($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         }
         return;
     }
-    // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
 
     $funcResult = $modAPIFunc($args);
 
@@ -1320,32 +1316,20 @@ function xarModIsAvailable($modName, $type = 'module')
     if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
         $modBaseInfo = xarMod_getBaseInfo($modName, $type);
 
-/*        // Catch the MODULE_NOT_EXIST exception first,
-        // because that is what we're testing
-        // here, we don't want to except on that.
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            if (xarCurrentErrorID() != 'MODULE_NOT_EXIST') {
-                // Other exceptions are still thrown however
-                return;
-            } else {
-                xarErrorFree();
-                return false;
-            }
-        }
-*/        // Also return null if the result wasn't set
+        // Also return null if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
 
         // We should be ok now, return the state of the module
         $modState = $modBaseInfo['state'];
-        $modAvailableCache[$modName] = false;
+        $modAvailableCache[$modBaseInfo['name']] = false;
 
         if ($modState == XARMOD_STATE_ACTIVE) {
-            $modAvailableCache[$modName] = true;
+            $modAvailableCache[$modBaseInfo['name']] = true;
         }
     }
     xarLogMessage("xarModIsAvailable: end $type:$modName");
 
-    return $modAvailableCache[$modName];
+    return $modAvailableCache[$modBaseInfo['name']];
 }
 
 /**
@@ -1764,7 +1748,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
  */
 function xarMod_getBaseInfo($modName, $type = 'module')
 {
-     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
+    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
 
     if (empty($modName)) {
         $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
@@ -1773,6 +1757,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 
     $type = strtolower($type);
+    $modName = strtolower($modName); // bug 2870
 
     if ($type != 'module' && $type != 'theme') {
         $msg = xarML('Wrong type, it must be \'module\' or \'theme\': #(1).', $type);
@@ -1780,6 +1765,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         return;
     }
 
+    // Fixme: this is a presentation issue.
     $upperFirstLetter = $type;
     $upperFirstLetter[0] = strtoupper($type[0]);
 
@@ -1795,12 +1781,10 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     if ($type == 'module') {
         $cacheCollection = 'Mod.BaseInfos';
         $checkNoState = 'xarMod_noCacheState';
-   } else {
+    } else {
         $cacheCollection = 'Theme.BaseInfos';
         $checkNoState = 'xarTheme_noCacheState';
     }
-//    $cacheCollection = $upperFirstLetter.'.BaseInfos';
-//    $checkNoState = 'xar'.$upperFirstLetter.'_noCacheState';
 
      if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
         return xarCore_GetCached($cacheCollection, $modName);
@@ -1818,52 +1802,38 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     //It will look in the most probable one first (SHARED)
     $modules_statesTable = $tables['system/'.$type.'_states'];
 
-    $query = "SELECT $modulestable.xar_regid,
-                                    $modulestable.xar_directory,
-                                    $modulestable.xar_mode,
-                                    $modulestable.xar_id,
-                                    $modules_statesTable.xar_state
-                         FROM $modulestable
-                   LEFT JOIN $modules_statesTable
-                              ON $modulestable.xar_regid = $modules_statesTable.xar_regid
-                       WHERE xar_name = ? OR xar_directory = ?";
-     $bindvars = array($modName, $modName);
+    $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
+        . ' mods.xar_id, modstates.xar_state, mods.xar_name'
+        . ' FROM '.$modulestable.' AS mods'
+        . ' LEFT JOIN '.$modules_statesTable.' AS modstates'
+        . ' ON modstates.xar_regid = mods.xar_regid'
+        . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
+    $bindvars = array($modName, $modName);
 
-    $result =& $dbconn->Execute($query,$bindvars);
+    $result =& $dbconn->Execute($query, $bindvars);
     if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();
-/*
-    if (strtolower($type) == 'module') {
-        $msg = xarML('Module #(1) does not exist.', $modName);
-    } else {
-        $msg = xarML('Theme #(1) does not exist.', $modName);
-    }
-     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
-*/
         return;
     }
 
     $modBaseInfo = array();
 
-     list($regid,
-            $modBaseInfo['directory'],
-            $mode,
-            $systemid,
-            $state) = $result->fields;
-     $result->Close();
+    list($regid, $directory, $mode, $systemid, $state, $name) = $result->fields;
+    $result->Close();
 
     $modBaseInfo['regid'] = (int) $regid;
     $modBaseInfo['mode'] = (int) $mode;
     $modBaseInfo['systemid'] = (int) $systemid;
     $modBaseInfo['state'] = (int) $state;
-    $modBaseInfo['name'] = $modName;
-    $modBaseInfo['displayname'] = xarModGetDisplayableName($modName, $type);
-    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($modName, $type);
+    $modBaseInfo['name'] = $name;
+    $modBaseInfo['displayname'] = xarModGetDisplayableName($name, $type);
+    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($name, $type);
+    $modBaseInfo['directory'] = $directory;
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
-    $modBaseInfo['osdirectory'] = xarVarPrepForOS($modBaseInfo['directory']);
+    $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
 
     //If we guessed wrong, then get the right state then.
     if ($modBaseInfo['mode'] != XARMOD_MODE_SHARED) {
@@ -1872,12 +1842,10 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     } else {
         if (empty($modBaseInfo['state'])) {
             $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
-        } else {
-            $modBaseInfo['state'] = (int) $modBaseInfo['state'];
         }
     }
 
-    xarCore_SetCached($cacheCollection, $modName, $modBaseInfo);
+    xarCore_SetCached($cacheCollection, $name, $modBaseInfo);
 
     return $modBaseInfo;
 }
@@ -1928,19 +1896,19 @@ function xarMod_getVarsByModule($modName, $type = 'module')
                 $module_varstable = $tables['site/module_vars'];
             }
 
-            $query = "SELECT xar_name, xar_value FROM $module_varstable
-                      WHERE xar_modid = ?";
-            $result =& $dbconn->Execute($query,array($modBaseInfo['systemid']));
+            $query = 'SELECT xar_name, xar_value FROM '.$module_varstable
+                . ' WHERE xar_modid = ?';
+            $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
             if (!$result) return;
 
             while (!$result->EOF) {
-                list($name,$value) = $result->fields;
-                xarCore_SetCached('Mod.Variables.' . $modName, $name, $value);
+                list($name, $value) = $result->fields;
+                xarCore_SetCached('Mod.Variables.' . $modBaseInfo['name'], $name, $value);
                 $result->MoveNext();
             }
             $result->Close();
 
-            xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
+            xarCore_SetCached('Mod.GetVarsByModule', $modBaseInfo['name'], true);
             break;
         case 'theme':
             // Takes the right table basing on theme mode
@@ -1950,14 +1918,14 @@ function xarMod_getVarsByModule($modName, $type = 'module')
                 $theme_varsTable = $tables['site/theme_vars'];
             }
 
-            $query = "SELECT xar_name, xar_prime, xar_value, xar_description
-                      FROM $theme_varsTable WHERE xar_themeName = ?";
-            $result =& $dbconn->Execute($query,array($themeName));
+            $query = 'SELECT xar_name, xar_prime, xar_value, xar_description'
+                . ' FROM '.$theme_varsTable.' WHERE xar_themeName = ?';
+            $result =& $dbconn->Execute($query, array($themeName));
             if (!$result) return;
 
             $themevars = array();
             while (!$result->EOF) {
-                list($name,$prime,$value,$description) = $result->fields;
+                list($name, $prime, $value, $description) = $result->fields;
                 $themevars[] = array('name' => $name, 'prime' => $prime, 'value' => $value, 'description' => $description);
                 xarCore_SetCached('Theme.Variables.' . $themeName, $name, $value);
                 $result->MoveNext();
