@@ -2,9 +2,10 @@
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
 <br />
 <div id="tabnav">
-	<div class="help" title="Send mail to groups, configure automatic notification or edit notification templates">Email notifications</div>
-	<div><a href="#xarModURL('roles', 'admin', 'createmail')#" class="active">Send mail</a></div>
-	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#">Configure</a></div>
+        <xar:set name="$tmptitle"><xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates</xar:mlstring></xar:set>
+	<div class="help" title="#$tmptitle#"><xar:mlstring>Email notifications</xar:mlstring></div>
+	<div><a href="#xarModURL('roles', 'admin', 'createmail')#" class="active"><xar:mlstring>Send mail</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'validationemail')#"><xar:mlstring>Validation</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'confirmationemail')#"><xar:mlstring>Confirmation</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'welcomeemail')#"><xar:mlstring>Welcome</xar:mlstring></a></div>

@@ -2,9 +2,10 @@
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')"></xar:if>
 <br />
 <div id="tabnav">
-	<div class="help" title="Send mail to groups, configure automatic notification or edit notification templates">Email notifications</div>
-	<div><a href="#xarModURL('roles', 'admin', 'createmail')#">Send mail</a></div>
-	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#">Configure</a></div>
+        <xar:set name="$tmptitle"><xar:mlstring></xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates">Email notifications</xar:set>
+	<div class="help" title="#$tmptitle#"><xar:mlstring>Email notifications</xar:mlstring></div>
+	<div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 	<div><xar:if condition="$mailtype eq 'validation'">
 		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
 		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'validation'))#" class="active">
