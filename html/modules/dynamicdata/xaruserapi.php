@@ -1259,27 +1259,12 @@ function dynamicdata_userapi_encode_shorturl($args)
 {
     static $objectcache = array();
 
-    if (count($objectcache) == 0) {
-        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
-        foreach ($objects as $object) {
-            $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
-        }
-    }
-
     // Get arguments from argument array
     extract($args);
 
     // check if we have something to work with
     if (!isset($func)) {
         return;
-    }
-
-    // fill in default values
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
     }
 
     // make sure you don't pass the following variables as arguments too
@@ -1291,10 +1276,28 @@ function dynamicdata_userapi_encode_shorturl($args)
     // we can't rely on xarModGetName() here !
     $module = 'dynamicdata';
 
-    // specify some short URLs relevant to your module
+    // return immediately when we're dealing with the main function (don't load unnecessary stuff)
     if ($func == 'main') {
-        $path = '/' . $module . '/';
-    } elseif ($func == 'view') {
+        return '/' . $module . '/';
+    }
+
+    // fill in default values
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    if (count($objectcache) == 0) {
+        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        foreach ($objects as $object) {
+            $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
+        }
+    }
+
+    // specify some short URLs relevant to your module
+    if ($func == 'view') {
         if (!empty($objectcache[$modid.':'.$itemtype])) {
             $name = $objectcache[$modid.':'.$itemtype];
             $alias = xarModGetAlias($name);
