@@ -184,6 +184,10 @@ function adminpanels_upgrade($oldversion)
                 xarModDelVar('adminpanels','showold');
                 xarModSetVar('adminpanels','showmarker', 0);
             }
+        case '1.2.1':
+            // Remove redundant modvars.
+            xarModDelVar('adminpanels', 'showontop');
+            xarModDelVar('adminpanels', 'menuposition');
     }
     return true;
 }
