@@ -39,7 +39,7 @@ function blocks_adminapi_groupgetinfo($args)
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Group ID $blockGroupId not found.", $query);
+        $msg = xarML("Group ID #(1) not found: #(2)", $blockGroupId, $query);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
