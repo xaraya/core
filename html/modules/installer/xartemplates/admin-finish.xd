@@ -1,6 +1,6 @@
 <div align="center">
-<span class="xar-pagetitle">Xaraya Installation</font><br />
-<span class="xar-sub">Page 6/6</font><br /><br />
+<span class="xar-pagetitle">Xaraya Installation</span><br />
+<span class="xar-sub">Page 6/6</span><br /><br />
 <span class="xar-title">Installation completed</span><br /><br />
 <table width="50%" align="center">
     <tr>
@@ -16,5 +16,5 @@
         </td>
     </tr>
 </table>
-<font class="xar-sub">Thank you for trying Xaraya.</font>
+<span class="xar-sub">Thank you for trying Xaraya.</span>
 </div>

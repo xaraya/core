@@ -1,6 +1,6 @@
 <div align="center">
-<span class="xar-pagetitle">Xaraya Installation</font><br />
-<span class="xar-sub">Page 4/6</font><br /><br />
+<span class="xar-pagetitle">Xaraya Installation</span><br />
+<span class="xar-sub">Page 4/6</span><br /><br />
 <span class="xar-title">Database Settings Collection</span><br /><br />
 <form action="install.php" method="post">
 <input type="hidden" name="install_language" value="#$language#" />
@@ -70,7 +70,7 @@
     </tr>
     <tr>
         <td align="left">
-            <font class="xar-normal">Database Type</font>
+            <span class="xar-normal">Database Type</span>
         </td>
         <td>
             <select name="install_database_type">
@@ -114,5 +114,5 @@
     </tr>
 </table>
 </form>
-<font class="xar-sub">Thank you for trying Xaraya.</font>
+<span class="xar-sub">Thank you for trying Xaraya.</span>
 </div>
