@@ -758,7 +758,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $this->stepBack($distance);
                             $this->raiseError(XAR_BL_INVALID_TAG,"Misplaced '". XAR_TOKEN_CI_DELIM .
                                               "' character. To print the literal '".XAR_TOKEN_CI_DELIM.
-                                              "', use '".XAR_TOKEN_DELIM.XAR_TOKEN_DELIM."'.", $this);
+                                              "', use '".XAR_TOKEN_CI_DELIM.XAR_TOKEN_CI_DELIM."'.", $this);
                             return;
                         }
                         $instruction .= $nextToken;
