@@ -237,7 +237,9 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
     // EHS could be (read damned PHP language :).
     if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
         xarLogMessage('The following exception is logged because the XARDBG_EXCEPTIONS flag is set.');
-        xarLogException();
+    // TODO: remove again once xarLogException works
+        xarLogMessage($value->toString());
+        //xarLogException();
     }
 }
 
