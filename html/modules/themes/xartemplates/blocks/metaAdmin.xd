@@ -13,7 +13,7 @@
             <span class="help" title="#xarML('Add the meta keywords.')#"><label for="metakeywords#$blockid#"><xar:mlstring>Meta Keywords</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <input type="text" name="metakeywords" id="metakeywords#$blockid#" value="#$metakeywords#" size="50" maxlength="100" />
+            <textarea name="metakeywords" id="metakeywords#$blockid#" style="width:300px;height:150px;">#$metakeywords#</textarea>
         </span>
         </div>
 
