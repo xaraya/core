@@ -1429,6 +1429,9 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if (strpos($ctxType, 'modules:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } elseif (strpos($ctxType, 'themes:') !== false) {
+            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
+            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
         } elseif (strpos($ctxType, 'core:') !== false) {
             $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
         } else {
@@ -1538,7 +1541,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function getContextNames($ctxType)
     {
         // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:')) $directory = '';
+        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'themes:')) $directory = '';
         else list($prefix,$directory) = explode(':',$ctxType);
         $this->contextlocation = $this->domainlocation . "/" . $directory;
         $ctxNames = array();
