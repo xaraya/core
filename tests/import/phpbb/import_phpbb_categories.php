@@ -18,19 +18,23 @@
 
     echo "<strong>$step. Importing phpBB categories into categories</strong><br/>\n";
 
-    $regid = xarModGetIDFromName('articles');
     $categories = xarModAPIFunc('categories', 'admin', 'create',
                                 array('name' => 'Forum Index',
                                       'description' => 'Forum Index',
                                       'parent_id' => 0));
-// set this as base category for forums
-    $ptid = xarModGetVar('installer','ptid');
-    if (!empty($ptid)) {
-        $settings = unserialize(xarModGetVar('articles', 'settings.'.$ptid));
-        $settings['defaultview'] = 'c' . $categories;
-        xarModSetVar('articles', 'settings.'.$ptid, serialize($settings));
-        xarModSetVar('articles', 'number_of_categories.'.$ptid, 1);
-        xarModSetVar('articles', 'mastercids.'.$ptid, $categories);
+    // set this as base category for forums
+    if ($importmodule == 'articles') {
+        $ptid = xarModGetVar('installer','ptid');
+        if (!empty($ptid)) {
+            $settings = unserialize(xarModGetVar('articles', 'settings.'.$ptid));
+            $settings['defaultview'] = 'c' . $categories;
+            xarModSetVar('articles', 'settings.'.$ptid, serialize($settings));
+            xarModSetVar('articles', 'number_of_categories.'.$ptid, 1);
+            xarModSetVar('articles', 'mastercids.'.$ptid, $categories);
+        }
+    } else {
+        xarModSetVar('xarbb', 'number_of_categories', 1);
+        xarModSetVar('xarbb', 'mastercids', $categories);
     }
 
     $query = 'SELECT cat_id, cat_title, cat_order

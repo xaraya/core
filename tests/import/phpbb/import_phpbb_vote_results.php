@@ -73,8 +73,14 @@
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
 
+if ($importmodule == 'articles') {
     // Enable polls hooks for 'forums' pubtype of articles
     xarModAPIFunc('modules','admin','enablehooks',
                   array('callerModName' => 'articles', 'callerItemType' => $ptid, 'hookModName' => 'polls'));
+} else {
+    // Enable polls hooks for all forums in xarbb
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'xarbb', 'hookModName' => 'polls'));
+}
 
 ?>

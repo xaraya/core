@@ -16,6 +16,9 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
+// avoid issues when caching is enabled - to be cleaned up
+include 'includes/xarCache.php';
+
 list($step,
      $startnum) = xarVarCleanFromInput('step',
                                        'startnum');
@@ -29,17 +32,22 @@ ob_start();
 }
 ?>
 
-<h3>Quick and dirty import of test data from an existing phpBB installation (to articles)</h3>
+<h3>Quick and dirty import of test data from an existing phpBB installation</h3>
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
         list($oldprefix,
+             $importmodule,
              $importusers) = xarVarCleanFromInput('oldprefix',
+                                                  'importmodule',
                                                   'importusers');
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
+        $importmodule = xarModGetVar('installer','importmodule');
+$oldprefix = 'phpbb';
+$importmodule = 'xarbb';
     }
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
@@ -53,9 +61,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <tr><td align="right">Import phpBB users</td><td>
     <select name="importusers">
     <option value="0">Don't import users (= test only)</option>
-    <option value="1">Create all users</option>
+    <option value="1" selected="selected">Create all users</option>
     <option value="2">Try to match usernames, and create otherwise (TODO)</option>
     <option value="3">Do something else...like using xarBB for instance :)</option>
+    </select></td></tr>
+    <tr><td align="right">Import into</td><td>
+    <select name="importmodule">
+    <option value="articles">articles</option>
+    <option value="xarbb" selected="selected">xarBB</option>
     </select></td></tr>
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
@@ -74,6 +87,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 } else {
     if ($step == 1 && !isset($startnum)) {
         xarModSetVar('installer','oldprefix',$oldprefix);
+        xarModSetVar('installer','importmodule',$importmodule);
         if (empty($importusers)) {
             $step = 2;
         }
@@ -90,8 +104,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (!xarModAPILoad('categories','admin')) {
         die("Unable to load the categories admin API");
     }
-    if (!xarModAPILoad('articles','admin')) {
+    if ($importmodule == 'articles' && !xarModAPILoad('articles','admin')) {
         die("Unable to load the articles admin API");
+    }
+    if ($importmodule == 'xarbb' && !xarModAPILoad('xarbb','admin')) {
+        die("Unable to load the xarbb admin API");
     }
     if (!xarModAPILoad('comments','user')) {
         die("Unable to load the comments user API");
@@ -116,8 +133,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                          4 => array('import_phpbb_posts.php'),
                          5 => array('import_phpbb_vote_desc.php',
                                     'import_phpbb_vote_results.php'),
-// TODO: add the rest (private messages, groups, ranks, ...) :-)
-                         6 => array('import_phpbb_cleanup.php'),
+                         6 => array('import_phpbb_privmsgs.php'),
+// TODO: add the rest (groups, ranks, ...) :-)
+                         7 => array('import_phpbb_cleanup.php'),
                         );
 
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
@@ -154,12 +172,7 @@ echo xarTpl_renderPage($return);
 // Close the session
 xarSession_close();
 
-//$dbconn->Close();
-
 flush();
-
-// Kill the debugger
-xarCore_disposeDebugger();
 
 // done
 exit;

@@ -41,9 +41,13 @@
     }
     $ptid = xarModGetVar('installer','ptid');
 
+if ($importmodule == 'articles') {
     $regid = xarModGetIDFromName('articles');
+} else {
+    $regid = xarModGetIDFromName('xarbb');
+}
     $pid2cid = array();
-// TODO: fix issue for large # of comments (64 KB limit)
+// TODO: fix issue for large # of comments (64 KB limit) - not relevant for phpBB
     $pids = xarModGetVar('installer','commentid');
     if (!empty($pids)) {
         $pid2cid = unserialize($pids);
@@ -56,15 +60,15 @@
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT p.post_id, p.topic_id, post_time, post_username, poster_id,
+    $query = 'SELECT p.post_id, p.topic_id, p.forum_id, post_time, post_username, poster_id,
               poster_ip, post_subject, post_text, bbcode_uid, topic_title
               FROM ' . $oldprefix . '_posts as p
               LEFT JOIN ' . $oldprefix . '_posts_text as pt
               ON p.post_id = pt.post_id
               LEFT JOIN ' . $oldprefix . '_topics as t
               ON t.topic_id = p.topic_id
-              ORDER BY p.post_id ASC';
-    $numitems = 1500;
+              ORDER BY p.topic_id ASC,p.post_id ASC';
+    $numitems = 2000;
     if (!isset($startnum)) {
         $startnum = 0;
     }
@@ -79,15 +83,24 @@
     }
     $num = 1;
     while (!$result->EOF) {
-        list($tid,$sid,$date,$uname,$uid,$hostname,$subject,$comment,$bbcode,$title) = $result->fields;
+        list($tid,$sid,$fid,$date,$uname,$uid,$hostname,$subject,$comment,$bbcode,$title) = $result->fields;
 
         if (isset($postid[$tid])) {
         // we've seen this one before as a topic
+            if ($num % 250 == 0) {
+                echo "Inserted post " . ($num + $startnum) . "<br/>\n";
+            }
+            flush();
             $num++;
             $result->MoveNext();
             continue;
         } elseif (!isset($topicid[$sid])) {
             echo "Unknown topic id $sid for post ($tid) $subject<br/>\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        } elseif (!isset($forumid[$fid])) {
+            echo "Unknown forum id $fid for post ($tid) $subject<br/>\n";
             $num++;
             $result->MoveNext();
             continue;
@@ -109,7 +122,11 @@
             $uid = _XAR_ID_UNREGISTERED;
         }
         $data['modid'] = $regid;
+if ($importmodule == 'articles') {
         $data['itemtype'] = $ptid; // whatever the pubtype for forums is
+} else {
+        $data['itemtype'] = $forumid[$fid];
+}
         $data['objectid'] = $topicid[$sid];
         if (!empty($pid) && !empty($pid2cid[$pid])) {
             $pid = $pid2cid[$pid];
@@ -128,7 +145,7 @@
             echo "Failed inserting post ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br/>\n";
         } elseif ($count < 200) {
             echo "Inserted post ($sid $pid) $uname - $subject<br/>\n";
-        } elseif ($num % 100 == 0) {
+        } elseif ($num % 250 == 0) {
             echo "Inserted post " . ($num + $startnum) . "<br/>\n";
             flush();
         }
@@ -140,14 +157,19 @@
     $result->Close();
 
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
-        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br/>';
+        echo '<a href="import_phpbb.php?step=' . $step . '&module=' . $importmodule . '&startnum=' . $startnum . '">Go to step ' . $step . ' - posts ' . $startnum . '+ of ' . $count . '</a><br/>';
+        flush();
+// auto-step
+        echo "<script>
+document.location = '" . xarServerGetBaseURL() . "import_phpbb.php?step=" . $step . '&module=' . $importmodule . '&startnum=' . $startnum . "'
+</script>";
     } else {
         xarModDelVar('installer','commentid');
         echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
 ?>

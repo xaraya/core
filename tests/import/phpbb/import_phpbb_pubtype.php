@@ -16,6 +16,7 @@
  * Note : this file is part of import_phpbb.php and cannot be run separately
  */
 
+if ($importmodule == 'articles') {
     echo "<strong>$step. Creating publication type for phpBB forums in articles</strong><br/>\n";
 
     $pubtypes = xarModAPIFunc('articles','user','getpubtypes');
@@ -108,5 +109,6 @@
         echo "Publication type 'forums' already exists...<br />\n";
     }
     xarModSetVar('installer','ptid',$ptid);
+}
 
 ?>

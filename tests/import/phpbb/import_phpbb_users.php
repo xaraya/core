@@ -196,6 +196,11 @@
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
         echo '<a href="import_phpbb.php?module=roles&step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - users ' . $startnum . '+ of ' . $count . '</a><br/>';
+        flush();
+// auto-step
+        echo "<script>
+document.location = '" . xarServerGetBaseURL() . 'import_phpbb.php?module=roles&step=' . $step . '&startnum=' . $startnum . "'
+</script>";
     } else {
         // Enable dynamicdata hooks for roles
         xarModAPIFunc('modules','admin','enablehooks',

@@ -23,6 +23,7 @@
         return;
     }
 
+    $forumid = unserialize(xarModGetVar('installer','forumid'));
     $topics = xarModGetVar('installer','topicid');
     if (!isset($topics)) {
         $topicid = array();
@@ -30,8 +31,6 @@
         $topicid = unserialize($topics);
     }
     $ptid = xarModGetVar('installer','ptid');
-
-    $regid = xarModGetIDFromName('articles');
 
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_vote_desc';
     $result =& $dbconn->Execute($query);
@@ -41,8 +40,10 @@
     $count = $result->fields[0];
     $result->Close();
 
-    $query = 'SELECT vdesc.vote_id,topic_id,vote_text,vote_start,SUM(vote_result)
+    $query = 'SELECT vdesc.vote_id,vdesc.topic_id,forum_id,vote_text,vote_start,SUM(vote_result)
               FROM ' . $oldprefix . '_vote_desc as vdesc
+              LEFT JOIN ' . $oldprefix . '_topics as topics
+                  ON vdesc.topic_id = topics.topic_id
               LEFT JOIN ' . $oldprefix . '_vote_results as vresults
                   ON vdesc.vote_id = vresults.vote_id
               GROUP BY vresults.vote_id
@@ -54,7 +55,7 @@
     $pollid = array();
     $num = 1;
     while (!$result->EOF) {
-        list($pid,$tid,$title,$time,$votes) = $result->fields;
+        list($pid,$tid,$fid,$title,$time,$votes) = $result->fields;
         if (empty($title)) {
             $title = xarML('[none]');
         }
@@ -63,14 +64,24 @@
             $num++;
             $result->MoveNext();
             continue;
+        } elseif (!isset($forumid[$fid])) {
+            echo "Unknown forum id $fid for vote ($pid) $title on topic $tid<br/>\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        }
+        if ($importmodule == 'articles') {
+            $itemtype = $ptid;
+        } else {
+            $itemtype = $forumid[$fid];
         }
         $newpid = xarModAPIFunc('polls','admin','create',
                                 array('title' => $title,
                                       'polltype' => 'single', // does phpBB support any other kind ?
                                       'private' => 0,
                                       'time' => $time,
-                                      'module' => 'articles',
-                                      'itemtype' => $ptid,
+                                      'module' => $importmodule, // articles or xarbb
+                                      'itemtype' => $itemtype,
                                       'itemid' => $topicid[$tid],
                                       'votes' => $votes));
         if (empty($newpid)) {

@@ -48,8 +48,40 @@
     }
     $count = $result->fields[0];
     $result->Close();
-    $regid = xarModGetIDFromName('articles');
-    $query = 'SELECT t.topic_id,t.forum_id,topic_title,topic_poster,topic_time,topic_views,topic_replies,topic_status,topic_vote,topic_type,topic_first_post_id,topic_last_post_id,topic_moved_id,post_username,post_subject,post_text,bbcode_uid
+
+    $numitems = 1000;
+    if (!isset($startnum)) {
+        $startnum = 0;
+    }
+
+if ($importmodule != 'articles') {
+// get last poster and time
+    $query = 'SELECT t.topic_id,topic_last_post_id,poster_id,post_time
+              FROM ' . $oldprefix . '_topics as t
+              LEFT JOIN ' . $oldprefix . '_posts as p
+                  ON t.topic_last_post_id=p.post_id
+              ORDER BY t.topic_id ASC';
+    if ($count > $numitems) {
+        $result =& $dbconn->SelectLimit($query, $numitems, $startnum);
+    } else {
+        $result =& $dbconn->Execute($query);
+    }
+    if (!$result) {
+        die("Oops, select topics failed : " . $dbconn->ErrorMsg());
+    }
+    $num = 1;
+    $lastuid = array();
+    $lasttime = array();
+    while (!$result->EOF) {
+        list($tid, $pid, $uid, $time) = $result->fields;
+        $lastuid[$tid] = $uid;
+        $lasttime[$tid] = $time;
+        $result->MoveNext();
+    }
+    $result->Close();
+}
+
+    $query = 'SELECT t.topic_id,t.forum_id,topic_title,topic_poster,topic_time,topic_views,topic_replies,topic_status,topic_vote,topic_type,topic_first_post_id,topic_last_post_id,topic_moved_id,post_username,post_subject,post_text,poster_ip,bbcode_uid
               FROM ' . $oldprefix . '_topics as t
               LEFT JOIN ' . $oldprefix . '_posts as p
                   ON t.topic_first_post_id=p.post_id
@@ -70,7 +102,7 @@
     }
     $num = 1;
     while (!$result->EOF) {
-        list($tid, $fid, $title, $authorid, $time, $views, $replies, $status, $vote, $type, $firstid, $lastid, $movedid, $uname, $subject, $text, $bbcode) = $result->fields;
+        list($tid, $fid, $title, $authorid, $time, $views, $replies, $status, $vote, $type, $firstid, $lastid, $movedid, $uname, $subject, $text, $ip, $bbcode) = $result->fields;
         if (empty($title)) {
             if (!empty($subject)) {
                 $title = $subject;
@@ -94,6 +126,11 @@
         if (isset($forumid[$fid])) {
             $cids[] = $forumid[$fid];
         }
+// TODO: other status values ?
+        if ($status == 1) {
+            $status = 3; // locked
+        }
+if ($importmodule == 'articles') {
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -111,6 +148,33 @@
                                       'hits' => $views
                                      )
                                );
+} else {
+        if (empty($forumid[$fid])) {
+            $forumid[$fid] = 1; // oops
+            echo "Invalid forum id $fid for topic ($tid) $title<br/>\n";
+        }
+        if (empty($lastuid[$tid])) {
+            $lastuid[$tid] = $authorid;
+        }
+        if (empty($lasttime[$tid])) {
+            $lasttime[$tid] = $time;
+        }
+        $newaid=xarModAPIFunc('xarbb',
+                               'user',
+                               'createtopic',
+                               array('fid'      => $forumid[$fid],
+                                     'ttitle'   => $title,
+                                     'tpost'    => $text,
+                                     'tposter'  => $authorid,
+                                     'ttime'    => $lasttime[$tid],
+                                     'tftime'   => $time,
+                                     'treplies' => $replies,
+                                     'treplier' => $lastuid[$tid],
+                                     'thostname' => $ip,
+                                     'tstatus'  => $status,
+                                     // this will be passed to the hitcount create hook
+                                     'hits'     => $views));
+}
         if (!isset($newaid)) {
             echo "Insert topic ($tid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
@@ -134,12 +198,21 @@
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import_phpbb.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br/>';
+        echo '<a href="import_phpbb.php?step=' . $step . '&module=' . $importmodule . '&startnum=' . $startnum . '">Go to step ' . $step . ' - topics ' . $startnum . '+ of ' . $count . '</a><br/>';
+        flush();
+// auto-step
+        echo "<script>
+document.location = '" . xarServerGetBaseURL() . 'import_phpbb.php?step=' . $step . '&module=' . $importmodule . '&startnum=' . $startnum . "'
+</script>";
     } else {
-        echo '<a href="import_phpbb.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
+        echo '<a href="import_phpbb.php?step=' . ($step+1) . '&module=' . $importmodule . '">Go to step ' . ($step+1) . '</a><br/>';
     }
+if ($importmodule == 'articles') {
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+} else {
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['xbbtopics']);
+}
     if (!empty($docounter)) {
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
     }
