@@ -1117,8 +1117,10 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplInstructionNode($instruction, &$parser)
     {
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
+            include_once(XAR_NODES_LOCATION . 'instructions/var.php');
             $node =& new xarTpl__XarVarInstructionNode($parser, 'InstructionNode');
         } else {
+            include_once(XAR_NODES_LOCATION . 'instructions/api.php');
             $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode');
         }
 
@@ -1481,57 +1483,6 @@ class xarTpl__InstructionNode extends xarTpl__Node
     function isPHPCode()
     {
         return true;
-    }
-}
-
-/**
- * xarTpl__XarVarInstructionNode
- *
- * models variables in the template, treats them as php expressions
- *
- * @package blocklayout
- * @access private
- */
-class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
-{
-    function render()
-    {
-        if (strlen($this->instruction) <= 1) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid variable reference instruction.', $this);
-            return;
-        }
-        // FIXME: Can we pre-determine here whether a variable exist?
-        $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
-        if (!isset($instruction)) return; // throw back
-
-        return $instruction;
-    }
-}
-
-/**
- * xarTpl__XarApiInstructionNode
- *
- * API function node, treated as php expression
- *
- * @package blocklayout
- * @access private
- */
-class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
-{
-    function render()
-    {
-        if (strlen($this->instruction) <= 1) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.', $this);
-        }
-        $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
-        if (!isset($instruction)) return; // throw back
-        
-        $funcName = substr($instruction, 0, strpos($instruction, '('));
-        if(!function_exists($funcName)) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.', $this);
-            return;
-        }
-        return $instruction;
     }
 }
 
