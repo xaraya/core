@@ -293,6 +293,9 @@ function xarOutputCleanCached($cacheType)
  * @param  string  $cacheType
  * @return float
  * @author jsb
+ * @todo   come up with a good way to determine which cacheKeys are the least
+ *         important and flush them to make more space.  atime would be a
+ *         possibility, but is often disabled at the filesystem
  */
 function xarCacheDirSize($dir = FALSE, $cacheType)
 {
@@ -303,6 +306,11 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
     } else {
         $size = xarCacheGetDirSize($dir, $cacheType);
         xarCore_SetCached('Output.Caching', 'size', $size);
+    }
+
+    if($size >= $xarOutput_cacheSizeLimit) {
+        xarOutputCleanCached($cacheType);
+        //xarOutputFlushCached('articles-user-view');
     }
 
     return $size;
@@ -319,34 +327,58 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
  * @author laurie@oneuponedown.com 
  * @author jsb
  * @todo   $dir changes type
- * @todo   come up with a good way to determine which cacheKeys are the least
- *         important and flush them to make more space.  atime would be a
- *         possibility, but is often disabled at the filesystem
  */
 function xarCacheGetDirSize($dir = FALSE, $cacheType)
 {
-    global $xarOutput_cacheSizeLimit;
 
+    static $blksize = 0;
+    static $bsknown = FALSE;
     $size = 0;
-    if ($dir && is_dir($dir)) {
-        if (substr($dir,-1) != "/") $dir .= "/";
-        if ($dirId = opendir($dir)) {
-            while (($item = readdir($dirId)) !== FALSE) {
-                if ($item != "." && $item != "..") {
-                    if (is_dir($dir . $item)) {
-                        $size += xarCacheGetDirSize($dir . $item, $cacheType);
-                    } else {
-                        $size += filesize($dir . $item);
-                    }
-                }
-            }
-            closedir($dirId);
+
+    if (empty($blksize)) {
+        $dirstat = stat($dir);
+        // we know the filesystem blocksize, use this to better calc the disk usage
+        if ($dirstat['blksize'] > 0) {
+            $blksize = $dirstat['blksize'] / 8;
+            $bsknown = TRUE;
+        } else { // just count of the used bytes
+            $blksize = 1;
+            $bsknown = FALSE;
         }
     }
 
-    if($size > $xarOutput_cacheSizeLimit) {
-        xarOutputCleanCached($cacheType);
-        //xarOutputFlushCached('articles-user-view');
+    if($bsknown) {
+        if ($dir && is_dir($dir)) {
+            if (substr($dir,-1) != "/") $dir .= "/";
+            if ($dirId = opendir($dir)) {
+                while (($item = readdir($dirId)) !== FALSE) {
+                    if ($item != "." && $item != "..") {
+                            $filestat = stat($dir . $item);
+                            $size += ($filestat['blocks'] * $blksize);
+                        if (is_dir($dir . $item)) {
+                            $size += xarCacheGetDirSize($dir . $item, $cacheType);
+                        }
+                    }
+                }
+                closedir($dirId);
+            }
+        }
+    } else {
+        if ($dir && is_dir($dir)) {
+            if (substr($dir,-1) != "/") $dir .= "/";
+            if ($dirId = opendir($dir)) {
+                while (($item = readdir($dirId)) !== FALSE) {
+                    if ($item != "." && $item != "..") {
+                        if (is_dir($dir . $item)) {
+                            $size += xarCacheGetDirSize($dir . $item, $cacheType);
+                        } else {
+                            $size += filesize($dir . $item);
+                        }
+                    }
+                }
+                closedir($dirId);
+            }
+        }
     }
 
     return $size;
