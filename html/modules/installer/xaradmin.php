@@ -227,7 +227,7 @@ function installer_admin_phase5()
     $dbconn = ADONewConnection($dbType);
     $dbExists = $dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
         if (!$createDB && !$dbExists) {
-            $msg = xarML('Database connection to database #(1) failed. Either the infomration supplied was erroneous, such as a bad or missing password, or there is no database available. If you cannot create a database notify your system administrator.', $dbName);
+            $msg = xarML('Database connection to database #(1) failed. Either the information supplied was erroneous, such as a bad or missing password, or there is no database available. If you cannot create a database notify your system administrator.', $dbName);
             xarCore_die($msg);
             return;
         }
