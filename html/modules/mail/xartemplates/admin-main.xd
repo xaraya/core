@@ -22,7 +22,7 @@
         </div>
         <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>From the menu, you have one choices. </xar:mlstring>
+            <xar:mlstring>From the menu, you have one choice. </xar:mlstring>
             <xar:mlstring>"Modify Configuration".  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.</xar:mlstring>
         </div>
         <br />
