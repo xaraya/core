@@ -32,6 +32,10 @@ define('XARMLS_CTXTYPE_TEMPLATE', 2);
 define('XARMLS_CTXTYPE_BLOCK', 3);
 define('XARMLS_CTXTYPE_INCLTEMPL', 4);
 define('XARMLS_CTXTYPE_BLKTEMPL',5);
+define('XARMLS_CTXTYPE_ADMIN', 6);
+define('XARMLS_CTXTYPE_ADMINAPI', 7);
+define('XARMLS_CTXTYPE_USER', 8);
+define('XARMLS_CTXTYPE_USERAPI', 9);
 
 /**
  * Initializes the Multi Language System
@@ -1430,9 +1434,20 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         case XARMLS_CTXTYPE_BLKTEMPL:
             $fileName = "templates/blocks/$ctxName";
             break;
+        case XARMLS_CTXTYPE_ADMIN:
+            $fileName = "admin/$ctxName";
+            break;
+        case XARMLS_CTXTYPE_ADMINAPI:
+            $fileName = "adminapi/$ctxName";
+            break;
+        case XARMLS_CTXTYPE_USER:
+            $fileName = "user/$ctxName";
+            break;
+        case XARMLS_CTXTYPE_USERAPI:
+            $fileName = "userapi/$ctxName";
+            break;
         }
         $fileName .= '.php';
-        if (!file_exists($this->baseDir.$fileName)) return false;
         return $this->baseDir.$fileName;
     }
 
@@ -1444,7 +1459,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
+            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
             return;
         }
         include $fileName;
@@ -1467,6 +1483,18 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             break;
         case XARMLS_CTXTYPE_BLKTEMPL:
             $dirName .= 'templates/blocks';
+            break;
+        case XARMLS_CTXTYPE_ADMIN:
+            $dirName .= 'admin';
+            break;
+        case XARMLS_CTXTYPE_ADMINAPI:
+            $dirName .= 'adminapi';
+            break;
+        case XARMLS_CTXTYPE_USER:
+            $dirName .= 'user';
+            break;
+        case XARMLS_CTXTYPE_USERAPI:
+            $dirName .= 'userapi';
             break;
         }
         $ctxNames = array();

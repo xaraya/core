@@ -661,9 +661,21 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
         $loadedModuleCache[strtolower("$modName$modType")] = false;
     }
 
+// This is now done on th assumption each function is a file
+/*
     // Load the module translations files
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
-
+    if ($GLOBALS['xarMLS_backend']->hasContext(XARMLS_CTXTYPE_FILE, $modType)) {
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
+    }
+    else {
+            if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMIN;
+            elseif ($modType == "adminapi") $type = XARMLS_CTXTYPE_ADMINAPI;
+            elseif ($modType == "user") $type = XARMLS_CTXTYPE_USER;
+            elseif ($modType == "userapi") $type = XARMLS_CTXTYPE_USERAPI;
+            else $type = 1;
+            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, $type, $modType) === NULL) return;
+    };
+*/
     //Try to load PN style translations -- Bridge mechanism -- Should disappear later on
     //How to find out what language is being used and what is the correspondent in pn style?
     $fileName = "modules/$modDir/pnlang/eng/$modType.php";
@@ -835,6 +847,12 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         return;
     }
 
+    // Load the translations file
+    if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMIN;
+    elseif ($modType == "user") $type = XARMLS_CTXTYPE_USER;
+    else $type = 1;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, $type, $funcName) === NULL) return;
+
     $tplData = $modFunc($args);
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
 
@@ -933,7 +951,11 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         }
         return;
     }
-
+    // Load the translations file
+    if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMINAPI;
+    elseif ($modType == "user") $type = XARMLS_CTXTYPE_USERAPI;
+    else $type = 1;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, $type, $funcName) === NULL) return;
     return $modAPIFunc($args);
 }
 

@@ -106,6 +106,18 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             case XARMLS_CTXTYPE_BLKTEMPL:
             $fileName = "templates/blocks/$ctxName";
             break;
+            case XARMLS_CTXTYPE_ADMIN:
+            $fileName = "admin/$ctxName";
+            break;
+            case XARMLS_CTXTYPE_ADMINAPI:
+            $fileName = "adminapi/$ctxName";
+            break;
+            case XARMLS_CTXTYPE_USER:
+            $fileName = "user/$ctxName";
+            break;
+            case XARMLS_CTXTYPE_USERAPI:
+            $fileName = "userapi/$ctxName";
+            break;
         }
         $fileName .= '.xml';
         if (!file_exists($this->baseDir.$fileName)) {
@@ -179,6 +191,18 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             break;
             case XARMLS_CTXTYPE_BLKTEMPL:
             $dirName .= 'templates/blocks';
+            break;
+            case XARMLS_CTXTYPE_ADMIN:
+            $dirName .= "admin";
+            break;
+            case XARMLS_CTXTYPE_ADMINAPI:
+            $dirName .= "adminapi";
+            break;
+            case XARMLS_CTXTYPE_USER:
+            $dirName .= "user";
+            break;
+            case XARMLS_CTXTYPE_USERAPI:
+            $dirName .= "userapi";
             break;
         }
         $ctxNames = array();
