@@ -160,10 +160,10 @@ function installer_admin_phase4()
     $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
     $data['database_type']       = xarCore_getSystemvar('DB.Type');
     // Supported  Databases:
-    $data['database_types']      = array('mysql'    => 'MySQL',
-                                         //'oci8'     => 'Oracle',
-                                         'postgres' => 'Postgres',
-                                         'sqlite'    => 'SQLite');
+    $data['database_types']      = array('mysql'    => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
+                                         'oci8'     => array('name' => 'Oracle'  , 'available' => false),
+                                         'postgres' => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
+                                         'sqlite'   => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')));
 
     $data['language'] = $install_language;
     $data['phase'] = 4;
