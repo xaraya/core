@@ -91,7 +91,8 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
-    $GLOBALS['MLS'] = new MLSEnvironment();
+    // FIXME: voll delete this line after testing
+    //$GLOBALS['MLS'] = new MLSEnvironment();
 
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml') {
