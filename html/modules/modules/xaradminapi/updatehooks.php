@@ -48,27 +48,28 @@ function modules_adminapi_updatehooks($args)
     }
 
     // Delete all entries of modules using this hook (but don't delete the '' module)
+    // signaling there *is* a hook, we want to keep that knowledge in  
     $sql = "DELETE FROM $xartable[hooks] WHERE xar_tmodule = ? AND xar_smodule <> ''";
     $result =& $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     // get the list of all (active) modules
-    $modList = xarModAPIFunc('modules', 
-                             'admin', 
-                             'GetList');
+    $modList = xarModAPIFunc('modules', 'admin', 'GetList');
     //throw back
     if (!isset($modList)) return;
 
     // see for which one(s) we need to enable this hook
     $todo = array();
     foreach ($modList as $mod) {
-        // Get selected value of hook
+        // Get selected value of hook (which is an array of all the itemtypes selected)
+        // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
         $ishooked = xarVarCleanFromInput("hooked_" . $mod['name']);
-        if (!empty($ishooked)) {
-            $todo[$mod['name']] = $ishooked;
+        // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
+        if (!empty($ishooked) && $ishooked[0] != 0) {
+            // There is something in there, either for all itemtypes or for some
+            $todo[$mod['name']] = $ishooked; 
         }
     }
-
     // nothing more to do here
     if (count($todo) < 1) {
         return true;
@@ -92,13 +93,16 @@ function modules_adminapi_updatehooks($args)
         if (empty($hooksmodname)) {
             foreach ($todo as $modname => $hookvalue) {
                 // Insert hook if required
+                xarLogMessage('Value: ' . $hookvalue[0] . ' for ' . $modname);
+                
                 foreach (array_keys($hookvalue) as $itemtype) {
-                    if ($itemtype == 0) $itemtype = '';
-
+                    // If user specified ALL specifically, set itemtype hard to empty
+                    if ($hookvalue[0] == 1 || $itemtype == 0) $itemtype = '';
+                    
                     $sql = "INSERT INTO $xartable[hooks] (
-                          xar_id, xar_object, xar_action, xar_smodule,
-                          xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
-                        VALUES (?,?,?,?,?,?,?,?,?)";
+                                xar_id, xar_object, xar_action, xar_smodule,
+                                xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
+                                VALUES (?,?,?,?,?,?,?,?,?)";
                     $bindvars = array($dbconn->GenId($xartable['hooks']),
                                       $hookobject, $hookaction, $modname,
                                       $itemtype, $hooktarea, $hooktmodule,
