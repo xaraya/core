@@ -11,6 +11,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2>
 	<div style="margin: auto;">
 	<form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return formCheck(this, fieldRequired, fieldDescription);" enctype="application/x-www-form-urlencoded" />
+             <div>
 		<div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
 		<span style="float: left; width: 20%; text-align: right;">
@@ -30,6 +31,7 @@
 		</span>
 		</div>
 		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$createlabel#" /></span>
+             </div>
 	</form>
 	</div>
 </div>

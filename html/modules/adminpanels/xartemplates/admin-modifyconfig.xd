@@ -10,6 +10,7 @@
     <h2><xar:mlstring>Configure Adminmenu</xar:mlstring></h2> 
 <!--     <br /> -->
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+        <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="adminmenu" /> 
         <table border="0" cellspacing="1" cellpadding="4" align="center" width="100%">
             <tr>
@@ -223,11 +224,13 @@
                 </td>
             </tr>
         </table>
+        </div>
     </form>
 <!-- </div> -->
 <!-- <div class="xar-mod-body"> -->
     <h2><xar:mlstring>Configure Overviews</xar:mlstring></h2> 
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+        </div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="overviews" /> 
 <!-- Disable overviews -->
         <table border="0" cellspacing="1" cellpadding="4" align="left" width="100%">
@@ -265,5 +268,6 @@
                 </td>
             </tr>
         </table>
+        </div>
     </form>
 </div>

@@ -8,6 +8,7 @@ warningmsg = '#xarML('You must select the block to move.')#';
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2>
 	<div style="margin: auto;">
 	<form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" onsubmit="saveBlockOrder(this);" enctype="application/x-www-form-urlencoded" />
+            <div>
 		<div style="clear: both; padding-top: 10px;">
 	    <input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="gid" id="gid" value="#$group['id']#" />
@@ -51,6 +52,7 @@ warningmsg = '#xarML('You must select the block to move.')#';
 		</span>
 		</div>
 		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$updatelabel#" /></span>
+              </div>
 	</form>
 	</div>
 </div>

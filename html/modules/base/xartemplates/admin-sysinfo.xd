@@ -4,6 +4,7 @@
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 
 <form action="&xar-modurl-base-admin-sysinfo;" method="post">
+<div>
 
 <xar:if condition="$what eq 1">
 <input type="radio" name="what" id="what" value="1" checked="checked" />
@@ -53,6 +54,7 @@
 <input type="radio" name="what" id="what" value="-1"  />
 </xar:if><xar:mlstring>All</xar:mlstring>
 &nbsp;&nbsp;<input type="submit" value="Refresh" />
+</div>
 </form>
 <p>#$phpinfo#</p>
 </div>
