@@ -24,17 +24,17 @@ function roles_admin_addrole()
     if (!xarSecConfirmAuthKey()) return;
 
     // get some vars for both groups and users
-    xarVarFetch('pname', 'str:1:', $pname, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('ptype', 'str:1', $ptype, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('pparentid', 'str:1:', $pparentid, NULL, XARVAR_NOT_REQUIRED);
+    xarVarFetch('pname', 'str:1:', $pname, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+    xarVarFetch('ptype', 'str:1', $ptype, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+    xarVarFetch('pparentid', 'str:1:', $pparentid, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
-        xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
     }
     // checks specific only to users
     if ($ptype == 0) {
@@ -136,5 +136,4 @@ function roles_admin_addrole()
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
 }
-
 ?>

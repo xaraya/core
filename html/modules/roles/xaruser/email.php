@@ -23,7 +23,7 @@
 function roles_user_email($args)
 {
     if (!xarVarFetch('uid','int:1:',$uid)) return;
-    if (!xarVarFetch('phase','str:1:100',$phase,'modify',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase','str:1:100',$phase,'modify',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
@@ -54,6 +54,10 @@ function roles_user_email($args)
             if (!xarVarFetch('subject','html:restricted',$subject, '',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('message','html:restricted',$message, '',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('femail','str:1:100',$femail)) return;
+            
+            $name   = xarVarPrepForDisplay($name);
+            $fname  = xarVarPrepForDisplay($fname);
+            $femail = xarVarPrepForDisplay($femail);
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
@@ -90,8 +94,6 @@ function roles_user_email($args)
 
             break;
     }
-
     return $data;
 }
-
 ?>

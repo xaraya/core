@@ -36,10 +36,10 @@ function roles_user_getvalidation()
        return true;
     }
 
-    if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('valcode','str:1:100',$valcode,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('sent','str:1:100',$sent,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('valcode','str:1:100',$valcode,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('sent','str:1:100',$sent,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Validate Your Account')));
 
@@ -164,9 +164,6 @@ function roles_user_getvalidation()
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));
 
     }
-
     return $data;
-
 }
-
 ?>

@@ -24,6 +24,8 @@ function roles_admin_updaterole()
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('ptype', 'str:1:35:', $ptype)) return;
+    $pname = xarVarPrepForDisplay($pname);
+    $ptype = xarVarPrepForDisplay($ptype);
     // checks specific only to users
     if ($ptype == 1) {
         $puname = "";
@@ -37,6 +39,13 @@ function roles_admin_updaterole()
         if (!xarVarFetch('ppass1', 'str:1:', $ppass1,'')) return;
         if (!xarVarFetch('ppass2', 'str:1:', $ppass2,'')) return;
         if (!xarVarFetch('pstate', 'str:1:', $pstate)) return;
+
+        $puname = xarVarPrepForDisplay($puname);
+        $pemail = xarVarPrepForDisplay($pemail);
+        $ppass1 = xarVarPrepForDisplay($ppass1);
+        $ppass2 = xarVarPrepForDisplay($ppass2);
+        $pstate = xarVarPrepForDisplay($pstate);
+
         // check for duplicate username
         $user = xarModAPIFunc('roles',
             'user',

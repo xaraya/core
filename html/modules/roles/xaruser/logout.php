@@ -17,7 +17,7 @@
 function roles_user_logout()
 {
     // Get input parameters
-    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     // Defaults
     if (preg_match('/roles/',$redirecturl)) {
@@ -26,14 +26,11 @@ function roles_user_logout()
 
     // Log user out
     if (!xarUserLogOut()) {
-        $msg = xarML('Problem Logging Out',
-                    'roles');
+        $msg = xarML('Problem Logging Out.  Module #(1) Function #(2)', 'roles', 'logout');
         xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
-
     xarResponseRedirect($redirecturl);
     return true;
 }
-
 ?>

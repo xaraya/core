@@ -32,9 +32,9 @@ function roles_admin_sitelock($args)
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
         $roles = unserialize($serialroles);
         $rolesCount = count($roles);
-        if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+        if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+        if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
         if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
         if(!isset($notify)) $notify = array();
         for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);

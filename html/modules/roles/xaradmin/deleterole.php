@@ -20,7 +20,7 @@ function roles_admin_deleterole()
 {
     // get parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     // Call the Roles class
     $roles = new xarRoles();
@@ -88,10 +88,8 @@ function roles_admin_deleterole()
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
-
         // redirect to the next page
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
     }
 }
-
 ?>

@@ -29,9 +29,9 @@ function roles_admin_testprivileges()
 {
     // Get Parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('pmodule', 'str:1:', $module, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pmodule', 'str:1:', $module, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;

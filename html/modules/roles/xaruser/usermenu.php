@@ -16,23 +16,16 @@ function roles_user_usermenu($args)
 
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
-
     extract($args);
-
-    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
-
+    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
-
     switch(strtolower($phase)) {
         case 'menu':
-
             $iconbasic = 'modules/roles/xarimages/home.gif';
             $iconenhanced = 'modules/roles/xarimages/home.gif';
             $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
                                                                          'iconenhanced' => $iconenhanced));
-
             break;
-
         case 'formbasic':
             $properties = null;
             $withupload = (int) FALSE;
@@ -54,7 +47,6 @@ function roles_user_usermenu($args)
                 }
             }
             unset($properties);
-
             $uname = xarUserGetVar('uname');
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
@@ -90,7 +82,6 @@ function roles_user_usermenu($args)
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
             $authid = xarSecGenAuthKey();
-
             $item['module'] = 'roles';
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (empty($hooks)) {
@@ -108,18 +99,15 @@ function roles_user_usermenu($args)
                                                                                  'uid'      => $uid,
                                                                                  'hooks'    => $hooks));
             break;
-
         case 'updatebasic':
-            if(!xarVarFetch('uid',   'isset', $uid,    NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('name',  'isset', $name,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('uid',   'isset', $uid,     NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('name',  'isset', $name,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('email', 'isset', $email,   NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('pass1', 'isset', $pass1,  NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('pass2', 'isset', $pass2,  NULL, XARVAR_DONT_SET)) return;
-
+            if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
             $uname = xarUserGetVar('uname');
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
-
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
@@ -247,18 +235,12 @@ function roles_user_usermenu($args)
 
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
-
             break;
-
         case 'updateenhanced':
-
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
-
             break;
     }
-
-
     return $data;
 }
 ?>

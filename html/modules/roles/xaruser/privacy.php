@@ -16,13 +16,9 @@
  */
 function roles_user_privacy()
 {
-
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
-
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Privacy Statement')));
-
     return array();
 }
-
 ?>

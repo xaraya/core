@@ -19,8 +19,8 @@ function roles_admin_createmail()
 
     if (!xarVarFetch('uid', 'int:0:', $data['uid'], Null, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('uids', 'isset', $uids, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:0:', $data['state'], '0', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'str:0:', $data['state'], '0', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], '1', XARVAR_NOT_REQUIRED)) return;

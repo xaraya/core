@@ -21,7 +21,7 @@ function roles_admin_removeprivilege()
 {
     if (!xarVarFetch('privid', 'int:1:', $privid)) return;
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
-    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return; 
     // Call the Roles class and get the role
     $roles = new xarRoles();
     $role = $roles->getRole($roleid); 

@@ -61,10 +61,7 @@ function roles_admin_displayrole()
     } else {
         $data['hooks'] = $hooks;
     }
-
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
-
     return $data;
 }
-
 ?>

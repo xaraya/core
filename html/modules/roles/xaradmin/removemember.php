@@ -29,8 +29,8 @@ function roles_admin_removemember()
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) return; 
     // get input from any view of this page
-    if (!xarVarFetch('parentid', 'str:1:', $parentid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('childid', 'str:1:', $childid, XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('parentid', 'str:1:', $parentid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('childid', 'str:1:', $childid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return; 
     // call the Roles class and get the parent and child objects
     $roles = new xarRoles();
     $role = $roles->getRole($parentid);

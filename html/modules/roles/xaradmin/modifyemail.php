@@ -20,8 +20,7 @@ function roles_admin_modifyemail($args)
     if (!xarSecurityCheck('EditRole')) return;
 
     extract($args);
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
-
+    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', XARVAR_NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 
@@ -49,19 +48,16 @@ function roles_admin_modifyemail($args)
 
             if (!xarVarFetch('message', 'str:1:', $message)) return;
             if (!xarVarFetch('subject', 'str:1:', $subject)) return;
+            $message = xarVarPrepHTMLDisplay($message);
+            $subject = xarVarPrepForDisplay($subject);
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) return;
-
             xarModSetVar('roles', $data['mailtype'].'email', $message);
             xarModSetVar('roles', $data['mailtype'].'title', $subject);
-
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
-
             break;
     }
-
     return $data;
 }
-
 ?>

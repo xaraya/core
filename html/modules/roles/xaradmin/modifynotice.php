@@ -18,9 +18,7 @@ function roles_admin_modifynotice()
 {
     // Security Check
     if (!xarSecurityCheck('AdminRole')) return;
-
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
-
+    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     switch (strtolower($phase)) {
         case 'modify':
         default: 
@@ -44,7 +42,6 @@ function roles_admin_modifynotice()
             if (!xarVarFetch('askvalidationemail', 'checkbox', $askvalidationemail, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('askpendingemail', 'checkbox', $askpendingemail, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('askpasswordemail', 'checkbox', $askpasswordemail, false, XARVAR_NOT_REQUIRED)) return;
-
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) return; 
             // Update module variables
@@ -63,8 +60,6 @@ function roles_admin_modifynotice()
 
             break;
     } 
-
     return $data;
 } 
-
 ?>

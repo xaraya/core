@@ -28,7 +28,7 @@ function roles_user_view($args)
 
     if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
     if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
-    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
     if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET, XARVAR_PREP_FOR_DISPLAY)) {return;}
 
     $data['items'] = array();
@@ -62,7 +62,6 @@ function roles_user_view($args)
     else {
         $data['msg'] = xarML("All members");
     }
-
     $data['order'] = $order;
     $data['letter'] = $letter;
     $data['search'] = $search;
@@ -70,14 +69,10 @@ function roles_user_view($args)
     $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
                             "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
     $filter['startnum'] = $startnum;
-
     switch(strtolower($phase)) {
-
         case 'active':
-
             $data['phase'] = 'active';
             $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-
             $data['title'] = xarML('Online Members');
             // The user API function is called. First pass to get the total number of records
             // for the pager. Not very efficient, but there you are.
@@ -92,9 +87,7 @@ function roles_user_view($args)
                                           'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
                                                                      'rolesperpage')));
-
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
-
             if (!$items){
                 $data['message'] = xarML('There are no online members selected');
                 $data['total'] = 0;
@@ -174,13 +167,9 @@ function roles_user_view($args)
         if (empty($items[$i]['ipaddr'])){
             $items[$i]['ipaddr'] = '';
         }
-
         $items[$i]['emailicon'] = '<img src="' . xarTplGetImage('emailicon.gif') . '" alt="Email" title="Email" />';
-
         $items[$i]['infoicon'] = '<img src="' . xarTplGetImage('infoicon.gif') . '" alt="Info" title="Info" />';
-
     }
-
     $data['pmicon'] = '';
     // Add the array of items to the template variables
     $data['items'] = $items;
@@ -198,5 +187,4 @@ function roles_user_view($args)
                             $numitems);
     return $data;
 }
-
 ?>
