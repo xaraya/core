@@ -1,0 +1,16 @@
+<div align="center">
+<font class="pn-pagetitle">Xaraya Installation</font><br />
+<font class="pn-sub">Step 5/6</font><br /><br />
+<font class="pn-title">Click to boot.</font>
+<form action="install.php" method="post">
+<table width="50%" align="center">
+    <tr>
+        <td align="center" class="pn-normal">
+                <input type="hidden" name="install_phase" value="6" />
+                <input type="submit" value="Continue &gt;">
+        </td>
+    </tr>
+</table>
+</form><br /><br />
+<font class="pn-sub">Thank you for trying Xaraya.</font>
+</div>

@@ -373,6 +373,36 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
+
+    // Install installer module
+    $seqId = $dbconn->GenId($tables['modules']);
+    $query = "INSERT INTO " . $tables['modules'] ."
+              (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
+     ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0', 1, 'Core Utility', 'Global', 1, 0)";
+
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    // Set installer to active
+    $query = "INSERT INTO " .$tables['system/module_states'] ." (pn_regid, pn_state
+              ) VALUES (200, 3)";
+
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
     // Fill language list(?)
 
     // Initialisation successful
@@ -403,29 +433,37 @@ function base_activate()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    // initialize & activate adminpanels module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
+
     // initialize blocks module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('blocks')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
 
-    // initialize users module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('users')));
+    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('blocks')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
+
+     // initialize & activate adminpanels module
+    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('adminpanels')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    // initialize users module
+    /*$res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('users')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }*/
 
 
     // initialize installer module
-    $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('installer')));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
 
     // Register Block types
 

@@ -221,13 +221,6 @@ function blocks_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
-    // Create default block groups/instances
-    pnModAPILoad('blocks', 'admin');
-    pnModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'));
-    pnModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                          'template' => 'right'));
-    
 
     // Register BL tags
     pnTplRegisterTag('blocks', 'blocks-stateicon',

@@ -1,5 +1,5 @@
 <div align="center">
-<span class="pn-pagetitle">PostNuke Installation</font><br />
+<span class="pn-pagetitle">Xaraya Installation</font><br />
 <span class="pn-sub">Page 5/6</font><br /><br />
 <span class="pn-title">Administrator Account Creation</span><br /><br />
 <form action="&pnt-modurl-installer-admin-create_administrator;" method="post">
@@ -8,7 +8,7 @@
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
             <span class="pn-normal">
-                Please enter the settings for your Administrator account. This information is necessary in order to properly secure your PostNuke installation. These settings can be changed at any point in the future by visiting the users module.
+                Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the users module.
             </span>
             <br /><br />
         </td>
@@ -66,7 +66,7 @@
     <tr>
         <td colspan="2" style="text-align:justify;">
             <span class="pn-normal">
-                 Your Administrator password is the key to your PostNuke installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.
+                 Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.
             </span><br /><br />
         </td>
     </tr>
@@ -77,5 +77,5 @@
     </tr>
 </table>
 </form>
-<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+<font class="pn-sub">Thank you for trying Xaraya.</font>
 </div>

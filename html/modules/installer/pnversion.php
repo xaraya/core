@@ -1,9 +1,9 @@
 <?php
 // $Id$
-$modversion['name'] = 'PostNuke Installer';
+$modversion['name'] = 'Xaraya Installer';
 $modversion['id'] = '200';
 $modversion['version'] = '1.0';
-$modversion['description'] = 'Install and customize PostNuke.';
+$modversion['description'] = 'Install and customize Xaraya.';
 $modversion['credits'] = '';
 $modversion['help'] = '';
 $modversion['changelog'] = '';
@@ -15,5 +15,5 @@ $modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Installer::' => '::');
 $modversion['class'] = 'Core Admin';
-$modversion['category'] = 'Global'; 
+$modversion['category'] = 'Global';
 ?>

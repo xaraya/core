@@ -212,8 +212,8 @@ function installer_admin_phase5()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
-    $GLOBALS['phase'] = 6;
-    pnResponseRedirect('install.php');
+   
+    return array();
 }
 
 /*function installer_admin_phase6
@@ -237,20 +237,27 @@ function installer_admin_bootstrap()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
+    
+    // Load installer API
+    pnModAPILoad('installer','admin');
 
     // Activate modules
-    $res = pnModAPILoad('installer',
-                        'admin'.
+    $res = pnModAPIFunc('installer',
+                        'admin',
                         'initialise',
-                        array('directory' => 'installer',
+                        array('directory' => 'base',
                               'initfunc' => 'activate'));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    die('activat');
+ 
+    // Create default block groups/instances
+    pnModAPILoad('blocks', 'admin');
+    pnModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'));
+    pnModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
+                                                          'template' => 'right'));
     pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
 
-    return array();
 }
 
 /**

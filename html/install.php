@@ -54,7 +54,7 @@ define ('PNINSTALL_PHASE_FINISHED',            '8');
 function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 {
     pnCoreInit(PNCORE_SYSTEM_NONE); // Does not initialise any optional system
-    
+
     // Handle installation phase designation
     $phase = (int) pnRequestGetVar('install_phase', 'POST');
     if ($phase == 0) {
@@ -63,8 +63,8 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 
     // Make sure we should still be here
     if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
-        die('movin to boot');
-        pnReponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
+        pnCoreInit(PNCORE_SYSTEM_ALL);
+        pnRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
     // Get module parameters
