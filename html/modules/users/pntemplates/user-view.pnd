@@ -18,6 +18,20 @@
             <a href="&pnt-modurl-users-user-view;"><pnt:mlstring>View Current Users</pnt:mlstring></a>
         </td>
     </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>Future Link</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-modify;"><pnt:mlstring>Future Link</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-logout;"><pnt:mlstring>Logout</pnt:mlstring></a>
+        </td>
+    </tr>
 </table>
 
 <center>
