@@ -35,144 +35,131 @@ function dynamicdata_adminapi_importpropertytypes( $args )
     $clearCache = "DELETE FROM $dynamicproptypes";
     $result =& $dbconn->Execute($clearCache);
     
-
-    // Get list of properties in properties directory.
-    $PropertiesDir = 'includes/properties/';
-
-    // Open Properties Directory
-    if ($pdh = opendir($PropertiesDir)) 
-    {
-        $proptypes = array();
-
-        $numLoaded = 0;
+    // Get a list of active modules which might have properties
+    $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+    if(empty($activeMods)) return; // this should never happen
+    
+    $propDirs = array('includes/properties/'); // Initialize it with the core location of properties
+    foreach($activeMods as $modInfo) {
+        // FIXME: the modinfo directory does NOT end with a /
+        $propDirs[] = $modInfo['osdirectory'] . '/xarproperties/';
+    }
+    
+    // Get list of properties in properties directories
+    $proptypes = array(); $numLoaded = 0;
+    foreach($propDirs as $PropertiesDir) {
         
-        // Loop through properties directory
-        while (($propertyfile = readdir($pdh)) !== false) 
-        {
-            $propertyfilepath = $PropertiesDir . $propertyfile;
-
-            // Only Process files, not directories
-            if( is_file($propertyfilepath) )
+        // Open Properties Directory if it exists, otherwise go to the next one
+        if(!file_exists($PropertiesDir)) continue;
+        
+        if ($pdh = opendir($PropertiesDir)) {
+            // Loop through properties directory
+            while (($propertyfile = readdir($pdh)) !== false) 
             {
+                $propertyfilepath = $PropertiesDir . $propertyfile;
+                
+                // Only Process files, not directories
+                if(!is_file($propertyfilepath) continue;
+                   
                 // Get the name of each file, assumed to be the name of the property
-                // Get file type
+                // FIXME: <mrb> decouple the classname from the filename someday
                 list($propertyClass, $type) = explode('.',$propertyfile);
                 
                 // Only worry about php files, not security place holder .html files or other garbage that might be present
-                if( $type == 'php' )
+                if( $type != 'php') continue;
+                   
+                // Include the file into the environment
+                require_once $propertyfilepath;
+                
+                // Tell the property to skip initialization, this is only really needed for Dynamic_FieldType_Property
+                // because it causes this function to recurse.
+                $args['skipInit'] = true;
+                
+                // Instantiate a copy of this class
+                if(!class_exists($propertyClass)) {
+                    // TODO: <mrb> raise exception?
+                    xarLogMessage("DD : The class $propertyClass does not match the filename $propertyfile");
+                    continue;
+                }
+                $property = new $propertyClass($args);
+                
+                // Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
+                $baseInfo = $property->getBasePropertyInfo();
+                
+                // Ensure that the base properties are all present.
+                if( !isset($baseInfo['dependancies']) )   $baseInfo['dependancies'] = '';
+                if( !isset($baseInfo['requiresmodule']) ) $baseInfo['requiresmodule'] = '';
+                if( !isset($baseInfo['aliases']) )        $baseInfo['aliases'] = '';
+                if( !isset($baseInfo['args']) )           $baseInfo['args'] = '';
+       
+                // If the property needs specific files to exist, check for them
+                // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
+                if( isset($baseInfo['dependancies']) && ($baseInfo['dependancies'] != '') )
                 {
-                    // Include the file into the environment
-                    require_once $propertyfilepath;
-                    
-                    // Tell the property to skip initialization, this is only really needed for Dynamic_FieldType_Property
-                    // because it causes this function to recurse.
-                    $args['skipInit'] = true;
-                    
-                    // Instantiate a copy of this class
-                    $property = new $propertyClass($args);
-                    
-                    // Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
-                    $baseInfo = $property->getBasePropertyInfo();
-                    
-                    // Insure that the base properties are all present.
-                    if( !isset($baseInfo['dependancies']) )
-                    {
-                        $baseInfo['dependancies'] = '';
+                    $dependancies = explode(';', $baseInfo['dependancies']);
+                    foreach( $dependancies as $dependancy ) {
+                        // If the file is not there continue to the next property
+                        if( !file_exists($dependancy) )  continue 2;
                     }
-                    if( !isset($baseInfo['requiresmodule']) )
-                    {
-                        $baseInfo['requiresmodule'] = '';
-                    }
-                    if( !isset($baseInfo['aliases']) )
-                    {
-                        $baseInfo['aliases'] = '';
-                    }
-                    if( !isset($baseInfo['args']) )
-                    {
-                        $baseInfo['args'] = '';
-                    }
+                }
 
-                    // Check if there is any reason why we shouldn't include this property in the property list                    
-                    $skipProperty = false;
+                // Check if any Modules are required
+                // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
+                // CHECK: <mrb> do we want the owning module in here?
+                if( isset($baseInfo['requiresmodule']) && ($baseInfo['requiresmodule'] != '') )
+                {
+                    $modulesNeeded = explode(';', $baseInfo['requiresmodule']);
+                    foreach( $modulesNeeded as $moduleName )
+                    {
+                        // If a required module is not available continue with the next property
+                        if( !xarModIsAvailable($moduleName) ) continue 2;
+                    }
+                }
+
+
+                // Save the name of the property
+                $baseInfo['propertyClass'] = $propertyClass;
+                
+                // Update database entry for this property
+                updateDB( $baseInfo, '', $propertyfilepath );
+                
+                // Check for aliases
+                if( !isset($baseInfo['aliases']) || ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) )
+                {
+                    // Make sure that this is always available
+                    $baseInfo['aliases'] = '';
+                
+                    // Add the property to the property type list
+                    $proptypes[$baseInfo['id']] = $baseInfo;
                     
-                    // If the property needs specific files to exist, check for them
-                    // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
-                    if( isset($baseInfo['dependancies']) && ($baseInfo['dependancies'] != '') )
+                } else if ( is_array($baseInfo['aliases']) && (count($baseInfo['aliases']) > 0) ) {
+                    // if aliases are present include them as seperate entries
+                    $aliasList = '';
+                    foreach( $baseInfo['aliases'] as $aliasInfo )
                     {
-                        $dependancies = explode(';', $baseInfo['dependancies']);
-                        foreach( $dependancies as $dependancy )
-                        {
-                            if( !file_exists($dependancy) )
-                            {
-                                $skipProperty = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Check if any Modules are required
-                    // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
-                    if( isset($baseInfo['requiresmodule']) && ($baseInfo['requiresmodule'] != '') )
-                    {
-                        $modulesNeeded = explode(';', $baseInfo['requiresmodule']);
-                        foreach( $modulesNeeded as $moduleName )
-                        {
-                            if( !xarModIsAvailable($moduleName) )
-                            {
-                                $skipProperty = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    // If we're still going to add this property to the list
-                    if( !$skipProperty )
-                    {
-                        // Save the name of the property
-                        $baseInfo['propertyClass'] = $propertyClass;
+                        // Save the name of the property, for the alias
+                        $aliasInfo['propertyClass'] = $propertyClass;
+                        $aliasInfo['aliases']       = '';
                         
-                        // Update database entry for this property
-                        updateDB( $baseInfo, '', $propertyfilepath );
                         
-                        // Check for aliases
-                        if( !isset($baseInfo['aliases']) || ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) )
-                        {
-                            // Make sure that this is always available
-                            $baseInfo['aliases'] = '';
+                        // Add the alias to the property type list
+                        $proptypes[$aliasInfo['id']] = $aliasInfo;
+                        $aliasList .= $aliasInfo['id'].',';
                         
-                            // Add the property to the property type list
-                            $proptypes[$baseInfo['id']] = $baseInfo;
-                            
-                        } else if ( is_array($baseInfo['aliases']) && (count($baseInfo['aliases']) > 0) ) {
-                            // if aliases are present include them as seperate entries
-                            $aliasList = '';
-                            foreach( $baseInfo['aliases'] as $aliasInfo )
-                            {
-                                // Save the name of the property, for the alias
-                                $aliasInfo['propertyClass'] = $propertyClass;
-                                $aliasInfo['aliases']       = '';
-                                
-                                
-                                // Add the alias to the property type list
-                                $proptypes[$aliasInfo['id']] = $aliasInfo;
-                                $aliasList .= $aliasInfo['id'].',';
-                                
-                                // Update Database
-                                updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
-                                
-                            }
-                            
-                            // Store a list of reference ID's from the base property it's aliases
-                            $baseInfo['aliases'] = $aliasList;
-
-                            // Add the base property to the property type list
-                            $proptypes[$baseInfo['id']] = $baseInfo;
-                        }
+                        // Update Database
+                        updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
+                        
                     }
-                }                
+                    
+                    // Store a list of reference ID's from the base property it's aliases
+                    $baseInfo['aliases'] = $aliasList;
+
+                    // Add the base property to the property type list
+                    $proptypes[$baseInfo['id']] = $baseInfo;
+                }
             }
+            closedir($pdh);
         }
-        closedir($pdh);
 
         // Sort the property types
         ksort( $proptypes );

@@ -161,7 +161,7 @@ class Dynamic_Property_Master
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['propertyClass'];
-            // Filepath is complete rel path to the php file, and decouple from the class name
+            // Filepath is complete rel path to the php file, and decoupled from the class name
             require_once $propertyInfo['filepath'];
             
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
