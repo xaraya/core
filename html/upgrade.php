@@ -721,7 +721,7 @@ if (empty($step)) {
     $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
                                 'set'     =>  $roleanon->getID()),
                           array('name'    =>  'System.Core.VersionNum',
-                                'set'     =>  '.9.1.0'));
+                                'set'     =>  '.9.1.1'));
  
     foreach($configvars as $configvar){
         foreach($configvar as $var){
