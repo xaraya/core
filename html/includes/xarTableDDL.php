@@ -583,7 +583,45 @@ function xarDB__oracleAlterTable($tableName, $args)
 
 function xarDB__sqliteAlterTable($tableName, $args) 
 {
-    die("Implement xarDB__sqliteAlterTable for $tableName");
+    switch ($args['command']) {
+        case 'add':
+            if (empty($args['field'])) {
+                $msg = xarML('Invalid args (field key must be set).');
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+           
+            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
+            $coldef = xarDB__sqliteColumnDefinition($args['field'],$args);
+            $sql.= $coldef['type'] . ' '
+                . $coldef['unsigned'] . ' '
+                . $coldef['null'] . ' '
+                . $coldef['default'] . ' '
+                . $coldef['auto_increment'] . ' ';
+
+            if($coldef['primary_key']) {
+                $sql.= 'PRIMARY KEY ';
+            }   
+
+            break;
+        case 'rename':
+            if (empty($args['new_name'])) {
+                $msg = xarML('Invalid args (new_name key must be set.)');
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+            $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
+            break;
+        default:
+            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return;
+        }
+
+        return $sql;
 }
 
 /**
