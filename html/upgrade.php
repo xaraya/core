@@ -16,6 +16,9 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
+// Use the installer theme
+xarTplSetThemeName('installer');
+
 if(!xarVarFetch('step','int', $step, NULL, XARVAR_DONT_SET)) {return;}
 
 // pre-fill the module name (if any) for hooks
