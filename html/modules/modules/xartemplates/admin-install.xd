@@ -45,18 +45,19 @@
 			        <th><xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring></th>
 			    </tr>
 	
-    	        <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
-			        <tr>
+    	        <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
+			        <tr><td>
 				        <xar:if condition="is_array($modInfo)">
-					        <td>#$modInfo['displayname']#</td>
+					        #$modInfo['displayname']#
 					    <xar:else />
-					        <td>
-					        	<a href="http://www.xaraya.com/index.php?module=release&func=display&rid=#$modInfo['regid']#>
-						        	#$modInfo['regid']#
-						        </a>
-					        </td>
+				        	<a href="http://www.xaraya.com/index.php?module=release&func=display&rid=#$modInfo#">
+					        	<xar:ml>
+					        		<xar:mlstring>Get Information for the missing Module with ID #(1)</xar:mlstring>
+					        		<xar:mlvar>#$modInfo#</xar:mlvar>
+					        	</xar:ml>
+					        </a>
 					    </xar:if>
-				    </tr>
+				    </td></tr>
 	            </xar:foreach>
 			</table>
         	<br />
