@@ -41,8 +41,8 @@ function xarWebservicesMain() {
     xarCoreInit(XARCORE_SYSTEM_ALL);
     
     // Load user API for xmlrpc module
-    if (!xarModAPILoad('webservices', 'user')) {
-        xarCore_die('Could not load webservices module');
+    if (!xarModAPILoad('xmlrpcserver', 'user')) {
+        xarCore_die('Could not load xmlrpcserver module');
     }
     
     /* determine the server type (xml-rpc or soap), then
@@ -56,7 +56,7 @@ function xarWebservicesMain() {
         // xmlrpc server does automatic processing directly
         $server=false;
         if (xarModIsAvailable('xmlrpcserver')) {
-            $server = xarModAPIFunc('webservices','user','initxmlrpcserver');
+            $server = xarModAPIFunc('xmlrpcserver','user','initxmlrpcserver');
         }
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
@@ -70,7 +70,7 @@ function xarWebservicesMain() {
     case 'soap' :
         $server=false;
         if(xarModIsAvailable('soapserver')) {
-            $server = xarModAPIFunc('webservices','user','initsoapserver');
+            $server = xarModAPIFunc('soapserver','user','initsoapserver');
         
             if (!$server) {
                 $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
