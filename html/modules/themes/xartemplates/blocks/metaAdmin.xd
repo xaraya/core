@@ -1,0 +1,46 @@
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Meta Description</xar:mlstring>
+	</td>
+	<td>
+		<textarea name="metadescription" id="metadescription" cols="50" rows="5" wrap="virtual" class="xar-normal">#$metadescription#</textarea>
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Meta Keywords</xar:mlstring>
+	</td>
+	<td>
+		<input type="text" name="metakeywords" id="metakeywords" value="#$metakeywords#" size="50" maxlength="100" />
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Use</xar:mlstring> <a href="http://geourl.org/" target="_BLANK"><xar:mlstring>GeoURL</xar:mlstring></a>
+	</td>
+	<td>
+		<xar:if condition="!empty($usegeo)">
+			<input type="checkbox" name="usegeo" id="usegeo" value="1" checked="checked" tabindex="1" />
+		<xar:else />
+			<input type="checkbox" name="usegeo" id="usegeo" value="1" tabindex="1" />
+		</xar:if>
+	</td>
+</tr>
+<xar:if condition="!empty($usegeo)">
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Your Longitude</xar:mlstring>
+	</td>
+	<td>
+		<input type="text" name="longitude" id="longitude" value="#$longitude#" size="30" maxlength="100" />
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<xar:mlstring>Your Latitude</xar:mlstring>
+	</td>
+	<td>
+		<input type="text" name="latitude" id="latitude" value="#$latitude#" size="30" maxlength="100" />
+	</td>
+</tr>
+</xar:if>
