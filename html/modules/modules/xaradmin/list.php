@@ -45,7 +45,8 @@ function modules_admin_list()
     $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('Active');
     $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('Inactive');
     $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Uninitialised');
-    
+    $data['filter'][XARMOD_STATE_MISSING]           = xarML('Missing files');
+
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
     $data['sort']['namedesc']                       = xarML('Name [z-a]');
     

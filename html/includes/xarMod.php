@@ -714,7 +714,7 @@ function xarModGetInfo($modRegId)
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 
     $modState = xarMod__getState($modInfo['regid'], $modInfo['mode']);
-    if (!isset($modState)) return; // throw back
+    if (!isset($modState)) $modState = XARMOD_STATE_MISSING; //return; // throw back
     $modInfo['state'] = $modState;
 
     // MrB: why do we have Info, BaseInfo, DBInfo, FileInfo etc. that's bloat
@@ -722,11 +722,14 @@ function xarModGetInfo($modRegId)
 
     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
     if (!isset($modFileInfo)) {
-        // Set an exception, id was passed in, so module *should* exist
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', 'xarversion.php or pnversion.php');
-        return; // throw back
-    }
-//    $modInfo = array_merge($modInfo, $modFileInfo);
+        // We couldn't get file info, fill in unknowns.
+        // The exception for this is logged in getFileInfo
+        $modFileInfo['class'] = xarML('Unknown');
+        $modFileInfo['description'] = xarML('This module isn\'t installed properly. Not all info could be retrieved');
+        $modFileInfo['category'] = xarML('Unknown');
+        $modFileInfo['author'] = xarML('Unknown');
+        $modFileInfo['contact'] = xarML('Unknown');
+    } 
     $modInfo = array_merge($modFileInfo, $modInfo);
 
     xarVarSetCached('Mod.Infos', $modRegId, $modInfo);
@@ -890,15 +893,15 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 
                 $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
                 if (!isset($modFileInfo)) {
-                    // Set an exception, the info from the DB doesn't match the filesystem
-                    $result->Close();
-                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, ' MODULE_FILE_NOT_EXIST','xarversion.php or pnversion.php');
-                    return; // throw back
+                    // The info from the DB doesn't match the filesystem
+                    // This is already logged in the getfileinfo function, we don't have to do it again
+                    // FIXME: Set the status of module to missing files or something?
+                } else {
+                    //     $modInfo = array_merge($modInfo, $modFileInfo);
+                    $modInfo = array_merge($modFileInfo, $modInfo);
+                    xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
+                    $modList[] = $modInfo;
                 }
-                //     $modInfo = array_merge($modInfo, $modFileInfo);
-                $modInfo = array_merge($modFileInfo, $modInfo);
-                xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
-                $modList[] = $modInfo;
             }
             $modInfo = array();
             $result->MoveNext();
@@ -1938,6 +1941,7 @@ function xarMod__loadDbInfo($modName, $modDir)
  * @param modMode integer the module's site mode
  * @return mixed the module's current state
  * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+ * @todo implement the xarMod__setState reciproke
  */
 function xarMod__getState($modRegId, $modMode)
 {
