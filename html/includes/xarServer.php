@@ -40,7 +40,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarResponse_redirectCalled'] = false;
 
     // Register the ServerRequest event
-    xarEvt_RegisterEvent('ServerRequest');
+    xarEvt_registerEvent('ServerRequest');
 
     return true;
 }

@@ -176,7 +176,7 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
 
 
 /**
- * Fire an event and call the potential handlers for it in the modules
+ * Trigger an event and call the potential handlers for it in the modules
  *
  * The specified event is issued to the active modules. If a module
  * has defined a specific handler for that event, that function is
@@ -190,7 +190,7 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
  * @return  void
  * @todo    Analyze thoroughly for performance issues
 */
-function xarEvt_fire($eventName, $value = NULL)
+function xarEvt_trigger($eventName, $value = NULL)
 {
     // Must make sure the event exists.
     if (!xarEvt__checkEvent($eventName)) return; // throw back

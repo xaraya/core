@@ -2771,7 +2771,7 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
             return;
         }
 
-        return "xarEvt_fire('$name')";
+        return "xarEvt_trigger('$name')";
     }
 
     function isAssignable()

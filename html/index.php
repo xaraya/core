@@ -89,7 +89,7 @@ function xarMain()
     }
 
     // We're all done, one ServerRequest made
-    xarEvt_Fire('ServerRequest');
+    xarEvt_trigger('ServerRequest');
 
     // Close the session
     xarSession_close();
