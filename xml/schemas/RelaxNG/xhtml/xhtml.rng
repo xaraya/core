@@ -4,9 +4,10 @@
 <grammar ns="http://www.w3.org/1999/xhtml"
          xmlns="http://relaxng.org/ns/structure/1.0">
 
+
 <include href="modules/datatypes.rng"/>
 <include href="modules/attribs.rng"/>
-<include href="modules/struct.rng"/>
+<!-- <include href="modules/struct.rng"/> -->
 <include href="modules/frames.rng"/>
 <include href="modules/text.rng"/>
 <include href="modules/hypertext.rng"/>
@@ -35,5 +36,88 @@
 <include href="modules/iframe.rng"/>
 <include href="modules/nameident.rng"/>
 <include href="modules/legacy.rng"/>
+
+<define name="xhtmlTag">
+  <choice>
+    <ref name="html"/>
+    <ref name="title"/>
+    <ref name="head"/>
+    <ref name="body"/>
+    <ref name="style"/>
+
+    <ref name="table"/>
+    <ref name="tbody"/>
+    <ref name="tfoot"/>
+
+    <ref name="applet"/>
+    <ref name="base"/>
+    <ref name="form"/>
+    <ref name="label"/>
+    <ref name="input"/>
+    <ref name="select"/>
+    <ref name="option"/>
+    <ref name="optgroup"/>
+    <ref name="fieldset"/>
+    <ref name="button"/>
+    <ref name="legend"/>
+    <ref name="option"/>
+    <ref name="textarea"/>
+    <ref name="noframes"/>
+    <ref name="frame"/>
+    <ref name="iframe"/>
+    <ref name="frameset"/>
+    <ref name="table"/>
+    <ref name="caption"/>
+
+    <ref name="th"/>
+    <ref name="tr"/>
+    <ref name="td"/>
+
+    <ref name="area"/>
+    <ref name="map"/>
+    <ref name="img"/>
+    <ref name="a"/>
+    <ref name="base"/>
+    <ref name="center"/>
+    <ref name="font"/>
+
+    <ref name="dl"/>
+    <ref name="dt"/>
+    <ref name="dd"/>
+
+    <ref name="li"/>
+    <ref name="ol"/>
+    <ref name="ul"/>
+
+    <ref name="meta"/>
+
+    <ref name="hr"/>
+    <ref name="b"/>
+    <ref name="i"/>
+    <ref name="strong"/>
+    <ref name="link"/>
+
+    <ref name="br"/>
+    <ref name="span"/>
+    <ref name="abbr"/>
+    <ref name="acronym"/>
+    <ref name="div"/>
+    <ref name="p"/>
+
+    <ref name="blockquote"/>
+    <ref name="pre"/>
+    <ref name="h1"/>
+    <ref name="h2"/>
+    <ref name="h3"/>
+    <ref name="h4"/>
+    <ref name="h5"/>
+    <ref name="h6"/>
+
+
+    <ref name="script"/>
+    <ref name="noscript"/>
+  </choice>
+</define>
+
 
 </grammar>

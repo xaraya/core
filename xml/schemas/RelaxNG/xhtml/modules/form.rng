@@ -7,12 +7,12 @@
   <define name="select">
     <element name="select">
       <ref name="select.attlist"/>
-      <oneOrMore>
-	<choice>
-	  <ref name="option"/>
-	  <ref name="optgroup"/>
-	</choice>
-      </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <ref name="option"/>
+            <ref name="optgroup"/>
+          </choice>
+        </oneOrMore>
     </element>
   </define>
 

@@ -1,46 +1,12 @@
 <!-- Blocklayout 1.0 -->
-<grammar ns="http://www.xaraya.com/2003/blocklayout"
+<grammar xmlns:xar="http://www.xaraya.com/2003/blocklayout"
          xmlns="http://relaxng.org/ns/structure/1.0">
 
 
-  <!-- We support the following xhtml modules -->
-  <include href="xhtml/modules/datatypes.rng"/>
-  <include href="xhtml/modules/attribs.rng"/>
-  <!-- 
-    As we are defining a new dialect we have to use
-    our own structure definition file, not the one from xhtml
-    <include href="xhtml/modules/struct.rng"/>
-  --> 
-  <include href="xhtml/modules/text.rng"/>
-  <include href="xhtml/modules/hypertext.rng"/>
-  <include href="xhtml/modules/list.rng"/>
-  <include href="xhtml/modules/image.rng"/>
-  <include href="xhtml/modules/ssismap.rng"/>
-  <include href="xhtml/modules/base.rng"/>
-  <include href="xhtml/modules/link.rng"/>
-  <include href="xhtml/modules/meta.rng"/>
-  <include href="xhtml/modules/param.rng"/>
-  <include href="xhtml/modules/object.rng"/>
-  <include href="xhtml/modules/bdo.rng"/>
-  <include href="xhtml/modules/pres.rng"/>
-  <include href="xhtml/modules/edit.rng"/>
-  <include href="xhtml/modules/applet.rng"/>
-  <!-- <include href="xhtml/modules/basic-form.rng"/> -->
-  <include href="xhtml/modules/form.rng"/>
-  <include href="xhtml/modules/style.rng"/>
-  <include href="xhtml/modules/script.rng"/>
-  <!-- <include href="xhtml/modules/basic-table.rng"/> -->
-  <include href="xhtml/modules/table.rng"/>
-  <include href="xhtml/modules/csismap.rng"/>
-  <include href="xhtml/modules/events.rng"/>
-  <include href="xhtml/modules/inlstyle.rng"/>
-  <include href="xhtml/modules/target.rng"/>
-  <include href="xhtml/modules/iframe.rng"/>
-  <include href="xhtml/modules/nameident.rng"/>
+  <!-- We support xhtml -->
+  <include href="xhtml/xhtml.rng"/>
 
-
-  <!-- and our own -->
-  <include href="xar/modules/struct.rng"/>
-  <!-- <include href="blocklayout-1.0.rng"/> -->
+  <!-- and Block Layout -->
+  <include href="xar/blocklayout.rng"/>
 
 </grammar>

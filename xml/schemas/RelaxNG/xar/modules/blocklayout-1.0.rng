@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE grammar SYSTEM "http://164.41.103.24/xaraya/xml/schemas/relaxng.dtd">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xar="http://www.xaraya.com/2003/blocklayout"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  
+  <!--
+  RelaxNG specification for the blocklayout templating language
+  RelaxNG specs: http://www.oasis-open.org/committees/relax-ng/spec-20011203.html
+
+  We use a top down approach for defining how a complete
+  blocklayout file should look like.
+  This approach makes it easier to read this file for
+  humans, and a bit harder for machines to parse.
+
+  Remember that this schema defines the blocklayout language
+  not the actual template files a designer might construct to
+  template a certain module.
+
+  This RelaxNG schema is based on RFC0010.xml for the Xaraya
+  project.
+  -->
+
+<!-- Block layout must be the root tag - Valid XML -->
+<start>
+  <ref name="blocklayout"/>
+</start>
+
+
+<define name="blocklayout">
+  <element name="blocklayout">
+    <zeroOrMore>
+      <ref name="nonchildTemplate"/>
+    </zeroOrMore>
+  </element>
+</define>
+
+  <!--
+  Definition of a non-child template
+  -->
+  <define name="nonchildTemplate">
+    <zeroOrMore>
+      <choice>
+        <!-- There is the need to add xhtml tags. How to do it?
+             do we need a RelaxNG's xhtml spec too? -->
+        <ref name="xhtmlTag"/>
+        <text/>
+        <ref name="logicalTemplate"/>
+        <ref name="displayTemplate"/>
+        <ref name="varsetTemplate"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <define name="nonchildTemplate_nonXHTML">
+    <zeroOrMore>
+      <choice>
+        <!-- There is the need to add xhtml tags. How to do it?
+             do we need a RelaxNG's xhtml spec too? -->
+        <text/>
+        <ref name="logicalTemplate"/>
+        <ref name="displayTemplate"/>
+        <ref name="varsetTemplate"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <!-- All logical tags must be able to have nonchildTemplate as elements -->
+  <define name="logicalTemplate">
+    <choice>
+      <ref name="forTag" />
+      <ref name="foreachTag" />
+      <ref name="ifTag" />
+      <ref name="loopTag" />
+      <ref name="whileTag" />
+      <ref name="secTag" />
+    </choice>
+  </define>
+
+  <define name="displayTemplate">
+    <choice>
+      <ref name="blockTag" />
+      <ref name="blockgroupTag" />
+      <ref name="mlTag" />
+      <ref name="mlkeyTag" />
+      <ref name="mlstringTag" />
+      <ref name="moduleTag" />
+      <ref name="templateTag" />
+      <ref name="varTag" />
+    </choice>
+  </define>
+
+  <define name="varsetTemplate">
+    <ref name="setTag" />
+  </define>
+
+  <define name="childonlyTemplate">
+    <ref name="elseTag" />
+    <ref name="elseifTag" />
+    <ref name="breakTag" />
+    <ref name="continueTag" />
+    <ref name="mlvarTag" />
+  </define>
+
+  <!-- Every single tag can have an optional ID-attribute -->
+  <define name="idAttr">
+    <optional>
+      <attribute name="id"><data type="ID"/></attribute>
+    </optional>
+  </define>
+
+  <!-- Definition for condition -->
+  <define name="conditionAttr">
+    <attribute name="condition"><data type="string"/></attribute>
+  </define>
+
+  <!-- Definition of escapable sequence -->
+  <define name="escapableSeq">
+    <zeroOrMore>
+      <choice>
+        <ref name="breakTag"/>
+        <ref name="continueTag"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+</grammar>

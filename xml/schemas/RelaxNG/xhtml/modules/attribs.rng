@@ -47,6 +47,13 @@
 <define name="Common.attrib">
   <ref name="Core.attrib"/>
   <ref name="I18n.attrib"/>
+  <!-- XARAYA MODIFICATION -->
+  <interleave>
+    <zeroOrMore>
+      <ref name="nonchildTemplate_nonXHTML"/>
+    </zeroOrMore>
+  </interleave>
+  <!-- XARAYA MODIFICATION -->
 </define>
 
 <define name="CommonIdRequired.attrib">

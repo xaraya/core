@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+<grammar xmlns:xar="http://www.xaraya.com/2003/blocklayout"
          xmlns="http://relaxng.org/ns/structure/1.0">
 
   <!-- Sec -->
   <define name="secTag">
     <element name="xar:sec">
       <ref name="idAttr"/>
-      <attribute name="realm"><data type="integer"/></attribute>
+      <attribute name="realm">
+        <!-- Data Type = Integer -->
+        <data type="string"/>
+      </attribute>
       <attribute name="component"><data type="string"/></attribute>
       <attribute name="instance"><data type="string"/></attribute>
       <attribute name="level"><data type="string"/></attribute>

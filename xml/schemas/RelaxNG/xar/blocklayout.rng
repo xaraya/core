@@ -1,35 +1,30 @@
-<!-- Xaraya´s Blocklayout -->
-<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+<!-- Xaraya's Blocklayout -->
+<grammar xmlns:xar="http://www.xaraya.com/2003/blocklayout"
          xmlns="http://relaxng.org/ns/structure/1.0">
 
-<!-- Include XHTML modularization -->
-<include href="../xhtml/xhtml.rng"/>
+  <!-- General connection between tags -->
+  <include href="modules/blocklayout-1.0.rng"/>
 
-<!-- General connection between tags -->
-<include href="modules/blocklayout-1.0.rng"/>
-
-
-<!-- Blocklayout´s tags modules -->
-<include href="modules/block.rng"/>
-<include href="modules/blockgroup.rng"/>
-<include href="modules/break.rng"/>
-<include href="modules/continue.rng"/>
-<include href="modules/else.rng"/>
-<include href="modules/elseif.rng"/>
-<include href="modules/for.rng"/>
-<include href="modules/foreach.rng"/>
-<include href="modules/if.rng"/>
-<include href="modules/loop.rng"/>
-<include href="modules/ml.rng"/>
-<include href="modules/mlkey.rng"/>
-<include href="modules/mlstring.rng"/>
-<include href="modules/mlvar.rng"/>
-<include href="modules/module.rng"/>
-<include href="modules/sec.rng"/>
-<include href="modules/set.rng"/>
-<include href="modules/template.rng"/>
-<include href="modules/var.rng"/>
-<include href="modules/while.rng"/>
-
+  <!-- Blocklayout's tags modules -->
+  <include href="modules/block.rng"/>
+  <include href="modules/blockgroup.rng"/>
+  <include href="modules/break.rng"/>
+  <include href="modules/continue.rng"/>
+  <include href="modules/else.rng"/>
+  <include href="modules/elseif.rng"/>
+  <include href="modules/for.rng"/>
+  <include href="modules/foreach.rng"/>
+  <include href="modules/if.rng"/>
+  <include href="modules/loop.rng"/>
+  <include href="modules/ml.rng"/>
+  <include href="modules/mlkey.rng"/>
+  <include href="modules/mlstring.rng"/>
+  <include href="modules/mlvar.rng"/>
+  <include href="modules/module.rng"/>
+  <include href="modules/sec.rng"/>
+  <include href="modules/set.rng"/>
+  <include href="modules/template.rng"/>
+  <include href="modules/var.rng"/>
+  <include href="modules/while.rng"/>
 
 </grammar>
