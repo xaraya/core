@@ -57,7 +57,7 @@
                     </td>
                     <td>
                         <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
-                        <input type="text" name="marker" size=3 maxlength=3 value="[x]" />
+                        <input type="text" name="marker" size=3 maxlength=3 value="&xar-var-marker;" />
                     </td>
                 </tr>
                 <tr align="left" valign="top">
