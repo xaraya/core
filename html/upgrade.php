@@ -66,31 +66,6 @@ if (empty($step)) {
   <div style="margin: auto;">
 <?php
     $sprefix=xarDBGetSiteTablePrefix();
-    // First see if the authsystem module has been upgraded.
-    echo "<h5>Making sure the system is ready for authenticating</h5>";
-
-    // UNSECURE CODE, RETHINK THIS
-    // If authsystem module is upgraded
-    $as_dbinfo = xarModGetInfo(42);
-    $as_fileinfo = xarMod_getFileInfo('authsystem');
-    if($as_dbinfo['version'] != $as_fileinfo['version']) {
-        echo xarML("Authentication system needs an upgrade") . "<br/>";
-        echo xarML("Upgrading authsystem from version #(1) to version #(2)",$as_dbinfo['version'],$as_fileinfo['version']) . "<br/>";
-        // authsystem has no init function, so we can just patch in the new version number in the database.
-        $sql = "UPDATE " . $sprefix . "_modules SET xar_version='".  $as_fileinfo['version'] . "' WHERE xar_regid='42'";
-        $dbconn =& xarDBGetConn();
-        if(!$dbconn->Execute($sql)) {
-            echo xarML("FAILED upgrading the authentication system. I cannot continue, I'm sorry.");
-            echo "</div></div>";
-            CatchOutput();
-            return;
-        } else {
-            echo xarML("Upgrade of authentication system successfull") . "<br/>";
-        }
-    } else {
-        echo xarML("System capable to authenticate, no upgrade needed");
-        echo "<br/>";
-    }
 
     // Now we can check whether people are logged in
     // TODO: allow the user to over-ride this message if need be - many problems
@@ -1143,88 +1118,112 @@ Password : %%password%%
     }
 
     // Bug 1716 module states table
-    echo "<h5>Upgrade module states table</h5>";
-    $module_states_table = $sitePrefix . '_module_states';
+    {
+        $module_states_table = $sitePrefix . '_module_states';
+        echo "<h5>Upgrade $module_states_table table</h5>";
 
-    // TODO: use adodb transactions to ensure atomicity?
-    // The changes for bug 1716:
-    // - add xar_id as primary key
-    // - make index on xar_regid unique
-    // 1. Add the primary key: save operation
-    $changes = array('command'     => 'add',
-                     'field'       => 'xar_id',
-                     'type'        => 'integer',
-                     'null'        => false,
-                     'unsigned'    => true,
-                     'increment'   => true,
-                     'primary_key' => true,
-                     'first'       => true);
-    $query = xarDBAlterTable($module_states_table, $changes);
-    $result = &$dbconn->Execute($query);
-    if (!$result) {
-        echo "FAILED to alter the $module_states_table table<br/>";
-        echo "The column xar_id may already exist in the $module_states_table table<br/>";
-    } else {
-        echo "Added column xar_id in the $module_states_table table<br/>";
+        // TODO: use adodb transactions to ensure atomicity?
+        // The changes for bug 1716:
+        // - add xar_id as primary key
+        // - make index on xar_regid unique
 
-        // Bug #1971 - Have to use GenId to create values for xar_id on
-        // existing rows or the create unique index will fail
-        $query = "SELECT xar_regid, xar_state
-                  FROM $module_states_table
-                  WHERE xar_id IS NULL";
-        $result = &$dbconn->Execute($query);
-        if (!$result) {
-            echo "FAILED to update the $module_states_table table<br/>";
+        $dbconn =& xarDBGetConn();
+        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
+
+        // Upgrade the module states table.
+        // Get column definitions for module states table.
+        $columns = $datadict->getColumns($module_states_table);
+        // Do we have a xar_id column?
+        $modules_column_found = false;
+        foreach($columns as $column) {
+            if ($column->name == 'xar_id') {
+                $modules_column_found = true;
+                break;
+            }
         }
-
-        // Get items from result array
-        while (!$result->EOF) {
-            list ($regid, $state) = $result->fields;
-
-            $seqId = $dbconn->GenId($module_states_table);
-            $query = "UPDATE $module_states_table
-                      SET xar_id = $seqId
-                      WHERE xar_regid = $regid
-                      AND xar_state = $state";
-            $updresult = &$dbconn->Execute($query);
-            if (!$updresult) {
-                echo "FAILED to update the $module_states_table table<br/>";
+        // Upgrade the table (xar_module_states) if the name column is not found.
+        if (!$modules_column_found) {
+            // Create the column.
+            $result = $datadict->addColumn($module_states_table, 'xar_id I AUTO PRIMARY');
+            if ($result) {
+                echo "Added column xar_id to table $module_states_table<br/>";
+            } else {
+                echo "Failed to add column xar_id to table $module_states_table<br/>";
             }
 
-            $result->MoveNext();
+            // Bug #1971 - Have to use GenId to create values for xar_id on
+            // existing rows or the create unique index will fail
+            // TODO: check this: can PGSQL do this? Can it create a primary key on a table
+            // with existing rows, when the primary key is, by definition, NOT NULL?
+            // MySQL will automatically prefill the column with autoincrement values, but I
+            // doubt PGSQL will.
+            $query = "SELECT xar_regid, xar_state
+                      FROM $module_states_table
+                      WHERE xar_id IS NULL";
+            $result = &$dbconn->Execute($query);
+            if ($result) {
+                // Get items from result array
+                while (!$result->EOF) {
+                    list ($regid, $state) = $result->fields;
+                    $seqId = $dbconn->GenId($module_states_table);
+                    $query = "UPDATE $module_states_table
+                              SET xar_id = $seqId
+                              WHERE xar_regid = $regid
+                              AND xar_state = $state";
+                    $updresult = &$dbconn->Execute($query);
+                    if (!$updresult) {
+                        echo "FAILED to update the $module_states_table table ID column<br/>";
+                    }
+
+                    $result->MoveNext();
+                }
+            }
+
+            // Close result set
+            $result->Close();
+        } else {
+            echo "Table $module_states_table does not require updating<br/>";
         }
 
-        // Close result set
-        $result->Close();
-
-        // 2. change index for reg_id to unique
-        $indexname = 'i_' . $sitePrefix . '_module_states_regid';
-        $query = xarDBDropIndex($module_states_table, array('name' => $indexname));
-        $result = &$dbconn->Execute($query);
-        if (!$result) {
-            echo "FAILED to drop the old index on the module states regid column<br/>";
-        } else {
-            echo "Dropped old index for $module_states_table table<br/>";
+        // Drop index i_xar_module_states_regid and create unique index
+        // i_xar_module_states_regid2 on xar_regid.
+        // By renaming the index, we know that it has been changed.
+        $indexes = $datadict->getIndexes($module_states_table);
+        $indexname = 'i_' . xarDBGetSiteTablePrefix() . '_module_states_regid';
+        if (isset($indexes[$indexname])) {
+            $result = $datadict->dropIndex($indexname, $module_states_table);
+            if ($result) {
+                echo "Dropped non-unique index $indexname from table $module_states_table<br/>";
+            } else {
+                echo "Failed to drop non-unique index $indexname from table $module_states_table<br/>";
+            }
         }
 
-        // 3. Add the new index.
-        $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
-        $query = xarDBCreateIndex($module_states_table, $index);
+        $indexname .= '2';
+        if (!isset($indexes[$indexname])) {
+            // We need to remove duplicate regids before creating a unique index on that column.
+            $query = "select max(xar_id), xar_regid from $module_states_table group by xar_regid having count(xar_regid) > 1";
+            $result = &$dbconn->Execute($query);
+            if ($result) {
+                // Get items from result array
+                while (!$result->EOF) {
+                    list ($xar_id, $xar_regid) = $result->fields;
+                    $query2 = "delete from $module_states_table where xar_id = $xar_id and xar_regid = $xar_regid";
+                    $result2 = &$dbconn->Execute($query2);
+                    $result2->close();
+                    echo "Deleted duplicate module state row (xar_id=$xar_id)<br/>";
 
-        $result = &$dbconn->Execute($query);
-        if (!$result) {
-            echo "FAILED to create the new index for the module states regid column<br/>";
-        } else {
-            echo "Added a new index on the $module_states_table table<br/>";
-        }
-
-        // 4. Set the version number of the modules module
-        $query = "UPDATE " . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
-        $result = &$dbconn->Execute($query);
-        if(!$result) {
-            echo "FAILED to update the version number for the modules module<br/>";
-        } else {
-            echo "Updated the version number for modules module<br/>";
+                    $result->MoveNext();
+                }
+            }
+            
+            // Create the unique index.
+            $result = $datadict->createIndex($indexname, $module_states_table, 'xar_regid', array('UNIQUE'));
+            if ($result) {
+                echo "Created unique index $indexname on $module_states_table.regid<br/>";
+            } else {
+                echo "Failed to create unique index $indexname on $module_states_table.regid<br/>";
+            }
         }
     }
 
