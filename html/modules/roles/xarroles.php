@@ -935,6 +935,39 @@ class xarRole {
     }
 
     /**
+     * countUsers: count the members of a group that are users
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
+     * @throws none
+     * @todo none
+     */
+    function countUsers($state = 0)
+    {
+        // set up the query and get the data
+        if ($state == 0) {
+            $query = "SELECT COUNT(r.xar_uid)
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        WHERE r.xar_uid = rm.xar_uid
+                        AND r.xar_type = 0
+                        AND rm.xar_parentid = $this->uid";
+        } else {
+            $query = "SELECT COUNT(r.xar_uid)
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        WHERE r.xar_uid = rm.xar_uid
+                        AND r.xar_type = 0 AND r.xar_state = $state
+                        AND rm.xar_parentid = $this->uid";
+        }
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+        list($numusers) = $result->fields;
+        // done
+        return $numusers;
+    }
+
+    /**
      * getParents: returns the parent objects of a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>

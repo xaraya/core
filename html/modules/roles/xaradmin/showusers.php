@@ -27,7 +27,7 @@ function roles_admin_showusers()
     switch (strtolower($phase)) {
         case 'viewall':
         default:
-            $total = count($role->getUsers(0));
+            $total = $role->countUsers(0);
             if ($total == 0) {
                 $data['message'] = xarML('There are no users');
             }
@@ -37,7 +37,7 @@ function roles_admin_showusers()
             break;
 
         case 'inactive':
-            $total = count($role->getUsers(1));
+            $total = $role->countUsers(1);
             if ($total == 0) {
                 $data['message'] = xarML('There are no inactive users');
             }
@@ -47,7 +47,7 @@ function roles_admin_showusers()
             break;
 
         case 'notvalidated':
-            $total = count($role->getUsers(2));
+            $total = $role->countUsers(2);
             if ($total == 0) {
                 $data['message'] = xarML('There are no users waiting for validation');
             }
@@ -57,7 +57,7 @@ function roles_admin_showusers()
             break;
 
         case 'active':
-            $total = count($role->getUsers(3));
+            $total = $role->countUsers(3);
             if ($total == 0) {
                 $data['message'] = xarML('There are no active users');
             }
@@ -67,7 +67,7 @@ function roles_admin_showusers()
             break;
 
         case 'pending':
-            $total = count($role->getUsers(4));
+            $total = $role->countUsers(4);
             if ($total == 0) {
                 $data['message'] = xarML('There are no pending users');
             }
