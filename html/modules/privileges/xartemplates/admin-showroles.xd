@@ -57,7 +57,7 @@
 					#$name#
 				</td>
 			<td align="right">
-				<a href="#$removeurl#&amp;partid=#$partid#"
+				<a href="#$removeurl#&amp;roleid=#$roleid#"
 				title="Remove this Privilege assignment">				
 					Remove    
 				</a>
