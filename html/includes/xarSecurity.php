@@ -287,7 +287,7 @@ $schemas = array();
     }
 
 /**
- * xarRemoveInstances: removes the instances registered by a module form the database
+ * xarRemoveInstances: removes the instances registered by a module from the database
  *
  * This is a wrapper function
  *
@@ -392,6 +392,25 @@ $schemas = array();
     }
 
 /**
+ * xarRemoveMasks: removes the masks registered by a module from the database
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   module name
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+    function xarRemoveMasks($module) {
+        $privileges = new xarPrivileges();
+        return $privileges->removeMasks($module);
+    }
+
+
+/**
  * see if a user is authorised to carry out a particular task
  * @access public
  * @param realm the realm to authorize
@@ -409,7 +428,7 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                     new SystemException($msg));
     return true;
-  
+
     // FIXME: <rabbitt> is everything below necessary if we're not using it anymore?
 
     if (empty($userId)) {

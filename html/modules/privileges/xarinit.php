@@ -301,18 +301,10 @@ function privileges_init()
 
     xarDB_importTables(array('instances' => xarDBGetSiteTablePrefix() . '_instances'));
 
-//    $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
-//    $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
-//    $privileges->setInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
-
     // Initialisation successful
     return true;
 }
 
-function privileges_activate()
-{
-    return true;
-}
 /**
  * Upgrade the roles module from an old version
  *

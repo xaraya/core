@@ -691,11 +691,10 @@ function dynamicdata_delete()
     xarTplUnregisterTag('data-label');
     xarTplUnregisterTag('data-object');
 
-    /**
-     * Remove instances
-     */
+    // Remove Masks and Instances
+    xarRemoveMasks('dynamicdata');
+    xarRemoveInstances('dynamicdata');
 
-     xarRemoveInstances("dynamicdata");
 
     // Deletion successful
     return true;

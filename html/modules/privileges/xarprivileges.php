@@ -193,6 +193,25 @@ class xarMasks
 	}
 
 /**
+ * removeMasks: remove the masks registered by a module form the database
+ * *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   module name
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+	function removemasks($module)
+	{
+		$query = "DELETE FROM $this->maskstable
+              WHERE xar_module = '$module'";
+		//Execute the query, bail if an exception was thrown
+		if (!$this->dbconn->Execute($query)) return;
+		return true;
+	}
+
+/**
  * winnow: merges two arrays of privileges to a single array of privileges
  *
  * The privileges are compared for implication and the less mighty are discarded

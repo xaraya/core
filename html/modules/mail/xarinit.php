@@ -5,7 +5,7 @@
 // Copyright (C) 2002 by the Xaraya Development Team.
 // http://www.xaraya.org
 // ----------------------------------------------------------------------
-// Original Author of file: John Cox via phpMailer Team 
+// Original Author of file: John Cox via phpMailer Team
 // Purpose of file:  Initialisation functions for the Mail Hook
 // ----------------------------------------------------------------------
 
@@ -74,6 +74,10 @@ function mail_delete()
     xarModDelVar('mail', 'replyto');
     xarModDelVar('mail', 'replytoname');
     xarModDelVar('mail', 'replytoemail');
+
+    // Remove Masks and Instances
+    xarRemoveMasks('mail');
+    xarRemoveInstances('mail');
 
     return true;
 }
