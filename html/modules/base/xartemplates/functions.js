@@ -1,3 +1,11 @@
+/*
+ * *** Deprecated ***
+ * Please instead use xar_base_confirmlink() and xar_base_formcheck()
+ * available to a template through the following theme tags:
+ * <xar:base-include-javascript module="base" filename="comfirmlink.js" position="head" /> and
+ * <xar:base-include-javascript module="base" filename="formcheck.js" position="head" />
+ */
+
 function confirmLink(theLink, xarConfirmMsg)
 {
 	var confirmMsg  = 'Do you really want to';
