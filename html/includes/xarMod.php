@@ -320,7 +320,12 @@ function xarModDelAllVars($modName)
         $module_varstable = $tables['site/module_vars'];
         $module_uservarstable = $tables['site/module_uservars'];
     }
-    
+
+// FIXME: the WHERE clause is wrong (should be xar_id), and this syntax is not
+//        supported by MySQL (should be DELETE t1,t2 FROM t1,t2,t3 WHERE t1.id=t2.id AND t2.id=t3.id
+//        or DELETE FROM t1,t2 USING t1,t2,t3 WHERE t1.id=t2.id AND t2.id=t3.id syntax)
+// Not sure which one is supposed to be ANSI SQL and/or is supported by PostgreSQL, Oracle, ...
+
     // Delete the user variables first
     $query = "DELETE FROM $module_uservarstable, $module_varstable
               WHERE $module_uservarstable.xar_mvid = $module_varstable.xar_modid AND
