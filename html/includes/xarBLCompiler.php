@@ -1294,6 +1294,15 @@ class xarTpl__ExpressionTransformer
     function transformBLExpression($blExpression)
     {
         // 'resolve' the dot and colon notation
+        $subparts = preg_split('/[\[|\]]/', $blExpression);
+        if(count($subparts) > 1) {
+            foreach($subparts as $subpart) {
+                // Resolve the subpart
+                $blExpression = str_replace($subpart, xarTpl__ExpressionTransformer::transformBLExpression($subpart), $blExpression);
+            }
+            return $blExpression;
+        }
+        
         $identifiers = preg_split('/[.|:]/',$blExpression);
         $operators = preg_split('/[^.|^:]/',$blExpression,-1,PREG_SPLIT_NO_EMPTY);
         
@@ -1311,44 +1320,47 @@ class xarTpl__ExpressionTransformer
                 $expression .= '->'.$identifiers[$i];
             }
         }
-        return XAR_TOKEN_VAR_START . $expression;
+        return $expression;
     }
 
     function transformPHPExpression($phpExpression)
     {
-        // This regular expression  must match the variables in the BLExpression grammar above
-        // pass it to the resolver, check for exceptions, and replace it with the resolved
-        // var name.
-        // Let's dissect the expression so it's a bit more clear:
-        //  1. /..../i      => we're matching in a case - insensitive  way what's between the /-es (FIXME: KEEP AN EYE ON THIS) 
-        //  2. \\\$         => matches \$ which is an escaped $ in the string to match
-        //  3. (            => this starts a captured subpattern - results in $matches[1]
-        //  4.  [a-z_]      => matches a letter or underscore
-        //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
-        //  6.  (?:         => start property access non-captured subpattern
-        //  7.   :|\\.      => matches the colon or the dot notation
-        //  8.   [$]{0,1}   => the array key or object member may be a variable
-        //  9.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences 
-        // 10.  )           => matches right brace
-        // 11.  *           => match zero or more occurences of the property access / array key notation (colon notation)
-        // 12. )            => ends the current pattern
-        // TODO: of course, if all this was between #...# it would be a lot easier ;-)
-        // TODO: $a[$b]:c doesn't work properly should be: $a[$b]->c Is: $a[$b]:c
-        // TODO: if variable array key or object member, make sure it starts with a letter
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?:[:|\\.][$]{0,1}[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
-            // Resolve BL expressions inside the php Expressions
-            $numMatches = count($matches[0]);
-            
-            // Make sure we replace in order of descending length of the matches
-            // to prevent overlapping matches to disturb eachother.
-            // NOTE: only needed for php versions < 4.3.0 otherwise use OFFSET flag for preg_match_all
-            usort($matches[0], array('xarTpl__ExpressionTransformer', 'rlensort'));
-            usort($matches[1], array('xarTpl__ExpressionTransformer', 'rlensort'));
-            
-            for ($i = 0; $i < $numMatches; $i++) {
-                $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
-                if (!isset($resolvedName)) return; // throw back
+        // This regular expression matches variables in their notation as 
+        // supported by php  and according to the dot/colon grammar in the
+        // method above. These expressions are matched and passed on to the BL 
+        // expression resolver above which resolves them into php variables notation. 
+        // The resolved names are replaced in the original expression 
 
+        // Let's dissect the expression so it's a bit more clear:
+        //  1. /..../i            => we're matching in a case - insensitive  way what's between the /-es (FIXME: KEEP AN EYE ON THIS) 
+        //  2. \\\$               => matches \$ which is an escaped $ in the string to match
+        //  3. (                  => this starts a captured subpattern 
+        //  4.  [a-z_]            => matches a letter or underscore, which is wat vars need to start with
+        //  5.  [0-9a-z_\[\]\$]*  => matches the rest of the variables which might be present, while preserving [ and ]
+        //  6.  (                 => start property / array access subpattern
+        //  7.   :|\\.            => matches the colon or the dot notation
+        //  8.   [$]{0,1}         => the array key or object member may be a variable
+        //  9.   [0-9a-z_\]\[\$]+ => matches number,letter or underscore, one or more occurrences 
+        // 10.  )                 => matches right brace
+        // 11.  *                 => match zero or more occurences of the property access / array key notation (colon notation)
+        // 12. )                  => ends the current pattern
+        // NOTE: The behaviour of this method along with the BLExpression method above CHANGED. Part 
+        //       of the resolving is now done by the previous method (i.e. a complete expression is passed into it)
+        
+        // TODO: of course, if all this was between #...# it would be a lot easier ;-)
+        // TODO: if variable array key or object member, make sure it starts with a letter
+        $regex = "/((\\\$[a-z_][a-z0-9_\[\]\$]*)([:|\.][$]{0,1}[0-9a-z_\]\[\$]+)*)/i";
+        if (preg_match_all($regex, $phpExpression,$matches)) {
+            // Resolve BL expressions inside the php Expressions
+            
+            // To prevent overlap as much as we can we sort descending by length
+            usort($matches[0], array('xarTpl__ExpressionTransformer','rlensort')); 
+            $numMatches = count($matches[0]);
+            for ($i = 0; $i < $numMatches; $i++) {
+                $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[0][$i]);
+                if (!isset($resolvedName)) return; // throw back
+                      
+                // CHECK: Does it matter if there is overlap in the matches? 
                 $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
             }
         }
