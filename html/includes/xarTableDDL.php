@@ -830,6 +830,9 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             break;
 
         case 'float':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'float';
+            }
             switch ($parameters['size']) {
                 case 'double':
                         $data_type = 'DOUBLE PRECISION';
@@ -1011,6 +1014,9 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             break;
 
         case 'float':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'float';
+            }
             switch ($parameters['size']) {
                 case 'double':
                         $data_type = 'DOUBLE PRECISION';
