@@ -99,28 +99,31 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 
     // Basic systems alway loaded
     // {ML_dont_parse 'includes/pnLog.php'}
-    include 'includes/pnLog.php';
+    include_once 'includes/pnLog.php';
     // {ML_dont_parse 'includes/pnEvt.php'}
-    include 'includes/pnEvt.php';
+    include_once 'includes/pnEvt.php';
     // {ML_dont_parse 'includes/pnException.php'}
-    include 'includes/pnException.php';
+    include_once 'includes/pnException.php';
     // {ML_dont_parse 'includes/pnVar.php'}
-    include 'includes/pnVar.php';
+    include_once 'includes/pnVar.php';
     // {ML_dont_parse 'includes/pnServer.php'}
-    include 'includes/pnServer.php';
+    include_once 'includes/pnServer.php';
     // {ML_dont_parse 'includes/pnMLS.php'}
-    include 'includes/pnMLS.php';
-    include 'includes/pnTemplate.php';
+    include_once 'includes/pnMLS.php';
+    include_once 'includes/pnTemplate.php';
 
     // Legacy systems
     // {ML_dont_parse 'includes/pnHTML.php'}
-    include 'includes/pnHTML.php';
+    include_once 'includes/pnHTML.php';
     // {ML_dont_parse 'includes/pnLegacy.php'}
-    include 'includes/pnLegacy.php';
+    include_once 'includes/pnLegacy.php';
+
+    // Initialise system args array
+    //$systemArgs = array();
 
     if ($whatToLoad & PNCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/pnDB.php'}
-        include 'includes/pnDB.php';
+        include_once 'includes/pnDB.php';
 
         // Decode encoded DB parameters
         $userName = pnCore_getSystemVar('DB.UserName');
@@ -137,7 +140,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     }
 
     // Start Event Messagging System
-    pnEvt_init($systemArgs);
+    // FIXME: what are we gonna do here marco ... Evt_init doesn't take an array
+    pnEvt_init($whatToLoad);
+    //pnEvt_init($systemArgs);
 
     pnEvt_registerEvent('PostBodyStart');
     pnEvt_registerEvent('PreBodyEnd');
@@ -161,7 +166,6 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
                         'censoredWords' => pnCore_getSiteVar('Var.CensoredWords'),
                         'censoredWordsReplacers' => pnCore_getSiteVar('Var.CensoredWordsReplacers'));
     */
-    $systemArgs = array();
     //pnVar_init($systemArgs);
 
     // Start HTTP Protocol Server/Request/Response utilities
@@ -173,7 +177,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 
     if ($whatToLoad & PNCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/pnSession.php'}
-        include 'includes/pnSession.php';
+        include_once 'includes/pnSession.php';
 
         // Start Session Support
         $systemArgs = array('securityLevel' => pnCore_getSiteVar('Session.SecurityLevel'),
@@ -191,7 +195,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     pnMLS_init($systemArgs);
 
     if ($whatToLoad & PNCORE_SYSTEM_CONFIGURATION) {
-        include 'includes/pnConfig.php';
+        include_once 'includes/pnConfig.php';
 
         // Start Configuration Unit
         $systemArgs = array();
@@ -199,7 +203,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     }
 
     if ($whatToLoad & PNCORE_SYSTEM_MODULES) {
-        include 'includes/pnMod.php';
+        include_once 'includes/pnMod.php';
 
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
@@ -210,9 +214,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     }
 
     if ($whatToLoad & PNCORE_SYSTEM_USER) {
-        include 'includes/pnUser.php';
+        include_once 'includes/pnUser.php';
         // {ML_dont_parse 'includes/pnSecurity.php'}
-        include 'includes/pnSecurity.php';
+        include_once 'includes/pnSecurity.php';
 
         // Start User System
         $systemArgs = array('authenticationModules' => pnCore_getSiteVar('User.AuthenticationModules'));
@@ -223,7 +227,7 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     }
 
     if ($whatToLoad & PNCORE_SYSTEM_BLOCKS) {
-        include 'includes/pnBlocks.php';
+        include_once 'includes/pnBlocks.php';
     }
 
     $systemArgs = array('enableTemplatesCaching' => true);

@@ -54,7 +54,10 @@ function pnDB_init($args)
     $dbpass = $args['password'];
 
     // ADODB configuration
-    define('ADODB_DIR', 'pnadodb');
+    if (!defined('ADODB_DIR')) {
+        define('ADODB_DIR', 'pnadodb');
+    }
+    
     include 'pnadodb/adodb.inc.php';
 
     // Database connection is a global (for now)
