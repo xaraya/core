@@ -28,8 +28,8 @@ function themes_admin_modifyconfig()
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
 
     $filter['Class'] = 2;
-    $data['themes'] = xarModAPIFunc('themes', 'admin', 'getlist', $filter);
-    $data['defaulttheme'] = xarModGetVar('themes', 'default', 1);
+    $data['themes'] = xarModAPIFunc('themes', 'admin', 'getlist', $filter); // This get the theme info structure
+    $data['defaulttheme'] = xarModGetVar('themes', 'default', 1); // This gets the directory name
     $data['defaultthemelabel'] = xarVarPrepForDisplay(xarML('Default Theme:'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
     $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;

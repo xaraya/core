@@ -6,10 +6,10 @@
     <div>
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<h3><xar:mlstring>Site Display Options</xar:mlstring></h3>
-	<p><label for="defaulttheme"><xar:mlstring>Default Theme</xar:mlstring></label>:
+	<p><label for="defaulttheme"><xar:mlstring>Default Theme</xar:mlstring></label>:#$defaulttheme#
 		<select name="defaulttheme" id="defaulttheme" size="1">
 			<xar:loop name="$themes">
-				<xar:if condition="$loop:item['name'] eq $defaulttheme">
+				<xar:if condition="$loop:item['directory'] eq $defaulttheme">
 					<option value="#$loop:item['regid']#" selected="selected">
 						#$loop:item['name']#
 					</option>
