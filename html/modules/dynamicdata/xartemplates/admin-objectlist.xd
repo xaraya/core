@@ -11,11 +11,15 @@
 </xar:if>
 <xar:if condition="empty($layout) or $layout eq 'list' or $layout eq 'default'">
     <div class="xar-fullwidth">
-        <h4>
-            <xar:mlstring>
-                Properties and Options 
-            </xar:mlstring>
-        </h4>
+        <xar:if condition="!empty($newlink)">
+            <a href="#$newlink#">
+                <strong>
+                    <xar:mlstring>
+                        Create New 
+                    </xar:mlstring>
+                </strong>
+             </a>
+        </xar:if>
 <!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
         <xar:foreach in="$items" key="$itemid" value="$fields">
             <table class="xar-norm xar-norm-outline xar-fullwidth">
@@ -26,16 +30,6 @@
                         </xar:mlstring>
                     </th>
                     <th colspan="2">
-                        <xar:if condition="!empty($newlink)">
-                            <a href="#$newlink#">
-                                <strong>
-                                    <xar:mlstring>
-                                        Create New 
-                                    </xar:mlstring>
-                                </strong>
-                            </a>
-                            | 
-                        </xar:if>
                         <xar:foreach in="$links[$itemid]" value="$option">
                             <xar:if condition="!empty($option['olink'])">
                                 #$option['ojoin']# 
