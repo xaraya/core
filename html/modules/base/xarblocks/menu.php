@@ -370,7 +370,8 @@ function base_menublock_insert($blockinfo)
         list($linkurl, $linkname, $linkdesc, $linkchild) = xarVarCleanFromInput('linkurl', 'linkname', 'linkdesc', 'linkchild');
         foreach ($blockinfo['linkname'] as $v) {
             if (!isset($blockinfo['linkdelete'][$c])) {
-                $content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
+                // FIXME: MrB, i added the @ to avoid testing whether all fields contains something usefull
+                @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
             if (isset($blockinfo['linkinsert'][$c])) {
                 $content[] = "||";
