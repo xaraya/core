@@ -347,7 +347,7 @@ function xarExceptionRender($format)
                 $type = 'SYSTEM Exception';
                 break;
             case XAR_USER_EXCEPTION:
-                $type = 'USER Exception';
+                $type = 'USER Error';
                 break;
             default:
                 continue 2;
@@ -362,22 +362,25 @@ function xarExceptionRender($format)
             if (method_exists($exception['value'], 'toHTML')) {
                 $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
             }
-            $stack = $exception['stack'];
-            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
-                if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-                else $function = '{}';
-                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
-                // Note: eval() doesn't generate file or line
-                if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
-                if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                $text .= ')<br />';
-                if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
-                    ob_start();
-                    print_r($stack[$i]['args']);
-                    $dump = ob_get_contents();
-                    ob_end_clean();
-                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
-                    $text .= '<br />';
+
+            if ($exception['major'] != XAR_USER_EXCEPTION) {
+                $stack = $exception['stack'];
+                for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
+                    if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
+                    else $function = '{}';
+                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
+                    // Note: eval() doesn't generate file or line
+                    if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
+                    if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
+                    $text .= ')<br />';
+                    if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
+                        ob_start();
+                        print_r($stack[$i]['args']);
+                        $dump = ob_get_contents();
+                        ob_end_clean();
+                        $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
+                        $text .= '<br />';
+                    }
                 }
             }
         } else {
@@ -385,22 +388,24 @@ function xarExceptionRender($format)
             if (method_exists($exception['value'], 'toString')) {
                 $text .= $exception['value']->toString();
             }
-            $stack = $exception['stack'];
-            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
-                if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-                else $function = '{}';
-                $text .= '     at '.$function.'(';
-                // Note: eval() doesn't generate file or line
-                if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
-                if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                $text .= ")\n";
-                if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
-                    ob_start();
-                    print_r($stack[$i]['args']);
-                    $dump = ob_get_contents();
-                    ob_end_clean();
-                    $text .= $dump;
-                    $text .= "\n";
+            if ($exception['major'] != XAR_USER_EXCEPTION) {
+                $stack = $exception['stack'];
+                for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
+                    if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
+                    else $function = '{}';
+                    $text .= '     at '.$function.'(';
+                    // Note: eval() doesn't generate file or line
+                    if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
+                    if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
+                    $text .= ")\n";
+                    if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
+                        ob_start();
+                        print_r($stack[$i]['args']);
+                        $dump = ob_get_contents();
+                        ob_end_clean();
+                        $text .= $dump;
+                        $text .= "\n";
+                    }
                 }
             }
         }
