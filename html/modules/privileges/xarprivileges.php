@@ -623,6 +623,7 @@ class xarMasks
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                     if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
+                    $matched = true;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
@@ -630,11 +631,9 @@ class xarMasks
                         $msg = $mask->getName()." MATCHES! ".
                             "Mask includes privilege. Privilege level ".
                             "lesser.\n";
-                        echo $msg;
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
-                $matched = true;
             }
             else {
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
