@@ -55,7 +55,7 @@
                 Members:
             </td>
             <td>
-                <xar:loop name="group.instances">
+                <xar:loop name="$group.instances">
                     <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-id;">&xar-var-title;</a><br />
                 </xar:loop>
             </td>

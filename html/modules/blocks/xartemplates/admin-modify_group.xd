@@ -87,7 +87,7 @@ function saveBlockOrder(f) {
                     <tr>
                         <td rowspan="2">
                             <select name="group_instances" size="&xar-var-instance_count;">
-                                <xar:loop name="group.instances">
+                                <xar:loop name="$group.instances">
                                     <option value="&xar-var-id;"><xar:var name="$title" /></option>
                                 </xar:loop>
                             </select>

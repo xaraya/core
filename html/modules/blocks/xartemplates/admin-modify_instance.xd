@@ -63,7 +63,7 @@
             </td>
             <td>
                 <select name="block_group" style="width:150px;">
-                    <xar:loop name="block_groups">
+                    <xar:loop name="$block_groups">
                         <xar:if condition="$instance['group_id'] eq $id">
                             <option value="&xar-var-id;" selected="selected">
                         <xar:else />
@@ -81,7 +81,7 @@
             </td>
             <td>
                 <select name="block_refresh" style="width:150px;">
-                    <xar:loop name="refresh_times">
+                    <xar:loop name="$refresh_times">
                         <xar:if condition="$instance['refresh'] eq $id">
                             <option value="&xar-var-id;" selected="selected">
                         <xar:else />

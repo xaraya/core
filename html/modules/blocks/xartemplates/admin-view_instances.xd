@@ -56,7 +56,7 @@
             Operations
         </th>
     </tr>
-    <xar:loop name="blocks">
+    <xar:loop name="$blocks">
     <tr align="center">
         <td>
             <a href="&xar-modurl-blocks-admin-modify_group;&gid=&xar-var-group_id;">&xar-var-group_name;</a>
