@@ -1,0 +1,27 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:if condition="empty($style) or $style eq 'serialized'">
+  <xar:if condition="!empty($object)">
+    <xar:data-display object="$object" />
+  <xar:else/>
+    #$value#
+  </xar:if>
+
+<xar:elseif condition="$style eq 'itemid'"/>
+  <xar:if condition="!empty($object)">
+    <xar:data-display object="$object" />
+  <xar:else/>
+    #$value#
+  </xar:if>
+
+<xar:elseif condition="$style eq 'childlist'"/>
+  <xar:if condition="!empty($object)">
+
+<xar:comment> TODO: use specific 'subform' layout here </xar:comment>
+    <xar:data-view object="$object" layout="list" />
+  <xar:else/>
+    #$value#
+  </xar:if>
+
+</xar:if>
+

@@ -1,0 +1,118 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table class="xar-norm">
+  <tr>
+    <td>
+      <xar:mlstring>Object</xar:mlstring>
+    </td>
+    <td>
+      <xar:set name="field">$name.'[objectid]'</xar:set>
+      <xar:data-input type="object" name="$field" value="$objectid" tabindex="$tabindex" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Style</xar:mlstring>
+    </td>
+    <td>
+      <select name="#$name#[style]" id="#$name#_style">
+      <xar:foreach in="$styles" key="$sname" value="$slabel">
+        <xar:if condition="!empty($style) and $style eq $sname">
+          <option value="#$sname#" selected="selected">#$slabel#</option>
+        <xar:else/>
+          <option value="#$sname#">#$slabel#</option>
+        </xar:if>    
+      </xar:foreach>
+      </select>
+    </td>
+  </tr>
+<xar:if condition="!empty($objectid) and !empty($style) and $style eq 'itemid'">
+  <tr>
+    <td>
+      <xar:mlstring>Title Field</xar:mlstring>
+    </td>
+    <td>
+      <xar:comment> the title property needs to be selected </xar:comment>
+      <select name="#$name#[title]" id="#$id#_title">
+        <option value="">[ <xar:mlstring>no dropdown list</xar:mlstring> ]</option>
+      <xar:foreach in="$properties" key="$propname" value="$propinfo">
+        <xar:if condition="!empty($title) and $title eq $propname">
+          <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+        <xar:else/>
+          <option value="#$propname#">#$propinfo.label#</option>
+        </xar:if>
+      </xar:foreach>
+      </select>
+    </td>
+  </tr>
+</xar:if>
+<xar:if condition="!empty($objectid) and !empty($style) and $style ne 'serialized'">
+  <tr>
+    <td>
+      <xar:mlstring>Link Field</xar:mlstring>
+    </td>
+    <td>
+      <xar:if condition="$style eq 'itemid'">
+        <xar:comment> the property of type 'itemid' is the link</xar:comment>
+        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+          <xar:if condition="!empty($propinfo['type']) and $propinfo['type'] eq 21">
+            #$propinfo.label#
+            <xar:break/>
+          </xar:if>
+        </xar:foreach>
+
+      <xar:elseif condition="$style eq 'childlist'"/>
+        <xar:comment> the parent property needs to be selected </xar:comment>
+        <select name="#$name#[link]" id="#$id#_link">
+        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+          <xar:if condition="!empty($link) and $link eq $propname">
+            <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+          <xar:else/>
+            <option value="#$propname#">#$propinfo.label#</option>
+          </xar:if>
+        </xar:foreach>
+        </select>
+      </xar:if>
+    </td>
+  </tr>
+<xar:comment> TODO: check this
+  <tr>
+    <td>
+      <xar:mlstring>Where</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[where]" id="#$id#_where" value="#$where#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</xar:comment>
+</xar:if>
+<xar:if condition="!empty($objectid)">
+  <tr>
+    <td>
+      <xar:mlstring>Field List</xar:mlstring>
+    </td>
+    <td>
+      <select name="#$name#[fieldlist][]" id="#$name#_fieldlist" multiple="multiple" />
+      <xar:foreach in="$properties" key="$propname" value="$propinfo">
+        <xar:if condition="!empty($fieldlist) and in_array($propname,$fieldlist)">
+          <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+        <xar:else/>
+          <option value="#$propname#">#$propinfo.label#</option>
+        </xar:if>
+      </xar:foreach>
+      </select>
+    </td>
+  </tr>
+</xar:if>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
