@@ -17,7 +17,10 @@ class HTMLExceptionRendering extends ExceptionRendering
 {
 
     function getTitle() { return xarVarPrepForDisplay(parent::getTitle()); }
-    function getShort() { return xarVarPrepForDisplay(parent::getShort()); }
+    function getShort() {
+        if ($this->exception->getID() == "ErrorCollection") return parent::getShort();
+        else return xarVarPrepForDisplay(parent::getShort());
+    }
     function getHint() { return xarVarPrepForDisplay(parent::getHint()); }
     function getMsg() { return xarVarPrepForDisplay(parent::getMsg()); }
 
