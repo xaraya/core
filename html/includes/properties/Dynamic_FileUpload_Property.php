@@ -242,19 +242,24 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $extensions = $this->filetype;
             $allowed = '<br />' . xarML('Allowed file types : #(1)',$extensions);
         } else {
+            $extensions = '';
             $allowed = '';
         }
 
-        $size       = !empty($size) ? $size : $this->size;
-        $maxSize    = !empty($maxSize) ? $maxSize : $this->maxSize;
-        $tabindex   = !empty($tabindex) ? ' tabindex="' . $tabindex . '" ' : '';
-        $value      = !empty($value) ? xarML('Uploaded file: #(1)',$value) . '<br /> <input type="hidden" name="' . $name . '" value="' . $value .'" />' : '';
-        $invalid    = !empty($this->invalid) ? '<span class="xar-error">' . xarML('Invalid #(1)',  $this->invalid) . '</span>' : '';
+        $data               = array();
+        $data['name']       = $name;
+        $data['value']      = xarVarPrepForDisplay($value);
+        $data['id']         = $id;
+        $data['upname']     = $upname;
+        $data['size']       = !empty($size) ? $size : $this->size;
+        $data['maxsize']    = !empty($maxSize) ? $maxSize : $this->maxSize;
+        $data['tabindex']   = !empty($tabindex) ? ' tabindex="' . $tabindex . '" ' : '';
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
+        $data['allowed']    = $allowed;
+        $data['extensions'] = $extensions;
 
-        // we're using a hidden field to keep track of any previously uploaded file here
-        return ($value .
-               '<input type="hidden" name="MAX_FILE_SIZE" value="'. $maxSize  .'" />' .
-               '<input type="file" name="'.$upname.'" size="'. $size . '" id="'. $id . '"' . $tabindex . ' /> ' . $allowed . $invalid);
+        $template="fileupload";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
     }
 
     function showOutput($args = array())
@@ -280,14 +285,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 // remove any left over values
                 return '';
             }
+            $data = array();
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
-                $value = xarVarPrepForDisplay($value);
-            // TODO: convert basedir to base URL when necessary ?
-                return '<a href="'.$this->basedir.'/'.$value.'" title="'.xarML('Download').'">'.$value.'</a>';
+                $data['basedir'] = $this->basedir;
             } else {
-                return xarVarPrepForDisplay($value); // something went wrong here
+                $data['basedir'] = null; // something went wrong here
             }
+            $data['value'] = xarVarPrepForDisplay($value);
+
+            $template="fileupload";
+            return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
         } else {
             return '';
         }

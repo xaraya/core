@@ -565,7 +565,7 @@ function dynamicdata_init()
                              'limit'  => 0
                             )
                     );
-    xarDefineInstance('dynamicdata','Type',$instances);
+    xarDefineInstance('dynamicdata','Field',$instances);
 
     xarModAPIFunc('modules','admin','enablehooks',
                   array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
@@ -610,7 +610,7 @@ function dynamicdata_upgrade($oldVersion)
                                  'limit'  => 0
                                 )
                         );
-        xarDefineInstance('dynamicdata','Type',$instances);
+        xarDefineInstance('dynamicdata','Field',$instances);
 
         $instances = array(
                            array('header' => 'external', // this keyword indicates an external "wizard"
