@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<select name="#$name#" id="#$id#" #$tabindex# >
+<select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
     <xar:foreach in="$soptions" value="$soption" >
         <xar:if condition="$value eq $soption['name']" >
             <option value="#$soption['name']#" selected="selected">#$soption['name']#</option>
