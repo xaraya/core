@@ -38,10 +38,11 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-                    <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" id="cancel" value="Cancel" align="middle" />
+				<input type="submit" value="OK" align="middle" />
             </td>
         </tr>
     </table>
+	<br /><br />
+	<a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel deletion of Block Instance</xar:mlstring></a>
 </form>
 </center>
