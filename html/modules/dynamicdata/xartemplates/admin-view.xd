@@ -16,7 +16,7 @@
         #$label# 
     </h2>
 <!-- this does all the hard work :) -->
-    <xar:data-list layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" sort="$sort" />
+    <xar:data-list layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" startnum="$startnum" catid="$catid" sort="$sort" />
     <xar:if condition="!empty($querylink)">
         <p>
             <a href="#$querylink#">
