@@ -34,7 +34,15 @@ function themes_adminapi_remove($args)
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
+    $defaultTheme = xarModGetVar('themes','default');
 
+    // Bail out if we're trying to remove the default theme
+    if ($defaultTheme == $themeInfo['name'] ) {
+        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
+                    xarML('The theme you are trying to remove is the current default theme. Select another default theme first, then try again.'));
+        return;
+    }
+    
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
