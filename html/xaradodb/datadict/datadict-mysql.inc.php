@@ -10,7 +10,8 @@
  
 */
 
-class ADODB2_mysql extends ADODB_DataDict {
+class ADODB2_mysql extends ADODB_DataDict
+{
 	var $databaseType = 'mysql';
 	var $alterCol = ' MODIFY COLUMN';
 	var $quote = '`';
