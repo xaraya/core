@@ -74,6 +74,16 @@
 		</xar:if>
 	</select></p>
 	<h3><xar:mlstring>Template Debugging options</xar:mlstring></h3>
+    <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
+    <p>
+      <xar:mlstring>Show php comment block header in compiled templates</xar:mlstring>
+        <xar:if condition="xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')">
+          <input type="checkbox" name="showphpcbit" id="showphpcbit" value="1" checked="checked" />
+        <xar:else />
+          <input type="checkbox" name="showphpcbit" id="showphpcbit" value="1" />
+        </xar:if>
+      </p>
+    </xar:if>
 	<xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
     <p>
       <xar:mlstring>Show template filenames in HTML comments</xar:mlstring>

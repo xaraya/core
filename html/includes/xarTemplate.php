@@ -933,6 +933,20 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         return;
     }
 
+    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
+        // CHECKME: not sure if this is needed, e.g. during installation
+        if (function_exists('xarModGetVar')){
+            $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
+            if (!empty($showphpcbit)) {
+                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+            } else {
+                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+            }
+        } else {
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+        }
+    }
+
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
@@ -943,12 +957,14 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
             // TODO: make a config var for this, so we can switch it off
-            $commentBlock = "<?php\n/*"
-                          . "\n * Source:     " . $sourceFileName
-                          . "\n * Theme:      " . xarTplGetThemeName()
-                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
-                          . "\n */\n?>\n";
-            fwrite($fd, $commentBlock);            
+            if($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) {
+                $commentBlock = "<?php\n/*"
+                              . "\n * Source:     " . $sourceFileName
+                              . "\n * Theme:      " . xarTplGetThemeName()
+                              . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
+                              . "\n */\n?>\n";
+                fwrite($fd, $commentBlock);
+            }
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
