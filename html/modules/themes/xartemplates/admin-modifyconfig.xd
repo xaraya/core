@@ -2,6 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <form method="post" action="#xarModURL('themes', 'admin', 'updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
+    <div>
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<h3><xar:mlstring>Site Display Options</xar:mlstring></h3>
 	<p>#$defaultthemelabel# 
@@ -70,6 +71,7 @@
                         </xar:if>
 	</p>
     <input type="submit" value="#$submitbutton#" />
+   </div>
 </form>
 </div>
 </div>

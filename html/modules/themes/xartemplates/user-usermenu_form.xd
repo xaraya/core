@@ -4,6 +4,7 @@
 <h2><xar:mlstring>Select Theme</xar:mlstring></h2> 
 <div align="center">
 <form action="#xarModURL('themes', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
+<div>
 <input type="hidden" name="authid" id="authid" value="#$authid#" />	
 <input type="hidden" name="uid" id="uid" value="#$uid#" />	
 <input type="hidden" name="phase" id="phase" value="update" />
@@ -28,6 +29,7 @@
 </table>
 <br />
 <input type="submit" value="Modify Default Theme" align="middle" tabindex="2" />
+</div>
 </form>
 </div>
 </div>
