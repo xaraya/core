@@ -39,6 +39,7 @@
                     Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site. 
                 </xar:mlstring>
             </p>
+            <div class="configuration">
             <h4>
                 <xar:mlstring>
                     Configuration Modules 
@@ -120,6 +121,7 @@
                     </xar:loop>
                 </div>
             </xar:if>
+            </div>
             <p>
                 <xar:mlstring>
                     All of the above modules can be installed or removed at any later time in the Modules module. 
