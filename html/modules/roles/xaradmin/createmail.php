@@ -28,7 +28,6 @@ function roles_admin_createmail()
 
    // what type of email: a selection or a single email?
     if ($uid < 1) $type = 'selection';
-//    $data['groupuid'] = 0;
     else {
         $roles = new xarRoles();
         $role = $roles->getRole($uid);
