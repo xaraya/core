@@ -238,8 +238,8 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
     if (empty($validation_name)) {
         // Raise an exception
         // ML system not loaded yet
+        // It seems like the log system is not yet loaded too?
         $msg = "The required validation name '$validation_name' input variable couldn\'t be found.";
-        die($msg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return false;
@@ -249,7 +249,6 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
         // Raise an exception
         // ML system not loaded yet
         $msg = "The validation name '$validation_name' is already being used";
-        die($msg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return false;
@@ -259,7 +258,6 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
         // Raise an exception
         // ML system not loaded yet
         $msg = "The required object name '$object_name' input variable couldn\'t be found or do not contain an validation object.";
-        die($msg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return false;
@@ -269,7 +267,6 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
         // Raise an exception
         // ML system not loaded yet
         $msg = "'$object_name' isnt the name of an object.";
-        die($msg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return false;
@@ -279,7 +276,6 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
         // Raise an exception
         // ML system not loaded yet
         $msg = "'$object_name' isnt a child of the object xarVarValidator.";
-        die($msg);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return false;
