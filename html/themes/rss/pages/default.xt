@@ -1,19 +1,4 @@
-<xar:set name="$data">xarThemeApiFunc('rss', 'prepareoutput')</xar:set>
-#$data['header']#
-#$data['xml']#
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-	 <channel>
-		<title>#$data['title']#</title>
-		<link>#$data['link']#</link>
-		<description>#$data['desc']#</description>
-		<webMaster>#$data['webmaster']#</webMaster>
-		<dc:language>en-us</dc:language> 
-		<dc:creator>#$data['erroremail']#</dc:creator> 
-	    <admin:generatorAgent rdf:resource="http://www.xaraya.org" /> 
-	    <admin:errorReportsTo rdf:resource="mailto:#$data['erroremail']#" /> 
-	    <sy:updatePeriod>hourly</sy:updatePeriod> 
-	    <sy:updateFrequency>1</sy:updateFrequency> 
-		<docs>http://backend.userland.com/rss</docs>
+<xar:blockgroup name="syndicate" id="syndicate" />
 		<xar:module id="modulespace" main="true" />
 	</channel>
 </rss>
