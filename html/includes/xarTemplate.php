@@ -12,14 +12,37 @@
  * @author Marco Canini <marco@xaraya.com>
  */
 
-/*
+  /**
+   *
+   * NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
+   *       but *DO NOT* remove it.  I still need to figure it out so I can
+   *       make proper widgets out of it (for r1.1)
+   *
+   *    Thanks
+   */
 
-NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
-        but *DO NOT* remove it.  I still need to figure it out so I can
-        make proper widgets out of it (for r1.1)
+  /**
+   * Defines for template handling
+   *
+   */
 
-        Thanks
-*/
+  /// OLD STUFF //////////////////////////////////
+define ('XAR_TPL_OPTIONAL', 2);
+define ('XAR_TPL_REQUIRED', 0); // default for attributes
+
+define ('XAR_TPL_STRING', 64);
+define ('XAR_TPL_BOOLEAN', 128);
+define ('XAR_TPL_INTEGER', 256);
+define ('XAR_TPL_FLOAT', 512);
+define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
+/// END OLD STUFF
+
+/**
+ * Define for reg expressions for attributes and tags
+ *
+ */
+define ('XAR_TPL_ATTRIBUTE_REGEX','^[a-z][-_a-z0-9]*$');
+define ('XAR_TPL_TAGNAME_REGEX',  '^[a-z][-_a-z0-9]*$');
 
 
 /**
@@ -774,6 +797,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
  */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
+    // FIXME: <mrb> should we reverte to default here?
     if (empty($templateName)) {
         $templateName = 'default';
     }
@@ -781,8 +805,6 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
     $templateName = xarVarPrepForOS($templateName);
 
     $sourceFileName = $GLOBALS['xarTpl_themeDir']."/blocks/$templateName.xt";
-    // FIXME: <marco> I'm removing the code to fall back to 'default' template since
-    // I don't think it's what we need to do here.
 
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
@@ -1181,16 +1203,6 @@ function xarTpl__loadFromFile($sourceFileName)
     return $output;
 }
 
-/// OLD STUFF //////////////////////////////////
-
-define ('XAR_TPL_OPTIONAL', 2);
-define ('XAR_TPL_REQUIRED', 0); // default for attributes
-
-define ('XAR_TPL_STRING', 64);
-define ('XAR_TPL_BOOLEAN', 128);
-define ('XAR_TPL_INTEGER', 256);
-define ('XAR_TPL_FLOAT', 512);
-define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
 
 /**
  *
@@ -1203,11 +1215,8 @@ class xarTemplateAttribute {
 
     function xarTemplateAttribute($name, $flags = NULL)
     {
-        // FIXME: It seems that the expr ^[a-z][a-z0-9\-_]*$ doesn *NOT* match the string 'bid'
-        // and the expr ^[a-z][-_a-z0-9]*$ *DOES*
-        // this was on the server on xaraya
-        // FIXME: Move this expression out of the class and define() it.
-        if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
+        // See define at top of file
+        if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
             $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
@@ -1274,8 +1283,8 @@ class xarTemplateTag {
 
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL)
     {
-        // FIXME: See note at attribute class
-        if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
+        // See defines at top of file
+        if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
@@ -1343,7 +1352,6 @@ class xarTemplateTag {
                 return;
             }
         }
-        //xarModAPILoad($this->_module, $this->_type);
         return xarModAPIFunc($this->_module, $this->_type, $this->_func, $args);
     }
 }
@@ -1369,7 +1377,9 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
         return false;
     }
 
+    // Validity of tagname is checked in class.
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
+    if(!$tag->getName()) return; // tagname was not set, exception pending
 
     list($tag_name,
          $tag_module,
@@ -1382,8 +1392,6 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    // FIXME: temp fix, installer doesn't know about it
-    //$tag_table = $xartable['template_tags'];
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
 
@@ -1419,7 +1427,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  **/
 function xarTplUnregisterTag($tag_name)
 {
-    if (!eregi('^[a-z][-_a-z0-9]*$', $tag_name)) {
+    if (!eregi(XARTPL_TAGNAME_REGEX, $tag_name)) {
         // throw exception
         return false;
     }
@@ -1497,8 +1505,6 @@ function xarTplGetTagObjectFromName($tag_name)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    // FIXME: during installer the template_tag table wasn't there, didn't investigate
-    //$tag_table = $xartable['template_tags'];
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
     $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
