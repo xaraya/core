@@ -226,17 +226,30 @@ function adminpanels_adminmenublock_display($blockinfo){
 //        $args = array('showold'=>false);
 //    }
     
-    // Sort Order Status and Links Display
-    if('byname' == pnModGetVar('adminpanels','menustyle')){
+    // Sort Order Status and Links Display.
+    $menustyle = pnModGetVar('adminpanels','menustyle');
+    if($menustyle == 'byname'){
         // sort by name
         $data = pnModAPIFunc('adminpanels', 'admin', 'buildbyname');
-        $output->Text('<font class="pn-sub">&nbsp;[ '.pnMLByKey('BYNAME').' ]</font>');
+        $output->Text('<font class="pn-sub">[ '.pnVarPrepForDisplay(pnML('by name')).' ]</font>');
         $output->Linebreak();
         $output->Text($data);
-    }else{
+    }else if ($menustyle == 'bycat'){
         // sort by categories
         $data = pnModAPIFunc('adminpanels', 'admin', 'buildbycat');
-        $output->Text('<font class="pn-sub">&nbsp;[ '.pnMLByKey('BYCAT').' ]</font>');
+        $output->Text('<font class="pn-sub">['.pnVarPrepForDisplay(pnML('by category')).']</font>');
+        $output->Linebreak();
+        $output->Text($data);
+    }else if ($menustyle == 'byweight'){
+        // sort by weight
+        $data = pnModAPIFunc('adminpanels', 'admin', 'buildbyname');
+        $output->Text('<font class="pn-sub">['.pnVarPrepForDisplay(pnML('by weight')).']</font>');
+        $output->Linebreak();
+        $output->Text($data);
+    }else if ($menustyle == 'bygroup'){
+        // sort by group
+        $data = pnModAPIFunc('adminpanels', 'admin', 'buildbyname');
+        $output->Text('<font class="pn-sub">['.pnVarPrepForDisplay(pnML('by group')).']</font>');
         $output->Linebreak();
         $output->Text($data);
     }
