@@ -1,13 +1,16 @@
 <?php
-// File: $Id: s.user.php 1.13 03/04/15 09:37:50+02:00 marc@marclaptop. $
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Everyone
-// Purpose of file: Roles Block
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * User Info via block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Roles Module
+ * @author Marco Canini
+*/
 
 /**
  * init
@@ -32,7 +35,8 @@ function roles_userblock_info()
 }
 
 /**
- * Display func
+ * Display func.
+ * @param $blockinfo array containing title,content
  */
 function roles_userblock_display($blockinfo)
 {

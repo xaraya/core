@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Language Selection
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Language Selection via block
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Roles Module
+ * @author Marco Canini
+*/
 
 /**
  * initialise block
@@ -28,7 +31,8 @@ function roles_languageblock_info()
 }
 
 /**
- * display block
+ * Display func.
+ * @param $blockinfo array containing title,content
  */
 function roles_languageblock_display($blockinfo)
 {

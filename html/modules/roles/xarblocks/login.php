@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file: user login
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Login via a block.
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Roles Module
+ * @author Jim McDonald
+*/
 
 /**
  * initialise block
@@ -28,7 +31,8 @@ function roles_loginblock_info()
 }
 
 /**
- * display block
+ * Display func.
+ * @param $blockinfo array containing title,content
  */
 function roles_loginblock_display($blockinfo)
 {
@@ -68,9 +72,9 @@ function roles_loginblock_display($blockinfo)
     return $blockinfo;
 }
 
-// TODO - modify/update block settings
 /**
- * modify block settings
+ * Modify Function to the Blocks Admin
+ * @param $blockinfo array containing title,content
  */
 function roles_loginblock_modify($blockinfo)
 {
@@ -95,7 +99,8 @@ function roles_loginblock_modify($blockinfo)
 }
 
 /**
- * update block settings
+ * Updates the Block config from the Blocks Admin
+ * @param $blockinfo array containing title,content
  */
 function roles_loginblock_update($blockinfo)
 {

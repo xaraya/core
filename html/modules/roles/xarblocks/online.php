@@ -31,7 +31,8 @@ function roles_onlineblock_info()
 }
 
 /**
- * display block
+ * Display func.
+ * @param $blockinfo array containing title,content
  */
 function roles_onlineblock_display($blockinfo)
 {
