@@ -19,6 +19,7 @@ function roles_user_usermenu($args)
     extract($args);
     if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
+    $data = array();
     switch(strtolower($phase)) {
         case 'menu':
             $iconbasic = 'modules/roles/xarimages/home.gif';
