@@ -9,8 +9,7 @@
 // Purpose of file:  Initialisation functions for base
 // ----------------------------------------------------------------------
 
-//Load Table Maintainance API
-xarDBLoadTableMaintenanceAPI();
+
 
 /**
  * Initialise the base module
@@ -21,6 +20,12 @@ xarDBLoadTableMaintenanceAPI();
  */
 function base_init()
 {
+    // Start the database
+    xarCoreInit(XARCORE_SYSTEM_ADODB);
+
+    //Load Table Maintainance API
+    xarDBLoadTableMaintenanceAPI();
+
     // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -125,6 +130,10 @@ function base_init()
         return NULL;
     }
     
+    // PRE-SETUP so that xarCoreInit will work 
+    xarInstallConfigSetVar('Site.BL.DefaultTheme','installer');
+    xarInstallConfigSetVar('Site.BL.ThemesDirectory','themes');
+    xarInstallConfigSetVar('Site.BL.CacheTemplates','true');
     xarCoreInit(XARCORE_SYSTEM_CONFIGURATION);
     /****************************************************************
     * Set System Configuration Variables
@@ -133,7 +142,6 @@ function base_init()
     xarConfigSetVar('System.Core.VersionNum', 'Xaraya Pre - 1.0');
     xarConfigSetVar('System.Core.VersionId', 'Xaraya');
     xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
-
     /*****************************************************************
     * Set site configuration variables
     ******************************************************************/
@@ -146,13 +154,10 @@ function base_init()
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
-
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
     xarConfigSetVar('Site.Session.EnableIntranetMode', false);
-    xarConfigSetVar('Site.BL.DefaultTheme', 'installer');
-    xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 1);

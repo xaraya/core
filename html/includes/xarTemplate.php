@@ -9,17 +9,44 @@
 // Purpose of file: The BlockLayout template engine
 // ----------------------------------------------------------------------
 
-//  Find specifications at the following address
-//  http://developer.hostnuke.com/modules.php?op=modload&name=Sections&file=index&req=viewarticle&artid=1&page=1
-
+/**
+ * Load BlockLayout
+ *
+ * @access private
+ * @param $args['enableTemplatesCaching']
+ * @param $args['themesBaseDir']
+ * @param $args['defaultThemeName']
+ * @returns bool
+ */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
     global $xarTpl_cacheTemplates, $xarTpl_themesBaseDir, $xarTpl_defaultThemeName;
     global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
 
-    $xarTpl_themesBaseDir = $args['themesBaseDirectory'];
-    $xarTpl_defaultThemeName = $args['defaultThemeName'];
-    
+    if (!$whatElseIsGoingLoaded & XARCORE_SYSTEM_CONFIGURATION) {
+        // Use variables in the site's config file
+        $xarTpl_themesBaseDir    = $args['themesBaseDirectory'];
+        $xarTpl_defaultThemeName = $args['defaultThemeName'];
+        $xarTpl_cacheTemplates   = $args['enableTemplatesCaching'];
+    } else {
+        // use variables in the site's config table
+        $xarTpl_themesBaseDir = xarConfigGetVar('Site.BL.ThemesDirectory');
+        if (!isset($xarTpl_themesBaseDir) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+        $xarTpl_defaultThemeName = xarConfigGetVar('Site.BL.DefaultTheme');
+        if (!isset($xarTpl_defaultThemeName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+        $xarTpl_cacheTemplates = xarConfigGetVar('Site.BL.CacheTemplates');
+        if (!isset($xarTpl_cacheTemplates) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+    }
+
     if (!xarTplSetThemeName($xarTpl_defaultThemeName)) {
         global $xarTpl_themeDir;
         xarCore_die("xarTpl_init: Unexistent theme directory '$xarTpl_themeDir'.");
@@ -34,8 +61,6 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
                    "'. Control directory permissions.");
     }
 
-    $xarTpl_cacheTemplates = $args['enableTemplatesCaching'];
-    
     $xarTpl_additionalStyles = '';
     $xarTpl_headJavaScript = '';
     $xarTpl_bodyJavaScript = '';
@@ -149,7 +174,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
-    
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 

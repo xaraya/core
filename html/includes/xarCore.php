@@ -213,7 +213,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     // Start BlockLayout Template Engine
-    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.TemplateCaching'),
+    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
                         'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
                         'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
     xarTpl_init($systemArgs, $whatToLoad);
