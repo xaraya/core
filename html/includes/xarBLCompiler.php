@@ -1356,8 +1356,9 @@ class xarTpl__ExpressionTransformer
      * BLExpression ::= Variable | Variable '.' ArrayKey
      * Variable ::= Name | SpecialVariable
      * SpecialVariable ::= Name ':' Name | Name ':' Name ':' Name
-     * ArrayKey ::= Name | Name '.' ArrayKey
+     * ArrayKey ::= KeyName | KeyName '.' ArrayKey
      * Name ::= [a-zA-Z_] ([0-9a-zA-Z_])*
+     * KeyName ::= ([0-9a-zA-Z_])+
      */
     function transformBLExpression($blExpression)
     {
@@ -1390,17 +1391,23 @@ class xarTpl__ExpressionTransformer
         // Let's dissect the expression so it's a bit more clear:
         //  1. /..../i      => we're matching in a case - insensitive  way what's betwteen the /-es
         //  2. \\\$         => matches \$ which is and escaped $ in the string to match
-        //  3. (            => this starts a subpattern
+        //  3. (            => this starts a captured subpattern - results in $matches[1]
         //  4.  [a-z_]      => matches a letter or underscore
         //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
-        //  6.  (           => starts a subpattern
+        //  6.  (?:         => starts a non-captured subpattern
         //  7.   :          => matches the colon
         //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
         //  9.  )           => matches right brace
         // 10.  {1,2}       => the whole previous subpattern may  appear min. 1 and max 2 times
-        // 11. )            => ends the current pattern
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*([:\.][0-9a-z_]+){1,2})/i", $phpExpression, $matches)) {
-            // Get xarTpl__SpecialVariableNamesResolver instance
+        // 11.  (?:         => start array key non-captured subpattern
+        // 12.   \\.        => each array key is separated by a dot, escaped for preg_match and the
+        //                     escaping '\' escaped for the double-quoted string
+        // 13.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
+        // 14.  )           => end array key subpattern
+        // 15.  *           => match zero or more occurances of the array key subpattern
+        // 16. )            => ends the current pattern
+        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){1,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
+            // Get xarTpl__SpecialVariableNamesResolver instance but via transformBLExpression()
             for ($i = 0; $i < count($matches[0]); $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
                 if (!isset($resolvedName)) {
@@ -2971,18 +2978,12 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return;
         }
         
-        // Allow php expressions for the attibute
-        $file = xarTpl__ExpressionTransformer::transformPHPExpression($file);
-        if (!isset($file)) {
-            return;
-        }
-
         switch($type) {
         case 'theme':
-            return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
+            return "xarTpl_includeThemeTemplate('$file', $subdata)";
             break;
         case 'module':
-            return "xarTpl_includeModuleTemplate(\$_bl_module_name, \"$file\", $subdata)";
+            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
             break;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);

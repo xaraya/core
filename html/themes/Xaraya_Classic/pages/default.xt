@@ -8,13 +8,13 @@
 <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css); </style> #$tpl:additionalStyles#
 <!--- Head JavaScript --->
 <xar:foreach in="$tpl:JavaScript.head" value="$jshead">
-    <xar:if condition="$jshead.type == 'code'">
+    <xar:if condition="$jshead['type'] == 'code'">
         <script language="Javascript" type="text/javascript">
         #$jshead['data']#
         </script>
     </xar:if>
-    <xar:if condition="$jshead.type == 'src'">
-        <script language="Javascript" type="text/javascript" src="#$jshead.data#"></script>
+    <xar:if condition="$jshead['type'] == 'src'">
+        <script language="Javascript" type="text/javascript" src="#$jshead['data']#"></script>
     </xar:if>
 </xar:foreach>
 </head>
@@ -74,13 +74,13 @@
 </div>
 <!--- Body JavaScript --->
 <xar:foreach in="$tpl:JavaScript.body" value="$jsbody">
-    <xar:if condition="$jsbody.type == 'code'">
+    <xar:if condition="$jsbody['type'] == 'code'">
         <script language="Javascript" type="text/javascript">
         #$jsbody['data']#
         </script>
     </xar:if>
-    <xar:if condition="$jsbody.type == 'src'">
-        <script language="Javascript" type="text/javascript" src="#$jsbody.data#"></script>
+    <xar:if condition="$jsbody['type'] == 'src'">
+        <script language="Javascript" type="text/javascript" src="#$jsbody['data']#"></script>
     </xar:if>
 </xar:foreach>
 </body>
