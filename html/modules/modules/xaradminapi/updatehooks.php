@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Update hooks for a particular hook module
@@ -48,13 +48,13 @@ function modules_adminapi_updatehooks($args)
     }
 
     // Delete all entries of modules using this hook (but don't delete the '' module)
-    // signaling there *is* a hook, we want to keep that knowledge in  
+    // signaling there *is* a hook, we want to keep that knowledge in
     $sql = "DELETE FROM $xartable[hooks] WHERE xar_tmodule = ? AND xar_smodule <> ''";
     $result =& $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     // get the list of all (active) modules
-    $modList = xarModAPIFunc('modules', 'admin', 'GetList');
+    $modList = xarModAPIFunc('modules', 'admin', 'getlist');
     //throw back
     if (!isset($modList)) return;
 
@@ -67,7 +67,7 @@ function modules_adminapi_updatehooks($args)
         // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
         if (!empty($ishooked) && $ishooked[0] != 0) {
             // There is something in there, either for all itemtypes or for some
-            $todo[$mod['name']] = $ishooked; 
+            $todo[$mod['name']] = $ishooked;
         }
     }
     // nothing more to do here
@@ -116,7 +116,7 @@ function modules_adminapi_updatehooks($args)
                 foreach (array_keys($hookvalue) as $itemtype) {
                     // If user specified SOME specifically, skip itemtype 0
                     if ($hookvalue[0] == 2 && $itemtype == 0) continue;
-                    
+
                     $sql = "INSERT INTO $xartable[hooks] (
                                 xar_id, xar_object, xar_action, xar_smodule,
                                 xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)

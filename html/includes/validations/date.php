@@ -30,10 +30,13 @@
  * where each format string uses the format specifiers as defined by strftime()
  */
 
-function variable_validations_date (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if (!is_string($subject)) {
-        $msg = xarML('Not a string: "#(1)"', $subject);
+        if ($name != '')
+            $msg = xarML('Variable #(1) is not a string: "#(2)"', $name, $subject);
+        else
+            $msg = xarML('Not a string: "#(1)"', $subject);
         if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }
@@ -96,7 +99,7 @@ function variable_validations_date (&$subject, $parameters, $supress_soft_exc)
     if ($timestamp > 0) {
         $subject = strftime($store_format, $timestamp);
     } else {
-        $msg = xarML('Invalid date format');
+        $msg = xarML('Invalid date format for #(1)', $name);
         if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }

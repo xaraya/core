@@ -12,11 +12,14 @@
 /**
  * Strings Validation Class
  */
-function variable_validations_str (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$name)
 {
 
     if (!is_string($subject)) {
-        $msg = xarML('Not a string: "#(1)"', $subject);
+        if ($name != '')
+            $msg = xarML('Variable #(1) is not a string: "#(2)"', $name, $subject);
+        else
+            $msg = xarML('Not a string: "#(1)"', $subject);
         if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }

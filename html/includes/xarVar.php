@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Variable utilities
- * 
+ *
  * @package variables
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -42,7 +42,7 @@ define('XARVAR_PREP_TRIM',        8);
  * @global xarVar_enableCensoringWords bool
  * @global xarVar_censoredWords array
  * @global xarVar_censoredWordsReplacers array
- * @param args array 
+ * @param args array
  * @param whatElseIsGoingLoaded integer
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
@@ -54,7 +54,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
      * Initialise the variable cache
      */
     $GLOBALS['xarVar_cacheCollection'] = array();
-    
+
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
@@ -64,7 +64,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
     if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
-        
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarVar__shutdown_handler');
     return true;
@@ -112,7 +112,7 @@ function xarVar__shutdown_handler()
  * @return array With the respective exceptions in case of failure
  * @raise BAD_PARAM
  */
-function xarVarBatchFetch() 
+function xarVarBatchFetch()
 {
 
     $batch = func_get_args();
@@ -149,7 +149,7 @@ function xarVarBatchFetch()
  * 1st try to use the variable provided, if this is not set (Or the XARVAR_DONT_REUSE flag is used)
  * then it try to ge the variable from the input (POST/GET methods for now)
  *
- * Then tries to validate the variable thru xarVarValidate.  
+ * Then tries to validate the variable thru xarVarValidate.
  *
  * See xarVarValidate for details about nature of $validation.
  * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
@@ -220,7 +220,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         $supress = false;
     }
 
-    $result = xarVarValidate($validation, $value, $supress);
+    $result = xarVarValidate($validation, $value, $supress, $name);
 
     if (xarCurrentErrorType()) {return;} //Throw back
 
@@ -308,7 +308,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, &$subject, $supress = false) 
+function xarVarValidate($validation, &$subject, $supress = false, $name='')
 {
 // <nuncanada> For now, i have moved all validations to html/modules/variable/validations
 //             I think that will incentivate 3rd party devs to create and send new validations back to us..
@@ -344,7 +344,7 @@ function xarVarValidate($validation, &$subject, $supress = false)
     $function_name = xarVarLoad ('validations', $valType);
     if (!$function_name) {return;}
 
-    return $function_name($subject, $valParams, $supress);
+    return $function_name($subject, $valParams, $supress, $name);
 }
 
 /*
@@ -456,7 +456,7 @@ function xarVar_addSlashes($var)
 
 function xarVar__getAllowedTags($level)
 {
-    // Get the allowed HTML from the config var.  At some 
+    // Get the allowed HTML from the config var.  At some
     // point this will be replaced by retrieving the
     // allowed HTML from the HTML module.
     $allowedHTML = array();
@@ -531,8 +531,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         //variable missing.
         return;
     }
-        
-    
+
+
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
     switch(strtolower($type)) {
     case 'themevar':
@@ -546,7 +546,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     default:
         break;
     }
-    
+
 
     // Still no luck, let's do the hard work then
     switch(strtolower($type)) {
@@ -556,7 +556,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     default:
         $baseinfotype = 'module';
         break;
-        
+
     }
     if($type != 'configvar') {
         $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype);
@@ -564,12 +564,12 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             return; // throw back
         }
     }
-    
+
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $bindvars = array();
-    
+
     switch(strtolower($type)) {
     case 'modvar':
     default:
@@ -579,7 +579,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
             $module_varstable = $tables['site/module_vars'];
         }
-        
+
         $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
         $bindvars = array((int)$modBaseInfo['systemid']);
         break;
@@ -593,8 +593,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         unset($modvarid);
         $modvarid = xarModGetVarId($modName, $name);
         if (!$modvarid) return;
-        
-        $query = "SELECT xar_value FROM $module_uservarstable 
+
+        $query = "SELECT xar_value FROM $module_uservarstable
                   WHERE xar_mvid = ? AND xar_uid = ?";
         $bindvars = array((int)$modvarid, (int)$uid);
         break;
@@ -608,7 +608,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
         //This was broken!!
         //Guess nobody is using these
-        //Later on it was list($value) = $this->fields... But there are 3 fields here!!! 
+        //Later on it was list($value) = $this->fields... But there are 3 fields here!!!
 //        $query = "SELECT xar_value, xar_prime, xar_description
         $query = "SELECT xar_name, xar_value
                   FROM $theme_varsTable
@@ -616,9 +616,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         $bindvars = array($modName);
         break;
     case 'configvar':
-        
+
         $config_varsTable = $tables['config_vars'];
-        
+
         $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
         $bindvars = array($name);
         break;
@@ -644,7 +644,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
     }
-    
+
     if (strtolower($type) == 'moduservar') {
         // If there is no such thing, return the global setting.
         if ($result->EOF) {
@@ -659,7 +659,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         xarVarSetCached($cacheCollection, $cacheName, $missing);
         return;
     }
-    
+
     switch(strtolower($type)) {
         case 'themevar':
         case 'modvar':
@@ -668,7 +668,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                 xarVarSetCached($cacheCollection, $name, $value);
                 $result->MoveNext();
             }
-            //Special value to tell this select has already been run, any 
+            //Special value to tell this select has already been run, any
             //variable not found now on is missing
              xarVarSetCached($cacheCollection, 0, true);
             //It should be here!
@@ -756,9 +756,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             // We need the variable id
             unset($modvarid);
             $modvarid = xarModGetVarId($modName, $name);
-                
+
             if($value === false) $value = 0;
-            if($value === true) $value = 1;        
+            if($value === true) $value = 1;
             if(!$modvarid) {
                 $seqId = $dbconn->GenId($module_varstable);
                 $query = "INSERT INTO $module_varstable
@@ -843,7 +843,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     if (xarCore_getSystemVar('DB.UseADODBCache')){
         $result =& $dbconn->CacheFlush();
     }
-    
+
     if (!empty($query)){
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
@@ -999,7 +999,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
  * @return string the string in the new context
  * @raise EMPTY_PARAM
  */
-function xarVarTransform ($string, $sourceContext, $targetContext) 
+function xarVarTransform ($string, $sourceContext, $targetContext)
 {
 
     //Would it be useful to be able to transform arrays of strings at once?
@@ -1026,7 +1026,7 @@ function xarVarTransform ($string, $sourceContext, $targetContext)
  * @return string the function anme
  * @raise BAD_PARAM
  */
-function xarVarLoad ($includes_type, $filename) 
+function xarVarLoad ($includes_type, $filename)
 {
 
     $filename = xarVarPrepForOS($filename);
@@ -1059,7 +1059,7 @@ function xarVarLoad ($includes_type, $filename)
  * @return string the string escape for the context
  * @raise EMPTY_PARAM
  */
-function xarVarEscape ($string, $targetContext, $extras = array()) 
+function xarVarEscape ($string, $targetContext, $extras = array())
 {
 
     //Would it be useful to be able to transform arrays of strings at once?

@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Configure hooks by hook module
@@ -47,9 +47,9 @@ function modules_admin_hooks($args)
     if (!empty($curhook)) {
         // Get list of modules likely to be "interested" in hooks
         //$modList = xarModGetList(array('Category' => 'Content'));
-        $modList = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+        $modList = xarModAPIFunc('modules',
+                          'admin',
+                          'getlist',
                           array('orderBy'     => 'category/name'));
         //throw back
         if (!isset($modList)) return;
@@ -103,7 +103,7 @@ function modules_admin_hooks($args)
     }
 
     foreach ($hooklist as $hookmodname => $hooks) {
-        
+
         // Get module display name
         $regid = xarModGetIDFromName($hookmodname);
         $modinfo = xarModGetInfo($regid);
@@ -115,7 +115,7 @@ function modules_admin_hooks($args)
                                                               array('hook' => $hookmodname)));
     }
 
-    //return the output 
+    //return the output
     return $data;
 }
 

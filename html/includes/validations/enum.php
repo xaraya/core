@@ -12,7 +12,7 @@
 /**
  * Enum Validation Function
  */
-function variable_validations_enum (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &$name)
 {
 
     $found = false;
@@ -26,7 +26,10 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc)
     if ($found) {
         return true;
     } else {
-        $msg = xarML('Input "#(1)" was not one of the possibilities: "', $subject);
+        if ($name != '')
+            $msg = xarML('Input "#(1)" was not one of the possibilities for #(2): "', $subject, $name);
+        else
+            $msg = xarML('Input "#(1)" was not one of the possibilities.', $subject);
         $first = true;
         foreach ($parameters as $param) {
             if ($first) $first = false;

@@ -12,11 +12,14 @@
 /**
  * Array Validation Function
  */
-function variable_validations_array (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_array (&$subject, $parameters, $supress_soft_exc, &$name)
 {
 
     if (!is_array($subject)) {
-        $msg = xarML('Not an array: "#(1)"', $subject);
+        if ($name != '')
+            $msg = xarML('Variable #(1) is not an array: "#(2)"', $name, $subject);
+        else
+            $msg = xarML('Not an array: "#(1)"', $subject);
         if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }

@@ -50,7 +50,7 @@
  * @return array array of module information arrays
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function modules_adminapi_GetList($args)
+function modules_adminapi_getlist($args)
 {
     extract($args);
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',

@@ -13,7 +13,7 @@
  * subject string 'hello,there;word' will return 'hello;there;word'.
  * Validation of each item in the list will be further passed on to
  * any required validation type.
- * 
+ *
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -22,12 +22,15 @@
 /**
  * String List Validation Class
  */
-function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     $return = true;
 
     if (!is_string($subject)) {
-        $msg = xarML('Not a string: "#(1)"', $subject);
+        if ($name != '')
+            $msg = xarML('Variable #(1) is not a string: "#(2)"', $name, $subject);
+        else
+            $msg = xarML('Not a string: "#(1)"', $subject);
         if (!$supress_soft_exc) {
             xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         }
@@ -57,7 +60,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         // Get count of elements.
         $count = count($elements);
 
-        // Loop through each element if there are any elements, and if 
+        // Loop through each element if there are any elements, and if
         // there is further validation to apply.
         if ($count > 0 && !empty($validation)) {
             for($i = 0; $i < $count; $i++) {

@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Obtain list of modules (deprecated)
@@ -29,9 +29,9 @@ function modules_adminapi_list($args)
 
     // Obtain information
     if (!isset($state)) $state = '';
-    $modList = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+    $modList = xarModAPIFunc('modules',
+                          'admin',
+                          'getlist',
                           array('filter'     => array('State' => $state)));
     //throw back
     if (!isset($modList)) return;

@@ -85,9 +85,9 @@ function dynamicdata_admin_view($args)
             $seenmod[$object['moduleid']] = 1;
         }
 
-        $modList = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+        $modList = xarModAPIFunc('modules',
+                          'admin',
+                          'getlist',
                           array('orderBy'     => 'category/name'));
         $oldcat = '';
         for ($i = 0, $max = count($modList); $i < $max; $i++) {

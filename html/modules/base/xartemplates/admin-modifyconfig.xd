@@ -235,7 +235,7 @@
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="tab" id="tab" value="#$tab#" />
 
-                              <xar:template file="modifyconfig-locales" module="base" type="module"/>
+             <xar:template file="modifyconfig-locales" module="base" type="module"/>
 
             <div style="clear: both; padding-top: 10px;">
                 <input type="submit" value="#$updatelabel#" />
