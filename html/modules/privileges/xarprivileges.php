@@ -685,7 +685,7 @@ class xarPrivileges extends xarMasks
         if (!$this->dbconn->Execute($query)) return;
 
 // empty the privset cache
-        $this->forgetprivsets();
+//        $this->forgetprivsets();
 
         return true;
     }
@@ -2017,8 +2017,8 @@ class xarPrivilege extends xarMask
         if (!$this->dbconn->Execute($query)) return;
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
         return true;
     }
@@ -2044,8 +2044,8 @@ class xarPrivilege extends xarMask
         if (!$this->dbconn->Execute($query)) return;
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
         return true;
     }
