@@ -222,119 +222,6 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // Insert Allowed Vars
-    $htmltags = array('!--',
-                      'a',
-                      'abbr',
-                      'acronym',
-                      'address',
-                      'applet',
-                      'area',
-                      'b',
-                      'base',
-                      'basefont',
-                      'bdo',
-                      'big',
-                      'blockquote',
-                      'br',
-                      'button',
-                      'caption',
-                      'center',
-                      'cite',
-                      'code',
-                      'col',
-                      'colgroup',
-                      'del',
-                      'dfn',
-                      'dir',
-                      'div',
-                      'dl',
-                      'dd',
-                      'dt',
-                      'em',
-                      'embed',
-                      'fieldset',
-                      'font',
-                      'form',
-                      'h1',
-                      'h2',
-                      'h3',
-                      'h4',
-                      'h5',
-                      'h6',
-                      'hr',
-                      'i',
-                      'iframe',
-                      'img',
-                      'input',
-                      'ins',
-                      'isindex',
-                      'kbd',
-                      'label',
-                      'legend',
-                      'l',
-                      'li',
-                      'map',
-                      'marquee',
-                      'menu',
-                      'nl',
-                      'nobr',
-                      'object',
-                      'ol',
-                      'optgroup',
-                      'option',
-                      'p',
-                      'param',
-                      'pre',
-                      'q',
-                      's',
-                      'samp',
-                      'script',
-                      'select',
-                      'small',
-                      'span',
-                      'strike',
-                      'strong',
-                      'sub',
-                      'sup',
-                      'table',
-                      'tbody',
-                      'td',
-                      'textarea',
-                      'tfoot',
-                      'th',
-                      'thead',
-                      'tr',
-                      'tt',
-                      'u',
-                      'ul',
-                      'var');
-
-    foreach ($htmltags as $htmltag) {
-        $id_allowedvar = $dbconn->GenId($allowedVarsTable);
-        $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$htmltag','html')";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-    }
-
-    $censoredWords = array('fuck',
-                           'fucked',
-                           'motherfucker',
-                           'pussy',
-                           'cock',
-                           'cunt',
-                           'cocksucker',
-                           'cum');
-
-    foreach ($censoredWords as $censoredWord) {
-        $id_allowedvar = $dbconn->GenId($allowedVarsTable);
-        $query = "INSERT INTO $allowedVarsTable VALUES ($id_allowedvar,'$censoredWord','censored')";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-    }
-
-
-
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
     * CREATE TABLE xar_template_tags (
@@ -478,22 +365,22 @@ function base_init()
     // FIXME: the installation of the blocks module depends on the modules module
     // to be present, doh !
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
-	    return;
-	}
+                           array('directory'=>'blocks', 'initfunc'=>'init'))) {
+        return;
+    }
 
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-	                       array('directory'=>'themes', 'initfunc'=>'init'))) {
-	    return;
-	}
+                           array('directory'=>'themes', 'initfunc'=>'init'))) {
+        return;
+    }
 
 //     /**************************************************************
 //     * Install the sniffer module
 //     **************************************************************/
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-	                       array('directory'=>'sniffer', 'initfunc'=>'init'))) {
-	    return;
-	}
+                           array('directory'=>'sniffer', 'initfunc'=>'init'))) {
+        return;
+    }
 
     // Fill language list(?)
 
