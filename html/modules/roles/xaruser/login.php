@@ -30,6 +30,14 @@ function roles_user_login()
 {
     global $xarUser_authenticationModules;
 
+    $locked  = xarSessionGetVar('roles.login.lockedout');
+    $now = time();
+    if (($now - $locked) < 54000){
+        $msg = xarML('Your account has been locked for 15 minutes.');
+        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+        return;
+    }
+
     if (!xarVarFetch('uname','str:1:100',$uname)) {
         xarErrorFree();
         $msg = xarML('You must provide a username.');
@@ -213,16 +221,25 @@ function roles_user_login()
             elseif ($res == false) {
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
-                $msg = xarML('Problem logging in: Invalid username or password.');
-                xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                return;
+                
+                $attempts = xarSessionGetVar('roles.login.attempts');
+                if ($attempts == 3){
+                    xarSessionSetVar('roles.login.lockedout', time());
+                    xarSessionSetVar('roles.login.attempts', 0);
+                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for 15 minutes.');
+                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+                    return;
+                } else {
+                    $newattempts = $attempts + 1;
+                    xarSessionSetVar('roles.login.attempts', $newattempts);
+                    $msg = xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.', $newattempts);
+                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+                    return;
+                }
             }
-
             xarResponseRedirect($redirecturl);
             return true;
-
             break;
-
         case ROLES_STATE_PENDING:
 
             // User is pending activation
