@@ -52,8 +52,11 @@ SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg_%' ORDER BY 1"
 	var $fmtTimeStamp = "'Y-m-d G:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
 	var $hasMoveFirst = true;
 	var $hasGenID = true;
-	var $_genIDSQL = "SELECT NEXTVAL('%s')";
-	var $_genSeqSQL = "CREATE SEQUENCE %s START %s";
+    // XARAYA MODIFICATION
+    // prefix the sequencwe number as it'll be the same id as the table name - GM
+	var $_genIDSQL = "SELECT NEXTVAL('seq%s')";
+	var $_genSeqSQL = "CREATE SEQUENCE seq%s START %s";
+    // END XARAYA MODIFICATION
 	var $metaDefaultsSQL = "SELECT d.adnum as num, d.adsrc as def from pg_attrdef d, pg_class c where d.adrelid=c.oid and c.relname='%s' order by d.adnum";
 		
 	// The last (fmtTimeStamp is not entirely correct: 
@@ -341,7 +344,8 @@ a different OID if a database must be reloaded. */
 		//if ($user) $linea = "user=$user host=$linea password=$pwd dbname=$db port=5432";
 		$this->_connectionID = pg_connect($str);
 		if ($this->_connectionID === false) return false;
-		$this->Execute("set datestyle='ISO'");
+        // find out why this fails
+		//$this->Execute("set datestyle='ISO'");
 				return true;
 	}
 	
