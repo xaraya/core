@@ -1,65 +1,48 @@
-
-<!-- common admin menu for this module - remove link to the current function -->
-
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-
-    <!-- the variables used in this menu come from example_admin_menu() -->
-
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">&xar-var-menutitle;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
-
-        <!-- links to particular menu items -->
-
-        <!-- Simple URLs can be specified directly in the template -->
-
-        <td> <strong>&xar-var-menulabel_new;</strong> </td>
-        <td><a href="&xar-modurl-example-admin-view;">&xar-var-menulabel_view;</a></td>
-        <td><a href="&xar-modurl-example-admin-modifyconfig;">&xar-var-menulabel_config;</a></td>
-
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
+            <td><strong><xar:mlstring>Create New</xar:mlstring> #$label#</strong></td>
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
-<!-- the specific template for the current admin function comes here -->
-
-<table width="100%" border="0" cellspacing="1" cellpadding="8">
-<!--
-    // Start form - note the use of xarModURL() to create the recipient URL of
-    // this form.  All URLs should be generated through xarModURL() to ensure
-    // compatibility with future versions of Xaraya
--->
-<form method="post" action="&xar-modurl-example-admin-create;">
-<!--
-    // Add an authorisation ID - this adds a hidden field in the form that
-    // contains an authorisation ID.  The authorisation ID is very important in
-    // preventing certain attacks on the website
--->
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
-
-<tr><td colspan="2">
-&xar-var-hooks;
-</td></tr>
-
-<tr><td>&xar-var-namelabel;</td>
-<td><input type="text" name="name" size=32 maxlength=32></td></tr>
-
-<tr><td>&xar-var-numberlabel;</td>
-<td><input type="text" name="number" size=5 maxlength=5></td></tr>
-
-<tr><td colspan="2" align="center">
-    <input type="submit" value="&xar-var-addbutton;"></td></tr>
-</form>
-
+<xar:if condition="!empty($preview)">
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <td align="center">
+            <xar:mlstring>Preview</xar:mlstring>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+        </td>
+    </tr>
 </table>
-<br />
+</xar:if>
+
+<form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#">
+    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="modid" value="#$modid#" />
+    <input type="hidden" name="itemtype" value="#$itemtype#" />
+    <input type="hidden" name="itemid" value="#$itemid#" />
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+        <xar:data-form module="$modid" itemtype="$itemtype" itemid="0" fields="$fields" />
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />
+                &nbsp;&nbsp;&nbsp;
+                <input type="submit" value="<xar:mlstring>Create</xar:mlstring>" />
+            </td>
+        </tr>
+    </table>
+
+</form>
 

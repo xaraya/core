@@ -1,8 +1,8 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <xar:loop name="$fields">
         <tr align="left" valign="middle">
-            <td>&xar-var-label;</td>
-            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" /></td>
+            <td>#$label# </td>
+            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" /> <xar:if condition="!empty($invalid)"><span style="color: red"><xar:mlstring>Invalid</xar:mlstring> #$invalid#</span></xar:if></td>
         </tr>
     </xar:loop>
 <xar:else />

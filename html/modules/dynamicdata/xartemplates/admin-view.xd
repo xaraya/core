@@ -1,12 +1,6 @@
-
-<!-- common admin menu for this module - remove link to the current function -->
-
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-
-    <!-- the variables used in this menu come from example_admin_menu() -->
-
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">&xar-var-menutitle;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
@@ -21,7 +15,7 @@
         <td><strong><xar:mlstring>View Data Properties</xar:mlstring></strong></td>
         <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configuration</xar:mlstring></a></td>
 -->
-        <td><strong><xar:mlstring>View Modules using Dynamic Data</xar:mlstring></strong></td>
+        <td><strong><xar:mlstring>View Module Objects</xar:mlstring></strong></td>
         <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
 
         <!-- more menu items come here... -->
@@ -36,44 +30,7 @@
 
 <!-- the specific template for the current admin function comes here -->
 
-<!-- some status given by the function using this template -->
-
-<strong>&xar-var-status;</strong>
-
-<table width="100%" border="1" cellspacing="0" cellpadding="4">
-    <tr>
-        <th>&xar-var-modidlabel;</th>
-        <th>&xar-var-itemtypelabel;</th>
-        <th>&xar-var-numitemslabel;</th>
-        <th>&xar-var-optionslabel;</th>
-    </tr>
-    <xar:loop name="$items">
-    <tr>
-        <td>&xar-var-name;</td>
-        <td>&xar-var-itemtype;</td>
-        <td>&xar-var-numitems;</td>
-        <td>
-           <xar:if condition="empty($editurl)">
-               &xar-var-edittitle;
-               <xar:else />
-                   <a href="&xar-var-editurl;">&xar-var-edittitle;</a>
-           </xar:if>
-<!---
-           |
-           <xar:if condition="empty($deleteurl)">
-               &xar-var-deletetitle;
-               <xar:else />
-                   <a href="&xar-var-deleteurl;">&xar-var-deletetitle;</a>
-           </xar:if>
---->
-        </td>
-    </tr>
-    </xar:loop>
-</table>
-<br />
-
-<!-- add the pager here -->
-&xar-var-pager;
+<xar:data-list module="$modid" itemtype="$itemtype" param="itemid" /> <!-- to hide objects and properties use :  where="id gt 2" -->
 
 <h2><xar:mlstring>Other modules</xar:mlstring></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">

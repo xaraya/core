@@ -15,7 +15,7 @@
                 <td>&nbsp;</td>
                 <td>
                 <xar:loop name="$options">
-                    #$join# <a href="#$link#">#$title#</a>
+                    #$ojoin# <a href="#$olink#">#$otitle#</a>
                 </xar:loop>
                 </td>
             </tr>
@@ -49,7 +49,7 @@
         <td valign="top" align="center">
         <xar:if condition="!empty($options) and count($options) gt 0">
             <xar:loop name="$options">
-                #$join# <a href="#$link#">#$title#</a>
+                #$ojoin# <a href="#$olink#">#$otitle#</a>
             </xar:loop>
         <xar:else />
             &nbsp;
@@ -58,6 +58,27 @@
     </tr>
     </xar:loop>
     </table>
+<xar:elseif condition="$layout eq 'bullet'" />
+    <ul>
+    <xar:loop name="$items">
+    <li>
+        <xar:loop name="$fields">
+            <xar:if condition="!empty($flink)">
+                <a href="#$flink#">
+            </xar:if>
+            <xar:data-output type="$type" name="dd_'.$id.'" value="$value" />
+            <xar:if condition="!empty($flink)">
+                </a><xar:set name="$flink" value="''" />
+            </xar:if>
+        </xar:loop>
+        <xar:if condition="!empty($options) and count($options) gt 0">
+           [ <xar:loop name="$options">
+                #$ojoin# <a href="#$olink#">#$otitle#</a>
+            </xar:loop> ]
+        </xar:if>
+    </li>
+    </xar:loop>
+    </ul>
 <!-- TODO: multi-column output -->
 <xar:else />
     <xar:mlstring>Specify your own layout here...</xar:mlstring>

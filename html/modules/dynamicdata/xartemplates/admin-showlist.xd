@@ -29,6 +29,29 @@
     </tr>
     </xar:if>
     </table>
+<xar:elseif condition="$layout eq 'cells'" />
+    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <xar:loop name="$labels">
+            <th align="center">#$label#</th>
+        </xar:loop>
+    </tr>
+    <xar:loop name="$items">
+    <tr>
+        <xar:loop name="$fields">
+            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" size="15" /></td>
+        </xar:loop>
+    </tr>
+    </xar:loop>
+    <xar:if condition="!empty($newlink)">
+    <tr>
+        <xar:loop name="$labels">
+            <td>&nbsp;</td>
+        </xar:loop>
+        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+    </tr>
+    </xar:if>
+    </table>
 <!-- TODO: multi-column output -->
 <xar:else />
     <xar:mlstring>Specify your own layout here...</xar:mlstring>

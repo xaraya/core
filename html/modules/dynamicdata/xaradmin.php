@@ -1,12 +1,509 @@
 <?php
-// File: $Id$
+/**
+ * File: $Id$
+ *
+ * Dynamic Data Admin Interface
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage dynamicdata module
+ * @author mikespub <mikespub@xaraya.com>
+*/
+
+/**
+ * the main administration function
+ *
+ */
+function dynamicdata_admin_main()
+{
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    $data = dynamicdata_admin_menu();
+
+    // Specify some other variables used in the blocklayout template
+    $data['welcome'] = xarML('Welcome to the administration part of this Dynamic Data module...');
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * view items
+ */
+function dynamicdata_admin_view($args)
+{
+    $startnum = xarVarCleanFromInput('startnum');
+    list($objectid,
+         $modid,
+         $itemtype,
+         $startnum) = xarVarCleanFromInput('objectid',
+                                           'modid',
+                                           'itemtype',
+                                           'startnum');
+
+    extract($args);
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (!isset($itemtype)) {
+        $itemtype = 0;
+    }
+
+    $data = dynamicdata_admin_menu();
+
+    $data['items'] = array();
+
+    // Specify some labels for display
+    $data['modidlabel'] = xarVarPrepForDisplay(xarML('Module'));
+    $data['itemtypelabel'] = xarVarPrepForDisplay(xarML('Item Type'));
+    $data['numitemslabel'] = xarVarPrepForDisplay(xarML('# of Properties'));
+    $data['optionslabel'] = xarVarPrepForDisplay(xarML('Options'));
+    $data['pager'] = '';
+
+    $data['modid'] = $modid;
+    $data['itemtype'] = $itemtype;
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+// not really used anymore - replaced by dynamic objects...
+    $items = xarModAPIFunc('dynamicdata',
+                          'user',
+                          'getmodules',
+                          array('startnum' => $startnum,
+                                'numitems' => xarModGetVar('dynamicdata',
+                                                          'itemsperpage')));
+    // Check for exceptions
+    if (!isset($items) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+
+    // Check individual permissions for Edit / Delete
+    // Note : we could use a foreach ($items as $item) here as well, as
+    // shown in xaruser.php, but as an example, we'll adapt the $items array
+    // 'in place', and *then* pass the complete items array to $data
+    $seenmod = array();
+    for ($i = 0; $i < count($items); $i++) {
+        $item = $items[$i];
+        $modinfo = xarModGetInfo($item['modid']);
+        $items[$i]['name'] = $modinfo['displayname'];
+        $seenmod[$modinfo['name']] = 1;
+        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_ADMIN)) {
+            $items[$i]['editurl'] = xarModURL('dynamicdata',
+                                              'admin',
+                                              'modifyprop',
+                                              array('modid' => $item['modid'],
+                                                    'itemtype' => $item['itemtype'],));
+        } else {
+            $items[$i]['editurl'] = '';
+        }
+        $items[$i]['edittitle'] = xarML('Edit');
+    }
+
+    // Add the array of items to the template variables
+    $data['items'] = $items;
+
+    // show other modules
+    $data['modlist'] = array();
+    $modList = xarModGetList(array(),NULL,NULL,'category/name');
+    $oldcat = '';
+    for ($i = 0; $i < count($modList); $i++) {
+        if (!empty($seenmod[$modList[$i]['name']])) {
+            continue;
+        }
+        if ($oldcat != $modList[$i]['category']) {
+            $modList[$i]['header'] = $modList[$i]['category'];
+            $oldcat = $modList[$i]['category'];
+        } else {
+            $modList[$i]['header'] = '';
+        }
+        if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
+            $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
+                                              array('modid' => $modList[$i]['regid']));
+        } else {
+            $modList[$i]['link'] = '';
+        }
+        $data['modlist'][] = $modList[$i];
+    }
+
+// TODO : add a pager (once it exists in BL)
+    $data['pager'] = '';
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * add new item
+ * This is a standard function that is called whenever an administrator
+ * wishes to create a new module item
+ */
+function dynamicdata_admin_new($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid,
+         $preview) = xarVarCleanFromInput('objectid',
+                                          'modid',
+                                          'itemtype',
+                                          'itemid',
+                                          'preview');
+
+    extract($args);
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (!isset($itemtype)) {
+        $itemtype = 0;
+    }
+    if (!isset($itemid)) {
+        $itemid = 0;
+    }
+    if (empty($label)) {
+        $label = xarML('Dynamic Data');
+    }
+
+    if (!xarModAPILoad('dynamicdata','user')) return;
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        $modid = $object['moduleid']['value'];
+        $itemtype = $object['itemtype']['value'];
+        $label =  $object['label']['value'];
+    } else {
+        $label = xarML('Dynamic Data Object');
+    }
+
+    $data = dynamicdata_admin_menu();
+
+    $data['objectid'] = $objectid;
+    $data['label'] = $label;
+    $data['modid'] = $modid;
+    $data['itemtype'] = $itemtype;
+    $data['itemid'] = $itemid; // might be coming from another module !
+    $data['fields'] = array(); // we'll let the form handle it
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:', ACCESS_ADD)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey();
+
+    $item = array();
+    $item['module'] = 'dynamicdata';
+    $hooks = xarModCallHooks('item','new','',$item);
+    if (empty($hooks) || !is_string($hooks)) {
+        $data['hooks'] = '';
+    } else {
+        $data['hooks'] = $hooks;
+    }
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * This is a standard function that is called with the results of the
+ * form supplied by dynamicdata_admin_new() to create a new item
+ * @param 'name' the name of the item to be created
+ * @param 'number' the number of the item to be created
+ */
+function dynamicdata_admin_create($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid,
+         $preview) = xarVarCleanFromInput('objectid',
+                                          'modid',
+                                          'itemtype',
+                                          'itemid',
+                                          'preview');
+    extract($args);
+
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for creating new #(1) item',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+    if (empty($itemid)) {
+        $itemid = 0;
+    }
+    if (empty($preview)) {
+        $preview = 0;
+    }
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        $modid = $object['moduleid']['value'];
+        $itemtype = $object['itemtype']['value'];
+        $label =  $object['label']['value'];
+    } else {
+        $label = xarML('Dynamic Data Object');
+    }
+
+    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        return; // throw back
+    }
+    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
+
+    // this fills $invalid with an array of errors, or fills $fields with the values
+    $invalid = xarModAPIFunc('dynamicdata','admin','checkinput',
+                             array('fields'      => &$fields, // pass by reference !
+                                   'dd_function' => 'create',
+                                   'extrainfo'   => array()));
+
+//print_r($fields);
+    if (!empty($preview) || count($invalid) > 0) {
+        $data = dynamicdata_admin_menu();
+        $data['objectid'] = $objectid;
+        $data['label'] = $label;
+        $data['modid'] = $modid;
+        $data['itemtype'] = $itemtype;
+        $data['itemid'] = $itemid; // might be coming from another module !
+        $data['fields'] = $fields; // we'll handle it ourselves here !
+        $data['authid'] = xarSecGenAuthKey();
+    //    $data['where'] = $where; // our selection criteria
+        $data['preview'] = $preview;
+        return xarTplModule('dynamicdata','admin','new', $data);
+    }
+
+    $itemid = xarModAPIFunc('dynamicdata','admin','create',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype,
+                                  'itemid' => 0, // in this case
+                                  'fields' => $fields));
+
+    if (!isset($itemid)) return; // throw back
+
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+
+    // Return
+    return true;
+}
+
+/**
+ * modify an item
+ * This is a standard function that is called whenever an administrator
+ * wishes to modify a current module item
+ * @param 'exid' the id of the item to be modified
+ */
+function dynamicdata_admin_modify($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid)= xarVarCleanFromInput('objectid',
+                                        'modid',
+                                        'itemtype',
+                                        'itemid');
+    extract($args);
+
+    if (empty($itemid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'item id', 'admin', 'modify', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:$itemid', ACCESS_EDIT)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    if (!xarModAPILoad('dynamicdata','user')) return;
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        //$modid = $object['moduleid']['value'];
+        //$itemtype = $object['itemtype']['value'];
+        $label =  $object['label']['value'];
+    } else {
+        $label = xarML('Dynamic Data Object');
+    }
+
+    $where = "moduleid eq $modid and itemtype eq $itemtype";
+
+    $data = dynamicdata_admin_menu();
+    $data['objectid'] = $objectid;
+    $data['label'] = $label;
+    $data['modid'] = $modid;
+    $data['itemtype'] = $itemtype;
+    $data['itemid'] = $itemid;
+    $data['fields'] = array(); // we'll let the form handle it
+    $data['where'] = $where; // our selection criteria
+    $data['authid'] = xarSecGenAuthKey();
+    // show a link to edit properties if we're dealing with a Dynamic Object
+    if ($objectid == 1) {
+        $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                      array('objectid' => $itemid));
+    } else {
+        $data['proplink'] = '';
+    }
+
+    return $data;
+}
+
+/**
+ * This is a standard function that is called with the results of the
+ * form supplied by dynamicdata_admin_modify() to update a current item
+ * @param 'exid' the id of the item to be updated
+ * @param 'name' the name of the item to be updated
+ * @param 'number' the number of the item to be updated
+ */
+function dynamicdata_admin_update($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid,
+         $preview) = xarVarCleanFromInput('objectid',
+                                          'modid',
+                                          'itemtype',
+                                          'itemid',
+                                          'preview');
+
+    extract($args);
+
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for updating #(1) item',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+    if (empty($preview)) {
+        $preview = 0;
+    }
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        $modid = $object['moduleid']['value'];
+        $itemtype = $object['itemtype']['value'];
+        $label =  $object['label']['value'];
+    } else {
+        $label = xarML('Dynamic Data Object');
+    }
+
+    $fields = xarModAPIFunc('dynamicdata','user','getitem',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype,
+                                  'itemid' => $itemid));
+    if (!isset($fields) || $fields == false) {
+        return; // throw back
+    }
+
+    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
+
+    // this fills $invalid with an array of errors, or fills $fields with the values
+    $invalid = xarModAPIFunc('dynamicdata','admin','checkinput',
+                             array('fields'      => &$fields, // pass by reference !
+                                   'dd_function' => 'update',
+                                   'extrainfo'   => array()));
+
+    if (!empty($preview) || count($invalid) > 0) {
+        $data = dynamicdata_admin_menu();
+        $data['objectid'] = $objectid;
+        $data['label'] = $label;
+        $data['modid'] = $modid;
+        $data['itemtype'] = $itemtype;
+        $data['itemid'] = $itemid;
+        $data['fields'] = $fields; // we'll handle it ourselves here !
+        $data['authid'] = xarSecGenAuthKey();
+    //    $data['where'] = $where; // our selection criteria
+        $data['preview'] = $preview;
+        // show a link to edit properties if we're dealing with a Dynamic Object
+        if ($objectid == 1) {
+            $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                          array('objectid' => $itemid));
+        } else {
+            $data['proplink'] = '';
+        }
+
+        return xarTplModule('dynamicdata','admin','modify', $data);
+    }
+
+    $itemid = xarModAPIFunc('dynamicdata','admin','update',
+                            array('modid' => $modid,
+                                  'itemtype' => $itemtype,
+                                  'itemid' => $itemid,
+                                  'fields' => $fields));
+
+    if (!isset($itemid)) return; // throw back
+
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+
+    // Return
+    return true;
+}
+
 // ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: mikespub
-// Purpose of file:  dynamic data administration display functions
+// Properties functions
 // ----------------------------------------------------------------------
 
 /**
@@ -27,9 +524,42 @@ function dynamicdata_admin_modifyprop()
         return;
     }
 
-    list($modid,
-         $itemtype) = xarVarCleanFromInput('modid',
-                                          'itemtype');
+    list($objectid,
+         $modid,
+         $itemtype) = xarVarCleanFromInput('objectid',
+                                           'modid',
+                                           'itemtype');
+
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        $modid = $object['moduleid']['value'];
+        $itemtype = $object['itemtype']['value'];
+        $label =  $object['label']['value'];
+    } elseif (!empty($modid)) {
+        $modinfo = xarModGetInfo($modid);
+        if (!empty($modinfo['name'])) {
+            $name = $modinfo['name'];
+            if (!empty($itemtype)) {
+                $name .= '_' . $itemtype;
+            }
+            if (!xarModAPILoad('dynamicdata','admin')) return;
+            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+                                      array('moduleid' => $modid,
+                                            'itemtype' => $itemtype,
+                                            'name' => $name,
+                                            'label' => ucfirst($name)));
+            if (!isset($objectid)) return;
+        }
+    }
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module id', 'admin', 'modifyprop', 'dynamicdata');
@@ -38,21 +568,10 @@ function dynamicdata_admin_modifyprop()
         return $msg;
     }
     $data['modid'] = $modid;
-    if (empty($itemtype)) {
-        $data['itemtype'] = '';
-        $itemtype = null;
-    } else {
-        $data['itemtype'] = $itemtype;
-    }
+    $data['itemtype'] = $itemtype;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
-
-    $modinfo = xarModGetInfo($modid);
-    $data['module'] = xarML('for module "#(1)"', $modinfo['displayname']);
-    if (!empty($itemtype)) {
-        $data['module'] .= ' ' . xarML('type #(1)', $itemtype);
-    }
 
     $data['newlink'] = xarModURL('dynamicdata','admin','newprop',
                                 array('modid' => $modid,
@@ -61,14 +580,18 @@ function dynamicdata_admin_modifyprop()
                                  array('modid' => $modid,
                                       'itemtype' => $itemtype));
 
-    if (!xarModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = xarML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
+    $modinfo = xarModGetInfo($modid);
+    if (!isset($object)) {
+        $data['objectid'] = 0;
+        $data['module'] = xarML('for Module "#(1)"', $modinfo['displayname']);;
+    } else {
+        $data['objectid'] = $object['id']['value'];
+        $data['module'] = xarML('for #(1) of Module "#(2)"', $object['label']['value'], $modinfo['displayname']);
     }
+    if (!empty($itemtype)) {
+        $data['module'] .= ' - ' . xarML('Type #(1)', $itemtype);
+    }
+
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
                                    array('modid' => $modid,
                                          'itemtype' => $itemtype));
@@ -84,6 +607,7 @@ function dynamicdata_admin_modifyprop()
 
     $data['labels'] = array(
                             'id' => xarML('ID'),
+                            'name' => xarML('Name'),
                             'label' => xarML('Label'),
                             'type' => xarML('Property Type'),
                             'default' => xarML('Default'),
@@ -103,9 +627,18 @@ function dynamicdata_admin_modifyprop()
                                          'itemtype' => $itemtype));
     if (!isset($data['static']) || $data['static'] == false) {
         $data['static'] = array();
+        $data['tables'] = array();
+    } else {
+        $data['tables'] = array();
+        foreach ($data['static'] as $field) {
+            if (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
+                $table = $matches[1];
+                $data['tables'][$table] = array('tname' => $table);
+            }
+        }
     }
 
-    $data['statictitle'] = xarML('Static Properties (guessed from module table definitions for now)');
+    $data['statictitle'] = xarML('Static Properties<br />(guessed from module table definitions for now)');
 
 // TODO: allow other kinds of relationships than hooks
     // (try to) get the relationships between this module and others
@@ -116,11 +649,13 @@ function dynamicdata_admin_modifyprop()
         $data['relations'] = array();
     }
 
-    $data['relationstitle'] = xarML('Relationships with other Modules/Properties (only item display hooks for now)');
+    $data['relationstitle'] = xarML('Relationships with other Modules/Properties<br />(only item display hooks for now)');
     $data['labels']['module'] = xarML('Module');
     $data['labels']['linktype'] = xarML('Link Type');
     $data['labels']['linkfrom'] = xarML('From');
     $data['labels']['linkto'] = xarML('To');
+
+    $data['where'] = "moduleid eq $modid and itemtype eq $itemtype";
 
     // Return the template variables defined in this function
     return $data;
@@ -182,7 +717,7 @@ function dynamicdata_admin_updateprop()
         return $msg;
     }
     // update old fields
-    foreach ($fields as $label => $field) {
+    foreach ($fields as $name => $field) {
         $id = $field['id'];
         if (empty($dd_label[$id])) {
             // delete property (and corresponding data) in xaradminapi.php
@@ -238,6 +773,53 @@ function dynamicdata_admin_updateprop()
 }
 
 /**
+ * Import the dynamic properties for a module + itemtype from a static table
+ */
+function dynamicdata_admin_importprops()
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $table) = xarVarCleanFromInput('objectid',
+                                        'modid',
+                                        'itemtype',
+                                        'table');
+    if (empty($modid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module id', 'admin', 'importprop', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    // Confirm authorisation code.  This checks that the form had a valid
+    // authorisation code attached to it.  If it did not then the function will
+    // proceed no further as it is possible that this is an attempt at sending
+    // in false data to the system
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for importing #(1) configuration',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (!xarModAPILoad('dynamicdata', 'admin')) return;
+
+    if (!xarModAPIFunc('dynamicdata','admin','importproperties',
+                       array('modid' => $modid,
+                             'itemtype' => $itemtype,
+                             'table' => $table,
+                             'objectid' => $objectid))) {
+        return;
+    }
+
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+                                  array('modid' => $modid,
+                                        'itemtype' => $itemtype)));
+}
+
+/**
  * generate the common admin menu configuration
  */
 function dynamicdata_admin_menu()
@@ -246,7 +828,7 @@ function dynamicdata_admin_menu()
     $menu = array();
 
     // Specify the menu title to be used in your blocklayout template
-    $menu['menutitle'] = xarML('Dynamic Data Properties');
+    $menu['menutitle'] = xarML('Dynamic Data');
 
     // Preset some status variable
     $menu['status'] = '';
@@ -321,18 +903,18 @@ function dynamicdata_admin_newhook($args)
     }
 
     // prefill the values with defaults (if any)
-    foreach (array_keys($fields) as $label) {
-        $fields[$label]['value'] = $fields[$label]['default'];
+    foreach (array_keys($fields) as $name) {
+        $fields[$name]['value'] = $fields[$name]['default'];
     }
 
     // if we are in preview mode, we need to check for any preview values
     $preview = xarVarCleanFromInput('preview');
     if (!empty($preview)) {
-        foreach ($fields as $label => $field) {
+        foreach ($fields as $name => $field) {
             $id = $field['id'];
             $value = xarVarCleanFromInput('dd_'.$id);
             if (isset($value)) {
-                $fields[$label]['value'] = $value;
+                $fields[$name]['value'] = $value;
             }
         }
     }
@@ -419,11 +1001,11 @@ function dynamicdata_admin_modifyhook($args)
     if (is_array($fields) && count($fields) > 0) {
         $preview = xarVarCleanFromInput('preview');
         if (!empty($preview)) {
-            foreach ($fields as $label => $field) {
+            foreach ($fields as $name => $field) {
                 $id = $field['id'];
                 $value = xarVarCleanFromInput('dd_'.$id);
                 if (isset($value)) {
-                    $fields[$label]['value'] = $value;
+                    $fields[$name]['value'] = $value;
                 }
             }
         }
@@ -513,168 +1095,9 @@ function dynamicdata_admin_modifyconfighook($args)
                                'fields' => $fields));
 }
 
-/**
- * the main administration function
- * This function is the default function, and is called whenever the
- * module is initiated without defining arguments.  As such it can
- * be used for a number of things, but most commonly it either just
- * shows the module menu and returns or calls whatever the module
- * designer feels should be the default function (often this is the
- * view() function)
- */
-function dynamicdata_admin_main()
-{
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing.  For the
-    // main function we want to check that the user has at least edit privilege
-    // for some item within this component, or else they won't be able to do
-    // anything and so we refuse access altogether.  The lowest level of access
-    // for administration depends on the particular module, but it is generally
-    // either 'edit' or 'delete'
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    // If you want to go directly to some default function, instead of
-    // having a separate main function, you can simply call it here, and
-    // use the same template for admin-main.xd as for admin-view.xd
-    // return dynamicdata_admin_view();
-
-    // Initialise the $data variable that will hold the data to be used in
-    // the blocklayout template, and get the common menu configuration - it
-    // helps if all of the module pages have a standard menu at the top to
-    // support easy navigation
-    $data = dynamicdata_admin_menu();
-
-    // Specify some other variables used in the blocklayout template
-    $data['welcome'] = xarML('Welcome to the administration part of this Dynamic Data module...');
-
-    // Return the template variables defined in this function
-    return $data;
-
-    // Note : instead of using the $data variable, you could also specify
-    // the different template variables directly in your return statement :
-    //
-    // return array('menutitle' => ...,
-    //              'welcome' => ...,
-    //              ... => ...);
-}
-
-/**
- * view items
- */
-function dynamicdata_admin_view()
-{
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
-    $startnum = xarVarCleanFromInput('startnum');
-
-    // Initialise the $data variable that will hold the data to be used in
-    // the blocklayout template, and get the common menu configuration - it
-    // helps if all of the module pages have a standard menu at the top to
-    // support easy navigation
-    $data = dynamicdata_admin_menu();
-
-    // Initialise the variable that will hold the items, so that the template
-    // doesn't need to be adapted in case of errors
-    $data['items'] = array();
-
-    // Specify some labels for display
-    $data['modidlabel'] = xarVarPrepForDisplay(xarML('Module'));
-    $data['itemtypelabel'] = xarVarPrepForDisplay(xarML('Item Type'));
-    $data['numitemslabel'] = xarVarPrepForDisplay(xarML('# of Properties'));
-    $data['optionslabel'] = xarVarPrepForDisplay(xarML('Options'));
-    $data['pager'] = '';
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    // Load API.  Note that this is loading the user API, that is because the
-    // user API contains the function to obtain item information which is the
-    // first thing that we need to do.  If the API fails to load the raised exception is thrown back to PostNuke
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
-
-    // The user API function is called.  This takes the number of items
-    // required and the first number in the list of all items, which we
-    // obtained from the input and gets us the information on the appropriate
-    // items.
-    $items = xarModAPIFunc('dynamicdata',
-                          'user',
-                          'getmodules',
-                          array('startnum' => $startnum,
-                                'numitems' => xarModGetVar('dynamicdata',
-                                                          'itemsperpage')));
-    // Check for exceptions
-    if (!isset($items) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
-    // Check individual permissions for Edit / Delete
-    // Note : we could use a foreach ($items as $item) here as well, as
-    // shown in xaruser.php, but as an example, we'll adapt the $items array
-    // 'in place', and *then* pass the complete items array to $data
-    $seenmod = array();
-    for ($i = 0; $i < count($items); $i++) {
-        $item = $items[$i];
-        $modinfo = xarModGetInfo($item['modid']);
-        $items[$i]['name'] = $modinfo['displayname'];
-        $seenmod[$modinfo['name']] = 1;
-        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_ADMIN)) {
-            $items[$i]['editurl'] = xarModURL('dynamicdata',
-                                              'admin',
-                                              'modifyprop',
-                                              array('modid' => $item['modid'],
-                                                    'itemtype' => $item['itemtype'],));
-        } else {
-            $items[$i]['editurl'] = '';
-        }
-        $items[$i]['edittitle'] = xarML('Edit');
-    }
-
-    // Add the array of items to the template variables
-    $data['items'] = $items;
-
-    // show other modules
-    $data['modlist'] = array();
-    $modList = xarModGetList(array(),NULL,NULL,'category/name');
-    $oldcat = '';
-    for ($i = 0; $i < count($modList); $i++) {
-        if (!empty($seenmod[$modList[$i]['name']])) {
-            continue;
-        }
-        if ($oldcat != $modList[$i]['category']) {
-            $modList[$i]['header'] = $modList[$i]['category'];
-            $oldcat = $modList[$i]['category'];
-        } else {
-            $modList[$i]['header'] = '';
-        }
-        if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
-            $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
-                                              array('modid' => $modList[$i]['regid']));
-        } else {
-            $modList[$i]['link'] = '';
-        }
-        $data['modlist'][] = $modList[$i];
-    }
-
-// TODO : add a pager (once it exists in BL)
-    $data['pager'] = '';
-
-    // Return the template variables defined in this function
-    return $data;
-
-    // Note : instead of using the $data variable, you could also specify
-    // the different template variables directly in your return statement :
-    //
-    // return array('items' => ...,
-    //              'namelabel' => ...,
-    //              ... => ...);
-}
+// ----------------------------------------------------------------------
+// Property Types functions (*cough*)
+// ----------------------------------------------------------------------
 
 /**
  * This is a standard function to modify the configuration parameters of the
@@ -739,295 +1162,6 @@ function dynamicdata_admin_updateconfig()
 //
 
 /**
- * add new item
- * This is a standard function that is called whenever an administrator
- * wishes to create a new module item
- */
-function dynamicdata_admin_new()
-{
-    // Initialise the $data variable that will hold the data to be used in
-    // the blocklayout template, and get the common menu configuration - it
-    // helps if all of the module pages have a standard menu at the top to
-    // support easy navigation
-    $data = dynamicdata_admin_menu();
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey();
-
-    // Specify some labels for display
-    $data['namelabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENAME'));
-    $data['numberlabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENUMBER'));
-    $data['addbutton'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLEADD'));
-
-    $item = array();
-    $item['module'] = 'dynamicdata';
-    $hooks = xarModCallHooks('item','new','',$item);
-    if (empty($hooks) || !is_string($hooks)) {
-        $data['hooks'] = '';
-    } else {
-        $data['hooks'] = $hooks;
-    }
-
-    // Return the template variables defined in this function
-    return $data;
-}
-
-/**
- * This is a standard function that is called with the results of the
- * form supplied by dynamicdata_admin_new() to create a new item
- * @param 'name' the name of the item to be created
- * @param 'number' the number of the item to be created
- */
-function dynamicdata_admin_create($args)
-{
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
-    list($name,
-         $number) = xarVarCleanFromInput('name',
-                                        'number');
-
-    // Admin functions of this type can be called by other modules.  If this
-    // happens then the calling module will be able to pass in arguments to
-    // this function through the $args parameter.  Hence we extract these
-    // arguments *after* we have obtained any form-based input through
-    // xarVarCleanFromInput().
-    extract($args);
-
-    // Confirm authorisation code.  This checks that the form had a valid
-    // authorisation code attached to it.  If it did not then the function will
-    // proceed no further as it is possible that this is an attempt at sending
-    // in false data to the system
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for creating new #(1) item',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
-
-    // Notable by its absence there is no security check here.  This is because
-    // the security check is carried out within the API function and as such we
-    // do not duplicate the work here
-
-    // Load API.  All of the actual work for the creation of the new item is
-    // done within the API, so we need to load that in before we can do
-    // anything. If the API fails to load the raised exception is thrown back to PostNuke
-    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
-
-    // The API function is called.  Note that the name of the API function and
-    // the name of this function are identical, this helps a lot when
-    // programming more complex modules.  The arguments to the function are
-    // passed in as their own arguments array
-    $exid = xarModAPIFunc('dynamicdata',
-                        'admin',
-                        'create',
-                        array('name' => $name,
-                              'number' => $number));
-
-    // The return value of the function is checked here, and if the function
-    // suceeded then an appropriate message is posted.  Note that if the
-    // function did not succeed then the API function should have already
-    // posted a failure message so no action is required
-    if (!isset($exid) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
-    // Success
-    xarSessionSetVar('statusmsg', xarMLByKey('EXAMPLECREATED'));
-
-    // This function generated no output, and so now it is complete we redirect
-    // the user to an appropriate page for them to carry on their work
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
-
-    // Return
-    return true;
-}
-
-/**
- * modify an item
- * This is a standard function that is called whenever an administrator
- * wishes to modify a current module item
- * @param 'exid' the id of the item to be modified
- */
-function dynamicdata_admin_modify($args)
-{
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
-    list($modid,
-         $itemtype,
-         $objectid)= xarVarCleanFromInput('modid',
-                                         'itemtype',
-                                         'objectid');
-
-
-    // Admin functions of this type can be called by other modules.  If this
-    // happens then the calling module will be able to pass in arguments to
-    // this function through the $args parameter.  Hence we extract these
-    // arguments *after* we have obtained any form-based input through
-    // xarVarCleanFromInput().
-    extract($args);
-
-    // At this stage we check to see if we have been passed $objectid, the
-    // generic item identifier.  This could have been passed in by a hook or
-    // through some other function calling this as part of a larger module, but
-    // if it exists it overrides $exid
-    //
-    // Note that this module couuld just use $objectid everywhere to avoid all
-    // of this munging of variables, but then the resultant code is less
-    // descriptive, especially where multiple objects are being used.  The
-    // decision of which of these ways to go is up to the module developer
-    if (!empty($objectid)) {
-        $modid = $objectid;
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-
-    // Load API.  Note that this is loading the user API, that is because the
-    // user API contains the function to obtain item information which is the
-    // first thing that we need to do.  If the API fails to load the raised exception is thrown back to PostNuke
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
-
-    // The user API function is called.  This takes the item ID which we
-    // obtained from the input and gets us the information on the appropriate
-    // item.  If the item does not exist we post an appropriate message and
-    // return
-    $item = xarModAPIFunc('dynamicdata',
-                         'user',
-                         'get',
-                         array('modid' => $modid,
-                               'itemtype' => $itemtype));
-    // Check for exceptions
-    if (!isset($item) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing.  However,
-    // in this case we had to wait until we could obtain the item name to
-    // complete the instance information so this is the first chance we get to
-    // do the check
-    if (!xarSecAuthAction(0, 'DynamicData::Item', "$item[name]::$exid", ACCESS_EDIT)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    // Get menu variables - it helps if all of the module pages have a standard
-    // menu at their head to aid in navigation
-    //$menu = dynamicdata_admin_menu('modify');
-
-    $item['module'] = 'dynamicdata';
-    $hooks = xarModCallHooks('item','modify',$exid,$item);
-    if (empty($hooks) || !is_string($hooks)) {
-        $hooks = '';
-    }
-    
-    // Return the template variables defined in this function
-    return array('authid' => xarSecGenAuthKey(),
-                 'namelabel' => xarVarPrepForDisplay(xarMLByKey('EXAMPLENAME')),
-                 'numberlabel' => xarVarPrepForDisplay(xarMLByKey('EXAMPLENUMBER')),
-                 'updatebutton' => xarVarPrepForDisplay(xarMLByKey('EXAMPLEUPDATE')),
-                 'hooks' => $hooks,
-                 'item' => $item);
-}
-
-/**
- * This is a standard function that is called with the results of the
- * form supplied by dynamicdata_admin_modify() to update a current item
- * @param 'exid' the id of the item to be updated
- * @param 'name' the name of the item to be updated
- * @param 'number' the number of the item to be updated
- */
-function dynamicdata_admin_update($args)
-{
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
-    list($exid,
-         $objectid,
-         $name,
-         $number) = xarVarCleanFromInput('exid',
-                                        'objectid',
-                                        'name',
-                                        'number');
-
-    // User functions of this type can be called by other modules.  If this
-    // happens then the calling module will be able to pass in arguments to
-    // this function through the $args parameter.  Hence we extract these
-    // arguments *after* we have obtained any form-based input through
-    // xarVarCleanFromInput().
-    extract($args);
-
-    // At this stage we check to see if we have been passed $objectid, the
-    // generic item identifier.  This could have been passed in by a hook or
-    // through some other function calling this as part of a larger module, but
-    // if it exists it overrides $exid
-    //
-    // Note that this module couuld just use $objectid everywhere to avoid all
-    // of this munging of variables, but then the resultant code is less
-    // descriptive, especially where multiple objects are being used.  The
-    // decision of which of these ways to go is up to the module developer
-    if (!empty($objectid)) {
-        $exid = $objectid;
-    }
-
-    // Confirm authorisation code.  This checks that the form had a valid
-    // authorisation code attached to it.  If it did not then the function will
-    // proceed no further as it is possible that this is an attempt at sending
-    // in false data to the system
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for updating #(1) item #(2)',
-                    'DynamicData', xarVarPrepForDisplay($exid));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
-
-    // Notable by its absence there is no security check here.  This is because
-    // the security check is carried out within the API function and as such we
-    // do not duplicate the work here
-
-    // Load API.  All of the actual work for the update of the new item is done
-    // within the API, so we need to load that in before we can do anything.
-    // If the API fails to load the raised exception is thrown back to PostNuke
-    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
-
-    // The API function is called.  Note that the name of the API function and
-    // the name of this function are identical, this helps a lot when
-    // programming more complex modules.  The arguments to the function are
-    // passed in as their own arguments array.
-    //
-    // The return value of the function is checked here, and if the function
-    // suceeded then an appropriate message is posted.  Note that if the
-    // function did not succeed then the API function should have already
-    // posted a failure message so no action is required
-    if(!xarModAPIFunc('dynamicdata',
-                    'admin',
-                    'update',
-                    array('exid' => $exid,
-                          'name' => $name,
-                          'number' => $number))) {
-        return; // throw back
-    }
-    xarSessionSetVar('statusmsg', xarMLByKey('EXAMPLEUPDATED'));
-
-    // This function generated no output, and so now it is complete we redirect
-    // the user to an appropriate page for them to carry on their work
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
-
-    // Return
-    return true;
-}
-
-/**
  * delete item
  * This is a standard function that is called whenever an administrator
  * wishes to delete a current module item.  Note that this function is
@@ -1043,6 +1177,7 @@ function dynamicdata_admin_update($args)
  */
 function dynamicdata_admin_delete($args)
 {
+return 'to be continued...';
     // Get parameters from whatever input we need.  All arguments to this
     // function should be obtained from xarVarCleanFromInput(), getting them
     // from other places such as the environment is not allowed, as that makes

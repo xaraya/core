@@ -1,12 +1,6 @@
-
-<!-- common admin menu for this module - remove link to the current function -->
-
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-
-    <!-- the variables used in this menu come from example_admin_menu() -->
-
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">&xar-var-menutitle;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
@@ -19,7 +13,7 @@
         <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
         <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
 -->
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Modules using Dynamic Data</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Module Objects</xar:mlstring></a></td>
         <td><strong><xar:mlstring>Configure Property Types</xar:mlstring></strong></a></td>
 
         <!-- more menu items come here... -->
