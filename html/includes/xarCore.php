@@ -5,10 +5,11 @@
  * The Core
  *
  * @package core
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2004 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini
+ * @author Marcel van der Boom
  * @todo dependencies and runlevels!
 */
 
@@ -110,7 +111,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // load level) once.
     if ($whatToLoad <= $current_load_level) {
         if (!$first_load) {
-            return true;
+            return true; // Does this ever happen? If so, we might consider an assert
         } else {
             $first_load = false;
         }
@@ -130,6 +131,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // FIXME: due to core calling xarVarIsCached this needs to be here
+    // I think we should put the var*cached functions in core and alias them in xarvar
+    // the request caching of vars is so important, we need that in core itself, not in 
+    // a subsystem, so ALL dependencies can be eliminated
     include 'includes/xarVar.php';
     
     /*
@@ -535,6 +539,7 @@ function xarCore_getSiteVar($name)
 
     if (!isset($siteVars)) {
         $configLoader = new xarCore__ConfigFileLoader();
+        // Dependency to xarServer!
         $serverName = xarServerGetVar('SERVER_NAME');
         $fileName = xarCoreGetVarDirPath() . "/config.$serverName.xml";
         if (!file_exists($fileName)) {
