@@ -122,7 +122,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
     }
-    
+
     // save table definition
     if (isset($args['command']) && $args['command'] == 'add') {
         $systemPrefix = xarDBGetSystemTablePrefix();
@@ -145,6 +145,17 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
                           (empty($args['primary_key']) ? '0' : '1'));
                   //    xar_width,
                   //    xar_decimals,
+        $result =& $dbconn->Execute($query,$bindvars);
+
+    } elseif (isset($args['command']) && $args['command'] == 'rename') {
+
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $metaTable = $systemPrefix . '_tables';
+
+        $dbconn =& xarDBGetConn();
+        $nextId = $dbconn->GenId($metaTable);
+        $query = "UPDATE $metaTable SET xar_table = ? WHERE xar_table = ?";
+        $bindvars = array((string) $args['new_name'], (string) $tableName);
         $result =& $dbconn->Execute($query,$bindvars);
     }
 
@@ -307,7 +318,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * @param databaseType is an optional parameter to specify the database type
  * @return string|false the generated SQL statement, or false on failure
  */
-function xarDBCreateIndex($tableName, $index, $databaseType = NULL) 
+function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 {
 
     // perform validations on input arguments
@@ -453,7 +464,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             } elseif (!empty($args['after_field'])) {
                 $sql .= ' AFTER '.$args['after_field'];
             }
-            
+
             // Add table options, if any
             // FIXME: when the callee was more sensible, we could simplify this
             if(array_key_exists('increment_start',$coldef)) {
@@ -472,14 +483,14 @@ function xarDB__mysqlAlterTable($tableName, $args)
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         case 'modify':
-        
+
             // ************************* TO DO TO DO *************************
             // this modify case ONLY adds or drops NULL to a column.  All other functionality
             // per the below args needs to be added
             // 11.30.04 - mrjones - ajones@schwabfoundation.org
             // ************************* TO DO TO DO *************************
-            
-            
+
+
             // We need to account for all the possible args that are passed:
             // * @param args['type'] column type
             // * @param args['size'] size of column if varying data
@@ -488,7 +499,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             // * @param args['unsigned'] allow unsigned data (true/false)
             // * @param args['increment'] auto incrementing files
             // * @param args['primary_key'] primary key
-            
+
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set.)');
@@ -503,7 +514,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            
+
             // check to make sure we have an action to perform on the colunm
             if (empty($args['null']) && $args['null']!=FALSE) {
                 $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
@@ -513,14 +524,14 @@ function xarDB__mysqlAlterTable($tableName, $args)
             }
             // prep the first part of the query
             $sql = 'ALTER TABLE `'.$tableName.'` MODIFY `'.$args['field'].'` ';
-            
+
             //since we don't allow type to be passed, check the db for type and derive type from
-            // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to 
-            // ASSOC so we don't have to loop through the entire returned array looking for are our one 
+            // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
+            // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
             $dbconn =& xarDBGetConn();
             $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_ASSOC;
-            $tableInfoArray = $dbconn->metacolumns($tableName); 
+            $tableInfoArray = $dbconn->metacolumns($tableName);
             $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
             if (!empty($tableInfoArray[strtoupper($args['field'])]->type)){
                 $sql.=$tableInfoArray[strtoupper($args['field'])]->type;
@@ -528,12 +539,12 @@ function xarDB__mysqlAlterTable($tableName, $args)
             if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length!="-1"){
                 $sql.='('.$tableInfoArray[strtoupper($args['field'])]->max_length.')';
             }
-            
+
             // see if the want to add null
             if ($args['null']==TRUE){
                 $sql.=' NOT NULL ';
             }
-            
+
             // break out of the case to return the modify sql
             break;
         default:
@@ -587,14 +598,14 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         case 'modify':
-        
+
             // ************************* TO DO TO DO *************************
             // this modify case ONLY adds or drops NULL to a column.  All other functionality
             // per the below args needs to be added
             // 11.30.04 - mrjones - ajones@schwabfoundation.org
             // ************************* TO DO TO DO *************************
-            
-            
+
+
             // We need to account for all the possible args that are passed:
             // * @param args['type'] column type
             // * @param args['size'] size of column if varying data
@@ -603,7 +614,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             // * @param args['unsigned'] allow unsigned data (true/false)
             // * @param args['increment'] auto incrementing files
             // * @param args['primary_key'] primary key
-            
+
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set.)');
@@ -618,7 +629,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return $msg;
             }
-            
+
             // check to make sure we have an action to perform on the colunm
             if (empty($args['null']) && $args['null']!=FALSE) {
                 $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
@@ -626,10 +637,10 @@ function xarDB__postgresqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            
+
             // prep the first part of the query
             $sql = 'ALTER TABLE '.$tableName.' ALTER COLUMN '.$args['field'].' ';
-            
+
             // see if the want to add or remove null
             if ($args['null']==FALSE){
                 $sql.='DROP NOT NULL';
@@ -637,7 +648,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             if ($args['null']==TRUE){
                 $sql.='SET NOT NULL';
             }
-            
+
             // break out of the case to return the modify sql
             break;
         default:
@@ -692,14 +703,14 @@ function xarDB__oracleAlterTable($tableName, $args)
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         case 'modify':
-        
+
             // ************************* TO DO TO DO *************************
             // this modify case ONLY adds or drops NULL to a column.  All other functionality
             // per the below args needs to be added
             // 11.30.04 - mrjones - ajones@schwabfoundation.org
             // ************************* TO DO TO DO *************************
-            
-            
+
+
             // We need to account for all the possible args that are passed:
             // * @param args['type'] column type
             // * @param args['size'] size of column if varying data
@@ -708,7 +719,7 @@ function xarDB__oracleAlterTable($tableName, $args)
             // * @param args['unsigned'] allow unsigned data (true/false)
             // * @param args['increment'] auto incrementing files
             // * @param args['primary_key'] primary key
-            
+
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set.)');
@@ -723,7 +734,7 @@ function xarDB__oracleAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            
+
             // check to make sure we have an action to perform on the colunm
             if (empty($args['null']) && $args['null']!=FALSE) {
                 $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
@@ -733,14 +744,14 @@ function xarDB__oracleAlterTable($tableName, $args)
             }
             // prep the first part of the query
             $sql = 'ALTER TABLE '.$tableName.' MODIFY ('.$args['field'].' ';
-            
+
             //since we don't allow type to be passed, check the db for type and derive type from
-            // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to 
-            // ASSOC so we don't have to loop through the entire returned array looking for are our one 
+            // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
+            // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
             $dbconn =& xarDBGetConn();
             $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_ASSOC;
-            $tableInfoArray = $dbconn->metacolumns($tableName); 
+            $tableInfoArray = $dbconn->metacolumns($tableName);
             $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
             if (!empty($tableInfoArray[strtoupper($args['field'])]->type)){
                 $sql.=$tableInfoArray[strtoupper($args['field'])]->type;
@@ -748,7 +759,7 @@ function xarDB__oracleAlterTable($tableName, $args)
             if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length!="-1"){
                 $sql.='('.$tableInfoArray[strtoupper($args['field'])]->max_length.')';
             }
-            
+
             // see if the want to add null
             if ($args['null']==FALSE){
                 $sql.=' NULL ';
@@ -756,10 +767,10 @@ function xarDB__oracleAlterTable($tableName, $args)
             if ($args['null']==TRUE){
                 $sql.=' NOT NULL ';
             }
-            
+
             // add on closing paren
             $sql.=")";
-            
+
             // break out of the case to return the modify sql
             break;
         default:
@@ -1084,7 +1095,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
         if (isset($parameters['increment_start']))
             $this_field['increment_start'] = $parameters['increment_start'];
         else {
-            // FIXME: <mrb> IMO the default auto_increment start = 1, why not use 
+            // FIXME: <mrb> IMO the default auto_increment start = 1, why not use
             //        that and  simplify code a bit?
             $this_field['increment_start'] = 0;
         }

@@ -181,7 +181,7 @@ function base_init()
     /****************************************************************
     * Set System Configuration Variables
     *****************************************************************/
-    xarConfigSetVar('System.Core.TimeZone', 'US/New York');
+    xarConfigSetVar('System.Core.TimeZone', '');
     xarConfigSetVar('System.Core.VersionNum', XARCORE_VERSION_NUM);
     xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
     xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
@@ -193,7 +193,7 @@ function base_init()
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
-    xarConfigSetVar('Site.Core.TimeZone', 'US/New York');
+    xarConfigSetVar('Site.Core.TimeZone', '');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
     // when installing via https, we assume that we want to support that :)
     $HTTPS = xarServerGetVar('HTTPS');
@@ -221,7 +221,8 @@ function base_init()
         $allowedLocales = array('en_US.utf-8');
         xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
     }
-    
+    // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
+    xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
 
     $authModules = array('authsystem');
     xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
