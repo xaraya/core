@@ -46,6 +46,15 @@ function mail_adminapi_sendhtmlmail($args)
     if (!isset($message))
         $invalid[] = 'message';
 
+    // Patch from Federico Luciani
+    if(!isset($recipients)) $recipients='';
+    if(!isset($name)) $name='';
+    if(!isset($from)) $from='';
+    if(!isset($fromname)) $fromname='';
+    if(!isset($priority)) $priority='';
+    if(!isset($encoding)) $encoding='';
+    if(!isset($wordwrap)) $wordwrap='';
+
     if (count($invalid) > 0) {
         $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', 'sendhtmlmail', 'Mail');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
