@@ -53,11 +53,12 @@ class Dynamic_Property_Master
                   FROM $dynamicprop ";
         if (isset($args['objectid'])) {
             $query .= " WHERE xar_prop_objectid = ?";
-            $bindvars[] = $args['objectid'];
+            $bindvars[] = (int) $args['objectid'];
         } else {
             $query .= " WHERE xar_prop_moduleid = ?
                           AND xar_prop_itemtype = ?";
-            $bindvars[] = $args['moduleid']; $bindvars[] = $args['itemtype'];
+            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = (int) $args['itemtype'];
         }
         if (empty($args['allprops'])) {
             $query .= " AND xar_prop_status > 0 ";

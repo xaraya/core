@@ -581,7 +581,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         }
         
         $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
-        $bindvars = array($modBaseInfo['systemid']);
+        $bindvars = array((int)$modBaseInfo['systemid']);
         break;
     case 'moduservar':
         // Takes the right table basing on module mode
@@ -596,7 +596,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         
         $query = "SELECT xar_value FROM $module_uservarstable 
                   WHERE xar_mvid = ? AND xar_uid = ?";
-        $bindvars = array($modvarid, $uid);
+        $bindvars = array((int)$modvarid, (int)$uid);
         break;
     case 'themevar':
         // Takes the right table basing on theme mode
@@ -920,7 +920,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 // MrB: we could use xarModDelUserVar in a loop here, but this is
                 //      much faster.
                 $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
-                $result =& $dbconn->Execute($query,array($modvarid));
+                $result =& $dbconn->Execute($query,array((int)$modvarid));
                 if(!$result) return;
             }
             // Takes the right table basing on module mode
@@ -931,7 +931,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             }
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-            $bindvars = array($modBaseInfo['systemid'], $name);
+            $bindvars = array((int)$modBaseInfo['systemid'], $name);
             break;
         case 'moduservar':
             // Takes the right table basing on module mode
@@ -946,7 +946,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             if(!$modvarid) return;
 
             $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ? AND xar_uid = ?";
-            $bindvars = array($modvarid, $uid);
+            $bindvars = array((int)$modvarid, (int)$uid);
             break;
         case 'themevar':
             // Takes the right table basing on theme mode

@@ -26,7 +26,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      */
     function getFieldName(&$property)
     {
-        return $property->id;
+        return (int)$property->id;
     }
 
     function getItem($args)
@@ -49,7 +49,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                    WHERE xar_dd_propid IN ($bindmarkers)
                      AND xar_dd_itemid = ?";
         $bindvars = $propids;
-        $bindvars[] = $itemid;
+        $bindvars[] = (int)$itemid;
 
         $result =& $dbconn->Execute($query,$bindvars);
 
@@ -136,7 +136,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                    WHERE xar_dd_propid IN ($bindmarkers)
                      AND xar_dd_itemid = ?";
         $bindvars = $propids;
-        $bindvars[] = $itemid;
+        $bindvars[] = (int)$itemid;
 
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
@@ -198,7 +198,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                    WHERE xar_dd_propid IN ($bindmarkers)
                      AND xar_dd_itemid = ?";
         $bindvars = $propids;
-        $bindvars[] = $itemid;
+        $bindvars[] = (int)$itemid;
 
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
@@ -249,7 +249,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars = array_merge($bindvars, $itemids);
             } else {
                 $query .= " AND xar_dd_itemid = ?";
-                $bindvars[] = $itemids[0];
+                $bindvars[] = (int)$itemids[0];
             }
 
             $result =& $dbconn->Execute($query,$bindvars);
@@ -476,7 +476,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars = array_merge($bindvars,$itemids);
             } else {
                 $query .= " AND xar_dd_itemid = ? ";
-                $bindvars[] = $itemids[0];
+                $bindvars[] = (int)$itemids[0];
             }
 
             $result =& $dbconn->Execute($query,$bindvars);
@@ -572,11 +572,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                      SET xar_object_maxid = xar_object_maxid + 1 ";
         if (!empty($objectid)) {
             $query .= "WHERE xar_object_id = ? ";
-            $bindvars[] = $objectid;
+            $bindvars[] = (int)$objectid;
         } else {
             $query .= "WHERE xar_object_moduleid = ?
                          AND xar_object_itemtype = ?";
-            $bindvars[] = $modid; $bindvars[] = $itemtype;
+            $bindvars[] = (int)$modid;
+            $bindvars[] = (int)$itemtype;
         }
 
         $result =& $dbconn->Execute($query,$bindvars);
@@ -588,11 +589,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                     FROM $dynamicobjects ";
         if (!empty($objectid)) {
             $query .= "WHERE xar_object_id = ? ";
-            $bindvars[] = $objectid;
+            $bindvars[] = (int)$objectid;
         } else {
             $query .= "WHERE xar_object_moduleid = ?
                          AND xar_object_itemtype = ? ";
-            $bindvars[] = $modid; $bindvars[] = $itemtype;
+            $bindvars[] = (int)$modid;
+            $bindvars[] = (int)$itemtype;
         }
 
         $result =& $dbconn->Execute($query,$bindvars);

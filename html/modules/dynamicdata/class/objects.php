@@ -444,10 +444,10 @@ class Dynamic_Object_Master
                   FROM $dynamicobjects ";
         if (!empty($args['objectid'])) {
             $query .= " WHERE xar_object_id = ? ";
-            $bindvars[] = $args['objectid'];
+            $bindvars[] = (int) $args['objectid'];
         } elseif (!empty($args['name'])) {
             $query .= " WHERE xar_object_name = ? ";
-            $bindvars[] = $args['name'];
+            $bindvars[] = (string) $args['name'];
         } else {
             if (empty($args['moduleid'])) {
                 $args['moduleid'] = xarModGetIDFromName(xarModGetName());
@@ -457,7 +457,8 @@ class Dynamic_Object_Master
             }
             $query .= " WHERE xar_object_moduleid = ? 
                           AND xar_object_itemtype = ? ";
-            $bindvars[] = $args['moduleid']; $bindvars[] = $args['itemtype'];
+            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = (int) $args['itemtype'];
         }
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result || $result->EOF) return;
@@ -1214,7 +1215,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                     FROM $dynamicobjects
                    WHERE xar_object_moduleid = ?";
 
-        $result =& $dbconn->Execute($query,array($args['moduleid']));
+        $result =& $dbconn->Execute($query,array((int)$args['moduleid']));
         if (!$result || $result->EOF) return;
 
         $nexttype = $result->fields[0];

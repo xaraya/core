@@ -92,7 +92,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        $result =& $dbconn->Execute($query,array($itemid));
+        $result =& $dbconn->Execute($query,array((int)$itemid));
 
         if (!$result) return;
 
@@ -220,7 +220,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $join = ', ';
         }
         $query .= " WHERE $itemidfield=?";
-        $bindvars[] = $itemid;
+        $bindvars[] = (int)$itemid;
         
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
@@ -243,7 +243,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
         
-        $result =& $dbconn->Execute($query,array($itemid));
+        $result =& $dbconn->Execute($query,array((int)$itemid));
         if (!$result) return;
 
         return $itemid;
@@ -355,7 +355,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
             $query .= " $next $itemidfield = ? ";
-            $bindvars[] = $itemids[0];
+            $bindvars[] = (int)$itemids[0];
         } elseif (count($this->where) > 0) {
             $query .= " $next ";
             foreach ($this->where as $whereitem) {
@@ -456,7 +456,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
             $query .= " WHERE $itemidfield = ? ";
-            $bindvars[] = $itemids[0];
+            $bindvars[] = (int)$itemids[0];
         } elseif (count($this->where) > 0) {
             $query .= " WHERE ";
             foreach ($this->where as $whereitem) {
@@ -556,7 +556,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars = $itemids;
             } elseif (count($itemids) == 1) {
                 $query .= " WHERE $itemidfield = ? ";
-                $bindvars[] = $itemids[0];
+                $bindvars[] = (int)$itemids[0];
             } elseif (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {
