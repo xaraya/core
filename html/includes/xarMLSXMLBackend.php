@@ -34,11 +34,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     var $transInd = 0;
     var $transKeyInd = 0;
 
-    var $locales;
 
     function xarMLS__XMLTranslationsBackend($locales)
     {
-        $this->locales = $locales;
+        parent::xarMLS__ReferencesBackend($locales);
+        $this->backendtype = "xml";
     }
 
     function translate($string)
@@ -70,66 +70,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function bindDomain($dnType, $dnName)
     {
-        $varDir = xarCoreGetVarDirPath();
-        switch ($dnType) {
-            case XARMLS_DNTYPE_MODULE:
-            $dirName = "modules/$dnName/";
-            break;
-            case XARMLS_DNTYPE_THEME:
-            $dirName = "themes/$dnName/";
-            break;
-            case XARMLS_DNTYPE_CORE:
-            $dirName = 'core/';
-        }
-        foreach ($this->locales as $locale) {
-            $this->baseDir = "$varDir/locales/$locale/xml/$dirName";
-            if (file_exists($this->baseDir)) return true;
-        }
-        return false;
-    }
-
-    function findContext($ctxType, $ctxName)
-    {
-        switch ($ctxType) {
-            case XARMLS_CTXTYPE_FILE:
-            $fileName = $ctxName;
-            break;
-            case XARMLS_CTXTYPE_TEMPLATE:
-            $fileName = "templates/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_BLOCK:
-            $fileName = "blocks/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_INCLTEMPL:
-            $fileName = "templates/includes/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_BLKTEMPL:
-            $fileName = "templates/blocks/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_ADMIN:
-            $fileName = "admin/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_ADMINAPI:
-            $fileName = "adminapi/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_USER:
-            $fileName = "user/$ctxName";
-            break;
-            case XARMLS_CTXTYPE_USERAPI:
-            $fileName = "userapi/$ctxName";
-            break;
-        }
-        $fileName .= '.xml';
-        if (!file_exists($this->baseDir.$fileName)) {
-        die("File does not exist:".$this->baseDir.$fileName);
-        return false;
-        }
-        return $this->baseDir.$fileName;
-    }
-
-    function hasContext($ctxType, $ctxName)
-    {
-        return $this->findContext($ctxType, $ctxName) != false;
+        if (parent::bindDomain($dnType, $dnName)) return true;
+        else return false;
     }
 
     function loadContext($ctxType, $ctxName)
@@ -148,7 +90,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         } else {
             $this->parser = xml_parser_create('iso-8859-1');
         }
-        xml_set_object($this->parser, $this);
+        xml_set_object($this->parser, &$this);
         xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING,0);
         xml_set_element_handler($this->parser, "beginElement","endElement");
         xml_set_character_data_handler($this->parser, "characterData");
@@ -162,6 +104,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
+            if ($charset == 'utf-8') {
+                $data = utf8_encode($data);
+            } else {
+                $data = utf8_decode($data);
+            }
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
@@ -178,35 +125,10 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function getContextNames($ctxType)
     {
-        $dirName = $this->baseDir;
-        switch ($ctxType) {
-            case XARMLS_CTXTYPE_TEMPLATE:
-            $dirName .= 'templates';
-            break;
-            case XARMLS_CTXTYPE_BLOCK:
-            $dirName .= 'blocks';
-            break;
-            case XARMLS_CTXTYPE_INCLTEMPL:
-            $dirName .= 'templates/includes';
-            break;
-            case XARMLS_CTXTYPE_BLKTEMPL:
-            $dirName .= 'templates/blocks';
-            break;
-            case XARMLS_CTXTYPE_ADMIN:
-            $dirName .= "admin";
-            break;
-            case XARMLS_CTXTYPE_ADMINAPI:
-            $dirName .= "adminapi";
-            break;
-            case XARMLS_CTXTYPE_USER:
-            $dirName .= "user";
-            break;
-            case XARMLS_CTXTYPE_USERAPI:
-            $dirName .= "userapi";
-            break;
-        }
+        $context = $GLOBALS['MLS']->getContextByType($ctxType);
+        $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
         $ctxNames = array();
-        $dd = opendir($dirName);
+        $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.xml$/', $fileName, $matches)) continue;
             $ctxNames[] = $matches[1];

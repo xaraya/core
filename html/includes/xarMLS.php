@@ -27,6 +27,7 @@ define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
 define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
+
 define('XARMLS_CTXTYPE_FILE', 1);
 define('XARMLS_CTXTYPE_TEMPLATE', 2);
 define('XARMLS_CTXTYPE_BLOCK', 3);
@@ -37,6 +38,119 @@ define('XARMLS_CTXTYPE_ADMINAPI', 7);
 define('XARMLS_CTXTYPE_USER', 8);
 define('XARMLS_CTXTYPE_USERAPI', 9);
 
+$MLSData = array(
+                'core' => array(
+                          'type' => XARMLS_CTXTYPE_FILE,
+                          'dir' => '',
+                          'label' => xarML('Common')
+                         ),
+                'templates' => array(
+                          'type' => XARMLS_CTXTYPE_TEMPLATE,
+                          'dir' => 'templates',
+                          'label' => xarML('Templates')
+                         ),
+                'blocks' => array(
+                          'type' => XARMLS_CTXTYPE_BLOCK,
+                          'dir' => 'blocks',
+                          'label' => xarML('Blocks')
+                         ),
+                'templateincludes' => array(
+                          'type' => XARMLS_CTXTYPE_INCLTEMPL,
+                          'dir' => 'templates/includes',
+                          'label' => xarML('Included Templates')
+                         ),
+                'templateblocks' => array(
+                          'type' => XARMLS_CTXTYPE_BLKTEMPL,
+                          'dir' => 'templates/blocks',
+                          'label' => xarML('Block Templates')
+                         ),
+                'admin' => array(
+                          'type' => XARMLS_CTXTYPE_ADMIN,
+                          'dir' => 'admin',
+                          'label' => xarML('Admin')
+                         ),
+                'adminapi' => array(
+                          'type' => XARMLS_CTXTYPE_ADMINAPI,
+                          'dir' => 'adminapi',
+                          'label' => xarML('AdminAPI')
+                         ),
+                'user' => array(
+                          'type' => XARMLS_CTXTYPE_USER,
+                          'dir' => 'user',
+                          'label' => xarML('User')
+                         ),
+                'userapi' => array(
+                          'type' => XARMLS_CTXTYPE_USERAPI,
+                          'dir' => 'userapi',
+                          'label' => xarML('UserAPI')
+                         )
+);
+
+// This class represents the MLS environment on the site
+class MLSEnvironment {
+    var $mlsdata;
+    var $mlsobjects;
+    var $backend;
+    var $domain;
+    var $backend = "php";
+
+    function MLSEnvironment($data) {
+        $this->mlsobjects = array();
+        foreach ($data as $key => $value) $this->mlsobjects[$key] = new MLSObject($key,$value);
+    }
+
+    function setDomain($x) { $this->domain = $x; }
+
+    function getSpace($x) {
+        $this->space = $x;
+        switch ($this->space) {
+        case XARMLS_DNTYPE_MODULE:
+            return "modules";
+        case XARMLS_DNTYPE_THEME:
+            return "themes";
+        case XARMLS_DNTYPE_CORE:
+            return "core";
+        default:
+            return NULL;
+        }
+    }
+    function getContexts() { return $this->mlsobjects; }
+    function getLocale() { return $this->locale; }
+    function getBackend() { return $this->backend; }
+    function getDomain() { return $this->domain; }
+    function getContextByName($name) { return $this->mlsobjects[$name]; }
+    function getContextByType($type) {
+        foreach ($this->mlsobjects as $object)
+            if ($object->getType() == $type) return $object;
+        return NULL;
+    }
+}
+
+class MLSObject {
+    var $name;
+    var $label;
+    var $type;
+    var $dir;
+
+    function MLSObject($name,$data) {
+        $this->name = $name;
+        $this->type = $data['type'];
+        $this->label = $data['label'];
+        $this->dir = $data['dir'];
+    }
+
+    function setName($x) { $this->name = $x; }
+    function setType($x) { $this->type = $x; }
+    function setLabel($x) { $this->label = $x; }
+    function setDir($x) { $this->dir = $x; }
+
+    function getName() { return $this->name; }
+    function getType() { return $this->type; }
+    function getLabel() { return $this->label; }
+    function getDir() { return $this->dir; }
+}
+
+
 /**
  * Initializes the Multi Language System
  *
@@ -46,7 +160,7 @@ define('XARMLS_CTXTYPE_USERAPI', 9);
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
-    // <mrb> Why do we have two formats here?
+// <mrb> Why do we have two formats here?
     // FIXME: use constants also for the configvars
     switch ($args['MLSMode']) {
     case 'SINGLE':
@@ -66,6 +180,8 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         // FIXME: Do we have to die ?
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
+
+    $GLOBALS['MLS'] = new MLSEnvironment($args['MLSData']);
 
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml') {
@@ -90,7 +206,6 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         // MLS will use the default locale
         xarMLS_setCurrentLocale($args['defaultLocale']);
     }
-
     return true;
 }
 
@@ -1295,6 +1410,8 @@ class xarMLS__TranslationsBackend
      */
     function getContextNames($ctxType)
     { die('abstract'); }
+
+
 }
 
 /**
@@ -1308,6 +1425,17 @@ class xarMLS__TranslationsBackend
  */
 class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 {
+    var $locales;
+    var $domainlocation;
+    var $contextlocation;
+    var $backendtype;
+    var $space;
+    var $spacedir;
+
+    function xarMLS__ReferencesBackend($locales)
+    {
+        $this->locales = $locales;
+    }
     /**
      * Gets a translation entry for a string based translation.
      */
@@ -1339,35 +1467,70 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
      */
     function enumKeyTranslations($reset = false)
     { die('abstract'); }
+
+    function bindDomain($dnType, $dnName)
+    {
+        $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
+        foreach ($this->locales as $locale) {
+            if($this->spacedir == "core") {
+                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
+            }
+            else {
+                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
+            }
+            if (file_exists($this->domainlocation)) return true;
+        }
+    }
+
+    function getDomainLocation() { return $this->domainlocation; }
+    function getContextLocation() { return $this->contextlocation; }
+
+    function hasContext($ctxType, $ctxName)
+    {
+        return $this->findContext($ctxType, $ctxName) != false;
+    }
+
+    function findContext($ctxType, $ctxName)
+    {
+        $context = $GLOBALS['MLS']->getContextByType($ctxType);
+        $fileName = $this->getDomainLocation() . "/" . $context->getDir() . "/" .
+        $ctxName . "." . $this->backendtype;
+        if (!file_exists($fileName)) {
+            die("File does not exist:" . $fileName);
+            return false;
+        }
+        return $fileName;
+    }
+
 }
 
 /**
  * This is the default translations backend and should be used for production sites.
  * Note that it does not support the xarMLS__ReferencesBackend interface.
+ * <marc> why? have changed this to be able to collapse common methods
  *
  * @package multilanguage
  */
-class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
+class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
 {
-    var $locales;
-
     function xarMLS__PHPTranslationsBackend($locales)
     {
-        $this->locales = $locales;
+        parent::xarMLS__ReferencesBackend($locales);
+        $this->backendtype = "php";
     }
 
     function translate($string)
     {
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
-        //return @$GLOBALS['xarML_PHPBackend_entries'][$string];
     }
 
     function translateByKey($key)
     {
         if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
             return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
-        //return @$xarML_PHPBackend_keyEntries[$key];
     }
 
     function clear()
@@ -1378,21 +1541,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 
     function bindDomain($dnType, $dnName)
     {
-        $varDir = xarCoreGetVarDirPath();
-        switch ($dnType) {
-        case XARMLS_DNTYPE_MODULE:
-            $dirName = "modules/$dnName/";
-            break;
-        case XARMLS_DNTYPE_THEME:
-            $dirName = "themes/$dnName/";
-            break;
-        case XARMLS_DNTYPE_CORE:
-            $dirName = 'core/';
-        }
-        foreach ($this->locales as $locale) {
-            $this->baseDir = "$varDir/locales/$locale/php/$dirName";
-            if (file_exists($this->baseDir)) return true;
-        }
+        if (parent::bindDomain($dnType, $dnName)) return true;
         if ($dnType == XARMLS_DNTYPE_MODULE) {
             $this->loadKEYS($dnName);
         }
@@ -1416,50 +1565,6 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         }
     }
 
-    function findContext($ctxType, $ctxName)
-    {
-        switch ($ctxType) {
-        case XARMLS_CTXTYPE_FILE:
-            $fileName = $ctxName;
-            break;
-        case XARMLS_CTXTYPE_TEMPLATE:
-            $fileName = "templates/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_BLOCK:
-            $fileName = "blocks/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_INCLTEMPL:
-            $fileName = "templates/includes/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_BLKTEMPL:
-            $fileName = "templates/blocks/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_ADMIN:
-            $fileName = "admin/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_ADMINAPI:
-            $fileName = "adminapi/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_USER:
-            $fileName = "user/$ctxName";
-            break;
-        case XARMLS_CTXTYPE_USERAPI:
-            $fileName = "userapi/$ctxName";
-            break;
-        }
-        $fileName .= '.php';
-        if (!file_exists($this->baseDir.$fileName)) {
-        die("File does not exist:".$this->baseDir.$fileName);
-        return false;
-        }
-        return $this->baseDir.$fileName;
-    }
-
-    function hasContext($ctxType, $ctxName)
-    {
-        return $this->findContext($ctxType, $ctxName) != false;
-    }
-
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
@@ -1474,35 +1579,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 
     function getContextNames($ctxType)
     {
-        $dirName = $this->baseDir;
-        switch ($ctxType) {
-        case XARMLS_CTXTYPE_TEMPLATE:
-            $dirName .= 'templates';
-            break;
-        case XARMLS_CTXTYPE_BLOCK:
-            $dirName .= 'blocks';
-            break;
-        case XARMLS_CTXTYPE_INCLTEMPL:
-            $dirName .= 'templates/includes';
-            break;
-        case XARMLS_CTXTYPE_BLKTEMPL:
-            $dirName .= 'templates/blocks';
-            break;
-        case XARMLS_CTXTYPE_ADMIN:
-            $dirName .= 'admin';
-            break;
-        case XARMLS_CTXTYPE_ADMINAPI:
-            $dirName .= 'adminapi';
-            break;
-        case XARMLS_CTXTYPE_USER:
-            $dirName .= 'user';
-            break;
-        case XARMLS_CTXTYPE_USERAPI:
-            $dirName .= 'userapi';
-            break;
-        }
+        $context = $GLOBALS['MLS']->getContextByType($ctxType);
+        $this->contextlocation = $this->domainlocation . "/" . $context->getDir();
         $ctxNames = array();
-        $dd = opendir($dirName);
+        $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) continue;
             $ctxNames[] = $matches[1];
