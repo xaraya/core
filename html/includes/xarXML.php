@@ -22,6 +22,7 @@
  *             subsystem can be reused by them all
  */
 
+error_reporting(E_ALL);
 
 /**
  * Defines make our life a bit easier.
@@ -79,6 +80,15 @@ define('XARXML_HSTATE_DTDGATHERING'     ,16);
 define('XARXML_DTD_TRACE',false);
 define('XARXML_DTD_GUESSROOT',false);
 
+// Attribute names 
+define('XARXML_ATTR_TAGINDEX','tagindex'); 
+define('XARXML_ATTR_TYPE','type');
+define('XARXML_ATTR_NAME','name');
+define('XARXML_ATTR_CHILDREN','children');
+define('XARXML_ATTR_CONTENT','content');
+define('XARXML_ATTR_ATTRIBUTES','attributes');
+define('XARXML_ATTR_NAMESPACES','namespaces');
+
 
 /**
  * Start the XML subsystem
@@ -111,7 +121,8 @@ class xarXmlParser
     var $handler;       // Which handler object is attached to this parser (of class xarXMLHandler)
     var $parser=NULL;   // The parser object itself
     var $tree=array();  // Resulting parse tree
-    
+    var $indexstart;
+
     /**
      * Construct the xarXmlParser object
      *
@@ -122,9 +133,10 @@ class xarXmlParser
      * @access public
      * @param string $encoding character encoding to use (see top of file) 
      */
-    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL) 
+    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL,$indexstart=1) 
     {
         $this->encoding=$encoding;
+        $this->indexstart=$indexstart;
         // TODO : based on capabilities instantiate other handler here as default
         //        for example the DOMXML if available :-)
         $defHandlerClass = XARXML_DEFAULTHANDLER;
@@ -174,10 +186,6 @@ class xarXmlParser
         $this->__activate($resolve_base);
         while ($xmldata = fread($fp, XARXML_BLOCKREAD_SIZE)) {
             if(!xml_parse($this->parser, $xmldata, feof($fp))) {
-                $error = xml_get_error_code($this->parser);
-                $this->lastmsg= "[".xml_get_current_line_number($this->parser).":"
-                                   .xml_get_current_column_number($this->parser)."]-"
-                                   .xml_error_string($error);
                 $this->__deactivate();
                 return false;
             }
@@ -185,6 +193,14 @@ class xarXmlParser
         return $this->__deactivate();
     }
 
+    function __getErrorInfo() 
+    {
+        $error = xml_get_error_code($this->parser);
+        $this->lastmsg = "[".xml_get_current_line_number($this->parser).":"
+            .xml_get_current_column_number($this->parser)."]-"
+            .xml_error_string($error);
+    }
+        
     /**
      * Set a parser option
      * 
@@ -208,6 +224,59 @@ class xarXmlParser
         return xml_parser_get_option($this->parser, $option);
     }
 
+    // Just for convenience for now, should go into separate class
+    function getElementsByname($name,$tree=NULL)
+    {
+        $results=array();
+        $query=array('type'  => XARXML_ATTR_NAME,
+                     'match' => $name
+                     );
+        if(!$tree) {
+            // return array of nodes which are of type XML_ELEMENT_NODE and have name = $name
+            // First node of the tree will always be document node
+            $results = $this->__queryTree($this->tree[0],$query, XML_ELEMENT_NODE);
+        } else {
+            $results = $this->__queryTree($tree[0],$query, XML_ELEMENT_NODE);
+        }
+        return $results;
+    }
+
+    function getSubTree($element_id, $tree=NULL)
+    {
+        $results=array();
+        $query =array('type'  => XARXML_ATTR_TAGINDEX,
+                      'match' => $element_id);
+        if(!$tree){
+            $results = $this->__queryTree($this->tree[0],$query, XML_ELEMENT_NODE,true);
+        } else {
+            $results = $this->__queryTree($tree[0],$query, XML_ELEMENT_NODE,true);
+        }
+        return $results;
+    }
+
+    // Just for convenience for now, should go into separate class
+    function __queryTree($subtree, $query, $nodetype,$returnsubtree=false) {
+        $results = array();
+
+        // If the node has children inspect them first, so we have simpler code in the second part (the unset)
+        if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
+            foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
+                 $results = array_merge($results, $this->__queryTree($child,$query,$nodetype,$returnsubtree));
+            }
+        }
+
+        // Inspect this node
+        if((@$subtree[XARXML_ATTR_TYPE] == $nodetype) && ($subtree[$query['type']] === $query['match'])) {
+            // We found a node, add it to the result array
+            if(!$returnsubtree) {
+                unset($subtree[XARXML_ATTR_CHILDREN]);
+            }
+            $results[] = $subtree;
+        }
+        
+        return $results;   
+    }
+    
     /** 
      * Private methods
      *
@@ -233,6 +302,7 @@ class xarXmlParser
         $this->setOption(XML_OPTION_SKIP_WHITE,true);
         $this->__activateHandlers();
         $this->handler->_resolve_base = $resolve_base;
+        $this->handler->_tagindex = $this->indexstart;
     }
 
     /**
@@ -244,6 +314,7 @@ class xarXmlParser
      */
     function __deactivate() 
     {
+        $this->__geterrorinfo();
         $this->tree = $this->handler->_tree;
         $this->handler->_reset();
         return $this->__free();
@@ -299,6 +370,7 @@ class xarXmlHandler
 {
     var $_tree = array();
     var $_depth = 1;
+    var $_tagindex;
     var $_nsregister=array();
     var $_state = XARXML_HSTATE_INITIAL;
     var $_dtd_data ='';
@@ -324,8 +396,10 @@ class xarXmlHandler
         
         // If we've never been here before add the initial doc node
         if($this->_state == XARXML_HSTATE_INITIAL) {
-            $this->_tree[0]['type'] = XML_DOCUMENT_NODE;
-            $this->_tree[0]['name'] = '#document';
+            $this->_tree[0][XARXML_ATTR_TYPE] = XML_DOCUMENT_NODE;
+            $this->_tree[0][XARXML_ATTR_NAME] = '#document';
+            $this->_tree[0][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
+            $this->_tagindex++;
             $this->_state = XARXML_HSTATE_NORMAL;
         }            
 
@@ -340,7 +414,7 @@ class xarXmlHandler
                 foreach($matches[1] as $match) {
                     list($attribute_name, $attribute_value) = (explode('=',$match));
                     $attribute_value = str_replace('"','',$attribute_value);
-                    $this->_tree[0]['attributes'][$attribute_name] = $attribute_value;
+                    $this->_tree[0][XARXML_ATTR_ATTRIBUTES][$attribute_name] = $attribute_value;
                 }
             }
 
@@ -400,10 +474,11 @@ class xarXmlHandler
     {
         // this handler can be called multiple times, so make sure we're not
         // overwriting ourselves, trust the depth to put things in the right place
-        if (!isset($this->_tree[$this->_depth-1]['content'])) {
-            $this->_tree[$this->_depth-1]['content'] = '';
+        if(array_key_exists(XARXML_ATTR_CONTENT,$this->_tree[$this->_depth-1])) {
+            $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] .= trim($data);
+        } else {
+            $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] = trim($data);
         }
-        $this->_tree[$this->_depth-1]['content'] .= trim($data);
     }
 
     /**
@@ -420,18 +495,20 @@ class xarXmlHandler
     function open_tag($parser, $tagname, $attribs, $type=XML_ELEMENT_NODE) 
     {
         // Next line is basically the crux of the whole thing, to construct the tree
-        $this->_tree[$this->_depth] = &$this->_tree[$this->_depth -1]['children'][];
-        $this->_tree[$this->_depth]['name']= $tagname;
-        $this->_tree[$this->_depth]['type'] = $type;
-        $attribs and $this->_tree[$this->_depth]['attributes'] = $attribs;
+        $this->_tree[$this->_depth] = &$this->_tree[$this->_depth -1][XARXML_ATTR_CHILDREN][];
+        $this->_tree[$this->_depth][XARXML_ATTR_NAME]= $tagname;
+        $this->_tree[$this->_depth][XARXML_ATTR_TYPE] = $type;
+        $this->_tree[$this->_depth][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
+        $attribs and $this->_tree[$this->_depth][XARXML_ATTR_ATTRIBUTES] = $attribs;
         // See if the ns handler has registered namespaces
         if(count($this->_nsregister) > 0 ) {
             foreach($this->_nsregister as $prefix => $uri) {
-                $this->_tree[$this->_depth]['namespaces'][$prefix] = $uri;
+                $this->_tree[$this->_depth][XARXML_ATTR_NAMESPACES][$prefix] = $uri;
             }
             // We can now reset the ns register, as they are stored in the structure
             $this->_nsregister=array();
         }
+        $this->_tagindex++;
         $this->_depth++;
     }
         
@@ -492,7 +569,7 @@ class xarXmlHandler
             // Which handler are we in?
             $ee_handlername = get_class($this);
             $ee_handler = new $ee_handlername();
-            $ee_parser = new xarXmlParser($parser->encoding,$ee_handler);
+            $ee_parser = new xarXmlParser($parser->encoding,$ee_handler,$this->_tagindex+1);
             // FIXME: I don't know the logic when to use public id and when to use system_id
             //        for now i only use system_id, which is a filename.
             // system_id is a filename, and as the $resolve_base is always empty we have to cope here
@@ -508,12 +585,12 @@ class xarXmlHandler
             $ee_tree = $ee_parser->tree;
         }
         // The node in the parent is an entity reference
+        $this->_tagindex = $ee_parser->handler->_tagindex;
         $this->open_tag($parser,$entity,array(), XML_ENTITY_REF_NODE);
-        $this->_tree[$this->_depth-1]['children'] = $ee_tree;
-        $this->_tree[$this->_depth-1]['children'][0]['type'] =  XML_ENTITY_NODE;
-        $this->_tree[$this->_depth-1]['children'][0]['name'] =  $entity;
-
-        
+        $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN] = $ee_tree;
+        $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN][0][XARXML_ATTR_TYPE] =  XML_ENTITY_NODE;
+        $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN][0][XARXML_ATTR_NAME] =  $entity;
+      
         $this->close_tag($parser, $entity);
         //print_r($this->_tree);
         return true;
@@ -589,4 +666,3 @@ class xarXmlHandler
     }
 }
 
-?>
