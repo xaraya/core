@@ -122,32 +122,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
-	//The FLAG here, stops xarVarFetch from reusing the variable if already present
+    //The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
-        $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
-
-        // Need to handle the checkbox as a special case. Otherwise, if someone tries to 'default' a checkbox 
-        // to TRUE, it will always remain TRUE and you will NOT be able to uncheck it. NULL is the 
-        // correct state of an unchecked checkbox.
-        if (($inputValue === NULL) && ($validation != 'checkbox')) {
-            if ($flags & XARVAR_DONT_SET) {
-                return true;
-            }
-
-            if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
-                $value = $defaultValue;
-
-                return true;
-            } else {
-                // Raise an exception
-                $msg = xarML('The required input variable \'#(1)\' could not be found.', $name);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-                return;
-            }
-        }
-        
-        //So far so good... Let's use the input value then...
-        $value = $inputValue;
+        $value = xarRequestGetVar($name, $allowOnlyMethod);
     }
 
     $result = xarVarValidate($validation, $value);
