@@ -475,8 +475,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Add text to parent, if there is any
                         // Situation: [...text...]<xar:...
                         // NOTE: WHITESPACE EATER HERE
-                        $trimmer='noop'; // Don't touch the text by default
-                        if($parent->tagName == 'set' || $parent->tagName == 'ml' || $parent->tagName == 'blockgroup') $trimmer='trim';
+                        $trimmer='xmltrim'; 
+                        // If we're in native php tags which always have xar children, trim it
+                        if($parent->tagName == 'set' || $parent->tagName == 'ml' || $parent->tagName == 'blockgroup' ) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
                                 $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
@@ -541,9 +542,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
                         // Add text to parent
                         // Situation: [...text...]</xar:...
-                        if (trim($text) != '') {
+                        $trimmer='xmltrim';
+                        if($parent->tagName == 'set' || $parent->tagName =='ml' || $parent->tagName == 'mlvar') $trimmer='trim';
+                        if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] =& $this->nodesFactory->createTextNode(xmltrim($text), $this);
+                                $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -737,8 +740,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         return;
                     }
                     // Add text to parent, if applicable
+                    // 
                     // Situation: [...text...]#$....# or [...text...]#xarFunction()#
-                    $trimmer='xmltrim'; 
+                    $trimmer='noop'; 
+                    // FIXME: The above is wrong, should be xmltrim, 
+                    // but otherwise the export of DD objects will look really ugly 
+                    
                     if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
                     if ($trimmer($text) != '') {
                         if ($parent->hasText()) {
@@ -801,9 +808,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             // Once we get here, nothing in the switch caught the token, we copy verbatim to output.
             $text .= $token;
         } // end while
-        if (trim($text) != '') {
+        
+        // Add the final text as a text node 
+        $trimmer = 'xmltrim';
+        if ($trimmer($text) != '') {
             if($parent->hasText()) {
-                $children[] = $this->nodesFactory->createTextNode(xmltrim($text),$this);
+                $children[] = $this->nodesFactory->createTextNode($trimmer($text),$this);
             } else {
                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text inside.", $parent);
                 return;
@@ -3207,6 +3217,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
  * - multiple spaces are equivalent to one
  * - only 'outside space' is considered, not space 'inside' the input
  * - when multiple whitespace chars are found, the first is returned
+ * - cr's are preserved
  *
  * As the 'whitespace' problem is really unsolvable (by me) isolate it
  * here. If someone finds a solution, here's where it should happen
@@ -3215,17 +3226,29 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
  * @param   string $input String for which to compress space
 */
 function xmltrim($input='')
-{
+{    
     // Let's first determine if there is space at all.
     $hasleftspace = (strlen(ltrim($input)) != strlen($input));
     $hasrightspace = (strlen(rtrim($input)) != strlen($input));
     if($hasleftspace && $hasrightspace && trim($input) =='') {
-        // There was more than one space, but only space, only return the first
-        return substr($input,0,1);
+        // There was more than one space, but only space, only return the first and 
+        // the carriage returns
+        $hasleftspace = true;
+        $hasrightspace= false;
     }
-    $leftspace  = $hasleftspace  ? ' ' : '';
-    $rightspace = $hasrightspace ? ' ' : '';
-    $input = $leftspace . trim($input) . $rightspace;
+    // Isolate the left and the right space
+    $leftspace  = $hasleftspace  ? substr($input,0,1) : '';
+    $rightspace = $hasrightspace ? substr($input,-1) : '';
+    
+    // Make sure we consider the right rest of the input string
+    if($hasleftspace) $input = substr($input,1);
+    if($hasrightspace) $input = substr($input,0,-1);
+    
+    // Make 'almost right' 
+    $input = $leftspace . trim($input,' ') . $rightspace;
+    // Finish it
+    $input = str_replace(array(" \n","\n "),array("\n","\n"),$input);
+    
     return $input;
 }
 

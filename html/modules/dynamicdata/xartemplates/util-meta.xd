@@ -50,36 +50,30 @@
 <form>
 <div>
 <textarea name="xml" id="xml" rows="30" cols="80">
-&lt;objects&gt;
-&nbsp;
+<objects>
 <xar:foreach in="$tables" key="$curtable" value="$fields">
-  &lt;object name="#$curtable#"&gt;
-    &lt;label&gt;#$curtable#&lt;/label&gt;
-    &lt;moduleid&gt;182&lt;/moduleid&gt;
-    &lt;itemtype&gt;-1&lt;/itemtype&gt;
-    &lt;urlparam&gt;itemid&lt;/urlparam&gt;
-    &lt;maxid&gt;0&lt;/maxid&gt;
-    &lt;config&gt;&lt;/config&gt;
-    &lt;isalias&gt;0&lt;/isalias&gt;
-    &lt;properties&gt;
-&nbsp;
-<xar:foreach in="$fields" key="$name" value="$field">
-      &lt;property name="#$name#"&gt;
-&nbsp;
-<xar:foreach in="$field" key="$key" value="$value">
-    <xar:if condition="$key ne 'name'">
-        &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
-&nbsp;
-    </xar:if>
+  <object name="#$curtable#">
+    <label>#$curtable#</label>
+    <moduleid>182&lt/moduleid>
+    <itemtype>-1</itemtype>
+    <urlparam>itemid</urlparam>
+    <maxid>0</maxid>
+    <config></config>
+    <isalias>0</isalias>
+    <properties>
+        <xar:foreach in="$fields" key="$name" value="$field">
+      <property name="#$name#">
+            <xar:foreach in="$field" key="$key" value="$value">
+                <xar:if condition="$key ne 'name'">
+        <#$key#>#$value#</#$key#>
+                </xar:if>
+            </xar:foreach>
+      </property>
+        </xar:foreach>
+    </properties>
+  </object>
 </xar:foreach>
-      &lt;/property&gt;
-&nbsp;
-</xar:foreach>
-    &lt;/properties&gt;
-  &lt;/object&gt;
-&nbsp;
-</xar:foreach>
-&lt;/objects&gt;
+</objects>
 </textarea>
 </div>
 </form>
