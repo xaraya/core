@@ -926,8 +926,6 @@ function xarModPrivateLoad($modName, $modType)
 {
     static $loadedModuleCache = array();
 
-    xarLogMessage("xarModLoad: loading $modName:$modType");
-
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -935,9 +933,11 @@ function xarModPrivateLoad($modName, $modType)
 
     // Make sure we access the cache with lower case key
     if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
-        // Already loaded from somewhere else
+        // Already loaded (or tried to) from somewhere else
         return true;
     }
+
+    xarLogMessage("xarModLoad: loading $modName:$modType");
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
@@ -946,6 +946,8 @@ function xarModPrivateLoad($modName, $modType)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
         return;
     }
+
+// TODO: use the xarVarPrepForOS()'d version for $modDir and $modType
 
     // Load the module files
     $modDir = $modBaseInfo['directory'];
@@ -962,12 +964,20 @@ function xarModPrivateLoad($modName, $modType)
     if (file_exists($fileName)) {
         // Load file
         include_once($fileName);
+
+        // Make sure we access the case with lower case key
+        $loadedModuleCache[strtolower("$modName$modType")] = true;
+    } elseif (is_dir("modules/$modDir/xar$modType")) {
+        // this is OK too - do nothing
+
+        // Make sure we access the case with lower case key
+        $loadedModuleCache[strtolower("$modName$modType")] = true;
+    } else {
+        // this is not OK - we don't have this -> set cache to false
+
+        // Make sure we access the case with lower case key
+        $loadedModuleCache[strtolower("$modName$modType")] = false;
     }
-
-
-    // MrB: this was a fix in main (the strtolower thing)
-    // Make sure we access the case with lower case key
-    $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
@@ -1085,7 +1095,28 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
+    $found = true;
     if (!function_exists($modFunc)) {
+        // attempt to load the module's api
+        xarModLoad($modName,$modType);
+        // let's check for that function again to be sure
+        if (!function_exists($modFunc)) {
+            // good thing this information is cached :)
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) return; // throw back
+
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'/'.$funcName.'.php';
+            if (!file_exists($funcFile)) {
+                $found = false;
+            } else {
+                require_once $funcFile;
+                if (!function_exists($modFunc)) {
+                    $found = false;
+                }
+            }
+        }
+    }
+    if (!$found) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $modFunc);
         return;
     }
@@ -1140,19 +1171,34 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
+    $found = true;
     if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
         xarModAPILoad($modName,$modType);
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
-            // MrB: When there is a parse error in the api file we sometimes end up
-            // here, the error is never shown !!!! (xmlrpc for example)
-            //die("api load went fine");
-            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                            new SystemException($msg));
-            return;
+            // good thing this information is cached :)
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) return; // throw back
+
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.$funcName.'.php';
+            if (!file_exists($funcFile)) {
+                $found = false;
+            } else {
+                require_once $funcFile;
+                if (!function_exists($modAPIFunc)) {
+                    $found = false;
+                }
+            }
         }
+    }
+    if (!$found) {
+        // MrB: When there is a parse error in the api file we sometimes end up
+        // here, the error is never shown !!!! (xmlrpc for example)
+        $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                        new SystemException($msg));
+        return;
     }
 
     return $modAPIFunc($args);
@@ -1666,6 +1712,11 @@ function xarMod_getBaseInfo($modName)
     // FIXME: <MrB> I've seen cases where the cache info is not in sync
     // with reality. I've take a couple ones out, but I haven't tested all
     // the way through.
+    // <mikespub> There were some issues where you tried to initialize/activate
+    // several modules one after the other during the same page request (e.g. at
+    // installation), since the state changes of those modules weren't taken
+    // into account. The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
+    // to cache module (+state) information in that case...
     if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.BaseInfos', $modName)) {
         return xarVarGetCached('Mod.BaseInfos', $modName);
     }

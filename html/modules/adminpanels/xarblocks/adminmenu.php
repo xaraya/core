@@ -140,7 +140,8 @@ function adminpanels_adminmenublock_display($blockinfo){
                         // with the new api load, it causes some problems.  We need to load the api
                         // in order to do it right.
                         xarModAPILoad($label, 'admin');
-                        if (function_exists($label.'_adminapi_getmenulinks')){
+                        if (function_exists($label.'_adminapi_getmenulinks') ||
+                            file_exists("modules/$mod[osdirectory]/xaradminapi/getmenulinks.php")){
                             // The user API function is called.
                             $menulinks = xarModAPIFunc($label,
                                                        'admin',
