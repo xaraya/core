@@ -249,9 +249,9 @@ function dynamicdata_init()
         "(20,'order','Order',2,182,1,15,'','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)')",
         "(21,'validation','Validation',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_validation',2,12,'varchar (254)')",
 
-        "(22,'id','Id',3,182,2,21,'','dynamic_data',2,1,'integer')",
-        "(23,'name','Name',3,182,2,2,'please enter your name...','dynamic_data',1,2,'varchar (30)')",
-        "(24,'age','Age',3,182,2,15,'','dynamic_data',1,3,'integer')",
+        "(22,'id','Id',3,182,2,21,'','dynamic_data',2,1,'')",
+        "(23,'name','Name',3,182,2,2,'please enter your name...','dynamic_data',1,2,'1:30')",
+        "(24,'age','Age',3,182,2,15,'','dynamic_data',1,3,'0:125')",
         "(25,'location','Location',3,182,2,12,'','dynamic_data',2,4,'')",
         );
     foreach ($properties as $property) {

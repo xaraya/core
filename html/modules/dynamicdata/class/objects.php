@@ -147,6 +147,20 @@ class Dynamic_Object_Master
                 $storename = '_functions_';
                 $storetype = 'function';
 
+            // data available in user variables
+            } elseif ($property->source == 'user variables') {
+                // we'll keep a separate data store per module/itemtype here for now
+            // TODO: integrate user variable handling with DD
+                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype;
+                $storetype = 'uservars';
+
+            // data available in module variables
+            } elseif ($property->source == 'module variables') {
+                // we'll keep a separate data store per module/itemtype here for now
+            // TODO: integrate module variable handling with DD
+                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype;
+                $storetype = 'modulevars';
+
             // TODO: extend with LDAP, file, ...
             } else {
                 $storename = '_todo_';

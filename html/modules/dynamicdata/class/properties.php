@@ -730,13 +730,35 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     var $size = 50;
     var $maxlength = 254;
 
+    var $min = null;
+    var $max = null;
+
+    function Dynamic_TextBox_Property($args)
+    {
+        $this->Dynamic_Property($args);
+        // check validation for allowed min/max length (or values)
+        if (!empty($this->validation) && strchr($this->validation,':')) {
+            list($min,$max) = explode(':',$this->validation);
+            if ($min !== '' && is_numeric($min)) {
+                $this->min = $min; // could be int or float - cfr. FloatBox below
+            }
+            if ($max !== '' && is_numeric($max)) {
+                $this->max = $max; // could be int or float - cfr. FloatBox below
+            }
+        }
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
         }
         if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('text too long');
+            $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
+            $this->value = null;
+            return false;
+        } elseif (isset($this->min) && strlen($value) < $this->min) {
+            $this->invalid = xarML('text : must be at least #(1) characters long',$this->min);
             $this->value = null;
             return false;
         } else {
@@ -750,6 +772,12 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        if (empty($maxlength) && isset($this->max)) {
+            $this->maxlength = $this->max;
+            if ($this->size > $this->maxlength) {
+                $this->size = $this->maxlength;
+            }
+        }
         return '<input type="text"'.
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
@@ -1465,10 +1493,30 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (empty($value)) {
-            $this->value = 0;
+        if (!isset($value) || $value === '') {
+            if (isset($this->min)) {
+                $this->value = $this->min;
+            } elseif (isset($this->max)) {
+                $this->value = $this->max;
+            } else {
+                $this->value = 0;
+            }
         } elseif (is_numeric($value)) {
-            $this->value = intval($value);
+            $value = intval($value);
+            if (isset($this->min) && isset($this->max) && ($this->min > $value || $this->max < $value)) {
+                $this->invalid = xarML('integer : allowed range is between #(1) and #(2)',$this->min,$this->max);
+                $this->value = null;
+                return false;
+            } elseif (isset($this->min) && $this->min > $value) {
+                $this->invalid = xarML('integer : must be #(1) or more',$this->min);
+                $this->value = null;
+                return false;
+            } elseif (isset($this->max) && $this->max < $value) {
+                $this->invalid = xarML('integer : must be #(1) or less',$this->max);
+                $this->value = null;
+                return false;
+            }
+            $this->value = $value;
         } else {
             $this->invalid = xarML('integer');
             $this->value = null;
@@ -1493,13 +1541,41 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
     var $min = null;
     var $max = null;
 
+    function Dynamic_NumberList_Property($args)
+    {
+        $this->Dynamic_Select_Property($args);
+        // check validation for allowed min/max values
+        if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
+            list($min,$max) = explode(':',$this->validation);
+            if ($min !== '' && is_numeric($min)) {
+                $this->min = intval($min);
+            }
+            if ($max !== '' && is_numeric($max)) {
+                $this->max = intval($max);
+            }
+            if (isset($this->min) && isset($this->max)) {
+                for ($i = $this->min; $i <= $this->max; $i++) {
+                    $this->options[] = array('id' => $i, 'name' => $i);
+                }
+            } else {
+                // you're in trouble :)
+            }
+        }
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (empty($value)) {
-            $this->value = 0;
+        if (!isset($value) || $value === '') {
+            if (isset($this->min)) {
+                $this->value = $this->min;
+            } elseif (isset($this->max)) {
+                $this->value = $this->max;
+            } else {
+                $this->value = 0;
+            }
         } elseif (is_numeric($value)) {
             $this->value = intval($value);
         } else {
@@ -1507,9 +1583,9 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
             $this->value = null;
             return false;
         }
-        if (count($this->options) == 0 && (isset($min) || isset($max)) ) {
-            if ( (isset($min) && $this->value < $min) ||
-                 (isset($max) && $this->value > $max) ) {
+        if (count($this->options) == 0 && (isset($this->min) || isset($this->max)) ) {
+            if ( (isset($this->min) && $this->value < $this->min) ||
+                 (isset($this->max) && $this->value > $this->max) ) {
                 $this->invalid = xarML('integer in range');
                 $this->value = null;
                 return false;
@@ -1551,10 +1627,29 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (empty($value)) {
-            $this->value = 0;
+        if (!isset($value) || $value === '') {
+            if (isset($this->min)) {
+                $this->value = $this->min;
+            } elseif (isset($this->max)) {
+                $this->value = $this->max;
+            } else {
+                $this->value = 0;
+            }
         } elseif (is_numeric($value)) {
-            $this->value = floatval($value);
+            $this->value = (float) $value;
+            if (isset($this->min) && isset($this->max) && ($this->min > $value || $this->max < $value)) {
+                $this->invalid = xarML('float : allowed range is between #(1) and #(2)',$this->min,$this->max);
+                $this->value = null;
+                return false;
+            } elseif (isset($this->min) && $this->min > $value) {
+                $this->invalid = xarML('float : must be #(1) or more',$this->min);
+                $this->value = null;
+                return false;
+            } elseif (isset($this->max) && $this->max < $value) {
+                $this->invalid = xarML('float : must be #(1) or less',$this->max);
+                $this->value = null;
+                return false;
+            }
         } else {
             $this->invalid = xarML('float');
             $this->value = null;
@@ -1571,11 +1666,11 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
             $value = $this->value;
         }
         if (!empty($value) && !empty($field->validation)) {
-        // TODO: extract precision from field validation
-            if (is_numeric($field->validation)) {
-                $precision = $field->validation;
-                return sprintf("%.".$precision."f",$value);
-            }
+        // TODO: extract precision from field validation too ?
+            //if (is_numeric($field->validation)) {
+            //    $precision = $field->validation;
+            //    return sprintf("%.".$precision."f",$value);
+            //}
         }
         return xarVarPrepForDisplay($value);
     }

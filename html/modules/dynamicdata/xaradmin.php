@@ -196,10 +196,12 @@ function dynamicdata_admin_create($args)
          $modid,
          $itemtype,
          $itemid,
+         $return_url,
          $preview) = xarVarCleanFromInput('objectid',
                                           'modid',
                                           'itemtype',
                                           'itemid',
+                                          'return_url',
                                           'preview');
     extract($args);
 
@@ -238,8 +240,12 @@ function dynamicdata_admin_create($args)
 
     if (empty($itemid)) return; // throw back
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('itemid' => $myobject->objectid)));
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('itemid' => $myobject->objectid)));
+    }
 
     // Return
     return true;
@@ -313,10 +319,12 @@ function dynamicdata_admin_update($args)
          $modid,
          $itemtype,
          $itemid,
+         $return_url,
          $preview) = xarVarCleanFromInput('objectid',
                                           'modid',
                                           'itemtype',
                                           'itemid',
+                                          'return_url',
                                           'preview');
 
     extract($args);
@@ -375,8 +383,12 @@ function dynamicdata_admin_update($args)
         }
     }
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('itemid' => $myobject->objectid)));
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('itemid' => $myobject->objectid)));
+    }
 
     // Return
     return true;

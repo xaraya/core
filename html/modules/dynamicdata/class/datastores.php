@@ -40,6 +40,15 @@ class Dynamic_DataStore_Master
             case 'function':
                 $datastore = new Dynamic_Function_DataStore($name);
                 break;
+            case 'uservars':
+            // TODO: integrate user variable handling with DD
+                $datastore = new Dynamic_UserVariables_DataStore($name);
+                break;
+            case 'modulevars':
+            // TODO: integrate module variable handling with DD
+                $datastore = new Dynamic_ModuleVariables_DataStore($name);
+                break;
+
        // TODO: other data stores
             case 'ldap':
                 $datastore = new Dynamic_LDAP_DataStore($name);
@@ -89,6 +98,15 @@ class Dynamic_DataStore_Master
         // default data source is dynamic data
         $sources[] = 'dynamic_data';
 
+        // user variables
+        $sources[] = 'user variables';
+
+        // module variables
+        $sources[] = 'module variables';
+
+        // session variables // TODO: perhaps someday, if this makes sense
+        //$sources[] = 'session variables';
+
     // TODO: re-evaluate this once we're further along
         // hook modules manage their own data
         $sources[] = 'hook module';
@@ -120,15 +138,16 @@ class Dynamic_DataStore_Master
  */
 class Dynamic_DataStore
 {
-    var $name;
+    var $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
     var $type;
-    var $fields; // array of $name => reference to property in Dynamic_Object*
+    var $fields;   // array of $name => reference to property in Dynamic_Object*
     var $primary;
 
     var $sort;
     var $where;
     var $join;
-    var $itemids; // reference to itemids in Dynamic_Object_List
+    var $itemids;  // reference to itemids in Dynamic_Object_List
+    var $itemtype; // reference to itemtype in Dynamic_Object
 
     function Dynamic_DataStore($name)
     {
@@ -1328,6 +1347,271 @@ class Dynamic_Dummy_DataStore extends Dynamic_DataStore
     function getItems($args = array())
     {
     }
+}
+
+/**
+ * Data Store is the user variables // TODO: integrate user variable handling with DD
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
+{
+    var $modname;
+
+    function Dynamic_UserVariables_DataStore($name)
+    {
+        // invoke the default constructor from our parent class
+        $this->Dynamic_DataStore($name);
+
+        // keep track of the concerned module for user settings
+    // TODO: the concerned module is currently hiding in the third part of the name :)
+        list($fixed1,$fixed2,$modid) = explode('_',$name);
+        if (empty($modid)) {
+            $modid = xarModGetIDFromName(xarModGetName());
+        }
+        $modinfo = xarModGetInfo($modid);
+        if (!empty($modinfo['name'])) {
+            $this->modname = $modinfo['name'];
+        }
+    }
+
+    /**
+     * Get the field name used to identify this property (we use the name of the module.property here)
+     */
+    function getFieldName(&$property)
+    {
+    // TODO: check this
+        // we add the module name in here by default, for user preferences per module
+        return $this->modname.'.'.$property->name;
+    }
+
+    function getItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // default is the current user (if any)
+            $itemid = xarUserGetVar('uid');
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+    // TODO: re-introduce xarUserGetVars ?
+
+        foreach ($fieldlist as $field) {
+            // get the value from the user variables
+            $value = xarUserGetVar($field,$itemid);
+
+            // set the value for this property
+            if (isset($value)) {
+                $this->fields[$field]->setValue($value);
+            } else {
+                // use the equivalent module variable as default
+                list($module,$name) = explode('.',$field);
+                $this->fields[$field]->setValue(xarModGetVar($module,$name));
+            }
+        }
+    }
+
+    function createItem($args)
+    {
+        // There's no difference with updateItem() here, because xarUserSetVar() handles that
+        return $this->updateItem($args);
+    }
+
+    function updateItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // default is the current user (if any)
+            $itemid = xarUserGetVar('uid');
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+        foreach ($fieldlist as $field) {
+            // get the value from the corresponding property
+            $value = $this->fields[$field]->getValue();
+            // skip fields where values aren't set
+            if (!isset($value)) {
+                continue;
+            }
+            xarUserSetVar($field,$value,$itemid);
+        }
+        return $itemid;
+    }
+
+    function deleteItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // default is the current user (if any)
+            $itemid = xarUserGetVar('uid');
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+    // TODO: hmmm, how are we supposed to delete user variables these days ? :-)
+        foreach ($fieldlist as $field) {
+        //    xarUserDelVar($field,$itemid);
+        }
+
+        return $itemid;
+    }
+
+    function getItems($args = array())
+    {
+        // TODO: not supported by xarUser*Var
+    }
+
+    function countItems($args = array())
+    {
+        // TODO: not supported by xarUser*Var
+        return 0;
+    }
+
+}
+
+/**
+ * Data Store is the module variables // TODO: integrate module variable handling with DD
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
+{
+    var $modname;
+
+    function Dynamic_ModuleVariables_DataStore($name)
+    {
+        // invoke the default constructor from our parent class
+        $this->Dynamic_DataStore($name);
+
+        // keep track of the concerned module for module settings
+    // TODO: the concerned module is currently hiding in the third part of the data store name :)
+        list($fixed1,$fixed2,$modid) = explode('_',$name);
+        if (empty($modid)) {
+            $modid = xarModGetIDFromName(xarModGetName());
+        }
+        $modinfo = xarModGetInfo($modid);
+        if (!empty($modinfo['name'])) {
+            $this->modname = $modinfo['name'];
+        }
+    }
+
+    /**
+     * Get the field name used to identify this property (we use the name of the property here)
+     */
+    function getFieldName(&$property)
+    {
+        return $property->name;
+    }
+
+    function getItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+        // let's cheat a little bit here, and preload everything :-)
+        xarMod_getVarsByModule($this->modname);
+
+        foreach ($fieldlist as $field) {
+            // get the value from the module variables
+        // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
+            $value = xarModGetVar($this->modname,$field);
+            // set the value for this property
+            $this->fields[$field]->setValue($value);
+        }
+    }
+
+    function createItem($args)
+    {
+        // There's no difference with updateItem() here, because xarModSetVar() handles that
+        return $this->updateItem($args);
+    }
+
+    function updateItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+        foreach ($fieldlist as $field) {
+            // get the value from the corresponding property
+            $value = $this->fields[$field]->getValue();
+            // skip fields where values aren't set
+            if (!isset($value)) {
+                continue;
+            }
+            xarModSetVar($this->modname,$field,$value);
+        }
+        return $itemid;
+    }
+
+    function deleteItem($args)
+    {
+        if (empty($args['itemid'])) {
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
+        } else {
+            $itemid = $args['itemid'];
+        }
+
+        $fieldlist = array_keys($this->fields);
+        if (count($fieldlist) < 1) {
+            return;
+        }
+
+        foreach ($fieldlist as $field) {
+            xarModDelVar($this->modname,$field);
+        }
+
+        return $itemid;
+    }
+
+    function getItems($args = array())
+    {
+        // TODO: not supported by xarMod*Var
+    }
+
+    function countItems($args = array())
+    {
+        // TODO: not supported by xarMod*Var
+        return 0;
+    }
+
 }
 
 ?>
