@@ -16,7 +16,13 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-$step = xarVarCleanFromInput('step');
+list($step,
+     $startnum) = xarVarCleanFromInput('step',
+                                       'startnum');
+
+// pre-fill the module name (if any) for hooks
+xarRequestGetInfo();
+
 if (!isset($step)) {
 // start the output buffer
 ob_start();
@@ -27,13 +33,23 @@ ob_start();
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
-if (isset($step) && ($step > 1 || isset($startnum))) {
-    $oldprefix = xarModGetVar('installer','oldprefix');
-    $reset = xarModGetVar('installer','reset');
-    $resetcat = xarModGetVar('installer','resetcat');
-    $imgurl = xarModGetVar('installer','imgurl');
+if (isset($step)) {
+    if ($step == 1 && !isset($startnum)) {
+        list($oldprefix,
+             $reset,
+             $resetcat,
+             $imgurl) = xarVarCleanFromInput('oldprefix',
+                                             'reset',
+                                             'resetcat',
+                                             'imgurl');
+    } elseif ($step > 1 || isset($startnum)) {
+        $oldprefix = xarModGetVar('installer','oldprefix');
+        $reset = xarModGetVar('installer','reset');
+        $resetcat = xarModGetVar('installer','resetcat');
+        $imgurl = xarModGetVar('installer','imgurl');
+    }
 }
-if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',$oldprefix)) {
+if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
 ?>
     Requirement : you must be using the same database, but a different prefix...
     <p></p>
