@@ -392,7 +392,6 @@ class xarMasks
 			$roleprivileges = $this->winnow(array($priv),$roleprivileges);
 			$roleprivileges = $this->winnow($priv->getDescendants(),$roleprivileges);
 		}
-//			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
 
@@ -1495,7 +1494,7 @@ function drawindent() {
 		if($comparing) {
 			if (
 				($this->getModule() == $mask->getModule()) ||
-				($this->getModule() == 'All') && ($mask->getModule() != 'None')
+				($this->getModule() != 'All') && ($mask->getModule() == 'All')
 			)
 			{$xModule = true;}
 			else {$xModule = false;}
@@ -1513,7 +1512,7 @@ function drawindent() {
 		if($comparing) {
 			if (
 				($this->getComponent() == $mask->getComponent()) ||
-				($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
+				($this->getComponent() != 'All') && ($mask->getComponent() == 'All')
 			)
 			{$xComponent = true;}
 			else {$xComponent = false;}
@@ -1539,7 +1538,7 @@ function drawindent() {
 
 		$implies = $xRealm && $xModule && $xComponent && $xInstance && $xLevel;
 
-//		echo $this->getName() . " implies " . $mask->getName() . ": " . $implies;
+//		echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName() . ": " . $implies;
 
 		return $implies;
 	}

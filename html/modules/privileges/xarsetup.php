@@ -54,16 +54,14 @@ function initializeSetup() {
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
     xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
     xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
-    xarRegisterPrivilege('DenyPrivileges','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-    xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+    xarRegisterPrivilege('DenyPrivileges','All','Privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+    xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Roles and Privileges modules');
     xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
+    xarRegisterPrivilege('Reading','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
 
     xarRegisterPrivilege('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('AnonView','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
-//    xarRegisterPrivilege('ViewLogin','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-//    xarRegisterPrivilege('ViewBlocks','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-//    xarRegisterPrivilege('AnonView','All','All','All','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
     xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
@@ -86,6 +84,7 @@ function initializeSetup() {
 	xarMakePrivilegeRoot('DenyRoles');
 	xarMakePrivilegeRoot('DenyPrivileges');
 	xarMakePrivilegeRoot('Editing');
+	xarMakePrivilegeRoot('Reading');
 	xarMakePrivilegeRoot('AnonView');
 	xarMakePrivilegeRoot('ViewLogin');
 	xarMakePrivilegeRoot('ViewBlocks');
@@ -94,6 +93,7 @@ function initializeSetup() {
 	xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
 	xarMakePrivilegeMember('Administration','Oversight');
 	xarMakePrivilegeMember('DenyRolesPrivileges','Editing');
+	xarMakePrivilegeMember('DenyRolesPrivileges','Reading');
 	xarMakePrivilegeMember('ViewLogin','AnonView');
 	xarMakePrivilegeMember('ViewBlocks','AnonView');
 
@@ -107,6 +107,7 @@ function initializeSetup() {
 	xarAssignPrivilege('Administration','Administrators');
 	xarAssignPrivilege('Oversight','Oversight');
 	xarAssignPrivilege('AnonView','Anonymous');
+	xarAssignPrivilege('Reading','Users');
 
     /*********************************************************************
     * Define instances for the core modules
