@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: import8.php,v 1.17 2002/09/15 11:30:35 mikespub Exp $
 // ----------------------------------------------------------------------
 // PostNuke Content Management System
 // Copyright (C) 2002 by the PostNuke Development Team.
@@ -196,12 +196,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     echo "Creating root for old news topics<br>\n";
     $topics = pnModAPIFunc('categories', 'admin', 'create', array(
                                'name' => 'Topics',
-                               'description' => 'Old news topics',
+                               'description' => 'News Topics (.7x style)',
                                'parent_id' => 0));
     echo "Creating root for old news categories<br>\n";
     $categories = pnModAPIFunc('categories', 'admin', 'create', array(
                                   'name' => 'Categories',
-                                  'description' => 'Old news categories',
+                                  'description' => 'News Categories (.7x style)',
                                   'parent_id' => 0));
     // preset the article categories to those two types
     if ($reset) {
@@ -209,13 +209,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $settings['number_of_categories'] = 2;
         $settings['cids'] = array($topics, $categories);
         pnModSetVar('articles', 'settings.1', serialize($settings));
+        pnModSetVar('articles', 'number_of_categories.1', 2);
+        pnModSetVar('articles', 'mastercids.1', $topics .';'.$categories);
     } else {
         // you'll be in trouble with your categories here...
     }
     echo "Creating old default 'Articles' news category<br>\n";
     $catid[0] = pnModAPIFunc('categories', 'admin', 'create', array(
                                  'name' => 'Articles',
-                                 'description' => 'Old default news category',
+                                 'description' => 'Articles',
                                  'parent_id' => $categories));
 
     $query = 'SELECT pn_topicid, pn_topicname, pn_topictext, pn_topicimage, pn_counter
@@ -229,7 +231,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         list($id, $name, $text, $image, $counter) = $result->fields;
         $topicid[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
                               'name' => $text,
-                              'description' => "Topic $name",
+                              'description' => $text,
                               'image' => "$imgurl/topics/$image",
                               'parent_id' => $topics));
         echo "Creating topic ($id) $text - $name [$image]<br>\n";
@@ -484,13 +486,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     echo "Creating root for old sections<br>\n";
     $sections = pnModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'Sections',
-                             'description' => 'Root for old sections',
+                             'description' => 'Document Sections (.7x style)',
                              'parent_id' => 0));
     if ($reset) {
         $settings = unserialize(pnModGetVar('articles', 'settings.2'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($sections);
         pnModSetVar('articles', 'settings.2', serialize($settings));
+        pnModSetVar('articles', 'number_of_categories.2', 1);
+        pnModSetVar('articles', 'mastercids.2', $sections);
     }
     if ($sections > 0) {
         $query = 'SELECT pn_secid, pn_secname, pn_image
@@ -504,7 +508,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             list($id, $name, $image) = $result->fields;
             $sectionid[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
                               'name' => $name,
-                              'description' => "Section $name",
+                              'description' => $name,
                               'image' => "$imgurl/sections/$image",
                               'parent_id' => $sections));
             echo "Creating section ($id) $name [$image]<br>\n";
@@ -594,13 +598,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     echo "Creating root for old FAQs<br>\n";
     $faqs = pnModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'FAQs',
-                             'description' => 'Root for old FAQs',
+                             'description' => 'Frequently Asked Questions (.7x style)',
                              'parent_id' => 0));
     if ($reset) {
         $settings = unserialize(pnModGetVar('articles', 'settings.4'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($faqs);
         pnModSetVar('articles', 'settings.4', serialize($settings));
+        pnModSetVar('articles', 'number_of_categories.4', 1);
+        pnModSetVar('articles', 'mastercids.4', $faqs);
     }
     if ($faqs > 0) {
         $query = 'SELECT pn_id_cat, pn_categories, pn_parent_id
@@ -622,7 +628,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             } else {
                 $faqid[$id] = pnModAPIFunc('categories', 'admin', 'create',
                                            array('name' => $name,
-                                           'description' => "$name FAQ",
+                                           'description' => $name,
                                            'parent_id' => $faqid[$parent]));
                 echo "Creating FAQ ($id) $name [parent $parent]<br>\n";
             }
@@ -773,7 +779,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     echo "<strong>10. Importing old web link categories</strong><br>\n";
     $weblinks[0] = pnModAPIFunc('categories', 'admin', 'create', array(
                                 'name' => 'Web Links',
-                                'description' => 'Web Links',
+                                'description' => 'Web Link Categories (.7x style)',
                                 'parent_id' => 0));
     $query = 'SELECT pn_cat_id, pn_parent_id, pn_title, pn_description
               FROM ' . $oldprefix . '_links_categories
@@ -804,6 +810,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $settings['number_of_categories'] = 1;
     $settings['cids'] = array($weblinks[0]);
     pnModSetVar('articles', 'settings.6', serialize($settings));
+    pnModSetVar('articles', 'number_of_categories.6', 1);
+    pnModSetVar('articles', 'mastercids.6', $weblinks[0]);
 
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
