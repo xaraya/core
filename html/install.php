@@ -98,7 +98,8 @@ xarSerReqRes_init($systemArgs, $whatToLoad);
 // templateable too obviously
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory'    => 'themes',
-                    'defaultThemeDir'        => 'Xaraya_Classic');
+                    'defaultThemeDir'        => 'Xaraya_Classic',
+                    'generateXMLURLs'        => false);
 xarTpl_init($systemArgs, $whatToLoad);
 
 
