@@ -114,3 +114,4 @@ if ($methodhelp == 1) {
 ?>
 </body>
 </html>
+<?php ?>
