@@ -195,15 +195,15 @@ function roles_user_usermenu($args)
                                              'email' => $email,
                                              'state' => ROLES_STATE_ACTIVE))) return;
                 } else {
-                    // Step 2
-                    xarUserLogOut();
 
-                    // Step 3
+                    // Step 2
                     // Create confirmation code and time registered
                     $confcode = xarModAPIFunc('roles',
                                               'user',
                                               'makepass');
 
+                    // Step 3
+                    // Set the user to not validated
                     // The API function is called.
                     if(!xarModAPIFunc('roles',
                                       'admin',
@@ -214,6 +214,7 @@ function roles_user_usermenu($args)
                                              'email'    => $email,
                                              'valcode'  => $confcode,
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
+                    // Step 4
                     //Send validation email
                     if (!xarModAPIFunc( 'roles',
                                         'admin',
@@ -222,6 +223,9 @@ function roles_user_usermenu($args)
                         $msg = xarML('Problem sending confirmation email');
                         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     }
+                    // Step 5
+                    // Log the user out. This needs to happen last
+                    xarUserLogOut();
                 }
             } else {
                 $email = xarUserGetVar('email');
