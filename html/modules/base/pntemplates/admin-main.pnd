@@ -1,12 +1,12 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Base Xaraya Module</pnt:mlstring>            
+            <pnt:mlstring>Base Xaraya Administration</pnt:mlstring>            
         </th>
     </tr>
     <tr align="center">
         <td align="center">
-            No links to display at this time.
+            <a href="&pnt-modurl-base-admin-modifyconfig;"><pnt:mlstring>Modify Xaraya Site Configuration</pnt:mlstring></a>
         </td>
     </tr>
 </table>

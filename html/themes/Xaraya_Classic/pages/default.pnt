@@ -1,10 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <meta name="Generator" content="&pnt-config-version;" />
+        <meta name="Keywords" content="&pnt-config-metakeywords;" />
+        <meta name="Description" content="&pnt-config-metadescription;" />
         <title>&pnt-config-sitename; :: &pnt-config-slogan;</title>
-        <base href="&pnt-baseurl;index.php">
-        <link rel="StyleSheet" href="&pnt-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css">
+        <base href="&pnt-baseurl;index.php" />
+        <link rel="StyleSheet" href="&pnt-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
         <style type="text/css">@import url(&pnt-baseurl;themes/Xaraya_Classic/style/style.css); </style>
     </head>
     <body>
