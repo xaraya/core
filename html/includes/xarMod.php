@@ -976,7 +976,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 
     // allow override of current module in special cases (e.g. modules admin)
     if (empty($callerModName)) {
-        list($modName) = xarGetRequestInfo();
+        list($modName) = xarRequestGetInfo();
     } else {
         $modName = $callerModName;
     }

@@ -269,32 +269,32 @@ function pnModRegisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $pntable = xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Insert hook
     $query = "INSERT INTO $hookstable (
-              pn_id,
-              pn_object,
-              pn_action,
-              pn_tarea,
-              pn_tmodule,
-              pn_ttype,
-              pn_tfunc)
+              xar_id,
+              xar_object,
+              xar_action,
+              xar_tarea,
+              xar_tmodule,
+              xar_ttype,
+              xar_tfunc)
               VALUES (
-              " . pnVarPrepForStore($dbconn->GenId($hookstable)) . ",
-              '" . pnVarPrepForStore($hookObject) . "',
-              '" . pnVarPrepForStore($hookAction) . "',
-              '" . pnVarPrepForStore($hookArea) . "',
-              '" . pnVarPrepForStore($hookModName) . "',
-              '" . pnVarPrepForStore($hookModType) . "',
-              '" . pnVarPrepForStore($hookFuncName) . "')";
+              " . xarVarPrepForStore($dbconn->GenId($hookstable)) . ",
+              '" . xarVarPrepForStore($hookObject) . "',
+              '" . xarVarPrepForStore($hookAction) . "',
+              '" . xarVarPrepForStore($hookArea) . "',
+              '" . xarVarPrepForStore($hookModName) . "',
+              '" . xarVarPrepForStore($hookModType) . "',
+              '" . xarVarPrepForStore($hookFuncName) . "')";
     $dbconn->Execute($query);
 
     if($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -326,23 +326,129 @@ function pnModUnregisterHook($hookObject,
     // FIXME: <marco> BAD_PARAM?
 
     // Get database info
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $pntable = xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Remove hook
     $query = "DELETE FROM $hookstable
-              WHERE pn_object = '" . xarVarPrepForStore($hookObject) . "'
-              AND pn_action = '" . xarVarPrepForStore($hookAction) . "'
-              AND pn_tarea = '" . xarVarPrepForStore($hookArea) . "'
-              AND pn_tmodule = '" . xarVarPrepForStore($hookModName) . "'
-              AND pn_ttype = '" . xarVarPrepForStore($hookModType) . "'
-              AND pn_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
+              WHERE xar_object = '" . xarVarPrepForStore($hookObject) . "'
+              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
+              AND xar_tarea = '" . xarVarPrepForStore($hookArea) . "'
+              AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
+              AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
+              AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
     $dbconn->Execute($query);
 
     if($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    return true;
+}
+
+/**
+ * register a hook function
+ *
+ * @deprec
+ * @access public
+ * @param hookObject the hook object
+ * @param hookAction the hook action
+ * @param hookArea the area of the hook (either 'GUI' or 'API')
+ * @param hookModName name of the hook module
+ * @param hookModType name of the hook type
+ * @param hookFuncName name of the hook function
+ * @returns bool
+ * @return true on success
+ * @raise DATABASE_ERROR
+ */
+function xarModRegisterHook($hookObject,
+                           $hookAction,
+                           $hookArea,
+                           $hookModName,
+                           $hookModType,
+                           $hookFuncName)
+{
+    // FIXME: <marco> BAD_PARAM?
+
+    // Get database info
+    list($dbconn) = xarDBGetConn();
+    $pntable = xarDBGetTables();
+    $hookstable = $pntable['hooks'];
+
+    // Insert hook
+    $query = "INSERT INTO $hookstable (
+              xar_id,
+              xar_object,
+              xar_action,
+              xar_tarea,
+              xar_tmodule,
+              xar_ttype,
+              xar_tfunc)
+              VALUES (
+              " . xarVarPrepForStore($dbconn->GenId($hookstable)) . ",
+              '" . xarVarPrepForStore($hookObject) . "',
+              '" . xarVarPrepForStore($hookAction) . "',
+              '" . xarVarPrepForStore($hookArea) . "',
+              '" . xarVarPrepForStore($hookModName) . "',
+              '" . xarVarPrepForStore($hookModType) . "',
+              '" . xarVarPrepForStore($hookFuncName) . "')";
+    $dbconn->Execute($query);
+
+    if($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    return true;
+}
+
+/**
+ * unregister a hook function
+ *
+ * @deprec
+ * @access public
+ * @param hookObject the hook object
+ * @param hookAction the hook action
+ * @param hookArea the area of the hook (either 'GUI' or 'API')
+ * @param hookModName name of the hook module
+ * @param hookModType name of the hook type
+ * @param hookFuncName name of the hook function
+ * @returns bool
+ * @return true if the unregister call suceeded, false if it failed
+ */
+function xarModUnregisterHook($hookObject,
+                             $hookAction,
+                             $hookArea,
+                             $hookModName,
+                             $hookModType,
+                             $hookFuncName)
+{
+    // FIXME: <marco> BAD_PARAM?
+
+    // Get database info
+    list($dbconn) = xarDBGetConn();
+    $pntable = xarDBGetTables();
+    $hookstable = $pntable['hooks'];
+
+    // Remove hook
+    $query = "DELETE FROM $hookstable
+              WHERE xar_object = '" . xarVarPrepForStore($hookObject) . "'
+              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
+              AND xar_tarea = '" . xarVarPrepForStore($hookArea) . "'
+              AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
+              AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
+              AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
+    $dbconn->Execute($query);
+
+    if($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
