@@ -192,6 +192,73 @@ TD.xar-alt {}
 
 
 /*  XARAYA REQUIRED ANONYMOUS CLASSES  */
+/* these defaults apply to the left block group */
+.xar-block-head{
+    border: 1px solid #E47C55;
+    background-color: #efefef;
+}
+.xar-block-title {
+    font-weight: bold;
+    font-size: 10pt;
+}
+.xar-block-body {}
+.xar-block-foot {
+    border-bottom: 2px dotted #cccccc;
+    margin-bottom: 8px;
+}
+
+/* right block group classes */
+.xar-block-head-right{
+    border-bottom: 1px solid #191970;
+    color: #191970;
+}
+.xar-block-title-right {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 10pt;
+}
+.xar-block-body-right {}
+.xar-block-foot-right {
+    border-bottom: 2px solid #dddddd;
+    margin-bottom: 8px;
+}
+
+/* topnav block group classes */
+.xar-block-head-topnav{}
+.xar-block-title-topnav {}
+.xar-block-body-topnav {
+    margin: auto;
+    border: 1px solid #CCE6FF;
+}
+.xar-block-foot-topnav {}
+
+/* center block group classes */
+.xar-block-head-center{
+    background-image: url(../images/sh_line.gif);
+    height: 6px;
+    width: 100%;
+    background-position: center center;
+    background-repeat: repeat-y;
+}
+.xar-block-title-center {
+    color: #E47C55;
+    background-color: inherit;
+    font-weight: bold;
+    font-size: 10pt;
+    text-align: center;
+}
+.xar-block-body-center {
+    background-color: #CCE6FF;
+}
+.xar-block-foot-center {
+    background-image: url(../images/sh_line.gif);
+    height: 3px;
+    width: 100%;
+    background-position: center center;
+    background-repeat: repeat-y;
+    margin-bottom: 4px;
+}
+
 .xar-block-head{}
 .xar-block-title {}
 .xar-block-body {}
