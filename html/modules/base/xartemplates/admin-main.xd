@@ -22,13 +22,34 @@
         </td>
     </tr>
 </table>
-<div align="center"><h2><xar:mlstring>Base Xaraya Administration</xar:mlstring></h2><br />
-<br />
-<br />
-<br />
-
-<center>
-
-<b><xar:var scope="session" name="$base_statusmsg" /></b>
-
-</center>
+<xar:if id="title_condition" condition="!empty($base_statusmsg)">
+<div align="center"><h2><xar:var scope="session" name="$base_statusmsg" /></h2><br />
+</xar:if>
+<div align="center"><h2><xar:mlstring>Base Module Overview</xar:mlstring></h2></div><br />
+<table border="0" width="100%">
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>What is it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>The Base Module controls the configuration of your Xaraya Website.  It is in many respects, the "Base" for administration.  From this module, you can set your configuration, allow and disallow certain display aspects of your Xaraya website as well.</xar:mlstring>
+        </td>
+    </tr>
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>How to use it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>
+			From the menu, you have three choices.  "Modify Site Configuration", "Add Allow Vars", and "View System Information". 
+			</xar:mlstring>
+			<ul>
+				<li><xar:mlstring>Modify Site Configuration -- Allows you to set certain global configuration routines for configuration throughout.  Each routine is explained in the online help.</xar:mlstring></li>
+				<li><xar:mlstring>Add Allow Vars -- This area allows you to add HTML and Consor Words (TODO, more allowed vars?) to your master configuration for filtering options.</xar:mlstring></li>
+				<li><xar:mlstring>View System Information -- Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
+			</ul>		
+			
+			<xar:mlstring>TODO -- Finish overview.</xar:mlstring>
+        </td>
+    </tr>
+</table>

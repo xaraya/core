@@ -49,6 +49,7 @@ function users_loginblock_display($blockinfo)
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
+            $args['search'] = 'Search';
             $blockinfo['content'] = xarTplBlock('users', 'logout', $args);
             if (!empty($vars['logouttitle'])) {
                 $blockinfo['title'] = $vars['logouttitle'];

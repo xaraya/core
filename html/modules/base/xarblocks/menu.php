@@ -129,6 +129,7 @@ function base_menublock_display($blockinfo)
 
 function base_menublock_modify($blockinfo)
 {
+    // TODO --> Send output to template.  Template somewhat complete.
     global $xartheme;
 
     list($dbconn) = xarDBGetConn();
