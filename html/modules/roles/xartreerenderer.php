@@ -220,7 +220,6 @@ class xarTreeRenderer
             } else {
                 $this->indent[] = $this->tee;
             }
-            echo count($this->indent) . " " . $this->level . " " . $this->nodeindex . "<br />";
             // draw this child
             $this->drawbranch($subnode);
             // we're done; remove the indent string
