@@ -334,7 +334,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Pre-load themes module variables
     // CHECKME: see if this doesn't hurt install before activating :-)
-        xarMod_getVarsByModule('themes');
+        xarMod_getVarsByModule('theme');
     }
 
     /**
