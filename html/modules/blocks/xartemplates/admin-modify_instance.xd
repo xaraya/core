@@ -7,183 +7,169 @@
 	</span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:mlstring>
-			Modify Instance 
-		</xar:mlstring>
-	</h2>
-	<form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-		<p style="float: left; width: 100%;">
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="bid" id="bid" value="#$bid#" />
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Enter the new title for the block instance.  If you leave this title blank, you will not have a reference for the block when browsing the blocks adminstration.')#">
-					<label for="block_title">
-						<xar:mlstring>
-							Title 
-						</xar:mlstring>
-					</label>
-					: 
-				</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="block_title" id="block_title" value="#$instance['title']#" maxlength="255" />
-			</span>
-		</p>
-		<p style="float: left; width: 100%;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('This is the type of block that is being modified.')#">
-					<xar:mlstring>
-						Type 
-					</xar:mlstring>
-					: 
-				</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				#$instance['module']#\#$instance['type']# 
-			</span>
-		</p>
-		<p style="float: left; width: 100%;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Enter the group that you want this block instance to belong to.')#">
-					<label for="block_group">
-						<xar:mlstring>
-							Group 
-						</xar:mlstring>
-					</label>
-					: 
-				</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="block_group" id="block_group">
-					<xar:loop name="$block_groups">
-						<xar:if condition="$instance['group_id'] eq $loop:item['id']">
-							<option value="#$loop:item['id']#" selected="selected">
-								#$loop:item['name']# 
-							</option>
-							<xar:else />
-							<option value="#$loop:item['id']#">
-								#$loop:item['name']# 
-							</option>
-						</xar:if>
-					</xar:loop>
-				</select>
-			</span>
-		</p>
-		<p style="float: left; width: 100%;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('If you wish to override the block template, this field needs to be completed to tell the system what template to load for this instance.')#">
-					<label for="block_template">
-						<xar:mlstring>
-							Template (optional) 
-						</xar:mlstring>
-					</label>
-					: 
-				</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="block_template" id="block_template" value="#$instance['template']#" size="40" maxlength="255" />
-			</span>
-		</p>
-		<xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
-			<p style="float: left; width: 100%;">
-				<span style="float: left; width: 20%; text-align: right;">
-					<span class="help" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#">
-						<label for="block_refresh">
-							<xar:mlstring>
-								Refresh 
-							</xar:mlstring>
-						</label>
-						: 
-					</span>
-				</span>
-				<span style="float: right; width: 78%; text-align: left;">
-					<select name="block_refresh" id="block_refresh" style="width:150px;">
-						<xar:loop name="$refresh_times">
-							<xar:if condition="$instance['refresh'] eq $loop:item['id']">
-								<option value="#$loop:item['id']#" selected="selected">
-									<xar:var name="$loop:item['name']" />
-								</option>
-								<xar:else />
-								<option value="#$loop:item['id']#">
-									<xar:var name="$loop:item['name']" />
-								</option>
-							</xar:if>
-						</xar:loop>
-					</select>
-				</span>
-			</p>
-		</xar:if>
-		<p style="float: left; width: 100%;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#">
-					<label for="block_state">
-						<xar:mlstring>
-							Default state 
-						</xar:mlstring>
-					</label>
-					: 
-				</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="block_state" id="block_state">
-					<xar:if condition="$instance['state'] eq 0">
-						<option value="0" selected="selected">
-							<xar:mlstring>
-								Hidden 
-							</xar:mlstring>
-						</option>
-						<xar:else />
-						<option value="0">
-							<xar:mlstring>
-								Hidden 
-							</xar:mlstring>
-						</option>
-					</xar:if>
-					<xar:if condition="$instance['state'] eq 2">
-						<option value="2" selected="selected">
-							<xar:mlstring>
-								Maximized 
-							</xar:mlstring>
-						</option>
-						<xar:else />
-						<option value="2">
-							<xar:mlstring>
-								Maximized 
-							</xar:mlstring>
-						</option>
-					</xar:if>
-				</select>
-			</span>
-		</p>
-		<xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
-			<p style="float: left; width: 100%;">
-				<span style="float: left; width: 20%; text-align: right;">
-					<span class="help" title="#xarML('Enter the content that is shown in the block instance.')#">
-						<label for="block_content">
-							<xar:mlstring>
-								Content 
-							</xar:mlstring>
-						</label>
-						: 
-					</span>
-				</span>
-				<span style="float: right; width: 78%; text-align: left;">
-					<textarea name="block_content" id="block_content" style="width:300px;height:150px;">
-						#$instance['content']# 
-					</textarea>
-				</span>
-			</p>
-		</xar:if>
-<!--- Blocks can send more fields to be shown and configured the extra_fields var shows those values --->
-		<xar:if condition="!empty($extra_fields)">
-			#$extra_fields# 
-		</xar:if>
-		<p>
-		    #$hooks#
-		</p>
-		<p>
-			<input type="submit" value="#$updatelabel#" />
-		</p>
-	</form>
+    <h2><xar:mlstring>Modify Instance</xar:mlstring></h2>
+
+    <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
+        <p style="float: left; width: 100%;">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="bid" id="bid" value="#$bid#" />
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Each instance requires a unique name.')#">
+                    <label for="block_title">
+                        <xar:mlstring>Name:</xar:mlstring>
+                    </label>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="block_name" id="block_name" value="#$instance['name']#" maxlength="255" /> TODO
+            </span>
+        </p>
+
+        <p style="float: left; width: 100%;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Enter the new title for the block instance. The title is optional.')#">
+                    <label for="block_title">
+                        <xar:mlstring>Title:</xar:mlstring>
+                    </label>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="block_title" id="block_title" value="#$instance['title']#" maxlength="255" />
+            </span>
+        </p>
+
+        <p style="float: left; width: 100%;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('This is the type of block that is being modified.')#">
+                    <xar:mlstring>Type:</xar:mlstring>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                #$instance['module']#\#$instance['type']# 
+            </span>
+        </p>
+
+        <p style="float: left; width: 100%;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Select the groups you want this block instance to belong to. Templates for use with each group can be optionally specified.')#">
+                    <label for="block_group">
+                        <xar:mlstring>Groups and Templates:</xar:mlstring>
+                    </label>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <xar:loop name="$block_groups">
+                    <xar:if condition="!empty($loop:item['selected'])">
+                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked"/>
+                    <xar:else />
+                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
+                    </xar:if>
+                    <label for="block_groups_#$loop:item.id#">
+                        <span style="width: 6em;">#$loop:item['name']#</span>
+                        <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
+                    </label><br />
+                </xar:loop>
+            </span>
+        </p>
+
+        <p style="float: left; width: 100%;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#">
+                    <label for="block_template">
+                        <xar:mlstring>Template:</xar:mlstring>
+                    </label>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="block_template" id="block_template" value="#$instance['template']#" size="40" maxlength="255" />
+            </span>
+        </p>
+
+        <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
+            <p style="float: left; width: 100%;">
+                <span style="float: left; width: 20%; text-align: right;">
+                    <span class="help" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#">
+                        <label for="block_refresh">
+                            <xar:mlstring>Refresh:</xar:mlstring>
+                        </label>
+                    </span>
+                </span>
+                <span style="float: right; width: 78%; text-align: left;">
+                    <select name="block_refresh" id="block_refresh" style="width:150px;">
+                        <xar:loop name="$refresh_times">
+                            <xar:if condition="$instance['refresh'] eq $loop:item['id']">
+                                <option value="#$loop:item['id']#" selected="selected">
+                                    <xar:var name="$loop:item['name']" />
+                                </option>
+                            <xar:else />
+                                <option value="#$loop:item['id']#">
+                                    <xar:var name="$loop:item['name']" />
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </span>
+            </p>
+        </xar:if>
+ 
+        <p style="float: left; width: 100%;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#">
+                    <label for="block_state">
+                        <xar:mlstring>Default state:</xar:mlstring>
+                    </label>
+                </span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="block_state" id="block_state">
+                    <xar:if condition="$instance['state'] eq 0">
+                        <option value="0" selected="selected">
+                            <xar:mlstring>Hidden</xar:mlstring>
+                        </option>
+                    <xar:else />
+                        <option value="0">
+                            <xar:mlstring>Hidden</xar:mlstring>
+                        </option>
+                    </xar:if>
+                    <xar:if condition="$instance['state'] eq 2">
+                        <option value="2" selected="selected">
+                            <xar:mlstring>Maximized</xar:mlstring>
+                        </option>
+                    <xar:else />
+                        <option value="2">
+                            <xar:mlstring>Maximized</xar:mlstring>
+                        </option>
+                    </xar:if>
+                </select>
+            </span>
+        </p>
+
+        <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
+            <p style="float: left; width: 100%;">
+                <span style="float: left; width: 20%; text-align: right;">
+                    <span class="help" title="#xarML('Enter the content that is shown in the block instance.')#">
+                        <label for="block_content">
+                            <xar:mlstring>Content:</xar:mlstring>
+                        </label>
+                    </span>
+                </span>
+                <span style="float: right; width: 78%; text-align: left;">
+                    <textarea name="block_content" id="block_content" style="width:300px;height:150px;">
+                        #$instance['content']# 
+                    </textarea>
+                </span>
+            </p>
+        </xar:if>
+
+        <!---
+            Blocks can send more fields to be shown and configured
+            the extra_fields var shows those values
+        --->
+        <xar:if condition="!empty($extra_fields)">
+            <hr />
+            #$extra_fields#
+        </xar:if>
+
+        <p><input type="submit" value="#xarML('Update')#" /></p>
+    </form>
 </div>

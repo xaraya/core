@@ -18,16 +18,17 @@
 function blocks_admin_new_instance()
 {
 // Security Check
-	if(!xarSecurityCheck('AddBlock',0,'Instance')) return;
+	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
     // Fetch block type list
+    // TODO: move to API function.
     $block_types_table = $xartable['block_types'];
     $query = "SELECT xar_id as id, xar_type as type, xar_module as module FROM $block_types_table";
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     $block_types = array();
     while(!$result->EOF) {
@@ -40,7 +41,8 @@ function blocks_admin_new_instance()
     ksort($block_types);
 
     // Position
-    // Fetch block type list
+    // Fetch block type list.
+    // TODO: move to API function.
     $block_groups_table = $xartable['block_groups'];
     $query = "SELECT xar_id as id, xar_name as name FROM $block_groups_table";
     $result =& $dbconn->Execute($query);
@@ -57,10 +59,10 @@ function blocks_admin_new_instance()
 
     // Include 'formcheck' JavaScript.
     // TODO: move this to a template widget when available.
-    xarModAPIfunc(
-        'base', 'javascript', 'modulefile',
-        array('module'=>'base', 'filename'=>'formcheck.js')
-    );
+//    xarModAPIfunc(
+//        'base', 'javascript', 'modulefile',
+//        array('module'=>'base', 'filename'=>'formcheck.js')
+//    );
 
     return array('block_types'  => $block_types,
                  'block_groups' => $block_groups,

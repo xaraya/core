@@ -24,13 +24,14 @@ function blocks_adminapi_delete_group($args)
     extract($args);
 
     // Argument check
-    if (!isset($gid)) {
+    if (!isset($gid) || !is_numeric($gid)) {
+        // FIXME: raise proper error messages through the handler.
         xarSessionSetVar('errormsg', _MODARGSERROR);
         return false;
     }
 
     // Security
-	if(!xarSecurityCheck('DeleteBlock',1,'Block',"::$gid")) return;
+	if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -43,17 +44,17 @@ function blocks_adminapi_delete_group($args)
               FROM      $block_group_instances_table as group_inst
               LEFT JOIN $block_instances_table as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              WHERE     group_inst.xar_group_id = '$gid'";
+              WHERE     group_inst.xar_group_id = $gid";
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     // Load up list of group's instances
+    // TODO: move to an API.
     $instances = array();
     while (!$result->EOF) {
         $instances[] = $result->GetRowAssoc(false);
         $result->MoveNext();
     }
-
     $result->Close();
 
     // Delete group member instance definitions
@@ -61,20 +62,20 @@ function blocks_adminapi_delete_group($args)
         $query = "DELETE FROM $block_instances_table
                   WHERE       xar_id = ".$instance['id'];
         $result =& $dbconn->Execute($query);
-        if (!$result) return;
+        if (!$result) {return;}
     }
 
     // Delete block group definition
     $query = "DELETE FROM $block_groups_table
-              WHERE xar_id=" . xarVarPrepForStore($gid);
+              WHERE xar_id=" . $gid;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     // Delete group-instance links
     $query = "DELETE FROM $block_group_instances_table
-              WHERE xar_group_id=" . xarVarPrepForStore($gid);
+              WHERE xar_group_id = " . $gid;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     return true;
 }

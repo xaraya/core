@@ -30,13 +30,16 @@ function blocks_adminapi_load($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (empty($blockName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'blockName');
+    // Legacy - some modules still passing in a 'blockName'.
+    if (!empty($blockName)) {$blockType = $blockName;}
+    // These really are block types, as defined in the block_types.xar_type column.
+    if (empty($blockType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'blockType');
         return;
     }
     static $loaded = array();
 
-    if (isset($loaded["$modName$blockName"])) {
+    if (isset($loaded["$modName$blockType"])) {
         return true;
     }
     $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -45,7 +48,7 @@ function blocks_adminapi_load($args)
     $blockDir = 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
 
     // Load the block
-    $blockFile = $blockName . '.php';
+    $blockFile = $blockType . '.php';
     $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
 
     if (!file_exists($filePath)) {
@@ -53,13 +56,13 @@ function blocks_adminapi_load($args)
         return;
     }
     include $filePath;
-    $loaded["$modName$blockName"] = 1;
+    $loaded["$modName$blockType"] = 1;
 
     // Load the block language files
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:blocks', $blockName) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:blocks', $blockType) === NULL) return;
 
     // Initialise block (security schema) if required.
-    $initFunc = "{$modName}_{$blockName}block_init";
+    $initFunc = "{$modName}_{$blockType}block_init";
     if (function_exists($initFunc)) {
         $initFunc();
     }

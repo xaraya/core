@@ -1,18 +1,29 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:base-include-javascript module="base" filename="formcheck.js" />
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields
-	var blocks_fieldRequired = Array("block_title");
+	var blocks_fieldRequired = Array("block_name");
 	// Enter field description to appear in the dialog box
-	var blocks_fieldDescription = Array("Title");
+	var blocks_fieldDescription = Array("Name");
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2>
 	<div style="margin: auto;">
 	<form action="#xarModURL('blocks', 'admin', 'create_instance')#"  method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-		<div style="clear: both; padding-top: 10px;">
+
+        <div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('Every block instance requires a unique name')#"><label for="block_name"><xar:mlstring>Name</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="block_name" id="block_name" size="30" value="" maxlength="100" />
+		</span>
+		</div>
+
+        <div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('The title of the block as you want it to appear on your website')#"><label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:</span>
 		</span>
@@ -29,24 +40,9 @@
 			<select name="block_type" id="block_type">
 			<xar:loop name="$block_types">
 				<option value="#$loop:item['id']#">
-					#$loop:item['module']# \ #$loop:item['type']#
+					#$loop:item['module']#/#$loop:item['type']#
 				</option>
 			</xar:loop>  
-			</select>
-		</span>
-		</div>
-
-		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('The group that you want this block to be a member of.')#"><label for="block_group"><xar:mlstring>Group</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<select name="block_group" id="block_group">
-				<xar:loop name="$block_groups">
-					<option value="#$loop:item['id']#">
-						#$loop:item['name']#
-					</option>
-				</xar:loop>                
 			</select>
 		</span>
 		</div>

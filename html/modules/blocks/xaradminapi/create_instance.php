@@ -14,9 +14,9 @@
 */
 /**
  * create a new block instance
+ * @param $args['name'] unique name for the block
  * @param $args['title'] the title of the block
  * @param $args['type'] the block's type
- * @param $args['group'] the block's group
  * @param $args['template'] the block's template
  * @returns int
  * @return block instance id on success, false on failure
@@ -31,39 +31,41 @@ function blocks_adminapi_create_instance($args)
 
     // Argument check
     if ((!isset($title)) ||
+        (!isset($name)) ||
         (!isset($type)) ||
-        (!isset($group)) ||
         (!isset($position)) ||
         (!isset($state))) {
-        $msg = xarML('Invalid Parameter Count',
-                    join(', ',$invalid), 'admin', 'create', 'Blocks');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        $msg = xarML('Invalid Parameter Count', 'admin', 'create', 'Blocks');
+        xarExceptionSet(
+            XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            new SystemException($msg)
+        );
         return;
     }
 
     // Security
-	if(!xarSecurityCheck('AddBlock',1,'Block',"All:$title:All")) return;
+	if(!xarSecurityCheck('AddBlock', 1, 'Block', "All:$title:All")) {return;}
 
     if (!isset($content)) {
         $content = '';
     }
 
-    // Load up database
+    // Load up database details.
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
     $block_instances_table       = $xartable['block_instances'];
-    $block_group_instances_table = $xartable['block_group_instances'];
-    $block_groups_table          = $xartable['block_groups'];
-    $block_types_table           = $xartable['block_types'];
+    //$block_group_instances_table = $xartable['block_group_instances'];
+    //$block_groups_table          = $xartable['block_groups'];
+    //$block_types_table           = $xartable['block_types'];
 
-    // TODO: make sure group, type exist
+    // TODO: make sure type exists.
 
-    // Insert instance into table
+    // Insert instance details.
     $nextId = $dbconn->GenId($block_instances_table);
     $query = "INSERT INTO $block_instances_table (
               xar_id,
               xar_type_id,
+              xar_name,
               xar_title,
               xar_content,
               xar_template,
@@ -71,42 +73,39 @@ function blocks_adminapi_create_instance($args)
               xar_refresh,
               xar_last_update)
             VALUES (
-              " . xarVarPrepForStore($nextId) . ",
+              " . $nextId . ",
               " . xarVarPrepForStore($type) . ",
+              '" . xarVarPrepForStore($name) . "',
               '" . xarVarPrepForStore($title) . "',
               '" . xarVarPrepForStore($content) . "',
               '" . xarVarPrepForStore($template) . "',
               " . xarVarPrepForStore($state) . ", 0,0)";
 
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
-    // Get block ID as index of block instances table
-    $block_id = $dbconn->PO_Insert_ID($block_instances_table, 'xar_id');
+    // Get ID of row inserted.
+    $bid = $dbconn->PO_Insert_ID($block_instances_table, 'xar_id');
 
-    // Insert group-instance link into table
-    $nextId = $dbconn->GenId($block_group_instances_table);
-    $query = "INSERT INTO $block_group_instances_table (
-              xar_id,
-              xar_group_id,
-              xar_instance_id,
-              xar_position)
-            VALUES (
-              " . xarVarPrepForStore($nextId) . ",
-              '" . xarVarPrepForStore($group) . "',
-              '$block_id',
-              '" . xarVarPrepForStore($position) . "');";
+    // Update the group instances.
+    if (isset($groups) && is_array($groups)) {
+        // Pass the group updated to the API if required.
+        // TODO: error handling.
+        $result = xarModAPIfunc(
+            'blocks', 'admin', 'update_instance_groups',
+            array('bid' => $bid, 'groups' => $groups)
+        );
+    }
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Resequence the blocks
+    // Resequence the blocks.
+    // TODO: support resequence by a single block type or for all
+    // block groups in which a block instance is a member.
     xarModAPIFunc('blocks','admin','resequence');
 
     $args['module'] = 'blocks';
-    xarModCallHooks('item', 'create', $block_id, $args);
+    xarModCallHooks('item', 'create', $bid, $args)
 
-    return $block_id;
+    return $bid;
 }
 
 ?>

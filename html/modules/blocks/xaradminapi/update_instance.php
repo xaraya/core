@@ -14,10 +14,11 @@
 */
 /**
  * update attributes of a block instance
- * @param $args['id'] the ID of the block to update
+ * @param $args['bid'] the ID of the block to update
  * @param $args['title'] the new title of the block
- * @param $args['group_id'] the new position of the block
- * @param $args['template'] the new language of the block
+ * @param $args['group_id'] the new position of the block (deprecated)
+ * @param $args['groups'] optional array of group memberships
+ * @param $args['template'] the template of the block instance
  * @param $args['content'] the new content of the block
  * @param $args['refresh'] the new refresh rate of the block
  * @returns bool
@@ -38,17 +39,29 @@ function blocks_adminapi_update_instance($args)
     }
 
     // Argument check
-    if ((!isset($bid)) ||
+    if ((!isset($name)) ||
+        (!isset($bid) || !is_numeric($bid)) ||
         (!isset($title)) ||
-        (!isset($refresh)) ||
-        (!isset($group_id)) ||
-        (!isset($state))) {
+        (!isset($refresh) || !is_numeric($refresh)) ||
+        (!isset($state)  || !is_numeric($state))) {
         xarSessionSetVar('errormsg', _MODARGSERROR);
         return false;
     }
 
+    // Legacy support of group_id
+    if (!isset($groups) && isset($group_id)) {
+        $groups = array(
+            array('gid' => $group_id, 'template' => '')
+        );
+    }
+
+    // TODO: check for unique name before updating the database (errors raised
+    // by unique keys are not user-friendly).
+    $name = strtolower($name);
+    
     // Security
-	if(!xarSecurityCheck('EditBlock',1,'Block',"$title::$bid")) return;
+    // TODO: add security on the name as well as (eventually instead of) the title.
+	if(!xarSecurityCheck('EditBlock', 1, 'Block', "$title::$bid")) {return;}
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -58,24 +71,27 @@ function blocks_adminapi_update_instance($args)
     $query = "UPDATE $block_instances_table
               SET xar_content='" . xarVarPrepForStore($content) . "',
                   xar_template='" . xarVarPrepForStore($template) . "',
+                  xar_name = '" . xarVarPrepForStore($name) . "',
                   xar_title='" . xarVarPrepForStore($title) . "',
-                  xar_refresh='" . xarVarPrepForStore($refresh) . "',
-                  xar_state='" . xarVarPrepForStore($state) . "'
-              WHERE xar_id=" . xarVarPrepForStore($id);
+                  xar_refresh = " . $refresh . ",
+                  xar_state = " . $state . "
+              WHERE xar_id = " . $bid;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
-    $query = "UPDATE $block_group_instances_table
-              SET   xar_group_id='" . xarVarPrepForStore($group_id) . "'
-              WHERE xar_instance_id=" . xarVarPrepForStore($id);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    // Update the group instances.
+    if (isset($groups) && is_array($groups)) {
+        // Pass the group updated to the API if required.
+        // TODO: error handling.
+        $result = xarModAPIfunc(
+            'blocks', 'admin', 'update_instance_groups',
+            array('bid' => $bid, 'groups' => $groups)
+        );
+    }
     
     $args['module'] = 'blocks';
 
-    xarModCallHooks(
-                    'item', 'update', $id, $args
-                    );
+    xarModCallHooks('item', 'update', $id, $args);
     
     return true;
 }

@@ -24,61 +24,37 @@ function blocks_admin_modify_instance()
     // Security Check
     if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
 
+    // TODO: move all database stuff to the API.
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
     $block_types_table = $xartable['block_types'];
 
-    // Fetch instance data
-    $query = "SELECT inst.xar_id as bid,
-                     inst.xar_title as title,
-                     inst.xar_template as template,
-                     inst.xar_content as content,
-                     inst.xar_refresh as refresh,
-                     inst.xar_state as state,
-                     group_inst.xar_group_id as group_id,
-                     type.xar_module as module,
-                     type.xar_type as type
-              FROM   $block_instances_table as inst
-              LEFT JOIN $block_group_instances_table as group_inst
-              ON        group_inst.xar_instance_id = inst.xar_id
-              LEFT JOIN $block_types_table as type
-              ON        type.xar_id = inst.xar_type_id
-              WHERE     inst.xar_id = $bid";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // Freak if we don't get one and only one result
-    if ($result->RecordCount() != 1) {
-        $msg = xarML('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-
-    // Fetch instance data
-    $instance = $result->GetRowAssoc(false);
+    // Get the instance details.
+    $instance = xarModAPIfunc('blocks', 'user', 'get', $bid);
 
     // Load block
-    if (!xarModAPIFunc('blocks', 
-                       'admin', 
-                       'load', array('modName' => $instance['module'],
-                                     'blockName' => $instance['type']))) return;
+    if (!xarModAPIFunc(
+        'blocks', 'admin', 'load',
+        array(
+            'modName' => $instance['module'],
+            'blockName' => $instance['type'])
+        )
+    ) {return;}
 
-
+    // Determine the name of the update function.
+    // Execute the function if it exists.
     $usname = preg_replace('/ /', '_', $instance['module']);
     $modfunc = $usname . '_' . $instance['type'] . 'block_modify';
 
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
     } else {
-        // TODO: adam_baum - add some error checking for non-existant func, methinks.
         $extra = '';
     }
 
-    // check to see if block has form content
+    // Check to see if block has form content.
     $infofunc = $usname.'_'.$instance['type'] . 'block_info';
     if (function_exists($infofunc)) {
         $block_edit = $infofunc();
@@ -90,36 +66,43 @@ function blocks_admin_modify_instance()
         return NULL;
     }
 
-    // build refresh times array
-    $refreshtimes = array(array('id' => 1800,
-                                'name' => xarML('Half Hour')),
-                          array('id' => 3600,
-                                'name' => xarML('Hour')),
-                          array('id' => 7200,
-                                'name' => xarML('Two Hours')),
-                          array('id' => 14400,
-                                'name' => xarML('Four Hours')),
-                          array('id' => 43200,
-                                'name' => xarML('Twelve Hours')),
-                          array('id' => 86400,
-                                'name' => xarML('Daily')));
+    // Build refresh times array.
+    // TODO: is this still used? Is it specific to certain types of block only?
+    $refreshtimes = array(
+        array('id' => 1800, 'name' => xarML('Half Hour')),
+        array('id' => 3600, 'name' => xarML('Hour')),
+        array('id' => 7200, 'name' => xarML('Two Hours')),
+        array('id' => 14400, 'name' => xarML('Four Hours')),
+        array('id' => 43200, 'name' => xarML('Twelve Hours')),
+        array('id' => 86400, 'name' => xarML('Daily'))
+    );
 
-    // Position
-    // Fetch block group list
+    // Fetch complete block group list.
+    // TODO: move to API.
     $block_groups_table = $xartable['block_groups'];
-    $query = "SELECT xar_id as id, xar_name as name FROM $block_groups_table";
+    $query = 'SELECT xar_id as id, xar_name as name FROM ' . $block_groups_table;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     $block_groups = array();
     while(!$result->EOF) {
         $group = $result->GetRowAssoc(false);
-
-        $block_groups[] = $group;
-
+        $block_groups[$group['id']] = $group;
         $result->MoveNext();
     }
     
+    // In the modify form, we want to provide an array of checkboxes: one for each group.
+    // Also a field for the overriding template name for each group instance.
+    foreach ($block_groups as $key => $block_group) {
+        if (isset($instance['groups'][$key])) {
+            $block_groups[$key]['selected'] = true;
+            $block_groups[$key]['template'] = $instance['groups'][$key]['group_inst_template'];
+        } else {
+            $block_groups[$key]['selected'] = false;
+            $block_groups[$key]['template'] = '';
+        }
+    }
+
     $hooks = xarModCallHooks('item', 'modify', $bid, '');
     //error_log("hooked to blocks = " . serialize($hooks));
     if (empty($hooks)) {
@@ -137,8 +120,7 @@ function blocks_admin_modify_instance()
                  'extra_fields'   => $extra,
                  'block_settings' => $block_edit,
                  'hooks'          => $hooks,
-                 'refresh_times'  => $refreshtimes,
-                 'updatelabel'    => xarML('Update'));
+                 'refresh_times'  => $refreshtimes);
 }
 
 ?>

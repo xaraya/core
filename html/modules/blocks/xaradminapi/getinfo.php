@@ -66,7 +66,7 @@ function blocks_adminapi_getinfo($args)
 
     if ($result->EOF) {
         $result->Close();
-        $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
+        $msg = xarML('Block identified by bid #(1) does not exist.', $blockId);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                        new SystemException($msg));
         return NULL;

@@ -1,43 +1,33 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:base-include-javascript module="base" filename="confirmlink.js" />
 <div class="xar-mod-head">
-	<span class="xar-mod-title">
-		<xar:mlstring>
-			Administration - Blocks System 
-		</xar:mlstring>
-	</span>
+    <span class="xar-mod-title">
+        <xar:mlstring>Administration - Blocks System</xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:mlstring>
-			View Blocks 
-		</xar:mlstring>
-	</h2>
-	<form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
-		<p class="xar-norm-outline" style="padding: .5em;">
-<!--- Module List Sort and Filter Controls --->
-			<label class="xar-mod-title" for="filter">
-				<xar:mlstring>
-					Style 
-				</xar:mlstring>
-			</label>
-			<select name="selstyle" id="selstyle" onchange="this.form.submit()">
-				<xar:foreach in="$style" key="$key" value="$value">
-					<xar:if condition="$key eq $selstyle">
-						<option value="#$key#" selected="selected">
-							#$value# 
-						</option>
-						<xar:else />
-						<option value="#$key#">
-							#$value# 
-						</option>
-					</xar:if>
-				</xar:foreach>
-			</select>
-		</p>
+    <h2><xar:mlstring>View Block Instances</xar:mlstring></h2>
+    <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
+        <p class="xar-norm-outline" style="padding: .5em;">
+            <!--- Module List Sort and Filter Controls --->
+            <label class="xar-mod-title" for="filter">
+                <xar:mlstring>Style</xar:mlstring>
+            </label>
+            <select name="selstyle" id="selstyle"">
+                <xar:foreach in="$style" key="$key" value="$value">
+                    <xar:if condition="$key eq $selstyle">
+                        <option value="#$key#" selected="selected">#$value#</option>
+                    <xar:else />
+                        <option value="#$key#">#$value#</option>
+                    </xar:if>
+                </xar:foreach>
+            </select>
+            <input type="submit" name="submit" value="#xarML('Refresh')#"/>
+        </p>
 	</form>
-	<xar:if condition="$selstyle eq 'compact'">
-		<xar:template file="compact" type="module" />
-		<xar:else />
-		<xar:template file="plain" type="module" />
-	</xar:if>
+    <xar:if condition="$selstyle eq 'compact'">
+        <xar:template file="compact" type="module" />
+    <xar:else />
+        <xar:template file="plain" type="module" />
+    </xar:if>
 </div>

@@ -17,44 +17,51 @@
  */
 function blocks_admin_update_instance()
 {
-
     // Get parameters
-    if (!xarVarFetch('bid','int:1:',$bid)) return;
-    if (!xarVarFetch('block_group','str:1:',$group_id)) return;
-    if (!xarVarFetch('block_state','str:1:',$state)) return;
-    if (!xarVarFetch('block_title','str:1:',$title,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_template','str:1:',$template,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_content','str:1:',$content,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_refresh','str:1:',$refresh,'0',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
+    if (!xarVarFetch('block_groups', 'keylist:id;checkbox', $block_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_name', 'str:1:', $name)) {return;}
+    if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_state', 'str:1:', $state)) {return;}
+    if (!xarVarFetch('block_template', 'str:1:', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('group_templates', 'keylist:id;str', $group_templates, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_content', 'str:1:', $content, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_refresh', 'str:1:', $refresh, '0', XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {return;}
 
-    // Security Check
-	if(!xarSecurityCheck('AddBlock',0,'Instance')) return;
+    // Security Check.
+	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
-    // Get and update block info
-    $blockinfo = xarModAPIFunc('blocks', 
-                               'admin', 
-                               'getinfo', array('blockId' => $bid));
+    // Get and update block info.
+    $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
+    $blockinfo['name'] = $name;
     $blockinfo['title'] = $title;
-    $blockinfo['bid'] = $bid;
-    $blockinfo['template'] = $template;
+    $blockinfo['template'] = $block_template;
     $blockinfo['content'] = $content;
     $blockinfo['refresh'] = $refresh;
     $blockinfo['state'] = $state;
-    // FIXME: this generates a Notice error
-    if ($blockinfo['group_id'] != $group_id) {
-        // Changed group, not worth keeping track of position, IMO
-        $blockinfo['position'] = '0';
-        $blockinfo['group_id'] = $group_id;
+
+    // Pick up the block instance groups and templates.
+    $groups = array();
+    foreach($block_groups as $gid => $block_group) {
+        $groups[] = array(
+            'gid' => $gid,
+            'template' => $group_templates[$gid]
+        );
     }
+    $blockinfo['groups'] = $groups;
 
     // Load block
-    if (!xarModAPIFunc('blocks', 
-                       'admin', 
-                       'load', array('modName' => $blockinfo['module'],
-                                     'blockName' => $blockinfo['type']))) return;
+    if (!xarModAPIFunc(
+            'blocks', 'admin', 'load',
+            array(
+                'modName' => $blockinfo['module'],
+                'blockName' => $blockinfo['type']
+            )
+        )
+    ) {return;}
 
     // Do block-specific update
     $usname = preg_replace('/ /', '_', $blockinfo['module']);
@@ -67,22 +74,19 @@ function blocks_admin_update_instance()
 	$func = $updatefunc();
 	if(!empty($func['func_update'])) {
 	    if (function_exists($func['func_update'])) {
+                // TODO: this doesn't look right. Is there a function the get/post vars
+                // go through before being used?
 		global $HTTP_POST_VARS;
 		$blockinfo = $func['func_update'](array_merge($HTTP_POST_VARS, $blockinfo));
 	    }
         }
     }
 
-    // Pass to API
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'update_instance',
-                       $blockinfo)) return;
+    // Pass to API - do generic updates.
+    if (!xarModAPIFunc('blocks', 'admin', 'update_instance', $blockinfo)) {return;}
 
-    // Resequence
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'resequence')) return;
+    // Resequence.
+    if (!xarModAPIFunc('blocks', 'admin', 'resequence')) {return;}
 
     xarResponseRedirect(xarModURL('blocks', 'admin', 'modify_instance',array('bid'=>$bid)));
 
