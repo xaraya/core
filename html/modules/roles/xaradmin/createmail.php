@@ -109,7 +109,9 @@ function roles_admin_createmail()
         $q->run();
 
         foreach($q->output() as $role) {
-            $data['users'][$role['uid']] = array('uid' => $role['uid'],
+                // Remove the next line eventually. It comes from a special situation upgrading from 0.9.10 to 0.9.11
+                if (empty($role)) continue;
+                $data['users'][$role['uid']] = array('uid' => $role['uid'],
                 'name' => $role['name'],
                 'uname' => $role['uname'],
                 'email' => $role['email'],

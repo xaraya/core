@@ -48,7 +48,7 @@ function roles_user_register()
 
     // Skip Min Age Requirement when set at 0.
     $minage = xarModGetVar('roles', 'minage');
-    if ($minage = 0){
+    if ($minage == 0){
         if ($phase = 'checkage'){
             $phase = 'registerform';
         }
@@ -380,7 +380,7 @@ function roles_user_register()
 
                 // Make the user a member of the users role
                 if(!xarMakeRoleMemberByID($uid, $defaultRole['uid'])) return;
-                xarModSetVar('roles', 'lastuser', $username);
+                xarModSetVar('roles', 'lastuser', $uid);
 
                 if ($pending == 1) $data = xarTplModule('roles','user', 'getvalidation');
                 else {

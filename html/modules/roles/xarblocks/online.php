@@ -94,7 +94,7 @@ function roles_onlineblock_display($blockinfo)
             );
 
             if ($aa['name'] == xarUserGetVar('name')) {
-                if (xarModIsAvailable('messages')) { 
+                if (xarModIsAvailable('messages')) {
                     $args['test1'][$key]['total'] = xarModAPIFunc(
                         'messages', 'user', 'count_total',
                         array('uid'=>$aa['uid'])
@@ -139,15 +139,24 @@ function roles_onlineblock_display($blockinfo)
          $args['users'] = xarML('users');
     }
 
-    $uname = xarModGetVar('roles', 'lastuser');
+    $uid = xarModGetVar('roles', 'lastuser');
 
     // Make sure we have a lastuser
-    if (!empty($uname)) {
-         $status = xarModAPIFunc(
+    if (!empty($uid)) {
+        if(!is_numeric($uid)) {
+        //Remove this further down the line
+            $status = xarModAPIFunc(
             'roles', 'user', 'get',
-            array('uname' => $uname)
-         );
+            array('uname' => $uid)
+            );
 
+        } else {
+            $status = xarModAPIFunc(
+            'roles', 'user', 'get',
+            array('uid' => $uid)
+            );
+
+        }
          // Check return
          if ($status) {$args['lastuser'] = $status;}
     }
