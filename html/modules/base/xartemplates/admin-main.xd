@@ -18,7 +18,7 @@
             <xar:mlstring>From the menu, you have one choice. </xar:mlstring>
 			<ul>
                 <li><xar:mlstring>View System Information -- Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
-			<ul>
+			</ul>
         </div>
         <br />
         <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
@@ -26,11 +26,12 @@
         </div>
         <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			<b>
 			<xar:mlstring>RSS Class</xar:mlstring>
             </b>
 			<p><xar:mlstring>The RSS capabilities in Xaraya is using </xar:mlstring><a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914"> <xar:mlstring> PHP feedParser </xar:mlstring> </a><xar:mlstring> as its backend.   The notes for the feedParser by Reverend Jim are as follows</xar:mlstring>:</p>
             <p><xar:mlstring>
-            feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate cronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
+            feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate chronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
 			</p>
             <b>
             <xar:mlstring>
@@ -39,7 +40,7 @@
             </b>
             <br /><br />
             <xar:mlstring>
-            Currently, the HTML and Text blocks can both expire content if you wish.  If you have a message that you would like to only have visable for a certain period of time, you can expire the block.  This functionality can be used in conjuction with any placement or block group that you assign the block.
+            Currently, the HTML and Text blocks can both expire content if you wish.  If you have a message that you would like to only have visible for a certain period of time, you can expire the block.  This functionality can be used in conjunction with any placement or block group that you assign the block.
             </xar:mlstring>
         </div>
         <br />

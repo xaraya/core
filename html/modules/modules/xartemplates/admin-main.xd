@@ -3,7 +3,7 @@
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
     <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
         <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
-            <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="39" height="41" />
+            <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96" />
         </div>
         <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>What is it?</xar:mlstring>
@@ -24,7 +24,7 @@
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Configure Hooks -- Allows you to set certain hooks for modules to be reused (such as allowing comments to a module data)</xar:mlstring></li>
-                    <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcments from Xaraya.com</xar:mlstring></li>
+                    <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcements from Xaraya.com</xar:mlstring></li>
                 </ul>
         </div>
         <br />
