@@ -9,9 +9,9 @@ a:link:hover, a:visited:hover { color: #994040; }
 h1, h2, h3, h4 { color: #336633; }
 
 .xar-mod-head {
-    color: #FFFFFF;
-    background-color: #336633;
-    border-color: #88A788;
+	color: #336633;
+	background-color: #E2F0DF;
+	border-color: #336633;
 }
 
 th {
