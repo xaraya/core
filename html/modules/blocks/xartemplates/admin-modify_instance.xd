@@ -54,6 +54,25 @@
                 <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
+         <tr>
+            <td align="left">
+                Refresh:
+            </td>
+            <td align="left">
+                <select name="block_refresh" id="block_refresh" style="width:150px;">
+                    <xar:loop name="$refresh_times">
+                        <xar:if condition="$instance['refresh'] eq $id">
+                            <option value="#$id#" selected="selected">
+                        <xar:else />
+                            <option value="#$id#">
+                        </xar:if>
+                        <xar:var name="$name" />
+                        </option>
+                    </xar:loop>
+                </select>
+            </td>
+        </tr>
+        <tr>
         <tr>
             <td align="left">
                 Default state:
