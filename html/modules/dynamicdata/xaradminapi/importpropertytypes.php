@@ -32,8 +32,8 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 
 	$dynamicproptypes = $xartable['dynamic_properties_def'];
 
-	$insert = "DELETE FROM $dynamicproptypes";
-	$result =& $dbconn->Execute($insert);
+	$clearCache = "DELETE FROM $dynamicproptypes";
+	$result =& $dbconn->Execute($clearCache);
 	
 
 	// Get list of properties in properties directory.

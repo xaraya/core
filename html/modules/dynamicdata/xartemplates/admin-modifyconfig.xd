@@ -3,6 +3,20 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Configure Property Types</xar:mlstring></h2><br />
 <div style="margin: auto;">
 
+<hr />
+<p>
+	Click <b>Flush Property Cache</b> to clear the DynamicData Property Definitions 
+	cache and to reload the properties definitions from the file system.
+</p>
+<form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+	<input type="hidden" name="flushPropertyCache" value="true" />
+   <input type="submit" value="Flush Property Cache" />
+</form>
+<hr />
+
+
+
 <p><xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties</xar:mlstring></p>
 // TODO: very much under construction, obviously :-)
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
