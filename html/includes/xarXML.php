@@ -69,6 +69,18 @@ if(!defined('XML_LOCAL_NAMESPACE'))  define('XML_LOCAL_NAMESPACE' , 2);
 // Miscellaneous
 define('XARXML_BLOCKREAD_SIZE',4096);
 
+// Parse directly when reading a file
+// This is mainly a switch for using xml_parse or
+// xml_parse_into_struct. It all depends whether the
+// re-arranging of the php generated struct is faster
+// then creating our own struct 
+// Using the chunk based parser, for large files 
+// and using 'true' SAX parsing (like direct filters or
+// chaining handlers, will be much faster and cost less
+// memory. We make it definable anyway, so we can prove
+// the above statement.
+define('XARXML_PARSEWHILEREAD',true);
+
 // Handler states
 define('XARXML_HSTATE_INITIAL'          , 0);
 define('XARXML_HSTATE_NORMAL'           , 1);
@@ -156,7 +168,7 @@ class xarXmlParser
     {
         $this->__activate();
         // TODO: check the string for stuff, this can be very delicate
-        if(!xml_parse($this->parser, $xmldata, true)) {
+        if(!$this->__parse($xmldata, true)) {
             $this->__deactivate();
             return false;
         }
@@ -184,14 +196,51 @@ class xarXmlParser
         // Activate the parser with resolve base the base path of the file
         $resolve_base = dirname($fileName);
         $this->__activate($resolve_base);
+        $xml='';
+
+        // Parse in chunks
         while ($xmldata = fread($fp, XARXML_BLOCKREAD_SIZE)) {
-            if(!xml_parse($this->parser, $xmldata, feof($fp))) {
+            if(XARXML_PARSEWHILEREAD) {
+                if(!$this->__parse($xmldata, feof($fp))) {
+                    $this->__deactivate();
+                    return false;
+                }
+            } else {
+                $xml .= $xmldata;
+            }
+        }
+        
+        // Parse in whole
+        if (!XARXML_PARSEWHILEREAD) {
+            if (!$this->__parse($xml,true)) {
                 $this->__deactivate();
                 return false;
             }
         }
         return $this->__deactivate();
     }
+
+    /**
+     * Central parse function
+     *
+     * This is the only place where the actual parsing (by php i.e.) is don
+     *
+     * @access private
+     * @param string $xmldata chunk of xmldata
+     * @param bool   $final   denotes whether this is the last chunk we can expect
+     */
+    function __parse($xmldata, $final) 
+    {
+        $vals=array(); $index=array();
+        // FIXME: actually put that arrays to use in the handler,
+        // tho we should do this in a portable way and in a 'SAX' way
+        if(XARXML_PARSEWHILEREAD) {
+            return xml_parse($this->parser,$xmldata, $final);
+        } else {
+            return xml_parse_into_struct($this->parser, $xmldata, &$vals, &$index);
+        }
+    }
+
 
     function __getErrorInfo() 
     {
@@ -200,6 +249,7 @@ class xarXmlParser
             .xml_get_current_column_number($this->parser)."]-"
             .xml_error_string($error);
     }
+
         
     /**
      * Set a parser option
@@ -499,6 +549,7 @@ class xarXmlHandler
         $this->_tree[$this->_depth][XARXML_ATTR_NAME]= $tagname;
         $this->_tree[$this->_depth][XARXML_ATTR_TYPE] = $type;
         $this->_tree[$this->_depth][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
+        // FIXME: somewhere we should at least check the the attribute ID is unique
         $attribs and $this->_tree[$this->_depth][XARXML_ATTR_ATTRIBUTES] = $attribs;
         // See if the ns handler has registered namespaces
         if(count($this->_nsregister) > 0 ) {
@@ -603,6 +654,7 @@ class xarXmlHandler
      */
     function unparsed_entity($parser, $entity_name, $resolve_base, $system_id, $public_id, $notation_name) 
     {
+        //echo "Unparsed entity handler for $entity_name, $resolve_base, $system_id, $public_id, $notation_name\n";
         return true;
     }
     
@@ -613,6 +665,7 @@ class xarXmlHandler
      */
     function notation_declaration($parser, $notation_name, $resolve_base, $system_id, $public_id) 
     {
+        //echo "Notation declaration handler for $notation_name, $resolve_base, $system_id, $public_id\n";
         return true;
     }
 
