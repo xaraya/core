@@ -189,10 +189,33 @@ function blocks_init()
 
     // Cache blocks table is not in xartables
     $cacheblockstable =  xarDBGetSystemTablePrefix() . '_cache_blocks';
+    //jojodee: for some reason php5.0.3 does not like the datadict approach
+    //changing now to usual creation approach to get installer working
 
+    $query = xarDBCreateTable($prefix . '_cache_blocks',
+                             array('xar_bid'          => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                            'default'     => '0'),
+                                   'xar_nocache'    => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '0'),
+                                   'xar_page' => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '0'),
+                                   'xar_user'    => array('type'        => 'integer',
+                                                             'null'        => true,
+                                                             'default'     => '0'),
+                                   'xar_expire'    => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '0')));
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+/*
     // Get a data dictionary object with item create methods.
     $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
-    
+
     $flds = "
         xar_bid             I           NotNull DEFAULT 0,
         xar_nocache         L           NotNull DEFAULT 0,
@@ -200,17 +223,27 @@ function blocks_init()
         xar_user            L           NotNull DEFAULT 0,
         xar_expire          I           Null
     ";
-    
+
     // Create or alter the table as necessary.
-    $result = $datadict->changeTable($cacheblockstable, $flds);    
+    $result = $datadict->changeTable($cacheblockstable, $flds);
     if (!$result) {return;}
-    
+    */
+    //jojodee: for some reason php5.0.3 does not like the datadict approach
+    //changing now to usual creation approach to get installer working
+
+    $query = xarDBCreateIndex($prefix . '_cache_blocks',
+                              array('name' => 'i_' . $prefix . '_cache_blocks_1',
+                                    'fields' => array('xar_bid'),
+                                    'unique' => true));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    /*
     // Create a unique key on the xar_bid collumn
     $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',
                                      $cacheblockstable,
                                      'xar_bid',
                                      array('UNIQUE'));
-
+   */
     // *_userblocks
     /* Removed Collapsing blocks to see if there is a better solution.
     $query = xarDBCreateTable($prefix . '_userblocks',
