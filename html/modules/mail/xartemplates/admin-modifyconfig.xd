@@ -57,17 +57,28 @@
 			<option label="SMTP" value="smtp" selected="selected">SMTP</option>
 			<option label="SendMail" value="sendmail">SendMail</option>
 			<option label="Mail" value="mail">Mail</option>
+			<option label="Mail" value="qmail">QMail</option>
 		<xar:elseif condition="xarModGetVar('mail', 'server') eq 'sendmail'" />
 			<option label="SMTP" value="smtp">SMTP</option>
 			<option label="SendMail" value="sendmail" selected="selected">SendMail</option>
 			<option label="Mail" value="mail">Mail</option>
+			<option label="Mail" value="qmail">QMail</option>
 		<xar:elseif condition="xarModGetVar('mail', 'server') eq 'mail'" />
 			<option label="SMTP" value="smtp">SMTP</option>
 			<option label="SendMail" value="sendmail">SendMail</option>
 			<option label="Mail" value="mail" selected="selected">Mail</option>
+			<option label="Mail" value="qmail">QMail</option>
+		<xar:elseif condition="xarModGetVar('mail', 'server') eq 'qmail'" />
+			<option label="SMTP" value="smtp">SMTP</option>
+			<option label="SendMail" value="sendmail">SendMail</option>
+			<option label="Mail" value="mail">Mail</option>
+			<option label="Mail" value="qmail" selected="selected">QMail</option>
 		</xar:if>									
 	</select>
 </p>
+<xar:if condition="xarModGetVar('mail', 'server') eq 'sendmail'">
+	<p><label for="sendmailpath"><xar:mlstring>Path to Sendmail</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="sendmailpath" id="sendmailpath" value="#xarModGetVar('mail', 'sendmailpath')#" size="30" maxlength="100" /></p>
+</xar:if>
 <xar:if condition="xarModGetVar('mail', 'server') eq 'smtp'">
 	<p><label for="smtphost"><xar:mlstring>SMTP Host</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="smtpHost" id="smtpHost" value="#xarModGetVar('mail', 'smtpHost')#" size="30" maxlength="100" /></p>
 	<p><label for="smtpPort"><xar:mlstring>SMTP Port</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="smtpPort" id="smtpPort" value="#xarModGetVar('mail', 'smtpPort')#" size="5" maxlength="5" /></p>
