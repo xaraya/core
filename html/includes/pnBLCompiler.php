@@ -300,16 +300,18 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            if (trim($text) != '') {
-                                if (!$parent->hasText()) {
+                            if ($text != '') {
+                                if ($parent->hasText()) {
+                                    $node = $this->nodesFactory->createTextNode($text, $this);
+                                    $children[] = $node;
+                                } elseif (trim($text) != '') {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                     return;
                                 }
-                                $node = $this->nodesFactory->createTextNode($text, $this);
-                                $children[] = $node;
                                 $text = '';
                             }
+
                             // Handle Begin Tag
                             $res = $this->parseBeginTag();
                             if (!isset($res)) {
@@ -362,14 +364,15 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 return;
                             }
                             // Add text to parent
-                            if (trim($text) != '') {
-                                if (!$parent->hasText()) {
+                            if ($text != '') {
+                                if ($parent->hasText()) {
+                                    $node = $this->nodesFactory->createTextNode($text, $this);
+                                    $children[] = $node;
+                                } elseif (trim($text) != '') {
                                     pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                    new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                     return;
                                 }
-                                $node = $this->nodesFactory->createTextNode($text, $this);
-                                $children[] = $node;
                                 $text = '';
                             }
                             // Handle Begin Tag
@@ -425,14 +428,15 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                                 // </pnt: tag
                                 //pnLogMessage('found </pnt:', PNLOG_LEVEL_ERROR);
                                 // Add text to parent
-                                if (trim($text) != '') {
-                                    if (!$parent->hasText()) {
+                                if ($text != '') {
+                                    if ($parent->hasText()) {
+                                        $node = $this->nodesFactory->createTextNode($text, $this);
+                                        $children[] = $node;
+                                    } elseif (trim($text) != '') {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                         return;
                                     }
-                                    $node = $this->nodesFactory->createTextNode($text, $this);
-                                    $children[] = $node;
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -457,14 +461,15 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             if ($nextToken == 'idget:') {
                                 // </widget: tag
                                 // Add text to parent
-                                if (trim($text) != '') {
-                                    if (!$parent->hasText()) {
+                                if ($text != '') {
+                                    if ($parent->hasText()) {
+                                        $node = $this->nodesFactory->createTextNode($text, $this);
+                                        $children[] = $node;
+                                    } elseif (trim($text) != '') {
                                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                        new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                         return;
                                     }
-                                    $node = $this->nodesFactory->createTextNode($text, $this);
-                                    $children[] = $node;
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -499,14 +504,15 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             return;
                         }
                         // Add text to parent
-                        if (trim($text) != '') {
-                            if (!$parent->hasText()) {
+                        if ($text != '') {
+                            if ($parent->hasText()) {
+                                $node = $this->nodesFactory->createTextNode($text, $this);
+                                $children[] = $node;
+                            } elseif (trim($text) != '') {
                                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have text.", $parent));
                                 return;
                             }
-                            $node = $this->nodesFactory->createTextNode($text, $this);
-                            $children[] = $node;
                             $text = '';
                         }
                         // Handle Entity
