@@ -40,10 +40,15 @@
  * Server package:
  * ---------------
  * ServerRequest - event is issued at the end of processing a server request
- * 
+ *
  * Session package:
  * ----------------
  * SessionCreate - event is triggered when a new session is being created (see xarSession.php)
+ *
+ * User package:
+ * -------------
+ * UserLogin - event is triggered when a user is successfully logged in (value = new userid)
+ * UserLogout - event is triggered when a user is successfully logged out (value = old userid)
  */
 
 /**

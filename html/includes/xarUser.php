@@ -64,7 +64,12 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
 
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
     xarTplSetThemeName(xarUserGetNavigationThemeName());
-    
+
+    // Register the UserLogin event
+    xarEvt_registerEvent('UserLogin');
+    // Register the UserLogout event
+    xarEvt_registerEvent('UserLogout');
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarUser__shutdown_handler');
     return true;
@@ -169,6 +174,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     // FIXME: <marco> here we could also set a last_logon timestamp
 
+    // User logged in successfully, trigger the proper event with the new userid
+    xarEvt_trigger('UserLogin',$userId);
+
     return true;
 }
 
@@ -184,6 +192,9 @@ function xarUserLogOut()
     if (!xarUserIsLoggedIn()) {
         return true;
     }
+    // get the current userid before logging out
+    $userId = xarSessionGetVar('uid');
+
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
@@ -194,6 +205,9 @@ function xarUserLogOut()
     }
 
     xarSessionDelVar('authenticationModule');
+
+    // User logged out successfully, trigger the proper event with the old userid
+    xarEvt_trigger('UserLogout',$userId);
 
     return true;
 }
