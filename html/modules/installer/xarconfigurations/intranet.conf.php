@@ -23,7 +23,6 @@ function installer_intranet_moduleoptions()
         array('name' => "comments",             'regid' => 14),
         array('name' => "example",              'regid' => 36),
         array('name' => "hitcount",             'regid' => 177),
-        array('name' => "metaweblogapi",        'regid' => 747),
         array('name' => "search",               'regid' => 32),
         array('name' => "soapserver",           'regid' => 748),
         array('name' => "sniffer",              'regid' => 755),
