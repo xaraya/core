@@ -410,7 +410,6 @@ function xarPageSetCached($cacheKey, $name, $value)
            $xarPage_cacheTime,
            $xarOutput_cacheTheme,
            $xarPage_cacheDisplay,
-           $xarPage_cacheShowTime,
            $xarOutput_cacheSizeLimit,
            $xarPage_cacheCode;
     
@@ -433,37 +432,9 @@ function xarPageSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
         xarPage_checkUserCaching()) {
-        $tmp_cache_file = tempnam($xarOutput_cacheCollection,"$cacheKey-$xarPage_cacheCode");
-        $fp = @fopen($tmp_cache_file, "w");
-        if (!empty($fp)) {
-            if ($xarPage_cacheShowTime == 1) {
-                $now = xarML('Last updated on #(1)',
-                             strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
-                $value = preg_replace('#</body>#',
-                    // TODO: set this up to be templated
-                    '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
-                    $value);
-            }
-            @fwrite($fp, $value);
-            @fclose($fp);
-            // rename() doesn't overwrite existing files in Windows
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                @copy($tmp_cache_file, $cache_file);
-                @unlink($tmp_cache_file);
-            } else {
-                @rename($tmp_cache_file, $cache_file);
-            }
+        
+        xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
 
-            // create another copy for session-less page caching if necessary
-            if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
-                $cacheKey = 'static';
-                $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
-            // Note that if we get here, the first-time visitor will receive a session cookie,
-            // so he will no longer benefit from this himself ;-)
-                @copy($cache_file, $cache_file2);
-            }
-        }
     }
 }
 
@@ -485,7 +456,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
            $xarBlock_noCache;
     
     if ($xarBlock_noCache == 1) {
-        unset($xarBlock_noCache);
+        $xarBlock_noCache = '';
         return;
     }
 
@@ -498,19 +469,52 @@ function xarBlockSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
-        $tmp_cache_file = tempnam($xarOutput_cacheCollection,"$cacheKey-$xarBlock_cacheCode");
-        $fp = @fopen($tmp_cache_file, "w");
-        if (!empty($fp)) {
-            //$value .= 'Cached Block';// This line is used for testing
-            @fwrite($fp, $value);
-            @fclose($fp);
-            // rename() doesn't overwrite existing files in Windows
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                @copy($tmp_cache_file, $cache_file);
-                @unlink($tmp_cache_file);
-            } else {
-                @rename($tmp_cache_file, $cache_file);
-            }
+
+        xarOutputSetCached($cacheKey, $cache_file, 'Block', $value);
+
+    }
+}
+
+function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
+{
+    global $xarOutput_cacheCollection,
+           $xarPage_cacheShowTime,
+           ${'xar' . $cacheType . '_cacheCode'};
+
+    $tmp_cache_file = tempnam($xarOutput_cacheCollection,
+    						  "$cacheKey-${'xar' . $cacheType . '_cacheCode'}");
+    $fp = @fopen($tmp_cache_file, "w");
+    if (!empty($fp)) {
+
+        if (($cacheType == 'Page') && ($xarPage_cacheShowTime == 1)) {
+            $now = xarML('Last updated on #(1)',
+                         strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
+            $value = preg_replace('#</body>#',
+                // TODO: set this up to be templated
+                '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
+                $value);
+        }
+
+        //if ($cacheType == 'Block') { $value .= 'Cached Block'; }// This line is used for testing
+
+        @fwrite($fp, $value);
+        @fclose($fp);
+        // rename() doesn't overwrite existing files in Windows
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            @copy($tmp_cache_file, $cache_file);
+            @unlink($tmp_cache_file);
+        } else {
+            @rename($tmp_cache_file, $cache_file);
+        }
+        
+        // create another copy for session-less page caching if necessary
+        if (($cacheType == 'Page') && (!empty($GLOBALS['xarPage_cacheNoSession']))) {
+            $cacheKey = 'static';
+            $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
+        // Note that if we get here, the first-time visitor will receive a session cookie,
+        // so he will no longer benefit from this himself ;-)
+            @copy($cache_file, $cache_file2);
         }
     }
 }
@@ -577,19 +581,19 @@ function xarPageFlushCached($cacheKey)
  *       precedents 
  *
  * @access  public
- * @param   string $type
+ * @param   string $cacheType
  * @param   string $cacheKey
  * @returns void
  */
-function xarOutputCleanCached($type, $cacheKey = '')
+function xarOutputCleanCached($cacheType, $cacheKey = '')
 {
-    global $xarOutput_cacheCollection, ${'xar' . $type . '_cacheTime'};
+    global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheTime'};
 
     $touch_file = $xarOutput_cacheCollection . '/' . 'cache.touch';
 
-    if (${'xar' . $type . '_cacheTime'} == 0 ||
+    if (${'xar' . $cacheType . '_cacheTime'} == 0 ||
         (file_exists($touch_file) &&
-         filemtime($touch_file) > time() - ${'xar' . $type . '_cacheTime'})
+         filemtime($touch_file) > time() - ${'xar' . $cacheType . '_cacheTime'})
         ) {
         return;
     }
@@ -602,10 +606,10 @@ function xarOutputCleanCached($type, $cacheKey = '')
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
-            if (filemtime($cache_file) < time() - (${'xar' . $type . '_cacheTime'} + 60) &&
+            if (filemtime($cache_file) < time() - (${'xar' . $cacheType . '_cacheTime'} + 60) &&
                 (strpos($file, '.php') !== false) &&
-                ($type == 'Block' || 
-                ($type == 'Page' && strpos($file, 'block') === false))) {
+                ($cacheType == 'Block' || 
+                ($cacheType == 'Page' && strpos($file, 'block') === false))) {
                 @unlink($cache_file);
             }
         }
@@ -618,7 +622,7 @@ function xarOutputCleanCached($type, $cacheKey = '')
  *
  * @access public
  * @param  string  $dir
- * @param  string  $type
+ * @param  string  $cacheType
  * @param  string  $cacheKey
  * @return float
  * @author nospam@jusunlee.com 
@@ -629,7 +633,7 @@ function xarOutputCleanCached($type, $cacheKey = '')
  *         important and flush them to make more space.  atime would be a
  *         possibility, but is often disabled at the filesystem
  */
-function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
+function xarCacheDirSize($dir = FALSE, $cacheType, $cacheKey = '')
 {
     global $xarOutput_cacheSizeLimit;
     $size = 0;
@@ -639,7 +643,7 @@ function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
             while (($item = readdir($dirId)) !== FALSE) {
                 if ($item != "." && $item != "..") {
                     if (is_dir($dir . $item)) {
-                        $size += xarCacheDirSize($dir . $item, $type);
+                        $size += xarCacheDirSize($dir . $item, $cacheType);
                     } else {
                         $size += filesize($dir . $item);
                     }
@@ -650,7 +654,7 @@ function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
     }
 
     if($size > $xarOutput_cacheSizeLimit) {
-        xarOutputCleanCached($type);
+        xarOutputCleanCached($cacheType);
         //xarOutputFlushCached('articles-user-view');
     }
 
