@@ -347,19 +347,7 @@ function xarSession__setup($args)
  */
 function xarSession__current($sessionId)
 {
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-
-    // Touch the last used time
-    $query = "UPDATE $sessioninfoTable
-              SET xar_lastused = ?
-              WHERE xar_sessid = ?";
-    $bindvars = array(time(),$sessionId);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
+    // lastused field will be updated when writing the session variables
     return true;
 }
 
@@ -468,8 +456,8 @@ function xarSession__phpWrite($sessionId, $vars)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "UPDATE $sessioninfoTable SET xar_vars = ? WHERE xar_sessid = ?";
-    $result =& $dbconn->Execute($query,array($vars, $sessionId));
+    $query = "UPDATE $sessioninfoTable SET xar_vars = ?, xar_lastused = ? WHERE xar_sessid = ?";
+    $result =& $dbconn->Execute($query,array($vars, time(), $sessionId));
     if (!$result) return;
 
     return true;

@@ -663,7 +663,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         }
         break;
     case 'configvar':
-        $setTo = NULL;
         break;
     default:
         $cacheCollection = 'Mod.Variables.' . $modName;
