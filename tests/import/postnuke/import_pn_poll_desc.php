@@ -32,11 +32,26 @@
     $count = $result->fields[0];
     $result->Close();
 
+    // Use different GROUP BY for MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $groupby = 'GROUP BY pdata.pollID';
+            break;
+        case 'postgres':
+                $groupby = 'GROUP BY pdesc.pollID, pollTitle, timeStamp, voters';
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
+
     $query = 'SELECT pdesc.pn_pollid,pn_title,pn_timestamp,pn_voters,SUM(pn_optioncount)
               FROM ' . $oldprefix . '_poll_desc as pdesc
               LEFT JOIN ' . $oldprefix . '_poll_data as pdata
                   ON pdesc.pn_pollid = pdata.pn_pollid
-              GROUP BY pdata.pn_pollid
+              ' . $groupby . ' 
               ORDER BY pdesc.pn_pollid ASC';
     $result =& $dbconn->Execute($query);
     if (!$result) {

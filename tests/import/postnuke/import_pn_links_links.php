@@ -24,8 +24,24 @@
     }
     $weblinks = unserialize(xarModGetVar('installer','weblinks'));
     $regid = xarModGetIDFromName('articles');
+
+    // Use different unix timestamp conversion function for 
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP(pn_date)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',pn_date)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
     $query = 'SELECT pn_lid, pn_cat_id, pn_title, ' . $oldprefix . '_links_links.pn_url, pn_description,
-                     UNIX_TIMESTAMP(pn_date), ' . $oldprefix . '_links_links.pn_name, ' . $oldprefix . '_links_links.pn_email, pn_hits,
+                     ' . $dbfunction . ', ' . $oldprefix . '_links_links.pn_name, ' . $oldprefix . '_links_links.pn_email, pn_hits,
                      pn_submitter, pn_ratingsummary, pn_totalvotes, pn_uid
               FROM ' . $oldprefix . '_links_links
               LEFT JOIN ' . $oldprefix . '_users

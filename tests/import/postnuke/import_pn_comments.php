@@ -34,7 +34,23 @@
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT pn_tid, pn_sid, pn_pid, UNIX_TIMESTAMP(pn_date), pn_uname, pn_uid,
+
+    // Use different unix timestamp conversion function for 
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP(pn_date)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',pn_date)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
+    $query = 'SELECT pn_tid, pn_sid, pn_pid, ' . $dbfunction . ', pn_uname, pn_uid,
               pn_host_name, pn_subject, pn_comment 
               FROM ' . $oldprefix . '_comments 
               LEFT JOIN ' . $oldprefix . '_users

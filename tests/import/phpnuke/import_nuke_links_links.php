@@ -24,13 +24,29 @@
     }
     $weblinks = unserialize(xarModGetVar('installer','weblinks'));
     $regid = xarModGetIDFromName('articles');
-    $query = 'SELECT lid, cid, title, ' . $oldprefix . '_links_links.url, description,
-                     UNIX_TIMESTAMP(date), ' . $oldprefix . '_links_links.name, ' . $oldprefix . '_links_links.email, hits,
-                     submitter, linkratingsummary, totalvotes, uid
-              FROM ' . $oldprefix . '_links_links
-              LEFT JOIN ' . $oldprefix . '_users
-              ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_links_links.submitter
-              ORDER BY lid ASC';
+
+    // Use different unix timestamp conversion function for 
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP(date)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',date)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
+    $query = 'SELECT lid, cid, title, ' . $oldprefix . '_links_links.url, 
+                     description, ' . $dbfunction . ', ' . $oldprefix . '_links_links.name, ' . $oldprefix . '_links_links.email, 
+                     hits, submitter, linkratingsummary, totalvotes, uid
+             FROM ' . $oldprefix . '_links_links
+             LEFT JOIN ' . $oldprefix . '_users
+             ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_links_links.submitter
+             ORDER BY lid ASC';
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, select links failed : " . $dbconn->ErrorMsg());

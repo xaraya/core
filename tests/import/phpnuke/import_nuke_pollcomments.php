@@ -47,14 +47,30 @@
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT tid, pollID, pid, UNIX_TIMESTAMP(date), uname, uid,
+
+    // Use different unix timestamp conversion function for 
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP(date)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',date)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
+    $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , uname, uid,
               host_name, subject, comment 
               FROM ' . $oldprefix . '_pollcomments 
               LEFT JOIN ' . $oldprefix . '_users
               ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_pollcomments.name
               ORDER BY tid ASC';
 /* if you try to match against Xaraya users someday
-    $query = 'SELECT tid, pollID, pid, UNIX_TIMESTAMP(date), xar_uname, xar_uid,
+    $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , xar_uname, xar_uid,
               host_name, subject, comment 
               FROM ' . $oldprefix . '_pollcomments 
               LEFT JOIN ' . $tables['roles'] . '

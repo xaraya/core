@@ -32,8 +32,24 @@
     $count = $result->fields[0];
     $result->Close();
     $regid = xarModGetIDFromName('articles');
+
+    // Use different unix timestamp conversion function for 
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP(pn_time)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',pn_time)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
     $query = 'SELECT pn_sid, pn_title, pn_hometext, pn_bodytext, pn_aid,
-                     UNIX_TIMESTAMP(pn_time), pn_language, pn_catid, pn_topic,
+                     ' . $dbfunction . ', pn_language, pn_catid, pn_topic,
                      pn_notes, pn_ihome, pn_counter
               FROM ' . $oldprefix . '_stories
               ORDER BY pn_sid ASC';

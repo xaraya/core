@@ -156,11 +156,9 @@
             echo "Inserted user " . ($num + $startnum) . "<br/>\n";
             flush();
         }
+        // timezone column not present in nuke_users table
+        $timezone = 0;
 
-        // default for timezone changed from 0 to 12 in PN
-        if (empty($timezone)) {
-            $timezone -= 12.0;
-        }
         if ($url === 'http://') {
             $url = '';
         }

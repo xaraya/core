@@ -33,6 +33,11 @@ ob_start();
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
+
+// Get and set the database type
+$dbtype  = xarCore_getSystemVar('DB.Type');
+xarModSetVar('installer','dbtype',$dbtype);
+
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
     if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
