@@ -25,7 +25,7 @@
         </xar:if>
         <tr>
             <td colspan="2" align="center">
-                <input type="hidden" name="redirecturl" id="returnurl" value="#$return_url#" />
+                <input type="hidden" name="redirecturl" id="returnurl#$blockid#" value="#$return_url#" />
                 <input type="submit" value="#$signinlabel#" />
             </td>
         </tr>
