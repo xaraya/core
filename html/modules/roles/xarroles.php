@@ -697,6 +697,7 @@ function drawindent() {
 // Confirm that this group or user does not already exist
 		$query = "SELECT COUNT(*) FROM $this->rolestable
 				  WHERE xar_name = '$name'";
+
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 

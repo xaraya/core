@@ -23,12 +23,13 @@
  */
 function privileges_init()
 {
-    if(!xarModIsAvailable('roles')) {
+/*    if(!xarModIsAvailable('roles')) {
         $msg=xarML('The roles module should be activated first');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION,'MODULE_DEPENDENCY',
                         new SystemException($msg));
         return;
     }
+    */
  // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -100,6 +101,8 @@ function privileges_init()
 
    if (!$dbconn->Execute($query)) return;
 
+    xarDB_importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
+
     // prefix_privmembers
     /*********************************************************************
     * CREATE TABLE xar_privmembers (
@@ -120,6 +123,8 @@ function privileges_init()
                                            'key'         => true)));
     if (!$dbconn->Execute($query)) return;
 
+    xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
+
     // prefix_acl
     /*********************************************************************
     * CREATE TABLE xar_acl (
@@ -139,6 +144,8 @@ function privileges_init()
                                            'default'     => '0',
                                            'key'         => true)));
     if (!$dbconn->Execute($query)) return;
+
+    xarDB_importTables(array('acl' => xarDBGetSiteTablePrefix() . '_acl'));
 
     // prefix_masks
     /*********************************************************************
@@ -197,6 +204,8 @@ function privileges_init()
                                       'default'     => '')));
 
     if (!$dbconn->Execute($query)) return;
+
+    xarDB_importTables(array('masks' => xarDBGetSiteTablePrefix() . '_masks'));
 
     // prefix_instances
     /*********************************************************************
@@ -260,26 +269,44 @@ function privileges_init()
 
     if (!$dbconn->Execute($query)) return;
 
+    xarDB_importTables(array('instances' => xarDBGetSiteTablePrefix() . '_instances'));
+
     /*********************************************************************
     * Enter some default privileges
     * Format is
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    include_once 'modules/privileges/xarprivileges.php';
-    $privileges = new xarPrivileges();
+		$query = "INSERT INTO xar_privileges VALUES
+		(1,'NoPrivileges', 'All', 'All', 'All', 'All', 0,
+		'The base privilege granting no access')";
+		if (!$dbconn->Execute($query)) return;
+		$query = "INSERT INTO xar_privileges VALUES
+		(2,'FullPrivileges', 'All', 'All', 'All', 'All', 800,
+		'The base privilege granting full access')";
+		if (!$dbconn->Execute($query)) return;
+		$query = "INSERT INTO xar_privileges VALUES
+		(3,'ReadAll', 'All', 'All', 'All', 'All', 200,
+		'The base privilege granting read access')";
+		if (!$dbconn->Execute($query)) return;
+		$query = "INSERT INTO xar_privileges VALUES
+		(4,'EditAll', 'All', 'All', 'All', 'All', 500,
+		'The base privilege granting edit access')";
+		if (!$dbconn->Execute($query)) return;
+		$query = "INSERT INTO xar_privileges VALUES
+		(5,'AddAll', 'All', 'All', 'All', 'All', 600,
+		'The base privilege granting add access')";
+		if (!$dbconn->Execute($query)) return;
+		$query = "INSERT INTO xar_privileges VALUES
+		(6,'DeleteAll', 'All', 'All', 'All', 'All', 700,
+		'The base privilege granting delete access')";
+		if (!$dbconn->Execute($query)) return;
 
-    $privileges->register('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
-    $privileges->register('FullPrivileges','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
-    $privileges->register('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
-    $privileges->register('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-    $privileges->register('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
-    $privileges->register('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
-    $privileges->register('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
-    $privileges->register('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
-    $privileges->register('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
-    $privileges->register('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
-    $privileges->register('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
+//    $privileges->register('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
+//    $privileges->register('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
+//    $privileges->register('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
+//    $privileges->register('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
+//    $privileges->register('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -288,19 +315,21 @@ function privileges_init()
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	$privileges->makeEntry('NoPrivileges');
-	$privileges->makeEntry('FullPrivileges');
-	//$privileges->makeMember('NoPrivileges','FullPrivileges');
-	$privileges->makeEntry('ReadAll');
-	//$privileges->makeMember('NoPrivileges','ReadAll');
-	$privileges->makeEntry('EditAll');
-	//$privileges->makeMember('NoPrivileges','EditAll');
-	$privileges->makeEntry('AddAll');
-	//$privileges->makeMember('NoPrivileges','AddAll');
-	$privileges->makeEntry('DeleteAll');
-	//$privileges->makeMember('NoPrivileges','DeleteAll');
-	$privileges->makeEntry('AdminPrivilege');
-	$privileges->makeEntry('AdminRole');
+	$query = "INSERT INTO xar_privmembers VALUES (1,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_privmembers VALUES (2,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_privmembers VALUES (3,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_privmembers VALUES (4,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_privmembers VALUES (5,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_privmembers VALUES (6,0)";
+	if (!$dbconn->Execute($query)) return;
+
+//	$privileges->makeEntry('AdminPrivilege');
+//	$privileges->makeEntry('AdminRole');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -308,10 +337,14 @@ function privileges_init()
     * assign(Privilege,Role)
     *********************************************************************/
 
-	$privileges->assign('NoPrivileges','Everybody');
-	$privileges->assign('FullPrivileges','Oversight');
-	$privileges->assign('AdminPrivilege','Anonymous');
-	$privileges->assign('AdminRole','Anonymous');
+	$query = "INSERT INTO xar_acl VALUES (1,1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_acl VALUES (2,2)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_acl VALUES (1,1)";
+	if (!$dbconn->Execute($query)) return;
+//	$privileges->assign('AdminPrivilege','Anonymous');
+//	$privileges->assign('AdminRole','Anonymous');
 
     /*********************************************************************
     * Define instances for some modules
@@ -319,12 +352,20 @@ function privileges_init()
     * setInstance(Module,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    $privileges->setInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    $privileges->setInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+	$query = "INSERT INTO xar_instances VALUES (
+	1,'roles','xar_roles','xar_pid','xar_name',0,
+	'xar_rolemembers','xar_pid','xar_parentid',
+	'Instances of the roles module, including multilevel nesting')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_instances VALUES (
+	2,'privileges','xar_privileges','xar_pid','xar_name',0,
+	'xar_privmembers','xar_pid','xar_parentid',
+	'Instances of the privileges module, including multilevel nesting')";
+	if (!$dbconn->Execute($query)) return;
 
-    $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
-    $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
-    $privileges->setInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
+//    $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
+//    $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
+//    $privileges->setInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
 
 
     /*********************************************************************
@@ -333,25 +374,57 @@ function privileges_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    include_once 'modules/privileges/xarprivileges.php';
-    $masks = new xarMasks();
+	$query = "INSERT INTO xar_masks VALUES (
+	1, 'PrivilegesGateway', 'All', 'Privileges',
+	'All','All',200,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	2, 'ViewPrivileges', 'All', 'Privileges',
+	'ViewPrivileges','All',200,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	3, 'EditPrivilege', 'All', 'Privileges',
+	'EditPrivilege','All',500,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	4, 'AddPrivilege', 'All', 'Privileges',
+	'AddPrivilege','All',600,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	5, 'DeletePrivilege', 'All', 'Privileges',
+	'DeletePrivilege','All',700,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	6, 'ViewPrivilegeRoles', 'All', 'Privileges',
+	'ViewRoles','All',200,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	7, 'RemoveRole', 'All', 'Privileges',
+	'RemoveRole','All',700,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	8, 'RolesGateway', 'All', 'Roles',
+	'All','All',200,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	9, 'ViewRoles', 'All', 'Roles',
+	'ViewRoles','All',200,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	10, 'ModMemberAll', 'All', 'Roles',
+	'EditMember','All',500,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	11, 'AddMemberAll', 'All', 'Roles',
+	'AddMember','All',600,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	12, 'DelMemberAll', 'All', 'Roles',
+	'DeleteMember','All',700,'')";
+	if (!$dbconn->Execute($query)) return;
 
-    $masks->register('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
-    $masks->register('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
-    $masks->register('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
-    $masks->register('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
-    $masks->register('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
-    $masks->register('ViewPrivilegeRoles','All','Privileges','ViewRoles','All',ACCESS_READ);
-    $masks->register('RemoveRole','All','Privileges','RemoveRole','All',ACCESS_DELETE);
-
-    $masks->register('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
-    $masks->register('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
-
-    $masks->register('RolesGateway','All','Roles','All','All',ACCESS_READ);
-   	$masks->register('ViewRoles','All','Roles','ViewRoles','All',ACCESS_READ);
-   	$masks->register('ModMemberAll','All','Roles','EditMember','All',ACCESS_EDIT);
-    $masks->register('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
-    $masks->register('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
+//    $masks->register('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
+//    $masks->register('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
 
     // Initialisation successful
     return true;

@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarSecurity.php 1.33 03/01/18 11:53:04+01:00 marcel@hsdev.com $
  *
- * Security Access Mechanism
+ * Low-level security access mechanism
  *
  * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- */
+ * @author Jim McDonald
+*/
 
 /**
  * Notes on security system
@@ -60,7 +60,8 @@ $schemas = array();
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
-    // FIXME: <marco> BAD_PARAM?
+  return true;
+  // FIXME: <marco> BAD_PARAM?
 
     if (empty($userId)) {
         $userId = xarSessionGetVar('uid');
@@ -243,7 +244,7 @@ function xarSec__getAuthInfo($userId)
     $userIds[] = -1;
     // Set userId infos
     $userIds[] = $userId;
-    
+
     // FIXME: <marco> This still be an undocumented feature.
     $vars['Active User'] = $userId;
     $userIds = implode(',', $userIds);
@@ -254,7 +255,7 @@ function xarSec__getAuthInfo($userId)
                      xar_instance,
                      xar_level
               FROM $userpermtable
-              WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
+              WHERE xar_pid IN (" . xarVarPrepForStore($userIds) . ")
               ORDER by xar_sequence";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -470,6 +471,12 @@ function xarSec__getModulesInstanceSchemaInfo()
     while ($modName = readdir($moddir)) {
         $osfile = 'modules/' . xarVarPrepForOS($modName) . '/xarversion.php';
         @include $osfile;
+
+        // pnAPI compatibility
+        if (!file_exists($osfile)) {
+           $osfile2 = 'modules/' . xarVarPrepForOS($modName) . '/pnversion.php';
+           @include $osfile2;
+        }
 
         if (!empty($modversion['securityschema'])) {
             foreach ($modversion['securityschema'] as $component => $instance) {

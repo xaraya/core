@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id: s.xarUser.php 1.95 03/01/21 04:15:07+01:00 marcel@hsdev.com $
- * 
+ *
  * User System
- * 
+ *
  * @package user
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -39,10 +39,10 @@ define('XARUSER_AUTH_FAILED', -1);
 
 /**
  * Initialise the User System
- * 
+ *
  * @access protected
- * @global xarUser_authentication modules array 
- * @param args[authenticationModules] array 
+ * @global xarUser_authentication modules array
+ * @param args[authenticationModules] array
  * @return bool true on success
  */
 function xarUser_init($args, $whatElseIsGoingLoaded)
@@ -50,14 +50,11 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $tables = array('users'            => $systemPrefix . '_users',
+    $tables = array('roles'            => $systemPrefix . '_roles',
                     'user_data'        => $systemPrefix . '_user_data',
                     'user_property'    => $systemPrefix . '_user_property',
-                    'groups'           => $systemPrefix . '_groups',
                     'realms'           => $systemPrefix . '_realms',
-                    'user_perms'       => $systemPrefix . '_user_perms',
-                    'group_perms'      => $systemPrefix . '_group_perms',
-                    'group_membership' => $systemPrefix . '_group_membership');
+                    'rolemembers' => $systemPrefix . '_rolemembers');
 
     xarDB_importTables($tables);
 
@@ -123,11 +120,11 @@ function xarUserLogIn($userName, $password, $rememberMe)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    $userstable = $xartable['users'];
+    $rolestable = $xartable['roles'];
 
-    $query = "UPDATE $userstable
+    $query = "UPDATE $rolestable
               SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
-              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
+              WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -178,7 +175,7 @@ function xarUserLogOut()
  */
 function xarUserIsLoggedIn()
 {
-    return xarSessionGetVar('uid') != 0;
+    return xarSessionGetVar('pid') != 0;
 }
 
 /**
@@ -278,10 +275,10 @@ function xarUserSetNavigationLocale($locale)
  * @author Marco Canini
  * @access public
  * @param name string the name of the variable
- * @param uid integer the user to get the variable for
+ * @param pid integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
- * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
+ * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('pid')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
  */
 function xarUserGetVar($name, $userId = NULL)
@@ -292,14 +289,14 @@ function xarUserGetVar($name, $userId = NULL)
     }
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('uid');
+        $userId = xarSessionGetVar('pid');
     }
-    if ($name == 'uid') {
+    if ($name == 'pid') {
         // User id for Anonymous is NULL, so we check later for this
         return $userId;
     }
     if ($userId == 0) {
-        // Anonymous user => only uid, name and uname allowed, for other variable names
+        // Anonymous user => only pid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         if ($name == 'name' || $name == 'uname') {
             return xarMLByKey('ANONYMOUS');
@@ -309,7 +306,7 @@ function xarUserGetVar($name, $userId = NULL)
     }
 
 /* TODO: #1
-    if ($userId != xarSessionGetVar('uid')) {
+    if ($userId != xarSessionGetVar('pid')) {
         // Security check
         // Here we use a trick
         // One user can make private some of its data by creating a permission with ACCESS_NONE as level
@@ -318,7 +315,7 @@ function xarUserGetVar($name, $userId = NULL)
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = xarML('No permission to get value of #(1) user variable for uid #(2).', $name, $userId);
+            $msg = xarML('No permission to get value of #(1) user variable for pid #(2).', $name, $userId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
@@ -372,7 +369,7 @@ function xarUserGetVar($name, $userId = NULL)
         }
 
         $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
-                               array('uid' => $userId,
+                               array('pid' => $userId,
                                      'name' => $name,
                                      'prop_id' => $prop_id,
                                      'prop_dtype' => $prop_dtype));
@@ -430,13 +427,13 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
-    if ($name == 'uid' || $name == 'authenticationModule') {
+    if ($name == 'pid' || $name == 'authenticationModule') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('uid');
+        $userId = xarSessionGetVar('pid');
     }
     if ($userId == 0) {
         // Anonymous user
@@ -444,7 +441,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
     /*
     Disabled for now!
-    if ($userId != xarSessionGetVar('uid')) {
+    if ($userId != xarSessionGetVar('pid')) {
         // If you want to set a variable owned by another user
         // you must have ACCESS_EDIT permission
         // Security check
@@ -452,7 +449,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = xarML('No permission to set value of #(1) user variable for uid #(2).', $name, $userId);
+            $msg = xarML('No permission to set value of #(1) user variable for pid #(2).', $name, $userId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
@@ -516,7 +513,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
 
     if (!xarModAPIFunc($authModName, 'user', 'set_user_variable',
-                       array('uid' => $userId,
+                       array('pid' => $userId,
                              'name' => $name,
                              'value' => $value,
                              'prop_id' => $prop_id,
@@ -627,7 +624,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  */
 function xarUser__getAuthModule($userId)
 {
-    if ($userId == xarSessionGetVar('uid')) {
+    if ($userId == xarSessionGetVar('pid')) {
         $authModName = xarSessionGetVar('authenticationModule');
         assert('isset($authModName)');
     } else {
@@ -635,11 +632,11 @@ function xarUser__getAuthModule($userId)
         $xartable = xarDBGetTables();
 
         // Get user auth_module name
-        $userstable = $xartable['users'];
+        $rolestable = $xartable['roles'];
 
         $query = "SELECT xar_auth_module
-                  FROM $userstable
-                  WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
+                  FROM $rolestable
+                  WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
 
@@ -669,7 +666,7 @@ function xarUser__getUserVarInfo($name)
 {
     $xartable = xarDBGetTables();
 
-    $userstable = $xartable['users'];
+    $rolestable = $xartable['roles'];
 
     // Core fields aren't handled with Dynamic User Data
     if ($name == 'name' || $name == 'uname' ||
@@ -787,7 +784,7 @@ function xarUser__getUserVarInfo($name)
  */
 function xarUser__syncUsersTableFields()
 {
-    $userId = xarSessionGetVar('uid');
+    $userId = xarSessionGetVar('pid');
     assert('$userId != 0');
 
     $authModName = xarUser__getAuthModule($userId);
@@ -826,11 +823,11 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    $userstable = $xartable['users'];
+    $rolestable = $xartable['roles'];
 
-    $query = "UPDATE $userstable
+    $query = "UPDATE $rolestable
               SET xar_name = '" . xarVarPrepForStore($value) . "'
-              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
+              WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -982,7 +979,7 @@ function xarUser__validationApply($validation, $valueToCheck)
 // Simple data structure used by validation stuff
 /**
  *
- * 
+ *
  * @package user
  */
 class xarUser__ValEntry

@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage Users Module
+ * @subpackage Roles Module
  * @author Jan Schrage, John Cox, Gregor Rothfuss
  * @todo need the dynamic users menu
  * @todo needs dyanamic data interface
@@ -23,78 +23,168 @@
  * @returns bool
  * @raise DATABASE_ERROR
  */
-function users_init()
+function roles_init()
 {
     // Get database setup
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
-
-    $tables['users']         = $sitePrefix . '_users';
+    $tables['roles'] = $sitePrefix . '_roles';
+    $tables['rolemembers'] = $sitePrefix . '_rolemembers';
     $tables['user_data']     = $sitePrefix . '_user_data';
     $tables['user_property'] = $sitePrefix . '_user_property';
-    $tables['user_status']   = $sitePrefix . '_user_status';
-    // Create the table
-    // *_users
-    $query = xarDBCreateTable($tables['users'],
-                             array('xar_pid'         => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0',
-                                                             'increment'   => true,
-                                                             'primary_key' => true),
-                                   'xar_name'        => array('type'        => 'varchar',
-                                                             'size'        => 60,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_uname'       => array('type'        => 'varchar',
-                                                             'size'        => 25,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_email'       => array('type'        => 'varchar',
-                                                             'size'        => 100,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_pass'        => array('type'        => 'varchar',
-                                                             'size'        => 40,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_url'         => array('type'        => 'varchar',
-                                                             'size'        => 100,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_date_reg'    => array('type'        => 'varchar',
-                                                             'size'        => 25,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_valcode'     => array('type'        => 'varchar',
-                                                             'size'        => 35,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_state'       => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '3',
-                                                             'increment'   => false,
-                                                             'primary_key' => false),
-                                   'xar_auth_module' => array('type'        => 'varchar',
-                                                             'size'        => 64,
-                                                             'null'        => false,
-                                                             'default'     => '')));
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
-    $index = array(
-    'name'      => 'i_xar_users_1',
+    // prefix_roles
+    /*********************************************************************
+	* CREATE TABLE xar_roles (
+	*   xar_pid int(11) NOT NULL auto_increment,
+	*   xar_name varchar(100) NOT NULL default '',
+	*   xar_type int(11) NOT NULL default '0',
+	*   xar_users int(11) NOT NULL default '0',
+	*   xar_uname varchar(100) NOT NULL default '',
+	*   xar_email varchar(100) NOT NULL default '',
+	*   xar_pass varchar(100) NOT NULL default '',
+	*   xar_url varchar(100) NOT NULL default '',
+	*   xar_auth_module varchar(100) NOT NULL default '',
+	*   PRIMARY KEY  (xar_pid)
+	* )
+    *********************************************************************/
+
+    $query = xarDBCreateTable($tables['roles'],
+             array('xar_pid'  => array('type'       => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0',
+                                      'increment'   => true,
+                                      'primary_key' => true),
+                   'xar_name' => array('type'       => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_type' => array('type'       => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0'),
+                   'xar_users' => array('type'      => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0'),
+                   'xar_uname' => array('type'      => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_email' => array('type'      => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_pass' => array('type'        => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_url' => array('type'        => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_date_reg' => array('type'        => 'varchar',
+                                      'size'        => 25,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_valcode' => array('type'        => 'varchar',
+                                      'size'        => 35,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_state' => array('type'      => 'integer',
+                                      'null'        => false,
+                                      'default'     => '3'),
+                   'xar_auth_module' => array('type'        => 'varchar',
+                                      'size'        => 100,
+                                      'null'        => false,
+                                      'default'     => '')));
+
+    if (!$dbconn->Execute($query)) return;
+
+/*    $index = array(
+    'name'      => 'i_xar_roles_1',
     'fields'    => array('xar_uname'),
     'unique'    => true
     );
 
-    $query = xarDBCreateIndex($tables['users'],$index);
+    $query = xarDBCreateIndex($tables['roles'],$index);
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+*/
 
-    // *_user_data
+    // prefix_rolemembers
+    /*********************************************************************
+    * CREATE TABLE xar_rolemembers (
+    *   xar_pid int(11) NOT NULL default '0',
+    *   xar_parentid int(11) NOT NULL default '0'
+    * )
+    *********************************************************************/
+
+    $query = xarDBCreateTable($tables['rolemembers'],
+             array('xar_pid'       => array('type'       => 'integer',
+                                           'null'        => false,
+                                           'default'     => '0'),
+                   'xar_parentid'      => array('type'   => 'integer',
+                                           'null'        => false,
+                                           'default'     => '0')));
+    if (!$dbconn->Execute($query)) return;
+
+    /*********************************************************************
+    * Enter some default groups and users
+    *********************************************************************/
+
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+			VALUES (1, 'Everybody', 1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+			VALUES (2, 'Current', 0, 'current', 'current@xaraya.com')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+			VALUES (3, 'Oversight', 1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+			VALUES (4, 'Overseer', 0, 'overseer', 'overseer@xaraya.com')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+			VALUES (5, 'Admins', 1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+			VALUES (6, 'Users', 1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+			VALUES (7, 'User', 0, 'user', 'user@xaraya.com')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+			VALUES (8, 'Anonymous', 0, 'anonymous', 'anonymous@xaraya.com')";
+	if (!$dbconn->Execute($query)) return;
+
+    /*********************************************************************
+    * Arrange the roles in a hierarchy
+    * Format is
+    * makeMember(Child,Parent)
+    *********************************************************************/
+
+	$query = "INSERT INTO xar_rolemembers VALUES (1,0)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (2,1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (3,2)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (4,1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (5,1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (6,5)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (7,1)";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_rolemembers VALUES (8,1)";
+	if (!$dbconn->Execute($query)) return;
+
+    /*********************************************************************
+    * prefix_user_data
+    *********************************************************************/
     $query = xarDBCreateTable($tables['user_data'],
                              array('xar_uda_id'     => array('type'        => 'integer',
                                                             'null'        => false,
@@ -113,7 +203,9 @@ function users_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // *_user_property
+    /*********************************************************************
+    * prefix_user_property
+    *********************************************************************/
     $query = xarDBCreateTable($tables['user_property'],
                              array('xar_prop_id'         => array('type'        => 'integer',
                                                                  'null'        => false,
@@ -143,18 +235,19 @@ function users_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Initialisation successful
     return true;
 }
 
 /**
- * Activate the users module
+ * Activate the roles module
  *
  * @access public
  * @param none
  * @returns bool
  * @raise DATABASE_ERROR
  */
-function users_activate()
+function roles_activate()
 {
     // Set up an initial value for module variables.
     xarModSetVar('users', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
@@ -217,14 +310,14 @@ president@whitehouse.gov';
     return true;
 }
 /**
- * Upgrade the users module from an old version
+ * Upgrade the roles module from an old version
  *
  * @access public
  * @param oldVersion
  * @returns bool
  * @raise DATABASE_ERROR
  */
-function users_upgrade($oldVersion)
+function roless_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch($oldVersion) {
@@ -248,17 +341,31 @@ function users_upgrade($oldVersion)
  * @returns bool
  * @raise DATABASE_ERROR
  */
-function users_delete()
+function roles_delete()
 {
-    // Get datbase setup
+    /*********************************************************************
+    * Drop the tables
+    *********************************************************************/
+
+    // Get database information
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $tables = xarDBGetTables();
 
-    // Drop the table
-    $query = "DROP TABLE $xartable[users]";
+    $query = xarDBDropTable($tables['roles']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    $query = xarDBDropTable($tables['rolemembers']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
+
+    $query = xarDBDropTable($tables['user_data']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
+
+    $query = xarDBDropTable($tables['user_property']);
+    if (empty($query)) return; // throw back
+    if (!$dbconn->Execute($query)) return;
 
     // Delete any module variables
     xarModDelVar('users', 'tacs');
