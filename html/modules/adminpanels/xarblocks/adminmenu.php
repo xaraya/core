@@ -70,8 +70,6 @@ function adminpanels_adminmenublock_display($blockinfo){
     }
     
     // which module is loaded atm?
-    // not sure why this function should be private, how else can we do it?
-    // TODO: check with Marco about it
     list($modName) = xarRequestGetInfo();
     
     // Sort Order Status and Links Display.
@@ -141,16 +139,13 @@ function adminpanels_adminmenublock_display($blockinfo){
         // prepare the data for template(s)
         $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
         $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
-    } else {
-        // default view by categories
-        $data = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
     }
+    // default view is by categories
     
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
     return $blockinfo;
 }
-
 
 /**
  * modify block settings
