@@ -13,6 +13,9 @@
 						#$moddirlabel#
 					</th>
 					<th>
+						#$versionlabel#
+					</th>
+					<th>
 						#$statelabel#
 					</th>
 					<th>
@@ -31,6 +34,9 @@
 						#$directory#
 					</td>
 					<td>
+						#$version#
+					</td>
+					<td>
 						<xar:if condition="$state eq 4">
 							#$state4label#
 						</xar:if>
@@ -44,8 +50,8 @@
 						<xar:if condition="$state eq 1">
 							#$state1label#
 						</xar:if>
-						<xar:if condition="$state eq 0">
-							#$state0label#
+						<xar:if condition="$state eq 5">
+							#$state5label#
 						</xar:if>
 
 					</td>
@@ -74,7 +80,7 @@
 							|
 							<a href="#$editurl#">#$edit#</a>
 						</xar:if>
-						<xar:if condition="$state eq 0">
+						<xar:if condition="$state eq 5">
 							<a href="#$upgradeurl#">#$upgrade#</a>
 							|
 							<a href="#$editurl#">#$edit#</a>
