@@ -160,9 +160,15 @@ function blocks_init()
                      array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
                      'blocks_userapi_handleStateIconTag');
     
+    /* these can't be set because they are part of the core
+       and when the core is installed, blocks is installed 
+       before the modules module is so, the module_vars table
+       isn't even created at this point.
+    
     xarModSetVar('blocks','collapseable',1);
     xarModSetVar('blocks','blocksuparrow','upb.gif');
     xarModSetVar('blocks','blocksdownarrow','downb.gif');
+    */
     
     // Initialisation successful
     return true;
