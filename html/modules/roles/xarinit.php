@@ -162,8 +162,12 @@ function roles_init()
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
     if (!$dbconn->Execute($query)) return;
     //Database Initialisation successful
-    
-    // Set up an initial value for module variables.
+    return true;
+}
+
+function roles_activate()
+{
+	// Set up an initial value for module variables.
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
@@ -320,11 +324,6 @@ Password : %%pass%%
     xarModSetVar('roles', 'disallowedips', $disallowedips);
 
     xarModSetVar('roles', 'minage', 13);
-    return true;
-}
-
-function roles_activate()
-{
 	// Register blocks
     if (!xarModAPIFunc('blocks',
             'admin',
