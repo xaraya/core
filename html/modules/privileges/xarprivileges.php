@@ -462,7 +462,7 @@ class xarPrivileges extends xarMasks
 {
 
 /**
- * setInstance: define how a module's instances are registered
+ * defineInstance: define how a module's instances are registered
  *
  * Creates an entry in the instances table
  * This function should be invoked at module initialisation time
@@ -482,7 +482,7 @@ class xarPrivileges extends xarMasks
 		$table1prep = xarVarPrepForStore($table1);
 		$valueprep = xarVarPrepForStore($valuefield);
 		$displayprep = xarVarPrepForStore($displayfield);
-		$appvarprep = xarVarPrepForStore($appvar);
+		$propagateprep = xarVarPrepForStore($propagate);
 		$table2prep = xarVarPrepForStore($table2);
 		$childIDprep = xarVarPrepForStore($childID);
 		$parentIDprep = xarVarPrepForStore($parentID);
@@ -492,7 +492,7 @@ class xarPrivileges extends xarMasks
 												'$table1prep',
 												'$valueprep',
 												'$displayprep',
-												$appvarprep,
+												$propagateprep,
 												'$table2prep',
 												'$childIDprep',
 												'$parentIDprep',
@@ -552,24 +552,23 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-	function assign($privilege,$role)
+	function assign($privilegename,$rolename)
 	{
 
 // get the ID of the privilege to be assigned
-		$perm = $this->findPrivilege($privilege);
-		$permid = $perm->getID();
+		$privilege = $this->findPrivilege($privilegename);
+		$privid = $privilege->getID();
 
 // get the Roles class
-		include_once 'modules/roles/xarroles.php';
     	$roles = new xarRoles();
 
 // find the role for the assignation and get its ID
-		$role = $roles->findRole($role);
+		$role = $roles->findRole($rolename);
 		$roleid = $role->getID();
 
 // Add the assignation as an entry to the acl table
 		$query = "INSERT INTO $this->acltable VALUES ($roleid,
-												$permid)";
+												$privid)";
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
 	}

@@ -630,7 +630,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exception handling for bad input
 */
-   function makeUser($name,$uname,$email){
+   function makeUser($name,$uname,$email,$pass=''){
 
 //TODO: validate the email address
 		if(empty($name) && empty($uname) || empty($email)) {
@@ -670,9 +670,10 @@ function drawindent() {
 		$nameprep = xarVarPrepForStore($name);
 		$unameprep = xarVarPrepForStore($uname);
 		$emailprep = xarVarPrepForStore($email);
+		$passprep = md5(xarVarPrepForStore($pass));
 		$query = "INSERT INTO $this->rolestable
-					(xar_pid, xar_name, xar_type, xar_uname, xar_email)
-				  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep')";
+					(xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
+				  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep', '$passprep')";
 		if (!$this->dbconn->Execute($query)) return;
 
 // done

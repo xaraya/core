@@ -231,11 +231,9 @@ function installer_admin_bootstrap()
      xarTplSetThemeName('installer');
 
 // activate the security stuff
-
-	registerMask('Admin','All','installer','All','All',ACCESS_ADMIN,
-	'Mask to limit access to the installer to Oversight');
-
-   	registerMask('Admin','All','modules','All','All',ACCESS_ADMIN);
+// create the default roles and privileges setup
+	include 'modules/privileges/xarsetup.php';
+	initializeSetup();
 
 // log in admin user
     if (!xarUserLogIn('overseer', 'xaraya', 0)) {

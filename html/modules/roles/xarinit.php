@@ -134,7 +134,7 @@ function roles_init()
     * Enter some default groups and users
     *********************************************************************/
 
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+/*	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
 			VALUES (1, 'Everybody', 1)";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
@@ -158,6 +158,7 @@ function roles_init()
 	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
 			VALUES (8, 'Anonymous', 0, 'anonymous', 'anonymous@xaraya.com')";
 	if (!$dbconn->Execute($query)) return;
+	*/
 
     /*********************************************************************
     * Arrange the roles in a hierarchy
@@ -165,6 +166,7 @@ function roles_init()
     * makeMember(Child,Parent)
     *********************************************************************/
 
+	/*
 	$query = "INSERT INTO xar_rolemembers VALUES (1,0)";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_rolemembers VALUES (2,1)";
@@ -181,6 +183,7 @@ function roles_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_rolemembers VALUES (8,1)";
 	if (!$dbconn->Execute($query)) return;
+	*/
 
     /*********************************************************************
     * prefix_user_data

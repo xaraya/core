@@ -41,6 +41,7 @@ function privileges_init()
     $tables['acl'] = $sitePrefix . '_acl';
     $tables['masks'] = $sitePrefix . '_masks';
     $tables['instances'] = $sitePrefix . '_instances';
+    $tables['realms']      = $sitePrefix . '_realms';
 
     // Create tables
     /*********************************************************************
@@ -48,7 +49,32 @@ function privileges_init()
      *
      * prefix_privileges       - holds privileges info
      * prefix_privmembers 	   - holds info on privileges group membership
+     * prefix_acl		 	   - holds info on privileges assignments to roles
+     * prefix_masks		 	   - holds info on masks for security checks
+     * prefix_instances 	   - holds module instance definitions
+     * prefix_realms	 	   - holds realsm info
      ********************************************************************/
+
+    // prefix_realms
+    /*********************************************************************
+    * CREATE TABLE xar_realms (
+    *  xar_rid int(11) NOT NULL auto_increment,
+    *  xar_name varchar(255) NOT NULL default '',
+    *  PRIMARY KEY  (xar_rid)
+    * )
+    *********************************************************************/
+    $query = xarDBCreateTable($tables['realms'],
+             array('xar_rid'  => array('type'        => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0',
+                                      'increment'   => true,
+                                      'primary_key' => true),
+                   'xar_name' => array('type'        => 'varchar',
+                                      'size'        => 255,
+                                      'null'        => false,
+                                      'default'     => '')));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // prefix_privileges
     /*********************************************************************
@@ -315,7 +341,7 @@ function privileges_init()
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	$query = "INSERT INTO xar_privmembers VALUES (1,0)";
+/*	$query = "INSERT INTO xar_privmembers VALUES (1,0)";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_privmembers VALUES (2,0)";
 	if (!$dbconn->Execute($query)) return;
@@ -327,7 +353,7 @@ function privileges_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_privmembers VALUES (6,0)";
 	if (!$dbconn->Execute($query)) return;
-
+*/
 //	$privileges->makeEntry('AdminPrivilege');
 //	$privileges->makeEntry('AdminRole');
 
@@ -337,7 +363,7 @@ function privileges_init()
     * assign(Privilege,Role)
     *********************************************************************/
 
-	$query = "INSERT INTO xar_acl VALUES (1,1)";
+/*	$query = "INSERT INTO xar_acl VALUES (1,1)";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_acl VALUES (2,2)";
 	if (!$dbconn->Execute($query)) return;
@@ -345,14 +371,14 @@ function privileges_init()
 	if (!$dbconn->Execute($query)) return;
 //	$privileges->assign('AdminPrivilege','Anonymous');
 //	$privileges->assign('AdminRole','Anonymous');
-
+*/
     /*********************************************************************
     * Define instances for some modules
     * Format is
     * setInstance(Module,Instancetable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-	$query = "INSERT INTO xar_instances VALUES (
+/*	$query = "INSERT INTO xar_instances VALUES (
 	1,'roles','xar_roles','xar_pid','xar_name',0,
 	'xar_rolemembers','xar_pid','xar_parentid',
 	'Instances of the roles module, including multilevel nesting')";
@@ -366,7 +392,7 @@ function privileges_init()
 //    $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
 //    $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
 //    $privileges->setInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
-
+*/
 
     /*********************************************************************
     * Register the module components that are privileges objects
@@ -374,6 +400,7 @@ function privileges_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
+/*
 //	$query = "INSERT INTO xar_masks VALUES (
 //	1, 'Admin', 'All', 'installer',
 //	'Admin','All',800,'')";
@@ -429,7 +456,7 @@ function privileges_init()
 
 //    $masks->register('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
 //    $masks->register('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
-
+*/
     // Initialisation successful
     return true;
 }

@@ -41,10 +41,12 @@ define('ACCESS_ADMIN', 800);
 
 
 	include_once 'modules/privileges/xarprivileges.php';
+	include_once 'modules/roles/xarroles.php';
     $tables = array('masks' => 'xar' . '_masks',
     				'acl' => 'xar'. '_acl',
     				'privileges' => 'xar'. '_privileges',
     				'privmembers' => 'xar'. '_privmembers',
+    				'realms' => 'xar'. '_realms',
 //    				'roles' => 'xar'. '_roles',
 //    				'rolemembers' => 'xar'. '_rolemembers',
     				'instances' => 'xar'. '_instances');
@@ -57,6 +59,7 @@ define('ACCESS_ADMIN', 800);
  * @access protected
  * @return bool true
  */
+
 function xarSecurity_init()
 {
 
@@ -77,6 +80,172 @@ function xarSecurity_init()
 $schemas = array();
 
 
+
+/**
+ * makeGroup: create an entry in the database for a group
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makeGroup($name) {
+			$roles = new xarRoles();
+			return $roles->makeGroup($name);
+	}
+
+/**
+ * makeUser: create an entry in the database for a user
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makeUser($name,$uname,$email,$pass='') {
+			$roles = new xarRoles();
+			return $roles->makeUser($name,$uname,$email,$pass);
+	}
+
+/**
+ * makeRoleRoot: defines an entry in the database as the root of a role tree
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makeRoleRoot($name) {
+			$roles = new xarRoles();
+			return $roles->isRoot($name);
+	}
+
+/**
+ * makeRoleMember: create a parent-child relationship in the database between two roles
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   child name string
+ * @param   parent name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makeRoleMember($childname, $parentname) {
+			$roles = new xarRoles();
+			return $roles->makeMember($childname, $parentname);
+	}
+
+/**
+ * registerPrivilege: create an entry in the database for a privilege
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @param   list of strings
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function registerPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
+			$privileges = new xarPrivileges();
+			return $privileges->register($name,$realm,$module,$component,$instance,$level,$description='');
+	}
+
+/**
+ * makePrivilegeRoot: defines an entry in the database as the root of a privilege tree
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makePrivilegeRoot($name) {
+			$privileges = new xarPrivileges();
+			return $privileges->makeEntry($name);
+	}
+
+/**
+ * makePrivilegeMember: create a parent-child relationship in the database between two privileges
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   child name string
+ * @param   parent name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function makePrivilegeMember($childname, $parentname) {
+			$privileges = new xarPrivileges();
+			return $privileges->makePrivilegeMember($childname, $parentname);
+	}
+
+/**
+ * assignPrivilege: assign a privilege to a role
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   privilege name string
+ * @param   role name string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function assignPrivilege($privilege,$role) {
+			$privileges = new xarPrivileges();
+			return $privileges->assign($privilege,$role);
+	}
+
+/**
+ * defineInstance: creates an instance definition in the database
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   list of strings
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function defineInstance($module,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
+			$privileges = new xarPrivileges();
+			return $privileges->defineInstance($module,$table1,$valuefield,$displayfield,$propagate,$table2,$childID,$parentID,$description);
+	}
 
 /**
  * securitycheck: check a role's privileges against the masks of a component
