@@ -119,11 +119,11 @@ function base_init()
     pnConfigSetVar('secmeddays', 7);
     pnConfigSetVar('secinactivemins', 90);
 
-    pnConfigSetVar('Version_Num', '0.80-pre');
-    pnConfigSetVar('Version_ID', 'PostNuke');
+    pnConfigSetVar('Version_Num', 'Xaraya Pre - 1.0');
+    pnConfigSetVar('Version_ID', 'Xaraya');
     pnConfigSetVar('Version_Sub', 'adam_baum');
 
-    pnConfigSetVar('Default_Theme', 'SeaBreeze');
+    pnConfigSetVar('Default_Theme', 'Xaraya_Classic');
 
     pnConfigSetVar('Site.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
     pnConfigSetVar('Site.TranslationsBackend', 'php');
