@@ -29,6 +29,11 @@ function blocks_userapi_getinfo($args)
 {
     extract($args);
 
+    // Exit now for templates that have not been recompiled.
+    if (!isset($instance) || !isset($module) || !isset($type)) {
+        return;
+    }
+
     // TODO: security check on the block name here, if $name or $instance is set.
 
     // We will be selecting either a block instance or a stand-alone block.
@@ -88,15 +93,17 @@ function blocks_userapi_getinfo($args)
     if (!is_null($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.
-    foreach($content as $pname => $pvalue) {
-        // If the array element exists, then over-ride it.
-        // There is no validation here (yet) - so arrays can
-        // override strings and strings can override arrays.
-        // TODO: allow a block to provide validation rules to 
-        // pass $pvalue through for each $pname.
-        // Such validation would also be able to convert numbers
-        // into booleans, string lists into arrays etc.
-        if (isset($blockinfo['content'][$pname])) {
+    // The content at this point will be either completely empty or
+    // an array - don't try and set array elements for anything else.
+    if (empty($blockinfo['content']) || is_array($blockinfo['content'])) {
+        foreach($content as $pname => $pvalue) {
+            // If the array element exists, then over-ride it.
+            // There is no validation here (yet) - so arrays can
+            // override strings and strings can override arrays.
+            // TODO: allow a block to provide validation rules to 
+            // pass $pvalue through for each $pname.
+            // Such validation would also be able to convert numbers
+            // into booleans, string lists into arrays etc.
             $blockinfo['content'][$pname] = $pvalue;
         }
     }
