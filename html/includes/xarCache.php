@@ -43,9 +43,8 @@ function xarCache_init($args)
     $xarPage_cacheTime = $cachingConfiguration['Page.TimeExpiration'];
     $xarPage_cacheDisplay = $cachingConfiguration['Page.DisplayView'];
     $xarPage_cacheShowTime = $cachingConfiguration['Page.ShowTime'];
-    if(isset($cachingConfiguration['Block.TimeExpiration'])) {
-        $xarBlock_cacheTime = $cachingConfiguration['Block.TimeExpiration'];
-    }
+    $xarBlock_cacheTime = $cachingConfiguration['Block.TimeExpiration'];
+
     return true;
 }
 
@@ -327,8 +326,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
         ) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
-            $value .= 'Cached Block';
-            @fwrite($fp, trim($value));
+            //$value .= 'Cached Block';// This line is used for testing
+            @fwrite($fp, $value);
             @fclose($fp);
         }
         xarOutputCleanCached('Block');
@@ -365,7 +364,7 @@ function xarPageFlushCached($cacheKey)
 
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
-            if ((preg_match("#$cacheKey#",$file)) && (strstr($file, '.php') !== false)) {
+            if ((preg_match("#$cacheKey#", $file)) && (strstr($file, '.php') !== false)) {
                 @unlink($xarOutput_cacheCollection . '/' . $file);
             }
         }
