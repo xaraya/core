@@ -128,9 +128,28 @@ function blocks_userapi_getinfo($args)
             // pass $pvalue through for each $pname.
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.
-            // Only override non-array and empty elements for now.
-            if (empty($blockinfo['content'][$pname]) || !is_array($blockinfo['content'][$pname])) {
+            // Only override non-array and unset elements for now.
+
+            if (!isset($blockinfo['content'][$pname])) {
                 $blockinfo['content'][$pname] = $pvalue;
+            } elseif (!is_array($blockinfo['content'][$pname])) {
+                // Now let's be clever. Validate the override so it is the same
+                // data type as the element it is over-riding. We still can't do
+                // range-checking, or more complicated transformationsm, but we
+                // get better validation and type casting.
+
+                switch (gettype($blockinfo['content'][$pname])) {
+                    case 'integer' : $valid = xarVarValidate('int', $pvalue, true); break;
+                    case 'string' : $valid = xarVarValidate('str', $pvalue, true); break;
+                    // Note: bool type validates 'true'/'false', or set/non-set
+                    // but NOT non-zero and zero.
+                    case 'boolean' : $valid = xarVarValidate('bool', $pvalue, true); break;
+                    case 'float' : $valid = xarVarValidate('float', $pvalue, true); break;
+                    default : $valid = false;
+                }
+
+                // If the override validated, then set the parameter.
+                if ($valid) {$blockinfo['content'][$pname] = $pvalue;}
             }
         }
 
