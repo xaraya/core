@@ -485,31 +485,27 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
  * @param offset timezone offset (default user timezeone)
  * @return date string
  *
- *  TODO: reorder the parameters to [$format [,$time [,$offset]]]  ?
- *        do we really need the $offset argument?
  */
-function xarLocaleFormatDate($time = null, $format = null, $offset = null)
+function xarLocaleFormatDate($format = null, $time = null)
 {
     if (empty($time)) { // yes, null or 0 or whatever :)
 //TODO: we should really get the user/site time based on timezone settings
-//      this will require UTC timestamps to be generated and then modified
-        //$time = time();
-        //$time = gmmktime(gmdate('H'),gmdate('i'),gmdate('s'),gmdate('m'),gmdate('d'),gmdate('Y'));
-        $time = xarLocaleUserTime();
+//TODO: this will require UTC timestamps to be generated and then modified
+        $time = xarMLS_userTime();
     } elseif (!is_numeric($time)) {
         // strtotime creates a timestamp based on the server's locale settings
         $time = strtotime($time);
         // we need to adjust for the server's timezone offset because
         // we'll be using the gmstrftime function later.
         // doing so will allow for the correct time to be displayed
-        // TODO: does this work everywhere or just on my machine???
+// TODO: does this work everywhere or just on my machine???
         $time += date('Z',$time);
         if ($time < 0) {
             return ''; // return empty string here (no exception)
         }
     } else {
         // adjust for the user's timezone offset
-        $time += xarLocaleUserOffset() * 3600;
+        $time += xarMLS_userOffset() * 3600;
     }
     
 // TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
@@ -518,33 +514,6 @@ function xarLocaleFormatDate($time = null, $format = null, $offset = null)
     //    $format = '%a, %d %B %Y %H:%M:%S %Z';
         $format = '%a, %d %B %Y %H:%M %Z';
     }
-
-// CHECKME: see how this interacts with user/site locale below
-//          This interacts fine with the new xarMLS_strftime function
-
-// NOTE: This is now handled by xarLocaleUserTime()
-/*
-    if (!isset($offset)) { // could be set to 0 here
-        if (xarUserIsLoggedIn()) {
-            $offset = xarUserGetVar('timezone'); // cfr. dynamicdata for roles
-        }
-        if (!isset($offset)) {
-        // TODO: add default offset configured by admin ?
-            $offset = 0; // this will currently keep the time UTC
-        }
-    }
-
-// TODO: add site offset in case the server time is wrong ?
-    $time += $offset * 3600;
-*/
-
-// CHECKME: set locale here !? That doesn't seem right somehow...
-//    setlocale(LC_TIME,xarConfigGetVar('locale'));
-//    setlocale(LC_TIME,xarUserGetNavigationLocale());
-    
-// NOTE: We don't need to do this anymore since we can use the new
-//       xarMLS_strftime function to handle correct date translations   
-//    setlocale(LC_TIME,xarMLSGetCurrentLocale());
 
     return xarMLS_strftime($format,$time);
 }
@@ -555,17 +524,16 @@ function xarLocaleFormatDate($time = null, $format = null, $offset = null)
  *  or gmdate functions only.
  *
  *  @author Roger Raymond <roger@asphyxia.com>
- *  @access public
+ *  @access protected
  *  @return int unix timestamp.
  */
-function xarLocaleUserTime($time=null) 
+function xarMLS_userTime($time=null) 
 {
     // get the current UTC time
-    // gmmktime acts unexpectedly when not passed any arguments
     if (!isset($time)) {
-        $time = gmmktime(gmdate('H'),gmdate('i'),gmdate('s'),gmdate('m'),gmdate('d'),gmdate('Y'));
+        $time = time();
     }
-    $time += xarLocaleUserOffset() * 3600;
+    $time += xarMLS_userOffset() * 3600;
     // return the corrected timestamp
     return $time;
 }
@@ -574,10 +542,10 @@ function xarLocaleUserTime($time=null)
  *  Returns the user's current tz offset
  *
  *  @author Roger Raymond <roger@asphyxia.com>
- *  @access public
+ *  @access protected
  *  @return int tz offset
  */
-function xarLocaleUserOffset()
+function xarMLS_userOffset()
 {
     // get the correct timezone offset for this user
     if (xarUserIsLoggedIn()) {
@@ -612,6 +580,8 @@ function xarLocaleUserOffset()
  *  %h - same as %b
  *  %p - either `am' or `pm' according to the given time value, or the corresponding strings for the current locale
  *  %r - time in a.m. and p.m. notation
+ *  %R - time in 24 hour notation (for windows compatibility)
+ *  %T - current time, equal to %H:%M:%S (for windows compatibility)
  *
  *  // TODO: formats not supported on windows
  *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
@@ -626,7 +596,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
 {
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
-        $timestamp = xarLocaleUserTime();
+        $timestamp = xarMLS_userTime();
     }
     
     // load the locale date
@@ -685,17 +655,29 @@ function xarMLS_strftime($format=null,$timestamp=null)
             case '%D' :
                 // just use the abbreviated formating string that %D represents
                 $locale_format = $localeData['/dateFormats/short'];
+                // replace the locale formatting style with valid strftime() style
                 $locale_format = str_replace('MMMM','%B',$locale_format);
                 $locale_format = str_replace('MMM','%b',$locale_format);
                 $locale_format = str_replace('M','%m',$locale_format);
                 $locale_format = str_replace('dddd','%A',$locale_format);
                 $locale_format = str_replace('ddd','%a',$locale_format);
-                $locale_format = str_replace('d','%e',$locale_format);
+                $locale_format = str_replace('d','%d',$locale_format);
                 $locale_format = str_replace('yyyy','%Y',$locale_format);
                 $locale_format = str_replace('yy','%y',$locale_format);
                 $format = str_replace($modifier,xarMLS_strftime($locale_format,$timestamp),$format);
                 break;
+            
+            /*
+            case '%e' :
+                // implement %e for windows - grab the day number
+                $e = xarMLS_strftime('%d',$timestamp);
+                // remove the preceeding 0 (zero)
                 
+                $format = str_replace($modifier,,$format);
+                
+                break;
+            */
+             
             case '%r' :
                 // recursively call the xarMLS_strftime function
                 $format = str_replace($modifier,xarMLS_strftime('%I:%M %p',$timestamp),$format);
