@@ -36,11 +36,12 @@ define('XAR_TOKEN_CDATA_START'       , '[CDATA['); // CDATA start inside non mar
 define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 
 // Other
-define('XAR_TOKEN_VAR_START'         , '$'    );       // Start of a variable
-define('XAR_TOKEN_CI_DELIM'          , '#'    );       // Delimiter for variables, functions and other the CI stands for Code Item
-define('XAR_NAMESPACE_PREFIX'        , 'xar'  );       // Our own default namespace prefix
-define('XAR_FUNCTION_PREFIX'         , 'xar'  );       // Function prefix (used in check for allowed functions)
-define('XAR_ROOTTAG_NAME'            , 'blocklayout'); // Default name of the root tag
+define('XAR_TOKEN_VAR_START'         , '$'    );          // Start of a variable
+define('XAR_TOKEN_CI_DELIM'          , '#'    );          // Delimiter for variables, functions and other the CI stands for Code Item
+define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
+define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
+define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
+define('XAR_NODES_LOCATION'          , 'includes/nodes/'); // Where do we keep our nodes classes
 
 /**
  * Defines for errors
@@ -1071,14 +1072,14 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
         // Otherwise we instantiate the right class
         $tagClass ='xarTpl__Xar' .$tagName.'Node';
-        $tagfile = "includes/nodes/tags/" .strtolower($tagName) .'.php';
+        $tagfile = XAR_NODES_LOCATION . 'tags/' .strtolower($tagName) .'.php';
         
         // FIXME: sync the implementation of core / custom tags, handle them the same way
         if(file_exists($tagfile)) {
             include_once($tagfile);
             $node =& new $tagClass($parser, $tagName);
         } else {
-            include_once("includes/nodes/tags/other.php");
+            include_once(XAR_NODES_LOCATION .'tags/other.php');
             $node =& new xarTpl__XarOtherNode($parser, $tagName);
             if(!isset($node->tagobject)) unset($node);
         }
@@ -1098,7 +1099,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplEntityNode($entityType, $parameters, &$parser)
     {
         $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
-        $entityFile ='includes/nodes/entities/' .strtolower($entityType) . '.php';
+        $entityFile = XAR_NODES_LOCATION . 'entities/' .strtolower($entityType) . '.php';
         if(!class_exists($entityClass)) {
             include_once($entityFile);
         }
