@@ -25,6 +25,7 @@ additions and corrections as of Aug 15 - 2004
 
 additions and corrections as of Oct 15 - 2004 
 
+    - tried hard to achieve the source ordered 3-col layout, when the content comes first
     - general facelift undertaken
     - redone all backgrounds, the look seems clearer after removing the textures
     - all images are gifs now
@@ -35,27 +36,23 @@ additions and corrections as of Oct 15 - 2004
     - redone the header - no longer we use the transparent gif to make it clickable
     - javascript style switcher is slightly modified for a better onload events handling
     - actually tested on FF, Moz, Safari, IE5-Mac, IE6-Win (no special linux tests yet)
-    - added _undo_ browsers defaults section right at the beginning
+    - added _undo_ browsers defaults section right at the beginning (just in case)
+    
 */
 
-/*  just before we start, lets UNDO some of the default browsers styles, 
+/*  occasionally may need to UNDO some of the default browsers styles, 
     so that we know exactly where we are */
 
-body, div, ul, li, td, h1, h2, h3, h4, h5, h6, code, pre {
-	font-family: "trebuchet ms", verdana, helvetica, sans-serif;
-	font-size: 1em;
-	line-height: 145%;
-}
-
-p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, blockquote, fieldset, input {
-	margin: 0;
-	padding: 0;
-}
-
-:link, :visited { text-decoration: none; }
-ul, ol { list-style-type: none; }
-a img, :link img, :visited img { border: none; }
-
+/* body, div, ul, li, td, h1, h2, h3, h4, h5, h6, code, pre { */
+/* 	font-size: 1em; */
+/* } */
+/* p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, blockquote, fieldset, input { */
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* } */
+/* :link, :visited { text-decoration: none; } */
+/* ul, ol { list-style-type: none; } */
+/* a img, :link img, :visited img { border: none; } */
 /* XARAYA REQUIRED CLASSES [gen_heading] */
 
 /*
@@ -63,18 +60,21 @@ Main (X)HTML Selectors - Typography, Colours and Positioning
 -------------------------------------------------------------------------[comment] */
 
 body {
-	margin: 1% 2%;
+	font-family: "trebuchet ms", "luxi sans", verdana, helvetica, sans-serif;
+	font-size: 100.01%;
+	line-height: 145%;
+	margin: 15px 2%;
 	padding: 0;
 	color: #333333;
 	background-color: #333366;
 	background-image: url(../images/page_bg.gif);
 	background-repeat: repeat-x;
 	background-position: 0% 0%;
-	background-attachment: fixed;
+	/* 	background-attachment: fixed; */
+	text-align: center;
 }
 
 a {
-	/* 	text-decoration: underline; */
 	color: #666699;
 	font-weight: bold;
 }
@@ -147,8 +147,7 @@ h1 { font-size: 160%; }
 h2 { font-size: 150%; }
 h3 { font-size: 130%; }
 h4 { font-size: 120%; }
-
-p { margin:.7em 0 0 .3em;}
+p { margin: .7em 0 0 .3em; }
 
 pre {
 	color: #990066;
@@ -161,7 +160,7 @@ ul {
 	margin: 0;
 	list-style-position: inside;
 	list-style-image: url(../images/bullet.png);
-	list-style-type: default;
+	list-style-type: none;
 }
 
 ul li { margin-left: 0.5em; }
@@ -177,7 +176,7 @@ code {
 }
 
 sup, sub {
-	font-size: 90%;
+	font-size: 95%;
 	font-weight: normal;
 }
 
@@ -207,7 +206,6 @@ textarea {
 	font-weight: normal;
 	text-indent: 2px;
 }
-
 
 button, input, select, textarea {
 	color: #003399;
@@ -253,10 +251,7 @@ td.xar-alt { }
 these defaults apply to the left block group 
 -------------------------------------------------------------------------[comment] */
 
-.xar-block-head {
-	/* 	border-bottom: 1px solid #191970; */
-	color: #333399;
-}
+.xar-block-head { color: #333399; }
 
 .xar-block-title {
 	font-weight: bold;
@@ -264,13 +259,13 @@ these defaults apply to the left block group
 }
 
 .xar-block-body { }
-.xar-block-foot { margin-bottom: 5px; }
+.xar-block-foot { }
 
 /*
 these defaults apply to the right block group 
 -------------------------------------------------------------------------[comment] */
 
-.xar-block-head-right { }
+.xar-block-head-right { color: #333399; }
 
 .xar-block-title-right {
 	font-weight: bold;
@@ -278,7 +273,7 @@ these defaults apply to the right block group
 }
 
 .xar-block-body-right { }
-.xar-block-foot-right { margin-bottom: 5px; }
+.xar-block-foot-right { }
 
 /*
 topnav block group classes 
@@ -296,7 +291,7 @@ center block group classes
 .xar-block-head-center { width: 100%; }
 
 .xar-block-title-center {
-	background-color: inherit;
+/* 	background-color: inherit; */
 	font-weight: bold;
 }
 
@@ -328,7 +323,7 @@ module rendering area and related rules
 	font-weight: bold;
 }
 
-.xar-mod-body { padding: .3em .6em;}
+.xar-mod-body { padding: .3em .6em; }
 .xar-mod-foot { }
 
 /*
@@ -364,12 +359,12 @@ complementary text related styling
 .xar-sub { font-size: 80%; }
 .xar-error { color: #ff0000; }
 .xar-title { font-weight: bold; }
+
 /*
 not sure if we still using this rule anywhere TODO: check
 -------------------------------------------------------------------------[comment] */
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
-
 div#classicthemecontrols {
 	position: relative;
 	width: 187px;
@@ -418,7 +413,6 @@ div.xar-block-body-topnav .xar-menu-section ul li a {
 
 /* all links should display horizontally in topnav block in this theme */
 div.xar-block-body-topnav {
-	min-width: 710px;
 	border-color: #757F8B;
 	border-width: 1px;
 	border-style: solid;

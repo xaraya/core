@@ -11,7 +11,7 @@ system menus and related rules
 	padding: 0;
 	font-family: arial, helvetica, verdana, sans-serif;
 	font-weight: bold;
-	font-size:93%;
+	font-size: 95%;
 	display: block;
 }
 
@@ -19,8 +19,8 @@ system menus and related rules
 .xar-block-body-right ul li {
 	list-style-type: none;
 	margin: 0 0 1px 0;
-	padding:0;
-    height:1.7em;
+	padding: 0;
+	height: 1.7em;
 }
 
 .xar-block-body ul li a,
@@ -51,7 +51,7 @@ system menus and related rules
 	padding: 0 4px;
 	text-align: right;
 	background-color: #f5f5f5;
-    height:1.7em;
+	height: 1.7em;
 }
 
 .xar-block-body ul ul li.xar-menu-subitem-current a,
@@ -65,6 +65,6 @@ system menus and related rules
 .xar-block-body-right ul > li, 
 .xar-block-body ul li > a,
 .xar-block-body-right ul li > a {
-    height:auto;
-    line-height:1.7em;
+	height: auto;
+	line-height: 1.7em;
 }

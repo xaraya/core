@@ -105,11 +105,11 @@
             <xar:var name="headblocksgroup" />
             <base href="&xar-baseurl;index.php" />
             <xar:comment>
-                Main CSS rules_____________________________________________________________________________[comment]
+                Main CSS rules_____________________________________________________________________________[comment] 
             </xar:comment>
-            <style type="text/css" media="screen">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style> 
+<style type="text/css" media="all">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style> 
             <xar:comment>
-                Styleswitcher CSS files to link to_________________________________________________________[comment]
+                Styleswitcher CSS files to link to_________________________________________________________[comment] 
             </xar:comment>
             <xar:template file="styleswitchercsslinks" type="theme" />
             <xar:comment>
@@ -117,112 +117,170 @@
             </xar:comment>
             #$tpl:additionalStyles# 
             <xar:comment>
-                Styleswitcher JavaScript___________________________________________________________________[comment]
+                Styleswitcher JavaScript___________________________________________________________________[comment] 
             </xar:comment>
-            <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script> 
+<script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script> 
             <xar:comment>
                 Head JavaScript - required for all themes__________________________________________________[comment] 
             </xar:comment>
             <xar:base-render-javascript position="head" />
         </head>
         <body>
-            <div id="xc-header">
-                <xar:template file="styleswitchercontrols" type="theme" />
-                <h1>
-                    <a href="&xar-baseurl;" title="#$sitename#">
-                        <span>
-                            #$sitename#
-                        </span>
-                    </a>
-                </h1>
-            </div>
-            <xar:if condition="!empty($topnavblocksgroup)">
-                <div id="classictopnavigation">
-                    <xar:var name="topnavblocksgroup" />
+            <div id="xc-outer-wrapper">
+                <div id="xc-header">
+                    <xar:template file="styleswitchercontrols" type="theme" />
+                    <h1>
+                        <a href="&xar-baseurl;" title="#$sitename#">
+                            <span>
+                                #$sitename# 
+                            </span>
+                        </a>
+                    </h1>
                 </div>
-            </xar:if>
-            <div id="xc-content">
-                <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
-                    <div class="xc-sidebar-left">
-                        <div class="xc-sidebar-content">
-                            <xar:var name="leftblocksgroup" />
-                        </div>
+                <xar:if condition="!empty($topnavblocksgroup)">
+                    <div id="classictopnavigation">
+                        <xar:var name="topnavblocksgroup" />
                     </div>
-                    <div class="xc-main">
-                        <div class="xc-sidebar-right">
-                            <div class="xc-sidebar-content">
-                                <xar:var name="rightblocksgroup" />
+                </xar:if>
+                <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
+                    <div id="xc-leftbg-wrapper">
+                        <div id="xc-rightbg-wrapper">
+                            <div id="xc-outermargin-wrapper">
+                                <div id="xc-inner-wrapper">
+                                    <div id="xc-innerbg-left">
+                                        <div id="xc-innerbg-right">
+                                            <div id="xc-innerbg">
+                                                <div id="xc-innerbg-top">
+                                                </div>
+                                                <div id="xc-left">
+                                                    <div class="xc-side-content">
+                                                        <xar:var name="leftblocksgroup" />
+                                                    </div>
+                                                </div>
+                                                <div id="xc-center-wrapper">
+                                                    <div id="xc-center">
+                                                        <xar:var name="centerblocksgroup" />
+                                                        <xar:module class="modulespace" main="true" />
+                                                    </div>
+                                                </div>
+                                                <div id="xc-right">
+                                                    <div class="xc-side-content">
+                                                        <xar:var name="rightblocksgroup" />
+                                                    </div>
+                                                </div>
+                                                <div id="xc-clear">
+                                                </div>
+                                                <div id="xc-innerbg-bottom">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="xc-main-content">
-                            <div class="xc-containing-float">
-                                <xar:var name="centerblocksgroup" />
-                                <xar:module class="modulespace" main="true" />
-                            </div>
-                            <hr class="xc-clear" />
                         </div>
                     </div>
                     <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
-                    <div class="xc-sidebar-left">
-                        <div class="xc-sidebar-content">
-                            <xar:var name="leftblocksgroup" />
+                    <div id="xc-leftbg-wrapper">
+                        <div id="xc-outermargin-noright-wrapper">
+                            <div id="xc-inner-wrapper">
+                                <div id="xc-innerbg-left">
+                                    <div id="xc-innerbg-right">
+                                        <div id="xc-innerbg">
+                                            <div id="xc-innerbg-top">
+                                            </div>
+                                            <div id="xc-left">
+                                                <div class="xc-side-content">
+                                                    <xar:var name="leftblocksgroup" />
+                                                </div>
+                                            </div>
+                                            <div id="xc-center-wrapper">
+                                                <div id="xc-center">
+                                                    <xar:var name="centerblocksgroup" />
+                                                    <xar:module class="modulespace" main="true" />
+                                                </div>
+                                            </div>
+                                            <div id="xc-clear">
+                                            </div>
+                                            <div id="xc-innerbg-bottom">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="xc-main-leftnoright">
-                        <div class="xc-containing-float">
-                            <xar:var name="centerblocksgroup" />
-                            <xar:module class="modulespace" main="true" />
-                        </div>
-                        <hr class="xc-clear" />
                     </div>
                     <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
-                    <div class="xc-main-rightnoleft">
-                        <div class="xc-sidebar-right">
-                            <div class="xc-sidebar-content">
-                                <xar:var name="rightblocksgroup" />
+                    <div id="xc-rightbg-wrapper">
+                        <div id="xc-outermargin-noleft-wrapper">
+                            <div id="xc-inner-wrapper">
+                                <div id="xc-innerbg-left">
+                                    <div id="xc-innerbg-right">
+                                        <div id="xc-innerbg">
+                                            <div id="xc-innerbg-top">
+                                            </div>
+                                            <div id="xc-center-wrapper">
+                                                <div id="xc-center">
+                                                    <xar:var name="centerblocksgroup" />
+                                                    <xar:module class="modulespace" main="true" />
+                                                </div>
+                                            </div>
+                                            <div id="xc-right">
+                                                <div class="xc-side-content">
+                                                    <xar:var name="rightblocksgroup" />
+                                                </div>
+                                            </div>
+                                            <div id="xc-clear">
+                                            </div>
+                                            <div id="xc-innerbg-bottom">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="xc-main-content">
-                            <div class="xc-containing-float">
-                                <xar:var name="centerblocksgroup" />
-                                <xar:module class="modulespace" main="true" />
-                            </div>
-                            <hr class="xc-clear" />
                         </div>
                     </div>
                     <xar:else />
-                    <div class="xc-main-norightnoleft">
-                        <div class="xc-main-content-norightnoleft">
-                            <div class="xc-containing-float">
-                                <xar:var name="centerblocksgroup" />
-                                <xar:module class="modulespace" main="true" />
+                    <div id="xc-inner-wrapper">
+                        <div id="xc-innerbg-left">
+                            <div id="xc-innerbg-right">
+                                <div id="xc-innerbg">
+                                    <div id="xc-innerbg-top">
+                                    </div>
+                                    <div id="xc-center">
+                                        <xar:var name="centerblocksgroup" />
+                                        <xar:module class="modulespace" main="true" />
+                                    </div>
+                                    <div id="xc-clear">
+                                    </div>
+                                    <div id="xc-innerbg-bottom">
+                                    </div>
+                                </div>
                             </div>
-                            <hr class="xc-clear" />
                         </div>
                     </div>
                 </xar:if>
-            </div>
-            <div id="xc-footer">
-                <div class="validators">
-                    <a href="http://validator.w3.org:8001/check?uri=referer" title="#$validatexhtml#">
-                        <img src="#$classicthemedir#/images/xhtml10.gif" alt="#$validatexhtml#" />
-                    </a>
-                    <a href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php" title="#$validatecss#">
-                        <img src="#$classicthemedir#/images/css.gif" alt="#$validatecss#" />
-                    </a>
-                    <a href="http://www.webreference.com/authoring/style/sheets/layout/" title="#$tableless#">
-                        <img src="#$classicthemedir#/images/csstableless.gif" alt="#$tableless#" />
-                    </a>
+                <div id="xc-footer">
+                    <div class="validators">
+                        <a href="http://validator.w3.org:8001/check?uri=referer" title="#$validatexhtml#">
+                            <img src="#$classicthemedir#/images/xhtml10.gif" alt="#$validatexhtml#" />
+                        </a>
+                        <a href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php" title="#$validatecss#">
+                            <img src="#$classicthemedir#/images/css.gif" alt="#$validatecss#" />
+                        </a>
+                        <a href="http://www.webreference.com/authoring/style/sheets/layout/" title="#$tableless#">
+                            <img src="#$classicthemedir#/images/csstableless.gif" alt="#$tableless#" />
+                        </a>
+                    </div>
+                    <p id="footermsg">
+                        <xar:var name="sitefooter" />
+                    </p>
+                    <p id="copyright">
+                        <xar:var name="sitecopyright" />
+                    </p>
+                    <p id="slogan">
+                        <xar:var name="siteslogan" />
+                    </p>
                 </div>
-                <p id="footermsg">
-                    <xar:var name="sitefooter" />
-                </p>
-                <p id="copyright">
-                    <xar:var name="sitecopyright" />
-                </p>
-                <p id="slogan">
-                    <xar:var name="siteslogan" />
-                </p>
             </div>
             <xar:comment>
                 Body JavaScript - required for all themes__________________________________________________[comment] 
