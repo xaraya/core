@@ -401,9 +401,6 @@ function base_menublock_insert($blockinfo)
 
     if ($new_linkname) {
        $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc').'|'.xarVarCleanFromInput('new_linkchild');
-        if (!xarVarFetch('new_linkdesc', 'str:1', $new_linkdesc, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('new_linkchild', 'str:1', $new_linkchild, '', XARVAR_NOT_REQUIRED)) return;
-       $content[] = $new_linkurl . '|' . $new_linkname . '|' . $new_linkdesc  . '|' . $new_linkchild;
     }
     $vars['content'] = implode("LINESPLIT", $content);
 
