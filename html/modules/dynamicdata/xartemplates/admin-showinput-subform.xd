@@ -61,7 +61,7 @@
             </xar:foreach>
           </select>
           <xar:if condition="empty($value)">
-            <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="" />
+            <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="0" />
           </xar:if>
         </td>
       </tr>
@@ -71,8 +71,7 @@
 
       <tr>
         <td colspan="2">
-<xar:comment> TODO: use specific 'subform' layout here </xar:comment>
-          <xar:data-list object="$object" layout="cells" />
+          <xar:data-list object="$object" layout="subform" />
           <strong>TODO: allow creating/updating of child items</strong>
         </td>
       </tr>

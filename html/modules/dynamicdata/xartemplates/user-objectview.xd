@@ -112,6 +112,62 @@
         </div>
     </xar:if>
 
+<xar:elseif condition="$layout eq 'subform'" />
+    <table class="xar-norm">
+    <tr>
+        <xar:foreach in="$properties" key="$name">
+            <th>
+                <xar:data-label property="$properties[$name]" />
+            </th>
+        </xar:foreach>
+        <xar:if condition="empty($linkfield)">
+            <th>
+                &nbsp;
+            </th>
+        </xar:if>
+    </tr>
+    <xar:foreach in="$items" key="$itemid" value="$fields">
+    <tr>
+        <xar:foreach in="$properties" key="$name">
+            <xar:if condition="empty($fields[$name])">
+                <td valign="top">&nbsp;</td>
+            <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
+                <td valign="top"><a href="#$links[$itemid]['display']['olink']#"><xar:data-output property="$properties[$name]" value="$fields[$name]" /></a></td>
+            <xar:else />
+                <td valign="top"><xar:data-output property="$properties[$name]" value="$fields[$name]" /></td>
+            </xar:if>
+        </xar:foreach>
+        <xar:if condition="empty($linkfield)">
+            <td valign="top">
+            <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
+                <xar:foreach in="$links[$itemid]" value="$option">
+                    #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+                </xar:foreach>
+            <xar:else />
+                &nbsp;
+            </xar:if>
+            </td>
+        </xar:if>
+    </tr>
+    </xar:foreach>
+    </table>
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <div align="center">
+            <xar:if condition="!empty($prevurl)">
+                 <a href="#$prevurl#">&lt;&lt; </a>
+            <xar:else />
+                 ---
+            </xar:if>
+            &nbsp;&nbsp;&nbsp;
+            <xar:if condition="!empty($nexturl)">
+                 <a href="#$nexturl#"> &gt;&gt;</a>
+            <xar:else />
+                 ---
+            </xar:if>
+        </div>
+    </xar:if>
+
 <xar:elseif condition="$layout eq 'bullet'" />
     <ul>
     <xar:foreach in="$items" value="$item">

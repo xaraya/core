@@ -31,6 +31,14 @@
  */
 function dynamicdata_adminapi_handleInputTag($args)
 {
+    // remove BL handler stuff
+    if (isset($args['handler_type'])) {
+        unset($args['handler_type']);
+    }
+    // fix id containing [] in forms
+    if (!empty($args['name']) && empty($args['id']) && strpos($args['name'],'[')) {
+         $args['id'] = strtr($args['name'], array('[' => '_', ']' => ''));
+    }
     // we just invoke the showInput() method of the Dynamic Property here
     if (!empty($args['property'])) {
         if (count($args) > 1) {

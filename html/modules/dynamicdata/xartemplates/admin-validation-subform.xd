@@ -74,6 +74,36 @@
       </xar:if>
     </td>
   </tr>
+</xar:if>
+<xar:if condition="!empty($objectid) and !empty($style) and $style eq 'childlist'">
+  <tr>
+    <td>
+      <xar:mlstring>Parent</xar:mlstring>
+    </td>
+    <td>
+      <xar:comment> equal to itemid or selectable </xar:comment>
+      <xar:if condition="empty($title)">
+        <label for="#$id#_title_0">
+          <input type="radio" name="#$name#[title]" id="#$id#_title_0" value="0" checked="checked" />
+          <xar:mlstring>select</xar:mlstring>
+        </label>
+        <label for="#$id#_title_1">
+          <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1" />
+          <xar:mlstring>fixed (use dummy datastore)</xar:mlstring>
+        </label>
+      <xar:else/>
+        <label for="#$id#_title_0">
+          <input type="radio" name="#$name#[title]" id="#$id#_title_0" value="0" />
+          <xar:mlstring>select</xar:mlstring>
+        </label>
+        <label for="#$id#_title_1">
+          <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1" checked="checked" />
+          <xar:mlstring>fixed (use dummy datastore)</xar:mlstring>
+        </label>
+      </xar:if>
+    </td>
+  </tr>
+</xar:if>
 <xar:comment> TODO: check this
   <tr>
     <td>
@@ -84,7 +114,6 @@
     </td>
   </tr>
 </xar:comment>
-</xar:if>
 <xar:if condition="!empty($objectid)">
   <tr>
     <td>

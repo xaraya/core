@@ -295,6 +295,11 @@ class Dynamic_Object_Master
             $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype;
             $storetype = 'modulevars';
 
+        // no data storage
+        } elseif ($property->source == 'dummy') {
+            $storename = '_dummy_';
+            $storetype = 'dummy';
+
         // TODO: extend with LDAP, file, ...
         } else {
             $storename = '_todo_';

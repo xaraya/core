@@ -203,7 +203,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                                                                       'fieldlist' => array($this->title),
                                                                       'where'     => $this->where));
                 $data['dropdown'] = $mylist->getItems();
-            } elseif ($this->style == 'childlist' && !empty($this->link)) {
+            } elseif ($this->style == 'childlist' && !empty($this->link) && empty($this->title)) {
                 // pick some field to count with
                 if (!empty($data['object']->primary)) {
                     // preferably the primary key

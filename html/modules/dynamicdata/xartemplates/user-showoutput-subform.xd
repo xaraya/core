@@ -16,9 +16,7 @@
 
 <xar:elseif condition="$style eq 'childlist'"/>
   <xar:if condition="!empty($object)">
-
-<xar:comment> TODO: use specific 'subform' layout here </xar:comment>
-    <xar:data-view object="$object" layout="list" />
+    <xar:data-view object="$object" layout="subform" />
   <xar:else/>
     #$value#
   </xar:if>

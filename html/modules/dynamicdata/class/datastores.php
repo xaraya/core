@@ -69,6 +69,7 @@ class Dynamic_DataStore_Master
                 require_once "includes/datastores/Dynamic_CSVFile_DataStore.php";
                 $datastore = new Dynamic_CSVFile_DataStore($name);
                 break;
+            case 'dummy':
             default:
                 require_once "includes/datastores/Dynamic_Dummy_DataStore.php";
                 $datastore = new Dynamic_Dummy_DataStore($name);
@@ -124,6 +125,9 @@ class Dynamic_DataStore_Master
 
         // user functions manage their own data
         $sources[] = 'user function';
+
+        // no local storage
+        $sources[] = 'dummy';
 
         // add the list of table + field
         while (!$result->EOF) {

@@ -217,6 +217,57 @@
             </p>
         </xar:if>
 
+    <xar:elseif condition="$layout eq 'subform'" />
+    <table class="xar-norm">
+        <tr>
+            <xar:foreach in="$properties" key="$name">
+                <th>
+                    <xar:data-label property="$properties[$name]" />
+                </th>
+            </xar:foreach>
+        </tr>
+        <xar:foreach in="$items" key="$itemid" value="$fields">
+            <tr>
+                <xar:foreach in="$properties" key="$name">
+                    <td>
+                        <xar:set name="propid">#$properties.$name:id#</xar:set>
+                        <xar:if condition="!empty($fields[$name])">
+                            <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" value="$fields[$name]" />
+                            <xar:else />
+                            <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" />
+                        </xar:if>
+                    </td>
+                </xar:foreach>
+            </tr>
+        </xar:foreach>
+        <tr>
+            <xar:foreach in="$properties" key="$name">
+                <td>
+                    <xar:set name="propid">#$properties.$name:id#</xar:set>
+                    <xar:data-input property="$properties[$name]" name="dd_'.$propid.'[0]" size="10" />
+                </td>
+            </xar:foreach>
+        </tr>
+    </table>
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <p>
+            <xar:if condition="!empty($prevurl)">
+                <a href="#$prevurl#">
+                    &lt;&lt; 
+                </a>
+                <xar:else />
+                --- 
+            </xar:if>
+            &nbsp;&nbsp;&nbsp; 
+            <xar:if condition="!empty($nexturl)">
+                <a href="#$nexturl#">
+                    &gt;&gt; 
+                </a>
+                <xar:else />
+                --- 
+            </xar:if>
+        </p>
+    </xar:if>
     <xar:else />
     <xar:mlstring>
         Specify your own layout here... 
