@@ -101,7 +101,6 @@ function installer_intranet_readnoncore()
     xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Exclude access to the core modules');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
-    xarRegisterPrivilege('DenyBase','All','base','All','All',ACCESS_NONE,'Exclude access to the Base module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Exclude access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Exclude access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Exclude access to the Modules module');
@@ -110,7 +109,6 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeRoot('ReadNonCore');
     xarMakePrivilegeRoot('DenyPrivileges');
     xarMakePrivilegeRoot('DenyAdminPanels');
-    xarMakePrivilegeRoot('DenyBase');
     xarMakePrivilegeRoot('DenyBlocks');
     xarMakePrivilegeRoot('DenyMail');
     xarMakePrivilegeRoot('DenyModules');
@@ -119,7 +117,6 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
-    xarMakePrivilegeMember('DenyBase','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
