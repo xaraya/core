@@ -1,0 +1,20 @@
+repository: xaraya
+description: Xaraya main repository
+category: applications/publishing
+logging: logging@openlogging.org
+license: 
+single_user: 
+single_host: 
+compression: gzip
+autofix: 
+contact: 
+email: marcel@hsdev.com
+street: 
+city: 
+state: 
+postal: 
+country: 
+phone: 
+cell: 
+pager: 
+hours: 
