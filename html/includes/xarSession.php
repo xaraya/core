@@ -37,7 +37,7 @@ function xarSession_init($args)
             }
         }
     }
-    // Start the session, this will call pnSession__phpRead, and
+    // Start the session, this will call xarSession__phpRead, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
     session_start();

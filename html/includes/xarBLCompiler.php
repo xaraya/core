@@ -172,7 +172,7 @@ class xarTpl__CodeGenerator
                 } else {
                     //xarLogVariable('pass here', $child->tagName, XARLOG_LEVEL_ERROR);
                     if ($child->needExceptionsControl()) {
-                        //xarLogVariable('pendingExceptionsControl', $child->tagName, PNLOG_LEVEL_ERROR);
+                        //xarLogVariable('pendingExceptionsControl', $child->tagName, XARLOG_LEVEL_ERROR);
                         $this->setPendingExceptionsControl(true);
                     }
                 }

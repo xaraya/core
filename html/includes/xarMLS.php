@@ -502,7 +502,7 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
                      'name' => $modName,
                      'baseDir' => 'modules/'.$modOsDir,
                      'subtype' => 'file',
-                     'subname' => 'pn'.$modType,
+                     'subname' => 'xar'.$modType,
                      'locale' => $testLocale);
 
         $res = $xarMLS_backend->load($ctx);
@@ -662,7 +662,7 @@ function xarMLS_loadBlockTranslations($blockName, $modOsDir)
     return false;
 }
 */
-function pnMLS_convertFromInput($var, $method)
+function xarMLS_convertFromInput($var, $method)
 {
     // FIXME: <marco> Can we trust browsers?
     if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE ||

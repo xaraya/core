@@ -552,7 +552,7 @@ function xarVar_stripSlashes(&$var)
     }
 }
 
-function pnVar_addSlashes($var)
+function xarVar_addSlashes($var)
 {
     return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
 }
