@@ -1481,7 +1481,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
             if (!file_exists($fileName)) {
                 $fileName = 'modules/' . $modOsDir . '/pnversion.php';
-                $modversion['id'] = substr_replace(time(),'666',0,3);
+                $modversion['id'] = time();
             }
             break;
         case 'theme':
