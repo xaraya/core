@@ -104,7 +104,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
-    if (!is_array($args) || !is_array($args['command'])) {
+    if (!is_array($args) || !isset($args['command'])) {
         $msg = xarML('Invalid args (must be an array, command key must be set).');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
@@ -114,6 +114,42 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
     }
+
+    // save table definition
+    if (isset($args['command']) && $args['command'] == 'add') {
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $metaTable = $systemPrefix . '_tables';
+
+        list($dbconn) = xarDBGetConn();
+        $nextId = $dbconn->GenId($metaTable);
+        $query = "INSERT INTO $metaTable (
+                      xar_tableid,
+                      xar_table,
+                      xar_field,
+                      xar_type,
+                      xar_size,
+                      xar_default,
+                      xar_null,
+                      xar_unsigned,
+                      xar_increment,
+                      xar_primary_key)
+                    VALUES (
+                      $nextId,
+                      '" . xarVarPrepForStore($tableName) . "',
+                      '" . xarVarPrepForStore($args['field']) . "',
+                      '" . (empty($args['type']) ? '' : xarvarPrepForStore($args['type'])) . "',
+                      '" . (empty($args['size']) ? '' : xarvarPrepForStore($args['size'])) . "',
+                      '" . (empty($args['default']) ? '' : xarvarPrepForStore($args['default'])) . "', " .
+                      (empty($args['null']) ? '0' : '1') . ", " .
+                      (empty($args['unsigned']) ? '0' : '1') . ", " .
+                      (empty($args['increment']) ? '0' : '1') . ", " .
+                      (empty($args['primary_key']) ? '0' : '1') .
+                      ")";
+                  //    xar_width,
+                  //    xar_decimals,
+        $result =& $dbconn->Execute($query);
+    }
+
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
@@ -399,7 +435,8 @@ function xarDB__mysqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            $sql = 'ALTER TABLE '.$tableName.' ADD ';
+       // TODO: adapt mysqlColumnDefinition to return field name too
+            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
             $sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
             if ($args['first'] == true) {
                 $sql .= ' FIRST';
@@ -447,7 +484,8 @@ function xarDB_postgresqlAlterTable($tableName, $args)
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
-            $sql = 'ALTER TABLE '.$tableName.' ADD ';
+       // TODO: adapt postgresColumnDefinition to return field name too
+            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
             $sql .= join(' ', xarDB__postgresColumnDefinition($args['field'], $args));
             break;
         case 'rename':
