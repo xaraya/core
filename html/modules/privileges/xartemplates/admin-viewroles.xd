@@ -1,4 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
 <script language="JavaScript">
@@ -24,8 +26,19 @@ document.forms['privilegeform'].submit();}
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>View</xar:mlstring></h2><br />
 <div style="margin: auto;">
+<div class="xar-mod-body"><h2><xar:mlstring>Manage the Privilege</xar:mlstring>: #$pname#</h2>
+
+<div id="tabnav">
+	<div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $pid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $pid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $pid))#" class="active"><xar:mlstring>Groups/Users</xar:mlstring></a></div>	
+</div>
+<br />
+<xar:mlstring>This privilege is assigned to the following groups/users</xar:mlstring>:
+<br /><br />
 <table border="0" width="100%" cellpadding="2">
 	<xar:if condition="count($roles) eq 0">
 		<tr>

@@ -1,7 +1,18 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Delete</xar:mlstring></h2><br />
-<div style="text-align: center; margin: auto;">
+<div class="xar-mod-body"><h2><xar:mlstring>Manage the Privilege</xar:mlstring>: #$pname#</h2>
+
+<div id="tabnav">
+	<div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $pid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $pid))# "class="active"><xar:mlstring>Delete</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $pid))#"><xar:mlstring>Groups/Users</xar:mlstring></a></div>	
+</div>
+<div style="border: 1px solid #ccc; text-align: center; border-top : none; padding-left: 5px;">
+<br />
 <form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;" method="post" enctype="application/x-www-form-urlencoded" >
     <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -9,7 +20,7 @@
 	<input type="hidden" name="confirm" id="confirm" value="1" />
 	<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<p><span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of Privilege</xar:mlstring>  '#$name#'</span></p>
+	<p><span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of Privilege</xar:mlstring>  '#$pname#'</span></p>
 	<br />
 
 	<input type="submit" value="#xarML('Confirm')#"  tabindex="1" /><br />

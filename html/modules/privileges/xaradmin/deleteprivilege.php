@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Delete a privilege
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -37,7 +37,7 @@ function privileges_admin_deleteprivilege()
         //Load Template
         $data['authid'] = xarSecGenAuthKey();
         $data['pid'] = $pid;
-        $data['name'] = $name;
+        $data['pname'] = $name;
         return $data;
 
     }

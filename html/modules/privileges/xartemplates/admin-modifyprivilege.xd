@@ -1,4 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
 </script>
 <script language="JavaScript">
@@ -25,8 +27,20 @@ document.forms['privilegeform'].submit();}
 </script>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Privilege</xar:mlstring></h2>
-<div style="text-align: left; margin: auto;">
+<div class="xar-mod-body"><h2><xar:mlstring>Manage the Privilege</xar:mlstring>: #$pname#</h2>
+
+<div id="tabnav">
+	<div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $ppid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $ppid))#" class="active"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $ppid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a></div>	
+	<xar:if condition="$ptype eq 1">
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('pid' => $ppid))#"><xar:mlstring>Components</xar:mlstring></a></div>	
+	</xar:if>
+</div>
+<div style="border: 1px solid #ccc; text-align: left; border-top : none; padding-left: 5px;">
+<br />
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
     <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -234,7 +248,7 @@ document.forms['privilegeform'].submit();}
 
         <xar:set name="$tmpupdatevalue"><xar:mlstring>Update</xar:mlstring></xar:set>
         <input type="submit" value="#$tmpupdatevalue#"  tabindex="8" />
-</div><br />
+<br />
 <h2><xar:mlstring>Add Privilege To</xar:mlstring> '#$pname#'</h2>
 <table border="0" cellpadding="2" cellspacing="0">
     <tr>
@@ -283,5 +297,5 @@ document.forms['privilegeform'].submit();}
     </tr>
 </xar:loop>
 </table>
-
+</div>
 </div>
