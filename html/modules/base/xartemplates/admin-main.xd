@@ -5,9 +5,9 @@
 <div class="xar-mod-body">
 
     <xar:if condition="file_exists('modules/base/xarimages/admin.gif')" >
-        <img src="modules/base/xarimages/admin.gif" alt="official icon" width="96" height="96" class="xar-module-icon" />
+        <img src="modules/base/xarimages/admin.gif" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
     <xar:else />
-        <img src="modules/base/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" class="xar-module-icon" />
+        <img src="modules/base/xarimages/admin_generic.gif" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
     </xar:if>
 
     <h2>

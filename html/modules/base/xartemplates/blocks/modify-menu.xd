@@ -93,7 +93,7 @@
 </div>
 
 <div class="xar-form-input-wrapper">
-    <label for="new_linkurl" title="#xarML('Item url')#" class="xar-form-label">
+    <label for="new_linkurl" title="#xarML('Item URL')#" class="xar-form-label">
         <xar:mlstring>URL:</xar:mlstring>
     </label>
     <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong" />

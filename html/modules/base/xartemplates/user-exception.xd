@@ -11,7 +11,7 @@
     <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="Exception Icon" class="xar-module-icon" />
+    <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
 
     <h2>#$type#</h2>
 
@@ -37,5 +37,5 @@
         <p>#$hint#</p>
     </xar:if>
 
-    <p><a href="javascript:history.back(-1)">Click here to try again</a></p>
+    <p><a href="javascript:history.back(-1)"><xar:mlstring>Click here to try again</xar:mlstring></a></p>
 </div>

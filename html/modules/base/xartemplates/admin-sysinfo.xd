@@ -13,9 +13,8 @@
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
             <xar:mlstring>
-                PHP Info Sort Information 
+                PHP Info Sort Information:
             </xar:mlstring>
-            : 
         </dt>
         <dd>
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=1">
@@ -48,7 +47,7 @@
         <dd>
             <a href="&xar-modurl-base-admin-sysinfo;&amp;what=16">
                 <xar:mlstring>
-                    Enviroment 
+                    Environment 
                 </xar:mlstring>
             </a>
         </dd>

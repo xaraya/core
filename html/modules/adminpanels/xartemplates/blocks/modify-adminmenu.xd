@@ -11,7 +11,7 @@
 </div>
 
 <div class="xar-form-input-wrapper">
-    <label for="menustyle" title="#xarML('How should the meny items be ordered?')#" class="xar-form-label">
+    <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
         <xar:mlstring>Sort Admin Menu Items:</xar:mlstring>
     </label>
     <select name="menustyle" id="menustyle">

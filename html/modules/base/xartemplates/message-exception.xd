@@ -11,7 +11,7 @@
     <span class="xar-mod-title"><xar:mlstring>System Message</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="Message Icon" class="xar-module-icon" />
+    <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="#xarML('Message Icon')#" class="xar-module-icon" />
 
     <h2>
         <xar:mlstring>System Exception</xar:mlstring>
