@@ -143,9 +143,9 @@ function roles_user_getvalidation()
 
             // check for user and grab uid if exists
             $status = xarModAPIFunc('roles',
-                                  'user',
-                                  'get',
-                                   array('uname' => $uname));
+                                    'user',
+                                    'get',
+                                    array('uname' => $uname));
 
             // Set up confirmation email
             $confemail = xarModGetVar('roles', 'confirmationemail');
@@ -191,7 +191,7 @@ function roles_user_getvalidation()
                                'admin',
                                'sendmail',
                                array('info' => $status['email'],
-                                     'name' => $status['realname'],
+                                     'name' => $status['name'],
                                      'subject' => $conftitle,
                                      'message' => $confemail))) return;
 

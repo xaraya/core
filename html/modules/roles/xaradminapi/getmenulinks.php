@@ -45,6 +45,13 @@ function roles_adminapi_getmenulinks()
                               'title' => xarML('Modify the welcome email sent to new users'),
                               'label' => xarML('Welcome Email'));
     }
+    if (xarSecurityCheck('AdminRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'reminderemail'),
+                              'title' => xarML('Modify the lost password email'),
+                              'label' => xarML('Reminder Email'));
+    }
 
 // Security Check
     if (xarSecurityCheck('AdminRole',0)) {

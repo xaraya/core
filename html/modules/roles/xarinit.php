@@ -176,6 +176,7 @@ function roles_activate()
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'itemsperpage', 20);
     xarModSetVar('roles', 'showtacs', 0);
+    xarModSetVar('roles', 'requirevalidation', 1);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
@@ -211,6 +212,18 @@ Linux';
 president@whitehouse.gov';
     $disallowedemails = serialize($emails);
     xarModSetVar('roles', 'disallowedemails', $disallowedemails);
+    $remindertitle = 'Replacement login information for %%name%% at %%sitename%%';
+    $reminderemail = '%%name%%,
+
+Here is your new password for %%sitename%%. You may now login to %%siteurl%% using the following username and password:
+
+username: %%username%%
+password: %%password%%
+
+-- %%siteadmin%%';
+
+    xarModSetVar('roles', 'reminderemail', $reminderemail);
+    xarModSetVar('roles', 'remindertitle', $remindertitle);
 
     $ips = '';
     $disallowedips = serialize($ips);

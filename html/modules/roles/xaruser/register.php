@@ -167,31 +167,35 @@ function roles_user_register()
             // check if the email is empty
             if (empty($email)){
                 $invalid['email'] = xarML('You must provide a valid email address to continue.');
+            }
 
-            // TODO: replace this with dynamic data property checker.
-            // check if the email is of a valid format
-            } elseif (!preg_match('/.*@.*/',$email )) {
+            $emailcheck = xarModAPIFunc('roles',
+                                        'user',
+                                        'validatevar',
+                                        array('var' => $email,
+                                              'type' => 'email'));
+
+            if ($emailcheck == false) {
                 $invalid['email'] = xarML('There is an error in your email address');
+            }
+
+            // check for duplicate email address
+            $user = xarModAPIFunc('roles',
+                                  'user',
+                                  'get',
+                                   array('email' => $email));
+            if ($user != false) {
+                unset($user);
+                $invalid['email'] = xarML('That email address is already registered.');
 
             } else {
-                // check for duplicate email address
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('email' => $email));
-                if ($user != false) {
-                    unset($user);
-                    $invalid['email'] = xarML('That email address is already registered.');
-
-                } else {
-                    // check for disallowed email addresses
-                    $disallowedemails = xarModGetVar('roles','disallowedemails');
-                    if (!empty($disallowedemails)) {
-                        $disallowedemails = unserialize($disallowedemails);
-                        $disallowedemails = explode("\r\n", $disallowedemails);
-                        if (in_array ($email, $disallowedemails)) {
-                            $invalid['email'] = xarML('That email address is either reserved or not allowed on this website');
-                        }
+                // check for disallowed email addresses
+                $disallowedemails = xarModGetVar('roles','disallowedemails');
+                if (!empty($disallowedemails)) {
+                    $disallowedemails = unserialize($disallowedemails);
+                    $disallowedemails = explode("\r\n", $disallowedemails);
+                    if (in_array ($email, $disallowedemails)) {
+                        $invalid['email'] = xarML('That email address is either reserved or not allowed on this website');
                     }
                 }
             }
@@ -241,7 +245,8 @@ function roles_user_register()
                                                                           'values'     => $values,
                                                                           'invalid'    => $invalid,
                                                                           'properties' => $properties,
-                                                                          'createlabel' => xarML('Create Account')));
+                                                                          'createlabel' => xarML('Create Account'),
+                                                                          'userlabel' => xarML('New User')));
             }
 
             // everything seems OK -> go on to the next step
@@ -260,7 +265,7 @@ function roles_user_register()
 
             if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('pass1','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('pass','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
@@ -274,121 +279,168 @@ function roles_user_register()
             }
 
             // Create confirmation code and time registered
-            $confcode = xarSecGenAuthKey();
+            $confcode = xarModAPIFunc('roles',
+                                      'user',
+                                      'makepass');
             $now = time();
+            
+            $requireValidation = xarModGetVar('roles', 'requirevalidation');
+            if ($requireValidation == false) {
+                // Create user and then log them in.  No sense in hesitating when its not required.
+                if (!xarModAPIFunc('roles',
+                                   'admin',
+                                   'create',
+                                    array('uname' => $username,
+                                          'realname' => $realname,
+                                          'email' => $email,
+                                          'pass'  => $pass,
+                                          'date'     => $now,
+                                          'valcode'  => $confcode,
+                                          'state'   => 3))) return;
 
-            // Create user - this will also create the dynamic properties (if any) via the create hook
-            if (!xarModAPIFunc('roles',
-                               'admin',
-                               'create',
-                                array('uname' => $username,
-                                      'realname' => $realname,
-                                      'email' => $email,
-                                      'pass'  => $pass,
-                                      'date'     => $now,
-                                      'valcode'  => $confcode,
-                                      'state'   => 2))) return;
+                // check for user and grab uid if exists
+                $user = xarModAPIFunc('roles',
+                                      'user',
+                                      'get',
+                                       array('uname' => $username));
 
-            // check for user and grab uid if exists
-            $user = xarModAPIFunc('roles',
-                                  'user',
-                                  'get',
-                                   array('uname' => $username));
+                // Check for user creation failure
+                if (empty($user)) return;
 
-            // Check for user creation failure
-            if (empty($user)) return;
+                //Insert the user into the default users role
+                $userRole = xarModGetVar('roles', 'defaultgroup');
 
-            //Insert the user into the default users role
-            $userRole = xarModGetVar('roles', 'defaultgroup');
+                // Get the group id
+                $defaultRole = xarModAPIFunc('roles',
+                                             'user',
+                                             'get',
+                                             array('uname'  => $userRole,
+                                                   'type'   => 1));
 
-            // Get the group id
-            $defaultRole = xarModAPIFunc('roles',
-                                         'user',
-                                         'get',
-                                         array('uname'  => $userRole,
-                                               'type'   => 1));
+                if (empty($defaultRole)) return;
 
-            if (empty($defaultRole)) return;
+                // Make the user a member of the users role
+                if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
+                
+                xarModAPIFunc('roles',
+                              'user',
+                              'login',
+                              array('uname' => $username,
+                                    'pass' => $pass,
+                                    'rememberme' => 0));
+                
+                xarResponseRedirect('index.php');
 
-            // Make the user a member of the users role
-            if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
+            } else {
+                // Create user - this will also create the dynamic properties (if any) via the create hook
+                if (!xarModAPIFunc('roles',
+                                   'admin',
+                                   'create',
+                                    array('uname' => $username,
+                                          'realname' => $realname,
+                                          'email' => $email,
+                                          'pass'  => $pass,
+                                          'date'     => $now,
+                                          'valcode'  => $confcode,
+                                          'state'   => 2))) return;
 
-            // TODO: make sending mail configurable too, depending on the other options ?
-            // Set up confirmation email
-            $confemail = xarModGetVar('roles', 'confirmationemail');
-            $conftitle = xarModGetVar('roles', 'confirmationtitle');
+                // check for user and grab uid if exists
+                $user = xarModAPIFunc('roles',
+                                      'user',
+                                      'get',
+                                       array('uname' => $username));
 
-            $sitename = xarModGetVar('themes', 'SiteName');
-            $siteadmin = xarModGetVar('mail', 'adminname');
+                // Check for user creation failure
+                if (empty($user)) return;
 
-            $confemailsearch = array('/%%link%%/',
-                                     '/%%name%%/',
-                                     '/%%username%%/',
-                                     '/%%ipaddr%%/',
-                                     '/%%sitename%%/',
-                                     '/%%password%%/',
-                                     '/%%siteadmin%%/',
-                                     '/%%valcode%%/');
+                //Insert the user into the default users role
+                $userRole = xarModGetVar('roles', 'defaultgroup');
 
-            $confemailreplace = array(xarModEmailUrl('roles',
-                                                'user',
-                                                'getvalidation',
-                                                array('stage'   => 'getvalidation',
-                                                      'valcode' => $confcode,
-                                                      'uname'   => $user['uname'])),
-                                      "$realname",
-                                      "$username",
-                                      "$ip",
-                                      "$sitename",
-                                      "$pass",
-                                      "$siteadmin",
-                                      "$confcode");
+                // Get the group id
+                $defaultRole = xarModAPIFunc('roles',
+                                             'user',
+                                             'get',
+                                             array('uname'  => $userRole,
+                                                   'type'   => 1));
 
-            // retrieve the dynamic properties (if any) for use in the e-mail too
-            if (xarModIsAvailable('dynamicdata')) {
-                // get the Dynamic Object defined for this module and item id
-                $object =& xarModAPIFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles',
-                                               // we know the item id now...
-                                               'itemid' => $user['uid']));
-                if (isset($object) && !empty($object->objectid)) {
+                if (empty($defaultRole)) return;
 
-                    // retrieve the item itself
-                    $itemid = $object->getItem();
+                // Make the user a member of the users role
+                if(!xarMakeRoleMemberByID($user['uid'], $defaultRole['uid'])) return;
 
-                    if (!empty($itemid) && $itemid == $user['uid']) {
-                        // get the Dynamic Properties of this object
-                        $properties =& $object->getProperties();
-                        foreach (array_keys($properties) as $key) {
-                            // add the property name/value to the search/replace lists
-                            if (isset($properties[$key]->value)) {
-                                $confemailsearch[] = '/%%'.$key . '%%/';
-                                $confemailreplace[] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
+                // TODO: make sending mail configurable too, depending on the other options ?
+                // Set up confirmation email
+                $confemail = xarModGetVar('roles', 'confirmationemail');
+                $conftitle = xarModGetVar('roles', 'confirmationtitle');
+
+                $sitename = xarModGetVar('themes', 'SiteName');
+                $siteadmin = xarModGetVar('mail', 'adminname');
+                $baseurl = xarServerGetBaseURL();
+
+                $confemailsearch = array('/%%link%%/',
+                                         '/%%name%%/',
+                                         '/%%username%%/',
+                                         '/%%ipaddr%%/',
+                                         '/%%sitename%%/',
+                                         '/%%password%%/',
+                                         '/%%siteadmin%%/',
+                                         '/%%valcode%%/');
+
+                $confemailreplace = array("".$baseurl."val.php?v=".$confcode."&u=".$user['uid']."",
+                                          "$realname",
+                                          "$username",
+                                          "$ip",
+                                          "$sitename",
+                                          "$pass",
+                                          "$siteadmin",
+                                          "$confcode");
+
+                // retrieve the dynamic properties (if any) for use in the e-mail too
+                if (xarModIsAvailable('dynamicdata')) {
+                    // get the Dynamic Object defined for this module and item id
+                    $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                                             array('module' => 'roles',
+                                                   // we know the item id now...
+                                                   'itemid' => $user['uid']));
+                    if (isset($object) && !empty($object->objectid)) {
+
+                        // retrieve the item itself
+                        $itemid = $object->getItem();
+
+                        if (!empty($itemid) && $itemid == $user['uid']) {
+                            // get the Dynamic Properties of this object
+                            $properties =& $object->getProperties();
+                            foreach (array_keys($properties) as $key) {
+                                // add the property name/value to the search/replace lists
+                                if (isset($properties[$key]->value)) {
+                                    $confemailsearch[] = '/%%'.$key . '%%/';
+                                    $confemailreplace[] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            $confemail = preg_replace($confemailsearch,
-                                      $confemailreplace,
-                                      $confemail);
+                $confemail = preg_replace($confemailsearch,
+                                          $confemailreplace,
+                                          $confemail);
 
-            $conftitle = preg_replace($confemailsearch,
-                                      $confemailreplace,
-                                      $conftitle);
+                $conftitle = preg_replace($confemailsearch,
+                                          $confemailreplace,
+                                          $conftitle);
 
-            // TODO Make HTML Message.
-            // Send confirmation email
-            if (!xarModAPIFunc('mail',
-                               'admin',
-                               'sendmail',
-                               array('info' => $email,
-                                     'name' => $realname,
-                                     'subject' => $conftitle,
-                                     'message' => $confemail))) return;
+                // TODO Make HTML Message.
+                // Send confirmation email
+                if (!xarModAPIFunc('mail',
+                                   'admin',
+                                   'sendmail',
+                                   array('info' => $email,
+                                         'name' => $realname,
+                                         'subject' => $conftitle,
+                                         'message' => $confemail))) return;
 
-           $data = xarTplModule('roles','user', 'waitingconfirm');
+               $data = xarTplModule('roles','user', 'waitingconfirm');
+                }
 
                 break;
 

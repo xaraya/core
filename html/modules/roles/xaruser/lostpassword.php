@@ -85,24 +85,40 @@ function roles_user_lostpassword()
             if ($userupdate == false) return;
 
             // Send Email
-            $sitename = xarModGetVar('themes', 'SiteName');
-            $adminname = xarModGetVar('mail', 'adminname');
+            $sitename       = xarModGetVar('themes', 'SiteName');
+            $adminname      = xarModGetVar('mail', 'adminname');
+            $subject        = xarModGetVar('roles', 'remindertitle'); 
+            $message        = xarModGetVar('roles', 'reminderemail');
+            $htmlmessage    = xarModGetVar('roles', 'reminderemail');
 
-            $subject = "Replacement login information for $user[name] at $sitename";
+            $search = array('/%%name%%/',
+                            '/%%username%%/',
+                            '/%%password%%/');
 
-            $message = "$user[name],\r\n\n";
-            $message .= "Here is your new password for $sitename. You may now login to ".xarServerGetBaseURL() ." using the following username and password:\n\n";
-            $message .= "username: $user[uname] \n";
-            $message .= "password: $pass \n\n";
-            $message .= "-- $adminname";
+            $replace = array("$user[name]",
+                             "$user[uname]",
+                             "$pass");
+
+            $subject         = preg_replace($search,
+                                            $replace,
+                                            $subject);
+
+            $message         = preg_replace($search,
+                                            $replace,
+                                            $message);
+
+            $htmlmessage     = preg_replace($search,
+                                            $replace,
+                                            $htmlmessage);
 
             if (!xarModAPIFunc('mail',
                                'admin',
                                'sendmail',
-                               array('info' => $user['email'],
-                                     'name' => $user['name'],
-                                     'subject' => $subject,
-                                     'message' => $message))) return;
+                               array('info'         => $user['email'],
+                                     'name'         => $user['name'],
+                                     'subject'      => $subject,
+                                     'message'      => $message,
+                                     'htmlmessage'  => $htmlmessage))) return;
 
             // Let user know that they have an email on the way.
             $data = xarTplModule('roles','user', 'requestpwconfirm');
