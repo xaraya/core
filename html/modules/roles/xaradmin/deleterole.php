@@ -39,10 +39,21 @@ function roles_admin_deleterole()
     } else {
         // Check for authorization code
         if (!xarSecConfirmAuthKey()) return;
-        // Try to remove the role and bail if an error was thrown
-        if (!$role->remove()) {
+        // Check to make sure the user is not active on the site.
+        $check = xarModAPIFunc('roles',
+                              'user',
+                              'getactive',
+                              array('uid' => $uid));
+
+        if (empty($check)) {
+            // Try to remove the role and bail if an error was thrown
+            if (!$role->remove()) return;
+        } else {
+            $msg = xarML('That user has a current active session', 'roles');
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
+
         // redirect to the next page
         xarResponseRedirect(xarModURL('roles', 'admin', 'viewroles'));
     }
