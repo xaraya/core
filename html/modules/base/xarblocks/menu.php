@@ -120,6 +120,7 @@ function base_menublock_display($blockinfo)
         // FIXME: make sure we don't generate content lines with missing pieces elsewhere
             $parts = explode('|', $contentline);
             $url = $parts[0];
+            $here = ($url == $currenturl) ? 'true' : '';
             if (!empty($url)){
                 switch ($url[0])
                 {
@@ -129,18 +130,52 @@ function base_menublock_display($blockinfo)
                         $url = explode(':', substr($url, 1,  - 1));
                         if (empty($url[1])) $url[1]="user";
                         if (empty($url[2])) $url[2]="main";
+                        // if the current module is active, then we are here 
+                        if ($url[0] == $thismodname) {
+                            $here = 'true';
+                        }
                         $url = xarModUrl($url[0],$url[1],$url[2]);
                         break;
                     }
                     case '{': // article link
                     {
                         $url = explode(':', substr($url, 1,  - 1));
+                        // Get current pubtype type (if any)
+                        if (xarVarIsCached('Blocks.articles', 'ptid')) {
+                            $ptid = xarVarGetCached('Blocks.articles', 'ptid');
+                        }
+                        if (empty($ptid)) {
+                            // try to get ptid from input
+                            xarVarFetch('ptid', 'isset', $ptid, NULL, XARVAR_DONT_SET);
+                        }
+                        // if the current pubtype is active, then we are here
+                        if ($url[0] == $ptid) {
+                            $here = 'true';
+                        }
                         $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
                         break;
                     }
                     case '(': // category link
                     {
                         $url = explode(':', substr($url, 1,  - 1));
+                        if (xarVarIsCached('Blocks.categories','catid')) {
+                            $catid = xarVarGetCached('Blocks.categories','catid');
+                        }
+                        if (empty($catid)) {
+                            // try to get catid from input
+                            xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET);
+                        }
+                        $ancestors = xarModAPIFunc('categories','user','getancestors',
+                                                  array('cid' => $catid,
+                                                        'return_itself' => true));
+                        if (!empty($ancestors)) {
+                            foreach ($ancestors as $ancestor) {
+                                // if we are on or below this category, then we are here
+                                if (in_array($url[0], $ancestor)) {
+                                    $here = 'true';
+                                }
+                            }
+                        }
                         $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
                     }
@@ -149,6 +184,7 @@ function base_menublock_display($blockinfo)
             $title = $parts[1];
             $comment = $parts[2];
             $child = isset($parts[3]) ? $parts[3] : '';
+            
             // Security Check
             //FIX: Should contain a check for the particular menu item
             //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
@@ -156,7 +192,7 @@ function base_menublock_display($blockinfo)
                 $title = xarVarPrepForDisplay($title);
                 $comment = xarVarPrepForDisplay($comment);
                 $child = xarVarPrepForDisplay($child);
-                $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $currenturl);
+                $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $here);
             }
         }
     } else {
