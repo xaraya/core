@@ -1419,12 +1419,16 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         switch ($dnType) {
         case XARMLS_DNTYPE_MODULE:
             $this->spacedir = "modules";
+            break;
         case XARMLS_DNTYPE_THEME:
             $this->spacedir = "themes";
+            break;
         case XARMLS_DNTYPE_CORE:
             $this->spacedir = "core";
+            break;
         default:
             $this->spacedir = NULL;
+            break;
         }
 
         foreach ($this->locales as $locale) {
