@@ -19,7 +19,7 @@
  */
 function users_init()
 {
-    // Get datbase setup
+    // Get database setup
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
     
@@ -181,7 +181,10 @@ function users_activate()
     // Set up an initial value for module variables.
     xarModSetVar('users', 'usersperpage', 20);
     xarModSetVar('users', 'showtacs', 0);
-    xarModSetVar('users', 'tacs', 0);
+    $disallowednames = array('root', 'admin');
+    xarModSetVar('users', 'disallowednames', $disallowednames);
+    $disallowedemails = array('@cnn.com', '@whitehouse.gov');
+    xarModSetVar('users', 'disallowedemails', $disallowedemails);
 
     // Register blocks
     xarBlockTypeRegister('users', 'login');
@@ -241,6 +244,8 @@ function users_delete()
     xarModDelVar('users', 'tacs');
     xarModDelVar('users', 'showtacs');
     xarModDelVar('users', 'usersperpage');
+    xarModDelVar('users', 'disallowednames');
+    xarModDelVar('users', 'disallowedemails');
 
     // Deletion successful
     return true;

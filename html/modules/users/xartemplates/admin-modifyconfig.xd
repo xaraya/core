@@ -138,12 +138,28 @@
 							</xar:if>
 						</td>
 					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Disallowed user names</xar:mlstring>
+						</td>
+						<td>
+						        <textarea name="disallowednames" id="disallowednames" tabindex="3" />#xarModGetVar('users','disallowednames')#</textarea> 
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<xar:mlstring>Disallowed email addresses</xar:mlstring>
+						</td>
+						<td>
+						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" />#xarModGetVar('users','disallowedemails')#</textarea> 
+						</td>
+					</tr>
 				</table>
 			</td>
 		</tr>
 	</table>
 	<br /><br />
-	<input type="submit" value="<xar:mlstring>Update Users Configuration</xar:mlstring>" align="middle" tabindex="3" />
+	<input type="submit" value="<xar:mlstring>Update Users Configuration</xar:mlstring>" align="middle" tabindex="5" />
 </form>
 </center>
         
