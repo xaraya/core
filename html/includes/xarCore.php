@@ -59,6 +59,9 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
  * dependancies will be automatically resolved
  */
+ 
+//TODO: <besfred> rethink runlevels and make them independant from one another
+
 define('XARCORE_SYSTEM_NONE', 0);
 define('XARCORE_SYSTEM_ADODB', 1);
 define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_ADODB);
@@ -159,16 +162,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
     xarException_init($systemArgs, $whatToLoad);
 
-    // Start Logging Facilities
-    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
-                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
-                        'level' => xarCore_getSiteVar('Log.LogLevel'));
-    xarLog_init($systemArgs, $whatToLoad);
-
-    // Start Event Messaging System
-    $systemArgs = array('loadLevel' => $whatToLoad);
-    xarEvt_init($systemArgs, $whatToLoad);
-
+    // Start Database Connection Handling System
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
         include_once 'includes/xarDB.php';
@@ -192,17 +186,22 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_ADODB;
     }
 
+    // Start Event Messaging System
+    $systemArgs = array('loadLevel' => $whatToLoad);
+    xarEvt_init($systemArgs, $whatToLoad);
 
-    // Start Variables utilities
-    // FIXME: <marco> No more sure of this!
-    /*
-    $systemArgs = array('allowableHTML' => xarCore_getSiteVar('Var.AllowableHTML'),
-                        'fixHTMLEntities' => xarCore_getSiteVar('Var.FixHTMLEntities'),
-                        'enableCensoringWords' => xarCore_getSiteVar('Var.EnableCensoringWords'),
-                        'censoredWords' => xarCore_getSiteVar('Var.CensoredWords'),
-                        'censoredWordsReplacers' => xarCore_getSiteVar('Var.CensoredWordsReplacers'));
-    */
-    //xarVar_init($systemArgs, $whatToLoad);
+	// Start Configuration System
+    if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
+        // {ML_dont_parse 'includes/xarConfig.php'}
+        include_once 'includes/xarConfig.php';
+
+        // Start Configuration Unit
+        $systemArgs = array();
+        xarConfig_init($systemArgs, $whatToLoad);
+
+        xarVar_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
+    }
 
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
@@ -212,6 +211,26 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
+    // Start BlockLayout Template Engine
+    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
+                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
+                        'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
+    xarTpl_init($systemArgs, $whatToLoad);
+
+    // Start Multi Language System
+    $systemArgs = array('translationsBackend' => xarCore_getSiteVar('MLS.TranslationsBackend'),
+                        'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
+                        'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
+                        'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
+    xarMLS_init($systemArgs, $whatToLoad);
+
+    // Start Logging Facilities
+    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
+                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
+                        'level' => xarCore_getSiteVar('Log.LogLevel'));
+    xarLog_init($systemArgs, $whatToLoad);
+
+	// Start Sessions Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/xarSession2.php'}
         // FIXME: LOOK AT xarSession2 code it has a catch22 situation!!
@@ -230,25 +249,29 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 
-    // Start Multi Language System
-    $systemArgs = array('translationsBackend' => xarCore_getSiteVar('MLS.TranslationsBackend'),
-                        'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
-                        'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
-                        'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
-    xarMLS_init($systemArgs, $whatToLoad);
+    // Start Variables utilities
+    // FIXME: <marco> No more sure of this!
+    /*
+    $systemArgs = array('allowableHTML' => xarCore_getSiteVar('Var.AllowableHTML'),
+                        'fixHTMLEntities' => xarCore_getSiteVar('Var.FixHTMLEntities'),
+                        'enableCensoringWords' => xarCore_getSiteVar('Var.EnableCensoringWords'),
+                        'censoredWords' => xarCore_getSiteVar('Var.CensoredWords'),
+                        'censoredWordsReplacers' => xarCore_getSiteVar('Var.CensoredWordsReplacers'));
+    */
+    //xarVar_init($systemArgs, $whatToLoad);
 
-    if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
-        // {ML_dont_parse 'includes/xarConfig.php'}
-        include_once 'includes/xarConfig.php';
+	// Start Blocks Subsystem
+    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
+        // {ML_dont_parse 'includes/xarBlocks.php'}
+        include_once 'includes/xarBlocks.php';
 
-        // Start Configuration Unit
+        // Start Blocks Support Sytem
         $systemArgs = array();
-        xarConfig_init($systemArgs, $whatToLoad);
-
-        xarVar_init($systemArgs, $whatToLoad);
-        $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
+        xarBlock_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 
+	// Start Modules Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         // {ML_dont_parse 'includes/xarMod.php'}
         include_once 'includes/xarMod.php';
@@ -263,12 +286,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     }
 
-    // Start BlockLayout Template Engine
-    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
-                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
-                        'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
-    xarTpl_init($systemArgs, $whatToLoad);
-
 // TODO (marcinmilan): review what pasts of the old user system need to be retained
 		if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
@@ -280,16 +297,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_USER;
-    }
-
-    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
-        // {ML_dont_parse 'includes/xarBlocks.php'}
-        include_once 'includes/xarBlocks.php';
-
-        // Start Blocks Support Sytem
-        $systemArgs = array();
-        xarBlock_init($systemArgs, $whatToLoad);
-        $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 
     // Make the current load level == the new load level

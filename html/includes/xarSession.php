@@ -28,6 +28,9 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     xarDB_importTables($tables);
 
+    // Register the SessionCreate event
+    xarEvt_registerEvent('SessionCreate');
+
     xarSession__setup($args);
 
     if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
@@ -373,6 +376,9 @@ function xarSession__new($sessionId, $ipAddress)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Congratulations. We have created a new session
+    xarEvt_trigger('SessionCreate');
+    
     return true;
 }
 
