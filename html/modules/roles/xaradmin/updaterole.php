@@ -25,9 +25,15 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('ptype', 'int', $ptype)) return;
 
+    //Save the old state and type
+    $roles = new xarRoles();
+    $oldrole = $roles->getRole($uid);
+    $oldstate = $oldrole->getState();
+    $oldtype = $oldrole->getType();
+
     // groups dont have pw etc., and can only be active
     if ($ptype == 1) {
-        $puname = "";
+        $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
         $pstate = 3;
@@ -77,11 +83,6 @@ function roles_admin_updaterole()
             return;
         }
     }
-    //Save the old state and type
-    $roles = new xarRoles();
-    $oldrole = $roles->getRole($uid);
-    $oldstate = $oldrole->getState();
-    $oldtype = $oldrole->getType();
 
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
