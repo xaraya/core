@@ -172,7 +172,7 @@ class xarTpl__CodeGenerator
                 if ($child->isAssignable() && !(/*$checkNode->needAssignment() ||*/ $checkNode->needParameter())) {
                     //xarLogVariable('checkNode', $checkNode, XARLOG_LEVEL_ERROR);
                     //xarLogMessage('here', XARLOG_LEVEL_ERROR);
-                    $code .= ";\n";
+                    $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
                         //xarLogMessage('exception control 1', XARLOG_LEVEL_ERROR);
                         $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;\n";
@@ -1757,7 +1757,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 
         $output = '$_bl_loop_index'.$loopCounter."++;\n";
         $output .= '$_bl_loop_number'.$loopCounter."++;\n";
-        $output .= "}\n";
+        $output .= "} ";
         return $output;
     }
 
@@ -1814,12 +1814,12 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             return;
         }
 
-        return "if (xarSecAuthAction($realm, '$component', '$instance', ACCESS_$level)) {\n";
+        return "if (xarSecAuthAction($realm, '$component', '$instance', ACCESS_$level)) { ";
     }
 
     function renderEndTag()
     {
-        return "}\n";
+        return "} ";
     }
 
     function hasChildren()
@@ -1902,12 +1902,12 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
             return; // throw back
         }
 
-        return "if ($condition) {\n";
+        return "if ($condition) { ";
     }
 
     function renderEndTag()
     {
-        return "}\n";
+        return "} ";
     }
 
     function hasChildren()
@@ -1943,7 +1943,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
             return; // throw back
         }
         
-        return "} elseif ($condition) {\n";
+        return "} elseif ($condition) { ";
     }
 
     function isAssignable()
@@ -1959,7 +1959,7 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
         switch ($this->parentTagName) {
             case 'if':
             case 'sec':
-                $output = "} else {\n";
+                $output = "} else { ";
                 break;
             case 'ternary':
                 $output = " : ";
@@ -2000,12 +2000,12 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
             return; // throw back
         }
         
-        return "while ($condition) {\n";
+        return "while ($condition) { ";
     }
 
     function renderEndTag()
     {
-        return "}\n";
+        return "} ";
     }
 
     function hasChildren()
@@ -2061,12 +2061,12 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
             return; // throw back
         }
         
-        return "for ($start; $test; $iter) {\n";
+        return "for ($start; $test; $iter) { ";
     }
 
     function renderEndTag()
     {
-        return "}\n";
+        return "} ";
     }
 
     function hasChildren()
@@ -2497,7 +2497,7 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
 
         foreach ($directories as $directory) {
             if (file_exists($directory . '/' . $file)) {
-                return "include ('$directory/$file');\n";
+                return "include ('$directory/$file'); ";
             }
         }
 
@@ -2547,7 +2547,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         //foreach ($directories as $directory) {
         //    if (file_exists($directory . '/' . $file)) {
                 $directory = $directories[0];
-                return "xarTplFile(\"$directory/$file.xd\", \$_bl_data)\n";
+                return "xarTplFile(\"$directory/$file.xd\", \$_bl_data) ";
         //    }
         //}
 
@@ -2580,6 +2580,16 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         }
 
         return $name.'='.$value;
+    }
+
+    function isAssignable()
+    {
+        return false;
+    }
+
+    function isPHPCode()
+    {
+        return true;
     }
 }
 
@@ -2753,7 +2763,7 @@ class xarTpl__WidgetModlink extends xarTpl__TplWidgetNode
 
         $output = "\$_bl_tplData = array('url' => xarModURL($modName, $modType, $funcName, " . $this->dumpArray($args) . "),".
                                         "'label' => '" . addslashes($label) . "',".
-                                        "'attributes' => '');\n";
+                                        "'attributes' => ''); ";
         $output .= "echo xarTpl_renderWidget('modlink', \$_bl_tplData);";
         //$output = "echo xarTpl_renderWidget('modlink', array());";
         return $output;
