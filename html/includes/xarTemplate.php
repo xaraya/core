@@ -982,7 +982,6 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             //   fwrite($fd, $entry);
             //   fclose($fd);
             //} 
-        }
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
