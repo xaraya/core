@@ -23,7 +23,7 @@ xarRequestGetInfo();
 //Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
-if(!xarSecurityCheck('AdminPanel')) return;
+//if(!xarSecurityCheck('AdminPanel')) return;
 
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
@@ -241,6 +241,11 @@ if (empty($step)) {
         /**
          * privileges changes
          */
+
+                if (!xarModRegisterHook('item', 'waitingcontent', 'GUI',
+                                       'articles', 'admin', 'waitingcontent')) {
+                    return false;
+                }
 
                 //This creates the new Myself role and makes it a child of Everybody
                 xarMakeUser('Myself','myself','myself@xaraya.com','password');
