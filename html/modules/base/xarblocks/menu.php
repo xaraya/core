@@ -125,6 +125,12 @@ function base_menublock_display($blockinfo)
                                 $url = 'index.php?module='.$url[0];
                                 break;
                             }
+                            case '{': // module link
+                            {
+                                $url = explode(':', substr($url, 1,  - 1));
+                                $url = "index.php?module=articles&amp;function=view&amp;ptid='.$url[0];
+                                break;
+                            }
                         }
                         $title = $parts[1];
                         $comment = $parts[2];
