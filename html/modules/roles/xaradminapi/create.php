@@ -68,6 +68,9 @@ function roles_adminapi_create($args)
         $cryptpass=md5($pass);
     }
 
+    // Put registratation date in timestamp format
+    $date_reg = $dbconn->DBTimeStamp($date);
+
     $query = "INSERT INTO $rolestable (
               xar_uid,
               xar_uname,
@@ -87,7 +90,7 @@ function roles_adminapi_create($args)
               0,
               '" . xarVarPrepForStore($cryptpass) . "',
               '" . xarvarPrepForStore($email) . "',
-              '" . xarVarPrepForStore($date) . "',
+              '" . xarvarPrepForStore($date_reg) . "',
               '" . xarVarPrepForStore($valcode) . "',
               '" . xarVarPrepForStore($state) . "',
               '" . xarVarPrepForStore($authmodule) . "')";

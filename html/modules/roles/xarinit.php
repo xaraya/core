@@ -41,7 +41,7 @@ function roles_init()
      *    xar_uname varchar(100) NOT NULL default '',
      *    xar_email varchar(100) NOT NULL default '',
      *    xar_pass varchar(100) NOT NULL default '',
-     *    xar_date_reg( varchar25) NOT NULL default '',
+     *    xar_date_reg datetime NOT NULL default '0000-00-00 00:00:00',
      *    xar_valcode varchar(35) NOT NULL default '',
      *    xar_state int(3) NOT NULL default '0',
      *    xar_auth_module varchar(100) NOT NULL default '',

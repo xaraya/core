@@ -705,28 +705,32 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
 
         case 'datetime':
             $this_field['type'] = "DATETIME";
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'].
                                          ' '.$datetime_defaults['hour'].
                                          ':'.$datetime_defaults['minute'].
                                          ':'.$datetime_defaults['second'];
+                }
             }
             break;
 
         case 'date':
             $this_field['type'] = "DATE";
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17)
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'];
+                }
             }
             break;
 
@@ -979,36 +983,83 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
         case 'timestamp':
         case 'datetime':
-            $this_field['type'] = 'TIMESTAMP WITH TIME ZONE';
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
+            // Note - after PostgreSQL 7.3, writing just timestamp is
+            // equivalent to 'timestamp without time zone'
+            $this_field['type'] = 'TIMESTAMP';
+
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                $invalidDate = false;
+
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'].
                                          ' '.$datetime_defaults['hour'].
                                          ':'.$datetime_defaults['minute'].
                                          ':'.$datetime_defaults['second'];
-                if (isset($datetime_defaults['timezone'])) {  // optional parm
-                    // FIXME: <marco> Gary, are you sure of this assigment?
-                    $parameters['default'] = $datetime_defaults['timezone'];
+
+                    // Check if optional timezone parm and add after type
+                    if (isset($datetime_defaults['timezone'])) {
+                        $this_field['type'] .= " WITH TIME ZONE";
+                    }
+                } else {
+                    // PostgreSQL doesn't allow a default value of 
+                    // '00-00-00 00:00:00 as this it is not a valid timestamp
+                    if ($parameters['default'] == '0000-00-00 00:00:00' ||
+                        $parameters['default'] == '00-00-00 00:00:00') {
+                        // Set to current timestamp
+                        $parameters['default'] = 'CURRENT_TIMESTAMP';
+                        $invalidDate = true;
+                    }
                 }
-            // only for timestamps - default them to the current time
-            } elseif ($parameters['type'] == 'timestamp') {
+
+                if (!$invalidDate) {
+                    // Timestamp literal value must be placed in quotes
+                    $parameters['default'] = "'" . $parameters['default'] . "'";
+                }
+
+            } else {
+                // Set to current timestamp
                 $parameters['default'] = 'CURRENT_TIMESTAMP';
             }
+
             break;
 
         case 'date':
             $this_field['type'] = "DATE";
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17)
+
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                $invalidDate = false;
+
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'];
+                } else {
+                    // PostgreSQL doesn't allow a default value of
+                    // '00-00-00 as this it is not a valid date
+                    if ($parameters['default'] == '0000-00-00' ||
+                        $parameters['default'] == '00-00-00') {
+                        // Change to current date
+                        $parameters['default'] = 'CURRENT_DATE';
+                        $invalidDate = true;
+                    }
+                }
+
+                if (!$invalidDate) {
+                    // Timestamp literal value must be placed in quotes
+                    $parameters['default'] = "'" . $parameters['default'] . "'";
+                }
+
+            } else {
+                // Set to current date
+                $parameters['default'] = 'CURRENT_DATE';
             }
             break;
 
@@ -1164,36 +1215,77 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
 
         case 'timestamp':
         case 'datetime':
-            $this_field[] = 'TIMESTAMP WITH TIME ZONE';
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
+            $this_field[] = 'TIMESTAMP';
+
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                $invalidDate = false;
+
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'].
                                          ' '.$datetime_defaults['hour'].
                                          ':'.$datetime_defaults['minute'].
                                          ':'.$datetime_defaults['second'];
-                if (isset($datetime_defaults['timezone'])) {  // optional parm
-                    // FIXME: <marco> Gary, are you sure of this assigment?
-                    $parameters['default'] = $datetime_defaults['timezone'];
+
+                } else {
+                    // Oracle doesn't allow a default value of
+                    // '00-00-00 00:00:00 as this it is not a valid timestamp
+                    if ($parameters['default'] == '0000-00-00 00:00:00' ||
+                        $parameters['default'] == '00-00-00 00:00:00') {
+                        // Change to current timestamp
+                        $parameters['default'] = 'NOW()';
+                        $invalidDate = true;
+                    }
                 }
-            // only for timestamps - default them to the current time
-            } elseif ($parameters['type'] == 'timestamp') {
-                $parameters['default'] = 'CURRENT_TIMESTAMP';
+
+                if (!$invalidDate) {
+                    // Timestamp literal value must be placed in quotes
+                    $parameters['default'] = "'" . $parameters['default'] . "'";
+                }
+
+            } else {
+                // Default timestamp to the current time
+                $parameters['default'] = 'NOW()';
             }
             break;
 
         case 'date':
             $this_field[] = "DATE";
-            // convert parameter array back to string for datetime
-            // array('year'=>2002,'month'=>04,'day'=>17)
+
             if (isset($parameters['default'])) {
-                $datetime_defaults = $parameters['default'];
-                $parameters['default'] = $datetime_defaults['year'].
+                $invalidDate = false;
+
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
                                          '-'.$datetime_defaults['month'].
                                          '-'.$datetime_defaults['day'];
+                } else {
+                    // Oracle doesn't allow a default value of
+                    // '00-00-00' as this it is not a valid date
+                    // Optionally, a date may have a time value in Oracle
+                    if (stristr('0000-00-00', $parameters['default']) ||
+                        stristr('00-00-00', $parameters['default'])) {
+                        // Default date to the current time
+                        $parameters['default'] = ' NOW()';
+                        $invalidDate = true;
+                    }
+                }
+
+                if (!$invalidDate) {
+                    // Timestamp literal value must be placed in quotes
+                    $parameters['default'] = "'" . $parameters['default'] . "'";
+                }
+
+            } else {
+                // Default date to the current time
+                $parameters['default'] = ' NOW()';
             }
             break;
 
