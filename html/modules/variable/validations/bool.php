@@ -4,17 +4,16 @@
 /**
  * Boolean Validation Function
  */
-function variable_validations_bool ($subject, $parameters, &$convValue) {
-    
+function variable_validations_bool (&$subject, $parameters=null) {
+
     if ($subject == 'true') {
         $subject = true;
     } elseif ($subject == 'false') {
         $subject = false;
-    } else { // Is this possible??
+    } else {
         return false;
     }
-    
-    $convValue = $subject;
+
     return true;
 }
 
