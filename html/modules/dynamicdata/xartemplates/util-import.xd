@@ -22,7 +22,7 @@
     <p>
         #$warning# 
     </p>
-    <form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','import')#">
+    <form class="dd-modifyprop-form" method="post" action="&xar-modurl-dynamicdata-util-import;">
         <fieldset>
             <table class="xar-accent">
                 <tr>

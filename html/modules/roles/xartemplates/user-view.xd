@@ -16,19 +16,19 @@
                 : 
             </dt>
             <dd>
-                <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => '', 'order' => $order))#">
+                <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
                     <xar:mlstring>All</xar:mlstring>
                 </a>
             </dd>
             <xar:foreach in="$alphabet" value="$ltr">
                 <dd>
-                    <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => $ltr, 'order' => $order))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
                         #$ltr#
                     </a>
                 </dd>
             </xar:foreach>
             <dd>
-                <a href="#xarModURL('roles','user','view',array('phase' => $phase, 'letter' => 'Other', 'order' => $order))#">
+                <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
                     <xar:mlstring>Other</xar:mlstring>
                 </a>
             </dd>
@@ -42,12 +42,12 @@
                     : 
                 </dt>
                 <dd>
-                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => 'viewall', 'letter' => $letter, 'search' => $search, 'order' => $order))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
                         <xar:mlstring>All</xar:mlstring>
                     </a>
                 </dd>
                 <dd>
-                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => 'active', 'letter' => $letter, 'search' => $search, 'order' => $order))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
                         <xar:mlstring>Online</xar:mlstring>
                     </a>
                 </dd>
@@ -64,18 +64,18 @@
             <tr>
             <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
                 <th style="width: 30%;" align="left">
-                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'name'))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </a>
                 </th>
                 <th style="width: 40%;">
-                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'uname'))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
                         <xar:mlstring>IP Address</xar:mlstring>
                     </a>
                 </th>
             <xar:else />
                 <th style="width: 70%;" align="left">
-                    <a href="#xarModURL('roles', 'user', 'view',array('phase' => $phase, 'letter' => '', 'search' => $search, 'order' => 'name'))#">
+                    <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </a>
                 </th>
@@ -102,7 +102,7 @@
                 <tr class="#$item_class#">
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                     <td>
-                        <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                        <a href="&xar-modurl-roles-user-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                     </td>
                     <td style="text-align: center;">
                         <!-- TODO: add link to working whois service -->
@@ -111,7 +111,7 @@
                     <xar:else />
                     <td>
                         <xar:if condition="xarUserIsLoggedIn()">
-                            <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                            <a href="&xar-modurl-roles-user-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                         <xar:else />
                             #xarVarPrepForDisplay($loop:item['name'])#
                         </xar:if>
@@ -146,7 +146,7 @@
 
         <div>
             <p>
-            <form method="post" action="#xarModURL('roles', 'user', 'view')#">
+            <form method="post" action="&xar-modurl-roles-user-view;">
                 <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
                 <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
                 <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />

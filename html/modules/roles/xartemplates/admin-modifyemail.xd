@@ -8,7 +8,7 @@
         <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
     </div>
     <h2>
-        <a href="#xarModURL('roles', 'admin', 'createmail')#">
+        <a href="&xar-modurl-roles-admin-createmail;">
             <xar:mlstring>Messaging system</xar:mlstring>
         </a>&nbsp;&gt;&nbsp;
         <xar:mlstring>Modify notification template</xar:mlstring>
@@ -25,17 +25,17 @@
                     : 
                 </dt>
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'createmail')#">
+                    <a href="&xar-modurl-roles-admin-createmail;">
                         <xar:mlstring>Send mail</xar:mlstring>
                     </a>
                 </dd>
                 <dd class="active">
-                    <a href="#xarModURL('roles', 'admin', 'modifyemail')#">
+                    <a href="&xar-modurl-roles-admin-modifyemail;">
                         <xar:mlstring>Templates</xar:mlstring>
                     </a>
                 </dd>
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'modifynotice')#">
+                    <a href="&xar-modurl-roles-admin-modifynotice;">
                         <xar:mlstring>Configure</xar:mlstring>
                     </a>
                 </dd>
@@ -47,7 +47,7 @@
         <div style="float:left;width:100%"> 
             <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
             <div style="clear: both; padding-top: 10px;">
-                <form method="post" action="#xarModUrl('roles', 'admin', 'modifyemail')#">
+                <form method="post" action="&xar-modurl-roles-admin-modifyemail;">
                     <span style="float: left; width: 20%; text-align: right;">
                         <span class="help" title="#xarML('Select the template to edit')#">
                             <label for="subject"><xar:mlstring>Template</xar:mlstring></label>:
@@ -89,7 +89,7 @@
                 </form>
             </div>    
             
-            <form action="#xarModURL('roles', 'admin', 'modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="&xar-modurl-roles-admin-modifyemail;" method="post" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="update" />
                 <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />

@@ -31,7 +31,7 @@
     <xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
         <br />
         <xar:if condition="$tab eq 'realms'">
-            <form method="post" action="#xarModURL('privileges', 'admin', 'modifyconfig')#" enctype="application/x-www-form-urlencoded" >
+            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="update" />
                 <input type="hidden" name="tab" id="tab" value="#$tab#" />

@@ -1,5 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="compare">xarServerGetCurrentURL()</xar:set>
+<!-- Next line cannot be replaced with entities yet -->
 <xar:set name="current">xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'))</xar:set>
 <xar:if condition="$compare eq $current">
     <dd class="active">
@@ -11,7 +12,7 @@
     </dd>    
 <xar:else />
     <dd>
-        <a href="#xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'))#">
+        <a href="&xar-modurl-roles-user-account;&amp;moduleload=roles">
             <xar:mlstring>
                 Edit Profile
             </xar:mlstring>

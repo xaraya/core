@@ -17,7 +17,7 @@
             #$modscount#
         </span>
     </h2>
-    <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="#xarModUrl('themes', 'admin', 'settings')#">
+    <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="&xar-modurl-themes-admin-settings;">
             <xar:comment> Theme List Sort and Filter Controls table </xar:comment>
             <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
               <tr>

@@ -24,7 +24,7 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="4">
             <tr>
                 <td align="left" width="33%">
-                    <a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#">
+                    <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
                         <xar:mlstring>
                             Modify Object Definition 
                         </xar:mlstring>
@@ -32,6 +32,10 @@
                 </td>
                 <td align="center">
                 <xar:if condition="!empty($fields)">
+                    <!-- 
+                        This set generate a string for the javascript below, which expects a non XML url, still the array notation make the tpl not well formed
+                        solution: make the javascript go elsewhere or play with CDATA sections (later though)
+                    -->
                     <xar:set name="urlform">#xarModURL('dynamicdata','admin','form',array('objectid' => $objectid, 'theme' => 'print'),false)#</xar:set>
 <script type="text/javascript">
 function xar_dynamicdata_formpreview()
@@ -51,7 +55,7 @@ function xar_dynamicdata_formpreview()
                 </xar:if>
                 </td>
                 <td align="right">
-                    <a href="#xarModURL('dynamicdata','util','export',array('modid' => $modid, 'itemtype' => $itemtype))#">
+                    <a href="&xar-modurl-dynamicdata-util&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
                         <xar:mlstring>
                             Export Object Definition to XML 
                         </xar:mlstring>
@@ -93,7 +97,7 @@ function xar_dynamicdata_formpreview()
                             #$labels['id']# 
                         </strong>
                         : 
-                        <a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#" title="#xarVarPrepForDisplay($otherfields)#">
+                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($otherfields)#">
                             #$field['id']# 
                         </a>
                         <strong>
@@ -125,7 +129,7 @@ function xar_dynamicdata_formpreview()
                     </label>
                     <label>
                         <strong>
-                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid' => $field['id']))#" title="#xarVarPrepForDisplay($editvalidation)#">
+                            <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editvalidation)#">
                             #$labels['validation']# 
                             </a>
                         </strong>

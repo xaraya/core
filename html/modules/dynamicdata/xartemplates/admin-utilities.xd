@@ -29,7 +29,7 @@
             </dt>
             <xar:if condition="$option eq 'query'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query">
                         <xar:mlstring>
                             Query 
                         </xar:mlstring>
@@ -37,7 +37,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'query'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query">
                         <xar:mlstring>
                             Query 
                         </xar:mlstring>
@@ -46,7 +46,7 @@
             </xar:if>
             <xar:if condition="$option eq 'import'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import">
                         <xar:mlstring>
                             Import 
                         </xar:mlstring>
@@ -54,7 +54,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'import'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import">
                         <xar:mlstring>
                             Import 
                         </xar:mlstring>
@@ -63,7 +63,7 @@
             </xar:if>
             <xar:if condition="$option eq 'export'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export">
                         <xar:mlstring>
                             Export 
                         </xar:mlstring>
@@ -71,7 +71,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'export'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export">
                         <xar:mlstring>
                             Export 
                         </xar:mlstring>
@@ -80,7 +80,7 @@
             </xar:if>
             <xar:if condition="$option eq 'static'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">
                         <xar:mlstring>
                             Table Definition 
                         </xar:mlstring>
@@ -88,7 +88,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'static'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">
                         <xar:mlstring>
                             Table Definition 
                         </xar:mlstring>
@@ -97,7 +97,7 @@
             </xar:if>
             <xar:if condition="$option eq 'relations'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations">
                         <xar:mlstring>
                             Relationships 
                         </xar:mlstring>
@@ -105,7 +105,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'relations'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations">
                         <xar:mlstring>
                             Relationships 
                         </xar:mlstring>
@@ -114,7 +114,7 @@
             </xar:if>
             <xar:if condition="$option eq 'meta'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta">
                         <xar:mlstring>
                             Meta Definitions 
                         </xar:mlstring>
@@ -122,7 +122,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'meta'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta">
                         <xar:mlstring>
                             Meta Definitions 
                         </xar:mlstring>
@@ -131,7 +131,7 @@
             </xar:if>
             <xar:if condition="$option eq 'migrate'">
                 <dd class="active">
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'migrate'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate">
                         <xar:mlstring>
                             Migrate Items 
                         </xar:mlstring>
@@ -139,7 +139,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="#xarModURL('dynamicdata', 'admin', 'utilities', array('q' => 'migrate'))#">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate">
                         <xar:mlstring>
                             Migrate Items 
                         </xar:mlstring>

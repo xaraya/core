@@ -8,7 +8,7 @@
 </xar:if>
 
 <div class="xar-fullwidth" style="margin: auto;">
-    <form action="#xarModURL('roles', 'user', 'usermenu')#" method="post" id="post" name="post" enctype="#$enc_type#">
+    <form action="&xar-modurl-roles-user-usermenu;" method="post" id="post" name="post" enctype="#$enc_type#">
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />    
             <input type="hidden" name="uid" id="uid" value="#$uid#" />

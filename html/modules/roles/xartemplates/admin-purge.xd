@@ -24,23 +24,23 @@
             </dt>
             <xar:if condition="$operation eq 'recall'">
                 <dd class="active">
-                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#">
+                    <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall">
                         <xar:mlstring>Recall Groups and Users</xar:mlstring>
                     </a>
                 </dd>
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#" >
+                    <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" >
                         <xar:mlstring>Purge Users</xar:mlstring>
                     </a>
                 </dd>
             <xar:else />
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'recall'))#">
+                    <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall">
                         <xar:mlstring>Recall Groups and Users</xar:mlstring>
                     </a>
                 </dd>
                 <dd class="active">
-                    <a href="#xarModURL('roles', 'admin', 'purge', array('operation' => 'purge'))#">
+                    <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge">
                         <xar:mlstring>Purge Users</xar:mlstring>
                     </a>
                 </dd>
@@ -51,7 +51,7 @@
     <div class="xar-mod-body"><h2><xar:mlstring>Recall Deleted Groups and Users</xar:mlstring></h2>
         <br />
         <div style="margin: auto; width: 100%;">
-        <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" enctype="application/x-www-form-urlencoded" >
+        <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" >
            <div>
                <input type="hidden" name="authid" id="authid" value="#$authid#" />
                <input type="hidden" name="operation" id="operation" value="recall" />
@@ -209,7 +209,7 @@
     <h2><xar:mlstring>Purge Users</xar:mlstring></h2>
     <br />
     <div style="margin: auto; width: 100%;">
-    <form method="post" action="#xarModURL('roles', 'admin', 'purge')#" enctype="application/x-www-form-urlencoded" name="purge">
+    <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" name="purge">
 
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />

@@ -27,7 +27,7 @@
             </span>
         </div>
         <div style="clear: both; padding-top: 10px;">
-        <form method="post" action="#xarModUrl('mail', 'admin', 'template')#">
+        <form method="post" action="&xar-modurl-mail-admin-template;">
                     <span style="float: left; width: 20%; text-align: right;">
                         <span class="help" title="#xarML('Select the template to edit')#">
                             <label for="mailtype"><xar:mlstring>Template</xar:mlstring></label>:
@@ -60,7 +60,7 @@
               </span>
          </form>
     </div>    
-    <form action="#xarModURL('mail', 'admin', 'template')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="phase" id="phase" value="update" />
         <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />

@@ -40,7 +40,7 @@
             </pre>
         </div>
     </xar:if>
-    <form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','migrate')#">
+    <form class="dd-modifyprop-form" method="post" action="&xar-modurl-dynamicdata-util-migrate;">
         <table class="xar-accent">
         <tr>
             <td>

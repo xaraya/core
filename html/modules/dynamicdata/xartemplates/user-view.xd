@@ -11,7 +11,7 @@
 
 <xar:else />
     <div align="center">
-        <a href="#xarModURL('dynamicdata','user','main')#"><xar:mlstring>Please select one of the available objects</xar:mlstring></a>
+        <a href="&xar-modurl-dynamicdata-user-main;"><xar:mlstring>Please select one of the available objects</xar:mlstring></a>
     </div>
 </xar:if>
 

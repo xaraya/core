@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Site Lock</xar:mlstring></h2>
 <div style="margin: auto;">
-    <form action="#xarModURL('roles', 'admin', 'sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="&xar-modurl-roles-admin-sitelock;" method="post" enctype="application/x-www-form-urlencoded">
         
         <table>
         <tr>

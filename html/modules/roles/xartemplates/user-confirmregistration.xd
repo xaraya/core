@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2>
 <div style="margin: auto;">
-<form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<form action="&xar-modurl-roles-user-register;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
     <tr>

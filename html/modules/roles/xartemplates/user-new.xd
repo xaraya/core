@@ -3,11 +3,7 @@
   <div align="center">
         <p><xar:mlstring>Terms and Conditions</xar:mlstring></p>
         <p><xar:template file="user-terms" type="module" /></p>
-<xar:comment> this stuff shouldnt print        <p><a href="##xarModURL('roles',
-                           'user',
-                           'new',
-                            array('stage' => 2,
-                                  'authid' => xarSecGenAuthKey()))##">
+<xar:comment> this stuff shouldnt print        <p><a href="#&xar-modurl-roles-user-new;&amp;stage=2&amp;authid=#xarSecGenAuthKey()###">
                             <xar:mlstring>Accept terms and conditions</xar:mlstring></a></p> </xar:comment>
         <p><a href="index.php"><xar:mlstring>Do not accept terms and conditions</xar:mlstring></a></p>
   </div>

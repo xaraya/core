@@ -3,7 +3,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Removal with dependents still not removed</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
-    <form action="#xarModURL('modules','admin','remove')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="&xar-modurl-modules-admin-remove;" method="post" enctype="application/x-www-form-urlencoded">
 <div>
         <input type="hidden" name="id" id="id" value="#$id#" />
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -43,7 +43,7 @@
         <input type="submit" name="command" id="command" value="#xarML('Remove All')#" tabindex="9" />
         <br />
 
-        <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
+        <a href="&xar-modurl-modules-admin-list;">#xarML('Go back to the modules list.')#</a>
 </div>
     </form>
 </div>

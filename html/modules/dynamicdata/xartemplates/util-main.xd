@@ -16,21 +16,21 @@
     </h2>
     <ul>
         <li>
-            <a href="#xarModURL('dynamicdata','admin','query')#">
+            <a href="&xar-modurl-dynamicdata-admin-query;">
                 <xar:mlstring>
                     Query Dynamic Objects or Database Tables 
                 </xar:mlstring>
             </a>
         </li>
         <li>
-            <a href="#xarModURL('dynamicdata','util','import')#">
+            <a href="&xar-modurl-dynamicdata-util-import;">
                 <xar:mlstring>
                     Import Object Definitions and Data 
                 </xar:mlstring>
             </a>
         </li>
         <li>
-            <a href="#xarModURL('dynamicdata','util','export')#">
+            <a href="&xar-modurl-dynamicdata-util-export;">
                 <xar:mlstring>
                     Export Object Definitions and Data 
                 </xar:mlstring>
@@ -41,7 +41,7 @@
             </xar:mlstring>
         </li>
         <li>
-            <a href="#xarModURL('dynamicdata','util','static')#">
+            <a href="&xar-modurl-dynamicdata-util-static;">
                 <xar:mlstring>
                     Static Table Definition 
                 </xar:mlstring>
@@ -52,7 +52,7 @@
             </xar:mlstring>
         </li>
         <li>
-            <a href="#xarModURL('dynamicdata','util','relations')#">
+            <a href="&xar-modurl-dynamicdata-util-relations;">
                 <xar:mlstring>
                     Relations between Objects 
                 </xar:mlstring>
@@ -64,7 +64,7 @@
             ) 
         </li>
         <li>
-            <a href="#xarModURL('dynamicdata','util','meta')#">
+            <a href="&xar-modurl-dynamicdata-util-meta;">
                 <xar:mlstring>
                     Meta Table Definitions 
                 </xar:mlstring>

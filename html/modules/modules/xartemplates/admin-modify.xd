@@ -3,7 +3,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Settings and Hooks</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
-    <form action="#xarModURL('modules','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
         <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="id" id="id" value="#$id#" />

@@ -6,9 +6,9 @@
 <xar:if condition="!empty($objectid) and $objectid eq 1">
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
     <tr>
-        <td align="left" width="33%"><a href="#xarModURL('dynamicdata','admin','view',array('itemid' => $itemid))#"><xar:mlstring>View Items</xar:mlstring></a></td>
-        <td align="center"><a href="#xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $itemid))#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
-        <td align="right"><a href="#xarModURL('dynamicdata','util','export',array('objectid' => $itemid))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
+        <td align="left" width="33%"><a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a></td>
+        <td align="center"><a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
+        <td align="right"><a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
     </tr>
 </table>
 <br />
@@ -34,7 +34,7 @@
 <xar:else/> 
     <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
-<form method="POST" action="#xarModURL('dynamicdata', 'admin', 'update')#" enctype="#$enc_type#">
+<form method="POST" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
 
 <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -69,7 +69,7 @@
     </table>
 
 <xar:if condition="!empty($objectid) and $objectid eq 2">
-    <strong><a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid' => $itemid))#"><xar:mlstring>Edit validation</xar:mlstring></a></strong>
+    <strong><a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#"><xar:mlstring>Edit validation</xar:mlstring></a></strong>
 </xar:if>
 
 </div>

@@ -1,5 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="compare">xarServerGetCurrentURL()</xar:set>
+<!-- Next line cant be handled by entities yet -->
 <xar:set name="current">xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'))</xar:set>
 <xar:if condition="$compare eq $current">
     <dd class="active">

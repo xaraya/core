@@ -4,7 +4,7 @@
 <div style="margin: auto;">
 
 <xar:set name="objectid">#$object:objectid#</xar:set>
-<form method="post" action="#xarModURL('dynamicdata','admin','form')#">
+<form method="post" action="&xar-modurl-dynamicdata-admin-form;">
 <div>
     <input type="hidden" name="objectid" value="#$objectid#" />
     <input type="hidden" name="theme" value="print" />

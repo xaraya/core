@@ -3,7 +3,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Relations with other Modules/Properties</xar:mlstring></h2><br />
 <div style="margin: auto;">
 
-<form method="post" action="#xarModURL('dynamicdata','util','relations')#">
+<form method="post" action="&xar-modurl-dynamicdata-util-relations;">
   <xar:mlstring>Module : </xar:mlstring>
   <xar:data-input type="module" name="modid" value="$modid" />
   <input type="submit" name="select" id="select" value="Select" />
@@ -42,7 +42,7 @@
 </xar:if>
 
 <h2><xar:mlstring>Relations with other Objects/Tables</xar:mlstring></h2><br />
-<form method="post" action="#xarModURL('dynamicdata','util','relations')#">
+<form method="post" action="&xar-modurl-dynamicdata-util-relations;">
   <xar:mlstring>Object : </xar:mlstring>
   <select name="objectid" id="objectid">
     <option value=""></option>
@@ -73,7 +73,7 @@
   <xar:set name="prop">
     #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
   </xar:set>
-  <a href="#xarModURL('dynamicdata','admin','view',array('table' => $table))#"><xar:mlstring>View Table</xar:mlstring></a>
+  <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#"><xar:mlstring>View Table</xar:mlstring></a>
   <table class="xar-norm">
     <xar:foreach in="$fields" key="$name" value="$property">
       <tr>
@@ -87,7 +87,7 @@
     </xar:foreach>
   </table>
   <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
-  <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
+  <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
     <input type="hidden" name="modid" value="#$modid#" />
     <input type="hidden" name="itemtype" value="#$itemtype#" />
     <input type="hidden" name="objectid" value="#$objectid#" />
@@ -159,7 +159,7 @@
 <xar:set name="table">$objectid</xar:set>
 </xar:if>
   <xar:if condition="!empty($relations[$table])">
-    <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
+    <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
       <input type="hidden" name="objectid" value="#$objectid#" />
       <input type="hidden" name="table" value="#$table#" />
       <input type="hidden" name="authid" value="#$authid#" />
@@ -173,6 +173,7 @@
           <td><xar:mlstring>Children</xar:mlstring></td>
         </tr>
         <xar:foreach in="$relations[$table]" key="$where" value="$links">
+          <!-- TODO: check this section, it contains greater than signs, dummy xar:sets and some other hackery -->
           <xar:if condition="is_numeric($where)">
             <xar:set name="wherelink">#xarModURL('dynamicdata','util','relations',array('objectid' => $where))#</xar:set>
             <xar:set name="wherename">#$objects[$where]['label']#</xar:set>
@@ -181,11 +182,11 @@
             <xar:set name="wherename">#$where#</xar:set>
           </xar:if>
           <xar:foreach in="$links" key="$idx" value="$link">
-<xar:if condition="is_numeric($link['to'])">
-<xar:set name="dummy">1; $link['from'] = $link['from'] . ' = ' . $link['to']; $link['to'] = '&nbsp;'</xar:set>
-<xar:elseif condition="is_numeric($link['from'])" />
-<xar:set name="dummy">1; $link['to'] = $link['to'] . ' = ' . $link['from']; $link['from'] = '&nbsp;'</xar:set>
-</xar:if>
+            <xar:if condition="is_numeric($link['to'])">
+                <xar:set name="dummy">1; $link['from'] = $link['from'] . ' = ' . $link['to']; $link['to'] = '&nbsp;'</xar:set>
+            <xar:elseif condition="is_numeric($link['from'])" />
+                <xar:set name="dummy">1; $link['to'] = $link['to'] . ' = ' . $link['from']; $link['from'] = '&nbsp;'</xar:set>
+            </xar:if>
             <xar:if condition="$link['type'] eq 'child'">
               <tr>
                 <td><input type="checkbox" name="what[#$where#][#$idx#]" id="what_#$where#_#$idx#" value="1" /></td>

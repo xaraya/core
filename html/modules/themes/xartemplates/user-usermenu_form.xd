@@ -11,7 +11,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Select Theme</xar:mlstring></h2>
     <div align="center">
-        <form action="#xarModURL('themes', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-themes-user-usermenu;" method="post" enctype="application/x-www-form-urlencoded">
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />    
             <input type="hidden" name="uid" id="uid" value="#$uid#" />    

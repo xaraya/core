@@ -8,7 +8,7 @@
     <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
 
-<form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#" enctype="#$enc_type#">
+<form method="post" name="post" id="post" action="&xar-modurl-roles-user-register;" enctype="#$enc_type#">
 
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
@@ -60,7 +60,7 @@
                <label for="agreetoterms">
                     <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
                </label>
-               <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+               <a href="&xar-modurl-roles-user-privacy;"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
                 
                 <xar:if condition="!empty($invalid['agreetoterms'])">
                     <span class="xar-error">#$invalid['agreetoterms']#</span>
@@ -74,7 +74,7 @@
                 <label for="agreetoterms">
                     <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
                 </label>
-                <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
+                <a href="&xar-modurl-roles-user-terms;"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
                     <xar:if condition="!empty($invalid['agreetoterms'])">
                         <span class="xar-error">#$invalid['agreetoterms']#</span>
                     </xar:if>
@@ -87,7 +87,7 @@
             <label for="agreetoterms">
                 <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
             </label>
-            <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+            <a href="&xar-modurl-roles-user-terms;"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="&xar-modurl-roles-user-privacy;"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
                 <xar:if condition="!empty($invalid['agreetoterms'])">
                     <span class="xar-error">#$invalid['agreetoterms']#</span>
                 </xar:if>

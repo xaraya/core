@@ -100,7 +100,7 @@
          <xar:mlstring>
              Welcome to our latest member,
          </xar:mlstring>
-         <a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#">
+         <a href="&xar-modurl-roles-user-display;#&amp;uid=#$lastuser['uid']#">
              #xarVarPrepForDisplay($lastuser['name'])#
          </a>
      </p>

@@ -1,7 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <h2>
-        <a href="#xarModURL('roles', 'admin', 'createmail')#">
+        <a href="&xar-modurl-roles-admin-createmail;">
             <xar:mlstring>Messaging system</xar:mlstring>
         </a>&nbsp;&gt;&nbsp;
         <xar:mlstring>Modify notification options</xar:mlstring>
@@ -16,17 +16,17 @@
                     : 
                 </dt>
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'createmail')#">
+                    <a href="&xar-modurl-roles-admin-createmail;">
                         <xar:mlstring>Send mail</xar:mlstring>
                     </a>
                 </dd>
                 <dd>
-                    <a href="#xarModURL('roles', 'admin', 'modifyemail')#">
+                    <a href="&xar-modurl-roles-admin-modifyemail;">
                         <xar:mlstring>Templates</xar:mlstring>
                     </a>
                 </dd>
                 <dd class="active">
-                    <a href="#xarModURL('roles', 'admin', 'modifynotice')#">
+                    <a href="&xar-modurl-roles-admin-modifynotice;">
                         <xar:mlstring>Configure</xar:mlstring>
                     </a>
                 </dd>
@@ -35,7 +35,7 @@
         </xar:if>
 <div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
 <br />
-<form method="post" action="#xarModURL('roles', 'admin', 'modifynotice')#" enctype="application/x-www-form-urlencoded" >
+<form method="post" action="&xar-modurl-roles-admin-modifynotice;" enctype="application/x-www-form-urlencoded" >
   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="phase" id="phase" value="update" />

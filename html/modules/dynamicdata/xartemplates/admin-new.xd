@@ -24,7 +24,7 @@
 <xar:else/> 
     <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
-<form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#" enctype="#$enc_type#">
+<form method="POST" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
 <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
