@@ -3,7 +3,7 @@
 function setActiveStyleSheetTxt(title) {
   var i, a, main;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title").indexOf("text") != -1) {
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classictext") != -1) {
       	a.disabled = true;
       	if(a.getAttribute("title") == title) a.disabled = false;
     }
@@ -13,7 +13,7 @@ function setActiveStyleSheetTxt(title) {
 function setActiveStyleSheetCol(title) {
   var i, a, main;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title").indexOf("colors") != -1) {
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classiccolors") != -1) {
       a.disabled = true;
       if(a.getAttribute("title") == title) a.disabled = false;
     }
@@ -23,7 +23,7 @@ function setActiveStyleSheetCol(title) {
 function getActiveStyleSheetTxt() {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf("text") != -1) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf("classictext") != -1) return a.getAttribute("title");
   }
   return null;
 }
@@ -31,7 +31,7 @@ function getActiveStyleSheetTxt() {
 function getActiveStyleSheetCol() {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title").indexOf("colors") != -1 && !a.disabled) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title").indexOf("classiccolors") != -1 && !a.disabled) return a.getAttribute("title");
   }
   return null;
 }
@@ -39,7 +39,7 @@ function getActiveStyleSheetCol() {
 function getPreferredStyleSheetTxt() {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title").indexOf("text")  != -1) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classictext")  != -1) return a.getAttribute("title");
   }
   return null;
 }
@@ -47,7 +47,7 @@ function getPreferredStyleSheetTxt() {
 function getPreferredStyleSheetCol() {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title").indexOf("colors")  != -1) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classiccolors")  != -1) return a.getAttribute("title");
   }
   return null;
 }

@@ -1,21 +1,42 @@
 /* Green'ish colours styles */
 
+/*
+with the styleswitcher in this theme we mainly need to override/modify 
+those attributes which influence colours, like color, background-color 
+and background-image.. although it's possible to alter any other rule here,
+lets keep these alternative stylesheets relatively small and easy to work with.
+------------------------------------------------------------------[important note] */
+
 body {
-	color: #669797;
-	background-color: #669797;
+	color: #003F3F;
+	background-color: #409999;
 	background-image: url(../images/page_bg_green.jpg);
-	background-repeat: repeat-x;
-	background-position: 100% 0;
 }
+
+a { color: #3F7F7F; }
+a:link:hover, a:visited:hover { color: #994040; }
+
+.xar-mod-head {
+	color: #7FFFFF;
+	background-color: #3F7F7F;
+	border-color: #7F5300;
+}
+
+th {
+	color: #3F7F7F;
+	background-color: #D2E3CC;
+}
+.xar-alt { background-color: #FFDE80; }
+.xar-accent { background-color: #DBFFFF; }
+.xar-alt-outline { border-color: #996C40;}
+.xar-accent-outline { border-color: #994040; }
+.xar-norm-outline { border-color: #007F7F; }
+.xar-norm { background-color: #FFFFFF; }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
-	width: 100%;
-	height: 70px;
 	background-image: url(../images/xa_logo_green.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 0;
 }
 
 div#classicfooter {

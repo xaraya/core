@@ -1,7 +1,10 @@
 /*  High contrast style, to somewhat emulate Google'ish and Yahoo'ish simplicity */
 
 /*
-with the styleswitcher in this theme we only need to override default styles 
+with the styleswitcher in this theme we mainly need to override/modify 
+those attributes which influence colours, like color, background-color 
+and background-image.. although it's possible to alter any other rule here,
+lets keep these alternative stylesheets relatively small and easy to work with.
 ------------------------------------------------------------------[important note] */
 
 body {
@@ -10,26 +13,32 @@ body {
 	background-image: none;
 }
 
-a { color: #610080; }
+a { color: #5B3D74; }
 a:link:hover, a:visited:hover { color: #CD2000; }
 
 .xar-menu-section { color: #D5004B;}
 
 .xar-mod-head {
-	color: #ffffff;
-	background-color: #0F0F0F;
+	color: #000000;
+	background-color: #EEEEEE;
 	border-color: #000000;
-	font-weight: bolder;
 }
+
+th {
+	color: #000000;
+	background-color: #F6F6F6;
+}
+.xar-alt { background-color: #EEE7EC; }
+.xar-accent { background-color: #E7EAEE; }
+.xar-alt-outline { border-color: #803200; }
+.xar-accent-outline { border-color: #003780; }
+.xar-norm-outline { border-color: #747075; }
+.xar-norm { background-color: #FFFFFF; }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
-	width: 100%;
-	height: 70px;
 	background-image: url(../images/xa_logo_contrast.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 0;
 }
 
 td#leftmenus, td#rightmenus, td#maincontent, div#classicfooter {

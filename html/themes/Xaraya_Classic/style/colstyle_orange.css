@@ -1,19 +1,42 @@
 /* Orang'ish colours styles */
 
+/*
+with the styleswitcher in this theme we mainly need to override/modify 
+those attributes which influence colours, like color, background-color 
+and background-image.. although it's possible to alter any other rule here,
+lets keep these alternative stylesheets relatively small and easy to work with.
+------------------------------------------------------------------[important note] */
+
 body {
-	color: #805400;
+	color: #7F5300;
 	background-color: #E59600;
 	background-image: url(../images/page_bg_orange.jpg);
-	background-repeat: repeat-x;
-	background-position: 100% 0;
 }
+
+a { color: #7F693F; }
+a:link:hover, a:visited:hover { color: #E54000; }
+
+.xar-mod-head {
+	color: #7F5300;
+	background-color: #FFD37F;
+	border-color: #7F5300;
+}
+
+th {
+	color: #7F5300;
+	background-color: #F2EADD;
+}
+.xar-alt { background-color: #FFDE80; }
+.xar-accent { background-color: #E5CF00; }
+.xar-alt-outline { border-color: #996C40;}
+.xar-accent-outline { border-color: #994040; }
+.xar-norm-outline { border-color: #7F5300; }
+.xar-norm { background-color: #FFFFFF; }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
 	background-image: url(../images/xa_logo_orange.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 0;
 }
 
 div#classicfooter {
