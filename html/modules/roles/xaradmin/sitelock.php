@@ -82,7 +82,8 @@ function roles_admin_sitelock($args)
             // turn the site on or off
             $toggle = $toggle ? 0 : 1;
 
-            // Send notification emails
+            // Find the users to be notified
+            // First get the roles
             $rolesarray = array();
             $rolemaker = new xarRoles();
             for($i=0;$i<count($roles);$i++) {
@@ -90,6 +91,7 @@ function roles_admin_sitelock($args)
                     $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
                 }
             }
+            //Check each if it is a user or a group
             $notify = array();
             foreach($rolesarray as $roletotell) {
                 if ($roletotell->isUser()) $notify[] = $roletotell;
@@ -100,6 +102,7 @@ function roles_admin_sitelock($args)
                               'from' => $admin->getEmail()
             );
 
+// We locked the site
             if ($toggle == 1) {
 
             // Clear the active sessions
@@ -114,6 +117,7 @@ function roles_admin_sitelock($args)
                 }
                 $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been locked.';
             }
+// We unlocked the site
             else {
                $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been unlocked.';
             }

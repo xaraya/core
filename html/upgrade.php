@@ -706,7 +706,7 @@ if (empty($step)) {
                              'set'     =>  0),
                        array('name'    =>  'lockdata',
                              'module'  =>  'roles',
-                             'set'     =>  serialize(array('roles' => array( array('uid' => 2,
+                             'set'     =>  serialize(array('roles' => array( array('uid' => 4,
                                                   'name' => 'Administrators',
                                                   'notify' => TRUE)
                                            ),
