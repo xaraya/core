@@ -140,7 +140,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarLog.php';
     $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
                         'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
-                        'level' => xarCore_getSystemVar('Log.LogLevel', true));
+                        'level'      => xarCore_getSystemVar('Log.LogLevel', true));
     xarLog_init($systemArgs, $whatToLoad);
 
     /*

@@ -124,19 +124,24 @@ class ExceptionRendering
         return $this->exception->getComponent();
     }
 
-    // FIXME: This method doesnt belong here
+    // FIXME: This method doesnt belong here, the dependencies should give a hint why not
     function isadmin()
     {
+        // Dependency (roles module)
         if (!class_exists("xarRoles"))
             return false;
-
+        
+        // Dependency (xarVar)
         if(!xarVarGetCached('installer','installing')) {
+            // Dependency!
             $roles = new xarRoles();
             $admins = "Administrators";
+            // Dependency!
             $admingroup = $roles->findRole("Administrators");
             // Dependency! (session)
             $me = $roles->getRole(xarSessionGetVar('uid'));
             if (!empty($admingroup) && isset($me)) {
+                // Dependency!
                 return $me->isParent($admingroup);
             } else {
                 return false;
