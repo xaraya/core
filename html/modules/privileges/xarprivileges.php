@@ -267,8 +267,8 @@ class xarMasks
                         $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
                         $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
                         echo "Winnowing: ";
-                        echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<BR />";
-                        echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<BR /><BR />";
+                        echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<br />";
+                        echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<br /><br />";
                     }
                     if ($priv1->matchesexactly($priv2)) {
                         $privs3 = $privs2;
@@ -525,20 +525,20 @@ class xarMasks
         $matched = false;
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                echo "<BR />Comparing <BR />" . $privilege->present() . " and <BR />" . $mask->present() . ". <BR />";
+                echo "<br />Comparing <br />" . $privilege->present() . " and <br />" . $mask->present() . ". <br />";
             }
             if($privilege->implies($mask)) {
                 $pass = $privilege;
                 $matched = true;
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Privilege includes mask. Privilege level greater or equal.<BR />";
+                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
                 }
                 break;
             }
             elseif ($privilege->includes($mask)) {
                 $matched = true;
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Privilege includes mask. Privilege level lesser.<BR />";
+                    echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level lesser.<br />";
                 }
                 break;
             }
@@ -547,25 +547,25 @@ class xarMasks
                     $pass = $privilege;
                     $matched = true;
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Mask includes privilege. Privilege level greater or equal.<BR />";
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
                     }
                     break;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<BR />Mask includes privilege. Privilege level lesser.<BR />";
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<br />Mask includes privilege. Privilege level lesser.<br />";
                     }
                 }
             }
             else {
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    echo "<font color='red'>no match</font>. Continuing...<BR />";
+                    echo "<font color='red'>no match</font>. Continuing...<br />";
                 }
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                echo "<BR />Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
+                echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
                 if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
                 else echo "not found. ";
             }
