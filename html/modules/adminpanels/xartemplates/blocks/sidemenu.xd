@@ -1,0 +1,12 @@
+<xar:loop name="$adminmods">
+    <strong>&middot;</strong>
+    <xar:if condition="empty($link)">
+        <b>&xar-var-label;</b>
+    <xar:else />
+        <a href="&xar-var-link;">&xar-var-label;</a>
+    </xar:if>
+    <xar:if condition="!empty($marker)">
+        &xar-var-marker;
+    </xar:if>
+    <br />
+</xar:loop>
