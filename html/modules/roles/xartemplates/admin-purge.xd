@@ -163,7 +163,7 @@
                     </xar:loop>
                     <!-- end loop over users -->
                     <!-- if there is a pager show it in the last row -->
-                    <xar:if condition="!empty($pager)">
+                    <xar:if condition="!empty($recallpager)">
                     <tr class="xar-norm" style="text-align: center;">
                         <td colspan="7">
                             #$recallpager#
@@ -316,7 +316,7 @@
                </xar:loop>
                <!-- end loop over users -->
                <!-- if there is a pager show it in the last row -->
-               <xar:if condition="!empty($pager)">
+               <xar:if condition="!empty($purgepager)">
                <tr class="xar-norm" style="text-align: center;">
                     <td colspan="7">#$purgepager#
                     </td>

@@ -46,7 +46,7 @@ function roles_admin_purge($args)
         if (!xarVarFetch('recalluids', 'isset', $recalluids, array(), XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('groupuid', 'int:1', $data['groupuid'], 0, XARVAR_NOT_REQUIRED)) return;
 
-        if ($confirmation == "Recall")
+        if ($confirmation == xarML("Recall"))
         {
  // --- recall users and groups
             if(!xarSecurityCheck('DeleteRole')) return;
@@ -153,7 +153,7 @@ function roles_admin_purge($args)
         if (!xarVarFetch('purgeuids', 'isset', $purgeuids, array(), XARVAR_NOT_REQUIRED)) return;
 
         // Check for confirmation.
-        if ($confirmation == "Purge")
+        if ($confirmation == xarML("Purge"))
         {
 // --- purge users
             if(!xarSecurityCheck('AdminRole')) return;
