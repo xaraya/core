@@ -37,9 +37,10 @@ define('XAR_TOKEN_CDATA_START'       , '[CDATA['); // CDATA start inside non mar
 define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 
 // Other
-define('XAR_TOKEN_VAR_START'         , '$'    ); // Start of a variable
-define('XAR_TOKEN_CI_DELIM'          , '#'    ); // Delimiter for variables, functions and other the CI stands for Code Item
-define('XAR_NAMESPACE_PREFIX'        , 'xar'  ); // Our own default namespace prefix
+define('XAR_TOKEN_VAR_START'         , '$'    );       // Start of a variable
+define('XAR_TOKEN_CI_DELIM'          , '#'    );       // Delimiter for variables, functions and other the CI stands for Code Item
+define('XAR_NAMESPACE_PREFIX'        , 'xar'  );       // Our own default namespace prefix
+define('XAR_ROOTTAG_NAME'            , 'blocklayout'); // Default name of the root tag
 
 /**
  * Defines for errors
@@ -506,14 +507,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
 
                         $tplType = $this->tplVars->get('type');
-                        if($tplType == 'module' && $tagName == 'blocklayout') {
+                        if($tplType == 'module' && $tagName == XAR_ROOTTAG_NAME) {
                             // root tag found in module template
                             $this->raiseError(XAR_BL_INVALID_SYNTAX,
                                               'Root tag found in module template or before <?xar type="page" ?> instruction',$this);
                             return;
                         }
 
-                        if($tplType == 'page' && $tagName != 'blocklayout' && !$this->tagRootSeen) {
+                        if($tplType == 'page' && $tagName != XAR_ROOTTAG_NAME && !$this->tagRootSeen) {
                             $this->raiseError(XAR_BL_INVALID_SYNTAX,"Found a  xar:$tagName tag before the xar:blocklayout tag, this is invalid",$this);
                             return;
                         }
@@ -1089,7 +1090,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $this->pos++; $this->column++;
             if ($token == "\n") {
                 $this->line++;
-                $this->column = 0;
+                $this->column = 1;
                 $this->lineText = '';
             }
             $result .= $token;
@@ -1128,7 +1129,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
     {
         // If the root tag comes along, check if we already have it
-        if($tagName == 'blocklayout' && $parser->tagRootSeen) {
+        if($tagName == XAR_ROOTTAG_NAME && $parser->tagRootSeen) {
             $this->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
             return;
         }
