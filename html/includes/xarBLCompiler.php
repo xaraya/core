@@ -377,17 +377,48 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $token = '';
                         break;
                     }
-                    //                      elseif ($nextToken == 'xml') {
-                    //                           // <?xml header tag
-                    //                           // Handle Header Tag
-                    //                           // <Dracos> No idea how to handle this atm
-                    //                           // <Mrb> This is why we need <xar:blocklayout> as the root tag
-                    //       in the theme, anything before the <xar:blocklayout>
-                    //       tag will be copied verbatim to the output.
-                    //       not to be handled here.
-                    //                           $token = '';
-                    //                           break;
-                    //                      }
+                    elseif ($nextToken == 'xml') {
+                        // <?xml header tag
+                        // <Dracos> No idea how to handle this atm
+                        // <Mrb> This is why we need <xar:blocklayout> as the root tag
+                        //       in the theme, anything before the <xar:blocklayout>
+                        //       will be copied verbatim to the output. 
+                        //       (well, almost verbatim)
+                        
+                        // Wind forward and copy to output
+                        
+                        $foundEndXmlHeader=false;
+                        $copy = '';
+                        while(!$foundEndXmlHeader) {
+                            $peek = $this->getNextToken(1);
+                            if($peek == '?') {
+                                $end = $this->getNextToken();
+                                if($end == '>') {
+                                    $foundEndXmlHeader = true;
+                                }
+                            } else {
+                                $copy .= $peek;
+                            }
+                        }
+
+                        // We do the exception check here, so the output is already parsed. 
+                        if($this->line != 1) {
+                            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidSyntax',
+                                            new xarTpl__ParserError('XML header can only be on the first line of the document',$this));
+                            $token ='';
+                            // Don't return here, do the rest of the document?
+                            break; 
+                        }   
+
+                        // Copy the header to the output 
+                        $short_open_allowed = ini_get('short_open_tag');
+                        if($short_open_allowed) {
+                            $token = "<?php echo '<?xml " . $copy . "?>';?>";
+                        } else {
+                            $token = "<?xml " . $copy . "?>";
+                        }
+                        break;
+                    }
                     // <Dracos>  Embedded php killer
                     elseif ($nextToken == 'php') {
                         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
@@ -749,7 +780,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     break;
                 }
             } // end switch
-            $text .= $token;
+            $text .= $token;            
         } // end while
         if ($text != '') {
             if (!$parent->hasText()) {
