@@ -115,6 +115,9 @@ function xarSessionGetVar($name)
     if (!xarSession__UseOldSessions()) {
         if (isset($_SESSION[$var])) {
             return $_SESSION[$var];
+        } elseif ($name == 'uid') {
+            $_SESSION[$var] = _XAR_ID_UNREGISTERED;
+            return $_SESSION[$var];
         }
         return;
     }
@@ -131,6 +134,12 @@ function xarSessionGetVar($name)
         // another 'feature' for Windows
         $GLOBALS[$var] = $GLOBALS['HTTP_SESSION_VARS'][$var];
         return $GLOBALS['HTTP_SESSION_VARS'][$var];
+    } elseif ($name == 'uid') {
+        $GLOBALS[$var] = _XAR_ID_UNREGISTERED;
+        if (!session_is_registered($var)) {
+            session_register($var);
+        }
+        return $GLOBALS[$var];
     }
 
     return;
