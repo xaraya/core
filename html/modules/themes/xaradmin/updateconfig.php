@@ -12,6 +12,7 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('separator', 'str:1:', $separator, ' :: ', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pagetitle', 'str:1:', $pagetitle, 'default', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('cachetemplates', 'checkbox', $cachetemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('slogan', 'str::', $slogan, 'Your Site Slogan', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return; 
@@ -27,6 +28,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'SiteCopyRight', $copyright);
     xarModSetVar('themes', 'SiteFooter', $footer);
     xarModSetVar('themes', 'ShowTemplates', $showtemplates);
+    xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     $whatwasbefore = xarModGetVar('themes', 'default');
 
