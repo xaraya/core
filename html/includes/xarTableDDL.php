@@ -449,7 +449,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
        // TODO: adapt mysqlColumnDefinition to return field name too
             $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
             $sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
-            if ($args['first'] == true) {
+            if (!empty($args['first']) && $args['first'] == true) {
                 $sql .= ' FIRST';
             } elseif (!empty($args['after_field'])) {
                 $sql .= ' AFTER '.$args['after_field'];
@@ -816,10 +816,12 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                                   : '';
 
     // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
-    if (isset($parameters['increment_start']))
-        $this_field['increment_start'] = $parameters['increment_start'];
-    else
-        $this_field['increment_start'] = 0;
+    if (!empty($this_field['auto_increment'])) {
+        if (isset($parameters['increment_start']))
+            $this_field['increment_start'] = $parameters['increment_start'];
+        else
+            $this_field['increment_start'] = 0;
+    }
 
     // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)
     if (!empty($this_field['auto_increment'])) {
