@@ -31,8 +31,11 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
         $this->Dynamic_Select_Property($args);
         if (count($this->options) == 0) {
             $this->options = array(
-                                 array('id' => 0, 'name' => xarML('d M Y H:i')),
-                                 array('id' => 1, 'name' => xarML('TODO')),
+                                 array('id' => '%m/%d/%Y %H:%M:%S',     'name' => xarML('12/31/2004 24:00:00')),
+                                 array('id' => '%d/%m/%Y %H:%M:%S',     'name' => xarML('31/12/2004 24:00:00')),
+                                 array('id' => '%Y/%m/%d %H:%M:%S',     'name' => xarML('2004/12/31 24:00:00')),
+                                 array('id' => '%d %m %Y %H:%M',        'name' => xarML('31 12 2004 24:00')),
+                                 array('id' => '%b %d %H:%M:%S',        'name' => xarML('12 31 24:00:00')),
                              );
         }
     }
