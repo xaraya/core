@@ -33,7 +33,7 @@ function adminpanels_admin_confirmlogout(){
     'admin',
     'confirmlogout',
     array(  'warning'       => xarVarPrepForDisplay(xarML('ATTENTION! YOU ARE ABOUT TO LOGOUT FROM ADMIN SYSTEM..')),
-            'question'      => xarVarPrepForDisplay(xarML('Are you sure? Click "Cancel" to return to previous page..')),
+            'question'      => xarVarPrepForDisplay(xarML('Are you sure? Click "Cancel" to return to the previous page..')),
             'logouturl'     => xarModURL('roles' ,'user', 'logout', array()),
             'logoutlabel'   => xarVarPrepForDisplay(xarML('Logout')),
             'cancelurl'     => 'javascript:top.history.go(-1)',

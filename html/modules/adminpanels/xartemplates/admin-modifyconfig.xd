@@ -205,7 +205,7 @@
                     </td>
                     <td class="adminpanels-rednote">
                         <xar:mlstring>
-                            allows to bypass the overviews and go directly to the modules configuration 
+                            Bypass the overviews and go directly to the module's configuration 
                         </xar:mlstring>
                     </td>
                 </tr>

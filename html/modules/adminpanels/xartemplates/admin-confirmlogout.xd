@@ -5,7 +5,7 @@
 <h2><xar:mlstring>Confirm Logout</xar:mlstring></h2>
 <div align="center">
 <!-- Formatting table to center the menu -->
-<h3><xar:mlstring>Are you sure? Click "Cancel" to return to previous admin panel</xar:mlstring></h3>
+<h3><xar:mlstring>Are you sure? Click "Cancel" to return to the previous admin panel</xar:mlstring></h3>
             [<a href="#$logouturl#">#$logoutlabel#</a>]
             [<a href="#$cancelurl#">#$cancellabel#</a>]
 </div>
