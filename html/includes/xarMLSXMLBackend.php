@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage Multi Language System - XML Translations Backend
+ * @subpackage xml_backend
  * @author Marco Canini <m.canini@libero.it>
  */
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarSecurity.php 1.33 03/01/18 11:53:04+01:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * Low-level security access mechanism
  *
@@ -8,7 +8,6 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Security Access Mechanism
  * @author Jim McDonald
  *
  * @todo bring back possibility of time authorized keys

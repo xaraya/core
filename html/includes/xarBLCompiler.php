@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarBLCompiler.php 1.61 03/05/06 14:20:24+02:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * BlockLayout Template Engine Compiler
  *
@@ -8,7 +8,6 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage BlockLayout Template Engine Compiler
  * @author Marco Canini <marco@xaraya.com>
  * @author Paul Rosania  <paul@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>

@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarMLS.php 1.38 03/06/01 14:42:42+02:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * Multi Language System
  *
@@ -8,7 +8,6 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Multi Language System
  * @author Marco Canini <m.canini@libero.it>
  * @todo Dynamic Translations
  *       Timezone and DST support

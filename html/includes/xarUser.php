@@ -8,7 +8,6 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage User System
  * @author Jim McDonald
  * @todo <marco> user status field
  * @todo <johnny> look over xarUserComparePasswords
