@@ -440,6 +440,8 @@ function xarRequestGetInfo()
         in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
         done to normal URL params, I've changed this to a more flexable regex at the other extreme.
         
+        This also happens to address Bug 2927 
+        
         TODO: The security of doing this should be examined by someone more familiar with why this works
         as a security check in the first place.
         */
