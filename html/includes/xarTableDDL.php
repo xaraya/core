@@ -753,7 +753,10 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             $this_field['type'] = $data_type;
             break;
-
+        // Added Time field via marsel@phatcom.net (David Taylor)
+        case 'time':
+            $this_field['type'] = "TIME";
+            break;
         case 'timestamp':
             if (empty($parameters['size'])) {
                 $parameters['size'] = 'timestamp';
