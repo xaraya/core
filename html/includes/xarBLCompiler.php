@@ -1893,6 +1893,9 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             return;
         }
 
+        // Allow specifying name="test" and name="$test" and deprecate the $ form over time
+        $name = str_replace(XAR_TOKEN_VAR_START,'',$name);
+
         switch ($scope) {
         case 'config':
             return "xarConfigGetVar('".$name."')";
@@ -1912,10 +1915,11 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             }
             return "xarThemeGetVar('".$themeName."', '".$name."')";
         case 'local':
-            $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
-            if (!isset($name)) return; // throw back
+            // Resolve the name, not that this works for both name="test" and name="$test"
+            $value = xarTpl__ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
+            if (!isset($value)) return; // throw back
             
-            return $name;
+            return $value;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.', $this);
             return;
