@@ -17,7 +17,7 @@
                 <input type="password" name="pass" maxlength="64" size="10" />
             </td>
         </tr>
-        <xar:if condition="xarConfigGetVar('seclevel') neq 'High'">
+        <xar:if condition="xarConfigGetVar('seclevel') ne 'High'">
             <tr>
                 <td colspan="2">
                     <input type="checkbox" name="rememberme" value="1" /><xar:mlstring>Remember me</xar:mlstring>

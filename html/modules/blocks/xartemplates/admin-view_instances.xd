@@ -43,7 +43,7 @@
             <a href="&xar-modurl-blocks-admin-view_types;"><xar:var name="$module" />\<xar:var name="$type" /></a>
         </td>
         <td>
-            <xar:if condition="$template neq NULL">
+            <xar:if condition="$template ne NULL">
                 <xar:var name="$template" />
             <xar:else />
                 <xar:var name="$group_template" />
