@@ -775,8 +775,8 @@ class xarPrivileges extends xarMasks
                         p.xar_level,
                         p.xar_description,
                         pm.xar_parentid
-                        FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
-                        ON p.xar_pid = pm.xar_pid
+                        FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                        WHERE p.xar_pid = pm.xar_pid
                         ORDER BY p.xar_name";
 
             $result = $this->dbconn->Execute($query);
@@ -823,13 +823,13 @@ class xarPrivileges extends xarMasks
     function gettoplevelprivileges($arg) {
 //    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
         if($arg == "all") {
-             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
+             $fromclause = "FROM $this->privilegestable AS p,$this->privmemberstable AS pm
                         WHERE p.xar_pid = pm.xar_pid
                         AND pm.xar_parentid = 0
                         ORDER BY p.xar_name";
         }
         elseif ($arg == "assigned"){
-             $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
+             $fromclause = "FROM $this->privilegestable AS p,$this->privmemberstable AS pm,
                             $this->acltable acl
                             WHERE p.xar_pid = pm.xar_pid
                             AND p.xar_pid = acl.xar_permid
@@ -1954,7 +1954,7 @@ class xarPrivilege extends xarMask
                     r.xar_email,
                     r.xar_pass,
                     r.xar_auth_module
-                    FROM $this->rolestable r, $this->acltable acl
+                    FROM $this->rolestable AS r, $this->acltable AS acl
                     WHERE r.xar_uid = acl.xar_partid
                     AND acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
@@ -2019,9 +2019,9 @@ class xarPrivilege extends xarMask
 
 // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
-                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
-                    ON p.xar_pid = pm.xar_parentid
-                    WHERE pm.xar_pid = " . $this->getID();
+                    FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                    WHERE p.xar_pid = pm.xar_parentid
+                      AND pm.xar_pid = " . $this->getID();
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
 
@@ -2099,9 +2099,9 @@ class xarPrivilege extends xarMask
 
 // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
-                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
-                    ON p.xar_pid = pm.xar_pid
-                    WHERE pm.xar_parentid = " . $this->getID();
+                    FROM $this->privilegestable AS p, $this->privmemberstable AS pm
+                    WHERE p.xar_pid = pm.xar_pid
+                      AND pm.xar_parentid = " . $this->getID();
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
 

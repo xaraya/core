@@ -60,7 +60,7 @@ class xarRoles {
                         r.xar_name,
                         r.xar_users,
                         rm.xar_parentid
-                        FROM $this->rolestable r, $this->rolememberstable rm
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 1
                         ORDER BY r.xar_name";
@@ -776,9 +776,9 @@ class xarRole {
                     xar_instance,
                     xar_level,
                     xar_description
-                    FROM $this->privilegestable p INNER JOIN $this->acltable acl
-                    ON p.xar_pid = acl.xar_permid
-                    WHERE acl.xar_partid = $this->uid";
+                    FROM $this->privilegestable AS p, $this->acltable AS acl
+                    WHERE p.xar_pid = acl.xar_permid
+                      AND acl.xar_partid = $this->uid";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -883,9 +883,9 @@ class xarRole {
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module
-                        FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
-                        ON r.xar_uid = rm.xar_uid
-                        WHERE r.xar_type = 0
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        WHERE r.xar_uid = rm.xar_uid
+                        AND r.xar_type = 0
                         AND rm.xar_parentid = $this->uid";
         } else {
             $query = "SELECT r.xar_uid,
@@ -898,9 +898,9 @@ class xarRole {
                         r.xar_valcode,
                         r.xar_state,
                         r.xar_auth_module
-                        FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
-                        ON r.xar_uid = rm.xar_uid
-                        WHERE r.xar_type = 0 AND r.xar_state = $state
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        WHERE r.xar_uid = rm.xar_uid
+                        AND r.xar_type = 0 AND r.xar_state = $state
                         AND rm.xar_parentid = $this->uid";
         }
         if ($startnum != 0) {
@@ -964,9 +964,9 @@ class xarRole {
         } else {
             // if this is a user just perform a SELECT on the rolemembers table
             $query = "SELECT r.*
-                        FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
-                        ON r.xar_uid = rm.xar_parentid
-                        WHERE rm.xar_uid = $this->uid";
+                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                        WHERE r.xar_uid = rm.xar_parentid
+                        AND rm.xar_uid = $this->uid";
             $result = $this->dbconn->Execute($query);
             if (!$result) return;
             // collect the table values and use them to create new role objects
