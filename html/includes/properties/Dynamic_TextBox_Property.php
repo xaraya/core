@@ -113,8 +113,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         $data=array();
 
         $data['value'] = $value;
-        $data['name'] = $this->name;
-        $data['id']   = $this->id;
 
         $template="textbox";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);

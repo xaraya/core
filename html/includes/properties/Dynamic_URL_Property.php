@@ -99,8 +99,6 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         // TODO: use redirect function here ?
         if (!empty($value)) {
             $data['value'] = xarVarPrepForDisplay($value);
-            $data['name'] = $this->name;
-            $data['id']   = $this->id;
             //return '<a href="'.$value.'">'.$value.'</a>';
 
             $template="url";

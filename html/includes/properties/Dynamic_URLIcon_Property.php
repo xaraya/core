@@ -110,8 +110,6 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 */
                 $data['value']= $this->value;
                 $data['icon'] = xarVarPrepForDisplay($this->icon);
-                $data['name'] = $this->name;
-                $data['id']   = $this->id;
 
                 $template="urlicon";
                 return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
