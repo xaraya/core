@@ -223,8 +223,10 @@ function dynamicdata_user_display($args)
 
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
-                                         'itemtype' => $itemtype));
-    $myobject->getItem($itemid);
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    if (!isset($myobject)) return;
+    $myobject->getItem();
 
     // Return the template variables defined in this function
     return array('object' => & $myobject);

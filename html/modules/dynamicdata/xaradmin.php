@@ -56,8 +56,6 @@ function dynamicdata_admin_view($args)
         $itemtype = 0;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
-
     $object = xarModAPIFunc('dynamicdata','user','getobject',
                             array('objectid' => $itemid,
                                   'moduleid' => $modid,
@@ -73,8 +71,7 @@ function dynamicdata_admin_view($args)
             $param = 'itemid';
         }
     } else {
-        $label = xarML('Dynamic Data Objects');
-        $param = '';
+        return;
     }
 
     $data = dynamicdata_admin_menu();
@@ -206,13 +203,7 @@ function dynamicdata_admin_create($args)
                                           'preview');
     extract($args);
 
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for creating new #(1) item',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+    if (!xarSecConfirmAuthKey()) return;
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -330,13 +321,7 @@ function dynamicdata_admin_update($args)
 
     extract($args);
 
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for updating #(1) item',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+    if (!xarSecConfirmAuthKey()) return;
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -455,15 +440,9 @@ function dynamicdata_admin_delete($args)
 
     // If we get here it means that the user has confirmed the action
 
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for deleting #(1) item #(2)',
-                    'DynamicData', xarVarPrepForDisplay($itemid));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+    if (!xarSecConfirmAuthKey()) return;
 
-    $itemid = $myobject->deleteItem($itemid);
+    $itemid = $myobject->deleteItem();
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                   array('itemid' => $objectid)));
@@ -504,6 +483,7 @@ function dynamicdata_admin_modifyprop()
     if (empty($itemtype)) {
         $itemtype = 0;
     }
+
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobject',
@@ -647,13 +627,7 @@ function dynamicdata_admin_updateprop()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for updating #(1) configuration',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+    if (!xarSecConfirmAuthKey()) return;
 
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -789,13 +763,7 @@ function dynamicdata_admin_importprops()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) {
-        $msg = xarML('Invalid authorization key for importing #(1) configuration',
-                    'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+    if (!xarSecConfirmAuthKey()) return;
 
     if (!xarModAPILoad('dynamicdata', 'admin')) return;
 
@@ -1061,13 +1029,8 @@ function dynamicdata_admin_import($args)
     }
 
     if (!empty($import)) {
-        if (!xarSecConfirmAuthKey()) {
-            $msg = xarML('Invalid authorization key for importing #(1) configuration',
-                        'DynamicData');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                           new SystemException($msg));
-            return;
-        }
+        if (!xarSecConfirmAuthKey()) return;
+
         $found = '';
         foreach ($files as $file) {
             if ($file == $import) {
@@ -1293,6 +1256,7 @@ function dynamicdata_admin_meta($args)
     $data = dynamicdata_admin_menu();
 
     if (!xarModAPILoad('dynamicdata','user')) return;
+
     $data['tables'] = xarModAPIFunc('dynamicdata','user','getmeta');
     $data['tablelist'] = array_keys($data['tables']);
 

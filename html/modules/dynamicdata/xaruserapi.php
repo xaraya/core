@@ -90,6 +90,7 @@ function dynamicdata_userapi_getitem($args)
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
                                        'status'    => $status));
+    if (!isset($object)) return;
     $object->getItem();
 
     if (count($object->fieldlist) > 0) {
@@ -578,13 +579,9 @@ function dynamicdata_userapi_getprop($args)
  * @return array of object definitions
  * @raise DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getobjects($args)
+function dynamicdata_userapi_getobjects($args = array())
 {
-    $objects = xarModAPIFunc('dynamicdata','user','getitems',
-                             array('module' => 'dynamicdata',
-                                   'itemtype' => 0));
-                             //      'fieldlist' => array('id,name')));
-    return $objects;
+    return Dynamic_Object_Master::getObjects();
 }
 
 /**
@@ -600,30 +597,10 @@ function dynamicdata_userapi_getobjects($args)
  */
 function dynamicdata_userapi_getobject($args)
 {
-    extract($args);
-    if (!empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getitem',
-                                array('module' => 'dynamicdata',
-                                      'itemtype' => 0,
-                                      'itemid' => $objectid));
-        if (!isset($object)) return;
-        return $object;
+    if (empty($args['moduleid']) && !empty($args['modid'])) {
+       $args['moduleid'] = $args['modid'];
     }
-
-    if (empty($moduleid) && !empty($modid)) {
-        $moduleid = $modid;
-    }
-    $objects = xarModAPIFunc('dynamicdata','user','getitems',
-                             array('module' => 'dynamicdata',
-                                   'itemtype' => 0,
-                                   'where' => "moduleid eq $moduleid and itemtype eq $itemtype"));
-    if (!isset($objects)) return;
-    foreach ($objects as $object) {
-        if (isset($object['objectid'])) {
-            return $object;
-        }
-    }
-    return;
+    return Dynamic_Object_Master::getObjectInfo($args);
 }
 
 /**
@@ -681,79 +658,7 @@ function dynamicdata_userapi_getmodules($args)
  */
 function dynamicdata_userapi_getsources($args)
 {
-    extract($args);
-
-/*
-    if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-
-    $invalid = array();
-    if (!isset($modid) || !is_numeric($modid)) {
-        $invalid[] = 'module id';
-    }
-    if (!isset($itemtype) || !is_numeric($itemtype)) {
-        $invalid[] = 'item type';
-    }
-    if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'user', 'getprop', 'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-
-    if (isset($propertybag["$modid:$itemtype"])) {
-        return $propertybag["$modid:$itemtype"];
-    }
-*/
-
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
-
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
-
-// TODO: remove Xaraya system tables from the list of available sources ?
-    $query = "SELECT xar_table,
-                     xar_field,
-                     xar_type,
-                     xar_size
-              FROM $metaTable
-              ORDER BY xar_table ASC, xar_field ASC";
-
-    $result =& $dbconn->Execute($query);
-
-    if (!$result) return;
-
-    $sources = array();
-
-    // default data source is dynamic data
-    $sources[] = 'dynamic_data';
-
-// TODO: re-evaluate this once we're further along
-    // hook modules manage their own data
-    $sources[] = 'hook module';
-
-    // user functions manage their own data
-    $sources[] = 'user function';
-
-    // add the list of table + field
-    while (!$result->EOF) {
-        list($table, $field, $type, $size) = $result->fields;
-    // TODO: what kind of security checks do we want/need here ?
-        //if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
-        //}
-        $sources[] = "$table.$field";
-        $result->MoveNext();
-    }
-
-    $result->Close();
-
-    return $sources;
+    return Dynamic_DataStore_Master::getDataSources();
 }
 
 /**
@@ -1235,9 +1140,7 @@ function dynamicdata_userapi_handleOutputTag($args)
         }
     }
     
-    // FIXME: MrB: How does the wrappiing of xarModAPILoad affect this?
-    $out = "xarModAPILoad('dynamicdata','user');
-echo xarModAPIFunc('dynamicdata',
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'user',
                    'showoutput',\n";
     if (isset($args['field'])) {
@@ -1297,8 +1200,7 @@ function dynamicdata_userapi_handleDisplayTag($args)
         }
     }
 
-    $out = "xarModAPILoad('dynamicdata','user');
-echo xarModAPIFunc('dynamicdata',
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'user',
                    'showdisplay',\n";
     if (isset($args['definition'])) {
@@ -1447,9 +1349,7 @@ function dynamicdata_userapi_handleViewTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
-    // FIXME: How does the wrapping of xarModAPILoad affect this?
-    $out = "xarModAPILoad('dynamicdata','user');
-echo xarModAPIFunc('dynamicdata',
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'user',
                    'showview',\n";
     // PHP >= 4.2.0 only

@@ -89,8 +89,16 @@ Tip : empty label -> delete field for all items
         <td><xar:data-input type="fieldstatus" name="dd_status[0]" value="1" /></td>
     </tr>
 
+<xar:if condition="$modid eq 182">
     <tr>
-        <td colspan="6" align="center">
+        <td colspan="7" align="center">
+           <xar:mlstring>Note : for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"</xar:mlstring>
+        </td>
+    </tr>
+</xar:if>
+
+    <tr>
+        <td colspan="7" align="center">
            <input type="submit" value="#$updatebutton#" />
         </td>
     </tr>

@@ -131,7 +131,7 @@ function dynamicdata_adminapi_delete($args)
 
     $myobject->getItem();
 
-    $itemid = $myobject->deleteItem($itemid);
+    $itemid = $myobject->deleteItem();
 
     return $itemid;
 }
@@ -371,8 +371,6 @@ function dynamicdata_adminapi_importproperties($args)
         $table = '';
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return;
-
     // search for an object, or create one
     if (empty($objectid)) {
         $object = xarModAPIFunc('dynamicdata','user','getobject',
@@ -391,7 +389,7 @@ function dynamicdata_adminapi_importproperties($args)
                                             'label' => ucfirst($name)));
             if (!isset($objectid)) return;
         } else {
-            $objectid = $object['objectid']['value'];
+            $objectid = $object['objectid'];
         }
     }
 
@@ -731,7 +729,6 @@ function dynamicdata_adminapi_updatehook($args)
     }
 
     $myobject->getItem();
-
     $isvalid = $myobject->checkInput();
     if (!$isvalid) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -1053,9 +1050,7 @@ function dynamicdata_adminapi_handleInputTag($args)
     }
 
     // we'll call a function to do it for us
-    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
-    $out = "xarModAPILoad('dynamicdata','admin');
-echo xarModAPIFunc('dynamicdata',
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'admin',
                    'showinput',\n";
     if (isset($args['field'])) {
@@ -1114,9 +1109,8 @@ function dynamicdata_adminapi_handleFormTag($args)
             return 'echo '.$args['object'].'->showForm(); ';
         }
     }
-    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
-    $out = "xarModAPILoad('dynamicdata','admin');
-echo xarModAPIFunc('dynamicdata',
+
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'admin',
                    'showform',\n";
     if (isset($args['definition'])) {
@@ -1267,9 +1261,7 @@ function dynamicdata_adminapi_handleListTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
-    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
-    $out = "xarModAPILoad('dynamicdata','admin');
-echo xarModAPIFunc('dynamicdata',
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'admin',
                    'showlist',\n";
     $out .= "                   array(\n";
