@@ -54,7 +54,9 @@ function modules_adminapi_setstate($args)
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:
 
-            if ($oldState == XARMOD_STATE_MISSING_FROM_UNINITIALISED) break;
+            if (($oldState == XARMOD_STATE_MISSING_FROM_UNINITIALISED) ||
+                ($oldState == XARMOD_STATE_ERROR_UNINITIALISED)) break;
+
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
                 $module_statesTable = $xartable['system/module_states'];
@@ -87,6 +89,7 @@ function modules_adminapi_setstate($args)
             if (($oldState != XARMOD_STATE_UNINITIALISED) &&
                 ($oldState != XARMOD_STATE_ACTIVE) &&
                 ($oldState != XARMOD_STATE_MISSING_FROM_INACTIVE) &&
+                ($oldState != XARMOD_STATE_ERROR_INACTIVE) &&
                 ($oldState != XARMOD_STATE_UPGRADED)) {
                 xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
                 return false;
@@ -94,6 +97,7 @@ function modules_adminapi_setstate($args)
             break;
         case XARMOD_STATE_ACTIVE:
             if (($oldState != XARMOD_STATE_INACTIVE) &&
+                ($oldState != XARMOD_STATE_ERROR_ACTIVE) &&
                 ($oldState != XARMOD_STATE_MISSING_FROM_ACTIVE)) {
                 xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
                 return false;
@@ -102,7 +106,8 @@ function modules_adminapi_setstate($args)
         case XARMOD_STATE_UPGRADED:
             if (($oldState != XARMOD_STATE_INACTIVE) &&
                 ($oldState != XARMOD_STATE_ACTIVE) &&
-                $oldState != XARMOD_STATE_MISSING_FROM_UPGRADED) {
+                ($oldState != XARMOD_STATE_ERROR_UPGRADED) &&
+                ($oldState != XARMOD_STATE_MISSING_FROM_UPGRADED)) {
                 xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
                 return false;
             }

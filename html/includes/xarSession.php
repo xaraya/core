@@ -545,7 +545,8 @@ function xarSession__phpGC($maxlifetime)
  * @link http://www.php.net/manual/en/ref.session.php
  * @return bool 
  */
-function xarSession__UseOldSessions() {
+function xarSession__UseOldSessions() 
+{
     return (phpversion() < "4.2.0" ? 1 : 0);
 }
 

@@ -333,13 +333,39 @@ function modules_upgrade($oldVersion)
         $result = &$dbconn->Execute($query);
         if (!$result) return; 
 
-        // 2. change index for reg_id to unique
+        // Bug #1971 - Have to use GenId to create values for xar_id on 
+        // existing rows or the create unique index will fail
+        $query = "SELECT xar_regid, xar_state 
+                  FROM " . $tables['module_states'] . " 
+                  WHERE xar_id IS NULL";
+        $result = &$dbconn->Execute($query);
+        if (!$result) return;
+        
+        // Get items from result array
+        while (!$result->EOF) {
+            list ($regid, $state) = $result->fields;
+
+            $seqId = $dbconn->GenId($tables['module_states']);
+            $query = "UPDATE " . $tables['module_states'] . " 
+                      SET xar_id = $seqId
+                      WHERE xar_regid = $regid
+                      AND xar_state = $state";
+            $updresult = &$dbconn->Execute($query);
+            if (!$updresult) return;
+
+            $result->MoveNext();
+        }
+
+        // Close result set
+        $result->Close();
+
+        // 2. Drop the old index
         $indexname = 'i_' . $sitePrefix . '_module_states_regid';
         $query = xarDBDropIndex($tables['module_states'], array('name' => $indexname));
         $result = &$dbconn->Execute($query);
         if (!$result) return; 
 
-        // 3. Add the new index.
+        // 3. Add the new unique index reg_id
         $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
         $query = xarDBCreateIndex($tables['module_states'], $index);
         

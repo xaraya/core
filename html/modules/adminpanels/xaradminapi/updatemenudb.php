@@ -22,7 +22,8 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminapi_updatemenudb($args){
+function adminpanels_adminapi_updatemenudb($args)
+{
     // no args yet
     extract($args);
 

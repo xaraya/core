@@ -168,7 +168,8 @@ function adminpanels_init()
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_upgrade($oldversion){
+function adminpanels_upgrade($oldversion)
+{
         
     // Upgrade dependent on old version number
     switch($oldversion) {

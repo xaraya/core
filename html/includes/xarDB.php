@@ -87,7 +87,24 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // BlockLayout Template Engine Tables
     $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
 
+    // All initialize register the shutdown function
+    register_shutdown_function('xarDB__shutdown_handler');
+
     return true;
+}
+
+/**
+ * Shutdown handler for the DB subsystem
+ *
+ * This function is the shutdown handler for the 
+ * DB subsystem. It runs on the end of a request
+ *
+ */
+function xarDB__shutdown_handler()
+{
+    // Shutdown handler for the DB subsystem
+    // Once the by reference handling of the dbconn is iin, we can do 
+    // a central close for the db connection here.
 }
 
 /**

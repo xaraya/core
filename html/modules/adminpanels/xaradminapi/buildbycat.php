@@ -22,7 +22,8 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminapi_buildbycat($args){
+function adminpanels_adminapi_buildbycat($args)
+{
 
     // extract($args);
     // we pass no args atm

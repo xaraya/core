@@ -318,7 +318,8 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * @param databaseType is an optional parameter to specify the database type
  * @return string|false the generated SQL statement, or false on failure
  */
-function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
+function xarDBCreateIndex($tableName, $index, $databaseType = NULL) 
+{
 
     // perform validations on input arguments
     if (empty($tableName)) {

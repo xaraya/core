@@ -101,7 +101,8 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * @return array With the respective exceptions in case of failure
  * @raise BAD_PARAM
  */
-function xarVarBatchFetch() {
+function xarVarBatchFetch() 
+{
 
     $batch = func_get_args();
 
@@ -273,7 +274,8 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, &$subject, $supress = false) {
+function xarVarValidate($validation, &$subject, $supress = false) 
+{
 // <nuncanada> For now, i have moved all validations to html/modules/variable/validations
 //             I think that will incentivate 3rd party devs to create and send new validations back to us..
 //             As id/int/str are used in every page view, probably they should be here.
@@ -1000,7 +1002,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
  * @return string the string in the new context
  * @raise EMPTY_PARAM
  */
-function xarVarTransform ($string, $sourceContext, $targetContext) {
+function xarVarTransform ($string, $sourceContext, $targetContext) 
+{
 
     //Would it be useful to be able to transform arrays of strings at once?
 
@@ -1026,7 +1029,8 @@ function xarVarTransform ($string, $sourceContext, $targetContext) {
  * @return string the function anme
  * @raise BAD_PARAM
  */
-function xarVarLoad ($includes_type, $filename) {
+function xarVarLoad ($includes_type, $filename) 
+{
 
     $filename = xarVarPrepForOS($filename);
 
@@ -1058,7 +1062,8 @@ function xarVarLoad ($includes_type, $filename) {
  * @return string the string escape for the context
  * @raise EMPTY_PARAM
  */
-function xarVarEscape ($string, $targetContext, $extras = array()) {
+function xarVarEscape ($string, $targetContext, $extras = array()) 
+{
 
     //Would it be useful to be able to transform arrays of strings at once?
     if (empty($targetContext)) {

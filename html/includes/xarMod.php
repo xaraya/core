@@ -34,6 +34,12 @@ define('XARMOD_STATE_INSTALLED', 6);
 define('XARMOD_STATE_MISSING_FROM_INACTIVE', 7);
 define('XARMOD_STATE_MISSING_FROM_ACTIVE', 8);
 define('XARMOD_STATE_MISSING_FROM_UPGRADED', 9);
+// Bug 1664 - Add  module states for modules that have a db version
+// that is greater than the file version
+define('XARMOD_STATE_ERROR_UNINITIALISED', 10);
+define('XARMOD_STATE_ERROR_INACTIVE', 11);
+define('XARMOD_STATE_ERROR_ACTIVE', 12);
+define('XARMOD_STATE_ERROR_UPGRADED', 13);
 
 /**
  * Define the theme here for now as well
@@ -1553,7 +1559,9 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         $modversion = array();
     }
     $version = array_merge($themeinfo, $modversion);
-
+    
+    // name and id are required, assert them, otherwise the module is invalid
+    assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
     $FileInfo['id']             = $version['id'];
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
