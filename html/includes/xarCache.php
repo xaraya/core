@@ -485,11 +485,9 @@ function xarBlockSetCached($cacheKey, $name, $value)
            $xarBlock_noCache;
     
     if ($xarBlock_noCache == 1) {
-        $xarBlock_noCache = '';
+        unset($xarBlock_noCache);
         return;
     }
-
-    $xarTpl_themeDir = xarTplGetThemeDir();
 
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
