@@ -12,8 +12,15 @@
 		<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
 	</xar:if>
 	<!-- Linking for Mozilla and related browser site tab -->
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
-	<link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
+	<xar:if condition="xarThemeIsAvailable('rss')">
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
+	</xar:if>
+	<xar:if condition="xarThemeIsAvailable('atom')">
+		<link rel="alternate" type="application/rss+xml" title="Atom" href="#$activepageatom#" />
+	</xar:if>
+	<xar:if condition="xarThemeIsAvailable('print')">
+		<link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
+	</xar:if>
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
 	<link rel="pingback" href="&xar-baseurl;ws.php" />
 	<link rel="Top" type="text/html" href="#$baseurl#" />
