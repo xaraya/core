@@ -26,11 +26,17 @@ function adminpanels_adminmenublock_modify($blockinfo)
     // Defaults
     if(empty($vars['showlogout'])) $vars['showlogout'] = 0;
     if(empty($vars['showmarker'])) $vars['showmarker'] = 0;
+    if(empty($vars['menustyle']))  $vars['menustyle'] = xarModGetVar('adminpanels','menustyle');
     
     // Set the config values
     $args['showlogout'] = $vars['showlogout'];
     $args['showmarker'] = $vars['showmarker'];
+    $args['menustyle']  = $vars['menustyle'];
     
+    // Set the template data we need
+    $sortorder = array('byname' => xarML('By Name'),
+                       'bycat'  => xarML('By Category'));
+    $args['sortorder'] = $sortorder;
     $args['blockid'] = $blockinfo['bid'];
     return $args;
 }
@@ -43,6 +49,7 @@ function adminpanels_adminmenublock_update($blockinfo)
 {
     if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showmarker', 'int:0:1', $vars['showmarker'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , xarModGetVar('adminpanels','menustyle'), XARVAR_NOT_REQUIRED)) return;
     
     $blockinfo['content'] = $vars;
     

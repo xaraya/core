@@ -79,10 +79,6 @@ function adminpanels_adminmenublock_display($blockinfo)
         xarModSetVar('adminpanels', 'menustyle', 'byname');
     }
     
-    // Sort Order, Status, Common Labels and Links Display preparation
-    // TODO: pick these up from block settings.
-    $menustyle = xarModGetVar('adminpanels', 'menustyle');
-    
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
@@ -95,9 +91,6 @@ function adminpanels_adminmenublock_display($blockinfo)
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
-    // TODO: rather use a boolean to flag whether the logout is need and xar:mlstring
-    //       the label inside a xar:if construct, i.e. dont set the text at all here.
-
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
@@ -105,10 +98,15 @@ function adminpanels_adminmenublock_display($blockinfo)
     // SETTING 2: Show markers for active menu-items?
     $showmarker = false;
     if(isset($vars['showmarker']) && $vars['showmarker']) $showmarker = true;
-    // dont show marker unless specified
+    // TODO: Move this out completely?
     $marker = '';
     if ($showmarker) $marker = xarModGetVar('adminpanels', 'marker');
-
+    
+    // SETTING 3: Menustyle 
+    if(!isset($vars['menustyle'])) {
+        // If it is not set, revert to the default setting
+        $vars['menustyle'] = xarModGetVar('adminpanels', 'menustyle');
+    }
     
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
@@ -117,9 +115,8 @@ function adminpanels_adminmenublock_display($blockinfo)
     // Admin types
     $admintypes = array('admin', 'util');
 
-    // TODO: why isn't the menustyle part of the block admin?
     // Set up like it is, means we are forced to use global menu style settings site-wide.
-    switch(strtolower($menustyle)){
+    switch(strtolower($vars['menustyle'])){
         case 'byname':
             // display by name
             foreach($mods as $mod) {
@@ -173,8 +170,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 
             $template = 'verticallistbyname';
             $data = array(
-                'adminmods'     => $adminmods,
-                'menustyle'     => $menustyle
+                'adminmods'     => $adminmods
             );
             // this should do for now
             break;
@@ -270,8 +266,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                 $template = 'sidemenu';
                 $data = array(
                     'adminmods'     => $adminmods = array(),
-                    'indlinks'      => $indlinks ='',
-                    'menustyle'     => $menustyle
+                    'indlinks'      => $indlinks =''
                 );
                 break;
 
@@ -288,8 +283,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                 $template = 'sidemenu';
                 $data = array(
                     'adminmods'     => $adminmods = array(),
-                    'indlinks'      => $indlinks ='',
-                    'menustyle'     => $menustyle
+                    'indlinks'      => $indlinks =''
                 );
                 break;
 
@@ -302,7 +296,8 @@ function adminpanels_adminmenublock_display($blockinfo)
     // Populate block info and pass to BlockLayout.
     $data['showlogout'] = $showlogout;
     $data['showmarder'] = $showmarker;
-    $data['marker'] = $marker; // Not used in the internal templates btw, which is good imvho ;-)
+    $data['marker']     = $marker; // Not used in the internal templates btw, which is good imvho ;-)
+    $data['menustyle']  = $vars['menustyle'];
     $blockinfo['content'] = $data;
     return $blockinfo;
 }
