@@ -157,7 +157,7 @@ function roles_admin_purge($args)
             foreach ($purgeuids as $uid => $val) {
                 $role = $roleslist->getRole($uid);
                 $state = ROLES_STATE_DELETED;
-                $uname = $deleted . mktime();
+                $uname = $deleted . microtime(TRUE) .'.'. $uid;
                 $name = '';
                 $pass = '';
                 $email = '';
