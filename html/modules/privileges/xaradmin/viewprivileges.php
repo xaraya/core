@@ -7,8 +7,8 @@
 function privileges_admin_viewprivileges()
 {
     $data = array();
-    
-    if (!xarVarFetch('show', 'str', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
+
+    if (!xarVarFetch('show', 'str', $data['show'], 'assigned')) return;
 
     // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
