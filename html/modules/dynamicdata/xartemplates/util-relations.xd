@@ -1,0 +1,39 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+</table>
+<br />
+
+<h2><xar:mlstring>Relations with other Modules/Properties</xar:mlstring> </h2>
+
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+       <td><strong><xar:mlstring>Module</xar:mlstring></strong></td>
+       <td><strong><xar:mlstring>Link Type</xar:mlstring></strong></td>
+       <td><strong><xar:mlstring>From</xar:mlstring></strong></td>
+       <td><strong><xar:mlstring>To</xar:mlstring></strong></td>
+    </tr>
+
+<xar:loop name="$relations">
+    <xar:if condition="count($links) gt 0">
+        <xar:loop name="$links">
+        <tr align="left" valign="middle">
+            <td>#$module#</td>
+            <td>#$type#</td>
+            <td>#$from#</td>
+            <td>#$to#</td>
+        </tr>
+        </xar:loop>
+    <xar:else />
+        <tr align="left" valign="middle">
+            <td>#$module#</td>
+            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
+            <td>-</td>
+            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
+        </tr>
+    </xar:if>
+</xar:loop>
+
+</table>
+

@@ -237,6 +237,7 @@ class Dynamic_Object_Master
      * Class method to retrieve information about a Dynamic Object
      *
      * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['name'] name of the object you're looking for, or
      * @param $args['moduleid'] module id of the object you're looking for +
      * @param $args['itemtype'] item type of the object you're looking for
      * @returns array
@@ -261,6 +262,8 @@ class Dynamic_Object_Master
                   FROM $dynamicobjects ";
         if (!empty($args['objectid'])) {
             $query .= " WHERE xar_object_id = " . xarVarPrepForStore($args['objectid']);
+        } elseif (!empty($args['name'])) {
+            $query .= " WHERE xar_object_name = '" . xarVarPrepForStore($args['name']) . "'";
         } else {
             if (empty($args['moduleid'])) {
                 $args['moduleid'] = xarModGetIDFromName(xarModGetName());
@@ -307,6 +310,7 @@ class Dynamic_Object_Master
      */
     function createObject($args)
     {
+        // create the Dynamic Objects item corresponding to this object
         $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
         $objectid = $object->createItem($args);
         return $objectid;
@@ -314,12 +318,43 @@ class Dynamic_Object_Master
 
     function updateObject($args)
     {
+        if (empty($args['objectid'])) {
+            return;
+        }
+        // update the Dynamic Objects item corresponding to this object
+        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
+        $itemid = $object->getItem(array('itemid' => $args['objectid']));
+        if (empty($itemid)) return;
+        $itemid = $object->updateItem($args);
+        return $itemid;
     }
 
     function deleteObject($args)
     {
-        // TODO: delete all the properties of this object too
-        // TODO: delete all the (dynamic ?) data for those properties as well
+        if (empty($args['objectid'])) {
+            return;
+        }
+        // get the Dynamic Objects item corresponding to this object
+        $object = new Dynamic_Object(array('objectid' => 1)); // the Dynamic Objects = 1
+        if (empty($object)) return;
+
+        $itemid = $object->getItem(array('itemid' => $args['objectid']));
+        if (empty($itemid)) return;
+
+        // get an object list for the object itself, so we can delete its items
+        $mylist = new Dynamic_Object_List(array('objectid' => $args['objectid']));
+        if (empty($mylist)) return;
+
+        // TODO: delete all the (dynamic ?) data for this object
+
+        // delete all the properties for this object
+        foreach (array_keys($mylist->properties) as $name) {
+            $propid = $mylist->properties[$name]->id;
+            $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
+        }
+
+        // delete the Dynamic Objects item corresponding to this object
+        return $object->deleteItem();
     }
 
 }
@@ -376,6 +411,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                                       'itemid'   => $this->itemid,
                                       'modname'  => $modinfo['name']));
         }
+        return $this->itemid;
     }
 
     /**
@@ -459,7 +495,7 @@ class Dynamic_Object extends Dynamic_Object_Master
     function createItem($args = array())
     {
         if (count($args) > 0) {
-            if (!empty($args['itemid'])) {
+            if (isset($args['itemid'])) {
                 $this->itemid = $args['itemid'];
             }
             foreach ($args as $name => $value) {

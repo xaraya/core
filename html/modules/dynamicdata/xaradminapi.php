@@ -74,7 +74,9 @@ function dynamicdata_adminapi_create($args)
 
     if (count($values) == 0) {
         foreach ($fields as $field) {
-            $values[$field['name']] = $field['value'];
+            if (isset($field['value'])) {
+                $values[$field['name']] = $field['value'];
+            }
         }
     }
     $itemid = $myobject->createItem($values);
@@ -201,7 +203,9 @@ function dynamicdata_adminapi_update($args)
 
     if (count($values) == 0) {
         foreach ($fields as $field) {
-            $values[$field['name']] = $field['value'];
+            if (isset($field['value'])) {
+                $values[$field['name']] = $field['value'];
+            }
         }
     }
     $itemid = $myobject->updateItem($values);
@@ -305,10 +309,11 @@ function dynamicdata_adminapi_createproperty($args)
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
                             array('objectid' => 2)); // the properties
 
+    $values = array();
     // the acceptable arguments correspond to the property names !
     foreach ($fields as $name => $field) {
         if (isset($args[$name])) {
-            $fields[$name]['value'] = $args[$name];
+            $values[$name] = $args[$name];
         }
     }
 /* this is already done via the table definition of xar_dynamic_properties
@@ -325,99 +330,10 @@ function dynamicdata_adminapi_createproperty($args)
                             array('modid'    => xarModGetIDFromName('dynamicdata'), //$moduleid,
                                   'itemtype' => 1, //$itemtype,
                                   'itemid'   => $itemid,
-                                  'fields'   => $fields));
+                                  'values'   => $values));
     if (!isset($propid)) return;
 
     return $propid;
-}
-
-/**
- * import property fields from a static table
- *
- * @author the DynamicData module development team
- * @param $args['modid'] module id of the table to import
- * @param $args['itemtype'] item type of the table to import
- * @param $args['table'] name of the table you want to import
- * @param $args['objectid'] object id to assign these properties to
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
- */
-function dynamicdata_adminapi_importproperties($args)
-{
-    extract($args);
-
-    // Required arguments
-    $invalid = array();
-    if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'admin', 'importproperties', 'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "::", ACCESS_ADD)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-    if (empty($table)) {
-        $table = '';
-    }
-
-    // search for an object, or create one
-    if (empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                                array('modid' => $modid,
-                                      'itemtype' => $itemtype));
-        if (!isset($object)) {
-            $modinfo = xarModGetInfo($modid);
-            $name = $modinfo['name'];
-            if (!empty($itemtype)) {
-                $name .= '_' . $itemtype;
-            }
-            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
-                                      array('moduleid' => $modid,
-                                            'itemtype' => $itemtype,
-                                            'name' => $name,
-                                            'label' => ucfirst($name)));
-            if (!isset($objectid)) return;
-        } else {
-            $objectid = $object['objectid'];
-        }
-    }
-
-    $fields = xarModAPIFunc('dynamicdata','user','getstatic',
-                            array('modid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'table' => $table));
-    if (!isset($fields) || !is_array($fields)) return;
-
-    // create new properties
-    foreach ($fields as $name => $field) {
-        $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
-                                array('name' => $name,
-                                      'label' => $field['label'],
-                                      'objectid' => $objectid,
-                                      'moduleid' => $modid,
-                                      'itemtype' => $itemtype,
-                                      'type' => $field['type'],
-                                      'default' => $field['default'],
-                                      'source' => $field['source'],
-                                      'status' => $field['status'],
-                                      'order' => $field['order'],
-                                      'validation' => $field['validation']));
-        if (empty($prop_id)) {
-            return;
-        }
-    }
-    return true;
 }
 
 

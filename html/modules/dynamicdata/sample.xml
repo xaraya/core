@@ -1,52 +1,47 @@
-<object>
+<object name="importsample">
   <objectid>3</objectid>
-  <name>sample</name>
-  <label>Sample Object</label>
+  <label>Imported Sample</label>
   <moduleid>182</moduleid>
   <itemtype>2</itemtype>
   <urlparam>itemid</urlparam>
-  <maxid>3</maxid>
+  <maxid>0</maxid>
   <config>nothing much...</config>
   <isalias>1</isalias>
   <properties>
-    <property id="1">
-      <name>id</name>
+    <property name="id">
+      <id>22</id>
       <label>Id</label>
       <type>21</type>
-      <id>22</id>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
       <order>1</order>
-      <validation>integer</validation>
+      <validation></validation>
     </property>
-    <property id="2">
-      <name>name</name>
+    <property name="name">
+      <id>23</id>
       <label>Name</label>
       <type>2</type>
-      <id>23</id>
       <default>please enter your name...</default>
       <source>dynamic_data</source>
       <status>1</status>
       <order>2</order>
-      <validation>varchar (30)</validation>
+      <validation>1:30</validation>
     </property>
-    <property id="3">
-      <name>age</name>
+    <property name="age">
+      <id>24</id>
       <label>Age</label>
       <type>15</type>
-      <id>24</id>
       <default></default>
       <source>dynamic_data</source>
       <status>1</status>
       <order>3</order>
-      <validation>integer</validation>
+      <validation>0:125</validation>
     </property>
-    <property id="4">
-      <name>location</name>
+    <property name="location">
+      <id>25</id>
       <label>Location</label>
       <type>12</type>
-      <id>25</id>
       <default></default>
       <source>dynamic_data</source>
       <status>2</status>
@@ -54,5 +49,25 @@
       <validation></validation>
     </property>
   </properties>
+  <items>
+    <importsample itemid="1">
+      <id>1</id>
+      <name>Johnny</name>
+      <age>32</age>
+      <location>http://mikespub.net/xaraya/images/cuernos1.jpg</location>
+    </importsample>
+    <importsample itemid="2">
+      <id>2</id>
+      <name>Nancy</name>
+      <age>29</age>
+      <location>http://mikespub.net/xaraya/images/agra1.jpg</location>
+    </importsample>
+    <importsample itemid="3">
+      <id>3</id>
+      <name>Baby</name>
+      <age>1</age>
+      <location>http://mikespub.net/xaraya/images/sydney1.jpg</location>
+    </importsample>
+  </items>
 </object>
 

@@ -1,0 +1,84 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+</table>
+<br />
+
+<h2><xar:mlstring>Static Table Definitions</xar:mlstring> </h2>
+
+<xar:if condition="empty($export)">
+
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+<xar:foreach in="$tables" key="$table" value="$fields">
+    <tr>
+       <th colspan="3" align="left">
+           #$table# 
+       </th>
+       <th colspan="3" align="right">
+           <a href="#xarModURL('dynamicdata','util','relations',array('modid' => $modid))#">
+           <xar:mlstring>Add Relation</xar:mlstring>
+           </a>
+       </th>
+    </tr>
+    <xar:foreach in="$fields" value="$field">
+    <tr>
+        <td>#$field['name']#</td>
+        <td>#$field['label']#</td>
+        <td><xar:data-output type="fieldtype" name="dummy" value="$field['type']" /></td>
+        <td>#$field['default']#</td>
+        <td>#$field['source']#</td>
+        <td>#$field['validation']#</td>
+    </tr>
+    </xar:foreach>
+    <tr>
+       <td colspan="6" align="center"><br />
+           <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+               <input type="hidden" name="authid" value="#$authid#" />
+               <input type="hidden" name="modid" value="#$modid#" />
+               <input type="hidden" name="itemtype" value="#$itemtype#" />
+               <input type="hidden" name="table" value="#$table#" />
+               <input type="submit" value=" <xar:mlstring>Import table</xar:mlstring> #$table# ">
+           </form>
+       </td>
+    <tr>
+</xar:foreach>
+</table>
+<br />
+<div align="center"><a href="#xarModURL('dynamicdata','util','static',array('export' => 1, 'modid' => $modid))#"><xar:mlstring>Export to XML</xar:mlstring></a></div>
+
+<xar:else />
+
+<form>
+<textarea name="xml" rows="30" cols="80">
+&lt;objects&gt;
+<xar:foreach in="$tables" key="$table" value="$fields">
+  &lt;object name="#$table#"&gt;
+    &lt;label&gt;#$table#&lt;/label&gt;
+    &lt;moduleid&gt;182&lt;/moduleid&gt;
+    &lt;itemtype&gt;-1&lt;/itemtype&gt;
+    &lt;urlparam&gt;itemid&lt;/urlparam&gt;
+    &lt;maxid&gt;0&lt;/maxid&gt;
+    &lt;config&gt;&lt;/config&gt;
+    &lt;isalias&gt;0&lt;/isalias&gt;
+    &lt;properties&gt;
+<xar:foreach in="$fields" key="$name" value="$field">
+      &lt;property name="#$name#"&gt;
+<xar:foreach in="$field" key="$key" value="$value">
+    <xar:if condition="$key ne 'name'">
+        &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
+    </xar:if>
+</xar:foreach>
+      &lt;/property&gt;
+</xar:foreach>
+    &lt;/properties&gt;
+  &lt;/object&gt;
+</xar:foreach>
+&lt;/objects&gt;
+</textarea>
+</form>
+<br />
+<div align="center"><a href="#xarModURL('dynamicdata','util','static',array('modid' => $modid))#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>
+
+</xar:if>
+

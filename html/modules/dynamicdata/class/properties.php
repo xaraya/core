@@ -229,7 +229,11 @@ class Dynamic_Property_Master
         // TODO: delete all the (dynamic ?) data for this property as well
         $object = new Dynamic_Object(array('objectid' => 2, // the Dynamic Properties = 2
                                            'itemid'   => $args['itemid']));
-        $object->getItem();
+        if (empty($object)) return;
+
+        $objectid = $object->getItem();
+        if (empty($objectid)) return;
+
         $objectid = $object->deleteItem();
         return $objectid;
     }
