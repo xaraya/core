@@ -47,12 +47,13 @@ function roles_user_register()
     if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
 
     // Skip Min Age Requirement when set at 0.
+    /*
     $minage = xarModGetVar('roles', 'minage');
     if ($minage == 0){
         if ($phase = 'checkage'){
             $phase = 'registerform';
         }
-    }
+    }*/
 
     switch(strtolower($phase)) {
 
