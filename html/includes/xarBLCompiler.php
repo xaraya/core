@@ -612,7 +612,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         switch($identifier) {
                         case XAR_TOKEN_BLCOMMENT_DELIM:
                             // <!--- Blocklayout comment, ignore completely if properly ended
-                            $token='';
+                            $token=''; $text=trim($text);
                             break;
                         case XAR_TOKEN_HTMLCOMMENT_DELIM:
                             // <!-- HTML comment, copy to output
