@@ -10,6 +10,7 @@
  * @link http://www.xaraya.com
  * @subpackage Page/Block Caching
  * @author mikespub
+ * @author jsb
  */
 
 /**
@@ -26,26 +27,17 @@ function xarCache_init($args = false)
 
 // TODO: clean up all these globals and put them e.g. into a single array
 
-    global $xarVarDir;
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
-    global $xarPage_cacheTime;
-    global $xarPage_cacheDisplay;
-    global $xarPage_cacheShowTime;
-    global $xarPage_cacheExpireHeader;
-    global $xarPage_cacheGroups;
-    global $xarPage_cacheHookedOnly;
-    global $xarBlock_cacheTime;
-    global $xarPage_autoCachePeriod;
-    global $xarPage_sessionLess;
 
     $xarVarDir = xarCache_getVarDirPath();
     
     if (!isset($cacheDir)) {
         $cacheDir = $xarVarDir . '/cache/output';
     }
-    
+
+    // load the caching configuration    
     if (!include_once($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
@@ -57,57 +49,18 @@ function xarCache_init($args = false)
         $cachingConfiguration['Output.DefaultTheme'] : '';
     $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
         $cachingConfiguration['Output.SizeLimit'] : 2097152;
-    $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ?
-        $cachingConfiguration['Page.TimeExpiration'] : 1800;
-    $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ?
-        $cachingConfiguration['Page.DisplayView'] : 0;
-    $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ?
-        $cachingConfiguration['Page.ShowTime'] : 1;
-    $xarPage_cacheExpireHeader = isset($cachingConfiguration['Page.ExpireHeader']) ?
-        $cachingConfiguration['Page.ExpireHeader'] : 1;
-    $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ?
-        $cachingConfiguration['Page.CacheGroups'] : '';
-    $xarPage_cacheHookedOnly = isset($cachingConfiguration['Page.HookedOnly']) ?
-        $cachingConfiguration['Page.HookedOnly'] : 0;
-    $xarPage_sessionLess = isset($cachingConfiguration['Page.SessionLess']) ?
-        $cachingConfiguration['Page.SessionLess'] : '';
-    $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
-        $cachingConfiguration['Block.TimeExpiration'] : 7200;
-    $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
-        $cachingConfiguration['AutoCache.Period'] : 0;
-    
+
     if (file_exists($cacheDir . '/cache.pagelevel')) {
         define('XARCACHE_PAGE_IS_ENABLED',1);
         require_once('includes/caching/page.php');
         // Note : we may already exit here if session-less page caching is enabled
-        xarPage_sessionLess();
-/*
-        $storage = !empty($cachingConfiguration['Page.CacheStorage']) ?
-                   $cachingConfiguration['Page.CacheStorage'] : 'filesystem';
-        $logfile = !empty($cachingConfiguration['Page.LogFile']) ?
-                   $cachingConfiguration['Page.LogFile'] : null;
-        $xarPage_storage =& xarCache_getStorage(array('storage'  => $storage,
-                                                      'type'     => 'page',
-                                                      'cachedir' => $xarOutput_cacheCollection,
-                                                      'expire'   => $xarPage_cacheTime,
-                                                      'logfile'  => $logfile));
-*/
+        xarPageCache_init($cachingConfiguration);
     }
 
     if (file_exists($cacheDir . '/cache.blocklevel')) {
         define('XARCACHE_BLOCK_IS_ENABLED',1);
         require_once('includes/caching/block.php');
-/*
-        $storage = !empty($cachingConfiguration['Block.CacheStorage']) ?
-                   $cachingConfiguration['Block.CacheStorage'] : 'filesystem';
-        $logfile = !empty($cachingConfiguration['Block.LogFile']) ?
-                   $cachingConfiguration['Block.LogFile'] : null;
-        $xarBlock_storage =& xarCache_getStorage(array('storage'  => $storage,
-                                                       'type'     => 'block',
-                                                       'cachedir' => $xarOutput_cacheCollection,
-                                                       'expire'   => $xarBlock_cacheTime,
-                                                       'logfile'  => $logfile));
-*/
+        xarBlockCache_init($cachingConfiguration);
     }
 
     // Subsystem initialized, register a handler to run when the request is over
@@ -125,24 +78,6 @@ function xarCache__shutdown_handler()
 {
     //xarLogMessage("xarCache shutdown handler");
 }
-
-/**
- * functions providing page caching
- *
- * Example :
- *
- * if (xarPageIsCached('MyCache', 'myvar')) {
- *     $var = xarPageGetCached('MyCache', 'myvar');
- * }
- * ...
- * xarPageSetCached('MyCache', 'myvar', 'this value');
- * ...
- * xarOutputDelCached('MyCache', 'myvar');
- * ...
- * xarOutputFlushCached('MyCache');
- * ...
- *
- */
 
 /**
  * Set the contents of some output in the cache

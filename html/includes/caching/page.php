@@ -10,7 +10,68 @@
  * @link http://www.xaraya.com
  * @subpackage Page/Block Caching
  * @author mikespub
+ * @author jsb
  */
+
+/**
+ * Initialise the page caching options
+ *
+ * @returns mixed
+ * @return true on success, exit if session-less page caching finds a hit
+ */
+function xarPageCache_init($args = array())
+{
+// TODO: clean up all these globals and put them e.g. into a single array
+    global $xarPage_cacheTime;
+    global $xarPage_cacheDisplay;
+    global $xarPage_cacheShowTime;
+    global $xarPage_cacheExpireHeader;
+    global $xarPage_cacheGroups;
+    global $xarPage_cacheHookedOnly;
+    global $xarPage_sessionLess;
+    global $xarPage_autoCachePeriod;
+
+    $xarPage_cacheTime = isset($args['Page.TimeExpiration']) ?
+        $args['Page.TimeExpiration'] : 1800;
+    $xarPage_cacheDisplay = isset($args['Page.DisplayView']) ?
+        $args['Page.DisplayView'] : 0;
+    $xarPage_cacheShowTime = isset($args['Page.ShowTime']) ?
+        $args['Page.ShowTime'] : 1;
+    $xarPage_cacheExpireHeader = isset($args['Page.ExpireHeader']) ?
+        $args['Page.ExpireHeader'] : 1;
+    $xarPage_cacheGroups = isset($args['Page.CacheGroups']) ?
+        $args['Page.CacheGroups'] : '';
+    $xarPage_cacheHookedOnly = isset($args['Page.HookedOnly']) ?
+        $args['Page.HookedOnly'] : 0;
+    $xarPage_sessionLess = isset($args['Page.SessionLess']) ?
+        $args['Page.SessionLess'] : '';
+    $xarPage_autoCachePeriod = isset($args['AutoCache.Period']) ?
+        $args['AutoCache.Period'] : 0;
+
+    // Note : we may already exit here if session-less page caching is enabled
+    xarPageCache_sessionLess();
+
+/*
+    global $xarOutput_cacheCollection;
+    global $xarPage_cacheStorage;
+
+    $storage = !empty($args['Page.CacheStorage']) ?
+        $args['Page.CacheStorage'] : 'filesystem';
+    $logfile = !empty($args['Page.LogFile']) ?
+        $args['Page.LogFile'] : null;
+    // Note: make sure this isn't used before core loading if we use database storage
+    $xarPage_cacheStorage =& xarCache_getStorage(array('storage'  => $storage,
+                                                       'type'     => 'page',
+                                                       'cachedir' => $xarOutput_cacheCollection,
+                                                       'expire'   => $xarPage_cacheTime,
+                                                       'logfile'  => $logfile));
+    if (empty($xarPage_cacheStorage)) {
+        return false;
+    }
+*/
+
+    return true;
+}
 
 /**
  * check if the content of a page is available in cache or not
@@ -24,8 +85,8 @@
 function xarPageIsCached($cacheKey, $name = '')
 {
     global $xarOutput_cacheCollection,
-           $xarPage_cacheTime,
            $xarOutput_cacheTheme,
+           $xarPage_cacheTime,
            $xarPage_cacheDisplay,
            $xarPage_cacheCode,
            $xarPage_cacheGroups;
@@ -84,7 +145,9 @@ function xarPageIsCached($cacheKey, $name = '')
             @copy($cache_file, $cache_file2);
         }
 
-        xarPage_httpCacheHeaders($cache_file);
+        // this may already exit if we have a 304 Not Modified
+        $modtime = filemtime($cache_file);
+        xarPageCache_sendHeaders($modtime);
 
         return true;
     } else {
@@ -125,14 +188,13 @@ function xarPageGetCached($cacheKey, $name = '')
 function xarPageSetCached($cacheKey, $name, $value)
 {
     global $xarOutput_cacheCollection,
-           $xarPage_cacheTime,
            $xarOutput_cacheTheme,
+           $xarPage_cacheTime,
            $xarPage_cacheDisplay,
-           $xarOutput_cacheSizeLimit,
            $xarPage_cacheShowTime,
            $xarPage_cacheHookedOnly,
            $xarPage_cacheCode;
-    
+
     $xarTpl_themeDir = xarTplGetThemeDir();
     
     if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
@@ -175,7 +237,8 @@ function xarPageSetCached($cacheKey, $name, $value)
 
         xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
 
-        xarPage_httpCacheHeaders($cache_file);
+        $modtime = filemtime($cache_file);
+        xarPageCache_sendHeaders($modtime);
 
     }
 }
@@ -248,13 +311,14 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
         //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
 
         // cfr. xarCache_init()
-        global $xarPage_autoCachePeriod;
         global $xarOutput_cacheCollection;
-        global $xarVarDir;
+        global $xarPage_autoCachePeriod;
 
         if (!empty($xarPage_autoCachePeriod) &&
             filemtime($xarOutput_cacheCollection.'/autocache.start') < time() - $xarPage_autoCachePeriod) {
             @touch($xarOutput_cacheCollection.'/autocache.start');
+
+            $xarVarDir = xarCache_getVarDirPath();
 
             // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
             $cachingConfigFile = $xarVarDir.'/cache/config.caching.php';
@@ -377,16 +441,25 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
    }
 }
 
-function xarPage_httpCacheHeaders($cache_file)
+/**
+ * Send HTTP headers for page caching (or return 304 Not Modified)
+ *
+ * @access private
+ * @return void
+ */
+function xarPageCache_sendHeaders($modtime = 0)
 {
     global $xarPage_cacheCode,
            $xarPage_cacheExpireHeader,
            $xarPage_cacheTime;
 
-    if (!file_exists($cache_file)) { return; }
-    $mod = filemtime($cache_file);
+    if (empty($modtime)) {
+    // CHECKME: this means 304 will never apply - is that what we want here ?
+        // default to current time
+        $modtime = time();
+    }
     // doesn't seem to be taken into account ?
-    $etag = $xarPage_cacheCode.$mod;
+    $etag = $xarPage_cacheCode.$modtime;
     $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
         $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
     if (!empty($match) && $match == $etag) {
@@ -398,7 +471,7 @@ function xarPage_httpCacheHeaders($cache_file)
     } else {
         $since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
             $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
-        if (!empty($since) && strtotime($since) >= $mod) {   
+        if (!empty($since) && strtotime($since) >= $modtime) {   
             header('HTTP/1.0 304');
             exit;
             // jsb: according to RFC 2616, if $match isn't empty but is
@@ -411,7 +484,7 @@ function xarPage_httpCacheHeaders($cache_file)
         // this tells clients and proxies that this file is good until local
         // cache file is due to expire, and can be reused w/out revalidating
         header("Expires: " .
-               gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
+               gmdate("D, d M Y H:i:s", $modtime + $xarPage_cacheTime) .
                " GMT");
         header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
     } else {
@@ -419,7 +492,7 @@ function xarPage_httpCacheHeaders($cache_file)
         header("Cache-Control: public, must-revalidate");
     }
     header("ETag: $etag");
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $modtime) . " GMT");
     // we can't use this after session_start()
     //session_cache_limiter('public');
     // PHP doesn't set the Pragma header when sending back a cookie
@@ -430,13 +503,12 @@ function xarPage_httpCacheHeaders($cache_file)
     }
 }
 
-function xarPage_sessionLess()
+function xarPageCache_sessionLess()
 {
     global $xarOutput_cacheCollection;
-    global $xarPage_cacheTime;
-    global $xarPage_cacheShowTime;
-    global $xarPage_autoCachePeriod;
     global $xarPage_sessionLess;
+    global $xarPage_cacheCode;
+    global $xarPage_cacheTime;
     
     // Session-less page caching (TODO: extend and place in separate function)
     if (!empty($xarPage_sessionLess) &&
@@ -453,7 +525,6 @@ function xarPage_sessionLess()
         in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
                  $xarPage_sessionLess)
        ) {
-        global $xarPage_cacheCode;
         $cacheKey = 'static';
         $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
         $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
@@ -462,8 +533,11 @@ function xarPage_sessionLess()
             ($xarPage_cacheTime == 0 ||
              filemtime($cache_file) > time() - $xarPage_cacheTime)) {
 
-            xarPage_httpCacheHeaders($cache_file);
+            // this may already exit if we have a 304 Not Modified
+            $modtime = filemtime($cache_file);
+            xarPageCache_sendHeaders($modtime);
 
+            // CHECKME: so we'll never log those 304 Not Modified's here at the moment !? :-)
             if (file_exists($xarOutput_cacheCollection.'/autocache.start')) {
                 xarPage_autoCacheLogStatus('HIT');
             }

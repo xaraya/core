@@ -38,6 +38,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         // we actually retrieve the value here too
         $value = $this->memcache->get($key);
         if ($value) {
+// FIXME: memcached doesn't keep track of modification times !
+            //$this->modtime = 0;
             $this->logStatus('HIT', $oldkey);
             return true;
         } else {
@@ -60,10 +62,15 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-        if (!empty($this->expire)) {
-            $this->memcache->set($key, $value, $this->expire);
+        if ($this->compressed) {
+            $flag = MEMCACHE_COMPRESSED;
         } else {
-            $this->memcache->set($key, $value);
+            $flag = false;
+        }
+        if (!empty($this->expire)) {
+            $this->memcache->set($key, $value, $flag, $this->expire);
+        } else {
+            $this->memcache->set($key, $value, $flag);
         }
     }
 
@@ -96,6 +103,33 @@ class xarCache_MemCached_Storage extends xarCache_Storage
             $this->numitems = $stats['curr_items'];
         }
         return $stats['bytes'];
+    }
+
+    function saveFile($key = '', $filename = '')
+    {
+        if (empty($filename)) return;
+
+        if (!empty($this->code)) {
+            $key .= '-' . $this->code;
+        }
+    // FIXME: avoid getting the value for the 2nd/3rd time here
+        $value = $this->memcache->get($key);
+        if (empty($value)) return;
+
+        $tmp_file = $filename . '.tmp';
+
+        $fp = @fopen($tmp_file, "w");
+        if (!empty($fp)) {
+            @fwrite($fp, $value);
+            @fclose($fp);
+            // rename() doesn't overwrite existing files in Windows
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                @copy($tmp_file, $filename);
+                @unlink($tmp_file);
+            } else {
+                @rename($tmp_file, $filename);
+            }
+        }
     }
 }
 

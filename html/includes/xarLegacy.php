@@ -128,6 +128,8 @@ include 'includes/pnHTML.php';
 * xarExceptionFree()    -> xarErrorFree()
 * xarExceptionHandled() -> xarErrorHandled()
 * xarExceptionRender()  -> xarErrorRender()
+* xarPage_sessionLess() -> xarPageCache_sessionLess()
+* xarPage_httpCacheHeaders() -> xarPageCache_sendHeaders()
 * /
 
 
@@ -1247,5 +1249,34 @@ function xarExceptionRender($format)
 {
     return xarErrorRender($format);
 }    // deprecated
+
+/**
+ * Session-less page caching
+ *
+ * @author mikespub, jsb
+ * @access private
+ * @return void
+ * @deprec 2005-02-01
+ */
+function xarPage_sessionLess()
+{
+    xarPageCache_sessionLess();
+}
+
+/**
+ * Send HTTP headers for page caching (or return 304 Not Modified)
+ *
+ * @author mikespub, jsb
+ * @access private
+ * @return void
+ * @deprec 2005-02-01
+ */
+function xarPage_httpCacheHeaders($cache_file)
+{
+    if (!file_exists($cache_file)) { return; }
+    $modtime = filemtime($cache_file);
+
+    xarPageCache_sendHeaders($modtime);
+}
 
 ?>

@@ -38,6 +38,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             ($this->expire == 0 ||
              filemtime($cache_file) > time() - $this->expire)) {
 
+            $this->modtime = filemtime($cache_file);
             $this->logStatus('HIT', $oldkey);
             return true;
 
@@ -98,17 +99,6 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             } else {
                 @rename($tmp_file, $cache_file);
             }
-/* CHECKME: leave this in page ?
-            // create another copy for session-less page caching if necessary
-            if (($this->type == 'page') && (!empty($GLOBALS['xarPage_cacheNoSession']))) {
-                $key = 'static';
-                $code = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = $this->dir . "/$key-$code.php";
-                // Note that if we get here, the first-time visitor will receive a session cookie,
-                // so he will no longer benefit from this himself ;-)
-                @copy($cache_file, $cache_file2);
-            }
-*/
         }
     }
 
@@ -172,6 +162,21 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         $this->size = $this->_getCacheDirSize($this->dir, $countitems);
 
         return $this->size;
+    }
+
+    function saveFile($key = '', $filename = '')
+    {
+        if (empty($filename)) return;
+
+        if (!empty($this->code)) {
+            $key .= '-' . $this->code;
+        }
+
+        $cache_file = $this->dir . '/' . $key . '.php';
+
+        if (file_exists($cache_file)) {
+            @copy($cache_file, $filename);
+        }
     }
 
     /**

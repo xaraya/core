@@ -13,6 +13,41 @@
  * @author jsb
  */
 
+
+/**
+ * Initialise the block caching options
+ *
+ * @returns bool
+ * @return true on success, false on failure
+ */
+function xarBlockCache_init($args = array())
+{
+// TODO: clean up all these globals and put them e.g. into a single array
+    global $xarBlock_cacheTime;
+
+    $xarBlock_cacheTime = isset($args['Block.TimeExpiration']) ?
+        $args['Block.TimeExpiration'] : 7200;
+
+/*
+    global $xarOutput_cacheCollection;
+    global $xarBlock_cacheStorage;
+
+    $storage = !empty($args['Block.CacheStorage']) ?
+        $args['Block.CacheStorage'] : 'filesystem';
+    $logfile = !empty($args['Block.LogFile']) ?
+        $args['Block.LogFile'] : null;
+    $xarBlock_cacheStorage =& xarCache_getStorage(array('storage'  => $storage,
+                                                        'type'     => 'block',
+                                                        'cachedir' => $xarOutput_cacheCollection,
+                                                        'expire'   => $xarBlock_cacheTime,
+                                                        'logfile'  => $logfile));
+    if (empty($xarBlock_cacheStorage)) {
+        return false;
+    }
+*/
+    return true;
+}
+
 /**
  * Check whether a block is cached
  *

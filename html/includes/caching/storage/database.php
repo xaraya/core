@@ -11,14 +11,29 @@ class xarCache_Database_Storage extends xarCache_Storage
     {
         $this->xarCache_Storage($args);
 
-        $this->table = xarDBGetSiteTablePrefix() . '_cache_data';
         $this->storage = 'database';
+    }
+
+    function getTable()
+    {
+        if (!empty($this->table)) {
+            return $this->table;
+
+        } elseif (function_exists('xarDBGetSiteTablePrefix')) {
+            $this->table = xarDBGetSiteTablePrefix() . '_cache_data';
+            return $this->table;
+
+        } else {
+            // can't use this storage until the core is loaded !
+        }
     }
 
     function isCached($key = '')
     {
+        $table = $this->getTable();
+        if (empty($table)) return false;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
         // we actually retrieve the value here too
         $query = "SELECT xar_id, xar_time, xar_size, xar_check, xar_data
                   FROM $table
@@ -32,9 +47,9 @@ class xarCache_Database_Storage extends xarCache_Storage
 
         if ($result->EOF) {
             $result->Close();
-            $this->logStatus('MISS', $key);
             $this->lastid = null;
             $this->value = null;
+            $this->logStatus('MISS', $key);
             return false;
         }
         list($id,$time,$size,$check,$data) = $result->fields;
@@ -44,12 +59,13 @@ class xarCache_Database_Storage extends xarCache_Storage
 
         $this->lastid = $id;
         if (!empty($this->expire) && $time < time() - $this->expire) {
-            $this->logStatus('MISS', $key);
             $this->value = null;
+            $this->logStatus('MISS', $key);
             return false;
         } else {
-            $this->logStatus('HIT', $key);
             $this->value = $data;
+            $this->modtime = $time;
+            $this->logStatus('HIT', $key);
             return true;
         }
     }
@@ -60,8 +76,10 @@ class xarCache_Database_Storage extends xarCache_Storage
             $this->lastkey = null;
             return $this->value;
         }
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
         $query = "SELECT xar_id, xar_time, xar_size, xar_check, xar_data
                   FROM $table
                   WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
@@ -101,8 +119,10 @@ class xarCache_Database_Storage extends xarCache_Storage
             $check = '';
         }
 
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
 
         if ($key == $this->lastkey && !empty($this->lastid)) {
             $query = "UPDATE $table
@@ -130,8 +150,10 @@ class xarCache_Database_Storage extends xarCache_Storage
 
     function delCached($key = '')
     {
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
 
         if ($key == $this->lastkey && !empty($this->lastid)) {
             $query = "DELETE FROM $table
@@ -151,8 +173,10 @@ class xarCache_Database_Storage extends xarCache_Storage
 
     function flushCached($key = '')
     {
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
 
         if (empty($key)) {
             $query = "DELETE FROM $table
@@ -175,8 +199,10 @@ class xarCache_Database_Storage extends xarCache_Storage
             // TODO: delete oldest entries if we're at the size limit ?
             return;
         }
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
 
         $time = time() - ($this->expire + 60); // take some margin here
 
@@ -191,8 +217,10 @@ class xarCache_Database_Storage extends xarCache_Storage
 
     function getCacheSize($countitems = false)
     {
+        $table = $this->getTable();
+        if (empty($table)) return;
+
         $dbconn =& xarDBGetConn();
-        $table = $this->table;
 
         if ($countitems) {
             $query = "SELECT SUM(xar_size), COUNT(xar_id)
@@ -222,6 +250,32 @@ class xarCache_Database_Storage extends xarCache_Storage
         return $size;
     }
 
+    function saveFile($key = '', $filename = '')
+    {
+        if (empty($filename)) return;
+
+        if ($key == $this->lastkey && isset($this->value)) {
+            $value = $this->value;
+        } else {
+            $value = $this->getCached($key);
+        }
+        if (empty($value)) return;
+
+        $tmp_file = $filename . '.tmp';
+
+        $fp = @fopen($tmp_file, "w");
+        if (!empty($fp)) {
+            @fwrite($fp, $value);
+            @fclose($fp);
+            // rename() doesn't overwrite existing files in Windows
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                @copy($tmp_file, $filename);
+                @unlink($tmp_file);
+            } else {
+                @rename($tmp_file, $filename);
+            }
+        }
+    }
 }
 
 ?>

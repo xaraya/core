@@ -12,6 +12,7 @@ class xarCache_Storage
     var $expire = 0;
     var $logfile = null;
     var $logsize = 2000000; // for each logfile
+    var $modtime = 0; // last modification time
 
     /**
      * Constructor
@@ -47,6 +48,11 @@ class xarCache_Storage
     function setExpire($expire = 0)
     {
         $this->expire = $expire;
+    }
+
+    function getModTime()
+    {
+        return $this->modtime;
     }
 
     function isCached($key = '')
@@ -112,6 +118,10 @@ class xarCache_Storage
             @fwrite($fp, "$time $status $type $key $code $addr $url\n");
             @fclose($fp);
         }
+    }
+
+    function saveFile($key = '', $filename = '')
+    {
     }
 }
 
