@@ -207,7 +207,8 @@ document.forms['privilegeform'].submit();}
 				<p><xar:mlstring>Specify the <a href="$target" title="Use Wizard">instances that apply</a> for this privilege</xar:mlstring></p>
 			</xar:if>
 		</xar:if>
-		<input type="submit" value="Add" align="middle" tabindex="2" />
+                <xar:set name="$tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
+		<input type="submit" value="#$tmpaddvalue#" align="middle" tabindex="2" />
             </div>
 	</form>
 </div>

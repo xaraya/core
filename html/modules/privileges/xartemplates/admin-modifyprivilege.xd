@@ -226,7 +226,8 @@ document.forms['privilegeform'].submit();}
                     
         <br /><br />
 
-        <input type="submit" value="Update" align="middle" tabindex="8" />
+        <xar:set name="$tmpupdatevalue"><xar:mlstring>Update</xar:mlstring></xar:set>
+        <input type="submit" value="#$tmpupdatevalue#" align="middle" tabindex="8" />
 </div><br />
 <h2><xar:mlstring>Add Privilege To</xar:mlstring> '#$pname#'</h2>
 <table border="0" cellpadding="2" cellspacing="0">
@@ -245,7 +246,8 @@ document.forms['privilegeform'].submit();}
     <tr>
     <td colspan="2" align="center">
 <br />
-<input type="button" value="Add" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
+<xar:set name="$tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
+<input type="button" value="#$tmpaddvalue#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
 </td>
 </tr>
 </table>
