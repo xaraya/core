@@ -24,8 +24,12 @@ function blocks_userapi_groupgetinfo($args)
 {
     extract($args);
 
-    if (!is_numeric($gid) || $gid < 1) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'gid');
+    if (empty($gid) || !is_numeric($gid)) {$gid = 0;}
+
+    if (empty($name)) {$name = '';}
+
+    if (empty($name) && empty($gid)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'gid/name');
         return;
     }
 
@@ -44,22 +48,29 @@ function blocks_userapi_groupgetinfo($args)
     $query = 'SELECT    xar_id as id,
                         xar_name as name,
                         xar_template as template
-              FROM      '.$blockGroupsTable.'
-              WHERE     xar_id = ' . $gid;
+              FROM      ' . $blockGroupsTable;
+
+    if (!empty($gid)) {
+        $query .= ' WHERE xar_id = ' . $gid;
+    } elseif (!empty($name)) {
+        $query .= ' WHERE xar_name = ' . $dbconn->qstr($name);
+    }
 
     $result =& $dbconn->Execute($query);
     if (!$result) {return;}
 
-    // Error if we don't get exactly one result.
+    // Return if we don't get exactly one result.
     if ($result->PO_RecordCount() != 1) {
-        $msg = xarML("Block group ID #(1) not found: #(2)", $blockGroupId, $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
     $group = $result->GetRowAssoc(false);
-
     $result->Close();
+
+    // If the name was used to find the group, then get the GID from the fetched group.
+    if (empty($gid)) {
+        $gid = $group['id'];
+    }
 
     // Query for instances in this group
     $query = "SELECT    inst.xar_id as id,

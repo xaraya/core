@@ -37,9 +37,23 @@ function blocks_admin_update_group()
         $group_instance_order = array();
     }
 
+    // Get the current group.
+    $currentgroup = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('gid' => $gid));
+    if (empty($currentgroup)) {return;}
+
+    // If the name is being changed, then check the new name has not already been used.
+    if ($currentgroup['name'] != $name) {
+        $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
+        if (!empty($checkname)) {
+            $msg = xarML('Block group name "#(1)" already exists', $name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            return;
+        }
+    }
+    
     // Pass to API
     if (!xarModAPIFunc(
-        'blocks', 'admin', 'update_group', 
+        'blocks', 'admin', 'update_group',
         array(
             'id' => $gid,
             'template' => $template,
