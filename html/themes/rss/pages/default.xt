@@ -3,13 +3,13 @@
 <xar:var scope="module" module="themes" name="rssxml"/>
 	<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 	 <channel>
-		<title>#xarVarTransform(htmlentities($tpl:pageTitle), 'HTML', 'XML')#</title>
+		<title>#xarVarTransform($tpl:pageTitle, 'HTML', 'XML')#</title>
 		<link>#xarVarPrepForDisplay(xarServerGetBaseURL())#</link>
 		<description>#xarVarTransform(htmlentities(xarModGetVar('themes','SiteSlogan')), 'HTML', 'XML')#</description>
 		<dc:language>en-us</dc:language> 
-		<dc:creator>#xarVarTransform(htmlentities(xarModGetVar('mail', 'adminname')), 'HTML', 'XML')#</dc:creator> 
+		<dc:creator>#xarVarTransform(xarModGetVar('mail', 'adminname'), 'HTML', 'XML')#</dc:creator> 
 	    <admin:generatorAgent rdf:resource="http://www.xaraya.org" /> 
-	    <admin:errorReportsTo rdf:resource="mailto:#xarVarTransform(htmlentities(xarModGetVar('mail', 'adminmail')), 'HTML', 'XML')#" /> 
+	    <admin:errorReportsTo rdf:resource="mailto:#xarVarTransform(xarModGetVar('mail', 'adminmail'), 'HTML', 'XML')#" /> 
 	    <sy:updatePeriod>hourly</sy:updatePeriod> 
 	    <sy:updateFrequency>1</sy:updateFrequency> 
 		<docs>http://backend.userland.com/rss</docs>
