@@ -158,8 +158,13 @@ function xarVarBatchFetch()
  * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
  * correctly.
  *
- * The $flag parameter is a bitmask between the following constants: XARVAR_GET_OR_POST, XARVAR_GET_ONLY,
- * XARVAR_POST_ONLY, XARVAR_NOT_REQUIRED.
+ * The $flag parameter is a bitmask between the following constants: 
+ * XARVAR_GET_OR_POST  - fetch from GET or POST variables
+ * XARVAR_GET_ONLY     - fetch from GET variables only
+ * XARVAR_POST_ONLY    - fetch from POST variables only
+ * XARVAR_NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
+ * XARVAR_DONT_REUSE   - if there is an existing value, do not reused it
+ * XARVAR_DONT_SET     - if there is an existing value, use it
  *
  * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
  * to one of XARVAR_GET_ONLY or XARVAR_POST_ONLY.
