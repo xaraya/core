@@ -212,7 +212,7 @@ class xarTpl__CodeGenerator
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
                         //xarLogMessage('exception control 1', XARLOG_LEVEL_ERROR);
-                        $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;\n";
+                        $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
@@ -241,7 +241,7 @@ class xarTpl__CodeGenerator
                 }
                 //xarLogVariable('final control', $node->tagName, XARLOG_LEVEL_ERROR);
                 //xarLogVariable('final control', $node->needExceptionsControl(), XARLOG_LEVEL_ERROR); 
-                $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;\n";
+                $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
                 $this->setPendingExceptionsControl(false);
             }
         } else {
@@ -1861,14 +1861,14 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $resolver->push("loop:$id:number", '$_bl_loop_number'.$loopCounter);
         }
 
-        $output = '$_bl_loop_index'.$loopCounter." = 0;\n";
-        $output .= '$_bl_loop_number'.$loopCounter." = 1;\n";
-        $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") {\n";
+        $output = '$_bl_loop_index'.$loopCounter." = 0; ";
+        $output .= '$_bl_loop_number'.$loopCounter." = 1; ";
+        $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
 
         if (!isset($prefix)) {
-            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_OVERWRITE);\n";
+            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_OVERWRITE); ";
         } else {
-            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix');\n";
+            $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
         }
 
         return $output;
@@ -1888,8 +1888,8 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $resolver->pop('loop:index');
         $resolver->pop('loop:number');
 
-        $output = '$_bl_loop_index'.$loopCounter."++;\n";
-        $output .= '$_bl_loop_number'.$loopCounter."++;\n";
+        $output = '$_bl_loop_index'.$loopCounter."++; ";
+        $output .= '$_bl_loop_number'.$loopCounter."++; ";
         $output .= "} ";
         return $output;
     }
@@ -2435,7 +2435,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
             return;
         }
         
-        return "xarBlock_renderGroup('$name');";    
+        return "xarBlock_renderGroup('$name')";
     }
     
     function hasChildren()
@@ -2829,7 +2829,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
-    function render()
+    function renderBeginTag()
     {
         extract($this->attributes);
 
@@ -2839,13 +2839,18 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
 
-        if (!isset($value)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'name\' attribute in <xar:set> tag.', $this));
+        if (count($this->children) != 1) {
+            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
+                           new xarTpl__ParserError('The <xar:set> tag can contain only one child tag.', $this));
             return;
         }
 
-        return $name.'='.$value;
+        return '$'.$name;
+    }
+
+    function renderEndTag()
+    {
+        return '';
     }
 
     function isAssignable()
@@ -2853,7 +2858,12 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         return false;
     }
 
-    function isPHPCode()
+    function hasChildren()
+    {
+        return true;
+    }
+
+    function needAssignment()
     {
         return true;
     }
