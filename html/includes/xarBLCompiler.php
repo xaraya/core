@@ -642,7 +642,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                         // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
                                         // See also bug #3111
                                         $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
-                                        break 3; // continue parsing the content
+                                        break 4; // continue parsing the content
                                 }
                                 $nextChar = $this->getNextToken();
                             }
