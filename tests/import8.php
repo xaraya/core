@@ -142,7 +142,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                       'valcode'  => 'createdbyadmin',
                                       'state'   => 3));
         if (!isset($newuid)) {
-            echo "Insert user ($uid) $name failed : " . $dbconn->ErrorMsg() ."<br>\n";
+            echo "Insert user ($uid) $name failed : " . xarExceptionRender('text') . "<br>\n";
         } elseif ($count < 200) {
             echo "Inserted user ($uid) $name - $uname<br>\n";
         } elseif ($num % 100 == 0) {
@@ -344,7 +344,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                      )
                                );
         if (!isset($newaid) || $newaid != $aid) {
-            echo "Insert article ($aid) $title failed<br>\n";
+            echo "Insert article ($aid) $title failed : " . xarExceptionRender('text') . "<br>\n";
         } elseif ($count < 200) {
             echo "Inserted article ($aid) $title<br>\n";
         } elseif ($num % 100 == 0) {
@@ -429,7 +429,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert queued article ($qid) $title failed <br>\n";
+            echo "Insert queued article ($qid) $title failed : " . xarExceptionRender('text') . "<br>\n";
         } elseif ($count < 200) {
             echo "Inserted queued article ($qid) $title<br>\n";
         } elseif ($num % 100 == 0) {
@@ -536,7 +536,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert section content ($artid) $title failed <br>\n";
+            echo "Insert section content ($artid) $title failed : " . xarExceptionRender('text') . "<br>\n";
         } else {
             echo "Inserted section content ($artid) $title<br>\n";
         }
@@ -639,7 +639,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert FAQ ($id) $title failed <br>\n";
+            echo "Insert FAQ ($id) $title failed : " . xarExceptionRender('text') . "<br>\n";
         } else {
             echo "Inserted FAQ ($id) $title<br>\n";
         }
@@ -817,7 +817,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert web link ($lid) $title failed <br>\n";
+            echo "Insert web link ($lid) $title failed : " . xarExceptionRender('text') . "<br>\n";
         } else {
             echo "Inserted web link ($lid) $title<br>\n";
         }
