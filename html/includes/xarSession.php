@@ -34,11 +34,11 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     xarSession__setup($args);
 
-    if (xarSession__UseOldSessions()) {
+    if (ini_get('register_globals')) {
         // First thing we do is ensure that there is no attempted pollution
-        // of the session namespace (yes, we still need this for now)
+        // of the session namespace (yes, we still need this in this case)
         foreach($GLOBALS as $k=>$v) {
-            if (preg_match('/^XARSV/', $k)) {
+            if (substr($k,0,5) == 'XARSV') {
                 xarCore_die('xarSession_init: Session Support initialisation failed.');
             }
         }
@@ -92,16 +92,17 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
+    $var = 'XARSV' . $name;
+
     // First try to handle stuff through _SESSION
     if (!xarSession__UseOldSessions()) {
-        if (isset($_SESSION[$name])) {
-            return $_SESSION[$name];
+        if (isset($_SESSION[$var])) {
+            return $_SESSION[$var];
         }
         return;
     }
 
     // Use the 'old' session var way
-    $var = 'XARSV' . $name;
 
     // + $_SESSION doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -127,13 +128,13 @@ function xarSessionSetVar($name, $value)
 {
     if ($name == 'uid') return false;
 
+    $var = 'XARSV' . $name;
+
     // Try to handle through _SESSION
     if (!xarSession__UseOldSessions()) {
-        $_SESSION[$name] = $value;
+        $_SESSION[$var] = $value;
         return true;
     }
-
-    $var = 'XARSV' . $name;
 
     // + $_SESSION for now - doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -154,16 +155,16 @@ function xarSessionDelVar($name)
 {
     if ($name == 'uid') return false;
 
+    $var = 'XARSV' . $name;
+
     // First try to handle through _SESSION
     if (!xarSession__UseOldSessions()) {
-        if (!isset($_SESSION[$name])) {
+        if (!isset($_SESSION[$var])) {
             return false;
         }
-        unset($_SESSION[$name]);
+        unset($_SESSION[$var]);
         return true;
     }
-
-    $var = 'XARSV' . $name;
 
     // + $_SESSION for now - doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
@@ -205,7 +206,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
         global $XARSVuid;
         $XARSVuid = $userId;
     } else {
-        $_SESSION['uid'] = $userId;
+        $_SESSION['XARSVuid'] = $userId;
     }
     return true;
 }
@@ -427,7 +428,7 @@ function xarSession__phpRead($sessionId)
             global $XARSVuid;
             $XARSVuid = _XAR_ID_UNREGISTERED;
         } else {
-            $_SESSION['uid'] = _XAR_ID_UNREGISTERED;
+            $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
         }
         $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';
