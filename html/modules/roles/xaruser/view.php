@@ -102,26 +102,20 @@ function roles_user_view()
 
             // The user API function is called. First pass to get the total number of records
             // for the pager. Not very efficient, but there you are.
-            $items = xarModAPIFunc('roles',
-                                   'user',
-                                   'getall',
-                                    array('startat' => 0,
-                                          'order'   => $order,
-                                          'selection'   => $selection,
-                                          'include_anonymous' => false,
-                                          'include_myself' => false,
-                                          'numitems' => xarModGetVar('roles',
-                                                                     'rolesperpage')));
+            $data['total'] = xarModAPIFunc('roles',
+                                           'user',
+                                           'countall',
+                                           array('selection'   => $selection,
+                                                 'include_anonymous' => false,
+                                                 'include_myself' => false));
 
-            if (!$items){
+            if (!$data['total']){
                 $data['message'] = xarML('There are no users selected');
                 $data['total'] = 0;
                 return $data;
             }
 
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Users')));
-
-            $data['total'] = count($items);
 
             // Now get the actual records to be displayed
             $items = xarModAPIFunc('roles',
@@ -144,20 +138,6 @@ function roles_user_view()
     for ($i = 0; $i < count($items); $i++) {
         $item = $items[$i];
         $data['uidlist'][] = $item['uid'];
-
-        switch(strtolower($phase)) {
-
-            case 'active':
-                $getuser = xarModAPIFunc('roles',
-                                         'user',
-                                         'get',
-                                          array('uid' => $items[$i]['uid']));
-
-
-                $items[$i]['name'] = $getuser['name'];
-                $items[$i]['email'] = $getuser['email'];
-                break;
-        }
 
         // Change email to a human readible entry.  Anti-Spam protection.
 
