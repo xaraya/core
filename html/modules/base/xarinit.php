@@ -376,10 +376,6 @@ function base_init()
     $group_admin = $dbconn->PO_Insert_ID($groupsTable,'xar_gid');
     $groupMembershipTable = $systemPrefix . '_group_membership';
 
-    $query = "INSERT INTO $groupMembershipTable (xar_gid, xar_uid) VALUES ($group_users, $id_anonymous);";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
     $query = "INSERT INTO $groupMembershipTable (xar_gid, xar_uid) VALUES ($group_admin, $id_admin);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;

@@ -43,6 +43,7 @@ function mail_delete()
     xarModDelVar('mail', 'adminmail');
     xarModDelVar('mail', 'wordwrap');
     xarModDelVar('mail', 'priority');
+    xarModDelVar('mail', 'replyto');
     xarModDelVar('mail', 'replytoname');
     xarModDelVar('mail', 'replytoemail');
 

@@ -96,6 +96,18 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
+							<xar:mlstring>Default Group for New Users</xar:mlstring>
+						</td>
+						<td>
+							<select name="defaultgroup">
+							<xar:loop name="$groups">
+								<option name="#$name#" value="#$name#">#$name#</option>
+							</xar:loop>
+							</select>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
 							<xar:mlstring>Allow users to be invisible in users list</xar:mlstring>
 						</td>
 						<td>
