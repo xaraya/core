@@ -1,7 +1,7 @@
-<link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/style_textsmall.css" title="Small classictext" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textlarge.css" title="Large classictext" media="screen" />
-<link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_blue.css" title="Blue classiccolors" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_highcontrast.css" title="Contrast classiccolors" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_green.css" title="Green classiccolors" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
+<xar:link-theme-stylesheet filename="style_textsmall" title="Small classictext" />
+<xar:link-theme-stylesheet filename="style_textmedium" alternate="true" title="Medium classictext" />
+<xar:link-theme-stylesheet filename="style_textlarge" alternate="true" title="Large classictext" />
+<xar:link-theme-stylesheet filename="colstyle_blue" title="Blue classiccolors" />
+<xar:link-theme-stylesheet filename="colstyle_highcontrast" alternate="true" title="Contrast classiccolors" />
+<xar:link-theme-stylesheet filename="colstyle_green" alternate="true" title="Green classiccolors" />
+<xar:link-theme-stylesheet filename="colstyle_orange" alternate="true" title="Orange classiccolors" />

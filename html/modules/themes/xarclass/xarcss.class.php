@@ -14,7 +14,6 @@
 /**
  * Base CSS class
  *
- * quick and dirty implementation started for corecss scenario
  *
  * @package themes
  */
@@ -62,18 +61,21 @@ class xarCSS
     
     // BASIC OVERRIDES SETTINGS (still TODO)
     var $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
-    var $altdir     = '';        // alternative directory for overridden css file
+    var $altdir     = '';           // alternative directory for overridden css file
     
     // SUPPORT FOR DYNAMIC CSS SERVING AND ADMIN GUI (TODO)
-    var $cssdecl    = array();      // TODO: associative array containing css declarations 
+    var $cssdecl;                   // TODO: associative array containing css declarations 
                                     // $this->componentCSS["body"]["background-color"] 
-    var $cssconf    = array();      // Runtime configuration parameters (with db backend)
+    var $cssconf    = false;        // Use runtime configuration parameters (with db backend)
+    
+    // STYLESHEETS DUMP
+//     var $cssdump;      // Collect info for all stylesheets to be used
     
     // constructor
     function xarCSS()
     {
         // DO NOT EVER ATTEMPT to instantiate this class, if you do you'll get a nasty error
-        // do subclass it instead and let the polymorphism to do its job :-) <andyv>
+        // subclass it instead and let the polymorphism to do its job :-) <andyv>
         $msg = xarML("you have illegally instantiated class: ") . get_class (&$this);
         $this->_error($msg);
     }
@@ -95,12 +97,12 @@ class xarCSS
     
     function set_rel_stylesheet()
     {
-        $this->set_rel(CSSRELSTYLESHEET);
+        $this->rel = CSSRELSTYLESHEET;
     }
     
     function set_rel_alternate()
     {
-        $this->set_rel(CSSRELALTSTYLESHEET);
+        $this->rel = CSSRELALTSTYLESHEET;
     }
     
     // CSS TYPE - public accessors
@@ -273,8 +275,8 @@ class xarCSS
             $htmlstr = '';
         }
         
-        // that's all we care to do ATM, rather quietly too
-        $GLOBALS['xarTpl_additionalStyles'] .= $htmlstr;
+        // that's all we care to do ATM, and rather quietly too
+        $GLOBALS['xarTpl_additionalStyles'][$this->comptype][$this->compname][] = $htmlstr;
         
         // return the result only if debug is on
         if($this->debug) return $htmlstr;
@@ -296,6 +298,7 @@ class xarCSS
     // returns relative xaraya path for the desired css file (protected)
     function _xarpath()
     {        
+        // in absence of a more generic core facility
         require_once "csspath.class.php";
         
         // make sure current module is known in advance
@@ -318,9 +321,10 @@ class xarCSS
         }
     }
     
-    // make valid (x)html tag for various css inclusion methods
+    // make valid (x)html tag for various css inclusion methods (protected)
     function _htmltag()
     {        
+        // in absence of a more generic core facility
         require_once "tagmaker.class.php";
         
         switch($this->method)

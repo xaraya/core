@@ -126,7 +126,10 @@ function themes_init()
     if (!$res) return;
 
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
-    xarModSetVar('themes', 'selsort', 'nameasc'); 
+    xarModSetVar('themes', 'selsort', 'nameasc');
+    
+    // Register css tags
+    xarModAPIFunc('themes', 'css', 'registercsstags');
     // Initialisation successful
     return true;
 } 
@@ -137,9 +140,8 @@ function themes_activate()
         xarModSetVar('themes', 'default', 'Xaraya_Classic');
     } 
 
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-            'themes', 'user', 'usermenu')) {
-        return false;
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
+        // return false;
     } 
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';
@@ -162,13 +164,10 @@ function themes_activate()
     xarModSetVar('themes', 'ShowTemplates', 0);
     // Register blocks
     if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
-        if (!xarModAPIFunc('blocks',
-                           'admin',
-                           'register_block_type',
-                           array('modName' => 'themes',
-                                 'blockType' => 'meta'))) return; 
+        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                           array('modName' => 'themes', 'blockType' => 'meta'))) return; 
     }
-
+    
     return true;
 } 
 
@@ -192,7 +191,10 @@ function themes_upgrade($oldversion)
 
             if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
                 array('modName' => 'themes', 'blockType' => 'meta'))) return; 
-        case 1.2:
+        case 1.4:
+            // Register css tags
+            xarModAPIFunc('themes', 'css', 'registercsstags');
+            
 
     } 
     // Update successful
