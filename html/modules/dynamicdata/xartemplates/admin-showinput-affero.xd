@@ -2,7 +2,7 @@
 <xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
 <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
-<xar:if condition="isempty($tabindex)">
+<xar:if condition="empty($tabindex)">
     <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" />
 <xar:else />
     <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
