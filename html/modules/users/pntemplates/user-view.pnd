@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Users Administration</pnt:mlstring>            
+            <pnt:mlstring>Users Area</pnt:mlstring>            
         </th>
     </tr>
     <tr align="center">
@@ -23,10 +23,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>Future Link</pnt:mlstring></a>
+            <a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-user-modify;"><pnt:mlstring>Future Link</pnt:mlstring></a>
+            <a href="&pnt-modurl-users-user-privacy;"><pnt:mlstring>Privacy Policy</pnt:mlstring></a>
         </td>
         <td align="center">
             <a href="&pnt-modurl-users-user-logout;"><pnt:mlstring>Logout</pnt:mlstring></a>

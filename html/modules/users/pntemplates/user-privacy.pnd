@@ -1,0 +1,71 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <pnt:mlstring>Users Area</pnt:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>New Account</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-modify;"><pnt:mlstring>Modify Account</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-view;"><pnt:mlstring>View Current Users</pnt:mlstring></a>
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <b><pnt:mlstring>Privacy Policy</pnt:mlstring></b>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-logout;"><pnt:mlstring>Logout</pnt:mlstring></a>
+        </td>
+    </tr>
+</table>
+
+<h2><pnt:mlstring>Privacy Policy v1.11 for</pnt:mlstring> &pnt-config-display.sitename;</h2>
+<h3><pnt:mlstring>Introduction.</pnt:mlstring></h3>
+<pnt:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control. Please take time to read our</pnt:mlstring> <a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>.
+<h3><pnt:mlstring>1. Collection of Data.</pnt:mlstring></h3>
+<pnt:mlstring>Our registration process requires only a valid e-mail address and a unique user ID and password. Providing us with other information is at your option. Please take note that your user name, e-mail address, or other submissions that you make on this site may contain your real name or other personally identifiable information and, as a result, may appear on this site. Like many web sites, we may also automatically receive general information that is contained in our server log files such as your IP address and cookie information. Information about how advertising may be served on this site (if at all) is set forth below.</pnt:mlstring>
+<h3><pnt:mlstring>2. Use of Data.</pnt:mlstring></h3>
+<pnt:mlstring>We may use Data to customize and improve your user experience on this site. We will make efforts so that your Data will not be provided to third parties unless (i) provided for otherwise in this Privacy Policy; (ii) we obtain your consent, such as when you choose to opt-in or opt-out to the sharing of Data; (iii) a service provided on our site requires the interaction with or is provided by a third party, by way of example an Application Service Provider; (iv) pursuant to legal process or law enforcement; (v) we find that your use of this site violates our this Policy, Terms of Service, other usage guidelines or as deemed reasonably necessary by us to protect our legal rights and/or property; (vi) or (vi) this site is purchased by a third party whereby that third party will be able to use the Data in the same manner as we can as set forth in this Policy. In the event you choose to use links that appear on our site to visit other web sites, you are advised to read the privacy policies that appear on those sites.</pnt:mlstring>
+<h3><pnt:mlstring>3. Cookies.</pnt:mlstring></h3>
+<pnt:mlstring>Like many web sites, we set and use cookies to enhance your user experience, such as retaining your personal settings. Advertisements may appear on our web site and, if so, may set and access cookies on your computer and is subject to the privacy policy of those parties providing the advertisement. However, the companies serving the advertising do not have access to our cookies. These companies usually use non-personally identifiable or anonymous codes to obtain information about your visits to our site.</pnt:mlstring>
+
+<!-- **NOTE: that this last statement should be true but modify if necessary -->
+<pnt:mlstring>You can </pnt:mlstring><a href=http://www.networkadvertising.org/optout_nonppii.asp><pnt:mlstring>click here</pnt:mlstring></a><pnt:mlstring> to find out more information about this practice and to find out about your options including from the following companies that may serve advertising on our site:</pnt:mlstring><br>
+<!-- **NOTE: Add or delete from the following -->
+<br />
+<br />
+[ <a href=http://www.affiliateshop.com><pnt:mlstring>AffiliateShop</pnt:mlstring></a> ]<br />
+[ <a href=http://www.associateprograms.com><pnt:mlstring>AssociatePrograms.com</pnt:mlstring></a> ]<br />
+[ <a href=http://www.befree.com><pnt:mlstring>Be Free</pnt:mlstring></a> ]<br />
+[ <a href=http://www.clicktrade.com><pnt:mlstring>Click Trade</pnt:mlstring></a> ]<br />
+[ <a href=http://www.cj.com><pnt:mlstring>Commission Junction</pnt:mlstring></a> ]<br />
+[ <a href=http://www.doubleclick.net><pnt:mlstring>DoubleClick</pnt:mlstring></a> ]<br />
+[ <a href=http://www.linkshare.com><pnt:mlstring>Linkshare</pnt:mlstring></a> ]<br />
+<h3><pnt:mlstring>4. Children.</pnt:mlstring></h3>
+<pnt:mlstring>We do not allow persons who are ages thirteen or younger to become members of this site. For more information, please contact</pnt:mlstring> <a href="mailto:&pnt-config-core.adminmail;"><pnt:mlstring>our webmaster</pnt:mlstring></a>.
+<!-- **NOTE: Feel free to provide other information -->
+<h3><pnt:mlstring>5. Editing or Deleting Your Account Information.</pnt:mlstring></h3>
+<pnt:mlstring>We provide you with the ability to edit the information in your user account information that you provided to us in registration by using </pnt:mlstring><a href="&pnt-modurl-users-user-main;"><pnt:mlstring>your personal page configuration area</pnt:mlstring></a>. <pnt:mlstring>You may request deletion of your user account by contacting </pnt:mlstring><a href="mailto:&pnt-config-core.adminmail;"><pnt:mlstring>our webmaster</pnt:mlstring></a>.  
+<!-- **NOTE: Note the following may be suggested for your jurisdiction and there is no harm in including it - begin -->
+<pnt:mlstring>Content or other data that you may have provided to us and that is not contained within your user account, such as posts that may appear within our forums, may continue to remain on our site at our discretion even though your user account is deleted. Please see our </pnt:mlstring><a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a><pnt:mlstring> for more information.</pnt:mlstring>
+<h3><pnt:mlstring>6. Changes to this Privacy Policy.</pnt:mlstring></h3>
+<pnt:mlstring>We may make changes to this Policy from time to time. We will notify you of substantial changes to this Policy either by posting a prominent announcement on our site and/or by sending a message to the e-mail address you have provided to us that is contained within your user settings.</pnt:mlstring>
+<h3><pnt:mlstring>7. NO GUARANTEES.</pnt:mlstring></h3>
+<pnt:mlstring>While this Privacy Policy states our standards for maintenance of Data and we will make efforts to meet them, we are not in a position to guarantee these standards. There may be factors beyond our control that may result in disclosure of data. As a consequence, we disclaim any warranties or representations relating to maintenance or nondisclosure of Data.</pnt:mlstring>
+<h3><pnt:mlstring>8. Contact Information.</pnt:mlstring></h3>
+<pnt:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</pnt:mlstring> <a href="mailto:&pnt-config-core.adminmail;"><pnt:mlstring>Your webmaster</pnt:mlstring></a>.
