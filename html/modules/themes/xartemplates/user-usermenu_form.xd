@@ -1,0 +1,27 @@
+<h2>#$name# <xar:mlstring>'s Theme Selection</xar:mlstring></h2> 
+<form action="#xarModURL('themes', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="authid" id="authid" value="#$authid#" />	
+<input type="hidden" name="uid" id="uid" value="#$uid#" />	
+<input type="hidden" name="phase" id="phase" value="update" />
+<table border="0" width="100%" cellspacing="1" cellpadding="4">
+	<tr align="left" valign="middle">
+		<td>
+			<xar:mlstring>Site Theme</xar:mlstring>
+		</td>
+		<td>
+			<select name="defaulttheme" id="defaulttheme" size="1" tabindex="1">
+				<xar:loop name="$themes">
+					<xar:if condition="xarConfigGetVar('Site.BL.DefaultTheme') eq $themename">
+						<option value="#$themename#" selected="selected">#$themename#</option>
+					<xar:else />
+						<option value="#$themename#">#$themename#</option>
+					</xar:if>									
+				</xar:loop>
+			</select>
+		</td>
+	</tr>
+</table>
+</div>
+<br /><br />
+<input type="submit" value="<xar:mlstring>Modify Default Theme</xar:mlstring>" align="middle" tabindex="2" />
+</form>

@@ -152,6 +152,12 @@ function themes_init()
     if(file_exists('themes/Xaraya_Classic/xartheme.php')){
         xarModSetVar('themes', 'default', 'Xaraya_Classic');
     }
+
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
+                            'themes', 'user', 'usermenu')) {
+        return false;
+    }
+
     // Initialisation successful
     return true;
 }
@@ -164,7 +170,23 @@ function themes_init()
  */
 function themes_upgrade($oldversion)
 {
-    return false;
+    // Upgrade dependent on old version number
+    switch($oldVersion) {
+        case 1.0:
+            
+            if (!xarModRegisterHook('item', 'usermenu', 'GUI',
+                                    'themes', 'user', 'usermenu')) {
+                return false;
+            }
+
+            break;
+        case 2.0:
+            // Code to upgrade from version 2.0 goes here
+            break;
+    }
+
+    // Update successful
+    return true;
 }
 
 /**
