@@ -25,7 +25,7 @@ function modules_admin_release()
 
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to 
-    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss";
+    $feedfile = "http://www.xaraya.com/index.php/articles/rnid/?theme=rss";
 
     // Create Cache File for 7 days.
     $refresh = (time() - 604800);

@@ -1,6 +1,6 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Themes System</xar:mlstring></span></div>
 <div class="xar-mod-body"><div align="left">
-<h2><xar:mlstring>Recent Certified Module Releases</xar:mlstring></h2>
+<h2><xar:mlstring>Recent Theme Extensions</xar:mlstring></h2>
 <xar:if condition="empty($warning)">
 	<xar:if condition="!empty($feedcontent)">
 		<xar:loop name="$feedcontent">
