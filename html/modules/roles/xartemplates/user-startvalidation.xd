@@ -5,7 +5,7 @@
 <p><xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.</xar:mlstring> </p>
 
 <xar:if condition="!empty($valcode)">
-    <p><xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('roles', 'user', 'getvalidation')#&amp;phase=getvalidate&amp;uname=#$uname#&amp;valcode=#$valcode#"><xar:mlstring>this link</xar:mlstring></a>.</p>
+    <p><xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('roles', 'user', 'getvalidation')#&amp;phase=getvalidate&amp;uname=#xarVarPrepForDisplay($uname)#&amp;valcode=#$valcode#"><xar:mlstring>this link</xar:mlstring></a>.</p>
 <xar:else />
     <form action="#xarModURL('roles', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
         <div>
@@ -14,7 +14,7 @@
     <table border="0" cellpadding="2" cellspacing="0">
     <tr>
         <td><label for="uname"><xar:mlstring>Username</xar:mlstring>:</label></td>
-        <td><input type="text" name="uname" id="uname" value="#$uname#" /></td>
+        <td><input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#" /></td>
     </tr>
     <tr>
         <td><label for="valcode"><xar:mlstring>Validation Code</xar:mlstring>:<label></td>
@@ -22,7 +22,7 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;"><br />
-            <input type="submit" value="#$validatelabel#" />
+            <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#" />
         </td>
     </tr>
     </table>

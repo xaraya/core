@@ -7,7 +7,7 @@
         <a href="#xarModURL('roles', 'user', 'view')#">
             <xar:mlstring>Member List</xar:mlstring>
         </a>
-        &nbsp;&gt;&nbsp;#$name#
+        &nbsp;&gt;&nbsp;#xarVarPrepForDisplay($name)#
     </h2>
     <div style="margin: auto;">
         <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
@@ -16,7 +16,7 @@
                 <a href="#xarModURL('roles', 'user', 'email', array('uid' => $uid))#">
                     <xar:ml>
                         <xar:mlstring>Send an Email to #(1)</xar:mlstring>
-                        <xar:mlvar>#$name#</xar:mlvar>
+                        <xar:mlvar>#xarVarPrepForDisplay($name)#</xar:mlvar>
                     </xar:ml>
                 </a>
             </p>

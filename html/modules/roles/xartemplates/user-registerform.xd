@@ -11,7 +11,7 @@
 <table border="0" cellpadding="2" cellspacing="0">
     <tr>
         <td><label for="username"><xar:mlstring>Username</xar:mlstring>:</label></td>
-        <td><input type="text" name="username" id="username" value="#$values['username']#" size="25" maxlength="255" />
+        <td><input type="text" name="username" id="username" value="#xarVarPrepForDisplay($values['username'])#" size="25" maxlength="255" />
             <xar:if condition="!empty($invalid['username'])">
                 <span class="xar-error">#$invalid['username']#</span>
             </xar:if>
@@ -19,7 +19,7 @@
     </tr>
     <tr>
         <td><label for="realname"><xar:mlstring>Display Name</xar:mlstring>:</label></td>
-        <td><input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="255" />
+        <td><input type="text" name="realname" id="realname" value="#xarVarPrepForDisplay($values['realname'])#" size="25" maxlength="255" />
             <xar:if condition="!empty($invalid['realname'])">
                 <span class="xar-error">#$invalid['realname']#</span>
             </xar:if>
@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <td><label for="email"><xar:mlstring>E-mail Address</xar:mlstring>:</label></td>
-        <td><input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="255" />
+        <td><input type="text" name="email" id="email" value="#xarVarPrepForDisplay($values['email'])#" size="25" maxlength="255" />
             <xar:if condition="!empty($invalid['email'])">
                 <span class="xar-error">#$invalid['email']#</span>
             </xar:if>
@@ -36,7 +36,7 @@
     <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
         <tr>
             <td><label for="pass1"><xar:mlstring>Password</xar:mlstring>:</label></td>
-            <td><input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" />
+            <td><input type="password" name="pass1" id="pass1" value="#xarVarPrepForDisplay($values['pass1'])#"" size="25" maxlength="40" />
                     <xar:if condition="!empty($invalid['pass1'])">
                         <span class="xar-error">#$invalid['pass1']#</span>
                     </xar:if>
@@ -44,7 +44,7 @@
         </tr>
         <tr>
             <td><label for="pass2"><xar:mlstring>Retype Password</xar:mlstring>:</label></td>
-            <td><input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" />
+            <td><input type="password" name="pass2" id="pass2" value="#xarVarPrepForDisplay($values['pass2'])#"" size="25" maxlength="40" />
                     <xar:if condition="!empty($invalid['pass2'])">
                         <span class="xar-error">#$invalid['pass2']#</span>
                     </xar:if>

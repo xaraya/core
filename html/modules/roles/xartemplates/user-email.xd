@@ -8,18 +8,18 @@
             <xar:mlstring>Member List</xar:mlstring>
         </a>&nbsp;&gt;&nbsp;
         <a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">
-            #$name#
+            #xarVarPrepForDisplay($name)#
         </a>&nbsp;&gt;&nbsp;
         <xar:mlstring>Send an Email to</xar:mlstring>
-        &nbsp;#$name#
+        &nbsp;#xarVarPrepForDisplay($name)#
     </h2>
     <div style="margin: auto;">
         <form method="post" action="#xarModURL('roles', 'user', 'email', array('phase' => 'confirm'))#" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="name" id="name" value="#$name#" />
+        <input type="hidden" name="name" id="name" value="#xarVarPrepForDisplay($name)#" />
         <input type="hidden" name="uid" id="uid" value="#$uid#" />
-        <input type="hidden" name="fname" id="fname" value="#xarUserGetVar('name')#" />
-        <input type="hidden" name="femail" id="femail" value="#xarUserGetVar('email')#" />
+        <input type="hidden" name="fname" id="fname" value="#xarVarPrepForDisplay(xarUserGetVar('name'))#" />
+        <input type="hidden" name="femail" id="femail" value="#xarVarPrepForDisplay(xarUserGetVar('email'))#" />
         <table border="0" cellpadding="2" cellspacing="0">
             <tr>
                 <td>

@@ -20,26 +20,26 @@ function roles_user_view($args)
 
     // Get parameters
     if(!xarVarFetch('startnum', 'isset',    $startnum, 1,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
-    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
+    if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED)) {return;}
     //This $filter variable isnt being used for anything...
     //It is set later on.
-    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET, XARVAR_PREP_FOR_DISPLAY)) {return;}
+    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
 
-    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
-    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
-    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
-    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET, XARVAR_PREP_FOR_DISPLAY)) {return;}
+    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET)) {return;}
 
     $data['items'] = array();
 
     // Specify some labels for display
     $data['pager'] = '';
-    $order = xarVarPrepForDisplay($order);
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
+// FIXME: SQL injection risk here - use bind variables.
     if ($letter) {
         if ($letter == 'Other') {
         // TODO: check for syntax in other databases
@@ -132,7 +132,7 @@ function roles_user_view($args)
                 return $data;
             }
 
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Members')));
+            xarTplSetPageTitle(xarML('All Members'));
 
             // Now get the actual records to be displayed
             $items = xarModAPIFunc('roles',

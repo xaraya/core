@@ -34,8 +34,8 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">
-      <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#" />
-            <input type="submit" value="#$loginlabel#" />
+      <input type="hidden" name="redirecturl" id="returnurl" value="#xarVarPrepForDisplay($redirecturl)#" />
+            <input type="submit" value="#xarVarPrepForDisplay($loginlabel)#" />
         </td>
     </tr>
 </table>

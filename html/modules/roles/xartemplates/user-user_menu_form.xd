@@ -15,15 +15,15 @@
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
             <td><xar:mlstring>User Name</xar:mlstring>:</td>
-            <td>#$uname#</td>
+            <td>#xarVarPrepForDisplay($uname)#</td>
         </tr>
         <tr>
             <td><xar:mlstring>Email Address</xar:mlstring>:</td>
-            <td>#$emailaddress#</td>
+            <td>#xarVarPrepForDisplay($emailaddress)#</td>
         </tr>
         <tr>
             <td><label for="name"><xar:mlstring>Display Name</xar:mlstring>:</label></td>
-            <td><input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" /></td>
+            <td><input type="text" name="name" id="name" value="#xarVarPrepForDisplay($name)#" size="20" maxlength="60" /></td>
         </tr>
         <tr>
             <td><label for="email"><xar:mlstring>Email Address</xar:mlstring>:</label></td>
@@ -61,7 +61,7 @@
 </xar:if>
         <tr>
             <td colspan="2" style="text-align: center;"><br />
-                <input type="submit" value="#$submitlabel#"  />
+                <input type="submit" value="#xarVarPrepForDisplay($submitlabel)#"  />
             </td>
         </tr>
     </table>

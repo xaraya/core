@@ -22,15 +22,15 @@
             <p>
             <form method="post" action="#xarModURL('roles', 'user', 'view')#">
                 <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
-                <input type="hidden" name="phase" id="phase" value="#$phase#" />
-                <input type="hidden" name="order" id="order" value="#$order#" />
+                <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
+                <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
                 <input type="hidden" name="letter" id="letter" value="" />
                 <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-                <input type="submit" value="#$searchlabel#" />
+                <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
             </form>
             </p>
             <p>
-                <xar:mlstring>Search condition</xar:mlstring>: <b>#$msg#</b>
+                <xar:mlstring>Search condition</xar:mlstring>: <b>#xarVarPrepForDisplay($msg)#</b>
             </p>
         </div>
         <div>
@@ -60,7 +60,7 @@
         </table>
         </div>
     <xar:if condition="!empty($message)">
-        <p>#$message#</p>
+        <p>#xarVarPrepForDisplay($message)#</p>
     <xar:else />
         <xar:if condition="xarModIsAvailable('dynamicdata')">
             <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
@@ -102,15 +102,15 @@
             <tr>
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                 <td class="xar-norm">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                 </td>
                 <td class="xar-norm" style="text-align: center;">
                     <!-- TODO: add link to working whois service -->
-                    #$loop:item['ipaddr']#
+                    #xarVarPrepForDisplay($loop:item['ipaddr'])#
                 </td>
                 <xar:else />
                 <td class="xar-norm">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                 </td>
                 </xar:if>
                 <td class="xar-norm" style="text-align: center;">
@@ -137,15 +137,15 @@
             <tr>
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                 <td class="xar-accent">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                 </td>
                 <td class="xar-accent" style="text-align: center;">
                     <!-- TODO: add link to working whois service -->
-                    #$loop:item['ipaddr']#
+                    #xarVarPrepForDisplay($loop:item['ipaddr'])#
                 </td>
                 <xar:else />
                 <td class="xar-accent">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
+                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                 </td>
                 </xar:if>
                 <td class="xar-accent" style="text-align: center;">

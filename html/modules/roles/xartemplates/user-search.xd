@@ -4,13 +4,13 @@
     <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
     <ul>
         <xar:foreach in="$users" key="$uid" value="$user">
-            <li><a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$user['name']#</a></li>
+            <li><a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#xarVarPrepForDisplay($user['name'])#</a></li>
         </xar:foreach>
     </ul>
 </xar:if>
 
 <xar:if condition="!empty($status)">
-<p>#$status#</p>
+<p>#xarVarPrepForDisplay($status)#</p>
 </xar:if>
 
 <p></p>

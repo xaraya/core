@@ -17,7 +17,7 @@
 function roles_user_logout()
 {
     // Get input parameters
-    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/roles/',$redirecturl)) {

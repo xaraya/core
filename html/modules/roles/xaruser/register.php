@@ -44,14 +44,14 @@ function roles_user_register()
         return;
     }
 
-    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('New Account')));
-    if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    xarTplSetPageTitle(xarML('New Account'));
+    if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
 
     switch(strtolower($phase)) {
 
         case 'choices':
         default:
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Log In')));
+            xarTplSetPageTitle(xarML('Log In'));
             $loginlabel = xarML('Sign In');
             $data = xarTplModule('roles','user', 'choices', array('loginlabel' => $loginlabel));
             break;
@@ -108,7 +108,7 @@ function roles_user_register()
             if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass1','str:4:100',$pass1,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass2','str:4:100',$pass2,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('agreetoterms','checkbox',$agreetoterms,false,XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
@@ -129,11 +129,11 @@ function roles_user_register()
             }
 
             // current values (in case some field is invalid, we'll return to the previous template)
-            $values = array('username'    => xarVarPrepForDisplay($username),
-                            'realname' => xarVarPrepForDisplay($realname),
-                            'email'    => xarVarPrepForDisplay($email),
-                            'pass1'    => xarVarPrepForDisplay($pass1),
-                            'pass2'    => xarVarPrepForDisplay($pass2));
+            $values = array('username' => $username,
+                            'realname' => $realname,
+                            'email'    => $email,
+                            'pass1'    => $pass1,
+                            'pass2'    => $pass2);
 
             // invalid fields (we'll check this below)
             $invalid = array();
@@ -300,8 +300,8 @@ function roles_user_register()
             if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;

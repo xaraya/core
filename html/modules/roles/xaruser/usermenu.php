@@ -17,7 +17,7 @@ function roles_user_usermenu($args)
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
-    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
+    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
     switch(strtolower($phase)) {
         case 'menu':
