@@ -60,26 +60,33 @@ function mail_adminapi_hookmailcreate($args)
          }
     }
 
-    // Security Check
-    //TODO: if we add to the hook to allow sending of mail to OTHER recipients than the admin
-    // we will have to include the following security check and make sure the appropriate privileges are assigned
-//    if (!xarSecurityCheck('AddMail', 0, 'All', "$modname::$objectid", 'mail')) return;
-
-    // Set up variables
-    $sitename = xarModGetVar('themes', 'SiteName');
-    $slogan = xarModGetVar('themes', 'SiteSlogan');
-    $wordwrap = xarModGetVar('mail', 'wordwrap');
-    $priority = xarModGetVar('mail', 'priority');
-    $encoding = xarModGetVar('mail', 'encoding');
-    if (empty($encoding)) {
-        $encoding = '8bit';
-        xarModSetVar('mail', 'encoding', $encoding);
-    }
     $from = xarModGetVar('mail', 'adminmail');
     $fromname = xarModGetVar('mail', 'adminname');
-    $subject = xarML('A new item was created');
+    $subject = xarML('New addition') . ' -- ' . $extrainfo['title'];
 // TODO: use BL template for message
     // Send a regular old text message.
+
+    $message = xarModGetVar('mail', 'hooktemplate');
+
+/*
+    $search = array('/%%name%%/',
+                    '/%%sitename%%/',
+                    '/%%siteslogan%%/',
+                    '/%%siteurl%%/',
+                    '/%%uid%%/',
+                    '/%%siteadmin%%/');
+
+    $replace = array("$name",
+                     "$sitename",
+                     "$siteslogan",
+                     "$siteurl",
+                     "$uid",
+                     "$siteadmin");
+
+    $message = preg_replace($search,
+                            $replace,
+                            $message);
+
     $message = "" . xarML('A new item was created in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "\r\n\n";
     $message .= "" . xarML('Site Name') . ": $sitename :: $slogan\n";
     $message .= "" . xarML('Site URL') . ": " . xarServerGetBaseURL() . "\n";
@@ -87,15 +94,12 @@ function mail_adminapi_hookmailcreate($args)
     $htmlmessage = "" . xarML('A new item was created in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "<br /><br />";
     $htmlmessage .= "" . xarML('Site Name') . ": $sitename :: <i>$slogan</i> <br />";
     $htmlmessage .= "" . xarML('Site URL') . ": <a href='" . xarServerGetBaseURL() . "'>" . xarServerGetBaseURL() . "</a><br />";
+*/
     // Set mail args array
     $mailargs = array('info' => $from, // set info to $from
         'subject' => $subject,
         'message' => $message,
-        'htmlmessage' => $htmlmessage,
         'name' => $fromname, // set name to $fromname
-        'priority' => $priority,
-        'encoding' => $encoding,
-        'wordwrap' => $wordwrap,
         'from' => $from,
         'fromname' => $fromname);
     // Check if HTML mail has been configured by the admin
@@ -107,5 +111,4 @@ function mail_adminapi_hookmailcreate($args)
     // life goes on, and so do hook calls :)
     return $extrainfo;
 }
-
 ?>

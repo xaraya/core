@@ -37,8 +37,8 @@ function roles_admin_addmember()
     $member = $roles->getRole($uid);
 
     // Security Check
-    if(!xarSecurityCheck('AssignRole',0,'Roles',$role->getName())) return;
-    if(!xarSecurityCheck('AssignRole',0,'Roles',$member->getName())) return;
+    if(!xarSecurityCheck('AssignRole',1,'Roles',$role->getName())) return;
+    if(!xarSecurityCheck('AssignRole',1,'Roles',$member->getName())) return;
 
     // check that this assignment hasn't already been made
     if ($member->isEqual($role)) {
