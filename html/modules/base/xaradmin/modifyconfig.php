@@ -27,21 +27,13 @@ function base_admin_modifyconfig()
     // Get list of user capable mods
         $data['mods'] = xarModAPIFunc('modules',
                           'admin',
-                          'GetList',
+                          'getlist',
                           array('filter'     => array('AdminCapable' => 1)));
-        $mods = array();
-        foreach($mods as $mod) {
-            $data['mods'][] = array('displayname' => $mod);
-        }
     } else {
         $data['mods'] = xarModAPIFunc('modules',
                           'admin',
-                          'GetList',
+                          'getlist',
                           array('filter'     => array('UserCapable' => 1)));
-        $mods = array();
-        foreach($mods as $mod) {
-            $data['mods'][] = array('displayname' => $mod);
-        }
     }
 
     $localehome = "var/locales";
