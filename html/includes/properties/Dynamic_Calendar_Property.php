@@ -168,6 +168,66 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                            );
         return $baseInfo;
      }
+
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+        }
+        if (empty($this->validation) || $this->validation == 'datetime' || $this->validation == 'date') {
+            $data['dbformat'] = $this->validation;
+            $data['other'] = '';
+        } else {
+            $data['dbformat'] = '';
+            $data['other'] = $this->validation;
+        }
+        // Note : timestamp is not an option for ExtendedDate
+        $data['class'] = get_class($this);
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = 'calendar';
+        }
+        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+    }
+
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                if (!empty($validation['other'])) {
+                    $this->validation = $validation['other'];
+
+                } elseif (isset($validation['dbformat'])) {
+                    $this->validation = $validation['dbformat'];
+
+                } else {
+                    $this->validation = '';
+                }
+            } else {
+                $this->validation = $validation;
+            }
+        }
+
+        // tell the calling function that everything is OK
+        return true;
+    }
+
 }
 
 ?>

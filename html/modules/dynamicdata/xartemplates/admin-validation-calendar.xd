@@ -1,0 +1,68 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table class="xar-norm">
+  <tr>
+    <td>
+      <xar:mlstring>Store as</xar:mlstring>
+    </td>
+    <td>
+      <select name="#$name#[dbformat]" id="#$id#_dbformat" tabindex="#$tabindex#">
+        <xar:set name="timestamp">#xarMLS_userTime()#</xar:set>
+        <xar:set name="datetime">#xarLocaleFormatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
+        <xar:set name="date">#xarLocaleFormatDate('%Y-%m-%d')#</xar:set>
+        <xar:comment>
+          Note : timestamp is not an option for ExtendedDate
+        </xar:comment>
+        <xar:if condition="empty($class) or $class ne 'dynamic_extendeddate_property'">
+          <option value="">
+            <xar:ml>
+              <xar:mlstring>timestamp : #(1)</xar:mlstring>
+              <xar:mlvar>#$timestamp#</xar:mlvar>
+            </xar:ml>
+          </option>
+        </xar:if>
+        <xar:if condition="!empty($dbformat) and $dbformat == 'datetime'">
+          <option value="datetime" selected="selected">
+            <xar:ml>
+              <xar:mlstring>datetime : #(1)</xar:mlstring>
+              <xar:mlvar>#$datetime#</xar:mlvar>
+            </xar:ml>
+          </option>
+        <xar:else/>
+          <option value="datetime">
+            <xar:ml>
+              <xar:mlstring>datetime : #(1)</xar:mlstring>
+              <xar:mlvar>#$datetime#</xar:mlvar>
+            </xar:ml>
+          </option>
+        </xar:if>
+        <xar:if condition="!empty($dbformat) and $dbformat == 'date'">
+          <option value="date" selected="selected">
+            <xar:ml>
+              <xar:mlstring>date : #(1)</xar:mlstring>
+              <xar:mlvar>#$date#</xar:mlvar>
+            </xar:ml>
+          </option>
+        <xar:else/>
+          <option value="date">
+            <xar:ml>
+              <xar:mlstring>date : #(1)</xar:mlstring>
+              <xar:mlvar>#$date#</xar:mlvar>
+            </xar:ml>
+          </option>
+        </xar:if>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
