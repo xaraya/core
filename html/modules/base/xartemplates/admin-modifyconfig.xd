@@ -91,7 +91,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 							<xar:mlstring>Locale</xar:mlstring>	
 						</td>
 						<td width="50" align="center">
-							<xar:mlstring>Active (fixed)</xar:mlstring>	
+							<xar:mlstring>Active</xar:mlstring>	
 						</td>
 					</tr>
 					<tr>
@@ -106,9 +106,9 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 						</td>
 						<td align="center">
 							 <xar:if condition="$loop:item['active'] == 'true'">
-								  <input type="checkbox" name="active[]" value=#$loop:item['active']# checked />
+								  <input type="checkbox" name="active[]" value=#$loop:item['name']# checked />
 							<xar:else />
-								  <input type="checkbox" name="active[]" value=#$loop:item['active']# />
+								  <input type="checkbox" name="active[]" value=#$loop:item['name']# />
 							</xar:if>
 						</td>
 					</tr>

@@ -24,7 +24,7 @@ function base_admin_updateconfig()
     if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-//    if (!xarVarFetch('localeslist','str:1:',$localesList)) return;
+    if (!xarVarFetch('active','isset',$active)) return;
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -35,6 +35,10 @@ function base_admin_updateconfig()
         $cacheTemplates = true;
     }
 
+    $localesList = array();
+    foreach($active as $activelocale) $localesList[] = $activelocale;
+    if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
+    sort($localesList);
 
     // TODO move this to the API once complete.
     xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
@@ -56,6 +60,7 @@ function base_admin_updateconfig()
 
     // Locales
     xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
+    xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
 
     //$authModules = array('authsystem');
     //xarConfigSetVar('Site.User.AuthenticationModules',$authModules);

@@ -44,19 +44,12 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
-//    $locales = xarMLSListSiteLocales();
-    $i = 0; $j = 0;
+    $allowedlocales = xarConfigGetVar('Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
-        $data['locales'][] = array('name' => $locale, 'active' => true);
-        $i++;
+        if (in_array($locale, $allowedlocales)) $active = true;
+        else $active = false;
+        $data['locales'][] = array('name' => $locale, 'active' => $active);
     }
-    $data['activelocales'] = '';
-    foreach($locales as $locale) {
-        $data['activelocales'] .= $locale;
-        $j++;
-        if ($j < $i) $data['activelocales'] .= ',';
-    }
-
     $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
