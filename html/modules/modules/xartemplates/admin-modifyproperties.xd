@@ -24,34 +24,38 @@
                         <th><xar:mlstring>Type</xar:mlstring></th>
                         <th><xar:mlstring>Set</xar:mlstring></th>
                     </tr>
-                    <tr>
-                        <td>
-                        <label for="Admin Menu">
-                            Admin Menu
-                        </label>
-                        </td>
-                        <td style="text-align: center;">
-                            <xar:if condition="$admincapable eq 1">
-                                <input type="checkbox" name="admincapable" id="admincapable" checked="CHECKED">
-                            <xar:else />
-                                <input type="checkbox" name="admincapable" id="admincapable">
-                            </xar:if>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <label for="Admin Menu">
-                            User Menu
-                        </label>
-                        </td>
-                        <td style="text-align: center;">
-                            <xar:if condition="$usercapable eq 1">
-                                <input type="checkbox" name="usercapable" id="usercapable" checked="CHECKED">
-                            <xar:else />
-                                <input type="checkbox" name="usercapable" id="usercapable">
-                            </xar:if>
-                        </td>
-                    </tr>
+					<xar:if condition="$adminallowed">
+						<tr>
+							<td>
+							<label for="Admin Menu">
+								Admin Menu
+							</label>
+							</td>
+							<td style="text-align: center;">
+								<xar:if condition="$admincapable eq 1">
+									<input type="checkbox" name="admincapable" id="admincapable" checked="CHECKED">
+								<xar:else />
+									<input type="checkbox" name="admincapable" id="admincapable">
+								</xar:if>
+							</td>
+						</tr>
+					</xar:if>
+					<xar:if condition="$userallowed">
+						<tr>
+							<td>
+							<label for="Admin Menu">
+								User Menu
+							</label>
+							</td>
+							<td style="text-align: center;">
+								<xar:if condition="$usercapable eq 1">
+									<input type="checkbox" name="usercapable" id="usercapable" checked="CHECKED">
+								<xar:else />
+									<input type="checkbox" name="usercapable" id="usercapable">
+								</xar:if>
+							</td>
+						</tr>
+					</xar:if>
                 </table>
                 <br /><br />
             <input type="submit" value="#$savechangeslabel#" tabindex="9" />

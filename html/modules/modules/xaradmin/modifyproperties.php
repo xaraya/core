@@ -36,12 +36,17 @@ function modules_admin_modifyproperties($args)
     if (!isset($modInfo)) return;
 
     $modName     = $modInfo['name'];
-    $displayName = $modInfo['displayname'];
-    $data['admincapable'] = $modInfo['admincapable'];
-    $data['usercapable'] = $modInfo['usercapable'];
 
     // Security Check
     if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
+
+    $displayName = $modInfo['displayname'];
+    $data['admincapable'] = $modInfo['admincapable'];
+    $data['usercapable'] = $modInfo['usercapable'];
+    $filesettings = xarMod_getFileInfo($modName);
+    $data['adminallowed'] = $filesettings['admin'];
+    $data['userallowed'] = $filesettings['user'];
+
 
     $data['savechangeslabel'] = xarML('Save Changes');
     if ($details) {
