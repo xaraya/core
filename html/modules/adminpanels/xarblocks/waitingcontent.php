@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -35,12 +35,8 @@ function adminpanels_waitingcontentblock_info()
  */
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
-    if (!xarSecAuthAction(0,
-                         'adminpanels:Waitingcontentblock:',
-                         "$blockinfo[title]::",
-                         ACCESS_EDIT)) {
-        return;
-    }
+// Security Check
+	if(!xarSecurityCheck('EditPanel',1,'Waitingcontentblock','$blockinfo[title]::')) return;
 
     $moditems = array();
 
