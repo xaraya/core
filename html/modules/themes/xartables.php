@@ -24,7 +24,7 @@ function themes_xartables()
     $xartable['system/theme_states'] = $systemPrefix . '_theme_states';
     $xartable['site/theme_states'] = $sitePrefix . '_theme_states';
     $xartable['site/theme_vars'] = $sitePrefix . '_theme_vars';
-    $xartable['system/theme_vars'] = $sytemPrefix . '_theme_vars';
+    $xartable['system/theme_vars'] = $systemPrefix . '_theme_vars';
     $xartable['theme_vars'] = $systemPrefix . '_theme_vars';
 
     // Return the table information
