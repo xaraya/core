@@ -120,7 +120,14 @@
                     <xar:else />
                         <tr>
                             <td class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 10px; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
-                                <a name="#$displayname#" id="#$displayname#" style="text-decoration:none">&nbsp;</a>#$displayname#
+                                <!--- just an anchor --->
+                                <a name="#$displayname#" id="#$displayname#" style="text-decoration:none">&nbsp;</a>
+                                <xar:if condition="$modconfigurl ne 0">
+                                    <!--- if module is active and configurable (admin type) make its name a link to module main admin function --->
+                                    <a href="#$modconfigurl#" title="#$adminurltitle##$displayname#">#$displayname#</a>
+                                <xar:else />
+                                    #$displayname#
+                                </xar:if>
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                 #$version#

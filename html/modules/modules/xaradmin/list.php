@@ -18,7 +18,7 @@ function modules_admin_list()
     $data['infolabel']      = xarVarPrepForDisplay(xarML('Info'));
 /*     $data['actionlabel']    = xarVarPrepForDisplay(xarML('Action')); */
 /*     $data['optionslabel']   = xarVarPrepForDisplay(xarML('Options')); */
-    $data['reloadlabel']   = xarVarPrepForDisplay(xarML('Reload'));
+    $data['reloadlabel']    = xarVarPrepForDisplay(xarML('Reload'));
 /*     $data['pager']          = ''; */
     
     $authid                 = xarSecGenAuthKey();
@@ -133,6 +133,13 @@ function modules_admin_list()
                                      array( 'id'        => $thismodid,
                                             'authid'    => $authid));
         
+        // link to module main admin function if any
+        if($mod['admin']){
+            $modconfigurl = xarModURL($mod['name'], 'admin');
+        } else {
+            $modconfigurl = 0;
+        }
+        
         // common urls
         $listrows[$i]['editurl']    = xarModURL('modules',
                                     'admin',
@@ -159,7 +166,7 @@ function modules_admin_list()
         $listrows[$i]['edit']           = xarML('On/Off');
         
         // conditional data
-        if(     $mod['state'] == 1){
+        if($mod['state'] == 1){
             // this module is 'Uninitialised' or 'Not Installed' - set labels and links
             $statelabel = xarML('Not Installed');
             $listrows[$i]['state'] = 1;
@@ -190,6 +197,12 @@ function modules_admin_list()
             // this module is 'Active'          - set labels and links
             $statelabel = xarML('Active');
             $listrows[$i]['state'] = 3;
+            
+            // passing along url to module admin main function if any
+            $listrows[$i]['modconfigurl']       = $modconfigurl;
+            // link title for modules main admin function - common
+            $listrows[$i]['adminurltitle']      = xarML('Go to administration of ');
+            
             // here we are checking for module class 
             // to prevent ppl messing with the core modules
             if(!$coremod){
