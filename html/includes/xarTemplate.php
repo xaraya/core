@@ -523,9 +523,12 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
     $data['totalitems'] = $total;
     $data['itemsperpage'] = $itemsPerPage;
     $data['itemsperblock'] = $itemsPerBlock;
+    $data['pagesperblock'] = $pageBlockSize;
 
     $data['currentblock'] = (int)ceil($startNum / $itemsPerBlock);
     $data['totalblocks'] = (int)ceil($total / $itemsPerBlock);
+    $data['firstblock'] = 1;
+    $data['lastblock'] = $data['totalblocks'];
     $data['blockfirstitem'] = $blockStart;
     $data['blocklastitem'] = $blockEnd;
 
@@ -557,7 +560,7 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
 
     // Data for previous block of pages.
     if ($blockStart > 1) {
-        $data['prevblockpages'] = $itemsPerPage;
+        $data['prevblockpages'] = $pageBlockSize;
         $data['prevblock'] = ($blockStart - $itemsPerBlock);
     } else {
         $data['prevblockpages'] = 0;
