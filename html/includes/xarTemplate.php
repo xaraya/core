@@ -942,7 +942,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        if (!isset($templateCode)) {
+        if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
@@ -1169,7 +1169,7 @@ function xarTpl__loadFromFile($sourceFileName)
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        if (!isset($templateCode)) {
+        if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
