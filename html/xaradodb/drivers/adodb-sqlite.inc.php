@@ -277,38 +277,27 @@ class ADODB_sqlite extends ADOConnection {
         return parent::Execute($sql,$inputarr);
     }
     
-    function _altertable($tablename, $alterdefs)
+    function _altertable($orgTableName, $alterdefs)
     {
         $fn = $this->raiseErrorFn;
         
         // First get the table definition
         $sql = "SELECT sql,name,type FROM sqlite_master WHERE tbl_name = ? ORDER BY type DESC";
-        $result = $this->Execute($sql, array((string) $tablename));
+        $result = $this->Execute($sql, array((string) $orgTableName));
         if(!$result) return $result;
         
         // Return if the table isnt there, nothing to alter
         if($result->RecordCount() <= 0 ) {
-            $fn('sqlite', 'EXECUTE', 666,  "Table $tablename not found",$sql);
+            $fn('sqlite', 'EXECUTE', 666,  "Table $orgTableName not found",$sql);
             return false;
         }
           
         // Fetch the sql for the original table
         $row = $result->GetRowAssoc();
-
-        // SQL to create the temporary table
-        $tmpname = 't'.time();
         $origsql = trim(preg_replace("/[\s]+/"," ",str_replace(",",", ",preg_replace("/[\(]/","( ",$row['SQL'],1))));
-        $createtemptableSQL = trim('CREATE '.substr(trim(preg_replace("'".$tablename."'",$tmpname,$origsql,1)),6));
-
-        // SQL to copy the data from the original to the temporary table
-        $copytotempsql = "INSERT INTO $tmpname SELECT * FROM $tablename";
-
-        // SQL to drop the original table
-        $dropoldsql = 'DROP TABLE '.$tablename;
-
         // Get the colums of the original table in an array so we can manipulate them easier
         // split them first into array elements based on position of first "(" and strip off the last ")"
-        $oldcols = preg_split("/[,]+/",substr($createtemptableSQL,strpos($createtemptableSQL,'(') +1,-1), -1, PREG_SPLIT_NO_EMPTY);
+        $oldcols = preg_split("/[,]+/",substr($origsql,strpos($origsql,'(') +1,-1), -1, PREG_SPLIT_NO_EMPTY);    
         
         // Determine whether they are really all columns
         $nrOfTableConstraints = 0; 
@@ -326,6 +315,15 @@ class ADODB_sqlite extends ADOConnection {
             }
         }
 
+        // Initialize some values
+        $tmpname = 't'.time();  $newTableName = $orgTableName;
+
+        // SQL to create the temporary table
+        $createtemptableSQL = trim('CREATE '.substr(trim(preg_replace("'".$orgTableName."'",$tmpname,$origsql,1)),6));
+        
+        // SQL to copy the data from the original to the temporary table
+        $copytotempsql = "INSERT INTO $tmpname SELECT * FROM $orgTableName";
+        
         // SQL for the new table (essential part of the goal here)
         $defs = preg_split("/[,]+/",$alterdefs,-1,PREG_SPLIT_NO_EMPTY);
         foreach($defs as $def){
@@ -353,7 +351,7 @@ class ADODB_sqlite extends ADOConnection {
                         $repl_index = $index;
                     }
                     if($repl_index == -1) {
-                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$tablename.'"');
+                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$orgTableName.'"');
                         return false;
                     }
                     $column_map[$defparts[0]] = $defparts[1];
@@ -374,21 +372,30 @@ class ADODB_sqlite extends ADOConnection {
                         $repl_index = $index;
                     }
                     if($repl_index == -1) {
-                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$tablename.'"');
+                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$orgTableName.'"');
                         return false;
                     }
                     $column_map[$defparts[0]] = null;
                     array_splice ($parts, $repl_index,1);
                     break;
+                case 'rename':
+                    // Renaming the table too, rest stays the same (unfortunately)
+                    if(sizeof($defparts) != 2 || strtoupper($defparts[0]) != "TO" ){ // TO new table name
+                        $fn('sqlite', 'EXECUTE', 666,'Syntax error in rename part of ALTER TABLE');
+                        return false;
+                    }
+                    $newTableName = $defparts[1];
+                    break;
                 default:
-                    $fn('sqlite', 'EXECUTE', 666,'Syntax error in ALTER TABLE');
+                    $fn('sqlite', 'EXECUTE', 666,'Syntax error in ALTER TABLE ('.$action.')');
                     return false;
             }
         }
         // Reconstruct the sql from the arrays
+        // For the NEW table
+        $createnewtableSQL = 'CREATE TABLE '.$newTableName .'('.  implode(',',array_merge($parts,$constraintparts)) . ')';
         $createtesttableSQL = 'CREATE TABLE '.$tmpname .'('.  implode(',',array_merge($parts,$constraintparts)) . ')';
-        $createnewtableSQL = 'CREATE TABLE '.$tablename .'('.  implode(',',array_merge($parts,$constraintparts)) . ')';
-
+        
         //this block of code generates a test table simply to verify that the columns specifed are valid in an sql statement
         //this ensures that no reserved words are used as columns, for example
         $result=$this->Execute($createtesttableSQL);
@@ -398,6 +405,8 @@ class ADODB_sqlite extends ADOConnection {
         if(!$result) return false;
         //end block
 
+        // SQL to drop the original table
+        $dropoldsql = 'DROP TABLE '.$orgTableName;
         
         // SQL to copy the new data back into the new table
         $newcolumns = ''; $oldcolumns = '';
@@ -407,7 +416,7 @@ class ADODB_sqlite extends ADOConnection {
                 $newcolumns .= (($newcolumns) ? ',':'') . $newcolumn;
             }
         }
-        $copytonewsql = 'INSERT INTO '.$tablename.'('.$newcolumns.') SELECT '.$oldcolumns.' FROM '.$tmpname;
+        $copytonewsql = 'INSERT INTO '.$newTableName.'('.$newcolumns.') SELECT '.$oldcolumns.' FROM '.$tmpname;
 
 //        echo "<pre>";
 //        echo $createtemptableSQL . "<br/>";
