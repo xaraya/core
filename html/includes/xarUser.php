@@ -80,7 +80,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> #1 here we could also set a last_logon timestamp
  */
-function xarUserLogIn($userName, $password, $rememberMe)
+function xarUserLogIn($userName, $password, $rememberMe=0)
 {
     if (xarUserIsLoggedIn()) {
         return true;
