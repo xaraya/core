@@ -918,9 +918,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         break;
     case 'themevar':
         // Takes the right table basing on theme mode
-        if ($ModBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+        if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
             $theme_varsTable = $tables['theme_vars'];
-        } elseif ($ModBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+        } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
             $theme_varsTable = $tables['site/theme_vars'];
         }
         
@@ -928,7 +928,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                       xar_prime,
                       xar_description
                       FROM $theme_varsTable
-                      WHERE xar_themename = '" . xarVarPrepForStore($themeName) . "'
+                      WHERE xar_themename = '" . xarVarPrepForStore($modName) . "'
                       AND xar_name = '" . xarVarPrepForStore($name) . "'";
         break;
     case 'configvar':
