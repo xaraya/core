@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- While -->
+  <define name="whileTag">
+    <element name="xar:while">
+      <ref name="idAttr"/>
+      <ref name="conditionAttr"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+</grammar>

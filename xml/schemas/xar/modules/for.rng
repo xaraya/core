@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- For -->
+  <define name="forTag">
+    <element name="xar:for">
+      <ref name="idAttr"/>
+      <attribute name="start"><data type="string"/></attribute>
+      <attribute name="test"><data type="string"/></attribute>
+      <attribute name="iter"><data type="string"/></attribute>
+      <ref name="escapableSeq"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+</grammar>

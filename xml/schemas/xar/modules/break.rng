@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- Break -->
+  <define name="breakTag">
+    <element name="xar:break">
+      <ref name="idAttr"/>
+    </element>
+  </define>
+
+
+</grammar>

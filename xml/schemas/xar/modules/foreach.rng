@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- Foreach -->
+  <define name="foreachTag">
+    <element name="xar:foreach">
+      <ref name="idAttr"/>
+      <attribute name="in"><data type="string"/></attribute>
+      <attribute name="value"><data type="string"/></attribute>
+      <optional>
+        <attribute name="key"><data type="string"/></attribute>
+      </optional>
+      <ref name="escapableSeq"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+</grammar>

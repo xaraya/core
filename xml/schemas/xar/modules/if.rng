@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- If -->
+  <define name="ifTag">
+    <element name="xar:if">
+      <ref name="idAttr"/>
+      <ref name="conditionAttr"/>
+      <optional>
+        <attribute name="inline"><data type="string"/></attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <!-- How to express that the else Tag can be present only once? Anywhere among the others? -->
+          <ref name="elseTag"/>
+          <ref name="elseifTag"/>
+          <ref name="nonchildTemplate"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+</grammar>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- Var -->
+  <define name="varTag">
+    <element name="xar:var">
+      <ref name="idAttr"/>
+      <attribute name="name"><data type="string"/></attribute>
+      <optional>
+        <attribute name="scope">
+          <choice>
+            <value type="string">config</value>
+            <value type="string">module</value>
+            <value type="string">block</value>
+            <value type="string">theme</value>
+            <value type="string">user</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+</grammar>

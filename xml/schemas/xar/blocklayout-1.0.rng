@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE grammar SYSTEM "http://164.41.103.24/xaraya/xml/schemas/relaxng.dtd">
+
+<!-- For testing purposes:
+      - Add <xar:blocklayout xmlns:xar="http://www.xaraya.com/2003/blocklayout"> to the start of the file to test
+        And </xar:blocklayout> to the end
+      - I havent find the way to support XHTML tags in here yet...
+      - change the location of the RelaxNG DTD in doctype
+
+      I didnt figure out yet how to workout the namespaces
+-->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xar="http://www.xaraya.com/2003/blocklayout"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  
+  <!--
+  RelaxNG specification for the blocklayout templating language
+  RelaxNG specs: http://www.oasis-open.org/committees/relax-ng/spec-20011203.html
+
+  We use a top down approach for defining how a complete
+  blocklayout file should look like.
+  This approach makes it easier to read this file for
+  humans, and a bit harder for machines to parse.
+
+  Remember that this schema defines the blocklayout language
+  not the actual template files a designer might construct to
+  template a certain module.
+
+  This RelaxNG schema is based on RFC0010.xml for the Xaraya
+  project.
+  -->
+
+  <!--
+  Top level includes exactly one master template
+  -->
+  <start>
+    <!-- This is not true right now, can we implicitly create this? -->
+    <!-- blocklayout always starts with the root tag -->
+    <element name="xar:blocklayout">
+      <ref name="idAttr"/>
+
+      <!-- The complete document consists of a master template -->
+      <ref name="mastertemplate"/>
+    </element>
+  </start>
+
+  <!--
+  A master template contains zero or more slave templates.
+  -->
+  <define name="mastertemplate">
+    <ref name="nonchildTemplate"/>
+  </define>
+
+
+  <!--
+  Definition of a non-child template
+  -->
+  <define name="nonchildTemplate">
+    <zeroOrMore>
+      <choice>
+        <!-- There is the need to add xhtml tags. How to do it?
+             do we need a RelaxNG's xhtml spec too? -->
+        <text/>
+        <ref name="logicalTemplate"/>
+        <ref name="displayTemplate"/>
+        <ref name="varsetTemplate"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <!-- All logical tags must be able to have nonchildTemplate as elements -->
+  <define name="logicalTemplate">
+    <choice>
+      <ref name="forTag" />
+      <ref name="foreachTag" />
+      <ref name="ifTag" />
+      <ref name="loopTag" />
+      <ref name="whileTag" />
+      <ref name="secTag" />
+    </choice>
+  </define>
+
+  <define name="displayTemplate">
+    <choice>
+      <ref name="blockTag" />
+      <ref name="blockgroupTag" />
+      <ref name="mlTag" />
+      <ref name="mlkeyTag" />
+      <ref name="mlstringTag" />
+      <ref name="moduleTag" />
+      <ref name="templateTag" />
+      <ref name="varTag" />
+    </choice>
+  </define>
+
+  <define name="varsetTemplate">
+    <ref name="setTag" />
+  </define>
+
+  <define name="childonlyTemplate">
+    <ref name="elseTag" />
+    <ref name="elseifTag" />
+    <ref name="breakTag" />
+    <ref name="continueTag" />
+    <ref name="mlvarTag" />
+  </define>
+
+  <!--
+    Each tag has it´s definition
+  -->
+
+  <!-- Block -->
+  <define name="blockTag">
+    <element name="xar:block">
+      <ref name="idAttr"/>
+      <choice>
+        <group>
+          <attribute name="type">
+            <value type="string">dynamic</value>
+          </attribute>
+          <attribute name="instance"><data type="int"/></attribute>
+        </group>
+        <group>
+          <attribute name="type">
+            <value type="string">static</value>
+          </attribute>
+          <attribute name="template"><data type="string"/></attribute>
+        </group>
+      </choice>
+      <attribute name="name"><data type="string"/></attribute>
+      <attribute name="module"><data type="string"/></attribute>
+    </element>
+  </define>
+
+  <!-- Blockgroup -->
+  <define name="blockgroupTag">
+    <element name="xar:blockgroup">
+      <ref name="idAttr"/>
+      <optional>
+        <attribute name="name"><data type="string"/></attribute>
+        <attribute name="template"><data type="string"/></attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="blockTag"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!-- Break -->
+  <define name="breakTag">
+    <element name="xar:break">
+      <ref name="idAttr"/>
+    </element>
+  </define>
+
+  <!-- Continue -->
+  <define name="continueTag">
+    <element name="xar:continue">
+      <ref name="idAttr"/>
+    </element>
+  </define>
+
+  <!-- Else -->
+  <define name="elseTag">
+    <element name="xar:else">
+      <ref name="idAttr"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+  <!-- Elseif -->
+  <define name="elseifTag">
+    <element name="xar:elseif">
+      <ref name="idAttr"/>
+      <ref name="conditionAttr"/>
+    </element>
+  </define>
+
+
+  <!-- For -->
+  <define name="forTag">
+    <element name="xar:for">
+      <ref name="idAttr"/>
+      <attribute name="start"><data type="string"/></attribute>
+      <attribute name="test"><data type="string"/></attribute>
+      <attribute name="iter"><data type="string"/></attribute>
+      <ref name="escapableSeq"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+  <!-- Foreach -->
+  <define name="foreachTag">
+    <element name="xar:foreach">
+      <ref name="idAttr"/>
+      <attribute name="in"><data type="string"/></attribute>
+      <attribute name="value"><data type="string"/></attribute>
+      <optional>
+        <attribute name="key"><data type="string"/></attribute>
+      </optional>
+      <ref name="escapableSeq"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+
+  <!-- If -->
+  <define name="ifTag">
+    <element name="xar:if">
+      <ref name="idAttr"/>
+      <ref name="conditionAttr"/>
+      <optional>
+        <attribute name="inline"><data type="string"/></attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <!-- How to express that the else Tag can be present only once? Anywhere among the others? -->
+          <ref name="elseTag"/>
+          <ref name="elseifTag"/>
+          <ref name="nonchildTemplate"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!-- Loop -->
+  <define name="loopTag">
+    <element name="xar:loop">
+      <ref name="idAttr"/>
+      <attribute name="name"><data type="string"/></attribute>
+      <choice>
+        <ref name="escapableSeq"/>
+        <ref name="nonchildTemplate"/>
+      </choice>
+    </element>
+  </define>
+
+  <!-- Ml -->
+  <define name="mlTag">
+    <element name="xar:ml">
+      <ref name="idAttr"/>
+      <choice>
+        <group>
+          <ref name="mlkeyTag"/>
+          <oneOrMore>
+            <ref name="mlvarTag"/>
+          </oneOrMore>
+        </group>
+        <group>
+          <ref name="mlstringTag"/>
+          <oneOrMore>
+            <ref name="mlvarTag"/>
+          </oneOrMore>
+        </group>
+      </choice>
+    </element>
+  </define>
+
+  <!-- Mlkey -->
+  <define name="mlkeyTag">
+    <element name="xar:mlkey">
+      <ref name="idAttr"/>
+      <text/>
+    </element>
+  </define>
+
+  <!-- Mlstring -->
+  <define name="mlstringTag">
+    <element name="xar:mlstring">
+      <ref name="idAttr"/>
+      <text/>
+    </element>
+  </define>
+
+  <!-- Mlvar -->
+  <define name="mlvarTag">
+    <element name="xar:mlvar">
+      <ref name="idAttr"/>
+      <text/>
+    </element>
+  </define>
+
+  <!-- Module -->
+  <define name="moduleTag">
+    <element name="xar:module">
+      <ref name="idAttr"/>
+      <attribute name="name"><data type="string"/></attribute>
+    </element>
+  </define>
+
+
+  <!-- Sec -->
+  <define name="secTag">
+    <element name="xar:sec">
+      <ref name="idAttr"/>
+      <attribute name="realm"><data type="integer"/></attribute>
+      <attribute name="component"><data type="string"/></attribute>
+      <attribute name="instance"><data type="string"/></attribute>
+      <attribute name="level"><data type="string"/></attribute>
+      <zeroOrMore>
+        <choice>
+          <!-- How to express that the else Tag can be present only once? Anywhere among the others? -->
+          <ref name="elseTag"/>
+          <ref name="elseifTag"/>
+          <ref name="nonchildTemplate"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+  <!-- Set -->
+  <define name="setTag">
+    <element name="xar:set">
+      <ref name="idAttr"/>
+      <attribute name="name"><data type="string"/></attribute>
+      <optional>
+        <attribute name="scope">
+          <choice>
+            <value type="string">module</value>
+            <value type="string">block</value>
+            <value type="string">theme</value>
+          </choice>
+        </attribute>
+      </optional>
+      <choice>
+        <text/>
+        <ref name="displayTemplate" />
+      </choice>
+    </element>
+  </define>
+
+
+  <!-- Template -->
+  <define name="templateTag">
+    <element name="xar:template">
+      <ref name="idAttr"/>
+      <attribute name="file"><data type="string"/></attribute>
+      <attribute name="type">
+        <choice>
+          <value type="string">module</value>
+          <value type="string">theme</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="compile">
+          <choice>
+            <value type="string">false</value>
+            <value type="string">true</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <!-- Var -->
+  <define name="varTag">
+    <element name="xar:var">
+      <ref name="idAttr"/>
+      <attribute name="name"><data type="string"/></attribute>
+      <optional>
+        <attribute name="scope">
+          <choice>
+            <value type="string">config</value>
+            <value type="string">module</value>
+            <value type="string">block</value>
+            <value type="string">theme</value>
+            <value type="string">user</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <!-- Definition of while tag -->
+  <define name="whileTag">
+    <element name="xar:while">
+      <ref name="idAttr"/>
+      <ref name="conditionAttr"/>
+      <ref name="nonchildTemplate"/>
+    </element>
+  </define>
+
+
+  <!--
+    Commonly used references
+  -->
+
+
+  <!-- Every single tag can have an optional ID-attribute -->
+  <define name="idAttr">
+    <optional>
+      <attribute name="id"><data type="ID"/></attribute>
+    </optional>
+  </define>
+
+  <!-- Definition for condition -->
+  <define name="conditionAttr">
+    <attribute name="condition"><data type="string"/></attribute>
+  </define>
+
+  <!-- Definition of escapable sequence -->
+  <define name="escapableSeq">
+    <zeroOrMore>
+      <choice>
+        <ref name="breakTag"/>
+        <ref name="continueTag"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+</grammar>

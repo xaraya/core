@@ -6,7 +6,7 @@
 
 <include href="modules/datatypes.rng"/>
 <include href="modules/attribs.rng"/>
-<!-- <include href="modules/struct.rng"/> -->
+<include href="modules/struct.rng"/>
 <include href="modules/frames.rng"/>
 <include href="modules/text.rng"/>
 <include href="modules/hypertext.rng"/>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<grammar ns:xar="http://www.xaraya.com/2003/blocklayout"
+         xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <!-- Block -->
+  <define name="blockTag">
+    <element name="xar:block">
+      <ref name="idAttr"/>
+      <choice>
+        <group>
+          <attribute name="type">
+            <value type="string">dynamic</value>
+          </attribute>
+          <attribute name="instance"><data type="int"/></attribute>
+        </group>
+        <group>
+          <attribute name="type">
+            <value type="string">static</value>
+          </attribute>
+          <attribute name="template"><data type="string"/></attribute>
+        </group>
+      </choice>
+      <attribute name="name"><data type="string"/></attribute>
+      <attribute name="module"><data type="string"/></attribute>
+    </element>
+  </define>
+
+
+</grammar>
