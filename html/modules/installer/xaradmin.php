@@ -282,6 +282,9 @@ function installer_admin_create_administrator()
         return;
     }
 
+    xarModSetVar('mail', 'adminname', $name);
+    xarModSetVar('mail', 'adminmail', $email);
+
     if(!xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
                                                         'name'  => $name,
                                                         'uname' => $username,
