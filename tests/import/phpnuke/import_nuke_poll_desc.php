@@ -16,10 +16,10 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old poll descriptions</strong><br>\n";
+    echo "<strong>$step. Importing old poll descriptions</strong><br/>\n";
 
     if (!xarModIsAvailable('polls')) {
-        echo "The polls module is not activated in Xaraya<br>\n";
+        echo "The polls module is not activated in Xaraya<br/>\n";
         $step++;
         return;
     }
@@ -56,11 +56,11 @@
                                       'time' => $time,
                                       'votes' => $realvotes));
         if (empty($newpid)) {
-            echo "Insert poll ($pid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert poll ($pid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted poll ($pid) $title<br>\n";
+            echo "Inserted poll ($pid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted poll $num<br>\n";
+            echo "Inserted poll $num<br/>\n";
             flush();
         }
         if (!empty($newpid)) {

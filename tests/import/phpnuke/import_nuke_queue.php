@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing queued articles</strong><br>\n";
+    echo "<strong>$step. Importing queued articles</strong><br/>\n";
 
     $userid = unserialize(xarModGetVar('installer','userid'));
     $topics = xarModGetVar('installer','topics');
@@ -84,24 +84,24 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert queued article ($qid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert queued article ($qid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted queued article ($qid) $title<br>\n";
+            echo "Inserted queued article ($qid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted queued article " . ($num + $startnum) . "<br>\n";
+            echo "Inserted queued article " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $num++;
         $result->MoveNext();
     }
     $result->Close();
-    //echo "<strong>TODO : add comments etc.</strong><br><br>\n";
+    //echo "<strong>TODO : add comments etc.</strong><br/><br/>\n";
     echo '<a href="import_nuke.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import_nuke.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_nuke.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
-        echo '<a href="import_nuke.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_nuke.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
 
 ?>

@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old web link categories</strong><br>\n";
+    echo "<strong>$step. Importing old web link categories</strong><br/>\n";
 
     $weblinks[0] = xarModAPIFunc('categories', 'admin', 'create', array(
                                 'name' => 'Web Links',
@@ -32,7 +32,7 @@
     while (!$result->EOF) {
         list($id, $parent, $title, $descr) = $result->fields;
         if (!isset($weblinks[$parent])) {
-            echo "Oops, missing parent $parent for category ($id) $title<br>\n";
+            echo "Oops, missing parent $parent for category ($id) $title<br/>\n";
             $result->MoveNext();
             continue;
         }
@@ -41,7 +41,7 @@
                                       'description' => $descr,
                                  //     'image' => "$imgurl/topics/$image",
                                       'parent_id' => $weblinks[$parent]));
-        echo "Creating web link category ($id) $title - $descr<br>\n";
+        echo "Creating web link category ($id) $title - $descr<br/>\n";
         $result->MoveNext();
     }
     $result->Close();
@@ -55,7 +55,7 @@
     xarModSetVar('articles', 'mastercids.6', $weblinks[0]);
 
     echo '<a href="import_nuke.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_nuke.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_nuke.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
 
 ?>

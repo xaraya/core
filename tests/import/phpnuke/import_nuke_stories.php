@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing articles</strong><br>\n";
+    echo "<strong>$step. Importing articles</strong><br/>\n";
 
     $userid = unserialize(xarModGetVar('installer','userid'));
     $topics = xarModGetVar('installer','topics');
@@ -102,11 +102,11 @@
                                      )
                                );
         if (!isset($newaid) || $newaid != $aid) {
-            echo "Insert article ($aid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert article ($aid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted article ($aid) $title<br>\n";
+            echo "Inserted article ($aid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted article " . ($num + $startnum) . "<br>\n";
+            echo "Inserted article " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $num++;
@@ -114,13 +114,13 @@
         $result->MoveNext();
     }
     $result->Close();
-    //echo "<strong>TODO : add comments etc.</strong><br><br>\n";
+    //echo "<strong>TODO : add comments etc.</strong><br/><br/>\n";
     echo '<a href="import_nuke.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import_nuke.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import_nuke.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
-        echo '<a href="import_nuke.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import_nuke.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);

@@ -16,7 +16,7 @@
  * Note : this file is part of import_pn.php and cannot be run separately
  */
 
-    echo "<strong>$step. Importing old web links</strong><br>\n";
+    echo "<strong>$step. Importing old web links</strong><br/>\n";
 
     $userid = unserialize(xarModGetVar('installer','userid'));
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
@@ -73,17 +73,17 @@
                                      )
                                );
         if (!isset($newaid)) {
-            echo "Insert web link ($lid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+            echo "Insert web link ($lid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
         } else {
-            echo "Inserted web link ($lid) $title<br>\n";
+            echo "Inserted web link ($lid) $title<br/>\n";
         }
 // TODO: ratings
         $result->MoveNext();
     }
     $result->Close();
-    echo "<strong>TODO : import ratings, editorials, new links and modifications etc.</strong><br><br>\n";
+    echo "<strong>TODO : import ratings, editorials, new links and modifications etc.</strong><br/><br/>\n";
     echo '<a href="import_nuke.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_nuke.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_nuke.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
     if (!empty($docounter)) {
