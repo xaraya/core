@@ -359,7 +359,6 @@ function xarTplGetJavaScript($position = '', $index = '')
  */
 function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
-
     if (!empty($templateName)) {
         $templateName = xarVarPrepForOS($templateName);
     }
@@ -367,34 +366,20 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     if (!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
     $modOsDir = $modBaseInfo['osdirectory'];
 
-    // Try theme template
-    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
-    if (!file_exists($sourceFileName)) {
-        // Use internal template
-        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
-        $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";
-        // fall back to default template if necessary
-        if (!empty($templateName) && !file_exists($sourceFileName)) {
-            $tplName = "$modType-$funcName";
+    // Basename of module template is apitype-functioname
+    $tplBase      = "$modType-$funcName";
+    unset($sourceFileName);
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName);
 
-            //check if theme overides default template
-            $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" .'.xt';
-            if(!file_exists($sourceFileName))
-            {
-                $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
-            }
-        }
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
-    } else {
-        // TODO: <marco> Handle i18n for this case
-        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, $GLOBALS['xarTpl_themeName'], 'themes:modules/'.$modName, $tplName) === NULL) return;
-    }
-
+    // Common data for BL
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
 
+    // TODO: make this work different, for example:
+    // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
+    // 2. Create a page in the themes module with an interface
+    // 3. Use 1. to link to 2.
     if (function_exists('xarModGetVar')){
         $var_dump = xarModGetVar('themes', 'var_dump');
         if ($var_dump == true){
@@ -420,45 +405,18 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  */
 function xarTplBlock($modName, $blockType, $tplData = array(), $templateName = NULL, $templateBase = NULL)
 {
-
     if (!empty($templateName)) {
         $templateName = xarVarPrepForOS($templateName);
     }
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        // module not known
-        return;
-    }
+    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
     $modOsDir = $modBaseInfo['osdirectory'];
 
-    // The template base name can be over-ridden within a block.
-    if (empty($templateBase)) {
-        $templateBase = $blockType;
-    }
-    $templateBase = xarVarPrepForOS($templateBase);
+    // Basename of block can be overridden
+    $tplBase      = xarVarPrepForOS(empty($templateBase) ? $blockType : $templateBase);
+    unset($sourceFileName);
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName, 'blocks');
 
-    // Template search order:
-    // 1. {theme-module}/blocks/{template-base}-{instance-name}.xt
-    // 2. {theme-module}/blocks/{template-base}.xt
-    // 3. {internal-module}/blocks/{template-base}.xt
-
-    $path = xarTplGetThemeDir() . "/modules/$modOsDir/blocks/";
-    if (!empty($templateName) && file_exists($path . "$templateBase-$templateName.xt")) {
-        // Theme template for template base and instance name or admin over-ride.
-        $sourceFileName = $path . "$templateBase-$templateName.xt";
-    } elseif (file_exists($path . "$templateBase.xt")) {
-        // Theme template for template base only.
-        $sourceFileName = $path . "$templateBase.xt";
-    } else {
-        // Internal template for blocktype (note: block name and admin over-ride is
-        // not considered here, as over-rides should always go into a theme.
-        // TODO: check this assumption, as it is a change from previous functionality.
-        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$templateBase.xd";
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/blocks', $blockType) === NULL) {
-            return;
-        }
-    }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -822,7 +780,6 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
-    xarLogMessage("Using $sourceFileName");
 
     $tplData = array(
         '_bl_mainModuleOutput'     => $mainModuleOutput,
@@ -972,7 +929,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
-
+    xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
@@ -1039,6 +996,71 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Return output
     return $output;
 }
+
+/**
+ * Determine the template sourcefile to use
+ *
+ * Based on the module, the basename for the template
+ * a possible overribe and a subpart and the active
+ * theme, determine the template source we should use and loads
+ * the appropriate translations based on the outcome.
+ *
+ * @param string modName Module name doing the request
+ * @param string tplBase The base name for the template
+ * @param string templateName The name for the template to use if any
+ * @param string tplSubPart   A subpart (blocks only for now)
+ * @return string
+ *
+ * @todo evaluate whether // in a path or ctxType hurts us
+ * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
+ */
+function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '') 
+{
+    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+    $modOsDir = $modBaseInfo['osdirectory'];
+
+    // For modules: {tplBase} = {modType}-{funcName}
+    // For blocks : {tplBase} = {blockType} or overridden value
+
+    // Template search order:
+    // 1. {theme}/modules/{module}/{tplBase}-{templateName}.xt
+    // 2. modules/{module}/xartemplates/{tplBase}-{templateName}.xd
+    // 3. {theme}/modules/{module}/{tplBase}.xt
+    // 4. modules/{module}/xartemplates/{tplBase}.xd
+    // 5. complain (later on)
+
+    $tplThemesDir = xarTplGetThemeDir();
+    $tplBaseDir   = "modules/$modOsDir";
+    $use_internal = false;
+    unset($sourceFileName);
+
+    if(!empty($templateName) && 
+        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
+        $tplBase .= "-$templateName";
+    } elseif(!empty($templateName) && 
+        file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
+        $use_internal = true;
+        $tplBase .= "-$templateName";
+    } elseif(
+        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")) {
+        ;
+    } elseif(
+        file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
+        $use_internal = true;
+    }
+    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
+
+    // Load the appropriate translations
+    if($use_internal) {
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/$tplSubPart', $tplBase) === NULL) return;
+    } else {
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, $GLOBALS['xarTpl_themeName'], "themes:$tplBase/$tplSubPart", $tplBase) === NULL) return;
+    }
+
+    return $sourceFileName;
+}
+
+
 /**
  * Output template
  *
