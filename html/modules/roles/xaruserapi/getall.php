@@ -63,8 +63,7 @@ function roles_userapi_getall($args)
         $query .= " AND xar_uid != $thisrole[uid]";
     }
 
-    $query .= " AND xar_type = 0 ORDER BY xar_uname";
-
+    $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
 
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;
@@ -81,8 +80,6 @@ function roles_userapi_getall($args)
                  'date_reg'   => $date_reg);
         }
     }
-
-    $result->Close();
 
     // Return the users
     return $roles;
