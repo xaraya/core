@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Update module information
@@ -69,8 +69,8 @@ function modules_adminapi_update($args)
              $hooktfunc) = $result->fields;
 
         // Get selected value of hook
+        unset($hookvalue);
         if (!xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET)) {return;}
-
         // See if this is checked and isn't in the database
         if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodname))) {
             // Insert hook if required
@@ -95,7 +95,6 @@ function modules_adminapi_update($args)
         }
     }
     $result->Close();
-
     return true;
 }
 

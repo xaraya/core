@@ -3,7 +3,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Settings and Hooks</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
-    <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="#xarModURL('modules','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
         <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="id" id="id" value="#$id#" />
@@ -11,7 +11,9 @@
             <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
         </xar:if>
         <input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#" />
-<!--         <label for="newdisplayname"><xar:mlstring>Enter new display name (Does not work)</xar:mlstring></label>
+<xar:comment>
+    <label for="newdisplayname"><xar:mlstring>Enter new display name (Does not work)</xar:mlstring></label>
+</xar:comment>
         <br />
         <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" /> -->
         <xar:if condition="count($hooklist) eq 0">
@@ -39,37 +41,37 @@
             </xar:foreach>
             </tr>
             <xar:foreach in="$hooklist" value="$hookmod">
-            <tr>
-                <td>
-                <label for="hooks_#$hookmod['modname']#_0">
-                    #$hookmod['modname']#
-                </label>
-                <xar:if condition="!empty($details)">
-                    <br /><br />
-                    <div style="padding-left: 2em;">
-                    <xar:foreach in="$hookmod['hooks']" key="$hook">
-                        &nbsp;&nbsp;#$hook#<br />
-                    </xar:foreach><br />
-                    </div>
-                </xar:if>
-                </td>
-                <td style="text-align: center;">
-                <xar:if condition="!empty($hookmod['checked'][0])">
-                    <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" />
-                </xar:if>
-                </td>
-            <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
-                <td style="text-align: center;">
-                <xar:if condition="!empty($hookmod['checked'][$typeid])">
-                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
-                <xar:else />
-                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" />
-                </xar:if>
-                </td>
-            </xar:foreach>
-            </tr>
+                <tr>
+                    <td>
+                    <label for="hooks_#$hookmod['modname']#_0">
+                        #$hookmod['modname']#
+                    </label>
+                    <xar:if condition="!empty($details)">
+                        <br /><br />
+                        <div style="padding-left: 2em;">
+                        <xar:foreach in="$hookmod['hooks']" key="$hook">
+                            &nbsp;&nbsp;#$hook#<br />
+                        </xar:foreach><br />
+                        </div>
+                    </xar:if>
+                    </td>
+                    <td style="text-align: center;">
+                    <xar:if condition="!empty($hookmod['checked'][0])">
+                        <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" />
+                    </xar:if>
+                    </td>
+                    <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
+                        <td style="text-align: center;">
+                        <xar:if condition="!empty($hookmod['checked'][$typeid])">
+                            <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
+                        <xar:else />
+                            <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" />
+                        </xar:if>
+                        </td>
+                    </xar:foreach>
+                </tr>
             </xar:foreach>
             </table>
             <br /><br />
