@@ -124,8 +124,8 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         $data['value']   = $value;
         $data['id']      = $id;
         $data['options'] = $options;
-        $data['tabindex']= !empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid'] = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
+        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid)  : '';
 
         $template="imagelist";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
