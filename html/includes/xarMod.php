@@ -1475,7 +1475,17 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
             if (!file_exists($fileName)) {
                 $fileName = 'modules/' . $modOsDir . '/pnversion.php';
-                $modversion['id'] = time();
+                if (file_exists($fileName)) {
+                    $fd = fopen($fileName, 'r') or die("Cannot open file");
+                    $buf = '';
+                    while (!feof($fd)) {
+                        $buf .= fgets($fd, 1024);
+                    }
+                    fclose($fd);
+                    //generate a checksum of max 10 digits
+                    $checksum = abs(crc32($buf));
+                    $modversion['id'] = "666" . substr($checksum,5);
+                }
             }
             break;
         case 'theme':
