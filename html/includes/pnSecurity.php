@@ -448,6 +448,7 @@ function pnSec__getLevel($perms, $testRealm, $testComponent, $testInstance)
  * @return schemas
  */
 // FIXME: <marco> Who use this?
+// <niceguyeddie> -- used for the schema breakdown in permissions module.
 //function getinstanceschemainfo()
 function pnSec__getBlocksInstanceSchemaInfo()
 {
@@ -474,6 +475,7 @@ function pnSec__getBlocksInstanceSchemaInfo()
  * @param none
  */
 // FIXME: <marco> Who use this?
+// <niceguyeddie> -- Used for the schema breakdown for permissions.
 //function getmodulesinstanceschemainfo()
 function pnSec__getModulesInstanceSchemaInfo()
 {
