@@ -35,7 +35,7 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
 
     $GLOBALS['xarLog_loggers'] = array();
 
-    $logConfigFile = xarCoreGetVarDirPath() . '/cache/config.log.php';
+    $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
 
     $xarLogConfig = array();
 
