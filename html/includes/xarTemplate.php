@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarTemplate.php 1.107 03/04/27 17:44:26+02:00 BRUMDall@brumdall2m.bru.fsc.net $
  *
  * BlockLayout Template Engine
  * 
@@ -12,6 +12,15 @@
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  */
+
+/*
+
+NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
+        but *DO NOT* remove it.  I still need to figure it out so I can
+        make proper widgets out of it (for r1.1)
+
+        Thanks
+*/
 
 
 /**
