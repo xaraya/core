@@ -137,7 +137,9 @@ class xarLogger_mail extends xarLogger
                 $headers .= "User-Agent: Log_mail\r\n";
 
                 if (mail($this->_recipient, $this->_subject, $this->_message,
-                        $headers) == false) {
+                        $headers, "-f".$this->_from) == false) {
+                    //FIXME: Use xarLogMessage, with an extra variable to rule this 
+                    // logger out and make it log on the others avaiable
                     error_log("Log_mail: Failure executing mail()", 0);
                     return false;
                 }
@@ -168,8 +170,6 @@ class xarLogger_mail extends xarLogger
 
         $this->_message .= $entry;
         
-        $this->close();
-
         return true;
     }
 }
