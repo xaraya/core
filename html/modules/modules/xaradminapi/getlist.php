@@ -25,8 +25,8 @@
  * If you don't care of UserCapable property, simply don't specify a value for
  * it.
  * The same thing is applied to the AdminCapable property.
- * Permitted values for Class and Category are the ones defined in the proper
- * RFC.
+ * Permitted values for Class and Category are the ones defined in RFC 13.
+ *
  * Permitted values for State are XARMOD_STATE_ANY, XARMOD_STATE_UNINITIALISED,
  * XARMOD_STATE_INACTIVE, XARMOD_STATE_ACTIVE, XARMOD_STATE_MISSING,
  * XARMOD_STATE_UPGRADED, XARMOD_STATE_INSTALLED
