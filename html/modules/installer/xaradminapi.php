@@ -171,4 +171,113 @@ function installer_adminapi_createdb($args)
 
     return true;
 }
+
+
+/**
+ * CheckForField
+ *
+ * @access public
+ * @param args['field_name']
+ * @param args['table_name']
+ * @returns true if field exists false otherwise
+ * @author Sean Finkle, John Cox
+ */
+function installer_adminapi_CheckForField($args)
+{
+    extract($args);
+
+    // Argument check - make sure that all required arguments are present,
+    // if not then set an appropriate error message and return
+    if ((!isset($field_name)) ||
+        (!isset($table_name))) {
+        $msg = xarML('Invalid Parameter Count',
+                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+    $query = "desc $table_name";
+    $result =& $dbconn->Execute($query);
+
+    for(;!$result->EOF;$result->MoveNext()) { 
+        if ($result[Field] == $field_name) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * GetFieldType
+ *
+ * @access public
+ * @param args['field_name']
+ * @param args['table_name']
+ * @returns field type
+ * @author Sean Finkle, John Cox
+ */
+function installer_adminapi_GetFieldType($args)
+{
+    extract($args);
+
+    // Argument check - make sure that all required arguments are present,
+    // if not then set an appropriate error message and return
+    if ((!isset($field_name)) ||
+        (!isset($table_name))) {
+        $msg = xarML('Invalid Parameter Count',
+                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = xarDBGetConn();
+
+    $query = "desc $table_name";
+    $result =& $dbconn->Execute($query);
+
+    for(;!$result->EOF;$result->MoveNext()) { 
+        if ($result[Field] == $field_name) {
+            return ($row[Type]);
+        }
+    }
+    return;
+}
+
+/**
+ * CheckTableExists
+ *
+ * @access public
+ * @param args['table_name']
+ * @returns true if field exists false otherwise
+ * @author Sean Finkle, John Cox
+ */
+function installer_adminapi_CheckTableExists($args)
+{
+    extract($args);
+
+    // Argument check - make sure that all required arguments are present,
+    // if not then set an appropriate error message and return
+    if (!isset($table_name)) {
+        $msg = xarML('Invalid Parameter Count',
+                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $result = $dbconn->MetaTables();
+    if (in_array($table_name, $result)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 ?>

@@ -118,7 +118,18 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     {
         $this->curData = '';
 
-        $this->parser = xml_parser_create('utf-8');
+        if (!isset($locale)) {
+            $locale = xarMLSGetCurrentLocale();
+        }
+
+        // Patch from Camille Perinel
+        $charset = xarMLSGetCharsetFromLocale($locale);
+
+        if ($charset == 'utf-8') {
+            $this->parser = xml_parser_create('utf-8');
+        } else {
+            $this->parser = xml_parser_create('iso-8859-1');
+        }
         xml_set_object($this->parser, $this);
         xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING,0);
         xml_set_element_handler($this->parser, "beginElement","endElement");

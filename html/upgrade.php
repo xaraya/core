@@ -33,7 +33,6 @@ $title = xarML('Upgrade');
 
 if (empty($step)) {
     $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1)',$xarVersion);
-
     // start the output buffer
     ob_start();
 ?>
@@ -52,7 +51,7 @@ if (empty($step)) {
 <?php
 } else {
 
-    list($dbconn) = xarDBGetConn();
+   list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
 //Begin Upgrades -- needs to be a switch after this first upgrade.
@@ -258,85 +257,6 @@ if (empty($step)) {
                 xarMakeUser('Myself','myself','myself@xaraya.com','password');
                 xarMakeRoleMemberByName('Myself','Everybody');
 
-                // create and populate the security levels table
-                $leveltable = $tables['security_levels'];
-                $query = xarDBCreateTable($leveltable,
-                         array('xar_lid'  => array('type'       => 'integer',
-                                                  'null'        => false,
-                                                  'default'     => '0',
-                                                  'increment'   => true,
-                                                  'primary_key' => true),
-                               'xar_level' => array('type'      => 'integer',
-                                                  'null'        => false,
-                                                  'default'     => '0'),
-                               'xar_leveltext' => array('type'=> 'varchar',
-                                                  'size'        => 255,
-                                                  'null'        => false,
-                                                  'default'     => ''),
-                               'xar_sdescription' => array('type'=> 'varchar',
-                                                  'size'        => 255,
-                                                  'null'        => false,
-                                                  'default'     => ''),
-                               'xar_ldescription' => array('type'=> 'varchar',
-                                                  'size'        => 255,
-                                                  'null'        => false,
-                                                  'default'     => '')));
-
-                if (!$dbconn->Execute($query)) return;
-
-                $sitePrefix = xarDBGetSiteTablePrefix();
-                $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
-                               'fields'    => array('xar_level'),
-                               'unique'    => FALSE);
-                $query = xarDBCreateIndex($leveltable,$index);
-                if (!$dbconn->Execute($query)) return;
-
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
-                if (!$dbconn->Execute($query)) return;
-                $nextId = $dbconn->GenId($leveltable);
-                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                          VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
-                if (!$dbconn->Execute($query)) return;
-
-                // remove this table. we're not doing caching yet
-                $query = xarDBDropTable($tables['security_privsets']);
-                if (empty($query)) return; // throw back
-                if (!$dbconn->Execute($query)) return;
-
                 // create a couple of new masks
                 xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
                 xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
@@ -369,48 +289,6 @@ if (empty($step)) {
                 // Note to self, roles datereg field needs to be changed to a date/time field.
 
         /**
-         * waiting content changes
-         */
-
-            $wctable = xarDBGetSiteTablePrefix() . '_admin_wc';
-
-            // Generate the SQL to drop the table using the API
-            $query = xarDBDropTable($wctable);
-            if (empty($query)) return; // throw back
-
-            // Drop the table and send exception if returns false.
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
-
-            // when a module item is created
-            if (!xarModUnregisterHook('item', 'create', 'API',
-                                   'adminpanels', 'admin', 'createwc')) {
-                return false;
-            }
-
-        // Note : we use the same function in both update and delete here
-        //        => delete the waiting content entry (if it still exists)
-
-            // when a module item is updated
-            if (!xarModUnregisterHook('item', 'update', 'API',
-                                   'adminpanels', 'admin', 'deletewc')) {
-                return false;
-            }
-
-            // when a module item is deleted
-            if (!xarModUnregisterHook('item', 'delete', 'API',
-                                   'adminpanels', 'admin', 'deletewc')) {
-                return false;
-            }
-
-            // when a whole module is removed, e.g. via the modules admin screen
-            // (set object ID to the module name !)
-            if (!xarModUnregisterHook('module', 'remove', 'API',
-                                   'adminpanels', 'admin', 'deleteallwc')) {
-                return false;
-            }
-
-        /**
          * dynamicdata changes
          */
 
@@ -431,7 +309,7 @@ if (empty($step)) {
     }
 
 // Fini
-
+    $in_process = xarML('Checking and Correcting');
     $complete = xarML('Upgrades Complete');
 
 // start the output buffer
@@ -439,8 +317,177 @@ if (empty($step)) {
 ?>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
-<div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
+<div class="xar-mod-body"><h2><?php echo $in_process; ?></h2><br />
 <div style="margin: auto;">
+<?php
+
+    // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
+    $sitePrefix = xarDBGetSiteTablePrefix();
+    
+    // Drop the admin_wc table and the hooks for the admin panels.
+    $table_name['admin_wc'] = $sitePrefix . '_admin_wc'; 
+
+    $upgrade['waiting_content'] = xarModAPIFunc('installer',
+                                                'admin',
+                                                'CheckTableExists',
+                                                array('table_name' => $table_name['admin_wc']));
+    if ($upgrade['waiting_content']) {
+        echo "$table_name[admin_wc] table still exists, attempting to drop... ";
+
+            // when a module item is created
+            xarModUnregisterHook('item', 'create', 'API',
+                                 'adminpanels', 'admin', 'createwc');
+            xarModUnregisterHook('item', 'update', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+            xarModUnregisterHook('item', 'delete', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+            xarModUnregisterHook('item', 'remove', 'API',
+                                 'adminpanels', 'admin', 'deletewc');
+
+            // Generate the SQL to drop the table using the API
+            $query = xarDBDropTable($table_name['admin_wc']);
+            $result =& $dbconn->Execute($query);
+            if (!$result){ 
+                echo "failed</font><br>\r\n";
+            } else {
+                echo "done!</font><br>\r\n";
+            }
+    } else {
+        echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";  
+    }
+
+    // Drop the security_privsets table
+    $table_name['security_privsets'] = $sitePrefix . '_security_privsets'; 
+
+    $upgrade['security_privsets'] = xarModAPIFunc('installer',
+                                                'admin',
+                                                'CheckTableExists',
+                                                array('table_name' => $table_name['security_privsets']));
+    if ($upgrade['security_privsets']) {
+        echo "$table_name[security_privsets] table still exists, attempting to drop... ";
+        // Generate the SQL to drop the table using the API
+        $query = xarDBDropTable($table_name['security_privsets']);
+        $result =& $dbconn->Execute($query);
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";  
+    }
+
+    // create and populate the security levels table
+    $table_name['security_levels'] = $sitePrefix . '_security_levels'; 
+
+    $upgrade['security_levels'] = xarModAPIFunc('installer',
+                                                'admin',
+                                                'CheckTableExists',
+                                                array('table_name' => $table_name['security_levels']));
+    if (!$upgrade['security_levels']) {
+        echo "$table_name[security_levels] table does not exist, attempting to create... ";
+        $leveltable = $table_name['security_levels'];
+        $query = xarDBCreateTable($table_name['security_levels'],
+                 array('xar_lid'  => array('type'       => 'integer',
+                                          'null'        => false,
+                                          'default'     => '0',
+                                          'increment'   => true,
+                                          'primary_key' => true),
+                       'xar_level' => array('type'      => 'integer',
+                                          'null'        => false,
+                                          'default'     => '0'),
+                       'xar_leveltext' => array('type'=> 'varchar',
+                                          'size'        => 255,
+                                          'null'        => false,
+                                          'default'     => ''),
+                       'xar_sdescription' => array('type'=> 'varchar',
+                                          'size'        => 255,
+                                          'null'        => false,
+                                          'default'     => ''),
+                       'xar_ldescription' => array('type'=> 'varchar',
+                                          'size'        => 255,
+                                          'null'        => false,
+                                          'default'     => '')));
+        $result = $dbconn->Execute($query);
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+
+        echo "Attempting to set index and fill $table_name[security_levels]... ";
+
+        $sitePrefix = xarDBGetSiteTablePrefix();
+        $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
+                       'fields'    => array('xar_level'),
+                       'unique'    => FALSE);
+        $query = xarDBCreateIndex($leveltable,$index);
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        $nextId = $dbconn->GenId($leveltable);
+        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                  VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
+        $result =& $dbconn->Execute($query);
+
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "$table_name[security_levels] already exists, moving to next check. <br />";  
+    }
+
+               
+
+
+?>
+<div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete.
 </div>
 </div>
