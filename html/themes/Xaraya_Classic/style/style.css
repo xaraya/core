@@ -9,19 +9,19 @@ A:hover {
 }
 BLOCKQUOTE {
    color: #191970;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    margin: 2em;
 }
 BODY {
    color: #000000;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    background-color: #FFFFFF;
 }
 CODE {
    color: #191970;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Courier,fixed-width;
 }
 H1 {
@@ -55,14 +55,14 @@ H4 {
 }
 TH {
    color: #000000;
-   font-size:11pt;
+   font-size: 11pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-weight: bolder;
    background-color:#CDD5F8;
 }
 TD {
    color: #000000;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
 TABLE {
@@ -74,19 +74,19 @@ THEAD {}
 TBODY {}
 TFOOT {
    color: #000000;
-   font-size:11pt;
+   font-size: 11pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-weight: bolder;
    background-color:#CDD5F8;
 }
 P {
    color: #000000;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
 PRE {
    color: #191970;
-   font-size:9.5pt;
+   font-size: 9.5pt;
    font-family: Courier,fixed-width;
 }
 INPUT {
@@ -157,10 +157,10 @@ OL {
    margin-bottom: 10px;
 }
 SUP {
-   font-size: 7pt;
+   font-size: 6.5pt;
 }
 SUB {
-   font-size: 7pt;
+   font-size: 6.5pt;
 }
 
 
@@ -192,6 +192,7 @@ TD.xar-alt {}
 
 
 /*  XARAYA REQUIRED ANONYMOUS CLASSES  */
+
 /* these defaults apply to the left block group */
 .xar-block-head{
     border: 1px solid #E47C55;
@@ -199,7 +200,7 @@ TD.xar-alt {}
 }
 .xar-block-title {
     font-weight: bold;
-    font-size: 10pt;
+    font-size: 11pt;
 }
 .xar-block-body {}
 .xar-block-foot {
@@ -215,7 +216,7 @@ TD.xar-alt {}
 .xar-block-title-right {
     font-weight: bold;
     font-style: italic;
-    font-size: 10pt;
+    font-size: 11pt;
 }
 .xar-block-body-right {}
 .xar-block-foot-right {
@@ -244,7 +245,7 @@ TD.xar-alt {}
     color: #E47C55;
     background-color: inherit;
     font-weight: bold;
-    font-size: 10pt;
+    font-size: 11pt;
     text-align: center;
 }
 .xar-block-body-center {
@@ -259,10 +260,6 @@ TD.xar-alt {}
     margin-bottom: 4px;
 }
 
-.xar-block-head{}
-.xar-block-title {}
-.xar-block-body {}
-.xar-block-foot {}
 .xar-mod-head {
    border: 2px solid #a0a0a0;
    background-color: #CDD5F8;
@@ -281,6 +278,9 @@ TD.xar-alt {}
 .xar-mod-foot {}
 .xar-alt {background-color: #E47C55; }
 .xar-accent {background-color: #CCE6FF; }
+.xar-alt-outline {border: 1px solid #E47C55; }
+.xar-accent-outline {border: 1px solid #CCE6FF; }
+.xar-norm-outline {border: 1px solid #c0c0c0; }
 .xar-norm {background-color: #FFFFFF; }
 .xar-sub {font-size: smaller;}
 .xar-menu-section {
@@ -424,7 +424,7 @@ TD.xar-alt {}
    background-color:#E3F1FF;
 }
 .copyright {
-   font-size:9pt;
+   font-size: 9pt;
    line-height: 150%;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }

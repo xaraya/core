@@ -10,21 +10,19 @@
         #$tpl:headJavaScript#
     </head>
     <body>
-<div style="background-image:url(themes/Xaraya_Classic/images/header_fill.gif);width: 100%;height: 52px; background-repeat: repeat-x;"><div style="float: left;width: 174px; height: 86px;"><a href="&xar-baseurl;">
-            <img src="themes/Xaraya_Classic/images/xaraya_logo.jpg" alt="#xarModGetVar('themes', 'SiteName')#" width="174" height="86" style="align:left; vertical-align:top; border:0px" />
+<div style="background-image:url(themes/Xaraya_Classic/images/header_fill.gif);width: 100%;height: 52px; background-repeat: repeat-x;"><div style="float: left;width: 148px; height: 52px;"><a href="&xar-baseurl;">
+            <img src="themes/Xaraya_Classic/images/xaraya_logo.jpg" alt="#xarModGetVar('themes', 'SiteName')#" width="148" height="52" style="align:left; vertical-align:top; border:0px" />
             </a></div><div style="float: right;width: 259px; height: 52px;"><a href="&xar-baseurl;">
             <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarModGetVar('themes', 'SiteName')#" width="259" height="52" style="align:left; vertical-align:top; border:0px" />
             </a></div>
-<br clear="all" />
+        <br clear="all" />
         <!-- xar:blockgroup name="topnav" id="topnav" / -->
-<br clear="all" />
-
 <!-- start body -->
 
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td style="width: 18%;" align="left" valign="top">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <table width="140" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td style="background-color:##ffffff;">
                         <xar:blockgroup name="left" id="left" />
@@ -45,7 +43,7 @@
             <xar:module id="modulespace" main="true" />
         </td>
         <td style="width: 1%"></td>
-        <td style="width: 20%; align: left; vertical-align: top; background-image:url(themes/Xaraya_Classic/images/side_all.gif)">
+        <td style="width: 150px; align: left; vertical-align: top; background-image:url(themes/Xaraya_Classic/images/side_all.gif)">
             <xar:blockgroup name="right" id="right" />
         </td>
     </tr>
