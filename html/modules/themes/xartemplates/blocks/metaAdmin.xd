@@ -1,6 +1,6 @@
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Meta Description</xar:mlstring>
+		<label for="metadescription"><xar:mlstring>Meta Description</xar:mlstring></label>
 	</td>
 	<td>
 		<textarea name="metadescription" id="metadescription" cols="50" rows="5" wrap="virtual" class="xar-normal">#$metadescription#</textarea>
@@ -8,7 +8,7 @@
 </tr>
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Meta Keywords</xar:mlstring>
+		<label for="metakeywords"><xar:mlstring>Meta Keywords</xar:mlstring></label>
 	</td>
 	<td>
 		<input type="text" name="metakeywords" id="metakeywords" value="#$metakeywords#" size="50" maxlength="100" />
@@ -29,7 +29,7 @@
 <xar:if condition="!empty($usegeo)">
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Your Longitude</xar:mlstring>
+		<label for="longitude"><xar:mlstring>Your Longitude</xar:mlstring></label>
 	</td>
 	<td>
 		<input type="text" name="longitude" id="longitude" value="#$longitude#" size="30" maxlength="100" />
@@ -37,7 +37,7 @@
 </tr>
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Your Latitude</xar:mlstring>
+		<label for="latitude"><xar:mlstring>Your Latitude</xar:mlstring></label>
 	</td>
 	<td>
 		<input type="text" name="latitude" id="latitude" value="#$latitude#" size="30" maxlength="100" />
@@ -46,7 +46,7 @@
 </xar:if>
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Use Dynamic Keywords</xar:mlstring>
+		<label for="usedk"><xar:mlstring>Use Dynamic Keywords</xar:mlstring></label>
 	</td>
 	<td>
 		<xar:if condition="!empty($usedk)">

@@ -89,7 +89,8 @@ function themes_metablock_display($blockinfo)
         $meta['keywords'] = $vars['metakeywords'];
     }
 
-    $meta['generator'] = xarConfigGetVar('System.Core.VersionNum');
+    $meta['generator'] = 'Xaraya ';
+    $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionID');
 
