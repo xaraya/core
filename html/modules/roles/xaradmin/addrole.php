@@ -134,7 +134,7 @@ function roles_admin_addrole()
     xarModCallHooks('item', 'create', $uid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
 }
 
 ?>
