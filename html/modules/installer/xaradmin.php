@@ -195,7 +195,6 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('newDB', 'int',$newDB, 0,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -240,23 +239,22 @@ function installer_admin_phase5()
         $data['dbPass']     = $dbPass;
         $data['dbPrefix']   = $dbPrefix;
         $data['dbType']     = $dbType;
-        $data['newDB']      = $createDB;
+        $data['install_create_database']      = $createDB;
         $data['language']    = $install_language;
         return $data;
     }
-    else {
-        $newDB = $createDB;
-    }
-//    echo $dbType;exit;
 
     // Create the database if necessary
-    if ($newDB) {
+    if ($createDB) {
         $data['confirmDB']  = true;
         //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
         //Probably there is already a core function that can make that for us...
         //the config.system.php is lazy loaded in xarCore_getSystemVar($name), which means we cant reload the values
         // in this phase... Not a big deal 'though.
+        if ($dbExists) {
+            if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
+        }
         if (!xarInstallAPIFunc('installer', 'admin', 'createdb', $config_args)) {
             $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
             xarCore_die($msg);
