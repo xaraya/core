@@ -324,6 +324,7 @@ function privileges_init()
 
     $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
     $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
+    $privileges->setInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
 
 
     /*********************************************************************
@@ -336,6 +337,7 @@ function privileges_init()
     $masks = new xarMasks();
 
     $masks->register('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
+    $masks->register('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
     $masks->register('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
     $masks->register('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
     $masks->register('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
