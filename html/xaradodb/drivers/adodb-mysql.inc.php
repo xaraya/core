@@ -25,7 +25,7 @@ class ADODB_mysql extends ADOConnection {
 	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $hasLimit = true;
 	var $hasMoveFirst = true;
-	var $hasGenID = true;
+	var $hasGenID = false;  // XARAYA MODIFICATION
 	var $upperCase = 'upper';
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = 'CURDATE()';
@@ -96,8 +96,6 @@ class ADODB_mysql extends ADOConnection {
 	
 	function GenID($seqname='adodbseq',$startID=1)
 	{
-		//xaraya modification
-		return 0;
 		// post-nuke sets hasGenID to false
 		if (!$this->hasGenID) return false;
 		

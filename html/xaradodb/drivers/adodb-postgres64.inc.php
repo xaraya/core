@@ -64,9 +64,12 @@ SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg_%' ORDER BY 1"
 	var $fmtTimeStamp = "'Y-m-d G:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
 	var $hasMoveFirst = true;
 	var $hasGenID = true;
-	var $_genIDSQL = "SELECT NEXTVAL('%s')";
-	var $_genSeqSQL = "CREATE SEQUENCE %s START %s";
-	var $_dropSeqSQL = "DROP SEQUENCE %s";
+    // XARAYA MODIFICATION - START
+    // Prefix the sequence number to make it unique
+    var $_genIDSQL = "SELECT NEXTVAL('seq%s')";
+    var $_genSeqSQL = "CREATE SEQUENCE seq%s START %s";
+	var $_dropSeqSQL = "DROP SEQUENCE seq%s";
+    // XARAYA MODIFICATION - END
 	var $metaDefaultsSQL = "SELECT d.adnum as num, d.adsrc as def from pg_attrdef d, pg_class c where d.adrelid=c.oid and c.relname='%s' order by d.adnum";
 	
 	
@@ -108,8 +111,12 @@ Unless you are very careful, you might end up with a tuple having
 a different OID if a database must be reloaded. */
 	function _insertid()
 	{
-		if (!is_resource($this->_resultid)) return false;
-	   return pg_getlastoid($this->_resultid);
+        // XARAYA MODIFICATION - START
+		// if (!is_resource($this->_resultid)) return false;
+	    // return pg_getlastoid($this->_resultid);
+        // return the GenID value
+        return $this->genID;
+        // XARAYA MODIFICATION - END
 	}
 
 // I get this error with PHP before 4.0.6 - jlim
@@ -457,7 +464,8 @@ a different OID if a database must be reloaded. */
 		else $this->_connectionID = pg_connect($str);
 		
 		if ($this->_connectionID === false) return false;
-		$this->Execute("set datestyle='ISO'");
+        // XARAYA TO DO - find out why following line fails
+        // $this->Execute("set datestyle='ISO'");
 		return true;
 	}
 	
