@@ -737,23 +737,25 @@ function installer_admin_confirm_configuration()
 
     $options2 = $options3 = array();
     foreach ($availablemodules as $availablemodule) {
-//            if(xarMod_getState($availablemodule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-//                echo var_dump($availablemodule);exit;
+//        if(xarMod_getState($availablemodule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+//            echo var_dump($availablemodule);exit;
             $options2[] = array(
                        'item' => $availablemodule['regid'],
                        'option' => 'true',
                        'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
                        );
-//            }
+//        }
     }
     foreach ($fileModules as $fileModule) {
-//            if(xarMod_getState($fileModule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+//        if(xarMod_getState($fileModule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+        // skip other auth* modules during installation !
+            if (substr($fileModule['name'],0,4) == 'auth') continue;
             $options3[] = array(
                        'item' => $fileModule['regid'],
                        'option' => 'false',
                        'comment' => xarML('Install the #(1) module.',ucfirst($fileModule['name']))
                        );
-//            }
+//        }
     }
 
     if (!$confirmed) {
