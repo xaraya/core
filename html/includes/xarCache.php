@@ -28,6 +28,7 @@ function xarCache_init($args)
     global $xarPage_cacheTime;
     global $xarPage_cacheDisplay;
     global $xarPage_cacheShowTime;
+    global $xarPage_cacheExpireHeader;
     global $xarPage_cacheGroups;
     global $xarBlock_cacheTime;
 
@@ -43,6 +44,7 @@ function xarCache_init($args)
     $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ? $cachingConfiguration['Page.TimeExpiration'] : 1800;
     $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ? $cachingConfiguration['Page.DisplayView'] : 0;
     $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ? $cachingConfiguration['Page.ShowTime'] : 1;
+    $xarPage_cacheExpireHeader = isset($cachingConfiguration['Page.ExpireHeader']) ? $cachingConfiguration['Page.ExpireHeader'] : 1;
     $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ? $cachingConfiguration['Page.CacheGroups'] : '';
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ? $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
@@ -91,7 +93,7 @@ function xarCache__shutdown_handler()
  */
 function xarPageIsCached($cacheKey, $name = '')
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheCode, $xarPage_cacheGroups;
+    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheExpireHeader, $xarPage_cacheCode, $xarPage_cacheGroups;
 
     $xarTpl_themeDir = xarTplGetThemeDir();
 
@@ -143,7 +145,11 @@ function xarPageIsCached($cacheKey, $name = '')
                 exit;
             }
         }
-        header("Expires: " . gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) . " GMT");
+        if (!empty($xarPage_cacheExpireHeader)) {
+            // this tells clients and proxies that this file is good until local cache file
+            // is due to expire
+        	header("Expires: " . gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) . " GMT");
+        }
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
         // we can't use this after session_start()
         //session_cache_limiter('public');
@@ -211,8 +217,9 @@ function xarBlockIsCached($args)
         $blockCacheExpireTime = $blocks[$blockid]['cacheexpire'];
     }
 
-    if (empty($noCache)) {
-        $noCache = 0;
+    if (!empty($noCache)) {
+        $xarBlock_noCache = 1;
+        return false;
     }
     if (empty($pageShared)) {
     	$pageShared = 0;
@@ -222,11 +229,6 @@ function xarBlockIsCached($args)
     }
     if (!isset($blockCacheExpireTime)) {
         $blockCacheExpireTime = $xarBlock_cacheTime;
-    }
-
-    if ($noCache == 1) {
-        $xarBlock_noCache = 1;
-        return false;
     }
 
     $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
@@ -257,7 +259,6 @@ function xarBlockIsCached($args)
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
-        filesize($cache_file) > 0 &&
         ($blockCacheExpireTime == 0 || filemtime($cache_file) > time() - $blockCacheExpireTime)) {
         return true;
     } else {
