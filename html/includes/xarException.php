@@ -577,10 +577,11 @@ function xarCoreExceptionFree()
     global $CoreStack;
     $CoreStack->initialize();
 }
-function isCoreException()
+function xarIsCoreException()
 {
     global $CoreStack;
     return $CoreStack->size() > 1;
 }
 
 ?>
+
