@@ -47,15 +47,15 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @param array blockInfo block information parameters
+ * @param array blockinfo block information parameters
  * @return string output the block to show
  * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarBlock_render($blockInfo)
+function xarBlock_render($blockinfo)
 {
-    $modName = $blockInfo['module'];
-    $blockType = $blockInfo['type'];
-    $blockName = $blockInfo['name'];
+    $modName = $blockinfo['module'];
+    $blockType = $blockinfo['type'];
+    $blockName = $blockinfo['name'];
 
     xarLogMessage("block rendering: module " . $modName . " / type " . $blockType);
 
@@ -77,9 +77,9 @@ function xarBlock_render($blockInfo)
     if (function_exists($displayFuncName)) {
         // Allow the block to modify the content before rendering.
         // In fact, the block can access and alter any aspect of the block info.
-        $blockInfo = $displayFuncName($blockInfo);
+        $blockinfo = $displayFuncName($blockinfo);
 
-        if (!isset($blockInfo)) {
+        if (!isset($blockinfo)) {
             if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {return;} // throw back
             return '';
         }
@@ -88,36 +88,36 @@ function xarBlock_render($blockInfo)
         // We somehow need to be able to raise exceptions here. We can't
         //       just ignore things which are wrong.
         // This would happen if a block does not return the blockinfo array correctly.
-        if (!is_array($blockInfo)) {return '';}
+        if (!is_array($blockinfo)) {return '';}
 
         // Handle the new block templating style.
         // If the block has not done the rendering already, then render now.
-        if (is_array($blockInfo['content'])) {
-            // Here $blockInfo['content'] is template data.
+        if (is_array($blockinfo['content'])) {
+            // Here $blockinfo['content'] is template data.
 
             // Set some additional details that the could be useful in the block.
             // TODO: prefix these extra variables (_bl_) to indicate they are supplied by the core.
-            $blockInfo['content']['blockid'] = $blockInfo['bid'];
-            $blockInfo['content']['blockname'] = $blockInfo['name'];
-            $blockInfo['content']['blocktypename'] = $blockInfo['type'];
-            if (isset($blockInfo['bgid'])) {
+            $blockinfo['content']['blockid'] = $blockinfo['bid'];
+            $blockinfo['content']['blockname'] = $blockinfo['name'];
+            $blockinfo['content']['blocktypename'] = $blockinfo['type'];
+            if (isset($blockinfo['bgid'])) {
                 // The block may not be rendered as part of a group.
-                $blockInfo['content']['blockgid'] = $blockInfo['bgid'];
-                $blockInfo['content']['blockgroupname'] = $blockInfo['group_name'];
+                $blockinfo['content']['blockgid'] = $blockinfo['bgid'];
+                $blockinfo['content']['blockgroupname'] = $blockinfo['group_name'];
             }
 
             // Render this block template data.
-            $blockInfo['content'] = xarTplBlock(
-                $modName, $blockType, $blockInfo['content'],
-                $blockInfo['_bl_block_template'], 
-                !empty($blockInfo['_bl_template_base']) ? $blockInfo['_bl_template_base'] : NULL
+            $blockinfo['content'] = xarTplBlock(
+                $modName, $blockType, $blockinfo['content'],
+                $blockinfo['_bl_block_template'], 
+                !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
             );
         }
     }
 
     // Now wrap the block up in a box.
     // TODO: pass the group name into this function (param 2?) for the template path.
-    return xarTpl_renderBlockBox($blockInfo, $blockInfo['_bl_box_template']);
+    return xarTpl_renderBlockBox($blockinfo, $blockinfo['_bl_box_template']);
 }
 
 /**
@@ -125,14 +125,15 @@ function xarBlock_render($blockInfo)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @param string groupName the name of the block group
+ * @param string groupname the name of the block group
+ * @param string template optional template to apply to all blocks in the group
  * @return string
  * @raise BAD_PARAM, DATABASE_ERROR
  */
-function xarBlock_renderGroup($groupName)
+function xarBlock_renderGroup($groupname, $template = NULL)
 {
-    if (empty($groupName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupName');
+    if (empty($groupname)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
         return;
     }
 
@@ -175,16 +176,16 @@ function xarBlock_renderGroup($groupName)
               AND       inst.xar_state > 0
               ORDER BY  group_inst.xar_position ASC";
 
-    $result =& $dbconn->Execute($query, array($groupName));
+    $result =& $dbconn->Execute($query, array($groupname));
     if (!$result) {return;}
 
     $output = '';
     while(!$result->EOF) {
-        $blockInfo = $result->GetRowAssoc(false);
+        $blockinfo = $result->GetRowAssoc(false);
 
         if ($caching == 1) {
-            $cacheKey = $blockInfo['module'] . "-blockid" . $blockInfo['bid'] . "-" . $groupName;
-            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockInfo['bid']);
+            $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
+            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
         if ($caching == 1 && xarBlockIsCached($args)) {
@@ -192,42 +193,48 @@ function xarBlock_renderGroup($groupName)
             $output .= xarBlockGetCached($cacheKey,'block');
 
         } else {
-            $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
+            $blockinfo['last_update'] = $result->UnixTimeStamp($blockinfo['last_update']);
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
-            $group_inst_bl_template = split(';', $blockInfo['group_inst_bl_template'], 3);
-            $inst_bl_template = split(';', $blockInfo['inst_bl_template'], 3);
-            $group_bl_template = split(';', $blockInfo['group_bl_template'], 3);
+            $group_inst_bl_template = split(';', $blockinfo['group_inst_bl_template'], 3);
+            $inst_bl_template = split(';', $blockinfo['inst_bl_template'], 3);
+            $group_bl_template = split(';', $blockinfo['group_bl_template'], 3);
 
             if (empty($group_bl_template[0])) {
                 // Default the box template to the group name.
-                $group_bl_template[0] = $blockInfo['group_name'];
+                $group_bl_template[0] = $blockinfo['group_name'];
             }
 
             if (empty($group_bl_template[1])) {
                 // Default the block template to the instance name.
                 // TODO
-                $group_bl_template[1] = $blockInfo['name'];
+                $group_bl_template[1] = $blockinfo['name'];
             }
 
             // Cascade level over-rides for the box template.
-            $blockInfo['_bl_box_template'] = !empty($group_inst_bl_template[0]) ? $group_inst_bl_template[0]
+            $blockinfo['_bl_box_template'] = !empty($group_inst_bl_template[0]) ? $group_inst_bl_template[0]
                 : (!empty($inst_bl_template[0]) ? $inst_bl_template[0] : $group_bl_template[0]);
 
+            // Global override of box template - usually comes from the 'template'
+            // attribute of the xar:blockgroup tag.
+            if (!empty($template)) {
+                $blockinfo['_bl_box_template'] = $template;
+            }
+
             // Cascade level over-rides for the block template.
-            $blockInfo['_bl_block_template'] = !empty($group_inst_bl_template[1]) ? $group_inst_bl_template[1]
+            $blockinfo['_bl_block_template'] = !empty($group_inst_bl_template[1]) ? $group_inst_bl_template[1]
                 : (!empty($inst_bl_template[1]) ? $inst_bl_template[1] : $group_bl_template[1]);
 
-            $blockInfo['_bl_template_base'] = $blockInfo['type'];
+            $blockinfo['_bl_template_base'] = $blockinfo['type'];
 
             // Unset a few elements that clutter up the block details.
             // They are for internal use and we don't want them used within blocks.
-            unset($blockInfo['group_inst_bl_template']);
-            unset($blockInfo['inst_bl_template']);
-            unset($blockInfo['group_bl_template']);
+            unset($blockinfo['group_inst_bl_template']);
+            unset($blockinfo['inst_bl_template']);
+            unset($blockinfo['group_bl_template']);
             
-            $blockoutput = xarBlock_render($blockInfo);
+            $blockoutput = xarBlock_render($blockinfo);
 
             if ($caching == 1) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);

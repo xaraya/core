@@ -2532,11 +2532,12 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
                     'type' => $type,
                     'name' => $name,
                     'title' => $title,
-                    'template' => $template,
+                    // Allow the template to be set from a xar:blockgroup tag.
+                    'template' => (isset(\$_bl_blockgroup_template) ? \$_bl_blockgroup_template : $template),
                     'state' => $state,
                     'content' => $override
             )
-        );
+        )
 EOT;
         return $code;
 
@@ -2583,22 +2584,26 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
 
-        if (!isset($template)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Must have \'template\' attribute in open <xar:blockgroup> tag.', $this);
-            return;
-        }
-
         if (isset($name)) {
             $this->raiseError(XAR_BL_INVALID_TAG,'Cannot have \'name\' attribute in open <xar:blockgroup> tag.', $this);
             return;
         }
 
-        return "\$_bl_blockgroup_template = '$template';";
+        // Template attribute is optional.
+        if (isset($template)) {
+            // TODO: not sure about use of semi-colons here. This command seems to get
+            // an echo prepended, but the renderEndTag output does not. Similarly, a
+            // terminating semi-colon is needed here, but not in the renderEndTag() method.
+            // Is this right?
+            return '; $_bl_blockgroup_template = "' . xarVar_addSlashes($template) . '";';
+        } else {
+            return ';';
+        }
     }
 
     function renderEndTag()
     {
-        return 'unset($_bl_blockgroup_template);';
+        return 'unset($_bl_blockgroup_template)';
     }
 
     function render()
@@ -2611,11 +2616,10 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         }
 
         if (isset($template)) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Cannot have \'template\' attribute in closed <xar:blockgroup/> tag.', $this);
-            return;
+            return 'xarBlock_renderGroup("' . xarVar_addSlashes($name) . '", "' . xarVar_addSlashes($template) . '")';
+        } else {
+            return 'xarBlock_renderGroup("' . xarVar_addSlashes($name) . '")';
         }
-
-        return "xarBlock_renderGroup('$name')";
     }
 
     function hasChildren()
