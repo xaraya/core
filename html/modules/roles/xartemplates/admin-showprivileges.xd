@@ -84,7 +84,7 @@
 				#$level#
 			</td>
 			<td align="right">
-				<a href="#$groupurl#&amp;ppid=#$groupid#">				
+				<a href="#$groupurl#&amp;puid=#$groupid#">				
 				#$groupname#
 				</a>
 			</td>
@@ -188,7 +188,7 @@
 				<td>
 					<select name="privid" id="privid">
 						<xar:loop name="$allprivileges">
-							<option value="#$pid#">#$name#
+							<option value="#$uid#">#$name#
 						</xar:loop>
 					</select>
 				</td>

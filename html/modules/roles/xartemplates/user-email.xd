@@ -3,7 +3,7 @@
 	<form action="&xar-modurl-roles-user-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="name" id="name" value="#$name#" />
-		<input type="hidden" name="pid" id="pid" value="#$pid#" />
+		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="fname" id="fname" value="#xarUserGetVar('name')#" />
 		<input type="hidden" name="femail" id="femail" value="#xarUserGetVar('email')#" />
 		<table>

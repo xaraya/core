@@ -47,8 +47,8 @@ function roles_onlineblock_display($blockinfo)
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     $sql = "SELECT COUNT(1)
             FROM $sessioninfotable
-            WHERE xar_lastused > $activetime AND xar_pid > 1
-		    GROUP BY xar_pid
+            WHERE xar_lastused > $activetime AND xar_uid > 1
+		    GROUP BY xar_uid
             ";
     $result = $dbconn->Execute($sql);
 
@@ -60,7 +60,7 @@ function roles_onlineblock_display($blockinfo)
 
    $query2 = "SELECT count( 1 )
              FROM $sessioninfotable
-              WHERE xar_lastused > $activetime AND xar_pid = '0'
+              WHERE xar_lastused > $activetime AND xar_uid = '0'
 			  GROUP BY xar_ipaddr
 			 ";
    $result2 = $dbconn->Execute($query2);
@@ -85,7 +85,7 @@ function roles_onlineblock_display($blockinfo)
     // TODO Figure out the call for usergetvar.
  /*
     if (xarUserIsLoggedIn()) {
-        $content .= '<br />'.xarML('Welcome Back').' <b> ' .xarUserGetVar('pid') . '</b>.<br />';
+        $content .= '<br />'.xarML('Welcome Back').' <b> ' .xarUserGetVar('uid') . '</b>.<br />';
 
     }
  */
@@ -93,7 +93,7 @@ function roles_onlineblock_display($blockinfo)
         //<b>' .xarUserGetVar('uname') . '</b>.<br />';
         /*
         $column = &$pntable['priv_msgs_column'];
-        $result2 = $dbconn->Execute("SELECT count(*) FROM $pntable[priv_msgs] WHERE $column[to_userid]=" . pnUserGetVar('pid'));
+        $result2 = $dbconn->Execute("SELECT count(*) FROM $pntable[priv_msgs] WHERE $column[to_userid]=" . pnUserGetVar('uid'));
         list($numrow) = $result2->fields;
         if ($numrow == 0) {
             $content .= '<br /></span>';
@@ -151,11 +151,11 @@ function roles_onlineblock_display($blockinfo)
     $activetime = time() - (xarConfigGetVar('secinactivemins') * 60);
 
     // TODO - see if this can be done in a better way
-    $query = "SELECT xar_pid,
+    $query = "SELECT xar_uid,
                    COUNT(1)
             FROM $sessioninfotable
             WHERE xar_lastused > $activetime
-            GROUP BY xar_pid";
+            GROUP BY xar_uid";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -169,11 +169,11 @@ function roles_onlineblock_display($blockinfo)
 
     $userlist = array();
     while (!$result->EOF) {
-        list($pid, $num) = $result->fields;
-        if ($pid == 0) {
+        list($uid, $num) = $result->fields;
+        if ($uid == 0) {
             $numguests = $num;
         } else {
-            $userlist[] = $pid;
+            $userlist[] = $uid;
             $numroles++;
         }
 
@@ -207,9 +207,9 @@ function roles_onlineblock_display($blockinfo)
 
         $userlist = join(',', $userlist);
         $sql = "SELECT xar_uname,
-                       xar_pid
+                       xar_uid
                 FROM $rolestable
-                WHERE xar_pid = 1
+                WHERE xar_uid = 1
                 ORDER BY xar_uname";
         $result = $dbconn->Execute($sql);
 
@@ -229,11 +229,11 @@ function roles_onlineblock_display($blockinfo)
 
         $numdisplayed=0;
         for (; !$result->EOF && $numdisplayed<$vars['maxwho']; $result->MoveNext()) {
-            list($uname, $pid) = $result->fields;
+            list($uname, $uid) = $result->fields;
 	    $output->URL(xarModURL('roles',
 				  'user',
 				  'display',
-				  array('pid' => $pid)),
+				  array('uid' => $uid)),
 			 $uname);
             $output->Linebreak();
         }

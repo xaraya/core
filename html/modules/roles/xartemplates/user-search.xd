@@ -4,7 +4,7 @@
     <br />
     <h3><xar:mlstring>User Found</xar:mlstring>:</h3>
     <ul>
-		<a href="#xarModURL('roles', 'user', 'display', array('pid' => $pid))#">#$name#</a>
+		<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
     </ul>
 </xar:if>
 

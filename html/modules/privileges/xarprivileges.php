@@ -1851,7 +1851,7 @@ class xarPrivilege extends xarMask
 
 // set up a query to select the roles this privilege
 // is linked to in the acl table
-		$query = "SELECT xar_roles.xar_pid,
+		$query = "SELECT xar_roles.xar_uid,
 					xar_roles.xar_name,
 					xar_roles.xar_type,
 					xar_roles.xar_uname,
@@ -1860,7 +1860,7 @@ class xarPrivilege extends xarMask
 					xar_roles.xar_url,
 					xar_roles.xar_auth_module
 					FROM $this->rolestable INNER JOIN $this->acltable
-					ON xar_roles.xar_pid = xar_acl.xar_partid
+					ON xar_roles.xar_uid = xar_acl.xar_partid
 					WHERE xar_acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
@@ -1871,9 +1871,9 @@ class xarPrivilege extends xarMask
 		$roles = array();
 //		$ind = 0;
 		while(!$result->EOF) {
-			list($pid,$name,$type,$uname,$email,$pass,$url,$auth_module) = $result->fields;
+			list($uid,$name,$type,$uname,$email,$pass,$url,$auth_module) = $result->fields;
 //			$ind = $ind + 1;
-			$role = new xarRole(array('pid' => $pid,
+			$role = new xarRole(array('uid' => $uid,
 							   'name' => $name,
 							   'type' => $type,
 							   'uname' => $uname,

@@ -38,7 +38,7 @@ function roles_init()
     // prefix_roles
     /*********************************************************************
 	* CREATE TABLE xar_roles (
-	*   xar_pid int(11) NOT NULL auto_increment,
+	*   xar_uid int(11) NOT NULL auto_increment,
 	*   xar_name varchar(100) NOT NULL default '',
 	*   xar_type int(11) NOT NULL default '0',
 	*   xar_users int(11) NOT NULL default '0',
@@ -47,12 +47,12 @@ function roles_init()
 	*   xar_pass varchar(100) NOT NULL default '',
 	*   xar_url varchar(100) NOT NULL default '',
 	*   xar_auth_module varchar(100) NOT NULL default '',
-	*   PRIMARY KEY  (xar_pid)
+	*   PRIMARY KEY  (xar_uid)
 	* )
     *********************************************************************/
 
     $query = xarDBCreateTable($tables['roles'],
-             array('xar_pid'  => array('type'       => 'integer',
+             array('xar_uid'  => array('type'       => 'integer',
                                       'null'        => false,
                                       'default'     => '0',
                                       'increment'   => true,
@@ -101,7 +101,7 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
-/*    $index = array(
+    $index = array(
     'name'      => 'i_xar_roles_1',
     'fields'    => array('xar_uname'),
     'unique'    => true
@@ -115,13 +115,13 @@ function roles_init()
     // prefix_rolemembers
     /*********************************************************************
     * CREATE TABLE xar_rolemembers (
-    *   xar_pid int(11) NOT NULL default '0',
+    *   xar_uid int(11) NOT NULL default '0',
     *   xar_parentid int(11) NOT NULL default '0'
     * )
     *********************************************************************/
 
     $query = xarDBCreateTable($tables['rolemembers'],
-             array('xar_pid'       => array('type'       => 'integer',
+             array('xar_uid'       => array('type'       => 'integer',
                                            'null'        => false,
                                            'default'     => '0'),
                    'xar_parentid'      => array('type'   => 'integer',
@@ -133,28 +133,28 @@ function roles_init()
     * Enter some default groups and users
     *********************************************************************/
 
-/*	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+/*	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
 			VALUES (1, 'Everybody', 1)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
 			VALUES (2, 'Current', 0, 'current', 'current@xaraya.com')";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
 			VALUES (3, 'Oversight', 1)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
 			VALUES (4, 'Overseer', 0, 'overseer', 'overseer@xaraya.com', md5('xaraya'))";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
 			VALUES (5, 'Admins', 1)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
 			VALUES (6, 'Users', 1)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
 			VALUES (7, 'User', 0, 'user', 'user@xaraya.com')";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
+	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
 			VALUES (8, 'Anonymous', 0, 'anonymous', 'anonymous@xaraya.com')";
 	if (!$dbconn->Execute($query)) return;
 	*/

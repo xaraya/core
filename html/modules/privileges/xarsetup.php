@@ -132,7 +132,7 @@ function initializeSetup() {
     xarDefineInstance('adminpanels','Item',$query);
 
 	$query = "SELECT xar_name FROM xar_roles";
-    xarDefineInstance('roles','Roles',$query,0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    xarDefineInstance('roles','Roles',$query,0,'xar_rolemembers','xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 	$query = "SELECT xar_name FROM xar_privileges";
     xarDefineInstance('privileges','Privileges',$query,0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
 

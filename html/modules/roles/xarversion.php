@@ -14,7 +14,7 @@ $modversion['contact'] = 'http://www.mcdee.net/, marco@xaraya.com, jan@xaraya.co
 $modversion['admin'] = 1;
 $modversion['user'] = 1;
 $modversion['user_menu'] = 1;
-$modversion['securityschema'] = array('roles::' => 'Role uname:Role pid');
+$modversion['securityschema'] = array('roles::' => 'Role uname:Role uid');
 $modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Users & Groups';
 ?>

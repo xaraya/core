@@ -58,12 +58,12 @@
 	if ((!isset($this->allgroups)) || count($this->allgroups)==0) {
 
 // set up the query and get the groups
-			$query = "SELECT xar_roles.xar_pid,
+			$query = "SELECT xar_roles.xar_uid,
 						xar_roles.xar_name,
 						xar_roles.xar_users,
 						xar_rolemembers.xar_parentid
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_pid = xar_rolemembers.xar_pid
+						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
 						WHERE xar_roles.xar_type = 1
 						ORDER BY xar_roles.xar_name";
 
@@ -74,9 +74,9 @@
 			$groups = array();
 			$ind = 0;
 			while(!$result->EOF) {
-				list($pid,$name, $users, $parentid) = $result->fields;
+				list($uid,$name, $users, $parentid) = $result->fields;
 				$ind = $ind + 1;
-				$groups[$ind] = array('pid' => $pid,
+				$groups[$ind] = array('uid' => $uid,
 								   'name' => $name,
 								   'users' => $users,
 								   'parentid' => $parentid);
@@ -103,9 +103,9 @@
  * @throws  none
  * @todo    none
 */
-	function getgroup($pid){
+	function getgroup($uid){
 		foreach($this->getgroups() as $group){
-			if ($group['pid'] == $pid) return $group;
+			if ($group['uid'] == $uid) return $group;
 		}
 		return false;
 	}
@@ -123,12 +123,12 @@
  * @throws  none
  * @todo    none
 */
-	function getsubgroups($pid){
+	function getsubgroups($uid){
 
 		$subgroups = array();
 		$ind = 0;
 		foreach($this->getgroups() as $subgroup){
-			if ($subgroup['parentid'] == $pid) {
+			if ($subgroup['parentid'] == $uid) {
 				$ind = $ind + 1;
 				$subgroups[$ind] = $subgroup;
 			}
@@ -167,7 +167,7 @@
 	function addbranches($node){
 		$object = $node['parent'];
 		$node['children'] = array();
-		foreach($this->getsubgroups($object['pid']) as $subnode){
+		foreach($this->getsubgroups($object['uid']) as $subnode){
 			array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
 		}
 		return $node;
@@ -255,13 +255,13 @@ function drawbranch($node){
 	$object = $node['parent'];
 
 // check if we've aleady processed this entry
-	if (in_array($object['pid'],$this->alreadydone)) {
+	if (in_array($object['uid'],$this->alreadydone)) {
 		$drawchildren = false;
 		$node['children'] = array();
 	}
 	else {
 		$drawchildren = true;
-		array_push($this->alreadydone,$object['pid']);
+		array_push($this->alreadydone,$object['uid']);
 	}
 
 // is this a branch?
@@ -272,7 +272,7 @@ function drawbranch($node){
 
 // this next table holds the Delete, Users and Privileges links
 // don't allow deletion of certain roles
-	if(($object['pid'] < 9) || ($object['users'] > 0) || (!$drawchildren)) {
+	if(($object['uid'] < 9) || ($object['users'] > 0) || (!$drawchildren)) {
 		$this->html .= $this->bigblank;
 	}
 	else {
@@ -280,7 +280,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'deleterole',
-				 array('ppid'=>$object['pid'])) .
+				 array('puid'=>$object['uid'])) .
 				 '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -293,7 +293,7 @@ function drawbranch($node){
 				xarModURL('roles',
 					 'admin',
 					 'showusers',
-					 array('ppid'=>$object['pid'])) .
+					 array('puid'=>$object['uid'])) .
 					 '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -306,7 +306,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'showprivileges',
-				 array('ppid'=>$object['pid'])) .
+				 array('puid'=>$object['uid'])) .
 				 '" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -319,7 +319,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'testprivileges',
-				 array('ppid'=>$object['pid'])) .
+				 array('puid'=>$object['uid'])) .
 				 '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -354,8 +354,8 @@ function drawbranch($node){
 					xarModURL('roles',
 						 'admin',
 						 'modifyrole',
-						 array('ppid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-		$this->html .= count($this->getsubgroups($object['pid'])) . ' subgroups';
+						 array('puid'=>$object['uid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
+		$this->html .= count($this->getsubgroups($object['uid'])) . ' subgroups';
 		$this->html .= ' | ' . $object['users'] . ' users</span>';
 	}
 
@@ -421,22 +421,22 @@ function drawindent() {
  * @throws  none
  * @todo    none
 */
- 	function getRole($pid)
+ 	function getRole($uid)
 	{
 // retrieve the object's data from the repository
 // set up and execute the query
 		$query = "SELECT *
                   FROM $this->rolestable
-                  WHERE xar_pid = $pid";
+                  WHERE xar_uid = $uid";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
 // set the data in an array
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -479,9 +479,9 @@ function drawindent() {
 		if (!$result) return;
 
 // set the data in an array
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -499,7 +499,7 @@ function drawindent() {
 	}
 
 /**
- * makeMemberByName: makes a role a child of a group
+ * makeMember: makes a role a child of a group
  *
  * Creates an entry in the rolemembers table
  * This is a convenience class for module developers
@@ -512,7 +512,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exceptions for bad input
 */
- 	function makeMemberByName($childname,$parentname)
+ 	function makeMember($childname,$parentname)
 	{
 // retrieve the parent's data from the repository
 		$query = "SELECT *
@@ -523,9 +523,9 @@ function drawindent() {
 		if (!$result) return;
 
 // create the parent object
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -548,79 +548,9 @@ function drawindent() {
 		if (!$result) return;
 
 // create the child object
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
-						'name'=>$name,
-						'type'=>$type,
-						'parentid'=>$parentid,
-						'uname'=>$uname,
-						'email'=>$email,
-						'pass'=>$pass,
-						'url'=>$url,
-						'date_reg'=>$date_reg,
-						'val_code'=>$val_code,
-						'state'=>$state,
-						'auth_module'=>$auth_module);
-		$child =  new xarRole($pargs);
-
-// done
-		return $parent->addMember($child);
-	}
-
-/**
- * makeMemberByUname: makes a role a child of a group
- *
- * Creates an entry in the rolemembers table
- * This is a convenience class for module developers
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @param   string
- * @return  boolean
- * @throws  none
- * @todo    create exceptions for bad input
-*/
- 	function makeMemberByUname($childname,$parentname)
-	{
-// retrieve the parent's data from the repository
-		$query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_uname = '$parentname'";
-		//Execute the query, bail if an exception was thrown
-		$result = $this->dbconn->Execute($query);
-		if (!$result) return;
-
-// create the parent object
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
-		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
-						'name'=>$name,
-						'type'=>$type,
-						'parentid'=>$parentid,
-						'uname'=>$uname,
-						'email'=>$email,
-						'pass'=>$pass,
-						'url'=>$url,
-						'date_reg'=>$date_reg,
-						'val_code'=>$val_code,
-						'state'=>$state,
-						'auth_module'=>$auth_module);
-		$parent =  new xarRole($pargs);
-
-// retrieve the child's data from the repository
-		$query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_uname = '$childname'";
-		//Execute the query, bail if an exception was thrown
-		$result = $this->dbconn->Execute($query);
-		if (!$result) return;
-
-// create the child object
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
-		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -654,7 +584,7 @@ function drawindent() {
  	function isRoot($rootname)
 	{
 // get the data for the root object
-		$query = "SELECT xar_pid
+		$query = "SELECT xar_uid
                   FROM $this->rolestable
                   WHERE xar_name = '$rootname'";
 		//Execute the query, bail if an exception was thrown
@@ -662,9 +592,9 @@ function drawindent() {
 		if (!$result) return;
 
 // create the entry
-		list($pid) = $result->fields;
+		list($uid) = $result->fields;
 		$query = "INSERT INTO $this->rolememberstable
-				VALUES ($pid,0)";
+				VALUES ($uid,0)";
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 
@@ -733,7 +663,7 @@ function drawindent() {
 		$stateprep = xarVarPrepForStore($state);
 		$authmoduleprep = xarVarPrepForStore($authmodule);
 		$query = "INSERT INTO $this->rolestable
-					(xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
+					(xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
 					xar_date_reg, xar_valcode, xar_state, xar_auth_module)
 				  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep', '$passprep',
 				  '$dateregprep', '$valcodeprep', $stateprep, '$authmoduleprep')";
@@ -784,7 +714,7 @@ function drawindent() {
 		$nextIdprep = xarVarPrepForStore($nextId);
 		$nameprep = xarVarPrepForStore($name);
 		$query = "INSERT INTO $this->rolestable
-					(xar_pid, xar_name, xar_type)
+					(xar_uid, xar_name, xar_type)
 				  VALUES ($nextIdprep, '$nameprep', 1)";
 		if (!$this->dbconn->Execute($query)) return;
 
@@ -807,7 +737,7 @@ function drawindent() {
 */
  class xarRole
 {
-	var $pid;           //the id of this user or group
+	var $uid;           //the id of this user or group
 	var $name;          //the name of this user or group
 	var $type;          //the type of this role (0=user, 1=group)
 	var $parentid;      //the id of the parent of this role
@@ -852,7 +782,7 @@ function drawindent() {
 		$this->privilegestable = $xartable['privileges'];
 		$this->acltable = $xartable['acl'];
 
-        $this->pid          = $pid;
+        $this->uid          = $uid;
         $this->name         = $name;
         $this->type         = $type;
         $this->parentid     = $parentid;
@@ -935,7 +865,7 @@ function drawindent() {
 			$nameprep = xarVarPrepForStore($this->name);
 			$typeprep = xarVarPrepForStore($this->type);
 			$query = "INSERT INTO $this->rolestable
-						(xar_pid, xar_name, xar_type)
+						(xar_uid, xar_name, xar_type)
 					  VALUES ($nextIdprep, '$nameprep', $typeprep)";
 		}
 		else {
@@ -950,7 +880,7 @@ function drawindent() {
 			$valcodeprep = xarVarPrepForStore($this->val_code);
 			$authmodprep = xarVarPrepForStore($this->auth_module);
 			$query = "INSERT INTO $this->rolestable
-						(xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
+						(xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
 						xar_date_reg, xar_state, xar_valcode, xar_auth_module)
 					  VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$emailprep',
 					  '$passprep', '$dateregprep', $stateprep, '$valcodeprep', '$authmodprep')";
@@ -958,13 +888,13 @@ function drawindent() {
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 
-		$query = "SELECT MAX(xar_pid) FROM $this->rolestable";
+		$query = "SELECT MAX(xar_uid) FROM $this->rolestable";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
-		list($pid) = $result->fields;
-		$this->pid = $pid;
+		list($uid) = $result->fields;
+		$this->uid = $uid;
 		$parts = new xarRoles();
 		$parentpart = $parts->getRole($this->parentid);
 		return $parentpart->addMember($this);
@@ -1000,7 +930,7 @@ function drawindent() {
 
 // get the current count
 			$query = "SELECT xar_users FROM $this->rolestable
-					WHERE xar_pid =" . $this->getID();
+					WHERE xar_uid =" . $this->getID();
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
@@ -1010,7 +940,7 @@ function drawindent() {
 			$query = "UPDATE " . $this->rolestable .
 					" SET " .
 					"xar_users = $users" .
-					" WHERE xar_pid =" . $this->getID();
+					" WHERE xar_uid =" . $this->getID();
 			if (!$this->dbconn->Execute($query)) return;
 		}
 
@@ -1034,7 +964,7 @@ function drawindent() {
 
 // delete the relevant entry from the rolemembers table
 		$query = "DELETE FROM $this->rolememberstable
-              WHERE xar_pid=" . $member->getID() .
+              WHERE xar_uid=" . $member->getID() .
               " AND xar_parentid=" . $this->getID();
 		if (!$this->dbconn->Execute($query)) return;
 
@@ -1044,7 +974,7 @@ function drawindent() {
 
 // get the current count.
 			$query = "SELECT xar_users FROM $this->rolestable
-					WHERE xar_pid =" . $this->getID();
+					WHERE xar_uid =" . $this->getID();
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
@@ -1054,7 +984,7 @@ function drawindent() {
 			$query = "UPDATE " . $this->rolestable .
 					" SET " .
 					"xar_users = $users" .
-					" WHERE xar_pid =" . $this->getID();
+					" WHERE xar_uid =" . $this->getID();
 			if (!$this->dbconn->Execute($query)) return;
 		}
 
@@ -1071,7 +1001,7 @@ function drawindent() {
 					"xar_uname = '$this->uname'," .
 					"xar_email = '$this->email'," .
 					"xar_pass = '$this->pass'" .
-					" WHERE xar_pid = " . $this->getID();
+					" WHERE xar_uid = " . $this->getID();
 
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
@@ -1094,7 +1024,7 @@ function drawindent() {
 // get a list of all relevant entries in the rolemembers table
 // where this role is the child
 		$query = "SELECT xar_parentid FROM $this->rolememberstable
-              WHERE xar_pid=" . $this->getID();
+              WHERE xar_uid=" . $this->getID();
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1114,7 +1044,7 @@ function drawindent() {
 
 // delete the relevant entry in the roles table
 		$query = "DELETE FROM $this->rolestable
-              WHERE xar_pid=" . $this->getID();
+              WHERE xar_uid=" . $this->getID();
 		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 
@@ -1160,7 +1090,7 @@ function drawindent() {
 					xar_description
 					FROM $this->privilegestable INNER JOIN $this->acltable
 					ON xar_privileges.xar_pid = xar_acl.xar_permid
-					WHERE xar_acl.xar_partid = $this->pid";
+					WHERE xar_acl.xar_partid = $this->uid";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1232,7 +1162,7 @@ function drawindent() {
 
 // remove an entry from the privmembers table
 		$query = "DELETE FROM $this->acltable
-              WHERE xar_partid=" . $this->pid .
+              WHERE xar_partid=" . $this->uid .
               " AND xar_permid=" . $perm->getID();
 		if (!$this->dbconn->Execute($query)) return;
 
@@ -1254,7 +1184,7 @@ function drawindent() {
 
 // set up the query and get the data
 	if ($state == '') {
-		$query = "SELECT xar_roles.xar_pid,
+		$query = "SELECT xar_roles.xar_uid,
 						xar_roles.xar_name,
 						xar_roles.xar_type,
 						xar_roles.xar_uname,
@@ -1263,12 +1193,12 @@ function drawindent() {
 						xar_roles.xar_url,
 						xar_roles.xar_auth_module
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_pid = xar_rolemembers.xar_pid
+						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
 						WHERE xar_roles.xar_type = 0
-						AND xar_rolemembers.xar_parentid = $this->pid";
+						AND xar_rolemembers.xar_parentid = $this->uid";
 	}
 	else {
-		$query = "SELECT xar_roles.xar_pid,
+		$query = "SELECT xar_roles.xar_uid,
 						xar_roles.xar_name,
 						xar_roles.xar_type,
 						xar_roles.xar_uname,
@@ -1277,9 +1207,9 @@ function drawindent() {
 						xar_roles.xar_url,
 						xar_roles.xar_auth_module
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_pid = xar_rolemembers.xar_pid
+						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
 						WHERE xar_roles.xar_type = 0 AND xar_state = $state
-						AND xar_rolemembers.xar_parentid = $this->pid";
+						AND xar_rolemembers.xar_parentid = $this->uid";
 	}
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1287,9 +1217,9 @@ function drawindent() {
 // arrange the data in an array of role objects
 		$users = array();
 		while(!$result->EOF) {
-		list($pid,$name,$type,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -1328,16 +1258,16 @@ function drawindent() {
 // if this is the root return an empty array
 		if ($this->getID() == 1) return $parents;
 
-// if this is a group pick up the pids using getgroups()
+// if this is a group pick up the uids using getgroups()
 // May be faster
 		if (!$this->isUser()) {
 
 // get the roles class
 			$parts = new xarRoles();
 
-// look for the parent pids and create role objects from them
+// look for the parent uids and create role objects from them
 			foreach($parts->getgroups() as $group){
-				if ($group['pid'] == $this->pid){
+				if ($group['uid'] == $this->uid){
 					array_push($parents, $parts->getRole($group['parentid']));
 				}
 			}
@@ -1346,16 +1276,16 @@ function drawindent() {
 // if this is a user just perform a SELECT on the rolemembers table
 			$query = "SELECT xar_roles.*
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_pid = xar_rolemembers.xar_parentid
-						WHERE xar_rolemembers.xar_pid = $this->pid";
+						ON xar_roles.xar_uid = xar_rolemembers.xar_parentid
+						WHERE xar_rolemembers.xar_uid = $this->uid";
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
 // collect the table values and use them to create new role objects
 			while(!$result->EOF) {
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
-		$pargs = array('pid'=>$pid,
+		$pargs = array('uid'=>$uid,
 						'name'=>$name,
 						'type'=>$type,
 						'parentid'=>$parentid,
@@ -1428,7 +1358,7 @@ function drawindent() {
 /**
  * isEqual: checks whether two roles are equal
  *
- * Two role objects are considered equal if they have the same pid.
+ * Two role objects are considered equal if they have the same uid.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -1563,7 +1493,7 @@ function drawindent() {
  * @throws  none
  * @todo    none
 */
-	function getID()            {return $this->pid;}
+	function getID()            {return $this->uid;}
     function getName()          {return $this->name;}
     function getType()          {return $this->type;}
     function getUser()          {return $this->uname;}

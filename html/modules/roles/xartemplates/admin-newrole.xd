@@ -69,7 +69,7 @@ document.forms[0].submit();}
 				<td>
 					<select name="pparentid" id="pparentid" tabindex="5">
 					<xar:loop name="$groups">
-								<option value="#$pid#">#$name#
+								<option value="#$uid#">#$name#
 					</xar:loop>
 					</select>
 				</td>

@@ -125,7 +125,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
 
     $query = "UPDATE $rolestable
               SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
-              WHERE xar_pid = " . xarVarPrepForStore($userId);
+              WHERE xar_uid = " . xarVarPrepForStore($userId);
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -628,7 +628,7 @@ function xarUser__getAuthModule($userId)
 
 	$query = "SELECT xar_auth_module
 			  FROM $rolestable
-			  WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
+			  WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
 	$result =& $dbconn->Execute($query);
 	if (!$result) return;
 
@@ -822,7 +822,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     // from the users table.
     $query = "UPDATE $rolestable
               SET $usercolumns[$name] = '" . xarVarPrepForStore($value) . "'
-              WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
+              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
     return true;
