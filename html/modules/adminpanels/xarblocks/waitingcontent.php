@@ -47,7 +47,7 @@ function adminpanels_waitingcontentblock_display($blockinfo)
 
     $data['moditems'] = array();
 
-    $modlist = xarModAPIFunc('adminpanels','admin','getmodules');
+    $modlist = xarModAPIFunc('adminpanels','admin','getmoduleswc');
     foreach ($modlist as $modid => $numitems) {
         $modinfo = xarModGetInfo($modid);
         $moditem = array();
