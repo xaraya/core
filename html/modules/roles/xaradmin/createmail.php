@@ -160,6 +160,7 @@ function roles_admin_createmail()
         $data['message'] = '';
     } else {
         $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
+        if (!isset($strings)) return;
 
         $data['subject'] = $strings['subject'];
         $data['message'] = $strings['message'];

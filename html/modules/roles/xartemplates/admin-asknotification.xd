@@ -11,7 +11,7 @@
 		<xar:mlstring>Send $mailtype notification</xar:mlstring>
     </h2>
     <div style="margin: auto;">
-<!--
+<xar:comment>
  Contextual text
 <xar:if condition="$mailtype eq 'validation'">
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
@@ -27,7 +27,8 @@
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
 <xar:elseif condition="$mailtype eq 'password'"/>
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator change their password</xar:mlstring></xar:set>
-</xar:if>-->
+</xar:if>
+</xar:comment>
 <form action="#xarModURL('roles', 'admin', 'asknotification')#" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="phase" id="phase" value="notify" />
@@ -74,75 +75,75 @@
 		 <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
 			<div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%password%%</span>
+				<span class="help" title="#$messagetitle#">$password</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Password of the user</xar:mlstring></span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%validationlink%%</span>
+				<span class="help" title="#$messagetitle#">$validationlink</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Validation link for the user</xar:mlstring></span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%valcode%%</span>
+				<span class="help" title="#$messagetitle#">$valcode</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Validation code for the user</xar:mlstring></span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%ipaddress%%</span>
+				<span class="help" title="#$messagetitle#">$ipaddress</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>IP address of the user</xar:mlstring></span>
 			 </div>
 		<xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>	
 			<div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%password%%</span>
+				<span class="help" title="#$messagetitle#">$password</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Password of the user</xar:mlstring></span>
 			 </div>
 		</xar:if>
 		<div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%sitename%%</span>
+			<span class="help" title="#$messagetitle#">$sitename</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the site</xar:mlstring></span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%siteadmin%%</span>
+			<span class="help" title="#$messagetitle#">$siteadmin</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the administrator</xar:mlstring></span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%adminmail%%</span>
+			<span class="help" title="#$messagetitle#">$adminmail</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the administrator</xar:mlstring></span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%siteurl%%</span>
+			<span class="help" title="#$messagetitle#">$siteurl</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>URL of the site</xar:mlstring>(#xarServerGetBaseURL()#)</span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%myname%%</span>
+			<span class="help" title="#$messagetitle#">$myname</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the user</xar:mlstring></span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%username%%</span>
+			<span class="help" title="#$messagetitle#">$username</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Username of the user</xar:mlstring></span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
 		    <span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#$messagetitle#">%%useremail%%</span>
+			<span class="help" title="#$messagetitle#">$useremail</span>
 		    </span>
 		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the user</xar:mlstring></span>
 		 </div>
@@ -150,7 +151,7 @@
 			<xar:foreach in="$properties" key="$name">
 			<div style="clear: both; padding-top: 10px;">
 			    <span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#$messagetitle#">%%#$name#%%</span>
+				<span class="help" title="#$messagetitle#">$#$name#</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;"><xar:data-label property="$properties[$name]" /> (<xar:mlstring>Dynamic property</xar:mlstring>)</span>
 			 </div>

@@ -36,9 +36,12 @@ function roles_admin_asknotification($args)
                 if ($data['mailtype'] == 'blank') {
                     $data['subject'] = '';
                     $data['message'] = '';
-                } elseif (xarModGetVar('roles', 'ask'.$data['mailtype'].'email')) {
-                        $data['subject'] = xarModGetVar('roles', $data['mailtype'].'title');
-                        $data['message'] = xarModGetVar('roles', $data['mailtype'].'email');
+                } else {
+                    $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
+                    if (!isset($strings)) return;
+
+                    $data['subject'] = $strings['subject'];
+                    $data['message'] = $strings['message'];
                 }
                 //Display the notification form
                 if (!xarVarFetch('subject', 'str:1:', $data['subject'], $data['subject'], XARVAR_NOT_REQUIRED)) return;
@@ -87,6 +90,7 @@ function roles_admin_asknotification($args)
             //Send notification
             $uid = unserialize(base64_decode($uid));
             if (!xarModAPIFunc('roles','admin','senduseremail', array( 'uid' => $uid, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
+                return;
                 $msg = xarML('Problem sending email for #(1) Userid: #(2)',$data['mailtype'],$uid);
                 xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             }
