@@ -28,9 +28,9 @@ function blocks_admin_modify_instance()
     // TODO: move all database stuff to the API.
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $block_instances_table = $xartable['block_instances'];
-    $block_group_instances_table = $xartable['block_group_instances'];
-    $block_types_table = $xartable['block_types'];
+    $block_instances_table =& $xartable['block_instances'];
+    $block_group_instances_table =& $xartable['block_group_instances'];
+    $block_types_table =& $xartable['block_types'];
 
     // Get the instance details.
     $instance = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $bid));
@@ -60,15 +60,25 @@ function blocks_admin_modify_instance()
         $extra = '';
     }
 
-    // Check to see if block has form content.
-    $infofunc = $usname.'_'.$instance['type'] . 'block_info';
-    if (function_exists($infofunc)) {
-        $block_edit = $infofunc();
-    } else {
+    // Get the block info flags.
+    $block_info = xarModAPIfunc(
+        'blocks', 'user', 'read_type_info',
+        array(
+            'module' => $instance['module'],
+            'type' => $instance['type']
+        )
+    );
+
+    if (empty($block_info)) {
         // Function does not exist so throw error
-        $msg = xarML('MODULE_FUNCTION_NOT_EXIST #(1)', $infofunc);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        $msg = xarML(
+            'Block info function for module "#(1)" and type "#(2)"',
+            $instance['module'], $instance['type']
+        );
+        xarExceptionSet(
+            XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+            new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
+        );
         return NULL;
     }
 
@@ -124,7 +134,7 @@ function blocks_admin_modify_instance()
                  'block_groups'   => $block_groups,
                  'instance'       => $instance,
                  'extra_fields'   => $extra,
-                 'block_settings' => $block_edit,
+                 'block_settings' => $block_info,
                  'hooks'          => $hooks,
                  'refresh_times'  => $refreshtimes);
 }

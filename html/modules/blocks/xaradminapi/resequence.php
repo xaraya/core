@@ -20,22 +20,19 @@ function blocks_adminapi_resequence()
 {
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $block_group_instances_table = $xartable['block_group_instances'];
 
+    $block_group_instances_table =& $xartable['block_group_instances'];
 
     // Get the information
-    $query = "SELECT xar_id,
-                     xar_group_id,
-                     xar_position
-              FROM $block_group_instances_table
-              ORDER BY xar_group_id,
-                       xar_position ASC";
+    $query = 'SELECT xar_id, xar_group_id, xar_position'
+              . ' FROM ' . $block_group_instances_table
+              .' ORDER BY xar_group_id, xar_position ASC';
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     // Fix sequence numbers
     $last_group = NULL;
-    while(!$result->EOF) {
+    while (!$result->EOF) {
         list($link_id, $group, $old_position) = $result->fields;
         $result->MoveNext();
 
@@ -45,11 +42,10 @@ function blocks_adminapi_resequence()
             $last_group = $group;
         }
         if ($position != $old_position) {
-            $query = "UPDATE $block_group_instances_table
-                      SET xar_position = " . xarVarPrepForStore($position) . "
-                      WHERE xar_id = " . xarVarPrepForStore($link_id);
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
+            $query = 'UPDATE ' . $block_group_instances_table
+                      . ' SET xar_position = ? WHERE xar_id = ?';
+            $result =& $dbconn->Execute($query, array($position, $link_id));
+            if (!$result) {return;}
         }
 
         $position++;

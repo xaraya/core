@@ -5,6 +5,14 @@
  * Get details suitable for *rendering* a block instance.
  * This will return the details for a block.
  *
+ * TODO: big changes planned for in here.
+ * - references to groups will be removed
+ * - block can be an instance or a 'one-off' standalone block
+ * - standalone blocks will be seeded with the block init details (if available)
+ * - arbitrary parameters can be passed in to override the block content array elements
+ * - some sort of validation check could be made available for the overridable params?
+ * - system-level flag to switch between reporting attribute/args errors or just ignoring
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

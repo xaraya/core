@@ -61,6 +61,9 @@ function blocks_adminapi_create_type($args)
         $nextID = $dbconn->PO_Insert_ID($block_types_table, 'xar_id');
     }
 
+    // Update the block info details.
+    xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
+
     return $nextID;
 }
 

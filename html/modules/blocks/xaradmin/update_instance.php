@@ -100,7 +100,7 @@ function blocks_admin_update_instance()
     // Resequence blocks within groups.
     if (!xarModAPIFunc('blocks', 'admin', 'resequence')) {return;}
 
-    xarResponseRedirect(xarModURL('blocks', 'admin', 'modify_instance',array('bid'=>$bid)));
+    xarResponseRedirect(xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid)));
 
     return true;
 }

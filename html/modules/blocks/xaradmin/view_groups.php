@@ -21,35 +21,22 @@ function blocks_admin_view_groups()
 	if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
-    // Load up database
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $block_groups_table = $xartable['block_groups'];
-
-    $query = "SELECT    xar_id as id,
-                        xar_name as name,
-                        xar_template as template
-              FROM      $block_groups_table
-              ORDER BY  xar_name ASC";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
+    $block_groups = xarModAPIfunc(
+        'blocks', 'user', 'getallgroups', array('order' => 'name')
+    );
 
     // Load up groups array
-    $block_groups = array();
-    while(!$result->EOF) {
-        $group = $result->GetRowAssoc(false);
-        // Get details on current group
-        $group = xarModAPIFunc(
-            'blocks', 'admin', 'groupgetinfo',
-            array('blockGroupId' => $group['id'])
-        );
-        $group['membercount'] = count($group['instances']);
-        $group['deleteconfirm'] = xarML('Delete group #(1)?', $group['name']);
-        $group['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('gid' => $group['id'], 'authid' => $authid));
-        $block_groups[] = $group;
+    foreach($block_groups as $index => $block_group) {
+        $block_groups[$index]['id'] = $block_group['gid']; // Legacy
 
-        $result->MoveNext();
+        // Get details on current group
+        $block_groups[$index] = xarModAPIFunc(
+            'blocks', 'admin', 'groupgetinfo',
+            array('blockGroupId' => $block_groups[$index]['gid'])
+        );
+        $block_groups[$index]['membercount'] = count($block_groups[$index]['instances']);
+        $block_groups[$index]['deleteconfirm'] = xarML('Delete group #(1)?', $block_group['name']);
+        $block_groups[$index]['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('gid' => $block_group['gid'], 'authid' => $authid));
     }
 
     return array('block_groups' => $block_groups);

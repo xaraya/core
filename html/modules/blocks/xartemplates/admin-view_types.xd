@@ -6,11 +6,17 @@
         <tr>
             <th><span class="help" title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></span></th>
             <th><span class="help" title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></span></th>
+            <th><span class="help" title="#xarML('A short description of what the block does.')#"><xar:mlstring>Description</xar:mlstring></span></th>
         </tr>
         <xar:loop name="$block_types" id="foo2">
             <tr>
                 <td><a href="#$loop:item['modurl']#" title="#xarML('Administer module')#">#$loop:item['module']#</a></td>
                 <td>#$loop:item['type']#</td>
+                <td>
+                    <xar:if condition="!empty($loop:item['info']['text_type_long'])">
+                        #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
+                    </xar:if>
+                </td>
             </tr>
         </xar:loop>
     </table>

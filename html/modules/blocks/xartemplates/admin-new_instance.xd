@@ -63,7 +63,7 @@
 		<span style="float: right; width: 78%; text-align: left;">
 			<select name="block_groups[][gid]" id="block_groups">
             <option value="">
-                -- <xar:mlstring>Add To Block Group</xar:mlstring> --
+                -- <xar:mlstring>no group</xar:mlstring> --
             </option>
 			<xar:loop name="$block_groups">
 				<option value="#$loop:item['gid']#">
