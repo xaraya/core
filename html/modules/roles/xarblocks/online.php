@@ -87,6 +87,14 @@ function roles_onlineblock_display($blockinfo)
         $blockinfo['title'] = xarML('Online');
     }
 
+    $uname = xarModGetVar('roles', 'lastuser');
+    $status = xarModAPIFunc('roles',
+                            'user',
+                            'get',
+                             array('uname' => $uname));
+
+    $args['lastuser'] = $status;
+
     $args['blockid'] = $blockinfo['bid'];
     $blockinfo['content'] = xarTplBlock('roles', 'online', $args);
     return $blockinfo;

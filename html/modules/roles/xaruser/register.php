@@ -328,7 +328,8 @@ function roles_user_register()
                               array('uname' => $username,
                                     'pass' => $pass,
                                     'rememberme' => 0));
-                
+
+                xarModSetVar('roles', 'lastuser', $username);
                 xarResponseRedirect('index.php');
 
             } else {

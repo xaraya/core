@@ -134,6 +134,7 @@ function roles_user_getvalidation()
                                          'message' => $message))) return;
             }
 
+            xarModSetVar('roles', 'lastuser', $username);
 
             $data = xarTplModule('roles','user', 'getvalidation');
 

@@ -395,6 +395,8 @@ function installer_admin_create_administrator()
                    'pass'  => $pass,
                    'state' => 3);
 
+    xarModSetVar('roles', 'lastuser', $userName);
+
     // create a role from the data
     $role = new xarRole($pargs);
 
