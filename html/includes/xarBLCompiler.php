@@ -254,7 +254,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             //
             // PART 2: Handle each child below it.
             //
-            //$checkNode = $node;
             foreach ($node->children as $child) {
                 if ($child->isPHPCode()) {
                     $code .= $this->setPHPBlock(true);
@@ -1156,6 +1155,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
  *
  * @package blocklayout
  * @access private
+ * @todo the push and pop are confusing here, because the access is by hash, not stacklike
  */
 class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
 {
@@ -1858,6 +1858,9 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
  * xarTpl__XarLoopNode: <xar:loop> tag class
  *
  * @package blocklayout
+ *
+ * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
+ * 
  */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
@@ -1903,21 +1906,22 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $resolver->push('loop:number', '$_bl_loop_number'.$loopCounter);
 
         if (isset($id)) {
-            // Register special variables for tag id
+            // If we have an $id, also register the id based specials
             $resolver->push("loop:$id:item", '$_bl_loop_item'.$loopCounter);
             $resolver->push("loop:$id:key", '$_bl_loop_key'.$loopCounter);
             $resolver->push("loop:$id:index", '$_bl_loop_index'.$loopCounter);
             $resolver->push("loop:$id:number", '$_bl_loop_number'.$loopCounter);
         }
 
-        $output = '$_bl_loop_index'.$loopCounter." = 0; ";
-        $output .= '$_bl_loop_number'.$loopCounter." = 1; ";
+        $output = '$_bl_loop_index'.$loopCounter." = -1; ";
+        $output .= '$_bl_loop_number'.$loopCounter." = 0; ";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
+        // Do the incrementing inside here ASAP, as the loop may be interupted by a xar:continue
+        $output .= '$_bl_loop_index'.$loopCounter."++; ";
+        $output .= '$_bl_loop_number'.$loopCounter."++; ";
 
-        if(!isset($id))
-            $prefix = '_bl_loop_'.$loopCounter;
-        else
-            $prefix = '_bl_loop_'.$id;
+        $prefix = '_bl_loop_' . (!isset($id)) ? $loopCounter: $id;               
+        
         $output .= 'if (is_array($_bl_loop_item'.$loopCounter.')) extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
         return $output;
     }
@@ -1930,15 +1934,14 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 
         // Get xarTpl__SpecialVariableNamesResolver instance
         $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
-        // Register special variables
+        // Unregister the special variables
+        // FIXME: what about the ID based ones?
         $resolver->pop('loop:item');
         $resolver->pop('loop:key');
         $resolver->pop('loop:index');
         $resolver->pop('loop:number');
 
-        $output = '$_bl_loop_index'.$loopCounter."++; ";
-        $output .= '$_bl_loop_number'.$loopCounter."++; ";
-        $output .= "} ";
+        $output = "} ";
         return $output;
     }
 
@@ -2863,6 +2866,7 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access private
+ * @todo Events are triggered by core only, how does this tag fit in?
  */
 class xarTpl__XarEventNode extends xarTpl__TplTagNode
 {
