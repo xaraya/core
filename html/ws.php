@@ -37,6 +37,7 @@ function xarWebservicesMain()
     if ($type == 'xmlrpc') {
         $server = xarModAPIFunc('webservices','user','initXMLRPCServer');
         if (!$server) {
+            xarLogMessage("Could not load XML-RPC server, giving up");
             die('Could not load XML-RPC server');
         }
     }
