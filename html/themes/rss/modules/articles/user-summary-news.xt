@@ -1,7 +1,7 @@
 <item>
 <title>#$rsstitle#</title>
 <link>#$link#</link>
-<pubDate>#$rssdate#</pubDate>
+<pubDate>#$date#</pubDate>
 <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
 <content:encoded><![CDATA[ #$summary# ]]></content:encoded>
 <description>#$rsssummary#</description>
