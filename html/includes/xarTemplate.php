@@ -513,7 +513,8 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     if ($currentItem > $lastItem) {$currentItem = $lastItem;}
 
     // If this request was the same as the last one, then return the cached pager details.
-    $request = ($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . $blockSize . ':' . $firstItem . ':' . $firstPage);
+    // TODO: is there a better way of caching for each unique request?
+    $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
     if (xarVarGetCached('Pager.core', 'request') == $request) {
         return xarVarGetCached('Pager.core', 'details');
     }
