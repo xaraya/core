@@ -442,7 +442,12 @@ function xarResponseRedirect($redirectURL)
 
         $header = "Location: $baseurl$redirectURL";
     }
-    xarSession_close();
+    if (!function_exists('xarSession_close')){
+        session_write_close();
+    } else {
+        xarSession_close();
+    }
+
     header($header, headers_sent());
 
     return true;
