@@ -169,8 +169,8 @@ function base_init()
     /****************************************************************
     * Set System Configuration Variables
     *****************************************************************/
-    xarConfigSetVar('System.Core.TimeZone', 'Europe/Rome');
-    xarConfigSetVar('System.Core.VersionNum', '0.901');
+    xarConfigSetVar('System.Core.TimeZone', 'US/New York');
+    xarConfigSetVar('System.Core.VersionNum', '0.902');
     xarConfigSetVar('System.Core.VersionId', 'Xaraya');
     xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
     $allowedAPITypes = array();
@@ -181,7 +181,7 @@ function base_init()
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
     xarConfigSetVar('Site.Core.FixHTMLEntities',false);
-    xarConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
+    xarConfigSetVar('Site.Core.TimeZone', 'US/New York');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
