@@ -831,18 +831,39 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
     $sql_fields = array();
     $primary_key = array();
 
+
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
 
-        $sql_fields[] = $field_name .' '
-                      . $this_field['type'] .' '
-//                      . $this_field['unsigned'] .' ' // doesnt do unsigned
-                      . $this_field['null'] .' '
-                      . $this_field['default'];// .' '
-//                      . $this_field['auto_increment']; // may not use autoinc
-        if ($this_field['primary_key'] == true) {
-            $primary_key[] = $field_name;
+        // For some reason that is not obvious in the old code, fetching
+        // the values from $this_field was causing an infinite loop - 
+        // now check to see if the key exists before assigning to $sql_fields
+        $sqlDDL = $field_name;
+        if (array_key_exists("type", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+
+        // PosgreSQL doesn't handle unsigned
+        //if (array_key_exists("unsigned", $this_field))
+        //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
+
+        if (array_key_exists("null", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
+
+        if (array_key_exists("default", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
+
+        // PosgreSQL doesn't handle auto_increment - this should be a sequence
+        //if (array_key_exists("auto_increment", $this_field))
+        //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
+
+        $sql_fields[] = $sqlDDL;
+
+        // Check for primary key
+        if (array_key_exists("primary_key", $this_field)) {
+            if ($this_field['primary_key'] == true) {
+                $primary_key[] = $field_name;
+            }
         }
     }
 
