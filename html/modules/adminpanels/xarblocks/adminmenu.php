@@ -122,7 +122,6 @@ function adminpanels_adminmenublock_display($blockinfo){
                                                 'modactive' => 1);
                                                 
                         // For active module we need to display the mod functions links
-                        xarModAPILoad($label, 'admin');
                         // call the api function to obtain function links
                         $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
                         // scan array and prepare the links
@@ -187,8 +186,6 @@ function adminpanels_adminmenublock_display($blockinfo){
         default:
         case 'bycat':
                 // sort by categories
-                xarModAPILoad('adminpanels', 'admin');
-                
                 // check if we need to update the table
                 if(!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')){
                     // if we fail lets have at least an error displayed
@@ -212,7 +209,6 @@ function adminpanels_adminmenublock_display($blockinfo){
                                                 'modactive' => 1);
                         
                         // For active module we need to display the mod functions links
-                        xarModAPILoad($label, 'admin');
                         // call the api function to obtain function links
                         $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
                         // scan array and prepare the links
@@ -291,7 +287,6 @@ function adminpanels_adminmenublock_display($blockinfo){
 
         case 'byweight':
                 // sort by weight
-                xarModAPILoad('adminpanels', 'admin');
                 // $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
 
                 $adminmods = 'not implemented';
@@ -309,7 +304,6 @@ function adminpanels_adminmenublock_display($blockinfo){
 
         case 'bygroup':
                 // sort by group
-                xarModAPILoad('adminpanels', 'admin');
                 $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
 
                 $adminmods = 'not implemented';

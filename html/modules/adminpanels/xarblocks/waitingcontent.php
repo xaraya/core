@@ -42,9 +42,6 @@ function adminpanels_waitingcontentblock_display($blockinfo)
         return;
     }
 
-    // Load API
-    if (!xarModAPILoad('adminpanels', 'admin')) return;
-
     $moditems = array();
 
     $modlist = xarModAPIFunc('adminpanels','admin','getmoduleswc');
