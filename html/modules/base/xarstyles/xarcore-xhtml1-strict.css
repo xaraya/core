@@ -271,5 +271,12 @@ miscellaneous utility clases
     float: left;
     width: 100%;
     margin-bottom: 4px;
+    clear: both;
+}
+.xar-form-input-wrapper-after {
+    width: auto;
+    padding-left: 15em;
+    margin-bottom: 4px;
+    clear: both;
 }
     
