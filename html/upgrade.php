@@ -25,6 +25,8 @@ xarRequestGetInfo();
 //Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
+if(!xarSecurityCheck('AdminPanel')) return;
+
 if (!isset($step)) {
 // start the output buffer
 ob_start();
@@ -164,7 +166,7 @@ Thank you, the upgrades are complete between .900 and .902.
 $return = ob_get_contents();
 ob_end_clean();
 
-xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Import Site'));
+xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Upgrade Xaraya'));
 
 //xarTplSetThemeName('Xaraya_Classic');
 //xarTplSetPageTemplateName('admin');
