@@ -470,13 +470,56 @@ class Dynamic_Property
     function showHidden($args = array())
     {
         extract($args);
-        return '<input type="hidden"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+
+        $data = array();
+        $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        return xarTplModule('dynamicdata', 'admin', 'showhidden', $data);
     }
     
+    /**
+     * For use in DD tags : preset="yes" - this can typically be used in admin-new.xd templates
+     * for individual properties you'd like to automatically preset via GET or POST parameters
+     *
+     * Note: don't use this if you already check the input for the whole object or in the code
+     * See also preview="yes", which can be used on the object level to preview the whole object
+     *
+     * @access private (= do not sub-class)
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['value'] value of the field (default is the current value)
+     * @param $args['id'] id of the field
+     * @param $args['tabindex'] tab index of the field
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function _showPreset($args = array())
+    {
+        // Check for empty here instead of isset, e.g. for <xar:data-input ... value="" />
+        if (empty($args['value'])) {
+            if (empty($args['name'])) {
+                $isvalid = $this->checkInput();
+            } else {
+                $isvalid = $this->checkInput($args['name']);
+            }
+            if ($isvalid) {
+                // remove the original input value from the arguments
+                unset($args['value']);
+            } else {
+                // clear the invalid message for preset
+                $this->invalid = '';
+            }
+        }
+
+        if (!empty($args['hidden'])) {
+            return $this->showHidden($args);
+        } else {
+            return $this->showInput($args);
+        }
+    }
+
     /**
      * Get the base information for this property.
      *
