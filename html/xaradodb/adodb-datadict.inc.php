@@ -645,13 +645,20 @@ class ADODB_DataDict {
 */
 	function ChangeTableSQL($tablename, $flds,$tableoptions=false)
 	{
-        // XARAYA MODIFICATION - START
+		// XARAYA MODIFICATION - START
+		// The meta fields *must* be indexed by column name for comparison
+		// lower down. Over-ride the current fetch mode to ensure this.
+		global $ADODB_FETCH_MODE;
+		$save = $ADODB_FETCH_MODE;
+		$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 		$cols = &$this->MetaColumns($tablename);
+		$ADODB_FETCH_MODE = $save;
+
 		if (empty($cols)) {
             if (xarCurrentErrorType()) {
                 xarErrorHandled();
             }
-            // XARAYA MODIFICATION - END
+			// XARAYA MODIFICATION - END
 			return $this->CreateTableSQL($tablename, $flds, $tableoptions);
 		}
 		
