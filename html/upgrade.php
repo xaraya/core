@@ -1143,6 +1143,8 @@ Password : %%password%%
 
     // Bug 1716 module states table
     echo "<h5>Upgrade module states table</h5>";
+    $module_states_table = $sitePrefix . '_module_states';
+
     // TODO: use adodb transactions to ensure atomicity?
     // The changes for bug 1716:
     // - add xar_id as primary key
@@ -1156,40 +1158,73 @@ Password : %%password%%
                      'increment'   => true,
                      'primary_key' => true,
                      'first'       => true);
-    $query = xarDBAlterTable($sitePrefix . '_module_states', $changes);
+    $query = xarDBAlterTable($module_states_table, $changes);
     $result = &$dbconn->Execute($query);
     if (!$result) {
-        echo "FAILED to alter the module_states table<br/>";
-    }
-
-    // 2. change index for reg_id to unique
-    $indexname = 'i_' . $sitePrefix . '_module_states_regid';
-    $query = xarDBDropIndex($sitePrefix . '_module_states', array('name' => $indexname));
-    $result = &$dbconn->Execute($query);
-    if (!$result) {
-        echo "FAILED to drop the old index on the module states regid column<br/>";
+        echo "FAILED to alter the $module_states_table table<br/>";
+        echo "The column xar_id may already exist in the $module_states_table table<br/>";
     } else {
-        echo "Dropped old index for module_states table<br/>";
-    }
+        echo "Added column xar_id in the $module_states_table table<br/>";
 
-    // 3. Add the new index.
-    $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
-    $query = xarDBCreateIndex($sitePrefix . '_module_states', $index);
+        // Bug #1971 - Have to use GenId to create values for xar_id on
+        // existing rows or the create unique index will fail
+        $query = "SELECT xar_regid, xar_state
+                  FROM $module_states_table
+                  WHERE xar_id IS NULL";
+        $result = &$dbconn->Execute($query);
+        if (!$result) {
+            echo "FAILED to update the $module_states_table table<br/>";
+        }
 
-    $result = &$dbconn->Execute($query);
-    if (!$result) {
-        echo "FAILED to create the new index for the module states regid column<br/>";
-    } else {
-        echo "Added a new index on the module_states table<br/>";
-    }
+        // Get items from result array
+        while (!$result->EOF) {
+            list ($regid, $state) = $result->fields;
+ 
+            $seqId = $dbconn->GenId($module_states_table);
+            $query = "UPDATE $module_states_table 
+                      SET xar_id = $seqId
+                      WHERE xar_regid = $regid
+                      AND xar_state = $state";
+            $updresult = &$dbconn->Execute($query);
+            if (!$updresult) {
+                echo "FAILED to update the $module_states_table table<br/>";
+            }
+ 
+            $result->MoveNext();
+        }
+ 
+        // Close result set
+        $result->Close();
 
-    // 4. Set the version number of the modules module
-    $query = 'UPDATE ' . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
-    $result = &$dbconn->Execute($query);
-    if(!$result) {
-        echo "FAILED to update the version number for the modules module<br/>";
-    } else {
-        echo "Updated the version number for modules module<br/>";
+        // 2. change index for reg_id to unique
+        $indexname = 'i_' . $sitePrefix . '_module_states_regid';
+        $query = xarDBDropIndex($module_states_table, array('name' => $indexname));
+        $result = &$dbconn->Execute($query);
+        if (!$result) {
+            echo "FAILED to drop the old index on the module states regid column<br/>";
+        } else {
+            echo "Dropped old index for $module_states_table table<br/>";
+        }
+
+        // 3. Add the new index.
+        $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
+        $query = xarDBCreateIndex($module_states_table, $index);
+
+        $result = &$dbconn->Execute($query);
+        if (!$result) {
+            echo "FAILED to create the new index for the module states regid column<br/>";
+        } else {
+            echo "Added a new index on the $module_states_table table<br/>";
+        }
+
+        // 4. Set the version number of the modules module
+        $query = 'UPDATE ' . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
+        $result = &$dbconn->Execute($query);
+        if(!$result) {
+            echo "FAILED to update the version number for the modules module<br/>";
+        } else {
+            echo "Updated the version number for modules module<br/>";
+        }
     }
 
     // Bug 630, let's throw the reminder back up after upgrade.
