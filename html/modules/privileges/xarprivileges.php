@@ -221,13 +221,13 @@ class xarMasks
 					$isimplied = true;
 					break;
 				}
-				else if ($perm1->implies($perm2)) {
+				else if ($perm1->implies($perm2,true)) {
 					array_splice($perms2,$key);
 					array_push($perms2,$perm1);
 					$isimplied = true;
 					break;
 				}
-				else if ($perm2->implies($perm1)) {
+				else if ($perm2->implies($perm1,true)) {
 					$isimplied = true;
 					break;
 				}
@@ -265,8 +265,8 @@ class xarMasks
 			$isimplied = false;
 			foreach ($perms2 as $key=>$perm2) {
 				if (($perm2->isEqual($perm1)) ||
-					($perm1->implies($perm2)) ||
-					($perm2->implies($perm1))) {
+					($perm1->implies($perm2,true)) ||
+					($perm2->implies($perm1,true))) {
 					array_splice($perms1,$key);
 					array_push($perms1,$perm2);
 					$isimplied = true;
@@ -402,7 +402,7 @@ class xarMasks
 
 // check the mask
 //			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
-			if ($chiave->implies($mask)) {
+			if ($chiave->implies($mask,false)) {
 
 // found a privilege that admits: return the privilege
 			return $chiave;
@@ -1474,29 +1474,59 @@ function drawindent() {
  * @throws  none
  * @todo    none
 */
-	function implies($mask) {
-		if (
-			($this->getRealm() == 'All') ||
-			($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+	function implies($mask,$comparing) {
+		if($comparing) {
+			if (
+				($this->getRealm() == 'All') ||
+				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
 			)
-		{$xRealm = true;}
-		else {$xRealm = false;}
+			{$xRealm = true;}
+			else {$xRealm = false;}
+		}
+		else {
+			if (
+				($this->getRealm() == 'All') ||
+				($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+			)
+			{$xRealm = true;}
+			else {$xRealm = false;}
+		}
 
-		if (
-			($this->getModule() == $mask->getModule()) ||
-//			($mask->getModule() == 'All') ||
-			($this->getModule() == 'All') && ($mask->getModule() != 'None')
-		)
-		{$xModule = true;}
-		else {$xModule = false;}
+		if($comparing) {
+			if (
+				($this->getModule() == $mask->getModule()) ||
+				($this->getModule() == 'All') && ($mask->getModule() != 'None')
+			)
+			{$xModule = true;}
+			else {$xModule = false;}
+		}
+		else {
+			if (
+				($this->getModule() == $mask->getModule()) ||
+				($mask->getModule() == 'All') ||
+				($this->getModule() == 'All') && ($mask->getModule() != 'None')
+			)
+			{$xModule = true;}
+			else {$xModule = false;}
+		}
 
-		if (
-			($this->getComponent() == $mask->getComponent()) ||
-			($mask->getComponent() == 'All') ||
-			($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
-		)
-		{$xComponent = true;}
-		else {$xComponent = false;}
+		if($comparing) {
+			if (
+				($this->getComponent() == $mask->getComponent()) ||
+				($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
+			)
+			{$xComponent = true;}
+			else {$xComponent = false;}
+		}
+		else {
+			if (
+				($this->getComponent() == $mask->getComponent()) ||
+				($mask->getComponent() == 'All') ||
+				($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
+			)
+			{$xComponent = true;}
+			else {$xComponent = false;}
+		}
 
 		if (
 			($this->getInstance() == 'All') ||

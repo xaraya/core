@@ -58,12 +58,12 @@ function initializeSetup() {
     xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
 
-//    xarRegisterPrivilege('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewLogin','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-//    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewBlocks','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-//    xarRegisterPrivilege('AnonView','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
-    xarRegisterPrivilege('AnonView','All','All','All','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('AnonView','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
+//    xarRegisterPrivilege('ViewLogin','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+//    xarRegisterPrivilege('ViewBlocks','All','All','All','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+//    xarRegisterPrivilege('AnonView','All','All','All','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
     xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
