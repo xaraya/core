@@ -48,15 +48,25 @@
 <textarea name="xml" rows="30" cols="80">
 &lt;objects&gt;
 <xar:foreach in="$tables" key="$table" value="$fields">
-    &lt;object id="#$table#"&gt;
+  &lt;object id="#$table#"&gt;
+    &lt;name&gt;#$table#&lt;/name&gt;
+    &lt;label&gt;#$table#&lt;/label&gt;
+    &lt;moduleid&gt;182&lt;/moduleid&gt;
+    &lt;itemtype&gt;-1&lt;/itemtype&gt;
+    &lt;urlparam&gt;itemid&lt;/urlparam&gt;
+    &lt;maxid&gt;0&lt;/maxid&gt;
+    &lt;config&gt;&lt;/config&gt;
+    &lt;isalias&gt;0&lt;/isalias&gt;
+    &lt;properties&gt;
 <xar:foreach in="$fields" key="$name" value="$field">
-        &lt;property id="#$name#"&gt;
+      &lt;property id="#$name#"&gt;
 <xar:foreach in="$field" key="$key" value="$value">
-            &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
+        &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
 </xar:foreach>
-        &lt;/property&gt;
+      &lt;/property&gt;
 </xar:foreach>
-    &lt;/object&gt;
+    &lt;/properties&gt;
+  &lt;/object&gt;
 </xar:foreach>
 &lt;/objects&gt;
 </textarea>
@@ -65,3 +75,4 @@
 <div align="center"><a href="#xarModURL('dynamicdata','admin','meta')#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>
 
 </xar:if>
+

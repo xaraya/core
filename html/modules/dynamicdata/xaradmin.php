@@ -994,6 +994,7 @@ function dynamicdata_admin_import($args)
     $data['authid'] = xarSecGenAuthKey();
 
     if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $basedir = 'modules/dynamicdata';
     $filetype = 'xml';
@@ -1035,10 +1036,12 @@ function dynamicdata_admin_import($args)
         }
 
         $what = '';
+        $count = 0;
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
+            $count++;
             if (empty($what)) {
-                if (preg_match('#<object>#',$line)) { // in case we import the object definition
+                if (preg_match('#<object.*>#',$line)) { // in case we import the object definition
                     $object = array();
                     $what = 'object';
                 } elseif (preg_match('#<items>#',$line)) { // in case we only import data
@@ -1050,7 +1053,7 @@ function dynamicdata_admin_import($args)
                     $key = $matches[1];
                     $value = $matches[2];
                     if (isset($object[$key])) {
-                        $msg = xarML('Duplicate definition for #(1) key #(2)','object',xarVarPrepForDisplay($key));
+                        $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','object',xarVarPrepForDisplay($key),$count);
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
                         fclose($fp);
@@ -1078,13 +1081,24 @@ function dynamicdata_admin_import($args)
                         return;
                     }
 
+                    // retrieve the correct itemtype if necessary
+                    if ($object['itemtype'] < 0) {
+                        $objectinfo = xarModAPIFunc('dynamicdata','user','getobject',
+                                                    array('objectid' => $objectid));
+                        $object['itemtype'] = $objectinfo['itemtype']['value'];
+                    }
+
                     $what = 'property';
+                } elseif (preg_match('#<items>#',$line)) {
+                    $what = 'item';
+                } elseif (preg_match('#</object>#',$line)) {
+                    $what = '';
                 } else {
                     // multi-line entries not relevant here
                 }
 
             } elseif ($what == 'property') {
-                if (preg_match('#<property id="\d+">#',$line)) {
+                if (preg_match('#<property id="\w+">#',$line)) {
                     $property = array();
                 } elseif (preg_match('#</property>#',$line)) {
                     // let's create the property now...
@@ -1103,7 +1117,7 @@ function dynamicdata_admin_import($args)
                     $key = $matches[1];
                     $value = $matches[2];
                     if (isset($property[$key])) {
-                        $msg = xarML('Duplicate definition for #(1) key #(2)','property',xarVarPrepForDisplay($key));
+                        $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','property',xarVarPrepForDisplay($key),$count);
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
                         fclose($fp);
@@ -1111,8 +1125,11 @@ function dynamicdata_admin_import($args)
                     }
                     $property[$key] = $value;
                 } elseif (preg_match('#</properties>#',$line)) {
+                    $what = 'object';
                 } elseif (preg_match('#<items>#',$line)) {
                     $what = 'item';
+                } elseif (preg_match('#</object>#',$line)) {
+                    $what = '';
                 } else {
                     // multi-line entries not relevant here
                 }
@@ -1134,7 +1151,7 @@ function dynamicdata_admin_import($args)
                     $key = $matches[1];
                     $value = $matches[2];
                     if (isset($item[$key])) {
-                        $msg = xarML('Duplicate definition for #(1) key #(2)','item',xarVarPrepForDisplay($key));
+                        $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','item',xarVarPrepForDisplay($key),$count);
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
                         fclose($fp);
@@ -1177,6 +1194,10 @@ function dynamicdata_admin_import($args)
                         return;
                     }
                     $item[$closetag] .= $line;
+                } elseif (preg_match('#</items>#',$line)) {
+                    $what = 'object';
+                } elseif (preg_match('#</object>#',$line)) {
+                    $what = '';
                 } else {
                 }
             } else {

@@ -379,8 +379,9 @@ function dynamicdata_adminapi_update($args)
     // update properties in some known table field
     foreach ($tables as $table => $fieldlist) {
         // look for the item id field
-        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
-            $field = $itemidname;
+        if (!empty($itemidname) && preg_match('/^(\w+)\.(\w+)$/', $fields[$itemidname]['source'], $matches)
+            && $table == $matches[1] && isset($tables[$table][$matches[2]])) {
+            $field = $matches[2];
         } else {
             // For now, we look for a primary key (or increment, perhaps ?),
             // and hope it corresponds to the item id :-)
@@ -563,6 +564,55 @@ function dynamicdata_adminapi_getnextid($args)
     return $nextid;
 }
 
+
+/**
+ * get next item type (for objects stored only in dynamic data table)
+ *
+ * @author the DynamicData module development team
+ * @param $args['modid'] module id for the original item +
+ * @returns integer
+ * @return value of the next item type
+ * @raise BAD_PARAM, NO_PERMISSION
+ */
+function dynamicdata_adminapi_getnexttype($args)
+{
+    extract($args);
+
+    $invalid = array();
+    if (!isset($modid) || !is_numeric($modid)) {
+        $invalid[] = 'module id';
+    }
+
+    if (count($invalid) > 0) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    join(', ',$invalid), 'admin', 'getnextid', 'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+    $dynamicobjects = $xartable['dynamic_objects'];
+
+    $query = "SELECT MAX(xar_object_itemtype)
+                FROM $dynamicobjects
+               WHERE xar_object_moduleid = " . xarVarPrepForStore($modid);
+
+    $result = $dbconn->Execute($query);
+    if (!isset($result)) return;
+
+    if ($result->EOF) return;
+
+    $nexttype = $result->fields[0];
+    $nexttype++;
+
+    $result->Close();
+
+    return $nexttype;
+}
+
 // ----------------------------------------------------------------------
 // Specific APIs for dynamic objects (= objectid 1)
 // ----------------------------------------------------------------------
@@ -600,6 +650,13 @@ function dynamicdata_adminapi_createobject($args)
         $itemtype = 0;
     }
     $itemid = 0;
+
+    // if we have a dummy itemtype of -1, we look for the next available one
+    if ($itemtype < 0) {
+        $itemtype = xarModAPIFunc('dynamicdata','admin','getnexttype',
+                                  array('modid' => $moduleid));
+        $args['itemtype'] = $itemtype;
+    }
 
     // the acceptable arguments correspond to the property names !
     foreach ($fields as $name => $field) {

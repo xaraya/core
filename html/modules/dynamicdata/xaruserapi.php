@@ -142,8 +142,9 @@ function dynamicdata_userapi_getitem($args)
 // TODO: create UNION (or equivalent) to retrieve all relevant table fields at once
     foreach ($tables as $table => $fieldlist) {
         // look for the item id field
-        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
-            $field = $itemidname;
+        if (!empty($itemidname) && preg_match('/^(\w+)\.(\w+)$/', $fields[$itemidname]['source'], $matches)
+            && $table == $matches[1] && isset($tables[$table][$matches[2]])) {
+            $field = $matches[2];
         } else {
             // For now, we look for a primary key (or increment, perhaps ?),
             // and hope it corresponds to the item id :-)
@@ -578,8 +579,9 @@ function dynamicdata_userapi_getitems($args)
 // TODO: create UNION (or equivalent) to retrieve all relevant table fields at once
     foreach ($tables as $table => $fieldlist) {
         // look for the item id field
-        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
-            $field = $itemidname;
+        if (!empty($itemidname) && preg_match('/^(\w+)\.(\w+)$/', $fields[$itemidname]['source'], $matches)
+            && $table == $matches[1] && isset($tables[$table][$matches[2]])) {
+            $field = $matches[2];
         } else {
             // For now, we look for a primary key (or increment, perhaps ?),
             // and hope it corresponds to the item id :-)
@@ -635,7 +637,6 @@ function dynamicdata_userapi_getitems($args)
         } else {
             $result = $dbconn->Execute($query);
         }
-
         if (!isset($result)) return;
 
         while (!$result->EOF) {
@@ -745,7 +746,6 @@ function dynamicdata_userapi_getitems($args)
                 }
             }
 
-//print_r($query);
             if ($numitems > 0) {
                 $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
             } else {
