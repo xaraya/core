@@ -44,6 +44,12 @@ class xarLogger_syslog extends xarLogger {
     var $_options = LOG_PID;
 
     /**
+    * Boolean holding if the log was already open or not
+    * @var bool
+    */
+    var $_opened = false;
+
+    /**
      * Sets up the configuration specific parameters for each driver
      *
      * @param array     $conf               Configuration options for the specific driver.
