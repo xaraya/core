@@ -179,7 +179,7 @@
 	<xar:loop name="$parents">
 		<tr>
 			<td width="150">
-				<xar:if condition="$parentid gt 4">
+				<xar:if condition="$loop:item['parentid'] gt 4">
 					<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['parentid']#">
 					#$loop:item['parentname']#
 					</a>
@@ -188,7 +188,7 @@
 				</xar:if>
 			</td>
 			<td width="50" style="text-align: center;">
-				<xar:if condition="count($parents) ne 1">
+				<xar:if condition="count($loop:item['parents']) ne 1">
 					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$loop:item['uid']#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$loop:item['authid']#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 				<xar:else />
 					&nbsp;

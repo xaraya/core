@@ -35,7 +35,7 @@
 		<xar:loop name="$users">
 			<tr>
 				<td width="100">
-					<xar:if condition="!$frozen">
+					<xar:if condition="!$loop:item['frozen']">
 						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['uid']#">				
 						#$loop:item['name']#
 						</a>
@@ -53,7 +53,7 @@
 					#$loop:item['date_reg']#
 				</td>
 				<td style="text-align: center">
-					<xar:if condition="!$frozen">
+					<xar:if condition="!$loop:item['frozen']">
 						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$loop:item['uid']#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;

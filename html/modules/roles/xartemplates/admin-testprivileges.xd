@@ -110,7 +110,7 @@
 			<td>
 				<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:this.form.submit();">
 					<xar:loop name="$allmodules">
-						<xar:if condition="$name eq $pmodule">
+						<xar:if condition="$loop:item['name'] eq $pmodule">
 							<option value="#$loop:item['name#']" selected="selected">#$loop:item['name']#</option>
 						<xar:else />
 							<option value="#$loop:item['name']#">#$loop:item['name']#</option>
