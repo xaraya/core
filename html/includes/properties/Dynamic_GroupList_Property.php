@@ -128,6 +128,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
         if (empty($value)) {
+            $group = array();
             $groupname = '';
         } else {
             $group = xarModAPIFunc('roles','user','get',
