@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Xaraya Web Interface Entry Point
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -31,13 +31,13 @@ function xarCache_init($args = false)
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
 
-    $xarVarDir = xarCache_getVarDirPath();
-    
+    $xarVarDir = xarPreCoreGetVarDirPath();
+
     if (!isset($cacheDir)) {
         $cacheDir = $xarVarDir . '/cache/output';
     }
 
-    // load the caching configuration    
+    // load the caching configuration
     if (!include_once($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
@@ -205,8 +205,8 @@ function xarCache_SizeLimit($dir = FALSE, $cacheType)
  * @param  string  $dir
  * @param  string  $cacheType
  * @return float
- * @author nospam@jusunlee.com 
- * @author laurie@oneuponedown.com 
+ * @author nospam@jusunlee.com
+ * @author laurie@oneuponedown.com
  * @author jsb
  * @todo   $dir changes type
  * @deprec 2005-02-01
@@ -262,27 +262,6 @@ function xarCache_getParents()
     $result->Close();
     xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
-}
-
-/**
- * Returns the path name for the var directory
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return string the var directory path name
- * @todo   keep this in sync with xarCoreGetVarDirPath() until there is a pre-core way to retrieve this
- */
-function xarCache_getVarDirPath()
-{
-    static $varpath = null;
-    if (isset($varpath)) return $varpath;
-    if (file_exists('./var/.key.php')) {
-        include './var/.key.php';
-        $varpath = './var/'.$protectionKey;
-    } else {
-        $varpath = './var';
-    }
-    return $varpath;
 }
 
 /**
