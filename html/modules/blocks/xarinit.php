@@ -102,18 +102,31 @@ function blocks_init()
 
     // *_block_types
     $query = xarDBCreateTable($prefix . '_block_types',
-                             array('xar_id'          => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'increment'   => true,
-                                                             'primary_key' => true),
-                                   'xar_type'        => array('type'        => 'varchar',
-                                                             'size'        => 255,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_module'    => array('type'        => 'varchar',
-                                                             'size'        => 255,
-                                                             'null'        => false,
-                                                             'default'     => '')));
+        array(
+            'xar_id' => array(
+                'type'          => 'integer',
+                'null'          => false,
+                'increment'     => true,
+                'primary_key'   => true
+            ),
+            'xar_type' => array(
+                'type'          => 'varchar',
+                'size'          => 255,
+                'null'          => false,
+                'default'       => ''
+            ),
+            'xar_module' => array(
+                'type'          => 'varchar',
+                'size'          => 255,
+                'null'          => false,
+                'default'       => ''
+            ),
+            'xar_info' => array(
+                'type'          => 'text',
+                'null'          => true
+            )
+        )
+    );
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
