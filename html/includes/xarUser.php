@@ -347,7 +347,7 @@ function xarUserGetVar($name, $userId = NULL)
     }
 */
 
-    if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
+    if (!xarCore_IsCached('User.Variables.'.$userId, $name)) {
 
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             // retrieve the item from the roles module
@@ -363,12 +363,12 @@ function xarUserGetVar($name, $userId = NULL)
                 return;
             }
 
-            xarVarSetCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
-            xarVarSetCached('User.Variables.'.$userId, 'name', $userRole['name']);
-            xarVarSetCached('User.Variables.'.$userId, 'email', $userRole['email']);
+            xarCore_SetCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
+            xarCore_SetCached('User.Variables.'.$userId, 'name', $userRole['name']);
+            xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            xarVarSetCached('User.Variables.'.$userId, $name, false);
+            xarCore_SetCached('User.Variables.'.$userId, $name, false);
             // Here we can't raise an exception (why was that again ?)
             $msg = xarML('User variable #(1) was not correctly registered', $name);
             xarLogMessage($msg, XARLOG_LEVEL_ERROR);
@@ -388,7 +388,7 @@ function xarUserGetVar($name, $userId = NULL)
             $properties =& $GLOBALS['xarUser_objectRef']->getProperties();
             foreach (array_keys($properties) as $key) {
                 if (isset($properties[$key]->value)) {
-                    xarVarSetCached('User.Variables.'.$userId, $key, $properties[$key]->value);
+                    xarCore_SetCached('User.Variables.'.$userId, $key, $properties[$key]->value);
                 }
             }
         }
@@ -435,7 +435,7 @@ function xarUserGetVar($name, $userId = NULL)
             // Variable doesn't exist
             // false is here a special value to denote that variable was searched
             // but wasn't found so xarUserGetVar'll return void
-            // will be called: xarVarSetCached('User.Variables.'.$userId, $name, false)
+            // will be called: xarCore_SetCached('User.Variables.'.$userId, $name, false)
         } else {
             switch ($prop_dtype) {
                 case XARUSER_DUD_TYPE_DOUBLE:
@@ -447,15 +447,15 @@ function xarUserGetVar($name, $userId = NULL)
             }
         }
 
-        xarVarSetCached('User.Variables.'.$userId, $name, $value);
+        xarCore_SetCached('User.Variables.'.$userId, $name, $value);
 */
     }
 
-    if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
+    if (!xarCore_IsCached('User.Variables.'.$userId, $name)) {
         return false; //failure
     }
 
-    $cachedValue = xarVarGetCached('User.Variables.'.$userId, $name);
+    $cachedValue = xarCore_GetCached('User.Variables.'.$userId, $name);
     if ($cachedValue === false) {
         // Variable already searched but doesn't exist and has no default
         return;
@@ -507,7 +507,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-        xarVarSetCached('User.Variables.'.$userId, $name, false);
+        xarCore_SetCached('User.Variables.'.$userId, $name, false);
         $msg = xarML('User variable #(1) was not correctly registered', $name);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
                        new SystemException($msg));
@@ -585,7 +585,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
 */
 
     // Keep in sync the UserVariables cache
-    xarVarSetCached('User.Variables.'.$userId, $name, $value);
+    xarCore_SetCached('User.Variables.'.$userId, $name, $value);
 
     return true;
 }
