@@ -154,7 +154,7 @@ class xarRoles
      */
     function getRole($uid)
     {
-        return $this->_lookuprole('xar_uid',$uid);
+        return $this->_lookuprole('xar_uid',(int) $uid);
     }
 
     /**
@@ -478,14 +478,14 @@ class xarRole
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = '';
 
-        $this->uid = $uid;
+        $this->uid = (int) $uid;
         $this->name = $name;
-        $this->type = $type;
-        $this->parentid = $parentid;
+        $this->type = (int) $type;
+        $this->parentid = (int) $parentid;
         $this->uname = $uname;
         $this->email = $email;
         $this->pass = $pass;
-        $this->state = $state;
+        $this->state = (int) $state;
         $this->date_reg = $date_reg;
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;

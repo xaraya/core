@@ -1596,13 +1596,13 @@ class xarPrivileges extends xarMasks
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
 
-        $this->sid          = $sid;
+        $this->sid          = (int) $sid;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
         $this->component    = $component;
         $this->instance     = $instance;
-        $this->level        = $level;
+        $this->level        = (int) $level;
         $this->description  = $description;
     }
 
@@ -1937,15 +1937,15 @@ class xarPrivilege extends xarMask
             $description = '';
         }
 
-        $this->pid          = $pid;
+        $this->pid          = (int) $pid;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
         $this->component    = $component;
         $this->instance     = $instance;
-        $this->level        = $level;
+        $this->level        = (int) $level;
         $this->description  = $description;
-        $this->parentid     = $parentid;
+        $this->parentid     = (int) $parentid;
     }
 
 /**

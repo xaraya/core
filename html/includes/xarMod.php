@@ -247,7 +247,7 @@ function xarModDelAllVars($modName)
     while (!$result->EOF) {
         list($id) = $result->fields;
         $result->MoveNext();
-        $idlist[] = $id;
+        $idlist[] = (int) $id;
     }
 
     if(count($idlist) != 0 ) {
@@ -421,7 +421,7 @@ function xarModGetVarId($modName, $name)
 
     $query = "SELECT xar_id FROM $module_varstable
               WHERE xar_modid = ? AND xar_name = ?";
-    $result =& $dbconn -> Execute($query,array($modBaseInfo['systemid'],$name));
+    $result =& $dbconn -> Execute($query,array((int)$modBaseInfo['systemid'],$name));
 
     if(!$result) return;
 
@@ -436,6 +436,7 @@ function xarModGetVarId($modName, $name)
     list($modvarid) = $result->fields;
     $result->Close();
 
+    $modvarid = (int) $modvarid;
     xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
@@ -537,7 +538,7 @@ function xarModGetInfo($modRegId, $type = 'module')
          $modInfo['version']) = $result->fields;
     $result->Close();
 
-    $modInfo['regid'] = $modRegId;
+    $modInfo['regid'] = (int) $modRegId;
     $modInfo['mode'] = (int) $mode;
     // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
     // $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
@@ -1538,7 +1539,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     // name and id are required, assert them, otherwise the module is invalid
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
-    $FileInfo['id']             = $version['id'];
+    $FileInfo['id']             = (int) $version['id'];
     if (isset($version['displayname'])) {
         $FileInfo['displayname'] = $version['displayname'];
     } else {
@@ -1672,15 +1673,18 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     $modBaseInfo = array();
 
-     list($modBaseInfo['regid'],
+     list($regid,
             $modBaseInfo['directory'],
             $mode,
-            $modBaseInfo['systemid'],
-            $modBaseInfo['state']) = $result->fields;
+            $systemid,
+            $state) = $result->fields;
      $result->Close();
 
-    $modBaseInfo['name'] = $modName;
+    $modBaseInfo['regid'] = (int) $regid;
     $modBaseInfo['mode'] = (int) $mode;
+    $modBaseInfo['systemid'] = (int) $systemid;
+    $modBaseInfo['state'] = (int) $state;
+    $modBaseInfo['name'] = $modName;
     $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
     $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($modName);
     // Shortcut for os prepared directory
