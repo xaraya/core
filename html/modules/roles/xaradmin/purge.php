@@ -53,18 +53,11 @@ function roles_admin_purge($args)
             $roleslist = new xarRoles();
             if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
             foreach ($recalluids as $uid => $val) {
-                $role = $roleslist->getRole($uid);
                 $state = $role->getType() ? 3 : $data['recallstate'];
-                $uname = explode($deleted,$role->getUser());
-    //            echo $uname[0];exit;
-                $query = "UPDATE $rolestable
-                        SET xar_uname = '" . xarVarPrepForStore($uname[0]) .
-                            "', xar_state = " . xarVarPrepForStore($state) ;
-                $query .= " WHERE xar_uid = ".xarVarPrepForStore($uid);
-
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-
+                $recalled = xarModAPIFunc('roles','admin','recall',
+                    array('uid' => $uid,
+                          'state' => $state));
+                $role = $roleslist->getRole($uid);
                 $parentgroup->addmember($role);
             }
         }
