@@ -23,7 +23,9 @@ xarRequestGetInfo();
 //Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
-//if(!xarSecurityCheck('AdminPanel')) return;
+if(!xarSecurityCheck('AdminPanel')) return;
+    //include 'modules/privileges/xarsetup.php';
+
 
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
@@ -260,19 +262,21 @@ if (empty($step)) {
                 xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
                 xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
                 xarMakePrivilegeRoot('GeneralLock');
+                //xarMakePrivilegeRoot('Administration');
                 xarMakePrivilegeMember('LockMyself','GeneralLock');
                 xarMakePrivilegeMember('LockEverybody','GeneralLock');
                 xarMakePrivilegeMember('LockAnonymous','GeneralLock');
                 xarMakePrivilegeMember('LockAdministrators','GeneralLock');
                 xarMakePrivilegeMember('LockAdministration','GeneralLock');
                 xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+                xarAssignPrivilege('Administration','Administrators');
                 xarAssignPrivilege('GeneralLock','Everybody');
                 xarAssignPrivilege('GeneralLock','Administrators');
                 xarAssignPrivilege('GeneralLock','Users');
 
                 //Make sure we have the correct stuff for Anonymous and Everybody
-                xarModDelVar('roles', 'Everybody');
-                xarModDelVar('roles', 'Anonymous');
+                //xarModDelVar('roles', 'Everybody');
+                //xarModDelVar('roles', 'Anonymous');
                 $role = xarFindRole('Everybody');
                 xarModSetVar('roles', 'everybody', $role->getID());
                 $role = xarFindRole('Anonymous');
@@ -304,6 +308,7 @@ if (empty($step)) {
 
                 if (!$dbconn->Execute($query)) return;
 
+                $sitePrefix = xarDBGetSiteTablePrefix();
                 $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
                                'fields'    => array('xar_level'),
                                'unique'    => FALSE);

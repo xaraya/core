@@ -17,13 +17,12 @@ function initializeSetup()
     /*********************************************************************
     * Enter some default groups and users
     *********************************************************************/
-
-    xarMakeUser('Myself','myself','myself@xaraya.com','password');
     xarMakeGroup('Everybody');
     xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
     xarMakeUser('Admin','Admin','admin@xaraya.com','password');
     xarMakeGroup('Administrators');
     xarMakeGroup('Users');
+    xarMakeUser('Myself','myself','myself@xaraya.com','password');
 
     /*********************************************************************
     * Arrange the roles in a hierarchy
@@ -90,7 +89,6 @@ function initializeSetup()
     $blockGroupsTable    = $systemPrefix . '_block_groups';
     $blockTypesTable     = $systemPrefix . '_block_types';
     $blockInstancesTable = $systemPrefix . '_block_instances';
-    $AdminWcTable        = $systemPrefix . '_admin_wc';
     $modulesTable        = $systemPrefix . '_modules';
     $rolesTable          = $systemPrefix . '_roles';
     $roleMembersTable    = $systemPrefix . '_rolemembers';
@@ -141,16 +139,6 @@ function initializeSetup()
                              'query' => $query3,
                              'limit' => 20));
     xarDefineInstance('adminpanels','Block',$instances);
-
-    $query1 = "SELECT DISTINCT modules.xar_name FROM $AdminWcTable as wc LEFT JOIN $modulesTable as modules ON wc.xar_moduleid = modules.xar_regid";
-    $query2 = "SELECT DISTINCT modules.xar_name,wc.xar_itemid FROM $AdminWcTable as wc LEFT JOIN $modulesTable as modules ON wc.xar_moduleid = modules.xar_regid";
-    $instances = array(array('header' => 'Module Name:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Item ID:',
-                             'query' => $query2,
-                             'limit' => 20));
-    xarDefineInstance('adminpanels','Item',$instances);
 
    //--------------------------------- Roles Module
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";

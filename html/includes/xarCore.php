@@ -217,7 +217,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarMLS_init($systemArgs, $whatToLoad);
 
     $anonuid = xarConfigGetVar('Site.User.AnonymousUID');
-    $anonuid = !empty($anonuid) ? $anonuid : 0;
+    $anonuid = !empty($anonuid) ? $anonuid : 1;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
     // Start Sessions Subsystem
