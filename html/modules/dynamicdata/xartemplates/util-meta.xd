@@ -14,11 +14,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>
-            Meta Table Definitions 
-        </xar:mlstring>
-    </h2>
+    <h2><xar:mlstring>Meta Table Definitions</xar:mlstring></h2>
     <xar:if condition="empty($export)">
         <xar:set name="prop">
             #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
@@ -90,56 +86,40 @@
                 </xar:mlstring>
             </a>
         </p>
-        <xar:else />
+    <xar:else />
         <form class="dd-modifyprop-form">
             <fieldset>
-                <textarea name="xml" id="xml" rows="30" cols="80">
-                    <objects>
-                        <xar:foreach in="$tables" key="$curtable" value="$fields">
-                            <object name="#$curtable#">
-                                <label>
-                                    #$curtable# 
-                                </label>
-                                <moduleid>
-                                    182
-                                </moduleid> 
-                                    <itemtype>
-                                        -1 
-                                    </itemtype>
-                                    <urlparam>
-                                        itemid 
-                                    </urlparam>
-                                    <maxid>
-                                        0 
-                                    </maxid>
-                                    <config>
-                                    </config>
-                                    <isalias>
-                                        0 
-                                    </isalias>
-                                    <properties>
-                                        <xar:foreach in="$fields" key="$name" value="$field">
-                                            <property name="#$name#">
-                                                <xar:foreach in="$field" key="$key" value="$value">
-                                                    <xar:if condition="$key ne 'name'">
-                                                        &lt;#$key#&gt;#$value# 
-                                                    &lt;/#$key#&gt;
-                                                </xar:if>
-                                            </xar:foreach>
-                                        </property>
-                                    </xar:foreach>
-                                </properties>
-                            </object>
+                <textarea name="xml" id="xml" rows="30" cols="80" style="width: 100%;">
+&lt;objects&gt;
+    <xar:foreach in="$tables" key="$curtable" value="$fields">
+        &lt;object name="#$curtable#"&gt;
+            &lt;label&gt;#$curtable#&lt;/label&gt;
+            &lt;moduleid&gt;182&lt/moduleid&gt;
+            &lt;itemtype&gt;-1&lt;/itemtype&gt;
+            &lt;urlparam&gt;itemid&lt;/urlparam&gt;
+            &lt;maxid&gt;0&lt;/maxid&gt;
+            &lt;config&gt;&lt;/config&gt;
+            &lt;isalias&gt;0&lt;/isalias&gt;
+            &lt;properties&gt;
+                <xar:foreach in="$fields" key="$name" value="$field">
+                    &lt;property name="#$name#"&gt;
+                        <xar:foreach in="$field" key="$key" value="$value">
+                            <xar:if condition="$key ne 'name'">
+                                &lt;#$key#&gt;#$value#&lt;/#$key#&gt;
+                            </xar:if>
                         </xar:foreach>
-                    </objects>
+                    &lt;/property&gt;
+                </xar:foreach>
+            &lt;/properties&gt;
+        &lt;/object&gt;
+    </xar:foreach>
+&lt;/objects&gt;
                 </textarea>
             </fieldset>
         </form>
         <p>
             <a href="#xarModURL('dynamicdata','util','meta')#">
-                <xar:mlstring>
-                    Show Table Definitions 
-                </xar:mlstring>
+                <xar:mlstring>Show Table Definitions</xar:mlstring>
             </a>
         </p>
     </xar:if>
