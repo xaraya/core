@@ -78,7 +78,7 @@ function dynamicdata_admin_modifyhook($args)
     $object->getItem();
 
     // if we are in preview mode, we need to check for any preview values
-    $preview = xarVarCleanFromInput('preview');
+    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
     if (!empty($preview)) {
         $object->checkInput();
     }

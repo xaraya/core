@@ -69,7 +69,7 @@ function modules_adminapi_update($args)
              $hooktfunc) = $result->fields;
 
         // Get selected value of hook
-        $hookvalue = xarVarCleanFromInput("hooks_$hooktmodule");
+        if (!xarVarFetch("hooks_$hooktmodule", 'isset', $hookvalue,  NULL, XARVAR_DONT_SET)) {return;}
 
         // See if this is checked and isn't in the database
         if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodname))) {

@@ -69,7 +69,7 @@ function roles_user_search()
             $where = array();
             // see which properties we're supposed to search in
             foreach (array_keys($object->properties) as $field) {
-                $checkfield = xarVarCleanFromInput($field);
+                if (!xarVarFetch($field, 'isset', $checkfield,  NULL, XARVAR_DONT_SET)) {return;}
                 if (!empty($checkfield)) {
                     $where[] = $field . " LIKE '%" . $q . "%'";
                     $where[] = $field . " LIKE '%" . strtoupper($q) . "%'";

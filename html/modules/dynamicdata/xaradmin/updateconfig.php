@@ -20,7 +20,7 @@ function dynamicdata_admin_updateconfig( $args )
 {
     extract( $args );
 
-    $flushPropertyCache = xarVarCleanFromInput( 'flushPropertyCache' );
+    if (!xarVarFetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, XARVAR_DONT_SET)) {return;}
 
     // Security Check
     if (!xarSecurityCheck('AdminDynamicData')) return;

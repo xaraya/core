@@ -96,7 +96,7 @@ function themes_admin_update()
         } 
     } 
 
-    $return = xarVarCleanFromInput('return');
+    if (!xarVarFetch('return', 'isset', $return,  NULL, XARVAR_DONT_SET)) {return;}
 
     if ($return == 1) {
         xarResponseRedirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));

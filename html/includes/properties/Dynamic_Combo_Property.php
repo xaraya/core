@@ -31,7 +31,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
         // First check for text in the text box
         $tbname  = $name.'_tb';
-        $tbvalue = xarVarCleanFromInput($tbname);
+        if (!xarVarFetch($tbname, 'isset', $tbvalue,  NULL, XARVAR_DONT_SET)) {return;}
 
         if( isset($tbvalue) && ($tbvalue != '') )
         {
@@ -44,7 +44,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
             $this->fieldname = $name;
             if (!isset($value)) 
             {
-                $value = xarVarCleanFromInput($name);
+                if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
             }
         }
         return $this->validateValue($value);

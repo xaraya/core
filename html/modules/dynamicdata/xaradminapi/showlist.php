@@ -75,22 +75,22 @@ function dynamicdata_adminapi_showlist($args)
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
-        $itemids = xarVarCleanFromInput('itemids');
+        if (!xarVarFetch('itemids', 'isset', $itemids,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
     // try getting the sort via input variables if necessary
     if (!isset($sort)) {
-        $sort = xarVarCleanFromInput('sort');
+        if (!xarVarFetch('sort', 'isset', $sort,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
     // try getting the numitems via input variables if necessary
     if (!isset($numitems)) {
-        $numitems = xarVarCleanFromInput('numitems');
+        if (!xarVarFetch('numitems', 'isset', $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
     // try getting the startnum via input variables if necessary
     if (!isset($startnum)) {
-        $startnum = xarVarCleanFromInput('startnum');
+        if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
     // don't try getting the where clause via input variables, obviously !

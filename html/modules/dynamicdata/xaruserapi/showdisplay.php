@@ -63,7 +63,7 @@ function dynamicdata_userapi_showdisplay($args)
 
     // try getting the item id via input variables if necessary
     if (!isset($itemid) || !is_numeric($itemid)) {
-        $itemid = xarVarCleanFromInput('itemid');
+        if (!xarVarFetch('itemid', 'isset', $itemid,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
 // TODO: what kind of security checks do we want/need here ?
@@ -110,7 +110,7 @@ function dynamicdata_userapi_showdisplay($args)
         $object->getItem();
     }
     // if we are in preview mode, we need to check for any preview values
-    //$preview = xarVarCleanFromInput('preview');
+    //if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
     if (!empty($preview)) {
         $object->checkInput();
     }

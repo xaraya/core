@@ -37,7 +37,7 @@ function themes_admin_updatetpltag()
     $aAttributes = array();
     for ($i=0; $i<10; $i++ ) {
         //xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib);
-        $current_attrib = xarVarCleanFromInput("tag_attrname[$i]");
+        if (!xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib,  NULL, XARVAR_DONT_SET)) {return;}
         if (Trim($current_attrib) != '') {
             $aAttributes[] = Trim($current_attrib);
         }

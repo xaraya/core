@@ -26,7 +26,7 @@ function dynamicdata_util_static($args)
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
 
-    $export = xarVarCleanFromInput('export');
+    if (!xarVarFetch('export', 'isset', $export,  NULL, XARVAR_DONT_SET)) {return;}
 
     extract($args);
     if (empty($export)) {

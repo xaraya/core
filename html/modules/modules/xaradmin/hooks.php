@@ -86,7 +86,7 @@ function modules_admin_hooks($args)
         $data['hookedmodules'] = $modList;
         $data['authid'] = xarSecGenAuthKey('modules');
 
-        $details = xarVarCleanFromInput('details');
+        if (!xarVarFetch('details', 'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
         if ($details) {
             $data['DetailsLabel'] = xarML('Hide Details');
             $data['DetailsURL'] = xarModURL('modules','admin','hooks',

@@ -26,7 +26,7 @@ function modules_admin_tools()
 
     $data = array();
     
-/*     $id = xarVarCleanFromInput('id'); */
+/*     if (!xarVarFetch('id', 'isset', $id,  NULL, XARVAR_DONT_SET)) {return;} */
 /*     if (empty($id)) { */
 /*         $msg = xarML('No module id specified', 'modules'); */
 /*         xarErrorSet(XAR_USER_EXCEPTION, */
