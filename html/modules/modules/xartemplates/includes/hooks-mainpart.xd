@@ -149,7 +149,7 @@
                             <xar:if condition="$hasItemTypes">
                                 <script type="text/javascript">
                                     setDisplayOn('itemtypes_#$hookedmod['name']#');
-                                    document.getElementById('SOME_hooked_#$hookedmod['name']#[0]').checked="checked";
+                                    document.getElementById('SOME_hooked_#$hookedmod['name']#_0').checked="checked";
                                 </script>
                             <xar:else/>
                                 <script type="text/javascript">
