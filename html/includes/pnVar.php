@@ -35,27 +35,27 @@ function pnVar_init($args)
     return true;
     */
 
-    $pnVar_allowableHTML = pnConfigGetVar('AllowableHTML');
-    if (!isset($allowableHTML) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $pnVar_allowableHTML = pnConfigGetVar('Site.Core.AllowableHTML');
+    if (!isset($pnVar_allowableHTML) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_fixHTMLEntities = pnConfigGetVar('htmlentities');
+    $pnVar_fixHTMLEntities = pnConfigGetVar('Site.Core.FixHTMLEntities');
     if (!isset($pnVar_fixHTMLEntities) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_enableCensoringWords = pnConfigGetVar('CensorMode');
+    $pnVar_enableCensoringWords = pnConfigGetVar('Site.Core.EnableCensoring');
     if (!isset($pnVar_enableCensoringWords) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
-    $pnVar_censoredWords = pnConfigGetVar('CensorList');
+    $pnVar_censoredWords = pnConfigGetVar('Site.Core.CensoredWords');
     if (!isset($pnVar_censoredWords) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
-    $pnVar_censoredWordsReplacers = pnConfigGetVar('CensorReplace');
-    if (!isset($replace) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $pnVar_censoredWordsReplacers = pnConfigGetVar('Site.Core.CensoredWordReplacers');
+    if (!isset($pnVar_censoredWordsReplacers) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return; // throw back exception
     }
 
