@@ -68,8 +68,7 @@ class xarQuery
         $this->dbconn =& xarDBGetConn();
     }
 
-
-    function run($statement='',$pretty=1)
+    function run($statement='',$display=1)
     {
         $this->setstatement($statement);
         if ($this->type != 'SELECT') {
@@ -103,7 +102,7 @@ class xarQuery
         if (($result->fields) === false) $numfields = 0;
         else $numfields = $result->_numOfFields;
         $this->output = array();
-        if ($pretty == 1) {
+        if ($display == 1) {
             if ($statement == '') {
                 if ($this->fields == array() && $numfields > 0) {
                     for ($i=0;$i<$numfields;$i++) {
@@ -202,7 +201,7 @@ class xarQuery
             }
         }
         else {
-            $msg = xarML('This function only take 1 or 2 parameters');
+            $msg = xarML('This function can only take 1 or 2 parameters');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
@@ -249,7 +248,7 @@ class xarQuery
             }
         }
         else {
-            $msg = xarML('This function only take 1 or 2 parameters');
+            $msg = xarML('This function can only take 1 or 2 parameters');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
@@ -907,11 +906,15 @@ class xarQuery
             $this->statement = $this->_statement();
         }
     }
-    function qecho()
+    function tostring()
     {
         $this->setstatement();
         if ($this->usebinding) $this->bindstatement();
-        echo $this->getstatement();
+        return $this->getstatement();
+    }
+    function qecho()
+    {
+        echo $this->tostring();
     }
     function bindstatement()
     {
