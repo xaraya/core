@@ -99,7 +99,9 @@ function roles_admin_purge($args)
                 $skip = 0;
                 $unique = 1;
                 if ($role['xar_type']) {
-                     $role['xar_uname'] = "";
+                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['xar_uname'], 'type' => 1, 'state' => ROLES_STATE_CURRENT));
+                    if (is_array($existinguser)) $unique = 0;
+                    $role['xar_uname'] = "";
                 }
                 else {
                     $uname1 = explode($deleted,$role['xar_uname']);
@@ -108,7 +110,7 @@ function roles_admin_purge($args)
                         $skip = 1;
                     }
                     else
-                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0]));
+                        $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0], 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
                     $role['xar_uname'] = $uname1[0];
                }

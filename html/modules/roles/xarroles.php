@@ -66,26 +66,27 @@ class xarRoles
         // check if we already have the groups stored
         if ((!isset($this->allgroups)) || count($this->allgroups) == 0) {
             // set up the query and get the groups
-            $query = "SELECT r.xar_uid,
-                        r.xar_name,
-                        r.xar_users,
-                        rm.xar_parentid
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
-                        WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 1
-                        ORDER BY r.xar_name";
+            $q = new xarQuery('SELECT');
+            $q->addtable($this->rolestable,'r');
+            $q->addtable($this->rolememberstable,'rm');
+            $q->join('r.xar_uid','rm.xar_uid');
+            $q->addfield('r.xar_uid');
+            $q->addfield('r.xar_name');
+            $q->addfield('r.xar_users');
+            $q->addfield('rm.xar_parentid');
+            $q->eq('r.xar_type',1);
+            $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
+            $q->setorder('r.xar_name');
+            if (!$q->run()) return;
 
-            $result = $this->dbconn->Execute($query);
-            if (!$result) return;
             // arrange the data in an array
+//            echo var_dump($q->output());exit;
             $groups = array();
-            while (!$result->EOF) {
-                list($uid, $name, $users, $parentid) = $result->fields;
-                $groups[] = array('uid' => $uid,
-                    'name' => $name,
-                    'users' => $users,
-                    'parentid' => $parentid);
-                $result->MoveNext();
+            foreach ($q->output() as $row) {
+                $groups[] = array('uid' => $row['r.xar_uid'],
+                    'name' => $row['r.xar_name'],
+                    'users' => $row['r.xar_users'],
+                    'parentid' => $row['rm.xar_parentid']);
             }
             $this->allgroups = $groups;
             return $groups;

@@ -41,65 +41,54 @@ function roles_userapi_get($args)
         return false;
     }
 
-    if (empty($type)){
-        $type = 0;
-    }
-    // Get database setup
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    if (empty($type)) $type = 0;
 
+    $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
     // Get user
-    // FIXME: Add status field when it appears in roles table
-    $query = "SELECT xar_uid,
-                   xar_uname,
-                   xar_name,
-                   xar_email,
-                   xar_pass,
-                   xar_date_reg,
-                   xar_valcode,
-                   xar_state
-            FROM $rolestable";
-
+    $q = new xarQuery('SELECT',$rolestable);
     if (!empty($uid) && is_numeric($uid)) {
-        $query .= " WHERE xar_uid = " . xarVarPrepForStore($uid);
-    } elseif (!empty($name)) {
-        $query .= " WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
-    } elseif (!empty($uname)) {
-        $query .= " WHERE xar_uname = '" . xarVarPrepForStore($uname) . "'";
-    } elseif (!empty($email)) {
-        $query .= " WHERE xar_email = '" . xarVarPrepForStore($email) . "'";
+        $q->eq('xar_uid',$uid);
     }
-        $query .= " AND xar_type = " . xarVarPrepForStore($type);
-
-   $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!empty($name)) {
+        $q->eq('xar_name',$name);
+    }
+    if (!empty($uname)) {
+        $q->eq('xar_uname',$uname);
+    }
+    if (!empty($email)) {
+        $q->eq('xar_email',$email);
+    }
+    if (!empty($state) && $state == ROLES_STATE_CURRENT) {
+        $q->ne('xar_state',ROLES_STATE_DELETED);
+    }
+    elseif (!empty($state) && $state != ROLES_STATE_ALL) {
+        $q->eq('xar_state',$state);
+    }
+    $q->eq('xar_type',$type);
+//    $q->qecho();
+    if (!$q->run()) return;
 
     // Check for no rows found, and if so return
-    if ($result->EOF) {
-        return false;
-    }
+    $row = $q->row();
+    if ($row == array()) return false;
 
     // Obtain the item information from the result set
-    list($uid, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
-
-    $result->Close();
 
     // Security check
-//    if (xarSecurityCheck('ReadRole',1,'All',"$uname:All:$uid")) return;
+//    if (xarSecurityCheck('ReadRole',1,'All',"$row['uname']:All:$row['uid']")) return;
 //    if (xarSecurityCheck('ViewRoles')) return;
 
 // Create the user array
-    $user = array('uid'         => $uid,
-                  'uname'       => $uname,
-                  'name'        => $name,
-                  'email'       => $email,
-                  'pass'        => $pass,
-                  'date_reg'    => $date,
-                  'valcode'     => $valcode,
-                  'state'       => $state);
-
+    $user = array('uid'         => $row['xar_uid'],
+                  'uname'       => $row['xar_uname'],
+                  'name'        => $row['xar_name'],
+                  'email'       => $row['xar_email'],
+                  'pass'        => $row['xar_pass'],
+                  'date_reg'    => $row['xar_date_reg'],
+                  'valcode'     => $row['xar_valcode'],
+                  'state'       => $row['xar_state']);
     // Return the user array
     return $user;
 }
