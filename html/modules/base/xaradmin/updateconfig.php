@@ -62,6 +62,8 @@ function base_admin_updateconfig()
     xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
     xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
+    // enable short urls for the base module itself too
+    xarModSetVar('base','SupportShortURLs', $enableShortURLs);
     xarConfigSetVar('Site.Core.FixHTMLEntities', $FixHTMLEntities);
 
     //Filtering Options
