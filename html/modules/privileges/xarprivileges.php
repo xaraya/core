@@ -482,8 +482,12 @@ class xarMasks
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
+//            echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . " for deny. ";
+//            if ($privilege->includes($mask)) echo $privilege->getName() . " found. ";
+//            else echo "not found. ";
            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
             $pass = false;
+            $matched = true;
             break;
            }
         }
