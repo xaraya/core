@@ -13,36 +13,41 @@
  */
 /**
  * removeMember - remove a user or group from a group
- * 
+ *
  * Remove a user or group as a member of another group.
  * This is an action page..
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
- * @access public 
- * @param none $ 
- * @return none 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param none $
+ * @return none
  * @throws none
  * @todo none
  */
 function roles_admin_removemember()
-{ 
+{
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return; 
+    if (!xarSecConfirmAuthKey()) return;
     // get input from any view of this page
     if (!xarVarFetch('parentid', 'str:1:', $parentid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('childid', 'str:1:', $childid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return; 
+    if (!xarVarFetch('childid', 'str:1:', $childid, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     // call the Roles class and get the parent and child objects
     $roles = new xarRoles();
     $role = $roles->getRole($parentid);
-    $member = $roles->getRole($childid); 
-    // assign the child to the parent and bail if an error was thrown
+    $member = $roles->getRole($childid);
+
+    // Security Check
+    if(!xarSecurityCheck('AssignRole',0,'Roles',$role->getName())) return;
+    if(!xarSecurityCheck('AssignRole',0,'Roles',$member->getName())) return;
+
+    // remove the child from the parent and bail if an error was thrown
     $removed = $role->removeMember($member);
-    if (!$removed) return; 
+    if (!$removed) return;
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles',
             'admin',
             'modifyrole',
             array('uid' => $childid)));
-} 
+}
 
 ?>

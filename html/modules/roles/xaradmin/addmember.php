@@ -35,6 +35,11 @@ function roles_admin_addmember()
     $roles  = new xarRoles();
     $role   = $roles->getRole($roleid);
     $member = $roles->getRole($uid);
+
+    // Security Check
+    if(!xarSecurityCheck('AssignRole',0,'Roles',$role->getName())) return;
+    if(!xarSecurityCheck('AssignRole',0,'Roles',$member->getName())) return;
+
     // check that this assignment hasn't already been made
     if ($member->isEqual($role)) {
         $msg = xarML('This assignment is not possible');

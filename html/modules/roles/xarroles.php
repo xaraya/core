@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id$
- *
  * Purpose of file:  Roles administration API
  *
  * @package Xaraya eXtensible Management System
@@ -11,6 +9,8 @@
  * @subpackage Roles Module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
+
+include_once 'modules/roles/xarincludes/xarQuery.php';
 
 /**
  * xarRoles: class for the role repository
@@ -146,31 +146,7 @@ class xarRoles
      */
     function getRole($uid)
     {
-        // retrieve the object's data from the repository
-        // set up and execute the query
-        $query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_uid = $uid";
-        // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-        // set the data in an array
-        list($uid, $name, $type, $parentid, $uname, $email, $pass,
-            $date_reg, $val_code, $state, $auth_module) = $result->fields;
-
-        $pargs = array('uid' => $uid,
-            'name' => $name,
-            'type' => $type,
-            'parentid' => $parentid,
-            'uname' => $uname,
-            'email' => $email,
-            'pass' => $pass,
-            'date_reg' => $date_reg,
-            'val_code' => $val_code,
-            'state' => $state,
-            'auth_module' => $auth_module);
-        // create and return the role object
-        return new xarRole($pargs);
+        return $this->_lookuprole('xar_uid',$uid);
     }
 
     /**
@@ -188,64 +164,41 @@ class xarRoles
      */
     function findRole($name)
     {
-        // retrieve the object's data from the repository
-        // set up and execute the query
-        $query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_name = '$name'";
-        // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-
-        if (!$result->EOF) {
-            // set the data in an array
-            list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $pargs = array('uid' => $uid,
-                'name' => $name,
-                'type' => $type,
-                'parentid' => $parentid,
-                'uname' => $uname,
-                'email' => $email,
-                'pass' => $pass,
-                'date_reg' => $date_reg,
-                'val_code' => $val_code,
-                'state' => $state,
-                'auth_module' => $auth_module);
-            // create and return the role object
-            return new xarRole($pargs);
-        }
+        return $this->_lookuprole('xar_name',$name);
     }
 
-    function ufindRole($name)
+    function ufindRole($uname)
+    {
+        return $this->_lookuprole('xar_uname',$uname);
+    }
+
+    function _lookuprole($field,$value)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
-        $query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_uname = '$name'";
-        // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
+        $q = new xarQuery('SELECT',$this->rolestable);
+        $q->eq($field,$value);
 
-        if (!$result->EOF) {
-            // set the data in an array
-            list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $pargs = array('uid' => $uid,
-                'name' => $name,
-                'type' => $type,
-                'parentid' => $parentid,
-                'uname' => $uname,
-                'email' => $email,
-                'pass' => $pass,
-                'date_reg' => $date_reg,
-                'val_code' => $val_code,
-                'state' => $state,
-                'auth_module' => $auth_module);
-            // create and return the role object
-            return new xarRole($pargs);
-        }
+        // Execute the query, bail if an exception was thrown
+        if (!$q->run()) return;
+
+        // set the data in an array
+        $row = $q->row();
+
+        $pargs = array(
+            'uid' =>         $row['xar_uid'],
+            'name' =>        $row['xar_name'],
+            'type' =>        $row['xar_type'],
+            'users' =>       $row['xar_users'],
+            'uname' =>       $row['xar_uname'],
+            'email' =>       $row['xar_email'],
+            'pass' =>        $row['xar_pass'],
+            'date_reg' =>    $row['xar_date_reg'],
+            'val_code' =>    $row['xar_valcode'],
+            'state' =>       $row['xar_state'],
+            'auth_module' => $row['xar_auth_module']);
+        // create and return the role object
+        return new xarRole($pargs);
     }
 
     /**
@@ -372,15 +325,11 @@ class xarRoles
             return false;
         }
         // Confirm that this group or user does not already exist
-        $query = "SELECT COUNT(*) FROM $this->rolestable
-                  WHERE xar_uname = '$uname'";
+        $q = new xarQuery('SELECT',$this->rolestable);
+        $q->eq('xar_uname',$uname);
 
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-
-        list($count) = $result->fields;
-
-        if ($count == 1) {
+        if (!$q->run()) return;
+        if ($q->getrows() == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
             xarExceptionSet(XAR_USER_EXCEPTION,
@@ -391,27 +340,26 @@ class xarRoles
         }
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
-        $createdate = mktime();
+
         // set up the query and create the entry
-        $nextIdprep = xarVarPrepForStore($nextId);
-        $nameprep = xarVarPrepForStore($name);
-        $unameprep = xarVarPrepForStore($uname);
-        $emailprep = xarVarPrepForStore($email);
-        $passprep = xarVarPrepForStore(md5($pass));
-        $dateregprep = xarVarPrepForStore($createdate);
-        $valcodeprep = xarVarPrepForStore($valcode);
-        $stateprep = xarVarPrepForStore($state);
-        $authmoduleprep = xarVarPrepForStore($authmodule);
-        $query = "INSERT INTO $this->rolestable
-                    (xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
-                    xar_date_reg, xar_valcode, xar_state, xar_auth_module)
-                  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep', '$passprep',
-                  '$dateregprep', '$valcodeprep', $stateprep, '$authmoduleprep')";
-        if (!$this->dbconn->Execute($query)) return;
+        $tablefields = array(
+            array('name' => 'xar_uid',         'value' => $nextId),
+            array('name' => 'xar_name',        'value' => $name),
+            array('name' => 'xar_type',        'value' => 0),
+            array('name' => 'xar_uname',       'value' => $uname),
+            array('name' => 'xar_email',       'value' => $email),
+            array('name' => 'xar_pass',        'value' => $pass),
+            array('name' => 'xar_date_reg',    'value' => mktime()),
+            array('name' => 'xar_valcode',     'value' => $valcode),
+            array('name' => 'xar_state',       'value' => $state),
+            array('name' => 'xar_auth_module', 'value' => $authmodule)
+        );
+        $q = new xarQuery('INSERT',$this->rolestable);
+        $q->addfields($tablefields);
+        if (!$q->run()) return;
         // done
         return true;
     }
-
     /**
      * makeGroup: add a new role object to the repository
      *
@@ -472,18 +420,18 @@ class xarRoles
  */
 class xarRole
 {
-    var $uid; //the id of this user or group
-    var $name; //the name of this user or group
-    var $type; //the type of this role (0=user, 1=group)
-    var $parentid; //the id of the parent of this role
-    var $uname; //the user name (not used by groups)
-    var $email; //the email address (not used by groups)
-    var $pass; //the password (not used by groups)
-    var $date_reg; //the date of registration
-    var $val_code; //the validation code of this user or group
-    var $state; //the state of this user or group
-    var $auth_module; //no idea what this is (not used by groups)
-    var $parentlevel; //we use this just to store transient information
+    var $uid;          //the id of this user or group
+    var $name;         //the name of this user or group
+    var $type;         //the type of this role (0=user, 1=group)
+    var $parentid;     //the id of the parent of this role
+    var $uname;        //the user name (not used by groups)
+    var $email;        //the email address (not used by groups)
+    var $pass;         //the password (not used by groups)
+    var $date_reg;     //the date of registration
+    var $val_code;     //the validation code of this user or group
+    var $state;        //the state of this user or group
+    var $auth_module;  //no idea what this is (not used by groups)
+    var $parentlevel;  //we use this just to store transient information
 
     var $dbconn;
     var $rolestable;
@@ -576,20 +524,16 @@ class xarRole
             return false;
         }
         // Confirm that this group or user does not already exist
+        $q = new xarQuery('SELECT',$this->rolestable);
         if ($this->type == 1) {
-            $query = "SELECT COUNT(*) FROM $this->rolestable
-                  WHERE xar_name = '$this->name'";
+            $q->eq('xar_name',$this->name);
         } else {
-            $query = "SELECT COUNT(*) FROM $this->rolestable
-                  WHERE xar_uname = '$this->uname'";
+            $q->eq('xar_uname',$this->uname);
         }
 
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
+        if (!$q->run()) return;
 
-        list($count) = $result->fields;
-
-        if ($count == 1) {
+        if ($q->getrows() == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
             xarExceptionSet(XAR_USER_EXCEPTION,
@@ -600,37 +544,33 @@ class xarRole
         }
 
         $nextId = $this->dbconn->genID($this->rolestable);
-        $createdate = mktime();
 
+        $tablefields = array(
+            array('name' => 'xar_uid',      'value' => $nextId),
+            array('name' => 'xar_name',     'value' => $this->name),
+            array('name' => 'xar_uname',    'value' => $this->uname),
+            array('name' => 'xar_date_reg', 'value' => mktime()),
+            array('name' => 'xar_valcode',  'value' => $this->val_code)
+        );
+        $q = new xarQuery('INSERT',$this->rolestable);
+        $q->addfields($tablefields);
         if ($this->type == 1) {
-            $nextIdprep = xarVarPrepForStore($nextId);
-            $nameprep = xarVarPrepForStore($this->name);
-            $typeprep = xarVarPrepForStore($this->type);
-            $unameprep = xarVarPrepForStore($this->uname);
-            $valcodeprep = xarVarPrepForStore($this->val_code);
-            $dateregprep = xarVarPrepForStore($createdate);
-            $query = "INSERT INTO $this->rolestable
-                        (xar_uid, xar_name, xar_type, xar_uname, xar_valcode, xar_date_reg)
-                      VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$valcodeprep', '$dateregprep')";
+            $groupfields = array(
+                array('name' => 'xar_type', 'value' => 1)
+            );
+            $q->addfields($groupfields);
         } else {
-            $nextIdprep = xarVarPrepForStore($nextId);
-            $nameprep = xarVarPrepForStore($this->name);
-            $typeprep = xarVarPrepForStore($this->type);
-            $unameprep = xarVarPrepForStore($this->uname);
-            $emailprep = xarVarPrepForStore($this->email);
-            $passprep = xarVarPrepForStore(md5($this->pass));
-            $dateregprep = xarVarPrepForStore($createdate);
-            $stateprep = xarVarPrepForStore($this->state);
-            $valcodeprep = xarVarPrepForStore($this->val_code);
-            $authmodprep = xarVarPrepForStore($this->auth_module);
-            $query = "INSERT INTO $this->rolestable
-                        (xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
-                        xar_date_reg, xar_state, xar_valcode, xar_auth_module)
-                      VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$emailprep',
-                      '$passprep', '$dateregprep', $stateprep, '$valcodeprep', '$authmodprep')";
+            $userfields = array(
+                array('name' => 'xar_type',       'value' => 0),
+                array('name' => 'xar_email',      'value' => $this->email),
+                array('name' => 'xar_pass',       'value' => md5($this->pass)),
+                array('name' => 'xar_state',      'value' => $this->state),
+                array('name' => 'xar_auth_module','value' => $this->auth_module)
+            );
+            $q->addfields($userfields);
         }
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query)) return;
+        if (!$q->run()) return;
 
         $query = "SELECT MAX(xar_uid) FROM $this->rolestable";
         // Execute the query, bail if an exception was thrown
@@ -639,6 +579,7 @@ class xarRole
 
         list($uid) = $result->fields;
         $this->uid = $uid;
+
         $parts = new xarRoles();
         $parentpart = $parts->getRole($this->parentid);
         return $parentpart->addMember($this);
@@ -727,11 +668,20 @@ class xarRole
 
     function update()
     {
-        $query = "UPDATE " . $this->rolestable . " SET " . "xar_name = '$this->name'," . "xar_type = $this->type," . "xar_uname = '$this->uname'," . "xar_email = '$this->email'," . "xar_state = '$this->state'";
-        if ($this->pass != '') $query .= ",xar_pass = '" . md5($this->pass) . "'";
-        $query .= " WHERE xar_uid = " . $this->getID();
+        $q = new xarQuery('UPDATE',$this->rolestable);
+        $tablefields = array(
+            array('name' => 'xar_name',     'value' => $this->name),
+            array('name' => 'xar_type',     'value' => $this->type),
+            array('name' => 'xar_uname',    'value' => $this->uname),
+            array('name' => 'xar_email',    'value' => $this->email),
+            array('name' => 'xar_state',    'value' => $this->state)
+        );
+        $q->addfields($tablefields);
+        if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
+        $q->eq('xar_uid',$this->getID());
+
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query)) return;
+        if (!$q->run()) return;
         return true;
     }
 
