@@ -486,6 +486,7 @@ function xarModGetIDFromName($modName, $type = 'module')
  */
 function xarModGetInfo($modRegId, $type = 'module')
 {
+    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
 
     if (empty($modRegId) || $modRegId == 0) {
         $msg = xarML('Empty RegId (#(1)) or RegId is equal to 0.', $modRegId);
@@ -540,8 +541,8 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     $modInfo['regid'] = (int) $modRegId;
     $modInfo['mode'] = (int) $mode;
-    // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-    // $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
+    // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name'], $type);
+    // $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
 
     // Shortcut for os prepared directory
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
@@ -1119,12 +1120,14 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @param modName string registered name of module
  * @return string the displayable name
  */
-function xarModGetDisplayableName($modName = NULL)
+function xarModGetDisplayableName($modName = NULL, $type = 'module')
 {
+    xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
+
     if (empty($modName)) {
         $modName = xarModGetName();
     }
-    $modInfo = xarMod_getFileInfo($modName);
+    $modInfo = xarMod_getFileInfo($modName, $type);
     return xarML($modInfo['displayname']);
 }
 
@@ -1137,8 +1140,10 @@ function xarModGetDisplayableName($modName = NULL)
  * @param modName string registered name of module
  * @return string the displayable description
  */
-function xarModGetDisplayableDescription($modName = NULL)
+function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 {
+    xarLogMessage("xarModGetDisplayableDescription ". $modName ." / " . $type);
+
     if (empty($modName)) {
         $modName = xarModGetName();
     }
@@ -1470,6 +1475,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  */
 function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
+    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
+
     if (empty($modOsDir)) {
         $msg = xarML('Directory information #(1) is empty.', $modOsDir);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
@@ -1506,6 +1513,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                 }
             }
             // If the locale is already present, it means we can make the translations available
+
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
@@ -1545,6 +1553,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     } else {
         $FileInfo['displayname'] = $version['name'];
     }
+
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
     if (isset($version['displaydescription'])) {
         $FileInfo['displaydescription'] = $version['displaydescription'];
@@ -1592,6 +1601,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
  */
 function xarMod_getBaseInfo($modName, $type = 'module')
 {
+     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
+
     if (empty($modName)) {
         $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
@@ -1685,8 +1696,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modBaseInfo['systemid'] = (int) $systemid;
     $modBaseInfo['state'] = (int) $state;
     $modBaseInfo['name'] = $modName;
-    $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
-    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($modName);
+    $modBaseInfo['displayname'] = xarModGetDisplayableName($modName, $type);
+    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($modName, $type);
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = xarVarPrepForOS($modBaseInfo['directory']);
