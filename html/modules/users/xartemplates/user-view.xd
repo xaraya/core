@@ -1,4 +1,13 @@
-<table width="100%" border="1" cellspacing="0" cellpadding="4">
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Memberslist</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2>#$title#</h2>
+<b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
+&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'active'))#">Online Members</a> <br />
+&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'viewall'))#">All Members</a><br /><br />
+
+<div class="xar-accent">
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
     <tr>        
 		<th width="20%">
 			<xar:mlstring>Real Name</xar:mlstring>
@@ -8,11 +17,12 @@
 		</th>
 	</tr>
     <xar:loop name="$items">
+<xar:if condition="(($_bl_loop_index1 + 1) % 2)">
     <tr>
-        <td>
+        <td class="xar-norm">
 			<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 		</td>
-        <td>
+        <td class="xar-norm">
            <xar:if condition="empty($emailurl)">
                #$email#
                <xar:else />
@@ -20,8 +30,23 @@
            </xar:if>
 		</td>
     </tr>
+<xar:else />
+    <tr>
+        <td class="xar-accent">
+			<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+		</td>
+        <td class="xar-accent">
+           <xar:if condition="empty($emailurl)">
+               #$email#
+               <xar:else />
+               <a href="#$emailurl#">#$email#</a>
+           </xar:if>
+		</td>
+    </tr>
+	</xar:if>
     </xar:loop>
 </table>
+</div>
 <br />
 
 <!-- add the pager here -->
