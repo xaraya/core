@@ -22,6 +22,8 @@
  * @throws  none
  * @todo    none
 */
+
+
 class xarMasks
 {
     var $dbconn;
@@ -35,6 +37,7 @@ class xarMasks
     var $allmasks;
     var $levels;
     var $instancestable;
+    var $privsetstable;
 
     var $privilegeset;
 
@@ -62,6 +65,7 @@ class xarMasks
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
+        $this->privsetstable = $xartable['security_privsets'];
 
 // hack this for display purposes
 // probably should be defined elsewhere
@@ -289,7 +293,10 @@ class xarMasks
         if ($module == '') list($module) = xarRequestGetInfo();
 // no need to update / select in database for each block here
 //        if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
-        if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule')) $module = xarVarGetCached('Security.Variables','currentmodule');
+
+// I'm a bit lost on this line. Does this var ever get set?
+        if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
+        $module = xarVarGetCached('Security.Variables','currentmodule');
 
         $mask =  $this->getMask($mask);
         if (!$mask) {
@@ -308,28 +315,31 @@ class xarMasks
         // insert any instance overrides
         if ($instance != '') $mask->setInstance($instance);
 
-        // check if we already have the irreducible set of privileges for the current user
+    // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
-            // get the Roles class
+
+// get the Roles class
             include_once 'modules/roles/xarroles.php';
             $roles = new xarRoles();
 
-            // get the uid of the role we will check against
-            // an empty role means take the current user
+// get the uid of the role we will check against
+// an empty role means take the current user
             if ($rolename == '') {
                 $userID = xarSessionGetVar('uid');
                 if (empty($userID)) {
                     $userID = _XAR_ID_UNREGISTERED;
                 }
                 $role = $roles->getRole($userID);
-            } else {
+            }
+            else {
                 $role = $roles->findRole($rolename);
             }
 
-            // get the irreducible set of privileges that apply for this role
+// get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)));
 
-            // if this is the current user, save the irreducible set of privileges to cache
+// leave this as same-page caching for now, until the db cache is finished
+        // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
                 xarVarSetCached('Security.Variables','privilegeset',$privileges);
             }
@@ -338,20 +348,79 @@ class xarMasks
             $privileges = xarVarGetCached('Security.Variables','privilegeset');
         }
 
-        // test the current mask (and instance) against the privileges
         $pass = $this->testprivileges($mask,$privileges,false);
+
+//        $pass = $this->testprivileges($mask,$this->getprivset($role),false);
 
 // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-        $msg = xarML('No privilege for #(1)',$mask->getName());
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+            $msg = xarML('No privilege for #(1)',$mask->getName());
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg));
         }
 
 // done
         return $pass;
     }
 
+
+/**
+ * forgetprivsets: remove all irreducible set of privileges from the db
+ *
+ * used to lighten the cache
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+    function forgetprivsets()
+    {
+        $query = "DELETE FROM $this->privsetstable";
+        if (!$this->dbconn->Execute($query)) return;
+        return true;
+    }
+
+/**
+ * getprivset: get a role's irreducible set of privileges from the db
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   role object
+ * @return  array containing the role's ancestors and privileges
+ * @throws  none
+ * @todo    none
+*/
+    function getprivset($role)
+    {
+        $query = "SELECT xar_set FROM $this->privsetstable WHERE xar_uid =" . $role->getID();
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+        if ($result->EOF) {
+            $privileges = $this->irreducibleset(array('roles' => array($role)));
+            $serprivs = xarVarPrepForStore(serialize($privileges));
+            $query = "INSERT INTO $this->privsetstable VALUES (" . $role->getID() . ",'$serprivs')";
+            if (!$this->dbconn->Execute($query)) return;
+            return $privileges;
+        }
+        else {
+            list($serprivs) = $result->fields;
+        }
+        return unserialize($serprivs);
+    }
+
+/**
+ * irreducibleset: assemble a role's irreducible set of privileges
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   array representing the initial node to start from
+ * @return  nested array containing the role's ancestors and privileges
+ * @throws  none
+ * @todo    none
+*/
     function irreducibleset($coreset)
     {
         $roles = $coreset['roles'];
@@ -375,6 +444,18 @@ class xarMasks
         return $coreset;
     }
 
+/**
+ * testprivileges: test an irreducible set of privileges against a mask
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @param   nested array representing the irreducibles set of privileges
+ * @param   boolean false (initial test value)
+ * @return  boolean false if check fails, privilege object if check succeeds
+ * @throws  none
+ * @todo    none
+*/
     function testprivileges($mask,$privilegeset,$pass)
     {
         $matched = false;
@@ -602,6 +683,10 @@ class xarPrivileges extends xarMasks
         $query = "INSERT INTO $this->acltable VALUES ($roleid,
                                                 $privid)";
         if (!$this->dbconn->Execute($query)) return;
+
+// empty the privset cache
+        $this->forgetprivsets();
+
         return true;
     }
 
@@ -1930,6 +2015,11 @@ class xarPrivilege extends xarMask
                 VALUES (" . $member->getID() . "," . $this->getID() . ")";
         //Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
+
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
+
         return true;
     }
 
@@ -1952,6 +2042,11 @@ class xarPrivilege extends xarMask
               " AND xar_parentid=" . $this->getID();
         //Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
+
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
+
         return true;
     }
 
@@ -2015,8 +2110,10 @@ class xarPrivilege extends xarMask
         $perms = new xarPrivileges();
         while(!$result->EOF) {
             list($parentid) = $result->fields;
-            $parentperm = $perms->getPrivilege($parentid);
-            $parentperm->removeMember($this);
+            if ($parentid != 0) {
+                $parentperm = $perms->getPrivilege($parentid);
+                $parentperm->removeMember($this);
+            }
             $result->MoveNext();
         }
         return true;
@@ -2068,9 +2165,9 @@ class xarPrivilege extends xarMask
                     r.xar_email,
                     r.xar_pass,
                     r.xar_auth_module
-                    FROM $this->rolestable r INNER JOIN $this->acltable acl
-                    ON r.xar_uid = acl.xar_partid
-                    WHERE acl.xar_permid = $this->pid";
+                    FROM $this->rolestable r, $this->acltable acl
+                    WHERE r.xar_uid = acl.xar_partid
+                    AND acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -2260,7 +2357,7 @@ class xarPrivilege extends xarMask
         while (list($key, $child) = each($children)) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {
-                array_push($children,$descendant);
+                $children[] =$descendant;
             }
         }
 
