@@ -89,11 +89,19 @@ function xarEvt__shutdown_handler()
 */
 function xarEvt_trigger($eventName, $value = NULL)
 {
+    //The active mods should not change during page view
+    static $activemods = false;
     // Must make sure the event exists.
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
     // Call the event handlers in the active modules
-    $activemods = xarEvt__GetActiveModsList();
+    //FIXME: MAKE A global variable to tell *all* of the core not to cache anything
+    //during page view! (change xarMod_noCacheState for that one)
+    //There are case (instalation, module instalation or others?) where the cache during
+    //the pageview can be compromised. As these are rare events, a variable to tell
+    //everything not to cache would be good enough
+    if (!empty($GLOBALS['xarMod_noCacheState']) || !$activemods) $activemods = xarEvt__GetActiveModsList();
+    
     xarLogMessage("Triggered event ($eventName)");
 
     $nractive=count($activemods);
@@ -214,6 +222,7 @@ function xarEvt__checkEvent($eventName)
  * @access  private
  * @return array of module information arrays
  */
+//FIXME: This should be in module's space, shouldnt it?
 function xarEvt__GetActiveModsList()
 {
     // use vars instead of defines to narrow the scope
