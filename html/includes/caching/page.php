@@ -166,7 +166,7 @@ function xarPageSetCached($cacheKey, $name, $value)
                                   '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
                                   $value);
         }
-        
+
         xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
 
         xarPage_httpCacheHeaders($cache_file);
@@ -260,12 +260,24 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
 
                     $logs = @file('var/cache/output/autocache.log');
                     $autocacheproposed = array();
+                    if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
+                        $autocachestats = array();
+                        $autocachefirstseen = array();
+                        $autocachelastseen = array();
+                    }
                     foreach ($logs as $entry) {
                         if (empty($entry)) continue;
                         list($time,$status,$addr,$url) = explode(' ',$entry);
                         $url = trim($url);
                         if (!isset($autocacheproposed[$url])) $autocacheproposed[$url] = 0;
                         $autocacheproposed[$url]++;
+                        if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
+                            if (!isset($autocachestats[$url])) $autocachestats[$url] = array('HIT' => 0,
+                                                                                             'MISS' => 0);
+                            $autocachestats[$url][$status]++;
+                            if (!isset($autocachefirstseen[$url])) $autocachefirstseen[$url] = $time;
+                            $autocachelastseen[$url] = $time;
+                        }
                     }
                     unset($logs);
                     // check that all required URLs are included
@@ -308,6 +320,40 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                             @fwrite ($fp, $cachingConfig);
                             @fclose ($fp);
                         }
+                    }
+                    // save cache statistics
+                    if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
+                        if (file_exists('var/cache/output/autocache.stats') &&
+                            filesize('var/cache/output/autocache.stats') > 0) {
+
+                            $stats = @file('var/cache/output/autocache.stats');
+                            foreach ($stats as $entry) {
+                                if (empty($entry)) continue;
+                                list($url,$hit,$miss,$first,$last) = explode(' ',$entry);
+                                $last = trim($last);
+                                if (!isset($autocachestats[$url])) {
+                                    $autocachestats[$url] = array('HIT' => $hit,
+                                                                  'MISS' => $miss);
+                                    $autocachefirstseen[$url] = $first;
+                                    $autocachelastseen[$url] = $last;
+                                } else {
+                                    $autocachestats[$url]['HIT'] += $hit;
+                                    $autocachestats[$url]['MISS'] += $miss;
+                                    $autocachefirstseen[$url] = $first;
+                                }
+                            }
+                            unset($stats);
+                        }
+                        $fp = @fopen('var/cache/output/autocache.stats', 'w');
+                        if ($fp) {
+                            foreach ($autocachestats as $url => $stats) {
+                                @fwrite($fp, $url . ' ' . $stats['HIT'] . ' ' . $stats['MISS'] . ' ' . $autocachefirstseen[$url] . ' ' . $autocachelastseen[$url] . "\n");
+                            }
+                            @fclose($fp);
+                        }
+                        unset($autocachestats);
+                        unset($autocachefirstseen);
+                        unset($autocachelastseen);
                     }
                 }
             }
