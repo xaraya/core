@@ -27,7 +27,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
     function Dynamic_FileUpload_Property($args)
     {
-        $this->Dynamic_Property($args);
+        parent::Dynamic_Property($args);
 
         if (!empty($this->validation)) {
             if ('single' == $this->validation) {
