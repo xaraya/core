@@ -1,54 +1,30 @@
 <?php
 /**
- * File: $Id$
- *
  * Event Messagging System
  *
+ * This subsystem issues events into the module space when something happens
+ * An event is composed of a system short identifier + an event name
+ * Example: a module is loading:  ModLoad 
+ * Short identifier: Mod
+ * Event name: Load
+ * Each subsystem in Xaraya may register events and trigger them, the event subsystem
+ * itself is initialized directly after the DB subsystem. Any systems loaded before
+ * that need to check whether the proper things are loaded themselves.
+ *
  * @package events
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2004 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
- * @author Marcel van der Boom <marcel@hsdev.com>
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ * @author Frank Besler <besfred@xaraya.com>
  * @todo Document EMS
  * @todo Document functions
  * @todo Implement discovery functions for modules
- *
- * An event is a string composed by two part:
- * event := owner + name
- * where owner is a system short identifier and name is the proper event name
- * Example: ModLoad -> system short identifier = Mod, event = Load
  */
 
 /**
  * List of supported events
- * Blocks package:
- * ---------------
- * none
- *
- * Config package:
- * --------------
- * none
- * 
- * Core:
- * -----
- * none
- *
- * DB package:
- * -----------
- * none
- *
- * Evt package:
- * ------------
- * none
- *
- * Exception package:
- * ------------------
- * none
- * 
- * Logging package:
- * ----------------
- * none
  * 
  * Multilanguage package:
  * ----------------------
@@ -61,10 +37,6 @@
  * ModLoad    - event is issued at the end of the xarModLoad function, just before returning true
  * ModAPILoad - event is issued at the end of the xarModAPILoad function, just before returning true
  *
- * Security package:
- * ----------------- 
- * none
- *
  * Server package:
  * ---------------
  * ServerRequest - event is issued at the end of processing a server request
@@ -72,27 +44,6 @@
  * Session package:
  * ----------------
  * SessionCreate - event is triggered when a new session is being created (see xarSession.php)
- *
- * TableDDL package :
- * ------------------
- * none
- * 
- * Template package :
- * ------------------
- * none
- * 
- * Theme package:
- * -------------
- * none
- * 
- * User package:
- * ------------
- * none
- * 
- * Variables package:
- * ------------------
- * none
- *
  */
 
 /**
@@ -118,7 +69,7 @@ function xarEvt_init($args, $whatElseIsGoingLoaded)
  */
 function xarEvt__shutdown_handler()
 {
-    //xarLogMessage("xarEvt shutdown handler");
+    xarLogMessage("xarEvt shutdown handler");
 }
 
 /**
@@ -144,14 +95,10 @@ function xarEvt_trigger($eventName, $value = NULL)
     // Call the event handlers in the active modules
     $activemods = xarEvt__GetActiveModsList();
     xarLogMessage("Triggered event ($eventName)");
-    //FIXME: <besfred> ^^^ should we catch its return value and react?
 
     $nractive=count($activemods);
     for ($i =0; $i < $nractive; $i++) {
-        // We issue the event to the user api for now
-        // FIXME: Could all 4 types be supported? In which situations?
         xarEvt__notify($activemods[$i]['name'], $eventName, $value);
-        //FIXME: <besfred> ^^^ should we catch its return value and react?
     }
 
 }
@@ -165,8 +112,9 @@ function xarEvt_trigger($eventName, $value = NULL)
  * @author  Marco Canini
  * @author  Marcel van der Boom <marcel@xaraya.com>
  * @access  private
- * @param   $modName string The name of the module
- * @param   $modType string userapi / adminapi
+ * @param   $modName   string The name of the module
+ * @param   $eventName string The name of the event to send
+ * @param   $value     mixed  Optional value to pass to the event handler 
  * @return  void
  * @throws  BAD_PARAM
  * @todo    Analyze thoroughly for performance issues.
@@ -188,46 +136,32 @@ function xarEvt__notify($modName, $eventName, $value)
     //   API was already loaded. However, this would mean that all module APIs
     //   are always loaded, which is a bit too much, so we should try it another way
 
-    // First issue it to the specific event handler
     // Function naming: module_eventapi_OnEventName
     $funcSpecific = "{$modName}_eventapi_On$eventName";
-    // $funcGeneral  = "{$modName}_eventapi_OnEvent";
+    $funcGeneral  = "{$modName}_eventapi_OnEvent";
 
     // set which file to load for looking up the event handler
     $xarapifile="modules/{$modName}/xareventapi.php";
-    $xartabfile="modules/{$modName}/xartables.php";
-    // $xarapifile="modules/{$modName}/xar{$modType}evt.php";    
+    $xartabfile="modules/{$modName}/xartables.php";    
 
-    if(function_exists($funcSpecific)) {
-
-        $funcSpecific($value);
+    // Determine what function we need to call
+    $funcToRun = '';
+    if(function_exists($funcSpecific))       $funcToRun = $funcSpecific;
+    else {
+        xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
+        if(function_exists($funcSpecific ))  $funcToRun = $funcSpecific;
+        if(function_exists($funcGeneral  ))  $funcToRun = $funcGeneral;
+        // We may need the tables
+        xarInclude($xartabfile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
+        $xartabfunc = $modName.'_xartables';
+        if (function_exists($xartabfunc)) 
+            xarDB_importTables($xartabfunc());
+    } 
+    if($funcToRun != '') {
+        $funcToRun($value);
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-//    } elseif (function_exists($funcGeneral)) {
-//        $funcGeneral($eventName,$value);
-//        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-    } elseif (file_exists($xarapifile)) {
-
-        include_once($xarapifile);
-
-        if (file_exists($xartabfile)) {
-            include_once($xartabfile);
-            $xartabfunc = $modName.'_xartables';
-
-            if (function_exists($xartabfunc)) 
-                xarDB_importTables($xartabfunc());
-        }
-
-        if(function_exists($funcSpecific)) {
-
-            $funcSpecific($value);
-
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
-//        } elseif (function_exists($funcGeneral)) {
-//            $funcGeneral($eventName,$value);
-//            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-        }
-    }   
+    }
+    // Nothing to be done, be silent about it
 }
 
 /**
@@ -238,7 +172,7 @@ function xarEvt__notify($modName, $eventName, $value)
  * @author  Marco Canini
  * @access  protected
  * @param   $eventName string Which event are we registering?
- * @return  void
+ * @return  bool  true on success
  * @throws  EMPTY_PARAM
  */
 function xarEvt_registerEvent($eventName)
