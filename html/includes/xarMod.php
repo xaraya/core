@@ -1193,7 +1193,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             // return a valid url
             xarLogException(XARLOG_LEVEL_ERROR);
         }
-        xarExceptionFree();
+        //xarExceptionFree();
     }
 
     // The arguments

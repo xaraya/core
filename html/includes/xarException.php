@@ -183,7 +183,8 @@ class ErrorCollection
  */
 function xarException_init($args, $whatElseIsGoingLoaded)
 {
-    if ($args['enablePHPErrorHandler'] == true && !function_exists('xdebug_enable')) {
+    // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
+    if ($args['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
         set_error_handler('xarException__phpErrorHandler');
     }
     xarExceptionFree();
