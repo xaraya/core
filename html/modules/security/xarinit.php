@@ -195,21 +195,29 @@ function security_init()
 
     $permissions->register('NoPermissions','All','All','All','All',ACCESS_NONE,'The base permission granting no access');
     $permissions->register('FullPermissions','All','All','All','All',ACCESS_ADMIN,'The base permission granting full access');
-    $permissions->register('ReadAll','All','All','All','All',ACCESS_READ,'The base permission granting full access');
-    $permissions->register('AddAll','All','All','All','All',ACCESS_ADD,'The base permission granting full access');
-    $permissions->register('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base permission granting full access');
+    $permissions->register('ReadAll','All','All','All','All',ACCESS_READ,'The base permission granting read access');
+    $permissions->register('EditAll','All','All','All','All',ACCESS_EDIT,'The base permission granting edit access');
+    $permissions->register('AddAll','All','All','All','All',ACCESS_ADD,'The base permission granting add access');
+    $permissions->register('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base permission granting delete access');
 
     /*********************************************************************
     * Arrange the  permissions in a hierarchy
     * Format is
+    * makeEntry(Permission)
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	$permissions->isRoot('NoPermissions');
-	$permissions->makeMember('FullPermissions','NoPermissions');
-	$permissions->makeMember('ReadAll','NoPermissions');
-	$permissions->makeMember('AddAll','NoPermissions');
-	$permissions->makeMember('DeleteAll','NoPermissions');
+	$permissions->makeEntry('NoPermissions');
+	$permissions->makeEntry('FullPermissions');
+	$permissions->makeMember('NoPermissions','FullPermissions');
+	$permissions->makeEntry('ReadAll');
+	$permissions->makeMember('NoPermissions','ReadAll');
+	$permissions->makeEntry('EditAll');
+	$permissions->makeMember('NoPermissions','EditAll');
+	$permissions->makeEntry('AddAll');
+	$permissions->makeMember('NoPermissions','AddAll');
+	$permissions->makeEntry('DeleteAll');
+	$permissions->makeMember('NoPermissions','DeleteAll');
 
     /*********************************************************************
     * Assign the default permissions to groups/users
@@ -230,6 +238,7 @@ function security_init()
     include_once 'modules/security/xarsecurity.php';
     $schemas = new xarSchemas();
 
+    $schemas->register('Gateway','All','Security','All','All',ACCESS_READ);
     $schemas->register('ModPermsAll','All','Security','ModifyPermission','All',ACCESS_EDIT);
     $schemas->register('AddPermsAll','All','Security','AddPermission','All',ACCESS_ADD);
     $schemas->register('DelPermsAll','All','Security','DelPermission','All',ACCESS_DELETE);
@@ -237,6 +246,7 @@ function security_init()
     $schemas->register('AssignPermsAll','All','Security','AssignPermission','All',ACCESS_ADD);
     $schemas->register('RemovePermsAll','All','Security','RemovePermission','All',ACCESS_DELETE);
 
+    $schemas->register('Gateway','All','Participants','All','All',ACCESS_READ);
    	$schemas->register('ModMember','All','Participants','ModifyMember','All',ACCESS_EDIT);
     $schemas->register('AddMemberAll','All','Participants','AddMember','All',ACCESS_ADD);
     $schemas->register('DelMemberAll','All','Participants','DelMember','All',ACCESS_DELETE);

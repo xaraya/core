@@ -200,7 +200,15 @@ document.forms[0].submit();}
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
-			#$tree#
+			<xar:loop name="$trees">
+				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
+					<tr>
+						<td>
+							&xar-var-tree;
+						</td>
+					</tr>
+				</table>			
+			</xar:loop>
 		</td>
 	</tr>
 </table>			

@@ -194,7 +194,7 @@ document.forms[0].submit();}
 		<td colspan="5">			
 			<xar:mlstring>Permission</xar:mlstring>
 			<b>'&xar-var-pname;'</b>
-			<xar:mlstring>is a member of the following permissions:</xar:mlstring>			
+			<xar:mlstring>contains the following Permissios:</xar:mlstring>			
 		</td>
 	</tr>
 	<xar:loop name="$parents">
@@ -237,8 +237,8 @@ document.forms[0].submit();}
     </tr>
     <tr>
         <td colspan="4" align="center">
-            <xar:mlstring>Add Permission</xar:mlstring>
-             <b>'&xar-var-pname;'</b> <xar:mlstring>to a Permission</xar:mlstring>                  
+            <xar:mlstring>Add a Permission to Permission</xar:mlstring>
+             <b>'&xar-var-pname;'</b>                  
         </td>
     </tr>
 </table>
@@ -278,14 +278,15 @@ document.forms[0].submit();}
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
-			<a href="&xar-modurl-security-admin-newpermission;">
-				<xar:mlstring>Add Permission</xar:mlstring>
-			</a>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			#$tree#
+			<xar:loop name="$trees">
+				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
+					<tr>
+						<td>
+							&xar-var-tree;
+						</td>
+					</tr>
+				</table>			
+			</xar:loop>
 		</td>
 	</tr>
 </table>			

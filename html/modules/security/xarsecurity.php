@@ -203,8 +203,10 @@ class xarSchemas
 */
  	function winnow($perms1, $perms2)
 	{
-		if ($perms1 == array()) return $perms2;
-		if ($perms2 == array()) return $perms1;
+		if ($perms1 == array() &&
+			(($perms1 == array()) || ($perms2 == ''))) return false;
+		if ($perms1 == array()) return $perms2 = array_pop($perms1);
+		if ($perms2 == array()) return $perms1 = array_pop($perms2);;
 
 		foreach ($perms1 as $perm1) {
 			$isimplied = false;
@@ -288,7 +290,7 @@ class xarSchemas
 	{
 //	return $this->getSchema($schemaname);;
 
-	//Get the inherited permissions
+//Get the inherited ancestors of the participant
 		$ancestors = $participant->getAncestors();
 
 // set up an array to hold the permissions
@@ -315,7 +317,7 @@ class xarSchemas
 // for each one winnow the  assigned permissions and then the inherited
 				foreach ($perms as $perm) {
 					$permissions = $this->winnow(array($perm),$permissions);
-					$permissions = $this->winnow($perm->getAncestors(),$permissions);
+					$permissions = $this->winnow($perm->getDescendants(),$permissions);
 				}
 
 // add some info on the group they belong to and stick it all in an array
@@ -553,6 +555,65 @@ class xarPermissions extends xarSchemas
     }
 
 /**
+ * gettoplevelpermissions: returns all the current permissions that have no parent.
+ *
+ * Returns an array of all the permissions in the permissions repository
+ * that are top level entries, i.e. have no parent
+ * This function will initially load the permissions from the db into an array and return it.
+ * On subsequent calls it just returns the array .
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  array of permissions
+ * @throws  none
+ * @todo    none
+*/
+    function gettoplevelpermissions() {
+	if ((!isset($alltoplevelpermissions)) || count($alltoplevelpermissions)==0) {
+			$query = "SELECT xar_permissions.xar_pid,
+						xar_permissions.xar_name,
+						xar_permissions.xar_realm,
+						xar_permissions.xar_module,
+						xar_permissions.xar_component,
+						xar_permissions.xar_instance,
+						xar_permissions.xar_level,
+						xar_permissions.xar_description,
+						xar_permmembers.xar_parentid
+						FROM $this->permissionstable INNER JOIN $this->permmemberstable
+						ON xar_permissions.xar_pid = xar_permmembers.xar_pid
+						WHERE xar_permmembers.xar_parentid = 0
+						ORDER BY xar_permissions.xar_name";
+
+			$result = $this->dbconn->Execute($query);
+			if (!$result) return;
+
+			$permissions = array();
+			$ind = 0;
+			while(!$result->EOF) {
+				list($pid, $name, $realm, $module, $component, $instance, $level,
+						$description,$parentid) = $result->fields;
+				$ind = $ind + 1;
+				$permissions[$ind] = array('pid' => $pid,
+								   'name' => $name,
+								   'realm' => $realm,
+								   'module' => $module,
+								   'component' => $component,
+								   'instance' => $instance,
+								   'level' => $level,
+								   'description' => $description,
+								   'parentid' => $parentid);
+				$result->MoveNext();
+			}
+			$alltoplevelpermissions = $permissions;
+			return $permissions;
+		}
+		else {
+			return $alltoplevelpermissions;
+		}
+    }
+
+/**
  * getrealms: returns all the current realms.
  *
  * Returns an array of all the realms in the realms table
@@ -632,7 +693,7 @@ class xarPermissions extends xarSchemas
 			$modules[2] = array('id' => 0,
 							   'name' => 'None');
 
-// add the realms from the database
+// add the modules from the database
 // TODO: maybe remove the key, don't really need it
 			$ind = 2;
 			while(!$result->EOF) {
@@ -722,6 +783,27 @@ class xarPermissions extends xarSchemas
 	}
 
 /**
+ * maketrees: create an array of all the permission trees
+ *
+ * Makes a tree representation of each permissions tree
+ * Returns an array of the trees
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  private
+ * @param   none
+ * @return  array of trees
+ * @throws  none
+ * @todo    none
+*/
+	function maketrees() {
+		$trees = array();
+		foreach ($this->gettoplevelpermissions() as $entry) {
+			array_push($trees,$this->maketree($this->getPermission($entry['pid'])));
+		}
+		return $trees;
+	}
+
+/**
  * maketree: make a tree of permissions
  *
  * Makes a tree representation of a permissions hierarchy
@@ -733,8 +815,8 @@ class xarPermissions extends xarSchemas
  * @throws  none
  * @todo    none
 */
-	function maketree() {
-		return $this->addbranches(array('parent'=>$this->getpermissionfast(1)));
+	function maketree($permission) {
+		return $this->addbranches(array('parent'=>$this->getpermissionfast($permission->getID())));
 	}
 
 /**
@@ -756,6 +838,24 @@ class xarPermissions extends xarSchemas
 			array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
 		}
 		return $node;
+	}
+
+/**
+ * drawtrees: create an array of tree drawings
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  private
+ * @param   none
+ * @return  array of tree drawings
+ * @throws  none
+ * @todo    none
+*/
+	function drawtrees(){
+		$drawntrees = array();
+		foreach($this->maketrees() as $tree){
+			array_push($drawntrees,array('tree'=>$this->drawtree($tree)));
+		}
+		return $drawntrees;
 	}
 
 /**
@@ -798,7 +898,7 @@ function drawtree($node) {
 	$this->level = 0;
 	$this->alreadydone = array();
 
-	$this->drawbranch($node);
+	$this->drawbranch($node, false);
 	$this->html .= '</table>';
 	return $this->html;
 }
@@ -817,26 +917,25 @@ function drawtree($node) {
  * @todo    none
 */
 
-function drawbranch($node){
+function drawbranch($node, $expand){
 
 	$this->level = $this->level + 1;
 	$this->nodeindex = $this->nodeindex + 1;
 	$object = $node['parent'];
 
-// check if we've aleady processed this entry
-	if (in_array($object['pid'],$this->alreadydone)) {
-		$drawchildren = false;
+// if we want a collapsed tree, remove the children
+	if (!$expand) $node['children'] = array();
+/*	if (in_array($object['pid'],$this->alreadydone)) {
 		$node['children'] = array();
 	}
 	else {
-		$drawchildren = true;
 		array_push($this->alreadydone,$object['pid']);
 	}
-
+*/
 // now begin adding rows to the string
 	$this->html .= '<tr><td>';
 
-// this table hold the index, the tree drawing gifs and the info about the permission
+// this table holds the index, the tree drawing gifs and the info about the permission
 	$this->html .= '<table cellspacing="0" cellpadding="0" border="0"><tr><td width="20">' . $this->nodeindex . '</td><td width="$indentwidth">';
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
@@ -853,29 +952,25 @@ function drawbranch($node){
 		$this->html .= $this->fullbox . '</td>';
 	}
 	else {
-		$this->html .= $this->bar;
+		if ($this->nodeindex != 1){
+			$this->html .= $this->bar;
+		}
 		$this->html .= $this->emptybox . '</td>';
 	}
 	$this->html .=  '<td valign="middle">&nbsp;';
 
-// if we've already done this entry skip the links and just tell the user
-	if (!$drawchildren) {
+// draw the name of the object and make a link
+	if($object['pid'] < 3) {
 		$this->html .= '<b>' . $object['name'] . '</b>: ';
-		$this->html .= ' see the entry above';
 	}
-	else{
-		if($object['pid'] < 3) {
-			$this->html .= '<b>' . $object['name'] . '</b>: ';
-		}
-		else {
-			$this->html .= '<a href="' .
-						xarModURL('security',
-							 'admin',
-							 'modifypermission',
-							 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-		}
-		$this->html .= count($this->getsubpermissions($object['pid'])) . ' subpermissions';
+	else {
+		$this->html .= '<a href="' .
+					xarModURL('security',
+						 'admin',
+						 'modifypermission',
+						 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
 	}
+	$this->html .= count($this->getsubpermissions($object['pid'])) . ' components';
 	$this->html .= '</td></tr></table></td>';
 
 // this next table holds the Delete, Users and Permissions links
@@ -919,7 +1014,7 @@ function drawbranch($node){
 		}
 
 // draw this child
-		$this->drawbranch($subnode);
+		$this->drawbranch($subnode, $expand);
 
 // we're done; remove the indent string
 		array_pop($this->indent);
@@ -1078,7 +1173,7 @@ function drawindent() {
 	}
 
 /**
- * isRoot: defines the root of the permissions hierarchy
+ * makeEntry: defines a top level entry of the permissions hierarchy
  *
  * Creates an entry in the permmembers table
  * This is a convenience class for module developers
@@ -1090,7 +1185,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exceptions for bad input
 */
- 	function isRoot($rootname)
+ 	function makeEntry($rootname)
 	{
 // get the data for the root object
 		$query = "SELECT xar_pid
@@ -1388,9 +1483,29 @@ class xarPermission extends xarSchema
 		$parentperm = $perms->getpermission($this->parentid);
 
 // make this permission a child of its parent
-		return $parentperm->addMember($this);
+		return $this->makeEntry();
 	}
 
+/**
+ * makeEntry: sets up a permission without parents
+ *
+ * Sets up a permission as a root entry (no parent)
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  boolean
+ * @throws  none
+ * @todo    check to make sure the child is not a parent of the parent
+*/
+    function makeEntry() {
+
+		$query = "INSERT INTO $this->permmemberstable
+				VALUES (" . $this->getID() . ",0)";
+		//Execute the query, bail if an exception was thrown
+		if (!$this->dbconn->Execute($query)) return;
+		return true;
+    }
 
 /**
  * addMember: adds a permission to a permission
@@ -1656,6 +1771,81 @@ class xarPermission extends xarSchema
 		$ancestors = array();
 		$parents = $schemas->winnow($ancestors,$parents);
 		return $ancestors;
+    }
+
+/**
+ * getChildren: returns the child objects of a permission
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  array of permission objects
+ * @throws  none
+ * @todo    none
+*/
+    function getChildren()
+    {
+// create an array to hold the objects to be returned
+		$children = array();
+
+// if this is a user just perform a SELECT on the partmembers table
+		$query = "SELECT xar_permissions.*, xar_permmembers.xar_parentid
+					FROM $this->permissionstable INNER JOIN $this->permmemberstable
+					ON xar_permissions.xar_pid = xar_permmembers.xar_pid
+					WHERE xar_permmembers.xar_parentid = " . $this->getID();
+		$result = $this->dbconn->Execute($query);
+		if (!$result) return;
+
+// collect the table values and use them to create new participant objects
+			while(!$result->EOF) {
+			list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
+			$pargs = array('pid'=>$pid,
+							'name'=>$name,
+							'realm'=>$realm,
+							'module'=>$module,
+							'component'=>$component,
+							'instance'=>$instance,
+							'level'=>$level,
+							'description'=>$description,
+							'parentid' => $parentid);
+			array_push($children, new xarPermission($pargs));
+			$result->MoveNext();
+			}
+// done
+		return $children;
+	}
+
+/**
+ * getDescendants: returns all objects in the permissions hierarchy below a permission
+ *
+ * The returned permissions are automatically winnowed
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  array of permission objects
+ * @throws  none
+ * @todo    none
+*/
+    function getDescendants()
+    {
+// start by getting an array of the parents
+		$children = $this->getChildren();
+
+//Get the child field for each child
+		$schemas = new xarSchemas();
+		while (list($key, $child) = each($children)) {
+			$descendants = $child->getChildren();
+			foreach ($descendants as $descendant) {
+				array_push($children,$descendant);
+			}
+		}
+
+//done
+		$descendants = array();
+		$children = $schemas->winnow($descendants,$children);
+		return $descendants;
     }
 
 /**
