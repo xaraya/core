@@ -643,12 +643,6 @@ function installer_admin_finish()
         return;
     }
 
-    xarConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
-
-    if (xarVarIsCached('Config.Variables', 'Site.BL.DefaultTheme')) {
-        xarVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
-    }
-
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
     return $data;
