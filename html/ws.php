@@ -14,7 +14,7 @@
 
 
 /**
- * Entry point for the webservices module
+ * Entry point for webservices 
  *
  * Just here to create a convenient url, the
  * actual work is done in the module, so we
@@ -53,7 +53,7 @@ function xarWebservicesMain()
      create an instance of an that server and 
      serve the request according the ther servers protocol
     */
-    $type = xarRequestGetVar('type');
+    xarVarFetch('type','enum:xmlrpc:trackback:soap:webdav:flashremoting',$type,'');
     xarLogMessage("In webservices with type=$type");
     $server=false;
     switch($type) {
