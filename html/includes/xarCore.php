@@ -23,7 +23,7 @@ define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
 /*
- * System dependencies for optional systems
+ * System dependencies for (optional) systems
  * ----------------------------------------------
  * | Name           | Depends on                |
  * ----------------------------------------------
@@ -33,6 +33,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * | USER           | SESSION, ADODB            |
  * | BLOCKS         | CONFIGURATION, ADODB      | (Paul, can you confirm this?)
  * | MODULES        | CONFIGURATION, ADODB      |
+ * | EVENTS         | MODULES                   |
  * ----------------------------------------------
  *
  *
@@ -47,6 +48,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  *      |- BLOCKS       (00011001)
  *      |
  *      |- MODULES      (00101001)
+ *
  */
  
 /*

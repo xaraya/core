@@ -88,6 +88,9 @@ function xarMain()
         ob_end_clean();
     }
 
+    // We're all done, one ServerRequest made
+    xarEvt_Fire('ServerRequest');
+
     // Close the session
     xarSession_close();
 
@@ -110,10 +113,7 @@ function xarMain()
     //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
-    // We're all done, one ServerRequest made
-    xarEvt_Fire('ServerRequest');
-
-    // Handle exceptions (the bubble at the top handler)
+     // Handle exceptions (the bubble at the top handler
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
     
     echo $pageOutput;
