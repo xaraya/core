@@ -29,7 +29,7 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-require_once "includes/transforms/ConvertCharset.class.php";
+require_once "includes/transforms/ConvertCharset.php";
 
 /**
  * Initializes the Multi Language System
