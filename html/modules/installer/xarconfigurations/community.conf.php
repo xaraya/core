@@ -124,10 +124,6 @@ function installer_community_configuration_load($args)
         xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // xmlrpcserver
         xarModAPIFunc('modules','admin','activate',array('regid'=>743));
     }
-    if(in_array('m745',$args)) {
-        xarModAPIFunc('modules','admin','initialise',array('regid'=>745));    // bloggerapi
-        xarModAPIFunc('modules','admin','activate',array('regid'=>745));
-    }
     if(in_array('m147',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
         xarModAPIFunc('modules','admin','activate',array('regid'=>147));
@@ -175,6 +171,10 @@ function installer_community_configuration_load($args)
     if(in_array('m746',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>746));    // xmlrpcvalidatorapi
         xarModAPIFunc('modules','admin','activate',array('regid'=>746));
+    }
+    if(in_array('m745',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>745));    // bloggerapi
+        xarModAPIFunc('modules','admin','activate',array('regid'=>745));
     }
 
     $content['marker'] = '[x]';                                           // create the user menu
