@@ -1,4 +1,4 @@
-<xar:if condition="xarModisAvailable($search)">
+<xar:if condition="xarModisAvailable('search')">
 	<form action="index.php">
 		<input type="hidden" name="module" id="module" value="search" />
 		<a href="&xar-modurl-search-user-main;"><label for="q"><xar:mlstring>Search</xar:mlstring></label></a> 

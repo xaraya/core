@@ -1325,6 +1325,8 @@ function xarModIsAvailable($modName)
 {
     static $modAvailableCache = array();
 
+    $modName = strtolower($modName);
+
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
