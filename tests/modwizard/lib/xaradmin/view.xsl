@@ -46,8 +46,8 @@
  * 'adminpanels - configurations - configure overview'.
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_admin_view($args) {
-
+function <xsl:value-of select="$module_prefix" />_admin_view($args) 
+{
     list( $itemtype ) = xarVarCleanFromInput('itemtype' );
 
     switch( $itemtype ) {

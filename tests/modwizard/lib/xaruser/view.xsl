@@ -42,8 +42,8 @@
  * userpriv_viewtable().
  *
  */
-function <xsl:value-of select="$module_prefix" />_user_view( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_user_view( $args ) 
+{
     $itemtype = xarVarCleanFromInput( 'itemtype' );
     extract( $args );
 

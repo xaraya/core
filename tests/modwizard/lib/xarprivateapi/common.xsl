@@ -43,8 +43,8 @@
  *      'menu'      => Array with information about the module menu
  *      'statusmsg' => Status message if set
  */
-function <xsl:value-of select="$module_prefix" />_privateapi_common( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_privateapi_common( $args ) 
+{
     extract( $args );
 
     $common = array();

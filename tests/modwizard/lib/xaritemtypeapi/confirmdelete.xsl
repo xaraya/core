@@ -39,8 +39,8 @@
  * Confirm the deletion of a <xsl:value-of select="@name" /> object.
  *
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_confirmdelete( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_confirmdelete( $args ) 
+{
     if (!xarSecurityCheck( 'Delete<xsl:value-of select="$module_prefix" />')) return;
 
     list ( $itemid ) = xarVarCleanFromInput( 'itemid' );

@@ -46,8 +46,8 @@
  * o
  *
  */
-function <xsl:value-of select="$module_prefix" />_userapi_encode_shorturl( $args ) {
-    <xsl:if test="boolean( database/table[@user='true'] )">
+function <xsl:value-of select="$module_prefix" />_userapi_encode_shorturl( $args ) 
+{    <xsl:if test="boolean( database/table[@user='true'] )">
     $func       = NULL;
     $module     = NULL;
     $itemid     = NULL;

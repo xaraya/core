@@ -32,8 +32,8 @@
 
 <xsl:template mode="xaruser_main_func" match="xaraya_module">
     <xsl:variable name="module_prefix" select="registry/name" />
-function <xsl:value-of select="$module_prefix" />_user_main() {
-
+function <xsl:value-of select="$module_prefix" />_user_main() 
+{
     // Security Check <xsl:if test="$gCommentsLevel >=2">
     // It is important to do this as early as possible to avoid potential
     // security holes or just too much wasted processing.  For the main

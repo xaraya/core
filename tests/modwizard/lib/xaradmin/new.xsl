@@ -52,8 +52,8 @@
  *      'itemtype'  =>  type of the object to create
  * </xsl:if>
  */
-function <xsl:value-of select="$module_prefix" />_admin_new( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_admin_new( $args ) 
+{
     list( $authid, $preview, $itemtype, $cancel ) =
         xarVarCleanFromInput( 'authid', 'preview', 'itemtype', 'cancel' );
     extract( $args );

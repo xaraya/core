@@ -46,8 +46,8 @@
  *                        'pubdate','pubtypeid','notes','status','body'
  *                        Optional fields : 'cids','author','counter','rating','dynamicdata'
  */
-function <xsl:value-of select="$module_prefix" />_userapi_getall( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_getall( $args ) 
+{
     extract( $args );
 
     if ( empty($startnum) ) {

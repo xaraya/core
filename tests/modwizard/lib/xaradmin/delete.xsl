@@ -52,8 +52,8 @@
  *      'itemid'    =>  id of the item to delete
  * </xsl:if>
  */
-function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) 
+{
     list( $authid, $confirm, $itemtype, $cancel, $itemid ) =
         xarVarCleanFromInput( 'authid', 'confirm', 'itemtype', 'cancel', 'itemid' );
     extract( $args );

@@ -37,8 +37,8 @@
  *
  * // TODO // explain that the function is called from admin and user * interface.
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_view( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_view( $args ) 
+{
     if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
 
     // Get parameter from browser

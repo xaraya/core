@@ -42,8 +42,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_adminapi_getmenulinks ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_adminapi_getmenulinks ( $args ) 
+{
     if (xarSecurityCheck('View<xsl:value-of select="$module_prefix" />')) {
 
         $menulinks[] = array(

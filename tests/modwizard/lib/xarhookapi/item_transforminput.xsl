@@ -46,8 +46,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hookapi_item_transforminput ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_hookapi_item_transforminput ( $args ) 
+{
     extract($args);
 
     // Argument check
@@ -78,8 +78,8 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_transforminput ( 
 
 }
 
-function <xsl:value-of select="$module_prefix" />_transforminput( $text ) {
-
+function <xsl:value-of select="$module_prefix" />_transforminput( $text ) 
+{
     return '[ Input Hook: ] ' . $text;
 
 }

@@ -42,8 +42,8 @@
  * The main ( default ) administration view.
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_admin_main() {
-
+function <xsl:value-of select="$module_prefix" />_admin_main() 
+{
     if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
 
     // Check if we should show the overview page <xsl:if test="$gCommentsLevel >=2">

@@ -44,8 +44,8 @@
  * @param $args['fields'] array with all the fields to return
  * @param $args['fields'] array with all the fields to return
  */
-function <xsl:value-of select="$module_prefix" />_userapi_get( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_get( $args ) 
+{
     extract( $args );
 
     if ( !isset( $getobject ) ) {

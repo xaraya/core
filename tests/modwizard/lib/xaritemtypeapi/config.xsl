@@ -39,8 +39,8 @@
 /**
  * Administration for the <xsl:value-of select="$module_prefix" /> module.
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_config( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_config( $args ) 
+{
     $data =&amp; xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'private'

@@ -41,8 +41,8 @@
  * @returns array
  * @return array containing the itemlink(s) for the item(s).
  */
-function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args ) 
+{
     extract($args);
 
     if (empty($itemtype)) {

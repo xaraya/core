@@ -46,8 +46,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hookapi_module_updateconfig ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_hookapi_module_updateconfig ( $args ) 
+{
     extract( $args );
 
     if (!isset($extrainfo)) {

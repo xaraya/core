@@ -47,8 +47,8 @@
  * o
  *
  */
-function <xsl:value-of select="$module_prefix" />_userapi_decode_shorturl( $params ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_decode_shorturl( $params ) 
+{
     <xsl:if test="boolean( database/table[@user='true'] )">
     if ( $params[0] != '<xsl:value-of select="$module_prefix" />' )
         return;

@@ -38,8 +38,8 @@
  * @returns array
  * @return array containing the item types and their description
  */
-function <xsl:value-of select="$module_prefix" />_userapi_getitemtypes() {
-
+function <xsl:value-of select="$module_prefix" />_userapi_getitemtypes() 
+{
     $itemtypes = array();
 
     <xsl:for-each select="database/table">

@@ -46,8 +46,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hook_module_modifyconfig ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_hook_module_modifyconfig ( $args ) 
+{
     extract( $args );
 
     if (!isset($extrainfo)) {

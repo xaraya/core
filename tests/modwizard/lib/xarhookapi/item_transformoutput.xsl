@@ -46,8 +46,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hookapi_item_transformoutput ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_hookapi_item_transformoutput ( $args ) 
+{
     extract($args);
 
     // Argument check
@@ -77,8 +77,8 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_transformoutput (
     return $result;
 }
 
-function <xsl:value-of select="$module_prefix" />_transformoutput( $text ) {
-
+function <xsl:value-of select="$module_prefix" />_transformoutput( $text ) 
+{
     return '[ My Hook: Change me in xarhookapi/item_transformoutput.xsl ] ' . $text;
 
 }

@@ -40,8 +40,8 @@
 /**
  * Modify a <xsl:value-of select="@name" /> object
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_modify( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_modify( $args ) 
+{
     if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
 
     list( $itemid ,$authid) = xarVarCleanFromInput( 'itemid', 'authid' );

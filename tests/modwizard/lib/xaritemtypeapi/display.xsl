@@ -39,8 +39,8 @@
 /**
  * // TODO // add description
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_display( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_display( $args ) 
+{
     // Security check
     if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
 

@@ -40,8 +40,8 @@ MODE: xaritemtypeapi_update               MATCH:  xaraya_module
 /**
 * Update a <xsl:value-of select="@name" /> object
 */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_update( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_update( $args ) 
+{
     if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
 
     list( $itemid) = xarVarCleanFromInput( 'itemid' );

@@ -41,8 +41,8 @@
  * @param array( 'itemtype' => &lt;itemtype&gt; )
  * @return number of items
  */
-function <xsl:value-of select="$module_prefix" />_userapi_count( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_count( $args ) 
+{
     extract( $args );
 
     // Retrieve all objects via the dynamicdata module api.

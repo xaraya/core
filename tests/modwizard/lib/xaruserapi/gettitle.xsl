@@ -41,8 +41,8 @@
  * @param $args['item'] item
  * @param $args['itemtype'] itemtyp
  */
-function <xsl:value-of select="$module_prefix" />_userapi_gettitle( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_gettitle( $args ) 
+{
     extract( $args );
 
     if ( empty( $itemtype ) ) return 'Itemtype missing';

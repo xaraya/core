@@ -43,8 +43,8 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_userapi_getmenulinks ( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_userapi_getmenulinks ( $args ) 
+{
     <xsl:if test="$gCommentsLevel >= 2">
     // First we need to do a security check to ensure that we only return menu items
     // that we are suppose to see.  It will be important to add for each menu item that

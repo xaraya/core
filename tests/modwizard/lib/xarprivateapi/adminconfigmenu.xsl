@@ -37,8 +37,8 @@
 /**
  * Create a little submenu for the configuration screen.
  */
-function <xsl:value-of select="$module_prefix" />_privateapi_adminconfigmenu( $itemtype ) {
-
+function <xsl:value-of select="$module_prefix" />_privateapi_adminconfigmenu( $itemtype ) 
+{
     /*
      * Build the configuration submenu
      */

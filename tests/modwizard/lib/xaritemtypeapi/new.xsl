@@ -40,8 +40,8 @@
  * Create a <xsl:value-of select="@name" /> object
  *
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_new( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_new( $args ) 
+{
     if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix" />')) return;
 
     list ( $authid ) = xarVarCleanFromInput( 'authid' );

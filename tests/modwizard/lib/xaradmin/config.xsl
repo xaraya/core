@@ -38,8 +38,8 @@
 /**
  * Administration for the <xsl:value-of select="$module_prefix" /> module.
  */
-function <xsl:value-of select="$module_prefix" />_admin_config( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_admin_config( $args ) 
+{
     list( $cancel, $itemtype ) = xarVarCleanFromInput( 'cancel', 'itemtype' );
     extract( $args );
 
@@ -85,8 +85,8 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args ) {
 /**
  * Administration for the <xsl:value-of select="$module_prefix" /> module.
  */
-function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) 
+{
     $data = xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'private'

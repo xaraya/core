@@ -40,8 +40,8 @@
  * Create a <xsl:value-of select="@name" /> object
  *
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_create( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_create( $args ) 
+{
     if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix" />')) return;
 
     extract( $args );

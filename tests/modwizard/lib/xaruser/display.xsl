@@ -61,8 +61,8 @@
  *
  * </xsl:if>
  */
-function <xsl:value-of select="$module_prefix" />_user_display( $args ) {
-
+function <xsl:value-of select="$module_prefix" />_user_display( $args ) 
+{
     $itemtype = xarVarCleanFromInput( 'itemtype' );
     extract( $args );
 
