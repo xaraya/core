@@ -104,93 +104,77 @@ function adminpanels_adminmenublock_display($blockinfo){
 
     switch(strtolower($menustyle)){
         case 'byname':
-            // sort by name
-            foreach($mods as $mod){
-                $label = $mod['name'];
-                $link = xarModURL($label ,'admin', 'main', array());
-
-                // depending on which module is currently loaded, prepare display data
-                if($label == $thismodname && $thismodtype == 'admin'){
-                    // clarification (to avoid new template bugs)
-                    // this module is currently loaded (active), we need to display
-                    // NOTE: it has been changed a bit to satisfy users logic (bug/feature request #472) 
-                    // OLD WAY: 1. blank label 2. no link 3. no alt text 4. links to module functions
-                    // NEW WAY: a) as above, when users looking at default main function
-                    // NEW WAY: b) main module link becomes active with alt text when user is looking at another screen of this module
-                    // lets also add clear identifier for the template that this module is the active one
-                    $labelDisplay = ucwords($label);
-                    if ($thisfuncname != 'main'){
-                        $adminmods[] = array(   'label'     => $labelDisplay,
-                                                'link'      => $link,
-                                                'modactive' => 1,
-                                                'maintitle' => xarML('View default screen for module ').$labelDisplay);
-                    } else {
-                        $adminmods[] = array(   'label'     => $labelDisplay,
-                                                'link'      => '',
-                                                'modactive' => 1,
-                                                'maintitle' => '');
-                    }
-
-                    // Call the admin menu links function, but don't raise an exception if it's not there
-                    $menulinks = xarModAPIFunc($label,'admin','getmenulinks',array(),false);
-                    // scan array and prepare the links
-                    if (!empty($menulinks)){
-                        $indlinks = array();
-                        foreach($menulinks as $menulink){
-                            // please note how we place the marker against active function link
-                            if ($menulink['url'] == $currenturl) {
-                                $funcactive = 1;
-                            }else{
-                                $funcactive = 0;
-                            }
-
-                            $indlinks[] = array('adminlink'     => $menulink['url'],
-                                                'adminlabel'    => $menulink['label'],
-                                                'admintitle'    => $menulink['title'],
-                                                'funcactive'    => $funcactive);
-                        }
-                    }else{
-                        // not sure if we need this
-                        // JC -- You do for E_ALL Errors.
-                        $indlinks= array();
-                    }
-                }else{
-                    // clarification (to avoid new template bugs)
-                    // this module is currently not loaded (inactive), we need to display
-                    // 1. link 2. label 3. alt text ($desc var in this case)
-                    // lets also add clear identifier for the template that this module is not the active one
-                    $modid = xarModGetIDFromName($label);
-                    $modinfo = xarModGetInfo($modid);
-                    if($modinfo){
-                        // is this in the legacy now?
-                        $desc = $modinfo['description'];
-                    }
-                    $labelDisplay = ucwords($label);
-                    $adminmods[] = array(   'label'     => $labelDisplay,
-                                            'link'      => $link,
-                                            'desc'      => $desc,
-                                            'modactive' => 0);
-                }
-            }
-            // prepare the data for template(s)
-
-            // not sure if we need this
-            // JC -- For E_ALL Errors
-            if (empty($indlinks)){
-                $indlinks = '';
-            }
-
+            // display by name
+			foreach($mods as $mod){
+				$modname = $mod['name'];    
+				// if this module is loaded we probably want to display it with -current css rule in the menu
+				if($modname == $thismodname && $thismodtype == 'admin'){
+					
+					// get URL to module's main function
+					$link = xarModURL($modname ,'admin', 'main', array());
+					
+					// this module is currently loaded (active), we need to display
+					// 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
+					// 5. URL with title text, when user is looking at other than default function of this module
+					$labelDisplay = ucwords($modname);
+					
+					// adding attributes and flags to each module link for the template
+					if ($thisfuncname == 'main'){
+						$adminmods[$modname]['features'] = array( 	'label'     => $labelDisplay,
+																		'link'      => $link,
+																		'modactive' => 1,
+																		'overview' 	=> 0,
+																		'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+					} else {
+						$adminmods[$modname]['features'] = array( 	'label'     => $labelDisplay,
+																		'link'      => $link,
+																		'modactive' => 1,
+																		'overview' 	=> 1,
+																		'maintitle' => xarML('Display overview information for module ').$labelDisplay);
+					}			
+					// For active module we need to display the mod functions links
+					// call the api function to obtain function links, but don't raise an exception if it's not there
+					$menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+					// scan array and prepare the links
+					if (!empty($menulinks)) {
+						foreach($menulinks as $menulink){
+							
+							// please note how we place the marker against active function link
+							if ($menulink['url'] == $currenturl) {
+								$funcactive = 1;
+							}else{
+								$funcactive = 0;
+							}
+	
+							$adminmods[$modname]['indlinks'][] = array(	'adminlink' 	=> $menulink['url'],
+																			'adminlabel'    => $menulink['label'],
+																			'admintitle'    => $menulink['title'],
+																			'funcactive'    => $funcactive);
+						}							
+					}else{
+						// not sure if we need this
+						$indlinks= array();
+					}
+				}else{
+				   $link = xarModURL($modname ,'admin', 'main', array());
+				   $labelDisplay = ucwords($modname);
+				   $adminmods[$modname]['features'] = array('label'     => $labelDisplay,
+																'link'      => $link,
+																'modactive' => 0,
+																'overview' 	=> 0,
+																'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+				}
+			}
             $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
             // TPL override
             if (empty($blockinfo['template'])) {
-                $template = 'sidemenu';
+                $template = 'verticallistbyname';
             } else {
                 $template = $blockinfo['template'];
             }
             $data = xarTplBlock('adminpanels',
                                 $template,
                                 array(  'adminmods'     => $adminmods,
-                                        'indlinks'      => $indlinks,
                                         'menustyle'     => $menustyle,
                                         'logouturl'     => $logouturl,
                                         'logoutlabel'   => $logoutlabel,
@@ -347,6 +331,5 @@ function adminpanels_adminmenublock_display($blockinfo){
     $blockinfo['content'] = $data;
     return $blockinfo;
 }
-
 
 ?>
