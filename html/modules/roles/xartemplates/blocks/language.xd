@@ -2,7 +2,7 @@
     <input type="hidden" name="return_url" value="#$return_url#" />
     <select name="#$form_picker_name#">
         <xar:loop name="$locales">
-            <xar:if condition="$selected">
+            <xar:if condition="$loop:item['selected']">
                 <option value="#$loop:item['locale']#" selected="selected">#$loop:item['name']# (#$loop:item['country']#)</option>
             <xar:else/>
                 <option value="#$loop:item['locale']#">#$loop:item['name']# (#$loop:item['country']#)</option>
