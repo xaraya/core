@@ -1913,13 +1913,11 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $resolver->push("loop:$id:number", '$_bl_loop_number'.$loopCounter);
         }
 
-        $output = '$_bl_loop_index'.$loopCounter." = -1; ";
-        $output .= '$_bl_loop_number'.$loopCounter." = 0; ";
+        $output = '$_bl_loop_index' . $loopCounter . ' = -1; ';
+        $output .= '$_bl_loop_number' . $loopCounter . " = $loopCounter; ";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
         // Do the incrementing inside here ASAP, as the loop may be interupted by a xar:continue
         $output .= '$_bl_loop_index'.$loopCounter."++; ";
-        $output .= '$_bl_loop_number'.$loopCounter."++; ";
-
         $prefix = '_bl_loop_' . (!isset($id)) ? $loopCounter: $id;               
         
         $output .= 'if (is_array($_bl_loop_item'.$loopCounter.')) extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
