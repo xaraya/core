@@ -3,7 +3,7 @@
 <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
 <xar:mlstring>Title: </xar:mlstring>
-<input type="text" name="#$name#[title]" value="#$title#" size="#$size#" maxlength="#$maxlength#" id="#$id#" #$tabindex#  />
+<input type="text" name="#$name#[title]" value="#$title#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
 <br />
 <xar:mlstring>URL: </xar:mlstring>
 <input type="text" name="#$name#[link]" value="#$link#" size="#$size#" maxlength="#$maxlength#"  />
