@@ -1,19 +1,31 @@
-<xar:include file="user-menu" type="module"/>
+<div class="xar-mod-head"><span class="xar-mod-title">#$name#</span></div>
+<div class="xar-mod-body" align="center"><br/>
 
-<table>
-<tr><xar:mlstring>User Name</xar:mlstring>: #$data['uname']#</tr>
-<tr><xar:mlstring>Real Name</xar:mlstring>: #$data['name']#</tr>
-<tr><xar:mlstring>Email</xar:mlstring>: #$data['email']#</tr>
-<tr><xar:mlstring>Home Page</xar:mlstring>: #$data['url']#</tr>
+<table border="0" width="30%" cellspacing="1" cellpadding="2">
+	<tr class="xar-norm" valign="top">
+		<td>
+			<xar:mlstring>Real Name</xar:mlstring>: 
+		</td>
+		<td>
+			#$name#
+		</td>
+	</tr>
+	<tr class="xar-norm" valign="top">
+		<td>
+			<xar:mlstring>Email</xar:mlstring>: 
+		</td>
+		<td>
+			#$email#	
+		</td>
+	</tr>
+	<tr class="xar-norm" valign="top">
+		<td>
+			<xar:mlstring>Home Page</xar:mlstring>: 
+		</td>
+		<td>
+			#$url#
+		</td>
+	</tr>
 </table>
 
-TODO: call hooks
-
-xarModCallHooks('item',
-                                 'display',
-                                 $uid,
-                                 xarModURL('users',
-                                          'user',
-                                          'display',
-                                          array('uid' => $uid))));
-
+#$hooks#

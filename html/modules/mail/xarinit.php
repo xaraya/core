@@ -22,6 +22,34 @@ function mail_init()
     xarModSetVar('mail', 'priority', '3');
     xarModSetVar('mail', 'smtpPort', '25');
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
+
+    // when a module item is created
+    if (!xarModRegisterHook('item', 'create', 'API',
+                           'mail', 'admin', 'hookmailcreate')) {
+        return false;
+    }
+
+    // when a module item is deleted
+    if (!xarModRegisterHook('item', 'delete', 'API',
+                           'mail', 'admin', 'hookmaildelete')) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Activate the mail module
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
+ */
+function mail_activate()
+{
+
+
     return true;
 }
 
