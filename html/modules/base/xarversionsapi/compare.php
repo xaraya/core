@@ -28,35 +28,29 @@ function base_versionsapi_compare($args)
     // the comparison.
     // With strict reset (false), then string comparisons will be
     // performed where one or both version levels are not numeric.
-    if (!isset($strict))
-    {
+    if (!isset($strict)) {
         $strict = true;
     }
 
-    if (!isset($ver1))
-    {
+    if (!isset($ver1)) {
         $ver1 = '0';
     }
 
-    if (!isset($ver2))
-    {
+    if (!isset($ver2)) {
         $ver2 = '0';
     }
 
     // Get the number of levels to check.
-    if (!settype($levels, 'integer') || $levels < 0)
-    {
+    if (!settype($levels, 'integer') || $levels < 0) {
         $levels = 0;
     }
 
     // If arrays have been passed in, convert them to a legal-format string.
-    if (is_array($ver1))
-    {
+    if (is_array($ver1)) {
         $ver1 = implode('.', $ver1);
     }
 
-    if (is_array($ver2))
-    {
+    if (is_array($ver2)) {
         $ver2 = implode('.', $ver2);
     }
 
@@ -81,26 +75,23 @@ function base_versionsapi_compare($args)
     $limitlevels = max(count($ver1), count($ver2));
     
     // If limited by the calling routine, then cut it down to size.
-    if ($levels > 0 && $limitlevels > $levels)
-    {
+    if ($levels > 0 && $limitlevels > $levels) {
         $limitlevels = $levels;
     }
 
     // Pad out version arrays where necessary.
-    while(count($ver1) < $limitlevels)
-    {
+    while (count($ver1) < $limitlevels) {
         array_push($ver1, '0');
     }
 
-    while(count($ver2) < $limitlevels)
-    {
+    while (count($ver2) < $limitlevels) {
         array_push($ver2, '0');
     }
 
     $latest = 0;
 
     // Loop through each level to find out which is the latest.
-    for($i=0; $i<$limitlevels; $i++)
+    for ($i=0; $i<$limitlevels; $i++)
     {
         // Note, we are comparing strings, BUT if both values happen
         // to be numeric, then PHP will do a numeric comparison.
