@@ -61,7 +61,7 @@
 <xar:if condition="xarModGetVar('roles', 'showprivacy')">
     <xar:set name="$curnum">++$curnum</xar:set>		
 	<h3 id="privacy">#$curnum#.&nbsp;<xar:mlstring>Privacy Policy</xar:mlstring></h3>
-	<p><xar:mlstring>Registration data and other personally identifiable information that we may collect is subject to the terms of our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.</p>
+	<p><xar:mlstring>Registration data and other personally identifiable information that we may collect is subject to the terms of our</xar:mlstring> <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.</p>
 </xar:if>
 
     <xar:set name="$curnum">++$curnum</xar:set>
