@@ -58,7 +58,8 @@
                     <td nowrap>
                         <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                             <a href="#$removeurl#">#$remove#</a>
-                        <xar:elseif  condition="($state eq 3)"/>(none allowed)   
+                        <xar:elseif  condition="($state eq 3) and (($class eq 'Core Admin') or ($class eq 'Core Utility') or ($class eq 'Core Complete') or ($class eq 'Core Other'))"/>
+                            <xar:mlstring>(none allowed)</xar:mlstring>
                         </xar:if>
                         <xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                             <a href="#$deactivateurl#">#$deactivate#</a>
@@ -67,7 +68,6 @@
                             <a href="#$activateurl#">#$activate#</a>
                             <xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                                 | <a href="#$removeurl#">#$remove#</a>
-                            
                             </xar:if>
                         </xar:if>
                         <xar:if condition="$state eq 1">
