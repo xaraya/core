@@ -148,17 +148,17 @@
             </label>
             <select name="priority" id="priority">
                 <xar:if condition="xarModGetVar('mail', 'priority') eq '1'">
-                    <option label="High" value="1" selected="selected">High</option>
-                    <option label="Normal" value="3">Normal</option>
-                    <option label="Low" value="5">Low</option>
+                    <option label="High" value="1" selected="selected"><xar:mlstring>High</xar:mlstring></option>
+                    <option label="Normal" value="3"><xar:mlstring>Normal</xar:mlstring></option>
+                    <option label="Low" value="5"><xar:mlstring>Low</xar:mlstring></option>
                 <xar:elseif condition="xarModGetVar('mail', 'priority') eq '3'" />
-                    <option label="High" value="1">High</option>
-                    <option label="Normal" value="3" selected="selected">Normal</option>
-                    <option label="Low" value="5">Low</option>
+                    <option label="High" value="1"><xar:mlstring>High</xar:mlstring></option>
+                    <option label="Normal" value="3" selected="selected"><xar:mlstring>Normal</xar:mlstring></option>
+                    <option label="Low" value="5"><xar:mlstring>Low</xar:mlstring></option>
                 <xar:elseif condition="xarModGetVar('mail', 'priority') eq '5'" />
-                    <option label="High" value="1">High</option>
-                    <option label="Normal" value="3">Normal</option>
-                    <option label="Low" value="5" selected="selected">Low</option>
+                    <option label="High" value="1"><xar:mlstring>High</xar:mlstring></option>
+                    <option label="Normal" value="3"><xar:mlstring>Normal</xar:mlstring></option>
+                    <option label="Low" value="5" selected="selected"><xar:mlstring>Low</xar:mlstring></option>
                 </xar:if>
             </select>
         </div>

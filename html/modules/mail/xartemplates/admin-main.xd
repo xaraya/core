@@ -3,7 +3,7 @@
     <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+    <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
 
     <h2>
         <xar:mlstring>Overview</xar:mlstring>
