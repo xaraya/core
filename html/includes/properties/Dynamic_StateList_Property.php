@@ -152,8 +152,9 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         return $out;
     }
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+	    	extract($args);
         if (isset($value)) {
             return xarVarPrepHTMLDisplay($value);
         } else {

@@ -102,8 +102,9 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         return $output;
     }
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+	    	extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

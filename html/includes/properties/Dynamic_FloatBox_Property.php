@@ -60,8 +60,9 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 
     // default showInput() from Dynamic_TextBox_Property
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+	    	extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

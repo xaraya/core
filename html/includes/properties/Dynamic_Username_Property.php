@@ -65,8 +65,9 @@ class Dynamic_Username_Property extends Dynamic_Property
         return $output;
     }
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+	    	extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

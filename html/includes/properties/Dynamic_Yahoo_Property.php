@@ -68,8 +68,9 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+	    	extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
