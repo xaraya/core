@@ -103,7 +103,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $query = "INSERT INTO $dynamicdata (xar_dd_id,xar_dd_propid,xar_dd_itemid,xar_dd_value)
                       VALUES (?,?,?,?)";
-            $bindvars = array($nextId,$propid,$itemid,$value);
+            $bindvars = array($nextId,$propid,$itemid, (string) $value);
             $result =& $dbconn->Execute($query,$bindvars);
             if (!$result) return;
         }
@@ -158,7 +158,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             // update the dynamic data field if it exists
             if (!empty($datafields[$propid])) {
                 $query = "UPDATE $dynamicdata SET xar_dd_value = ? WHERE xar_dd_id = ?";
-                $bindvars = array($value, $datafields[$propid]);
+                $bindvars = array((string) $value, $datafields[$propid]);
             // or create it if necessary (e.g. when you add properties afterwards etc.)
             } else {
                 $nextId = $dbconn->GenId($dynamicdata);
@@ -166,7 +166,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query = "INSERT INTO $dynamicdata 
                             (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
                           VALUES (?,?,?,?)";
-                $bindvars = array($nextId,$propid,$itemid,$value);
+                $bindvars = array($nextId,$propid,$itemid, (string) $value);
             }
             $result =& $dbconn->Execute($query,$bindvars);
             if (!$result) return;
