@@ -645,8 +645,9 @@ class ADODB_DataDict {
 */
 	function ChangeTableSQL($tablename, $flds,$tableoptions=false)
 	{
-		if ( !is_array($cols = &$this->MetaColumns($tablename)) ) {
-            // XARAYA MODIFICATION - START
+        // XARAYA MODIFICATION - START
+		$cols = &$this->MetaColumns($tablename);
+		if (empty($cols)) {
             if (xarCurrentErrorType()) {
                 xarErrorHandled();
             }
