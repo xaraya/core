@@ -1,2 +1,3 @@
-Your Basic details:
-<a href="#xarModURL('users', 'user', 'user_menu', array('phase' => 'form'))#"><img src="#$icon#"></a>
+<xar:mlstring>Your Basic details</xar:mlstring>:<br /><br />
+<a href="#xarModURL('users', 'user', 'usermenu', array('phase' => 'form'))#"><img src="#$icon#"></a>
+<br />

@@ -1,0 +1,20 @@
+<div class="xar-mod-body" align="center"><br/>
+
+<table border="0" width="30%" cellspacing="1" cellpadding="2">
+	<tr class="xar-norm" valign="top">
+		<td>
+			<xar:mlstring>User Name</xar:mlstring>: 
+		</td>
+		<td>
+			#$uname#
+		</td>
+	</tr>
+	<tr class="xar-norm" valign="top">
+		<td>
+			<xar:mlstring>Email</xar:mlstring>: 
+		</td>
+		<td>
+			#$email#	
+		</td>
+	</tr>
+</table>
