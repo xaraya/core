@@ -243,7 +243,7 @@ if (empty($step)) {
         /**
          * privileges changes
          */
-
+                xarConfigSetVar('System.Core.VersionNum', '.9.0.5');
                 if (!xarModRegisterHook('item', 'waitingcontent', 'GUI',
                                        'articles', 'admin', 'waitingcontent')) {
                     return false;
@@ -269,9 +269,9 @@ if (empty($step)) {
                 xarMakePrivilegeMember('LockAdministrators','GeneralLock');
                 xarMakePrivilegeMember('LockAdministration','GeneralLock');
                 xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-                xarAssignPrivilege('Administration','Administrators');
+                //xarAssignPrivilege('Administration','Administrators');
                 xarAssignPrivilege('GeneralLock','Everybody');
-                xarAssignPrivilege('GeneralLock','Administrators');
+                //xarAssignPrivilege('GeneralLock','Administrators');
                 xarAssignPrivilege('GeneralLock','Users');
 
                 //Make sure we have the correct stuff for Anonymous and Everybody
