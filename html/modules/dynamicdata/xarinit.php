@@ -22,7 +22,8 @@ function dynamicdata_init()
     $dynamic_data = $xartable['dynamic_data'];
     $dynamic_properties = $xartable['dynamic_properties'];
 
-    include ('includes/xarTableDDL.php');
+    //Load Table Maintenance API
+    xarDBLoadTableMaintenanceAPI();
 
     $fields = array('xar_dd_id'       => array('type'        => 'integer',
                                               'null'        => false,
@@ -286,7 +287,8 @@ function dynamicdata_delete()
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    include ('includes/xarTableDDL.php');
+    //Load Table Maintenance API
+    xarDBLoadTableMaintenanceAPI();
 
     // Generate the SQL to drop the table using the API
     $sql = xarDBDropTable($xartable['dynamic_data']);
