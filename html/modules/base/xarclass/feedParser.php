@@ -185,6 +185,12 @@ class feedParser
                         case "RDF:RDF":
                             $info = $this->parseRDF($child);
                             break;
+                        case "rdf:RDF":
+                            $info = $this->parseRDF($child);
+                            break;
+                        case "UNDEF:RDF":
+                            $info = $this->parseRDF($child);
+                            break;
                         default:
                             $info["warning"] = xarML('Unknown document format: #(1)', $child['tag']);
                             break;
@@ -209,8 +215,14 @@ class feedParser
                         case "RDF2:CHANNEL":
                             $channel = $this->getRDFChannel($child);
                             break;
+                        case "UNDEF:CHANNEL":
+                            $channel = $this->getRDFChannel($child);
+                            break;
                         case "RSS:ITEM":
                         case "RDF2:ITEM":
+                            $item[] = $this->getRDFItem($child);
+                            break;
+                        case "UNDEF:ITEM":
                             $item[] = $this->getRDFItem($child);
                             break;
                         default:
@@ -262,6 +274,13 @@ class feedParser
                                 $channel['title'] = '';
                             }
                             break;
+                        case "UNDEF:TITLE":
+                            if (array_key_exists('children', $child)){
+                                $channel['title'] = $child['children'][0];
+                            }else{
+                                $channel['title'] = '';
+                            }
+                            break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
                             if (array_key_exists('children', $child)){
@@ -270,8 +289,22 @@ class feedParser
                                 $channel['link'] = '';
                             }
                             break;
+                        case "UNDEF:LINK":
+                            if (array_key_exists('children', $child)){
+                                $channel['link'] = $child['children'][0];
+                            }else{
+                                $channel['link'] = '';
+                            }
+                            break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
+                            if (array_key_exists('children', $child)){
+                                $channel['description'] = $child['children'][0];
+                            }else{
+                                $channel['description'] = '';
+                            }
+                            break;
+                        case "UNDEF:DESCRIPTION":
                             if (array_key_exists('children', $child)){
                                 $channel['description'] = $child['children'][0];
                             }else{
@@ -366,6 +399,13 @@ class feedParser
                                 $item['title'] = '';
                             }
                             break;
+                        case "UNDEF:TITLE":
+                            if (array_key_exists('children', $child)){
+                                $item['title'] = $child['children'][0];
+                            }else{
+                                $item['title'] = '';
+                            }
+                            break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
                             if (array_key_exists('children', $child)){
@@ -374,8 +414,22 @@ class feedParser
                                 $item['link'] = '';
                             }
                             break;
+                        case "UNDEF:LINK":
+                            if (array_key_exists('children', $child)){
+                                $item['link'] = $child['children'][0];
+                            }else{
+                                $item['link'] = '';
+                            }
+                            break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
+                            if (array_key_exists('children', $child)){
+                                $item['description'] = $child['children'][0];
+                            }else{
+                                $item['description'] = '';
+                            }
+                            break;
+                        case "UNDEF:DESCRIPTION":
                             if (array_key_exists('children', $child)){
                                 $item['description'] = $child['children'][0];
                             }else{
