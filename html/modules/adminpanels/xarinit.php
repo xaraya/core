@@ -153,9 +153,9 @@ function adminpanels_init()
                                                             'unsigned'    => true,
                                                             'null'        => false,
                                                             'default'     => '0'),
-                                   'xar_hits'          => array('type'        => 'integer',
+                                   'xar_itemid'     => array('type'        => 'integer',
+                                                            'unsigned'    => true,
                                                             'null'        => false,
-                                                            'size'        => 'big',
                                                             'default'     => '0')));
 
     $result =& $dbconn->Execute($query);
@@ -170,8 +170,8 @@ function adminpanels_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($xartable['waitingcontent'],
-                             array('name'   => 'xar_hits',
-                                   'fields' => array('xar_hits'),
+                             array('name'   => 'xar_itemid',
+                                   'fields' => array('xar_itemid'),
                                    'unique' => false));
 
     $result =& $dbconn->Execute($query);
@@ -181,21 +181,31 @@ function adminpanels_init()
 
 
 
-    // when a module item is created (set extrainfo to the module name ?)
+    // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
                            'adminpanels', 'admin', 'createwc')) {
         return false;
     }
 
-    // when a module item is deleted (set extrainfo to the module name ?)
+// Note : we use the same function in both update and delete here
+//        => delete the waiting content entry (if it still exists)
+
+    // when a module item is updated
+    if (!xarModRegisterHook('item', 'update', 'API',
+                           'adminpanels', 'admin', 'deletewc')) {
+        return false;
+    }
+
+    // when a module item is deleted
     if (!xarModRegisterHook('item', 'delete', 'API',
                            'adminpanels', 'admin', 'deletewc')) {
         return false;
     }
+
     // when a whole module is removed, e.g. via the modules admin screen
     // (set object ID to the module name !)
     if (!xarModRegisterHook('module', 'remove', 'API',
-                           'adminpanels', 'admin', 'deletewc')) {
+                           'adminpanels', 'admin', 'deleteallwc')) {
         return false;
     }
 
@@ -302,6 +312,35 @@ function adminpanels_delete()
     // unregister our blocks.. maybe not
     // xarBlockTypeUnregister('adminpanels', 'adminmenu');
     // xarBlockTypeUnregister('articles', 'waitingcontent');
+
+    // when a module item is created
+    if (!xarModUnregisterHook('item', 'create', 'API',
+                           'adminpanels', 'admin', 'createwc')) {
+        return false;
+    }
+
+// Note : we use the same function in both update and delete here
+//        => delete the waiting content entry (if it still exists)
+
+    // when a module item is updated
+    if (!xarModUnregisterHook('item', 'update', 'API',
+                           'adminpanels', 'admin', 'deletewc')) {
+        return false;
+    }
+
+    // when a module item is deleted
+    if (!xarModUnregisterHook('item', 'delete', 'API',
+                           'adminpanels', 'admin', 'deletewc')) {
+        return false;
+    }
+
+    // when a whole module is removed, e.g. via the modules admin screen
+    // (set object ID to the module name !)
+    if (!xarModUnregisterHook('module', 'remove', 'API',
+                           'adminpanels', 'admin', 'deleteallwc')) {
+        return false;
+    }
+
     
     // we are done with removing stuff from version 1.0
     
