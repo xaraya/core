@@ -46,7 +46,8 @@ define('XARTHEME_STATE_ANY', 0);
 /**
  * Flags for loading APIs
  */
-define('XARMOD_LOAD_ANYSTATE', 1);
+define('XARMOD_LOAD_ONLYACTIVE', 1);
+define('XARMOD_LOAD_ANYSTATE', 2);
 
 /*
  * Modules modes
@@ -600,7 +601,7 @@ function xarModGetInfo($modRegId, $type = 'module')
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModPrivateLoad($modName, $modType, $flags = 0)
+function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
 {
     static $loadedModuleCache = array();
     if (empty($modName)) {
@@ -609,6 +610,8 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     }
 
     // Make sure we access the cache with lower case key
+    //Why to repeat a functionality already present in the PHP functions?
+    //Better complain with the PHP team if include_once has any problem...
     if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
         // Already loaded (or tried to) from somewhere else
         return true;
@@ -1862,8 +1865,12 @@ function xarMod__loadDbInfo($modName, $modDir)
     include_once $osxartablefile;
 
     $tablefunc = $modName . '_' . 'xartables';
+    $pntablefunc = $modName . '_' . 'pntables';
+
     if (function_exists($tablefunc)) {
         xarDB_importTables($tablefunc());
+    } elseif (function_exists($pntablefunc)) {
+        xarDB_importTables($pntablefunc());
     }
 
     $loadedDbInfoCache[$modName] = true;

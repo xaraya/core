@@ -14,12 +14,22 @@ function modules_adminapi_executeinitfunction ($args)
     // Security Check
 	if(!xarSecurityCheck('AdminModules')) return;
 
+    // Argument check
+    if (!isset($args['regid'])) {
+        $msg = xarML('Missing module regid.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+        return;
+    }
+
     // Get module information
     $modInfo = xarModGetInfo($args['regid']);
-	
-    if (empty($modInfo['osdirectory']) || !is_dir('modules/'. $modInfo['osdirectory'])) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $args[regid] - directory: $modInfo[osdirectory]) does not exist."));
+
+    if (!isset($modInfo['osdirectory']) ||
+        empty($modInfo['osdirectory']) ||
+        !is_dir('modules/'. $modInfo['osdirectory'])) {
+
+        $msg = xarML('Module (regid: #(1) - directory: #(2) does not exist.', $args['regid'], $modInfo['osdirectory']);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',  $msg);
         return;
     }
 
@@ -34,16 +44,52 @@ function modules_adminapi_executeinitfunction ($args)
         $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
     }
 
-    if (!empty($xarinitfile)) {
-        include_once $xarinitfile;
-
-        $func = $modInfo['name'] . '_'.$args['function'];
-        if (function_exists($func)) {
-            if ($func() != true) {
-                return false;
-            }
-        }
+    if (empty($xarinitfile)) {
+        /*
+        $msg = xarML('No Initiliazation File Found for Module "#(1)"', $modInfo['name']);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        return;
+        */
+        //Return gracefully, the metaweblogapi doesnt have the init file..
+        //Should it be obligatory? The same can be asked about each individual process function
+        // (init/activate/deactivate/remobve)
+        return true;
     }
+
+    // if (!empty($xarinitfile)) {
+    ob_start();
+    $r = include_once($xarinitfile);
+    $error_msg = strip_tags(ob_get_contents());
+    ob_end_clean();
+
+    if (empty($r) || !$r) {
+        $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $xarinitfile, $error_msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        return;
+    }
+
+    $func = $modInfo['name'] . '_'.$args['function'];
+    if (function_exists($func)) {
+        if ($func() === false) {
+            $msg = xarML('While changing state of a module, the function #(1) returned a false value when executed.', $func);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+            return;
+        } elseif ($func != true) {
+            $msg = xarML('An error ocurred while changing state of module, executing function #(1)', $func);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+            return;
+        }
+    } else {
+        // A lot of init files dont have the function, maily activate...
+        // Should we enforce them to have it?
+        /*
+        // file exists, but function not found. Exception!
+        $msg = xarML('Module change of state failed because your module did not include an #(1) function: #(2)', $args['function'], $func);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        return;
+        */
+    }
+    //}
 
 	return true;
 }

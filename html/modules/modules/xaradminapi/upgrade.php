@@ -28,23 +28,14 @@ function modules_adminapi_upgrade($args)
         return false;
     }
 
-    // Get module database info
-    xarMod__loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
-
-    // Module upgrade function
-
-    // pnAPI compatibility
-    $xarinitfilename = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
-    if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
-    }
-    @include $xarinitfilename;
-
-    $func = $modInfo['name'] . '_upgrade';
-    if (function_exists($func)) {
-        if ($func($modInfo['version']) != true) {
-            return false;
-        }
+    // Module deletion function
+    if (!xarModAPIFunc('modules',
+                       'admin',
+                       'executeinitfunction',
+                       array('regid'    => $regid,
+                             'function' => 'init'))) {
+        //Raise an Exception
+        return;
     }
 
     // Update state of module
@@ -54,7 +45,6 @@ function modules_adminapi_upgrade($args)
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
     if (!isset($res)) return;
-
 
     // Get the new version information...
     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);

@@ -24,16 +24,23 @@ function modules_adminapi_remove($args)
     $modinfo = xarModGetInfo($regid);
 
     //TODO: Add check if there is any dependents
-
+/*
+    if (!xarModAPIFunc('modules','admin','verifydependents',array('regid'=>$regid))) {
+        //TODO: Add description of the dependencies
+        $msg = xarML('There are dependents to the module "#(1)" that weren\'t removed yet.', $modInfo['displayname']);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+        return;
+    }
+*/
     // Module deletion function
-	if (!xarModAPIFunc('modules',
-	                   'admin',
-					   'executeinitfunction',
-	                   array('regid'    => $regid,
+    if (!xarModAPIFunc('modules',
+                       'admin',
+                       'executeinitfunction',
+                       array('regid'    => $regid,
                              'function' => 'delete'))) {
-		//Raise an Exception
-		return;
-	}
+        //Raise an Exception
+        return;
+    }
 
     // Delete any module variables that the module cleanup function might
     // have missed
