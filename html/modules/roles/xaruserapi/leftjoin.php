@@ -63,9 +63,15 @@ function roles_userapi_leftjoin($args)
     $leftjoin['table'] = $rolestable;
     $leftjoin['field'] = $rolestable . '.xar_uid';
     if (count($uids) > 0) {
-        $alluids = join(', ', $uids);
+        $cleanuids = array();
+        foreach ($uids as $uid) {
+            $uid = intval($uid);
+            if (!is_int($uid) || $uid < 1) continue;
+            $cleanuids[] = $uid;
+        }
+        $alluids = join(', ', $cleanuids);
         $leftjoin['where'] = $rolestable . '.xar_uid IN (' .
-                             xarVarPrepForStore($alluids) . ')';
+                             $alluids . ')';
     } else {
         $leftjoin['where'] = '';
     }
