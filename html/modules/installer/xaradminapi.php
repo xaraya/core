@@ -193,8 +193,7 @@ function installer_adminapi_CheckForField($args)
     // if not then set an appropriate error message and return
     if ((!isset($field_name)) ||
         (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count',
-                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        $msg = xarML('Invalid Parameter Count');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
@@ -232,8 +231,7 @@ function installer_adminapi_GetFieldType($args)
     // if not then set an appropriate error message and return
     if ((!isset($field_name)) ||
         (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count',
-                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        $msg = xarML('Invalid Parameter Count');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
@@ -267,8 +265,7 @@ function installer_adminapi_CheckTableExists($args)
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
     if (!isset($table_name)) {
-        $msg = xarML('Invalid Parameter Count',
-                    join(', ',$invalid), 'admin', 'create', 'Installer');
+        $msg = xarML('Invalid Parameter Count');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;

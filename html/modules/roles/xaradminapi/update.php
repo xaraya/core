@@ -34,8 +34,7 @@ function roles_adminapi_update($args)
         (!isset($uname)) ||
         (!isset($email)) ||
         (!isset($state))) {
-        $msg = xarML('Invalid Parameter Count',
-                    'admin', 'update', 'Users');
+        $msg = xarML('Invalid Parameter Count');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
@@ -47,7 +46,7 @@ function roles_adminapi_update($args)
             array('uid' => $uid));
 
     if ($item == false) {
-        $msg = xarML('No such user','roles');
+        $msg = xarML('No such user');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'ID_NOT_EXIST',
                      new SystemException($msg));
