@@ -29,9 +29,6 @@ function roles_userapi_addmember($args)
         return false;
     }
 
-// Security Check
-    if(!xarSecurityCheck('AddRole')) return;
-
     $roles = new xarRoles();
     $group = $roles->getRole($gid);
     if($group->isUser()) {
@@ -44,8 +41,10 @@ function roles_userapi_addmember($args)
 
     $user = $roles->getRole($uid);
 
-    $result = $group->addMember($user);
-    if (!$result) return;
+// Security Check
+    if(!xarSecurityCheck('AttachRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
+
+    if (!$group->addMember($user)) return;
 
     // call item create hooks (for DD etc.)
     $pargs['module'] = 'roles';
@@ -53,7 +52,7 @@ function roles_userapi_addmember($args)
     $pargs['itemid'] = $gid;
     xarModCallHooks('item', 'create', $gid, $pargs);
 
-    return $result;
+    return true;
 }
 
 ?>

@@ -70,28 +70,18 @@ class xarRoles
             $q->addtable($this->rolestable,'r');
             $q->addtable($this->rolememberstable,'rm');
             $q->join('r.xar_uid','rm.xar_uid');
-            $q->addfield('r.xar_uid');
-            $q->addfield('r.xar_name');
-            $q->addfield('r.xar_users');
-            $q->addfield('rm.xar_parentid');
+            $q->addfield('r.xar_uid AS uid');
+            $q->addfield('r.xar_name AS name');
+            $q->addfield('r.xar_users AS users');
+            $q->addfield('rm.xar_parentid AS parentid');
             $q->eq('r.xar_type',1);
             $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
             $q->setorder('r.xar_name');
             if (!$q->run()) return;
 
-            // arrange the data in an array
-            $groups = array();
-            foreach ($q->output() as $row) {
-                $groups[] = array('uid' => $row['r.xar_uid'],
-                    'name' => $row['r.xar_name'],
-                    'users' => $row['r.xar_users'],
-                    'parentid' => $row['rm.xar_parentid']);
-            }
-            $this->allgroups = $groups;
-            return $groups;
-        } else {
-            return $this->allgroups;
+            $this->allgroups = $q->output();
         }
+        return $this->allgroups;
     }
 
     /**
@@ -990,6 +980,43 @@ class xarRole
     }
 
     /**
+     * countChildren: count the members of a group
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param integer state count user in this state
+     * @param string selection count user within this selection criteria
+     * @param integer type group or user
+     * @return boolean
+     * @throws none
+     * @todo none
+     */
+    function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $type = NULL)
+    {
+        $q = new xarQuery('SELECT');
+        $q->addfield('COUNT(r.xar_uid) AS children');
+        $q->addtable($this->rolestable,'r');
+        $q->addtable($this->rolememberstable,'rm');
+        $q->join('r.xar_uid', 'rm.xar_uid');
+        $q->eq('rm.xar_parentid', $this->uid);
+        if ($state == ROLES_STATE_CURRENT) {
+            $q->ne('r.xar_state', ROLES_STATE_DELETED);
+        } else {
+            $q->eq('r.xar_state', $state);
+        }
+        if (isset($type)) $q->eq('r.xar_type', $type);
+
+        if (isset($selection)) {
+            $query = $q->tostring() . $selection;
+            if(!$q->run($query)) return;
+        } else {
+            if(!$q->run()) return;
+        }
+        $result = $q->row();
+        return $result['children'];
+    }
+
+    /**
      * countUsers: count the members of a group that are users
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
@@ -1002,29 +1029,7 @@ class xarRole
      */
     function countUsers($state = ROLES_STATE_CURRENT, $selection = NULL)
     {
-        // set up the query and get the data
-        if ($state == ROLES_STATE_CURRENT) {
-            $query = "SELECT COUNT(r.xar_uid)
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
-                        WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0
-                        AND r.xar_state != " . ROLES_STATE_DELETED .
-                        " AND rm.xar_parentid = $this->uid";
-            $bindvars = array($this->uid);
-        } else {
-            $query = "SELECT COUNT(r.xar_uid)
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
-                        WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0 AND r.xar_state = ?
-                        AND rm.xar_parentid = ?";
-            $bindvars = array($state, $this->uid);
-        }
-        if (isset($selection)) $query .= $selection;
-        $result = $this->dbconn->Execute($query,$bindvars);
-        if (!$result) return;
-        list($numusers) = $result->fields;
-        // done
-        return $numusers;
+        return $this->countChildren(0, $state, $selection);
     }
 
     /**
@@ -1043,43 +1048,30 @@ class xarRole
         $parents = array();
         // if this is the root return an empty array
         if ($this->getID() == 1) return $parents;
-        // if this is a group pick up the uids using getgroups()
-        // May be faster
-        if (!$this->isUser()) {
-            // get the roles class
-            $parts = new xarRoles();
-            // look for the parent uids and create role objects from them
-            foreach($parts->getgroups() as $group) {
-                if ($group['uid'] == $this->uid) {
-                    $parents[] = $parts->getRole($group['parentid']);
-                }
-            }
-        } else {
-            // if this is a user just perform a SELECT on the rolemembers table
-            $query = "SELECT r.*
-                        FROM $this->rolestable AS r, $this->rolememberstable AS rm
-                        WHERE r.xar_uid = rm.xar_parentid
-                        AND rm.xar_uid = ?";
-            $result = $this->dbconn->Execute($query,array($this->uid));
-            if (!$result) return;
-            // collect the table values and use them to create new role objects
-            while (!$result->EOF) {
-                list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                    $date_reg, $val_code, $state, $auth_module) = $result->fields;
-                $pargs = array('uid' => $uid,
-                    'name' => $name,
-                    'type' => $type,
-                    'parentid' => $parentid,
-                    'uname' => $uname,
-                    'email' => $email,
-                    'pass' => $pass,
-                    'date_reg' => $date_reg,
-                    'val_code' => $val_code,
-                    'state' => $state,
-                    'auth_module' => $auth_module);
-                $parents[] = new xarRole($pargs);
-                $result->MoveNext();
-            }
+        // if this is a user just perform a SELECT on the rolemembers table
+        $query = "SELECT r.*
+                    FROM $this->rolestable AS r, $this->rolememberstable AS rm
+                    WHERE r.xar_uid = rm.xar_parentid
+                    AND rm.xar_uid = ?";
+        $result = $this->dbconn->Execute($query,array($this->uid));
+        if (!$result) return;
+        // collect the table values and use them to create new role objects
+        while (!$result->EOF) {
+            list($uid, $name, $type, $parentid, $uname, $email, $pass,
+                $date_reg, $val_code, $state, $auth_module) = $result->fields;
+            $pargs = array('uid' => $uid,
+                'name' => $name,
+                'type' => $type,
+                'parentid' => $parentid,
+                'uname' => $uname,
+                'email' => $email,
+                'pass' => $pass,
+                'date_reg' => $date_reg,
+                'val_code' => $val_code,
+                'state' => $state,
+                'auth_module' => $auth_module);
+            $parents[] = new xarRole($pargs);
+            $result->MoveNext();
         }
         // done
         return $parents;
@@ -1233,6 +1225,38 @@ class xarRole
             if ($role->isEqual($ancestor)) return true;
         }
         return false;
+    }
+
+    /**
+     * adjustParentUsers: adjust of a user's parent user tallies
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param integer
+     * @return boolean
+     * @throws none
+     * @todo none
+     */
+    function adjustParentUsers($adjust)
+    {
+        $q = new xarQuery('SELECT', $this->rolestable, 'xar_users AS users');
+        $q1 = new xarQuery('UPDATE', $this->rolestable);
+        $parents = $this->getParents();
+        foreach ($parents as $parent) {
+            $q->clearconditions();
+            $q->eq('xar_uid', $parent->getID());
+            $q1->clearconditions();
+            $q1->eq('xar_uid', $parent->getID());
+
+            // get the current count.
+            if (!$q->run()) return;
+            $row = $q->row();
+
+            // adjust and update update.
+            $q1->addfield('xar_users', $row['users'] + $adjust);
+            if (!$q1->run()) return;
+        }
+        return true;
     }
 
     /**

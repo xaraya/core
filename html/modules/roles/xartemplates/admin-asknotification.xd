@@ -8,7 +8,10 @@
         <a href="#xarModURL('roles', 'admin', 'showusers')#">
             <xar:mlstring>Member List</xar:mlstring>
         </a>&nbsp;&gt;&nbsp;
-        <xar:mlstring>Send $mailtype notification</xar:mlstring>
+        <xar:ml>
+        <xar:mlstring>Send #(1) notification</xar:mlstring>
+        <xar:mlvar>#$mailtype#</xar:mlvar>        
+        </xar:ml>
     </h2>
     <div style="margin: auto;">
 <xar:comment>

@@ -80,13 +80,13 @@ function themes_metablock_display($blockinfo)
     // Dynamic Keywords
     $incomingkey = xarVarGetCached('Blocks.articles','body');
     $incomingkeys = xarVarGetCached('Blocks.keywords','keys');
-    
+
     if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
         // Keywords generated from articles module
         $meta['keywords'] = xarVarGetCached('Blocks.articles','body');
-    } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){   
+    } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
         // Keywords generated from keywords module
-        $meta['keywords'] = xarVarGetCached('Blocks.keywords','keys');    
+        $meta['keywords'] = xarVarGetCached('Blocks.keywords','keys');
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }

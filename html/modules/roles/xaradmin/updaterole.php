@@ -20,24 +20,24 @@
 function roles_admin_updaterole()
 {
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSecConfirmAuthKey()) return;
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
-    if (!xarVarFetch('ptype', 'str:1:35:', $ptype)) return;
+    if (!xarVarFetch('ptype', 'int', $ptype)) return;
 
-    // checks specific only to users
+    // groups dont have pw etc., and can only be active
     if ($ptype == 1) {
         $puname = "";
         $pemail = "";
         $ppass1 = "";
-        $pstate = 0;
+        $pstate = 3;
     }
     else {
         if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
         if (!xarVarFetch('pemail', 'str:1:', $pemail)) return;
         if (!xarVarFetch('ppass1', 'str:1:', $ppass1,'')) return;
         if (!xarVarFetch('ppass2', 'str:1:', $ppass2,'')) return;
-        if (!xarVarFetch('pstate', 'str:1:', $pstate)) return;
+        if (!xarVarFetch('pstate', 'int:1:', $pstate)) return;
 
         // check for duplicate username
         $user = xarModAPIFunc('roles',
@@ -76,13 +76,13 @@ function roles_admin_updaterole()
             xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
-        //Save the old state
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('uid' => $uid));
-        $oldstate = $user['state'];
     }
+    //Save the old state and type
+    $roles = new xarRoles();
+    $oldrole = $roles->getRole($uid);
+    $oldstate = $oldrole->getState();
+    $oldtype = $oldrole->getType();
+
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,
@@ -93,12 +93,9 @@ function roles_admin_updaterole()
         'state' => $pstate);
     // create a role from the data
     $role = new xarRole($pargs);
-    // Try to update the role to the repository and bail if an error was thrown
-    $modifiedrole = $role->update();
-    if (!$modifiedrole) {
-        return;
-    }
 
+   // Try to update the role to the repository and bail if an error was thrown
+    if (!$role->update()) return;
 
     // call item update hooks (for DD etc.)
 // TODO: move to update() function
@@ -114,8 +111,12 @@ function roles_admin_updaterole()
                                                      array('uname'  => $defaultgroup,
                                                            'type'   => 1));
         if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname);
-    }
-    else {
+
+        // Adjust the user count if necessary
+        if ($oldtype == 0) $oldrole->adjustParentUsers(-1);
+    }else {
+        // Adjust the user count if necessary
+        if ($oldtype == 1) $oldrole->adjustParentUsers(1);
         //TODO : Be able to send 2 email if both password and type has changed... (or an single email with a overall msg...)
         //Ask to send email if the password has changed
         if ($ppass1 != '') {

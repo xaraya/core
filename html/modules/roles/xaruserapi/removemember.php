@@ -44,8 +44,10 @@ function roles_userapi_removemember($args)
 
     $user = $roles->getRole($uid);
 
-    $result = $group->removeMember($user);
-    if (!$result) return;
+// Security Check
+    if(!xarSecurityCheck('RemoveRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
+
+    if (!$group->removeMember($user)) return;
 
     // call item create hooks (for DD etc.)
     $pargs['module'] = 'roles';
@@ -53,7 +55,7 @@ function roles_userapi_removemember($args)
     $pargs['itemid'] = $gid;
     xarModCallHooks('item', 'delete', $gid, $pargs);
 
-    return $result;
+    return true;
 }
 
 ?>

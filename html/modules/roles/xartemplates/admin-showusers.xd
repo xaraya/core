@@ -284,13 +284,13 @@
                         </td>
                         <td style="text-align: center;">#xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
                         <td style="text-align: center;">
-                            <xar:if condition="$loop:item['status'] eq $stateinactive">
+                            <xar:if condition="$loop:item['state'] eq $stateinactive">
                                 <xar:mlstring>Inactive</xar:mlstring>
-                                <xar:elseif condition="$loop:item['status'] eq $statenotvalidated"/>
+                                <xar:elseif condition="$loop:item['state'] eq $statenotvalidated"/>
                                 <xar:mlstring>Not Validated</xar:mlstring>
-                                <xar:elseif condition="$loop:item['status'] eq $stateactive"/>
+                                <xar:elseif condition="$loop:item['state'] eq $stateactive"/>
                                 <xar:mlstring>Active</xar:mlstring>
-                                <xar:elseif condition="$loop:item['status'] eq $statepending"/>
+                                <xar:elseif condition="$loop:item['state'] eq $statepending"/>
                                 <xar:mlstring>Pending</xar:mlstring>
                             </xar:if>
                         </td>

@@ -243,14 +243,10 @@ class xarQuery
                 }
                 else {
                     if ($this->type == 'SELECT') {
-                        $newfield = explode(' as ',strtolower($field));
-                        if (count($newfield) > 1) {
-                            $field0 = substr($field,0,strlen($newfield[0]));
-                            $field1 = substr($field,strlen($newfield[0]) + 4);
-                            $argsarray = array('name' => trim($field0), 'value' => '', 'alias' => trim($field1));
-                        }
-                        else {
-                            $argsarray = array('name' => trim($newfield[0]), 'value' => '', 'alias' => '');
+                        if (preg_match("/(.*) as (.*)/i", $field, $match)) {
+                            $argsarray = array('name' => trim($match[1]), 'value' => '', 'alias' => trim($match[2]));
+                        } else {
+                            $argsarray = array('name' => trim($field), 'value' => '', 'alias' => '');
                         }
                     }
                     else {
@@ -796,6 +792,7 @@ class xarQuery
     function clearconditions()
     {
         $this->conditions = array();
+        $this->conjunctions = array();
     }
     function clearsorts()
     {

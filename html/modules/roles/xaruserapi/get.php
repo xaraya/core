@@ -84,6 +84,7 @@ function roles_userapi_get($args)
     $user = array('uid'         => (int) $row['xar_uid'],
                   'uname'       => $row['xar_uname'],
                   'name'        => $row['xar_name'],
+                  'type'        => $row['xar_type'],
                   'email'       => $row['xar_email'],
                   'pass'        => $row['xar_pass'],
                   'date_reg'    => $row['xar_date_reg'],

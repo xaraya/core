@@ -472,7 +472,7 @@ function xarMaskExists($name,$module="All")
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
    $masks = new xarMasks();
-   $return = $masks->querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+   return $masks->querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**

@@ -77,7 +77,13 @@ function roles_admin_showusers()
     $xartable =& xarDBGetTables();
     $q = new xarQuery('SELECT');
     $q->addtable($xartable['roles'],'r');
-    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
+    $q->addfields(array(
+        'r.xar_uid AS uid',
+        'r.xar_name AS name',
+        'r.xar_uname AS uname',
+        'r.xar_email AS email',
+        'r.xar_state AS state',
+        'r.xar_date_reg AS date_reg'));
 
     //Create the selection
     if (!empty($data['search'])) {
@@ -137,17 +143,10 @@ function roles_admin_showusers()
             break;
     }
     // assemble the info for the display
-    $users = array();
-        foreach($q->output() as $role) {
-            $users[] = array('uid' => $role['r.xar_uid'],
-                'name' => $role['r.xar_name'],
-                'uname' => $role['r.xar_uname'],
-                'email' => $role['r.xar_email'],
-                'status' => $role['r.xar_state'],
-                'date_reg' => $role['r.xar_date_reg'],
-                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$role['r.xar_name'])
-                );
-        }
+        $users = array();
+        foreach($q->output() as $user)
+            $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
+
     if ($uid != 0) $data['title'] .= " ".xarML('of group')." ";
 
     //selstyle

@@ -20,11 +20,11 @@ function roles_admin_modifyrole()
 {
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype', 'str:1', $type, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ptype', 'str:1', $type, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -64,7 +64,7 @@ function roles_admin_modifyrole()
 // Security Check
     $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
-    if (!empty($type)) {
+    if (isset($type)) {
         $data['ptype'] = $type;
     } else {
         $data['ptype'] = $role->getType();
@@ -82,7 +82,7 @@ function roles_admin_modifyrole()
         $data['pemail'] = $role->getEmail();
     }
 
-    if (!empty($pstate)) {
+    if (isset($pstate)) {
         $data['pstate'] = $pstate;
     } else {
         $data['pstate'] = $role->getState();
@@ -98,6 +98,7 @@ function roles_admin_modifyrole()
     $data['uid'] = $uid;
     $data['groups'] = $groups;
     $data['parents'] = $parents;
+    $data['haschildren'] = $role->countChildren();
     $data['updatelabel'] = xarML('Update');
     $data['addlabel'] = xarML('Add');
     $data['authid'] = xarSecGenAuthKey();
