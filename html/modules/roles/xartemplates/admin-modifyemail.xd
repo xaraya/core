@@ -26,79 +26,38 @@
                         </span>
                     </span>
                     <span style="float: right; width: 78%; text-align: left;">
-			<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
+				<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
+				<xar:loop name="$templates">
+					<xar:if condition="$mailtype eq $loop:item['key']">
+						<option value="#$loop:item['key']#" selected="selected">
+							#$loop:item['value']#
+						</option>
+					<xar:else/>
+						<option value="#$loop:item['key']#">
+							#$loop:item['value']#
+						</option>
+					</xar:if>
+				</xar:loop>
+				</select>
+
 				<xar:if condition="$mailtype eq 'validation'">
-					<option value="validation" selected="selected">
-						<xar:mlstring>Validation</xar:mlstring>
-					</option>
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="validation">
-						<xar:mlstring>Validation</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'confirmation'">
-					<option value="confirmation" selected="selected">
-						<xar:mlstring>Confirmation</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'confirmation'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="confirmation">
-						<xar:mlstring>Confirmation</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'welcome'">
-					<option value="welcome" selected="selected">
-						<xar:mlstring>Welcome</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'welcome'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="welcome">
-						<xar:mlstring>Welcome</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'reminder'">
-					<option value="reminder" selected="selected">
-						<xar:mlstring>Reminder</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'reminder'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="reminder">
-						<xar:mlstring>Reminder</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'pending'">
-					<option value="pending" selected="selected">
-						<xar:mlstring>Pending</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'pending'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="pending">
-						<xar:mlstring>Pending</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'deactivation'">
-					<option value="deactivation" selected="selected">
-						<xar:mlstring>Deactivation</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'deactivation'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
-				<xar:else/>
-					<option value="deactivation">
-						<xar:mlstring>Deactivation</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'password'">
-					<option value="password" selected="selected">
-						<xar:mlstring>Password</xar:mlstring>
-					</option>
+				<xar:elseif condition="$mailtype eq 'password'" />
 					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
 				<xar:else/>
-					<option value="password">
-						<xar:mlstring>Password</xar:mlstring>
-					</option>
-				</xar:if>
-			</select>
-                    </span>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
+                </xar:if>
+              </span>
 		 </form>
 		 </div>	
 	<form action="#xarModURL('roles', 'admin', 'modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
@@ -117,7 +76,7 @@
                         </span>
                     </span>
                     <span style="float: right; width: 78%; text-align: left;">
-                        <input type="text" name="subject" id="subject" size="40" value="#$subject#"  maxlength="150" />
+                        <input type="text" name="subject" id="subject" size="80" value="#$subject#"  maxlength="150" />
                     </span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">
@@ -127,7 +86,7 @@
                         </span>
                     </span>
                     <span style="float: right; width: 78%; text-align: left;">
-                        <textarea name="message" id="message" rows="20" cols="60">#$message#</textarea>
+                        <textarea name="message" id="message" rows="20" cols="80">#$message#</textarea>
                     </span>
 		 </div>
 		 <div style="clear: both; padding-top: 10px;">

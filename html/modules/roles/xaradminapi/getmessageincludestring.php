@@ -38,7 +38,7 @@ function roles_adminapi_getmessageincludestring($args)
         $line = fgets($fd, 1024);
         $string .= $line;
     }
-
+    fclose($fd);
     return $string;
 }
 

@@ -50,6 +50,7 @@ function roles_adminapi_getmessagestrings($args)
         $string .= $line;
     }
     $message = $string;
+    fclose($fd);
 
     return array('subject' => $subject, 'message' => $message);
 }
