@@ -160,7 +160,7 @@ function xarBlockGroupGetInfo($blockGroupId)
               FROM      $blockGroupInstancesTable as group_inst
               LEFT JOIN $blockGroupsTable as groups
               ON        group_inst.xar_group_id = groups.xar_id
-              LEFT JOIN $block_instances_table as inst
+              LEFT JOIN $blockInstancesTable as inst
               ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as types
               ON        types.xar_id = inst.xar_type_id
@@ -368,7 +368,7 @@ function xarBlock_renderGroup($groupName)
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
-    $blockGroupTnstancesTable = $tables['block_group_instances'];
+    $blockGroupInstancesTable = $tables['block_group_instances'];
     $blockInstancesTable      = $tables['block_instances'];
     $blockGroupsTable         = $tables['block_groups'];
     $blockTypesTable          = $tables['block_types'];
