@@ -129,7 +129,7 @@
 					<tr align="left" valign="top">
 						<td>
 							<xar:mlstring>Disallowed user names</xar:mlstring><br />
-							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+							<i><xar:mlstring>Note: Enter after each name.  Do not separate with comma, etc</xar:mlstring></i>
 						</td>
 						<td>
 						        <textarea name="disallowednames" id="disallowednames" tabindex="3" rows="10" cols="30" />#$names#</textarea> 
@@ -138,7 +138,7 @@
 					<tr align="left" valign="top">
 						<td>
 							<xar:mlstring>Disallowed email addresses</xar:mlstring><br />
-							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+							<i><xar:mlstring>Note: Enter after each name.  Do not separate with comma, etc</xar:mlstring></i>
 						</td>
 						<td>
 						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" rows="10" cols="30" />#$emails#</textarea> 
@@ -147,7 +147,7 @@
 					<tr align="left" valign="top">
 						<td>
 							<xar:mlstring>Disallowed IP addresses</xar:mlstring><br />
-							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+							<i><xar:mlstring>Note: Enter after each name.  Do not separate with comma, etc</xar:mlstring></i>
 						</td>
 						<td>
 						        <textarea name="disallowedips" id="disallowedips" tabindex="4" rows="10" cols="30" />#$ips#</textarea> 

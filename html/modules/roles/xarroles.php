@@ -882,7 +882,7 @@ function drawindent() {
 			$typeprep = xarVarPrepForStore($this->type);
 			$unameprep = xarVarPrepForStore($this->uname);
 			$emailprep = xarVarPrepForStore($this->email);
-			$passprep = xarVarPrepForStore($this->pass);
+			$passprep = xarVarPrepForStore(md5($this->pass));
 			$dateregprep = xarVarPrepForStore($this->date_reg);
 			$stateprep = xarVarPrepForStore($this->state);
 			$valcodeprep = xarVarPrepForStore($this->val_code);
