@@ -53,11 +53,11 @@ function roles_admin_purge($args)
             $roleslist = new xarRoles();
             if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
             foreach ($recalluids as $uid => $val) {
+                $role = $roleslist->getRole($uid);
                 $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarModAPIFunc('roles','admin','recall',
                     array('uid' => $uid,
                           'state' => $state));
-                $role = $roleslist->getRole($uid);
                 $parentgroup->addmember($role);
             }
         }

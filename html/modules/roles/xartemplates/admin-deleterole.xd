@@ -28,7 +28,7 @@
 		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a></div>	
 	</xar:if>
 </div>
-<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+<div style="border: 1px solid #ccc;  text-align: center; border-top : none; padding-left: 5px;">
 <br />
 <xar:if condition="$ptype eq 1">
 	<xar:set name="$roletype"><xar:mlstring>group</xar:mlstring></xar:set>
