@@ -112,6 +112,7 @@ function base_menublock_display($blockinfo)
                         // depending on which module is currently loaded we display accordingly
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
+                            $label = ucwords($label);
                             $usermods[] = array('label' => $label, 'link' => '', 'desc' => '', 'marker' => $marker);
 
                             // Load API for individual links. 
@@ -139,6 +140,7 @@ function base_menublock_display($blockinfo)
                             if($modinfo){
                                 $desc = $modinfo['description'];
                             }
+                            $label = ucwords($label);
                             $usermods[] = array('label' => $label, 'link' => $link, 'desc' => $desc, 'marker' => '');
                         }
                     }
