@@ -1,4 +1,3 @@
-<!-- adminpanels configuration template; file path: modules/adminpanels/xartemplates/admin-modifyconfig.xd -->
 <style>.adminpanels-rednote {color: #CC0000;}</style> 
 <div class="xar-mod-head">
     <span class="xar-mod-title"> 
@@ -7,16 +6,12 @@
         </xar:mlstring>
     </span> 
 </div>
-<h2> 
-    <xar:mlstring>
-        Configure Adminmenu 
-    </xar:mlstring>
-</h2> 
-<!-- LAYOUT REVOLUTION IS NOT COMING YET - PUTTING FORMATTING BACK TO TABLES (FOR 0.902 RELEASE) -->
-<form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-    <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="adminmenu" /> 
-    <div class="xar-mod-body">
-        <table border="0" cellspacing="1" cellpadding="4" align="left">
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Configure Adminmenu</xar:mlstring></h2> 
+<!--     <br /> -->
+    <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+        <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="adminmenu" /> 
+        <table border="0" cellspacing="1" cellpadding="4" align="left" width="100%">
             <tr>
                 <td align="right" width="180">
                     &nbsp; 
@@ -70,7 +65,7 @@
                     </label> 
                 </td>
                 <td>
-                    <!-- feature request 707 - 10 is the maximum number of characters accepted for html entities -->
+<!-- feature request 707 - 10 is the maximum number of characters accepted for html entities -->
                     <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" /> 
                 </td>
                 <td class="adminpanels-rednote">
@@ -228,28 +223,23 @@
                 </td>
             </tr>
         </table>
-    </div>
-</form>
-<br />
-<h2> 
-    <xar:mlstring>
-        Configure Overviews 
-    </xar:mlstring>
-</h2> 
-<form method=post action="&xar-modurl-adminpanels-admin-updateconfig;">
-    <input type=hidden name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="overviews" /> 
-    <div class="xar-mod-body">
+    </form>
+<!-- </div> -->
+<!-- <div class="xar-mod-body"> -->
+    <h2><xar:mlstring>Configure Overviews</xar:mlstring></h2> 
+    <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+        <input type="hidden" name="authid" id="authid" value="#$authid#" /> <input type="hidden" name="formname" id="formname" value="overviews" /> 
 <!-- Disable overviews -->
-        <table border="0" cellspacing="1" cellpadding="4" align="left">
+        <table border="0" cellspacing="1" cellpadding="4" align="left" width="100%">
             <tr>
                 <td align="right" width="180">
                     &nbsp; 
                 </td>
                 <td>
                     <xar:if condition="$showoverviews eq 1">
-                        <input type=checkbox name="overview" id="overview" value=1 checked=checked /> 
+                        <input type="checkbox" name="overview" id="overview" value="1" checked="checked" /> 
                         <xar:else />
-                        <input type=checkbox name="overview" id="overview" value=1 /> 
+                        <input type="checkbox" name="overview" id="overview" value="1" /> 
                     </xar:if>
                     <label for="overview"> 
                         <xar:mlstring>
@@ -275,5 +265,5 @@
                 </td>
             </tr>
         </table>
-    </div>
-</form>
+    </form>
+</div>
