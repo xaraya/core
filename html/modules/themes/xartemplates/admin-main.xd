@@ -24,7 +24,7 @@
                 From the menu, you have three choices.  "View", "Modify Config", and "Template Tags". 
                 </xar:mlstring></p>
                 <ul>
-                    <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
+                    <li><xar:mlstring>View -- Allows you to see what themes are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Modify Configuration -- Allows you to set certain display configuration values.</xar:mlstring></li>
                     <li><xar:mlstring>Template tags -- Allows you view / edit / delete template tags on the system, as well as add new tags to functions.</xar:mlstring></li>
                 </ul>
@@ -42,7 +42,7 @@
             <p><xar:mlstring>Included Hooks</xar:mlstring></p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The Themes modules has a user menu hook which allows the users of your Xaraya site to change the default theme to their choosing.  This can be activated and deactivated from the modules module.</xar:mlstring></p>
+            <p><xar:mlstring>The Themes module has a user menu hook which allows the users of your Xaraya site to change the default theme to their choosing.  This can be activated and deactivated from the modules module.</xar:mlstring></p>
         </div>
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
             <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
