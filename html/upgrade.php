@@ -262,17 +262,17 @@ if (empty($step)) {
                 xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
                 xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
                 xarMakePrivilegeRoot('GeneralLock');
-                xarMakePrivilegeRoot('Administration');
+                //xarMakePrivilegeRoot('Administration');
                 xarMakePrivilegeMember('LockMyself','GeneralLock');
                 xarMakePrivilegeMember('LockEverybody','GeneralLock');
                 xarMakePrivilegeMember('LockAnonymous','GeneralLock');
                 xarMakePrivilegeMember('LockAdministrators','GeneralLock');
                 xarMakePrivilegeMember('LockAdministration','GeneralLock');
                 xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-                xarAssignPrivilege('Administration','Administrators');
-                xarAssignPrivilege('GeneralLock','Everybody');
-                xarAssignPrivilege('GeneralLock','Administrators');
-                xarAssignPrivilege('GeneralLock','Users');
+                //xarAssignPrivilege('Administration','Administrators');
+                //xarAssignPrivilege('GeneralLock','Everybody');
+                //xarAssignPrivilege('GeneralLock','Administrators');
+                //xarAssignPrivilege('GeneralLock','Users');
 
                 //Make sure we have the correct stuff for Anonymous and Everybody
                 //xarModDelVar('roles', 'Everybody');
