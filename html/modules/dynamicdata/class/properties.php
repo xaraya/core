@@ -356,7 +356,14 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_PayPalCart_Property.php";
                 $property = new Dynamic_PayPalCart_Property($args);
                 break;
-
+            case 802: // PayPal Cart
+                require_once "includes/properties/Dynamic_PayPalDonate_Property.php";
+                $property = new Dynamic_PayPalDonate_Property($args);
+                break;
+            case 803: // PayPal Cart
+                require_once "includes/properties/Dynamic_PayPalSubscription_Property.php";
+                $property = new Dynamic_PayPalSubscription_Property($args);
+                break;
 
             default:
                 $property = new Dynamic_Property($args);
@@ -864,6 +871,22 @@ class Dynamic_Property_Master
 								  'name'       => 'paypalcart',
 								  'label'      => 'PayPal Cart Button',
 								  'format'     => '801',
+								  'validation' => '',
+								  // ...
+								 );
+			$proptypes[802] = array(
+								  'id'         => 802,
+								  'name'       => 'paypaldonate',
+								  'label'      => 'PayPal Donate Button',
+								  'format'     => '802',
+								  'validation' => '',
+								  // ...
+								 );
+			$proptypes[803] = array(
+								  'id'         => 803,
+								  'name'       => 'paypalsubscription',
+								  'label'      => 'PayPal Subscription Button',
+								  'format'     => '803',
 								  'validation' => '',
 								  // ...
 								 );
