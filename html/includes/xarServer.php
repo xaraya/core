@@ -350,7 +350,7 @@ function xarRequestGetInfo()
 
     // If $modName is still empty we use the default module/type/func to be loaded in that such case
     if (empty($modName)) {
-        // Get Start Page -- Defined in Base Config or from config.site.xml
+        // Get Default Module -- Defined in Base Config or from config.site.xml
         // TODO -- Allow user select start page
         if (function_exists('xarConfigGetVar')){
             $modName = xarConfigGetVar('Site.Core.DefaultModuleName');
@@ -359,8 +359,18 @@ function xarRequestGetInfo()
                 $modName = $xarRequest_defaultModule['module'];
             }
         }
-        if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
-        if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
+    // Get Default Module Type -- Defined in Base Config or from config.site.xml
+        if (function_exists('xarConfigGetVar')){
+            $modType = xarConfigGetVar('Site.Core.DefaultModuleType');
+        } elseif (!isset($modType)) {
+            if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
+        }
+        // Get Default Module Type -- Defined in Base Config or from config.site.xml
+        if (function_exists('xarConfigGetVar')){
+            if (isset($xarRequest_defaultModule['func'])) $funcName = xarConfigGetVar('Site.Core.DefaultModuleFunction');
+        } elseif (!isset($funcName)) {
+            if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
+        }
     }
 
     // Cache values into info static var
