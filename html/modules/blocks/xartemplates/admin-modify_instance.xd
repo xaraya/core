@@ -21,7 +21,7 @@
                 </span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="block_name" id="block_name" value="#$instance['name']#" maxlength="255" />
+                <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="255" />
             </span>
         </p>
 
@@ -34,7 +34,7 @@
                 </span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="block_title" id="block_title" value="#$instance['title']#" maxlength="255" />
+                <input type="text" name="block_title" id="block_title" value="#xarVarPrepForDisplay($instance['title'])#" maxlength="255" />
             </span>
         </p>
 
@@ -45,7 +45,7 @@
                 </span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                #$instance['module']#\#$instance['type']# 
+                #xarVarPrepForDisplay($instance['module'])#\#xarVarPrepForDisplay($instance['type'])# 
             </span>
         </p>
 
@@ -65,7 +65,7 @@
                         <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                     </xar:if>
                     <label for="block_groups_#$loop:item.id#">
-                        <span style="width: 6em;">#$loop:item['name']#</span>
+                        <span style="width: 6em;">#xarVarPrepForDisplay($loop:item['name'])#</span>
                         <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
                     </label><br />
                 </xar:loop>
@@ -81,10 +81,11 @@
                 </span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <input type="text" name="block_template" id="block_template" value="#$instance['template']#" size="40" maxlength="255" />
+                <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" size="40" maxlength="255" />
             </span>
         </p>
 
+        <xar:comment>It is likely this section will be removed, since blocks generally do not use it.</xar:comment>
         <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
             <p style="float: left; width: 100%;">
                 <span style="float: left; width: 20%; text-align: right;">
@@ -144,6 +145,7 @@
             </span>
         </p>
 
+        <xar:comment>This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.</xar:comment>
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
             <p style="float: left; width: 100%;">
                 <span style="float: left; width: 20%; text-align: right;">
@@ -169,9 +171,7 @@
             <hr />
             #$extra_fields#
         </xar:if>
-        <p>
-            #$hooks#
-        </p>
+        <div>#$hooks#</div>
 
         <p><input type="submit" value="#xarML('Update')#" /></p>
     </form>

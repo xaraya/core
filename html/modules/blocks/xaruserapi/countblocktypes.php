@@ -28,13 +28,16 @@ function blocks_userapi_countblocktypes($args)
     extract($args);
 
     $where = array();
+    $bind = array();
 
     if (!empty($module)) {
-        $where[] = 'xar_module = \'' . xarVarPrepForStore($module) . '\'';
+        $where[] = 'xar_module = ?';
+        $bind[] = $module;
     }
 
     if (!empty($type)) {
-        $where[] = 'xar_type = \'' . xarVarPrepForStore($type) . '\'';
+        $where[] = 'xar_type = ?';
+        $bind[] = $type;
     }
 
     $dbconn =& xarDBGetConn();
@@ -47,12 +50,12 @@ function blocks_userapi_countblocktypes($args)
         $query .= ' WHERE ' . implode(' AND ', $where);
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query, $bind);
     if (!$result) {return;}
 
     list ($count) = $result->fields;
 
-    return $count;
+    return (int)$count;
 }
 
 ?>

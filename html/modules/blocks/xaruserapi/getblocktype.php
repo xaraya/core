@@ -9,8 +9,8 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @param args['tid'] block type ID (optional)
- * @param args['module'] module name (optional)
- * @param args['type'] block type name (optional)
+ * @param args['module'] module name (optional, but requires 'type')
+ * @param args['type'] block type name (optional, but requires 'module')
  * @returns array of block types, keyed on block type ID
  *
  * @subpackage Blocks administration
@@ -20,8 +20,8 @@
 function blocks_userapi_getblocktype($args)
 {
     // Minimum parameters allowed, to fetch a single block type: tid or type.
-    if (empty($args['tid']) && empty($args['type'])) {
-        $msg = xarML('blocks_userapi_getblocktype (tid and type are NULL)');
+    if (empty($args['tid']) && (empty($args['type']) || empty($args['type']))) {
+        $msg = xarML('blocks_userapi_getblocktype (tid and module/type are NULL)');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new DefaultUserException($msg));
         return;
     }

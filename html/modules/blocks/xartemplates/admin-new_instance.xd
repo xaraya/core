@@ -39,8 +39,8 @@
 		<span style="float: right; width: 78%; text-align: left;">
 			<select name="block_type" id="block_type">
 			<xar:loop name="$block_types">
-				<option value="#$loop:item['id']#">
-					#$loop:item['module']#/#$loop:item['type']#
+				<option value="#$loop:item['tid']#">
+					#xarVarPrepForDisplay($loop:item['module'])#/#xarVarPrepForDisplay($loop:item['type'])#
 				</option>
 			</xar:loop>  
 			</select>
@@ -57,6 +57,24 @@
 		</div>
 
 		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('Initial block group to place this block into (optional)')#"><label for="block_type"><xar:mlstring>Block group (optional)</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<select name="block_group" id="block_group">
+            <option value="">
+                -- <xar:mlstring>Add To Block Group</xar:mlstring> --
+            </option>
+			<xar:loop name="$block_groups">
+				<option value="#$loop:item['gid']#">
+					#xarVarPrepForDisplay($loop:item['name'])#
+				</option>
+			</xar:loop>  
+			</select>
+		</span>
+		</div>
+
+        <div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#"><label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:</span>
 		</span>
