@@ -977,7 +977,8 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param prefix string the prefix for the GET parameter
  * @return string the expanded GET parameter(s)
  */
-function xarMod__URLnested($args, $prefix) {
+function xarMod__URLnested($args, $prefix)
+{
     $path = '';
     foreach ($args as $key => $arg) {
         if (is_array($arg)) {
