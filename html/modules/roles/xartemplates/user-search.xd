@@ -14,25 +14,31 @@
 </xar:if>
 
 <p></p>
-<table border="0" cellpadding="2" cellspacing="0">
-    <tr>
-        <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
-        <td>
-        <xar:if condition="!empty($properties) and count($properties) gt 0">
-            <xar:set name="i">-1</xar:set>
-            <!-- you can also specify individual fields here, if you don't want to allow searching
-                through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...) -->
-            <xar:foreach in="$properties" key="$field">
-                <xar:if condition="$i++ and $i % 4 eq 0">
-                    </td><td valign="top">
-                </xar:if>
-                <xar:if condition="!empty($checked[$field])">
-                    <input type="checkbox" name="#$field#" id="#$field#" value="1" checked="checked" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
-                <xar:else />
-                    <input type="checkbox" name="#$field#" id="#$field#" value="1" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
-                </xar:if>
+<xar:if condition="!empty($properties) and count($properties) gt 0">
+    <xar:comment> arrange by columns of 4 fields each </xar:comment>
+    <xar:set name="i">0</xar:set>
+    <xar:foreach in="$properties" key="$field">
+        <xar:set name="dummy">1; $col = intval($i/4); $columns[$col][] = $field; $i++</xar:set>
+    </xar:foreach>
+    <table border="0" cellpadding="2" cellspacing="0">
+        <tr>
+            <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+            <xar:comment>
+                you can also specify individual fields here, if you don't want to allow searching
+                through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...)
+            </xar:comment>
+            <xar:foreach in="$columns" value="$fields">
+                <td valign="top">
+                <xar:foreach in="$fields" value="$field">
+                    <xar:if condition="!empty($checked[$field])">
+                        <input type="checkbox" name="#$field#" id="#$field#" value="1" checked="checked" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
+                    <xar:else />
+                        <input type="checkbox" name="#$field#" id="#$field#" value="1" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
+                    </xar:if>
+                </xar:foreach>
+                </td>
             </xar:foreach>
-        </xar:if>
-        </td>
-    </tr>
-</table>
+        </tr>
+    </table>
+</xar:if>
+
