@@ -2068,10 +2068,10 @@ function xarModGetAlias($var)
  * @todo evalutate dependency consequences
  *
 */
-function xarModSetAlias($modName, $alias)
+function xarModSetAlias($alias, $modName)
 {
     if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('modName'=>$alias, 'aliasModName'=>$modName);
+    $args = array('modName' => $modName, 'aliasModName' => $alias);
     return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
 }
 
@@ -2080,10 +2080,10 @@ function xarModSetAlias($modName, $alias)
  * @todo evalutate dependency consequences
  *
 */
-function xarModDelAlias($modName, $alias)
+function xarModDelAlias($alias, $modName)
 {
     if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('aliasModName'=>$modName);
+    $args = array('modName' => $modName, 'aliasModName' => $alias);
     return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
 }
 
