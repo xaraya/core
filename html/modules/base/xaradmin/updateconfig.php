@@ -70,6 +70,9 @@ function base_admin_updateconfig()
 // Save these in normal module variables for now
     xarModSetVar('base','proxyhost',$proxyhost);
     xarModSetVar('base','proxyport',$proxyport);
+    
+    // Call updateconfig hooks
+    xarModCallHooks('module','updateconfig','base', array('module' => 'base'));
 
     xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig'));
 

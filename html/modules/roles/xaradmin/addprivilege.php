@@ -31,6 +31,12 @@ function roles_admin_addprivilege()
     if (!$priv->isassigned($role)) {
         if (!$role->assignPrivilege($priv)) return;
     }
+
+    // call update hooks and let them know that the role has changed
+    $pargs['module'] = 'roles';
+    $pargs['itemid'] = $roleid;
+    xarModCallHooks('item', 'update', $roleid, $pargs);
+
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles',
             'admin',

@@ -46,7 +46,13 @@ function roles_admin_removeprivilege()
         // Check for authorization code
         if (!xarSecConfirmAuthKey()) return; 
         // Try to remove the privilege and bail if an error was thrown
-        if (!$role->removePrivilege($priv)) return; 
+        if (!$role->removePrivilege($priv)) return;
+
+        // call update hooks and let them know that the role has changed
+        $pargs['module'] = 'roles';
+        $pargs['itemid'] = $roleid;
+        xarModCallHooks('item', 'update', $roleid, $pargs);
+
         // redirect to the next page
         xarResponseRedirect(xarModURL('roles', 'admin', 'showprivileges', array('uid' => $roleid)));
     } 
