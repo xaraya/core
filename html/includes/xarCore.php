@@ -375,6 +375,8 @@ function xarCoreIsDebugFlagSet($flag)
 function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
+// FIXME: take into account database values (if there's a database already)
+//        or find some other way to update system/site config variables
     if (!isset($systemVars)) {
         /*
         $configLoader = new xarCore__ConfigFileLoader();
@@ -403,6 +405,8 @@ function xarCore_getSystemVar($name)
 function xarCore_getSiteVar($name)
 {
     static $siteVars = NULL;
+// FIXME: take into account database values (if there's a database already)
+//        or find some other way to update system/site config variables
     if (!isset($siteVars)) {
         $configLoader = new xarCore__ConfigFileLoader();
         $serverName = xarServerGetVar('SERVER_NAME');
