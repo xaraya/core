@@ -172,44 +172,25 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 
 function updateDB( $proptype, $parent, $filepath )
 {
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
 
-        $dynamicproptypes = $xartable['dynamic_properties_def'];
+    $dynamicproptypes = $xartable['dynamic_properties_def'];
 
-        $insert = "INSERT INTO $dynamicproptypes
-                  (
-                    xar_prop_id
-                    , xar_prop_name
-                    , xar_prop_label
-                    , xar_prop_parent
-                    , xar_prop_filepath
-                    , xar_prop_class
-                    , xar_prop_format 
-                    , xar_prop_validation
-                    , xar_prop_source
-                    , xar_prop_reqfiles
-                    , xar_prop_reqmodules
-                    , xar_prop_args
-                    , xar_prop_aliases
-                  )
-                  VALUES
-                  (
-                    ".$proptype['id']."
-                    , '".$proptype['name']."'
-                    , '".$proptype['label']."'
-                    , '".$parent."'
-                    , '".$filepath."'
-                    , '".$proptype['propertyClass']."'
-                    , '".$proptype['format']."'
-                    , '".$proptype['validation']."'
-                    , '".$proptype['source']."'
-                    , '".$proptype['dependancies']."'
-                    , '".$proptype['requiresmodule']."'
-                    , '".$proptype['args']."'
-                    , '".$proptype['aliases']."'
-                  )";
-
+    $insert = "INSERT INTO $dynamicproptypes
+                ( xar_prop_id, xar_prop_name, xar_prop_label,
+                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
+                  xar_prop_format, xar_prop_validation, xar_prop_source,
+                  xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args,
+                  xar_prop_aliases
+                ) 
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        
+    $bindvars = array((int) $proptype['id'], $proptype['name'], $proptype['label'],
+                      $parent, $filepath, $proptype['propertyClass'], 
+                      $proptype['format'], $proptype['validation'], $proptype['source'], 
+                      $proptype['dependancies'], $proptype['requiresmodule'], $proptype['args'], 
+                      $proptype['aliases']);
     $result =& $dbconn->Execute($insert);
 }
 ?>
