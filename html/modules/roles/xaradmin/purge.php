@@ -156,7 +156,7 @@ function roles_admin_purge($args)
     $data['roles'] = $roles;
     $data['pager'] = xarTplGetPager($startnum,
         $data['totalselect'],
-        xarModURL('roles', 'admin', 'showusers',
+        xarModURL('roles', 'admin', 'purge',
             $filter),
         $numitems);
     // Return
