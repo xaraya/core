@@ -40,7 +40,7 @@ function roles_xartables()
      );
 
     // Get the name for the autolinks item table
-    $user_status   = xarConfigGetVar('prefix') . '_user_status';
+    $user_status   = xarDBGetSiteTablePrefix() . '_user_status';
 
     // Set the table name
     $xartable['roles'] = $roles;
