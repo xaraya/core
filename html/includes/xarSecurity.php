@@ -10,7 +10,9 @@
  * @link http://www.xaraya.com
  * @subpackage Security Access Mechanism
  * @author Jim McDonald
-*/
+ *
+ * @todo bring back possibility of time authorized keys
+ */
 
 /**
  * Notes on security system
@@ -46,8 +48,6 @@ define('ACCESS_ADMIN', 800);
                     'privileges' => 'xar'. '_privileges',
                     'privmembers' => 'xar'. '_privmembers',
                     'security_realms' => 'xar'. '_security_realms',
-//                    'roles' => 'xar'. '_roles',
-//                    'rolemembers' => 'xar'. '_rolemembers',
                     'security_instances' => 'xar'. '_security_instances');
 
     xarDB_importTables($tables);
@@ -80,130 +80,122 @@ $schemas = array();
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakeGroup($name) {
-        $roles = new xarRoles();
-        return $roles->makeGroup($name);
-    }
+ * @param   string name
+ * @return  bool
+ */
+function xarMakeGroup($name)
+{
+    $roles = new xarRoles();
+    return $roles->makeGroup($name);
+}
 
 /**
  * xarMakeUser: create an entry in the database for a user
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakeUser($name,$uname,$email,$pass='',$datereg='',$valcode='',$state=3,$authmodule='') {
-        $roles = new xarRoles();
-        return $roles->makeUser($name,$uname,$email,$pass,$datereg,$valcode,$state,$authmodule);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string name
+ * @return bool
+ */
+function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule='')
+{
+    $roles = new xarRoles();
+    return $roles->makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
+}
 
 /**
  * xarMakeRoleRoot: defines an entry in the database as the root of a role tree
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakeRoleRoot($name) {
-        $roles = new xarRoles();
-        return $roles->isRoot($name);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string name
+ * @return bool
+ */
+function xarMakeRoleRoot($name)
+{
+    $roles = new xarRoles();
+    return $roles->isRoot($name);
+}
 
 /**
  * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   child name string
- * @param   parent name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakeRoleMemberByName($childname, $parentname) {
-        $roles = new xarRoles();
-        return $roles->makeMemberByName($childname, $parentname);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string child name
+ * @param  string parent name
+ * @return bool
+ */
+function xarMakeRoleMemberByName($childName, $parentName)
+{
+    $roles = new xarRoles();
+    return $roles->makeMemberByName($childName, $parentName);
+}
 
 /**
  * xarMakeRoleMemberByUname: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   child uname string
- * @param   parent uname string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakeRoleMemberByUname($childname, $parentname) {
-        $roles = new xarRoles();
-        return $roles->makeMember($childname, $parentname);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string child uname
+ * @param  string parent uname
+ * @return bool
+ */
+function xarMakeRoleMemberByUname($childName, $parentName)
+{
+    $roles = new xarRoles();
+    return $roles->makeMember($childName, $parentName);
+}
 
 /**
  * xarMakeRoleMemberByID: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   child ID
- * @param   parent ID
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string child ID
+ * @param  string parent ID
+ * @return bool
+ */
+function xarMakeRoleMemberByID($childId, $parentId)
+{
+    $roles = new xarRoles();
+    $parent = $roles->getRole($parentId);
+    $child = $roles->getRole($childId);
 
-    function xarMakeRoleMemberByID($childid, $parentid) {
-        $roles = new xarRoles();
-        $parent = $roles->getRole($parentid);
-        $child = $roles->getRole($childid);
-         return $parent->addMember($child);
-    }
+    return $parent->addMember($child);
+}
 
 /**
  * xarRegisterPrivilege: create an entry in the database for a privilege
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   name string
- * @param   list of strings
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
-        $privileges = new xarPrivileges();
-        return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string name
+ * @param  integer realm
+ * @param  string module
+ * @param  string component
+ * @param  string instance
+ * @param  integer level
+ * @param  string description
+ * @return bool
+ */
+function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
+{
+    $privileges = new xarPrivileges();
+    return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
+}
 
 /**
  * xarMakePrivilegeRoot: defines an entry in the database as the root of a privilege tree
@@ -212,72 +204,72 @@ $schemas = array();
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakePrivilegeRoot($name) {
-        $privileges = new xarPrivileges();
-        return $privileges->makeEntry($name);
-    }
+ * @param   string name
+ * @return  bool
+ */
+function xarMakePrivilegeRoot($name)
+{
+    $privileges = new xarPrivileges();
+    return $privileges->makeEntry($name);
+}
 
 /**
  * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   child name string
- * @param   parent name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarMakePrivilegeMember($childname, $parentname) {
-        $privileges = new xarPrivileges();
-        return $privileges->makeMember($childname, $parentname);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string childName
+ * @param  string  parentName
+ * @return bool
+ */
+function xarMakePrivilegeMember($childName, $parentName)
+{
+    $privileges = new xarPrivileges();
+    return $privileges->makeMember($childName, $parentName);
+}
 
 /**
  * xarAssignPrivilege: assign a privilege to a role
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   privilege name string
- * @param   role name string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarAssignPrivilege($privilege,$role) {
-        $privileges = new xarPrivileges();
-        return $privileges->assign($privilege,$role);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string  privilege name
+ * @param  string role name
+ * @return bool
+ */
+function xarAssignPrivilege($privilege,$role)
+{
+    $privileges = new xarPrivileges();
+    return $privileges->assign($privilege,$role);
+}
 
 /**
  * xarDefineInstance: creates an instance definition in the database
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   list of strings
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string module
+ * @param  string type
+ * @param  string query
+ * @param  integer propagate
+ * @param  string table2
+ * @param  integer childId
+ * @param  integer parentId
+ * @param  string description
+ * @return bool
+ */
+function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
+{
+    $privileges = new xarPrivileges();
 
-    function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
-        $privileges = new xarPrivileges();
-        return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childID,$parentID,$description);
-    }
+    return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childId,$parentId,$description);
+}
 
 /**
  * xarRemoveInstances: removes the instances registered by a module from the database
@@ -286,34 +278,29 @@ $schemas = array();
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   module name
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarRemoveInstances($module) {
-        $privileges = new xarPrivileges();
-        return $privileges->removeInstances($module);
-    }
+ * @param   string module
+ * @return  bool
+ */
+function xarRemoveInstances($module)
+{
+    $privileges = new xarPrivileges();
+    return $privileges->removeInstances($module);
+}
 
 /**
  * xarGetGroups: returns an array of all the groups in the database
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of strings
- * @throws  none
- * @todo    none
-*/
-
-    function xarGetGroups() {
-        $roles = new xarRoles();
-        return $roles->getgroups();
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return array of strings
+ */
+function xarGetGroups()
+{
+    $roles = new xarRoles();
+    return $roles->getgroups();
+}
 
 /* xarFindRole: returns a role object by its name
  *
@@ -321,16 +308,14 @@ $schemas = array();
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   name string
- * @return  role object
- * @throws  none
- * @todo    none
-*/
-
-    function xarFindRole($name) {
-        $roles = new xarRoles();
-        return $roles->findRole($name);
-    }
+ * @param   string name
+ * @return  object role
+ */
+function xarFindRole($name)
+{
+    $roles = new xarRoles();
+    return $roles->findRole($name);
+}
 
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
@@ -338,68 +323,68 @@ $schemas = array();
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   component string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string mask
+ * @param  integer showException
+ * @param  string component
+ * @param  string instance
+ * @param  string module
+ * @param  string role
+ * @return bool
+ */
+function xarSecurityCheck($mask,$showException=1,$component='',$instance='',$module='',$role='')
+{
+    global $installing;
 
-    function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$module='',$role='')
-    {
-        global $installing;
+    if(isset($installing) && ($installing == true)) {
+       return true;
 
-        if(isset($installing) && ($installing == true)) {
-            return true;
-        }
-        else {
-            $masks = new xarMasks();
-            return $masks->xarSecurityCheck($mask,$showexception,$component,
-            $instance,$module,$role);
-        }
+    } else {
+       $masks = new xarMasks();
+       return $masks->xarSecurityCheck($mask,$showException,$component, $instance,$module,$role);
     }
+}
 
 /**
  * xarRegisterMask: wrapper function for registering a mask
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   component string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string name
+ * @param  integer realm
+ * @param  string module
+ * @param  string component
+ * @param  string instance
+ * @param  integer level
+ * @param  string description
+ * @return bool
+ */
+function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
+{
+    global $installing;
 
-    function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
-    {
-        global $installing;
-
-        if(isset($installing) && ($installing == true)) {
-            return true;
-        }
-        else {
-            $masks = new xarMasks();
-            return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
-        }
+    if(isset($installing) && ($installing == true)) {
+        return true;
+    } else {
+        $masks = new xarMasks();
+        return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
     }
+}
 
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   component string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarUnregisterMask($name)
-    {
-        $masks = new xarMasks();
-        return $masks->unregister($name);
-    }
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @param  string name
+ * @return bool
+ */
+function xarUnregisterMask($name)
+{
+    $masks = new xarMasks();
+    return $masks->unregister($name);
+}
 
 /**
  * xarRemoveMasks: removes the masks registered by a module from the database
@@ -408,104 +393,51 @@ $schemas = array();
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   module name
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
-    function xarRemoveMasks($module) {
-        $privileges = new xarPrivileges();
-        return $privileges->removeMasks($module);
-    }
+ * @param   string module
+ * @return  bool
+ */
+function xarRemoveMasks($module)
+{
+    $privileges = new xarPrivileges();
+    return $privileges->removeMasks($module);
+}
 
 
 /**
  * see if a user is authorised to carry out a particular task
+ *
  * @access public
- * @param realm the realm to authorize
- * @param component the component to authorize
- * @param instance the instance to authorize
- * @param level the level of access required
- * @param uid user id to check for authorisation
- * @returns bool
- * @return true if authorised, false if not
+ * @param  integer realm the realm to authorize
+ * @param  string component the component to authorize
+ * @param  string instance the instance to authorize
+ * @param  integer level the level of access required
+ * @param  integer userId  user id to check for authorisation
+ * @return bool
  * @raise DATABASE_ERROR
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
     $msg = xarML('This call needs to be converted to the Xaraya security system');
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                     new SystemException($msg));
     return true;
-
-    // FIXME: <rabbitt> is everything below necessary if we're not using it anymore?
-
-    if (empty($userId)) {
-        $userId = xarSessionGetVar('uid');
-        if (empty($userId)) {
-            $userId = 0;
-        }
-    }
-    if (!xarVarIsCached('Permissions', $userId)) {
-        // First time here - get auth info
-        $perms = xarSec__getAuthInfo($userId);
-        if (!isset($perms) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
-        if ((count($perms[0]) == 0) &&
-            (count($perms[1]) == 0)) {
-                // No permissions
-                return;
-        }
-        xarVarSetCached('Permissions', $userId, $perms);
-    }
-
-    list($userPerms, $groupPerms) = xarVarGetCached('Permissions', $userId);
-
-    // Get user access level
-    $userlevel = xarSec__getLevel($userPerms, $testRealm, $testComponent, $testInstance);
-
-    // User access level is override, so return that if it exists
-    if ( $userlevel > ACCESS_INVALID ) {
-        // user has explicitly defined access level for this
-        // realm/component/instance combination
-        if ( $userlevel >= $testLevel ) {
-            // permission is granted to user
-            return true;
-        } else {
-            // permission is prohibited to user, so group perm
-            // doesn't matter
-            return false;
-        }
-    }
-
-    // User access level not defined. Now check group access level
-    $grouplevel = xarSec__getLevel($groupPerms, $testRealm, $testComponent, $testInstance);
-    if ($grouplevel >= $testLevel) {
-        // permission is granted to associated group
-        return true;
-    }
-
-    // No access granted
-    return false;
 }
 
 /**
- * generate an authorisation key
- * <br>
+ * Generate an authorisation key
+ *
  * The authorisation key is used to confirm that actions requested by a
  * particular user have followed the correct path.  Any stage that an
  * action could be made (e.g. a form or a 'delete' button) this function
  * must be called and the resultant string passed to the client as either
  * a GET or POST variable.  When the action then takes place it first calls
- * <code>xarSecConfirmAuthKey()</code> to ensure that the operation has
+ * xarSecConfirmAuthKey() to ensure that the operation has
  * indeed been manually requested by the user and that the key is valid
  *
- * @public
- * @param modName the module this authorisation key is for (optional)
- * @returns string
- * @return an encrypted key for use in authorisation of operations
+ * @access public
+ * @param string modName the module this authorisation key is for (optional)
+ * @return string an encrypted key for use in authorisation of operations
+ * @todo bring back possibility of extra security by using date (See code)
  */
 function xarSecGenAuthKey($modName = NULL)
 {
@@ -525,13 +457,15 @@ function xarSecGenAuthKey($modName = NULL)
 }
 
 /**
- * confirm an authorisation key is valid
- * <br>
- * See description of <code>xarSecGenAuthKey</code> for information on
+ * Confirm an authorisation key is valid
+ *
+ * See description of xarSecGenAuthKey for information on
  * this function
- * @public
- * @returns bool
- * @return true if the key is valid, false if it is not
+ *
+ * @access public
+ * @param string authIdVarName
+ * @return bool true if the key is valid, false if it is not
+ * @todo bring back possibility of time authorized keys
  */
 function xarSecConfirmAuthKey($authIdVarName = 'authid')
 {
@@ -576,9 +510,10 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
 /*
  * Register an instance schema with the security
  * system
+ *
  * @access public
- * @param component the component to add
- * @param schema the security schema to add
+ * @param string component the component to add
+ * @param string schema the security schema to add
  *
  * Will fail if an attempt is made to overwrite an existing schema
  */
@@ -598,10 +533,11 @@ function xarSecAddSchema($component, $schema)
 // PRIVATE FUNCTIONS
 
 /**
- * get authorisation information for this user
- * @access public
- * @returns array
- * @return two-element array of user and group permissions
+ * Get authorisation information for this user
+ *
+ * @access private
+ * @param  integer userId
+ * @return array two-element array of user and group permissions
  * @raise DATABASE_ERROR
  */
 function xarSec__getAuthInfo($userId)

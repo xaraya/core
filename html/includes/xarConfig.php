@@ -18,9 +18,9 @@
  *
  * @author  Marco Canini
  * @access public
- * @param args array
- * @param whatElseIsGoingLoaded integer 
- * @return  bool
+ * @param array args
+ * @param integer whatElseIsGoingLoaded
+ * @return bool
 */
 function xarConfig_init($args, $whatElseIsGoingLoaded)
 {
@@ -38,9 +38,11 @@ function xarConfig_init($args, $whatElseIsGoingLoaded)
  * Gets a configuration variable.
  *
  * @access public
- * @param name string the name of the variable
+ * @param string name the name of the variable
  * @return mixed value of the variable(string), or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo do we need these aliases anymore ?
+ * @todo return proper site prefix when we can store site vars
  */
 function xarConfigGetVar($name)
 {
@@ -68,7 +70,8 @@ function xarConfigGetVar($name)
     }
 
     if ($name == 'Site.DB.TablePrefix') {
-        return xarCore_getSiteVar('DB.TablePrefix');
+        //return xarCore_getSiteVar('DB.TablePrefix');
+        return xarCore_getSystemVar('DB.TablePrefix');
     } elseif ($name == 'System.Core.VersionNumber') {
         return XARCORE_VERSION_NUM;
     } elseif ($name == 'System.Core.VersionId') {
@@ -116,9 +119,11 @@ function xarConfigGetVar($name)
  * Sets a configuration variable.
  *
  * @access public
- * @param name string the name of the variable
- * @param value mixed (array,integer or string) the value of the variable
+ * @param string name the name of the variable
+ * @param mixed value (array,integer or string) the value of the variable
  * @return bool true on success, or false if you're trying to set unallowed variables
+ * @todo return states that it should return false if we're setting
+ *       unallowed variables.. there is no such code to do that in the function
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarConfigSetVar($name, $value)

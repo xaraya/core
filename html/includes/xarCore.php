@@ -94,7 +94,7 @@ define('_XAR_ID_UNREGISTERED', '2');
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @param whatToLoad integer What optional systems to load.
+ * @param integer whatToLoad What optional systems to load.
  * @return bool true
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
  */
@@ -203,6 +203,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
+        // Start Variables utilities
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
@@ -247,17 +248,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 
-    // Start Variables utilities
-    // FIXME: <marco> No more sure of this!
-    /*
-    $systemArgs = array('allowableHTML' => xarCore_getSiteVar('Var.AllowableHTML'),
-                        'fixHTMLEntities' => xarCore_getSiteVar('Var.FixHTMLEntities'),
-                        'enableCensoringWords' => xarCore_getSiteVar('Var.EnableCensoringWords'),
-                        'censoredWords' => xarCore_getSiteVar('Var.CensoredWords'),
-                        'censoredWordsReplacers' => xarCore_getSiteVar('Var.CensoredWordsReplacers'));
-    */
-    //xarVar_init($systemArgs, $whatToLoad);
-
     // Start Blocks Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
         // {ML_dont_parse 'includes/xarBlocks.php'}
@@ -284,7 +274,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     }
 
-// TODO (marcinmilan): review what pasts of the old user system need to be retained
+        // TODO (marcinmilan): review what pasts of the old user system need to be retained
         if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
         include_once 'includes/xarUser.php';
@@ -322,10 +312,10 @@ function xarCoreGetVarDirPath()
  * Activates the debugger.
  *
  * @access public
- * @global xarDebug integer
- * @global xarDebug_sqlCalls integer
- * @global xarDebug_startTime string ?
- * @param flags integer bit mask for the debugger flags
+ * @global integer xarDebug
+ * @global integer xarDebug_sqlCalls
+ * @global string xarDebug_startTime
+ * @param integer flags bit mask for the debugger flags
  * @return void
  */
 function xarCoreActivateDebugger($flags)
@@ -354,7 +344,7 @@ function xarCoreActivateDebugger($flags)
  * Check if the debugger is active
  *
  * @access public
- * @global xarDebug integer
+ * @global integer xarDebug
  * @return bool true if the debugger is active, false otherwise
  */
 function xarCoreIsDebuggerActive()
@@ -366,7 +356,7 @@ function xarCoreIsDebuggerActive()
  * Check for specified debugger flag.
  *
  * @access public
- * @param flag integer the debugger flag to check for activity
+ * @param integer flag the debugger flag to check for activity
  * @return bool true if the flag is active, false otherwise
  */
 function xarCoreIsDebugFlagSet($flag)
@@ -379,21 +369,14 @@ function xarCoreIsDebugFlagSet($flag)
  *
  * @access protected
  * @static systemVars array
- * @param name string name of core system variable to get
- * @todo <marco> remove config file loader code if we're not going to use it
+ * @param string name name of core system variable to get
  */
 function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
-// FIXME: take into account database values (if there's a database already)
-//        or find some other way to update system/site config variables
+
+
     if (!isset($systemVars)) {
-        /*
-        $configLoader = new xarCore__ConfigFileLoader();
-        $fileName = xarCoreGetVarDirPath() . '/config.system.xml';
-        $configLoader->load($fileName);
-        $systemVars = $configLoader->getConfigVars();
-        */
         $fileName = xarCoreGetVarDirPath() . '/config.system.php';
         include $fileName;
         $systemVars = $systemConfiguration;
@@ -408,15 +391,14 @@ function xarCore_getSystemVar($name)
  * Get a core site variable
  *
  * @access protected
- * @static siteVars array
- * @param name string name of core site variable to get
+ * @static array siteVars
+ * @param string name name of core site variable to get
  * @return mixed variable value
  */
 function xarCore_getSiteVar($name)
 {
     static $siteVars = NULL;
-// FIXME: take into account database values (if there's a database already)
-//        or find some other way to update system/site config variables
+
     if (!isset($siteVars)) {
         $configLoader = new xarCore__ConfigFileLoader();
         $serverName = xarServerGetVar('SERVER_NAME');
@@ -438,9 +420,9 @@ function xarCore_getSiteVar($name)
  * Dispose the debugger
  *
  * @access protected
- * @global xarDebug integer
- * @global xarDebug_sqlCalls integer
- * @global xarDebug_startTime string?
+ * @global integer xarDebug
+ * @global intger xarDebug_sqlCalls
+ * @global string xarDebug_startTime
  * @return void
  */
 function xarCore_disposeDebugger()
@@ -460,7 +442,7 @@ function xarCore_disposeDebugger()
  * Error function before Exceptions are loaded
  *
  * @access protected
- * @param msg string message to print as an error
+ * @param string msg message to print as an error
  */
 function xarCore_die($msg)
 {
@@ -508,9 +490,9 @@ EOM;
  * The list of API types is read from the Core configuration variable
  * Core.AllowedAPITypes.
  *
- * @access protected
- * @param  apiType string Type of API to check whether allowed to load
  * @author Marcel van der Boom marcel@hsdev.com
+ * @access protected
+ * @param string apiType type of API to check whether allowed to load
  * @return bool
  */
 function xarCoreIsApiAllowed($apiType) {

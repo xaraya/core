@@ -4,6 +4,9 @@
  * 
  * Display Blocks
  *
+ * xarBlockType functions are now in xarLegacy,
+ * they can be called through blocks module api
+ *
  * @package blocks
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -18,11 +21,11 @@
  *
  * @author Paul Rosania
  * @access protected
- * @param args 
+ * @param  array args
  * @param whatElseIsGoingLoaded integer
  * @returns bool
- * @todo    And why are you using $blockType instead of $blockName, 
- *          when I said you to change I meant use $blockName everywhere, 
+ * @todo    And why are you using $blockType instead of $blockName,
+ *          when I said you to change I meant use $blockName everywhere,
  *          in the end it's the block name, not the block type, don't you think?
  */
 function xarBlock_init($args, $whatElseIsGoingLoaded)
@@ -30,14 +33,14 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     // Blocks Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $tables = array('blocks' => $systemPrefix . '_blocks',
-                    'block_instances' => $systemPrefix . '_block_instances',
-                    'block_groups' => $systemPrefix . '_block_groups',
+    $tables = array('blocks'                => $systemPrefix . '_blocks',
+                    'block_instances'       => $systemPrefix . '_block_instances',
+                    'block_groups'          => $systemPrefix . '_block_groups',
                     'block_group_instances' => $systemPrefix . '_block_group_instances',
-                    'block_types' => $systemPrefix . '_block_types');
+                    'block_types'           => $systemPrefix . '_block_types');
 
     xarDB_importTables($tables);
-    
+
     return true;
 }
 
@@ -45,8 +48,8 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
  * Get block information
  *
  * @access public
- * @param blockId integer the block id
- * @return resarray array block information
+ * @param integer blockId  the block id
+ * @return array block information
  * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarBlockGetInfo($blockId)
@@ -56,12 +59,12 @@ function xarBlockGetInfo($blockId)
         return;
     }
     list ($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $tables = xarDBGetTables();
 
-    $block_instances_table = $xartable['block_instances'];
-    $block_types_table = $xartable['block_types'];
-    $block_groups_table = $xartable['block_groups'];
-    $block_group_instances_table = $xartable['block_group_instances'];
+    $blockInstancesTable      = $tables['block_instances'];
+    $blockTypesTable          = $tables['block_types'];
+    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupInstancesTable = $tables['block_group_instances'];
 
     $query = "SELECT    inst.xar_id as id,
                         inst.xar_title as title,
@@ -74,12 +77,12 @@ function xarBlockGetInfo($blockId)
                         type.xar_module as module,
                         type.xar_type as type,
                         groups.xar_name as group_name
-              FROM      $block_instances_table as inst
-              LEFT JOIN $block_group_instances_table as group_inst
+              FROM      $blockInstancesTable as inst
+              LEFT JOIN $blockGroupInstancesTable as group_inst
               ON        group_inst.xar_instance_id = inst.xar_id
-              LEFT JOIN $block_types_table as type
+              LEFT JOIN $blockTypesTable as type
               ON        type.xar_id = inst.xar_type_id
-              LEFT JOIN $block_groups_table as groups
+              LEFT JOIN $blockGroupsTable as groups
               ON        groups.xar_id = group_inst.xar_group_id
               WHERE     inst.xar_id = $blockId";
 
@@ -94,21 +97,22 @@ function xarBlockGetInfo($blockId)
         return NULL;
     }
 
-    $block_info = $result->GetRowAssoc(false);
-    $block_info['mid'] = $block_info['module'];
-    $block_info['bkey'] = $block_info['id'];
+    $blockInfo = $result->GetRowAssoc(false);
+
+    $blockInfo['mid']  = $blockInfo['module'];
+    $blockInfo['bkey'] = $blockInfo['id'];
 
     $result->Close();
 
-    return $block_info;
+    return $blockInfo;
 }
 
 /**
  * Get block group information
  *
  * @access public
- * @param blockGroupID integer the block group id
- * @returns resarray array of block information
+ * @param integer blockGroupId the block group id
+ * @return array lock information
  * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarBlockGroupGetInfo($blockGroupId)
@@ -119,17 +123,17 @@ function xarBlockGroupGetInfo($blockGroupId)
     }
 
     list ($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $tables = xarDBGetTables();
 
-    $block_instances_table = $xartable['block_instances'];
-    $block_types_table = $xartable['block_types'];
-    $block_groups_table = $xartable['block_groups'];
-    $block_group_instances_table = $xartable['block_group_instances'];
+    $blockInstancesTable      = $tables['block_instances'];
+    $blockTypesTable          = $tables['block_types'];
+    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupInstancesTable = $tables['block_group_instances'];
 
     $query = "SELECT    xar_id as id,
                         xar_name as name,
                         xar_template as template
-              FROM      $block_groups_table
+              FROM      $blockGroupsTable
               WHERE     xar_id = $blockGroupId";
 
     $result =& $dbconn->Execute($query);
@@ -140,7 +144,7 @@ function xarBlockGroupGetInfo($blockGroupId)
         $msg = xarML("Group ID $blockGroupId not found.", $query);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-        return NULL;
+        return;
     }
 
     $group = $result->GetRowAssoc(false);
@@ -153,12 +157,12 @@ function xarBlockGroupGetInfo($blockGroupId)
                         types.xar_module as module,
                         inst.xar_title as title,
                         group_inst.xar_position as position
-              FROM      $block_group_instances_table as group_inst
-              LEFT JOIN $block_groups_table as groups
+              FROM      $blockGroupInstancesTable as group_inst
+              LEFT JOIN $blockGroupsTable as groups
               ON        group_inst.xar_group_id = groups.xar_id
               LEFT JOIN $block_instances_table as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $block_types_table as types
+              LEFT JOIN $blockTypesTable as types
               ON        types.xar_id = inst.xar_type_id
               WHERE     groups.xar_id = '$blockGroupId'
               ORDER BY  group_inst.xar_position ASC";
@@ -180,17 +184,13 @@ function xarBlockGroupGetInfo($blockGroupId)
     return $group;
 }
 
-// XarBlockType functions are now in xarLegacy, they should be in the blocks module
-
-// PROTECTED FUNCTIONS
-
 /**
  * Load a block
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
- * @param modName the module name
- * @param blockType the name of the block
+ * @param string modName the module name
+ * @param string blockType the name of the block
  * @return bool
  * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
@@ -212,26 +212,26 @@ function xarBlock_load($modName, $blockName)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back exception
 
-    $moddir = 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
+    $blockDir = 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
 
     // Load the block
-    $incfile = $blockName . ".php";
-    $filepath = $moddir . '/' . xarVarPrepForOS($incfile);
+    $blockFile = $blockName . '.php';
+    $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
 
-    if (!file_exists($filepath)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filepath);
+    if (!file_exists($filePath)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filePath);
         return;
     }
-    include $filepath;
+    include $filePath;
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_BLOCK, $blockName) === NULL) return;
 
     // Initialise block (security schema) if required.
-    $initfunc = "{$modName}_{$blockName}block_init";
-    if (function_exists($initfunc)) {
-        $initfunc();
+    $initFunc = "{$modName}_{$blockName}block_init";
+    if (function_exists($initFunc)) {
+        $initFunc();
     }
     return true;
 }
@@ -250,17 +250,17 @@ function xarBlock_loadAll()
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    $modNametable = $xartable['modules'];
+    $modTable = $tables['modules'];
 
     $query = "SELECT xar_name,
                    xar_directory,
                    xar_regid
-            FROM $modNametable";
+            FROM $modTable";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while (!$result->EOF) {
-        list($name, $directory, $mid) = $result->fields;
+        list($name, $directory, $modId) = $result->fields;
         $result->MoveNext();
         $blockDir = 'modules/' . xarVarPrepForOS($directory) . '/xarblocks';
         if (!@is_dir($blockDir)) {
@@ -276,18 +276,18 @@ function xarBlock_loadAll()
                 }
                 // Get info on the block
                 $usname = preg_replace('/ /', '_', $name);
-                $infofunc = $usname . '_' . $blockName . 'block_info';
+                $infoFunc = $usname . '_' . $blockName . 'block_info';
                 if (function_exists($infofunc)) {
-                    $blocks_modules["$name$blockName"] = $infofunc();
-                    $blocks_modules["$name$blockName"]['bkey'] = $blockName;
-                    $blocks_modules["$name$blockName"]['mid'] = $mid;
+                    $blocksModules["$name$blockName"] = $infoFunc();
+                    $blocksModules["$name$blockName"]['bkey'] = $blockName;
+                    $blocksModules["$name$blockName"]['mid'] = $modId;
                 }
             }
         }
     }
     $result->Close();
     // Return information gathered
-    return $blocks_modules;
+    return $blocksModules;
 }
 
 /**
@@ -295,7 +295,7 @@ function xarBlock_loadAll()
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
- * @param blockInfo block information parameters
+ * @param array blockInfo block information parameters
  * @return string output the block to show
  * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
@@ -339,16 +339,8 @@ function xarBlock_render($blockInfo)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $displayFuncName);
         return;
     }
-    /* Removed collapsible blocks for better solution.  
-    // Handle block state
-    $res = xarModAPIFunc('blocks', 'user', 'getState', $blockInfo);
-    if (!isset($res)) {
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-        $blockInfo['content'] = '';
-    }
-    */
-    // Determine which block box template to use
 
+    // Determine which block box template to use
     $templateName = NULL;
     if (isset($blockInfo['_bl_template'])) {
         $templateName = $blockInfo['_bl_template'];
@@ -362,7 +354,8 @@ function xarBlock_render($blockInfo)
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
- * @param groupName the name of the block group
+ * @param string groupName the name of the block group
+ * @return string
  * @raise BAD_PARAM, DATABASE_ERROR
  */
 function xarBlock_renderGroup($groupName)
@@ -373,15 +366,13 @@ function xarBlock_renderGroup($groupName)
     }
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $tables = xarDBGetTables();
 
-    $block_group_instances_table = $xartable['block_group_instances'];
-    $block_instances_table = $xartable['block_instances'];
-    $block_groups_table = $xartable['block_groups'];
-    $block_types_table = $xartable['block_types'];
+    $blockGroupTnstancesTable = $tables['block_group_instances'];
+    $blockInstancesTable      = $tables['block_instances'];
+    $blockGroupsTable         = $tables['block_groups'];
+    $blockTypesTable          = $tables['block_types'];
 
-    // FIXME: Should use UNION instead of LEFT JOIN(?) - Paul
-    // <marco> Nope, UNION is lesser supported than LEFT JOIN by rdbms
     $query = "SELECT    inst.xar_id as bid,
                         types.xar_type as type,
                         types.xar_module as module,
@@ -391,12 +382,12 @@ function xarBlock_renderGroup($groupName)
                         inst.xar_state as state,
                         group_inst.xar_position as position,
                         groups.xar_template as _bl_template
-              FROM      $block_group_instances_table as group_inst
-              LEFT JOIN $block_groups_table as groups
+              FROM      $blockGroupInstancesTable as group_inst
+              LEFT JOIN $blockGroupsTable as groups
               ON        group_inst.xar_group_id = groups.xar_id
-              LEFT JOIN $block_instances_table as inst
+              LEFT JOIN $blockInstancesTable as inst
               ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $block_types_table as types
+              LEFT JOIN $blockTypesTable as types
               ON        types.xar_id = inst.xar_type_id
               WHERE     groups.xar_name = '$groupName'
               AND       inst.xar_state > 0
