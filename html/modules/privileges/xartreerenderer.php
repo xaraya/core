@@ -6,7 +6,7 @@
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Privileges Module
@@ -15,7 +15,7 @@
 
 include_once 'modules/privileges/xarprivileges.php';
 
-class xarTreeRenderer 
+class xarTreeRenderer
 {
 
     var $privs;
@@ -44,7 +44,7 @@ class xarTreeRenderer
      * Constructor
      *
     */
-        function xarTreeRenderer() 
+        function xarTreeRenderer()
         {
             $this->privs = new xarPrivileges();
         }
@@ -62,7 +62,7 @@ class xarTreeRenderer
      * @throws  none
      * @todo    none
     */
-        function maketrees($arg) 
+        function maketrees($arg)
         {
             $trees = array();
             foreach ($this->privs->gettoplevelprivileges($arg) as $entry) {
@@ -83,7 +83,7 @@ class xarTreeRenderer
      * @throws  none
      * @todo    none
     */
-        function maketree($privilege) 
+        function maketree($privilege)
         {
             return $this->addbranches(array('parent'=>$this->privs->getprivilegefast($privilege->getID())));
         }
@@ -106,7 +106,7 @@ class xarTreeRenderer
             $node['expanded'] = false;
             $node['selected'] = false;
             $node['children'] = array();
-            foreach($this->privs->getsubprivileges($object['pid']) as $subnode){
+            foreach($this->privs->getChildren($object['pid']) as $subnode){
                 $node['children'][] = $this->addbranches(array('parent'=>$subnode));
             }
             return $node;
@@ -145,7 +145,7 @@ class xarTreeRenderer
      * @todo    none
     */
 
-    function drawtree($node) 
+    function drawtree($node)
     {
 
         $this->html = "\n".'<div name="PrivilegesTree_'.$node['parent']['pid'].'" id="PrivilegesTree_'.$node['parent']['pid'].'" style="position: relative;">';
@@ -200,7 +200,7 @@ class xarTreeRenderer
 
     // this next part holds the icon links
     // toggle the tree
-/*        if(count($this->privs->getsubprivileges($object['pid'])) == 0) {
+/*        if(count($this->privs->getChildren($object['pid'])) == 0) {
             $this->html .= $this->bigblank;
         }
         else {
@@ -255,7 +255,7 @@ class xarTreeRenderer
                              'admin',
                              'modifyprivilege',
                              array('pid'=>$object['pid'])) .'" title="'.$object['description'].'">' .$object['name'] . '</a>';
-        $componentcount = count($this->privs->getsubprivileges($object['pid']));
+        $componentcount = count($this->privs->getChildren($object['pid']));
         $this->html .= $componentcount > 0 ? "&nbsp;:&nbsp;" .$componentcount . '&nbsp;'.xarML('components') : "";
         $this->html .= "\n\t\t";
 /*        $this->html .= '<span style="position:absolute;left:35em;border: 1px dashed #f0f;">';
@@ -305,7 +305,7 @@ class xarTreeRenderer
      * @todo    none
     */
 
-    function drawindent() 
+    function drawindent()
     {
         $html = '';
         foreach ($this->indent as $column) {$html .= $column;}

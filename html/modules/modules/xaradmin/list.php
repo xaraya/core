@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * List modules and current settings
@@ -71,11 +71,11 @@ function modules_admin_list()
 
     // reset session-based message var
     xarSessionDelVar('statusmsg');
-    
+
     // obtain list of modules based on filtering criteria
     // think we need to always check the filesystem
     xarModAPIFunc('modules', 'admin', 'regenerate');
-    $modlist = xarModAPIFunc('modules','admin','GetList',array('filter' => array('State' => $data['selfilter'])));
+    $modlist = xarModAPIFunc('modules','admin','getlist',array('filter' => array('State' => $data['selfilter'], 'numitems' =>20)));
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('set1/disabled.png');

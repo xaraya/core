@@ -68,12 +68,14 @@ class xarQuery
         $this->dbconn =& xarDBGetConn();
     }
 
+
     function run($statement='',$display=1)
     {
         $this->setstatement($statement);
         if ($this->type != 'SELECT') {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                $this->bindvars = array();
             }
             else {
                 $result = $this->dbconn->Execute($this->statement);
@@ -90,6 +92,7 @@ class xarQuery
         else {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                $this->bindvars = array();
             }
             else {
                 $result = $this->dbconn->Execute($this->statement);
@@ -742,7 +745,7 @@ class xarQuery
     function assembledsorts()
     {
         $s = "";
-        if (count($this->sorts)>0 && count($this->fields) > 1 && !isset($this->fields['COUNT(*)'])) {
+        if (count($this->sorts)>0 && count($this->fields) && !isset($this->fields['COUNT(*)'])) {
             $s = " ORDER BY ";
             foreach ($this->sorts as $sort) {
                 if (is_array($sort)) {
@@ -768,12 +771,13 @@ class xarQuery
     }
     function clearfield($x)
     {
-        $count = count($this->fields);
-        for ($i=0;$i<$count;$i++) {
-            if (($this->fields[$i]['name'] == $x)) unset($this->fields[$i]);
-            elseif (isset($this->fields[$i]['alias']) && ($this->fields[$i]['alias'] == $x))
-            unset($this->fields[$i]);
-
+        foreach ($this->fields as $key => $value) {
+            if (($key == $x)) {
+                unset($this->fields[$key]);
+            }
+            elseif (isset($value['alias']) && ($value['alias'] == $x)) {
+                unset($this->fields[$key]);
+            }
         }
     }
     function clearconditions()

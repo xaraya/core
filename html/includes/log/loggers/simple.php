@@ -42,7 +42,7 @@
 * The Log_file class is a concrete implementation of the Log::
 * abstract class which writes message to a text file. This is based
 * on the previous Log_file class by Jon Parise.
-* 
+*
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
 * @package logging
@@ -61,14 +61,14 @@ include_once ('./includes/log/loggers/xarLogger.php');
  */
 class xarLogger_simple extends xarLogger
 {
-    /** 
-    * String holding the filename of the logfile. 
+    /**
+    * String holding the filename of the logfile.
     * @var string
     */
     var $_filename;
 
     /**
-    * Integer holding the file handle. 
+    * Integer holding the file handle.
     * @var integer
     */
     var $_fp;
@@ -116,7 +116,7 @@ class xarLogger_simple extends xarLogger
 
     /**
     * Set up the configuration of the specific Log Observer.
-    * 
+    *
     * @param  array $conf  with
     *               'fileName'     => string      The filename of the logfile.
     *               'maxLevel'     => int         Maximum level at which to log.
@@ -127,7 +127,7 @@ class xarLogger_simple extends xarLogger
     function setConfig($conf)
     {
         parent::setConfig($conf);
-        
+
         /* If a file mode has been provided, use it. */
         if (!empty($conf['mode'])) {
             $this->_mode = $conf['mode'];
@@ -148,12 +148,12 @@ class xarLogger_simple extends xarLogger
          if (isset($_SERVER["HTTP_REFERER"])) {
             $this->_buffer .= "HTTP_REFERER:  {$_SERVER['HTTP_REFERER']} \r\n";
          }
-         
+
         $this->_writeOut        = true;
         $this->_isFileOpen      = false;
         $this->_isFileWriteable = false;
         $this->_fileheader      = '';
-        
+
         $this->_filename        = $conf['fileName'];
         $this->_ensureFileWriteable();
 
@@ -162,7 +162,7 @@ class xarLogger_simple extends xarLogger
         //This is not working, find out why later on
 //      register_shutdown_function(array(&$this, '_destructor'));
     }
-    
+
     /**
     * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
     * method has been called, in which case it won't.
@@ -194,7 +194,7 @@ class xarLogger_simple extends xarLogger
 
         // Add to loglines array
         $this->_buffer .= $this->_formatMessage($message, $level);
-        
+
         //This shouldnt be necessary, fix afterwards
         //The destructor doesnt seem to be called, or
         //the script is not able to execute the fwrite(?) during shutdown
@@ -202,7 +202,7 @@ class xarLogger_simple extends xarLogger
 
         return true;
     }
-    
+
     /**
     * This function will prevent the destructor from logging.
     *
@@ -226,7 +226,7 @@ class xarLogger_simple extends xarLogger
             fwrite($this->_fp, $this->_buffer);
             $this->_buffer = '';
         }
-        
+
         if (!$this->_closeLogfile()) return false;
     }
 
@@ -237,25 +237,25 @@ class xarLogger_simple extends xarLogger
     *
     * Sets $this->_filename to the file path then
     *
-    * @param file $file Path to the logger file 
+    * @param file $file Path to the logger file
     * @access private
     */
-    function _ensureFileWriteable() 
+    function _ensureFileWriteable()
     {
         if (!file_exists($this->_filename)) {
             if (!is_writable(dirname($this->_filename))) {
-               xarCore_die ('Logger file path given is not writeable: '.$this->_filename);
+               xarCore_die ('Logger file path given (' . $this->_filename . ') is not writeable: '.$this->_filename);
             }
-            else 
+            else
             {
                 if (!touch($this->_filename))
                     xarCore_die ('Unable to create logger file: '.$this->_filename);
             }
         }
-        
+
         $this->_isFileWriteable = true;
         $this->_filename = realpath($this->_filename);
-        
+
         return true;
     }
 
@@ -274,15 +274,15 @@ class xarLogger_simple extends xarLogger
         if (!$this->_isFileWriteable) {
             xarCore_die('File is not writeable');
         }
-        
+
         if (!file_exists($this->_filename) || filesize($this->_filename) > $this->_maxFileSize) {
             $insert_header = true;
             $option = 'w'; //write over
-        } else {       
+        } else {
             $insert_header = false;
             $option = 'a'; //append
         }
-        
+
         if (($this->_fp = fopen($this->_filename, $option)) == false) {
             xarCore_die('unable to open log file '.$this->_filename);
             return false;
@@ -295,7 +295,7 @@ class xarLogger_simple extends xarLogger
         $this->_isFileOpen = true;
         return true;
     }
-    
+
     /**
     * Closes the logfile file pointer.
     *
@@ -309,7 +309,7 @@ class xarLogger_simple extends xarLogger
         if (!fclose($this->_fp)) {
             return false;
         }
-        
+
         $this->_isFileOpen = false;
 
         return true;
