@@ -160,6 +160,10 @@ function blocks_init()
                      array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
                      'blocks_userapi_handleStateIconTag');
     
+    xarModSetVar('blocks','collapseable',1);
+    xarModSetVar('blocks','blocksuparrow','upb.gif');
+    xarModSetVar('blocks','blocksdownarrow','downb.gif');
+    
     // Initialisation successful
     return true;
 }
