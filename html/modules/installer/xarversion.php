@@ -2,7 +2,7 @@
 // $Id: s.xarversion.php 1.7 03/01/17 16:29:55+00:00 johnny@falling.local.lan $
 $modversion['name'] = 'Xaraya Installer';
 $modversion['id'] = '200';
-$modversion['version'] = '1.0';
+$modversion['version'] = '1.0.0';
 $modversion['description'] = 'Install and customize Xaraya.';
 $modversion['credits'] = '';
 $modversion['help'] = '';

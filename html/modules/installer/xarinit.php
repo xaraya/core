@@ -52,12 +52,12 @@ function installer_init()
  */
 function installer_upgrade($oldVersion)
 {
-    // Get database information
-    list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
-
-
-    return false;
+    switch($oldVersion) {
+    case '1.0':
+        // compatability upgrade, nothing to be done
+        break;
+    }
+    return true;
 }
 
 /**
