@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -503,10 +503,8 @@ function dynamicdata_admin_modifyprop()
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     list($itemid,
          $modid,
@@ -1072,10 +1070,8 @@ function dynamicdata_admin_modifyconfig()
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();

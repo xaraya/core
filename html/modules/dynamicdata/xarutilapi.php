@@ -482,11 +482,8 @@ function dynamicdata_utilapi_getmeta($args)
 {
     static $propertybag = array();
 
-    // restricted to DD Admins
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     extract($args);
 
