@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage import
  * @author mikespub <mikespub@xaraya.com>
  * @author apakuni <apakuni@xaraya.com>
@@ -30,7 +30,7 @@ ob_start();
 }
 ?>
 
-<h3>Quick and dirty import of test data from an existing PN .71+ site</h3>
+<h3>Quick and dirty import of test data from an existing MoveableType site</h3>
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
@@ -51,39 +51,47 @@ if (isset($step)) {
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
 ?>
     Requirement : you must be using the same database, but a different prefix...
-    <p></p>
-    <form method="POST" action="import_pn.php">
-    <table border="0" cellpadding="4">
-    <tr><td align="right">Prefix used in your PN .71+ site</td><td>
-    <input type="text" name="oldprefix" value="nuke"></td></tr>
-    <tr><td align="right">URL of the /images directory on your PN .71+ site</td><td>
-    <input type="text" name="imgurl" value="/images"></td></tr>
-    <tr><td align="right">Reset corresponding Xaraya data ?</td><td>
-    <input type="checkbox" name="reset" checked></td></tr>
-    <tr><td align="right">Reset existing Xaraya categories ?</td><td>
-    <input type="checkbox" name="resetcat" checked></td></tr>
-    <tr><td colspan=2 align="middle">
-    <input type="submit" value=" Import Data "></td></tr>
-    </table>
-    <input type="hidden" name="step" value="1">
-    <input type="hidden" name="module" value="roles">
+    <br />
+    <form method="POST" action="import_mt.php">
+        <table border="0" cellpadding="4">
+            <tr>
+                <td align="right">Prefix used in your PN .71+ site</td>
+                <td><input type="text" name="oldprefix" value="mt"></td>
+            </tr>
+            <tr>
+                <td align="right">URL of the /images directory on your PN .71+ site</td>
+                <td><input type="text" name="imgurl" value="/images"></td>
+            </tr>
+            <tr>
+                <td align="right">Reset corresponding Xaraya data ?</td>
+                <td><input type="checkbox" name="reset" checked></td>
+            </tr>
+            <tr>
+                <td align="right">Reset existing Xaraya categories ?</td>
+                <td><input type="checkbox" name="resetcat" checked></td>
+            </tr>
+            <tr>
+                <td colspan=2 align="middle"><input type="submit" value=" Import Data "></td>
+            </tr>
+        </table>
+        <input type="hidden" name="step" value="1">
+        <input type="hidden" name="module" value="roles">
     </form>
-    Recommended usage :<br /><ol>
-    <li>install Xaraya with the 'Community Site' option</li>
-    <li>initialize and activate the following modules :<ul>
-<li>categories</li>
-<li>comments</li>
-<li>hitcount</li>
-<li>ratings (optional)</li>
-<li>articles</li>
-<li>polls (if you want to import those)</li>
-</ul>
-[do not modify the default privileges, hooks etc. yet]
-</li>
-    <li>copy the import_pn.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
-    <li>???</li>
-    <li>profit ;-)</li>
-</ol>
+    Recommended usage :<br />
+    <ol>
+        <li>install Xaraya with the 'Community Site' option</li>
+        <li>initialize and activate the following modules :
+            <ul>
+                <li>categories</li>
+                <li>comments</li>
+                <li>articles</li>
+            </ul>
+            [do not modify the default privileges, hooks etc. yet]
+        </li>
+        <li>copy the import_mt.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
+        <li>???</li>
+        <li>profit ;-)</li>
+    </ol>
 
 <?php
 } else {
@@ -117,12 +125,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (!xarModAPILoad('dynamicdata','util')) {
         die("Unable to load the dynamicdata util API");
     }
-    if (xarModIsAvailable('polls') && !xarModAPILoad('polls','admin')) {
-        die("Unable to load the polls admin API");
-    }
-    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
-        $docounter = 1;
-    }
     $tables = xarDBGetTables();
 
     if (!isset($reset)) {
@@ -132,27 +134,29 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         $resetcat = 0;
     }
 
-    $importfiles = array(
-                         1 => array('import_pn_users.php'),
-                         //2 => array('import_pn_topics.php','import_pn_stories_cat.php'),
-                         2 => array('import_pn_topicscat.php'),
-                         3 => array('import_pn_stories.php'),
-                         4 => array('import_pn_queue.php'),
-                         5 => array('import_pn_sections.php'),
-                         6 => array('import_pn_seccont.php'),
-                         7 => array('import_pn_faqcategories.php'),
-                         8 => array('import_pn_faqanswer.php'),
-                         9 => array('import_pn_comments.php'),
-                         10 => array('import_pn_links_categories.php'),
-                         11 => array('import_pn_links_links.php'),
-                    // TODO: split into separate steps if you have many of those :)
-                         12 => array('import_pn_poll_desc.php',
-                                     'import_pn_poll_data.php',
-                                     'import_pn_pollcomments.php'),
-// TODO: add the rest :-)
-                         13 => array('import_pn_cleanup.php'),
-                        );
 
+    $importfiles = array(
+                         1 => array('import_mt_mysql.php'));
+/*
+                         //2 => array('import_mt_topics.php','import_mt_stories_cat.php'),
+                         2 => array('import_mt_topicscat.php'),
+                         3 => array('import_mt_stories.php'),
+                         4 => array('import_mt_queue.php'),
+                         5 => array('import_mt_sections.php'),
+                         6 => array('import_mt_seccont.php'),
+                         7 => array('import_mt_faqcategories.php'),
+                         8 => array('import_mt_faqanswer.php'),
+                         9 => array('import_mt_comments.php'),
+                         10 => array('import_mt_links_categories.php'),
+                         11 => array('import_mt_links_links.php'),
+                    // TODO: split into separate steps if you have many of those :)
+                         12 => array('import_mt_poll_desc.php',
+                                     'import_mt_poll_data.php',
+                                     'import_mt_pollcomments.php'),
+// TODO: add the rest :-)
+                         13 => array('import_mt_cleanup.php'),
+                        );
+*/
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
         foreach ($importfiles[$step] as $file) {
             if (!is_file($file)) {
@@ -163,11 +167,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             include($file);
         }
     }
+
 }
 
-?>
-
-<?php
 if (!isset($step)) {
 
 // catch the output
@@ -195,5 +197,5 @@ xarCore_disposeDebugger();
 
 // done
 exit;
- 
+
 ?>
