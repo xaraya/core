@@ -53,8 +53,6 @@ function xarConfigGetVar($name)
                             'Version_ID' => 'System.Core.VersionId',
                             'Version_Sub' => 'System.Core.VersionSub');
 
-	static $accessed_db = false;
-
     if (empty($name)) {
         $msg = xarML('Empty name.');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -64,6 +62,10 @@ function xarConfigGetVar($name)
 
     if (isset($aliases[$name])) {
         $name = $aliases[$name];
+    }
+
+    if (xarVarIsCached('Config.Variables', $name)) {
+        return xarVarGetCached('Config.Variables', $name);
     }
 
     if ($name == 'Site.DB.TablePrefix') {
@@ -77,42 +79,39 @@ function xarConfigGetVar($name)
         return XARCORE_VERSION_SUB;
     }
 
-    if (!$accessed_db) {
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
 
-    	list($dbconn) = xarDBGetConn();
-        $tables = xarDBGetTables();
+    $config_varsTable = $tables['config_vars'];
 
-        $config_varsTable = $tables['config_vars'];
+    $query = "SELECT xar_value
+              FROM $config_varsTable
+              WHERE xar_name='" . xarVarPrepForStore($name) . "'";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-        $query = "SELECT xar_name, xar_value
-                FROM $config_varsTable";
+    if ($result->EOF) {
+        $result->Close();
+        // FIXME: <marco> Trying to force strong check over config var names
+        /*$msg = xarML('Unexistent config variable: #(1).', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                       new SystemException($msg));
+        return;*/
+        xarVarSetCached('Config.Variables', $name, NULL);
+        return;
+    }
 
-		$result =& $dbconn->Execute($query);
+    //Get data
+    list($value) = $result->fields;
+    $result->Close();
 
-		if (!$result) return;
+    // Unserialize variable value
+    $value = unserialize($value);
 
-        while(!$result->EOF) {
-            list($db_name, $db_value) = $result->fields;
+    //Some caching
+    xarVarSetCached('Config.Variables', $name, $value);
 
-			// Unserialize variable value
-            $value = unserialize($db_value);
-
-            //Some caching
-            xarVarSetCached('Config.Variables', $db_name, $value);
-
-            $result->MoveNext();
-		}
-
-		$result->Close();
-
-		$accessed_db = true;
-	}
-
-    if (xarVarIsCached('Config.Variables', $name)) {
-        return xarVarGetCached('Config.Variables', $name);
-    } else {
-	    return;
-	}
+    return $value;
 }
 
 /**
