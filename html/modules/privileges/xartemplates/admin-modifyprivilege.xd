@@ -32,7 +32,7 @@ document.forms['privilegeform'].submit();}
         <input type="hidden" name="pid" id="pid" value="#$ppid#" />
         <div style="text-align: left">
         <table border="0" cellpadding="2" cellspacing="0">
-            <xar:if condition="$ppid lt 3">
+            <xar:if condition="$frozen">
                 <tr>
                     <td>
                         <label for="pname"><xar:mlstring>Name</xar:mlstring></label>

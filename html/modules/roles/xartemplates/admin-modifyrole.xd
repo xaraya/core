@@ -6,7 +6,7 @@
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
         <div style="text-align: left;">
 		<table border="0" cellpadding="2" cellspacing="0">
-			<xar:if condition="$uid lt xarModGetVar('roles','frozenroles')">
+			<xar:if condition="$frozen">
 			<tr>
 				<td>
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>

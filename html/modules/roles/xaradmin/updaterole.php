@@ -3,23 +3,29 @@
 /**
  * updaterole - update a role
  * this is an action page
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_admin_updaterole()
-{ 
+{
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
-    if (!xarVarFetch('ptype', 'str:1:35:', $ptype)) return; 
+    if (!xarVarFetch('ptype', 'str:1:35:', $ptype)) return;
     // checks specific only to users
-    if ($ptype == 0) {
+    if ($ptype == 1) {
+        $puname = "";
+        $pemail = "";
+        $ppass1 = "";
+        $pstate = 0;
+    }
+    else {
         if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
         if (!xarVarFetch('pemail', 'str:1:', $pemail)) return;
-        if (!xarVarFetch('ppass1', 'str:1:', $ppass1)) return;
-        if (!xarVarFetch('ppass2', 'str:1:', $ppass2)) return;
-        if (!xarVarFetch('pstate', 'str:1:', $pstate)) return; 
+        if (!xarVarFetch('ppass1', 'str:1:', $ppass1,'')) return;
+        if (!xarVarFetch('ppass2', 'str:1:', $ppass2,'')) return;
+        if (!xarVarFetch('pstate', 'str:1:', $pstate)) return;
         // check for duplicate username
         $user = xarModAPIFunc('roles',
             'user',
@@ -30,19 +36,19 @@ function roles_admin_updaterole()
             $msg = xarML('That username is already taken.');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
-        } 
+        }
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
             $msg = xarML('There is an error in username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
-        } 
+        }
 
         if (strrpos($puname, ' ') > 0) {
             $msg = xarML('There is a space in username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
-        } 
+        }
         // TODO: Replace with DD property type check.
         // check for valid email address
         $res = preg_match('/.*@.*/', $pemail);
@@ -50,14 +56,14 @@ function roles_admin_updaterole()
             $msg = xarML('There is an error in email address');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
-        } 
+        }
         // check for valid password
         if (strcmp($ppass1, $ppass2) != 0) {
             $msg = xarML('The two password entries are not the same');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
-        } 
-    } 
+        }
+    }
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,
@@ -65,16 +71,16 @@ function roles_admin_updaterole()
         'uname' => $puname,
         'email' => $pemail,
         'pass' => $ppass1,
-        'state' => $pstate); 
+        'state' => $pstate);
     // create a role from the data
-    $role = new xarRole($pargs); 
+    $role = new xarRole($pargs);
     // Try to update the role to the repository and bail if an error was thrown
     $modifiedrole = $role->update();
     if (!$modifiedrole) {
         return;
-    } 
+    }
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));
-} 
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+}
 
 ?>

@@ -199,7 +199,7 @@ class xarTreeRenderer {
         }
 */
     // don't allow deletion of certain privileges
-        if($object['pid'] <= xarModGetVar('privileges','frozenprivileges')) {
+        if(!xarSecurityCheck('DeletePrivilege',0,'Privileges',$object['name'])) {
             $this->html .= $this->bigblank;
         }
         else {

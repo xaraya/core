@@ -32,7 +32,7 @@
 		<xar:loop name="$users">
 			<tr>
 				<td width="150">
-					<xar:if condition="$uid ge xarModGetVar('roles','frozenroles')">
+					<xar:if condition="!$frozen">
 						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">				
 						#$name#
 						</a>
@@ -47,7 +47,7 @@
 					#$email#
 				</td>
 				<td style="text-align: center">
-					<xar:if condition="$uid gt 4">
+					<xar:if condition="!$frozen">
 						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;

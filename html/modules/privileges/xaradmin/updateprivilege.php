@@ -22,7 +22,7 @@ function privileges_admin_updateprivilege()
                                        'prealm',
                                        'pmodule',
                                        'pcomponent',
-                                        'ptype',
+                                       'ptype',
                                        'plevel');
 
     $i = 0;
@@ -38,13 +38,8 @@ function privileges_admin_updateprivilege()
         $instance = substr($instance,0,strlen($instance)-1);
     }
 
-// some privileges can't be modified, for your own good.
-    if ($pid <= xarModGetVar('privileges','frozenprivileges')) {
-        $msg = xarML('This privilege cannot be edited');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'NO_PERMISSION',
-                       new DefaultUserException($msg));
-        return;
-    }
+// Security Check
+    if(!xarSecurityCheck('EditPrivilege',0,'Privileges',$name)) return;
 
 // call the Privileges class and update the values
 

@@ -14,8 +14,6 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
-    // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -40,11 +38,11 @@ function roles_admin_modifyrole()
         }
     }
     // Load Template
-    if (!empty($name)) {
-        $data['pname'] = $name;
-    } else {
-        $data['pname'] = $role->getName();
-    }
+    if (empty($name)) $name = $role->getName();
+    $data['pname'] = $name;
+
+    // Security Check
+    $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
     if (!empty($type)) {
         $data['ptype'] = $type;

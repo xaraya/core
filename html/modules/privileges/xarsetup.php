@@ -47,9 +47,10 @@ function initializeSetup()
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'Admin access to all modules');
     xarRegisterPrivilege('GeneralLock','All','empty','All','All',ACCESS_NONE,'A container privilege for denying access to certain roles');
     xarRegisterPrivilege('LockSelf','All','roles','Roles','Self',ACCESS_NONE,'Deny access to Self');
-    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody',ACCESS_NONE,'Deny access to Everybody');
-    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous',ACCESS_NONE,'Deny access to Anonymous');
-    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators',ACCESS_NONE,'Deny access to Administrators');
+    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody',ACCESS_NONE,'Deny access to Everybody role');
+    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous',ACCESS_NONE,'Deny access to Anonymous role');
+    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators',ACCESS_NONE,'Deny access to Administrators role');
+    xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration',ACCESS_NONE,'Deny access to Administration privilege');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -64,6 +65,7 @@ function initializeSetup()
     xarMakePrivilegeMember('LockEverybody','GeneralLock');
     xarMakePrivilegeMember('LockAnonymous','GeneralLock');
     xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+    xarMakePrivilegeMember('LockAdministration','GeneralLock');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -73,6 +75,8 @@ function initializeSetup()
 
     xarAssignPrivilege('Administration','Administrators');
     xarAssignPrivilege('GeneralLock','Everybody');
+    xarAssignPrivilege('GeneralLock','Administrators');
+    xarAssignPrivilege('GeneralLock','Users');
 
     /*********************************************************************
     * Define instances for the core modules

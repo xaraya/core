@@ -290,7 +290,7 @@ class xarMasks
     {
         $mask =  $this->getMask($mask);
         if (!$mask) {
-// <mikespub> moved this whole $module thing where it's actually used, i.e. for 
+// <mikespub> moved this whole $module thing where it's actually used, i.e. for
 // error reporting only. If you want to override masks with this someday, move
 // it back before the $this->getMask($mask) or wherever :-)
 
@@ -299,7 +299,7 @@ class xarMasks
             if ($module == '') list($module) = xarRequestGetInfo();
 
 // I'm a bit lost on this line. Does this var ever get set?
-// <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar / 
+// <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar /
 // xarModGetVar combination you used before (although $module will generally
 // not be 'blocks', so I have no idea why this is needed anyway)
             if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
@@ -317,6 +317,8 @@ class xarMasks
             return;
         }
 
+        // insert any component overrides
+        if ($component != '') $mask->setComponent($component);
         // insert any instance overrides
         if ($instance != '') $mask->setInstance($instance);
 
@@ -487,9 +489,9 @@ class xarMasks
         }
         foreach ($privilegeset['privileges'] as $privilege) {
 //            echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
-//            if (($privilege->getLevel() == 0) && (($privilege->includes($mask))||($mask->includes($privilege)))) echo $privilege->getName() . " found. ";
+//            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
 //            else echo "not found. ";
-            if (($privilege->getLevel() == 0) && (($privilege->includes($mask))||($mask->includes($privilege)))) {
+            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
             $pass = false;
             $matched = true;
             break;

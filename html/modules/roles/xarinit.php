@@ -179,8 +179,6 @@ function roles_activate()
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
-    xarModSetVar('roles', 'frozenroles', _XAR_ID_UNREGISTERED + 1);
-    xarModSetVar('privileges', 'frozenprivileges', 1);
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
     $confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.  You can either do this now, or on the first time that you log in.  If you perfer to do it now, then you will need to follow this link:

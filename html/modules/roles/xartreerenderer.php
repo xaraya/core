@@ -154,7 +154,7 @@ class xarTreeRenderer {
         $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">';
         // this next table holds the Delete, Users and Privileges links
         // don't allow deletion of certain roles
-        if (($object['uid'] <= xarModGetVar('roles', 'frozenroles')) || ($object['users'] > 0) || (!$drawchildren)) {
+        if (!xarSecurityCheck('DeleteRole',0,'Roles',$object['name']) || ($object['users'] > 0) || (!$drawchildren)) {
             $this->html .= $this->bigblank;
         } else {
             $this->html .= '<a href="' .
