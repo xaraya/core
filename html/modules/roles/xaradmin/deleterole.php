@@ -27,13 +27,6 @@ function roles_admin_deleterole()
     // get the role to be deleted
     $role = $roles->getRole($uid);
     $type = $role->isUser() ? 0 : 1;
-    // The user API function is called.
-    $data = xarModAPIFunc('roles',
-        'user',
-        'get',
-        array('uid' => $uid, 'type' => $type));
-
-    if ($data == false) return;
 
     // get the array of parents of this role
     // need to display this in the template
@@ -47,7 +40,7 @@ function roles_admin_deleterole()
     $name = $role->getName();
 
 // Security Check
-    if(!xarSecurityCheck('DeleteRole',0,'Roles',$name)) return;
+    $data['frozen'] = !xarSecurityCheck('DeleteRole',0,'Roles',$name);
 
 // Prohibit removal of any groups the system needs
     if($uid == xarModGetVar('roles','admin')) {

@@ -6,6 +6,7 @@
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
 <xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
 : #$name#</h2>
+<xar:if condition="count($parents) gt 0">
   <div id="tabnav">
 		<div class="help" title="These are the groups that #$name# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
 		<xar:set name="$prevgroup">""</xar:set>
@@ -16,6 +17,7 @@
 			<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
 		</xar:for>
   </div>
+</xar:if>
 <div id="tabnav">
 	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
 	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
@@ -28,25 +30,29 @@
 </div>
 <div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
 <br />
-<form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" >
-   <div>
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	<input type="hidden" name="uid" id="uid" value="#$uid#" />
-	<input type="hidden" name="confirmation" id="confirmation" value="1" />
+<xar:if condition="$ptype eq 1">
+	<xar:set name="$roletype"><xar:mlstring>group</xar:mlstring></xar:set>
+<xar:else />
+	<xar:set name="$roletype"><xar:mlstring>user</xar:mlstring></xar:set>
+</xar:if>
+<xar:if condition="$frozen">
+	<xar:mlstring>You do not have the privileges to delete</xar:mlstring>&nbsp;#$roletype#&nbsp;#$name#
+<xar:else />
+	<form method="post" action="&xar-modurl-roles-admin-deleterole;" method="post" enctype="application/x-www-form-urlencoded" >
+	   <div>
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="uid" id="uid" value="#$uid#" />
+		<input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<span class="xar-title"><xar:mlstring>Confirm the deletion of </xar:mlstring>
-	<xar:if condition="$ptype eq 1">
-		<xar:mlstring>Group</xar:mlstring>
-	<xar:else />
-		<xar:mlstring>User</xar:mlstring>
-	</xar:if>
-	 '#$name#'</span>
-	<br /><br />
+		<span class="xar-title"><xar:mlstring>Confirm the deletion of</xar:mlstring>&nbsp;#$roletype#&nbsp;#$name#
+		</span>
+		<br /><br />
 
-	<input type="submit" value="#$deletelabel#" tabindex="1" /><br /><br />
-	
-	<a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
-    </div>
-</form>        
+		<input type="submit" value="#$deletelabel#" tabindex="1" /><br /><br />
+
+		<a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Cancel the deletion</xar:mlstring></a>
+		</div>
+	</form>        
+</xar:if>
 </div>
 </div>
