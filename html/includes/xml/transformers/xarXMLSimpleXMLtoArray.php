@@ -123,7 +123,8 @@ class xarXMLSimpleXMLtoArrayTransformer extends xarAbstractXmlHandler
         return '/'.implode('/', $this->_path);
     }
 
-    function getCleanPath() {
+    function getCleanPath()
+    {
         return '/'.implode('/', $this->_clean_path);
     }
 
