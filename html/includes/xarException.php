@@ -539,7 +539,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
 
-    $msg = "At: " . $file." (Line: " . $line.")<br/><br/>". $errorString ;
+    $msg = "At: " . $file." (Line: " . $line.")\n". $errorString ;
 
     // Trap for errors that are on the so-called "safe path" for rendering
     // Need to revert to raw HTML here
