@@ -161,45 +161,40 @@ function roles_init()
         'unique' => false);
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
     if (!$dbconn->Execute($query)) return;
-    // Initialisation successful
-    return true;
-}
+    //Database Initialisation successful
 
-function roles_activate()
-{
-    // Set up an initial value for module variables.
-    xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
-    xarModSetVar('roles', 'rolesperpage', 20);
-    xarModSetVar('roles', 'allowregistration', 1);
-    xarModSetVar('roles', 'requirevalidation', 1);
-    xarModSetVar('roles', 'defaultgroup', 'Users');
-    xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
-    xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
-    $lockdata = array('roles' => array( array('uid' => 4,
+// Set up an initial value for module variables.
+	xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');    
+	xarModSetVar('roles', 'rolesperpage', 20);
+	xarModSetVar('roles', 'allowregistration', 1);
+	xarModSetVar('roles', 'requirevalidation', 1);
+	xarModSetVar('roles', 'defaultgroup', 'Users');
+	xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
+	xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');    
+	$lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
-                                              'notify' => TRUE)
-                                       ),
-                      'message' => '',
-                      'locked' => 0,
-                      'notifymsg' => '');
-    xarModSetVar('roles', 'lockdata', serialize($lockdata));
+                                              'notify' => TRUE)),
+ 			                      'message' => '',
+     				              'locked' => 0,
+         			              'notifymsg' => '');
+	xarModSetVar('roles', 'lockdata', serialize($lockdata));
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
-    $confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.  You can either do this now, or on the first time that you log in.  If you perfer to do it now, then you will need to follow this link:
-
-%%link%%
-
+    $confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.
+You can either do this now, or on the first time that you log in.  
+If you prefer to do it now, then you will need to follow this link : 
+%%validationlink%%
 Here are the details that were provided.
 
-IP Address of the person creating that account: %%ipaddr%%
+IP Address of the person creating that account: %%ipaddress%%
 User Name:  %%username%%
 Password:  %%password%%
 
 Validation Code to activate your account:  %%valcode%%
 
-If you did not create this account, then do nothing.  The account will be deemed inactive after a period of time and deleted from our records.  You will recieve no further emails from us.
-
-Thank you,
+If you did not create this account, then do nothing.  The account will be deemed 
+inactive after a period of time and deleted from our records.  You will recieve 
+no further emails from us.Thank you,
 
 %%siteadmin%%';
 
@@ -216,11 +211,12 @@ president@whitehouse.gov';
     $disallowedemails = serialize($emails);
     xarModSetVar('roles', 'disallowedemails', $disallowedemails);
     
-    $remindertitle = 'Replacement login information for %%name%% at %%sitename%%';
+    $remindertitle = 'Replacement login information for %%name%% at 
+%%sitename%%';    
     $reminderemail = '%%name%%,
 
-Here is your new password for %%sitename%%. You may now login to %%siteurl%% using the following username and password:
-
+Here is your new password for %%sitename%%. You may now login to %%siteurl%% 
+using the following username and password:
 username: %%username%%
 password: %%password%%
 
@@ -240,10 +236,10 @@ password: %%password%%
     $validationtitle = 'Validate your account %%name%% at %%sitename%%';
     $validationemail = '%%name%%,
     
-Your account must be validated again because your e-mail address has changed or an administrator has unvalidated it.
-You can either do this now, or on the next time that you log in. 
-If you prefer to do it now, then you will need to follow this link :
-%%link%%
+Your account must be validated again because your e-mail address has changed or 
+an administrator has unvalidated it.You can either do this now, or on the next 
+time that you log in. If you prefer to do it now, then you will need to follow 
+this link :%%validationlink%%
 Validation Code to activate your account:  %%valcode%%
 			    
 You will receive an email has soon as your account is activated again.
@@ -268,8 +264,8 @@ You will receive an email as soon as your account is activated again.
     $pendingemail = '%%name%%,
 
 Your account is pending. 
-You\'ll have to wait for the explicit approval of the administrator to log again.
-
+You\'ll have to wait for the explicit approval of the administrator to log 
+again.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email has soon as your account is activated again.
 
@@ -330,13 +326,16 @@ Password : %%pass%%
             'roles', 'user', 'usermenu')) {
         return false;
     }
-
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    // This won't work because the dynamicdata hooks aren't registered yet when this is
-    // called at installation --> put in xarinit.php of dynamicdata instead
-    // xarModAPIFunc('modules','admin','enablehooks',
-    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+// This won't work because the dynamicdata hooks aren't registered yet when this is
+// called at installation --> put in xarinit.php of dynamicdata instead
+//xarModAPIFunc('modules','admin','enablehooks',
+// array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+return true;
+}
+function roles_activate()
+{
     return true;
 }
 
@@ -353,6 +352,7 @@ function roless_upgrade($oldVersion)
     // Upgrade dependent on old version number
     switch ($oldVersion) {
         case 1.01:
+        //Todo add good english email =)
 	        //Send notifications values
 		    xarModSetVar('roles', 'askwelcomeemail', 1);
 		    xarModSetVar('roles', 'askvalidationemail', 1);
@@ -367,7 +367,7 @@ function roless_upgrade($oldVersion)
 Your account must be validated again because your e-mail address has changed or an administrator has unvalidated it.
 You can either do this now, or on the next time that you log in. 
 If you prefer to do it now, then you will need to follow this link :
-%%link%%
+%%validationlink%%
 Validation Code to activate your account:  %%valcode%%
 			    
 You will receive an email has soon as your account is activated again.
@@ -408,12 +408,13 @@ You will receive an email has soon as your account is activated again.
 Your password has been changed by an administrator.
 You can now login at %%link%% with those information :
 Login : %%username%%
-Password : %%pass%%
+Password : %%password%%
 
 %%siteadmin%%';
 	    
     xarModSetVar('roles', 'passwordemail', $passwordemail);
     xarModSetVar('roles', 'passwordtitle', $passwordtitle);
+    
             break;
         case 1.02:   
          	break;
