@@ -21,8 +21,16 @@
  */
 function modules_adminapi_installwithdependencies ($args)
 {
-
+    //    static $installed_ids = array();
     $mainId = $args['regid'];
+
+
+    // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
+    //     if(in_array($mainId, $installed_ids)) {
+    //         xarLogMessage("Already installed $mainId in this request, skipping");
+    //         return true;
+    //     }
+    //     $installed_ids[] = $mainId;
 
     // Security Check
     // need to specify the module because this function is called by the installer module

@@ -21,6 +21,8 @@
  */
 function modules_adminapi_getalldependents ($args) 
 {
+    static $dependent_ids = array();
+
     $mainId = $args['regid'];
 
     // Security Check
@@ -40,11 +42,16 @@ function modules_adminapi_getalldependents ($args)
         return;
     }
 
-    //Initialize the dependecies array
+    //Initialize the dependencies array
     $dependents_array                  = array();
     $dependents_array['active']        = array();
     $dependents_array['initialised']   = array();
-    
+
+
+    // If we have already got the same id in the same request, dont do it again.
+    if(in_array($mainId, $dependent_ids)) return $dependents_array;
+    $dependent_ids[] = $mainId;
+
     //Get all modules in the filesystem
     $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
     if (!isset($fileModules)) return;
@@ -84,6 +91,7 @@ function modules_adminapi_getalldependents ($args)
             if ($modId != $mainId) continue;
             
             //If we are here, then it is dependent
+            // RECURSIVE CALL
             $output = xarModAPIFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid'])); 
             if (!$output) {
                 $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);

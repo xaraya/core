@@ -31,26 +31,33 @@ function modules_admin_deactivate ()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return;
 
+    //Checking if the user has already passed thru the GUI:
+    xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
-    //First check the modules dependencies
-    $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
-    if (count($dependents['active']) > 1) {
-        //Checking if the user has already passed thru the GUI:
-        xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
-    } else {
-        //No dependencies problems, jump dependency GUI
-        $command = true;
-    }
-
+    // If we haven't been to the deps GUI, check that first
     if (!$command) {
-        //Let's make a nice GUI to show the user the options
-        $data = array();
-        $data['id'] = $id;
-        //They come in 2 arrays: active, initialised
-        //Both have $name => $modInfo under them foreach
-        $data['authid']       = xarSecGenAuthKey();
-        $data['dependencies'] = $dependents;
-        return $data;
+        //First check the modules dependencies
+        // FIXME: double check this line and the line with deactivatewithdependents below,
+        // they can NOT be called in the same request due to the statics used in there, the logic
+        // needs to be reviewed, it's not solid enough.
+        $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
+        if(count($dependents['active']) > 1) {
+            //Let's make a nice GUI to show the user the options
+            $data = array();
+            $data['id'] = $id;
+            //They come in 2 arrays: active, initialised
+            //Both have $name => $modInfo under them foreach
+            $data['authid']       = xarSecGenAuthKey();
+            $data['dependencies'] = $dependents;
+            return $data;
+        } else {
+            // No dependents, we can deactivate the module
+            if(!xarModAPIFunc('modules','admin','deactivate',array('regid' => $id))){
+                return;
+            } else {
+                xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+            }               
+        }
     }
 
     // See if we have lost any modules since last generation
@@ -74,7 +81,6 @@ function modules_admin_deactivate ()
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
-    //    xarResponseRedirect(xarModURL('modules', 'admin', "list#$target"));
     xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
