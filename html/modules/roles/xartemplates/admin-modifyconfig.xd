@@ -81,7 +81,7 @@
     <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
     
 <xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
-    <br /><br />
+    <br />
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
             <input type="hidden" name="authid" id="authid" value="#$authid#" />

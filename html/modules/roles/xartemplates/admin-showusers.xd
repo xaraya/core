@@ -92,7 +92,7 @@
             </xar:if>
         </xar:if>
         <div>&nbsp;</div>
-        <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="#xarModUrl('roles', 'admin', 'showusers')#">
+        <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="#xarModUrl('roles', 'admin', 'showusers', array('reload' => 'reload'))#">
             <xar:comment> Module List Sort and Filter Controls table </xar:comment>
             <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
               <tr>
