@@ -1,0 +1,70 @@
+/*
+system menus and related rules 
+-------------------------------------------------------------------------[comment] */
+
+.xar-block-body ul,
+.xar-block-body-right ul {
+	list-style-position: outside;
+	list-style-type: none;
+	list-style-image: none;
+	margin: 0;
+	padding: 0;
+	font-family: arial, helvetica, verdana, sans-serif;
+	font-weight: bold;
+	font-size:93%;
+	display: block;
+}
+
+.xar-block-body ul li,
+.xar-block-body-right ul li {
+	list-style-type: none;
+	margin: 0 0 1px 0;
+	padding:0;
+    height:1.7em;
+}
+
+.xar-block-body ul li a,
+.xar-block-body-right ul li a {
+	text-decoration: none;
+	display: block;
+	color: #666666;
+	background-color: #eeeeee;
+	border-bottom: #FFFFFF;
+	padding: 0 4px;
+	margin: 0;
+	height: 1.7em;
+}
+
+.xar-block-body ul li a:hover,
+.xar-block-body-right ul li a:hover {
+	text-decoration: none;
+	display: block;
+	color: #eeeeee;
+	background-color: #666666;
+	padding: 0 4px;
+	height: 1.7em;
+}
+
+.xar-block-body ul ul ul li a,
+.xar-block-body-right ul ul ul li a {
+	margin: 0 10px 0 0;
+	padding: 0 4px;
+	text-align: right;
+	background-color: #f5f5f5;
+    height:1.7em;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem-current a,
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+	color: #eeeeee;
+	background-color: #999999;
+}
+
+/* proper browsers can calculate height alright, ie-win cannot apparently */
+.xar-block-body ul > li,
+.xar-block-body-right ul > li, 
+.xar-block-body ul li > a,
+.xar-block-body-right ul li > a {
+    height:auto;
+    line-height:1.7em;
+}

@@ -1,0 +1,120 @@
+/* prefix xc- is for xaraya_classic of course.. and what did you think it was for? :) */
+#xc-header, #xc-footer, #xc-content {
+    margin: 5px auto;
+    text-align: left;
+    max-width: 1152px;
+    min-width: 710px;
+    background-color: transparent;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat-y;
+    background-position: left top;
+}
+
+#xc-header, #xc-footer {
+    background-color: #ffffff;
+    background-image: none;
+    height: 50px;
+}
+
+
+div.xc-sidebar-left { float: left; }
+div.xc-sidebar-right { float: right; }
+
+div.xc-sidebar-left, div.xc-sidebar-right {
+    width: 200px;
+    margin: 0;
+    padding: 0;
+}
+
+div.xc-sidebar-content {
+    margin: 0;
+    padding: 5px 10px;
+}
+
+div.xc-main {
+    margin: 0 0 0 200px;
+    padding: 0;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat-y;
+    background-position: right top;
+}
+
+div.xc-main-content {
+    margin: 0 205px 0 5px;
+    padding: 0 5px;
+    background-image: url(../images/bkgr200.gif);
+}
+
+div.xc-containing-float {
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding: 5px 0;
+/*  border:1px solid gray; */
+}
+
+/* above rules are for a classic 3-col layout case, below are for 2-col cases  */
+div.xc-main-leftnoright {
+    margin: 0 0 0 205px;
+    padding: 5px 10px;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat;
+    background-position: left top;
+}
+
+div.xc-main-rightnoleft {
+    margin: 0;
+    padding: 0;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat-y;
+    background-position: right top;
+}
+
+/* and finally.. a case with no right and no left blockgroups - 1-col essentially */
+div.xc-main-norightnoleft {
+    margin: 0;
+    padding: 0;
+}
+
+div.xc-main-content-norightnoleft {
+    margin: 0;
+    padding: 5px 10px;
+    background-image: url(../images/bkgr200.gif);
+}
+
+/* to equalize the heights of pseudo-columns we use the clearing element */
+.xc-clear {
+    clear: both;
+    height: 1px;
+    margin: -1px 0 0 0;
+    padding: 0;
+    border: none;
+    visibility: hidden;
+}
+
+/* the header composition is now a bit more semantic without the transparent gif overlay */
+div#xc-header {
+    height: 70px;
+    background-color: #DDDDF0;
+}
+
+div#xc-header h1, div#xc-header h1 a {
+    float: left;
+    width: 245px;
+    height: 70px;
+    margin:0;
+    padding:0;
+}
+
+div#xc-header h1 a {
+    position: relative;
+    background-image: url(../images/xaraya_logo_blue.gif);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+}
+
+div#xc-header h1 a span {
+    position: absolute;
+    left: -9000px;
+    /* hopefully enough for off-screen placement in all circumstances */
+}

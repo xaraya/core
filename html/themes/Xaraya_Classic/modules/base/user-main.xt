@@ -1,22 +1,60 @@
-<p>
-  <xar:mlstring>
-    Xaraya is currently in Beta Production.
-  </xar:mlstring>
-  <xar:mlstring>
-    If you notice any unexpected functionality, please use our bug tracker at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>.
-  </xar:mlstring>
-  <xar:mlstring>
-    Thank you for your support, and feel free to join our development or user discussions to become involved in our community.
-  </xar:mlstring>
-</p>
-<p>
-  <xar:mlstring>
-    For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website.
-  </xar:mlstring>
-</p>
-<p>
-  <xar:ml>
-    <xar:mlstring>This message can be edited by creating an override template (#(1)/themename/modules/base/user-main.xt) for the base module.</xar:mlstring>
-    <xar:mlvar><xar:var scope="config" name="Site.BL.ThemesDirectory"/></xar:mlvar>
-  </xar:ml>
-</p>
+<h1 class="xar-mod-head">
+    <xar:mlstring>
+        Thank you for installing and trying Xaraya! 
+    </xar:mlstring>
+</h1>
+<div class="xar-mod-body xar-norm-outline">
+    <h2>
+        <xar:mlstring>
+            Xaraya is currently in Beta Production. 
+        </xar:mlstring>
+    </h2>
+    <p>
+        <xar:mlstring>
+            If you notice any unexpected functionality, please use our bug tracker at 
+            <a href="http://bugs.xaraya.com">
+                http://bugs.xaraya.com</a>. 
+        </xar:mlstring>
+        <xar:mlstring>
+            Thank you for your support, and feel free to join our development or user discussions to become involved in our community. 
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+            For more information on Xaraya, please visit 
+            <a href="http://www.xaraya.com">
+                Xaraya's
+            </a>
+            website. 
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:ml>
+            <xar:mlstring>
+                This message can be edited by creating an override template (#(1)/themename/modules/base/user-main.xt) for the base module.
+            </xar:mlstring>
+            <xar:mlvar><xar:var scope="config" name="Site.BL.ThemesDirectory" /></xar:mlvar>
+        </xar:ml>
+    </p>
+    <h4>
+        <xar:mlstring>
+            About the default theme (yes, this one). 
+        </xar:mlstring>
+    </h4>
+    <p>
+        <xar:mlstring>
+            The default theme's name is Xaraya_Classic. It is supplied and installed with every distribution package of Xaraya. 
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+            Starting from the release 0.9.11 the theme's layout is 100% table-free and is totally CSS driven. It means the theme is now more standards compliant than ever before. However, designing your site with the web-standards in mind requires certain degree of knowledge, experience, attention to detail and patience. So we would advise to keep this theme unmodified within your Xaraya installation directory, in case you need to use it as the (last resource) fallback. 
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+            If you wish to design your own Xaraya theme based on the current layout or alter the appearance of this theme, the graphics sources can be obtained from 
+            <a href="http://www.xaraya.com/~andyv/xclassic_sources">here</a>. 
+        </xar:mlstring>
+    </p>
+</div>

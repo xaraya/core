@@ -1,3 +1,13 @@
+/* better event handling */
+if (document.all&&window.attachEvent) { // IE-Win
+    window.attachEvent("onload", onPageLoad);
+} else if (window.addEventListener) { // Gecko, Safari, KDE
+    window.addEventListener("load",onPageLoad,true);
+    window.addEventListener("unload",onPageUnload,true);
+} else { // old others, like ie5-mac
+
+}
+
 /* modified version of a script once published in ALA http://www.alistapart.com/articles/alternate/ */
 
 function setActiveStyleSheetProperty(title,property) {
@@ -59,7 +69,7 @@ function readCookie(name) {
   return null;
 }
 
-window.onload = function(e) {
+function onPageLoad(e) {
   var cookie = readCookie("xarayaclassic_textsize");
   var title = cookie ? cookie : getPreferredStyleSheetTxt();
   setActiveStyleSheetTxt(title);
@@ -69,6 +79,25 @@ window.onload = function(e) {
   return true;
 }
 
+function onPageUnload(e) {
+  var title = getActiveStyleSheetTxt();
+  createCookie("xarayaclassic_textsize", title, 365);
+  var title2 = getActiveStyleSheetCol();
+  createCookie("xarayaclassic_colscheme", title2, 365);
+}
+
+
+
+/*     window.onload = function(e) { */
+/*       var cookie = readCookie("xarayaclassic_textsize"); */
+/*       var title = cookie ? cookie : getPreferredStyleSheetTxt(); */
+/*       setActiveStyleSheetTxt(title); */
+/*       var cookie2 = readCookie("xarayaclassic_colscheme"); */
+/*       var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol(); */
+/*       setActiveStyleSheetCol(title2); */
+/*       return true; */
+/*     } */
+
 /* window.onunload = function(e) { */
 /*   var title = getActiveStyleSheetTxt(); */
 /*   createCookie("xarayaclassic_textsize", title, 365); */
@@ -76,9 +105,9 @@ window.onload = function(e) {
 /*   createCookie("xarayaclassic_colscheme", title2, 365); */
 /* } */
 
-var cookie = readCookie("xarayaclassic_textsize");
-var title = cookie ? cookie : getPreferredStyleSheetTxt();
-setActiveStyleSheetTxt(title);
-var cookie2 = readCookie("xarayaclassic_colscheme");
-var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol();
-setActiveStyleSheetCol(title2);
+/* var cookie = readCookie("xarayaclassic_textsize"); */
+/* var title = cookie ? cookie : getPreferredStyleSheetTxt(); */
+/* setActiveStyleSheetTxt(title); */
+/* var cookie2 = readCookie("xarayaclassic_colscheme"); */
+/* var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol(); */
+/* setActiveStyleSheetCol(title2); */

@@ -1,229 +1,246 @@
-/*  Xaraya_Classic - default theme.. [revision 2 by andyv_at_xaraya.com]
+@import url(layout.css);
+@import url(menus.css);
 
-Lets make the CSS a bit more interesting and a lot better organised than before;
+/*  Xaraya_Classic - default theme.. [revision 3 by andyv_at_xaraya.com]
 
-Differences and aims of this revision will be:
+Lets make the CSS a bit more interesting and a lot better organised than the old original;
 
-    - improved readability and formatting of source
-    - rules arranged according to page structure, layout and other properties
-    - detailed comments for each class and selector
-    - the page layouts should be rendered similar by a wide range of browsers
-    - improved consistency for the theme typography
-    - increased reliance on relative sizing and positioning
-    - a few more advanced rules provided as examples of theme capabilities
-    - cleaned up and removed unnecessary duplication of inheritable properties
-    - introduced professional quality in colour co-ordination and graphics
+Differences so far are as follows:
+
+	- improved readability and formatting of source
+	- rules arranged according to page structure, layout and other properties
+	- detailed comments for each class and selector
+	- the page layouts should be rendered similar by a wide range of browsers
+	- improved consistency for the theme typography
+	- increased reliance on relative sizing and positioning
+	- a few more advanced rules provided as examples of theme capabilities
+	- cleaned up and removed unnecessary duplication of inheritable properties
+	- introduced professional quality in colour co-ordination and graphics
+
+additions and corrections as of Aug 15 - 2004 
+
+    - text colours is in the web-safe range (should easier to read on low-res screen)
+    - body background attachement changed to fixed
+    - general cleanup
+
+additions and corrections as of Oct 15 - 2004 
+
+    - general facelift undertaken
+    - redone all backgrounds, the look seems clearer after removing the textures
+    - all images are gifs now
+    - new set of micro badges for the footer
+    - added link to the p/shop source files archive for those who want them
+    - gone totally tableless (Rabbitt said it's ok to disregard IE windows users ;-)
+    - tried to eliminate the potential box-model problems and consequent hacks
+    - redone the header - no longer we use the transparent gif to make it clickable
+    - javascript style switcher is slightly modified for a better onload events handling
+    - actually tested on FF, Moz, Safari, IE5-Mac, IE6-Win (no special linux tests yet)
+    - added _undo_ browsers defaults section right at the beginning
 */
+
+/*  just before we start, lets UNDO some of the default browsers styles, 
+    so that we know exactly where we are */
+
+body, div, ul, li, td, h1, h2, h3, h4, h5, h6, code, pre {
+	font-family: "trebuchet ms", verdana, helvetica, sans-serif;
+	font-size: 1em;
+	line-height: 145%;
+}
+
+p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, blockquote, fieldset, input {
+	margin: 0;
+	padding: 0;
+}
+
+:link, :visited { text-decoration: none; }
+ul, ol { list-style-type: none; }
+a img, :link img, :visited img { border: none; }
 
 /* XARAYA REQUIRED CLASSES [gen_heading] */
 
 /*
 Main (X)HTML Selectors - Typography, Colours and Positioning 
 -------------------------------------------------------------------------[comment] */
-body {
-    color: #003780;
-    background-color: #8296BB;
-    margin: 0;
-    padding: 10px;
-    min-width:710px;
-    background-image: url(../images/page_bg.jpg);
-    background-repeat: repeat-x;
-    background-position: 100% 0;
-} /*
-body defines basic viewport properties 
--------------------------------------------------------------------------[comment] */
 
 body {
-    font-family: "trebuchet ms", verdana, helvetica, sans-serif;
-    font-size: 76%;
-    line-height:140%;
-} /*
-shared typography, which should be inherited by the descendants 
--------------------------------------------------------------------------[comment] */
-
-table, td, th, thead, tbody, tfoot, button, input, select, textarea {
-    font-family: "trebuchet ms", verdana, helvetica, sans-serif;
-    font-size: 1em;
-    line-height:140%;
-    
-} /*
-more shared typography to reinforce it on certain browsers (IE/Win and Opera) 
--------------------------------------------------------------------------[comment] */
+	margin: 1% 2%;
+	padding: 0;
+	color: #333333;
+	background-color: #333366;
+	background-image: url(../images/page_bg.gif);
+	background-repeat: repeat-x;
+	background-position: 0% 0%;
+	background-attachment: fixed;
+}
 
 a {
-    text-decoration: none;
-    color: #58657E;
-    font-weight: bold;
-} /*
+	/* 	text-decoration: underline; */
+	color: #666699;
+	font-weight: bold;
+}
+
+/*
 a normal link is being styled similarly across all pages, unless re-declared
 -------------------------------------------------------------------------[comment] */
 
-a:link         {}
-a:visited     {}
-a:active     {}
-a:hover     {} /*
+a:link { }
+a:visited { }
+a:active { }
+a:hover { }
+
+/*
 leave pseudo-classes exactly in this order even if you decide to re-declare them 
 ------------------------------------------------------------------[important note] */
+
 a:link:hover, a:visited:hover {
-    color: #F12600;
-    text-decoration: underline;
-} /*
+	color: #CC3300;
+	text-decoration: underline;
+}
+
+/*
 we dont really want to underline and hilite named anchors in this theme, just links 
 ------------------------------------------------------------------[important note] */
 
 /*
 Tables and related selectors
 -------------------------------------------------------------------------[comment] */
+
 table {
-    border-collapse: collapse;
-    border-style: solid;
-    border-color: #757F8B;
-    border-width: 0px;
-} /*
+	border-collapse: collapse;
+	border-style: solid;
+	border-color: #757F8B;
+	border-width: 0px;
+}
+
+/*
 the actual border should be visible only when border-width is re-declared
 ------------------------------------------------------------------[important note] */
 
 th {
-    color: #55627A;
-    background-color: #DEE3ED;
+	color: #666699;
+	background-color: #DCDCE5;
 }
 
 tfoot {
-    font-weight: bold;
-    background-color: #cdd5f8;
+	font-weight: bold;
+	background-color: #DCDCE1;
 }
 
 /*
 General text and related selectors 
 -------------------------------------------------------------------------[comment] */
+
 h1, h2, h3, h4 {
-    font-family: helvetica, tahoma, arial, sans-serif;
-    font-weight: bold;
-    color: #BA1D00;
-    padding: 0em;
-    margin: .5em 0 .5em 0;
-} /*
+	font-family: arial, helvetica, tahoma, sans-serif;
+	font-weight: bold;
+	line-height: 120%;
+	color: #CC3300;
+	padding: 0;
+	margin: .5em 0 .5em 0;
+}
+
+/*
 page headers - shared typography and positioning 
 -------------------------------------------------------------------------[comment] */
 
-h1 {
-    font-size: 140%;
-    line-height: 120%;
-}
+h1 { font-size: 160%; }
+h2 { font-size: 150%; }
+h3 { font-size: 130%; }
+h4 { font-size: 120%; }
 
-h2 {
-    font-size: 130%;
-    line-height: 120%;
-}
-
-h3 {
-    font-size: 120%;
-    line-height: 120%;
-}
-
-h4 {
-    font-size: 110%;
-    line-height: 120%;
-}
-
-p { line-height: 140%; }
+p { margin:.7em 0 0 .3em;}
 
 pre {
-    color: #80005C;
-    font-size: 95%;
-    font-family: monaco, courier, monospace;
+	color: #990066;
+	font-size: 95%;
+	font-family: monaco, courier, monospace;
 }
 
 ul {
-    padding: 0;
-    margin: 0;
-    list-style-position: inside;
+	padding: 0;
+	margin: 0;
+	list-style-position: inside;
+	list-style-image: url(../images/bullet.png);
+	list-style-type: default;
 }
 
-ul li {
-    margin-left: 0.5em;
-}
+ul li { margin-left: 0.5em; }
 
 blockquote {
-    color: #191970;
-    margin: 2em;
+	color: #333366;
+	margin: 2em;
 }
 
 code {
-    color: #191970;
-    font-family: monaco, courier, monospace;
+	color: #990066;
+	font-family: monaco, courier, monospace;
 }
 
 sup, sub {
-    font-size: 90%;
-    font-weight: normal;
+	font-size: 90%;
+	font-weight: normal;
 }
 
 /*
 Form elements 
 -------------------------------------------------------------------------[comment] */
-form {
-    margin:0;
-    padding:0;
-}
 
+form {
+	margin: 0;
+	padding: 0;
+}
 
 input {
-    font-weight: normal;
-    text-indent: 2px;
+	font-weight: normal;
+	text-indent: 2px;
+	margin: 2px;
 }
 
-button {
-    border: 2px outset #f0f0f0;
-}
+button { border: 2px outset #f0f0f0; }
+select { font-weight: normal; }
 
-select {
-    font-weight: normal;
-} /*
+/*
 in many browsers appearance of select is handled by OSs widgets, not by css
 ------------------------------------------------------------------[important note] */
 
 textarea {
-    font-weight: normal;
-    text-indent: 2px;
+	font-weight: normal;
+	text-indent: 2px;
 }
 
-checkbox {
-    background-color: transparent;
-    font-weight: normal;
-}
 
 button, input, select, textarea {
-    color: #002D80;
-    background-color: #F8F8F8;
-} /*
+	color: #003399;
+	background-color: #F8F8F8;
+}
+
+/*
 shared properties for form elements
 -------------------------------------------------------------------------[comment] */
 
 /*
 replaced elements 
 -------------------------------------------------------------------------[comment] */
-img { border: 0px; }
 
+img { border: 0px; }
 
 /*
 list elements 
 -------------------------------------------------------------------------[comment] */
-ul, li, ol {
-    line-height: 140%;
-}
+
+ul, li, ol { line-height: 140%; }
 
 /* THEME SPECIFIC CLASSES [gen_heading] */
 h5, h6 {
-    color: #191970;
-    font-size: 95%;
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: bold;
+	color: #333399;
+	font-size: 95%;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
 }
 
 hr {
-    width: 100%;
-    color: #c0c0c0;
+	width: 100%;
+	color: #c0c0c0;
 }
 
 /* XARAYA REQUIRED INDIVIDUAL CLASSES [gen_heading] */
@@ -235,560 +252,312 @@ td.xar-alt { }
 /*
 these defaults apply to the left block group 
 -------------------------------------------------------------------------[comment] */
+
 .xar-block-head {
-    border-bottom: 1px solid #191970;
-    color: #191970;
+	/* 	border-bottom: 1px solid #191970; */
+	color: #333399;
 }
 
 .xar-block-title {
-    font-weight: bold;
-    font-size: 110%;
+	font-weight: bold;
+	font-size: 110%;
 }
 
 .xar-block-body { }
-
-.xar-block-foot {
-    margin-bottom: 5px;
-}
+.xar-block-foot { margin-bottom: 5px; }
 
 /*
 these defaults apply to the right block group 
--------------------------------------------------------------------------[comment] */ 
-.xar-block-head-right {}
+-------------------------------------------------------------------------[comment] */
+
+.xar-block-head-right { }
 
 .xar-block-title-right {
-    font-weight: bold;
-    font-size: 110%;
+	font-weight: bold;
+	font-size: 110%;
 }
 
-.xar-block-body-right {}
-
-.xar-block-foot-right {
-    margin-bottom: 5px;
-}
+.xar-block-body-right { }
+.xar-block-foot-right { margin-bottom: 5px; }
 
 /*
 topnav block group classes 
 -------------------------------------------------------------------------[comment] */
+
 .xar-block-head-topnav { }
 .xar-block-title-topnav { }
-
 .xar-block-body-topnav { }
-
 .xar-block-foot-topnav { }
 
 /*
 center block group classes 
 -------------------------------------------------------------------------[comment] */
-.xar-block-head-center {
-    width: 100%;
-}
+
+.xar-block-head-center { width: 100%; }
 
 .xar-block-title-center {
-    background-color: inherit;
-    font-weight: bold;
+	background-color: inherit;
+	font-weight: bold;
 }
 
-.xar-block-body-center {}
+.xar-block-body-center { }
 
 .xar-block-foot-center {
-    width: 100%;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #A0B8E5;
+	width: 100%;
+	margin-bottom: 4px;
+	border-bottom: 1px solid #A0B8E5;
 }
 
 /*
 module rendering area and related rules 
 -------------------------------------------------------------------------[comment] */
+
 .xar-mod-head {
-    color: #ffffff;
-    background-color: #8296BB;
-    padding: 2px;
-    text-align: center;
-    font-weight: bold;
-    border-color: #A0B8E5;
-    border-width: 1px;
-    border-style: solid;
+	color: #ffffff;
+	background-color: #8296BB;
+	padding: 2px;
+	text-align: center;
+	font-weight: bold;
+	border-color: #A0B8E5;
+	border-width: 1px;
+	border-style: solid;
 }
 
 .xar-mod-title {
-    font-size: 110%;
-    font-weight: bold;
+	font-size: 110%;
+	font-weight: bold;
 }
 
-.xar-mod-body { }
+.xar-mod-body { padding: .3em .6em;}
 .xar-mod-foot { }
 
 /*
 complementary styling - colors, backgrounds and outlines 
 -------------------------------------------------------------------------[comment] */
-.xar-alt { background-color: #E7E9F4; }
 
+.xar-alt { background-color: #E7E9F4; }
 .xar-accent { background-color: #E7EAF4; }
 
 .xar-alt-outline {
-    border-color: #A782BB;
-    border-width: 1px;
-    border-style: solid;
+	border-color: #A782BB;
+	border-width: 1px;
+	border-style: solid;
 }
+
 .xar-accent-outline {
-    border-color: #82BBA7;
-    border-width: 1px;
-    border-style: solid;
+	border-color: #82BBA7;
+	border-width: 1px;
+	border-style: solid;
 }
+
 .xar-norm-outline {
-    border-color: #8296BB;
-    border-width: 1px;
-    border-style: solid;
+	border-color: #8296BB;
+	border-width: 1px;
+	border-style: solid;
 }
 
 /*
 complementary text related styling
 -------------------------------------------------------------------------[comment] */
+
 .xar-norm { background-color: #FFFFFF; }
-
 .xar-sub { font-size: 80%; }
-
 .xar-error { color: #ff0000; }
-
-.xar-title {
-    font-weight: bold;
-} /*
+.xar-title { font-weight: bold; }
+/*
 not sure if we still using this rule anywhere TODO: check
 -------------------------------------------------------------------------[comment] */
 
-/*
-system menus and related rules 
--------------------------------------------------------------------------[comment] */
-
-.xar-menu-item {
-    font-weight: bold;
-/*     background-color: #E7EAEE; */
-}
-
-li.xar-menu-item a {
-    padding-left:10px;
-}
-
-.xar-menu-subitem {
-    padding: 0;
-}
-
-ul.xar-menu-section, ul.xar-menu-item, ul.xar-menu-subitem {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #E7EAF4;
-}
-
-ul li.xar-menu-section {
-    margin-top: 2px;
-    border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
-    border-width: 1px;
-    border-style: solid;
-    font-family: helvetica, arial, verdana, sans-serif;
-}
-
-.xar-menu-section li {
-    margin: 0 0 1px 0;
-}
-
-.xar-menu-section a {
-    display: block;
-    padding: 1px 0;
-    width: 160px;
-    color: #003780;
-/*     background-color: #E7EAEE; */
-/*     background-color: #6C9BD8; */
-    text-decoration: none;
-}
-
-.xar-menu-section h4 {
-    padding: 0 5px;
-    margin: 1px 5px 5px 5px;
-    border-bottom: 1px solid #BA1D00;
-}
-
-.xar-menu-section a:hover {
-    color: #fff;
-    background-color: #8296BB;
-    text-decoration: none;
-}
-
-.xar-menu-section ul ul li {
-    margin: 0 0 1px 10px;
-}
-
-.xar-menu-section ul ul a {
-    display: block;
-    padding: 1px 10px;
-    width: 140px;
-    color: #fff;
-    background-color: #8296BB;
-    font-size: 10px;
-    font-weight: normal;
-    text-decoration: none;
-    line-height: 12pt;
-    
-} /* this is the only rule where we currently use absolute font size,
-     it is done only because of the horizontal space restriction in side menus
-------------------------------------------------------------------[important note] */
-
-/* Hide from IE5-mac. Only IE-win sees this. \*/
-
-* html .xar-menu-item a, * html .xar-menu-item-current a {
-    float:left;
-    f\loat:none;
-}
-
-* html .xar-menu-section ul {
-    height: 0;
-}
-
-* html .xar-menu-section a {
-    width:170px;
-    w\idth:160px;
-}
-
-* html .xar-menu-section ul ul a {
-    width:160px;
-    w\idth:140px;
-} /* End hide from IE5/mac -the above rules are for the benefit of older ie-win 
- browsers which have broken box model, however for ie6 in strict mode we must
- provide genuine figures or it will not behave as expected - it can have escaped rules.
- there is also extra space between listitems in IE5+, floating links seems to be a fix 
--------------------------------------------------------------------------[comment] */
-
-.xar-menu-section ul ul a:hover {
-    color: #002C80;
-    background-color: #BFD5FF;
-    text-decoration: none;
-}
-
-
-li.xar-menu-section-current {
-    color: #2C3F58;
-    background-color: #B1C2E3;
-}
-
-li.xar-menu-item-current {
-    color: #2C3F58;
-    background-color: #E7EAEE;
-}
-
-li.xar-menu-item-current a {
-    padding-left: 10px;
-    margin-bottom:1px;
-}
-
-li li.xar-menu-subitem-current a, li.xar-menu-item-current a {
-    color: #4C5056;
-    background-color: #C7D2E2;
-}
-
-.xar-menu-subitem-current a:before {
-    content: "\00BB \0020";
-} /*
-people with css2 compliant browsers can see a nice marker against current function,
-why not have some fun when you can ;-)
-------------------------------------------------------------------[important note] */
-
-
-/*
-this was the original method used in old classic, but it never worked in IE/Win 
--------------------------------------------------------------------------[comment] */
-/* .xar-menu-item > a, .xar-menu-subitem > a { display: block; } */
-/* .xar-menu-item-current > .xar-menu-subitem > a { color: #193970; } */
-/* .xar-menu-subitem > a:hover { background-color: #cce6ff; } */
-/* .xar-menu-item-current > .xar-menu-subitem > a:visited { color: #003366; } */
-
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
-div#classicheader {
-    width: 100%;
-    height: 70px;
-    background-image: url(../images/xa_logo.jpg);
-    background-repeat: no-repeat;
-    background-position: 0 0;
-}
-
-div#classicheader img {
-    width: 245px;
-    height: 70px;
-    float: left;
-}
-
 div#classicthemecontrols {
-    position: relative;
-    width: 187px;
-    float: right;
-    padding: 0 3px 0 0;
-    margin: 0;
+	position: relative;
+	width: 187px;
+	float: right;
+	padding: 0 3px 0 0;
+	margin: 0;
 }
 
 div#classicthemecontrols img {
-    position: relative;
-    float: right;
-    width: 26px;
-    height: 21px;
+	position: relative;
+	float: right;
+	width: 26px;
+	height: 21px;
 }
 
 * html div#classicthemecontrols img, * html div#classicheader img {
-    margin: 0 -3px;
-    ma\rgin: 0;
-} /*
+	margin: 0 -3px;
+	ma\rgin: 0;
+}
+
+/*
 thus rule (with Tan filter) is for the benefit of Win-IE browsers only - they 
 cannot float linked images properly, without inserting 3px margins around them
 ------------------------------------------------------------------[important note] */
 
 div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
-    display: inline;
-    list-style-type: none;
-    padding: 0 5px;
-    margin:0;
-    border:0;
-} /*
+	display: inline;
+	list-style-type: none;
+	padding: 0 5px;
+	margin: 0;
+	border: 0;
+}
+
+/*
 since topnav group is available by default, we must be able to lay it out
 -------------------------------------------------------------------------[comment] */
 
-div.xar-block-body-topnav .xar-menu-section h4 {
-    display:none;
-} /* hide section heading [gen_heading] */
+div.xar-block-body-topnav .xar-menu-section h4 { display: none; }
 
+/* hide section heading [gen_heading] */
 div.xar-block-body-topnav .xar-menu-section ul li a {
-    display:inline;
-    padding-right:.5em;
-    padding-left:.5em;
-} /* all links should display horizontally in topnav block in this theme */
-
-div.xar-block-body-topnav {
-    min-width: 710px;
-    border-color: #757F8B;
-    border-width: 1px;
-    border-style: solid;
-    margin-bottom: 2px;
-    padding: 2px 0;
+	display: inline;
+	padding-right: .5em;
+	padding-left: .5em;
 }
 
-/* .xar-block-head-topnav, .xar-block-title-topnav, .xar-block-foot-topnav  { display:none; } */
-
-
-table#classiccontentarea {
-    width: 100%;
-    margin: 0;
-    border-collapse: separate;
-    border-spacing: 3px;
-    border-color: #757F8B;
-    border-width: 1px;
-    border-style: solid;
-} /*
-this table 'holds' our dynamic content in this theme (not ideal, but..)
--------------------------------------------------------------------------[comment] */
-
-td#leftmenus {
-    background-image: url(../images/content_bg.jpg);
-    background-repeat: repeat;
-    background-position: 0 0;
-} /*
-area occupied by leftblocksgroup 
--------------------------------------------------------------------------[comment] */
-
-div#leftmenuswrapper {
-    margin:5px;
-} /*
-pixel-perfect positioning for leftblocksgroup 
--------------------------------------------------------------------------[comment] */
-
-
-td#rightmenus {    
-    background-image: url(../images/content_bg.jpg);
-    background-repeat: repeat;
-    background-position: 0 0;
-} /*
-area occupied by rightblocksgroup 
--------------------------------------------------------------------------[comment] */
-
-div#rightmenuswrapper {
-    margin:5px;
-} /*
-pixel-perfect positioning for rightblocksgroup 
--------------------------------------------------------------------------[comment] */
+/* all links should display horizontally in topnav block in this theme */
+div.xar-block-body-topnav {
+	min-width: 710px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+	margin-bottom: 2px;
+	padding: 2px 0;
+}
 
 /*
-notice that we can avoid using explicit width declaration for the above wrappers,
-all this is done for the sake of cross-browser compatibility and, at the same time,
-to avoid using IE/Win specific hacks for its broken box model 
-------------------------------------------------------------------[important note] */
-
-td#rightmenus, td#leftmenus, td#maincontent {
-    vertical-align: top;
-    width: 180px;
-    border-color: #E7EAEE #8296BB #8296BB #E7EAEE;
-    border-width: 1px;
-    border-style: solid;
-} /*
-menu and content areas - shared properties for the table cells
--------------------------------------------------------------------------[comment] */
-
-td#maincontent {
-    width: auto;
-    vertical-align: top;
-    background-image: url(../images/content_bg.jpg);
-    background-repeat: repeat;
-    background-position: 0 0;
-/*     border-color: #757F8B; */
-/*     border-width: 0 1px 0 1px; */
-/*     border-style: solid; */
-    padding: 5px;
-} /*
-it is possible to use padding in this case, because width of this container
-should be calculated correctly by all modern (and old) browsers (table cell)
--------------------------------------------------------------------------[comment] */
-
-
-div#footerwrapper {
-    padding: 3px;
-    margin-top: 3px;
-    border-color: #757F8B;
-    border-width: 1px;
-    border-style: solid;
-} /*
 positioning and minimal styling of footer 
 -------------------------------------------------------------------------[comment] */
 
-div#classicfooter {
-    position: relative;
-    height:54px;
-    text-align: left;
-    background-image: url(../images/footer_bg.jpg);
-    background-repeat: repeat-x;
-} /*
+div#xc-footer {
+	background-image: url(../images/page_bg.gif);
+	background-repeat: repeat-x;
+	background-position: 0% 20%;
+}
+
+/*
 footer container itself - watch for the explicit height limitations
 -------------------------------------------------------------------------[comment] */
 
 p#footermsg {
-    position: relative;
-    float: right;
-    padding: 3px 2px;
-    width: 250px;
-    text-align: right;
-    margin:0;
-} /*
+	float: right;
+	padding: 1px 2px;
+	width: 250px;
+	text-align: right;
+	margin: 0;
+}
+
+/*
 standard content of the footer, limited by explicit width and height 
 -------------------------------------------------------------------------[comment] */
 
 p#slogan {
-    float: left;
-    padding: 20px 0 0 5px;
-    width:auto;
-    text-align: left;
-    margin:0;
-} /*
+	float: left;
+	padding: 17px 0 0 5px;
+	width: auto;
+	text-align: left;
+	margin: 0;
+}
+
+/*
 site slogan can sit in the footer for now 
 -------------------------------------------------------------------------[comment] */
 
 p#copyright {
-    float: left;
-    padding: 20px 0 0 5px;
-    width:180px;
-    text-align: center;
-    margin:0;
-} /*
+	float: left;
+	padding: 17px 0 0 5px;
+	width: 200px;
+	text-align: center;
+	margin: 0;
+}
+
+/*
 and so can the copyright info
 -------------------------------------------------------------------------[comment] */
 
 div.validators {
-    float:right;
-    height:23px;
-    width:102px;    
-    padding-top:2px;
-    margin-right:3px;
-} /*
+	float: right;
+	height: 23px;
+	width: 80px;
+	/* 	padding-top:2px; */
+	margin-right: 7px;
+}
+
+/*
 it is a kind of modern trend to display links to w3c validators 
 -------------------------------------------------------------------------[comment] */
 
 div.validators img {
-    margin: 1px 0;
-    display:block;
-} /*
+	margin: 1px 0;
+	display: block;
+}
+
+/*
 not so much a decoration, but rather a high visibility tool for beta-testers 
 -------------------------------------------------------------------------[comment] */
 
 /* MISCELLANEOUS [gen_heading] */
 .txttitle {
-    font-weight: bold;
-    color: #336699;
-    text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+	text-decoration: none;
 }
 
 .sidebtns {
-    font-weight: bold;
-    color: #336699;
-    text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+	text-decoration: none;
 }
 
 .subhead {
-    font-weight: bold;
-    color: #60a9f0;
-    text-decoration: none;
+	font-weight: bold;
+	color: #60a9f0;
+	text-decoration: none;
 }
 
 .btns {
-    text-decoration: none;
-    background-color: #FFD800;
-    color: #000000;
-    font-weight: bold;
-    font-size: 9.5pt;
+	text-decoration: none;
+	background-color: #FFD800;
+	color: #000000;
+	font-weight: bold;
+	font-size: 9.5pt;
 }
 
 .busbtns {
-    text-decoration: none;
-    background-color: #85b8ea;
-    color: #000000;
-    font-weight: bold;
-    font-size: 9.5pt;
+	text-decoration: none;
+	background-color: #85b8ea;
+	color: #000000;
+	font-weight: bold;
+	font-size: 9.5pt;
 }
 
 .blk {
-    text-decoration: none;
-    color: #000000;
-    font-weight: bold;
+	text-decoration: none;
+	color: #000000;
+	font-weight: bold;
 }
 
 .LightUp {
-    background-color: #cfe5fa;
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
+	background-color: #cfe5fa;
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 .LightDown {
-    background-color: #ffffff;
-    color: #336699;
-    font-weight: bold;
-    font-size: 9.5pt;
-    text-decoration: none;
+	background-color: #ffffff;
+	color: #336699;
+	font-weight: bold;
+	font-size: 9.5pt;
+	text-decoration: none;
 }
 
 .formUp { background-color: #e3f1ff; }
 
 abbr, acronym, .help {
-    border-bottom: 1px dotted #999;
-    cursor: help;
+	border-bottom: 1px dotted #999;
+	cursor: help;
 }
 
-/* EXPERIMENTAL RULES - keep them near the bottom [gen_heading] */
-
-div.iewintablefixer {
-    width: 100%;
-    padding:0;
-    margin:0;
-} /*
-it is a known fact that IE-Windows cannot correctly calculate width of a table in %,
-when such table is positioned inside a div without explicit width, so
-in order to avoid multiple hacks in this theme we just make sure that 
-every container for every potential table has the width specified as 100%.
-It is a small price to pay, considering there are only 3 places like this
-in the whole theme - leftblocks content and rightblocks, which need to be wrapped
-in this _special_ _fixer_ container.. [andyv]
-------------------------------------------------------------------[important note] */
+/* EXPERIMENTAL RULES - keep them near the bottom */

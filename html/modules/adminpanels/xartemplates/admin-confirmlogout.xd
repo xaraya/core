@@ -1,12 +1,23 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration</xar:mlstring></span></div>
-<!-- common admin menu for this module - remove link to the current function -->
+<xar:comment>
+	License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <div class="xar-mod-body">
-<h2><xar:mlstring>Confirm Logout</xar:mlstring></h2>
-<div align="center">
-<!-- Formatting table to center the menu -->
-<h3><xar:mlstring>Are you sure? Click "Cancel" to return to the previous admin panel</xar:mlstring></h3>
-            [<a href="#$logouturl#">#$logoutlabel#</a>]
-            [<a href="#$cancelurl#">#$cancellabel#</a>]
-</div>
+	<div class="xar-mod-head">
+		<span class="xar-mod-title">
+			<xar:mlstring>
+				Administration 
+			</xar:mlstring>
+		</span>
+	</div>
+	<h2>
+		<xar:mlstring>
+			Confirm Logout 
+		</xar:mlstring>
+	</h2>
+	<p>
+		<xar:mlstring>
+			Are you sure? Click "Cancel" to return to the previous admin panel 
+		</xar:mlstring>
+	</p>
+	[<a href="#$logouturl#">#$logoutlabel#</a>] [<a href="#$cancelurl#">#$cancellabel#</a>] 
 </div>

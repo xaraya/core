@@ -1,0 +1,7 @@
+<link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/style_textsmall.css" title="Small classictext" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textlarge.css" title="Large classictext" media="screen" />
+<link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_blue.css" title="Blue classiccolors" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_highcontrast.css" title="Contrast classiccolors" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_green.css" title="Green classiccolors" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
