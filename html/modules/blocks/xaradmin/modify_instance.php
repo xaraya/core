@@ -62,9 +62,18 @@ function blocks_admin_modify_instance()
         // TODO: adam_baum - add some error checking for non-existant func, methinks.
         $extra = '';
     }
+
     // check to see if block has form content
     $infofunc = $usname.'_'.$instance['type'] . 'block_info';
-    $block_edit = $infofunc();
+    if (function_exists($infofunc)) {
+        $block_edit = $infofunc();
+    } else {
+        // Function does not exist so throw error
+        $msg = xarML('MODULE_FUNCTION_NOT_EXIST #(1)', $infofunc);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
 
     // build refresh times array
     $refreshtimes = array(array('id' => 1800,
