@@ -47,8 +47,9 @@ function roles_admin_modifyemail($args)
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $data['subject'] = xarModGetVar('roles', $data['mailtype'].'title');
-            $data['message'] = xarModGetVar('roles', $data['mailtype'].'email');
+            $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
+            $data['subject'] = $strings['subject'];
+            $data['message'] = $strings['message'];
             $data['authid'] = xarSecGenAuthKey();
 
 
@@ -72,9 +73,37 @@ function roles_admin_modifyemail($args)
             $message = xarVarPrepHTMLDisplay($message);
             $subject = xarVarPrepForDisplay($subject);
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
-            xarModSetVar('roles', $data['mailtype'].'email', $message);
-            xarModSetVar('roles', $data['mailtype'].'title', $subject);
+//            if (!xarSecConfirmAuthKey()) return;
+//            xarModSetVar('roles', $data['mailtype'].'email', $message);
+//            xarModSetVar('roles', $data['mailtype'].'title', $subject);
+
+            $messaginghome = "var/messaging/roles";
+            $filebase = $messaginghome . "/" . $data['mailtype'] . "-";
+
+            $filename = $filebase . 'subject.xd';
+            if (is_writable($filename)) {
+               unlink($filename);
+               if (!$handle = fopen($filename, 'a')) {
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
+               }
+               if (fwrite($handle, $subject) === FALSE) {
+                   echo "Cannot write to file ($filename)";
+                   exit;
+               }
+               fclose($handle);
+            }
+            $filename = $filebase . 'message.xd';
+            if (is_writable($filename)) {
+               unlink($filename);
+               if (!$handle = fopen($filename, 'a')) {
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
+               }
+               if (fwrite($handle, $message) === FALSE) {
+                   echo "Cannot write to file ($filename)";
+                   exit;
+               }
+               fclose($handle);
+            }
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
             break;
