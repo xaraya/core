@@ -238,12 +238,17 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         //include_once 'includes/xarSession2.php';
         include_once 'includes/xarSession.php';
 
+        if (phpversion() >= "4.2.0") {
+            $oldsessions = false;
+        } else {
+            $oldsessions = true;
+        }
         // Start Session Support
         $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
                             'duration' => xarCore_getSiteVar('Session.Duration'),
                             'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
                             'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'),
-                            'useOldPHPSessions' => false);
+                            'useOldPHPSessions' => $oldsessions);
         xarSession_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
