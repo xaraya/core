@@ -5,7 +5,7 @@
  * BlockLayout Template Engine Compiler
  *
  * @package blocklayout
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -14,7 +14,6 @@
  * @author Marty Vance <dracos@xaraya.com>
  * @author Garrett Hunter <garrett@blacktower.com>
  */
-
 
 /**
  * Defines for comment specifiers
@@ -44,7 +43,6 @@ define('XAR_BL_MISSING_PARAMETER','MISSING_PARAMETER');
 
 define('XAR_BL_DEPRECATED_ATTRIBUTE','DEPRECATED_ATTRIBUTE');
 
-
 /**
  * xarTpl__CompilerError
  *
@@ -57,6 +55,7 @@ class xarTpl__CompilerError extends SystemException
 {
     function raiseError($msg)
     {
+        // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
         xarExceptionSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
     }
 }
@@ -64,8 +63,7 @@ class xarTpl__CompilerError extends SystemException
 /**
  * xarTpl__ParserError
  *
- * class to hold parser errors, the constructor makes up
- * the msg to pass on as the exception message.
+ * class to hold parser errors
  *
  * @package blocklayout
  * @access private
@@ -83,6 +81,7 @@ class xarTpl__ParserError extends SystemException
             $msg .= str_repeat('-', $posInfo->column - 3);
         }
         $msg .= '^';
+        // FIXME: evaluate whether this needs to be a system exception.
         xarExceptionSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
     }
 }
@@ -210,7 +209,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
     function generateNode($node)
     {
-        //xarLogMessage('generateNode '.$node->tagName, XARLOG_LEVEL_ERROR);
         //if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
         if ($node->hasChildren() && isset($node->children) /*|| $node->hasText()*/) {
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
@@ -230,7 +228,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     $code .= "?>";
                     $this->setPHPBlock(false);
                 }
-                //xarLogVariable('child', $child, XARLOG_LEVEL_ERROR);
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
                         $this->raiseError(XAR_BL_INVALID_TAG,"The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
@@ -248,7 +245,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 if (!isset($childCode)) {
                     return; // throw back
                 }
+           
                 // Commented out the code that will patch a security hole in xar:set
+                // See also bug #107
                 // We need to see if there is anyone using xar:set with php/xaraya functions
                 //if ($child->tagName != 'TextNode' || !$checkNode->needAssignment()) {
                     $code .= $childCode;
@@ -256,23 +255,16 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     //$code .= "'" . strtr($childCode, array("\\" => "\\\\", "'" => "\\'")) . "'";
                 //}
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
-                    //xarLogVariable('checkNode', $checkNode, XARLOG_LEVEL_ERROR);
-                    //xarLogMessage('here', XARLOG_LEVEL_ERROR);
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
-                        //xarLogMessage('exception control 1', XARLOG_LEVEL_ERROR);
                         $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
-
-                    //xarLogVariable('pass here', $child->tagName, XARLOG_LEVEL_ERROR);
                     if ($child->needExceptionsControl()) {
-                        //xarLogVariable('pendingExceptionsControl', $child->tagName, XARLOG_LEVEL_ERROR);
                         $this->setPendingExceptionsControl(true);
                     }
                 }
-
                 //$checkNode = $child;
             }
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
@@ -289,8 +281,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     $code .= "<?php ";
                     $this->setPHPBlock(true);
                 }
-                //xarLogVariable('final control', $node->tagName, XARLOG_LEVEL_ERROR);
-                //xarLogVariable('final control', $node->needExceptionsControl(), XARLOG_LEVEL_ERROR);
                 $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
                 $this->setPendingExceptionsControl(false);
             }
@@ -300,7 +290,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             assert('isset($code); /* The rendering code for a node is not working properly */');
             if (!isset($code))  return; // throw back
         }
-        //xarLogMessage('exiting generateNode', XARLOG_LEVEL_ERROR);
         return $code;
     }
 }
@@ -360,7 +349,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $documentTree->children = $res;
         $documentTree->variables = $this->tplVars;
 
-        //xarLogVariable('documentTree', $documentTree, XARLOG_LEVEL_ERROR);
         return $documentTree;
     }
 
@@ -368,7 +356,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $children = array();
         $text = '';
         while (true) {
-            //xarLogMessage('parseNode', XARLOG_LEVEL_ERROR);
             $token = $this->getNextToken();
             $nextToken = '';
             if (!isset($token)) {
@@ -698,10 +685,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $nextToken = $this->getNextToken(1);
 
                 // Break out of processing if # is escaped as ##
-                // TODO <Dracos>:  Rip this out when all the templates are stripped of ##
-                if ($nextToken == '#') {
-                    break;
-                }
+//                 // TODO <Dracos>:  Rip this out when all the templates are stripped of ##
+//                 <MrB> commented it out on 20-09-2003, let's see if we get weird stuff.
+//                 if ($nextToken == '#') {
+//                     break;
+//                 }
                 // Break out of processing if nextToken is (, because #(.) is used by MLS
                 if ($nextToken == '(') {
                     $token .= '(';
@@ -1065,24 +1053,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         if ($token === false) {
             return;
         }
-        //$this->lineText .= $token;
 
-        // <MrB> The \r\n combo shouldn't happen anymore, as we filter that out,
-        // commented it out for now.
-//         if ($token == "\r") {
-//             if (substr($this->templateSource, $start + 1, 1) == "\n") {
-//                 // Check for \r\n
-//                 $start++;
-//             }
-//             $token = "\n";
-//         }
-//         $start++;
-        //$this->column++;
-        /*if ($token == "\n") {
-            $this->line++;
-            $this->column = 0;
-            $this->lineText = '';
-        }*/
         if ($len != 1) {
             $token .= $this->peek($len - 1, $start);
         }
@@ -1318,6 +1289,7 @@ class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
         array_pop($this->varsMapping[$specialVarName]);
     }
 
+    // TODO: check whether we can eliminate $posInfo, as the object is derived from it
     function resolve($specialVarName, $posInfo)
     {
         if (!isset($this->varsMapping[$specialVarName])) {
