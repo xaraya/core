@@ -36,25 +36,22 @@ function blocks_adminapi_getmenulinks()
                                                    'new_instance'),
                               'title' => xarML('Add a new block instance'),
                               'label' => xarML('Add Instance'));
-    }
-    if (xarSecurityCheck('AddBlock',0)) {
-
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
                                                    'view_groups'),
                               'title' => xarML('View the existing block groups'),
                               'label' => xarML('View Groups'));
-    }
-
-    if (xarSecurityCheck('AddBlock',0)) {
-
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
                                                    'new_group'),
                               'title' => xarML('Add a new group of blocks'),
                               'label' => xarML('Add Group'));
+        $menulinks[] = Array('url'   => xarModURL('blocks',
+                                                   'admin',
+                                                   'view_groups'),
+                              'title' => xarML('View the defined block groups'),
+                              'label' => xarML('View Groups'));
     }
-
     if (xarSecurityCheck('AdminBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
