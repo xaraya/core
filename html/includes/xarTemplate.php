@@ -914,23 +914,13 @@ function xarTpl__getCompilerInstance()
 function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 {
     // $tplData should be an array (-even-if- it only has one value in it)
-    assert('is_array($tplData)');
+    assert('is_array($tplData); /* Template data should always be passed in an array */');
 
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
 
     $tplData['_bl_data'] = $tplData;
-
-    // $__tplData should be an array (-even-if- it only has one value in it),
-    // if it's not throw an exception.
-    if (is_array($tplData)) {
-        extract($tplData, EXTR_OVERWRITE);
-    } else {
-        $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    extract($tplData, EXTR_OVERWRITE);
 
     // Start output buffering
     ob_start();
@@ -1029,17 +1019,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
-    // $__tplData should be an array (-even-if- it only has one value in it),
-    // if it's not throw an exception.
-    if (is_array($tplData)) {
-        extract($tplData, EXTR_OVERWRITE);
-    } else {
-        // This should actually never be reached.
-        $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    extract($tplData, EXTR_OVERWRITE);
 
     // Load cached template file
     ob_start();
