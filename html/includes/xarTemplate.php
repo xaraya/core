@@ -659,6 +659,9 @@ function xarTpl__execute($templateCode, $tplData)
     // $tplData should be an array (-even-if- it only has one value in it) 
     assert('is_array($tplData)');
 
+    //POINT of ENTRY for cleaning variables
+    // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
+
     $tplData['_bl_data'] = $tplData;
 
     // $__tplData should be an array (-even-if- it only has one value in it), 
@@ -698,7 +701,7 @@ function xarTpl__execute($templateCode, $tplData)
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
 
-    // $tplData should be an array (-even-if- it only has one value in it) 
+    // $tplData should be an array (-even-if- it only has one value in it)
     assert('is_array($tplData)');
 
     $needCompilation = true;
@@ -712,12 +715,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $needCompilation = false;
         }
     }
-    
+
     if (!file_exists($sourceFileName) && $needCompilation == true) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
-    
+
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
@@ -740,8 +743,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     }
 
 
+    //POINT of ENTRY for cleaning variables
+    // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
-    // $__tplData should be an array (-even-if- it only has one value in it), 
+
+    // $__tplData should be an array (-even-if- it only has one value in it),
     // if it's not throw an exception.
     if (is_array($tplData)) {
         extract($tplData, EXTR_OVERWRITE);
@@ -765,7 +771,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         }
     }
-    
+
     // Start output buffering
     ob_start();
 
@@ -803,8 +809,8 @@ define ('XAR_TPL_FLOAT', 512);
 define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
 
 /**
- * 
- * 
+ *
+ *
  * @package blocklayout
  */
 class xarTemplateAttribute {
