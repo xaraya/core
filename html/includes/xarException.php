@@ -284,7 +284,12 @@ function xarExceptionRender($format)
         $data['hint'] = $rendering->getHint();
         $data['stack'] = $rendering->getStack();
     }
-   return  xarTplModule('base',$template, 'exception', $data);
+    if ($format == 'html') {
+        return  xarTplModule('base',$template, 'exception', $data);
+    }
+    else {
+        return $data;
+    }
 }
 
 // PRIVATE FUNCTIONS
