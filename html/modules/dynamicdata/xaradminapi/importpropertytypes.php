@@ -219,7 +219,7 @@ function updateDB( $proptype, $parent, $filepath )
 					, '".$proptype['source']."'
 					, '".$proptype['dependancies']."'
 					, '".$proptype['requiresmodule']."'
-					, ''
+					, '".$proptype['args']."'
 					, '".$proptype['aliases']."'
 				  )";
 

@@ -8,13 +8,13 @@
 			<xar:set name="$theID">$id.'_'.$key</xar:set>
 		</xar:if>
 	
-		<label for="#$theID#">#$option['name']# </label>
-	
 		<xar:if condition="$option['checked']">
-			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" /> #$option['name']#
+			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
 		<xar:else />
-			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" /> #$option['name']#
+			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
 		</xar:if>
+		
+		<label for="#$theID#">#$option['name']# </label>		
 	</xar:foreach>
 <xar:else />
 	No options specified for CheckBox List in validation field.
