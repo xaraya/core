@@ -36,26 +36,26 @@ function xarVar_init($args)
     */
 
     $xarVar_allowableHTML = xarConfigGetVar('Site.Core.AllowableHTML');
-    if (!isset($xarVar_allowableHTML) && xarExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($xarVar_allowableHTML) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
     $xarVar_fixHTMLEntities = xarConfigGetVar('Site.Core.FixHTMLEntities');
-    if (!isset($xarVar_fixHTMLEntities) && xarExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($xarVar_fixHTMLEntities) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
     $xarVar_enableCensoringWords = xarConfigGetVar('Site.Core.EnableCensoring');
-    if (!isset($xarVar_enableCensoringWords) && xarExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($xarVar_enableCensoringWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
     $xarVar_censoredWords = xarConfigGetVar('Site.Core.CensoredWords');
-    if (!isset($xarVar_censoredWords) && xarExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($xarVar_censoredWords) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
     $xarVar_censoredWordsReplacers = xarConfigGetVar('Site.Core.CensoredWordReplacers');
-    if (!isset($xarVar_censoredWordsReplacers) && xarExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($xarVar_censoredWordsReplacers) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
 
