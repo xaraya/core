@@ -49,6 +49,74 @@
             </span>
         </p>
 
+		<p style="padding-top: 10px;">
+			<xar:mlstring>Groups and group templates</xar:mlstring>
+		</p>
+
+		<p style="padding-top: 10px;">
+            <xar:if condition="$group_method eq 'min'">
+                <xar:comment>Provide a 'new group' drop-down list.</xar:comment>
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('Add this block instance to the selected block group.')#">
+                            <label for="block_template">
+                                <xar:mlstring>Add to group:</xar:mlstring>
+                            </label>
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+                        <select name="block_new_group" id="block_new_group">
+                            <option value="" selected="selected">
+                                <xar:mlstring>-- no new group --</xar:mlstring>
+                            </option>
+                            <xar:loop name="$block_groups">
+                                <xar:if condition="empty($loop:item['selected'])">
+                                    <option value="#$loop:item['gid']#">
+                                        #xarVarPrepForDisplay($loop:item['name'])#
+                                    </option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </span>
+            </xar:if>
+		</p>
+
+		<p style="padding-top: 10px;">
+		<xar:loop name="$block_groups">
+			<xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+				<div style="clear: both; padding-top: 10px;">
+					<span style="float: left; width: 20%; text-align: right;">
+						<label for="group_templates_#$loop:item.gid#">
+							#xarVarPrepForDisplay($loop:item['name'])#:
+						</label>
+					</span>
+					<span style="float: right; width: 78%; text-align: left;">
+						<xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+							<input type="text" name="group_templates[#$loop:item.gid#]" id="group_templates_#$loop:item.gid#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
+							<xar:if condition="$group_method eq 'min'">
+								<xar:if condition="!empty($loop:item['selected'])">
+									<input type="checkbox" name="block_remove_groups[#$loop:item.gid#]" id="block_remove_groups_#$loop:item.gid#" value="on" />
+									<label for="block_remove_groups_#$loop:item.gid#">
+										<xar:mlstring>Remove</xar:mlstring>
+									</label>
+									<input type="hidden" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+								</xar:if>
+							<xar:else />
+								<xar:if condition="!empty($loop:item['selected'])">
+									<input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" checked="checked"/>
+								<xar:else />
+									<input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+								</xar:if>
+								<label for="block_groups_#$loop:item.gid#">
+									<xar:mlstring>Selected</xar:mlstring>
+								</label>
+							</xar:if>
+						</xar:if>
+					</span>
+				</div>
+			</xar:if>
+		</xar:loop>
+		</p>
+
         <p style="float: left; width: 100%;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#">
@@ -138,87 +206,15 @@
             </p>
         </xar:if>
 
-        <fieldset style="clear: both;">
-            <legend><xar:mlstring>Groups and group templates</xar:mlstring></legend>
-            <xar:if condition="$group_method eq 'min'">
-                <div style="clear: both;">
-                    <xar:comment>Provide a 'new group' drop-down list.</xar:comment>
-                    <span style="float: left; width: 20%; text-align: right;">
-                        <span class="help" title="#xarML('Add this block instance to the selected block group.')#">
-                            <label for="block_template">
-                                <xar:mlstring>Add to group:</xar:mlstring>
-                            </label>
-                        </span>
-                    </span>
-                    <span style="float: right; width: 78%; text-align: left;">
-                        <select name="block_new_group" id="block_new_group">
-                            <option value="" selected="selected">
-                                <xar:mlstring>-- no new group --</xar:mlstring>
-                            </option>
-                            <xar:loop name="$block_groups">
-                                <xar:if condition="empty($loop:item['selected'])">
-                                    <option value="#$loop:item['gid']#">
-                                        #xarVarPrepForDisplay($loop:item['name'])#
-                                    </option>
-                                </xar:if>
-                            </xar:loop>
-                        </select>
-                    </span>
-                </div>
-            </xar:if>
-
-            <div style="clear: both;">
-                <xar:loop name="$block_groups">
-                    <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-                        <div style="clear: both;">
-                            <span style="float: left; width: 20%; text-align: right;">
-                                <label for="group_templates_#$loop:item.gid#">
-                                    #xarVarPrepForDisplay($loop:item['name'])#:
-                                </label>
-                            </span>
-
-                            <span style="float: right; width: 78%; text-align: left;">
-                                <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-                                    <input type="text" name="group_templates[#$loop:item.gid#]" id="group_templates_#$loop:item.gid#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
-
-                                    <xar:if condition="$group_method eq 'min'">
-                                        <xar:if condition="!empty($loop:item['selected'])">
-                                            <input type="checkbox" name="block_remove_groups[#$loop:item.gid#]" id="block_remove_groups_#$loop:item.gid#" value="on" />
-                                            <label for="block_remove_groups_#$loop:item.gid#">
-                                                <xar:mlstring>Remove</xar:mlstring>
-                                            </label>
-                                            <input type="hidden" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
-                                        </xar:if>
-                                    <xar:else />
-                                        <xar:if condition="!empty($loop:item['selected'])">
-                                            <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" checked="checked"/>
-                                        <xar:else />
-                                            <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
-                                        </xar:if>
-                                        <label for="block_groups_#$loop:item.gid#">
-                                            <xar:mlstring>Selected</xar:mlstring>
-                                        </label>
-                                    </xar:if>
-
-                                    <br />
-                                </xar:if>
-                            </span>
-                        </div>
-                    </xar:if>
-                </xar:loop>
-            </div>
-        </fieldset>
-
-        <div style="clear: both;"><input type="submit" value="#xarML('Update')#" /></div>
+		<xar:if condition="empty($extra_fields)">
+			<div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
+		<xar:else />
         <!---
             Blocks can send more fields to be shown and configured
             the extra_fields var shows those values
         --->
-        <xar:if condition="!empty($extra_fields)">
-            <hr />
             #$extra_fields#
-            <xar:comment><div style="clear:both;"><input type="submit" value="#xarML('Update')#" /></div></xar:comment>
+            <div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
         </xar:if>
         <div>#$hooks#</div>
     </form>
-</div>
