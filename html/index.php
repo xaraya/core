@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Xaraya Web Interface Entry Point
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -13,12 +13,12 @@
  */
 
 /**
- * Index Function 
+ * Index Function
 */
 include 'includes/xarCore.php';
 
 /**
- * Main Xaraya Entry 
+ * Main Xaraya Entry
  *
  * @access public
  * @return bool
@@ -97,7 +97,7 @@ function xarMain()
 
      // Handle exceptions (the bubble at the top handler
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-    
+
     echo $pageOutput;
 
     return true;
@@ -107,9 +107,9 @@ if (!xarMain()) {
 
     // If we're here there must be surely an uncaught exception
     if (xarCoreIsDebuggerActive()) {
-        $text = xarML('Caught exception');
-        $text .= '<br />';
-        $text .= xarExceptionRender('html');
+//        $text = xarML('Caught exception');
+//        $text .= '<br />';
+        $text = xarExceptionRender('html');
     } else {
         $text = xarML('An error occurred while processing your request. The details are:');
         $text .= '<br />';
@@ -127,7 +127,7 @@ if (!xarMain()) {
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
         echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$text</body></html>";
     } else {
-        // It's important here to free exception before caling xarTplPrintPage
+        // It's important here to free exception before calling xarTplPrintPage
         // As we are in the exception handling phase, we can clear it without side effects.
         xarExceptionFree();
         // Render page
