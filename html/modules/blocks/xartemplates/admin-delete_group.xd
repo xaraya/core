@@ -21,7 +21,7 @@
             </td>
             <td>
                 <xar:loop name="$group['instances']">
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$id#">#$title#</a><br />
+                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#">#$loop:item['title']#</a><br />
                 </xar:loop>
             </td>
         </tr>

@@ -13,10 +13,10 @@
     <xar:loop name="$block_types" id="foo">
     <tr align="center">
         <td>
-            <a href="#$modurl#">#$module#</a>
+            <a href="#$loop:item['modurl']#">#$loop:item['module']#</a>
         </td>
         <td>
-           #$type#
+           #$loop:item['type']#
         </td>
     </tr>
     </xar:loop>

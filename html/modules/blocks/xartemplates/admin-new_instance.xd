@@ -20,8 +20,8 @@
             <td>
                 <select name="block_type" id="block_type" style="width:150px;">
                     <xar:loop name="$block_types">
-                        <option value="#$id#">
-                            #$module#\#$type#
+                        <option value="#$loop:item['id']#">
+                            #$loop:item['module']#\#$loop:item['type']#
                         </option>
                     </xar:loop>                
                 </select>
@@ -34,8 +34,8 @@
             <td>
                 <select name="block_group" id="block_group" style="width:150px;">
                     <xar:loop name="$block_groups">
-                        <option value="#$id#">
-                            #$name#
+                        <option value="#$loop:item['id']#">
+                            #$loop:item['name']#
                         </option>
                     </xar:loop>                
                 </select>

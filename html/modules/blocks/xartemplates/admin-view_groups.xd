@@ -19,19 +19,19 @@
     <xar:loop name="$block_groups">
     <tr align="center">
         <td>
-            #$name#&nbsp;
+            #$loop:item['name']#&nbsp;
         </td>
         <td>&nbsp;
             <xar:loop name="$instances" prefix="inst">
-                <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$inst_id#">#$inst_title#</a><br />
+                <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#">#$loop:item['title']#</a><br />
             </xar:loop>
         </td>
         <td>
-            #$template#&nbsp;
+            #$loop:item['template']#&nbsp;
         </td>
         <td>
-            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$id#">Edit</a> |
-            <a href="&xar-modurl-blocks-admin-delete_group;&amp;gid=#$id#">Delete</a>
+            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['id']#">Edit</a> |
+            <a href="&xar-modurl-blocks-admin-delete_group;&amp;gid=#$loop:item['id']#">Delete</a>
         </td>
     </tr>
     </xar:loop>

@@ -28,7 +28,7 @@
                         <td rowspan="2">
                             <select name="group_instances" id="group_instances" size="#$instance_count#">
                                 <xar:loop name="$group['instances']">
-                                    <option value="#$id#"><xar:var name="$title" /></option>
+                                    <option value="#$loop:item['id']#"><xar:var name="$loop:item['title']" /></option>
                                 </xar:loop>
                             </select>
                         </td>

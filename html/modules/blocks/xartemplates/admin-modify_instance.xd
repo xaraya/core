@@ -29,12 +29,12 @@
             <td align="left">
                 <select name="block_group" id="block_group" style="width:150px;">
                     <xar:loop name="$block_groups">
-                        <xar:if condition="$instance['group_id'] eq $id">
-                            <option value="#$id#" selected="selected">
+                        <xar:if condition="$instance['group_id'] eq $loop:item['id']">
+                            <option value="#$loop:item['id']#" selected="selected">
                         <xar:else />
-                            <option value="#$id#">
+                            <option value="#$loop:item['id']#">
                         </xar:if>
-                        #$name#
+                        #$loop:item['name']#
                         </option>
                     </xar:loop>                
                 </select>
@@ -56,12 +56,12 @@
             <td align="left">
                 <select name="block_refresh" id="block_refresh" style="width:150px;">
                     <xar:loop name="$refresh_times">
-                        <xar:if condition="$instance['refresh'] eq $id">
-                            <option value="#$id#" selected="selected">
+                        <xar:if condition="$instance['refresh'] eq $loop:item['id']">
+                            <option value="#$loop:item['id']#" selected="selected">
                         <xar:else />
-                            <option value="#$id#">
+                            <option value="#$loop:item['id']#">
                         </xar:if>
-                        <xar:var name="$name" />
+                        <xar:var name="$loop:item['name']" />
                         </option>
                     </xar:loop>
                 </select>
