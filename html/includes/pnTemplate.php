@@ -116,7 +116,7 @@ function pnTplString($templateCode, $tplData)
 
 function pnTplFile($fileName, $tplData)
 {
-    return pnTpl__executeFromFile($templateCode, $tplData);
+    return pnTpl__executeFromFile($fileName, $tplData);
 }
 
 
@@ -185,6 +185,8 @@ function pnTpl__getCompilerInstance()
 // Now featuring *eval()* for your anti-caching pleasure :-)
 function pnTpl__execute($templateCode, $tplData)
 {
+    $tplData['_bl_data'] = $tplData;
+
     // $__tplData should be an array (-even-if- it only has one value in it), 
     // if it's not throw an exception.
     if (is_array($tplData)) {
@@ -248,7 +250,7 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
             return pnTpl__execute($templateCode, $tplData);
         }
     }
-
+        $tplData['_bl_data'] = $tplData;
     // $__tplData should be an array (-even-if- it only has one value in it), 
     // if it's not throw an exception.
     if (is_array($tplData)) {

@@ -902,6 +902,9 @@ class pnTpl__NodesFactory
             case 'include':
                 $node = new pnTpl__PntIncludeNode();
                 break;
+            case 'template':
+                $node = new pnTpl__PntTemplateNode();
+                break;
             case 'set':
                 $node = new pnTpl__PntSetNode();
                 break;
@@ -2267,6 +2270,55 @@ class pnTpl__PntIncludeNode extends pnTpl__TplTagNode
         foreach ($directories as $directory) {
             if (file_exists($directory . '/' . $file)) {
                 return "include ('$directory/$file');\n";
+            }
+        }
+        
+        pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                       new pnTpl__ParserError("File '$file' not found. (Search path: '$path')", $this));
+    }
+}
+
+class pnTpl__PntTemplateNode extends pnTpl__TplTagNode
+{
+    function render()
+    {
+        extract($this->attributes);
+        
+        if (!isset($file)) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'MissingAttribute',
+                           new pnTpl__ParserError('Missing \'file\' attribute in <pnt:include> tag.', $this));
+            return;
+        }
+        
+        if (!isset($type)) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'MissingAttribute',
+                           new pnTpl__ParserError('Missing \'type\' attribute in <pnt:include> tag.', $this));
+            return;
+        }
+        
+        $themeName = pnCore_getSiteVar('BL.Theme.Name');
+        $directories = array();
+        if ($type == 'theme') {
+            $directories[] = "themes/$themeName/includes/";
+        } elseif ($type == 'module') {
+            $directories[] = "themes/$themeName/modules/$_bl_module_name/includes/";
+            $directories[] = "modules/$_bl_module_name/pninclude/";
+        } else {
+            pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                           new pnTpl__ParserError("Invalid value '$type' for 'type' attribute in <pnt:include> tag.", $this));
+            return;
+        }
+
+        $path = implode('; ', $directories);
+        if (strstr($file, '..') != false) {
+            pnExceptionSet(PN_USER_EXCEPTION, 'InvalidAttribute',
+                           new pnTpl__ParserError("File '$file' may not be located outside search path. (Path: '$path')", $this));
+            return;
+        }
+        
+        foreach ($directories as $directory) {
+            if (file_exists($directory . '/' . $file)) {
+                return "pnTplFile('$directory/$file', \$_bl_data)\n";
             }
         }
         
