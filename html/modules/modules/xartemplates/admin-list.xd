@@ -76,8 +76,6 @@
 						<xar:if condition="$state eq 1">
 							<a href="#$initialiseurl#">#$initialise#</a>
 							|
-							<a href="#$removeurl#">#$remove#</a>
-							|
 							<a href="#$editurl#">#$edit#</a>
 						</xar:if>
 						<xar:if condition="$state eq 5">
