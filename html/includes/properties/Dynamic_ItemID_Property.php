@@ -39,15 +39,10 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
             $data['value']= xarVarPrepForDisplay($this->value);
         }
 
-        $data['name']    = isset($name) ? xarVarPrepForDisplay($name) : xarVarPrepForDisplay($this->name);
-        $data['id']    = isset($id) ? xarVarPrepForDisplay($id) : xarVarPrepForDisplay($this->id);
-        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
+        // Note: item ids are read-only, even (especially) in input forms
 
-    $template="itemid";
-    return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        $template="itemid";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
     }
     // default methods from Dynamic_NumberBox_Property
 }
