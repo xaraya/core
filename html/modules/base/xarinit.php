@@ -169,7 +169,7 @@ function base_init()
     * Set System Configuration Variables
     *****************************************************************/
     xarConfigSetVar('System.Core.TimeZone', 'Europe/Rome');
-    xarConfigSetVar('System.Core.VersionNum', 'Pre - 1.0');
+    xarConfigSetVar('System.Core.VersionNum', '.900');
     xarConfigSetVar('System.Core.VersionId', 'Xaraya');
     xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
     xarConfigSetVar('System.Core.LoadLegacy', true);
