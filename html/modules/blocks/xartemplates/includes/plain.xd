@@ -1,47 +1,31 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
-<table class="fullwidth">
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<table class="xar-fullwidth">
     <tr>
         <th>
-            <xar:mlstring>
-                Name 
-            </xar:mlstring>
+            <xar:mlstring>Name</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Groups 
-            </xar:mlstring>
+            <xar:mlstring>Groups</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Module 
-            </xar:mlstring>
+            <xar:mlstring>Module</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Type 
-            </xar:mlstring>
+            <xar:mlstring>Type</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Template 
-            </xar:mlstring>
+            <xar:mlstring>Template</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Status 
-            </xar:mlstring>
+            <xar:mlstring>Status</xar:mlstring>
         </th>
         <th>
-            <xar:mlstring>
-                Actions 
-            </xar:mlstring>
+            <xar:mlstring>Actions</xar:mlstring>
         </th>
     </tr>
     <xar:loop name="$blocks">
         <tr>
-            <td class="xar-mod-title">
+            <td>
                 <xar:if condition="empty($loop:item['title'])">
                     #$loop:item['name']# 
                     <xar:else />
@@ -57,10 +41,8 @@
                             #$loop:groups:item.name# 
                         </a>
                     </xar:loop>
-                    <xar:else />
-                    <xar:mlstring>
-                        none 
-                    </xar:mlstring>
+                <xar:else />
+                    [ <xar:mlstring>none</xar:mlstring> ]
                 </xar:if>
             </td>
             <td>
@@ -81,15 +63,15 @@
                             default 
                         </xar:mlstring>
                         ] 
-                        <xar:else />
+                    <xar:else />
                         #$loop:item['group_template']# &nbsp; 
                     </xar:if>
                 </xar:if>
             </td>
-            <td>
+            <td class="xar-align-center">
                 #$state_desc[$loop:item['state']]# 
             </td>
-            <td>
+            <td class="xar-align-center">
                 <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#">
                     <xar:mlstring>
                         Edit 

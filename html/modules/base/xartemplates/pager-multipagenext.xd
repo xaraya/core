@@ -2,13 +2,17 @@
 <xar:comment> Pager for displaying legacy next-page links on multi-page documents </xar:comment>
 
 <xar:comment> Display next-page link if we are not on the last page </xar:comment>
-<xar:if condition="$currentpagenum ne $lastpagenum">
-    <a title="#xarML('Next page')#" href="#$nextpageurl#">#xarML('next')# (#$nextpage#/#$totalpages#)</a>
-<xar:else/>
-    &nbsp;
-</xar:if>
+<div class="xar-pager">
+    <xar:if condition="$currentpagenum ne $lastpagenum">
+        <a title="#xarML('Next page')#" href="#$nextpageurl#">#xarML('next')# (#$nextpage#/#$totalpages#)</a>
+    <xar:else/>
+        <span title="#xarML('Next page')#">#xarML('next')# (#$nextpage#/#$totalpages#)</span>
+    </xar:if>
 
-<xar:comment> Display last-page link if we are not on the last page </xar:comment>
-<xar:if condition="$currentpagenum ne $lastpagenum">
-    &nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
-</xar:if>
+    <xar:comment> Display last-page link if we are not on the last page </xar:comment>
+    <xar:if condition="$currentpagenum ne $lastpagenum">
+        &nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
+    <xar:else/>
+        &nbsp;<span title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</span>
+    </xar:if>
+</div>

@@ -11,7 +11,7 @@
     <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <img src="modules/base/xarimages/exception.jpg" alt="Exception Icon" class="xar-module-icon" />
+    <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="Exception Icon" class="xar-module-icon" />
 
     <h2>#$type#</h2>
 

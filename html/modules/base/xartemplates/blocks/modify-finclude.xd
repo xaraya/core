@@ -1,9 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-        <div style="clear: both; padding-top: 10px;">
-        <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#xarML('Enter the path of the file to include.')#"><label for="url#$blockid#"><xar:mlstring>File:</xar:mlstring></label>:</span>
-        </span>
-        <span style="float: right; width: 78%; text-align: left;">
-             <input type="text" name="url" id="url#$blockid#" size="30" maxlength="255" value="#$url#" />
-        </span>
-        </div>
+<div class="xar-form-input-wrapper">
+    <label for="url#$blockid#" title="#xarML('Enter the path of the file to include.')#" class="xar-form-label">
+        <xar:mlstring>File:</xar:mlstring>
+    </label>
+    <input type="text" name="url" id="url#$blockid#" value="#$url#" maxlength="255" class="xar-form-textmedium" />
+</div>

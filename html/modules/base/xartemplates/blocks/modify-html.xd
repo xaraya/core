@@ -1,36 +1,59 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-        <div style="clear: both; padding-top: 10px;">
-        <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#xarML('Select when the block will expire, if at all.')#"><label for="expire#$blockid#"><xar:mlstring>Block Expiration</xar:mlstring></label>:</span>
-        </span>
-        <span style="float: right; width: 78%; text-align: left;">
-            <select name="expire" id="expire">
-                <option name="expire" id="expire#$blockid#" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
-                <option name="expire" id="expire#$blockid#" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
-                <option name="expire" id="expire#$blockid#" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
-                <option name="expire" id="expire#$blockid#" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
-                <option name="expire" id="expire#$blockid#" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
-                <option name="expire" id="expire#$blockid#" value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
-            </select>
-        </span>
-        </div>
 
-        <xar:if condition="$expirein ne 0">
-        <div style="clear: both; padding-top: 10px;">
-        <span style="float: left; width: 20%; text-align: right;">
-            <xar:mlstring>This Block Will Expire:</xar:mlstring>
-        </span>
-        <span style="float: right; width: 78%; text-align: left;">
-             #$expirein# <xar:mlstring>hours from now.</xar:mlstring>
-        </span>
-        </div>
+<div class="xar-form-input-wrapper">
+    <label for="expire#$blockid#" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
+        <xar:mlstring>Block Expiration:</xar:mlstring>
+    </label>
+    <xar:set name="$expireseconds">$expirein * 3600</xar:set>
+    <select name="expire" id="expire#$blockid#">
+        <xar:if condition="$expireseconds eq 86400">
+            <option value="86400" selected="selected"><xar:mlstring>1 Day</xar:mlstring></option>
+        <xar:else />
+            <option value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
         </xar:if>
+        <xar:if condition="$expireseconds eq 172800">
+            <option value="172800" selected="selected"><xar:mlstring>2 Days</xar:mlstring></option>
+        <xar:else />
+            <option value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
+        </xar:if>
+        <xar:if condition="$expireseconds eq 432000">
+            <option value="432000" selected="selected"><xar:mlstring>5 Days</xar:mlstring></option>
+        <xar:else />
+            <option value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
+        </xar:if>
+        <xar:if condition="$expireseconds eq 1296000">
+            <option value="1296000" selected="selected"><xar:mlstring>15 Days</xar:mlstring></option>
+        <xar:else />
+            <option value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
+        </xar:if>
+        <xar:if condition="$expireseconds eq 2592000">
+            <option value="2592000" selected="selected"><xar:mlstring>30 Days</xar:mlstring></option>
+        <xar:else />
+            <option value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
+        </xar:if>
+        <xar:if condition="$expireseconds eq 0">
+            <option value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
+        <xar:else />
+            <option value="0"><xar:mlstring>Unlimited</xar:mlstring></option>
+        </xar:if>
+    </select>
+</div>
 
-        <div style="clear: both; padding-top: 10px;">
-        <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#xarML('Enter the HTML to display in the block.')#"><label for="html_content#$blockid#"><xar:mlstring>HTML</xar:mlstring></label>:</span>
-        </span>
-        <span style="float: right; width: 78%; text-align: left;">
-             <textarea name="html_content" id="html_content#$blockid#" style="width:300px;height:150px;">#xarVarPrepForDisplay($html_content)#</textarea>
-        </span>
-        </div>
+<xar:if condition="$expirein ne 0">
+    <div class="xar-form-input-wrapper">
+        <label class="xar-form-label">
+            <xar:mlstring>This Block Will Expire:</xar:mlstring>
+        </label>
+        <xar:ml>
+            <xar:mlstring>#(1) hours from now.</xar:mlstring>
+            <xar:mlvar>#$expirein#</xar:mlvar>
+        </xar:ml>
+    </div>
+</xar:if>
+
+<div class="xar-form-input-wrapper">
+    <label for="html_content#$blockid#" title="#xarML('Enter the HTML to display in the block.')#" class="xar-form-label">
+        <xar:mlstring>HTML:</xar:mlstring>
+    </label>
+     <textarea name="html_content" id="html_content#$blockid#" class="xar-form-textarealarge">#xarVarPrepForDisplay($html_content)#</textarea>
+</div>

@@ -15,8 +15,7 @@
     </h2>
 
     <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="bid" id="bid" value="#$bid#" />
+
         <fieldset>
             <legend>
                 <xar:mlstring>Instance Parameters</xar:mlstring>
@@ -114,38 +113,31 @@
 
        <fieldset>
             <legend>
-                <xar:mlstring>
-                    Type Parameters 
-                </xar:mlstring>
+                <xar:mlstring>Type Parameters</xar:mlstring>
             </legend>
 
+            <xar:comment>
+                This 'content' section is deprecated - it will be removed once the PHP block no longer uses it. 
+            </xar:comment>
 
-
-        <xar:comment>
-            This 'content' section is deprecated - it will be removed once the PHP block no longer uses it. 
-        </xar:comment>
-        <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
-
+            <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                 <div class="xar-form-input-wrapper">
                     <label for="block_content" title="#xarML('Enter the content that is shown in the block instance.')#" class="xar-form-label">
                         <xar:mlstring>Content:</xar:mlstring>
                     </label>
                     <textarea name="block_content" id="block_content" class="xar-form-textareaxlarge">#$instance['content']#</textarea>
                 </div>
+            </xar:if>
 
-        </xar:if>
             <xar:if condition="!empty($extra_fields)">
                 #$extra_fields#
             </xar:if>
-
 
         </fieldset>
 
         <fieldset>
             <legend>
-                <xar:mlstring>
-                    Groups and Group Templates 
-                </xar:mlstring>
+                <xar:mlstring>Groups and Group Templates</xar:mlstring>
             </legend>
 
             <xar:if condition="$group_method eq 'min'">
@@ -220,6 +212,8 @@
         </fieldset>
 
         <div class="xar-clear-both xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="bid" id="bid" value="#$bid#" />
             <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
             <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
         </div>

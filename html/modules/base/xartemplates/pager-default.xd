@@ -1,93 +1,99 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment> Display first-page link or text if there is more than one page </xar:comment>
-<xar:if condition="$totalpages gt 1">
-    <xar:if condition="$currentpagenum ne $firstpagenum">
-        &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
-    <xar:else />
-        &nbsp;&nbsp;|&lt;
+<div class="xar-pager">
+    <xar:if condition="$totalpages gt 1">
+        <xar:if condition="$currentpagenum ne $firstpagenum">
+            &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
+        <xar:else />
+            &nbsp;&nbsp;<span title="#xarML('First page')#">|&lt;</span>
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:comment> Display previous-block link if there is more than one block </xar:comment>
-<xar:if condition="$totalblocks gt 1">
-    <xar:if condition="$currentblock ne $firstblock">
+    <xar:comment> Display previous-block link if there is more than one block </xar:comment>
+    <xar:if condition="$totalblocks gt 1">
         <xar:set name="prevblocklabel"><xar:ml>
             <xar:mlstring>Previous #(1) pages</xar:mlstring>
             <xar:mlvar>#$prevblockpages#</xar:mlvar>
         </xar:ml></xar:set>
-        &nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
-    <xar:else />
-        &nbsp;&nbsp;&lt;&lt;
+        <xar:if condition="$currentblock ne $firstblock">
+            &nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
+        <xar:else />
+            &nbsp;&nbsp;<span title="#$prevblocklabel#">&lt;&lt;</span>
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:comment> Display previous-page link if there is just one block </xar:comment>
-<xar:if condition="$totalblocks eq 1">
-    <xar:if condition="$prevpageitems gt 0">
+    <xar:comment> Display previous-page link if there is just one block </xar:comment>
+    <xar:if condition="$totalblocks eq 1">
         <xar:set name="prevpagelabel"><xar:ml>
             <xar:mlstring>Previous page; #(1) items</xar:mlstring>
             <xar:mlvar>#$prevpageitems#</xar:mlvar>
         </xar:ml></xar:set>
-        &nbsp;&nbsp;<a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
-    <xar:else />
-        &nbsp;&nbsp;&lt;
+        <xar:if condition="$prevpageitems gt 0">
+            &nbsp;&nbsp;<a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
+        <xar:else />
+            &nbsp;&nbsp;<span title="#$prevpagelabel#">&lt;</span>
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
-    <xar:if condition="$pagenumber ne $currentpage">
-        <xar:if condition="$middleitemsfrom[$pagenumber] ne $middleitemsto[$pagenumber]">
-            <xar:set name="pageurllabel"><xar:ml>
-                <xar:mlstring>Page #(1) (items #(2) to #(3))</xar:mlstring>
-                <xar:mlvar>#$pagenumber#</xar:mlvar>
-                <xar:mlvar>#$middleitemsfrom[$pagenumber]#</xar:mlvar>
-                <xar:mlvar>#$middleitemsto[$pagenumber]#</xar:mlvar>
-            </xar:ml></xar:set>
-        <xar:else/>
+    <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
+        <xar:if condition="$pagenumber ne $currentpage">
+            <xar:if condition="$middleitemsfrom[$pagenumber] ne $middleitemsto[$pagenumber]">
+                <xar:set name="pageurllabel"><xar:ml>
+                    <xar:mlstring>Page #(1) (items #(2) to #(3))</xar:mlstring>
+                    <xar:mlvar>#$pagenumber#</xar:mlvar>
+                    <xar:mlvar>#$middleitemsfrom[$pagenumber]#</xar:mlvar>
+                    <xar:mlvar>#$middleitemsto[$pagenumber]#</xar:mlvar>
+                </xar:ml></xar:set>
+            <xar:else/>
+                <xar:set name="pageurllabel"><xar:ml>
+                    <xar:mlstring>Page #(1)</xar:mlstring>
+                    <xar:mlvar>#$pagenumber#</xar:mlvar>
+                </xar:ml></xar:set>
+            </xar:if>
+            &nbsp;&nbsp;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
+            <xar:comment> &nbsp;&nbsp;<a href="#$pageurl#">[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#]</a> </xar:comment>
+        <xar:else />
             <xar:set name="pageurllabel"><xar:ml>
                 <xar:mlstring>Page #(1)</xar:mlstring>
                 <xar:mlvar>#$pagenumber#</xar:mlvar>
             </xar:ml></xar:set>
+            &nbsp;&nbsp;<span title="#$pageurllabel#">#$pagenumber#</span>
+            <xar:comment> &nbsp;&nbsp;[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#] </xar:comment>
         </xar:if>
-        &nbsp;&nbsp;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
-        <xar:comment> &nbsp;&nbsp;<a href="#$pageurl#">[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#]</a> </xar:comment>
-    <xar:else />
-        &nbsp;&nbsp;#$pagenumber#
-        <xar:comment> &nbsp;&nbsp;[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#] </xar:comment>
-    </xar:if>
-</xar:foreach>
+    </xar:foreach>
 
-<xar:comment> Display next-page link if there is just one block </xar:comment>
-<xar:if condition="$totalblocks eq 1">
-    <xar:if condition="$nextpageitems gt 0">
+    <xar:comment> Display next-page link if there is just one block </xar:comment>
+    <xar:if condition="$totalblocks eq 1">
         <xar:set name="nextpagelabel"><xar:ml>
             <xar:mlstring>Next page; #(1) items</xar:mlstring>
             <xar:mlvar>#$nextpageitems#</xar:mlvar>
         </xar:ml></xar:set>
-        &nbsp;&nbsp;<a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
-    <xar:else />
-        &nbsp;&nbsp;&gt;
+        <xar:if condition="$nextpageitems gt 0">
+            &nbsp;&nbsp;<a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
+        <xar:else />
+            &nbsp;&nbsp;<span title="#$nextpagelabel#">&gt;</span>
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:comment> Display next-block link if there is more than one block </xar:comment>
-<xar:if condition="$totalblocks gt 1">
-    <xar:if condition="$currentblock ne $lastblock">
+    <xar:comment> Display next-block link if there is more than one block </xar:comment>
+    <xar:if condition="$totalblocks gt 1">
         <xar:set name="nextblocklabel"><xar:ml>
             <xar:mlstring>Next #(1) pages</xar:mlstring>
             <xar:mlvar>#$nextblockpages#</xar:mlvar>
         </xar:ml></xar:set>
-        &nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
-    <xar:else/>
-        &nbsp;&nbsp;&gt;&gt;
+        <xar:if condition="$currentblock ne $lastblock">
+            &nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
+        <xar:else/>
+            &nbsp;&nbsp;<span title="#$nextblocklabel#">&gt;&gt;</span>
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:comment> Display last-page link or text if there is more than one page </xar:comment>
-<xar:if condition="$totalpages gt 1">
-    <xar:if condition="$currentpagenum ne $lastpagenum">
-        &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
-    <xar:else />
-        &nbsp;&nbsp;&gt;|
+    <xar:comment> Display last-page link or text if there is more than one page </xar:comment>
+    <xar:if condition="$totalpages gt 1">
+        <xar:if condition="$currentpagenum ne $lastpagenum">
+            &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
+        <xar:else />
+            &nbsp;&nbsp;<span title="#xarML('Last page')#">&gt;|</span>
+        </xar:if>
     </xar:if>
-</xar:if>
+</div>
