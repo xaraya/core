@@ -293,7 +293,7 @@ class xarMasks
  * @todo    none
 */
 
-	function xarSecurityCheck($mask,$showexception=1,$component='', $instance='',$rolename='',$module='')
+	function xarSecurityCheck($mask,$showexception=1,$component='', $instance='',$module='',$rolename='')
 	{
 
 // get the masks pertaining to the current module and the component requested

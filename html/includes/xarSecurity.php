@@ -25,7 +25,7 @@
 
 //'All' and 'unregistered' for user and group permissions
 define('_XARSEC_ALL', '-1');
-define('_XARSEC_UNREGISTERED', '0');
+define('_XARSEC_UNREGISTERED', '3');
 /*
  * Defines for access levels
  */
@@ -290,7 +290,7 @@ $schemas = array();
 		else {
 			$masks = new xarMasks();
 			return $masks->xarSecurityCheck($mask,$showexception,$component,
-			$instance,$role,$module);
+			$instance,$module,$role);
 		}
 	}
 
