@@ -1571,14 +1571,6 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler, $flags);
     if(!$tag->getName()) return; // tagname was not set, exception pending
 
-    list($tag_name,
-         $tag_module,
-         $tag_func,
-         $tag_data) = xarVarPrepForStore($tag->getName(),
-                                         $tag->getModule(),
-                                         $tag->getHandler(),
-                                         serialize($tag));
-
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
@@ -1589,19 +1581,17 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag_id = $dbconn->GenId($tag_table);
 
     $query = "INSERT INTO $tag_table
-                (xar_id,
-                 xar_name,
-                 xar_module,
-                 xar_handler,
-                 xar_data)
+                (xar_id, xar_name, xar_module, xar_handler, xar_data)
               VALUES
-                ('$tag_id',
-                 '$tag_name',
-                 '$tag_module',
-                 '$tag_func',
-                 '$tag_data');";
+                (?,?,?,?,?)";
 
-    $result = $dbconn->Execute($query);
+    $bindvars = array($tag_id,
+                      $tag->getName(), 
+                      $tag->getModule(),
+                      $tag->getHandler(),
+                      serialize($tag));
+
+    $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
