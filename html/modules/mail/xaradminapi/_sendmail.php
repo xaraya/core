@@ -96,10 +96,12 @@ function mail_adminapi__sendmail($args)
     if (empty($fromname)) {
         $fromname = xarModGetVar('mail', 'adminname');
     }
+
     // Check if htmlmail parameter passed in - sendmail()
     // does not set this in, only sendhtmlmail()
-    if (!isset($htmlmail))
+    if (!isset($htmlmail)) {
         $htmlmail = false;
+    }
 
     ini_set("sendmail_from", $from);
 
@@ -113,12 +115,11 @@ function mail_adminapi__sendmail($args)
 
     if ($serverType == 'smtp') {
         $mail->IsSMTP(); // telling the class to use SMTP
-        // $mail->Host = "smtp.email.com"; // SMTP server
         $mail->Host = xarModGetVar('mail', 'smtpHost'); // SMTP server
         $mail->Port = xarModGetVar('mail', 'smtpPort'); // SMTP Port default 25.
-        $mail->Helo = "localhost.localdomain"; // Need to research
+        $mail->Helo = xarServerGetVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
-        // Not sure if this is working
+        // the smtp server might require authentication
         if (xarModGetVar('mail', 'smtpAuth')) {
             $mail->SMTPAuth = true; // turn on SMTP authentication
             $mail->Username = xarModGetVar('mail', 'smtpUserName'); // SMTP username
@@ -150,7 +151,7 @@ function mail_adminapi__sendmail($args)
 
     // The parameters below are the bare minimum sent to the API.
     // $info = Where its being mailed to
-    // $recipients = array of recipients -- meant to replace $info/$name  #cls
+    // $recipients = array of recipients -- meant to replace $info/$name
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person recieving email (not required)
@@ -180,24 +181,24 @@ function mail_adminapi__sendmail($args)
     $mail->Subject = "$subject";
     // Set IsHTML - this is true for HTML mail
     $mail->IsHTML($htmlmail);
+
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
-        $mail->AltBody = "$message"; // Alternate message body
-        $mail->Body = "$htmlmessage"; // HTML message body
-    } else {
-        $mail->Body = "$message";
-    }
+        // Alternate message body if it is set
+        if (!empty($message) && xarModGetVar('mail', 'htmlsendaltbody')) {
+            $mail->AltBody = xarTplModule('mail', 'admin', 'sendmail',
+                                          array('message'=>$message),
+                                          'text');
+        }
+        // HTML message body
+        $mail->Body = xarTplModule('mail', 'admin', 'sendmail',
+                                   array('htmlmessage'=>$htmlmessage),
+                                   'html');
 
-
-    $mail->Subject = "$subject";
-    // Set IsHTML - this is true for HTML mail
-    $mail->IsHTML($htmlmail);
-    // Check if this is HTML mail and set Body appropriately
-    if ($htmlmail) {
-        $mail->AltBody = "$message"; // Alternate message body
-        $mail->Body = "$htmlmessage"; // HTML message body
     } else {
-        $mail->Body = "$message";
+        $mail->Body = xarTplModule('mail', 'admin', 'sendmail',
+                                   array('message'=>$message),
+                                   'text');
     }
 
     /* We are now setting up the advance options that can be used by the modules

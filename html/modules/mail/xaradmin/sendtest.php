@@ -1,15 +1,15 @@
 <?php
 /**
  * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
- * 
+ *
  * Mail System
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage mail module
- * @author John Cox <admin@dinerminor.com> 
+ * @author John Cox <admin@dinerminor.com>
  */
 
 /**
@@ -26,12 +26,14 @@ function mail_admin_sendtest()
 {
     // Get parameters from whatever input we need
     if (!xarVarFetch('message', 'str:1:', $message)) return;
-    if (!xarVarFetch('subject', 'str:1', $subject)) return; 
+    if (!xarVarFetch('htmlmessage', 'str::', $htmlmessage)) return;
+    if (!xarVarFetch('subject', 'str:1', $subject)) return;
+
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) return; 
+    if (!xarSecConfirmAuthKey()) return;
     // Security check
-    if (!xarSecurityCheck('AdminMail')) return; 
-    
+    if (!xarSecurityCheck('AdminMail')) return;
+
     $email  = xarModGetVar('mail', 'adminmail');
     $name   = xarModGetVar('mail', 'adminname');
 
@@ -51,11 +53,12 @@ function mail_admin_sendtest()
                 'name' => $name,
                 'subject' => $subject,
                 'message' => $message,
+                'htmlmessage' => $htmlmessage,
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarResponseRedirect(xarModURL('mail', 'admin', 'compose')); 
+    xarResponseRedirect(xarModURL('mail', 'admin', 'compose'));
     // Return
     return true;
-} 
+}
 ?>

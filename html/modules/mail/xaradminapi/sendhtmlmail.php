@@ -79,34 +79,35 @@ function mail_adminapi_sendhtmlmail($args)
         }
     }
 
-    // Check if HTML mail has been configured by the admin
-    $adminhtml = xarModGetVar('mail', 'html');
-
     $parsedmessage = '';
+
     // Check if a valid htmlmessage was sent
     if (!empty($htmlmessage)) {
-        // If admin set HTML mail then include header and footer
-        if ($adminhtml) {
-            $htmlheader = xarModGetVar('mail', 'htmlheader');
-            $parsedmessage .= $htmlheader;
-            $parsedmessage .= '<br /><br />';
-        }
         // Set the html version of the message
+
+        // Check if headers/footers have been configured by the admin
+        $htmlheadfoot = xarModGetVar('mail', 'htmluseheadfoot');
+
+        $parsedmessage .= $htmlheadfoot ? xarModGetVar('mail', 'htmlheader') : '';
         $parsedmessage .= $htmlmessage;
+        $parsedmessage .= $htmlheadfoot ? xarModGetVar('mail', 'htmlfooter') : '';
+
     } else {
         // If the module did not send us an html version of the
         // message ($htmlmessage),
-        // then we have to play around with this one a bit.
+        // then we have to play around with this one a bit by adding some <pre> tags
+
+        // Check if headers/footers have been configured by the admin
+        $textheadfoot = xarModGetVar('mail', 'textuseheadfoot');
+
         $parsedmessage .= '<pre>';
+        $parsedmessage .= $textheadfoot ? xarModGetVar('mail', 'textheader') : '';
         $parsedmessage .= $message;
+        $parsedmessage .= $textheadfoot ? xarModGetVar('mail', 'textfooter') : '';
         $parsedmessage .= '</pre>';
+
     }
-    // If admin set HTML mail then include header and footer
-    if ($adminhtml) {
-        $htmlfooter = xarModGetVar('mail', 'htmlfooter');
-        $parsedmessage .= '<br /><br />';
-        $parsedmessage .= $htmlfooter;
-    }
+
     // Call private sendmail
     return xarModAPIFunc('mail', 'admin', '_sendmail',
         array('info'        => $info,
