@@ -17,8 +17,8 @@ function blocks_admin_view_instances()
     $block_types_table = $xartable['block_types'];
 
     $query = "SELECT    inst.xar_id as id,
-                        types.xar_type as type,
-                        types.xar_module as module,
+                        btypes.xar_type as type,
+                        btypes.xar_module as module,
                         inst.xar_title as title,
                         inst.xar_content as content,
                         inst.xar_last_update as last_update,
