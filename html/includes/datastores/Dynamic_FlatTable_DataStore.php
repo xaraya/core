@@ -349,7 +349,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $bindvars = array();
         if (count($itemids) > 1) {
-            $bindmarkers = '?' . str_repeat(',?',count($itemids));
+            $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
             $query .= " $next $itemidfield IN ($bindmarkers) ";
             $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
@@ -451,7 +451,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $bindvars = array();
         if (count($itemids) > 1) {
             $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
-            $query .= " WHERE $itemidfield IN ($bindvars) ";
+            $query .= " WHERE $itemidfield IN ($bindmarkers) ";
             $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
             $query .= " WHERE $itemidfield = ? ";
