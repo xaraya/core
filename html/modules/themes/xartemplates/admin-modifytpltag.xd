@@ -43,9 +43,9 @@
             <td> // TODO<!--
 
                 <xar:for start="$i=0" test="$i<$max_attrs" iter="$i++">
-                    <xar:set name="$current_name">''</xar:set>
+                    <xar:set name="current_name">''</xar:set>
                     <xar:if condition="isset($attributes[$i])">
-                        <xar:set name="$current_name">#$attributes[$i]['name']#</xar:set>
+                        <xar:set name="current_name">#$attributes[$i]['name']#</xar:set>
                     </xar:if>
 
                     <input style="width:100%;"

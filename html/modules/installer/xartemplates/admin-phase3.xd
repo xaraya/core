@@ -1,12 +1,12 @@
 <xar:set name="active_step">
     3 
 </xar:set>
-<xar:set name="$successtitle">
+<xar:set name="successtitle">
     <xar:mlstring>
         SUCCESS 
     </xar:mlstring>
 </xar:set>
-<xar:set name="$failuretitle">
+<xar:set name="failuretitle">
     <xar:mlstring>
         FAILURE 
     </xar:mlstring>

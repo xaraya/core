@@ -36,7 +36,7 @@ document.forms['privilegeform'].submit();}
                 <dt class="help" title="These are the privileges that contain #$pname# as a component">
                     <xar:mlstring>Used in</xar:mlstring> :
                 </dt>
-                <xar:set name="$prevgroup">""</xar:set>
+                <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
@@ -45,7 +45,7 @@ document.forms['privilegeform'].submit();}
                             </a>
                         </dd>
                     </xar:if>
-                    <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
                 </xar:for>
             </dl>
         </div>
@@ -116,7 +116,7 @@ document.forms['privilegeform'].submit();}
                         #$role['name']#
                     </td>
                 <td align="right">
-                        <xar:set name="$urltitle"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
+                        <xar:set name="urltitle"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
                     <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#$urltitle#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
                 </td>
                 </tr>

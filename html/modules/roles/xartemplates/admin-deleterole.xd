@@ -16,7 +16,7 @@
                 </xar:mlstring>
                 : 
             </dt>
-            <xar:set name="$prevgroup">""</xar:set>
+            <xar:set name="prevgroup">""</xar:set>
             <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                 <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                     <dd>
@@ -25,7 +25,7 @@
                         </a>
                     </dd>
                 </xar:if>
-                <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
+                <xar:set name="prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
             </xar:for>
         </dl>
     </div>
@@ -74,9 +74,9 @@
 <div style="border: 1px solid #ccc;  text-align: center; border-top : none; padding-left: 5px;">
 <br />
 <xar:if condition="$ptype eq 1">
-    <xar:set name="$roletype"><xar:mlstring>group</xar:mlstring></xar:set>
+    <xar:set name="roletype"><xar:mlstring>group</xar:mlstring></xar:set>
 <xar:else />
-    <xar:set name="$roletype"><xar:mlstring>user</xar:mlstring></xar:set>
+    <xar:set name="roletype"><xar:mlstring>user</xar:mlstring></xar:set>
 </xar:if>
 <xar:if condition="$frozen">
     <xar:mlstring>You do not have the privileges to delete</xar:mlstring>&nbsp;#xarVarPrepForDisplay($roletype)#&nbsp;#xarVarPrepForDisplay($name)#

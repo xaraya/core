@@ -1,11 +1,11 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$statecurrent">ROLES_STATE_CURRENT</xar:set>
-<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
-<xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
-<xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
+<xar:set name="statecurrent">ROLES_STATE_CURRENT</xar:set>
+<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
@@ -105,7 +105,7 @@
                             <xar:mlstring>All Users</xar:mlstring>
                         </option>
                     </xar:if>
-                    <xar:set name="$prevgroup">""</xar:set>
+                    <xar:set name="prevgroup">""</xar:set>
                     <xar:loop name="$groups">
                         <xar:if condition="$prevgroup ne $loop:item['name']">
                             <xar:if condition="$uid eq $loop:item['uid']">
@@ -114,7 +114,7 @@
                                 <option value="#$loop:item['uid']#">#$loop:item['name']#</option>
                             </xar:if>
                         </xar:if>
-                        <xar:set name="$prevgroup">#$loop:item['name']#</xar:set>
+                        <xar:set name="prevgroup">#$loop:item['name']#</xar:set>
                     </xar:loop>
                 </select>
             </td>

@@ -1,4 +1,4 @@
-<xar:set name="$active_step">
+<xar:set name="active_step">
     6 
 </xar:set>
 <div id="install">

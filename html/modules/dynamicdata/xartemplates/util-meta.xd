@@ -20,7 +20,7 @@
         </xar:mlstring>
     </h2>
     <xar:if condition="empty($export)">
-        <xar:set name="$prop">
+        <xar:set name="prop">
             #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
         </xar:set>
         <table class="xar-norm">

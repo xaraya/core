@@ -16,7 +16,7 @@
 <xar:comment> Display previous-block link if there is more than one block </xar:comment>
 <xar:if condition="$totalblocks gt 1 and $pagesperblock gt 1">
     <xar:if condition="$currentblock ne $firstblock">
-        <xar:set name="$prevblocklabel"><xar:ml>
+        <xar:set name="prevblocklabel"><xar:ml>
             <xar:mlstring>Previous #(1) pages</xar:mlstring>
             <xar:mlvar>#$prevblockpages#</xar:mlvar>
         </xar:ml></xar:set>
@@ -37,7 +37,7 @@
 
 <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
     <xar:if condition="$pagenumber ne $currentpage">
-        <xar:set name="$pageurllabel"><xar:ml>
+        <xar:set name="pageurllabel"><xar:ml>
             <xar:mlstring>Page #(1)</xar:mlstring>
             <xar:mlvar>#$pagenumber#</xar:mlvar>
         </xar:ml></xar:set>

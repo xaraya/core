@@ -10,7 +10,7 @@
     <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
     <td>
 <xar:if condition="!empty($item['fields']) and count($item['fields']) gt 0">
-<xar:set name="$i">-1</xar:set>
+<xar:set name="i">-1</xar:set>
 <xar:foreach in="$item['fields']" key="$name" value="$field">
     <xar:if condition="$i++ and $i % 4 eq 0">
 </td><td valign="top">

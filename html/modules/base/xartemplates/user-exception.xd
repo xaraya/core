@@ -7,7 +7,7 @@
 * it correctly, leading to unexpected results
 ***********
 </xar:comment>
-<xar:set name="$icon">xarTplGetImage("exception.jpg", "base")</xar:set>
+<xar:set name="icon">xarTplGetImage("exception.jpg", "base")</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2>#$type#</h2>

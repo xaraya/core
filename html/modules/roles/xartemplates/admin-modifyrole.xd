@@ -1,8 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
@@ -17,7 +17,7 @@
                 </xar:mlstring>
                 : 
             </dt>
-            <xar:set name="$prevgroup">""</xar:set>
+            <xar:set name="prevgroup">""</xar:set>
             <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                 <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                     <dd>
@@ -26,7 +26,7 @@
                         </a>
                     </dd>
                 </xar:if>
-                <xar:set name="$prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
+                <xar:set name="prevgroup">#xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
             </xar:for>
         </dl>
     </div>

@@ -37,7 +37,7 @@
                 </tr>
             </table>
             <p>
-            <xar:set name="$mlconfirm"><xar:mlstring>Modify Default Theme</xar:mlstring></xar:set>
+            <xar:set name="mlconfirm"><xar:mlstring>Modify Default Theme</xar:mlstring></xar:set>
             <input type="submit" value="#$mlconfirm#" tabindex="2" />
             </p>
         </div>

@@ -1,10 +1,10 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$statecurrent">ROLES_STATE_CURRENT</xar:set>
-<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
-<xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:set name="statecurrent">ROLES_STATE_CURRENT</xar:set>
+<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
@@ -68,7 +68,7 @@
                                 <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
                         </dd>
                     </xar:if>
-                    <xar:set name="$prevgroup">""</xar:set>
+                    <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                         <xar:if condition="$prevgroup ne $groups[$i]['name']">
                             <xar:if condition="$groupuid eq $groups[$i]['uid']">
@@ -85,7 +85,7 @@
                                 </dd>
                             </xar:if>
                         </xar:if>
-                        <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
+                        <xar:set name="prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                     </xar:for>
                 </dl>
             </div>
@@ -125,7 +125,7 @@
               </select>
             </td>
             <td style="text-align: center;">
-                <xar:set name="$prevgroup">""</xar:set>
+                <xar:set name="prevgroup">""</xar:set>
                 <select name="uid" id="groupuid" size="1" tabindex="5"  onchange="this.form.submit()">
                     <xar:if condition="$groupuid eq 0">
                         <option value="0" selected="selected">
@@ -148,7 +148,7 @@
                             </option>
                         </xar:if>
                     </xar:if>
-                    <xar:set name="$prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
+                    <xar:set name="prevgroup">#xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                 </xar:for>
                 </select>
             </td>

@@ -18,7 +18,7 @@
 </table>
 </xar:if>
 
-<xar:set name="$isupload">#$object->upload#</xar:set>
+<xar:set name="isupload">#$object->upload#</xar:set>
 <xar:if condition="!empty($isupload)">
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#" enctype="multipart/form-data">
 <xar:else />

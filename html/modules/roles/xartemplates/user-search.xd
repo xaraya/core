@@ -19,7 +19,7 @@
     <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
     <td>
 <xar:if condition="!empty($properties) and count($properties) gt 0">
-<xar:set name="$i">-1</xar:set>
+<xar:set name="i">-1</xar:set>
 <!-- you can also specify individual fields here, if you don't want to allow searching
      through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...) -->
 <xar:foreach in="$properties" key="$field">

@@ -2,7 +2,7 @@
 <xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
-<xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
+<xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <h2>
         <a href="#xarModURL('roles', 'admin', 'createmail')#">
@@ -63,21 +63,21 @@
                 </select>
 
                 <xar:if condition="$mailtype eq 'validation'">
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'confirmation'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'welcome'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'reminder'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'pending'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'deactivation'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
                 <xar:elseif condition="$mailtype eq 'password'" />
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
                 <xar:else/>
-                    <xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
+                    <xar:set name="explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
                 </xar:if>
               </span>
          </form>

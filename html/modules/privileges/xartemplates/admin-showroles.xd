@@ -53,7 +53,7 @@
                     #$loop:item['name']#
                 </td>
             <td align="right">
-                    <xar:set name="$tmptitleremove"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
+                    <xar:set name="tmptitleremove"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
                 <a href="#$removeurl#&amp;roleid=#$roleid#" title="#$tmptitleremove#">                
                     <xar:mlstring>Remove</xar:mlstring>
                 </a>

@@ -1,8 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Add Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">

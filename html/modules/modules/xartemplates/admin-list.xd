@@ -1,5 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2 style="width:100%;height:1.5em;">
@@ -12,7 +12,7 @@
             <xar:mlstring>
                 Total listed: 
             </xar:mlstring>
-            <xar:set name="$modscount">count($listrowsitems)</xar:set>
+            <xar:set name="modscount">count($listrowsitems)</xar:set>
             #$modscount#
         </span>
     </h2>

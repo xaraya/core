@@ -1,5 +1,5 @@
 <xar:comment> we need to see if type is admin or user here, since we don't know who called us anymore </xar:comment>
-<xar:set name="$tmpreq">#xarRequestGetInfo()#</xar:set>
+<xar:set name="tmpreq">#xarRequestGetInfo()#</xar:set>
 
 <xar:if condition="!empty($tmpreq) and $tmpreq[1] eq 'admin' and $tmpreq[2] eq 'view'">
 <xar:comment> from admin-objectlist.xd </xar:comment>

@@ -2,7 +2,7 @@
 <xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
-<xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
+<xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Configure Notification Template</xar:mlstring></h2><br />
 <div style="margin: auto;width:100%">
@@ -49,13 +49,13 @@
                 </select>
 
                 <xar:if condition="$mailtype eq 'createhook'">
-                    <xar:set name="$explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is created</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is created</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
                 <xar:elseif condition="$mailtype eq 'changehook'" />
-                    <xar:set name="$explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is updated</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is updated</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
                 <xar:elseif condition="$mailtype eq 'deletehook'" />
-                    <xar:set name="$explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is deleted</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)] when a hooked item is deleted</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
                 <xar:else/>
-                    <xar:set name="$explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)]</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
+                    <xar:set name="explanation"><xar:ml><xar:mlstring>This email will be sent to #(1) [#(2)]</xar:mlstring><xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar><xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar></xar:ml></xar:set>
                 </xar:if>
               </span>
          </form>

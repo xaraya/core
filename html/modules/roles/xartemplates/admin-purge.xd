@@ -1,9 +1,9 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:set name="$statedeleted">ROLES_STATE_DELETED</xar:set>
-<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="statedeleted">ROLES_STATE_DELETED</xar:set>
+<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>

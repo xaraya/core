@@ -9,14 +9,14 @@
                 <dt class="help" title="These are the privileges that contain #$pname# as a component">
                     <xar:mlstring>Used in</xar:mlstring> :
                 </dt>
-                <xar:set name="$prevgroup">""</xar:set>
+                <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
                             <a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                         </dd>
                     </xar:if>
-                    <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
                 </xar:for>
             </d1>
         </div>

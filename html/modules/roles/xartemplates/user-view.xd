@@ -123,7 +123,7 @@
                     </xar:if>
                 </td>
                 <xar:if condition="isset($properties) and count($properties) gt 0">
-                    <xar:set name="$uid">#$loop:item['uid']#</xar:set>
+                    <xar:set name="uid">#$loop:item['uid']#</xar:set>
                     <xar:foreach in="$properties" key="$key">
                         <td>
                             <xar:if condition="isset($values[$uid][$key])">

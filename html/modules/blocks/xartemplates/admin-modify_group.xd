@@ -37,9 +37,9 @@
                     <xar:if condition="$instance_count gt 0">
                         <span style="float: right; width: 68%; text-align: left;">
                             <xar:if condition="$instance_count gt 2">
-                                <xar:set name="$list_size">#$instance_count#</xar:set>
+                                <xar:set name="list_size">#$instance_count#</xar:set>
                             <xar:else />
-                                <xar:set name="$list_size">3</xar:set>
+                                <xar:set name="list_size">3</xar:set>
                             </xar:if>
                             <select name="group_instances" id="group_instances" size="#$instance_count#">
                                 <xar:loop name="$group['instances']">
