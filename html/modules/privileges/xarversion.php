@@ -24,6 +24,7 @@ $modversion['id'] = '1098';
 $modversion['version'] = '0.1.0';
 $modversion['displayname'] = xarML('Privileges Admin');
 $modversion['description'] = 'Modify privileges security';
+$modversion['displaydescription'] = xarML('Modify privileges security');
 $modversion['official'] = 1;
 $modversion['author'] = 'Marc Lutolf';
 $modversion['contact'] = 'http://www.xaraya.com/';

@@ -543,6 +543,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     $modInfo['regid'] = $modRegId;
     $modInfo['mode'] = (int) $mode;
     // $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
+    // $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
 
     // Shortcut for os prepared directory
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
@@ -571,6 +572,8 @@ function xarModGetInfo($modRegId, $type = 'module')
         $modFileInfo['class'] = xarML('Unknown');
         $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
         $modFileInfo['category'] = xarML('Unknown');
+        $modFileInfo['displayname'] = xarML('Unknown');
+        $modFileInfo['displaydescription'] = xarML('Unknown');
         $modFileInfo['author'] = xarML('Unknown');
         $modFileInfo['contact'] = xarML('Unknown');
         $modFileInfo['dependency'] = array();
@@ -1117,6 +1120,21 @@ function xarModGetDisplayableName($modName)
 }
 
 /**
+ * Get the displayable description for modName
+ *
+ * The displayable description is sensible to user language.
+ *
+ * @access public
+ * @param modName string registered name of module
+ * @return string the displayable description
+ */
+function xarModGetDisplayableDescription($modName)
+{
+    $modInfo = xarMod_getFileInfo($modName);
+    return xarML($modInfo['displaydescription']);
+}
+
+/**
  * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
  *
  * @access public
@@ -1507,9 +1525,14 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     if (isset($version['displayname'])) {
         $FileInfo['displayname'] = $version['displayname'];
     } else {
-       $FileInfo['displayname'] = $version['name'];
+        $FileInfo['displayname'] = $version['name'];
     }
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
+    if (isset($version['displaydescription'])) {
+        $FileInfo['displaydescription'] = $version['displaydescription'];
+    } else {
+        $FileInfo['displaydescription'] = $FileInfo['description'];
+    }
     $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['user']           = isset($version['user'])           ? $version['user'] : false;
@@ -1653,6 +1676,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modBaseInfo['name'] = $modName;
     $modBaseInfo['mode'] = (int) $mode;
     $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
+    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($modName);
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = xarVarPrepForOS($modBaseInfo['directory']);

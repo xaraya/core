@@ -24,15 +24,6 @@
                 <p><span class="xar-mod-title">#$modname#</span></p>
             </div>
         </div>
-        <!-- Description -->
-        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
-            <div style="float: left; width: 30%; text-align: left; display: inline;">
-                <p><span class="xar-mod-title"><xar:mlstring>Description</xar:mlstring>:</span></p>
-            </div>
-            <div style="float: right; width: 60%; text-align: right; display: inline;">
-                <p><span class="xar-mod-title">#$moddescr#</span></p>
-            </div>
-        </div>
         <!-- Module Display Name -->
         <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
@@ -40,6 +31,15 @@
             </div>
             <div style="float: right; width: 60%; text-align: right; display: inline;">
                 <p><span class="xar-mod-title">#$moddispname#</span></p>
+            </div>
+        </div>
+        <!-- Description -->
+        <div class="xar-norm-outline" style="margin: auto;height:40px; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
+            <div style="float: left; width: 30%; text-align: left; display: inline;">
+                <p><span class="xar-mod-title"><xar:mlstring>Description</xar:mlstring>:</span></p>
+            </div>
+            <div style="float: right; width: 60%; text-align: right; display: inline;">
+                <p><span class="xar-mod-title">#$moddispdesc#</span></p>
             </div>
         </div>
         <!-- Module Directory -->

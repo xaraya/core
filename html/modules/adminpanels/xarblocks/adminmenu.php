@@ -136,7 +136,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                             'modactive' => 1,
                             'overview'  => 0,
                             // TODO: sentance structure not properly translatable.
-                            'maintitle' => xarML('Show administration options for module ') . $labelDisplay);
+                            'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
                     } else {
                         $adminmods[$modname]['features'] = array(
                             'label'     => $labelDisplay,
@@ -144,7 +144,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                             'modactive' => 1,
                             'overview'  => 1,
                             // TODO: sentance structure not properly translatable.
-                            'maintitle' => xarML('Display overview information for module ') . $labelDisplay);
+                            'maintitle' => xarML('Display overview information for module #(1)', $labelDisplay));
                     }
 
                     // For active module we need to display the mod functions links
@@ -182,7 +182,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                         'modactive' => 0,
                         'overview'  => 0,
                         // TODO: sentance structure not properly translatable.
-                        'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                        'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay)
                    );
                 }
             }
@@ -238,7 +238,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                                 'modactive' => 1,
                                 'overview'  => 0,
                                 // TODO: untranslatable
-                                'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                                'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay)
                             );
                         } else {
                             $catmods[$cat][$modname]['features'] = array(
@@ -247,7 +247,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                                 'modactive' => 1,
                                 'overview'  => 1,
                                 // TODO: untranslatable
-                                'maintitle' => xarML('Display overview information for module ') . $labelDisplay
+                                'maintitle' => xarML('Display overview information for module #(1)', $labelDisplay)
                             );
                         }
                         // For active module we need to display the mod functions links
@@ -286,7 +286,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                             'modactive' => 0,
                             'overview'  => 0,
                             // TODO: untranslatable
-                            'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                            'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay)
                        );
                     }
                 }

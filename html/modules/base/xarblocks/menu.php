@@ -211,6 +211,7 @@ function base_menublock_display($blockinfo)
         if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
             foreach($mods as $mod){
                 $label = xarModGetDisplayableName($mod['name']);
+                $title = xarModGetDisplayableDescription($mod['name']);
                 $link = xarModURL($mod['name'] ,'user', 'main', array());
                 // depending on which module is currently loaded we display accordingly
                 if($mod['name'] == $thismodname && $thismodtype == 'user'){
@@ -219,6 +220,7 @@ function base_menublock_display($blockinfo)
                     $labelDisplay = $label;
                     $usermods[] = array(   'label'     => $labelDisplay,
                                            'link'      => '',
+                                           'desc'      => $title,
                                            'modactive' => 1);
 
                     // Lets check to see if the function exists and just skip it if it doesn't
@@ -260,28 +262,33 @@ function base_menublock_display($blockinfo)
                     }
 
                 }else{
+/*
                     $modid = xarModGetIDFromName($mod['name']);
                     $modinfo = xarModGetInfo($modid);
                     if($modinfo){
-                        $desc = $modinfo['description'];
+                        $desc = $modinfo['displaydescription'];
+                    } else {
+                 	      $desc = xarML('No description');
                     }
-
+*/
                     $labelDisplay = $label;
                     $usermods[] = array('label' => $labelDisplay,
                                         'link' => $link,
-                                        'desc' => $desc,
+                                        'desc' => $title,
                                         'modactive' => 0);
                 }
             }
         } else {
             $modid = xarModGetIDFromName('roles');
             $modinfo = xarModGetInfo($modid);
-            if($modinfo){
-                $desc = $modinfo['description'];
+            if ($modinfo){
+                $title = $modinfo['displaydescription'];
+            } else {
+            	  $title = xarML('No description');
             }
             $usermods[] = array('label' => xarModGetDisplayableName('roles'),
                 'link' => xarModUrl('roles', 'user', 'main'),
-                'desc' => $desc,
+                'desc' => xarModGetDisplayableDescription('roles'),
                 'modactive' => 0);
         }
     } else {

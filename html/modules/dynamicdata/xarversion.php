@@ -23,6 +23,7 @@ $modversion['id'] = '182';
 $modversion['displayname'] = xarML('Dynamic Data');
 $modversion['version'] = '1.2.0';
 $modversion['description'] = 'Dynamic Data Module';
+$modversion['displaydescription'] = xarML('Dynamic Data Module');
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
 $modversion['changelog'] = 'xardocs/changelog.txt';

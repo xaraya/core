@@ -21,8 +21,9 @@
 $modversion['name']           = 'Members';
 $modversion['id']             = '27';
 $modversion['version']        = '1.1.0';
-$modversion['displayname']    = xarML('Members Admin');
+$modversion['displayname']    = xarML('Members');
 $modversion['description']    = 'User and Group registration and handling';
+$modversion['displaydescription'] = xarML('User and Group registration and handling');
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';
 $modversion['changelog']      = 'xardocs/changelog.txt';

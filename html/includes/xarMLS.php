@@ -985,6 +985,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
             if (!isset($loadedCommons[$dnName])) {
                 $loadedCommons[$dnName] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
+                if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
             }
         }
 

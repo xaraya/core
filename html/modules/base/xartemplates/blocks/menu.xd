@@ -69,7 +69,7 @@
 				<xar:foreach in="$usermods" value="$mod" key="$modname">
 					<xar:if condition="$mod['modactive']">
 						<li class="xar-menu-item-current">
-							<a name="activeitem" title="#$mod['label']#">#$mod['label']#</a>
+							<a name="activeitem" title="#$mod['desc']#">#$mod['label']#</a>
 							<xar:if condition="$indlinks ne ''">
 								<ul class="xar-menu-subitem">
 									<xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
@@ -86,7 +86,7 @@
 					<xar:elseif condition="$mod['modactive'] and !$mod['link']" />
 						<li class="xar-menu-section">#$mod['label']#</li>
 					<xar:else />
-						<li class="xar-menu-item"><a href="#$mod['link']#" title="#$mod['label']#">#$mod['label']#</a></li>
+						<li class="xar-menu-item"><a href="#$mod['link']#" title="#$mod['desc']#">#$mod['label']#</a></li>
 					</xar:if>
 				</xar:foreach>
 			</ul>

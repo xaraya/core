@@ -23,6 +23,7 @@ $modversion['id']             = '771';
 $modversion['displayname']    = xarML('Mail');
 $modversion['version']        = '0.1.0';
 $modversion['description']    = 'Mail handling utility module';
+$modversion['displaydescription']    = xarML('Mail handling utility module');
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';
 $modversion['changelog']      = 'xardocs/changelog.txt';

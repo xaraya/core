@@ -39,6 +39,7 @@ function modules_admin_modinfonew()
     $data['modname']            = xarVarPrepForDisplay($modinfo['name']);
     $data['moddescr']           = xarVarPrepForDisplay($modinfo['description']);
     $data['moddispname']        = xarVarPrepForDisplay($modinfo['displayname']);
+    $data['moddispdesc']        = xarVarPrepForDisplay($modinfo['displaydescription']);
     $data['modlisturl']         = xarModURL('modules', 'admin', 'list');
     // check for proper icon, if not found display default
     // also displaying a generic icon now, if it was provided
