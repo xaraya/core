@@ -294,11 +294,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
  */
 function xarCoreGetVarDirPath()
 {
-    if (file_exists('var/.key.php')) {
-        include 'var/.key.php';
-        return 'var/'.$protectionKey;
+    if (file_exists('./var/.key.php')) {
+        include './var/.key.php';
+        return './var/'.$protectionKey;
     }
-    return 'var';
+    return './var';
 }
 
 /**
@@ -371,6 +371,9 @@ function xarCore_getSystemVar($name)
 
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/config.system.php';
+        if (!file_exists($fileName)) {
+            xarCore_die("xarCore_getSystemVar: Configuration file not present: ".$fileName);
+        }
         include $fileName;
         $systemVars = $systemConfiguration;
     }
@@ -439,14 +442,18 @@ function xarCore_disposeDebugger()
  */
 function xarCore_die($msg)
 {
+    //Cant we stardatize errors for both this and Exceptions????
+    // It is useful for the developer to know this is happening before the
+    // Exceptions is loaded, still for the end user it is still just an error.
     $url = xarServerGetBaseURL() . 'index.php';
     if (xarCoreIsDebuggerActive()) {
         $msg = nl2br($msg);
 $debug = <<<EOD
-<p>Technical information</p>
+<br /><br />
+<p align="center"><span style="color: blue">Technical information</span></p>
 <p>Xaraya has failed to serve the request, and the failure could not be handled.</p>
 <p>This is a bad sign and probably means that Xaraya is not configured properly.</p>
-<p>The failure reason is: $msg</p>
+<p>The failure reason is: <span style="color: red">$msg</span></p>
 EOD;
     } else {
        $debug = '';
@@ -469,7 +476,12 @@ $errPage = <<<EOM
 </html>
 EOM;
     echo $errPage;
-    xarCore_disposeDebugger();
+    //If the log system hasnt been set up while the error ocurred, this will cause an warning.
+    //Can be fixed in the log system by setting up a isset( ...xar_Loggers)....
+    //Still i wonder if we are not assuming too much by having the Log system is already loaded here
+    //Probably a remanagement of these xarCore****Debugger functions is in order?
+    //Probably to xarDebug.php?
+//    xarCore_disposeDebugger();
     die();
 }
 
