@@ -24,14 +24,14 @@ function blocks_adminapi_activate($args)
     extract($args);
 
     // Argument check
-    if (!isset($bid)) {
+    if (!isset($bid) || !is_numeric($bid)) {
         $msg = xarML('Invalid Parameter Count', join(', ', $invalid), 'admin', 'create', 'blocks');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
     // Security
-	if(!xarSecurityCheck('EditBlock',1,'Block',"::$bid")) return;
+	if(!xarSecurityCheck('EditBlock',1,'Block',"::$bid")) {return;}
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -40,9 +40,9 @@ function blocks_adminapi_activate($args)
     // Deactivate
     $query = "UPDATE $blockstable
             SET xar_active = 1
-            WHERE xar_bid = " . xarVarPrepForStore($bid);
+            WHERE xar_bid = " . $bid;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     return true;
 }
