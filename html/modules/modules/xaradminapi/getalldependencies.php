@@ -9,7 +9,7 @@
  * @return true on dependencies activated, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_getalldependencies($args) 
+function modules_adminapi_getalldependencies($args)
 {
     $mainId = $args['regid'];
 
@@ -35,13 +35,13 @@ function modules_adminapi_getalldependencies($args)
     $dependency_array['unsatisfiable'] = array();
     $dependency_array['satisfiable']   = array();
     $dependency_array['satisfied']     = array();
-    
+
     // Get module information
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
         //Handle the Exception Thrown
         xarExceptionHandled();
-        
+
         //Add this module to the unsatisfiable list
         $dependency_array['unsatisfiable'][] = $mainId;
 
@@ -55,7 +55,7 @@ function modules_adminapi_getalldependencies($args)
         $dependency = array();
     }
 
-    //The dependencies are ok, they shouldnt change in the middle of the 
+    //The dependencies are ok, they shouldnt change in the middle of the
     //script execution, so let's assume this.
     foreach ($dependency as $module_id => $conditions) {
         if (is_array($conditions)) {
@@ -66,7 +66,7 @@ function modules_adminapi_getalldependencies($args)
             $modId = $conditions;
         }
 
-        $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId)); 
+        $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
         if (!$output) {
             $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
@@ -74,15 +74,15 @@ function modules_adminapi_getalldependencies($args)
         }
         //This is giving : recursing detected.... ohh well
 //        $dependency_array = array_merge_recursive($dependency_array, $output);
-        
+
         $dependency_array['satisfiable'] = array_merge(
-            $dependency_array['satisfiable'], 
+            $dependency_array['satisfiable'],
             $output['satisfiable']);
         $dependency_array['unsatisfiable'] = array_merge(
-            $dependency_array['unsatisfiable'], 
+            $dependency_array['unsatisfiable'],
             $output['unsatisfiable']);
         $dependency_array['satisfied'] = array_merge(
-            $dependency_array['satisfied'], 
+            $dependency_array['satisfied'],
             $output['satisfied']);
     }
 
@@ -100,21 +100,25 @@ function modules_adminapi_getalldependencies($args)
     } else {
         //Then this module is at least satisfiable
         //Depends if it is already initialized or not
-        
+
         //TODO: Add version checks later on
         // Add a new state in the dependency array for version
         // So that we can present that nicely in the gui...
-        
+
         switch ($modInfo['state']) {
             case XARMOD_STATE_ACTIVE:
-            case XARMOD_STATE_UPGRADED: 
+            case XARMOD_STATE_UPGRADED:
                 //It is satisfied if already initialized
                 $dependency_array['satisfied'][] = $modInfo;
             break;
             case XARMOD_STATE_INACTIVE:
-            default:
+            case XARMOD_STATE_UNINITIALISED:
                 //If not then it is satisfiable
                 $dependency_array['satisfiable'][] = $modInfo;
+            break;
+            default:
+                //If not then it is satisfiable
+                $dependency_array['unsatisfiable'][] = $modInfo;
             break;
         }
     }
