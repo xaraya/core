@@ -215,26 +215,26 @@
         <xar:foreach in="$masks" value="$mask">
         <tr>
             <td width="150">
-                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask->getName()#&amp;test=true">                
-                    #$mask->getName()#
+                <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask:getName()#&amp;test=true">                
+                    #$mask:getName()#
                 </a>
             </td>
             <xar:if condition="xarModGetVar('privileges','showrealms')">
                 <td width="50" style="text-align: center;">
-                    #$mask->getRealm()#
+                    #$mask:getRealm()#
                 </td>
             </xar:if>
             <td width="100" style="text-align: center;">
-                #$mask->getModule()#
+                #$mask:getModule()#
             </td>
             <td width="120" style="text-align: center;">
-                #$mask->getComponent()#
+                #$mask:getComponent()#
             </td>
             <td width="120" style="text-align: center;">
-                #$mask->getInstance()#
+                #$mask:getInstance()#
             </td>
             <td width="100" style="white-space: nowrap;text-align: center;">
-                #$mask->getLevel()#
+                #$mask:getLevel()#
             </td>
             </tr>
         </xar:foreach>
