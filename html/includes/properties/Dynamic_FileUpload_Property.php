@@ -240,6 +240,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         if (!empty($this->filetype)) {
             $extensions = $this->filetype;
+            // TODO: get rid of the break
             $allowed = '<br />' . xarML('Allowed file types : #(1)',$extensions);
         } else {
             $extensions = '';
@@ -253,7 +254,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['upname']     = $upname;
         $data['size']       = !empty($size) ? $size : $this->size;
         $data['maxsize']    = !empty($maxSize) ? $maxSize : $this->maxSize;
-        $data['tabindex']   = !empty($tabindex) ? ' tabindex="' . $tabindex . '" ' : '';
+        $data['tabindex']   = !empty($tabindex) ? $tabindex  : 0;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
         $data['allowed']    = $allowed;
         $data['extensions'] = $extensions;
