@@ -1,4 +1,4 @@
-<xar:if condition="$number gt 0">
+<xar:if condition="!empty($number)">
     <xar:foreach in="$columns" key="$col">
         <xar:foreach in="$columns[$col]" key="$row">
             #$columns[$col][$row]#
