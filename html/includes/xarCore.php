@@ -488,18 +488,18 @@ function xarCore_getSystemVar($name, $returnNull = false)
     }
 
     if (!isset($systemVars[$name])) {
-		if($returnNull)
-		{
-			return null;
-		} else {
-	        // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
-	        if ($name == 'DB.UseADODBCache') {
-	            $systemVars[$name] = false;
-	        } else {
-	            xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
-	        }
-	    }
-	}
+        if($returnNull)
+        {
+            return null;
+        } else {
+            // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
+            if ($name == 'DB.UseADODBCache') {
+                $systemVars[$name] = false;
+            } else {
+                xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
+            }
+        }
+    }
 
     xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
 
@@ -681,7 +681,7 @@ EOM;
 function xarCoreIsApiAllowed($apiType) {
     // Testing for an empty API type just returns false
     if (empty($apiType)) return false;
-    if (preg_match ("/api/i", $apiType)) return false;
+    if (preg_match ("/api$/i", $apiType)) return false;
 
     $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
 

@@ -2,7 +2,7 @@
 
 /**
  * getUsers - view users in group
- * @param $args['pid'] group id
+ * @param $args['uid'] group id
  * @return $users array containing uname, uid
  */
 function roles_userapi_getUsers($args)
