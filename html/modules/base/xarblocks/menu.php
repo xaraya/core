@@ -133,7 +133,7 @@ function base_menublock_display($blockinfo)
                         $url = explode(':', substr($url, 1,  - 1));
                         // if the current module is active, then we are here
                         if ($url[0] == $thismodname &&
-                            (!isset($url[1]) || $url[1] == $thismodtype) && 
+                            (!isset($url[1]) || $url[1] == $thismodtype) &&
                             (!isset($url[2]) || $url[2] == $thisfuncname)) {
                             $here = 'true';
                         }
@@ -390,7 +390,7 @@ function base_menublock_modify($blockinfo)
     }
 
     // Prepare output array
-    $c=0;
+    $c=1;
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
         $vars['contentlines'] = array();
@@ -424,7 +424,7 @@ function base_menublock_insert($blockinfo)
 
     // User links.
     $content = array();
-    $c = 0;
+    $c = 1;
     if (!xarVarFetch('linkname', 'list:str', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (isset($linkname)) {
         if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
