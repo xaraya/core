@@ -43,23 +43,25 @@ function roles_user_usermenu($args)
                     // get the Dynamic Properties of this object
                     $properties =& $object->getProperties();
                 }
-                
+
                 $withupload = (int) FALSE;
-                foreach ($properties as $key => $prop) {
-                    if (isset($prop->upload) && $prop->upload == TRUE) {
-                        $withupload = (int) TRUE;
+                if (is_array($properties)) {
+                    foreach ($properties as $key => $prop) {
+                        if (isset($prop->upload) && $prop->upload == TRUE) {
+                            $withupload = (int) TRUE;
+                        }
                     }
                 }
             }
             unset($properties);
-            
+
             $uname = xarUserGetVar('uname');
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
             $email = xarUserGetVar('email');
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
-            $data = xarTplModule('roles','user', 'user_menu_form', 
+            $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,
                                   'name'         => $name,
@@ -208,12 +210,12 @@ function roles_user_usermenu($args)
                                          'state'    => 2))) return;
                 //Send validation email
                 if (!xarModAPIFunc( 'roles',
-                					'admin',
-                					'senduseremail',
-                					array('uid' => array($uid => '1'), 'mailtype' => 'confirmation'))) {
-            		$msg = xarML('Problem sending confirmation email');
-                	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            	}
+                                    'admin',
+                                    'senduseremail',
+                                    array('uid' => array($uid => '1'), 'mailtype' => 'confirmation'))) {
+                    $msg = xarML('Problem sending confirmation email');
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                }
                 }
             } else {
                 $email = xarUserGetVar('email');
