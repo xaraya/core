@@ -175,8 +175,19 @@ function modules_adminapi_GetList($args)
                     //     $modInfo = array_merge($modInfo, $modFileInfo);
                     $modInfo = array_merge($modFileInfo, $modInfo);
                     xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
-                    if ($modInfo['state'] == XARMOD_STATE_MISSING) {
-                        $modInfo['state'] = XARMOD_STATE_UNINITIALISED;
+                    switch ($modInfo['state']) {
+                        case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
+                            $modInfo['state'] = XARMOD_STATE_UNINITIALISED;
+                            break;
+                        case XARMOD_STATE_MISSING_FROM_INACTIVE:
+                            $modInfo['state'] = XARMOD_STATE_INACTIVE;
+                            break;
+                        case XARMOD_STATE_MISSING_FROM_ACTIVE:
+                            $modInfo['state'] = XARMOD_STATE_ACTIVE;
+                            break;
+                        case XARMOD_STATE_MISSING_FROM_UPGRADED:
+                            $modInfo['state'] = XARMOD_STATE_UPGRADED;
+                            break;
                     }
                     $modList[] = $modInfo;
                 }

@@ -44,7 +44,10 @@ function modules_admin_list()
     $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('All Active');
     $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('All Inactive');
     $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Not Installed');
-    $data['filter'][XARMOD_STATE_MISSING]           = xarML('Missing files');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_UNINITIALISED] = xarML('Missing files');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_INACTIVE] = xarML('Missing files');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_ACTIVE]   = xarML('Missing files');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_UPGRADED] = xarML('Missing files');
 
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
     $data['sort']['namedesc']                       = xarML('Name [z-a]');
@@ -209,7 +212,10 @@ function modules_admin_list()
                 $listrows[$i]['actionimg1']     = $img_disabled;
                 $listrows[$i]['actionimg2']     = $img_disabled;
             }
-        }elseif($mod['state'] == 4){
+        }elseif($mod['state'] == 4 ||
+                $mod['state'] == 7 ||
+                $mod['state'] == 8 ||
+                $mod['state'] == 9){
             // this module is 'Missing'         - set labels and links
             $statelabel = xarML('Missing');
             $listrows[$i]['state'] = 4;

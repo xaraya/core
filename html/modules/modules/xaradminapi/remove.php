@@ -33,7 +33,10 @@ function modules_adminapi_remove($args)
     }
 */
     // If the files have been removed, the module will now also be removed from the db
-    if ($modinfo['state'] == XARMOD_STATE_MISSING) {
+    if ($modinfo['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
+        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
+        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
+        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED ) {
         $query = "DELETE FROM $tables[modules]
                   WHERE xar_regid = '" . xarVarPrepForStore($modinfo['regid']) . "'";
         $result =& $dbconn->Execute($query);

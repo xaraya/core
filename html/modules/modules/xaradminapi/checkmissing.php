@@ -9,11 +9,11 @@
  */
 function modules_adminapi_checkmissing()
 {
-	static $check = false;
-	
-	//Now with dependency checking, this function may be called multiple times
-	//Let's check if it already return ok and stop the processing here
-	if ($check) {return true;}
+    static $check = false;
+
+    //Now with dependency checking, this function may be called multiple times
+    //Let's check if it already return ok and stop the processing here
+    if ($check) {return true;}
 
     // Security Check
     // need to specify the module because this function is called by the installer module
@@ -30,28 +30,42 @@ function modules_adminapi_checkmissing()
     // See if we have lost any modules since last generation
     foreach ($dbModules as $name => $modInfo) {
 
-		//TODO: Add check for any module that might depend on this one
-		// If found, change its state to something inoperative too
-		// New state? XAR_MODULE_DEPENDENCY_MISSING?
-		
+        //TODO: Add check for any module that might depend on this one
+        // If found, change its state to something inoperative too
+        // New state? XAR_MODULE_DEPENDENCY_MISSING?
+
         if (empty($fileModules[$name])) {
             // Old module
 
             // Get module ID
             $regId = $modInfo['regid'];
             // Set state of module to 'missing'
-            $set = xarModAPIFunc('modules',
-                                'admin',
-                                'setstate',
-                                array('regid'=> $regId,
-                                      'state'=> XARMOD_STATE_MISSING));
-            //throw back
-            if (!isset($set)) return;
+            switch ($modInfo['state']) {
+                case XARMOD_STATE_UNINITIALISED:
+                    $newstate = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
+                    break;
+                case XARMOD_STATE_INACTIVE:
+                    $newstate = XARMOD_STATE_MISSING_FROM_INACTIVE;
+                    break;
+                case XARMOD_STATE_ACTIVE:
+                    $newstate = XARMOD_STATE_MISSING_FROM_ACTIVE;
+                    break;
+                case XARMOD_STATE_UPGRADED:
+                    $newstate = XARMOD_STATE_MISSING_FROM_UPGRADED;
+                    break;
+            }
+            if (isset($newstate)) {
+                $set = xarModAPIFunc('modules',
+                                    'admin',
+                                    'setstate',
+                                    array('regid'=> $regId,
+                                          'state'=> $newstate));
+            }
         }
     }
-    
+
     $check = true;
-    
+
     return true;
 }
 
