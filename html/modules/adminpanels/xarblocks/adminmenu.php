@@ -143,6 +143,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                             } 
                         }else{
                             // not sure if we need this
+                            // JC -- You do for E_ALL Errors.
                             $indlinks= '';
                         }
                     }else{
@@ -166,6 +167,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                 // prepare the data for template(s)
                 
                 // not sure if we need this
+                // JC -- For E_ALL Errors
                 if (empty($indlinks)){
                     $indlinks = '';
                 }

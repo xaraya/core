@@ -1,24 +1,41 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file: Display menu, with lots of options
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Menu System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage adminpanels module
+ * @author Patrick Kellum, Jim McDonald, Greg Allan, John Cox
+*/
 
 /**
- * init
- */
+ * initialise block
+ *
+ * @author  John Cox <admin@dinerminor.com>
+ * @access  public
+ * @param   none
+ * @return  nothing
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function base_menublock_init()
 {
     xarSecAddSchema('base:Menublock', 'Block title:Link name:');
 }
+
 /**
- * Block info array
- */
+ * get information on block
+ *
+ * @access  public
+ * @param   none
+ * @return  data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function base_menublock_info()
 {
     return array('text_type' => 'Menu',
@@ -30,13 +47,20 @@ function base_menublock_info()
 		 'form_refresh' => false,
 		 'show_preview' => true);
 }
+
 /**
- * Display func
- */
+ * display adminmenu block
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  data array on success or void on failure
+ * @throws  no exceptions
+ * @todo    implement centre and right menu position
+*/
 function base_menublock_display($blockinfo)
 {
-    // ToDo: 
-    // Major Clean-Up, need to add back menu items manually added, as well as support for a top menu.
+
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -66,8 +90,8 @@ function base_menublock_display($blockinfo)
 
    
     // which module is loaded atm?
-    // we need it's name and type - dealing only with admin type mods, aren't we?
-    list($thismodname, $thismodtype) = xarRequestGetInfo();
+    // we need it's name, type and function - dealing only with user type mods, aren't we?
+    list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
     
     // Sort Order, Status, Common Labels and Links Display preparation
     //$menustyle = xarModGetVar('adminpanels','menustyle');
@@ -112,7 +136,9 @@ function base_menublock_display($blockinfo)
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
                             $labelDisplay = ucwords($label);
-                            $usermods[] = array('label' => $labelDisplay, 'link' => '', 'desc' => '', 'marker' => $marker);
+                            $usermods[] = array(   'label'     => $labelDisplay, 
+                                                   'link'      => '', 
+                                                   'modactive' => 1);
 
                             // Load API for individual links. 
                             xarModAPILoad($label, 'user');
@@ -120,27 +146,42 @@ function base_menublock_display($blockinfo)
 
                             // The user API function is called.
                             $menulinks = xarModAPIFunc($label,
-                                       'user',
-                                       'getmenulinks');
+                                                       'user',
+                                                       'getmenulinks');
 
                             if (!empty($menulinks)) {
                                 $indlinks = array();
                                 foreach($menulinks as $menulink){
+
+                                    if(!strstr($menulink['url'], 'func='.$thisfuncname)){
+                                        $funcactive = 0;
+                                    }else{
+                                        $funcactive = 1;
+                                    }
+
                                     if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$blockinfo[title]:", ACCESS_READ)) {
-                                        $indlinks[] = array('userlink' => $menulink['url'], 'userlabel' => $menulink['label'], 'usertitle' => $menulink['title']);
+                                        $indlinks[] = array('userlink'      => $menulink['url'],
+                                                            'userlabel'     => $menulink['label'], 
+                                                            'usertitle'     => $menulink['title'],
+                                                            'funcactive'    => $funcactive);
                                     }
                                 } 
                             } else {
                                 $indlinks= '';
                             }
+
                         }else{
                             $modid = xarModGetIDFromName($mod['name']);
                             $modinfo = xarModGetInfo($modid);
                             if($modinfo){
                                 $desc = $modinfo['description'];
                             }
+
                             $labelDisplay = ucwords($label);
-                            $usermods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
+                            $usermods[] = array('label' => $labelDisplay, 
+                                                'link' => $link,
+                                                'desc' => $desc,
+                                                'modactive' => 0);
                         }
                     }
                 } else {
@@ -152,12 +193,14 @@ function base_menublock_display($blockinfo)
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
-                $data = xarTplBlock('base','sidemenu', array('usermods'     => $usermods, 
-                                                             'indlinks'     => $indlinks,
-                                                             'logouturl'     => $logouturl,
-                                                             'logoutlabel'   => $logoutlabel,
-                                                             'loggedin'      => $loggedin,
-                                                             'usercontent'   => $usercontent
+
+                $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods, 
+                                                             'indlinks'         => $indlinks,
+                                                             'logouturl'        => $logouturl,
+                                                             'logoutlabel'      => $logoutlabel,
+                                                             'loggedin'         => $loggedin,
+                                                             'usercontent'      => $usercontent,
+                                                             'marker'           => $marker
                                                              ));
                 // this should do for now
                 break;
@@ -169,6 +212,15 @@ function base_menublock_display($blockinfo)
 
 }
 
+/**
+ * modify block settings
+ *
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function base_menublock_modify($blockinfo)
 {
     // TODO --> Send output to template.  Template somewhat complete.
@@ -227,6 +279,15 @@ function base_menublock_modify($blockinfo)
 
 }
 
+/**
+ * update block settings
+ *
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function base_menublock_insert($blockinfo)
 {
     list($vars['displaymodules'],
