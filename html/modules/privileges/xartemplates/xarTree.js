@@ -18,6 +18,7 @@ var xarTree_config = {
 }
 
 function xarTree_init() {
+
 	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
 		var trees = document.getElementsByName('PrivilegesTree');
 		var i=0;

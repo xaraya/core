@@ -509,67 +509,67 @@ function dynamicdata_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All',ACCESS_OVERVIEW);
-    xarRegisterMask('EditDynamicData','All','dynamicdata','All','All',ACCESS_EDIT);
-    xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All',ACCESS_ADMIN);
+    xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
 
-    xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All',ACCESS_OVERVIEW);
-    xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_READ);
-    xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_EDIT);
-    xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_ADD);
-    xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_DELETE);
-    xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All',ACCESS_ADMIN);
+    xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
+    xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
+    xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
+    xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
+    xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
 
-    xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_READ);
-    xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_EDIT);
-    xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_ADD);
-    xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_DELETE);
-    xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All',ACCESS_ADMIN);
+    xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_READ');
+    xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_EDIT');
+    xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADD');
+    xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_DELETE');
+    xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
 
-    xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All',ACCESS_OVERVIEW);
-    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','BLock','All:All:All',ACCESS_READ);
+    xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','BLock','All:All:All','ACCESS_READ');
    /*********************************************************************
     * Define instances for this module
     * Format is
     * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-	$query1 = "SELECT DISTINCT xar_prop_name FROM xar_dynamic_properties";
-	$query2 = "SELECT DISTINCT xar_prop_type FROM xar_dynamic_properties";
-	$query3 = "SELECT DISTINCT xar_prop_id FROM xar_dynamic_properties";
-	$instances = array(
-						array('header' => 'Property Name:',
-								'query' => $query1,
-								'limit' => 20
-							),
-						array('header' => 'Property Type:',
-								'query' => $query2,
-								'limit' => 20
-							),
-						array('header' => 'Property ID:',
-								'query' => $query3,
-								'limit' => 20
-							)
-					);
+    $query1 = "SELECT DISTINCT xar_prop_name FROM xar_dynamic_properties";
+    $query2 = "SELECT DISTINCT xar_prop_type FROM xar_dynamic_properties";
+    $query3 = "SELECT DISTINCT xar_prop_id FROM xar_dynamic_properties";
+    $instances = array(
+                        array('header' => 'Property Name:',
+                                'query' => $query1,
+                                'limit' => 20
+                            ),
+                        array('header' => 'Property Type:',
+                                'query' => $query2,
+                                'limit' => 20
+                            ),
+                        array('header' => 'Property ID:',
+                                'query' => $query3,
+                                'limit' => 20
+                            )
+                    );
     xarDefineInstance('dynamicdata','Type',$instances);
 
-	$query1 = "SELECT DISTINCT xar_name FROM  xar_modules";
-	$query2 = "SELECT DISTINCT xar_object_itemtype FROM xar_dynamic_objects";
-	$query3 = "SELECT DISTINCT xar_object_id FROM xar_dynamic_objects";
-	$instances = array(
-						array('header' => 'Module Name:',
-								'query' => $query1,
-								'limit' => 20
-							),
-						array('header' => 'Object Type:',
-								'query' => $query2,
-								'limit' => 20
-							),
-						array('header' => 'Object ID:',
-								'query' => $query3,
-								'limit' => 20
-							)
-					);
+    $query1 = "SELECT DISTINCT xar_name FROM  xar_modules";
+    $query2 = "SELECT DISTINCT xar_object_itemtype FROM xar_dynamic_objects";
+    $query3 = "SELECT DISTINCT xar_object_id FROM xar_dynamic_objects";
+    $instances = array(
+                        array('header' => 'Module Name:',
+                                'query' => $query1,
+                                'limit' => 20
+                            ),
+                        array('header' => 'Object Type:',
+                                'query' => $query2,
+                                'limit' => 20
+                            ),
+                        array('header' => 'Object ID:',
+                                'query' => $query3,
+                                'limit' => 20
+                            )
+                    );
     xarDefineInstance('dynamicdata','Item',$instances);
 
     xarModAPIFunc('modules','admin','enablehooks',
@@ -620,7 +620,7 @@ function dynamicdata_delete()
   //this module cannot be removed
   return false;
 
-  	/**
+    /**
      * Drop tables
      */
     list($dbconn) = xarDBGetConn();

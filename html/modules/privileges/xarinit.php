@@ -394,6 +394,10 @@ function privileges_init()
                    'xar_level' => array('type'      => 'integer',
                                       'null'        => false,
                                       'default'     => '0'),
+                   'xar_leveltext' => array('type'=> 'varchar',
+                                      'size'        => 255,
+                                      'null'        => false,
+                                      'default'     => ''),
                    'xar_sdescription' => array('type'=> 'varchar',
                                       'size'        => 255,
                                       'null'        => false,
@@ -412,40 +416,44 @@ function privileges_init()
     if (!$dbconn->Execute($query)) return;
 
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 0, 'No Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 100, 'Overview Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 200, 'Read Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 300, 'Comment Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 400, 'Moderate Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 500, 'Edit Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 600, 'Add Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 700, 'Delete Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
     if (!$dbconn->Execute($query)) return;
     $nextId = $dbconn->GenId($leveltable);
-    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 800, 'Admin Access', '')";
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
+    if (!$dbconn->Execute($query)) return;
+    $nextId = $dbconn->GenId($leveltable);
+    $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+              VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
     if (!$dbconn->Execute($query)) return;
 
     // prefix_security_privsets

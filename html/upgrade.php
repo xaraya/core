@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage import
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -58,7 +58,7 @@ if (empty($step)) {
         case .901:
             xarConfigSetVar('System.Core.VersionNum', '.902');
 
-            // Themes 
+            // Themes
             xarModSetVar('themes', 'hidecore', 0);
             xarModSetVar('themes', 'selstyle', 'plain');
             xarModSetVar('themes', 'selfilter', 'XARMOD_STATE_ANY');
@@ -71,7 +71,7 @@ if (empty($step)) {
             // Modules
 
             // expertlist
-            $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+            $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value)
             VALUES (".$dbconn->GenId($tables['module_vars']).",1,'expertlist',0)";
             $result =& $dbconn->Execute($query);
             if(!$result) return;
@@ -99,13 +99,13 @@ if (empty($step)) {
                             );
             xarDefineInstance('articles','Block',$instances);
 
-            xarRegisterMask('ViewArticles','All','articles','Article','All',ACCESS_OVERVIEW);
-            xarRegisterMask('ReadArticles','All','articles','Article','All',ACCESS_READ);
-            xarRegisterMask('SubmitArticles','All','articles','Article','All',ACCESS_COMMENT);
-            xarRegisterMask('EditArticles','All','articles','Article','All',ACCESS_EDIT);
-            xarRegisterMask('DeleteArticles','All','articles','Article','All',ACCESS_DELETE);
-            xarRegisterMask('AdminArticles','All','articles','Article','All',ACCESS_ADMIN);
-            xarRegisterMask('ReadArticlesBlock','All','articles','Block','All',ACCESS_READ);
+            xarRegisterMask('ViewArticles','All','articles','Article','All','ACCESS_OVERVIEW');
+            xarRegisterMask('ReadArticles','All','articles','Article','All','ACCESS_READ');
+            xarRegisterMask('SubmitArticles','All','articles','Article','All','ACCESS_COMMENT');
+            xarRegisterMask('EditArticles','All','articles','Article','All','ACCESS_EDIT');
+            xarRegisterMask('DeleteArticles','All','articles','Article','All','ACCESS_DELETE');
+            xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
+            xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
 
             // Roles
 
@@ -218,12 +218,12 @@ if (empty($step)) {
                                   );
                 xarDefineInstance('categories', 'Link', $instances);
 
-                xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All',ACCESS_OVERVIEW);
-                xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All',ACCESS_COMMENT);
-                xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All',ACCESS_EDIT);
-                xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All',ACCESS_DELETE);
+                xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
+                xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
+                xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
+                xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
 
-                xarRegisterMask('AdminCategories','All','categories','Category','All:All',ACCESS_ADMIN);
+                xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
 
                 if (xarModIsAvailable('ratings')) {
                     // when a whole module is removed, e.g. via the modules admin screen
@@ -237,7 +237,7 @@ if (empty($step)) {
             break;
 
             case '.9.0.4': // this is how it's defined in upgrade.php
-                
+
                 // Note to self, roles datereg field needs to be changed to a date/time field.
 
     }
@@ -284,5 +284,5 @@ xarCore_disposeDebugger();
 
 // done
 exit;
- 
+
 ?>

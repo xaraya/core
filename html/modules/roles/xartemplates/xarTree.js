@@ -14,7 +14,7 @@ var xarTree_config = {
     is            : new xarTree_browsersniffer(),            // Browser sniffer object
     count         : 0,                                       // Placeholder for counting
     parseType     : null,                                    // Placeholder for open/save parsing type
-    operation     : null                                     // Placeholder for operation type
+    operation     : null                                        // Placeholder for operation type
 }
 
 function xarTree_init(treeID) {

@@ -37,6 +37,7 @@ class xarMasks
     var $allmasks;
     var $levels;
     var $instancestable;
+    var $levelstable;
     var $privsetstable;
 
     var $privilegeset;
@@ -65,6 +66,7 @@ class xarMasks
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
+        $this->levelstable = $xartable['security_levels'];
 //        $this->privsetstable = $xartable['security_privsets'];
 
 // hack this for display purposes
@@ -270,6 +272,30 @@ class xarMasks
 
 // done
         return $privs2;
+    }
+
+/**
+ * xarSecLevel: check a role's privileges against the masks of a component
+ *
+ * Return an access level based on its name
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   access level description
+ * @return  access level
+ * @throws  none
+ * @todo    none
+*/
+
+    function xarSecLevel($levelname)
+    {
+        $query = "SELECT xar_level FROM $this->levelstable
+                    WHERE xar_leveltext = '$levelname'";
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
+        $level = -1;
+        if (!$result->EOF) list($level) = $result->fields;
+        return $level;
     }
 
 /**

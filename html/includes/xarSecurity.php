@@ -25,22 +25,6 @@
  *
  */
 
-
-/*
- * Defines for access levels
- */
-define('ACCESS_INVALID', -1);
-define('ACCESS_NONE', 0);
-define('ACCESS_OVERVIEW', 100);
-define('ACCESS_READ', 200);
-define('ACCESS_COMMENT', 300);
-define('ACCESS_MODERATE', 400);
-define('ACCESS_EDIT', 500);
-define('ACCESS_ADD', 600);
-define('ACCESS_DELETE', 700);
-define('ACCESS_ADMIN', 800);
-
-
     include_once 'modules/privileges/xarprivileges.php';
     include_once 'modules/roles/xarroles.php';
     $tables = array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks',
@@ -49,6 +33,7 @@ define('ACCESS_ADMIN', 800);
                     'privmembers' => xarDBGetSiteTablePrefix() . '_privmembers',
                     'security_realms' => xarDBGetSiteTablePrefix() . '_security_realms',
                     'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances',
+                    'security_levels' => xarDBGetSiteTablePrefix() . '_security_levels',
                     'modules' => xarDBGetSiteTablePrefix() . '_modules',
                     'module_states' => xarDBGetSiteTablePrefix() . '_module_states',
                     'security_privsets' => xarDBGetSiteTablePrefix() . '_security_privsets'
@@ -202,7 +187,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
     // Check if the privilege already exists
     $privilege = $privileges->findPrivilege($name);
     if (!$privilege) {
-        return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
+        return $privileges->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
     return;
 }
@@ -344,6 +329,21 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
     return $privs->returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
 }
 
+/* xarSecurityLevel: gets a security level based on its name.
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   integer levelname
+ * @return  security level
+ */
+function xarSecurityLevel($levelname)
+{
+    $masks = new xarMasks();
+    return $masks->xarSecLevel($levelname);
+}
+
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
  *
@@ -395,7 +395,7 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
         return true;
     } else {
         $masks = new xarMasks();
-        return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
+        return $masks->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
 }
 
