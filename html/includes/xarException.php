@@ -3,7 +3,7 @@
  * File: $Id$
  *
  * Exception Handling System
- * 
+ *
  * @package exceptions
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -27,8 +27,8 @@ define('XAR_SYSTEM_EXCEPTION', 2);
 /* Xaraya System Exceptions */
 
 /**
- * SystemException 
- * 
+ * SystemException
+ *
  * @package exceptions
  */
 class SystemException
@@ -44,7 +44,7 @@ class SystemException
     {
         return $this->msg;
     }
-    
+
     function toHTML()
     {
         return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
@@ -101,7 +101,7 @@ class SystemException
 
 /**
  *
- * 
+ *
  * @package exceptions
  */
 class DefaultUserException
@@ -119,7 +119,7 @@ class DefaultUserException
     {
         return $this->msg;
     }
-    
+
     function toHTML()
     {
         $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
@@ -133,7 +133,7 @@ class DefaultUserException
 
 /**
  * ErrorCollection
- * 
+ *
  * it has to be raised as user exception
  * it's a container of error/exceptions
  * for now it's used only by the PHP error handler bridge
@@ -338,15 +338,15 @@ function xarExceptionHandled()
 function xarExceptionRender($format)
 {
     $text = '';
-    
+
     foreach($GLOBALS['xarException_stack'] as $exception) {
 
         switch ($exception['major']) {
             case XAR_SYSTEM_EXCEPTION:
-                $type = 'SYSTEM Exception';
+                $type = 'System Exception';
                 break;
             case XAR_USER_EXCEPTION:
-                $type = 'USER Error';
+                $type = 'User Error';
 
                 if ($format == 'html') {
                     $text .= '<br /><span style="color: purple">'.$type.'</span><br /><br />';
@@ -366,7 +366,7 @@ function xarExceptionRender($format)
         }
 
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
-        
+
         //This format thing should be dealt some other way...
         // BL? depending on output type...
         if ($format == 'html') {
@@ -448,7 +448,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                 $value = xarExceptionValue();
                 if ($id == 'ERROR_COLLECTION') {
                     // add an exception to error collection
-                    $value->exceptions[] = array('id' => 'PHP_ERROR', 
+                    $value->exceptions[] = array('id' => 'PHP_ERROR',
                                                  'value' => new SystemException($msg));
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $value);
                 } else {
@@ -456,14 +456,14 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                     $exc = new ErrorCollection();
                     $exc->exceptions[] = array('id' => $id,
                                                'value' => $value);
-                    $exc->exceptions[] = array('id' => 'PHP_ERROR', 
+                    $exc->exceptions[] = array('id' => 'PHP_ERROR',
                                                'value' => new SystemException($msg));
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
                 }
             } else {
                 // raise an error collection
                 $exc = new ErrorCollection();
-                $exc->exceptions[] = array('id' => 'PHP_ERROR', 
+                $exc->exceptions[] = array('id' => 'PHP_ERROR',
                                            'value' => new SystemException($msg));
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
             }
@@ -475,7 +475,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     }
 
     // This will make us log the errors, still not break the script
-    //if they are not supposed to    
+    //if they are not supposed to
     if (!(error_reporting() & $errorType)) xarExceptionHandled();
 }
 

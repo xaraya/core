@@ -585,8 +585,8 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
         $msg .= xarML('Possible reasons:');
         $msg .= "\n1. " . xarML("You clicked on the browser's back button and reattempted an operation that may not be repeated.");
         $msg .= "\n2. " . xarML('Your browser does not have cookies enabled.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'Forbidden operation',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_USER_EXCEPTION, 'Forbidden operation',
+                       new DefaultUserException($msg));
         return;
 }
 
