@@ -39,6 +39,9 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarResponse_closeSession'] = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
     $GLOBALS['xarResponse_redirectCalled'] = false;
 
+    // Register the ServerRequest event
+    xarEvt_RegisterEvent('ServerRequest');
+
     return true;
 }
 
