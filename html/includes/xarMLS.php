@@ -616,11 +616,16 @@ function xarLocaleFormatUTCDate($format = null, $time = null)
  */
 function xarLocaleFormatDate($format = null, $timestamp = null)
 {
+    // CHECKME: should we default to current time only when timestamp is not set at all ?
+    //if (!isset($timestamp)) {
     if (empty($timestamp)) {
         $timestamp = xarMLS_userTime();
-    } else {
+    } elseif ($timestamp >= 0) {
         // adjust for the user's timezone offset
         $timestamp += xarMLS_userOffset() * 3600;
+    } else {
+        // invalid dates < 0 (e.g. from strtotime) return an empty date string
+        return '';
     }
     return xarMLS_strftime($format,$timestamp);
 }
@@ -704,6 +709,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
+    } elseif ($timestamp < 0) {
+        // invalid dates < 0 (e.g. from strtotime) return an empty date string
+        return '';
     }
 
     // we need to get the correct timestamp format if we do not have one

@@ -18,9 +18,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        // default time is now
+        // default time is unspecified
         if (empty($value)) {
-            $this->value = time();
+              $this->value = -1;
         } elseif (is_numeric($value)) {
             $this->value = $value;
         } elseif (is_array($value) && !empty($value['year'])) {
@@ -35,17 +35,24 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
+            // this returns -1 when we have an invalid date (e.g. on purpose)
             $this->value = strtotime($value);
-            // adjust for the user's timezone offset
-            $this->value -= xarMLS_userOffset() * 3600;
+            if ($this->value >= 0) {
+                // adjust for the user's timezone offset
+                $this->value -= xarMLS_userOffset() * 3600;
+            }
         } else {
             $this->invalid = xarML('date');
             $this->value = null;
             return false;
         }
         // TODO: improve this
+        // store values in a datetime field
         if ($this->validation == 'datetime') {
             $this->value = gmdate('Y-m-d H:i:s', $this->value);
+        // store values in a date field
+        } elseif ($this->validation == 'date') {
+            $this->value = gmdate('Y-m-d', $this->value);
         }
         return true;
     }
@@ -65,14 +72,16 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
+        // default time is unspecified
         if (empty($value)) {
-            $value = time();
+            $value = -1;
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
         // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
+            // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
         }
         if (!isset($dateformat)) {
@@ -127,9 +136,9 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         if (!isset($value)) {
             $value = $this->value;
         }
-        // default time is now
+        // default time is unspecified
         if (empty($value)) {
-            $value = time();
+            $value = -1;
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
         // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
