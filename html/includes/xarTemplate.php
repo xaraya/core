@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarTemplate.php 1.119 03/06/30 16:10:26+01:00 miko@miko.homelinux.org $
+ * File: $Id$
  *
  * BlockLayout Template Engine
  *
@@ -69,11 +69,11 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
-        xarCore_die("xarTpl_init: Nonexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
+        xarCore_die("xarTpl_init: Nonexistent theme directory '" . $args['defaultThemeDir'] ."'");
     }
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
-        xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
+        xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
@@ -125,7 +125,6 @@ function xarTplGetThemeName()
  * @access public
  * @global xarTpl_themesBaseDir string
  * @global xarTpl_themeName string
- * @global xarTpl_themeDir string
  * @param themeName string
  * @return bool
  */
@@ -136,7 +135,7 @@ function xarTplSetThemeName($themeName)
         return false;
     }
     $GLOBALS['xarTpl_themeName'] = $themeName;
-    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$GLOBALS['xarTpl_themeName'];
+    xarTplSetThemeDir($GLOBALS['xarTpl_themesBaseDir'].'/'.$GLOBALS['xarTpl_themeName']);
     return true;
 }
 
@@ -153,10 +152,10 @@ function xarTplSetThemeName($themeName)
 function xarTplSetThemeDir($themeDir)
 {
     assert('$themeDir != "" && $themeDir{0} != "/"');
-    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
     if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
         return false;
     }
+    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
     return true;
 }
 
@@ -189,14 +188,13 @@ function xarTplGetPageTemplateName()
  *
  * @access public
  * @global xarTpl_pageTemplateName string
- * @global xarTpl_themeDir string
  * @param templateName string
  * @return bool
  */
 function xarTplSetPageTemplateName($templateName)
 {
     assert('$templateName != ""');
-    if (!file_exists($GLOBALS['xarTpl_themeDir']."/pages/$templateName.xt")) {
+    if (!file_exists(xarTplGetThemeDir() . "/pages/$templateName.xt")) {
         return false;
     }
     $GLOBALS['xarTpl_pageTemplateName'] = $templateName;
@@ -330,7 +328,6 @@ function xarTplGetJavaScript($position = '', $index = '')
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access public
- * @global xarTpl_themeDir string
  * @param modName string the module name
  * @param modType string user|admin
  * @param funcName string module function to template
@@ -349,7 +346,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
+    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
@@ -359,7 +356,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
             $tplName = "$modType-$funcName";
 
             //check if theme overides default template
-            $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/$modType-$funcName" .'.xt';
+            $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" .'.xt';
             if(!file_exists($sourceFileName))
             {
                 $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
@@ -382,7 +379,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access public
- * @global xarTpl_themeDir string
  * @param modName string the module name
  * @param blockName string the block name
  * @param tplData array arguments for the template
@@ -401,7 +397,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     $modOsDir = $modBaseInfo['osdirectory'];
 
     // Try theme template
-    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
+    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $blockFileName = $blockName . (empty($templateName) ? '' : "-$templateName");
@@ -756,7 +752,6 @@ function xarTplCompileString($templateSource)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @global xarTpl_themeDir string
  * @global xarTpl_pageTemplateName string
  * @global xarTpl_pageTitle string
  * @global xarTpl_additionalStyles string
@@ -774,7 +769,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     }
 
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/pages/$templateName.xt";
+    $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
 
     $tplData = array(
         '_bl_mainModuleOutput'     => $mainModuleOutput,
@@ -790,21 +785,20 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
  * Render a block box
  *
  * @access protected
- * @global xarTpl_themeDir string
  * @param blockInfo string
  * @param templateName string
  * @return bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
  */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
-    // FIXME: <mrb> should we reverte to default here?
+    // FIXME: <mrb> should we revert to default here?
     if (empty($templateName)) {
         $templateName = 'default';
     }
 
     $templateName = xarVarPrepForOS($templateName);
 
-    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/blocks/$templateName.xt";
+    $sourceFileName = xarTplGetThemeDir() . "/blocks/$templateName.xt";
 
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
@@ -813,31 +807,27 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
  * Render a widget
  *
  * @access protected
- * @global xarTpl_themeDir string
  * @param widgetName string
  * @param tplData string
  * @return xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTpl_renderWidget($widgetName, $tplData)
 {
-    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/widgets/$widgetName.xd";
-
-    $sourceFileName = "$xarTpl_themeDir/widgets/$widgetName.xd";
-
+    $sourceFileName = xarTplGetThemeDir() . "/widgets/$widgetName.xd";
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
 function xarTpl_includeThemeTemplate($templateName, $tplData)
 {
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/includes/$templateName.xt";
+    $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
 function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 {
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = "$GLOBALS[xarTpl_themeDir]/modules/$modName/includes/$templateName.xt";
+    $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
