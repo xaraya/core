@@ -362,7 +362,7 @@ class Dynamic_Property
      * Check the input value of this property
      *
      * @param $name name of the input field (default is 'dd_NN' with NN the property id)
-     * @param $value value of the input field (default is retrieved via xarVarCleanFromInput())
+     * @param $value value of the input field (default is retrieved via xarVarFetch())
      */
     function checkInput($name = '', $value = null)
     {

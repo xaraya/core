@@ -18,9 +18,7 @@
 function dynamicdata_admin_updateprop()
 {
     // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
+    // function should be obtained from xarVarFetch()
     if(!xarVarFetch('objectid',      'isset', $objectid,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',         'isset', $modid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',      'isset', $itemtype,       NULL, XARVAR_DONT_SET)) {return;}
