@@ -448,7 +448,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-	function setInstance($module,$table1,$valuefield,$displayfield,$appvar=0,$table2,$childID='xar_id',$parentID='parentID',$description='')
+	function setInstance($module,$table1,$valuefield,$displayfield,$appvar=0,$table2='',$childID='',$parentID='',$description='')
 	{
 		$nextID = $this->dbconn->genID($this->instancestable);
 		$nextIDprep = xarVarPrepForStore($nextID);

@@ -313,7 +313,10 @@ function privileges_init()
 
     $privileges->setInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
     $privileges->setInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+
     $privileges->setInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
+    $privileges->setInstance('articles','xar_articles','xar_aid','xar_title',0);
+
 
     /*********************************************************************
     * Register the module components that are privileges objects
