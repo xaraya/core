@@ -1,5 +1,5 @@
 <!-- START MODULES ADMIN-PREF TEMPLATE -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Preferences</xar:mlstring></h2>
     <div style="border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 1px;">

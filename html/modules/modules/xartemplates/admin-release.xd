@@ -1,4 +1,4 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body"><div align="left">
 <h2><xar:mlstring>Recent Certified Module Releases</xar:mlstring></h2> -- TODO move release module to xar.com
 <xar:if condition="empty($warning)">

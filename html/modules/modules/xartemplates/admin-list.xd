@@ -1,5 +1,5 @@
 <!-- modules module template: file admin-list.xd -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Modules List</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-settings;">
