@@ -76,8 +76,8 @@ function readCookie(name) {
 
 window.onload = function(e) {
   var cookie = readCookie("xarayaclassic_textsize");
-  var title = cookie ? cookie : getPreferredStyleSheet();
-  setActiveStyleSheet(title);
+  var title = cookie ? cookie : getPreferredStyleSheetTxt();
+  setActiveStyleSheetTxt(title);
   var cookie2 = readCookie("xarayaclassic_colscheme");
   var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol();
   setActiveStyleSheetCol(title2);
@@ -91,7 +91,7 @@ window.onload = function(e) {
 /* } */
 
 var cookie = readCookie("xarayaclassic_textsize");
-var title = cookie ? cookie : getPreferredStyleSheet();
+var title = cookie ? cookie : getPreferredStyleSheetTxt();
 setActiveStyleSheetTxt(title);
 var cookie2 = readCookie("xarayaclassic_colscheme");
 var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol();

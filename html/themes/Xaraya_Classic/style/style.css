@@ -510,7 +510,7 @@ pixel-perfect positioning for leftblocksgroup
 
 
 td#rightmenus {	
-	background-image: url(../images/rightmenus_bg.jpg);
+	background-image: url(../images/leftmenus_bg.jpg);
 	background-repeat: repeat-y;
 	background-position: 0 0;
 } /*
