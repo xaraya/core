@@ -1,0 +1,88 @@
+	<tr>
+		<td class="xar-title">
+			<xar:mlstring>Menu Format</xar:mlstring>
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<td class="xar-normal">
+			<xar:mlstring>Menu as List</xar:mlstring>:
+		</td>
+		<td>
+			<xar:if condition="$style eq 1">
+			<input type="radio" name="style" value="1" checked />
+			<xar:else />
+			<input type="radio" name="style" value="1" />
+			</xar:if>
+		</td>
+	</tr>
+	<tr>
+		<td class="xar-normal">
+			<xar:mlstring>Menu as Dropdown</xar:mlstring>:
+		</td>
+		<td>
+			<xar:if condition="$style eq 2">
+			<input type="radio" name="style" value="2" checked />
+			<xar:else />
+			<input type="radio" name="style" value="2" />
+			</xar:if>
+		</td>
+	</tr>
+	<tr>
+		<td class="xar-title">
+			<xar:mlstring>Display</xar:mlstring>
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<td class="xar-normal">
+			<xar:mlstring>Display Modules</xar:mlstring>:
+		</td>
+		<td>
+			<xar:if condition="$displaymodules eq 2">
+			<input type="checkbox" value="1" name="displaymodules" checked />
+			<xar:else>
+			<input type="checkbox" value="1" name="displaymodules" checked />
+			</xar:if>
+		</td>
+	</tr>
+	<tr>
+		<td class="xar-normal">
+			<xar:mlstring>Display Waiting Content</xar:mlstring>:
+		</td>
+		<td>
+			<xar:if condition="$displaywaiting eq 2">
+			<input type="checkbox" value="1" name="displaywaiting" checked />
+			<xar:else>
+			<input type="checkbox" value="1" name="displaywaiting" />
+			</xar:if>
+		</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td valign="top" class="xar-title">
+			".xarML('Menu Content'):
+		</td>
+		<td>
+			<table border="1">
+				<tr>
+					<td align="center" class="xar-normal" style="color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center">
+						<b>.xarML('Title')."</b>
+					</td>
+					<td align="center" class="xar-normal" style="color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center">
+						<b>.xarML('URL')."</b>
+					</td>
+					<td align="center" class="xar-normal" style="color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center">
+						<b>.xarML('Description')."&nbsp;</b>
+						<span class="xar-sub"><b>(".xarML('Optional').")</b></span>
+					</td>
+					<td align="center" class="xar-normal" style="color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center">
+						<b>.xarML('Delete')."</b>
+					</td>
+					<td align="center" class="xar-normal" style="color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center">
+						<b>".xarML('Insert Blank After')."</b>
+					</td>
+				</tr>
