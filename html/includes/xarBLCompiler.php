@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: xarBLCompiler.php 1.169 04/03/25 18:47:58+01:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * BlockLayout Template Engine Compiler
  *
@@ -2732,7 +2732,8 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
             $this->raiseError(XAR_BL_INVALID_TAG,'Missing content in <xar:mlstring> tag.', $this);
             return;
         }
-        return "'$leftspace' . xarML('".xarVar_addslashes($totranslate)."'";
+        
+        return "'$leftspace' . xarML('".str_replace("'","\'",$totranslate)."'";
     }
 
     function renderEndTag()
