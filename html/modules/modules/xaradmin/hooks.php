@@ -101,6 +101,7 @@ function modules_admin_hooks()
         $data['hookmodules'][] = array('modid' => $regid,
                                        'modname' => $hookmodname,
                                        'modtitle' => $modinfo['description'],
+                                       'modstatus' => xarModIsAvailable($modinfo['name']),
                                        'modlink' => xarModURL('modules','admin','hooks',
                                                               array('hook' => $hookmodname)));
     }

@@ -20,10 +20,10 @@
 function modules_admin_updatehooks()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('AdminModules')) {return;}
 
-    if (!xarSecConfirmAuthKey()) return;
-    if (!xarVarFetch('curhook', 'str:1:', $curhook)) return; 
+    if (!xarSecConfirmAuthKey()) {return;}
+    if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
 
     $regId = xarModGetIDFromName($curhook);
     if (!isset($curhook) || !isset($regId)) {
@@ -33,13 +33,16 @@ function modules_admin_updatehooks()
         return;
     }
 
-    // Pass to API
-    $updated = xarModAPIFunc('modules',
-                             'admin',
-                             'updatehooks',
-                              array('regid' => $regId));
-
-    if (!isset($updated)) return;
+    // Only update if the module is active.
+    $modinfo = xarModGetInfo($regId);
+    if (!empty($modinfo) && xarModIsAvailable($modinfo['name'])) {
+        // Pass to API
+        $updated = xarModAPIFunc(
+            'modules', 'admin', 'updatehooks',
+            array('regid' => $regId)
+        );
+        if (!isset($updated)) {return;}
+    }
 
     xarResponseRedirect(xarModURL('modules', 'admin', 'hooks',
                                   array('hook' => $curhook)));
