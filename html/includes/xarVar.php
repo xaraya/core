@@ -744,13 +744,12 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                 $module_varstable = $tables['site/module_vars'];
             }
 
-            // can't do that here - this breaks the link with the module user vars !
-            //xarModDelVar($modName, $name);
-
             // We need the variable id
             unset($modvarid);
             $modvarid = xarModGetVarId($modName, $name);
-
+                
+            if($value === false) $value = 0;
+            if($value === true) $value = 1;        
             if(!$modvarid) {
                 $seqId = $dbconn->GenId($module_varstable);
                 $query = "INSERT INTO $module_varstable
