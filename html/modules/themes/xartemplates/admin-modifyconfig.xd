@@ -22,10 +22,10 @@
 		</select>
 	</p>
     <p><label for="sitename"><xar:mlstring>Site Name</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName', 1)#" size="30" maxlength="100" /></p>
-    <p><label for="slogan"><xar:mlstring>Site Slogan</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
+    <p><label for="slogan"><xar:mlstring>Site Slogan</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" /></p>
 	<p><label for="copyright"><xar:mlstring>Copyright</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" /></p>
 	#xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
-	<p><xar:mlstring>Footer Note</xar:mlstring></label>:&nbsp;&nbsp;<br /><textarea name="footer" id="footer" cols="60" rows="5" class="xar-norm">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea></p>
+	<p><label for="footer"><xar:mlstring>Footer Note</xar:mlstring></label>:&nbsp;&nbsp;<br /><textarea name="footer" id="footer" cols="60" rows="5" class="xar-norm">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea></p>
 	#xarVarDelCached('Mod.Variables.themes','SiteFooter')#
 	<h3><xar:mlstring>Page Title Options</xar:mlstring></h3>
 	<p><label for="separator"><xar:mlstring>Page Title Separator</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" /></p>
