@@ -24,6 +24,12 @@
 */
 
 
+//quick hack to show some of what the functions are doing
+//set to 1 to activate
+define('XARDBG_WINNOW', 0);
+//define('XARDBG_TEST', 0);
+//define('XARDBG_TESTDENY', 0);
+
 class xarMasks
 {
     var $dbconn;
@@ -251,10 +257,14 @@ class xarMasks
         foreach ($privs1 as $key1 => $priv1) {
             $matched = false;
             foreach ($privs2 as $key2 => $priv2) {
-//                echo "Winnowing: ";
-//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2) . " | ";
-//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1) . " | ";
-                if ($priv1->implies($priv2)) {
+                if(XARDBG_WINNOW) {
+                    $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
+                    $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
+                    echo "Winnowing: ";
+                    echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<BR />";
+                    echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<BR /><BR />";
+                }
+                if ($priv1->matchesexactly($priv2)) {
                     $privs3 = $privs2;
                     $notmoved = true;
                     foreach ($privs3 as $priv3) if($priv3->matchesexactly($priv1)) $notmoved = false;
@@ -262,7 +272,7 @@ class xarMasks
                     else if (!$priv1->matchesexactly($priv2)) array_splice($privs2,$key2);
                     $matched = true;
                 }
-                elseif ($priv2->implies($priv1) || $priv1->matchesexactly($priv2)) {
+                elseif ($priv2->matchesexactly($priv1) || $priv1->matchesexactly($priv2)) {
                     $matched = true;
                     break;
                 }
