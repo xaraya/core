@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Xaraya
- *
+ * File: $Id: s.xarCore.php 1.43 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * 
+ * The Core
+ * 
  * @package core
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Marco Canini <m.canini@libero.it>
- */
+ * @author Marco Canini
+*/
 
 /*
  * Core version informations 
@@ -281,7 +281,6 @@ function xarCoreGetVarDirPath()
 /**
  * Activates the debugger.
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @global xarDebug integer
  * @global xarDebug_sqlCalls integer
@@ -312,12 +311,11 @@ function xarCoreActivateDebugger($flags)
 }
 
 /**
- * Checks if the debugger is active
+ * Check if the debugger is active
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @return bool true if the debugger is active, false otherwise
  * @global xarDebug integer
+ * @return bool true if the debugger is active, false otherwise
  */
 function xarCoreIsDebuggerActive()
 {
@@ -325,9 +323,8 @@ function xarCoreIsDebuggerActive()
 }
 
 /**
- * Checks for specified debugger flag.
+ * Check for specified debugger flag.
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @param flag integer the debugger flag to check for activity
  * @return bool true if the flag is active, false otherwise
@@ -340,11 +337,9 @@ function xarCoreIsDebugFlagSet($flag)
 /**
  * Gets a core system variable
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @param name string name of core system variable to get
  * @static systemVars array
- * @return mixed variable value
+ * @param name string name of core system variable to get
  * @todo <marco> remove config file loader code if we're not going to use it
  */
 function xarCore_getSystemVar($name)
@@ -368,9 +363,8 @@ function xarCore_getSystemVar($name)
 }
 
 /**
- * Gets a core site variable
+ * Get a core site variable
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @static siteVars array
  * @param name string name of core site variable to get
@@ -397,9 +391,8 @@ function xarCore_getSiteVar($name)
 }
 
 /**
- * Disposes the debugger.
+ * Dispose the debugger
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @global xarDebug integer
  * @global xarDebug_sqlCalls integer
@@ -420,12 +413,11 @@ function xarCore_disposeDebugger()
 }
 
 /**
- * Dies
+ * Error function before Exceptions are loaded
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access proctected
  * @param msg string message to print as an error
- */
+ */ 
 function xarCore_die($msg)
 {
     $url = xarServerGetBaseURL() . 'index.php';
@@ -438,7 +430,7 @@ $debug = <<<EOD
 <p>The failure reason is: $msg</p>
 EOD;
     } else {
-        $debug = '';
+       $debug = '';
     }
 $errPage = <<<EOM
 <html>
