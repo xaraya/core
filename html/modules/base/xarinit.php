@@ -191,21 +191,20 @@ function base_init()
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
-    xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
+    xarConfigSetVar('Site.MLS.TranslationsBackend', 'xml');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
-    xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
-    $allowedLocales = array('en_US.iso-8859-1');
-    xarConfigSetVar('Site.MLS.AllowedLocales',$allowedLocales);
-
+    
+    // The installer should now set the default locale based on the
+    // chose language, let's make sure that is true
+    if(!xarConfigGetVar('Site.MLSDefaultLocale')) {
+        xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
+        $allowedLocales = array('en_US.iso-8859-1');
+        xarConfigSetVar('Site.MLS.AllowedLocles', $allowedLocales);
+    }
+    
     $authModules = array('authsystem');
     xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
-
-    // Dummy logger
-    // THESE VARIABLES AREN"T USED ANYWHERE YET.. DON"T BE FOOLED! :)
-    //xarConfigSetVar('Site.Log.LoggerName', 'dummy');
-    //xarConfigSetVar('Site.Log.LoggerArgs', '');
-    //xarConfigSetVar('Site.Log.LogLevel', 1 /*XARLOG_LEVEL_DEBUG*/);
 
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************

@@ -84,11 +84,15 @@ $systemArgs = array('enableTemplatesCaching' => false,
                     'defaultThemeDir' => 'installer');
 xarTpl_init($systemArgs, $whatToLoad);
 
+
+// Get the install language everytime
+xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+
 // Start Multi Language System
-$systemArgs = array('translationsBackend' => 'php',
-                    'MLSMode' => 'SINGLE',
-                    'defaultLocale' => 'en_US.iso-8859-1',
-                    'allowedLocales' => 'en_US.iso-8859-1');
+$systemArgs = array('translationsBackend' => 'xml',
+                    'MLSMode' => 'BOXED',
+                    'defaultLocale' => $install_language,
+                    'allowedLocales' => array('en_US.iso-8859-1','nl_NL.iso-8859-1'));
 xarMLS_init($systemArgs, $whatToLoad);
 
 // Install Phases
@@ -135,6 +139,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Make sure we should still be here
     if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
+        xarLogMessage("We will now hand over control to Xaraya");
+        // CHECKME: is this ever reached? If it is, it is likely that it will NOT work, as the locale will
+        // not be set properly.
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
@@ -144,15 +151,11 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Build function name from phase
     $funcName = 'phase' . $phase;
-    // Handle language setting
 
     // Load installer module
     $res = xarInstallLoad($modName, $modType);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-
-        return; // throw back
-    }
-
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
+  
     // if the debugger is active, start it
     if (xarCoreIsDebuggerActive()) {
        ob_start();
@@ -186,9 +189,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     }
 
     // Here we check for exceptions even if $res isn't empty
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
 
     // Render page
     $pageOutput = xarTpl_renderPage($mainModuleOutput);

@@ -46,6 +46,9 @@ function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args =
         return;
     }
 
+    // Load the translations file
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
+
     $tplData = $modFunc($args);
 
     if (!is_array($tplData)) {
@@ -82,6 +85,9 @@ function xarInstallAPIFunc($modName, $modType = 'user', $funcName = 'main', $arg
             return;
         }
     }
+
+    // Load the translations file
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
 
     return $modAPIFunc($args);
 }
@@ -219,10 +225,10 @@ function xarInstallLoad($modName, $modType = 'user')
     $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
-    /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType);
+    $res = xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType);
     if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
-    }*/
+    }
 
     // Load database info
     //xarMod__loadDbInfo($modName, $modOsDir);
@@ -264,11 +270,15 @@ function xarTplInstall($modName, $modType, $funcName, $tplData = array(), $templ
     $modOsDir = 'installer';
 
     // Try theme template
-    $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
+    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
+        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
+        $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";;
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
     }
+
+    // TODO: do we want overridden translations?
 
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
