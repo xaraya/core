@@ -55,6 +55,8 @@ class ADODB_mysql extends ADOConnection {
 	function GenID($seqname='adodbseq',$startID=1)
 	{
 		//if (!$this->hasGenID) return false;
+        // temporal fix proca
+        if (!$this->hasGenID) return 0;
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		$rs = @$this->Execute($getnext);
 		if (!$rs) {
