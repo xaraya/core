@@ -1127,6 +1127,9 @@ function dynamicdata_userapi_getitemsforview($args)
     }
     $args['getobject'] = 1;
     $object = & xarModAPIFunc('dynamicdata','user','getitems',$args);
+    if (!isset($object)) {
+        return array(array(), array());
+    }
     $properties = & $object->getProperties();
     $items = & $object->items;
     return array(& $properties, & $items);
