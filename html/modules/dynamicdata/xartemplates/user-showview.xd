@@ -102,7 +102,7 @@
             </xar:if>
             <xar:data-output type="$type" name="dd_'.$id.'" value="$value" />
             <xar:if condition="!empty($flink)">
-                </a><xar:set name="$flink" value="''" />
+                </a><xar:set name="$flink">''</xar:set>
             </xar:if>
         </xar:loop>
         <xar:if condition="!empty($options) and count($options) gt 0">
