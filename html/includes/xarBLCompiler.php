@@ -183,17 +183,19 @@ class xarTpl__CodeGenerator
                 if ($child->isPHPCode() && !$this->isPHPBlock()) {
                     $code .= "<?php ";
                     $this->setPHPBlock(true);
-                } elseif (!$child->isPHPCode() && $this->isPHPBlock()) {
+                } elseif (!$child->isPHPCode() && $this->isPHPBlock() && !$checkNode->needAssignment()) {
                     $code .= "?>";
                     $this->setPHPBlock(false);
                 }
                 //xarLogVariable('child', $child, XARLOG_LEVEL_ERROR);
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
+                    /*
                     if (!$child->isAssignable()) {
                         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                                        new xarTpl__ParserError("The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child));
                         return;
                     }
+                    */
                     if ($checkNode->needAssignment()) {
                         $code .= ' = ';
                     }
@@ -206,7 +208,7 @@ class xarTpl__CodeGenerator
                     return; // throw back
                 }
                 $code .= $childCode;
-                if ($child->isAssignable() && !(/*$checkNode->needAssignment() ||*/ $checkNode->needParameter())) {
+                if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     //xarLogVariable('checkNode', $checkNode, XARLOG_LEVEL_ERROR);
                     //xarLogMessage('here', XARLOG_LEVEL_ERROR);
                     $code .= "; ";
@@ -216,6 +218,7 @@ class xarTpl__CodeGenerator
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
+
                     //xarLogVariable('pass here', $child->tagName, XARLOG_LEVEL_ERROR);
                     if ($child->needExceptionsControl()) {
                         //xarLogVariable('pendingExceptionsControl', $child->tagName, XARLOG_LEVEL_ERROR);
@@ -1334,7 +1337,8 @@ class xarTpl__ExpressionTransformer
             }
         }
         
-        $findLogic      = array(' eq ', ' neq ', ' lt ', ' gt ', ' id ', ' nid ', ' lte ', ' gte ');
+        $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
+
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
         
@@ -2829,6 +2833,11 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
+    function render()
+    {
+        return '';
+    }
+
     function renderBeginTag()
     {
         extract($this->attributes);
@@ -2839,13 +2848,15 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
 
+        /*
         if (count($this->children) != 1) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('The <xar:set> tag can contain only one child tag.', $this));
             return;
         }
+        */
 
-        return '$'.$name;
+        return $name;
     }
 
     function renderEndTag()
@@ -2864,6 +2875,11 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     }
 
     function needAssignment()
+    {
+        return true;
+    }
+    
+    function hasText()
     {
         return true;
     }

@@ -215,6 +215,10 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
         $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";
+        // fall back to default template if necessary
+        if (!empty($templateName) && !file_exists($sourceFileName)) {
+            $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
+        }
     } /*else {
         TODO: <marco> Handle i18n for this case
     }*/
