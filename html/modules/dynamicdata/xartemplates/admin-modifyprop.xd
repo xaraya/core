@@ -48,9 +48,9 @@ Tip : empty label -> delete field for all items
         <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#">#$field['id']#</a></td>
         <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label[#$field['id']#]" size="10" value="#$field['label']#" /></td>
         <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type['.$field['id'].']" value="$field['type']" /></td>
-        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default[#$field['id']#]" size="10" value="#$field['default']#" /></td>
+        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default[#$field['id']#]" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
         <td>#$field['source']#</td>
-        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation[#$field['id']#]" size="10" value="#$field['validation']#" /></td>
+        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation[#$field['id']#]" size="10" value="#xarVarPrepForDisplay($field['validation'])#" /></td>
         <td><xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" size="15" value="$field['status']" /></td>
     </tr>
 </xar:foreach>

@@ -18,9 +18,9 @@
         <td>#$field['id']#</td>
         <td>#$field['label']#</td>
         <td><xar:data-output property="$fieldtypeprop" value="$field['type']" /></td>
-        <td>#$field['default']#</td>
+        <td>#xarVarPrepForDisplay($field['default'])#</td>
         <td>#$field['source']#</td>
-        <td>#$field['validation']#</td>
+        <td>#xarVarPrepForDisplay($field['validation'])#</td>
     </tr>
 </xar:foreach>
 </xar:if>
