@@ -69,6 +69,68 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
+ * Fetches and validates in a Batch.
+ *
+ *   if (!xarVarFetch('reassign', 'checkbox',  $reassign, false, XARVAR_NOT_REQUIRED)) return;
+ *   if (!xarVarFetch('repeat',   'int:1:100', $repeat,   1,     XARVAR_NOT_REQUIRED)) return;
+ *
+ *  Can be done thru xarVarBatchFetch with:
+ *
+ *  $result = xarVarBatchFetch(array('reassign','checkbox', 'reassign', false, XARVAR_NOT_REQUIRED),
+ *                             array('repeat', 'int:1:100', 'repeat'));
+ *
+ * Notice that i didnt use XARVAR_NOT_REQUIRED because xarVarBatchFetch will trap the
+ * thrown exceptions for me in the result array, thus allowing me to get this easily
+ * back to the GUI warning the user that the variable didn't validate and for what reason
+ *
+ * if ($result['no_errors']) {
+ *     //No Errors!
+ *     $results[variable name]['value'] holds the inputs with the apropriate types
+ * } else {
+ *     //Errors Found, go back to the GUI and use the $result to display the errors
+ *     // in the right place
+ *     $results[variable name]['value'] holds the input values
+ *     $results[variable name]['error'] holds the Error Message ('' in case of none)
+ *  }
+ *
+ *
+ * @author Flavio Botelho
+ * @access public
+ * @param arrays The arrays storing information equivalent to the xarVarFetch interface
+ * @return array With the respective exceptions in case of failure
+ * @raise BAD_PARAM
+ */
+function xarVarBatchFetch() {
+
+    $batch = func_get_args();
+    
+    $result_array = array();
+    $no_errors    = true;
+
+    foreach ($batch as $line) {
+        $result_array[$line[2]] = array();
+        $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
+        
+        if (!$result) {
+            //Records the error presented in the given input variable
+            $result_array[$line[2]]['error'] = xarExceptionValue();
+            //Handle the Exception
+            xarExceptionHandled();
+            //Mark that we've got an error
+            $no_errors = false;
+        } else {
+            $result_array[$line[2]]['error'] = '';
+        }
+    }
+    
+    //Chose this key name to avoid clashes and make it easy to go on if there is no
+    //errors present in the Fetched variables.
+    $result_array['no_errors'] = $no_errors;
+    
+    return $result_array;
+}
+
+/**
  * Fetches the $name variable from input variables and validates it by applying the $validation rules.
  *
  * 1st try to use the variable provided, if this is not set (Or the XARVAR_DONT_REUSE flag is used)
