@@ -282,7 +282,7 @@ function installer_admin_create_administrator()
     $data['phase_label'] = xarML('Create Administrator');
 
 // Security Check
-	if(!xarSecurityCheck('Admin')) return;
+	if(!xarSecurityCheck('AdminInstaller')) return;
 
     include_once 'modules/roles/xarroles.php';
 

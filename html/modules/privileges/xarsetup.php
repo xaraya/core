@@ -109,17 +109,36 @@ function initializeSetup() {
 //	xarAssignPrivilege('AdminRole','Anonymous');
 
     /*********************************************************************
-    * Define instances for some modules
+    * Define instances for the core modules
     * Format is
     * setInstance(Module,Type,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    xarDefineInstance('roles','Roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    xarDefineInstance('privileges','Privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+	$query = "SELECT xar_name,xar_id FROM xar_block_groups";
+    xarDefineInstance('blocks','BlockGroups',$query);
+	$query = "SELECT types.xar_type,instances.xar_title,instances.xar_id FROM xar_block_instances as instances LEFT JOIN xar_block_types as types ON types.xar_id = instances.xar_type_id";
+    xarDefineInstance('blocks','Blocks',$query);
 
-    xarDefineInstance('categories','Categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
-    xarDefineInstance('articles','Articles','xar_articles','xar_aid','xar_title',0);
-    xarDefineInstance('xproject','Projects','xar_xproject','xar_projectid','xar_name',0);
+	$query = "SELECT xar_name FROM xar_admin_menu";
+    xarDefineInstance('adminpanels','adminmenu',$query);
+	$query = "SELECT xar_name FROM xar_admin_menu";
+    xarDefineInstance('adminpanels','adminmenublock',$query);
+	$query = "SELECT xar_name FROM xar_admin_menu";
+    xarDefineInstance('adminpanels','admintopblock',$query);
+	$query = "SELECT xar_name FROM xar_admin_menu";
+    xarDefineInstance('adminpanels','Waitingcontentblock',$query);
+	$query = "SELECT modules.xar_name,wc.xar_itemid FROM xar_admin_wc as wc LEFT JOIN xar_modules as modules ON wc.xar_moduleid = modules.xar_regid";
+    xarDefineInstance('adminpanels','Item',$query);
+
+	$query = "SELECT xar_name FROM xar_roles";
+    xarDefineInstance('roles','Roles',$query,0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
+	$query = "SELECT xar_name FROM xar_privileges";
+    xarDefineInstance('privileges','Privileges',$query,0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+
+	$query = "SELECT xar_name,xar_id FROM xar_allowed_vars";
+    xarDefineInstance('base','Base',$query);
+
+//    xarDefineInstance('xproject','Projects','xar_xproject','xar_projectid','xar_name');
 
 
     /*********************************************************************
@@ -127,6 +146,34 @@ function initializeSetup() {
     * Format is
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
+
+    xarRegisterMask('ViewBlocks','All','base','HTMLBlock','All',ACCESS_OVERVIEW);
+    xarRegisterMask('EditBlock','All','base','Block','All',ACCESS_EDIT);
+    xarRegisterMask('AddBlock','All','base','Block','All',ACCESS_ADD);
+    xarRegisterMask('DeleteBlock','All','base','Block','All',ACCESS_DELETE);
+    xarRegisterMask('AdminBlock','All','base','Block','All',ACCESS_ADMIN);
+    xarRegisterMask('AdminBase','All','base','All','All',ACCESS_ADMIN);
+
+	xarRegisterMask('AdminInstaller','All','installer','All','All',ACCESS_ADMIN);
+
+    xarRegisterMask('ViewThemes','All','themes','metablock','All',ACCESS_OVERVIEW);
+
+    xarRegisterMask('EditPanel','All','adminpanels','All','All',ACCESS_EDIT);
+    xarRegisterMask('AddPanel','All','adminpanels','Item','All',ACCESS_ADD);
+    xarRegisterMask('DeletePanel','All','adminpanels','All','All',ACCESS_DELETE);
+    xarRegisterMask('AdminPanel','All','adminpanels','All','All',ACCESS_ADMIN);
+
+   	xarRegisterMask('ReadLogin','All','roles','LoginBlock','All',ACCESS_READ);
+
+   	xarRegisterMask('SeeRoles','All','roles','All','All',ACCESS_OVERVIEW);
+   	xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_READ);
+   	xarRegisterMask('EditRole','All','roles','All','All',ACCESS_EDIT);
+    xarRegisterMask('AddRole','All','roles','All','All',ACCESS_ADD);
+    xarRegisterMask('DeleteRole','All','roles','All','All',ACCESS_DELETE);
+    xarRegisterMask('AdminRole','All','roles','All','All',ACCESS_ADMIN);
+
+    xarRegisterMask('EditMail','All','mail','All','All',ACCESS_EDIT);
+    xarRegisterMask('AdminMail','All','mail','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
     xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
@@ -140,16 +187,9 @@ function initializeSetup() {
     xarRegisterMask('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
 
     xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
-   	xarRegisterMask('ViewRoles','All','Roles','ViewRoles','All',ACCESS_READ);
-   	xarRegisterMask('ModMemberAll','All','Roles','EditMember','All',ACCESS_EDIT);
-    xarRegisterMask('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
-    xarRegisterMask('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
 
-//	'Mask to limit access to the installer to Admins'
-	xarRegisterMask('Admin','All','installer','All','All',ACCESS_ADMIN);
-
-   	xarRegisterMask('Admin','All','modules','All','All',ACCESS_ADMIN);
-    xarRegisterMask('Overview','All','base','Overview','All',ACCESS_OVERVIEW);
+   	xarRegisterMask('AdminModules','All','modules','All','All',ACCESS_ADMIN);
+    xarRegisterMask('ViewBase','All','base','Overview','All',ACCESS_OVERVIEW);
 
     // Initialisation successful
     return true;

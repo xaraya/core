@@ -13,9 +13,9 @@ $modversion['author'] = 'Marc Lutolf';
 $modversion['contact'] = 'http://www.xaraya.com/';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
-$modversion['securityschema'] = array('Privileges::' => '::');
+$modversion['securityschema'] = array('Privileges::' => 'name:pid');
 // During integration phase classify as admin
-//$modversion['class'] = 'Core Admin';
+//$modversion['class'] = 'Core Complete';
 $modversion['class'] = 'Admin';
 $modversion['category'] = 'Users & Groups';
 ?>

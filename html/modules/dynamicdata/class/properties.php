@@ -639,7 +639,7 @@ class Dynamic_Property_Master
             list(...) = $result->fields;
 
 // Security Check
-		if (xarSecurityCheck('Overview',0) {
+		if (xarSecurityCheck('Overview',0)) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();

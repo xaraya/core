@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  *
@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage Themes Module
  * @author Carl Corliss, John Cox
 */
@@ -63,9 +63,14 @@ function themes_metablock_info()
 */
 function themes_metablock_display($blockinfo)
 {
-    if (!xarSecAuthAction(0, 'themes:metablock', "$blockinfo[title]::", ACCESS_OVERVIEW)) {
-        return;
-    }
+// Security Check
+//TODO (marc) fix this for God's sake!
+// get the Roles class
+		include_once 'modules/roles/xarroles.php';
+    	$roles = new xarRoles();
+	$userID = xarSessionGetVar('uid');
+			$role = $roles->getRole($userID);
+	if(!xarSecurityCheck('ViewThemes',1,'metablock','$blockinfo[title]::',$role->getName(),'All')) return;
 
     // Get current content
     $vars = @unserialize($blockinfo['content']);
@@ -83,30 +88,30 @@ function themes_metablock_display($blockinfo)
     $incomingkey = xarVarGetCached('Blocks.articles','body');
 
     if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
-       
+
         // Strip -all- html
         $htmlless = strip_tags($incomingkey);
-        
-        // Strip anything that isn't alphanumeric or _ - 
+
+        // Strip anything that isn't alphanumeric or _ -
         $symbolLess = trim(ereg_replace('([^a-zA-Z0-9_-])+',' ',$htmlless));
-        
+
         // Remove duplicate words
         $keywords = explode(" ", strtolower($symbolLess));
         $keywords = array_unique($keywords);
-        
+
         // Remove words that are < four characters in length
         foreach($keywords as $word) {
             if (strlen($word) >= 4 && !empty($word)) {
                 $list[] = $word;
             }
         } $keywords = $list;
-        
+
         // Sort the list of words in Ascending order Alphabetically
         sort($keywords, SORT_STRING);
-        
+
         // Merge the list of words into a single, comma delimited string of keywords
         $meta['keywords'] = implode(",",$keywords);
-    
+
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }
@@ -123,10 +128,10 @@ function themes_metablock_display($blockinfo)
     $meta['geourl'] = $vars['usegeo'];
 
     $meta['activepage'] = xarServerGetCurrentURL();
-    
+
     $blockinfo['content'] = $meta;
     return $blockinfo;
- 
+
 }
 
 /**
@@ -168,7 +173,7 @@ function themes_metablock_modify($blockinfo)
     if (empty($vars['latitude'])) {
         $vars['latitude'] = '';
     }
-    
+
     $content = xarTplBlock('themes', 'metaAdmin', $vars);
 
     return $content;
@@ -202,7 +207,7 @@ function themes_metablock_update($blockinfo)
     if (empty($vars['metakeywords'])) {
         $vars['metakeywords'] = '';
     }
-    
+
     if (empty($vars['metadescription'])) {
         $vars['metadescription'] = '';
     }

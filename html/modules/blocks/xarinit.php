@@ -94,7 +94,7 @@ function blocks_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'xar_type_index',
                                    'fields' => array('xar_type'),
@@ -109,7 +109,7 @@ function blocks_init()
                                    'unique' => true));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-*/    
+*/
     // *_block_group_instances
     $query = xarDBCreateTable($prefix . '_block_group_instances',
                              array('xar_id'          => array('type'        => 'integer',
@@ -125,10 +125,10 @@ function blocks_init()
                                    'xar_position'    => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0')));
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     // *_userblocks
     $query = xarDBCreateTable($prefix . '_userblocks',
                              array('xar_uid'         => array('type'    => 'integer',
@@ -144,10 +144,10 @@ function blocks_init()
                                                              'default' => '1'),
                                    'xar_last_update' => array('type'    => 'timestamp',
                                                              'null'    => false)));
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     $query = xarDBCreateIndex($prefix . '_userblocks',
                              array('name'   => 'xar_uidbid_index',
                                    'fields' => array('xar_uid', 'xar_bid'),
@@ -159,17 +159,17 @@ function blocks_init()
     xarTplRegisterTag('blocks', 'blocks-stateicon',
                      array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
                      'blocks_userapi_handleStateIconTag');
-    
+
     /* these can't be set because they are part of the core
-       and when the core is installed, blocks is installed 
+       and when the core is installed, blocks is installed
        before the modules module is so, the module_vars table
        isn't even created at this point.
-    
+
     xarModSetVar('blocks','collapseable',1);
     xarModSetVar('blocks','blocksuparrow','upb.gif');
     xarModSetVar('blocks','blocksdownarrow','downb.gif');
     */
-    
+
     // Initialisation successful
     return true;
 }

@@ -242,9 +242,27 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarDefineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
+	function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
 			$privileges = new xarPrivileges();
-			return $privileges->defineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate,$table2,$childID,$parentID,$description);
+			return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childID,$parentID,$description);
+	}
+
+/**
+ * xarRemoveInstances: removes the instances registered by a module form the database
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   module name
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function xarRemoveInstances($module) {
+			$privileges = new xarPrivileges();
+			return $privileges->removeInstances($module);
 	}
 
 /**
@@ -261,7 +279,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarSecurityCheck($component,$showexception=1,$instancetype='',$instance='',$role='',$module='')
+	function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$role='',$module='')
 	{
 		global $installing;
 
@@ -270,7 +288,7 @@ $schemas = array();
 		}
 		else {
 			$masks = new xarMasks();
-			return $masks->xarSecurityCheck($component,$showexception,$instancetype,
+			return $masks->xarSecurityCheck($mask,$showexception,$component,
 			$instance,$role,$module);
 		}
 	}
@@ -313,7 +331,7 @@ $schemas = array();
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
- 		return true;
+// 		return true;
  		$msg = xarML('This call needs to be converted to the Xaraya security system');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));

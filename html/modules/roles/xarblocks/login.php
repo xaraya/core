@@ -33,13 +33,13 @@ function roles_loginblock_info()
  */
 function roles_loginblock_display($blockinfo)
 {
-    // Security check
-    if (!xarSecAuthAction(0,
-                         'roles:Loginblock:',
-                         "$blockinfo[title]::",
-                         ACCESS_READ)) {
-        return;
-    }
+// Security Check
+// get the Roles class
+		include_once 'modules/roles/xarroles.php';
+    	$roles = new xarRoles();
+	$userID = xarSessionGetVar('uid');
+			$role = $roles->getRole($userID);
+	if(!xarSecurityCheck('ReadLogin',1,'Loginblock','$blockinfo[title]::',$role->getName(),'All')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);

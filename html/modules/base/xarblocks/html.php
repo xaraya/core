@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  *
@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage Base Module
  * @author Patrick Kellum
 */
@@ -43,9 +43,8 @@ function base_htmlblock_info()
  */
 function base_htmlblock_display($blockinfo)
 {
-    if (!xarSecAuthAction(0, 'base:HTMLblock', "$blockinfo[title]::", ACCESS_OVERVIEW)) {
-        return;
-    }
+    // Security
+	if(!xarSecurityCheck('ViewBlocks','All','HTMLBlock','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);
@@ -83,7 +82,7 @@ function base_htmlblock_modify($blockinfo)
     if (empty($vars['html_content'])) {
         $vars['html_content'] = '';
     }
-    
+
     $now = time();
     if ($vars['expire'] == 0){
         $vars['expirein'] = 0;
@@ -92,7 +91,7 @@ function base_htmlblock_modify($blockinfo)
         $sooner = $soon / 3600;
         $vars['expirein'] =  round($sooner);
     }
-     
+
     $content = xarTplBlock('base', 'htmlAdmin', $vars);
 
     return $content;
@@ -111,7 +110,7 @@ function base_htmlblock_update($blockinfo)
     if (empty($vars['expire'])) {
         $vars['expire'] = 0;
     }
-    
+
     if ($vars['expire'] != 0){
         $now = time();
         $vars['expire'] = $vars['expire'] + $now;

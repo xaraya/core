@@ -293,16 +293,21 @@ class xarMasks
  * @todo    none
 */
 
-	function xarSecurityCheck($component,$showexception=1,$instancetype='', $instance='',$rolename='',$module='')
+	function xarSecurityCheck($mask,$showexception=1,$component='', $instance='',$rolename='',$module='')
 	{
 
 // get the masks pertaining to the current module and the component requested
 		if ($module == '') list($module) = xarRequestGetInfo();
-		$masks =  $this->getMasks($module, $component);
-		if ($masks == array()) {
-			$msg = xarML('No masks registered for component name: ') . $component .
-			xarML(' in module: ') . $module . xarML('. Check if the component and module names are correct.');
-			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_COMPONENT',
+		$mask =  $this->getMask($mask);
+		if (!$mask) {
+			if ($component == "") {
+				$msg = xarML('Did not find a mask registered for an unspecified component in module ') . $module;
+			}
+			else {
+				$msg = xarML('No masks registered for component ') . $component .
+				xarML(' in module ') . $module;
+			}
+			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_MASK',
 						   new DefaultUserException($msg));
         	return;
 		}
@@ -389,14 +394,12 @@ class xarMasks
 		$pass = false;
 		foreach ($irreducibleset as $chiave) {
 
-// check against each mask defined for the component
-			foreach ($masks as $mask) {
-//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
-				if ($chiave->implies($mask)) {
+// check the mask
+//			if ($mask->getName() == "AddBlock") {echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);exit;}
+			if ($chiave->implies($mask)) {
 
 // found a privilege that admits: return the privilege
-				return $chiave;
-				}
+			return $chiave;
 			}
 		}
 // nothing found: return false
@@ -428,7 +431,7 @@ class xarMasks
 					WHERE xar_masks.xar_name= '$name'";
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
-//		if ($result->EOF) return array();
+		if ($result->EOF) return false;
 
 // reorganize the data into an array and create the masks object
 		list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
@@ -475,31 +478,47 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-	function defineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='')
+	function defineInstance($module,$type,$query,$propagate=0,$table2='',$childID='',$parentID='',$description='')
 	{
 		$nextID = $this->dbconn->genID($this->instancestable);
 		$nextIDprep = xarVarPrepForStore($nextID);
 		$moduleprep = xarVarPrepForStore($module);
 		$typeprep = xarVarPrepForStore($type);
-		$table1prep = xarVarPrepForStore($table1);
-		$valueprep = xarVarPrepForStore($valuefield);
-		$displayprep = xarVarPrepForStore($displayfield);
+		$queryprep = xarVarPrepForStore($query);
 		$propagateprep = xarVarPrepForStore($propagate);
 		$table2prep = xarVarPrepForStore($table2);
 		$childIDprep = xarVarPrepForStore($childID);
 		$parentIDprep = xarVarPrepForStore($parentID);
 		$descriptionprep = xarVarPrepForStore($description);
-		$query = "INSERT INTO $this->instancestable VALUES ($nextIDprep,
+		$query = "INSERT INTO $this->instancestable
+												VALUES ($nextIDprep,
 												'$moduleprep',
 												'$typeprep',
-												'$table1prep',
-												'$valueprep',
-												'$displayprep',
+												'$queryprep',
 												$propagateprep,
 												'$table2prep',
 												'$childIDprep',
 												'$parentIDprep',
 												'$descriptionprep')";
+		if (!$this->dbconn->Execute($query)) return;
+		return true;
+	}
+
+/**
+ * removeInstances: remove the instances registered by a module form the database
+ * *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   module name
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+	function removeInstances($module)
+	{
+		$query = "DELETE FROM $this->instancestable
+              WHERE xar_module = '$module'";
+		//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
 	}
@@ -757,10 +776,12 @@ class xarPrivileges extends xarMasks
 */
     function getmodules() {
 	if ((!isset($allmodules)) || count($allmodules)==0) {
-			$query = "SELECT xar_id,
-						xar_name
-						FROM $this->modulestable
-						ORDER BY xar_name";
+			$query = "SELECT modules.xar_id,
+						modules.xar_name
+						FROM xar_modules AS modules LEFT JOIN xar_module_states AS states
+						ON modules.xar_regid = states.xar_regid
+						WHERE states.xar_state = 3
+						ORDER BY modules.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -862,11 +883,11 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
 */
     function getinstances($module) {
-		$query = "SELECT xar_instancetable1,
-					xar_instancevaluefield,
-					xar_instancedisplayfield
+		$query = "SELECT xar_type,
+					xar_query
 					FROM $this->instancestable
-					WHERE xar_module= '$module'";
+					WHERE xar_module= '$module'
+					ORDER BY xar_type";
 
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -883,26 +904,28 @@ class xarPrivileges extends xarMasks
 							   'name' => 'None');
 		}
 		else {
-			list($table, $valuefield, $displayfield) = $result->fields;
-			$query = "SELECT $valuefield,
-						$displayfield
-						FROM $table
-						ORDER BY $displayfield";
-
-			$result = $this->dbconn->Execute($query);
-			if (!$result) return;
-
 			$instances[1] = array('id' => -1,
 							   'name' => 'All');
 			$instances[2] = array('id' => 0,
 							   'name' => 'None');
 			$ind = 2;
 			while(!$result->EOF) {
-				list($id, $name) = $result->fields;
-				if (($name != 'All') && ($name != 'None')){
-					$ind = $ind + 1;
-					$instances[$ind] = array('id' => $id,
-									   'name' => $name);
+				list($type, $query) = $result->fields;
+				$result1 = $this->dbconn->Execute($query);
+				if (!$result1) return;
+
+				while(!$result1->EOF) {
+					$instance = '';
+					foreach($result1->fields as $field) {
+						$instance .= $field . ":";
+					}
+					$instance = substr_replace($instance,"",strlen($instance)-1);
+					if (($instance != 'All') && ($instance != 'None')){
+						$ind = $ind + 1;
+						$instances[$ind] = array('id' => $instance,
+										   'name' => $instance);
+					}
+					$result1->MoveNext();
 				}
 				$result->MoveNext();
 			}

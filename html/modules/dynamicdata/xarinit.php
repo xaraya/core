@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -119,7 +119,7 @@ function dynamicdata_init()
                     );
     foreach ($objects as $object) {
         $query = "INSERT INTO $dynamic_objects
-                         (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config, xar_object_isalias) 
+                         (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config, xar_object_isalias)
                   VALUES $object";
         $result = $dbconn->Execute($query);
         if (!isset($result)) return;
@@ -487,6 +487,26 @@ function dynamicdata_init()
                       array(),
                       'dynamicdata_userapi_handleObjectTag');
 
+    /*********************************************************************
+    * Register the module components that are privileges objects
+    * Format is
+    * register(Name,Realm,Module,Component,Instance,Level,Description)
+    *********************************************************************/
+
+    xarRegisterMask('Edit','All','DynamicData','Edit','All',ACCESS_EDIT);
+
+   /*********************************************************************
+    * Define instances for this module
+    * Format is
+    * setInstance(Module,Type,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    *********************************************************************/
+
+	$query = "SELECT xar_prop_name,xar_prop_type,xar_prop_id FROM xar_dynamic_properties";
+    xarDefineInstance('dynamicdata','Type',$query);
+
+	$query = "SELECT modules.xar_name,objects.xar_object_itemtype,objects.xar_object_id FROM xar_dynamic_objects as objects LEFT JOIN xar_modules as modules ON objects.xar_object_moduleid = modules.xar_regid";
+    xarDefineInstance('dynamicdata','Item',$query);
+
     // Initialisation successful
     return true;
 }
@@ -638,6 +658,12 @@ function dynamicdata_delete()
 
     xarTplUnregisterTag('data-label');
     xarTplUnregisterTag('data-object');
+
+    /**
+     * Remove instances
+     */
+
+     xarRemoveInstances("dynamicdata");
 
     // Deletion successful
     return true;
