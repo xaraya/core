@@ -35,6 +35,112 @@ function base_menublock_info()
  */
 function base_menublock_display($blockinfo)
 {
+    // ToDo: 
+    // Major Clean-Up, need to add back menu items manually added, as well as support for a top menu.
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+    if (!xarSecAuthAction(0, 'base:Menublock', 
+                             "$blockinfo[title]::",
+                              ACCESS_READ)) {
+        return;
+    }
+
+    // Break out options from our content field
+    $vars = unserialize($blockinfo['content']);
+    
+    // are there any admin modules, then get their names
+    // checking as early as possible :)
+    $mods = xarModGetList(array('UserCapable' => 1));
+	if(empty($mods)) {
+	// there aren't any admin modules, dont display adminmenu
+	    return;
+	}
+    
+    // TODO this is how we are marking the currently loaded module <-- Borrowing from the admin panels, 
+    // need to break this out to the block update function
+
+    $marker = xarModGetVar('adminpanels', 'marker');
+    if(!isset($marker)){
+        xarModSetVar('adminpanels' ,'marker', '[x]');
+        $marker = '[x]';
+    }
+    
+    // which module is loaded atm?
+    // we need it's name and type - dealing only with admin type mods, aren't we?
+    list($thismodname, $thismodtype) = xarRequestGetInfo();
+    
+    // Sort Order, Status, Common Labels and Links Display preparation
+    //$menustyle = xarModGetVar('adminpanels','menustyle');
+    $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
+    $logouturl = xarModURL('users' ,'user', 'logout', array());
+    $loggedin = xarUserIsLoggedIn();
+
+    // Dirty right now, need to do a block group check and fix.
+    $menustyle = 'side';
+
+    // Ensure we have a title for the block.
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('Main Menu');
+    }
+
+    switch(strtolower($menustyle)) {
+        default:
+        case 'side':
+                // Content
+        /* Needs more work
+                if (!empty($vars['content'])) {
+                    $usercontent[] = array();
+                    $contentlines = explode("LINESPLIT", $vars['content']);
+                    foreach ($contentlines as $contentline) {
+                        list($url, $title, $comment) = explode('|', $contentline);
+                        if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
+                            $usercontenttitle = xarVarPrepForDisplay($title);
+                            $usercontenturl = xarVarPrepForDisplay($url);
+                            $usercontentcomment = xarVarPrepForDisplay($comment);
+                        }
+                    }
+                } else {
+                    $usercontenttitle = '';
+                    $usercontenturl = '';
+                    $usercontentcomment = '';
+                }
+        */
+                // sort by name
+                foreach($mods as $mod){
+                    $label = $mod['name'];
+                    $link = xarModURL($mod['name'] ,'user', 'main', array());
+                    // depending on which module is currently loaded we display accordingly
+                    if($label == $thismodname && $thismodtype == 'user'){
+                        $usermods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                    }else{
+                        $usermods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                    }
+                }
+                // prepare the data for template(s)
+                $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+                $data = xarTplBlock('base','sidemenu', array('usermods'     => $usermods, 
+                                                             'menustyle'     => $menustyle,
+                                                             'logouturl'     => $logouturl,
+                                                             'logoutlabel'   => $logoutlabel,
+                                                             'loggedin'      => $loggedin,
+                                                             //'usercontenttitle' => $usercontenttitle,
+                                                             //'usercontenturl' => $usercontenturl,
+                                                             //'usercontentcomment' => $usercontentcomment
+                                                             ));
+                // this should do for now
+                break;
+    }
+
+    // Populate block info and pass to BlockLayout.
+    $blockinfo['content'] = $data;
+    return $blockinfo;
+    /*
+
+
+
+
+
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -103,7 +209,7 @@ function base_menublock_display($blockinfo)
                                                                        'user',
                                                                        'main'),
                                                               xarVarPrepForDisplay($mod['description']));
-*/
+END COMMENT WHEN ACTIVE/
                         $block['content'] .= addMenuStyledUrl($vars['style'],
                                                               xarVarPrepForDisplay($mod['displayname']),
                                                               xarModURL($mod['name'],
@@ -125,6 +231,7 @@ function base_menublock_display($blockinfo)
         //return themesideblock($blockinfo);
         return $blockinfo;
     }
+    */
 }
 
 function base_menublock_modify($blockinfo)

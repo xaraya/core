@@ -1,0 +1,32 @@
+<br />
+<!-- <xar:loop name="$usercontent">
+	<strong>&nbsp;</strong>
+	<strong>&middot;</strong>
+    <xar:if condition="empty($usercontenturl)">
+        &xar-var-usercontenttitle;
+    <xar:else />
+        <a href="&xar-var-usercontenturl;">&xar-var-usercontenttitle;</a>
+    </xar:if>
+</xar:loop> -->
+
+<xar:loop name="$usermods">
+    <xar:if condition="$marker eq '' and $link eq ''">
+        <strong>&nbsp;</strong>
+    <xar:else />
+        <strong>&middot;</strong>
+    </xar:if>
+    <xar:if condition="empty($link)">
+        <b>&xar-var-label;</b>
+    <xar:else />
+        <a href="&xar-var-link;">&xar-var-label;</a>
+    </xar:if>
+    <xar:if condition="!empty($marker)">
+        &xar-var-marker;
+    </xar:if>
+    <br />
+</xar:loop>
+<br />
+<!-- Logout -->
+<xar:if condition = "$loggedin">
+[<a href="&xar-var-logouturl;">&xar-var-logoutlabel;</a>]
+</xar:if>
