@@ -1,0 +1,185 @@
+<?php
+/**
+ * File: $Id$
+ *
+ * Dynamic Data Combo Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
+
+include_once "includes/properties/Dynamic_Select_Property.php";
+
+/**
+ * Handle the combo property
+ *
+ * @package dynamicdata
+ */
+class Dynamic_Combo_Property extends Dynamic_Select_Property
+{
+
+    function checkInput($name = '', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+
+		// First check for text in the text box
+		$tbname  = $name.'_tb';
+		$tbvalue = xarVarCleanFromInput($tbname);
+
+		if( isset($tbvalue) && ($tbvalue != '') )
+		{
+			$this->fieldname = $tbname;
+			$value = $tbvalue;
+		} else {
+			// Default to checking the selection box.
+
+			// store the fieldname for validations who need them (e.g. file uploads)
+			$this->fieldname = $name;
+			if (!isset($value)) 
+			{
+				$value = xarVarCleanFromInput($name);
+			}
+		}
+        return $this->validateValue($value);
+    }
+
+    function validateValue($value = null)
+    {
+        if (!isset($value)) 
+		{
+            $value = $this->value;
+        }
+		$this->value = $value;
+		
+		return true;
+    }
+
+//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
+    function showInput($args = array())
+    {
+        extract($args);
+		
+        $data=array();
+
+        if (!isset($value)) {
+            $data['value'] = $this->value;
+        } else {
+            $data['value'] = $value;
+        }
+		
+        if (!isset($options) || count($options) == 0) {
+            $data['options'] = $this->options;
+        }
+        if (empty($name)) {
+            $data['name'] = 'dd_' . $this->id;
+        } else {
+        	$data['name'] = $name;
+        }
+        if (empty($id)) 
+		{
+            $data['id'] = $data['name'];
+        } else {
+        	$data['id']= $id;
+        }
+        /*$out = '<select' .
+               ' name="' . $name . '"' .
+               ' id="'. $id . '"' .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
+               '>';
+
+        foreach ($options as $option) {
+            $out .= '<option';
+            if (empty($option['id']) || $option['id'] != $option['name']) {
+                $out .= ' value="'.$option['id'].'"';
+            }
+            if ($option['id'] == $value) {
+                $out .= ' selected="selected">'.$option['name'].'</option>';
+            } else {
+                $out .= '>'.$option['name'].'</option>';
+            }
+        }
+        */
+
+        /*$out .= '</select>' .
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+
+        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+
+        $template="combobox";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        //return $out;
+    }
+
+    function showOutput($args = array())
+    {
+         extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        //$out = '';
+        $data=array();
+        // TODO: support multiple selection
+        $join = '';
+        foreach ($this->options as $option) 
+		{
+            if ($option['id'] == $value) 
+			{
+                $data['option']['name']=xarVarPrepForDisplay($option['name']);
+                //$out .= $join . xarVarPrepForDisplay($option['name']);
+                $join = ' | ';
+            }
+        }
+
+		// If the value wasn't found in the select list data, then it was
+		// probably typed in -- so just display it.
+		if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
+		{
+			$data['option']['name'] = xarVarPrepForDisplay($value);
+		}
+
+        $template="combobox";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+        // return $out;
+    }
+
+	/**
+     * Get the base information for this property.
+     *
+     * @returns array
+     * @return base information for this property
+	 **/
+	 function getBasePropertyInfo()
+	 {
+	 	$args = array();
+	 	$baseInfo = array(
+                              'id'         => 506,
+                              'name'       => 'combo',
+                              'label'      => 'Combo Dropdown Textbox',
+                              'format'     => '506',
+                              'validation' => '',
+                              'source'         => '',
+                              'dependancies'   => '',
+                              'requiresmodule' => '',
+                              'aliases'        => '',
+							  'args'           => serialize($args),
+							// ...
+						   );
+		return $baseInfo;
+	 }
+
+
+
+}
+
+
+?>
