@@ -243,7 +243,7 @@ function xarTheme_getBaseInfo($themeName)
  */
 function xarTheme_getVarsByTheme($themeName)
 {
-    return xarMod__getVarsByModule($name, $type = 'theme');
+    return xarMod_getVarsByModule($name, $type = 'theme');
 }
 
 /**
@@ -255,7 +255,7 @@ function xarTheme_getVarsByTheme($themeName)
  */
 function xarTheme_getVarsByName($name)
 {
-    return xarMod__getVarsByName($name, $type = 'theme');
+    return xarMod_getVarsByName($name, $type = 'theme');
 }
 
 /**
@@ -265,7 +265,7 @@ function xarTheme_getVarsByName($name)
  * @param themeThemee the theme's site mode
  * @return to xarMod__getState for processing
  */
-function xarTheme__getState($themeRegId, $themeMode)
+function xarTheme_getState($themeRegId, $themeMode)
 {
     return xarMod_getState($themeRegId, $themeMode, $type = 'theme');
 }
