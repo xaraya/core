@@ -20,6 +20,7 @@ class DefaultUserException extends Exception
     function DefaultUserException($msg = '', $link = NULL)
     {
         parent::Exception();
+        $this->msg = $msg;
         $this->link = $link;
     }
 

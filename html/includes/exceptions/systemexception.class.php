@@ -18,7 +18,7 @@ class SystemException extends Exception
 {
     function SystemException($msg = '') {
         parent::Exception();
-
+        $this->msg = $msg;
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
             $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
         // Then check in $_GET
