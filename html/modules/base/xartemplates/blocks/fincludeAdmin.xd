@@ -1,6 +1,6 @@
 <tr>
      <td class="xar-normal" align="left">
-         <xar:mlstring>File:</xar:mlstring>
+         <label for="url"><xar:mlstring>File:</xar:mlstring></label>
      </td>
      <td align="left">
          <input type="text" name="url" id="url" size="30" maxlength="255" value="#$url#" />

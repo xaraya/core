@@ -27,7 +27,7 @@
 </tr>
 <tr align="left" valign="middle">
     <td>
-        <xar:mlstring>Text</xar:mlstring>
+        <label for="text_content"><xar:mlstring>Text</xar:mlstring></label>
     </td>
     <td colspan="2">
         <textarea name="text_content" id="text_content" style="width:300px;height:150px;">#$text_content#</textarea>

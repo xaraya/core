@@ -1,6 +1,6 @@
 <tr align="left" valign="middle">
     <td>
-        <xar:mlstring>Block Expiration</xar:mlstring>
+        <label for="expire"><xar:mlstring>Block Expiration</xar:mlstring></label>
     </td>
     <td>
     <select name="expire" id="expire">
@@ -27,7 +27,7 @@
 </tr>
 <tr align="left" valign="middle">
     <td>
-        <xar:mlstring>HTML</xar:mlstring>
+        <label for="html_content"><xar:mlstring>HTML</xar:mlstring></label>
     </td>
     <td colspan="2">
         <textarea name="html_content" id="html_content" style="width:300px;height:150px;">#$html_content#</textarea>
