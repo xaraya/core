@@ -196,43 +196,43 @@ function modules_init()
     * prolly need to move this closer to installer, not sure yet
     *********************************************************************/
     // default show-hide core modules
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','hidecore',0)";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'hidecore',0)";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default regenerate command
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','regen',0)";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'regen',0)";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default style of module list
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','selstyle','plain')";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'selstyle','plain')";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default filtering based on module states
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','selfilter', 0)";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'selfilter', 0)";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default modules list sorting order
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','selsort','nameasc')";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'selsort','nameasc')";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default show-hide modules statistics
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','hidestats',0)";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'hidestats',0)";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default maximum number of modules listed per page
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','selmax','all')";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'selmax','all')";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     // default start page
-    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modname, xar_name, xar_value) 
-    VALUES (".$dbconn->GenId($tables['module_vars']).",'modules','startpage','overview')";
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'startpage','overview')";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
     

@@ -42,11 +42,11 @@
         </div>
         <br />
         <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: thin; border-color: ##B3B3B3; border-style: none none dotted none;">
-            <xar:mlstring>And more..</xar:mlstring>
+            <xar:mlstring>And more.. [for module developers]</xar:mlstring>
         </div>
         <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>[For Module Developers] In addition, this module attempts to 'show-case' some basic requirements for module administration layouts, provision of custom controls, and other useful interface techniques. Following these practices while designing your own module would enable Xaraya system administrators to instantly recognise the common UI elements and workflow, and to use your module with more comfort and ease..</xar:mlstring>
+            <xar:mlstring>This module also attempts to 'show-case' some basic requirements for module administration layouts, implementation of custom controls, and other useful interface techniques. Adhering to these practices while designing your own module, would enable Xaraya system administrators to instantly recognise the common UI elements..</xar:mlstring>
         </div>
         <br />
         <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
@@ -61,7 +61,7 @@
             </select>
             <input type="submit" name="setstartpage" value="Set" />
             <br />
-            <xar:mlstring>Defaults can be restored from 'Preferences'.</xar:mlstring>
+            <xar:mlstring>Defaults can be restored from </xar:mlstring><a href="#$prefurl#"><xar:mlstring>"Preferences".</xar:mlstring></a>
             </form>
         </div>
     </div>
