@@ -1,11 +1,15 @@
+<div align="left" style="border:solid 5px ##000000;width:758px;">
+  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
+	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
+	<p style="padding:10px;">
 <div align="center">
 <span class="xar-pagetitle">Xaraya Installation</span><br />
 <span class="xar-sub">Page 4/6</span><br /><br />
 <span class="xar-title">Database Settings Collection</span><br /><br />
 <form action="install.php" method="post">
-<input type="hidden" name="install_language" id="install_language" value="#$language#" />
+<input type="hidden" name="install_language" value="#$language#" />
 
-<table border="0">
+<table border=0>
 </table>
 <table width="50%" align="center">
     <tr>
@@ -25,7 +29,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
+            <input type="text" name="install_database_host" maxlength="80" value="#$database_host#">
         </td>
     </tr>
     <tr>
@@ -35,7 +39,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
+            <input type="text" name="install_database_username" maxlength="80" value="#$database_username#">
         </td>
     </tr>
     <tr>
@@ -45,7 +49,7 @@
             </span>
         </td>
         <td>
-            <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+            <input type="password" name="install_database_password" size="25" maxlength="80" value="#$database_password#">
         </td>
     </tr>
     <tr>
@@ -55,7 +59,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
+            <input type="text" name="install_database_name" maxlength="80" value="#$database_name#">
         </td>
     </tr>
     <tr>
@@ -65,7 +69,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
+            <input type="text" name="install_database_prefix" maxlength="10" value="#$database_prefix#">
         </td>
     </tr>
     <tr>
@@ -73,7 +77,7 @@
             <span class="xar-normal">Database Type</span>
         </td>
         <td>
-            <select name="install_database_type" id="install_database_type">
+            <select name="install_database_type">
                 <xar:foreach in="$database_types" key="$key" value="$value"> 
                     <option value="#$key#">#$value#</option>
                 </xar:foreach>
@@ -82,7 +86,7 @@
     </tr>
     <tr>
         <td align="left" colspan="2">
-            <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
+            <input type="checkbox" name="install_create_database" value="1">
             <span class="xar-normal">Create the database</span>
         </td>
     </tr>
@@ -95,7 +99,7 @@
     </tr>
     <tr>
         <td align="left" colspan="2">
-            <input type="checkbox" name="install_intranet" id="install_intranet" value="1" />
+            <input type="checkbox" name="install_intranet" value="1">
             <span class="xar-normal">This site is for intranet or other local (non-internet) use</span>
         </td>
     </tr>
@@ -108,7 +112,7 @@
     </tr>
     <tr>
         <td align="center" colspan="2" class="xar-normal">
-            <input type="hidden" name="install_phase" id="install_phase" value="5" />
+            <input type="hidden" name="install_phase" value="5" />
             <input type="submit" value="Continue &gt;" />
         </td>
     </tr>

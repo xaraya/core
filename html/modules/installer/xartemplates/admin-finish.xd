@@ -1,3 +1,7 @@
+<div align="left" style="border:solid 5px ##000000;width:758px;">
+  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
+	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
+	<p style="padding:10px;">
 <div align="center">
 <span class="xar-pagetitle">Xaraya Installation</span><br />
 <span class="xar-sub">Page 6/6</span><br /><br />
@@ -10,7 +14,7 @@
                 <br /><br />
                 Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
             <br /><br />
-	    <a href="index.php">Launch the site!</a>
+	    <a href=index.php>Launch the site!</a>
             </span>
             <br /><br />
         </td>

@@ -1,9 +1,13 @@
+<div align="left" style="border:solid 5px ##000000;width:758px;">
+  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
+	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
+	<p style="padding:10px;">
 <div align="center">
 <span class="xar-pagetitle">Xaraya Installation</span><br />
 <span class="xar-sub">Page 5/6</span><br /><br />
 <span class="xar-title">Administrator Account Creation</span><br /><br />
 <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
-<input type="hidden" name="install_language" id="install_language" value="#$language#" />
+<input type="hidden" name="install_language" value="<?php echo $language; ?>" />
 <table width="50%" align="center">
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
@@ -20,7 +24,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" />
+            <input type="text" name="install_admin_username" maxlength="80" value="Admin">
         </td>
     </tr>
     <tr>
@@ -30,7 +34,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" />
+            <input type="text" name="install_admin_name" maxlength="80" value="Admin">
         </td>
     </tr>
     <tr>
@@ -40,7 +44,7 @@
             </span>
         </td>
         <td>
-            <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
+            <input type="password" name="install_admin_password" size="25" maxlength="80" value="">
         </td>
     </tr>
     <tr>
@@ -50,7 +54,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="" />
+            <input type="text" name="install_admin_email" maxlength="80" value="">
         </td>
     </tr>
     <tr>
@@ -60,7 +64,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_url" id="install_admin_url" maxlength="80" value="#xarServerGetBaseURI()#" />
+            <input type="text" name="install_admin_url" maxlength="80" value="<?php echo xarServerGetBaseURI(); ?>">
         </td>
     </tr>
     <tr>

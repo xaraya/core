@@ -1,22 +1,17 @@
-<div align="center">
-<span class="xar-pagetitle">Xaraya Installation</span><br />
-<span class="xar-sub">Step 1/6</span><br /><br />
-<span class="xar-title">Select your Language.</span>
+<div align="left" style="border:solid 5px ##000000;width:758px;">
+  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
+	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
+	<p style="padding:10px;">
+<span class="xar-pagetitle">Step One : Select your Language</span><br />
+<div style="text-align:center;">
 <form action="install.php" method="post">
-<table width="50%" align="center">
-    <tr>
-        <td align="center" class="xar-normal">
-                Language:
-                <select name="install_language" id="install_language" class="xar-text">
-                    <xar:foreach in="$languages" key="$key" value="$value">
-                        <option value="#$key#">#$value#</option>
-                    </xar:foreach>
-                </select>
-                <input type="hidden" name="install_phase" id="install_phase" value="2" />
-                <input type="submit" value="Continue &gt;" />
-        </td>
-    </tr>
-</table>
+  <span class="xar-normal">Language: </span>
+    <select name="install_language" class="xar-text">
+      <xar:foreach in="$languages" key="$key" value="$value">
+        <option value="#$key#">#$value#</option>
+      </xar:foreach>
+    </select>
+    <input type="hidden" name="install_phase" value="2" />
+    <input type="submit" value="Next Step &gt;">
 </form><br /><br />
-<span class="xar-sub">Thank you for trying Xaraya.</span>
-</div>
+<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>
