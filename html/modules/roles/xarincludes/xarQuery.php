@@ -580,6 +580,21 @@ class xarQuery
         return $this->version;
     }
 
+    function getorder($x='')
+    {
+        if ($this->sorts == array()) return false;
+        if ($x == '') return $this->sorts[0];
+        foreach ($this->sorts as $order) if ($order[0] == $x) return $order;
+        return false;
+    }
+
+    function getsort($x='')
+    {
+        $order = $this->getorder($x);
+        if(is_array($order)) return $order['order'];
+        return false;
+    }
+
     function addorder($x = '', $y = 'ASC')
     {
         if ($x != '') {
@@ -589,7 +604,8 @@ class xarQuery
     function setorder($x = '',$y = 'ASC')
     {
         if ($x != '') {
-            $this->sorts = array(); $this->addorder($x,$y);
+            $this->sorts = array();
+            $this->addorder($x,$y);
         }
     }
     function setstartat($x = 0)

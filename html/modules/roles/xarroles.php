@@ -465,17 +465,17 @@ class xarRole
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
 
-        if (empty($uid)) $uid = 0;
-        if (empty($parentid)) $parentid = 0;
-        if (empty($uname)) $uname = xarSessionGetVar('uid') . time();
-        if (empty($email)) $email = '';
-        if (empty($pass)) $pass = '';
-        if (empty($state)) $state = 1;
+        if (!isset($uid)) $uid = 0;
+        if (!isset($parentid)) $parentid = 0;
+        if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
+        if (!isset($email)) $email = '';
+        if (!isset($pass)) $pass = '';
+        if (!isset($state)) $state = 1;
         // FIXME: why is date_reg a varchar in the database and not a date field?
-        if (empty($date_reg)) $date_reg = mktime();
-        if (empty($val_code)) $val_code = 'createdbyadmin';
+        if (!isset($date_reg)) $date_reg = mktime();
+        if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
-        if (empty($auth_module)) $auth_module = '';
+        if (!isset($auth_module)) $auth_module = '';
 
         $this->uid = $uid;
         $this->name = $name;
