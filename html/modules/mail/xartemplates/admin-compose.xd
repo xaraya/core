@@ -1,16 +1,15 @@
-<script type="text/javascript" src="modules/base/xartemplates/functions.js"></script>
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields
-	var fieldRequired = Array("subject", "message");
+	var mail_fieldRequired = Array("subject", "message");
 	// Enter field description to appear in the dialog box
-	var fieldDescription = Array("Subject", "Message");
+	var mail_fieldDescription = Array("Subject", "Message");
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Test Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
-	<form action="#xarModURL('mail', 'admin', 'sendtest')#" method="post" onsubmit="return formCheck(this, fieldRequired, fieldDescription);" enctype="application/x-www-form-urlencoded">
+	<form action="#xarModURL('mail', 'admin', 'sendtest')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
 
 		<div style="clear: both; padding-top: 10px;">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
