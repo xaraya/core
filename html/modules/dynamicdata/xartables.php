@@ -26,11 +26,13 @@ function dynamicdata_xartables()
     $dynamic_objects = xarDBGetSiteTablePrefix() . '_dynamic_objects';
     $dynamic_properties = xarDBGetSiteTablePrefix() . '_dynamic_properties';
     $dynamic_data = xarDBGetSiteTablePrefix() . '_dynamic_data';
+    $dynamic_relations = xarDBGetSiteTablePrefix() . '_dynamic_relations';
 
     // Set the table names
     $xartable['dynamic_objects'] = $dynamic_objects;
     $xartable['dynamic_properties'] = $dynamic_properties;
     $xartable['dynamic_data'] = $dynamic_data;
+    $xartable['dynamic_relations'] = $dynamic_relations;
 
     // Return the table information
     return $xartable;

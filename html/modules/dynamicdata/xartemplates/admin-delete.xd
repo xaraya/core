@@ -1,68 +1,37 @@
-
-<!-- common admin menu for this module - remove link to the current function -->
-
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-
-    <!-- the variables used in this menu come from example_admin_menu() -->
-
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">&xar-var-menutitle;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
 
-        <!-- links to particular menu items -->
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
 
-        <!-- Simple URLs can be specified directly in the template -->
-
-        <td><a href="&xar-modurl-example-admin-new;">&xar-var-menulabel_new;</a></td>
-        <td><a href="&xar-modurl-example-admin-view;">&xar-var-menulabel_view;</a></td>
-        <td><a href="&xar-modurl-example-admin-modifyconfig;">&xar-var-menulabel_config;</a></td>
-
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
-<!-- the specific template for the current admin function comes here -->
+<h2><xar:mlstring>Delete</xar:mlstring> #$label#</h2>
 
+<center><strong><xar:mlstring>Confirm deleting this item ?</xar:mlstring></strong></center><br />
 
-<center>&xar-var-confirmtext;</center><br />
+<xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" />
 
 <center>
-<form method="post" action="&xar-modurl-example-admin-delete;">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
-    <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="exid" value="&xar-var-exid;" />
+<form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
+    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="objectid" value="#$objectid#" />
+    <input type="hidden" name="modid" value="#$modid#" />
+    <input type="hidden" name="itemtype" value="#$itemtype#" />
+    <input type="hidden" name="itemid" value="#$itemid#" />
 
-    <table border="0" width="300">
-        <tr>
-            <td>
-                &xar-var-itemid;:
-            </td>
-            <td>
-                &xar-var-exid;
-            </td>
-        </tr>
-        <tr>
-            <td>
-                &xar-var-namelabel;:
-            </td>
-            <td>
-                &xar-var-namevalue;
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center"><br />
-                    <input type="submit" value="&xar-var-confirmbutton;" align="middle" />
-            </td>
-        </tr>
-    </table>
+    <input type="submit" name="confirm" value="<xar:mlstring>Yes</xar:mlstring>" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="submit" name="noconfirm" value="<xar:mlstring>No</xar:mlstring>" />
 </form>
 </center>
+

@@ -379,7 +379,7 @@ function dynamicdata_adminapi_update($args)
     // update properties in some known table field
     foreach ($tables as $table => $fieldlist) {
         // look for the item id field
-        if (isset($tables[$table][$itemidname])) {
+        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
             $field = $itemidname;
         } else {
             // For now, we look for a primary key (or increment, perhaps ?),
@@ -1750,7 +1750,9 @@ function dynamicdata_adminapi_checkinput($args)
                 break;
             case 'itemid':
                 if (empty($value)) {
-                    $fields[$name]['value'] = 0;
+                    // this one is passed separately !
+                    $value = xarVarCleanFromInput('itemid');
+                    $fields[$name]['value'] = $value;
                 } elseif (is_numeric($value)) {
                     $fields[$name]['value'] = intval($value);
                 } else {

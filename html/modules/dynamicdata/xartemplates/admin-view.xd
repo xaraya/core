@@ -6,33 +6,34 @@
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
 
-        <!-- links to particular menu items -->
-
-        <!-- Simple URLs can be specified directly in the template -->
-
-<!--
-        <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
-        <td><strong><xar:mlstring>View Data Properties</xar:mlstring></strong></td>
-        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configuration</xar:mlstring></a></td>
--->
-        <td><strong><xar:mlstring>View Module Objects</xar:mlstring></strong></td>
+        <td>
+            <xar:if condition="!empty($objectid) and $objectid eq 1">
+                <strong><xar:mlstring>View Dynamic Objects</xar:mlstring></strong>
+            <xar:else />
+                <a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a>
+            </xar:if>
+        </td>
         <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
 
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
-<!-- the specific template for the current admin function comes here -->
+<h2><xar:mlstring>View</xar:mlstring> #$label#</h2>
 
-<xar:data-list module="$modid" itemtype="$itemtype" param="itemid" /> <!-- to hide objects and properties use :  where="id gt 2" -->
+<!-- this does all the hard work :) -->
+<xar:data-list module="$modid" itemtype="$itemtype" param="$param" />
 
-<h2><xar:mlstring>Other modules</xar:mlstring></h2>
+<!-- to hide objects and properties use :  where="id gt 2"  (but only when we have objectid=0) -->
+
+
+<xar:if condition="!empty($objectid) and $objectid eq 1">
+
+<!-- when we're viewing the Dynamic Objects themselves, show other modules -->
+<h2><xar:mlstring>Other Modules</xar:mlstring></h2>
+
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <th>&xar-var-modidlabel;</th>
@@ -56,4 +57,6 @@
     </tr>
     </xar:loop>
 </table>
+
+</xar:if>
 

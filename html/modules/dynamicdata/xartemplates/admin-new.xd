@@ -5,12 +5,17 @@
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
-            <td><strong><xar:mlstring>Create New</xar:mlstring> #$label#</strong></td>
+
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
+
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
+
+<div align="center"><h2><xar:mlstring>Create New</xar:mlstring> #$label#</h2></div>
 
 <xar:if condition="!empty($preview)">
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
@@ -34,7 +39,7 @@
     <input type="hidden" name="itemid" value="#$itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
-        <xar:data-form module="$modid" itemtype="$itemtype" itemid="0" fields="$fields" />
+        <xar:data-form module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />

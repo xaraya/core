@@ -6,29 +6,18 @@
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
 
-        <!-- links to particular menu items -->
-
-        <!-- Simple URLs can be specified directly in the template -->
-<!--
-        <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
--->
         <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Module Objects</xar:mlstring></a></td>
         <td><strong><xar:mlstring>Configure Property Types</xar:mlstring></strong></a></td>
 
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
-<!-- the specific template for the current admin function comes here -->
+<h2><xar:mlstring>Configure Property Types</xar:mlstring></h2>
+<br /><br />
 
-<!-- some variable filled in by the admin function using this template -->
 <xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties</xar:mlstring>
 <br /><br />
 // TODO: very much under construction, obviously :-)
@@ -70,7 +59,7 @@
     </tr>
 
     <tr>
-        <td colspan="4" align="center">
+        <td colspan="7" align="center">
            <input type="submit" value="&xar-var-updatebutton;" />
         </td>
     </tr>

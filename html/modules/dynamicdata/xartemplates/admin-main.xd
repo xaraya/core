@@ -6,32 +6,23 @@
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
 
-        <!-- links to particular menu items -->
-
-        <!-- Simple URLs can be specified directly in the template -->
-<!--
-        <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
--->
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Module Objects</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
         <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
 
-        <!-- more menu items come here... -->
-
-        <!-- Note : you can also specify the links in example_admin_menu()
-             and pass them on as variables : e.g. &xar-var-menulink_view; -->
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
-<!-- the specific template for the current admin function comes here -->
+<h2><xar:mlstring>Dynamic Data Overview</xar:mlstring></h2>
+<br />
 
-<!-- some variable filled in by the admin function using this template -->
-
-<center><strong> &xar-var-welcome; </strong></center>
-
+<table border="0" width="100%">
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b>What is it?</b>        </td>
+        <td align="left" valign="top">
 
 <pre>
 [Temporary help file :-)]
@@ -46,4 +37,8 @@ if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
 }
 ?>
 </pre>
+
+        </td>
+    </tr>
+</table>
 

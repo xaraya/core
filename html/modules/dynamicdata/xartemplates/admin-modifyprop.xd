@@ -1,13 +1,26 @@
 <table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr>
-        <th align="center">
-            <xar:mlstring>Dynamic Properties</xar:mlstring>
-            <br />&xar-var-module;</th>
+        <th align="center">#$menutitle#</th>
     </tr>
+    <tr><td>
+        <table border="0" width="100%" cellspacing="1" cellpadding="8">
+        <tr align="center" valign="middle">
+
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
+
+        </tr>
+        </table>
+    </td></tr>
 </table>
 <br />
 
+<h2><xar:mlstring>Modify Dynamic Properties</xar:mlstring> #$label#</h2>
+
+<br />
+
 <xar:if condition="!empty($objectid)">
+    <!-- show some basic info about this dynamic object -->
     <xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
 </xar:if>
 
@@ -17,9 +30,18 @@ Tip : empty label -> delete field for all items
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
-    <input type="hidden" name="authid" value="&xar-var-authid;" />
-    <input type="hidden" name="modid" value="&xar-var-modid;" />
-    <input type="hidden" name="itemtype" value="&xar-var-itemtype;" />
+    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="objectid" value="#$objectid#" />
+    <input type="hidden" name="modid" value="#$modid#" />
+    <input type="hidden" name="itemtype" value="#$itemtype#" />
+
+    <xar:if condition="!empty($objectid) and $objectid lt 3">
+    <tr>
+        <td colspan="6" align="center"><br />
+            <br /><strong><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify the properties of this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></strong><br />&nbsp;
+        </td>
+    </tr>
+    </xar:if>
 
     <tr>
        <td><strong>&xar-var-labels.id;</strong></td>
@@ -69,7 +91,7 @@ Tip : empty label -> delete field for all items
     </tr>
 
     <tr>
-        <td colspan="5" align="center">
+        <td colspan="6" align="center">
            <input type="submit" value="&xar-var-updatebutton;" />
         </td>
     </tr>
@@ -78,13 +100,9 @@ Tip : empty label -> delete field for all items
 </table>
 <br />
 
+
 <xar:if condition="count($static) gt 0">
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-    <tr>
-        <th align="center">&xar-var-statictitle;<br/>&xar-var-module;</th>
-    </tr>
-</table>
-<br />
+<h2>#$statictitle#</h2>
 
 // TODO: very much under construction, obviously :-)
 <br /><br />
@@ -131,13 +149,9 @@ Tip : empty label -> delete field for all items
 <br />
 </xar:if> 
 
+
 <xar:if condition="count($relations) gt 0">
-<table border="0" width="100%" cellspacing="1" cellpadding="8">
-    <tr>
-        <th align="center">&xar-var-relationstitle;<br/>&xar-var-module;</th>
-    </tr>
-</table>
-<br />
+<h2>#$relationstitle#</h2>
 
 // TODO: very much under construction, obviously :-)
 <br /><br />
@@ -157,31 +171,15 @@ Tip : empty label -> delete field for all items
         <tr align="left" valign="middle">
             <td>#$module#</td>
             <td>#$type#</td>
-            <td>
-                <select name="dummy">
-                <xar:loop name="$fields">
-                   <xar:if condition="$source eq $from">
-                       <option selected>#$source#</option>
-                   <xar:else />
-                       <option>#$source#</option>
-                   </xar:if>
-                </xar:loop>
-                </select>
-            </td>
+            <td>#$source#</td>
             <td>#$to#</td>
         </tr>
         </xar:loop>
     <xar:else />
         <tr align="left" valign="middle">
-            <td>&xar-var-module;</td>
+            <td>#$module#</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
-            <td>
-                <select name="dummy">
-                <xar:loop name="$fields">
-                   <option>#$source#</option>
-                </xar:loop>
-                </select>
-            </td>
+            <td>-</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
         </tr>
     </xar:if>

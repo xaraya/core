@@ -89,7 +89,7 @@ function dynamicdata_userapi_getitem($args)
     }
 
     // different processing depending on the data source
-    list($dynprops,$tables,$hooks,$functions) =
+    list($dynprops,$tables,$hooks,$functions,$itemidname) =
                           xarModAPIFunc('dynamicdata','user','splitfields',
                                                           // pass by reference
                                         array('fields' => &$fields));
@@ -134,28 +134,34 @@ function dynamicdata_userapi_getitem($args)
     // retrieve properties for this item from some known table field
 // TODO: create UNION (or equivalent) to retrieve all relevant table fields at once
     foreach ($tables as $table => $fieldlist) {
-        // For now, we look for a primary key (or increment, perhaps ?),
-        // and hope it corresponds to the item id :-)
-    // TODO: improve this once we can define better relationships
-        $query = "SELECT xar_field, xar_type
-                    FROM $metaTable
-                   WHERE xar_primary_key = 1
-                     AND xar_table='" . xarVarPrepForStore($table) . "'";
+        // look for the item id field
+        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
+            $field = $itemidname;
+        } else {
+            // For now, we look for a primary key (or increment, perhaps ?),
+            // and hope it corresponds to the item id :-)
+        // TODO: improve this once we can define better relationships
+            $query = "SELECT xar_field, xar_type
+                        FROM $metaTable
+                       WHERE xar_primary_key = 1
+                         AND xar_table='" . xarVarPrepForStore($table) . "'";
 
-        $result = $dbconn->Execute($query);
+            $result = $dbconn->Execute($query);
 
-        if (!isset($result)) return;
+            if (!isset($result)) return;
 
-        if ($result->EOF) {
-            continue;
+            if ($result->EOF) {
+                continue;
+            }
+            list($field, $type) = $result->fields;
+            $result->Close();
         }
-        list($field, $type) = $result->fields;
-        $result->Close();
 
+        // can't really do much without the item id field at the moment
         if (empty($field)) {
             continue;
         }
-        $query = "SELECT " . join(', ', array_keys($fieldlist)) . "
+        $query = "SELECT $field, " . join(', ', array_keys($fieldlist)) . "
                     FROM $table
                    WHERE $field = " . xarVarPrepForStore($itemid);
 
@@ -169,10 +175,12 @@ function dynamicdata_userapi_getitem($args)
         $values = $result->fields;
         $result->Close();
 
+        $newitemid = array_shift($values);
         // oops, something went seriously wrong here...
-        if (count($values) != count($fieldlist)) {
+        if (empty($itemid) || $newitemid != $itemid || count($values) != count($fieldlist)) {
             continue;
         }
+
         foreach ($fieldlist as $field => $name) {
             $fields[$name]['value'] = array_shift($values);
         }
@@ -556,7 +564,7 @@ function dynamicdata_userapi_getitems($args)
 // TODO: create UNION (or equivalent) to retrieve all relevant table fields at once
     foreach ($tables as $table => $fieldlist) {
         // look for the item id field
-        if (isset($tables[$table][$itemidname])) {
+        if (!empty($itemidname) && isset($tables[$table][$itemidname])) {
             $field = $itemidname;
         } else {
             // For now, we look for a primary key (or increment, perhaps ?),
@@ -758,8 +766,35 @@ function dynamicdata_userapi_getitems($args)
 
         // here we grab everyting ?
         } else {
-        }
+            $query = "SELECT xar_dd_itemid,
+                             xar_dd_propid,
+                             xar_dd_value
+                        FROM $dynamicdata
+                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+            // we don't really need the LEFT JOIN here, since we know the propid's & labels already
+            //       LEFT JOIN $dynamicprop
+            //              ON xar_dd_propid = xar_prop_id
 
+            $result = $dbconn->Execute($query);
+
+            if (!isset($result)) return;
+
+            while (!$result->EOF) {
+                list($itemid,$propid, $value) = $result->fields;
+                if (isset($value)) {
+                    // pre-fill the item if necessary
+                    if (!isset($items[$itemid]) || !isset($items[$itemid]['fields'])) {
+                        $items[$itemid] = array('itemid' => $itemid,
+                                                'fields' => $fields);
+                    }
+                    $name = $dynprops[$propid];
+                    $items[$itemid]['fields'][$name]['value'] = $value;
+                }
+                $result->MoveNext();
+            }
+
+            $result->Close();
+        }
     }
 
     // retrieve properties via a hook module

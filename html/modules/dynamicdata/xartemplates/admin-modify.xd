@@ -5,40 +5,65 @@
     <tr><td>
         <table border="0" width="100%" cellspacing="1" cellpadding="8">
         <tr align="center" valign="middle">
-            <td><strong><xar:mlstring>Modify</xar:mlstring> #$label#</strong></td>
+
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
+
         </tr>
         </table>
     </td></tr>
 </table>
 <br />
 
+<h2><xar:mlstring>Modify</xar:mlstring> #$label#</h2>
+
+<xar:if condition="!empty($proplink) or !empty($viewlink)">
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <tr align="center" valign="middle">
+    <xar:if condition="!empty($viewlink)">
+        <td><a href="#$viewlink#"><xar:mlstring>View Items</xar:mlstring></a></td>
+    </xar:if>
+    <xar:if condition="!empty($proplink)">
+        <td><a href="#$proplink#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
+    </xar:if>
+    </tr>
+</table>
+<br />
+</xar:if>
+
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center">
-            <xar:mlstring>Preview</xar:mlstring>
+            <strong><xar:mlstring>Preview</xar:mlstring></strong>
         </td>
     </tr>
     <tr>
-        <td align="center">
+        <td>
             <xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
         </td>
     </tr>
 </table>
-
-<br />
-<xar:if condition="!empty($proplink)">
-<center><a href="#$proplink#">Modify Properties</a></center>
-</xar:if>
 <br />
 
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'update')#">
     <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="module" value="#$modid#" />
+    <input type="hidden" name="modid" value="#$modid#" />
     <input type="hidden" name="itemtype" value="#$itemtype#" />
     <input type="hidden" name="itemid" value="#$itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
+
+        <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
+        <tr>
+            <td colspan="2" align="center"><br />
+                <br /><strong><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></strong><br />&nbsp;
+            </td>
+        </tr>
+        </xar:if>
+
+        <!-- this does most of the hard work :) -->
         <xar:data-form module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />
