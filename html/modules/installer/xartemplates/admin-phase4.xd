@@ -1,4 +1,3 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="active_step">4</xar:set>
 <div id="install">
     <xar:template file="status" />
@@ -66,19 +65,19 @@
                 <label for="install_database_type">
                     <xar:mlstring>Database Type</xar:mlstring>
                 </label>
-                <select name="install_database_type" id="install_database_type">
-                    <xar:foreach in="$database_types" value="$info">
-                        <xar:if condition="!empty($info['php_extension']) and !extension_loaded($info['php_extension'])">
-                            <option value="#$info.adodb_driver#" disabled="disabled">
-                                #$info.name# 
-                            </option>
-                        <xar:else/>
-                            <option value="#$info.adodb_driver#">
-                                #$info.name# 
-                            </option>
-                        </xar:if>
-                    </xar:foreach>
-                </select>
+				<select name="install_database_type" id="install_database_type">
+					<xar:foreach in="$database_types" key="$adodbdriver" value="$info">
+						<xar:if condition="!$info.available">
+							<option value="#$adodbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
+						<xar:else/>
+							<xar:if condition="$database_type == $adodbdriver">
+								<option selected="selected" value="#$adodbdriver#">#$info.name#</option>
+							<xar:else/>
+								<option value="#$adodbdriver#">#$info.name#</option>
+							</xar:if>
+						</xar:if>
+					</xar:foreach>
+				</select>
             </p>
         </div>
         <p>
