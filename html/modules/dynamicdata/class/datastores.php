@@ -42,7 +42,7 @@ class Dynamic_DataStore_Master
                 break;
             case 'uservars':
             // TODO: integrate user variable handling with DD
-                $datastore = new Dynamic_UserVariables_DataStore($name);
+                $datastore = new Dynamic_UserSettings_DataStore($name);
                 break;
             case 'modulevars':
             // TODO: integrate module variable handling with DD
@@ -98,11 +98,11 @@ class Dynamic_DataStore_Master
         // default data source is dynamic data
         $sources[] = 'dynamic_data';
 
-        // user variables
-        $sources[] = 'user variables';
-
         // module variables
         $sources[] = 'module variables';
+
+        // user settings (= user variables per module)
+        $sources[] = 'user settings';
 
         // session variables // TODO: perhaps someday, if this makes sense
         //$sources[] = 'session variables';
@@ -1350,16 +1350,16 @@ class Dynamic_Dummy_DataStore extends Dynamic_DataStore
 }
 
 /**
- * Data Store is the user variables // TODO: integrate user variable handling with DD
+ * Data Store is the user settings (user variables per module) // TODO: integrate user variable handling with DD
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
+class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
 {
     var $modname;
 
-    function Dynamic_UserVariables_DataStore($name)
+    function Dynamic_UserSettings_DataStore($name)
     {
         // invoke the default constructor from our parent class
         $this->Dynamic_DataStore($name);
@@ -1377,13 +1377,11 @@ class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
     }
 
     /**
-     * Get the field name used to identify this property (we use the name of the module.property here)
+     * Get the field name used to identify this property (we use the name of the property here)
      */
     function getFieldName(&$property)
     {
-    // TODO: check this
-        // we add the module name in here by default, for user preferences per module
-        return $this->modname.'.'.$property->name;
+        return $property->name;
     }
 
     function getItem($args)
@@ -1400,26 +1398,25 @@ class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
             return;
         }
 
-    // TODO: re-introduce xarUserGetVars ?
+    // TODO: introduce xarModGetUserVars ?
 
         foreach ($fieldlist as $field) {
             // get the value from the user variables
-            $value = xarUserGetVar($field,$itemid);
+            $value = xarModGetUserVar($this->modname,$field,$itemid);
 
             // set the value for this property
             if (isset($value)) {
                 $this->fields[$field]->setValue($value);
-            } else {
+            //} else {
                 // use the equivalent module variable as default
-                list($module,$name) = explode('.',$field);
-                $this->fields[$field]->setValue(xarModGetVar($module,$name));
+            //    $this->fields[$field]->setValue(xarModGetVar($this->modname,$field));
             }
         }
     }
 
     function createItem($args)
     {
-        // There's no difference with updateItem() here, because xarUserSetVar() handles that
+        // There's no difference with updateItem() here, because xarModSetUserVar() handles that
         return $this->updateItem($args);
     }
 
@@ -1444,7 +1441,7 @@ class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
             if (!isset($value)) {
                 continue;
             }
-            xarUserSetVar($field,$value,$itemid);
+            xarModSetUserVar($this->modname,$field,$value,$itemid);
         }
         return $itemid;
     }
@@ -1463,9 +1460,8 @@ class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
             return;
         }
 
-    // TODO: hmmm, how are we supposed to delete user variables these days ? :-)
         foreach ($fieldlist as $field) {
-        //    xarUserDelVar($field,$itemid);
+            xarModDelUserVar($this->modname,$field,$itemid);
         }
 
         return $itemid;
@@ -1473,12 +1469,12 @@ class Dynamic_UserVariables_DataStore extends Dynamic_DataStore
 
     function getItems($args = array())
     {
-        // TODO: not supported by xarUser*Var
+        // TODO: not supported by xarMod*UserVar
     }
 
     function countItems($args = array())
     {
-        // TODO: not supported by xarUser*Var
+        // TODO: not supported by xarMod*UserVar
         return 0;
     }
 

@@ -150,7 +150,7 @@ class Dynamic_Object_Master
                 $storetype = 'function';
 
             // data available in user variables
-            } elseif ($property->source == 'user variables') {
+            } elseif ($property->source == 'user settings') {
                 // we'll keep a separate data store per module/itemtype here for now
             // TODO: integrate user variable handling with DD
                 $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype;
