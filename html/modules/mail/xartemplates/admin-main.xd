@@ -1,0 +1,33 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">
+            <xar:mlstring>Xaraya Mail Administration</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<xar:if id="title_condition" condition="!empty($mail_statusmsg)">
+<div align="center"><h2><xar:var scope="session" name="$mail_statusmsg" /></h2><br />
+</xar:if>
+<div align="center"><h2><xar:mlstring>Mail Module Overview</xar:mlstring></h2></div><br />
+<table border="0" width="100%">
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>What is it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>The mail module controls the ways that your Xaraya system sends mail to users or groups of users.  This module is a utility module and takes information from other modules installed on your Xaraya system and formats the mail for them.  This module at its heart is using the</xar:mlstring> <a href="http://phpmailer.sourceforge.net" target="_BLANK"><xar:mlstring>phpmailer</xar:mlstring></a> <xar:mlstring> classes for processing.  These classes extend Xaraya to allow you to use SMTP, SendMail or the normal PHP Mail functions.</xar:mlstring>
+        </td>
+    </tr>
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>How to use it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>
+			From the menu, you have one choice.  "Modify Site Configuration".  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.
+			<br />
+			<br />
+			TODO:  Finish Overview
+        </td>
+    </tr>
+</table>
