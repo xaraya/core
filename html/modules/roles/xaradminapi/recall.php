@@ -50,6 +50,12 @@ function roles_adminapi_recall($args)
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
+    // Let any hooks know that we have recalled this user.
+    $item['module'] = 'roles';
+    $item['itemid'] = $item['uid'];
+    $item['method'] = 'recall';
+    xarModCallHooks('item', 'create', $uid, $item);
+
     //finished successfully
     return true;
 }

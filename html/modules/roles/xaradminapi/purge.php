@@ -55,11 +55,11 @@ function roles_adminapi_purge($args)
             return;
         }
 
-        // Let any hooks
+    // Let any hooks know that we have purged this user.
         $item['module'] = 'roles';
         $item['itemid'] = $item['uid'];
         $item['method'] = 'purge';
-        xarModCallHooks('item', 'delete', $item['uid'], $item);
+        xarModCallHooks('item', 'delete', $uid, $item);
     }
 
     //finished successfully

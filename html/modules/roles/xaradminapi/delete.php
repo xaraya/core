@@ -62,7 +62,7 @@ function roles_adminapi_delete($args)
     $result =& $dbconn->Execute($query,array($uid));
     if (!$result) return;
 
-    // Let any hooks
+    // Let any hooks know that we have deleted this user.
     $item['module'] = 'roles';
     $item['itemid'] = $uid;
     $item['method'] = 'delete';
