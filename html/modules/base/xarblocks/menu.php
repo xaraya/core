@@ -170,7 +170,8 @@ function base_menublock_display($blockinfo)
                             $cids = xarVarGetCached('Blocks.categories','cids');
                         } else {
                             $cids = array();
-                        }                        
+                        }
+                        $catid = preg_replace('/_/','',$catid);
                         $ancestors = xarModAPIFunc('categories','user','getancestors',
                                                   array('cid' => $catid,
                                                         'cids' => $cids,
