@@ -87,6 +87,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
        ob_start();
     }
 
+    // Set the default page title before calling the module function
+    xarTplSetPageTitle("Installing Xaraya");
+
     // Run installer function
     $mainModuleOutput = xarInstallFunc($modName, $modType, $funcName);
 
