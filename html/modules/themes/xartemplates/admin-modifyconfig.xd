@@ -1,10 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('blocks', 'blocks')">
-    <xar:comment>
-        Template wasnt well formatted, temporarily using blocks css because it's already implemented in stable scenario.. 
-        TODO: convert to native core.css as soon as practicable 
-    </xar:comment>
-</xar:if>
+<xar:link-common-stylesheet />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
 </div>

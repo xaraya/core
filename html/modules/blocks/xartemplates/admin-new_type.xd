@@ -8,11 +8,7 @@
     //var blocks_fieldDescription = Array("Module Name", "Block Name");
 //-->
 </script>
-<xar:if condition="xarTplAddStyleLink('blocks', 'blocks')">
-    <xar:comment>
-        no action required if external file was not added 
-    </xar:comment>
-</xar:if>
+<xar:link-common-stylesheet />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Blocks Administration</xar:mlstring>

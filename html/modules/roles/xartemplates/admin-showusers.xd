@@ -7,8 +7,7 @@
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:base-include-javascript module="roles" filename="xarTree.js" position="head" />
-<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-</xar:if>
+<xar:link-module-stylesheet name="base" file="navtabs" />
 <xar:if condition="xarTplAddStyleLink('roles', 'roletree')">
 </xar:if>
 <div class="xar-mod-head">

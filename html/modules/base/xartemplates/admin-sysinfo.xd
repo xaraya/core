@@ -1,4 +1,5 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:link-module-stylesheet name="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Base Administration</xar:mlstring>
@@ -8,8 +9,6 @@
     <h2>
         <xar:mlstring>System Information</xar:mlstring>
     </h2>
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    </xar:if>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
             <xar:mlstring>

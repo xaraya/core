@@ -1,5 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="base" filename="confirmlink.js" position="head" />
+<xar:link-common-stylesheet />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
 </div>
