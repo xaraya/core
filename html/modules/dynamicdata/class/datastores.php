@@ -266,16 +266,32 @@ class Dynamic_DataStore
     }
 
     /**
-     * Add a join condition to this data store (TODO)
+     * Join another database table to this data store (unfinished)
      */
-    function addJoin(&$property, $condition)
+    function addJoin($table, $key, $fields, $where = array(), $andor = 'and', $sort = array())
     {
-        $name = $this->getFieldName($property);
-        if (!isset($name)) return;
-
-        $this->join[] = array('field'     => $name,
-                              //'source'    => $source,
-                              'condition' => $condition);
+        if (!isset($this->extra)) {
+            $this->extra = array();
+        }
+        $fieldlist = array();
+        foreach (array_keys($fields) as $field) {
+            $source = $fields[$field]->source;
+            // save the source for the query fieldlist
+            $fieldlist[] = $source;
+            // save the source => property pairs for returning the values
+            $this->extra[$source] = & $fields[$field]; // use reference to original property
+        }
+        $whereclause = '';
+        if (count($where) > 0) {
+            foreach ($where as $part) {
+                $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
+            }
+        }
+        $this->join[] = array('table' => $table,
+                              'key' => $key,
+                              'fields' => $fieldlist,
+                              'where' => $whereclause,
+                              'andor' => $andor);
     }
 
     /**

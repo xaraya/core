@@ -272,6 +272,79 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $result->Close();
 
+        // join between dynamic_data and another table
+        // (all items, single key, no sort, DD where clauses limited to ORing)
+        } elseif (count($this->join) > 0) {
+            $tables = array();
+            $fields = array();
+            $keys = array();
+            $where = array();
+            $andor = 'AND';
+            foreach ($this->join as $info) {
+                $tables[] = $info['table'];
+                foreach ($info['fields'] as $field) {
+                    $fields[] = $field;
+                }
+                if (!empty($info['key'])) {
+                    $keys[] = $info['key'] . ' = xar_dd_itemid';
+                }
+                if (!empty($info['where'])) {
+                    $where[] = '(' . $info['where'] . ')';
+                }
+                if (!empty($info['andor'])) {
+                    $andor = $info['andor'];
+                }
+                // TODO: sort clauses for the joined table ?
+            }
+            $query = "SELECT xar_dd_itemid, xar_dd_propid, xar_dd_value, " . join(', ',$fields) . "
+                        FROM $dynamicdata, " . join(', ',$tables) . "
+                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+            if (count($keys) > 0) {
+                $query .= " AND " . join(' AND ', $keys);
+            }
+            if (count($where) > 0) {
+                $query .= " AND ( " . join(' AND ', $where);
+            }
+            if (count($this->where) > 0) {
+                $query .= " $andor ( ";
+                // we're looking for combinations (propid + where clause) here - only OR is supported !
+                foreach ($this->where as $whereitem) {
+                    $query .= $whereitem['join'] . " (xar_dd_propid = " . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
+                }
+                $query .= " )";
+            }
+            if (count($where) > 0) {
+                $query .= " )";
+            }
+            $result =& $dbconn->Execute($query);
+
+            if (!$result) return;
+
+            $itemidlist = array();
+            while (!$result->EOF) {
+                $values = $result->fields;
+                $itemid = array_shift($values);
+                $itemidlist[$itemid] = 1;
+                $propid = array_shift($values);
+                $value = array_shift($values);
+                if (isset($value)) {
+                    // add the item to the value list for this property
+                    $this->fields[$propid]->setItemValue($itemid,$value);
+                }
+                // save the extra fields too
+                foreach ($fields as $field) {
+                    $value = array_shift($values);
+                    if (isset($value)) {
+                        $this->extra[$field]->setItemValue($itemid,$value);
+                    }
+                }
+                $result->MoveNext();
+            }
+            // add the itemids to the list
+            $this->itemids = array_keys($itemidlist);
+
+            $result->Close();
+
     // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0) {
@@ -339,18 +412,18 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             if (!$result) return;
 
+            $itemidlist = array();
             while (!$result->EOF) {
                 list($itemid,$propid, $value) = $result->fields;
-                // add this itemid to the list
-                if (!in_array($itemid,$this->itemids)) {
-                    $this->itemids[] = $itemid;
-                }
+                $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
                     $this->fields[$propid]->setItemValue($itemid,$value);
                 }
                 $result->MoveNext();
             }
+            // add the itemids to the list
+            $this->itemids = array_keys($itemidlist);
 
             $result->Close();
         }

@@ -553,6 +553,99 @@ class Dynamic_Object_Master
         return $object->deleteItem();
     }
 
+    /**
+     * Join another database table to this object (unfinished)
+     * The difference with the 'join' argument above is that we don't create a new datastore for it here,
+     * and the join is handled directly in the original datastore, i.e. more efficient querying...
+     *
+     * @param $args['table'] the table to join with
+     * @param $args['key'] the join key for this table
+     * @param $args['fields'] the fields you want from this table
+     * @param $args['where'] optional where clauses for those table fields
+     * @param $args['andor'] optional combination of those clauses with the ones from the object
+     * @param $args['sort'] optional sort order in that table (TODO)
+     * ...
+     */
+    function joinTable($args)
+    {
+        if (empty($args['table'])) return;
+        $meta = xarModAPIFunc('dynamicdata','util','getmeta',
+                              array('table' => $args['table']));
+        // we throw an exception here because we assume a table should always exist (for now)
+        if (!isset($meta) || !isset($meta[$args['table']])) {
+            $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
+                         'join',$args['table'],$this->name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+            return;
+        }
+        $count = count($this->properties);
+        foreach ($meta[$args['table']] as $name => $propinfo) {
+            $this->addProperty($propinfo);
+        }
+        $table = $args['table'];
+        $key = null;
+        if (!empty($args['key']) && isset($this->properties[$args['key']])) {
+            $key = $this->properties[$args['key']]->source;
+        }
+        $fields = array();
+        if (!empty($args['fields'])) {
+            foreach ($args['fields'] as $field) {
+                if (isset($this->properties[$field])) {
+                    $fields[$field] =& $this->properties[$field];
+                    if (count($this->fieldlist) > 0 && !in_array($field,$this->fieldlist)) {
+                        $this->fieldlist[] = $field;
+                    }
+                }
+            }
+        }
+        $where = array();
+        if (!empty($args['where'])) {
+            // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
+            $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
+            $replaceLogic   = array( ' = ', ' != ',  ' < ',  ' > ',  ' = ', ' != ', ' <= ', ' >= ');
+
+            $args['where'] = str_replace($findLogic, $replaceLogic, $args['where']);
+
+            $parts = preg_split('/\s+(and|or)\s+/',$args['where'],-1,PREG_SPLIT_DELIM_CAPTURE);
+            $join = '';
+            foreach ($parts as $part) {
+                if ($part == 'and' || $part == 'or') {
+                    $join = $part;
+                    continue;
+                }
+                $pieces = preg_split('/\s+/',$part);
+                $name = array_shift($pieces);
+                // sanity check on SQL
+                if (count($pieces) < 2) {
+                    $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                                 'query ' . xarVarPrepForStore($args['where']), 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                    new SystemException($msg));
+                    return;
+                }
+                // for many-to-1 relationships where you specify the foreign key in the original table here
+                // (e.g. properties joined to xar_dynamic_objects -> where object_id eq objectid)
+                if (!empty($pieces[1]) && is_string($pieces[1]) && isset($this->properties[$pieces[1]])) {
+                    $pieces[1] = $this->properties[$pieces[1]]->source;
+                }
+                if (isset($this->properties[$name])) {
+                    $where[] = array('property' => &$this->properties[$name],
+                                     'clause' => join(' ',$pieces),
+                                     'join' => $join);
+                }
+            }
+        }
+        if (!empty($args['andor'])) {
+            $andor = $args['andor'];
+        } else {
+            $andor = 'and';
+        }
+        foreach (array_keys($this->datastores) as $name) {
+             $this->datastores[$name]->addJoin($table, $key, $fields, $where, $andor);
+        }
+    }
+
 }
 
 /**

@@ -43,6 +43,31 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $tables = array($table);
+
+        // join with another table
+        if (count($this->join) > 0) {
+            $keys = array();
+            $where = array();
+            $andor = 'AND';
+            foreach ($this->join as $info) {
+                $tables[] = $info['table'];
+                foreach ($info['fields'] as $field) {
+                    $this->fields[$field] =& $this->extra[$field];
+                }
+                if (!empty($info['key'])) {
+                    $keys[] = $info['key'] . ' = ' . $itemidfield;
+                }
+                if (!empty($info['where'])) {
+                    $where[] = '(' . $info['where'] . ')';
+                }
+                // not relevant here
+                //if (!empty($info['andor'])) {
+                //    $andor = $info['andor'];
+                //}
+            }
+        }
+
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) {
             return;
@@ -51,8 +76,17 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         list($dbconn) = xarDBGetConn();
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                    FROM $table
+                    FROM " . join(', ', $tables) . "
                    WHERE $itemidfield = " . xarVarPrepForStore($itemid);
+
+        if (count($this->join) > 0) {
+            if (count($keys) > 0) {
+                $query .= " AND " . join(' AND ', $keys);
+            }
+            if (count($where) > 0) {
+                $query .= " AND " . join(' AND ', $where);
+            }
+        }
 
         $result =& $dbconn->Execute($query);
 
@@ -66,7 +100,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $newitemid = array_shift($values);
         // oops, something went seriously wrong here...
-        if (empty($itemid) || $newitemid != $itemid || count($values) != count($this->fields)) {
+        if (empty($itemid) || $newitemid != $itemid || count($values) != count($fieldlist)) {
             return;
         }
 
@@ -242,6 +276,31 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
+        $tables = array($table);
+
+        // join with another table
+        if (count($this->join) > 0) {
+            $keys = array();
+            $where = array();
+            $andor = 'AND';
+            foreach ($this->join as $info) {
+                $tables[] = $info['table'];
+                foreach ($info['fields'] as $field) {
+                    $this->fields[$field] =& $this->extra[$field];
+                }
+                if (!empty($info['key'])) {
+                    $keys[] = $info['key'] . ' = ' . $itemidfield;
+                }
+                if (!empty($info['where'])) {
+                    $where[] = '(' . $info['where'] . ')';
+                }
+                if (!empty($info['andor'])) {
+                    $andor = $info['andor'];
+                }
+                // TODO: sort clauses for the joined table ?
+            }
+        }
+
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) {
             return;
@@ -266,23 +325,36 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         if ($isgrouped) {
             $query = "SELECT " . join(', ', $newfields) . "
-                        FROM $table ";
+                        FROM " . join(', ', $tables) . " ";
         } else {
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                        FROM $table ";
+                        FROM " . join(', ', $tables) . " ";
         }
 
-        // TODO: LEFT JOIN, ... ? -> cfr. relationships
+        $next = 'WHERE';
+        if (count($this->join) > 0) {
+            if (count($keys) > 0) {
+                $query .= " $next " . join(' AND ', $keys);
+                $next = 'AND';
+            }
+            if (count($where) > 0) {
+                $query .= " $next ( " . join(' AND ', $where);
+                $next = $andor;
+            }
+        }
 
         if (count($itemids) > 1) {
-            $query .= " WHERE $itemidfield IN (" . join(', ',$itemids) . ") ";
+            $query .= " $next $itemidfield IN (" . join(', ',$itemids) . ") ";
         } elseif (count($itemids) == 1) {
-            $query .= " WHERE $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
+            $query .= " $next $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
         } elseif (count($this->where) > 0) {
-            $query .= " WHERE ";
+            $query .= " $next ";
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' ' . $whereitem['field'] . ' ' . $whereitem['clause'] . ' ';
             }
+        }
+        if (count($this->join) > 0 && count($where) > 0) {
+            $query .= " ) ";
         }
 
         if (count($this->groupby) > 0) {
@@ -325,7 +397,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 $itemid = array_shift($values);
             }
             // oops, something went seriously wrong here...
-            if (empty($itemid) || count($values) != count($this->fields)) {
+            if (empty($itemid) || count($values) != count($fieldlist)) {
+                $result->MoveNext();
                 continue;
             }
 
