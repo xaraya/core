@@ -229,27 +229,27 @@
 				</tr>
 				<tr>
 					<th style="text-align: left; padding-left: .5em;">
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'name', 'search' => $search))#">
+						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'xar_name', 'search' => $search))#">
 							<xar:mlstring>Real name</xar:mlstring>
 						</a>
 					</th>
 					<th style="text-align: left; padding-left: .5em;">
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'uname', 'search' => $search))#">
+						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'xar_uname', 'search' => $search))#">
 							<xar:mlstring>Login</xar:mlstring>
 						</a>
 					</th>
 					<th style="text-align: left; padding-left: .5em;">
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'email', 'search' => $search))#">
+						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'xar_email', 'search' => $search))#">
 							<xar:mlstring>Email</xar:mlstring>
 						</a>
 					</th>
 					<th style="text-align: center;">
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'date_reg', 'search' => $search))#">
+						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'xar_date_reg', 'search' => $search))#">
 							<xar:mlstring>Date Registered</xar:mlstring>
 						</a>
 					</th>	
 					<th style="text-align: center;">
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'state', 'search' => $search))#">
+						<a href="#xarModURL('roles', 'admin', 'showusers', array('state' => $state,'uid' => $groupuid, 'order' => 'xar_state', 'search' => $search))#">
 							<xar:mlstring>State</xar:mlstring>
 						</a>
 					</th>
