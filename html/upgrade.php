@@ -783,7 +783,7 @@ if (empty($step)) {
                             );
             xarDefineInstance('articles', 'Article', $instances);
             $xartable = xarDBGetTables();
-            $query = "SELECT DISTINCT instances.xar_title FROM $xartable[block_instances] as instances LEFT JOIN $xartable[block_types] as types ON types.xar_id = instances.xar_type_id WHERE xar_module = 'articles'";
+            $query = "SELECT DISTINCT instances.xar_title FROM $xartable[block_instances] as instances LEFT JOIN $xartable[block_types] as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'articles'";
             $instances = array(
                                 array('header' => 'Article Block Title:',
                                         'query' => $query,
