@@ -23,23 +23,23 @@ function modules_adminapi_regenerate()
 {
     // Security Check
     // need to specify the module because this function is called by the installer module
-    if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
+    if(!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules')) {return;}
 
     //Finds and updates missing modules
-    if (!xarModAPIFunc('modules','admin','checkmissing')) {return;}
+    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {return;}
 
     //Get all modules in the filesystem
-    $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
-    if (!isset($fileModules)) return;
+    $fileModules = xarModAPIFunc('modules', 'admin', 'getfilemodules');
+    if (!isset($fileModules)) {return;}
 
     // Get all modules in DB
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
-    if (!isset($dbModules)) return;
+    $dbModules = xarModAPIFunc('modules', 'admin', 'getdbmodules');
+    if (!isset($dbModules)) {return;}
 
     //Setup database object for module insertion
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $modules_table = $xartable['modules'];
+    $modules_table =& $xartable['modules'];
 
     // See if we have gained any modules since last generation,
     // or if any current modules have been upgraded
@@ -96,41 +96,61 @@ function modules_adminapi_regenerate()
 
             if (!$result) return;
 
-            $set = xarModAPIFunc('modules',
-                                'admin',
-                                'setstate',
-                                array('regid' => $modinfo['regid'],
-                                      'state' => XARMOD_STATE_UNINITIALISED));
-            if (!isset($set)) return;
+            $set = xarModAPIFunc(
+                'modules', 'admin', 'setstate',
+                array(
+                    'regid' => $modinfo['regid'],
+                    'state' => XARMOD_STATE_UNINITIALISED
+                )
+            );
+            if (!isset($set)) {return;}
 
         } else {
-            // Bug 1664 - If the module version changes for a module that has NOT been
-            // installed, then simply update the database with the new version number
-            // without admin intervention rather than try to upgrade.
             if ($dbModules[$name]['version'] != $modinfo['version']) {
-                // Check if database version is less than file version 
-                if ($dbModules[$name]['version'] < $modinfo['version']) {
-                    // Automatically update the module version for uninstalled modules
+                // The version strings are different.
+                // TODO: move the versions API from 'base' to 'modules' if we need to upgrade
+                // the base module through this mechanism.
+                // Compare the versions, only going down to three levels. Only the first three
+                // levels are significant for upgrades. A module writer could use further levels
+                // to indicate bugfix releases that don't need an explicit upgrade, for example
+                // from 1.0.3 to 1.0.3.1
+                $vercompare = xarModAPIfunc(
+                    'base', 'versions', 'compare',
+                    array(
+                        'ver1'=>$dbModules[$name]['version'],
+                        'ver2'=>$modinfo['version'],
+                        'levels' => 3
+                    )
+                );
+                // Check if database version is less than (or equal to) the file version
+                // i.e. that the module is not being downgraded.
+                if ($vercompare >= 0) {
+                    // The new version is either the same (to 3 levels) or higher.
+
+                    // Automatically update the module version for uninstalled modules or
+                    // where the version number is equivalent (but could be a different format)
+                    // or if the module is a core module.
                     if ($dbModules[$name]['state'] == XARMOD_STATE_UNINITIALISED ||
                         $dbModules[$name]['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
-                        $dbModules[$name]['state'] == XARMOD_STATE_ERROR_UNINITIALISED)
+                        $dbModules[$name]['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
+                        $vercompare == 0 ||
+                        substr($dbModules[$name]['class'], 0, 4)  == 'Core')
                     {
                         // Update the module version number
-                        $sql = "UPDATE $modules_table
-                                SET xar_version = '" . xarVarPrepForStore($modinfo['version']) . "'
-                                WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
-
-                        $result = $dbconn->Execute($sql);
+                        $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
+                        $result = $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
                         if (!$result) return;
                     } else {
                         // Else set the module state to upgraded
-                        $set = xarModAPIFunc('modules',
-                                             'admin',
-                                             'setstate', 
-                                             array('regid' =>   $modinfo['regid'],
-                                                   'state' => XARMOD_STATE_UPGRADED));
+                        $set = xarModAPIFunc(
+                            'modules', 'admin', 'setstate', 
+                            array(
+                                'regid' =>   $modinfo['regid'],
+                                'state' => XARMOD_STATE_UPGRADED
+                            )
+                        );
 
-                        if (!isset($set)) return;
+                        if (!isset($set)) {return;}
                     }
                 } else {
                     // The database version is greater than the file version.
@@ -171,12 +191,14 @@ function modules_adminapi_regenerate()
                             break;
                     }
                     if ($modstate != XARMOD_STATE_ANY) {
-                        $set = xarModAPIFunc('modules', 
-                                             'admin', 
-                                             'setstate',
-                                             array( 'regid' => $dbModules[$name]['regid'],
-                                                    'state' => $modstate));
-                        if (!isset($set)) return;
+                        $set = xarModAPIFunc(
+                            'modules', 'admin', 'setstate',
+                            array(
+                                'regid' => $dbModules[$name]['regid'],
+                                'state' => $modstate
+                            )
+                        );
+                        if (!isset($set)) {return;}
 
                         // Continue to next module
                         continue;
@@ -205,14 +227,19 @@ function modules_adminapi_regenerate()
                     break;
             }
             if ($newstate != XARMOD_STATE_ANY) {
-                $set = xarModAPIFunc('modules', 
-                                     'admin', 
-                                     'setstate',
-                                     array( 'regid' => $dbModules[$name]['regid'],
-                                            'state' => $newstate));
+                $set = xarModAPIFunc(
+                    'modules', 'admin', 'setstate',
+                    array(
+                        'regid' => $dbModules[$name]['regid'],
+                        'state' => $newstate
+                    )
+                );
             }
             // Check if there was a version change and adjust
-            xarModAPIFunc('modules','admin','checkversion');
+            // TODO: find out what this call to 'checkversion' is for.
+            // It seems to attempt to do what regenerate does, but not so well, except it
+            // does extra stuff for core modules. Upgrades seem to work fine without this call.
+            //xarModAPIFunc('modules', 'admin', 'checkversion');
         }
     }
 
