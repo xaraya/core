@@ -1,0 +1,79 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>Delete block group</center><br />
+
+<center>
+<form method="post" action="&pnt-modurl-blocks-admin-delete_group;">
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="confirm" value="true" />
+    <input type="hidden" name="gid" value="<pnt:var name="group.id" />" />
+    
+    <table border="0" width="300">
+        <tr>
+            <td>
+                Name:
+            </td>
+            <td>
+                <pnt:var name="group.name" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Members:
+            </td>
+            <td>
+                <pnt:loop name="group.instances">
+                    <a href="&pnt-modurl-blocks-admin-modify_instance;&bid=&pnt-var-id;">&pnt-var-title;</a><br />
+                </pnt:loop>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Template:
+            </td>
+            <td>
+                <pnt:var name="group.template" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>

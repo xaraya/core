@@ -1,0 +1,152 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>Modify block instance</center><br />
+
+<center>
+<form method="post" action="&pnt-modurl-blocks-admin-update_instance;">
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="bid" value="&pnt-var-bid;" />
+    
+    <table border="0" width="300">
+        <tr>
+            <td>
+                Title:
+            </td>
+            <td>
+                <input type="text" name="block_title" value="<pnt:var name="instance.title" />" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Type:
+            </td>
+            <td>
+                <pnt:var name="instance.module" />\<pnt:var name="instance.type" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Group:
+            </td>
+            <td>
+                <select name="block_group" style="width:150px;">
+                    <pnt:loop name="block_groups">
+                        <pnt:if condition="$instance['group_id'] == $id">
+                            <option value="&pnt-var-id;" selected="selected">
+                        <pnt:else />
+                            <option value="&pnt-var-id;">
+                        </pnt:if>
+                        &pnt-var-name;
+                        </option>
+                    </pnt:loop>                
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Refresh:
+            </td>
+            <td>
+                <select name="block_refresh" style="width:150px;">
+                    <pnt:loop name="refresh_times">
+                        <pnt:if condition="$instance['refresh'] == $id">
+                            <option value="&pnt-var-id;" selected="selected">
+                        <pnt:else />
+                            <option value="&pnt-var-id;">
+                        </pnt:if>
+                        <pnt:var name="name" />
+                        </option>
+                    </pnt:loop>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Template (optional):
+            </td>
+            <td>
+                <input type="text" name="block_template" value="<pnt:var name="instance.template" />" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Default state:
+            </td>
+            <td>
+                <select name="block_state" style="width:150px;">
+                    <pnt:if condition="$instance['state'] == 0">
+                        <option value="0" selected="selected">
+                    <pnt:else />
+                        <option value="0">
+                    </pnt:if>
+                    Hidden</option>
+                    <pnt:if condition="$instance['state'] == 1">
+                        <option value="1" selected="selected">
+                    <pnt:else />
+                        <option value="1">
+                    </pnt:if>
+                    Minimized</option>
+                    <pnt:if condition="$instance['state'] == 2">
+                        <option value="2" selected="selected">
+                    <pnt:else />
+                        <option value="2">
+                    </pnt:if>
+                    Maximized</option>
+                </select>
+            </td>
+        </tr>
+        <pnt:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] == true">
+        <tr>
+            <td colspan="2">
+                Content:
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea name="block_content" style="width:300px;height:150px;"><pnt:var name="instance.content" /></textarea>
+            </td>
+        </tr>
+        </pnt:if>
+        <pnt:var name="extra_fields" />
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>

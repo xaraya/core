@@ -1,0 +1,72 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <b>View block groups</b>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>View block groups</center><br />
+
+<table border="1" width="100%">
+    <tr align="center">
+        <th>
+            Name
+        </th>
+        <th>
+            Members
+        </th>
+        <th>
+            Template
+        </th>
+        <th>
+            Operations
+        </th>
+    </tr>
+    <pnt:loop name="block_groups">
+    <tr align="center">
+        <td>
+            &pnt-var-name;
+        </td>
+        <td>
+            <pnt:loop name="instances" prefix="inst">
+                <a href="&pnt-modurl-blocks-admin-modify_instance;&bid=&pnt-var-inst_id;">&pnt-var-inst_title;</a><br />
+            </pnt:loop>
+        </td>
+        <td>
+            &pnt-var-template;
+        </td>
+        <td>
+            <a href="&pnt-modurl-blocks-admin-modify_group;&gid=&pnt-var-id;">Edit</a> |
+            <a href="&pnt-modurl-blocks-admin-delete_group;&gid=&pnt-var-id;">Delete</a>
+        </td>
+    </tr>
+    </pnt:loop>
+</table>

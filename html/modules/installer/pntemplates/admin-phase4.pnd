@@ -1,0 +1,125 @@
+<div align="center">
+<span class="pn-pagetitle">PostNuke Installation</font><br />
+<span class="pn-sub">Page 4/6</font><br /><br />
+<span class="pn-title">Database Settings Collection</span><br /><br />
+<form action="install.php" method="post">
+<input type="hidden" name="install_language" value="<?php echo $language; ?>" />
+
+<table border=0>
+</table>
+<table width="50%" align="center">
+    <tr>
+        <td align="center" style="text-align:justify;" colspan="2">
+            <span class="pn-normal">
+                Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.
+            </span>
+            <br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Database Host
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_database_host" maxlength="80" value="<?php echo $database_host; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Database Username
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_database_username" maxlength="80" value="<?php echo $database_username; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Database Password
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_database_password" maxlength="80" value="<?php echo $database_password; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Database Name
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_database_name" maxlength="80" value="<?php echo $database_name; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Table Prefix (for Table Sharing)
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_database_prefix" maxlength="10" value="<?php echo $database_prefix; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <font class="pn-normal">Database Type</font>
+        </td>
+        <td>
+            <select name="install_database_type">
+                <?php while (list ($key, $name) = each ($database_types)) { ?>
+                    <option value="<?php echo $key; ?>">&nbsp;<?php echo $name; ?>&nbsp;</option>
+                <?php } ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td align="left" colspan="2">
+            <input type="checkbox" name="install_create_database" value="1">
+            <span class="pn-normal">Create the database</span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:justify;">
+            <span class="pn-normal">
+                 If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.
+            </span><br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="left" colspan="2">
+            <input type="checkbox" name="install_intranet" value="1">
+            <span class="pn-normal">This site is for intranet or other local (non-internet) use</span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:justify;">
+            <span class="pn-normal">
+                You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.postnuke.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b>
+            </span><br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2">
+            <span class="pn-normal">
+                <input type="radio" name="install_type" value="new" />&nbsp;New install
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="install_type" value="upgrade" />&nbsp;Upgrade
+            </span><br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2" class="pn-normal">
+            <input type="hidden" name="install_phase" value="5" />
+            <input type="submit" value="Continue &gt;" />
+        </td>
+    </tr>
+</table>
+</form>
+<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+</div>

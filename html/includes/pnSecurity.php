@@ -1,0 +1,506 @@
+<?php
+// File: $Id$
+// ----------------------------------------------------------------------
+// PostNuke Content Management System
+// Copyright (C) 2002 by the PostNuke Development Team.
+// http://www.postnuke.com/
+// ----------------------------------------------------------------------
+// LICENSE
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License (GPL)
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// To read the license please visit http://www.gnu.org/copyleft/gpl.html
+// ----------------------------------------------------------------------
+// Original Author of file: Jim McDonald
+// Purpose of file: Provide a low-level security access mechanism
+// ----------------------------------------------------------------------
+
+
+/*
+ * Notes on security system
+ *
+ * Special UID and GIDS:
+ *  UID -1 corresponds to 'all users', includes unregistered users
+ *  GID -1 corresponds to 'all groups', includes unregistered users
+ *  UID 0 corresponds to unregistered users
+ *  GID 0 corresponds to unregistered users
+ *
+ */
+
+//'All' and 'unregistered' for user and group permissions
+define('_PNSEC_ALL', '-1');
+define('_PNSEC_UNREGISTERED', '0');
+/*
+ * Defines for access levels
+ */
+define('ACCESS_INVALID', -1);
+define('ACCESS_NONE', 0);
+define('ACCESS_OVERVIEW', 100);
+define('ACCESS_READ', 200);
+define('ACCESS_COMMENT', 300);
+define('ACCESS_MODERATE', 400);
+define('ACCESS_EDIT', 500);
+define('ACCESS_ADD', 600);
+define('ACCESS_DELETE', 700);
+define('ACCESS_ADMIN', 800);
+
+/*
+ * schemas - holds all component/instance schemas
+ * Should wrap this in a static one day, but the information
+ * isn't critical so we'll do it later
+ */
+global $schemas;
+$schemas = array();
+
+/**
+ * see if a user is authorised to carry out a particular task
+ * @access public
+ * @param realm the realm to authorize
+ * @param component the component to authorize
+ * @param instance the instance to authorize
+ * @param level the level of access required
+ * @param uid user id to check for authorisation
+ * @returns bool
+ * @return true if authorised, false if not
+ * @raise DATABASE_ERROR
+ */
+function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+{
+    // FIXME: <marco> BAD_PARAM?
+
+    if (empty($userId)) {
+        $userId = pnSessionGetVar('uid');
+        if (empty($userId)) {
+            $userId = 0;
+        }
+    }
+    if (!pnVarIsCached('Permissions', $userId)) {
+        // First time here - get auth info
+        $perms = pnSec__getAuthInfo($userId);
+        if (!isset($perms) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+            return; // throw back
+        }
+        if ((count($perms[0]) == 0) &&
+            (count($perms[1]) == 0)) {
+                // No permissions
+                return;
+        }
+        pnVarSetCached('Permissions', $userId, $perms);
+    }
+
+    list($userPerms, $groupPerms) = pnVarGetCached('Permissions', $userId);
+
+    // Get user access level
+    $userlevel = pnSec__getLevel($userPerms, $testRealm, $testComponent, $testInstance);
+
+    // User access level is override, so return that if it exists
+    if ( $userlevel > ACCESS_INVALID ) {
+        // user has explicitly defined access level for this
+        // realm/component/instance combination
+        if ( $userlevel >= $testLevel ) {
+            // permission is granted to user
+            return true;
+        } else {
+            // permission is prohibited to user, so group perm
+            // doesn't matter
+            return false;
+        }
+    }
+
+    // User access level not defined. Now check group access level
+    $grouplevel = pnSec__getLevel($groupPerms, $testRealm, $testComponent, $testInstance);
+    if ($grouplevel >= $testLevel) {
+        // permission is granted to associated group
+        return true;
+    }
+
+    // No access granted
+    return false;
+}
+
+/**
+ * generate an authorisation key
+ * <br>
+ * The authorisation key is used to confirm that actions requested by a
+ * particular user have followed the correct path.  Any stage that an
+ * action could be made (e.g. a form or a 'delete' button) this function
+ * must be called and the resultant string passed to the client as either
+ * a GET or POST variable.  When the action then takes place it first calls
+ * <code>pnSecConfirmAuthKey()</code> to ensure that the operation has
+ * indeed been manually requested by the user and that the key is valid
+ *
+ * @public
+ * @param modName the module this authorisation key is for (optional)
+ * @returns string
+ * @return an encrypted key for use in authorisation of operations
+ */
+function pnSecGenAuthKey($modName = NULL)
+{
+    if (empty($modName)) {
+        list($modName) = pnGetRequestInfo();
+    }
+
+// Date gives extra security but leave it out for now
+//    $key = pnSessionGetVar('rand') . $modName . date ('YmdGi');
+    $key = pnSessionGetVar('rand') . $modName;
+
+    // Encrypt key
+    $authid = md5($key);
+
+    // Return encrypted key
+    return $authid;
+}
+
+/**
+ * confirm an authorisation key is valid
+ * <br>
+ * See description of <code>pnSecGenAuthKey</code> for information on
+ * this function
+ * @public
+ * @returns bool
+ * @return true if the key is valid, false if it is not
+ */
+function pnSecConfirmAuthKey($authIdVarName = 'authid')
+{
+    list($modName) = pnRequestGetInfo();
+    $authid = pnRequestGetVar($authIdVarName);
+
+    // Regenerate static part of key
+    $partkey = pnSessionGetVar('rand') . $modName;
+
+// Not using time-sensitive keys for the moment
+//    // Key life is 5 minutes, so search backwards and forwards 5
+//    // minutes to see if there is a match anywhere
+//    for ($i=-5; $i<=5; $i++) {
+//        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
+//
+//        $testauthid = md5($partkey . date('YmdGi', $testdate));
+//        if ($testauthid == $authid) {
+//            // Match
+//
+//            // We've used up the current random
+//            // number, make up a new one
+//            srand((double)microtime()*1000000);
+//            pnSessionSetVar('rand', rand());
+//
+//            return true;
+//        }
+//    }
+    if ((md5($partkey)) == $authid) {
+        // Match - generate new random number for next key and leave happy
+        srand((double)microtime()*1000000);
+        pnSessionSetVar('rand', rand());
+
+        return true;
+    }
+    // Not found, assume invalid
+    return false;
+}
+
+/*
+ * Register an instance schema with the security
+ * system
+ * @access public
+ * @param component the component to add
+ * @param schema the security schema to add
+ *
+ * Will fail if an attempt is made to overwrite an existing schema
+ */
+function pnSecAddSchema($component, $schema)
+{
+    global $schemas;
+
+    if (!empty($schemas[$component])) {
+        return false;
+    }
+
+    $schemas[$component] = $schema;
+
+    return true;
+}
+
+// PRIVATE FUNCTIONS
+
+/**
+ * get authorisation information for this user
+ * @access public
+ * @returns array
+ * @return two-element array of user and group permissions
+ * @raise DATABASE_ERROR
+ */
+function pnSec__getAuthInfo($userId)
+{
+    list($dbconn) = pnDBGetConn();
+    $pntable = pnDBGetTables();
+
+    // Tables we use
+    $userpermtable = $pntable['user_perms'];
+    $groupmembershiptable = $pntable['group_membership'];
+    $grouppermtable = $pntable['group_perms'];
+    $realmtable = $pntable['realms'];
+
+    // Empty arrays
+    $userPerms = array();
+    $groupPerms = array();
+
+    $userIds[] = -1;
+    // Set userId infos
+    $userIds[] = $userId;
+    // FIXME: <marco> This still be an undocumented feature.
+    $vars['Active User'] = $userId;
+    $userIds = implode(',', $userIds);
+
+    // Get user permissions
+    $query = "SELECT pn_realm,
+                     pn_component,
+                     pn_instance,
+                     pn_level
+              FROM $userpermtable
+              WHERE pn_uid IN (" . pnVarPrepForStore($userIds) . ")
+              ORDER by pn_sequence";
+    $result = $dbconn->Execute($query);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    while(list($realm, $component, $instance, $level) = $result->fields) {
+        $result->MoveNext();
+
+        // Fix component and instance to auto-insert '.*'
+        $component = preg_replace('/^$/', '.*', $component);
+        $component = preg_replace('/^:/', '.*:', $component);
+        $component = preg_replace('/::/', ':.*:', $component);
+        $component = preg_replace('/:$/', ':.*', $component);
+        $instance = preg_replace('/^$/', '.*', $instance);
+        $instance = preg_replace('/^:/', '.*:', $instance);
+        $instance = preg_replace('/::/', ':.*:', $instance);
+        $instance = preg_replace('/:$/', ':.*', $instance);
+
+        $userPerms[] = array('realm'     => $realm,
+                             'component' => $component,
+                             'instance'  => $instance,
+                             'level'     => $level);
+    }
+
+    // Get all groups that user is in
+    $query = "SELECT pn_gid
+              FROM $groupmembershiptable
+              WHERE pn_uid IN (" . pnVarPrepForStore($userIds) . ")";
+
+    $result = $dbconn->Execute($query);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    $usergroups[] = -1;
+    if (empty($userId)) {
+       // Anonymous user
+       $usergroups[] = 0;
+    }
+    while(list($gid) = $result->fields) {
+        $result->MoveNext();
+
+        $usergroups[] = $gid;
+    }
+    $usergroups = implode(',', $usergroups);
+
+    // Get all group permissions
+    $query = "SELECT pn_realm,
+                     pn_component,
+                     pn_instance,
+                     pn_level
+              FROM $grouppermtable
+              WHERE pn_gid IN (" . pnVarPrepForStore($usergroups) . ")
+              ORDER by pn_sequence";
+    $result = $dbconn->Execute($query);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+
+    while(list($realm, $component, $instance, $level) = $result->fields) {
+        $result->MoveNext();
+
+        // Fix component and instance to auto-insert '.*' where
+        // there is nothing there
+        $component = preg_replace('/^$/', '.*', $component);
+        $component = preg_replace('/^:/', '.*:', $component);
+        $component = preg_replace('/::/', ':.*:', $component);
+        $component = preg_replace('/:$/', ':.*', $component);
+        $instance = preg_replace('/^$/', '.*', $instance);
+        $instance = preg_replace('/^:/', '.*:', $instance);
+        $instance = preg_replace('/::/', ':.*:', $instance);
+        $instance = preg_replace('/:$/', ':.*', $instance);
+
+        // Search/replace of special names
+        // TODO: <marco> Document this and maibe do a if(isset($vars[$res[1]])), don't you think?
+        while (preg_match("/<([^>]+)>/", $instance, $res)) {
+            $instance = preg_replace("/<([^>]+)>/", $vars[$res[1]], $instance, 1);
+        }
+
+        $groupPerms[] = array('realm'     => $realm,
+                              'component' => $component,
+                              'instance'  => $instance,
+                              'level'     => $level);
+    }
+
+    return array($userPerms, $groupPerms);
+}
+
+/**
+ * calculate security level for a test item
+ * @access private
+ * @param perms array of permissions to test against
+ * @param testrealm realm of item under test
+ * @param testcomponent component of item under test
+ * @param testinstanc instance of item under test
+ * @returns int
+ * @return matching security level
+ */
+function pnSec__getLevel($perms, $testRealm, $testComponent, $testInstance)
+{
+    // FIXME: <marco> BAD_PARAM?
+
+    $level = ACCESS_INVALID;
+
+    // If we get a test component or instance purely consisting of ':' signs
+    // then it counts as blank
+    $testComponent = preg_replace('/^:*$/', '', $testComponent);
+    $testInstance = preg_replace('/^:*$/', '', $testInstance);
+
+    // Test for generic permission
+    if ((empty($testComponent)) &&
+        (empty($testInstance))) {
+        // Looking for best permission
+        foreach ($perms as $perm) {
+            // Confirm generic realm, or this particular realm
+            if (($perm['realm'] != 0) && ($perm['realm'] != $testRealm)) {
+                continue;
+            }
+
+            if ($perm['level'] > $level) {
+                $level = $perm['level'];
+            }
+        }
+        return $level;
+    }
+
+    // Test for generic instance
+    if (empty($testInstance)) {
+        // Looking for best permission
+        foreach ($perms as $perm) {
+            // Confirm generic realm, or this particular realm
+            if (($perm['realm'] != 0) && ($perm['realm'] != $testRealm)) {
+                continue;
+            }
+
+            // Confirm that component matches
+            if (preg_match("/^$perm[component]$/", $testComponent)) {
+                if ($perm['level'] > $level) {
+                    $level = $perm['level'];
+                }
+            }
+        }
+        return $level;
+    }
+
+
+    // Normal permissions check
+    foreach ($perms as $perm) {
+
+        // Confirm generic realm, or this particular realm
+        if (($perm['realm'] != 0) && ($perm['realm'] != $testRealm)) {
+            continue;
+        }
+
+        if (($testComponent != '') && ($testInstance != '')) {
+            // Confirm that component and instance match
+            if (!((ereg("^$perm[component]$", $testComponent)) &&
+                  (ereg("^$perm[instance]$", $testInstance)))) {
+                continue;
+            }
+        } elseif (($testComponent == '') && ($testInstance != '')) {
+            // Confirm that instance matches
+            if (!ereg("^$perm[instance]$", $testInstance)) {
+                continue;
+            }
+        }
+
+        // We have a match - set the level and quit
+        $level = $perm['level'];
+        break;
+
+    }
+    return($level);
+}
+
+/* Get list of schemas
+ * @access
+ * @param none
+ * @return schemas
+ */
+// FIXME: <marco> Who use this?
+//function getinstanceschemainfo()
+function pnSec__getBlocksInstanceSchemaInfo()
+{
+    // FIXME: <marco> Exceptions
+
+    global $schemas;
+    static $gotschemas = 0;
+
+    if ($gotschemas == 0) {
+        // Get all module schemas
+        pnSec__getModulesInstanceSchemaInfo();
+
+        // Get all block schemas
+        pnBlock_loadAll();
+
+        $gotschemas = 1;
+    }
+
+    return $schemas;
+}
+
+/* Get instance information from modules
+ * @access
+ * @param none
+ */
+// FIXME: <marco> Who use this?
+//function getmodulesinstanceschemainfo()
+function pnSec__getModulesInstanceSchemaInfo()
+{
+
+    $moddir = opendir('modules/');
+    while ($modName = readdir($moddir)) {
+        $osfile = 'modules/' . pnVarPrepForOS($modName) . '/pnversion.php';
+        @include $osfile;
+        if (!empty($modversion['securityschema'])) {
+            foreach ($modversion['securityschema'] as $component => $instance) {
+                pnSecAddSchema($component, $instance);
+            }
+        }
+        $modversion['securityschema'] = '';
+    }
+    closedir($moddir);
+}
+
+?>

@@ -1,0 +1,73 @@
+<tr class="odd"><td valign="top" class="leftvalue">PHP Version: </td><td> phpversion() </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">Loaded extensions: </td><td>
+
+$ext = get_loaded_extensions();
+$comptExt = count($ext);
+
+for ($i=0;$i<$comptExt;$i++) {
+echo "$ext[$i]";
+if ($i != $comptExt-1) {
+echo ", ";
+}
+}
+echo "</td></tr>";
+
+
+
+<tr class="odd"><td valign="top" class="leftvalue">extension_dir: </td><td> ini_get(extension_dir) </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">include_path: </td><td>
+
+$include_path = ini_get(include_path);
+if ($include_path == "") {
+echo "<i>No value</i>";
+} else {
+echo "$include_path";
+}
+</td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">magic_quotes_gpc: </td><td>
+
+$magic_quotes_gpc = ini_get(magic_quotes_gpc);
+if ($magic_quotes_gpc == "1") {
+echo "On";
+} else {
+echo "Off";
+}
+
+</td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">magic_quotes_runtime: </td><td>
+
+$magic_quotes_runtime = ini_get(magic_quotes_runtime);
+if ($magic_quotes_runtime == "1") {
+echo "On";
+} else {
+echo "Off";
+}
+</td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">safe_mode: </td><td>
+
+$safemodeTest = ini_get(safe_mode);
+if ($safemodeTest == "1") {
+echo "On";
+} else {
+echo "Off";
+}
+echo "</td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">Mail: </td><td>
+
+$notificationsTest = function_exists('mail');
+if ($notificationsTest == "true") {
+echo "On";
+} else {
+echo "Off";
+}
+</td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">SMTP: </td><td> ini_get(SMTP) </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">upload_max_filesize: </td><td> .ini_get(upload_max_filesize) </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">session.name: </td><td> session_name() </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">session.save_path: </td><td> session_save_path() </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">HTTP_HOST: </td><td> $HTTP_HOST </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">PATH_TRANSLATED: </td><td> stripslashes($PATH_TRANSLATED) </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">SERVER_NAME: </td><td> $SERVER_NAME </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">SERVER_PORT: </td><td> $SERVER_PORT </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">SERVER_SOFTWARE: </td><td> $SERVER_SOFTWARE </td></tr>
+<tr class="odd"><td valign="top" class="leftvalue">SERVER_OS: </td><td> PHP_OS </td></tr>

@@ -1,0 +1,21 @@
+<?php 
+// $Id$
+$modversion['name'] = 'users';
+$modversion['id'] = '27';
+$modversion['version'] = '1.01';
+$modversion['description'] = 'User registration and handling';
+$modversion['credits'] = 'pndocs/credits.txt';
+$modversion['help'] = 'pndocs/help.txt';
+$modversion['changelog'] = 'pndocs/changelog.txt';
+$modversion['license'] = 'pndocs/license.txt';
+$modversion['official'] = 1;
+$modversion['author'] = 'Jim McDonald,Marco Canini';
+$modversion['contact'] = 'http://www.mcdee.net/,marco.canini@postnuke.com';
+$modversion['admin'] = 1;
+$modversion['user'] = 1;
+$modversion['securityschema'] = array('users::' => 'User uname::User uid',
+                                      'users::Field' => '::',
+				      'users::Variables' => 'User variable name::');
+$modversion['class'] = 'Core Complete';
+$modversion['category'] = 'Users & Groups';
+?>

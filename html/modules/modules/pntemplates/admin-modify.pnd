@@ -1,0 +1,65 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <b><a href="&pnt-modurl-modules-admin-main;">Modules Administration</a></b>
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-modules-admin-list;">List available modules</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-modules-admin-regenerate;">Regenerate module list</a>
+        </td>
+    </tr>
+</table>
+<br />
+<center>Modify Module Settings</center>
+<br />
+
+<center>
+<form method="post" action="&pnt-modurl-modules-admin-update;">
+    <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
+    <input type="hidden" name="id" value="&pnt-var-regId;" />
+
+    <table border="0" width="300">
+        <tr>
+            <td>
+                 Edit Display Name:
+            </td>
+            <td>
+                <input type="text" name="newdisplayname" value="&pnt-var-displayName;" length="40" maxlength="254" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 Edit Display Name:
+            </td>
+            <td>
+                 <input type="text" name="newdescription" value="&pnt-var-description;" length="60" maxlength="254" style="width:150px;" />
+            </td>
+        </tr>
+        <pnt:loop name="hooks">
+        <tr>
+            <td>
+                Activate &pnt-var-hooks['tmodName']; for this module
+            </td>
+            <td>
+               <pnt:if condition="$hooks['checked'] == 1">
+                    <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" checked="checked" />
+                    <pnt:else>
+                        <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" />
+                    </pnt:else>
+                </pnt:if>
+            </td>
+        </tr>
+        </pnt:loop>
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="Save Changes" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>

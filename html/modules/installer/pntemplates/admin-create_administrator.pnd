@@ -1,0 +1,81 @@
+<div align="center">
+<span class="pn-pagetitle">PostNuke Installation</font><br />
+<span class="pn-sub">Page 5/6</font><br /><br />
+<span class="pn-title">Administrator Account Creation</span><br /><br />
+<form action="&pnt-modurl-installer-admin-create_administrator;" method="post">
+<input type="hidden" name="install_language" value="<?php echo $language; ?>" />
+<table width="50%" align="center">
+    <tr>
+        <td align="center" style="text-align:justify;" colspan="2">
+            <span class="pn-normal">
+                Please enter the settings for your Administrator account. This information is necessary in order to properly secure your PostNuke installation. These settings can be changed at any point in the future by visiting the users module.
+            </span>
+            <br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Administrator Username
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_admin_username" maxlength="80" value="Admin">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Administrator Name
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_admin_name" maxlength="80" value="Admin">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Administrator Password
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_admin_password" maxlength="80" value="">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Administrator Email
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_admin_email" maxlength="80" value="">
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span class="pn-normal">
+                Administrator URL
+            </span>
+        </td>
+        <td>
+            <input type="text" name="install_admin_url" maxlength="10" value="<?php echo pnGetBaseURL(); ?>">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:justify;">
+            <span class="pn-normal">
+                 Your Administrator password is the key to your PostNuke installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.
+            </span><br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2" class="pn-normal">
+            <input type="submit" name="create" value="Continue &gt;" />
+        </td>
+    </tr>
+</table>
+</form>
+<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+</div>

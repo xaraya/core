@@ -1,0 +1,8 @@
+<item>
+<title>&pnt-var-title;</title>
+<link>&pnt-var-notes;</link>
+<description>&pnt-var-summary;</description>
+<author>&pnt-var-author;</author>
+<date>&pnt-var-date;</date>
+<hits>&pnt-var-counter;</hits>
+</item>

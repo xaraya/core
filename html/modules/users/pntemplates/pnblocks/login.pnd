@@ -1,0 +1,38 @@
+<form action="&pnt-modurl-users-user-login;" method="post" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="returnurl" id="returnurl" value="&pnt-var-return_url;" />
+    <table border="0" width="100%">
+        <tr>
+            <td>
+                Username
+            </td>
+            <td>
+                <input type="text" name="uname" maxlength="64" size="10" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Password
+            </td>
+            <td>
+                <input type="password" name="pass" maxlength="64" size="10" />
+            </td>
+        </tr>
+        <pnt:if condition="pnConfigGetVar('seclevel') != 'High'">
+            <tr>
+                <td colspan="2">
+                    <input type="checkbox" name="rememberme" value="1" />Remember me
+                </td>
+            </tr>
+        </pnt:if>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="Sign in" align="middle" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="justify">
+                Need an account? <a href="&pnt-modurl-users-user-register;">Register here</a>.
+            </td>
+        </tr>
+    </table>
+</form>

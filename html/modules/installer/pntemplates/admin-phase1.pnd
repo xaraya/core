@@ -1,0 +1,22 @@
+<div align="center">
+<font class="pn-pagetitle">PostNuke Installation</font><br />
+<font class="pn-sub">Step 1/6</font><br /><br />
+<font class="pn-title">Select your language.</font>
+<form action="install.php" method="post">
+<table width="50%" align="center">
+    <tr>
+        <td align="center" class="pn-normal">
+                Language:
+                <select name="install_language" class="pn-text">
+                    <?php while (list($key, $name) = each($languages)) { ?>
+                        <option value="<?php echo $key; ?>"><?php echo $name; ?></option>
+                    <?php } ?>
+                </select>
+                <input type="hidden" name="install_phase" value="2" />
+                <input type="submit" value="Continue &gt;">
+        </td>
+    </tr>
+</table>
+</form><br /><br />
+<font class="pn-sub">Thank you for trying PostNuke, and welcome to our community.</font>
+</div>

@@ -1,0 +1,57 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <b>View block types</b>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>View block types</center><br />
+
+<table border="1" width="100%">
+    <tr align="center">
+        <th>
+            Module
+        </th>
+        <th>
+            Type
+        </th>
+    </tr>
+    <pnt:loop name="block_types" id="foo">
+    <tr align="center">
+        <td>
+            <a href="&pnt-var-modurl;">&pnt-var-module;</a>
+        </td>
+        <td>
+           &pnt-var-type;
+        </td>
+    </tr>
+    </pnt:loop>
+</table>

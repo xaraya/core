@@ -1,0 +1,123 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>Modify block group</center><br />
+
+<script language="javascript">
+function moveBlock(f, dir) {
+	var el = f.elements["group_instances"]
+	var idx = el.selectedIndex
+	if (idx==-1) 
+		alert("You must select the block to move.")
+	else {
+		var nxidx = idx+( dir? -1 : 1)
+		if (nxidx<0) nxidx=el.length-1
+		else if (nxidx>=el.length) nxidx=0
+		var oldVal = el[idx].value
+		var oldText = el[idx].text
+		el[idx].value = el[nxidx].value
+		el[idx].text = el[nxidx].text
+		el[nxidx].value = oldVal
+		el[nxidx].text = oldText
+		el.selectedIndex = nxidx
+	}
+    return false
+}
+
+function saveBlockOrder(f) {
+	var ord = "";
+	for (var i = 0; i < f.elements["group_instances"].options.length; i++)
+		ord += "/" + f.elements["group_instances"].options[i].value;
+	f.elements["group_instance_order"].value = ord.substring(1, ord.length);
+}
+</script>
+
+<center>
+<form method="post" action="&pnt-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="gid" value="<pnt:var name="group.id" />" />
+    <input type="hidden" name="group_instance_order" value="" />
+    <table border="0" width="300">
+        <tr>
+            <td>
+                Name:
+            </td>
+            <td>
+                <input type="text" name="group_name" value="<pnt:var name="group.name" />" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Members:
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td rowspan="2">
+                            <select name="group_instances" size="&pnt-var-instance_count;">
+                                <pnt:loop name="group.instances">
+                                    <option value="&pnt-var-id;"><pnt:var name="title" /></option>
+                                </pnt:loop>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="image" src="&pnt-var-up_arrow_src;" onclick="return moveBlock(this.form, true)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" src="&pnt-var-down_arrow_src;" onclick="return moveBlock(this.form, false)" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Template:
+            </td>
+            <td>
+                <input type="text" name="group_template" value="<pnt:var name="group.template" />" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>

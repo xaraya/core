@@ -1,0 +1,77 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>Delete block instance</center><br />
+
+<center>
+<form method="post" action="&pnt-modurl-blocks-admin-delete_instance;">
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+    <input type="hidden" name="confirm" value="true" />
+    <input type="hidden" name="bid" value="<pnt:var name="instance.id" />" />
+    
+    <table border="0" width="300">
+        <tr>
+            <td>
+                Title:
+            </td>
+            <td>
+                <pnt:var name="instance.title" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Group:
+            </td>
+            <td>
+                <pnt:var name="instance.group_name" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Type:
+            </td>
+            <td>
+                <pnt:var name="instance.module" />\<pnt:var name="instance.type" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>

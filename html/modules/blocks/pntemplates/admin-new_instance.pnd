@@ -1,0 +1,107 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            Blocks Administration
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <b>New block instance</b>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+        </td>
+        <td align="center">
+        
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+        </td>
+        <td align="center" width="25%">
+            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+        </td>
+    </tr>
+</table><br />
+<center>New block instance</center><br />
+
+<center>
+<form method="post" action="&pnt-modurl-blocks-admin-create_instance;">
+    <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
+    
+    <table border="0" width="300">
+        <tr>
+            <td>
+                Title:
+            </td>
+            <td>
+                <input type="text" name="block_title" value="" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Type:
+            </td>
+            <td>
+                <select name="block_type" style="width:150px;">
+                    <pnt:loop name="block_types">
+                        <option value="&pnt-var-id;">
+                            &pnt-var-module;\&pnt-var-type;
+                        </option>
+                    </pnt:loop>                
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Group:
+            </td>
+            <td>
+                <select name="block_group" style="width:150px;">
+                    <pnt:loop name="block_groups">
+                        <option value="&pnt-var-id;">
+                            &pnt-var-name;
+                        </option>
+                    </pnt:loop>                
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Template (optional):
+            </td>
+            <td>
+                <input type="text" name="block_template" value="" length="40" maxlength="255" style="width:150px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Default state:
+            </td>
+            <td>
+                <select name="block_state" style="width:150px;">
+                    <option value="0">Hidden</option>
+                    <option value="1">Minimized</option>
+                    <option value="2" selected="selected">Maximized</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><br />
+                    <input type="submit" value="OK" align="middle" />
+                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+            </td>
+        </tr>
+    </table>
+</form>
+</center>
