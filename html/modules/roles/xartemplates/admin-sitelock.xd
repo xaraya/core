@@ -48,17 +48,17 @@
 					</tr>
 				<xar:loop name="$roles">
 					<tr>
-						<td width="100" align="right">
+						<td width="100" align="center">
 							<xar:if condition="count($roles) gt 1">
 								<input type="button" value="#$deletelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();"/>
 							<xar:else />
 								&nbsp;
 							</xar:if>
 						</td>
-						<td>
+						<td align="center">
 							&nbsp;#$loop:item['name']#
 						</td>
-						<td>
+						<td align="center">
 							 <xar:if condition="$loop:item['notify'] == 'true'">
 								  <input type="checkbox" name="notify[]" value=#$loop:item['uid']# checked />
 							<xar:else />
