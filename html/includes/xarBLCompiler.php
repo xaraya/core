@@ -2334,19 +2334,19 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 /**
  * xarTpl__XarBlockNode: <xar:block> tag class
  *
+ * Tag summary:
+ *   Mandatory attributes: either 'instance' or ('module' and 'type')
+ *   Optional attributes: 'title', 'template', 'name', 'state'
+ *   Other attributes: all remaining, collected into an array
+ *   Tag content: not supported for the present time
  * @package blocklayout
  * @access private
+ * @todo try to get rid of the dependency with xarVar.php (xarVar_addslashes)
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
-        // Tag summary:
-        // Mandatory attributes: either 'instance' or ('module' and 'type')
-        // Optional attributes: 'title', 'template', 'name', 'state'
-        // Other attributes: all remaining, collected into an array
-        // Tag content: not supported for the present time
-
         extract($this->attributes);
 
         if (empty($instance) && (empty($module) || empty($type))) {
@@ -2430,6 +2430,7 @@ EOT;
  *
  * @package blocklayout
  * @access private
+ * @todo the renderbegintag use of semicolons looks weird, why is that?
  */
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
@@ -2724,12 +2725,7 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
     {
         return true;
     }
-/*
-    function hasText()
-    {
-        return true;
-    }
-*/
+
     function needParameter()
     {
         return true;
