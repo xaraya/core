@@ -80,7 +80,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
-    
+  
     // there aren't any admin modules, dont display adminmenu
     // <mrb> How would this happen? adminpanels is here :-)
     if (empty($mods)) return;
@@ -107,7 +107,6 @@ function adminpanels_adminmenublock_display($blockinfo)
     // FIXME: this is quite ad-hoc here
     $admintypes = array('admin', 'util');
 
-    // Set up like it is, means we are forced to use global menu style settings site-wide.
     switch(strtolower($vars['menustyle'])){
         case 'byname': // display by name
             foreach($mods as $mod) {
@@ -158,61 +157,56 @@ function adminpanels_adminmenublock_display($blockinfo)
 
         default:
         case 'bycat': // sort by categories
+            // <mrb> for the release we can do without the adminmenu table, if 
+            // that gains functionality consider putting it back.
+            foreach ($mods as $mod) {
+                // get URL to module's main function
+                $modname=$mod['name'];
+                $link = xarModURL($modname, 'admin', 'main', array());
+                $labelDisplay = $mod['displayname'];
+                if(!isset($mod['category']) or $mod['category'] == '0') {
+                    $mod['category'] = xarML('Unknown');
+                }
+                $cat = $mod['category'];
 
-            // check if we need to update the table, return error if check has failed
-            if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')) {return;}
+                // if this module is loaded we probably want to display it with -current css rule in the menu
+                $catmods[$cat][$modname]['features'] = array(
+                    'label'     => $labelDisplay,
+                    'link'      => $link,
+                    'modactive' => 0,
+                    'overview'  => 0,
+                    'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
+                if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
+                    // this module is currently loaded (active), we need to display
+                    // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
+                    // 5. URL with title text, when user is looking at other than default function of this module
 
-            // get an array of modules sorted by categories from db
-            $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildmenu',array('menustyle' => 'bycat'));
-
-            // scan the array and set labels and states
-            foreach ($catmods as $cat => $mods) { 
-                // display label for each category
-                $label = $cat;
-                
-                foreach ($mods as $modname=>$mod) {
-                    // get URL to module's main function
-                    $link = xarModURL($modname, 'admin', 'main', array());
-                    $labelDisplay = $mod['displayname'];
-                    // if this module is loaded we probably want to display it with -current css rule in the menu
-                    $catmods[$cat][$modname]['features'] = array(
-                        'label'     => $labelDisplay,
-                        'link'      => $link,
-                        'modactive' => 0,
-                        'overview'  => 0,
-                        'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
-                    if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
-                        // this module is currently loaded (active), we need to display
-                        // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
-                        // 5. URL with title text, when user is looking at other than default function of this module
- 
-                        // adding attributes and flags to each module link for the template
-                        $catmods[$cat][$modname]['features']['modactive'] = 1;
-                        if ($thisfuncname != 'main' || $thismodtype != 'admin'){
-                            $catmods[$cat][$modname]['features']['overview'] = 1;
-                            $catmods[$cat][$modname]['features']['maintitle'] = xarML('Display overview information for module #(1)', $labelDisplay);
-                        }
-                        // For active module we need to display the mod functions links
-                        // call the api function to obtain function links, but don't raise an exception if it's not there
-                        $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
-
-                        // scan array and prepare the links
-                        if (!empty($menulinks)) {
-                            foreach($menulinks as $menulink) {
-                                $catmods[$cat][$modname]['indlinks'][] = array(
-                                    'adminlink'     => $menulink['url'],
-                                    'adminlabel'    => $menulink['label'],
-                                    'admintitle'    => $menulink['title'],
-                                    'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
-                                );
-                            }
-                        }
-                    } else {
-                       // Why is this needed?
-                       unset($mod['displayname']);
+                    // adding attributes and flags to each module link for the template
+                    $catmods[$cat][$modname]['features']['modactive'] = 1;
+                    if ($thisfuncname != 'main' || $thismodtype != 'admin'){
+                        $catmods[$cat][$modname]['features']['overview'] = 1;
+                        $catmods[$cat][$modname]['features']['maintitle'] = xarML('Display overview information for module #(1)', $labelDisplay);
                     }
-                } //inner foreach
-            } // outer foreach
+                    // For active module we need to display the mod functions links
+                    // call the api function to obtain function links, but don't raise an exception if it's not there
+                    $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+
+                    // scan array and prepare the links
+                    if (!empty($menulinks)) {
+                        foreach($menulinks as $menulink) {
+                            $catmods[$cat][$modname]['indlinks'][] = array(
+                                'adminlink'     => $menulink['url'],
+                                'adminlabel'    => $menulink['label'],
+                                'admintitle'    => $menulink['title'],
+                                'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
+                            );
+                        }
+                    }
+                } else {
+                   // Why is this needed?
+                   unset($mod['displayname']);
+                }
+            } //inner foreach
                 
             $template = 'verticallistbycats';
             $data = array(
