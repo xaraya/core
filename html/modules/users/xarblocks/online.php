@@ -119,7 +119,7 @@ function users_onlineblock_display($blockinfo)
 
     // Block formatting
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = pnML('Online');
+        $blockinfo['title'] = xarML('Online');
     }
  
     $blockinfo['content'] = xarTplBlock('users', 'online', $args);
