@@ -1201,6 +1201,9 @@ function drawindent() {
                         r.xar_uname,
                         r.xar_email,
                         r.xar_pass,
+                        r.xar_date_reg,
+                        r.xar_valcode,
+                        r.xar_state,
                         r.xar_auth_module
                         FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
                         ON r.xar_uid = rm.xar_uid
@@ -1214,6 +1217,9 @@ function drawindent() {
                         r.xar_uname,
                         r.xar_email,
                         r.xar_pass,
+                        r.xar_date_reg,
+                        r.xar_valcode,
+                        r.xar_state,
                         r.xar_auth_module
                         FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
                         ON r.xar_uid = rm.xar_uid
@@ -1227,6 +1233,9 @@ function drawindent() {
         $result = $this->dbconn->Execute($query);
     }
         if (!$result) return;
+
+    // CHECKME: I suppose this is what you meant here ?
+        $parentid = $this->uid;
 
 // arrange the data in an array of role objects
         $users = array();
