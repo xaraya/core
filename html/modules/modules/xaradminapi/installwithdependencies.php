@@ -104,9 +104,13 @@ function modules_adminapi_installwithdependencies ($args)
         }
 
         if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
-            $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+                return;
+            } else {
+                $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+                return;
+            }
         }
     }
 
@@ -114,17 +118,25 @@ function modules_adminapi_installwithdependencies ($args)
     if (!$initialised) {
         // Finally, now that dependencies are dealt with, initialize the module
         if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
-            $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+                return;
+            } else {
+                $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+                return;
+            }
         }
     }
 
     // And activate it!
     if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
-        $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-        return;
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+            return;
+        } else {
+            $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+            return;
+        }
     }
 
     return true;
