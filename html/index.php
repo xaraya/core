@@ -94,7 +94,7 @@ function xarMain()
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
-r() != XAR_NO_EXCEPTION) return; // throw back
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
     echo $pageOutput;
 
@@ -148,6 +148,4 @@ if (!xarMain()) {
 // Kill the debugger
 xarCore_disposeDebugger();
 
-?>L
 ?>
-

@@ -40,7 +40,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     
-    if ($xarTpl_cacheTemplates) {
+    if ($args['enableTemplatesCaching']) {
         if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
             xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
                        xarCoreGetVarDirPath().'/cache/templates'.

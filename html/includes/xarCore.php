@@ -225,7 +225,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
         // or XHTML site compliance. For now just pass false.
-        $systemArgs = array('generateShortURLs' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
+        $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
     }
