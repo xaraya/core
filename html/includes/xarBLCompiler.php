@@ -1204,7 +1204,11 @@ class xarTpl__ExpressionTransformer
         $expression = $identifiers[0];
         for ($i = 1; $i < $numIdentifiers; $i++) {
             if($operators[$i - 1] == '.') {
-                $expression .= "['".$identifiers[$i]."']";
+                if((substr($identifiers[$i],0,1) == XAR_TOKEN_VAR_START) || is_numeric($identifiers[$i])) {
+                    $expression .= "[".$identifiers[$i]."]";
+                } else {
+                    $expression .= "['".$identifiers[$i]."']";
+                }
             } elseif($operators[$i - 1] == ':') {
                 $expression .= '->'.$identifiers[$i];
             }
@@ -1224,19 +1228,17 @@ class xarTpl__ExpressionTransformer
         //  4.  [a-z_]      => matches a letter or underscore
         //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
         //  6.  (?:         => start property access non-captured subpattern
-        //  7.   :          => matches the colon
-        //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
-        //  9.  )           => matches right brace
-        // 10.  *           => match zero or more occurences of the property access notation (colon notation)
-        // 11.  (?:         => start array key non-captured subpattern
-        // 12.   \\.        => each array key is separated by a dot, escaped for preg_match and the
-        //                     escaping '\' escaped for the double-quoted string
-        // 13.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
-        // 14.  )           => end array key subpattern
-        // 15.  *           => match zero or more occurances of the array key subpattern
-        // 16. )            => ends the current pattern
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+)*(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
-            // Resolve BL expresions inside the php Expression
+        //  7.   :|\\.      => matches the colon or the dot notation
+        //  8.   [$]{0,1}   => the array key or object member may be a variable
+        //  9.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences 
+        // 10.  )           => matches right brace
+        // 11.  *           => match zero or more occurences of the property access / array key notation (colon notation)
+        // 12. )            => ends the current pattern
+        // TODO: of course, if all this was between #...# it would be a lot easier ;-)
+        // TODO: $a[$b]:c doesn't work properly should be: $a[$b]->c Is: $a[$b]:c
+        // TODO: if variable array key or object member, make sure it starts with a letter
+        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?:[:|\\.][$]{0,1}[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
+            // Resolve BL expressions inside the php Expressions
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
