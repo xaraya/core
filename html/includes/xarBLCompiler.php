@@ -3070,14 +3070,10 @@ class xarTpl__XarBreakNode extends xarTpl__TplTagNode
 {
     function render()
     {
+        $depth = 1;
         extract($this->attributes);
 
-        if(isset($depth) && $depth > 1){
-            $output = " break $depth; ";
-        } else {
-            $output = " break; ";
-        }
-        return $output;
+        return " break $depth; ";
     }
 
     function isAssignable()
