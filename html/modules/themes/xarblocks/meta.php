@@ -40,15 +40,16 @@ function themes_metablock_init()
 */
 function themes_metablock_info()
 {
-    return array('text_type' => 'Meta',
-         'text_type_long' => 'Meta',
-         'module' => 'themes',
-         'func_update' => 'themes_metablock_update',
-         'allow_multiple' => false,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
-
+    return array(
+        'text_type' => 'Meta',
+        'text_type_long' => 'Meta',
+        'module' => 'themes',
+        'func_update' => 'themes_metablock_update',
+        'allow_multiple' => false,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => true
+    );
 }
 
 /**
@@ -64,40 +65,47 @@ function themes_metablock_info()
 function themes_metablock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"meta:$blockinfo[title]:All")) return;
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$blockinfo[title].':All')) return;
 
     // Get current content
-    $vars = @unserialize($blockinfo['content']);
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    }
+
     // Description
-    $incomingdesc = xarVarGetCached('Blocks.articles','summary');
-    if ((!empty($incomingdesc)) and ($vars['usedk'] == 1)){
+    $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
+    if (!empty($incomingdesc) and $vars['usedk'] == 1) {
         // Strip -all- html
         $htmlless = strip_tags($incomingdesc);
         $meta['description'] = $htmlless;
     } else {
         $meta['description'] = $vars['metadescription'];
     }
-    // Dynamic Keywords
-    $incomingkey = xarVarGetCached('Blocks.articles','body');
-    $incomingkeys = xarVarGetCached('Blocks.keywords','keys');
 
-    if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
+    // Dynamic Keywords
+    $incomingkey = xarVarGetCached('Blocks.articles', 'body');
+    $incomingkeys = xarVarGetCached('Blocks.keywords', 'keys');
+
+    if (!empty($incomingkey) and $vars['usedk'] == 1) {
         // Keywords generated from articles module
-        $meta['keywords'] = xarVarGetCached('Blocks.articles','body');
+        $meta['keywords'] = $incomingkey;
     } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
         // Keywords generated from keywords module
-        $meta['keywords'] = xarVarGetCached('Blocks.keywords','keys');
+        $meta['keywords'] = $incomingkeys;
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }
+
     // Character Set
     $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
     $meta['generator'] = xarConfigGetVar('System.Core.VersionId');
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
+
     // Geo Url
     $meta['longitude'] = $vars['longitude'];
     $meta['latitude'] = $vars['latitude'];
+
     // Active Page
     $meta['activepagerss'] = xarServerGetCurrentURL(array('theme' => 'rss'));
     $meta['activepageatom'] = xarServerGetCurrentURL(array('theme' => 'atom'));
@@ -109,16 +117,19 @@ function themes_metablock_display($blockinfo)
     } else {
         $meta['copyrightpage'] = '';
     }
+
     if (isset($vars['helppage'])){
-            $meta['helppage'] = $vars['helppage'];
+        $meta['helppage'] = $vars['helppage'];
     } else {
         $meta['helppage'] = '';
     }
+
     if (isset($vars['glossary'])){
-            $meta['glossary'] = $vars['glossary'];
+        $meta['glossary'] = $vars['glossary'];
     } else {
         $meta['glossary'] = '';
     }
+
     //Pager Buttons
     $meta['refreshurl']     = xarVarGetCached('Meta.refresh','url');
     $meta['refreshtime']    = xarVarGetCached('Meta.refresh','time');
@@ -200,16 +211,25 @@ function themes_metablock_modify($blockinfo)
 */
 function themes_metablock_update($blockinfo)
 {
-    if(!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('usegeo',          'notempty', $vars['usegeo'],          '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('usedk',           'notempty', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('longitude',       'notempty', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('latitude',        'notempty', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('helppage',        'notempty', $vars['helppage'],        '', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('glossary',        'notempty', $vars['glossary'],        '', XARVAR_NOT_REQUIRED)) return;
-    $blockinfo['content'] = serialize($vars);
+    // TODO: remove this once all blocks can accept content arrays.
+    if (!is_array($blockinfo['content'])) {
+        $blockinfo['content'] = unserialize($blockinfo['content']);
+    }
+
+    // FIXME: use better validation on these parameters.
+    $vars = array();
+    if (!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('usegeo',          'int:0:1',  $vars['usegeo'],          0,  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('longitude',       'notempty', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('latitude',        'notempty', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('usedk',           'notempty', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        '', XARVAR_NOT_REQUIRED)) return;
+
+    // Merge the submitted block info content into the existing block info.
+    $blockinfo['content'] = array_merge($blockinfo['content'], $vars);
 
     return $blockinfo;
 }
