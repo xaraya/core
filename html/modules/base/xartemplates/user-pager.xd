@@ -33,8 +33,10 @@
 <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
     <xar:if condition="$pagenumber ne $currentpage">
         &nbsp;&nbsp;<a href="#$pageurl#">#$pagenumber#</a>
+        <!--- &nbsp;&nbsp;<a href="#$pageurl#">[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#]</a> --->
     <xar:else />
         &nbsp;&nbsp;#$pagenumber#
+        <!--- &nbsp;&nbsp;[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#] --->
     </xar:if>
 </xar:foreach>
 

@@ -516,6 +516,9 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
     $pageNum = ceil($blockStart / $itemsPerPage);
     for ($i = $blockStart; $i <= $blockEnd; $i += $itemsPerPage) {
         $data['middleitems'][$pageNum] = $i;
+        $data['middleitemsfrom'][$pageNum] = $i;
+        $data['middleitemsto'][$pageNum] = $i + $itemsPerPage - 1;
+        if ($data['middleitemsto'][$pageNum] > $total) {$data['middleitemsto'][$pageNum] = $total;}
         $pageNum += 1;
     }
 
@@ -593,8 +596,9 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
  * @param string $urltemplate template for url, will replace '%%' with item number
  * @param integer $perpage number of links to display (default=10)
  * @param integer $pageBlockSize number of pages to display at once (default=10)
+ * @param integer $template alternative template name within base/user (default 'pager')
  */
-function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlockSize = 10)
+function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlockSize = 10, $template = 'pager')
 {
     // Sanity check on perpage to prevent infinite loops
     if($perpage < 1) {$perpage = 10;}
@@ -643,7 +647,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
         xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
     }
 
-    return trim(xarTplModule('base', 'user', 'pager', $data));
+    return trim(xarTplModule('base', 'user', $template, $data));
 }
 
 /**
