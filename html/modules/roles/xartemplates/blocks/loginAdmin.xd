@@ -1,6 +1,6 @@
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Show logout box when logged in</xar:mlstring>
+		<label for="showlogout"><xar:mlstring>Show logout box when logged in</xar:mlstring></label>
 	</td>
 	<td>
 		<xar:if condition="$showlogout eq 1">
@@ -12,7 +12,7 @@
 </tr>
 <tr align="left" valign="middle">
 	<td>
-		<xar:mlstring>Logout Title</xar:mlstring>
+		<label for="logouttitle"><xar:mlstring>Logout Title</xar:mlstring></label>
 	</td>
 	<td>
 		<input type="text" name="logouttitle" id="logouttitle" value="#$logouttitle#" size="15" maxlength="25" tabindex="2" />

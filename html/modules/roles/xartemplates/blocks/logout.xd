@@ -1,7 +1,7 @@
 <xar:if condition="xarModisAvailable($search)">
 	<form action="index.php">
 		<input type="hidden" name="module" id="module" value="search" />
-		<a href="&xar-modurl-search-user-main;"><xar:mlstring>Search</xar:mlstring></a> 
+		<a href="&xar-modurl-search-user-main;"><label for="q"><xar:mlstring>Search</xar:mlstring></label></a> 
 		<input type="text" name="q" id="q" size="15" align="middle" />
 	</form>
 </xar:if>
