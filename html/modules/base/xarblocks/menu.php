@@ -265,7 +265,9 @@ function base_menublock_display($blockinfo)
                                                             'loggedin'         => $loggedin,
                                                             'usercontent'      => $usercontent,
                                                             'marker'           => $marker,
-                                                            'showlogout'       => $showlogout));
+                                                            'showlogout'       => $showlogout,
+                                                            'where'            => $thismodname,
+                                                            'what'             => $thisfuncname));
                 // this should do for now
                 break;
     }
