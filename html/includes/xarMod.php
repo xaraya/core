@@ -1201,11 +1201,11 @@ function xarModIsAvailable($modName, $type = 'module')
         // because that is what we're testing
         // here, we don't want to except on that.
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            if (xarExceptionId() != 'MODULE_NOT_EXIST') {
+            if (xarCurrentErrorID() != 'MODULE_NOT_EXIST') {
                 // Other exceptions are still thrown however
                 return;
             } else {
-                xarExceptionFree();
+                xarErrorFree();
                 return false;
             }
         }
