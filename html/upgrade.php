@@ -1059,23 +1059,6 @@ if (empty($step)) {
     xarUnregisterMask('AssignRole');
 
     // Check the installed privs and masks.
-    echo "<h5>Checking Hook Structure</h5>";
-
-    $ratings = array();
-
-    if (xarModIsAvailable('ratings')) {
-        $ratings['deleteall'] = xarModRegisterHook('module', 'remove', 'API', 'ratings', 'admin', 'deleteall');
-    }
-
-    if (!isset($ratings['deleteall']) || !$ratings['deleteall']) {
-        echo "Ratings Delete All Hook already exists, moving to next check. <br /> ";
-    } else {
-        echo "Setting Ratings Delete All Hook... done! <br />";
-    }
-
-    if (!xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange')) {}
-
-    // Check the installed privs and masks.
     echo "<h5>Checking Time / Date Structure</h5>";
 
     include 'includes/xarDate.php';

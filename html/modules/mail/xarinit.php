@@ -81,6 +81,23 @@ function mail_upgrade($oldVersion)
     case '0.01':
         // Compatability upgrade nothing to be done
         break;
+
+    case '0.1.0':
+        // clean up double hook registrations
+        xarModUnregisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
+        xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
+        $hookedmodules = xarModAPIFunc('modules', 'admin', 'gethookedmodules',
+                                       array('hookModName' => 'mail'));
+        if (isset($hookedmodules) && is_array($hookedmodules)) {
+            foreach ($hookedmodules as $modname => $value) {
+                foreach ($value as $itemtype => $val) {
+                    xarModAPIFunc('modules','admin','enablehooks',
+                                  array('hookModName' => 'mail',
+                                        'callerModName' => $modname,
+                                        'callerItemType' => $itemtype));
+                }
+            }
+        }
     }
     return true;
 }
