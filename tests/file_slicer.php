@@ -161,7 +161,7 @@ function write_functions($funcMap, $file, $directory) {
         echo "\nWriting function file: [$funcFileName]";
            
         // add < ? php as first line
-        fwrite($fd, "<?php\n\n", 6);
+        fwrite($fd, "<?php\n\n", 7);
         
         for ($i = $func['start']; $i <= $func['end']; $i++) {
             fwrite($fd, $file[$i], strlen($file[$i]));
