@@ -1221,7 +1221,7 @@ class xarTpl__NodesFactory
         }
         // FIXME: how do you handle new tags registered by module developers ?
         // TODO: is xarTplRegisterTag still supposed to work for this ?
-        //If we get here, the tag doesn't exist so we raise a user exception
+        // If we get here, the tag doesn't exist so we raise a user exception
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
                        new xarTpl__ParserError("Cannot instantiate nonexistent tag '$tagName'.", $parser));
         return;
@@ -2552,18 +2552,23 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
             $template = '';
         }
 
-        // Calculate block ID - theme dependent
-        // FIXME: <marco> What is this for?
-        // <mikespub> for block caching, perhaps ? Note that there's not necessarily a unique id here !
-        if (isset($id)) {
-            return "xarBlock_renderBlock(array('bid' => '$id'))";
+        // If the block instance attribute is specified in the tag, render it directly 
+        // NOTE: $id is also an attribute, but that is an id attribute in XML sense, not in DB sense
+        if (isset($instance)) {
+            return "xarBlock_renderBlock(array('bid' => '$instance'))";
         } else {
-            $id = 0;
+            $instance = 0;
         }
-        $bid = md5(xarTplGetThemeName().$id);
 
-// TODO: allow designers to fill in or override the settings defined in the (serialized) blockinfo['content']
-
+        // Calculate block ID - theme dependent
+        // FIXME: 
+        // <marco>    What is this for?
+        // <mikespub> for block caching, perhaps ? Note that there's not necessarily a unique id here !
+        // <mrb>      i could not figure out where this is used, but $id is optional attribute, so that is not
+        //            always set. The bid is never used.
+        $bid = md5(xarTplGetThemeName().$instance);
+        
+        // TODO: allow designers to fill in or override the settings defined in the (serialized) blockinfo['content']
         if (isset($this->children) && count($this->children) > 0) {
             $contentNode = $this->children[0];
             if (isset($contentNode)) {
