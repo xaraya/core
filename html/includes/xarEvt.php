@@ -249,14 +249,14 @@ function xarEvt__GetActiveModsList()
                  $modInfo['directory'], $modInfo['version'],
                  $modState) = $result->fields;
                 
-            if (xarVarIsCached('Evt.Mod.Infos', $modInfo['regid'])) {
+            if (xarCore_IsCached('Evt.Mod.Infos', $modInfo['regid'])) {
                 // Get infos from cache
-                $modList[] = xarVarGetCached('Evt.Mod.Infos', $modInfo['regid']);
+                $modList[] = xarCore_GetCached('Evt.Mod.Infos', $modInfo['regid']);
             } else {
                 $modInfo['mode'] = (int) $mode;
                 $modInfo['state'] = (int) $modState;
-                xarVarSetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
-                xarVarSetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
+                xarCore_SetCached('Evt.Mod.BaseInfos', $modInfo['name'], $modInfo);
+                xarCore_SetCached('Evt.Mod.Infos', $modInfo['regid'], $modInfo);
                 $modList[] = $modInfo;
             }
             $modInfo = array();
