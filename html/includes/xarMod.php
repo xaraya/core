@@ -40,6 +40,11 @@ define('XARTHEME_STATE_MISSING', 4);
 define('XARTHEME_STATE_UPGRADED', 5);
 define('XARTHEME_STATE_ANY', 0);
 
+/**
+ * Flags for loading APIs
+ */
+define('XARMOD_LOAD_ANYSTATE', 1);
+
 /*
  * Modules modes
  */
@@ -588,10 +593,11 @@ function xarModGetInfo($modRegId, $type = 'module')
  * @access private
  * @param modName string - name of module to load
  * @param modType string - type of functions to load
+ * @param flags number - flags to modify function behaviour
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModPrivateLoad($modName, $modType)
+function xarModPrivateLoad($modName, $modType, $flags = 0)
 {
     static $loadedModuleCache = array();
     if (empty($modName)) {
@@ -610,7 +616,7 @@ function xarModPrivateLoad($modName, $modType)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
-    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
+    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
         return;
     }
@@ -719,7 +725,7 @@ function xarModAPILoad($modName, $modType = 'user')
         return;
     }
 
-    return xarModPrivateLoad($modName, $modType.'api');
+    return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
 }
 
 /**
