@@ -462,7 +462,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if (trim($text) != '') {
                             if ($parent->hasText()) {
                                 $children[] = $this->nodesFactory->createTextNode($text, $this);
-                            } elseif (trim($text) != '') {
+                            } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
                             }
@@ -648,7 +648,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
                             $children[] = $this->nodesFactory->createTextNode($text, $this);
-                        } elseif (trim($text) != '') {
+                        } else {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
                         }
@@ -712,7 +712,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
                             $children[] = $this->nodesFactory->createTextNode($text, $this);
-                        } elseif (trim($text) != '') {
+                        } else {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
                         }
