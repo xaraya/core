@@ -180,6 +180,9 @@
 			#$extra_fields# 
 		</xar:if>
 		<p>
+		    #$hooks#
+		</p>
+		<p>
 			<input type="submit" value="#$updatelabel#" />
 		</p>
 	</form>

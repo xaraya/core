@@ -173,7 +173,7 @@ function xarBlock_renderGroup($groupName)
         if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch')) {
             $caching = 1;
             $cacheKey = $blockInfo['module']."-blockid".$blockInfo['bid'];
-            $args = array('cacheKey' => $cacheKey, 'name' => 'block');
+            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockInfo['bid']);
         }
  
         if ($caching == 1 && xarBlockIsCached($args)) {

@@ -143,6 +143,8 @@ function xarBlockIsCached($args)
     
     $factors = $xarTpl_themeDir;
     
+    //error_log("block id = " . $blockid);
+    
     if (!isset($blockDynamics)) {
     	$blockDynamics = 1;
     }
@@ -160,9 +162,9 @@ function xarBlockIsCached($args)
     if ($blockPermission == 1) {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $rolemembers = $systemPrefix . '_rolemembers';
-        $cuid = xarSessionGetVar('uid');
+        $currentuid = xarSessionGetVar('uid');
         list($dbconn) = xarDBGetConn();
-        $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $cuid ";
+        $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $currentuid ";
         $result =& $dbconn->Execute($query);
         if (!$result) return;
         $gids ='';
@@ -185,7 +187,7 @@ function xarBlockIsCached($args)
     
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
         filemtime($cache_file) > time() - $xarPage_cacheTime) {
@@ -285,7 +287,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
         (!file_exists($cache_file) ||
          filemtime($cache_file) < time() - $xarPage_cacheTime) &&
         xarCacheDirSize($xarPage_cacheCollection) <= $xarOutput_cacheSizeLimit

@@ -119,6 +119,16 @@ function blocks_admin_modify_instance()
 
         $result->MoveNext();
     }
+    
+    $hooks = xarModCallHooks('item', 'modify', $bid, '');
+    //error_log("hooked to blocks = " . serialize($hooks));
+    if (empty($hooks)) {
+        $hooks = '';
+    } elseif (is_array($hooks)) {
+        $hooks = join('',$hooks);
+    } else {
+        $hooks = $hooks;
+    }
 
     return array('authid'         => xarSecGenAuthKey(),
                  'bid'            => $bid,
@@ -126,6 +136,7 @@ function blocks_admin_modify_instance()
                  'instance'       => $instance,
                  'extra_fields'   => $extra,
                  'block_settings' => $block_edit,
+                 'hooks'          => $hooks,
                  'refresh_times'  => $refreshtimes,
                  'updatelabel'    => xarML('Update'));
 }

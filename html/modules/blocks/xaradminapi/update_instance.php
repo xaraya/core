@@ -70,9 +70,11 @@ function blocks_adminapi_update_instance($args)
               WHERE xar_instance_id=" . xarVarPrepForStore($id);
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+    
+    $args['module'] = 'blocks';
 
     xarModCallHooks(
-                    'item', 'update', $id, ''
+                    'item', 'update', $id, $args
                     );
     
     return true;
