@@ -338,6 +338,22 @@ function xarUFindRole($name)
     return $roles->ufindRole($name);
 }
 
+/* xarTree: creates a tree object
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string name
+ * @return  object role
+ */
+function xarTree()
+{
+    include_once 'modules/roles/xartreerenderer.php';
+    $tree = new xarTreeRenderer();
+    return $tree;
+}
+
 /* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
  *
  * This is a wrapper function

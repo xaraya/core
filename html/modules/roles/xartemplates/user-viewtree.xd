@@ -1,0 +1,6 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Roles Tree</xar:mlstring></h2>
+	<div style="margin: auto;">
+		#$chart#
+	</div>
+</div>

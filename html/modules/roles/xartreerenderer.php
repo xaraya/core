@@ -30,13 +30,13 @@ class xarTreeRenderer {
     var $alreadydone;
 
     // convenience variables to hold strings referring to pictures
+    var $expandedbox;
+    var $collapsedbox;
     var $el             = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle" />';
     var $tee            = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle" />';
     var $aye            = '<img src="modules/roles/xarimages/I.gif" alt="" style="vertical-align: middle" />';
     var $bar            = '<img src="modules/roles/xarimages/s.gif" alt="" style="vertical-align: middle" />';
     var $emptybox       = '<img class="xar-roletree-box" src="modules/roles/xarimages/k1.gif" alt="" style="vertical-align: middle" />';
-    var $expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)" />';
-    var $collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)"/>';
     var $blank          = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
     var $bigblank       = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
     var $smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
@@ -45,7 +45,7 @@ class xarTreeRenderer {
     /**
      * Constructor
      */
-    function xarTreeRenderer()
+    function xarTreeRenderer($allowtoggle=0)
     {
         $this->roles = new xarRoles();
         $this->setitem(1, "deleteitem");
@@ -55,6 +55,14 @@ class xarTreeRenderer {
         $this->setitem(5, "testitem");
         $this->setitem(6, "treeitem");
         $this->setitem(7, "descriptionitem");
+        if ($allowtoggle) {
+            $this->expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)" />';
+            $this->collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)"/>';
+        }
+        else {
+            $this->expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" />';
+            $this->collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" />';
+        }
     }
 
     /**
