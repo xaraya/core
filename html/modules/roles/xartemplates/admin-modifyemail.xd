@@ -13,8 +13,8 @@
         <xar:set name="$tmptitle"><xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates</xar:mlstring></xar:set>
 	<div class="help" title="#$tmptitle#"><xar:mlstring>Actions</xar:mlstring></div>
 	<div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
-	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'modifyemail')#" class="active"><xar:mlstring>Templates</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 </div>
 <div style="margin: auto;">
 	<div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>

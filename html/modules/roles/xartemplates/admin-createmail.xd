@@ -21,8 +21,8 @@
 		<div id="tabnav">
 			<div class="help" title="#xarML('Send mail to groups, configure automatic notification or edit notification templates')#"><xar:mlstring>Actions</xar:mlstring></div>
 			<div><a href="#xarModURL('roles', 'admin', 'createmail')#" class="active"><xar:mlstring>Send mail</xar:mlstring></a></div>
-			<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 			<div><a href="#xarModURL('roles', 'admin', 'modifyemail')#"><xar:mlstring>Templates</xar:mlstring></a></div>
+			<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
 		</div>
 		</xar:if>
 		<br />
@@ -327,6 +327,7 @@
 				</form>
 			</div>
 			</xar:if>
+		</xar:if>
 		<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
@@ -347,7 +348,7 @@
 				</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="subject" id="subject" size="40" value="#$subject#"  maxlength="150" />
+				<input type="text" name="subject" id="subject" size="60" value="#$subject#"  maxlength="150" />
 			    </span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">
@@ -357,11 +358,19 @@
 				</span>
 			    </span>
 			    <span style="float: right; width: 78%; text-align: left;">
-				<textarea name="message" id="message" rows="20" cols="60">#$message#</textarea>
+				<textarea name="message" id="message" rows="20" cols="80">#$message#</textarea>
 			    </span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">
-			    <div style="float: left; width: 45%; text-align: right; margin-top: 5px;"><input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);"/>&nbsp;&nbsp;&nbsp;<input type="submit" value="#xarML('Send')#" /></div>
+			    <div style="float: left; width: 45%; text-align: right; margin-top: 5px;">
+					<input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);"/>
+					&nbsp;&nbsp;&nbsp;
+					<xar:if condition="!isset($users) or $users eq 0">
+						<input type="submit" value="#xarML('Send')#" disabled/>
+					<xar:else />
+						<input type="submit" value="#xarML('Send')#" />
+					</xar:if>
+			    </div>
 			</div>
 			<div style="clear: both; padding-top: 10px;">
 				   <span style="float: right; width: 95%; text-align: left;">
@@ -394,6 +403,5 @@
 			 </div>
 		</div>
 		</form>
-	</xar:if>
 	</div>
 </div>
