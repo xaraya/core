@@ -3,8 +3,10 @@
 <div style="margin: auto;">
 	<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<p><xar:mlstring>Message</xar:mlstring></p>
-		<p><textarea name="email" id="email" wrap="soft" rows="20" cols="50"></textarea></p>
+		<input type="hidden" name="uid" id="uid" value="#$uid#" />
+		<p><xar:mlstring>Subject</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
+		<p><xar:mlstring>Message</xar:mlstring>:</p>
+		<p><textarea name="message" id="message" wrap="soft" rows="20" cols="50"></textarea></p>
 		<p><input type="submit" value="Submit" align="middle" /></p>
 	</form>
 </div>
