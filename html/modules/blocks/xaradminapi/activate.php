@@ -25,7 +25,7 @@ function blocks_adminapi_activate($args)
 
     // Argument check
     if (!isset($bid) || !is_numeric($bid)) {
-        $msg = xarML('Invalid Parameter Count', join(', ', $invalid), 'admin', 'create', 'blocks');
+        $msg = xarML('Wrong arguments for blocks_adminapi_activate');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
