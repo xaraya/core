@@ -10,7 +10,11 @@
 
 <!--- Example previous page link
 <xar:if condition="$prevpageitems gt 0">
-	&nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
+    <xar:set name="$prevpagelabel"><xar:ml>
+        <xar:mlstring>Previous #(1) items</xar:mlstring>
+        <xar:mlvar>#$prevpageitems#</xar:mlvar>
+    </xar:ml></xar:set>
+	&nbsp;&nbsp;<a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
 <xar:else />
 	&nbsp;&nbsp;&lt;
 </xar:if>
@@ -24,9 +28,13 @@
     </xar:if>
 </xar:foreach>
 
-<!---
+<!--- Example next page link
 <xar:if condition="$nextpageitems gt 0">
-	&nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
+    <xar:set name="$nextpagelabel"><xar:ml>
+        <xar:mlstring>Next #(1) items</xar:mlstring>
+        <xar:mlvar>#$nextpageitems#</xar:mlvar>
+    </xar:ml></xar:set>
+	&nbsp;&nbsp;<a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
 <xar:else />
 	&nbsp;&nbsp;&gt;
 </xar:if>
@@ -38,7 +46,7 @@
         <xar:mlvar>#$nextblockpages#</xar:mlvar>
     </xar:ml></xar:set>
 	&nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
-	<!--- &nbsp;&nbsp;<a title="#xarML('Last')#" href="#$lasturl#">&gt;|</a> --->
+	<!--- &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a> --->
 <xar:else/>
 	&nbsp;&nbsp;&gt;&gt;
     <!--- &nbsp;&nbsp;&gt;| --->

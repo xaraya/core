@@ -467,12 +467,112 @@ function xarTplGetImage($modImage, $modName = NULL)
 }
 
 /**
+ * Creates pager information with no assumptions to output format.
+ *
+ * @author Jason Judge
+ * @since 2003/10/09
+ * @access public
+ * @param integer $startNum start item
+ * @param integer $total total number of items present
+ * @param integer $itemsPerPage number of links to display (default=10)
+ * @param integer $pageBlockSize number of pages to display at once (default=10)
+ */
+function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize = 10)
+{
+    // Sanity check on arguments.
+    if ($itemsPerPage < 1) {$itemsPerPage = 10;}
+    if ($startNum < 1) {$startNum = 1;}
+
+    // Number of pages in a page block.
+    if ($pageBlockSize < 1) {$pageBlockSize = 10;}
+
+    // Max number of items in a block of pages.
+    $itemsPerBlock = ($pageBlockSize * $itemsPerPage);
+
+    // Get the start and end items of the page block containing the current item.
+    $blockStart = $startNum - (($startNum-1) % $itemsPerBlock);
+    $blockEnd = $blockStart + $itemsPerBlock - 1;
+    if ($blockEnd > $total) {$blockEnd = $total;}
+
+    // Get start and end items of the current page.
+    $pageStart = $startNum - (($startNum-1) % $itemsPerPage);
+    $pageEnd = $pageStart + $itemsPerPage - 1;
+    if ($pageEnd > $total) {$pageEnd = $total;}
+
+    // Initialise data array.
+    $data = array();
+    
+    $data['middleitems'] = array();
+    $pageNum = ceil($blockStart / $itemsPerPage);
+    for ($i = $blockStart; $i <= $blockEnd; $i += $itemsPerPage) {
+        $data['middleitems'][$pageNum] = $i;
+        $pageNum += 1;
+    }
+
+    $data['currentitem'] = $startNum;
+    $data['totalitems'] = $total;
+    $data['totalpages'] = (int)ceil($total / $itemsPerPage);
+    $data['totalblocks'] = (int)ceil($total / $itemsPerBlock);
+
+    $data['currentpage'] = (int)ceil($startNum / $itemsPerPage);
+    $data['itemsperblock'] = $itemsPerBlock;
+    $data['itemsperpage'] = $itemsPerPage;
+
+    $data['blockfirstitem'] = $blockStart;
+    $data['blocklastitem'] = $blockEnd;
+
+    $data['pagefirstitem'] = $pageStart;
+    $data['pagelastitem'] = $pageEnd;
+
+    $data['firstpage'] = 1;
+    $data['lastpage'] = $total - (($total-1) % $itemsPerPage);
+
+    // Data for previous page of items.
+    if ($data['currentpage'] > 1) {
+        $data['prevpageitems'] = $itemsPerPage;
+        $data['prevpage'] = ($pageStart - $itemsPerPage);
+    } else {
+        $data['prevpageitems'] = 0;
+    }
+
+    // Data for next page of items.
+    if ($pageEnd < $total) {
+        $nextPageEnd = ($pageEnd + $itemsPerPage);
+        if ($nextPageEnd > $total) {$nextPageEnd = $total;}
+        $data['nextpageitems'] = ($nextPageEnd - $pageEnd);
+        $data['nextpage'] = ($pageEnd + 1);
+    } else {
+        $data['nextpageitems'] = 0;
+    }
+
+    // Data for previous block of pages.
+    if ($blockStart > 1) {
+        $data['prevblockpages'] = $itemsPerPage;
+        $data['prevblock'] = ($blockStart - $itemsPerBlock);
+    } else {
+        $data['prevblockpages'] = 0;
+    }
+    
+    // Data for next block of pages.
+    if ($blockEnd < $total) {
+        $nextBlockEnd = ($blockEnd + $itemsPerBlock);
+        if ($nextBlockEnd > $total) {$nextBlockEnd = $total;}
+        $data['nextblockpages'] = ceil(($nextBlockEnd - $blockEnd) / $itemsPerPage);
+        $data['nextblock'] = ($blockEnd + 1);
+    } else {
+        $data['nextblockpages'] = 0;
+    }
+
+    return $data;
+}
+
+/**
  * Equivalent of pnHTML()'s Pager function (to get rid of pnHTML calls in modules while waiting for widgets)
  *
- * @author Greg 'Adam Baum'
- * @since 1.13 - 2002/01/23
+ * @author Jason Judge
+ * @since 1.13 - 2003/10/09
  * @access public
- * @param integer $startnum start iteam
+ * @param integer $startnum start item
  * @param integer $total total number of items present
  * @param string $urltemplate template for url, will replace '%%' with item number
  * @param integer $perpage number of links to display (default=10)
@@ -482,7 +582,6 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
 {
     // Sanity check on perpage to prevent infinite loops
     if($perpage < 1) {$perpage = 10;}
-
     if($startnum < 1) {$startnum = 1;}
 
     // Quick check to ensure that we have work to do
@@ -496,87 +595,46 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
     // Number of pages in a page block.
     if ($pageBlockSize < 1) {$pageBlockSize = 10;}
 
-    $itemsPerBlock = ($pageBlockSize * $perpage);
+    // Get the pager information.
+    $data = xarTplPagerInfo($startnum, $total, $perpage, 2 /*$pageBlockSize*/);
 
-    // Get the page block start and end item containing the current item.
-    $pageBlockStart = $startnum - ($startnum % $itemsPerBlock) + 1;
-    $pageBlockEnd = $pageBlockStart + $itemsPerBlock - 1;
-    if ($pageBlockEnd > $total) {$pageBlockEnd = $total;}
+    if (empty($data)) {return '';}
 
-    // Get start and end items of the current page.
-    $pageStart = $startnum - ($startnum % $perpage) + 1;
-    $pageEnd = $pageStart + $perpage - 1;
-    if ($pageEnd > $total) {$pageEnd = $total;}
-
-    // Initialise data array.
-    $data = array();
-    
-    $data['middleurls'] = array();
-    $pageNum = floor($pageBlockStart / $perpage) + 1;
-    for ($i = $pageBlockStart; $i <= $pageBlockEnd; $i += $perpage) {
-        $data['middleurls'][$pageNum] = str_replace('%%', $i, $urltemplate);
-        $pageNum += 1;
-    }
-    
     // These two links are for first and last pages.
-    $data['firsturl'] = str_replace('%%', 1, $urltemplate);
-    $data['lasturl'] = str_replace('%%', $total - (($total-1) % $perpage), $urltemplate);
+    $data['firsturl'] = str_replace('%%', $data['firstpage'], $urltemplate);
+    $data['lasturl'] = str_replace('%%', $data['lastpage'], $urltemplate);
 
-    $data['currentitem'] = $startnum;
-    $data['totalitems'] = $total;
-
-    $data['currentpage'] = floor($startnum / $perpage) + 1;
-    $data['itemsperblock'] = $itemsPerBlock;
-    $data['itemsperpage'] = $perpage;
+    // Middle URLs
+    $data['middleurls'] = array();
+    foreach ($data['middleitems'] as $pageNum => $itemNum) {
+        $data['middleurls'][$pageNum] = str_replace('%%', $itemNum, $urltemplate);
+    }
 
     // Links for previous page of items.
-    if ($data['currentpage'] > 1) {
-        $data['prevpageurl'] = str_replace('%%', $startnum - $perpage, $urltemplate);
-        $data['prevpageitems'] = $perpage;
-    } else {
-        $data['prevpageitems'] = 0;
+    if ($data['prevpageitems'] > 0) {
+        $data['prevpageurl'] = str_replace('%%', $data['prevpage'], $urltemplate);
     }
 
     // Links for next page of items.
-    if ($pageEnd < $total) {
-        $data['nextpageurl'] = str_replace('%%', $startnum + $perpage, $urltemplate);
-        $nextPageEnd = ($pageEnd + $perpage);
-        if ($nextPageEnd > $total) {$nextPageEnd = $total;}
-        $data['nextpageitems'] = ($nextPageEnd - $pageEnd);
-    } else {
-        $data['nextpageitems'] = 0;
+    if ($data['nextpageitems'] > 0) {
+        $data['nextpageurl'] = str_replace('%%', $data['nextpage'], $urltemplate);
     }
 
-    // TODO: get rid of this leftarrow and rightarrow stuff - 'arrows' are meaningless
-    // in this context, and left/right depend on international settings. It is not
-    // actually clear what pager.first and pager.last are meant to represent anyway as
-    // there are so many different links that could be useful in different contexts.
-
     // Links for previous block of pages.
-    if ($pageBlockStart > 1) {
-        $data['prevblockurl'] = str_replace('%%', $pageBlockStart - $itemsPerBlock, $urltemplate);
+    if ($data['prevblockpages'] > 0) {
+        $data['prevblockurl'] = str_replace('%%', $data['prevblock'], $urltemplate);
         xarVarSetCached('Pager.first', 'leftarrow', $data['firsturl']);
-        $data['prevblockpages'] = $perpage;
-    } else {
-        $data['prevblockpages'] = 0;
     }
     
     // Links for next block of pages.
-    if ($pageBlockEnd < $total) {
-        $data['nextblockurl'] = str_replace('%%', $pageBlockEnd + 1, $urltemplate);
+    if ($data['nextblockpages'] > 0) {
+        $data['nextblockurl'] = str_replace('%%', $data['nextblock'], $urltemplate);
         xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
-
-        $nextBlockEnd = ($pageBlockEnd + $itemsPerBlock);
-        if ($nextBlockEnd > $total) {$nextBlockEnd = $total;}
-        $data['nextblockpages'] = floor(($nextBlockEnd - $pageBlockEnd) / $perpage) + 1;
-    } else {
-        $data['nextblockpages'] = 0;
     }
-    
+
     // Cache all the pager details for use elsewhere.
     //xarVarSetCached('Pager.full', 'details', $data);
 
-    // TODO: provide access to the non-templated output for special purpose pagers.
     return trim(xarTplModule('base', 'user', 'pager', $data));
 }
 
