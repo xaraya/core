@@ -25,7 +25,7 @@ class ADODB_mysql extends ADOConnection {
 	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $hasLimit = true;
 	var $hasMoveFirst = true;
-	var $hasGenID = true;
+	var $hasGenID = false;
 	var $upperCase = 'upper';
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = 'CURDATE()';
