@@ -2396,7 +2396,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
             return;
         }
         
-        return "\$_bl_blockgroup_template = 'a$template';";
+        return "\$_bl_blockgroup_template = '$template';";
     }
     
     function renderEndTag()
