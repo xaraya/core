@@ -6,7 +6,7 @@
 		<td><xar:mlstring>Username</xar:mlstring>:</td>
 		<td><input type="text" name="uname" id="uname" value="#$values['uname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['uname'])">
-				<span style="color: red">#$invalid['uname']#</span>
+				<span class="xar-error">#$invalid['uname']#</span>
 			</xar:if>
 		</td>
 	</tr>
@@ -14,7 +14,7 @@
 		<td><xar:mlstring>Display Name</xar:mlstring>:</td>
 		<td><input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['realname'])">
-				<span style="color: red">#$invalid['realname']#</span>
+				<span class="xar-error">#$invalid['realname']#</span>
 			</xar:if>
 		</td>
 	</tr>
@@ -22,7 +22,7 @@
 		<td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
 		<td><input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['email'])">
-				<span style="color: red">#$invalid['email']#</span>
+				<span class="xar-error">#$invalid['email']#</span>
 			</xar:if>
 		</td>
 	</tr>
@@ -31,7 +31,7 @@
 			<td><xar:mlstring>Password</xar:mlstring>:</td>
 			<td><input type="password" name="pass1" id="pass1" value="#$values['pass1']#"" size="25" maxlength="40" />
 					<xar:if condition="!empty($invalid['pass1'])">
-						<span style="color: red">#$invalid['pass1']#</span>
+						<span class="xar-error">#$invalid['pass1']#</span>
 					</xar:if>
 			</td>
 		</tr>
@@ -39,7 +39,7 @@
 			<td><xar:mlstring>Retype Password</xar:mlstring>:</td>
 			<td><input type="password" name="pass2" id="pass2" value="#$values['pass2']#"" size="25" maxlength="40" />
 					<xar:if condition="!empty($invalid['pass2'])">
-						<span style="color: red">#$invalid['pass2']#</span>
+						<span class="xar-error">#$invalid['pass2']#</span>
 					</xar:if>
 			</td>
 		</tr>
@@ -51,7 +51,7 @@
 					<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 				</label>
 				<xar:if condition="!empty($invalid['agreetoterms'])">
-					<span style="color: red">#$invalid['agreetoterms']#</span>
+					<span class="xar-error">#$invalid['agreetoterms']#</span>
 				</xar:if>
 			</td>
 		</tr>
@@ -63,7 +63,7 @@
 					<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
 				</label>
 					<xar:if condition="!empty($invalid['agreetoterms'])">
-						<span style="color: red">#$invalid['agreetoterms']#</span>
+						<span class="xar-error">#$invalid['agreetoterms']#</span>
 					</xar:if>
 			</td>
 		</tr>
@@ -75,7 +75,7 @@
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('roles', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 			</label>
 				<xar:if condition="!empty($invalid['agreetoterms'])">
-					<span style="color: red">#$invalid['agreetoterms']#</span>
+					<span class="xar-error">#$invalid['agreetoterms']#</span>
 				</xar:if>
 			</td>
 		</tr>
