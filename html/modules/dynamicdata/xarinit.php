@@ -115,7 +115,7 @@ function dynamicdata_init()
     $objects = array(
                      "(1,'objects','Dynamic Objects',$modid,0,'itemid',0,'',0)",
                      "(2,'properties','Dynamic Properties',$modid,1,'itemid',0,'',0)",
-                     "(3,'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',1)",
+                     "(3,'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',0)",
                     );
     foreach ($objects as $object) {
         $query = "INSERT INTO $dynamic_objects

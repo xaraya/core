@@ -24,7 +24,7 @@ $modversion['official'] = 1;
 $modversion['author'] = 'mikespub';
 $modversion['contact'] = 'http://www.xaraya.com/';
 $modversion['admin'] = 1;
-$modversion['user'] = 0;
+$modversion['user'] = 1;
 $modversion['securityschema'] = array('DynamicData::Item' => 'ModuleID:ItemType:ItemID',
                                       'DynamicData::Field' => 'FieldName:FieldType:FieldID');
 $modversion['class'] = 'Core Complete';

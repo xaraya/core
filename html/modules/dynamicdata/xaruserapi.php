@@ -1195,6 +1195,11 @@ function dynamicdata_userapi_getmenulinks()
             // skip the internal objects
             if ($itemid < 3) continue;
             $modid = $object['moduleid'];
+            // don't show data "belonging" to other modules for now
+            if ($modid != $mymodid) {
+                continue;
+            }
+            // nice(r) URLs
             if ($modid == $mymodid) {
                 $modid = null;
             }
