@@ -58,7 +58,9 @@
                     </a>
                     | 
                     <a href="#$loop:item['deleteurl']#" onClick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                        <xar:mlstring>
                         Delete 
+                        </xar:mlstring>
                     </a>
                 </td>
             </tr>
