@@ -78,11 +78,6 @@ function xarErrorSet($major, $errorID, $value = NULL)
             xarCore_die('Attempting to set an error with an invalid major value: ' . $major);
     }
 
-    //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    if (!error_reporting()) {
-        return;
-    }
-
     $stack = xarException__backTrace();
     if (!is_object($value)) {
         // The error passed in is just a msg or an identifier, try to construct
@@ -315,6 +310,11 @@ function xarErrorRender($format,$thisstack = "ERROR")
 function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {
     global $CoreStack;
+
+    //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
+    if (!error_reporting()) {
+        return;
+    }
 
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
