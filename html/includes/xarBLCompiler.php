@@ -1074,9 +1074,9 @@ class xarTpl__NodesFactory
     function createTplInstructionNode($instruction, $parser)
     {
         if ($instruction[0] == '$') {
-            $node = new xarTpl__PntVarInstructionNode();
+            $node = new xarTpl__XarVarInstructionNode();
         } else {
-            $node = new xarTpl__PntApiInstructionNode();
+            $node = new xarTpl__XarApiInstructionNode();
         }
         
         if (isset($node)) {
@@ -1438,7 +1438,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
     }
 }
 
-class xarTpl__PntVarInstructionNode extends xarTpl__InstructionNode
+class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
 {
     function render()
     {
@@ -1455,7 +1455,7 @@ class xarTpl__PntVarInstructionNode extends xarTpl__InstructionNode
     }
 }
 
-class xarTpl__PntApiInstructionNode extends xarTpl__InstructionNode
+class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
 {
     function render()
     {
@@ -1471,7 +1471,7 @@ class xarTpl__PntApiInstructionNode extends xarTpl__InstructionNode
     }
 }
 
-class xarTpl__PntVarEntityNode extends xarTpl__EntityNode
+class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
 {
     function render()
     {
