@@ -1331,7 +1331,7 @@ if (empty($step)) {
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete. It is recommended you go to the
 <a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
-to upgrade the modules which have gotten a new version.
+to upgrade the modules which have a new version.
 </div>
 </div>
 </div>
