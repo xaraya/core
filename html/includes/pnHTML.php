@@ -472,7 +472,7 @@ class pnHTML
         $arg['authid'] = xarSecGenAuthKey();
         $arg['confirmation'] = 1;
         $compoutput->FormHidden($arg);
-        $compoutput->FormSubmit(_CONFIRM);
+        $compoutput->FormSubmit(xarML('Confirm'));
         $compoutput->Linebreak(2);
         $compoutput->URL($cancel_url, $cancel_text);
         $compoutput->FormEnd();

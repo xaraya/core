@@ -640,7 +640,7 @@ function pnInit()
     return xarCoreInit();
 }
 
-function pnModAPIFunc($modName, $modType, $funcName, $args = NULL)
+function pnModAPIFunc($modName, $modType, $funcName, $args = array())
 {
     return xarModAPIFunc($modName, $modType, $funcName, $args);
 }
