@@ -189,7 +189,8 @@ $schemas = array();
 	function xarMakeRoleMemberByID($childid, $parentid) {
 			$roles = new xarRoles();
 			$parent = $roles->getRole($parentid);
-			return $$parent->addMember($childid);
+            $child = $roles->getRole($childid);
+			return $parent->addMember($child);
 	}
 
 /**
