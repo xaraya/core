@@ -63,7 +63,7 @@ function modules_adminapi_updatehooks($args)
     foreach ($modList as $mod) {
         // Get selected value of hook (which is an array of all the itemtypes selected)
         // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
-        $ishooked = xarVarCleanFromInput("hooked_" . $mod['name']);
+        xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);
         // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
         if (!empty($ishooked) && $ishooked[0] != 0) {
             // There is something in there, either for all itemtypes or for some
@@ -94,10 +94,28 @@ function modules_adminapi_updatehooks($args)
             foreach ($todo as $modname => $hookvalue) {
                 // Insert hook if required
                 xarLogMessage('Value: ' . $hookvalue[0] . ' for ' . $modname);
-                
+
+                // If user specified ALL specifically, set itemtype hard to empty
+                if ($hookvalue[0] == 1) {
+                    $itemtype = '';
+                    $sql = "INSERT INTO $xartable[hooks] (
+                                xar_id, xar_object, xar_action, xar_smodule,
+                                xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
+                                VALUES (?,?,?,?,?,?,?,?,?)";
+                    $bindvars = array($dbconn->GenId($xartable['hooks']),
+                                      $hookobject, $hookaction, $modname,
+                                      $itemtype, $hooktarea, $hooktmodule,
+                                      $hookttype,$hooktfunc);
+                    $subresult =& $dbconn->Execute($sql,$bindvars);
+                    if (!$subresult) return;
+                    // we're done for this module
+                    continue;
+                }
+
+                // If user specified SOME specifically, skip itemtype 0
                 foreach (array_keys($hookvalue) as $itemtype) {
-                    // If user specified ALL specifically, set itemtype hard to empty
-                    if ($hookvalue[0] == 1 || $itemtype == 0) $itemtype = '';
+                    // If user specified SOME specifically, skip itemtype 0
+                    if ($hookvalue[0] == 2 && $itemtype == 0) continue;
                     
                     $sql = "INSERT INTO $xartable[hooks] (
                                 xar_id, xar_object, xar_action, xar_smodule,
