@@ -1,7 +1,7 @@
 <!-- modules module template: file admin-list.xd -->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>View Modules</xar:mlstring></h2>
+    <h2><xar:mlstring>View Modules (list mode)</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-settings;">
         <div class="xar-mod-body" style="border-width: thin; border-style: solid; border-color: #B3B3B3; padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
@@ -20,7 +20,7 @@
                     <label class="xar-mod-title" for="hide"><xar:mlstring>Hide</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap" colspan="3">
-                    <label class="xar-mod-title" for="reload"><xar:mlstring>Enforce</xar:mlstring></label>
+                    <label class="xar-mod-title" for="reload"><xar:mlstring>Force</xar:mlstring></label>
                 </th>
               </tr>
               <tr>
@@ -66,7 +66,7 @@
                 </td>
                 <td style="text-align: left;vertical-align: middle;">  
                   <label for="hidecore">
-                    <label for="hidecore"><xar:mlstring>Core Mods</xar:mlstring></label>
+                    <label for="hidecore"><xar:mlstring>Core Modules</xar:mlstring></label>
                   </label>
                 </td>
                 <td style="text-align: right;">
@@ -206,7 +206,7 @@
             </table>
         </div>
         <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: #B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <xar:mlstring>Note to module developers: removal of all core modules is currently disabled;</xar:mlstring>
+            <xar:mlstring>Note to module developers: removal (and upgrades) of all core modules is currently disabled from GUI;</xar:mlstring>
             <xar:mlstring>you may need to re-classify your modules in accordance with</xar:mlstring>
             <a href="http://docs.xaraya.com/docs/rfcs/rfc0013.html">RFC-13</a>
             <xar:if condition="$selstyle eq 'icons'"><br />
