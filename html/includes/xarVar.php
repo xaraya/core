@@ -529,6 +529,13 @@ class xarVarGroupValidator extends xarVarValidator
 /**
  * Cleans a variable.
  *
+ *******************************************************************
+ * <nuncanada>
+ * This is a bad way to add security!
+ * You have to quote/escape/treat the variable upon the change of interpretation, not when
+ * getting them from the input!!
+ *********************************************************************
+ *
  * Cleaning it up to try to ensure that hack attacks
  * don't work. Typically used for cleaning variables
  * coming from user input.
@@ -560,6 +567,13 @@ function xarVarCleanUntrusted($var)
  *
  * Gets a global variable, cleaning it up to try to ensure that
  * hack attacks don't work. Can have as many parameters as needed.
+ *
+ *******************************************************************
+ * <nuncanada>
+ * This is a bad way to add security!
+ * You have to quote/escape/treat the variable upon the change of interpretation, not when
+ * getting them from the input!!
+ *********************************************************************
  *
  * @access public
  * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
