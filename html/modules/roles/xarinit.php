@@ -328,7 +328,7 @@ function roles_delete()
     // Delete any module variables
     xarModDelVar('roles', 'tacs');
     xarModDelVar('roles', 'showtacs');
-    xarModDelVar('roles', 'itemsperpage');
+    xarModDelVar('roles', 'rolesperpage');
     xarModDelVar('roles', 'disallowednames');
     xarModDelVar('roles', 'disallowedemails');
 

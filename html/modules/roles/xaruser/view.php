@@ -24,8 +24,6 @@ function roles_user_view()
     $data['pager'] = '';
     $order = xarVarPrepForDisplay($order);
 
-    $perpage = xarModGetVar('roles','itemsperpage');
-
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 

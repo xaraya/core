@@ -15,7 +15,12 @@ function roles_admin_showusers()
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
-    $numitems = xarModGetVar('roles', 'itemsperpage');
+    $numitems = xarModGetVar('roles', 'rolesperpage');
+
+    // Make sure a value was retrieved for rolesperpage
+    if (empty($numitems))
+        $numitems = -1;
+
     // get all children of this role that are users
     switch (strtolower($phase)) {
         case 'viewall':
