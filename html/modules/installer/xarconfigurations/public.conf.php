@@ -204,27 +204,27 @@ function installer_public_configuration_load($args)
 
 function installer_public_commentaccess()
 {
-    xarRegisterPrivilege('CommentAccess','All','All','All','All',ACCESS_COMMENT);
+    xarRegisterPrivilege('CommentAccess','All','All','All','All',ACCESS_COMMENT,'Comment access to all modules');
     xarMakePrivilegeRoot('CommentAccess');
 }
 
 function installer_public_moderateaccess()
 {
-    xarRegisterPrivilege('ModerateAccess','All','All','All','All',ACCESS_MODERATE);
+    xarRegisterPrivilege('ModerateAccess','All','All','All','All',ACCESS_MODERATE,'Moderate access to all modules');
     xarMakePrivilegeRoot('ModerateAccess');
 }
 
 function installer_public_readnoncore()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Exclude access to the core modules');
-    xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
-    xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-    xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
-    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Exclude access to the Blocks module');
-    xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Exclude access to the Mail module');
-    xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Exclude access to the Modules module');
-    xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Exclude access to the Themes module');
-//    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
+    xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Read access only to none-core modules');
+    xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'Read access to all modules');
+    xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Deny access to the Privileges module');
+    xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Deny access to the AdminPanels module');
+    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Deny access to the Blocks module');
+    xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Deny access to the Mail module');
+    xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Deny access to the Modules module');
+    xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Deny access to the Themes module');
+//    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Deny access to the Dynamic Data module');
     xarMakePrivilegeRoot('ReadNonCore');
     xarMakePrivilegeRoot('ReadAccess');
     xarMakePrivilegeRoot('DenyPrivileges');

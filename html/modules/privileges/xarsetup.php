@@ -44,7 +44,6 @@ function initializeSetup()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-//    xarRegisterPrivilege('NoAccess','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
 
     /*********************************************************************
@@ -54,7 +53,6 @@ function initializeSetup()
     * makeMember(Child,Parent)
     *********************************************************************/
 
-//    xarMakePrivilegeRoot('NoAccess');
     xarMakePrivilegeRoot('Administration');
 
     /*********************************************************************
@@ -63,7 +61,6 @@ function initializeSetup()
     * assign(Privilege,Role)
     *********************************************************************/
 
-//    xarAssignPrivilege('NoAccess','Everybody');
     xarAssignPrivilege('Administration','Administrators');
 
     /*********************************************************************

@@ -248,7 +248,7 @@ class xarTreeRenderer {
                              array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
         $this->html .= count($this->privs->getsubprivileges($object['pid'])) . ' components';
 
-        $this->html .= "<span>";
+        $this->html .= '<span style="position:absolute;left:35em;">';
         $this->html .= $object['description'];
         $this->html .= "</span>";
 
