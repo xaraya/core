@@ -1,0 +1,99 @@
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:comment>
+    Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
+</xar:comment>
+<xar:link-module-stylesheet modname="blocks" />
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Themes Administration 
+        </xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>
+            Cascading Style Sheets (CSS) Manager 
+        </xar:mlstring>
+    </h2>
+    <xar:template file="navtabs" type="module" />
+    <xar:if condition="$component eq ''">
+        <p>
+            <xar:mlstring>
+                The CSS subsystem can function in one of two modes: configurable (managed) or non-configurable (unmanaged - default). While default mode is extremely fast and fool-proof, the configurable option gives much more flexibility and control over the way css is treated by Xaraya. 
+            </xar:mlstring>
+        </p>
+        <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'cssconfig')#" method="post">
+            <fieldset class="xar-norm">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <fieldset class="formelements xar-norm">
+                    <legend>
+                        <strong>
+                            <xar:mlstring>
+                                CSS Options 
+                            </xar:mlstring>
+                        </strong>
+                    </legend>
+                    <p class="param">
+                        <label for="configurable">
+                            <xar:mlstring>
+                                Mode
+                            </xar:mlstring>
+                        </label>
+                        <xar:if condition="$configurable">
+                            <xar:mlstring>managed</xar:mlstring>
+                        <xar:else />
+                            <xar:mlstring>unmanaged</xar:mlstring>
+                        </xar:if>
+                    </p>
+                    <p class="param">
+                        <label for="configurable">
+                            <xar:mlstring>
+                                Set Mode
+                            </xar:mlstring>
+                        </label>
+                        <xar:if condition="$configurable">
+                            <input type="radio" value="0" id="configurable" name="configurable" />
+                            <xar:mlstring>unmanaged</xar:mlstring><br />
+                            <input type="radio" value="1" checked="checked" id="configurable" name="configurable" />
+                            <xar:mlstring>leave as managed</xar:mlstring>
+                        <xar:else />
+                            <input type="radio" value="0" checked="checked" id="configurable" name="configurable" />
+                            <xar:mlstring>leave as unmanaged</xar:mlstring><br />
+                            <input type="radio" value="1" id="configurable" name="configurable" />
+                            <xar:mlstring>managed</xar:mlstring>
+                        </xar:if>
+                    </p>
+                    <p class="param">
+                        <label for="options">
+                            <a href="#$resettagsurl#">
+                                <xar:mlstring>
+                                    (CSS) Stylesheet Tags 
+                                </xar:mlstring>
+                            </a>
+                        </label>
+                        #$resettagsurlstatus# 
+                    </p>
+                </fieldset>
+                <input type="submit" value="#$submitbutton#" />
+            </fieldset>
+        </form>
+        
+        <h4><xar:mlstring>Note: About stylesheet tags</xar:mlstring></h4>
+        <p>
+            <xar:mlstring>With the manager come the custom template tags. 
+            These should be used in modules and theme templates instead of (old) xarTplAddStyleLink and $tpl:additionalStyles. 
+            See examples in the Xaraya_Classic theme and in this module templates. 
+            The complete list of the tags is also available in "Template Tags" panel, 
+            although modifying the tags from that interface would probably not be advisable.</xar:mlstring>
+        </p>
+        <xar:elseif condition="$component eq 'core'" />
+        <xar:template file="corecss" type="module" />
+        <xar:elseif condition="$component eq 'themes'" />
+        <xar:template file="themescss" type="module" />
+        <xar:elseif condition="$component eq 'modules'" />
+        <xar:template file="modulescss" type="module" />
+    </xar:if>
+</div>

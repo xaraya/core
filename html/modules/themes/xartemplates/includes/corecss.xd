@@ -1,0 +1,108 @@
+<h4>Component - #$component#</h4>
+<p>
+    <xar:mlstring>The Core CSS is a new feature/concept in Xaraya. It allows all CSS-aware themes to automatically link the common css rulesets used throughout the user interface (UI) layouts.</xar:mlstring>
+</p>
+<xar:if condition="$configurable">
+    <p>
+        <xar:mlstring>Normally, it is sufficient to leave on the default settings (static). When the dynamic option is selected administrators and theme developers can visually review and modify each core class as they see fit. The last option is to suppress the core css - it may be useful for debugging purposes.</xar:mlstring>
+    </p>
+    <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'corecssupdate')#" method="post">
+        <fieldset class="xar-norm">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <fieldset class="formelements xar-norm">
+                <legend>
+                    <strong>
+                        <xar:mlstring>Core CSS Options</xar:mlstring>
+                    </strong>
+                </legend>
+                <p class="param">
+                    <label for="linkoptions">
+                        <xar:mlstring>Currently linked css file(s)</xar:mlstring>
+                    </label>
+                    <strong>#$currentcssfile#</strong>
+                </p>
+                <p class="param">
+                    <label for="linkoptions">
+                        <xar:mlstring>Method of serving</xar:mlstring>
+                    </label>
+                    <xar:if condition="$csslinkoption eq 'static'">
+                        <select name="linkoptions" id="linkoptions" size="1">
+                            <option value="static" selected="selected">
+                                <xar:mlstring>Static (default)</xar:mlstring>
+                            </option>
+                            <option value="dynamic">
+                                <xar:mlstring>Dynamic</xar:mlstring>
+                            </option>
+                            <option value="none">
+                                <xar:mlstring>None</xar:mlstring>
+                            </option>
+                        </select>
+                        <xar:elseif condition="$csslinkoption eq 'dynamic'" />
+                        <select name="linkoptions" id="linkoptions" size="1">
+                            <option value="static">
+                                <xar:mlstring>Static (default)</xar:mlstring>
+                            </option>
+                            <option value="dynamic" selected="selected">
+                                <xar:mlstring>Dynamic</xar:mlstring>
+                            </option>
+                            <option value="none">
+                                <xar:mlstring>None</xar:mlstring>
+                            </option>
+                        </select>
+                        <xar:else />
+                        <select name="linkoptions" id="linkoptions" size="1">
+                            <option value="static">
+                                <xar:mlstring>Static (default)</xar:mlstring>
+                            </option>
+                            <option value="dynamic">
+                                <xar:mlstring>Dynamic</xar:mlstring>
+                            </option>
+                            <option value="none" selected="selected">
+                                <xar:mlstring>None</xar:mlstring>
+                            </option>
+                        </select>
+                        <xar:mlstring>(linking is suppressed)</xar:mlstring>
+                    </xar:if>
+                </p>
+                <xar:if condition="$csslinkoption eq 'static'">
+                    <p class="param">
+                        <label for="viewsource">
+                            <xar:mlstring>Source (view only)</xar:mlstring>
+                        </label>
+                        <span class="fullright">
+                            <textarea id="viewsource" name="viewsource" rows="10" cols="60" readonly="readonly">#$csssource#</textarea>
+                        </span>
+                    </p>
+                    <xar:elseif condition="$csslinkoption eq 'dynamic'" />
+                    <p class="param">
+                        <label for="resetsource">
+                            <input id="resetsource" name="resetsource" type="checkbox" value="1" />
+                        </label>
+                        <strong>#$resetbutton#</strong>
+                        <xar:mlstring>(Warning! All modifications will be lost)</xar:mlstring>
+                    </p>
+                    <p class="param">
+                        <label for="editsource">
+                            <xar:mlstring>Source (editable)</xar:mlstring>
+                        </label>
+                        <span class="fullright">
+                            <textarea id="editsource" name="editsource" rows="20" cols="60">#$csssource#</textarea>
+                        </span>
+                    </p>
+                    <xar:else />
+                </xar:if>
+            </fieldset>
+        </fieldset>
+        <input type="submit" value="#$submitbutton#" />
+    </form>
+    <xar:if condition="$csslinkoption ne 'none'">
+        <h4>
+            <xar:mlstring>Important! The core classes are still experimental. Please avoid using them in your own (3rd party) modules UI and themes until official recommendations are published.</xar:mlstring>
+        </h4>
+        <p>
+            <xar:mlstring>All class names or attributes are subject to change in the future. Particular class names may be reserved for Xaraya internal use only. Please consult current RFCs and other relevant core documentation about the latest status of core css development.</xar:mlstring>
+        </p>
+    </xar:if>
+    <xar:else />
+    <h4>#$unmanagednote#</h4>
+</xar:if>

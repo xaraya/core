@@ -1,0 +1,87 @@
+<xar:link-module-stylesheet modname="base" filename="navtabs" />
+<xar:set name="generalcss">
+    <xar:mlstring>
+        All
+    </xar:mlstring>
+</xar:set>
+<xar:set name="generalcssurl">
+    xarModURL('themes','admin', 'cssconfig')
+</xar:set>
+<xar:set name="modulescss">
+    <xar:mlstring>
+        Modules
+    </xar:mlstring>
+</xar:set>
+<xar:set name="modulescssurl">
+    xarModURL('themes','admin','cssconfig',array('component'=>'modules'))
+</xar:set>
+<xar:set name="themescss">
+    <xar:mlstring>
+        Themes
+    </xar:mlstring>
+</xar:set>
+<xar:set name="themescssurl">
+    xarModURL('themes','admin','cssconfig',array('component'=>'themes'))
+</xar:set>
+<xar:set name="corecss">
+    <xar:mlstring>
+        Core
+    </xar:mlstring>
+</xar:set>
+<xar:set name="corecssurl">
+    xarModURL('themes','admin','cssconfig',array('component'=>'core'))
+</xar:set>
+<xar:set name="currentcssurl">
+    xarServerGetCurrentURL()
+</xar:set>
+<!--
+<xar:if condition=" eq ">
+    <xar:set name="tabclass">' class="active"'</xar:set>
+<xar:else />
+    <xar:set name="tabclass">''</xar:set>    
+</xar:if>
+-->
+<dl class="xar-tabs">
+    <dt class="help">
+        <xar:mlstring>
+            Component CSS 
+        </xar:mlstring>
+        : 
+    </dt>
+    <xar:if condition="$generalcssurl eq $currentcssurl">
+        <dd class="active">
+            <a href="#$generalcssurl#" title="#$generalcss#"> #$generalcss# </a> 
+        </dd>
+        <xar:else />
+        <dd>
+            <a href="#$generalcssurl#" title="#$generalcss#"> #$generalcss# </a> 
+        </dd>
+    </xar:if>
+    <xar:if condition="$themescssurl eq $currentcssurl">
+        <dd class="active">
+            <a href="#$themescssurl#" title="#$themescss#"> #$themescss# </a> 
+        </dd>
+        <xar:else />
+        <dd>
+            <a href="#$themescssurl#" title="#$themescss#"> #$themescss# </a> 
+        </dd>
+    </xar:if>
+    <xar:if condition="$modulescssurl eq $currentcssurl">
+        <dd class="active">
+            <a href="#$modulescssurl#" title="#$modulescss#"> #$modulescss# </a> 
+        </dd>
+        <xar:else />
+        <dd>
+            <a href="#$modulescssurl#" title="#$modulescss#"> #$modulescss# </a> 
+        </dd>
+    </xar:if>
+    <xar:if condition="$corecssurl eq $currentcssurl">
+        <dd class="active">
+            <a href="#$corecssurl#" title="#$corecss#"> #$corecss# </a> 
+        </dd>
+        <xar:else />
+        <dd>
+            <a href="#$corecssurl#" title="#$corecss#"> #$corecss# </a> 
+        </dd>
+    </xar:if>
+</dl>
