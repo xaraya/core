@@ -329,23 +329,39 @@ function roles_user_register()
                                             'date'     => $now,
                                             'valcode'  => $confcode,
                                             'state'   => $state));
-                 if ($uid == 0) return;
-                 //send an email to the admin
-                 if (xarModGetVar('roles', 'sendnotice')){
-                    //Todo create a new notification
+                if ($uid == 0) return;
+
+                // Send an e-mail to the admin
+                if (xarModGetVar('roles', 'sendnotice')) {
+                    // TODO: create a new notification. i.e. templatize this.
                     $adminname = xarModGetVar('mail', 'adminname');
                     $adminemail = xarModGetVar('mail', 'adminmail');
-                    $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
-                    $message .= "".xarML('Username')." = $username\n";
-                    $message .= "".xarML('Email Address')." = $email";
+                    $message = array();
+                    $message[] = xarML('A new user has registered. Here are the details:');
+                    $message[] = '';
+                    $message[] = xarML('Full Name') . ' = ' . $realname;
+                    $message[] = xarML('Username') . ' = ' . $username;
+                    $message[] = xarML('Email Address') . ' = ' . $email;
+                    if (xarModGetVar('roles', 'showterms') == 1) {
+                        // User has agreed to the terms and conditions.
+                        $message[] = '';
+                        $message[] = xarML('This user has agreed to the terms and conditions.');
+                    }
+                    // TODO: perhaps allow 'sendmail' to accept the content as an array,
+                    // and to add its own newlines, CRs - depending on how it is set up.
+                    $message = implode("\n", $message);
 
-                    $messagetitle = "".xarML('A New User Has Registered')."";
+                    $messagetitle = xarML('A new user has registered: #(1) "#(2)"', $username, $realname);
 
-                    if (!xarModAPIFunc('mail', 'admin','sendmail',
-                                        array('info' => $adminemail,
-                                              'name' => $adminname,
-                                              'subject' => $messagetitle,
-                                              'message' => $message))) return;
+                    if (!xarModAPIFunc(
+                        'mail', 'admin', 'sendmail',
+                        array(
+                            'info' => $adminemail,
+                            'name' => $adminname,
+                            'subject' => $messagetitle,
+                            'message' => $message
+                        )
+                    )) return;
                 }
 
                 //Insert the user into the default users role
