@@ -334,7 +334,7 @@ function xarBlock_load($modName, $blockName)
     $loaded["$modName$blockName"] = 1;
 
     // Load the block language files
-    if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modBaseInfo['osdirectory'], 'block', $blockName) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_BLOCK, $blockName) === NULL) return;
 
     // Initialise block (security schema) if required.
     $initfunc = "{$modName}_{$blockName}block_init";

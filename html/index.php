@@ -17,6 +17,9 @@ function xarMain()
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
     // Adjust BL settings
+    // Set the default page title
+    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
+
     // ANSWER <marco>: Who's gonna use that?
     // Allow theme override in URL first
     $themeName = xarVarCleanFromInput('theme');
@@ -93,8 +96,6 @@ function xarMain()
         // Use the admin.xt page if available when $modType is admin
         xarTplSetPageTemplateName('admin');
 	}
-    // Set the default page title
-    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
     //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 

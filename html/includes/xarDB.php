@@ -39,15 +39,10 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $dbuname = $args['userName'];
     $dbpass = $args['password'];
 
-    // Decode username and password if necessary
-    if (1 == xarCore_getSystemVar('DB.Encoded')) {
-        $dbuname = base64_decode($dbuname);
-        $dbpass  = base64_decode($dbpass);
-    }
     // ADODB configuration
-    if (!defined('ADODB_DIR')) {
+    //if (!defined('ADODB_DIR')) {
         define('ADODB_DIR', 'xaradodb');
-    }
+    //}
 
     include_once 'xaradodb/adodb.inc.php';
 
@@ -209,18 +204,21 @@ function xarDB_importTables($tables)
 {
     global $xartable;
 
+    assert('is_array($tables)');
+
     $xartable = array_merge($xartable, $tables);
 }
 
 // PRIVATE FUNCTIONS
 
-function xarDB__adodbErrorHandler($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
+function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1=false, $param2=false)
 {
-    // I need to complete it.
-    if (!$p1) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($errmsg));
+    if ($funcName == 'EXECUTE') {
+        $msg = xarML('The following query failed: "#(1)", cause is: #(2)', $param1, $errMsg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($msg));
     } else {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($errmsg.$p1));
+        $msg = xarML('Unknown database error, cause is: #(1)', $errMsg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', new SystemException($msg));
     }
 }
 ?>

@@ -424,6 +424,10 @@ function xarRequest__setShortURLVars($vars)
 function xarResponseRedirect($redirectURL)
 {
     global $xarResponse_redirectCalled;
+
+    // First checks if there's a pending exception, if so does not redirect browser
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false;
+
     if (isset($xarResponse_redirectCalled) && $xarResponse_redirectCalled == true) {
         if (headers_sent() == true) return false;
     }

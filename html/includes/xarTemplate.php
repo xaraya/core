@@ -140,7 +140,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     if (!file_exists($sourceFileName)) {
         // Use internal template
         $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
-        if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'template', $tplName) === NULL) return;
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
         $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";
     } /*else {
         TODO: <marco> Handle i18n for this case

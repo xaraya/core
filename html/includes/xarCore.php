@@ -125,6 +125,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Decode encoded DB parameters
         $userName = xarCore_getSystemVar('DB.UserName');
         $password = xarCore_getSystemVar('DB.Password');
+        if (xarCore_getSystemVar('DB.Encoded') == '1') {
+            $userName = base64_decode($userName);
+            $password  = base64_decode($password);
+        }
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
                             'databaseHost' => xarCore_getSystemVar('DB.Host'),
@@ -274,6 +278,8 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_ACTIVE, 1);
         assert_options(ASSERT_WARNING, 1);
         assert_options(ASSERT_BAIL, 1);
+        include_once 'includes/assert.php';
+
         $xarDebug_sqlCalls = 0;
         $lmtime = explode(' ', microtime());
         $xarDebug_startTime = $lmtime[1] + $lmtime[0];

@@ -21,12 +21,18 @@
  * Implements the request(ed) locale APIs for backend interactions
  * See how utf-8 works for xml backend
  * finish phpdoc tags
- * Implement the $whatToLoad passage to every subsytem
  */
 
 define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
 define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 2);
 define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
+
+define('XARMLS_DNTYPE_CORE', 1);
+define('XARMLS_DNTYPE_THEME', 2);
+define('XARMLS_DNTYPE_MODULE', 3);
+define('XARMLS_CTXTYPE_FILE', 1);
+define('XARMLS_CTXTYPE_TEMPLATE', 2);
+define('XARMLS_CTXTYPE_BLOCK', 3);
 
 /**
  * Initialise the Multi Language System
@@ -36,7 +42,7 @@ define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarMLS_mode, $xarMLS_backend;
+    global $xarMLS_mode, $xarMLS_backendName;
     global $xarMLS_localeDataLoader, $xarMLS_localeDataCache;
     global $xarMLS_currentLocale, $xarMLS_defaultLocale, $xarMLS_allowedLocales;
 
@@ -58,16 +64,9 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
             xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
-    $backendName = $args['translationsBackend'];
-    switch ($backendName) {
-        case 'xml':
-            $xarMLS_backend = new xarMLS__XMLTranslationsBackend();
-            break;
-        case 'php':
-            $xarMLS_backend = new xarMLS__PHPTranslationsBackend();
-            break;
-        default:
-            xarCore_die('xarML_init: Unknown translations backend: '.$backendName);
+    $xarMLS_backendName = $args['translationsBackend'];
+    if ($xarMLS_backendName != 'php' && $xarMLS_backendName != 'xml') {
+        xarCore_die('xarML_init: Unknown translations backend: '.$backendName);
     }
 
     $xarMLS_localeDataLoader = new xarMLS__LocaleDataLoader();
@@ -77,7 +76,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     $xarMLS_defaultLocale = $args['defaultLocale'];
     $xarMLS_allowedLocales = $args['allowedLocales'];
 
-    if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER != XARCORE_SYSTEM_USER) {
+    if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER) {
         // The User System won't be started
         // MLS will use the default locale
         xarMLS_setCurrentLocale($xarMLS_defaultLocale);
@@ -92,7 +91,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
- * Gets Locale Mode TODO <johnny> marco please describe this function
+ * Gets the current MLS mode
  *
  * @access public
  * @returns string
@@ -148,7 +147,7 @@ function xarMLSListSiteLocales()
  * @access public
  * @returns array
  * @return locale data
- * @raise LOCALE_NOT_FOUNT
+ * @raise LOCALE_NOT_FOUND
  */
 function xarMLSLoadLocaleData($locale = NULL)
 {
@@ -161,8 +160,7 @@ function xarMLSLoadLocaleData($locale = NULL)
     $siteLocales = xarMLSListSiteLocales();
     if (!in_array($locale, $siteLocales)) {
         $msg = xarML('Unavailable locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_FOUND',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException($msg));
         return;
     }
 
@@ -180,7 +178,7 @@ function xarMLSLoadLocaleData($locale = NULL)
     return $xarMLS_localeDataCache[$locale];
 }
 /**
- * Gets the current locale TODO: <marco> please check this description
+ * Gets the current locale
  *
  * @access public
  * @returns
@@ -206,6 +204,7 @@ function xarMLSGetCurrentLocale()
 function xarMLSGetCharsetFromLocale($locale)
 {
     assert('!empty($locale)');
+    
     $parsedLocale = xarMLS__parseLocaleString($locale);
     if (!isset($parsedLocale)) return; // throw back
     return $parsedLocale['charset'];
@@ -220,14 +219,16 @@ function xarMLSGetCharsetFromLocale($locale)
  * @returns string
  * @return the translated string, or the original string if no translation is available
  */
-function xarML($string)
+function xarML($string/*, ...*/)
 {
     global $xarMLS_backend;
+    
+    assert('!empty($string)');
 
     if (isset($xarMLS_backend)) {
         $trans = $xarMLS_backend->translate($string);
     } else {
-        // This happen in rare cases when xarML is called before xarMLInit was called
+        // This happen in rare cases when xarML is called before xarMLS_init has been called
         $trans = $string;
     }
     if (empty($trans)) {
@@ -251,14 +252,16 @@ function xarML($string)
  * @returns string
  * @return the translation string, or the key if no translation is available
  */
-function xarMLByKey($key)
+function xarMLByKey($key/*, ...*/)
 {
     global $xarMLS_backend;
+
+    //assert('!empty($key) && strpos($key, " ") === false');
 
     if (isset($xarMLS_backend)) {
         $trans = $xarMLS_backend->translateByKey($key);
     } else {
-        // This happen in rare cases when xarMLByKey is called before xarMLInit was called
+        // This happen in rare cases when xarMLByKey is called before xarMLS_init has been called
         $trans = $key;
     }
     if (empty($trans)) {
@@ -290,6 +293,83 @@ function xarMLGetDynamic($refid, $table_name, $fields)
 */
 
 // L10N API
+
+/**
+ * Gets the locale info for the specified locale string.
+ * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
+ *
+ * @access public
+ * @returns array
+ * @return locale info
+ */
+function xarLocaleGetInfo($locale)
+{
+    return xarMLS__parseLocaleString($locale);
+}
+
+/**
+ * Gets the locale string for the specified locale info.
+ * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
+ *
+ * @access public
+ * @returns string
+ * @return locale string
+ */
+function xarLocaleGetString($localeInfo)
+{
+    assert('isset($localeInfo["lang"]) && isset($localeInfo["country"]) &&
+            isset($localeInfo["specializer"]) && isset($localeInfo["charset"])');
+
+    if (strlen($localeInfo['lang']) != 2) {
+        $msg = xarML('Invalid lang.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+    $locale = strtolower($localeInfo['lang']);
+    if (!empty($localeInfo['country'])) {
+        if (strlen($localeInfo['country']) != 2) {
+            $msg = xarML('Invalid country.');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            return;
+        }
+        $locale .= '_'.strtoupper($localeInfo['country']);
+    }
+    if (!empty($localeInfo['specializer'])) {
+        $locale .= '@'.$localeInfo['specializer'];
+    }
+    if (!empty($localeInfo['charset'])) {
+        $locale .= '.'.$localeInfo['charset'];
+    } else {
+        $locale .= '.UTF-8';
+    }
+    return $locale;
+}
+
+/**
+ * Gets a list of locale string which met the specified filter criteria.
+ * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
+ * lang, country, specializer, charset.
+ *
+ * @access public
+ * @returns array
+ * @return locale list
+ */
+function xarLocaleGetList($filter)
+{
+    assert('is_array($filter)');
+
+    $list = array();
+    $locales = xarMLSListSiteLocales();
+    foreach ($locales as $locale) {
+        $l = xarMLS__parseLocaleString($locale);
+        if (isset($filter['lang']) && $filter['lang'] != $l['lang']) continue;
+        if (isset($filter['country']) && $filter['country'] != $l['country']) continue;
+        if (isset($filter['specializer']) && $filter['specializer'] != $l['specializer']) continue;
+        if (isset($filter['charset']) && $filter['charset'] != $l['charset']) continue;
+        $list[] = $locale;
+    }
+    return $list;
+}
 
 /**
  * Formats a currency according to specified locale data
@@ -413,7 +493,9 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
  */
 function xarMLS_setCurrentLocale($locale)
 {
-    global $xarMLS_currentLocale;
+    global $xarMLS_currentLocale, $xarMLS_backendName, $xarMLS_backend;
+    
+    assert('!empty($locale)');
 
     $mode = xarMLSGetMode();
     switch ($mode) {
@@ -429,109 +511,43 @@ function xarMLS_setCurrentLocale($locale)
                 $locale = xarMLSGetSiteLocale();
             }
     }
-    if ($locale != $xarMLS_currentLocale) {
-        // Adjust new current locale
-        $xarMLS_currentLocale = $locale;
+    if ($locale == $xarMLS_currentLocale) return; // Nothing to do
 
-        if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
-            $curCharset = xarMLSGetCharsetFromLocale($locale);
-            if (substr($curCharset, 0, 9) != 'iso-8859-' &&
-                $curCharset != 'koi8-r') {
-                // Do not use mbstring for single byte charsets
-                ini_set('mbstring.func_overload', 7);
-                mb_internal_encoding(strtoupper($curCharset));
-            }
-        }
+    // Adjust new current locale
+    $xarMLS_currentLocale = $locale;
 
-        // Load core translations
-        xarMLS_loadTranslations('core', 'xaraya', '.', 'file', 'core');
-
-        // Load global language defines
-        $localeData = xarMLSLoadLocaleData($locale);
-        if (!isset($localeData)) return; // throw back
-        $lang = $localeData['/language/iso3code'];
-        $fileName = "language/$lang/global.php";
-        if (file_exists($fileName)) {
-            include $fileName;
-        } else {
-            // Oh, bad thing guys
-            // Now since all this will become obsolete we can load eng and don't care of details
-            $fileName = "language/eng/global.php";
-            if (file_exists($fileName)) {
-                include $fileName;
-            }
-        }
+    $curCharset = xarMLSGetCharsetFromLocale($locale);
+    if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
+        assert('$curCharset == "UTF-8"');
+        ini_set('mbstring.func_overload', 7);
+        mb_internal_encoding($curCharset);
     }
-}
-
-/**
- * Loads module translations
- *
- * @access private
- * @param modName module name
- * @param modOnDir module directory
- * @param modType module type
- * @returns bool
- * @return
- */
-/*
-function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
-{
-    global $xarMLS_backend;
-    static $loadedCommons = array();
-
-    if (!isset($loadedCommons[$modName])) {
-        $loadedCommons[$modName] = true;
-        $res = xarMLS_loadModuleTranslations($modName, $modOsDir, 'common');
-        if (!isset($res)) {
-            return; // throw back
-        }
-    }
-
-    $locale = xarMLSGetCurrentLocale();
+    //if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+        //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
+        //$curCharset != 'koi8-r') {
+            // Do not use mbstring for single byte charsets
+            
+        //}
+    //}
+    header("Content-Type: text/html; charset=$curCharset");
 
     $alternatives = xarMLS__getLocaleAlternatives($locale);
-    foreach ($alternatives as $testLocale) {
-        if ($modName == 'translations') $testLocale = 'it';
-        $ctx = array('type' => 'module',
-                     'name' => $modName,
-                     'baseDir' => 'modules/'.$modOsDir,
-                     'subtype' => 'file',
-                     'subname' => 'xar'.$modType,
-                     'locale' => $testLocale);
-
-        $res = $xarMLS_backend->load($ctx);
-        if (!isset($res)) {
-            return; // throw back
-        }
-        if ($res == true) {
-            return true;
-        }
-        xarEvt_fire('MLSMissingTranslationContext', $ctx);
+    switch ($xarMLS_backendName) {
+        case 'xml':
+        include_once 'includes/xarMLSXMLBackend.php';
+        $xarMLS_backend = new xarMLS__XMLTranslationsBackend($alternatives);
+        break;
+        case 'php':
+        $xarMLS_backend = new xarMLS__PHPTranslationsBackend($alternatives);
+        break;
     }
 
-    // No valid translations set loaded, try with old style translations
+    // Load core translations
+    xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', XARMLS_CTXTYPE_FILE, 'core');
 
-    /* Old style language packs */
-    /*
-    $localeData = xarMLSLoadLocaleData($locale);
-    if (!isset($localeData)) return; // throw back
-    $lang = $localeData['/language/iso3code'];
-    $fileName = "modules/$modOsDir/xarlang/$lang/$modType.php";
-    if (file_exists($fileName)) {
-        include $fileName;
-    } else {
-        // Oh, bad thing guys
-        // Now since all this will become obsolete we can load eng and don't care of details
-        $fileName = "modules/$modOsDir/xarlang/eng/$modType.php";
-        if (file_exists($fileName)) {
-            include $fileName;
-        }
-    }
-
-    return false;
+    //xarMLSLoadLocaleData($locale);
 }
-*/
+
 /**
  * Loads translations for the specified context
  *
@@ -542,122 +558,32 @@ function xarMLS_loadModuleTranslations($modName, $modOsDir, $modType)
  * @returns bool
  * @return
  */
-function xarMLS_loadTranslations($type, $name, $baseDir, $subtype, $subname)
+function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
     global $xarMLS_backend;
     static $loadedCommons = array();
 
-    if ($type == 'module') {
-        // Handle in a special way the module type
-        // for which it's necessary to load common translations
-        if (!isset($loadedCommons[$name])) {
-            $loadedCommons[$name] = true;
-            if (xarMLS_loadTranslations($type, $name, $baseDir, 'file', 'common') === NULL) return;
+    if ($xarMLS_backend->bindDomain($dnType, $dnName)) {
+        
+        if ($dnType == XARMLS_DNTYPE_MODULE) {
+            // Handle in a special way the module type
+            // for which it's necessary to load common translations
+            if (!isset($loadedCommons[$dnName])) {
+                $loadedCommons[$dnName] = true;
+                if (!$xarMLS_backend->loadContext(XARMLS_CTXTYPE_FILE, 'common')) return; // throw back
+            }
         }
-    }
 
-    $locale = xarMLSGetCurrentLocale();
-    $testLocale = $locale;
-    //$alternatives = xarMLS__getLocaleAlternatives($locale);
-    //foreach ($alternatives as $testLocale) {
-        if ($name == 'translations') $testLocale = 'it';
-        $ctx = array('type' => $type,
-                     'name' => $name,
-                     'baseDir' => $baseDir,
-                     'subtype' => $subtype,
-                     'subname' => $subname,
-                     'locale' => $testLocale);
-//if($subtype == 'template')
-//xarLogVariable('ctx', $ctx);
-        if ($xarMLS_backend->hasContext($ctx, $loadCtx)) {
-            if (!$xarMLS_backend->load($loadCtx)) return;
-            return true;
-        } else {
-            xarEvt_fire('MLSMissingTranslationContext', $ctx);
-        }
-    //}
-
-    // No valid translations set loaded, try with old style translations
-
-    /* Old style language packs */
-    // TODO: <marco> Recode if we want to keep old language packs
-    /*
-    $localeData = xarMLSLoadLocaleData($locale);
-    if (!isset($localeData)) return; // throw back
-    $lang = $localeData['/language/iso3code'];
-    $fileName = "modules/$modOsDir/xarlang/$lang/$modType.php";
-    if (file_exists($fileName)) {
-        include $fileName;
-    } else {
-        // Oh, bad thing guys
-        // Now since all this will become obsolete we can load eng and don't care of details
-        $fileName = "modules/$modOsDir/xarlang/eng/$modType.php";
-        if (file_exists($fileName)) {
-            include $fileName;
-        }
-    }
-    */
-    return false;
-}
-/*
-function xarMLS_loadTemplateTranslations($tplName, $baseOsDir)
-{
-    global $xarMLS_backend;
-
-    $locale = xarMLSGetCurrentLocale();
-    $ctx = array('name' => $tplName,
-                 'baseDir' => $baseOsDir,
-                 'type' => 'template',
-                 'locale' => $locale);
-    $res = $xarMLS_backend->load($ctx);
-    if (!isset($res)) {
-        return; // throw back
-    }
-    if ($res == true) {
+        if (!$xarMLS_backend->loadContext($ctxType, $ctxName)) return; // throw back
         return true;
     }
-    xarEvt_fire('MLSMissingTranslationContext', $ctx);
-    return false;
-}
-/*
-function xarMLS_loadBlockTranslations($blockName, $modOsDir)
-{
-    global $xarMLS_backend;
 
-    $locale = xarMLSGetCurrentLocale();
-    $ctx = array('name' => $blockName,
-                 'baseDir' => 'modules/'.$modOsDir,
-                 'type' => 'block',
-                 'locale' => $locale);
-    $res = $xarMLS_backend->load($ctx);
-    if (!isset($res)) {
-        return; // throw back
-    }
-    if ($res == true) {
-        return true;
-    }
-    xarEvt_fire('MLSMissingTranslationContext', $ctx);
-
-    // Old Style of loading the block language files
-    $localeData = xarMLSLoadLocaleData($locale);
-    if (!isset($localeData)) return; // throw back
-    $lang = $localeData['/language/iso3code'];
-    $osname = xarVarPrepForOS($blockName);
-    $fileName = "modules/$modOsDir/xarlang/$lang/$osname.php";
-    if (file_exists($fileName)) {
-        include $fileName;
-    } else {
-        // Oh, bad thing guys
-        // Now since all this will become obsolete we can load eng and don't care of details
-        $fileName = "modules/$modOsDir/xarlang/eng/$osname.php";
-        if (file_exists($fileName)) {
-            include $fileName;
-        }
-    }
+    xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
 
     return false;
 }
-*/
+
+
 function xarMLS_convertFromInput($var, $method)
 {
     // FIXME: <marco> Can we trust browsers?
@@ -677,25 +603,6 @@ function xarMLS_convertFromInput($var, $method)
 }
 
 // PRIVATE FUNCTIONS
-
-function xarMLS__setup($args)
-{
-    $mode = $args['MLSMode'];
-    if (function_exists('mb_http_input')) {
-        $curCharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
-        if (substr($curCharset, 0, 9) != 'iso-8859-' &&
-            $curCharset != 'koi8-r') {
-            // Do not use mbstring for single byte charsets
-            ini_set('mbstring.func_overload', 7);
-            mb_internal_encoding(strtoupper($curCharset));
-        }
-    } else {
-        if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
-            // mbstring reuired
-            xarCore_die('xarMLS__setup: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
-        }
-    }
-}
 
 function xarMLS__convertFromCharset($var, $charset)
 {
@@ -728,15 +635,12 @@ function xarMLS__bindVariables($string, $args)
  */
 function xarMLS__getLocaleAlternatives($locale)
 {
-    $parsedLocale = xarMLS__parseLocaleString($locale);
-    if (!isset($parsedLocale)) return; // throw back
+    if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return; // throw back
     extract($parsedLocale); // $lang, $country, $charset
 
     $alternatives = array($locale);
-    if (isset($country)) {
-        $alternatives[] = $lang.'_'.$country.'.'.$charset;
-    }
-    $alternatives[] = $lang.'.'.$charset;
+    if (!empty($country) && !empty($specializer)) $alternatives[] = $lang.'_'.$country.'.'.$charset;
+    if (!empty($country) && empty($specializer)) $alternatives[] = $lang.'.'.$charset;
 
     return $alternatives;
 }
@@ -744,81 +648,52 @@ function xarMLS__getLocaleAlternatives($locale)
 /**
  * Parses a locale string into an associative array composed of
  * lang, country, specializer and charset keys
- *.
+ *
  * @returns array
  * @return parsed locale
  */
 function xarMLS__parseLocaleString($locale)
 {
-    $size = strlen($locale);
-    $cur_pos = 0;
-    $seps = array('_', '@', '.');
-
-    while ($cur_pos < $size) {
-        $next_pos = $size;
-        while (true) {
-            $sep = array_shift($seps);
-            if (empty($sep)) break;
-            $tmp_pos = strpos($locale, $sep, $cur_pos + 1);
-            if ($tmp_pos !== false) {
-                $next_pos = $tmp_pos;
-                break;
-            }
-        }
-
-        $len = $next_pos - $cur_pos;
-        $word = substr($locale, $cur_pos, $len);
-
-        if (empty($old_sep))
-            $res['lang'] = $word;
-        elseif ($old_sep == '_')
-            $res['country'] = $word;
-        elseif ($old_sep == '@')
-            $res['specializer'] = $word;
-        elseif ($old_sep == '.')
-            $res['charset'] = $word;
-
-        $old_sep = $sep;
-        $cur_pos = $cur_pos + $len + 1;
-    }
-
-    if (empty($res['lang'])) {
+    assert('!empty($locale)');
+    
+    $res = array('lang'=>'', 'country'=>'', 'specializer'=>'', 'charset'=>'UTF-8');
+    if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(@([0-9a-zA-Z]+))?(\.([0-9A-Z\-]+))?/', $locale, $matches)) {
         $msg = xarML('Invalid locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
-    if (empty($res['charset'])) {
-        $res['charset'] = xarMLS__getSingleByteCharset($res['lang']);
-        if ($res['charset'] == '') $res['charset'] = 'utf-8';
-        $locale .= $res['charset'];
-    }
+
+    $res['lang'] = $matches[1];
+    if (!empty($matches[3])) $res['country'] = $matches[3];
+    if (!empty($matches[5])) $res['specializer'] = $matches[5];
+    if (!empty($matches[7])) $res['charset'] = $matches[7];
+
     return $res;
 }
 
 /**
  * Gets the single byte charset most typically used in the Web for the
  * requested language
- *.
+ *
  * @returns string
  * @return the charset
  */
 function xarMLS__getSingleByteCharset($langISO2Code) {
-    static $charsets = array('af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
-    'ar' => 'iso-8859-6',  'eu' => 'iso-8859-1',  'bg' => 'iso-8859-5',
-    'be' => 'iso-8859-5',  'ca' => 'iso-8859-1',  'hr' => 'iso-8859-2',
-    'cs' => 'iso-8859-2',  'da' => 'iso-8859-1',  'nl' => 'iso-8859-1',
-    'en' => 'iso-8859-1',  'eo' => 'iso-8859-3',  'et' => 'iso-8859-15',
-    'fo' => 'iso-8859-1',  'fi' => 'iso-8859-1',  'fr' => 'iso-8859-1',
-    'gl' => 'iso-8859-1',  'de' => 'iso-8859-1',  'el' => 'iso-8859-7',
-    'iw' => 'iso-8859-8',  'hu' => 'iso-8859-2',  'is' => 'iso-8859-1',
-    'ga' => 'iso-8859-1',  'it' => 'iso-8859-1',  //'ja' => '',
-    'lv' => 'iso-8859-13', 'lt' => 'iso-8859-13', 'mk' => 'iso-8859-5',
-    'mt' => 'iso-8859-3',  'no' => 'iso-8859-1',  'pl' => 'iso-8859-2',
-    'pt' => 'iso-8859-1',  'ro' => 'iso-8859-2',  'ru' => 'koi8-r',
-    'gd' => 'iso-8859-1',  'sr' => 'iso-8859-2',  'sk' => 'iso-8859-2',
-    'sl' => 'iso-8859-2',  'es' => 'iso-8859-1',  'sv' => 'iso-8859-1',
-    'tr' => 'iso-8859-9',  'uk' => 'iso-8859-5');
+    static $charsets = array('af' => 'ISO-8859-1', 'sq' => 'ISO-8859-1',
+    'ar' => 'ISO-8859-6',  'eu' => 'ISO-8859-1',  'bg' => 'ISO-8859-5',
+    'be' => 'ISO-8859-5',  'ca' => 'ISO-8859-1',  'hr' => 'ISO-8859-2',
+    'cs' => 'ISO-8859-2',  'da' => 'ISO-8859-1',  'nl' => 'ISO-8859-1',
+    'en' => 'ISO-8859-1',  'eo' => 'ISO-8859-3',  'et' => 'ISO-8859-15',
+    'fo' => 'ISO-8859-1',  'fi' => 'ISO-8859-1',  'fr' => 'ISO-8859-1',
+    'gl' => 'ISO-8859-1',  'de' => 'ISO-8859-1',  'el' => 'ISO-8859-7',
+    'iw' => 'ISO-8859-8',  'hu' => 'ISO-8859-2',  'is' => 'ISO-8859-1',
+    'ga' => 'ISO-8859-1',  'it' => 'ISO-8859-1',  //'ja' => '',
+    'lv' => 'ISO-8859-13', 'lt' => 'ISO-8859-13', 'mk' => 'ISO-8859-5',
+    'mt' => 'ISO-8859-3',  'no' => 'ISO-8859-1',  'pl' => 'ISO-8859-2',
+    'pt' => 'ISO-8859-1',  'ro' => 'ISO-8859-2',  'ru' => 'KOI8-R',
+    'gd' => 'ISO-8859-1',  'sr' => 'ISO-8859-2',  'sk' => 'ISO-8859-2',
+    'sl' => 'ISO-8859-2',  'es' => 'ISO-8859-1',  'sv' => 'ISO-8859-1',
+    'tr' => 'ISO-8859-9',  'uk' => 'ISO-8859-5');
     return @$charsets[$langISO2Code];
 }
 
@@ -843,7 +718,7 @@ class xarMLS__LocaleDataLoader
 
     function load($locale)
     {
-        $fileName = "locales/$locale.pld";
+        $fileName = "locales/$locale/locale.xml";
         if (!file_exists($fileName)) {
             return false;
         }
@@ -855,11 +730,11 @@ class xarMLS__LocaleDataLoader
         $this->localeData = array();
 
         // TRICK: <marco> Since this xml parser sucks, we obviously use UTF-8 for utf-8 charset
-        // and ISO-8859-1 for other charsets, even if they're not singl byte.
+        // and ISO-8859-1 for other charsets, even if they're not single byte.
         // The only important thing here is to split utf-8 from other charsets.
         $charset = xarMLSGetCharsetFromLocale($locale);
         // FIXME: <marco> try, re-try and re-re-try this!
-        if ($charset == 'utf-8') {
+        if ($charset == 'UTF-8') {
             $this->parser = xml_parser_create('UTF-8');
         } else {
             $this->parser = xml_parser_create('ISO-8859-1');
@@ -1013,16 +888,29 @@ class xarMLS__TranslationsBackend
     function translateByKey($key)
     { die('abstract'); }
     /**
-     * Checks if this backend supports a scpecified translation context.
-     * If success the loadCtx parameter is set to the load context value.
+     * Unloads loaded translations.
      */
-    function hasContext($translationCtx, &$loadCtx)
+    function clear()
     { die('abstract'); }
     /**
-     * Loads a set of translations into the backend. This set is identified
-     * by a load context that can be aquired by hasContext static method.
+     * Binds the backend to the specified domain.
      */
-    function load($loadCtx)
+    function bindDomain($dnType, $dnName)
+    { die('abstract'); }
+    /**
+     * Checks if this backend supports a scpecified translation context.
+     */
+    function hasContext($ctxType, $ctxName)
+    { die('abstract'); }
+    /**
+     * Loads a set of translations into the backend.
+     */
+    function loadContext($ctxType, $ctxName)
+    { die('abstract'); }
+    /**
+     * Gets available context names for the specified context type
+     */
+    function getContextNames($ctxType)
     { die('abstract'); }
 }
 
@@ -1069,251 +957,16 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 }
 
 /**
- * Implements a concrete translations backend based on the XML language.
- * All xml files are encoded in UTF-8. This backend is useful only when
- * running Xaraya in the multi-language mode (UTF-8).
- */
-class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
-{
-    var $curEntry;
-    var $curData;
-
-    var $parser;
-
-    var $trans = array(); // where translations are kept
-    var $transEntries = array(); // mapping for string-based translations
-    var $transKeyEntries = array(); // mapping for key-based translations
-
-    var $transInd = 0;
-    var $transKeyInd = 0;
-
-    function hasContext($translationCtx, &$loadCtx)
-    {
-        // Only module typed contexts are allowed
-        //if ($translationCtx['type'] != 'module') return false;
-
-        $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/xml/";
-        switch ($translationCtx['subtype']) {
-            case 'file':
-                $fileName .= $translationCtx['subname'];
-            break;
-            case 'template':
-                $fileName .= "templates/$translationCtx[subname]";
-            break;
-            case 'block':
-                $fileName .= "blocks/$translationCtx[subname]";
-        }
-        $fileName .= '.xml';
-
-        if (!file_exists($fileName)) {
-            return false;
-        }
-        $loadCtx = $fileName;
-        return true;
-    }
-
-    function translate($string)
-    {
-        if (!isset($this->transEntries[$string])) {
-            return;
-        }
-        $ind = $this->transEntries[$string];
-        return $this->trans[$ind]['translation'];
-    }
-
-    function translateByKey($key)
-    {
-        if (!isset($this->transKeyEntries[$key])) {
-            return;
-        }
-        $ind = $this->transKeyEntries[$key];
-        return $this->trans[$ind]['translation'];
-    }
-
-    function load($loadCtx)
-    {
-        $this->curData = '';
-
-        $this->parser = xml_parser_create('UTF-8');
-        xml_set_object($this->parser, $this);
-        xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
-        xml_set_element_handler($this->parser, "beginElement", "endElement");
-        xml_set_character_data_handler($this->parser, "characterData");
-
-        $fp = fopen($loadCtx, 'r');
-
-        while ($data = fread($fp, 4096)) {
-            if (!xml_parse($this->parser, $data, feof($fp))) {
-                // NOTE: <marco> Of course don't use xarML here!
-                $errstr = xml_error_string(xml_get_error_code($this->parser));
-                $line = xml_get_current_line_number($this->parser);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TRANSLATION_EXCEPTION',
-                               new SystemException("XML parser error in $fileName: $errstr at line $line."));
-                return;
-            }
-        }
-
-        xml_parser_free($this->parser);
-
-        return true;
-    }
-
-    function getEntry($string)
-    {
-        if (!isset($this->transEntries[$string])) {
-            return;
-        }
-        $ind = $this->transEntries[$string];
-        return $this->trans[$ind];
-    }
-
-    function getEntryByKey($key)
-    {
-        if (!isset($this->transKeyEntries[$key])) {
-            return;
-        }
-        $ind = $this->transKeyEntries[$key];
-        return $this->trans[$ind];
-    }
-
-    function getTransientId($string)
-    {
-        if (!isset($this->transEntries[$string])) {
-            return;
-        }
-        return $this->transEntries[$string];
-    }
-
-    function lookupTransientId($transientId)
-    {
-        if (!isset($this->trans[(int) $transientId])) {
-            return;
-        }
-        return $this->trans[(int) $transientId];
-    }
-
-    function enumTranslations($reset = false)
-    {
-        if ($reset == true) {
-            $this->transInd = 0;
-        }
-        $count = count($this->trans);
-        if ($this->transInd == $count) {
-            return false;
-        }
-        while ($this->transInd < $count) {
-            if (isset($this->trans[$this->transInd]['string'])) {
-                $res = array($this->trans[$this->transInd]['string'], $this->trans[$this->transInd]['translation']);
-                $this->transInd++;
-                return $res;
-            }
-            $this->transInd++;
-        }
-        return false;
-    }
-
-    function enumKeyTranslations($reset = false)
-    {
-        if ($reset == true) {
-            $this->transKeyInd = 0;
-        }
-        $count = count($this->trans);
-        if ($this->transKeyInd == $count) {
-            return false;
-        }
-        while ($this->transKeyInd < $count) {
-            if (isset($this->trans[$this->transKeyInd]['key'])) {
-                $res = array($this->trans[$this->transKeyInd]['key'], $this->trans[$this->transKeyInd]['translation']);
-                $this->transKeyInd++;
-                return $res;
-            }
-            $this->transKeyInd++;
-        }
-        return false;
-    }
-
-    function beginElement($parser, $tag, $attribs)
-    {
-        if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
-        }
-        if ($tag == 'entry' || $tag == 'keyEntry') {
-            $this->curEntry = array();
-            $this->curEntry['references'] = array();
-        } elseif ($tag == 'reference') {
-            $reference['file'] = $attribs['file'];
-            $reference['line'] = $attribs['line'];
-            $this->curEntry['references'][] = $reference;
-        }
-        /*elseif ($tag == 'original') {
-            $this->curEntry['original'] = array();
-            $this->curEntry['original']['file'] = $attribs['file'];
-            $this->curEntry['original']['xpath'] = $attribs['xpath'];
-        }*/
-    }
-
-    function endElement($parser, $tag)
-    {
-        if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
-        }
-        if ($tag == 'entry') {
-            $string = $this->curEntry['string'];
-            $this->trans[] = $this->curEntry;
-            $this->transEntries[$string] = count($this->trans) - 1;
-        } elseif ($tag == 'keyEntry') {
-            $key = $this->curEntry['key'];
-            $this->trans[] = $this->curEntry;
-            $this->transKeyEntries[$key] = count($this->trans) - 1;
-        } elseif ($tag == 'string') {
-            $this->curEntry['string'] = trim($this->curData);
-            //$this->curEntry['string'] = utf8_decode(trim($this->curData));
-        } elseif ($tag == 'key') {
-            $this->curEntry['key'] = trim($this->curData);
-        } elseif ($tag == 'translation') {
-            $this->curEntry['translation'] = trim($this->curData);
-            //$this->curEntry['translation'] = utf8_decode(trim($this->curData));
-        }
-        $this->curData = '';
-    }
-
-    function characterData($parser, $data)
-    {
-        // FIXME <marco> consider to replace \n,\r with ''
-        $this->curData .= $data;
-    }
-
-}
-
-/**
  * This is the default translations backend and should be used for production sites.
  * Note that it does not support the xarMLS__ReferencesBackend interface.
  */
 class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 {
-    function hasContext($translationCtx, &$loadCtx)
+    var $locales;
+
+    function xarMLS__PHPTranslationsBackend($locales)
     {
-        // Only module typed contexts are allowed
-        //if ($translationCtx['type'] != 'module') return false;
-
-        $fileName = "$translationCtx[baseDir]/locales/$translationCtx[locale]/php/";
-        switch ($translationCtx['subtype']) {
-            case 'file':
-                $fileName .= $translationCtx['subname'];
-            break;
-            case 'template':
-                $fileName .= "templates/$translationCtx[subname]";
-            break;
-            case 'block':
-                $fileName .= "blocks/$translationCtx[subname]";
-        }
-        $fileName .= '.php';
-
-        if (!file_exists($fileName)) {
-            return false;
-        }
-        $loadCtx = $fileName;
-        return true;
+        $this->locales = $locales;
     }
 
     function translate($string)
@@ -1321,6 +974,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         global $xarML_PHPBackend_entries;
         if (isset($xarML_PHPBackend_entries[$string]))
             return $xarML_PHPBackend_entries[$string];
+        //return @$xarML_PHPBackend_entries[$string];
     }
 
     function translateByKey($key)
@@ -1328,15 +982,111 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         global $xarML_PHPBackend_keyEntries;
         if (isset($xarML_PHPBackend_keyEntries[$key]))
             return $xarML_PHPBackend_keyEntries[$key];
+        //return @$xarML_PHPBackend_keyEntries[$key];
     }
 
-    function load($loadCtx)
+    function clear()
     {
-        include $loadCtx;
+        global $xarML_PHPBackend_entries;
+        global $xarML_PHPBackend_keyEntries;
+        $xarML_PHPBackend_entries = array();
+        $xarML_PHPBackend_keyEntries = array();
+    }
+
+    function bindDomain($dnType, $dnName)
+    {
+        switch ($dnType) {
+            case XARMLS_DNTYPE_MODULE:
+            $dirName = "modules/$dnName/";
+            break;
+            case XARMLS_DNTYPE_THEME:
+            $dirName = "themes/$dnName/";
+            break;
+            case XARMLS_DNTYPE_CORE:
+            $dirName = 'core/';
+        }
+        foreach ($this->locales as $locale) {
+            $this->baseDir = "locales/$locale/php/$dirName";
+            if (file_exists($this->baseDir)) return true;
+        }
+        if ($dnType == XARMLS_DNTYPE_MODULE) {
+            $this->loadKEYS($dnName);
+        }
+        return false;
+    }
+
+    function loadKEYS($dnName)
+    {
+        $modBaseInfo = xarMod_getBaseInfo($dnName);
+        $fileName = "modules/$modBaseInfo[directory]/KEYS";
+        if (file_exists($fileName)) {
+            global $xarML_PHPBackend_keyEntries;
+
+            $lines = file($fileName);
+            foreach ($lines as $line) {
+                if ($line{0} == '#') continue;
+                list($key, $value) = explode('=', $line);
+                $key = trim($key);
+                $value = trim($value);
+                $xarML_PHPBackend_keyEntries[$key] = $value;
+            }
+        }
+    }
+
+    function findContext($ctxType, $ctxName)
+    {
+        switch ($ctxType) {
+            case XARMLS_CTXTYPE_FILE:
+            $fileName = $ctxName;
+            break;
+            case XARMLS_CTXTYPE_TEMPLATE:
+            $fileName = "templates/$ctxName";
+            break;
+            case XARMLS_CTXTYPE_BLOCK:
+            $fileName = "blocks/$ctxName";
+            break;
+        }
+        $fileName .= '.php';
+        if (!file_exists($this->baseDir.$fileName)) return false;
+        return $this->baseDir.$fileName;
+    }
+
+    function hasContext($ctxType, $ctxName)
+    {
+        return $this->findContext($ctxType, $ctxName) != false;
+    }
+
+    function loadContext($ctxType, $ctxName)
+    {
+        if (!$fileName = $this->findContext($ctxType, $ctxName)) {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_FOUND', new SystemException($ctxType.': '.$ctxName));
+            return;
+        }
+        include $fileName;
 
         return true;
     }
 
+    function getContextNames($ctxType)
+    {
+        $dirName = $this->baseDir;
+        switch ($ctxType) {
+            case XARMLS_CTXTYPE_TEMPLATE:
+            $dirName .= 'templates';
+            break;
+            case XARMLS_CTXTYPE_BLOCK:
+            $dirName .= 'blocks';
+            break;
+        }
+        $ctxNames = array();
+        $dd = opendir($dirName);
+        while ($fileName = readdir($dd)) {
+            if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) continue;
+            $ctxNames[] = $matches[1];
+        }
+        closedir($dd);
+        return $ctxNames;
+    }
 }
 
 

@@ -48,10 +48,12 @@ function xarEvt_init($args, $whatElseIsGoingLoaded)
 function xarEvtSubscribe($eventName, $modName, $modType)
 {
     global $xarEvt_subscribed;
+    
+    assert('validEventName($eventName) && validModName($modName) && validModType($modType)');
+    
     if (!xarEvt__checkEvent($eventName)) {
-        $msg = xarML('Unknown event.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
+        $msg = xarML('Unknown event: #(1).', $eventName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -70,6 +72,9 @@ function xarEvtSubscribe($eventName, $modName, $modType)
 function xarEvtUnsubscribe($eventName, $modName, $modType)
 {
     global $xarEvt_subscribed;
+    
+    assert('validEventName($eventName) && validModName($modName) && validModType($modType)');
+    
     if (!isset($xarEvt_subscribed[$eventName])) return;
 
     for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
@@ -85,6 +90,9 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
 function xarEvt_fire($eventName, $value = NULL)
 {
     global $xarEvt_subscribed;
+    
+    assert('validEventName($eventName)');
+    
     if (!isset($xarEvt_subscribed[$eventName])) return;
 
     for ($i = 0; $i < count($xarEvt_subscribed[$eventName]); $i++) {
@@ -104,6 +112,8 @@ function xarEvt_fire($eventName, $value = NULL)
 
 function xarEvt_notify($modName, $modType, $eventName, $value)
 {
+    assert('validModName($modName) && validModType($modType) && validEventName($eventName)');
+
     $funcName = "{$modName}_{$modType}evt_On$eventName";
     if (function_exists($funcName)) {
         $funcName($value);
@@ -120,6 +130,9 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
 function xarEvt_subscribeRawCallback($eventName, $funcName)
 {
     global $xarEvt_subscribed;
+    
+    assert('validEventName($eventName) && validFuncName($funcName)');
+    
     if (!xarEvt__checkEvent($eventName)) {
         xarCore_die("xarEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
     }
@@ -130,6 +143,9 @@ function xarEvt_subscribeRawCallback($eventName, $funcName)
 function xarEvt_registerEvent($eventName)
 {
     global $xarEvt_knownEvents;
+    
+    assert('validEventName($eventName)');
+    
     $xarEvt_knownEvents[$eventName] = true;
 }
 
@@ -138,6 +154,7 @@ function xarEvt_registerEvent($eventName)
 function xarEvt__checkEvent($eventName)
 {
     global $xarEvt_knownEvents;
+
     return isset($xarEvt_knownEvents[$eventName]);
     /*
     Current list is:

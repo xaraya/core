@@ -67,11 +67,13 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 
     xarDB_importTables($tables);
 
+    // Not feasible here in this way!
+    /*
     // Pre-fetch all 'SupportShortURLs' variables if needed
     if (!empty($xarMod_generateShortURLs)) {
         xarMod_getVarsByName('SupportShortURLs');
     }
-
+    */
     return true;
 }
 
@@ -87,12 +89,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
  */
 function xarModGetVar($modName, $name)
 {
-    if (empty($modName) || empty($name)) {
-        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $modName, $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName) && !empty($name)');
 
     if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
         $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
@@ -159,16 +156,10 @@ function xarModGetVar($modName, $name)
  */
 function xarModSetVar($modName, $name, $value)
 {
-    if (empty($modName) || empty($name)) {
-        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $modName, $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));return;
-    }
+    assert('validModName($modName) && !empty($name) && isset($value)');
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) return; // throw back
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -183,9 +174,7 @@ function xarModSetVar($modName, $name, $value)
     $oldValue = xarModGetVar($modName, $name);
 
     if (!isset($oldValue)) {
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back exception
-        }
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
         $seqId = $dbconn->GenId($module_varsTable);
         $query = "INSERT INTO $module_varsTable
@@ -226,16 +215,10 @@ function xarModSetVar($modName, $name, $value)
  */
 function xarModDelVar($modName, $name)
 {
-    if (empty($modName) || empty($name)) {
-        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $modName, $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));return;
-    }
+    assert('validModName($modName) && !empty($name)');
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) return; // throw back
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -269,16 +252,10 @@ function xarModDelVar($modName, $name)
  */
 function xarModGetIDFromName($modName)
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
+
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) return; // throw back
     return $modBaseInfo['regid'];
 }
 
@@ -293,12 +270,7 @@ function xarModGetIDFromName($modName)
  */
 function xarModGetInfo($modRegId)
 {
-    // a $modRegId of 0 is associated with core ( xar_blocks.mid, ... ).
-    if (empty($modRegId) || $modRegId == 0) {
-        $msg = xarML('Empty modRegId (#(1)) or modRegId is equal to 0.', $modRegId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg ));return;
-    }
+    assert('validModRegId($modRegId)');
 
     if (xarVarIsCached('Mod.Infos', $modRegId)) {
         return xarVarGetCached('Mod.Infos', $modRegId);
@@ -319,8 +291,7 @@ function xarModGetInfo($modRegId)
     if ($result->EOF) {
         $result->Close();
         $msg = xarML('Module identified by #(1) doesn\'t exist.', $modRegId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-                       new SystemException($msg));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', new SystemException($msg));
         return;
     }
     list($modInfo['name'],
@@ -333,7 +304,8 @@ function xarModGetInfo($modRegId)
     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
 
     // Shortcut for os prepared directory
-    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+    // TODO: <marco> get rid of it since useless
+    $modInfo['osdirectory'] = $modInfo['directory'];
 
     $modState = xarMod__getState($modInfo['regid'], $modInfo['mode']);
     if (!isset($modState)) return; // throw back
@@ -341,7 +313,7 @@ function xarModGetInfo($modRegId)
 
     xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+    $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
     if (!isset($modFileInfo)) return; // throw back
     $modInfo = array_merge($modInfo, $modFileInfo);
 
@@ -379,7 +351,7 @@ function xarModGetInfo($modRegId)
  * first by class, then by category and lastly by name you pass
  * 'class/category/name' as orderBy parameter
  *
- * @author Marco Canini <marco.canini@postnuke.com>
+ * @author Marco Canini <m.canini@libero.it>
  * @param filter array of criteria used to filter the entire list of installed
  *        modules.
  * @param startNum the start offset in the list
@@ -393,20 +365,12 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 {
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',
                                      'class' => 'infos', 'category' => 'infos');
-    if (!is_array($filter)) {
-        $msg = xarML('Parameter filter must be an array.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+
+    assert('is_array($filter)');
 
     // Optional arguments.
-    if (!isset($startNum)) {
-        $startNum = 1;
-    }
-    if (!isset($numItems)) {
-        $numItems = -1;
-    }
+    if (!isset($startNum)) $startNum = 1;
+    if (!isset($numItems)) $numItems = -1;
 
     $extraSelectClause = '';
     $whereClauses = array();
@@ -502,13 +466,14 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
                     $modInfo['mode'] = (int) $mode;
                     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
                     // Shortcut for os prepared directory
-                    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+                    // TODO: <marco> get rid of it since useless
+                    $modInfo['osdirectory'] = $modInfo['directory'];
 
                     $modInfo['state'] = (int) $modState;
 
                     xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-                    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+                    $modFileInfo = xarMod_getFileInfo($modInfo['directory']);
                     if (!isset($modFileInfo)) return; // throw back
                     $modInfo = array_merge($modInfo, $modFileInfo);
 
@@ -542,14 +507,9 @@ function xarModLoad($modName, $modType = 'user')
 {
     static $loadedModuleCache = array();
 
-    xarLogMessage("xarModLoad: loading $modName:$modType");
+    assert('validModName($modName) && validModType($modType)');
 
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    xarLogMessage("xarModLoad: loading $modName:$modType");
 
     if (isset($loadedModuleCache["$modName$modType"])) {
         // Already loaded from somewhere else
@@ -557,9 +517,7 @@ function xarModLoad($modName, $modType = 'user')
     }
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) return; // throw back
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
         $msg = xarML('Module #(1) is not active.', $modName);
@@ -569,45 +527,32 @@ function xarModLoad($modName, $modType = 'user')
     }
 
     // Load the module files
-    $modOsType = xarVarPrepForOS($modType);
-    $modOsDir = $modBaseInfo['osdirectory'];
+    $modDir = $modBaseInfo['directory'];
 
-    $osfile = "modules/$modOsDir/xar$modOsType.php";
+    $fileName = "modules/$modDir/xar$modType.php";
 
-    // pnAPI compatibility
-    if (!file_exists($osfile)) {
-        $osfile = "modules/$modOsDir/pn$modOsType.php";
-        if (!file_exists($osfile)) {
-
-            // File does not exist
-            $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException($msg));
-            return;
-        }
+    if (!file_exists($fileName)) {
+        // File does not exist
+        $msg = xarML('Module file #(1) doesn\'t exist.', $fileName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException($msg));
+        return;
     }
 
     // Load file
-    include $osfile;
+    include $fileName;
     $loadedModuleCache["$modName$modType"] = true;
 
     // Load the module translations files
-    if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
 
-    // pnAPI compatibility
-    $defaultlang = pnConfigGetVar('language');
-    if (empty($defaultlang)) {
-        $defaultlang = 'eng';
-    }
-    $currentlang = pnUserGetLang();
-    if (file_exists("modules/$modOsDir/pnlang/$currentlang/$modType.php")) {
-        include "modules/$modOsDir/pnlang/" . xarVarPrepForOS($currentlang) . "/$modType.php";
-    } elseif (file_exists("modules/$modOsDir/pnlang/$defaultlang/$modType.php")) {
-        include "modules/$modOsDir/pnlang/" . xarVarPrepForOS($defaultlang) . "/$modType.php";
+    // FIXME: <marco> Remove it when the old language packs are gone
+    $fileName = "modules/$modDir/xarlang/eng/$modType.php";
+    if (file_exists($fileName)) {
+        include $fileName;
     }
 
     // Load database info
-    xarMod__loadDbInfo($modName, $modOsDir);
+    xarMod__loadDbInfo($modName, $modDir);
 
     // Module loaded successfully, notify the proper event
     xarEvt_notify($modName, $modType, 'ModLoad', NULL);
@@ -629,14 +574,9 @@ function xarModAPILoad($modName, $modType = 'user')
 {
     static $loadedAPICache = array();
 
-    xarLogMessage("xarModAPILoad: loading $modName:$modType");
+    assert('validModName($modName) && validModType($modType)');
 
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    xarLogMessage("xarModAPILoad: loading $modName:$modType");
 
     if (isset($loadedAPICache["$modName$modType"])) {
         // Already loaded from somewhere else
@@ -644,9 +584,7 @@ function xarModAPILoad($modName, $modType = 'user')
     }
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
+    if (!isset($modBaseInfo)) return; // throw back
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
         $msg = xarML('Module #(1) is not active.', $modName);
@@ -655,47 +593,31 @@ function xarModAPILoad($modName, $modType = 'user')
         return;
     }
 
-    $modOsType = xarVarPrepForOS($modType);
-    $modOsDir = $modBaseInfo['osdirectory'];
+    $modDir = $modBaseInfo['directory'];
 
-    $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
-    if (!file_exists($osfile)) {
+    $fileName = "modules/$modDir/xar{$modType}api.php";
+    if (!file_exists($fileName)) {
         // File does not exist
-        // pnAPI compatibility
-        $osfile = "modules/$modOsDir/pn{$modOsType}api.php";
-        if (!file_exists($osfile)) {
-            // File does not exist
-            $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException($msg));
-            return;
-        }
+        $msg = xarML('Module file #(1) doesn\'t exist.', $fileName);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException($msg));
+        return;
     }
 
     // Load the file
-    include $osfile;
+    include $fileName;
     $loadedAPICache["$modName$modType"] = true;
 
     // Load the API translations files
-    if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType.'api') === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType.'api') === NULL) return;
 
-    // pnAPI compatibility
-    // Load the module language files
-    $currentlang = pnUserGetLang();
-    $defaultlang = pnConfigGetVar('language');
-    if (empty($defaultlang)) {
-        $defaultlang = 'eng';
-    }
-    $oscurrentlang = xarVarPrepForOS($currentlang);
-    $osdefaultlang = xarVarPrepForOS($defaultlang);
-    if (file_exists("modules/$modOsDir/pnlang/$oscurrentlang/{$modType}api.php")) {
-        include "modules/$modOsDir/pnlang/$oscurrentlang/{$modType}api.php";
-    } elseif (file_exists("modules/$modOsDir/pnlang/$osdefaultlang/{$modType}api.php")) {
-        include "modules/$modOsDir/pnlang/$osdefaultlang/{$modType}api.php";
+    // FIXME: <marco> Remove it when the old language packs are gone
+    $fileName = "modules/$modDir/xarlang/eng/{$modType}api.php";
+    if (file_exists($fileName)) {
+        include $fileName;
     }
 
     // Load database info
-    xarMod__loadDbInfo($modName, $modOsDir);
+    xarMod__loadDbInfo($modName, $modDir);
 
     // Module API loaded successfully, notify the proper event
     xarEvt_notify($modName, $modType, 'ModAPILoad', NULL);
@@ -714,24 +636,19 @@ function xarModAPILoad($modName, $modType = 'user')
  */
 function xarModDBInfoLoad($modName, $modDir = NULL)
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
 
     // Get the directory if we don't already have it
     if (empty($modDir)) {
         $modBaseInfo = xarMod_getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {
-            return; // throw back
-        }
+        if (!isset($modBaseInfo)) return; // throw back
 
         $modDir = $modBaseInfo['directory'];
+    } else {
+        $modDir = xarVarPrepForOS($modDir);
     }
 
-    xarMod__loadDbInfo($modName, xarVarPrepForOS($modDir));
+    xarMod__loadDbInfo($modName, $modDir);
 
     return true;
 }
@@ -750,12 +667,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL)
  */
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName) && validModType($modType) && validFuncName($funcName) && is_array($args)');
 
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
@@ -801,12 +713,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName) && validModType($modType) && validFuncName($funcName) && is_array($args)');
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
@@ -931,19 +838,12 @@ function xarModIsAvailable($modName)
 {
     static $modAvailableCache = array();
 
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
 
     if (!isset($modAvailableCache[$modName])) {
 
         $modBaseInfo = xarMod_getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {
-            return; // throw back
-        }
+        if (!isset($modBaseInfo)) return; // throw back
 
         $modState = $modBaseInfo['state'];
         $modAvailableCache[$modName] = false;
@@ -977,7 +877,7 @@ function xarModIsAvailable($modName)
  */
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL)
 {
-    // FIXME: <marco> BAD_PARAM?
+    assert('validHookObject($hookObject) && validHookAction($hookAction)');
 
     // allow override of current module in special cases (e.g. modules admin)
     if (empty($callerModName)) {
@@ -1000,43 +900,27 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 
     // Call each hook
     foreach ($hooklist as $hook) {
+        // FIXME: <marco> Shouldn't this be a continue; instead of return; ?
+        if (!xarModIsAvailable($hook['module'], $hook['type'])) return;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
-            $res = xarModIsAvailable($hook['module'], $hook['type']);
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return;
-            }
-            if ($res) {
-                $res = xarModLoad($hook['module'], $hook['type']);
-                if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                     return;
-                 }
-                 if ($res) {
-                    $output .= xarModFunc($hook['module'],
-                                         $hook['type'],
-                                         $hook['func'],
-                                         array('objectid' => $hookId,
-                                               'extrainfo' => $extraInfo));
-                }
-            }
+            if (!xarModLoad($hook['module'], $hook['type'])) return;
+            $res = xarModFunc($hook['module'],
+                              $hook['type'],
+                              $hook['func'],
+                              array('objectid' => $hookId,
+                              'extrainfo' => $extraInfo));
+            if (!isset($res)) return;
+            $output .= $res;
         } else {
-            $res = xarModIsAvailable($hook['module'], $hook['type']);
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return;
-            }
-            if ($res) {
-                $res = xarModAPILoad($hook['module'], $hook['type']);
-                if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                    return;
-                }
-                if ($res) {
-                    $extraInfo = xarModAPIFunc($hook['module'],
-                                              $hook['type'],
-                                              $hook['func'],
-                                              array('objectid' => $hookId,
-                                                    'extrainfo' => $extraInfo));
-                }
-            }
+            if (!xarModAPILoad($hook['module'], $hook['type'])) return;
+            $res = xarModAPIFunc($hook['module'],
+                                 $hook['type'],
+                                 $hook['func'],
+                                 array('objectid' => $hookId,
+                                       'extrainfo' => $extraInfo));
+            if (!isset($res)) return;
+            $extraInfo = $res;
         }
     }
 
@@ -1061,6 +945,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
 {
     static $hookListCache = array();
 
+    assert('validModName($callerModName) && validHookObject($hookObject) && validHookAction($hookAction)');
+
     if (isset($hookListCache["$callerModName$hookObject$hookAction"])) {
         return $hookListCache["$callerModName$hookObject$hookAction"];
     }
@@ -1083,26 +969,23 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     if (!$result) return;
 
     $resarray = array();
-    if ($result->EOF) {
-        $hookListCache["$callerModName$hookObject$hookAction"] = $resarray;
-        return $resarray;
+    if (!$result->EOF) {
+
+        while(list($hookArea,
+                   $hookModName,
+                   $hookModType,
+                   $hookFuncName) = $result->fields) {
+            $result->MoveNext();
+
+            $tmparray = array('area' => $hookArea,
+                              'module' => $hookModName,
+                              'type' => $hookModType,
+                              'func' => $hookFuncName);
+
+            array_push($resarray, $tmparray);
+        }
+        $result->Close();
     }
-
-    while(list($hookArea,
-               $hookModName,
-               $hookModType,
-               $hookFuncName) = $result->fields) {
-        $result->MoveNext();
-
-        $tmparray = array('area' => $hookArea,
-                          'module' => $hookModName,
-                          'type' => $hookModType,
-                          'func' => $hookFuncName);
-
-        array_push($resarray, $tmparray);
-    }
-    $result->Close();
-
     $hookListCache["$callerModName$hookObject$hookAction"] = $resarray;
     return $resarray;
 }
@@ -1119,12 +1002,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
  */
 function xarModGetAlias($modName)
 {
-    if (empty($modName)) {
-        $msg = xarML('Invalid module name');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
 
     $aliases = xarConfigGetVar('System.ModuleAliases');
 
@@ -1135,6 +1013,7 @@ function xarModGetAlias($modName)
     }
 }
 
+// TODO: <marco> Out of core!
 /**
  * define a module name as an alias for some other module
  * (only used for short URL support at the moment)
@@ -1146,14 +1025,11 @@ function xarModGetAlias($modName)
  * @return true on success, false on failure
  * @raise BAD_PARAM
  */
-function xarModSetAlias($modName,$alias)
+function xarModSetAlias($modName, $alias)
 {
-    if (empty($modName) || empty($alias)) {
-        $msg = xarML('Invalid module name or alias');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
+    assert('validModName($modName) && !empty($alias)');
+
+    // FIXME: <marco> Wrong variable names
 
     // Check if the module name we want to define is already in use
     $modid = xarModGetIDFromName($modName);
@@ -1165,6 +1041,9 @@ function xarModSetAlias($modName,$alias)
         return false;
     }
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarExceptionId() != 'MODULE_NOT_EXIST') {
+            return; // throw back
+        }
         // Ignore exceptions here!
         xarExceptionFree();
     }
@@ -1193,6 +1072,7 @@ function xarModSetAlias($modName,$alias)
     return true;
 }
 
+// TODO: <marco> Out of core!
 /**
  * remove an alias for a module name
  * (only used for short URL support at the moment)
@@ -1206,12 +1086,7 @@ function xarModSetAlias($modName,$alias)
  */
 function xarModDelAlias($modName, $alias)
 {
-    if (empty($modName) || empty($alias)) {
-        $msg = xarML('Invalid module name or alias');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
+    assert('validModName($modName) && !empty($alias)');
 
     $aliases = xarConfigGetVar('System.ModuleAliases');
 
@@ -1231,26 +1106,23 @@ function xarModDelAlias($modName, $alias)
  * Get info from xarversion.php
  *
  * @access protected
- * @param modOSdir the module's directory
+ * @param modDir the module's directory
  * @returns array
  * @return an array of module file information
  * @raise MODULE_FILE_NOT_EXIST
  */
-function xarMod_getFileInfo($modOsDir)
+function xarMod_getFileInfo($modDir)
 {
-    $resarray = array();
-    // Spliffster, additional mod info from modules/$modOsDir/xarversion.php
-    $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+    assert('!empty($modDir)');
 
-    // pnAPI compatibility
+    $resarray = array();
+    // Spliffster, additional mod info from modules/$modDir/xarversion.php
+    $fileName = 'modules/' . $modDir . '/xarversion.php';
+
     if (!file_exists($fileName)) {
-        $fileName = 'modules/' . $modOsDir . '/pnversion.php';
-        if (!file_exists($fileName)) {
-            $msg = xarML('Module file #(1) doesn\'t exist.', 'modules/' . $modOsDir . '/xar(pn)version.php');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException($msg));
-            return;
-        }
+        $msg = xarML('Module file #(1) doesn\'t exist.', 'modules/' . $modDir . '/xar(pn)version.php');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException($msg));
+        return;
     }
 
     include($fileName);
@@ -1283,6 +1155,8 @@ function xarMod_getFileInfo($modOsDir)
  */
 function xarMod_getBaseInfo($modName)
 {
+    assert('validModName($modName)');
+
     if (xarVarIsCached('Mod.BaseInfos', $modName)) {
         return xarVarGetCached('Mod.BaseInfos', $modName);
     }
@@ -1316,7 +1190,8 @@ function xarMod_getBaseInfo($modName)
     $modBaseInfo['mode'] = (int) $mode;
     $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);
     // Shortcut for os prepared directory
-    $modBaseInfo['osdirectory'] = xarVarPrepForOS($modBaseInfo['directory']);
+    // TODO: <marco> get rid of it since useless
+    $modBaseInfo['osdirectory'] = $modBaseInfo['directory'];
 
     $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
     if (!isset($modState)) return; // throw back
@@ -1337,12 +1212,7 @@ function xarMod_getBaseInfo($modName)
  */
 function xarMod_getVarsByModule($modName)
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty module name (#(1)).', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
@@ -1387,12 +1257,7 @@ function xarMod_getVarsByModule($modName)
  */
 function xarMod_getVarsByName($name)
 {
-    if (empty($name)) {
-        $msg = xarML('Empty variable name (#(1)).', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('validModName($modName)');
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -1425,14 +1290,16 @@ function xarMod_getVarsByName($name)
  * Load database definition for a module
  *
  * @param modName name of module to load database definition for
- * @param modOsDir directory that module is in
+ * @param modDir directory that module is in
  * @returns bool
  * @return true on success
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
-function xarMod__loadDbInfo($modName, $modOsDir)
+function xarMod__loadDbInfo($modName, $modDir)
 {
     static $loadedDbInfoCache = array();
+
+    assert('validModName($modName) && !empty($modDir)');
 
     // Check to ensure we aren't doing this twice
     if (isset($loadedDbInfoCache[$modName])) {
@@ -1440,25 +1307,15 @@ function xarMod__loadDbInfo($modName, $modOsDir)
     }
 
     // Load the database definition if required
-    $osxartablefile = "modules/$modOsDir/xartables.php";
+    $osxartablefile = "modules/$modDir/xartables.php";
     if (!file_exists($osxartablefile)) {
-       // pnAPI compatibility
-       $osxartablefile = "modules/$modOsDir/pntables.php";
-       if (!file_exists($osxartablefile)) {
-           return false;
-       }
+        return false;
     }
     include_once $osxartablefile;
 
     $tablefunc = $modName . '_' . 'xartables';
     if (function_exists($tablefunc)) {
         xarDB_importTables($tablefunc());
-    } else {
-        // pnAPI compatibility
-        $tablefunc = $modName . '_' . 'pntables';
-        if (function_exists($tablefunc)) {
-            xarDB_importTables($tablefunc());
-        }
     }
 
     $loadedDbInfoCache[$modName] = true;
@@ -1477,6 +1334,8 @@ function xarMod__loadDbInfo($modName, $modOsDir)
  */
 function xarMod__getState($modRegId, $modMode)
 {
+    assert('validModRegId($modRegId) && validModMode($modMode)');
+
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
@@ -1491,18 +1350,14 @@ function xarMod__getState($modRegId, $modMode)
               WHERE xar_regid = '" . xarVarPrepForStore($modRegId) . "'";
     $result = $dbconn->Execute($query);
     if (!$result) return;
-/*
-    Should never happen!
-    if ($result->EOF) {
-        $result->Close();
-        $msg = xarML('The state of module #(1) is not present.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException($msg));
-        return;
-    }
-*/
+
+    // Should never happen!
+    assert(!$result->EOF);
+
     list($modState) = $result->fields;
     $result->Close();
 
     return (int) $modState;
 }
+
+?>

@@ -2,7 +2,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <meta name="Generator" content="#xarConfigGetVar('System.Core.VersionNum')# :: #xarConfigGetVar('System.Core.VersionID')#" />
         <meta name="Keywords" content="#xarConfigGetVar('Site.Core.MetaKeywords')#" />
         <meta name="Description" content="#xarConfigGetVar('Site.Core.MetaDescription')#" />

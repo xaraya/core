@@ -93,12 +93,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
         return true;
     }
 
-    if (empty($userName)) {
-        $msg = xarML('Empty uname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('!empty($userName) && isset($password)');
 
     $userId = XARUSER_AUTH_FAILED;
     foreach($xarUser_authenticationModules as $authModName) {
@@ -106,15 +101,13 @@ function xarUserLogIn($userName, $password, $rememberMe)
         // Authentication interface so there's at least the authenticate_user
         // user api function
 
-        $res = xarModAPILoad($authModName, 'user');
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
-        }
+        if (!xarModAPILoad($authModName, 'user')) return; // throw back
 
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user',
                             array('uname' => $userName, 'pass' => $password));
-        if (!isset($userId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return;
+
+        if (!isset($userId)) {
+            return; // throw back
         } elseif ($userId != XARUSER_AUTH_FAILED) {
             // Someone authenticated us
             break;
@@ -133,10 +126,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
     }
 
     // Set user session information
-    $res = xarSession_setUserInfo($userId, $rememberMe);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (!xarSession_setUserInfo($userId, $rememberMe)) return; // throw back
 
     // Set user auth module information
     list($dbconn) = xarDBGetConn();
@@ -156,10 +146,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
     xarSessionSetVar('authenticationModule', $authModName);
 
     // Sync core fields that're duplicates in users table
-    $res = xarUser__syncUsersTableFields();
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (!xarUser__syncUsersTableFields()) return;
 
     // FIXME: <marco> here we could also set a last_logon timestamp
 
