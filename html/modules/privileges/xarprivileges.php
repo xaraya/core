@@ -209,7 +209,7 @@ class xarMasks
     }
 
 /**
- * removeMasks: remove the masks registered by a module form the database
+ * removeMasks: remove the masks registered by a module from the database
  * *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
