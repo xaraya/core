@@ -804,8 +804,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $tplData = array(
         '_bl_mainModuleOutput'     => $mainModuleOutput,
         '_bl_page_title'           => xarTplGetPageTitle(),
-        '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
-        '_bl_javascript'           => $GLOBALS['xarTpl_JavaScript']
+        '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles']
     );
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);

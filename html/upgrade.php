@@ -741,7 +741,7 @@ if (empty($step)) {
                              'set'     =>  1),
                        array('name'    =>  'admin',
                              'module'  =>  'roles',
-                             'set'     =>  $admin->getID()),
+                             'set'     =>  $role->getID()),
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
