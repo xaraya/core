@@ -451,33 +451,45 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
 {
     var $buffer = '';
 		var $loggerdesc="Mozilla Javascript Console Logger";
+		var $commoncodeinserted;
 
     function xarLog__MozJSConsoleLogger($args)
     {
-        // Set the HTML format
-        $this->setFormat('html');
+        // Console only supports plain text 
+        $this->setFormat('text');
+				$this->commoncodeinserted=false;
+				
+				// FIXME: this will never work, because the tpl engine is not initialized yet.
+				//$code=$this->getCommonCode();
+				//xarTplAddJavaScriptCode('head',$this->loggerdesc,$code);
 		}
 
-//     function getBuffer()
-//     {
-//         $code = "<script language=\"javascript\">\n".
-// 					$this->buffer.
-// 					"</script>\n";
-//         return $str;
-//     }
+		function getCommonCode() {
+			//
+			$code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
+				"var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
+				"var iface = Components.interfaces.nsIConsoleService;\n".
+				"var jsconsole = con_service_class.getService(iface);\n";
+			return $code;
+		}
 
     function logMessage($msg, $callPrepForDisplay = true)
     {
 			// FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
 			// it should be done with a signed script eventually, but this is rather complex 
 			// TODO: check on windows and browsers other than mozilla, to fall back gracefully
-			$code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
-				"var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
-				"var iface = Components.interfaces.nsIConsoleService;\n".
-				"var jsconsole = con_service_class.getService(iface);\n";
+			if (!$this->commoncodeinserted) {
+				$code = $this->getCommonCode();
+				xarTplAddJavaScriptCode('body',$this->loggerdesc,$code);
+				$this->commoncodeinserted=true;
+			}
 			$logentry=$this->getTimestamp(). " - (" .$this->formatLevel().")".$msg;
-		  $code.= "jsconsole.logStringMessage('$logentry');\n";
-			xarTplAddJavaScriptCode('body', 'Mozilla JS console logger', $code);
+			// Add \ for each newline
+			$logentry = addslashes($logentry);
+			$trans=array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
+      $logentry=strtr($logentry,$trans);
+		  $code= "jsconsole.logStringMessage('$logentry');\n";
+			xarTplAddJavaScriptCode('body', $this->loggerdesc, $code);
     }
 
 }
