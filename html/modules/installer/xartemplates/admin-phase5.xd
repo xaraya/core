@@ -34,9 +34,12 @@
                 </xar:mlstring>
             </h4>
             <h4>
+                <xar:ml>
                 <xar:mlstring>
-                    If you continue your previous data will be overwritten. 
+                    If you continue, tables using the #(1)_ prefix will be overwritten. 
                 </xar:mlstring>
+                <xar:mlvar>#$dbPrefix#</xar:mlvar>
+                </xar:ml>
             </h4>
             <div style="float:left;width:230px; text-align:center; margin-top:2em;">
                 <form action="install.php" method="post">
