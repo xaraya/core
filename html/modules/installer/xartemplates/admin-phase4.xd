@@ -64,7 +64,7 @@
                             Re-Enter Password 
                         </xar:mlstring>
                     </label>
-                    <input type="password" name="install_database_password2" id="install_database_password22" maxlength="80" value="#$database_password#" />
+                    <input type="password" name="install_database_password2" id="install_database_password2" maxlength="80" value="#$database_password#" />
                     <br class="clear" />
                 </p>
                 <p>
