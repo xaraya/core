@@ -66,6 +66,7 @@ function base_admin_updateconfig()
         case 'locales':
             if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
             if (!xarVarFetch('active','isset',$active)) return;
+            if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
 
             $localesList = array();
             foreach($active as $activelocale) $localesList[] = $activelocale;
@@ -73,6 +74,7 @@ function base_admin_updateconfig()
             sort($localesList);
 
             // Locales
+            xarConfigSetVar('Site.MLS.MLSMode', $MLSMode);
             xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
             xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
             break;

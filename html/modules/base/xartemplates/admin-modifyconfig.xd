@@ -230,57 +230,13 @@
 	
 <xar:comment> ----------------- Begin Locale Options ------------------- </xar:comment>
 	<xar:elseif condition="$tab eq 'locales'" />
+
 		<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 			<input type="hidden" name="authid" id="authid" value="#$authid#" />
 			<input type="hidden" name="tab" id="tab" value="#$tab#" />
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>Language/Locale Configuration</xar:mlstring></h4>
-				<p><xar:mlstring>Please note that you cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0
-				with the mbstring extension compiled in.</xar:mlstring></p>
 
-				<p><xar:mlstring>The following locales are available to this site:</xar:mlstring></p>
-			</div>
+                              <xar:template file="modifyconfig-locales" module="base" type="module"/>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<xar:mlstring>Locale</xar:mlstring>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<xar:mlstring>Active</xar:mlstring>	
-			</span>
-			</div>
-
-			<xar:loop name="$locales">
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<label for="locale_#$loop:item['name']#">#$loop:item['name']#</label>:
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				 <xar:if condition="$loop:item['active'] == 'true'">
-					  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value="#$loop:item['name']#" checked="checked" />
-				<xar:else />
-					  <input type="checkbox" name="active[]" id="locale_#$loop:index#" value="#$loop:item['name']#" />
-				</xar:if>
-			</span>
-			</div>
-			</xar:loop>
-
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Default locale to load')#"><label for="defaultlocale"><xar:mlstring>Default Locale</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="defaultlocale" id="defaultlocale" size="1">
-				<xar:loop name="$locales">
-				  <xar:if condition="xarMLSGetSiteLocale() eq $loop:item['name']">
-					<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-				   <xar:else />
-					<option value="#$loop:item['name']#">#$loop:item['name']#</option>
-				  </xar:if>
-				</xar:loop>
-			  </select>
-			</span>
-			</div>		
 			<div style="clear: both; padding-top: 10px;">
 				<input type="submit" value="#$updatelabel#" />
 			</div>
