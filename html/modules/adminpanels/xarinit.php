@@ -131,6 +131,71 @@ function adminpanels_init()
     xarModSetVar('adminpanels','showontop', 1);
     xarModSetVar('adminpanels','showhelp', 1);
     
+    /* Create the table and hooks for the waiting content block */
+
+    // Create tables
+    $xartable['waitingcontent'] = xarDBGetSiteTablePrefix() . '_admin_wc';
+    // Create tables
+    $query = xarDBCreateTable($xartable['waitingcontent'],
+                             array('xar_wcid'        => array('type'        => 'integer',
+                                                            'null'        => false,
+                                                            'default'     => '0',
+                                                            'increment'   => true,
+                                                            'primary_key' => true),
+                                   'xar_moduleid'    => array('type'        => 'integer',
+                                                            'unsigned'    => true,
+                                                            'null'        => false,
+                                                            'default'     => '0'),
+                                   'xar_hits'          => array('type'        => 'integer',
+                                                            'null'        => false,
+                                                            'size'        => 'big',
+                                                            'default'     => '0')));
+
+    $result =& $dbconn->Execute($query);
+    //if (!$result) return;
+
+    $query = xarDBCreateIndex($xartable['waitingcontent'],
+                             array('name'   => 'xar_moduleid',
+                                   'fields' => array('xar_moduleid'),
+                                   'unique' => false));
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $query = xarDBCreateIndex($xartable['waitingcontent'],
+                             array('name'   => 'xar_hits',
+                                   'fields' => array('xar_hits'),
+                                   'unique' => false));
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Set up module hooks
+
+    // when a module item is displayed
+    // (use xarVarSetCached('Hooks.hitcount','save', 1) to tell hitcount *not*
+    // to display the hit count, but to save it in 'Hooks.hitcount', 'value')
+    if (!xarModRegisterHook('item', 'display', 'GUI',
+                           'waitingcontent', 'user', 'display')) {
+        return false;
+    }
+    // when a module item is created (set extrainfo to the module name ?)
+    if (!xarModRegisterHook('item', 'create', 'API',
+                           'waitingcontent', 'admin', 'create')) {
+        return false;
+    }
+    // when a module item is deleted (set extrainfo to the module name ?)
+    if (!xarModRegisterHook('item', 'delete', 'API',
+                           'waitingcontent', 'admin', 'delete')) {
+        return false;
+    }
+    // when a whole module is removed, e.g. via the modules admin screen
+    // (set object ID to the module name !)
+    if (!xarModRegisterHook('module', 'remove', 'API',
+                           'waitingcontent', 'admin', 'deleteall')) {
+        return false;
+    }
+
     // Initialisation successful
     return true;
 }
