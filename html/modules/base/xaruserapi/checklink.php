@@ -64,7 +64,7 @@ function base_userapi_checklink($args)
     $proxyhost = xarModGetVar('base','proxyhost');
     if (!empty($proxyhost) && !$islocal) {
         $proxyport = xarModGetVar('base','proxyport');
-        $fp = fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
+        $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
             return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
         }
@@ -79,7 +79,7 @@ function base_userapi_checklink($args)
         if (empty($info['port'])) $info['port'] = '80';
         if (empty($info['path'])) $info['path'] = '/';
 
-        $fp = fsockopen($info['host'],$info['port'],$errno,$errstr,10);
+        $fp = @fsockopen($info['host'],$info['port'],$errno,$errstr,10);
         if (!$fp) {
             return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
         }

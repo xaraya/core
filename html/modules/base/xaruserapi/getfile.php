@@ -137,7 +137,7 @@ function base_userapi_getfile($args)
     $proxyhost = xarModGetVar('base','proxyhost');
     if (!empty($proxyhost) && !$islocal) {
         $proxyport = xarModGetVar('base','proxyport');
-        $fp = fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
+        $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
             $msg = xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
