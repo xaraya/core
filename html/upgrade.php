@@ -712,7 +712,113 @@ if (empty($step)) {
                                            ),
                                           'message' => '',
                                           'locked' => 0,
-                                          'notifymsg' => '')))
+                                          'notifymsg' => ''))),
+                       array('name'    =>  'askwelcomeemail',
+                             'module'  =>  'roles',
+                             'set'     =>  1),
+                       array('name'    =>  'askvalidationemail',
+                             'module'  =>  'roles',
+                             'set'     =>  1),
+                       array('name'    =>  'askdeactivationemail',
+                             'module'  =>  'roles',
+                             'set'     =>  1),
+                       array('name'    =>  'askpendingemail',
+                             'module'  =>  'roles',
+                             'set'     =>  1),
+                       array('name'    =>  'askpasswordemail',
+                             'module'  =>  'roles',
+                             'set'     =>  1),   
+                       array('name'    =>  'rolesdisplay',
+                             'module'  =>  'roles',
+                             'set'     =>  'tabbed'),
+                       array('name'    =>  'confirmationemail',
+                             'module'  =>  'roles',
+                             'set'     =>  'Your account has been created for %%sitename%% and needs to be activated.
+You can either do this now, or on the first time that you log in.
+If you prefer to do it now, then you will need to follow this link :
+%%validationlink%%
+Here are the details that were provided.
+
+IP Address of the person creating that account: %%ipaddress%%
+User Name:  %%username%%
+Password:  %%password%%
+
+Validation Code to activate your account:  %%valcode%%
+
+If you did not create this account, then do nothing.  The account will be deemed
+inactive after a period of time and deleted from our records.  You will recieve
+no further emails from us.Thank you,
+
+%%siteadmin%%'),          
+                     array('name'    =>  'remindertitle',
+                             'module'  =>  'roles',
+                             'set'     =>  'Replacement login information for %%name%% at
+%%sitename%%'),       
+                    array('name'    =>  'reminderemail',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%%,
+
+Here is your new password for %%sitename%%. You may now login to %%siteurl%%
+using the following username and password:
+username: %%username%%
+password: %%password%%
+
+-- %%siteadmin%%'),      
+                    array('name'    =>  'validationtitle',
+                             'module'  =>  'roles',
+                             'set'     =>  'Validate your account %%name%% at %%sitename%%'),                          
+                    array('name'    =>  'validationemail',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%%,
+
+Your account must be validated again because your e-mail address has changed or
+an administrator has unvalidated it. You can either do this now, or on the next
+time that you log in. If you prefer to do it now, then you will need to follow
+this link : %%validationlink%%
+Validation Code to activate your account:  %%valcode%%
+
+You will receive an email has soon as your account is activated again.
+
+%%siteadmin%%%'),
+                    array('name'    =>  'deactivationtitle',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%% deactivated at %%sitename%%'),
+                    array('name'    =>  'deactivationemail',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%%,
+
+Your account was deactivated by the administrator.
+If you want to know the reason, contact %%adminmail%%
+You will receive an email as soon as your account is activated again.
+
+%%siteadmin%%%'),             
+                    array('name'    =>  'pendingtitle',
+                             'module'  =>  'roles',
+                             'set'     =>  'Pending state of %%name%% at %%sitename%%'),
+                    array('name'    =>  'pendingemail',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%%,
+
+Your account is pending.
+You\'ll have to wait for the explicit approval of the administrator to log
+again.
+If you want to know the reason, contact %%adminmail%%
+You will receive an email has soon as your account is activated again.
+
+%%siteadmin%%%'),
+                    array('name'    =>  'passwordtitle',
+                             'module'  =>  'roles',
+                             'set'     =>  'Your password at %%sitename%% has been changed'),
+                    array('name'    =>  'passwordemail',
+                             'module'  =>  'roles',
+                             'set'     =>  '%%name%%,
+
+Your password has been changed by an administrator.
+You can now login at %%link%% with those information :
+Login : %%username%%
+Password : %%pass%%
+
+%%siteadmin%%'),                          
                           );
 
     foreach($modvars as $modvar){

@@ -161,19 +161,23 @@ function roles_init()
         'unique' => false);
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
     if (!$dbconn->Execute($query)) return;
-
     //Database Initialisation successful
-    return true;
-}
-
-function roles_activate()
-{
-// Set up an initial value for module variables.
+    
+    // Set up an initial value for module variables.
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
     xarModSetVar('roles', 'defaultgroup', 'Users');
+    //Send notifications values
+    xarModSetVar('roles', 'askwelcomeemail', 1);
+    xarModSetVar('roles', 'askvalidationemail', 1);
+    xarModSetVar('roles', 'askdeactivationemail', 1);
+    xarModSetVar('roles', 'askpendingemail', 1);
+    xarModSetVar('roles', 'askpasswordemail', 1);
+    //Default Display
+    xarModSetVar('roles', 'rolesdisplay', 'tabbed');
+    
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
     $lockdata = array('roles' => array( array('uid' => 4,
@@ -256,9 +260,9 @@ password: %%password%%
     $validationemail = '%%name%%,
 
 Your account must be validated again because your e-mail address has changed or
-an administrator has unvalidated it.You can either do this now, or on the next
+an administrator has unvalidated it. You can either do this now, or on the next
 time that you log in. If you prefer to do it now, then you will need to follow
-this link :%%validationlink%%
+this link : %%validationlink%%
 Validation Code to activate your account:  %%valcode%%
 
 You will receive an email has soon as your account is activated again.
@@ -293,8 +297,7 @@ again.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%
-    ';
+%%siteadmin%%%';
     xarModSetVar('roles', 'pendingemail', $pendingemail);
     xarModSetVar('roles', 'pendingtitle', $pendingtitle);
 
@@ -364,6 +367,11 @@ Password : %%pass%%
 // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
 
     return true;
+}
+
+function roles_activate()
+{
+	return true;
 }
 
 /**
