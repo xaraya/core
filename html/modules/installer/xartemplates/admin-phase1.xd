@@ -1,43 +1,47 @@
 <div id="install">
-    <div style="padding:10px;">
-        <div style="text-align:center;">
-            <span class="xar-pagetitle">
-                <xar:mlstring>
-                    Select your Language 
-                </xar:mlstring>
-            </span>
-        </div>
-        <br />
-        <br />
-        <div style="text-align:justify;">
-            <span class="xar-normal">
-                <p>
-                    <xar:mlstring>
-                        This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help. 
-                    </xar:mlstring>
-                </p>
-            </span>
-        </div>
-        <div style="text-align:center;">
-            <form action="install.php" method="post">
-                <p class="xar-normal">
-                    <xar:mlstring>
-                        Language 
-                    </xar:mlstring>
-                    : 
-                    <select name="install_language" class="xar-text">
-                        <xar:foreach in="$languages" key="$key" value="$value">
-                            <option value="#$key#">
-                                #$value# 
-                            </option>
-                        </xar:foreach>
-                    </select>
-                    <input type="hidden" name="install_phase" id="install_phase" value="2" />
-                    <input type="submit" value="Continue &gt;" />
-                </p>
-            </form>
-        </div>
+  <div style="padding:10px;">
+    <div style="text-align:center;">
+      <span class="xar-pagetitle">
+        <xar:mlstring>
+          Select your Language 
+        </xar:mlstring>
+      </span>
     </div>
+    <br />
+    <br />
+    <div style="text-align:justify;">
+      <span class="xar-normal">
+        <p>
+          <xar:mlstring>
+            This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help. 
+          </xar:mlstring>
+        </p>
+      </span>
+    </div>
+    <div style="text-align:center;">
+      <form action="install.php" method="post">
+        <p class="xar-normal">
+          <xar:mlstring>
+            Language 
+          </xar:mlstring>
+          : 
+          <select name="install_language" class="xar-text">
+            <xar:foreach in="$languages" key="$key" value="$value">
+              <xar:if condition="$install_language == $key">
+                <option value="#$key#" selected="selected">
+              <xar:else/>
+                <option value="#$key#">
+              </xar:if>
+              #$value# (#$key#)
+              </option>
+            </xar:foreach>
+          </select>
+          <input type="hidden" name="install_phase" id="install_phase" value="2" />
+          <input type="submit" value="Continue &gt;" />
+        </p>
+      </form>
+    </div>
+  </div>
 </div>
 <xar:set name="active_step">1</xar:set>
 <xar:template file="status"/>

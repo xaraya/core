@@ -87,14 +87,33 @@ xarTpl_init($systemArgs, $whatToLoad);
 
 // Get the install language everytime
 // We need the var to init MLS, but we need MLS for this, DOH
+// Make sure we set a utf locale intially, otherwise the combo box wont be filled correctly
+// for language name which include utf characters in their name
 $GLOBALS['xarMLS_mode'] = 'SINGLE'; // set temporary
-xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
+xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+
+// Construct an array of the available locale folders
+$locale_dir = './var/locales/';
+$allowedLocales = array($install_language);
+if(is_dir($locale_dir)) {
+    if ($dh = opendir($locale_dir)) {
+        while (($file = readdir($dh)) !== false) {
+            if($file == '.' || $file == '..' || $file == 'SCCS' || filetype($locale_dir . $file) == 'file' ) continue;
+            if(filetype(realpath($locale_dir . $file)) == 'dir') {
+                $allowedLocales[] = $file;
+            }
+        }
+        closedir($dh);
+    }
+ }
+array_unique($allowedLocales);
+sort($allowedLocales);
 
 // Start Multi Language System
 $systemArgs = array('translationsBackend' => 'xml',
                     'MLSMode' => 'BOXED',
                     'defaultLocale' => $install_language,
-                    'allowedLocales' => array('en_US.iso-8859-1','nl_NL.iso-8859-1'));
+                    'allowedLocales' => $allowedLocales);
 xarMLS_init($systemArgs, $whatToLoad);
 
 // Install Phases
