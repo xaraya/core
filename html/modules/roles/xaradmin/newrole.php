@@ -19,7 +19,7 @@
  */
 function roles_admin_newrole()
 {
-    if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED,)) return;
+    if (!xarVarFetch('pparentid', 'str:1:', $pparentid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ptype', 'str:1:', $type, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
