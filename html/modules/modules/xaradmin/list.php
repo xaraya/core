@@ -121,7 +121,7 @@ function modules_admin_list()
         if(isset($mod['admin']) && $mod['admin'] == 1 && $mod['state'] == 3){
             $listrows[$i]['modconfigurl'] = xarModURL($mod['name'], 'admin');
             // link title for modules main admin function - common
-            $listrows[$i]['adminurltitle'] = xarML('Go to administration of ');
+            $listrows[$i]['adminurltitle'] = xarML('Go to administration of');
         }
 
         // common urls

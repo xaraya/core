@@ -113,7 +113,7 @@
                                     <a name="#$modinfo['displayname']#" id="#$modinfo['displayname']#" style="text-decoration:none">&nbsp;</a>
                                     <!--- if module is active and configurable (admin type) make its name a link to module main admin function --->
                                     <xar:if condition="$modinfo['modconfigurl'] ne ''">
-                                        <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']##$modinfo['displayname']#">#$modinfo['displayname']#</a>
+                                        <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['displayname']#</a>
                                     <xar:else />
                                         #$modinfo['displayname']#
                                     </xar:if>
