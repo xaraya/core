@@ -898,14 +898,13 @@ function dynamicdata_admin_export($args)
             $i++;
         }
         $xml .= "  </properties>\n";
+    // TODO: insert items here for some parameter
         $xml .= "</object>\n";
 
     // export specific item
-    } else {
+    } elseif (is_numeric($itemid)) {
         $data['label'] = xarML('Export Data for #(1) # #(2)', $label, $itemid);
 
-        $objectname = $object['name']['value'];
-        $xml = "<$objectname id=\"$itemid\">\n";
         $fields = xarModAPIFunc('dynamicdata','user','getitem',
                                 array('modid' => $modid,
                                       'itemtype' => $itemtype,
@@ -914,10 +913,60 @@ function dynamicdata_admin_export($args)
             $data['xml'] = xarML('Unknown Item');
             return $data;
         }
+        $objectname = $object['name']['value'];
+        $xml = "<$objectname id=\"$itemid\">\n";
         foreach ($fields as $fieldname => $field) {
             $xml .= "  <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n";
         }
         $xml .= "</$objectname>\n";
+
+    // export all items (better save this to file, e.g. in var/cache/...)
+    } elseif ($itemid == 'all') {
+        $data['label'] = xarML('Export Data for all #(1) Items', $label);
+
+        $items = xarModAPIFunc('dynamicdata','user','getitems',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype));
+        if (!isset($items)) {
+            $data['xml'] = xarML('No Items');
+            return $data;
+        }
+        $objectname = $object['name']['value'];
+/**/
+        $xml = "<items>\n";
+        foreach ($items as $itemid => $item) {
+            $xml .= "  <$objectname id=\"$itemid\">\n";
+            foreach ($item['fields'] as $fieldname => $field) {
+                $xml .= "    <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n";
+            }
+            $xml .= "  </$objectname>\n";
+        }
+        $xml .= "</items>\n";
+/**/
+/*
+        $varDir = xarCoreGetVarDirPath();
+        $outfile = $varDir . '/cache/templates/' . xarVarPrepForOS($objectname) . '.data.xml';
+        $fp = @fopen($outfile,'w');
+        if (!$fp) {
+            $data['xml'] = xarML('Unable to open file');
+            return $data;
+        }
+        fputs($fp, "<items>\n");
+        foreach ($items as $itemid => $item) {
+            fputs($fp, "  <$objectname id=\"$itemid\">\n");
+            foreach ($item['fields'] as $fieldname => $field) {
+                fputs($fp, "    <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n");
+            }
+            fputs($fp, "  </$objectname>\n");
+        }
+        fputs($fp, "</items>\n");
+        fclose($fp);
+        $xml = xarML('Data saved to #(1)',$outfile);
+*/
+
+    } else {
+        $data['label'] = xarML('Unknown Request for #(1)', $label);
+        $xml = '';
     }
 
     $data['xml'] = xarVarPrepForDisplay($xml);
@@ -977,81 +1026,165 @@ function dynamicdata_admin_import($args)
                            new SystemException($msg));
             return;
         }
-        $lines = @file($basedir . '/' . $file);
-        if (empty($lines) || count($lines) < 1) {
-            $msg = xarML('File is empty');
+        $fp = @fopen($basedir . '/' . $file, 'r');
+        if (!$fp) {
+            $msg = xarML('Unable to open file');
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
             return;
         }
-        $object = array();
-        $properties = array();
+
         $what = '';
-        foreach ($lines as $line) {
+        while (!feof($fp)) {
+            $line = fgets($fp, 4096);
             if (empty($what)) {
-                if (preg_match('#<object>#',$line)) {
+                if (preg_match('#<object>#',$line)) { // in case we import the object definition
+                    $object = array();
                     $what = 'object';
+                } elseif (preg_match('#<items>#',$line)) { // in case we only import data
+                    $what = 'item';
                 }
+
             } elseif ($what == 'object') {
                 if (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
                     $key = $matches[1];
                     $value = $matches[2];
                     if (isset($object[$key])) {
-                        $msg = xarML('Duplicate definition for key #(1)',xarVarPrepForDisplay($key));
+                        $msg = xarML('Duplicate definition for #(1) key #(2)','object',xarVarPrepForDisplay($key));
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
+                        fclose($fp);
                         return;
                     }
                     $object[$key] = $value;
                 } elseif (preg_match('#<properties>#',$line)) {
+                    // let's create the object now...
+                    if (empty($object['name']) || empty($object['moduleid'])) {
+                        $msg = xarML('Missing keys in object definition');
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        fclose($fp);
+                        return;
+                    }
+                    // make sure we drop the object id, because it might already exist here
+                    unset($object['id']);
+                // TODO: make sure itemtype is unique when we're dealing with fully dynamic objects
+                //       (= objects that have the moduleid of dynamicdata itself)
+
+                    $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+                                              $object);
+                    if (!isset($objectid)) {
+                        fclose($fp);
+                        return;
+                    }
+
                     $what = 'property';
+                } else {
+                    // multi-line entries not relevant here
                 }
+
             } elseif ($what == 'property') {
-                if (preg_match('#<property #',$line)) {
+                if (preg_match('#<property id="\d+">#',$line)) {
                     $property = array();
                 } elseif (preg_match('#</property>#',$line)) {
-                    $properties[] = $property;
+                    // let's create the property now...
+                    $property['objectid'] = $objectid;
+                    $property['moduleid'] = $object['moduleid'];
+                    $property['itemtype'] = $object['itemtype'];
+                    // make sure we drop the property id, because it might already exist here
+                    unset($property['id']);
+                    $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
+                                             $property);
+                    if (!isset($prop_id)) {
+                        fclose($fp);
+                        return;
+                    }
                 } elseif (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
                     $key = $matches[1];
                     $value = $matches[2];
                     if (isset($property[$key])) {
-                        $msg = xarML('Duplicate definition for key #(1)',xarVarPrepForDisplay($key));
+                        $msg = xarML('Duplicate definition for #(1) key #(2)','property',xarVarPrepForDisplay($key));
                         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
+                        fclose($fp);
                         return;
                     }
                     $property[$key] = $value;
+                } elseif (preg_match('#</properties>#',$line)) {
+                } elseif (preg_match('#<items>#',$line)) {
+                    $what = 'item';
+                } else {
+                    // multi-line entries not relevant here
                 }
+
+            } elseif ($what == 'item') {
+                if (preg_match('#<([^> ]+) id="\d+">#',$line,$matches)) {
+                    // find out what kind of item we're dealing with
+                    $objectname = $matches[1];
+                    // ...
+                    $item = array();
+                    $closeitem = $objectname;
+                    $closetag = 'N/A';
+                } elseif (preg_match("#</$closeitem>#",$line)) {
+                    // let's create the item now...
+                    // ...
+                    $closeitem = 'N/A';
+                    $closetag = 'N/A';
+                } elseif (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
+                    $key = $matches[1];
+                    $value = $matches[2];
+                    if (isset($item[$key])) {
+                        $msg = xarML('Duplicate definition for #(1) key #(2)','item',xarVarPrepForDisplay($key));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        fclose($fp);
+                        return;
+                    }
+                    $item[$key] = $value;
+                    $closetag = 'N/A';
+                } elseif (preg_match('#<([^/>]+)>(.*)#',$line,$matches)) {
+                    // multi-line entries *are* relevant here
+                    $key = $matches[1];
+                    $value = $matches[2];
+                    if (isset($item[$key])) {
+                        $msg = xarML('Duplicate definition for #(1) key #(2)','item',xarVarPrepForDisplay($key));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        fclose($fp);
+                        return;
+                    }
+                    $item[$key] = $value;
+                    $closetag = $key;
+                } elseif (preg_match("#(.*)</$closetag>#",$line,$matches)) {
+                    // multi-line entries *are* relevant here
+                    $value = $matches[1];
+                    if (!isset($item[$closetag])) {
+                        $msg = xarML('Undefined #(1) key #(2)','item',xarVarPrepForDisplay($closetag));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        fclose($fp);
+                        return;
+                    }
+                    $item[$closetag] .= $value;
+                    $closetag = 'N/A';
+                } elseif ($closetag != 'N/A') {
+                    // multi-line entries *are* relevant here
+                    if (!isset($item[$closetag])) {
+                        $msg = xarML('Undefined #(1) key #(2)','item',xarVarPrepForDisplay($closetag));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        fclose($fp);
+                        return;
+                    }
+                    $item[$closetag] .= $line;
+                } else {
+                }
+            } else {
             }
         }
-        if (empty($object['name']) || empty($object['moduleid'])) {
-            $msg = xarML('Missing keys in object definition');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
-        }
+        fclose($fp);
 
-        // make sure we drop the object id, because it might already exist here
-        unset($object['id']);
-// TODO: make sure itemtype is unique when we're dealing with fully dynamic objects
-//       (= objects that have the moduleid of dynamicdata itself)
-
-        if (!xarModAPILoad('dynamicdata','admin')) return;
-        $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
-                                  $object);
-        if (!isset($objectid)) return;
-
-        foreach ($properties as $property) {
-            $property['objectid'] = $objectid;
-            $property['moduleid'] = $object['moduleid'];
-            $property['itemtype'] = $object['itemtype'];
-            // make sure we drop the property id, because it might already exist here
-            unset($property['id']);
-            $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
-                                     $property);
-            if (!isset($prop_id)) return;
-        }
-        $data['warning'] = xarML('Object #(1) was created successfully',xarVarPrepForDisplay($object['label']));
+        $data['warning'] = xarML('Object #(1) was successfully imported',xarVarPrepForDisplay($object['label']));
         return $data;
     }
 
@@ -1061,25 +1194,6 @@ function dynamicdata_admin_import($args)
          $data['options'][] = array('id' => $file,
                                     'name' => $file);
     }
-
-/*
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
-
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (!isset($object)) {
-        $data['label'] = xarML('Unknown Object');
-        $data['xml'] = '';
-        return $data;
-    }
-
-    $objectid = $object['id']['value'];
-    $modid = $object['moduleid']['value'];
-    $itemtype = $object['itemtype']['value'];
-    $label =  $object['label']['value'];
-*/
 
     return $data;
 }
