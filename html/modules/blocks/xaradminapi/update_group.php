@@ -33,8 +33,10 @@ function blocks_adminapi_update_group($args)
         $instance_order = explode('/', $instance_order);
 
         while (list($position, $instance_id) = each($instance_order)) {
+            // added the "+ 1" to $position because array indicies start at 0 and the
+            // $position index should start at 1
             $query = "UPDATE $block_group_instances_table
-                      SET   xar_position='" . xarVarPrepForStore($position) . "'
+                      SET   xar_position='" . xarVarPrepForStore($position + 1) . "'
                       WHERE xar_instance_id=" . xarVarPrepForStore($instance_id);
             $result =& $dbconn->Execute($query);
             if (!$result) return;
