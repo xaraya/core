@@ -38,6 +38,21 @@ document.forms[0].submit();}
 		<input type="hidden" name="pid" id="pid" value="#$ppid#" />
 		
 		<table border="0" cellpadding="5">
+			<xar:if condition="$ppid lt 3">
+				<tr>
+					<td>
+						<xar:mlstring>Name</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+							This privilege cannot be edited or deleted
+					</td>
+				</tr>
+			<xar:else />
 			<xar:if condition="$ptype eq 'empty'">
 				<tr>
 					<td>
@@ -222,6 +237,7 @@ document.forms[0].submit();}
 					</td>
 				</tr>
 			</xar:if>
+			</xar:if>
 		</table>			
 					
 		<br /><br />
@@ -277,19 +293,15 @@ document.forms[0].submit();}
 			<td colspan="5">			
 				<xar:mlstring>Privilege</xar:mlstring>
 				<b>'#$pname#'</b>
-				<xar:mlstring>is a component of the following Privileges:</xar:mlstring>			
+				<xar:mlstring>is a component of:</xar:mlstring>			
 			</td>
 		</tr>
 	<xar:loop name="$parents">
 		<tr>
 			<td width="150">
-				<xar:if condition="$parentid gt 2">
-					<a href="&xar-modurl-roles-admin-modifyrole;&amp;ppid=#$parentid#">				
+					<a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;ppid=#$parentid#">				
 					#$parentname#
 					</a>
-				<xar:else />
-					<b>#$parentname#</b>
-				</xar:if>
 			</td>
 			<td width="50">
 				&nbsp;
@@ -301,13 +313,9 @@ document.forms[0].submit();}
 				&nbsp;
 			</td>
 			<td width="50" align="right">
-				<xar:if condition="count($parents) ne 1">
 					<a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#&amp;authid=#$authid#">				
 						<xar:mlstring>Remove</xar:mlstring>    
 					</a>
-				<xar:else />
-					&nbsp;
-				</xar:if>
 			</td>
 		</tr>
 	</xar:loop>

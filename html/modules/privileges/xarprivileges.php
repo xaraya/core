@@ -1112,16 +1112,11 @@ function drawbranch($node){
 	$this->html .=  '<span name="titletext" style="padding-left: 1em">';
 
 // draw the name of the object and make a link
-	if($object['pid'] < 3) {
-		$this->html .= '<b>' . $object['name'] . '</b>: ';
-	}
-	else {
 		$this->html .= '<a href="' .
 					xarModURL('privileges',
 						 'admin',
 						 'modifyprivilege',
 						 array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-	}
 	$this->html .= count($this->getsubprivileges($object['pid'])) . ' components</span>';
 
 // this next table holds the Delete, Users and Privileges links
@@ -1872,9 +1867,6 @@ class xarPrivilege extends xarMask
     {
 // create an array to hold the objects to be returned
 		$parents = array();
-
-// if this is the root return an empty array
-		if ($this->getID() == 1) return $parents;
 
 // if this is a user just perform a SELECT on the rolemembers table
 		$query = "SELECT xar_privileges.*, xar_privmembers.xar_parentid
