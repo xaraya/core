@@ -1,12 +1,12 @@
-<?php 
+<?php
 // $Id$
 $modversion['name'] = 'AuthSystem';
 $modversion['id'] = '42';
 $modversion['version'] = '0.91';
-$modversion['description'] = 'PostNuke default authentication module';
-$modversion['credits'] = 'pndocs/credits.txt';
-$modversion['help'] = 'pndocs/help.txt';
-$modversion['changelog'] = 'pndocs/changelog.txt';
+$modversion['description'] = 'Xaraya default authentication module';
+$modversion['credits'] = 'xardocs/credits.txt';
+$modversion['help'] = 'xardocs/help.txt';
+$modversion['changelog'] = 'xardocs/changelog.txt';
 $modversion['license'] = 'docs/license.txt';
 $modversion['official'] = 1;
 $modversion['author'] = 'Marco Canini';
