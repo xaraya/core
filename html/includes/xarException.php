@@ -336,16 +336,15 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                 $ExceptionStack->initialize();
             }
             else {
-                $exception = $ExceptionStack->peek();
+                $exception =& $ExceptionStack->peek();
                 if ($exception->getMajor() != XAR_NO_EXCEPTION) {
                     $id = xarExceptionId();
                     $value = xarExceptionValue();
-                    if ($exception->getID() == 'ERROR_COLLECTION') {
+                    if ($exception->getID() == 'ErrorCollection') {
                         // add an exception to error collection
                         $thisexcp = new SystemException($msg);
                         $thisexcp->setID('PHP_ERROR');
                         $exception->exceptions[] = $thisexcp;
-                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $value);
                     } else {
                         // raise an error collection
                         $exc = new ErrorCollection();
