@@ -259,76 +259,81 @@ function xarSession_close()
  */
 function xarSession__setup($args)
 {
-    $path = xarServerGetBaseURI();
-    if (empty($path)) {
-        $path = '/';
+    //All in here is based on the possibility of changing
+    //PHP's session related configuration
+    if (!xarFuncIsDisabled('ini_set'))
+    {
+        $path = xarServerGetBaseURI();
+        if (empty($path)) {
+            $path = '/';
+        }
+
+        // PHP configuration variables
+        // Stop adding SID to URLs
+        ini_set('session.use_trans_sid', 0);
+
+        // User-defined save handler
+        ini_set('session.save_handler', 'user');
+    
+        // How to store data
+        ini_set('session.serialize_handler', 'php');
+    
+        // Use cookie to store the session ID
+        ini_set('session.use_cookies', 1);
+    
+        // Name of our cookie
+        ini_set('session.name', 'XARAYASID');
+
+        // Lifetime of our cookie
+        switch ($args['securityLevel']) {
+            case 'High':
+                // Session lasts duration of browser
+                $lifetime = 0;
+                // Referer check
+                $host = xarServerGetVar('HTTP_HOST');
+                $host = preg_replace('/:.*/', '', $host);
+                // this won't work for non-standard ports
+                //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
+                // this should be customized for multi-server setups wanting to
+                // share sessions
+                ini_set('session.referer_check', $host);
+                break;
+            case 'Medium':
+                // Session lasts set number of days
+                $lifetime = $args['duration'] * 86400;
+                break;
+            case 'Low':
+                // Session lasts unlimited number of days (well, lots, anyway)
+                // (Currently set to 25 years)
+                $lifetime = 788940000;
+                break;
+        }
+
+        ini_set('session.cookie_lifetime', $lifetime);
+
+        // Cookie path
+        // this should be customized for multi-server setups wanting to share
+        // sessions
+        ini_set('session.cookie_path', $path);
+
+        // Cookie domain
+        // this is only necessary for sharing sessions across multiple servers,
+        // and should be configurable for multi-site setups
+        // Example: .Xaraya.com for all *.Xaraya.com servers
+        // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
+        //$domain = xarServerGetVar('HTTP_HOST');
+        //$domain = preg_replace('/:.*/', '', $domain);
+        //if (!xarFuncIsDisabled('ini_set')) ini_set('session.cookie_domain', $domain);
+    
+        // Garbage collection
+        ini_set('session.gc_probability', 1);
+    
+        // Inactivity timeout for user sessions
+        ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
+
+        // Auto-start session
+        ini_set('session.auto_start', 1);
     }
-
-    // PHP configuration variables
-
-    // Stop adding SID to URLs
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.use_trans_sid', 0);
-
-    // User-defined save handler
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.save_handler', 'user');
-
-    // How to store data
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.serialize_handler', 'php');
-
-    // Use cookie to store the session ID
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.use_cookies', 1);
-
-    // Name of our cookie
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.name', 'XARAYASID');
-
-    // Lifetime of our cookie
-    switch ($args['securityLevel']) {
-        case 'High':
-            // Session lasts duration of browser
-            $lifetime = 0;
-            // Referer check
-            $host = xarServerGetVar('HTTP_HOST');
-            $host = preg_replace('/:.*/', '', $host);
-            // this won't work for non-standard ports
-            //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
-            // this should be customized for multi-server setups wanting to
-            // share sessions
-            if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', $host);
-            break;
-        case 'Medium':
-            // Session lasts set number of days
-            $lifetime = $args['duration'] * 86400;
-            break;
-        case 'Low':
-            // Session lasts unlimited number of days (well, lots, anyway)
-            // (Currently set to 25 years)
-            $lifetime = 788940000;
-            break;
-    }
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.cookie_lifetime', $lifetime);
-
-    // Cookie path
-    // this should be customized for multi-server setups wanting to share
-    // sessions
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.cookie_path', $path);
-
-    // Cookie domain
-    // this is only necessary for sharing sessions across multiple servers,
-    // and should be configurable for multi-site setups
-    // Example: .Xaraya.com for all *.Xaraya.com servers
-    // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
-    //$domain = xarServerGetVar('HTTP_HOST');
-    //$domain = preg_replace('/:.*/', '', $domain);
-    //if (!xarFuncIsDisabled('ini_set')) ini_set('session.cookie_domain', $domain);
-
-    // Garbage collection
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.gc_probability', 1);
-
-    // Inactivity timeout for user sessions
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
-
-    // Auto-start session
-    if (!xarFuncIsDisabled('ini_set')) ini_set('session.auto_start', 1);
 
     // Session handlers
     session_set_save_handler("xarSession__phpOpen",
