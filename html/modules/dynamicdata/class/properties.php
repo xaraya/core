@@ -302,6 +302,13 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_MultiSelect_Property.php";
                 $property = new Dynamic_MultiSelect_Property($args);
                 break;
+
+
+            case 105: // (uploads) Upload
+                require_once "includes/properties/Dynamic_Upload_Property.php";
+                $property = new Dynamic_Upload_Property($args);
+                break;
+
             default:
                 $property = new Dynamic_Property($args);
                 break;
@@ -719,8 +726,8 @@ class Dynamic_Property_Master
                                     // ...
                                    );
         }
-    // TODO: replace fileupload above with this one someday ?
-    /*
+
+	// Integrate with the uploads module for this property.
         if (xarModIsAvailable('uploads')) {
             $proptypes[105] = array(
                                     'id'         => 105,
@@ -732,7 +739,7 @@ class Dynamic_Property_Master
                                     // ...
                                    );
         }
-    */
+
 
     // TODO: yes :)
     /*
