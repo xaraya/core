@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <style type="text/css">@import url(modules/privileges/xartemplates/includes/privtree.css);</style>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
 <script type="text/javascript">

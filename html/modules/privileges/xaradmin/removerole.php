@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * File: $Id:
+ * 
+ * Remove a role from a privilege assignment
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Privileges Module
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ */
 /**
  * removeRole - remove a role from a privilege assignment
  * prompts for confirmation
