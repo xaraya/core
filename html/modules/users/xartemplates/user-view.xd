@@ -4,6 +4,8 @@
 <h2>#$title#</h2>
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 &nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'active'))#">Online Members</a> <br />
+&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'today'))#">Active Today</a> <br />
+&nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'week'))#">Active This week</a><br />
 &nbsp;&nbsp;<a href="#xarModURL('users', 'user', 'view', array('phase' => 'viewall'))#">All Members</a><br /><br />
 
 <xar:if condition="!empty($message)">
