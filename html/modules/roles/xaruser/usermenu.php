@@ -70,9 +70,9 @@ function roles_user_usermenu()
             if (!xarSecConfirmAuthKey()) return;
 
             if (!empty($pass1)){
-                $minpasslegnth = xarModGetVar('roles', 'minpasslength');
-                if (strlen($pass2) < $minpasslegnth) {
-                    $msg = xarML('Your password must be ' . $minpasslegnth . ' characters long.');
+                $minpasslength = xarModGetVar('roles', 'minpasslength');
+                if (strlen($pass2) < $minpasslength) {
+                    $msg = xarML('Your password must be ' . $minpasslength . ' characters long.');
                     xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
                 }
