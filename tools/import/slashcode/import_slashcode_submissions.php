@@ -32,16 +32,33 @@
 
     $regid = xarModGetIDFromName('articles');
 
+    // Use different unix timestamp conversion function for
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP($table_submissions.time)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',$table_submissions.time)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
     // Select all of the stories
     $query = "SELECT $table_submissions.subid, 
-                     $table_submissions.uid,
+                     $table_userids.xar_uid,
                      $table_submissions.tid,
                      $table_submissions.subj, 
                      $table_submissions.story, 
                      $table_submissions.comment,
-                     $table_submissions.time,
+                     $dbfunction,
                      $table_submissions.del
               FROM   $table_submissions
+              LEFT JOIN $table_userids
+                     ON $table_submissions.uid = $table_userids.slash_uid
               ORDER BY $table_submissions.subid ASC";
 
     $numitems = xarModGetVar('installer','submissionimport');
@@ -63,7 +80,7 @@
 
     while (!$result->EOF) {
         list($subid, 
-             $uid,
+             $authorid,
              $tid,
              $subj, 
              $story, 
@@ -80,23 +97,8 @@
         }
 
         // Check if userid set
-        if ($uid == 0 ) {
-                $authorid = _XAR_ID_UNREGISTERED;
-        } else {
-            // Retrieve Xaraya userid based on Slashcode uid
-            $query2 = "SELECT xar_uid 
-                       FROM   $table_userids
-                       WHERE  slash_uid = $uid";
-            $result2 =& $dbconn->Execute($query2);
-            if (!$result2) {
-                die("Oops, could not select user id from " . $table_userids . ": " . $dbconn->ErrorMsg());
-            } 
-            $authorid = $result2->fields[0];
-            $result2->Close();
-
-            if (empty($authorid) || $authorid < 6) {
-                $authorid = _XAR_ID_UNREGISTERED;
-            }
+        if (empty($authorid) || $authorid < 6) {
+            $authorid = _XAR_ID_UNREGISTERED;
         }
         $cids = array();
         // Check if topic id set
@@ -108,6 +110,7 @@
         if (empty($subj)) {
             $subj = xarML('[none]');
         }
+    // Note: we don't try to use the same article id as the old submission id here
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -125,14 +128,20 @@
                                       'hits' => 0
                                      )
                                );
-        if (!isset($newaid)) {
-            echo "Insert submission ($subid) $title failed : " . xarErrorRender('text') . "<br/>\n";
+        if (empty($newaid)) {
+            echo "Insert submission ($subid) $title failed :";
+            xarErrorRender('text');
+            echo "<br/>\n";
+            xarErrorHandled();
         } elseif ($submissioncount < 200) {
             echo "Inserted submission ($subid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
             echo "Inserted submission " . ($num + $startnum) . "<br/>\n";
             flush();
         }
+        // we're not interested in associating newaid with subid either, since
+        // submissions should have no comments etc. attached
+        //$submissions[$subid] = $newaid;
         $num++;
 
         $result->MoveNext();
@@ -144,11 +153,11 @@
         $startnum += $numitems;
         echo '<a href="import_slashcode.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $submissioncount . '</a><br/>';
     } else {
-        echo '<a href="import_slashcode.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
+        echo '<a href="import_slashcode.php?step=' . ($step+1) . '&module=polls">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     // Optimize tables
-    $dbconn->$dbtype = xarModGetVar('installer','dbtype');
+    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['articles'];
@@ -173,6 +182,4 @@
         default:
             break;
     }
-?>
-
 ?>

@@ -67,39 +67,53 @@
     // create a new table to store the Slashcode and Xaraya user ids.
 
     // In case the topics_tree table exits, drop the table
-    if ($startnum == 0) {
+    if (empty($startnum)) {
         $dbconn->Execute("DROP TABLE " . $table_userids);
+
+        // Create topic tree table
+        $fields = array(
+            'slash_uid'   => array('type'=>'integer','null'=>FALSE),
+            'xar_uid'     => array('type'=>'integer','null'=>FALSE)
+        );
+
+        // Create the table DDL
+        $query = xarDBCreateTable($table_userids,$fields);
+        if (empty($query)) {
+            echo "Couldn't create query for table $table_userids<br/>\n";
+            return; // throw back
+        }
+
+        // Pass the Table Create DDL to adodb to create the table
+        $dbconn->Execute($query);
+
+        // Check for an error with the database
+        if ($dbconn->ErrorNo() != 0) {
+            die("Oops, create of table " . $table_userids . " failed : " . $dbconn->ErrorMsg());
+        }
     }
-
-    // Create topic tree table
-    $fields = array(
-        'slash_uid'   => array('type'=>'integer','null'=>FALSE),
-        'xar_uid'     => array('type'=>'integer','null'=>FALSE)
-    );
-
-    // Create the table DDL
-    $query = xarDBCreateTable($table_userids,$fields);
-    if (empty($query)) {
-        echo "Couldn't create query for table $table_userids<br/>\n";
-        return; // throw back
-    }
-
-    // Pass the Table Create DDL to adodb to create the table
-    $dbconn->Execute($query);
-
-    // Check for an error with the database
-    if ($dbconn->ErrorNo() != 0) {
-        die("Oops, create of table " . $table_userids . " failed : " . $dbconn->ErrorMsg());
-    }
-
     
     $usercount = xarModGetVar('installer','usercount');
     echo "Found " . $usercount . " Users<br/>\n";
 
     // Delete current users in Xaraya database
-    if ($reset && $startnum == 0) {
+    if ($reset && empty($startnum)) {
         $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 6"); // TODO: VERIFY !
         $dbconn->Execute("DELETE FROM " . $tables['rolemembers'] . " WHERE xar_uid > 6 OR xar_parentid > 6"); // TODO: VERIFY !
+    }
+
+    // Use different unix timestamp conversion function for
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP($table_users_info.lastaccess)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',$table_users_info.lastaccess)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
     }
 
     // uid          - user id
@@ -113,7 +127,7 @@
     // lastaccess   - last access to the site (use as registration date)
     // sig          - signature text
     // bio          - spiel of who they are
-    // off_set      - timezone offset in minutes 
+    // off_set      - timezone offset in seconds 
     // seclev       - security level, 100 and above admin
     
     $query = "SELECT $table_users.uid, 
@@ -124,16 +138,22 @@
                      $table_users.fakeemail,
                      $table_users.passwd,
                      $table_users.homepage,
-                     $table_users_info.lastaccess,
+                     $dbfunction,
                      $table_users.sig,
                      $table_users_info.bio,
                      $table_tzcodes.off_set,
                      $table_users.seclev
-              FROM   $table_users,  $table_users_info, $table_users_prefs, $table_tzcodes
-              WHERE  $table_users.uid = $table_users_info.uid
-              AND    $table_users.uid = $table_users_prefs.uid
-              AND    $table_users_prefs.tzcode = $table_tzcodes.tz
-              ORDER BY $table_users.uid ASC";
+                FROM $table_users
+           LEFT JOIN $table_users_info
+                  ON $table_users.uid = $table_users_info.uid
+           LEFT JOIN $table_users_prefs
+                  ON $table_users.uid = $table_users_prefs.uid
+           LEFT JOIN $table_tzcodes
+                  ON $table_users_prefs.tzcode = $table_tzcodes.tz
+               WHERE LENGTH($table_users.passwd) = 32
+            ORDER BY $table_users.uid ASC";
+    // skip users with invalid password lengths
+    //           WHERE LENGTH($table_users.passwd) = 32
 
     $numitems = xarModGetVar('installer','userimport');
     if (!isset($startnum)) {
@@ -217,8 +237,8 @@
             $realname = $nickname;
         }
         
-        if (empty($lastacccess)) {
-            $lastacccess = time();
+        if (empty($lastaccess)) {
+            $lastaccess = time();
         }
                              
         $user = array(//'uid'        => $uid,
@@ -227,7 +247,7 @@
                       'email'      => $realemail,
                       'cryptpass'  => $passwd,
                       'pass'       => '', // in case $pass is empty
-                      'date'       => $lastacccess,
+                      'date'       => $lastaccess,
                       'valcode'    => 'createdbyadmin',
                       'authmodule' => 'authsystem',
                       'state'      => 3);           
@@ -263,7 +283,7 @@
             echo "succeeded<br/>\n";
             flush();
         } elseif ($usercount < 200) {
-            echo "Inserted user ($uid) $name - $uname<br/>\n";
+            echo "Inserted user ($uid) $realname - $nickname<br/>\n";
         } elseif ($num % 100 == 0) {
             echo "Inserted user " . ($num + $startnum) . "<br/>\n";
             flush();
@@ -285,7 +305,7 @@
         // fill in the dynamic properties - cfr. users.xml !
         $dynamicvalues = array('itemid'     => $newuid,
                                'website'    => empty($homepage) ? null : $homepage,
-                               'timezone'   => $timezone == 0 ? null : $timezone, // GMT default
+                               'timezone'   => empty($timezone) ? null : intval($timezone / 3600), // GMT default
                                'avatar'     => empty($avatar) ? null : $avatar,
                                'icq'        => empty($icq) ? null : $icq,
                                'aim'        => empty($aim)  ? null : $aim,
@@ -301,7 +321,7 @@
         $myobject->createItem($dynamicvalues);
 
         // add user to the default group
-        xarMakeRoleMemberByID($newuid, $defaultgid);
+        //xarMakeRoleMemberByID($newuid, $defaultgid);
 
         // import user into appropriate group
         if ($seclev >= 100) {
@@ -349,12 +369,20 @@
                       'admin',
                       'enablehooks',
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-                      
+
+        // Add index for slash_uid
+        $query = xarDBCreateIndex($table_userids,
+                                  array('name'   => 'i_' . $table_userids,
+                                        'fields' => array('slash_uid')));
+        if (empty($query)) return; // throw back
+        $result = $dbconn->Execute($query);
+        if (!isset($result)) return;
+
         echo '<a href="import_slashcode.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     // Optimize tables
-    $dbconn->$dbtype = xarModGetVar('installer','dbtype');
+    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['roles'];

@@ -18,9 +18,13 @@
 
     echo "<strong>$step. Importing Slashcode poll questions</strong><br/>\n";
 
+    // mapping discussion - poll id
+    $polldiscussions = array();
+
     if (!xarModIsAvailable('polls')) {
         echo "The polls module is not activated in Xaraya<br/>\n";
         $step++;
+        xarModSetVar('installer','polldiscussions',serialize($polldiscussions));
         return;
     }
 
@@ -36,10 +40,25 @@
     $result->Close();
 
     // Remove all polls if reset
+    $regid = xarModGetIDFromName('polls');
     if ($reset) {
         $dbconn->Execute("DELETE FROM " . $tables['polls']);
         $dbconn->Execute("DELETE FROM " . $tables['polls_info']);
+        $dbconn->Execute("DELETE FROM " . $tables['categories_linkage'] . " WHERE xar_modid=$regid");
     }
+
+    // Enable categories hooks for polls
+    xarModAPIFunc('modules',
+                  'admin',
+                  'enablehooks',
+                  array('callerModName' => 'polls', 'hookModName' => 'categories'));
+
+    // Get categories info
+    $categories_cid = xarModGetVar('installer','categories_cid');
+    $categories = unserialize(xarModGetVar('installer','categories'));
+
+    xarModSetVar('polls', 'number_of_categories', 1);
+    xarModSetVar('polls', 'mastercids', $categories_cid);
 
     // Use different unix timestamp conversion function for
     // MySQL and PostgreSQL databases
@@ -73,6 +92,7 @@
         die("Oops, select polls failed : " . $dbconn->ErrorMsg());
     }
 
+    // mapping old-new poll id
     $pollid = array();
     $num = 1;
     while (!$result->EOF) {
@@ -103,6 +123,12 @@
                 $status = 0;
                 break;
         }
+        // we pass the topic via the create function too - it'll be processed
+        // by the categories item create hook internally.
+        $cids = array();
+        if (isset($categories[$topic])) {
+            $cids[] = $categories[$topic];
+        }
         // Create new poll
         $newpid = xarModAPIFunc('polls',
                                 'admin',
@@ -111,10 +137,14 @@
                                       'polltype' => 'single',
                                       'private' => $status,
                                       'time' => $date,
-                                      'votes' => $voters));
+                                      'votes' => $voters,
+                                      'cids' => $cids));
 
         if (empty($newpid)) {
-            echo "Insert poll ($qid) $question failed : " . xarErrorRender('text') . "<br/>\n";
+            echo "Insert poll ($qid) $question failed :";
+            xarErrorRender('text');
+            echo "<br/>\n";
+            xarErrorHandled();
         } elseif ($count < 200) {
             echo "Inserted poll ($qid) $question<br/>\n";
         } elseif ($num % 100 == 0) {
@@ -123,10 +153,15 @@
         }
         if (!empty($newpid)) {
             $pollid[$qid] = $newpid;
+            if (!empty($discussion)) {
+                $polldiscussions[$discussion] = $newpid;
+            }
         }
         $num++;
         $result->MoveNext();
     }
     $result->Close();
+
+    xarModSetVar('installer','polldiscussions',serialize($polldiscussions));
 
 ?>

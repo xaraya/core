@@ -134,10 +134,10 @@
 
     // Create topic tree table
     $fields = array(
-        'xar_tid'            => array('type'=>'integer','size'=>'tiny','null'=>FALSE),
+        'xar_tid'            => array('type'=>'integer','null'=>FALSE),
         'xar_textname'       => array('type'=>'varchar','size'=>80,'null'=>FALSE),
         'xar_image'          => array('type'=>'varchar','size'=>100,'null'=>FALSE),
-        'xar_parent_tid'     => array('type'=>'integer','size'=>'tiny','null'=>TRUE)
+        'xar_parent_tid'     => array('type'=>'integer','null'=>TRUE)
     );
 
     // Create the table DDL
@@ -157,6 +157,8 @@
         die("Oops, create of table " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
     }
 
+// CHECKME: the same topic may appear more than once ?!
+
     // Insert the topics and topic_parent rows into this table
     $query = "INSERT INTO $table_topics_tree
               SELECT $table_topics.tid, 
@@ -171,38 +173,61 @@
     if (!$result) {
         die("Oops, insert into " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
     }
+
+    // Set parent_tid to 0 where parent_tid is null to allow sorting for Postgres too (NULL comes later numbers there)
+    $query = "UPDATE $table_topics_tree
+                 SET $table_topics_tree.xar_parent_tid=0
+               WHERE $table_topics_tree.xar_parent_tid IS NULL";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, update of " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
+    }
     
-    // Get all of the topics from the topics tree where parent_tid is null
+    // Get all of the topics from the topics tree ordered by parent_tid then by tid,
+    // to get the top-level topics first, and then the lower-level ones
     $query = "SELECT $table_topics_tree.xar_tid,
                      $table_topics_tree.xar_textname, 
-                     $table_topics_tree.xar_image
+                     $table_topics_tree.xar_image,
+                     $table_topics_tree.xar_parent_tid
               FROM   $table_topics_tree
-              WHERE  $table_topics_tree.xar_parent_tid IS NULL";
+              ORDER BY $table_topics_tree.xar_parent_tid ASC, $table_topics_tree.xar_tid ASC";
   
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, select parent topics from " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
     }
-    
+
+    $categories = array();
+
     // Loop through result
     while (!$result->EOF) {
-        list($tid, $textname, $image) = $result->fields;
+        list($tid, $textname, $image, $parentid) = $result->fields;
 
+        if (!empty($categories[$tid])) {
+// CHECKME: the same topic may appear more than once ?!
+            echo "<strong>Already seen category ($categories[$tid]) $textname under a different parent - skipping...</strong><br/>\n";
+            $result->MoveNext();
+            continue;
+        }
+
+        if (empty($parentid) || empty($categories[$parentid])) {
+            $parentcid = $categories_cid;
+        } else {
+            $parentcid = $categories[$parentid];
+        }
         // Create category
         $cid = xarModAPIFunc('categories', 
                              'admin', 
                              'create', 
                              array('name' => $textname,
                                    'description' => $textname,
-                                   'parent_id' => $categories_cid));
+                                   'parent_id' => $parentcid));
                              
         // Set new cid in categories array
         $categories[$tid] = $cid;
-              
-        // Set parent cat array
-        $parentcats[] = array('tid' => $tid, 'cid' => $cid);
-        
-        echo "Creating parent category ($cid) $textname- parent " . $categories_cid['cid'] . "<br/>\n";
+
+        echo "Creating category ($cid) $textname - parent " . $parentcid . "<br/>\n";
         
         if (!empty($docounter)) {
             $hcid = xarModAPIFunc('hitcount',
@@ -219,110 +244,7 @@
     }
     $result->Close();
     
-    // TODO:  Rewrite to use depth and lineage.  But for now, brute force retrieval of all of the 
-    // children and grandchid topics of the parent topics.
-    // 
-
-    // Get child topics
-    foreach ($parentcats as $parentcat) {
-        // Get all children topics
-        $query = "SELECT $table_topics_tree.xar_tid,
-                         $table_topics_tree.xar_textname, 
-                         $table_topics_tree.xar_image
-                  FROM   $table_topics_tree
-                  WHERE  $table_topics_tree.xar_parent_tid = " . $parentcat['tid'];
-
-        $result =& $dbconn->Execute($query);
-        if (!$result) {
-            die("Oops, select child topics from " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
-        }
-        
-        // Loop through result
-        while (!$result->EOF) {
-            list($tid, $textname, $image) = $result->fields;
-            // Create category
-            $cid = xarModAPIFunc('categories', 
-                                 'admin', 
-                                 'create', 
-                                 array('name' => $textname,
-                                       'description' => $textname,
-                                       'parent_id' => $parentcat['cid']));
-
-            // Set new cid in categories array
-            $categories[$tid] = $cid;
-                   
-            // Set parent cat array
-            $childcats[] = array('tid' => $tid, 'cid' => $cid);
-
-            echo "Creating child category ($cid) $textname - parent " . $parentcat['cid'] . "<br/>\n";
-            
-            if (!empty($docounter)) {
-                $hcid = xarModAPIFunc('hitcount',
-                                      'admin',
-                                      'create',
-                                      array('modname' => 'categories',
-                                            'objectid' => $cid,
-                                            'hits' => $counter));
-                if (!isset($hcid)) {
-                    echo "Couldn't create hit counter $counter for section $cid $textname<br/>\n";
-                }
-            }
-            $result->MoveNext();
-        }        
-        $result->Close();
-    }
-    
-    // Retrieve grandchild topics
-    foreach ($childcats as $childcat) {
-        // Get all children topics
-        $query = "SELECT $table_topics_tree.xar_tid,
-                         $table_topics_tree.xar_textname, 
-                         $table_topics_tree.xar_image
-                  FROM   $table_topics_tree
-                  WHERE  $table_topics_tree.xar_parent_tid = " . $childcat['tid'];
-
-        $result =& $dbconn->Execute($query);
-        if (!$result) {
-            die("Oops, select grandchild topics from " . $table_topics_tree . " failed : " . $dbconn->ErrorMsg());
-        }
-        
-        // Loop through result
-        while (!$result->EOF) {
-            list($tid, $textname, $image) = $result->fields;
-            // Create category
-            $cid = xarModAPIFunc('categories', 
-                                 'admin', 
-                                 'create', 
-                                 array('name' => $textname,
-                                       'description' => $textname,
-                                       'parent_id' => $childcat['cid']));
-            
-            // Set new cid in categories array
-            $categories[$tid] = $cid;
-                                           
-            // Set parent cat array
-            $grandchildcats[] = array('tid' => $tid, 'cid' => $cid);
-
-            echo "Creating grandchild category ($cid) $textname - parent " . $childcat['cid'] . " <br/>\n";
-            
-            if (!empty($docounter)) {
-                $hcid = xarModAPIFunc('hitcount',
-                                      'admin',
-                                      'create',
-                                      array('modname' => 'categories',
-                                            'objectid' => $cid,
-                                            'hits' => $counter));
-                if (!isset($hcid)) {
-                    echo "Couldn't create hit counter $counter for section $cid $textname<br/>\n";
-                }
-            }
-            $result->MoveNext();
-        }        
-        $result->Close();
-    }
-    
-    echo "<strong>TODO:  Retrieve more than 3 levels of topics</strong><br/><br/>\n";   
-    //echo "<strong>TODO : copy the topic_nexus and topic_nexus_extra tables</strong><br/><br/>\n";
+    echo "<strong>TODO : handle the topic_nexus and topic_nexus_extra tables ?</strong><br/><br/>\n";
     
     xarModSetVar('installer','sections_cid',$sections_cid);
     xarModSetVar('installer','sections',serialize($sections));
@@ -333,7 +255,7 @@
           <a href="import_slashcode.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     
     // Optimize tables
-    $dbconn->$dbtype = xarModGetVar('installer','dbtype');
+    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['categories'];

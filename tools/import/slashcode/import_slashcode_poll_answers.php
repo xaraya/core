@@ -77,8 +77,11 @@
                                       'votes' => $votes));
 
         if (empty($newvid)) {
-            echo "Insert poll option ($qid $aid) $answer failed : " . xarErrorRender('answer') . "<br/>\n";
-        } elseif ($votes < 100) {
+            echo "Insert poll option ($qid $aid) $answer failed :";
+            xarErrorRender('text');
+            echo "<br/>\n";
+            xarErrorHandled();
+        } elseif ($pollcount < 100) {
             echo "Inserted poll option ($qid $aid) $answer<br/>\n";
         } elseif ($num % 100 == 0) {
             echo "Inserted poll option $num<br/>\n";
@@ -92,8 +95,14 @@
     echo '<a href="import_slashcode.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import_slashcode.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
 
+    // Enable comments hooks for polls
+    xarModAPIFunc('modules',
+                  'admin',
+                  'enablehooks',
+                  array('callerModName' => 'polls', 'hookModName' => 'comments'));
+
     // Optimize tables
-    $dbconn->$dbtype = xarModGetVar('installer','dbtype');
+    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['polls'];

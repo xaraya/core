@@ -43,9 +43,24 @@
         }
     }
 
+    // Use different unix timestamp conversion function for
+    // MySQL and PostgreSQL databases
+    $dbtype = xarModGetVar('installer','dbtype');
+    switch ($dbtype) {
+        case 'mysql':
+                $dbfunction = "UNIX_TIMESTAMP($table_stories.day_published)";
+            break;
+        case 'postgres':
+                $dbfunction = "DATE_PART('epoch',$table_stories.day_published)";
+            break;
+        default:
+            die("Unknown database type");
+            break;
+    }
+
     // Select all of the stories
     $query = "SELECT $table_stories.stoid, 
-                     $table_stories.uid,
+                     $table_userids.xar_uid,
                      $table_stories.tid,
                      $table_story_text.title, 
                      $table_story_text.introtext, 
@@ -54,10 +69,13 @@
                      $table_stories.writestatus, 
                      $table_stories.is_archived, 
                      $table_stories.in_trash, 
-                     $table_stories.day_published, 
+                     $dbfunction, 
                      $table_stories.hits
-              FROM   $table_stories, $table_story_text
-              WHERE  $table_stories.stoid = $table_story_text.stoid
+              FROM   $table_stories
+              LEFT JOIN $table_story_text
+                     ON $table_stories.stoid = $table_story_text.stoid
+              LEFT JOIN $table_userids
+                     ON $table_stories.uid = $table_userids.slash_uid
               ORDER BY $table_stories.stoid ASC";
 
     $numitems = xarModGetVar('installer','storyimport');
@@ -77,7 +95,7 @@
     $language = xarMLSGetCurrentLocale();
     while (!$result->EOF) {
         list($stoid, 
-             $uid,
+             $authorid,
              $tid,
              $title, 
              $introtext, 
@@ -114,17 +132,6 @@
             $status = 5;
         }
         
-        // Retrieve Xaraya userid based on Slashcode uid
-        $query2 = "SELECT xar_uid 
-                   FROM   $table_userids
-                   WHERE  slash_uid = $uid";
-        $result2 =& $dbconn->Execute($query2);
-        if (!$result2) {
-            die("Oops, could not select user id from " . $table_userids . ": " . $dbconn->ErrorMsg());
-        } 
-        $authorid = $result2->fields[0];
-        $result2->Close();
-
         if (empty($authorid) || $authorid < 6) {
             $authorid = _XAR_ID_UNREGISTERED;
         }
@@ -135,6 +142,7 @@
         if (empty($title)) {
             $title = xarML('[none]');
         }
+    // Note: we try to use the same article id as the old story id here
         $newaid = xarModAPIFunc('articles',
                                 'admin',
                                 'create',
@@ -153,7 +161,10 @@
                                      )
                                );
         if (!isset($newaid) || $newaid != $stoid) {
-            echo "Insert article #$num ($stoid) $title failed : " . xarErrorRender('text') . "<br/>\n";
+            echo "Insert article #$num ($stoid) $title failed :";
+            xarErrorRender('text');
+            echo "<br/>\n";
+            xarErrorHandled();
         } elseif ($storycount < 200) {
             echo "Inserted article ($stoid) $title<br/>\n";
         } elseif ($num % 100 == 0) {
@@ -161,7 +172,7 @@
             flush();
         }
         // Associate newaid with stoid
-        $articles[$stoid] = $newaid;
+        //$articles[$stoid] = $newaid;
         $num++;
 
         $result->MoveNext();
@@ -169,7 +180,9 @@
     $result->Close();
 
     // Set articles modvar
-    xarModSetVar('installer','articles',serialize($articles));
+    //xarModSetVar('installer','articles',serialize($articles));
+
+    echo "<strong>TODO : check sequence number for articles in Postgres</strong><br/><br/>\n";
 
     echo '<a href="import_slashcode.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($storycount > $numitems && $startnum + $numitems < $storycount) {
@@ -180,7 +193,7 @@
     }
 
     // Optimize tables
-    $dbconn->$dbtype = xarModGetVar('installer','dbtype');
+    $dbtype = xarModGetVar('installer','dbtype');
     switch ($dbtype) {
         case 'mysql':
             $query = 'OPTIMIZE TABLE ' . $tables['articles'];

@@ -78,7 +78,9 @@ $table_discussions = 'discussions';
 
 if (empty($step)) {
     // Count number of users
-    $query = 'SELECT COUNT(uid) FROM ' . $table_users;
+    //$query = 'SELECT COUNT(uid) FROM ' . $table_users;
+    // skip users with invalid password lengths
+    $query = 'SELECT COUNT(uid) FROM ' . $table_users . ' WHERE LENGTH(passwd) = 32';
     $result =& $dbconn->Execute($query);
     if (!$result) {
         echo("Oops, count of " . $table_users . " failed : " . $dbconn->ErrorMsg() . '<br/>');
@@ -244,13 +246,12 @@ if (empty($step)) {
                          2 => array('import_slashcode_topicscat.php'),
                          3 => array('import_slashcode_stories.php'),
                          4 => array('import_slashcode_submissions.php'),
-                         5 => array('import_slashcode_comments.php'),
-                         //6 => array('import_slashcode_discussions.php'),
-                         6 => array('import_slashcode_poll_questions.php',
+                         5 => array('import_slashcode_poll_questions.php',
                                     'import_slashcode_poll_answers.php'),
-                         //           'import_slashcode_pollcomments.php'),
+                         6 => array('import_slashcode_discussions.php'),
+                         7 => array('import_slashcode_comments.php'),
 // TODO: add the rest :-)
-                         7 => array('import_slashcode_cleanup.php')
+                         8 => array('import_slashcode_cleanup.php')
                         );
 
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
