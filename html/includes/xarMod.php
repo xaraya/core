@@ -617,7 +617,10 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     xarLogMessage("xarModLoad: loading $modName:$modType");
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
+    if (!isset($modBaseInfo)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
+        return; // throw back
+    }
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
