@@ -1,0 +1,22 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Purge Users by Status</xar:mlstring></h2><br />
+<div style="margin: auto;">
+<form method="post" action="#xarModURL('roles', 'admin', 'purge')#" method="post" enctype="application/x-www-form-urlencoded" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="confirmation" id="confirmation" value="1" />
+
+    <span class="xar-title"><xar:mlstring>Select Status Type to Purge</xar:mlstring></span><br /><br />
+
+	<p><xar:mlstring>Select Status Type</xar:mlstring>:
+	<select name="state" id="state" size="1">
+			<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+			<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+			<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+	</select></p>
+
+    <input type="submit" value="#$submitlabel#" align="middle" /><br /><br />
+    
+    <a href="#xarModURL('roles', 'admin', 'view')#"><xar:mlstring>Cancel purge process.</xar:mlstring></a>
+</form>        
+</div>
+</div>

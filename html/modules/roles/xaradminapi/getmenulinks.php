@@ -61,6 +61,14 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Validation Email'));
     }
 
+    if (xarSecurityCheck('DeleteRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'purge'),
+                              'title' => xarML('Purge users by status'),
+                              'label' => xarML('Purge Users'));
+    }
+
 // Security Check
     if (xarSecurityCheck('AdminRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',

@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * delete users based on status
+ * @param $args['state'] state that we are deleting.
+ * @returns bool
+ * @return true on success, false on failure
+ */
+function roles_adminapi_purge($args)
+{
+    // Get arguments
+    extract($args);
+
+
+    if ($state == 3) {
+        $msg = xarML('Cannot Purge Active Users');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
+        return;
+    }
+
+    $items = xarModAPIFunc('roles',
+             'user',
+             'getall',
+             array('state' => $state));
+
+    foreach ($items as $item) {
+
+        // The user API function is called.
+        $user = xarModAPIFunc('roles',
+                'user',
+                'get',
+                array('uid' => $item['uid']));
+
+    // Security check
+        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[uid]")) {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+            return;
+        }
+
+        // Call the Roles class
+        $roles = new xarRoles();
+        $role = $roles->getRole($item['uid']);
+        if (!$role->remove()) {
+            return;
+        }
+
+        // Let any hooks
+        $item['module'] = 'roles';
+        $item['itemid'] = $item['uid'];
+        xarModCallHooks('item', 'delete', $item['uid'], $item);
+    }
+
+    //finished successfully
+    return true;
+}
+
+?>
