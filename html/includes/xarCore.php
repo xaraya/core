@@ -153,10 +153,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // {ML_dont_parse 'includes/xarTheme.php'}
     include_once 'includes/xarTheme.php';
     // Legacy systems
-    // {ML_dont_parse 'includes/pnHTML.php'}
-    include_once 'includes/pnHTML.php';
-    // {ML_dont_parse 'includes/pnLegacy.php'}
-    include_once 'includes/pnLegacy.php';
+    if (xarCore_getSiteVar('Core.LoadLegacy') == true){
+        // {ML_dont_parse 'includes/pnHTML.php'}
+        include_once 'includes/pnHTML.php';
+        // {ML_dont_parse 'includes/pnLegacy.php'}
+        include_once 'includes/pnLegacy.php';
+    }
 
     // Start Exception Handling System
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));

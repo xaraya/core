@@ -18,7 +18,7 @@
 	</tr>
 	<tr>
 		<td>
-			<xar:mlstring>Real Name</xar:mlstring>
+			<xar:mlstring>Display Name</xar:mlstring>
 		</td>
 		<td>
 			#$realname#
