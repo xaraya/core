@@ -500,7 +500,7 @@ class pnHTML
     {
         if ($this->GetInputMode() == _PNH_PARSEINPUT)
         {
-            $text = pnVarPrepForDisplay($text);
+            $text = xarVarPrepForDisplay($text);
         }
 
         if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
@@ -525,7 +525,7 @@ class pnHTML
 
         if ($this->GetInputMode() == _PNH_PARSEINPUT)
         {
-            $output .= pnVarPrepForDisplay($text);
+            $output .= xarVarPrepForDisplay($text);
         } else {
             $output .= $text;
         }
@@ -551,9 +551,9 @@ class pnHTML
     {
         if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
         {
-            return '<b>'.pnVarPrepForDisplay($text).'</b>';
+            return '<b>'.xarVarPrepForDisplay($text).'</b>';
         } else {
-            $this->output .= '<b>'.pnVarPrepForDisplay($text).'</b>';
+            $this->output .= '<b>'.xarVarPrepForDisplay($text).'</b>';
         }
     }
 
@@ -599,7 +599,7 @@ class pnHTML
         {
             if ($this->GetInputMode() == _PNH_PARSEINPUT)
             {
-                $text = pnVarPrepForDisplay($text);
+                $text = xarVarPrepForDisplay($text);
             }
             $output .= $text;
         }
@@ -638,7 +638,7 @@ class pnHTML
         {
             if ($this->GetInputMode() == _PNH_PARSEINPUT)
             {
-                $title = pnVarPrepForDisplay($title);
+                $title = xarVarPrepForDisplay($title);
             }
             $output .= '<tr><th align="center">'. $title .'</th></tr>' . "\n";
         }
@@ -646,7 +646,7 @@ class pnHTML
 
         if ($this->GetInputMode() == _PNH_PARSEINPUT)
         {
-            $border = pnVarPrepForDisplay($border);
+            $border = xarVarPrepForDisplay($border);
         }
         $output .= '<table border="' . $border . '" width="100%">';
 
@@ -662,7 +662,7 @@ class pnHTML
                 }
                 if ($this->GetInputMode() == _PNH_PARSEINPUT)
                 {
-                    $head = pnVarPrepForDisplay($head);
+                    $head = xarVarPrepForDisplay($head);
                 }
                 $output .= '<th>' . $head . '</th>';
             }
@@ -801,7 +801,7 @@ class pnHTML
                 }
                 if ($this->GetInputMode())
                 {
-                    $rowitem['content'] = pnVarPrepForDisplay($rowitem['content']);
+                    $rowitem['content'] = xarVarPrepForDisplay($rowitem['content']);
                 }
                 $output .= '<td'
                     .((empty ($rowitem['align'])) ? '' : ' align="'.$rowitem['align'].'"')
@@ -819,7 +819,7 @@ class pnHTML
                 }
                 if ($this->GetInputMode() == _PNH_PARSEINPUT)
                 {
-                    $rowitem = pnVarPrepForDisplay($rowitem);
+                    $rowitem = xarVarPrepForDisplay($rowitem);
                 }
                 $output .= '<td>' . $rowitem . '</td>';
             }
@@ -848,7 +848,7 @@ class pnHTML
     function FormStart($action)
     {
         $output = '<form'
-            .' action="'.pnVarPrepForDisplay($action).'"'
+            .' action="'.xarVarPrepForDisplay($action).'"'
             .' method="post"'
             .' enctype="'.((empty ($this->fileupload)) ? 'application/x-www-form-urlencoded' : 'multipart/form-data').'"'
             .'>'
@@ -895,9 +895,9 @@ class pnHTML
         $this->tabindex++;
         $output = '<input'
             .' type="submit"'
-            .' value="'.pnVarPrepForDisplay($label).'"'
+            .' value="'.xarVarPrepForDisplay($label).'"'
             .' align="middle"'
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .' />'
         ;
@@ -933,12 +933,12 @@ class pnHTML
         $this->tabindex++;
         $output = '<input'
             .' type="'.(($password) ? 'password' : 'text').'"'
-            .' name="'.pnVarPrepForDisplay($fieldname).'"'
-            .' id="'.pnVarPrepForDisplay($fieldname).'"'
-            .' value="'.pnVarPrepForDisplay($contents).'"'
-            .' size="'.pnVarPrepForDisplay($size).'"'
-            .' maxlength="'.pnVarPrepForDisplay($maxlength).'"'
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .' name="'.xarVarPrepForDisplay($fieldname).'"'
+            .' id="'.xarVarPrepForDisplay($fieldname).'"'
+            .' value="'.xarVarPrepForDisplay($contents).'"'
+            .' size="'.xarVarPrepForDisplay($size).'"'
+            .' maxlength="'.xarVarPrepForDisplay($maxlength).'"'
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .' />'
         ;
@@ -973,15 +973,15 @@ class pnHTML
         }
         $this->tabindex++;
         $output = '<textarea'
-            .' name="'.pnVarPrepForDisplay($fieldname).'"'
-            .' id="'.pnVarPrepForDisplay($fieldname).'"'
+            .' name="'.xarVarPrepForDisplay($fieldname).'"'
+            .' id="'.xarVarPrepForDisplay($fieldname).'"'
             .' wrap="'.(($wrap = 'soft') ? 'soft' : 'hard').'"' // not proper HTML, but too useful to abandon yet
-            .' rows="'.pnVarPrepForDisplay($rows).'"'
-            .' cols="'.pnVarPrepForDisplay($cols).'"'
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .' rows="'.xarVarPrepForDisplay($rows).'"'
+            .' cols="'.xarVarPrepForDisplay($cols).'"'
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .'>'
-            .pnVarPrepForDisplay($contents)
+            .xarVarPrepForDisplay($contents)
             .'</textarea>'
         ;
         if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
@@ -1014,18 +1014,18 @@ class pnHTML
             {
                 $output .= '<input'
                     .' type="hidden"'
-                    .' name="'.pnVarPrepForDisplay($n).'"'
-                    .' id="'.pnVarPrepForDisplay($n).'"'
-                    .' value="'.pnVarPrepForDisplay($v).'"'
+                    .' name="'.xarVarPrepForDisplay($n).'"'
+                    .' id="'.xarVarPrepForDisplay($n).'"'
+                    .' value="'.xarVarPrepForDisplay($v).'"'
                     .'/>'
                 ;
             }
         } else {
             $output = '<input'
                 .' type="hidden"'
-                .' name="'.pnVarPrepForDisplay($fieldname).'"'
-                .' id="'.pnVarPrepForDisplay($fieldname).'"'
-                .' value="'.pnVarPrepForDisplay($value).'"'
+                .' name="'.xarVarPrepForDisplay($fieldname).'"'
+                .' id="'.xarVarPrepForDisplay($fieldname).'"'
+                .' value="'.xarVarPrepForDisplay($value).'"'
                 .' />'
             ;
         }
@@ -1082,21 +1082,21 @@ class pnHTML
             $size = $c;
         }
         $output = '<select'
-            .' name="'.pnVarPrepForDisplay($fieldname).'"'
-            .' id="'.pnVarPrepForDisplay($fieldname).'"'
-            .' size="'.pnVarPrepForDisplay($size).'"'
+            .' name="'.xarVarPrepForDisplay($fieldname).'"'
+            .' id="'.xarVarPrepForDisplay($fieldname).'"'
+            .' size="'.xarVarPrepForDisplay($size).'"'
             .(($multiple == 1) ? ' multiple="multiple"' : '')
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .'>'
         ;
         foreach ($data as $datum)
         {
             $output .= '<option'
-                .' value="'.pnVarPrepForDisplay($datum['id']).'"'
+                .' value="'.xarVarPrepForDisplay($datum['id']).'"'
                 .((empty ($datum['selected'])) ? '' : ' selected="selected"')
                 .'>'
-                .pnVarPrepForDisplay($datum['name'])
+                .xarVarPrepForDisplay($datum['name'])
                 .'</option>'
             ;
         }
@@ -1132,11 +1132,11 @@ class pnHTML
         $this->tabindex++;
         $output = '<input'
             .' type="'.(($type == 'checkbox') ? 'checkbox' : 'radio').'"'
-            .' name="'.pnVarPrepForDisplay($fieldname).'"'
-            .' id="'.pnVarPrepForDisplay($fieldname).'"'
-            .' value="'.pnVarPrepForDisplay($value).'"'
+            .' name="'.xarVarPrepForDisplay($fieldname).'"'
+            .' id="'.xarVarPrepForDisplay($fieldname).'"'
+            .' value="'.xarVarPrepForDisplay($value).'"'
             .(($checked) ? ' checked="checked"' : '')
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .' />'
         ;
@@ -1168,13 +1168,13 @@ class pnHTML
             return;
         }
         $this->tabindex++;
-        $output = '<input type="hidden" name="MAX_FILE_SIZE" value="'.pnVarPrepForDisplay($maxsize).'" />';
+        $output = '<input type="hidden" name="MAX_FILE_SIZE" value="'.xarVarPrepForDisplay($maxsize).'" />';
         $output .= '<input'
             .' type="file"'
-            .' name="'.pnVarPrepForDisplay($fieldname).'"'
-            .' id="'.pnVarPrepForDisplay($fieldname).'"'
-            .' size="'.pnVarPrepForDisplay($size).'"'
-            .((empty ($accesskey)) ? '' : ' accesskey="'.pnVarPrepForDisplay($accesskey).'"')
+            .' name="'.xarVarPrepForDisplay($fieldname).'"'
+            .' id="'.xarVarPrepForDisplay($fieldname).'"'
+            .' size="'.xarVarPrepForDisplay($size).'"'
+            .((empty ($accesskey)) ? '' : ' accesskey="'.xarVarPrepForDisplay($accesskey).'"')
             .' tabindex="'.$this->tabindex.'"'
             .' />'
         ;

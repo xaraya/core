@@ -18,7 +18,9 @@ define('_PNNO', 0);
 //'All' and 'unregistered' for user and group permissions
 define('_PNPERMS_ALL', '-1');
 define('_PNPERMS_UNREGISTERED', '0');
-
+//Prefix Changes
+define('_XARPERMS_ALL', '-1');
+define('_XARPERMS_UNREGISTERED', '0');
 
 define('_PN_VERSION_NUM', '0.8');
 define('_PN_VERSION_ID',  'PostNuke');
@@ -349,6 +351,21 @@ function pnModUnregisterHook($hookObject,
 }
 
 function pnGetStatusMsg()
+{
+    $msg = xarSessionGetVar('statusmsg');
+    xarSessionDelVar('statusmsg');
+    $errmsg = xarSessionGetVar('errormsg');
+    xarSessionDelVar('errormsg');
+
+    // Error message overrides status message
+    if (!empty($errmsg)) {
+        return $errmsg;
+    }
+    return $msg;
+}
+
+// Prefix Add
+function xarGetStatusMsg()
 {
     $msg = xarSessionGetVar('statusmsg');
     xarSessionDelVar('statusmsg');
