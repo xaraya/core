@@ -24,12 +24,28 @@ function dynamicdata_util_meta($args)
 
     if (!xarVarFetch('export', 'notempty', $export, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('table', 'notempty', $table, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('showdb', 'notempty', $showdb, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('db', 'notempty', $db, '', XARVAR_NOT_REQUIRED)) {return;}
 
     $data = array();
-    $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
-                                    array('table' => $table));
+    if (!empty($showdb)) {
+        $data['tables'] = array();
+
+        $dbconn =& xarDBGetConn();
+        // Note: this only works if we use the same database connection
+        $data['databases'] = $dbconn->MetaDatabases();
+        if (empty($db)) {
+            $db = xarDBGetName();
+        }
+        $data['db'] = $db;
+        if (empty($data['databases'])) {
+            $data['databases'] = array($db);
+        }
+    } else {
+        $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
+                                        array('db' => $db, 'table' => $table));
+    }
 
     $data['table'] = $table;
     $data['export'] = $export;

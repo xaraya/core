@@ -92,6 +92,9 @@
         <option value="#$item#">#$item#</option>
       </xar:if>
     </xar:foreach>
+    <xar:if condition="!empty($table) and strstr($table, '.')">
+      <option value="#$table#" selected="selected">#$table#</option>
+    </xar:if>
     </select>
   </td>
   <td>
@@ -106,8 +109,11 @@
   <td>
     <input type="text" name="startnum" id="startnum" value="#$startnum#" size="5" />
   </td>
-  <td colspan="2">
-    &nbsp;
+  <td>
+    <label for="cache"><xar:mlstring>Cache:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="text" name="cache" id="cache" value="#$cache#" size="3" />
   </td>
 </tr>
 </table>

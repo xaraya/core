@@ -42,6 +42,8 @@ function dynamicdata_admin_query($args)
     if(!xarVarFetch('groupby', 'isset', $groupby, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('operation', 'isset', $operation, NULL, XARVAR_DONT_SET)) {return;}
 
+    if(!xarVarFetch('cache', 'int', $cache, 0, XARVAR_DONT_SET)) {return;}
+
     $reset = false;
     // changed selected object
     if ($itemid != $olditemid) {
@@ -113,6 +115,7 @@ function dynamicdata_admin_query($args)
         $startnum = 1;
         $groupby = 0;
         $operation = array();
+        $cache = 0;
     }
 
     if (!empty($query) && $query == $newquery) {
@@ -343,6 +346,7 @@ function dynamicdata_admin_query($args)
 
     $data['groupby'] = $groupby;
     $data['operation'] = $operation;
+    $data['cache'] = $cache;
 
 // TODO: add extra support
 //    if (!empty($groupby)) {
@@ -357,6 +361,7 @@ function dynamicdata_admin_query($args)
                                         'where' => $whereclause,
                                         'groupby' => $grouplist,
                                         'sort' => $sortlist,
+                                        'cache' => $cache,
                                         'numitems' => $numitems,
                                         'startnum' => $startnum));
         $data['mylist'] =& $data['object'];
@@ -384,6 +389,9 @@ function dynamicdata_admin_query($args)
         }
         if (!empty($sortlist) && count($sortlist) > 0) {
             $data['sample'] .= 'sort="' . xarVarPrepForDisplay(join(',',$sortlist)) . '" ';
+        }
+        if (!empty($cache)) {
+            $data['sample'] .= 'cache="' . xarVarPrepForDisplay($cache) . '" ';
         }
         $data['sample'] .= 'layout="list" ';
         $data['sample'] .= 'linkfield="N/A" ';
@@ -416,6 +424,7 @@ function dynamicdata_admin_query($args)
     //   $queryvars['startnum'] = $startnum;
         $queryvars['groupby'] = $groupby;
         $queryvars['operation'] = $operation;
+        $queryvars['cache'] = $cache;
     // TODO: clean up query cleaning
         if (count($data['queries']) >= 20) {
             $dropquery = array_pop($data['queries']);

@@ -35,6 +35,14 @@ function dynamicdata_utilapi_getmeta($args)
 
     $dbconn =& xarDBGetConn();
 
+    // Note: this only works if we use the same database connection
+    if (!empty($db) && $db != xarDBGetName()) {
+        $dbconn->SelectDB($db);
+        $prefix = $db . '.';
+    } else {
+        $prefix = '';
+    }
+
     if (!empty($table)) {
         $tables = array($table);
     } else {
@@ -46,6 +54,7 @@ function dynamicdata_utilapi_getmeta($args)
 
     $metadata = array();
     foreach ($tables as $curtable) {
+        $curtable = $prefix . $curtable;
         if (isset($propertybag[$curtable])) {
              $metadata[$curtable] = $propertybag[$curtable];
              continue;
@@ -155,6 +164,11 @@ function dynamicdata_utilapi_getmeta($args)
         }
         $metadata[$curtable] = $columns;
         $propertybag[$curtable] = $columns;
+    }
+
+    // Note: this only works if we use the same database connection
+    if (!empty($db) && $db != xarDBGetName()) {
+        $dbconn->SelectDB(xarDBGetName());
     }
 
     return $metadata;

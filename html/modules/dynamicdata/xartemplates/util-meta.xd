@@ -19,6 +19,19 @@
         <xar:set name="prop">
             #xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'))# 
         </xar:set>
+        <xar:if condition="!empty($databases)">
+        <h3><xar:mlstring>Select a database:</xar:mlstring></h3>
+        <ul>
+        <xar:foreach in="$databases" value="$database">
+            <li>
+                <a href="#xarModURL('dynamicdata','util','meta',array('db' => $database))#">#$database#</a>
+                <xar:if condition="!empty($db) and $database eq $db">
+                    <xar:mlstring>(*)</xar:mlstring>
+                </xar:if>
+            </li>
+        </xar:foreach>
+        </ul>
+        </xar:if>
         <table class="xar-norm">
             <xar:foreach in="$tables" key="$curtable" value="$fields">
                 <tr>
@@ -83,6 +96,12 @@
             <a href="#xarModURL('dynamicdata','util','meta',array('export' => 1))#">
                 <xar:mlstring>
                     Export all tables to XML 
+                </xar:mlstring>
+            </a>
+            |
+            <a href="#xarModURL('dynamicdata','util','meta',array('showdb' => 1))#">
+                <xar:mlstring>
+                    Show other databases
                 </xar:mlstring>
             </a>
         </p>
