@@ -20,7 +20,11 @@ function base_textblock_init()
 {
     return array(
         'text_content' => '',
-        'expire' => 0
+        'expire' => 0,
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 1, // but if you do, share across pages
+        'usershared' => 1, // and for group members
+        'cacheexpire' => null
     );
 }
 
@@ -133,7 +137,7 @@ function base_textblock_update($blockinfo)
         $now = time();
         $vars['expire'] = $expire + $now;
     }
-
+    
     if (!isset($vars['expire'])) {
         $vars['expire'] = 0;
     }

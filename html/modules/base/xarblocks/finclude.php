@@ -19,7 +19,11 @@
 function base_fincludeblock_init()
 {
     return array(
-        'url' => 'http://www.example.com/'
+        'url' => 'http://www.example.com/',
+        'nocache' => 0, // cache by default
+        'pageshared' => 1, // share across pages here
+        'usershared' => 1, // and for group members
+        'cacheexpire' => null
     );
 }
 

@@ -19,7 +19,11 @@ function roles_loginblock_init()
 {
     return array(
         'showlogout' => 0,
-        'logouttitle' => ''
+        'logouttitle' => '',
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 1, // if you do, share across pages
+        'usershared' => 0, // but don't share for different users
+        'cacheexpire' => null
     );
 }
 

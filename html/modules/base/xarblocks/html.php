@@ -18,7 +18,10 @@
  */
 function base_htmlblock_init()
 {
-    return array();
+    return array('nocache' => 1, // don't cache by default
+                 'pageshared' => 1, // but if you do, share across pages
+                 'usershared' => 1, // and for group members
+                 'cacheexpire' => null);
 }
 
 /**

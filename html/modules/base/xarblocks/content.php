@@ -26,7 +26,11 @@ function base_contentblock_init()
         'custom_format' => '',
         'hide_errors' => true,
         'start_date' => '',
-        'end_date' => ''
+        'end_date' => '',
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 1, // but if you do, share across pages
+        'usershared' => 1, // and for group members
+        'cacheexpire' => null
     );
 }
 

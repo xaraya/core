@@ -17,7 +17,11 @@
  */
 function roles_userblock_init()
 {
-    return array();
+    return array(
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 1, // share across pages
+        'usershared' => 0, // don't share across users
+        'cacheexpire' => null);
 }
 
 /**

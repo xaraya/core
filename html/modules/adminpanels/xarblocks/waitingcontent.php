@@ -26,7 +26,10 @@
 function adminpanels_waitingcontentblock_init()
 {
     // Nothing to configure.
-    return array();
+    return array('nocache'     => 0,
+                 'pageshared'  => 1,
+                 'usershared'  => 1,
+                 'cacheexpire' => null);
 }
 
 /**

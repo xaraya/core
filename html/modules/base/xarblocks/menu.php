@@ -30,8 +30,11 @@ function base_menublock_init()
         'displayrss' => false,
         'displayprint' => false,
         'marker' => '[x]',
-        'content' => 'http://www.example.com/|Title|Example|'
-    );
+        'content' => 'http://www.example.com/|Title|Example|',
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 0, // don't share across pages (depending on dynamic menu or not)
+        'usershared' => 1, // share for group members
+        'cacheexpire' => null);
 }
 
 /**

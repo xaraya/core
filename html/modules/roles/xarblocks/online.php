@@ -17,7 +17,11 @@
 function roles_onlineblock_init()
 {
     // No parameters accepted by this block.
-    return array();
+    return array(
+        'nocache' => 0, // cache by default
+        'pageshared' => 1, // share across pages
+        'usershared' => 1, // share for group members
+        'cacheexpire' => null);
 }
 
 /**
@@ -90,7 +94,7 @@ function roles_onlineblock_display($blockinfo)
             );
 
             if ($aa['name'] == xarUserGetVar('name')) {
-                if (xarModIsAvailable('messages')) {
+                if (xarModIsAvailable('messages')) { 
                     $args['test1'][$key]['total'] = xarModAPIFunc(
                         'messages', 'user', 'count_total',
                         array('uid'=>$aa['uid'])

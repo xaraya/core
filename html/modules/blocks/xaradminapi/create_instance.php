@@ -49,14 +49,12 @@ function blocks_adminapi_create_instance($args)
     // Make sure type exists.
     $blocktype = xarModAPIfunc('blocks', 'user', 'getblocktype', array('tid' => $type));
 
+    $initresult = xarModAPIfunc('blocks', 'user', 'read_type_init', $blocktype);
+
     // If the content is not set, attempt to get initial content from
     // the block initialization function.
     if (!isset($content)) {
         $content = '';
-
-        $initresult = xarModAPIfunc(
-            'blocks', 'user', 'read_type_init', $blocktype
-        );
 
         if (!empty($initresult)) {
             $content = $initresult;
@@ -109,6 +107,41 @@ function blocks_adminapi_create_instance($args)
             'blocks', 'admin', 'update_instance_groups',
             array('bid' => $bid, 'groups' => $groups)
         );
+    }
+
+    // Insert defaults for block caching (based on block init array)
+    if (!empty($initresult) && is_array($initresult) && !empty($xartable['cache_blocks'])) {
+        if (!empty($initresult['nocache'])) {
+            $nocache = 1;
+        } else {
+            $nocache = 0;
+        }
+        if (!empty($initresult['pageshared']) && is_numeric($initresult['pageshared'])) {
+            $pageshared = (int) $initresult['pageshared'];
+        } else {
+            $pageshared = 0;
+        }
+        if (!empty($initresult['usershared']) && is_numeric($initresult['usershared'])) {
+            $usershared = (int) $initresult['usershared'];
+        } else {
+            $usershared = 0;
+        }
+        // don't use empty because this could be 0 here
+        if (isset($initresult['cacheexpire']) && is_numeric($initresult['cacheexpire'])) {
+            $cacheexpire = (int) $initresult['cacheexpire'];
+        } else {
+            $cacheexpire = NULL;
+        }
+        $cacheblocks = $xartable['cache_blocks'];
+        $query = "INSERT INTO $cacheblocks (xar_bid,
+                                            xar_nocache,
+                                            xar_page,
+                                            xar_user,
+                                            xar_expire)
+                  VALUES (?,?,?,?,?)";
+        $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);
+        $result =& $dbconn->Execute($query,$bindvars);
+        if (!$result) {return;}
     }
 
     // Resequence the blocks.

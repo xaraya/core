@@ -25,7 +25,20 @@
 */
 function themes_metablock_init()
 {
-    return true;
+    return array(
+        'metakeywords' => '',
+        'metadescription' => '',
+        'usedk' => '',
+        'usegeo' => '',
+        'longitude' => '',
+        'latitude' => '',
+        'copyrightpage' => '',
+        'helppage' => '',
+        'glossary' => '',
+        'nocache' => 1, // don't cache by default
+        'pageshared' => 0, // if you do, don't share across pages
+        'usershared' => 1, // but share for group members
+        'cacheexpire' => null);
 }
 
 /**
