@@ -61,6 +61,7 @@ function base_admin_modifyconfig()
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
+    if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');    
     $allowedlocales = xarConfigGetVar('Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
         if (in_array($locale, $allowedlocales)) $active = true;
