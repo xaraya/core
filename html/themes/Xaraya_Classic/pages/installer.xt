@@ -1,26 +1,28 @@
 <?xar type="page"?>
 <xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-<title><xar:mlstring>Now Installing Xaraya :: Welcome to the next level!</xar:mlstring></title>
-<meta name="ROBOTS" content="INDEX,FOLLOW" />
-<meta name="resource-type" content="document" />
-<meta http-equiv="expires" content="0" />
-<meta name="generator" content="Xaraya pre-release; - http://www.xaraya.com" />
-<meta name="rating" content="General" />
-<style type="text/css">@import url("themes/Xaraya_Classic/style/installer.css"); </style>
-</head>
-<body>
-
-<div id="main">
-  <img src="#xarTplGetImage('top.gif','installer')#" style="height:90px;width:760px;border:0px;vertical-align:top;" alt="wave" />
-  <xar:module main="true" />
-  <br style="clear:both"/>
-  <img src="#xarTplGetImage('bottom.gif','installer')#" style="height:120px;width:760px;border:0px;vertical-align:bottom;" alt="wave" />
-</div>
-
-</body>
-</html>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        <head>
+            <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+            <title>
+                <xar:mlstring>
+                    Now Installing Xaraya :: Welcome to the next level!
+                </xar:mlstring>
+            </title>
+            <meta name="ROBOTS" content="INDEX,FOLLOW" />
+            <meta name="resource-type" content="document" />
+            <meta http-equiv="expires" content="0" />
+            <meta name="generator" content="Xaraya pre-release; - http://www.xaraya.com" />
+            <meta name="rating" content="General" />
+            <style type="text/css">@import url("themes/Xaraya_Classic/style/installer.css"); </style> 
+        </head>
+        <body>
+            <div id="main">
+                <img src="#xarTplGetImage('top.gif','installer')#" style="height:90px;width:760px;border:0px;vertical-align:top;" alt="wave" />
+                <xar:module main="true" />
+                <br style="clear:both" />
+                <img src="#xarTplGetImage('bottom.gif','installer')#" style="height:120px;width:760px;border:0px;vertical-align:bottom;" alt="wave" />
+            </div>
+        </body>
+    </html>
 </xar:blocklayout>
