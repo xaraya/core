@@ -259,7 +259,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     $childCode = trim($this->generateNode($child));
                 } elseif($node->tagName == 'set') {
                     // preserve one whitespace on the outer rim of xar:set if there was one.
-                    $childCode = _compress_space($this->generateNode($child));
+                    $childCode = xmltrim($this->generateNode($child));
                 } else {
                     $childCode = $this->generateNode($child);
                 }
@@ -472,9 +472,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             return;
                         }
                         // Add text to parent, if there is any
+                        // Situation: [...text...]<xar:...
                         if (trim($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode($text, $this);
+                                $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -535,9 +536,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $xarToken = $this->getNextToken(4);
                     if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
                         // Add text to parent
+                        // Situation: [...text...]</xar:...
                         if (trim($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode($text, $this);
+                                $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -677,9 +679,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         return;
                     }
                     // Add text to parent
+                    // Situation: [...text...]&xar-...
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
-                            $children[] = $this->nodesFactory->createTextNode($text, $this);
+                            $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
                         } else {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
@@ -739,9 +742,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         return;
                     }
                     // Add text to parent
+                    // Situation: [...text...]#$....# or [...text...]#xarFunction()#
                     if (trim($text) != '') {
                         if ($parent->hasText()) {
-                            $children[] = $this->nodesFactory->createTextNode($text, $this);
+                            $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
                         } else {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
@@ -812,12 +816,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $text .= $token;
         } // end while
         if (trim($text) != '') {
-            if (!$parent->hasText()) {
+            if($parent->hasText()) {
+                $children[] = $this->nodesFactory->createTextNode(xmltrim($text),$this);
+            } else {
                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text inside.", $parent);
                 return;
             }
-            $node = $this->nodesFactory->createTextNode($text, $this);
-            $children[] = $node;
         }
         // Check if there is something left at the stack
         $stackTagName = array_pop($this->tagNamesStack);
@@ -3316,7 +3320,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
  * @access  protected
  * @param   string $input String for which to compress space
 */
-function _compress_space($input='')
+function xmltrim($input='')
 {
     //return $input; // If we wanna revert back to the old situation, uncomment this line
     // Let's first determine if there is space at all.
@@ -3328,5 +3332,5 @@ function _compress_space($input='')
     $input = $leftspace . trim($input) . $rightspace;  
     return $input;
 }
-
 ?>
+
