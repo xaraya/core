@@ -134,7 +134,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 8"); // TODO: VERIFY !
+        $dbconn->Execute("DELETE FROM " . $tables['roles'] . " WHERE xar_uid > 5"); // TODO: VERIFY !
         $dbconn->Execute('FLUSH TABLE ' . $tables['roles']);
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
     }
@@ -212,6 +212,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         // fill in the dynamic properties - cfr. users.xml !
         $dynamicvalues = array(
                                'itemid'     => $newuid,
+                               'website'    => $url,
                                'timezone'   => $timezone - 12.0,
                                'avatar'     => $avatar,
                                'icq'        => $icq,
@@ -809,7 +810,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         }
         $data['pid'] = $pid;
         $data['author'] = $uid;
-        $data['subject'] = $subject;
+        $data['title'] = $subject;
         $data['comment'] = $comment;
         $data['hostname'] = $hostname;
         //$data['cid'] = $tid;
