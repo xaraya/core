@@ -2280,7 +2280,8 @@
 	/**
 	* Internal placeholder for record objects. Used by ADORecordSet->FetchObj().
 	*/
-	class ADOFetchObj {
+	class ADOFetchObj
+        {
 	};
 	
 	//==============================================================================================	
@@ -2329,7 +2330,8 @@
 	 * No prefetching of data is done, so the RecordCount() can return -1 ( which
 	 * means recordcount not known).
 	 */
-	class ADORecordSet extends ADODB_BASE_RS {
+	class ADORecordSet extends ADODB_BASE_RS
+        {
 	/*
 	 * public variables	
 	 */
@@ -2541,7 +2543,8 @@
 	 * @return an associative array indexed by the first column of the array, 
 	 * 	or false if the  data has less than 2 cols.
 	 */
-	function &GetAssoc($force_array = false, $first2cols = false) {
+	function &GetAssoc($force_array = false, $first2cols = false)
+        {
 		$cols = $this->_numOfFields;
 		if ($cols < 2) {
 			return false;
