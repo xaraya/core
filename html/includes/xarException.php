@@ -267,7 +267,6 @@ function xarErrorRender($format,$thisstack = "ERROR")
     while (!$stack->isempty()) {
 
         $error = $stack->pop();
-//echo $error->getMajor();exit;
 
         switch ($error->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
