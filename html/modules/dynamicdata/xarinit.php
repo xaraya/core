@@ -255,7 +255,7 @@ function dynamicdata_init()
         "'default','Default',$objectid[2],182,1,3,'','" . $dynamic_properties . ".xar_prop_default',1,8,'varchar (254)'",
         "'source','Source',$objectid[2],182,1,23,'dynamic_data','" . $dynamic_properties . ".xar_prop_source',1,9,'varchar (254)'",
         "'status','Status',$objectid[2],182,1,25,'1','" . $dynamic_properties . ".xar_prop_status',1,10,'integer (tiny)'",
-        "'order','Order',$objectid[2],182,1,15,'','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)'",
+        "'order','Order',$objectid[2],182,1,15,'0','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)'",
         "'validation','Validation',$objectid[2],182,1,2,'','" . $dynamic_properties . ".xar_prop_validation',2,12,'varchar (254)'",
 
         // 22 -> 25
@@ -303,7 +303,7 @@ function dynamicdata_init()
                                               'null'        => false,
                                               'default'     => '0'),
                 /* the value of this dynamic data */
-                    'xar_dd_value'    => array('type'        => 'blob', // or text ?
+                    'xar_dd_value'    => array('type'        => 'text', // or blob when storing binary data (but not for PostgreSQL - see bug 1324)
                                               'size'        => 'medium',
                                               'null'        => 'false')
               );
@@ -606,6 +606,10 @@ function dynamicdata_upgrade($oldversion)
                               array(),
                               'dynamicdata_userapi_handleGetItemsTag');
             break;
+
+        // for the switch from blob to text of the xar_dd_value field, no upgrade is necessary for MySQL,
+        // and no simple upgrade is possible for PostgreSQL
+
         case 2.0:
             // Code to upgrade from version 2.0 goes here
             break;

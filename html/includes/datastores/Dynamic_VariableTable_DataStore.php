@@ -358,7 +358,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $query = "SELECT xar_dd_itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN xar_dd_value ELSE '' END) AS 'dd_$propid' \n";
+                $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN xar_dd_value ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE xar_dd_propid IN (" . join(', ',$propids) . ") 
