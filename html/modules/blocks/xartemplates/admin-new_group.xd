@@ -37,7 +37,7 @@
 
 <center>
 <form method="post" action="&xar-modurl-blocks-admin-create_group;">
-    <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
+    <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
     
     <table border="0" width="300">
         <tr>
