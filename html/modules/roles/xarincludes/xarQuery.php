@@ -26,7 +26,6 @@ class xarQuery
     var $row;
     var $dbconn;
     var $statement;
-    var $result;
     var $limits = 1;
 
 //---------------------------------------------------------
