@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * get a user variable (currently unused)
+ * @public
+ * @author Marco Canini
+ * @param args['uid'] user id
+ * @param args['name'] variable name
+ * @returns string
+ */
+function authsystem_userapi_get_user_variable($args)
+{
+    // Second level cache
+    static $vars = array();
+
+    extract($args);
+
+    if (!isset($uid) || !isset($name)) {
+        $msg = xarML('Empty uid (#(1)) or name (#(2))', $uid, $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    if (!isset($vars[$uid])) {
+        $vars[$uid] = array();
+    }
+
+    if (!isset($vars[$uid][$name])) {
+        $vars[$uid][$name] = false;
+
+        // ... retrieve the user variable somehow ...
+
+        // throw back an exception if the user doesn't exist
+        //if (...) {
+        //    $msg = xarML('User identified by uid #(1) doesn\'t exist.', $uid);
+        //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+        //                  new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        //    return;
+        //}
+
+        // $vars[$uid][$name] = $value;
+    }
+
+    // Return the variable
+    if (isset($vars[$uid][$name])) {
+        return $vars[$uid][$name];
+    } else {
+        return false;
+    }
+}
+
+?>
