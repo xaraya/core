@@ -31,13 +31,13 @@ function roles_user_login()
     global $xarUser_authenticationModules;
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
-        xarExceptionFree();
+        xarErrorFree();
         $msg = xarML('You must provide a username.');
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
     if (!xarVarFetch('pass','str:1:100',$pass)) {
-        xarExceptionFree();
+        xarErrorFree();
         $msg = xarML('You must provide a password.');
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
