@@ -1,6 +1,7 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2>
 <div style="margin: auto;">
-<xar:mlstring>Please select an option from the menu below</xar:mlstring>:
+<p><xar:mlstring>Please select an option from the menu below</xar:mlstring>:</p>
 <p><a href="#xarModURL('roles', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a></p>
 <p><xar:if condition="xarModGetVar('roles', 'minage') eq 0">
 	<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>Register</xar:mlstring></a>

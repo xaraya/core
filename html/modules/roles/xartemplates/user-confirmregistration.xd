@@ -1,10 +1,11 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2>
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
-<table>
+<table border="0" cellpadding="2" cellspacing="0">
 	<tr>
 		<td><xar:mlstring>Preferred Username</xar:mlstring>:</td>
-		<td>#$uname#</td>
+		<td>#$username#</td>
 	</tr>
 	<tr>
 		<td><xar:mlstring>Display Name</xar:mlstring>:</td>
@@ -22,10 +23,15 @@
 		</tr>
 	</xar:foreach>
 </xar:if>
+    <tr>
+        <td colspan="2" style="text-align: center;"><br />
+            <input type="submit" value="#$createlabel#" />
+        </td>
+    </tr>
 </table>
 <input type="hidden" name="authid" id="authid" value="#$authid#" />
 <input type="hidden" name="phase" id="phase" value="createuser" />
-<input type="hidden" name="uname" id="uname" value="#$uname#" />
+<input type="hidden" name="username" id="username" value="#$username#" />
 <input type="hidden" name="realname" id="realname" value="#$realname#" />
 <input type="hidden" name="email" id="email" value="#$email#" />
 <input type="hidden" name="pass" id="pass" value="#$pass#" />
@@ -35,7 +41,7 @@
 	<xar:data-input property="$properties[$name]" hidden="true" />
 </xar:foreach>
 </xar:if>
-<input type="submit" value="Create Account" />
+
 </form>
 </div>
 </div>

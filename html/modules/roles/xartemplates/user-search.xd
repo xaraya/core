@@ -1,4 +1,4 @@
-<h2><xar:mlstring>Search for Users</xar:mlstring></h2>
+<h2><xar:mlstring>Search Users</xar:mlstring></h2>
 <xar:if condition="!empty($users) and count($users) gt 0">
     <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
     <xar:foreach in="$users" key="$uid" value="$user">
@@ -10,13 +10,14 @@
 <p>#$status#</p>
 </xar:if>
 
-<p><xar:mlstring>Search on</xar:mlstring>:</p>
-<table border="0" cellpadding="4" cellspacing="0">
-<tr><td valign="top">
-<p><input type="checkbox" name="name" value=1 checked /> <xar:mlstring>Real Name</xar:mlstring></p>
-<p><input type="checkbox" name="uname" value=1 checked /> <xar:mlstring>Username</xar:mlstring></p>
-<p><input type="checkbox" name="email" value=1 checked /> <xar:mlstring>Email Address </xar:mlstring></p>
-
+<p></p>
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+    <td valign="top"><xar:mlstring>Search on</xar:mlstring>:</td>
+    <td>
+        <input type="checkbox" name="name" id="name" value="1" checked="checked" /> <label for="name"><xar:mlstring>Real Name</xar:mlstring></label><br />
+        <input type="checkbox" name="uname" id="uname" value="1" checked="checked" /> <label for="uname"><xar:mlstring>Username</xar:mlstring></label><br />
+        <input type="checkbox" name="email" id="email" value="1" checked="checked" /> <label for="email"><xar:mlstring>Email Address </xar:mlstring></label><br />
 <xar:if condition="!empty($properties) and count($properties) gt 0">
 <xar:set name="$i">2</xar:set>
 <!-- you can also specify individual fields here, if you don't want to allow searching
@@ -26,11 +27,13 @@
 </td><td valign="top">
     </xar:if>
     <xar:if condition="!empty($checked[$field])">
-        <p><input type="checkbox" name="#$field#" value=1 checked /> <xar:data-label property="$properties[$field]" /></p>
+        <input type="checkbox" name="#$field#" id="#$field#" value="1" checked="checked" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
     <xar:else />
-        <p><input type="checkbox" name="#$field#" value=1 /> <xar:data-label property="$properties[$field]" /></p>
+        <input type="checkbox" name="#$field#" id="#$field#" value=1 /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
     </xar:if>
 </xar:foreach>
 </xar:if>
-</td></tr></table>
+    </td>
+</tr>
+</table>
 

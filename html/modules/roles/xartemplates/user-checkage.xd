@@ -1,9 +1,13 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Age Check</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Age Check</xar:mlstring></h2>
 <div style="margin: auto;">
 
-<xar:mlstring>You must be</xar:mlstring> #$minage# <xar:mlstring>or over, or have parental permission to register here</xar:mlstring>.
-<p><a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>I am </xar:mlstring> #$minage# <xar:mlstring> or older</xar:mlstring></a></p>
-<p>(<xar:mlstring>By clicking on the above link you certify that you are either </xar:mlstring> #$minage# <xar:mlstring> or over, or that you have parental consent to register here</xar:mlstring>.)</p>
-<p><a href="index.php"><xar:mlstring>I am not </xar:mlstring> #$minage# <xar:mlstring> or older</xar:mlstring></a></p>
+<p><xar:ml>
+<xar:mlstring>You must be #(1) or over, or have parental permission to register here.</xar:mlstring>
+<xar:mlvar>#$minage#</xar:mlvar>
+</xar:ml></p>
+<p><a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:ml><xar:mlstring>I am #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
+<p><xar:ml><xar:mlstring>By clicking on the above link you certify that you are either #(1) or over, or that you have parental consent to register here.</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></p>
+<p><a href="index.php"><xar:ml><xar:mlstring>I am not #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
 </div>
 </div>

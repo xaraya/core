@@ -54,7 +54,7 @@ function roles_user_register()
             $authid = xarSecGenAuthKey();
 
             // current values (none)
-            $values = array('uname'    => '',
+            $values = array('username'    => '',
                             'realname' => '',
                             'email'    => '',
                             'pass1'    => '',
@@ -77,12 +77,13 @@ function roles_user_register()
             $data = xarTplModule('roles','user', 'registerform', array('authid'     => $authid,
                                                                        'values'     => $values,
                                                                        'invalid'    => $invalid,
-                                                                       'properties' => $properties));
+                                                                       'properties' => $properties,
+                                                                       'userlabel' => xarML('New User')));
             break;
 
         case 'checkregistration':
 
-            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass1','str:4:100',$pass1,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass2','str:4:100',$pass2,'',XARVAR_NOT_REQUIRED)) return;
@@ -107,7 +108,7 @@ function roles_user_register()
             }
 
             // current values (in case some field is invalid, we'll return to the previous template)
-            $values = array('uname'    => xarVarPrepForDisplay($uname),
+            $values = array('username'    => xarVarPrepForDisplay($username),
                             'realname' => xarVarPrepForDisplay($realname),
                             'email'    => xarVarPrepForDisplay($email),
                             'pass1'    => xarVarPrepForDisplay($pass1),
@@ -117,30 +118,30 @@ function roles_user_register()
             $invalid = array();
 
             // check if the username is empty
-            if (empty($uname)) {
-                $invalid['uname'] = xarML('You must provide a preferred username to continue.');
+            if (empty($username)) {
+                $invalid['username'] = xarML('You must provide a preferred username to continue.');
 
             // check for spaces in the username
-            } elseif (preg_match("/[[:space:]]/",$uname)) {
-                $invalid['uname'] = xarML('There is a space in the username');
+            } elseif (preg_match("/[[:space:]]/",$username)) {
+                $invalid['username'] = xarML('There is a space in the username');
 
             // check the length of the username
-            } elseif (strlen($uname) > 255) {
-                $invalid['uname'] = xarML('Your username is too long.');
+            } elseif (strlen($username) > 255) {
+                $invalid['username'] = xarML('Your username is too long.');
 
             // check for spaces in the username (again ?)
-            } elseif (strrpos($uname,' ') > 0) {
-                $invalid['uname'] = xarML('There is a space in your username');
+            } elseif (strrpos($username,' ') > 0) {
+                $invalid['username'] = xarML('There is a space in your username');
 
             } else {
                 // check for duplicate usernames
                 $user = xarModAPIFunc('roles',
                                       'user',
                                       'get',
-                                       array('uname' => $uname));
+                                       array('uname' => $username));
                 if ($user != false) {
                     unset($user);
-                    $invalid['uname'] = xarML('That username is already taken.');
+                    $invalid['username'] = xarML('That username is already taken.');
 
                 } else {
                     // check for disallowed usernames
@@ -148,8 +149,8 @@ function roles_user_register()
                     if (!empty($disallowednames)) {
                         $disallowednames = unserialize($disallowednames);
                         $disallowednames = explode("\r\n", $disallowednames);
-                        if (in_array ($uname, $disallowednames)) {
-                            $invalid['uname'] = xarML('That username is either reserved or not allowed on this website');
+                        if (in_array ($username, $disallowednames)) {
+                            $invalid['username'] = xarML('That username is either reserved or not allowed on this website');
                         }
                     }
                 }
@@ -239,23 +240,25 @@ function roles_user_register()
                 return xarTplModule('roles','user', 'registerform', array('authid'     => $authid,
                                                                           'values'     => $values,
                                                                           'invalid'    => $invalid,
-                                                                          'properties' => $properties));
+                                                                          'properties' => $properties,
+                                                                          'createlabel' => xarML('Create Account')));
             }
 
             // everything seems OK -> go on to the next step
-            $data = xarTplModule('roles','user', 'confirmregistration', array('uname'    => $uname,
+            $data = xarTplModule('roles','user', 'confirmregistration', array('username'    => $username,
                                                                              'email'     => $email,
                                                                              'realname'  => $realname,
                                                                              'pass'      => $pass,
                                                                              'ip'        => $ip,
                                                                              'authid'    => $authid,
-                                                                             'properties' => $properties));
+                                                                             'properties' => $properties,
+                                                                             'createlabel' => xarML('Create Account')));
 
             break;
 
         case 'createuser':
 
-            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('pass1','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED)) return;
@@ -278,7 +281,7 @@ function roles_user_register()
             if (!xarModAPIFunc('roles',
                                'admin',
                                'create',
-                                array('uname' => $uname,
+                                array('uname' => $username,
                                       'realname' => $realname,
                                       'email' => $email,
                                       'pass'  => $pass,
@@ -290,7 +293,7 @@ function roles_user_register()
             $user = xarModAPIFunc('roles',
                                   'user',
                                   'get',
-                                   array('uname' => $uname));
+                                   array('uname' => $username));
 
             // Check for user creation failure
             if (empty($user)) return;
@@ -334,7 +337,7 @@ function roles_user_register()
                                                       'valcode' => $confcode,
                                                       'uname'   => $user['uname'])),
                                       "$realname",
-                                      "$uname",
+                                      "$username",
                                       "$ip",
                                       "$sitename",
                                       "$pass",

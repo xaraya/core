@@ -1,4 +1,5 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Your Account</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Information</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2>#$name#</h2>
 <div style="margin: auto;">
 <xar:if condition="!empty($message)">
 	#$message#

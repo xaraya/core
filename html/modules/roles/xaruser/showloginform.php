@@ -8,8 +8,8 @@ function roles_user_showloginform()
 
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
-
-    return array();
+    $data['loginlabel'] = xarML('Log In');
+    return $data;
 }
 
 ?>

@@ -2,24 +2,24 @@
     <table border="0" width="100%">
         <tr>
             <td>
-                <label for="uname"><xar:mlstring>Username</xar:mlstring></label>
+                <label for="uname#$blockid#"><xar:mlstring>Username</xar:mlstring></label>
             </td>
             <td>
-                <input type="text" name="uname" id="uname" maxlength="64" size="10" />
+                <input type="text" name="uname" id="uname#$blockid#" maxlength="64" size="10" />
             </td>
         </tr>
         <tr>
             <td>
-                <label for="pass"><xar:mlstring>Password</xar:mlstring></label>
+                <label for="pass#$blockid#"><xar:mlstring>Password</xar:mlstring></label>
             </td>
             <td>
-                <input type="password" name="pass" id="pass" maxlength="64" size="10" />
+                <input type="password" name="pass" id="pass#$blockid#" maxlength="64" size="10" />
             </td>
         </tr>
         <xar:if condition="xarConfigGetVar('seclevel') ne 'High'">
             <tr>
                 <td colspan="2">
-                    <input type="checkbox" name="rememberme" id="rememberme" value="1" /><label for="rememberme"><xar:mlstring>Remember me</xar:mlstring></label>
+                    <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" /><label for="rememberme#$blockid#"><xar:mlstring>Remember me</xar:mlstring></label>
 				</td>
             </tr>
         </xar:if>

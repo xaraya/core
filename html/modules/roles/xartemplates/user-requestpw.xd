@@ -1,13 +1,33 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Request Lost Password</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Request Lost Password</xar:mlstring></h2>
 <div style="margin: auto;">
-<xar:mlstring>Enter your username or your e-mail address.</xar:mlstring>
-<br /><br />
+<p><xar:mlstring>Enter your username or your e-mail address.</xar:mlstring></p>
 <form action="#xarModURL('roles', 'user', 'lostpassword')#" method="post" enctype="application/x-www-form-urlencoded">
-<p><label for="uname"><xar:mlstring>Username</xar:mlstring></label>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" size="25" maxlength="255" /><br />
-<label for="email"><xar:mlstring>E-mail address</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="email" id="email" size="25" maxlength="255" /></p>
-<input type="hidden" name="authid" id="authid" value="#$authid#" />
-<input type="hidden" name="phase" id="phase" value="send" />
-<input type="submit" value="E-Mail new password" />
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+    <td>
+        <label for="username"><xar:mlstring>Username</xar:mlstring>:</label>
+    </td>
+    <td>
+        <input type="text" name="uname" id="username" size="25" maxlength="255" />
+    </td>
+</tr>
+<tr>
+    <td>
+        <label for="email"><xar:mlstring>E-mail address</xar:mlstring>:</label>
+    </td>
+    <td>
+        <input type="text" name="email" id="email" size="25" maxlength="255" />
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="text-align: center;"><br />
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+        <input type="hidden" name="phase" id="phase" value="send" />
+        <input type="submit" value="#$emaillabel#">
+    </td>
+</tr>
+</table>
 </form>
 </div>
 </div>

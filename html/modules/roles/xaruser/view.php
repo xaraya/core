@@ -146,6 +146,7 @@ function roles_user_view()
         $data['pager'] .= '<a href="' . xarModURL('roles','user','view',array('phase' => $phase, 'startnum' => $startnum + $perpage)) . '">';
         $data['pager'] .= xarML('next') . ' &gt;&gt;</a>';
     }
+    $data['refreshlabel'] = xarML('Refresh');
 
     return $data;
 }

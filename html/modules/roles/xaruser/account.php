@@ -13,8 +13,8 @@ function roles_user_account()
                                       'register'));
     }
 
-    $name = xarUserGetVar('name');
-    $uid = xarUserGetVar('uid');
+    $data['name'] = xarUserGetVar('name');
+    $data['uid'] = xarUserGetVar('uid');
 
     $output = xarModCallHooks('item', 'usermenu', '', array());
 
@@ -23,12 +23,13 @@ function roles_user_account()
     } elseif (is_array($output)) {
         $output = join('',$output);
     }
+    $data['output'] = $output;
 
     if (empty($message)){
-        $message = '';
+        $data['message'] = '';
     }
 
-    return array('name' => $name, 'output' => $output, 'message' => $message);
+    return $data;
 }
 
 ?>

@@ -40,7 +40,9 @@ function roles_user_getvalidation()
             $data = xarTplModule('roles','user', 'startvalidation', array('phase'   => $phase,
                                                                           'uname'   => $uname,
                                                                           'sent'    => $sent,
-                                                                          'valcode' => $valcode));
+                                                                          'valcode' => $valcode,
+                                                                           'validatelabel' => xarML('Validate Your Account'),
+                                                                           'resendlabel' => xarML('Resend Validation Information')));
             break;
 
         case 'getvalidate':

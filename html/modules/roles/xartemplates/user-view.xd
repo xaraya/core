@@ -1,40 +1,26 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Memberslist</xar:mlstring></h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Member List</xar:mlstring></h2>
 <div style="margin: auto;">
-<b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
+<p><b><xar:mlstring>Sort Options</xar:mlstring>:</b>
 
-<form action="#xarModURL('roles', 'user', 'view')#" method="post">
-
-<xar:if condition="$phase eq 'active'">
-<input type="radio" name="phase" id="phase" value="active" checked="checked" />
-<xar:else />
-<input type="radio" name="phase" id="phase" value="active"  />
-</xar:if><xar:mlstring>Active Users</xar:mlstring>
-
-<xar:if condition="$phase eq 'viewall'">
-<input type="radio" name="phase" id="phase" value="viewall" checked="checked" />
-<xar:else />
-<input type="radio" name="phase" id="phase" value="viewall"  />
-</xar:if><xar:mlstring>All Users</xar:mlstring>
-
-<input type="submit" value="Refresh" />
-</form>
-
-<br />
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall"><xar:mlstring>All Users</xar:mlstring></a>
+</p>
 <xar:if condition="!empty($message)">
-	#$message#
+	<p>#$message#</p>
 <xar:else />
 
 <xar:if condition="xarModIsAvailable('dynamicdata')">
     <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
 </xar:if>
 
-	<table width="80%" border="0" cellspacing="0" cellpadding="4">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2">
 		<tr>
 			<xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
 				<th width="30%" align="left">
 					<xar:mlstring>Name</xar:mlstring>
 				</th>
-				<th width="40%" align="left">
+				<th width="40%">
 					<xar:mlstring>IP Address</xar:mlstring>
 				</th>
 			<xar:else />
@@ -42,9 +28,6 @@
 					<xar:mlstring>Name</xar:mlstring>
 				</th>
 			</xar:if>
-			<th width="10%">
-				<xar:mlstring>Info</xar:mlstring>
-			</th>
 			<th width="10%">
 				<xar:mlstring>Email</xar:mlstring>
 			</th>
@@ -62,20 +45,17 @@
 				<tr>
 					<xar:if condition="!empty($ipaddr) and xarSecurityCheck('AdminPanel',0)">
 						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$uid#">#$name#</a>
 						</td>
-						<td class="xar-norm">
+						<td class="xar-norm" style="text-align: center;">
 							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$ipaddr#&amp;targetnic=auto">#$ipaddr#</a>
 						</td>
 					<xar:else />
 						<td class="xar-norm">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$uid#">#$name#</a>
 						</td>
 					</xar:if>
-					<td class="xar-norm">
-						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
-					</td>
-					<td class="xar-norm">
+					<td class="xar-norm" style="text-align: center;">
 					   <xar:if condition="empty($emailurl)">
 						   #$emailicon#
 						<xar:else />
@@ -105,13 +85,10 @@
 						</td>
 					<xar:else />
 						<td class="xar-accent">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$uid#">#$name#</a>
 						</td>
 					</xar:if>
-					<td class="xar-accent">
-						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
-					</td>
-					<td class="xar-accent">
+					<td class="xar-accent" style="text-align: center;">
 					   <xar:if condition="empty($emailurl)">
 						   #$emailicon#
 						<xar:else />

@@ -28,7 +28,8 @@ function roles_user_lostpassword()
         case 'request':
         default:
             $authid = xarSecGenAuthKey();
-            $data = xarTplModule('roles','user', 'requestpw', array('authid'    => $authid));
+            $data = xarTplModule('roles','user', 'requestpw', array('authid'    => $authid,
+                                                                    'emaillabel' => xarML('E-Mail New Password')));
 
             break;
 

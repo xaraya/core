@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: s.user.php 1.13 03/04/15 09:37:50+02:00 marc@marclaptop. $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.

@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.online.php 1.25 03/06/10 20:10:43+02:00 marc@marclaptop. $
  *
  * Online Block
  *
@@ -81,7 +81,7 @@ function roles_onlineblock_display($blockinfo)
    } else {
        $args['users'] = xarML('users');
    }
-
+   $args['blockid'] = $blockinfo['bid'];
     // Block formatting
     if (empty($blockinfo['title'])) {
         $blockinfo['title'] = xarML('Online');

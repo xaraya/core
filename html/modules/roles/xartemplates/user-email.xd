@@ -1,4 +1,5 @@
-<div class="xar-mod-body"><h2><xar:mlstring>Send Email To</xar:mlstring> #$name#</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Email User</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>To</xar:mlstring>: #$name#</h2>
 <div style="margin: auto;">
 	<form action="&xar-modurl-roles-user-view;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -6,25 +7,29 @@
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="fname" id="fname" value="#xarUserGetVar('name')#" />
 		<input type="hidden" name="femail" id="femail" value="#xarUserGetVar('email')#" />
-		<table width="90%">
+		<table border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td align="left">
+				<td>
 					<label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:
 				</td>
-				<td align="left">			
-					<input type="text" name="subject" id="subject" size="30" maxlength="100" />
+				<td>			
+					<input type="text" name="subject" id="subject" size="40" maxlength="100" />
 				</td>
 			</tr>
 			<tr>
-				<td align="left" valign="top">
+				<td style="vertical-align: top;">
 					<label for="message"><xar:mlstring>Message</xar:mlstring></label>:
 				</td>
-				<td align="left">
+				<td>
 					<textarea name="message" id="message" wrap="soft" rows="20" cols="60"></textarea>
 				</td>
 			</tr>
+            <tr>
+                <td colspan="2" style="text-align: center;"><br />
+                    <input type="submit" value="#$confirm#" align="middle" />
+                </td>
+            </tr>
 		</table>
-		<p><input type="submit" value="#$confirm#" align="middle" /></p>
 	</form>
 </div>
 </div>

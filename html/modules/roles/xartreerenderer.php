@@ -21,14 +21,14 @@ class xarTreeRenderer {
     var $indent;
     var $level; 
     // convenience variables to hold strings referring to pictures
-    var $el             = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle"/>';
-    var $tee            = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle"/>';
-    var $aye            = '<img src="modules/roles/xarimages/I.gif" alt="" style="vertical-align: middle"/>';
-    var $bar            = '<img src="modules/roles/xarimages/s.gif" alt="" style="vertical-align: middle"/>';
-    var $emptybox       = '<img class="box" src="modules/roles/xarimages/k1.gif" alt="" style="vertical-align: middle"/>';
-    var $expandedbox    = '<img class="box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle"/>';
-    var $collapsedbox   = '<img class="box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle"/>';
-    var $blank          = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle"/>';
+    var $el             = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle" />';
+    var $tee            = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle" />';
+    var $aye            = '<img src="modules/roles/xarimages/I.gif" alt="" style="vertical-align: middle" />';
+    var $bar            = '<img src="modules/roles/xarimages/s.gif" alt="" style="vertical-align: middle" />';
+    var $emptybox       = '<img class="xar-roletree-box" src="modules/roles/xarimages/k1.gif" alt="" style="vertical-align: middle" />';
+    var $expandedbox    = '<img class="xar-roletree-box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)" />';
+    var $collapsedbox   = '<img class="xar-roletree-box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle" onclick="toggleBranch(this,this.parentNode.lastChild)"/>';
+    var $blank          = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
     var $bigblank       = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
     var $smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>'; 
     // we'll use this to check whether a group has already been processed
@@ -151,7 +151,7 @@ class xarTreeRenderer {
         // is this a branch?
         $isbranch = count($node['children']) > 0 ? true : false; 
         // now begin adding rows to the string
-        $this->html .= '<div class="xarbranch" id="branch' . $this->nodeindex . '">'; 
+        $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">'; 
         // this next table holds the Delete, Users and Privileges links
         // don't allow deletion of certain roles
         if (($object['uid'] <= xarModGetVar('roles', 'frozenroles')) || ($object['users'] > 0) || (!$drawchildren)) {
@@ -236,7 +236,7 @@ class xarTreeRenderer {
             $this->html .= ' | ' . $object['users'] . ' users</span>';
         } 
         // we've finished this row; now do the children of this role
-        $this->html .= $isbranch ? '<div class="xarleaf" id="leaf' . $this->nodeindex . '" >' : '';
+        $this->html .= $isbranch ? '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >' : '';
         $ind = 0;
         foreach($node['children'] as $subnode) {
             $ind = $ind + 1; 
