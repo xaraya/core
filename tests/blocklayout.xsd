@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:xar="http://www.xaraya.com/blocklayout"
+           xmlns:xar="http://www.xaraya.com/2003/blocklayout"
            elementFormDefault="qualified" attributeFormDefault="unqualified"
            targetNameSpace="http://www.xaraya.com/blocklayout">
 
@@ -8,7 +8,7 @@
   <xs:annotation>
     <xs:documentation xml:lang="en">
       Blocklayout 1.0 XML schema experiment for Xaraya.
-      Copyright 2002 Xaraya Development Group All rights reserved.
+      Copyright 2003 Xaraya Development Group All rights reserved.
       Author: Gregor J. Rothfuss gregor@xaraya.com
       Author: Marcel R. van der Boom marcel@xaraya.com
     </xs:documentation>
