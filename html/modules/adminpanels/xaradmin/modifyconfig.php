@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * standard function to modify the configuration parameters
+ *
+ * @author  Andy Varganov <andyv@xaraya.com>
+ * @access  public
+ * @param   no parameters
+ * @return  the data for template
+ * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
+ * @todo    nothing
+*/
+function adminpanels_admin_modifyconfig()
+{
+// Security Check
+    if(!xarSecurityCheck('AdminPanel')) return;
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey();
+    // everything else happens in Template for now
+    // prepare labels and values for display by the template
+    $data['showontop']              = xarModGetVar('adminpanels', 'showontop');
+    $data['showold']                = xarModGetVar('adminpanels', 'showold');
+    $data['marker']                 = xarModGetVar('adminpanels', 'marker');
+
+    $data['sortorder'] = array();
+    $data['sortorder']['byname']    = xarML('By Name');
+    $data['sortorder']['bycat']     = xarML('By Category');
+    $data['sortorder']['byweight']  = xarML('By Weight');
+    $data['sortorder']['bygroup']   = xarML('By Group');
+
+    $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
+    //TODO: need a better routine for building select in template
+
+    $data['menuselect']             = array();
+    $data['menuselect']['l']        = xarML('Left');
+    $data['menuselect']['c']        = xarML('Center');
+    $data['menuselect']['r']        = xarML('Right');
+    $data['menuposition']           = xarModGetVar('adminpanels', 'menuposition');
+    //TODO: need a better routine for building select in template
+
+/*     $data['showhelplabel']          = xarML('Show module "Help" in the menu:'); */
+    $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
+/*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */
+
+    // moved from modify overviews
+    $data['showoverviews']          = xarModGetVar('adminpanels', 'overview');
+    // everything else happens in Template for now
+    return $data;
+}
+
+?>
