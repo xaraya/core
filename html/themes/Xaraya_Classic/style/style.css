@@ -1,36 +1,36 @@
 /* XARAYA REQUIRED CLASSES */
-A {
+a {
    text-decoration: none;
-   color: #6A5ACD;
+   color: #6a5acd;
    font-weight: bold;
 }
-A:hover {
+a:hover {
    color: #003366;
 }
-BLOCKQUOTE {
+blockquote {
    color: #191970;
    font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    margin: 2em;
 }
-BODY {
+body {
    color: #000000;
    font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   background-color: #FFFFFF;
+   background-color: #ffffff;
 }
-CODE {
+code {
    color: #191970;
    font-size: 9.5pt;
    font-family: Courier,fixed-width;
 }
-H1 {
+h1 {
    color: #191970;
    font-size: 14pt;
    font-weight: bolder;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
-H2 {
+h2 {
    color: #191970;
    font-size: 12.5pt;
    font-weight: bolder;
@@ -38,14 +38,14 @@ H2 {
    border-bottom: 1px solid #191970;
    line-height: 170%;
 }
-H3 {
+h3 {
    color: #191970;
    font-size: 11pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    line-height: 100%;
 }
-H4 {
+h4 {
    color: #191970;
    font-size: 11pt;
    font-weight: bold;
@@ -53,43 +53,43 @@ H4 {
    border-bottom: 1px solid #191970;
    line-height: 170%;
 }
-TH {
+th {
    color: #000000;
    font-size: 11pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-weight: bolder;
-   background-color:#CDD5F8;
+   background-color:#cdd5f8;
 }
-TD {
+td {
    color: #000000;
    font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
-TABLE {
+table {
 	border: 0px;
 	margin: 0px;
 	padding: 0px;
 }
-THEAD {}
-TBODY {}
-TFOOT {
+thead {}
+tbody {}
+tfoot {
    color: #000000;
    font-size: 11pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-weight: bolder;
-   background-color:#CDD5F8;
+   background-color:#cdd5f8;
 }
-P {
+p {
    color: #000000;
    font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
-PRE {
+pre {
    color: #191970;
    font-size: 9.5pt;
    font-family: Courier,fixed-width;
 }
-INPUT {
+input {
    background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
@@ -102,15 +102,15 @@ INPUT {
    text-indent: 2px;
    color: #191970;
 }
-BUTTON {
+button {
    border: 2px outset #f0f0f0;
-   background-color: #CDD5F8;
+   background-color: #cdd5f8;
    color: #191970;
    font-size: 9.5pt;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
 
-SELECT {
+select {
    background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
@@ -122,7 +122,7 @@ SELECT {
    font-weight: normal;
    color: #191970;
 }
-TEXTAREA {
+textarea {
    background-color: #f0f0f0;
    border-bottom-width: 1px;
    border-color: #000000;
@@ -135,51 +135,51 @@ TEXTAREA {
    text-indent: 0px;
    color: #191970;
 }
-IMG {
+img {
    border: 0px;
 }
-LI {
+li {
    color: #000000;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    line-height: 150%;
    margin-bottom: 10px;
 }
-UL {
+ul {
    color: #000000;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    line-height: 150%;
    margin-bottom: 10px;
 }
-OL {
+ol {
    color: #000000;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    line-height: 150%;
    margin-bottom: 10px;
 }
-SUP {
+sup {
    font-size: 6.5pt;
 }
-SUB {
+sub {
    font-size: 6.5pt;
 }
 
 
 /*  THEME SPECIFIC CLASSES */
-H5, H6 {
+h5, h6 {
    color: #191970;
    font-size: 11pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
-HR {
+hr {
    width:100%;
-   color:#C0C0C0;
+   color:#c0c0c0;
 }
-FORM {
+form {
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-size: 9.5pt;
 }
-CHECKBOX {
+checkbox {
    background-color: transparent;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-size: 9.5pt;
@@ -187,8 +187,8 @@ CHECKBOX {
 }
 
 /*  XARAYA REQUIRED INDIVIDUAL CLASSES */
-TD.xar-norm {}
-TD.xar-alt {}
+td.xar-norm {}
+td.xar-alt {}
 
 
 /*  XARAYA REQUIRED ANONYMOUS CLASSES  */
@@ -211,7 +211,7 @@ TD.xar-alt {}
 
 /* right block group classes */
 .xar-block-head-right{
-    border: 1px solid #E47C55;
+    border: 1px solid #e47c55;
     background-color: #efefef;
 }
 .xar-block-title-right {
@@ -242,14 +242,14 @@ TD.xar-alt {}
     background-repeat: repeat-y;
 }
 .xar-block-title-center {
-    color: #E47C55;
+    color: #e47c55;
     background-color: inherit;
     font-weight: bold;
     font-size: 11pt;
     text-align: center;
 }
 .xar-block-body-center {
-    background-color: #CCE6FF;
+    background-color: #cce6ff;
 }
 .xar-block-foot-center {
     background-image: url(../images/sh_line.gif);
@@ -262,7 +262,7 @@ TD.xar-alt {}
 
 .xar-mod-head {
    border: 2px solid #a0a0a0;
-   background-color: #CDD5F8;
+   background-color: #cdd5f8;
    padding: 3px;
    text-align: center;
    font-weight: bold;
@@ -276,12 +276,12 @@ TD.xar-alt {}
 }
 .xar-mod-body {}
 .xar-mod-foot {}
-.xar-alt {background-color: #E47C55; }
-.xar-accent {background-color: #CCE6FF; }
-.xar-alt-outline {border: 1px solid #E47C55; }
-.xar-accent-outline {border: 1px solid #CCE6FF; }
+.xar-alt {background-color: #e47c55; }
+.xar-accent {background-color: #cce6ff; }
+.xar-alt-outline {border: 1px solid #e47c55; }
+.xar-accent-outline {border: 1px solid #cce6ff; }
 .xar-norm-outline {border: 1px solid #c0c0c0; }
-.xar-norm {background-color: #FFFFFF; }
+.xar-norm {background-color: #ffffff; }
 .xar-sub {font-size: smaller;}
 .xar-menu-section {
    color: #191970;
@@ -295,7 +295,7 @@ TD.xar-alt {}
    margin-bottom: 4px;
 }
 .xar-menu-section-current {
-   background-color: #CCE6FF;
+   background-color: #cce6ff;
    color: #191970;
    font-size: 11pt;
    font-weight: bold;
@@ -310,7 +310,7 @@ TD.xar-alt {}
    padding-left: .5em;
 }
 .xar-menu-item-current {
-   background-color: #CCE6FF;
+   background-color: #cce6ff;
    font-size: 9.5pt;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
@@ -328,7 +328,7 @@ TD.xar-alt {}
    padding-left: 0px;
 }
 .xar-menu-subitem:hover {
-   background-color: #CDD5F8;
+   background-color: #cdd5f8;
 }
 .xar-menu-subitem-current {
    font-weight: bold;
@@ -338,15 +338,15 @@ TD.xar-alt {}
    margin-left: 6px;
    padding-left: 0px;
 }
-.xar-menu-item-current > .xar-menu-subitem > A {
+.xar-menu-item-current > .xar-menu-subitem > a {
    color: #193970;
 }
-.xar-menu-item-current > .xar-menu-subitem > A:visited {
+.xar-menu-item-current > .xar-menu-subitem > a:visited {
    color: #003366;
 }
 
 .xar-error {
-   color: #FF0000;
+   color: #ff0000;
 }
 
 /*  THEME SPECIFIC ANONYMOUS CLASSES  */
@@ -368,7 +368,7 @@ TD.xar-alt {}
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-size: 9.5pt;
-   color:#60A9F0;
+   color:#60a9f0;
    text-decoration: none;
 }
 .btns {
@@ -381,7 +381,7 @@ TD.xar-alt {}
 }
 .busbtns {
    text-decoration: none;
-   background-color:#85B8EA;
+   background-color:#85b8ea;
    color:#000000;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
@@ -395,15 +395,15 @@ TD.xar-alt {}
    font-size: 9.5pt;
 }
 .LightUp {
-   background-color:#CFE5FA;
-   color:#FFFFFF;
+   background-color:#cfe5fa;
+   color:#ffffff;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
    font-size: 9.5pt;
    text-decoration: none;
 }
 .LightDown {
-   background-color:#FFFFFF;
+   background-color:#ffffff;
    color:#336699;
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
@@ -411,7 +411,7 @@ TD.xar-alt {}
    text-decoration: none;
 }
 .formUp {
-   background-color:#E3F1FF;
+   background-color:#e3f1ff;
 }
 .copyright {
    font-size: 9pt;
