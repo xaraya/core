@@ -12,7 +12,7 @@
  * @subpackage module name
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
-*/
+ */
 
 
 global $installing;

@@ -179,8 +179,8 @@ function modules_init()
     'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
     'xar_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
-    'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>true),
-    'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>true),
+    'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),
@@ -240,6 +240,29 @@ function modules_init()
     if(!$result) return;
     
     // Initialisation successful
+    return true;
+}
+
+/**
+ * Activates the modules module
+ *
+ * @param none
+ * @returns bool
+ *
+ */
+function modules_activate()
+{
+    // make sure we dont miss empty variables (which were not passed thru)
+    if(empty($selstyle)) $selstyle                  = 'plain';
+    if(empty($selfilter)) $selfilter                = XARMOD_STATE_ANY;
+    if(empty($hidecore)) $hidecore                  = 0;
+    if(empty($selsort)) $selsort                    = 'namedesc';
+
+    xarModSetVar('modules', 'hidecore', $hidecore);
+    xarModSetVar('modules', 'selstyle', $selstyle);
+    xarModSetVar('modules', 'selfilter', $selfilter);
+    xarModSetVar('modules', 'selsort', $selsort);
+
     return true;
 }
 
