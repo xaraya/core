@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -20,16 +20,16 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
@@ -65,9 +65,9 @@ function saveBlockOrder(f) {
 </script>
 
 <center>
-<form method="post" action="&pnt-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
-    <input type="hidden" name="authid" value="&pnt-var-authid;" />
-    <input type="hidden" name="gid" value="<pnt:var name="group.id" />" />
+<form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
+    <input type="hidden" name="gid" value="<xar:var name="group.id" />" />
     <input type="hidden" name="group_instance_order" value="" />
     <table border="0" width="300">
         <tr>
@@ -75,7 +75,7 @@ function saveBlockOrder(f) {
                 Name:
             </td>
             <td>
-                <input type="text" name="group_name" value="<pnt:var name="group.name" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_name" value="<xar:var name="group.name" />" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -86,19 +86,19 @@ function saveBlockOrder(f) {
                 <table>
                     <tr>
                         <td rowspan="2">
-                            <select name="group_instances" size="&pnt-var-instance_count;">
-                                <pnt:loop name="group.instances">
-                                    <option value="&pnt-var-id;"><pnt:var name="title" /></option>
-                                </pnt:loop>
+                            <select name="group_instances" size="&xar-var-instance_count;">
+                                <xar:loop name="group.instances">
+                                    <option value="&xar-var-id;"><xar:var name="title" /></option>
+                                </xar:loop>
                             </select>
                         </td>
                         <td>
-                            <input type="image" src="&pnt-var-up_arrow_src;" onclick="return moveBlock(this.form, true)" />
+                            <input type="image" src="&xar-var-up_arrow_src;" onclick="return moveBlock(this.form, true)" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input type="image" src="&pnt-var-down_arrow_src;" onclick="return moveBlock(this.form, false)" />
+                            <input type="image" src="&xar-var-down_arrow_src;" onclick="return moveBlock(this.form, false)" />
                         </td>
                     </tr>
                 </table>
@@ -109,7 +109,7 @@ function saveBlockOrder(f) {
                 Template:
             </td>
             <td>
-                <input type="text" name="group_template" value="<pnt:var name="group.template" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_template" value="<xar:var name="group.template" />" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>

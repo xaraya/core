@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -20,26 +20,26 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
 <center>Delete block group</center><br />
 
 <center>
-<form method="post" action="&pnt-modurl-blocks-admin-delete_group;">
-    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+<form method="post" action="&xar-modurl-blocks-admin-delete_group;">
+    <input type="hidden" name="authid" value="&xar-var-authid;" />
     <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="gid" value="<pnt:var name="group.id" />" />
+    <input type="hidden" name="gid" value="<xar:var name="group.id" />" />
     
     <table border="0" width="300">
         <tr>
@@ -47,7 +47,7 @@
                 Name:
             </td>
             <td>
-                <pnt:var name="group.name" />
+                <xar:var name="group.name" />
             </td>
         </tr>
         <tr>
@@ -55,9 +55,9 @@
                 Members:
             </td>
             <td>
-                <pnt:loop name="group.instances">
-                    <a href="&pnt-modurl-blocks-admin-modify_instance;&bid=&pnt-var-id;">&pnt-var-title;</a><br />
-                </pnt:loop>
+                <xar:loop name="group.instances">
+                    <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-id;">&xar-var-title;</a><br />
+                </xar:loop>
             </td>
         </tr>
         <tr>
@@ -65,7 +65,7 @@
                 Template:
             </td>
             <td>
-                <pnt:var name="group.template" />
+                <xar:var name="group.template" />
             </td>
         </tr>
         <tr>

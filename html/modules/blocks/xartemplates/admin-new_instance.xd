@@ -12,7 +12,7 @@
             <b>New block instance</b>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -20,23 +20,23 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
 <center>New block instance</center><br />
 
 <center>
-<form method="post" action="&pnt-modurl-blocks-admin-create_instance;">
+<form method="post" action="&xar-modurl-blocks-admin-create_instance;">
     <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
     
     <table border="0" width="300">
@@ -54,11 +54,11 @@
             </td>
             <td>
                 <select name="block_type" style="width:150px;">
-                    <pnt:loop name="block_types">
-                        <option value="&pnt-var-id;">
-                            &pnt-var-module;\&pnt-var-type;
+                    <xar:loop name="block_types">
+                        <option value="&xar-var-id;">
+                            &xar-var-module;\&xar-var-type;
                         </option>
-                    </pnt:loop>                
+                    </xar:loop>                
                 </select>
             </td>
         </tr>
@@ -68,11 +68,11 @@
             </td>
             <td>
                 <select name="block_group" style="width:150px;">
-                    <pnt:loop name="block_groups">
-                        <option value="&pnt-var-id;">
-                            &pnt-var-name;
+                    <xar:loop name="block_groups">
+                        <option value="&xar-var-id;">
+                            &xar-var-name;
                         </option>
-                    </pnt:loop>                
+                    </xar:loop>                
                 </select>
             </td>
         </tr>

@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -23,13 +23,13 @@
             <b>View block types</b>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
@@ -44,14 +44,14 @@
             Type
         </th>
     </tr>
-    <pnt:loop name="block_types" id="foo">
+    <xar:loop name="block_types" id="foo">
     <tr align="center">
         <td>
-            <a href="&pnt-var-modurl;">&pnt-var-module;</a>
+            <a href="&xar-var-modurl;">&xar-var-module;</a>
         </td>
         <td>
-           &pnt-var-type;
+           &xar-var-type;
         </td>
     </tr>
-    </pnt:loop>
+    </xar:loop>
 </table>

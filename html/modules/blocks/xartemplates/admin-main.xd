@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -20,16 +20,16 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table>

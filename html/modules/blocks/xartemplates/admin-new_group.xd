@@ -9,7 +9,7 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
             <b>New block group</b>
@@ -20,23 +20,23 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_instances;">View block instances</a>
+            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
 <center>New block group</center><br />
 
 <center>
-<form method="post" action="&pnt-modurl-blocks-admin-create_group;">
+<form method="post" action="&xar-modurl-blocks-admin-create_group;">
     <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
     
     <table border="0" width="300">

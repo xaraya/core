@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_instance;">New block instance</a>
+            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-blocks-admin-new_group;">New block group</a>
+            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
         </td>
         <td align="center">
         
@@ -20,16 +20,16 @@
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_types;">View block types</a>
+            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
         </td>
         <td align="center" width="25%">
             <b>View block instances</b>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-view_groups;">View block groups</a>
+            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-blocks-admin-settings;">General settings</a>
+            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
         </td>
     </tr>
 </table><br />
@@ -56,31 +56,31 @@
             Operations
         </th>
     </tr>
-    <pnt:loop name="blocks">
+    <xar:loop name="blocks">
     <tr align="center">
         <td>
-            <a href="&pnt-modurl-blocks-admin-modify_group;&gid=&pnt-var-group_id;">&pnt-var-group_name;</a>
+            <a href="&xar-modurl-blocks-admin-modify_group;&gid=&xar-var-group_id;">&xar-var-group_name;</a>
         </td>
         <td>
-            <pnt:var name="title" />
+            <xar:var name="title" />
         </td>
         <td>
-            <a href="&pnt-modurl-blocks-admin-view_types;"><pnt:var name="module" />\<pnt:var name="type" /></a>
+            <a href="&xar-modurl-blocks-admin-view_types;"><xar:var name="module" />\<xar:var name="type" /></a>
         </td>
         <td>
-            <pnt:if condition="$template neq NULL">
-                <pnt:var name="template" />
-            <pnt:else />
-                <pnt:var name="group_template" />
-            </pnt:if>
+            <xar:if condition="$template neq NULL">
+                <xar:var name="template" />
+            <xar:else />
+                <xar:var name="group_template" />
+            </xar:if>
         </td>
         <td>
-            <pnt:var name="state_desc" />
+            <xar:var name="state_desc" />
         </td>
         <td>
-            <a href="&pnt-modurl-blocks-admin-modify_instance;&bid=&pnt-var-id;">Edit</a> |
-            <a href="&pnt-modurl-blocks-admin-delete_instance;&bid=&pnt-var-id;">Delete</a>
+            <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-id;">Edit</a> |
+            <a href="&xar-modurl-blocks-admin-delete_instance;&bid=&xar-var-id;">Delete</a>
         </td>
     </tr>
-    </pnt:loop>
+    </xar:loop>
 </table>
