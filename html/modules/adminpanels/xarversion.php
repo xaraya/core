@@ -1,6 +1,12 @@
 <?php
-// $Id$
+// File: $Id$
+// ----------------------------------------------------------------------
+// Xaraya eXtensible Management System
+// Copyright (C) 2002 by the Xaraya Development Team.
+// http://www.xaraya.org
+// ----------------------------------------------------------------------
 $modversion['name'] = 'Administration';
+$modversion['description'] = 'Displays the Adminstration Area in a user friendly block format';
 $modversion['id'] = '9';
 $modversion['version'] = '2.0';
 $modversion['official'] = 1;
