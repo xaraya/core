@@ -25,10 +25,11 @@
  * with which the protocol is chosed
  *
  * Entry points for client:
- * XMLRPC   : http://host.com/ws.php?type=xmlrpc
- * SOAP     : http://host.com/ws.php?type=soap
- * TRACKBACK: http://host.com/ws.php?type=trackback (Is this still right?)
- * WEBDAV   : http://host.com/ws.php?type=webdav
+ * XMLRPC        : http://host.com/ws.php?type=xmlrpc
+ * SOAP          : http://host.com/ws.php?type=soap
+ * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
+ * WEBDAV        : http://host.com/ws.php?type=webdav
+ * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
  */
 
 
@@ -140,6 +141,13 @@ function xarWebservicesMain()
             $server->ServeRequest();
         }
         break;
+  	case 'flashremoting' :
+	   	  include "./modules/flashservices/classes/app/Gateway.php";
+	      $gateway = new Gateway();
+    	  $gateway->setBaseClassPath("./modules/flashservices/services/");
+    	  $gateway->service();
+		    break; 
+
     default:
         if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
             // FIXME: for now wsdl description is in soapserver module
@@ -151,7 +159,8 @@ function xarWebservicesMain()
 <a href="ws.php?type=xmlrpc">XML-RPC Interface</a><br />
 <a href="ws.php?type=trackback">Trackback Interface</a><br />
 <a href="ws.php?type=soap">SOAP Interface</a><br/>
-<a href="ws.php?type=webdav">WebDAV Interface</a>';
+<a href="ws.php?type=webdav">WebDAV Interface</a><br/>
+<a href="ws.php?type=flashremoting">FLASHREMOTING Interface</a>';
         }
     }
 }
