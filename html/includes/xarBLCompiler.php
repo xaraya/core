@@ -1099,14 +1099,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             include_once($entityFile);
         }
         $node =& new $entityClass($parser,'EntityNode');
-
-        if (isset($node)) {
-            $node->entityType = $entityType;
-            $node->parameters = $parameters;
-            return $node;
-        }
-        $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'.", $parser);
-        return;
+        return $node;
     }
 
     function createTplInstructionNode($instruction, &$parser)
@@ -1404,10 +1397,17 @@ class xarTpl__EntityNode extends xarTpl__Node
     var $entityType;
     var $parameters;
     
+    function xarTpl__EntityNode(&$parser, $tagName, $entityType, $parameters) 
+    {
+        parent::constructor($parser, $tagName);
+        $this->entityType = $entityType;
+        $this->parameters = $parameters;
+    }
+    
     function isPHPCode()
-   {
+    {
         return true;
-   }
+    }
 }
 
 /**
