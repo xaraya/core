@@ -179,8 +179,6 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 }
                 break;
 
-            case 'passthru' :
-            case 'val' :
                 // Assume an unrecognised option refers to an alternative validation
                 // type, making 'passthru' redundant. Doing it this way simplifies the
                 // validation, so fetching a string 'str:1:20' can be trimmed by adding
@@ -189,6 +187,8 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 // be treating it as the passthru validation type.
             default:
                 array_unshift($parameters, $param);
+            case 'passthru' :
+            case 'val' :
                 if (!empty($parameters)) {
                     // Roll up the remaining parameters.
                     $validation = implode(':', $parameters);
