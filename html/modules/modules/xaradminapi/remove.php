@@ -14,7 +14,7 @@ function modules_adminapi_remove($args)
     extract($args);
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+	if(!xarSecurityCheck('AdminModules')) return;
 
     // Remove variables and module
     list($dbconn) = xarDBGetConn();
@@ -32,54 +32,42 @@ function modules_adminapi_remove($args)
         return;
     }
 */
-    // If the files have been removed, the module will now also be removed from the db
-    if ($modinfo['state'] == XARMOD_STATE_MISSING) {
-        $query = "DELETE FROM $tables[modules]
-                  WHERE xar_regid = '" . xarVarPrepForStore($modinfo['regid']) . "'";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-    $query = "DELETE FROM $tables[system/module_states]
-              WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
+    // Module deletion function
+    if (!xarModAPIFunc('modules',
+                       'admin',
+                       'executeinitfunction',
+                       array('regid'    => $regid,
+                             'function' => 'delete'))) {
+        //Raise an Exception
+        return;
     }
-    else {
-        // Module deletion function
-        if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
-                           array('regid'    => $regid,
-                                 'function' => 'delete'))) {
-            //Raise an Exception
-            return;
-        }
 
-        // Delete any module variables that the module cleanup function might
-        // have missed
-        xarModDelAllVars($modinfo['name']);
+    // Delete any module variables that the module cleanup function might
+    // have missed
+    xarModDelAllVars($modinfo['name']);
 
-        // TODO: do the same for create hooks somewhere (on initialise ?)
+    // TODO: do the same for create hooks somewhere (on initialise ?)
 
-        // Call any 'category' delete hooks assigned for that module
-        // (notice we're using the module name as object id, and adding an
-        // extra parameter telling xarModCallHooks for *which* module we're
-        // calling hooks here)
-        xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
+    // Call any 'category' delete hooks assigned for that module
+    // (notice we're using the module name as object id, and adding an
+    // extra parameter telling xarModCallHooks for *which* module we're
+    // calling hooks here)
+    xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
-        // Delete any hooks assigned for that module, or by that module
-        $query = "DELETE FROM $tables[hooks]
-                  WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'
-                     OR xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
+    // Delete any hooks assigned for that module, or by that module
+    $sql = "DELETE FROM $tables[hooks]
+              WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'
+                 OR xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
+    $result =& $dbconn->Execute($sql);
+    if (!$result) return;
 
-        // Update state of module
-        $res = xarModAPIFunc('modules',
-                            'admin',
-                            'setstate',
-                            array('regid' => $regid,
-                                  'state' => XARMOD_STATE_UNINITIALISED));
-    }
+    // Update state of module
+    $res = xarModAPIFunc('modules',
+                        'admin',
+                        'setstate',
+                        array('regid' => $regid,
+                              'state' => XARMOD_STATE_UNINITIALISED));
+
     return true;
 }
 

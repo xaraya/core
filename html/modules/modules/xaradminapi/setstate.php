@@ -23,7 +23,7 @@ function modules_adminapi_setstate($args)
     }
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+	if(!xarSecurityCheck('AdminModules')) return;
 
     // Clear cache to make sure we get newest values
     if (xarVarIsCached('Mod.Infos', $regid)) {
@@ -41,27 +41,22 @@ function modules_adminapi_setstate($args)
     // Check valid state transition
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:
-
-            if ($oldState == XARMOD_STATE_MISSING) break;
-            if ($oldState != XARMOD_STATE_INACTIVE) {
-                // New Module
-                $module_statesTable = $xartable['system/module_states'];
-                $query = "SELECT * FROM $module_statesTable WHERE xar_regid = $regid";
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-                if ($result->EOF) {
-                    $query = "INSERT INTO $module_statesTable
-                       (xar_regid,
-                        xar_state)
-                        VALUES
-                        ('" . xarVarPrepForStore($regid) . "',
-                         '" . xarVarPrepForStore($state) . "')";
-
-                    $result =& $dbconn->Execute($query);
-                    if (!$result) return;
-                }
-                return true;
-            }
+	
+			if ($oldState != XARMOD_STATE_INACTIVE) {
+	            // New Module
+	            $module_statesTable = $xartable['system/module_states'];
+	            $sql = "INSERT INTO $module_statesTable
+    	           (xar_regid,
+        	        xar_state)
+            	    VALUES
+	                ('" . xarVarPrepForStore($regid) . "',
+    	             '" . xarVarPrepForStore($state) . "')";
+	
+    	        $result =& $dbconn->Execute($sql);
+        	    if (!$result) return;
+	
+	            return true;
+			}
 
             break;
         case XARMOD_STATE_INACTIVE:
@@ -93,10 +88,10 @@ function modules_adminapi_setstate($args)
         $module_statesTable = $xartable['site/module_states'];
     }
 
-    $query = "UPDATE $module_statesTable
-              SET xar_state = " . xarVarPrepForStore($state) . "
-              WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result =& $dbconn->Execute($query);
+    $sql = "UPDATE $module_statesTable
+            SET xar_state = " . xarVarPrepForStore($state) . "
+            WHERE xar_regid = " . xarVarPrepForStore($regid);
+    $result =& $dbconn->Execute($sql);
 
     if (!$result) {return;}
 
