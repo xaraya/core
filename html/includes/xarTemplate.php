@@ -598,7 +598,7 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
  * @param integer $pageBlockSize number of pages to display at once (default=10)
  * @param integer $template alternative template name within base/user (default 'pager')
  */
-function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlockSize = 10, $template = 'pager')
+function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlockSize = 10, $template = 'default')
 {
     // Sanity check on perpage to prevent infinite loops
     if($perpage < 1) {$perpage = 10;}
@@ -647,7 +647,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
         xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
     }
 
-    return trim(xarTplModule('base', 'user', $template, $data));
+    return trim(xarTplModule('base', 'pager', $template, $data));
 }
 
 /**
