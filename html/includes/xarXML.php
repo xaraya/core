@@ -68,6 +68,16 @@ if(!defined('XML_LOCAL_NAMESPACE'))  define('XML_LOCAL_NAMESPACE' , 2);
 // Miscellaneous
 define('XARXML_BLOCKREAD_SIZE',4096);
 
+// Handler states
+define('XARXML_HSTATE_INITIAL'          , 0);
+define('XARXML_HSTATE_NORMAL'           , 1);
+define('XARXML_HSTATE_DTDNAME_EXPECTED' , 2);
+define('XARXML_HSTATE_WAITCONDOPEN'     , 4);
+define('XARXML_HSTATE_DTDCLOSE_EXPECTED', 8);
+define('XARXML_HSTATE_DTDGATHERING'     ,16);
+
+define('XARXML_DTD_TRACE',false);
+define('XARXML_DTD_GUESSROOT',false);
 
 
 /**
@@ -290,7 +300,8 @@ class xarXmlHandler
     var $_tree = array();
     var $_depth = 1;
     var $_nsregister=array();
-
+    var $_state = XARXML_HSTATE_INITIAL;
+    var $_dtd_data ='';
     /** 
      * We need a base for resolving entities when they are not 
      * specified relatively. On creation of the handler this can have a number of values
@@ -303,26 +314,80 @@ class xarXmlHandler
     /**
      * The default handler catches everything which is not handled by others
      *
-     * The <?xml tag is catched by this handler, as opposed to for 
-     * example <?php which are handled by the proces_instruction handler
-     *
      * @param object $parser the parser to which the handler is attached
      * @param string $data   string data found in the construct
      */
     function default_handler($parser, $data) 
     {
-        if( trim($data) ) {
-            //echo "$data\n";
-            // get the attributes
-            preg_match_all('/ (\w+=".+")/U', $data, $matches);
-            foreach($matches[1] as $match) {
-                list($attribute_name, $attribute_value) = (explode('=',$match));
-                $attribute_value = str_replace('"','',$attribute_value);
-                $this->_tree[0]['type'] = XML_DOCUMENT_NODE;
-                $this->_tree[0]['attributes'][$attribute_name] = $attribute_value;
+        if(!trim($data)) return true; // nothing to do here
+        
+        // Subminiparser to extract the DOCTYPE
+        //echo "$data\n";
+        switch($this->_state) {
+        case XARXML_STATE_INITIAL:
+            // First thing we should get is <?xml, if not still add the doc node
+            $this->_tree[0]['type'] = XML_DOCUMENT_NODE;
+            $this->_tree[0]['name'] = '#document';
+            if(substr($data,0,5) == '<?xml') {
+                // get the attributes
+                preg_match_all('/ (\w+=".+")/U', $data, $matches);
+                foreach($matches[1] as $match) {
+                    list($attribute_name, $attribute_value) = (explode('=',$match));
+                    $attribute_value = str_replace('"','',$attribute_value);
+                    $this->_tree[0]['attributes'][$attribute_name] = $attribute_value;
+                }
             }
+            //echo "Got xml declaration!\n";
+            //print_r($this->_tree);
+            $this->_state= XARXML_HSTATE_NORMAL;
+            break;
+        case XARXML_HSTATE_NORMAL:
+            if(trim($data) == '<!DOCTYPE') {
+                //echo "Got doctype !\n";
+                // We expect the next time a name for the doctype
+                $this->_state = XARXML_HSTATE_DTDNAME_EXPECTED;
+            }
+            break;
+        case XARXML_HSTATE_DTDNAME_EXPECTED:
+            //echo "Adding $data as doctype\n";
+            $this->_state = XARXML_HSTATE_WAITCONDOPEN;
+            $this->open_tag($parser,$data,array(),XML_DOCUMENT_TYPE_NODE);
+            //print_r($this->_tree);
+            return true;
+            break;
+        case XARXML_HSTATE_WAITCONDOPEN:
+            if($data=='[') {
+                //echo "Gathering dtd data\n";
+                $this->_state = XARXML_HSTATE_DTDGATHERING;
+            }
+            break;
+        case XARXML_HSTATE_DTDGATHERING:
+            if($data==']') {
+                $this->_state = XARXML_HSTATE_DTDCLOSE_EXPECTED;
+                // For now just add the dtd data as content to the doctype node
+                //echo "Finished dtd gathering, adding $this->_dtd_data as cdata\n";
+                $this->character_data($parser,$this->_dtd_data);
+                //print_r($this->_tree);
+                $this->_dtd_data='';
+            } else {
+                $this->_dtd_data .= " " . $data;
+            }
+            break;
+        case XARXML_HSTATE_DTDCLOSE_EXPECTED:
+            if($data=='>') {
+                //echo "Closing the doctype\n";
+                $this->_state = XARXML_HSTATE_NORMAL;
+                $this->close_tag($parser,'');
+                //print_r($this->_tree);
+                return true;
+            }
+            break;
+
         }
+        return true;
+     
     }
+
 
     /**
      * Character data handler is added as 'data' for the current tag
@@ -350,7 +415,7 @@ class xarXmlHandler
      */
     function open_tag($parser, $tagname, $attribs, $type=XML_ELEMENT_NODE) 
     {
-        // Next line is basiclly the crux of the whole thing, to construct the tree
+        // Next line is basically the crux of the whole thing, to construct the tree
         $this->_tree[$this->_depth] = &$this->_tree[$this->_depth -1]['children'][];
         $this->_tree[$this->_depth]['name']= $tagname;
         $this->_tree[$this->_depth]['type'] = $type;
@@ -416,7 +481,7 @@ class xarXmlHandler
     */
     function external_entity_reference($parser, $entity_names,  $resolve_base, $system_id, $public_id) 
     {
-        
+        //echo "External entity ref handler\n";
         $entity_list = explode(XARXML_ENTITY_SEP,$entity_names);
         $entity = array_pop($entity_list);
         if($system_id) {
@@ -445,6 +510,7 @@ class xarXmlHandler
 
         
         $this->close_tag($parser, $entity);
+        //print_r($this->_tree);
         return true;
     }
 
@@ -510,6 +576,8 @@ class xarXmlHandler
      */
     function _reset() 
     {
+        $this->_dtd_data='';
+        $this->_state = XARXML_HSTATE_INITIAL;
         $this->_tree=array();
         $this->_depth=1;
         $this->_resolve_base=NULL;
