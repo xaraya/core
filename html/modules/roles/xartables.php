@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: John Cox
-// Purpose of file:  Table information for base module
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Purpose of file:  Table information for roles module
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage security
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+*/
 
 function roles_xartables()
 {
@@ -16,11 +19,14 @@ function roles_xartables()
 
     $roles = xarDBGetSiteTablePrefix() . '_roles';
     $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
+
+// FIXME: do you still need those defined here too ?
     $privileges = xarDBGetSiteTablePrefix() . '_privileges';
     $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
     $acl = xarDBGetSiteTablePrefix() . '_security_acl';
     $masks = xarDBGetSiteTablePrefix() . '_security_masks';
     $instances = xarDBGetSiteTablePrefix() . '_instances';
+
     $xartable['users_column'] = array(
         'uid'            => $roles . '.xar_uid',
         'name'           => $roles . '.xar_name',
@@ -32,35 +38,6 @@ function roles_xartables()
         'state'          => $roles . '.xar_state',
         'auth_module'    => $roles . '.xar_auth_module'
      );
-
-    // Get the name for the user data table
-    $user_data  = xarConfigGetVar('prefix') . '_user_data';
-
-    // Set the table name
-    $xartable['user_data'] = $user_data;
-
-    // Set the column names
-    $xartable['user_data_column'] = array(
-        'uda_id'          => $user_data . '.xar_uda_id',
-        'uda_propid'      => $user_data . '.xar_uda_propid',
-        'uda_uid'         => $user_data . '.xar_uda_uid',
-        'uda_value'       => $user_data . '.xar_uda_value'
-    );
-
-    // Get the name for the user property table
-    $user_property  = xarConfigGetVar('prefix') . '_user_property';
-
-    // Set the table name
-    $xartable['user_property'] = $user_property;
-
-    // Set the column names
-    $xartable['user_property_column'] = array(
-        'prop_id'          => $user_property . '.xar_prop_id',
-        'prop_label'       => $user_property . '.xar_prop_label',
-        'prop_dtype'       => $user_property . '.xar_prop_dtype',
-        'prop_default'     => $user_property . '.xar_prop_default',
-        'prop_validation'  => $user_property . '.xar_prop_validation'
-    );
 
     // Get the name for the autolinks item table
     $user_status   = xarConfigGetVar('prefix') . '_user_status';
@@ -79,3 +56,4 @@ function roles_xartables()
     return $xartable;
 }
 
+?>

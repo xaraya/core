@@ -17,14 +17,17 @@
 /**
  * Dynamic User Data types for User Properties
  */
+/* (currently unused)
 define('XARUSER_DUD_TYPE_CORE', 0); // indicates a core field
 define('XARUSER_DUD_TYPE_STRING', 1);
 define('XARUSER_DUD_TYPE_TEXT', 2);
 define('XARUSER_DUD_TYPE_DOUBLE', 4);
 define('XARUSER_DUD_TYPE_INTEGER', 8);
+*/
 
 /**
  * Authentication modules capabilities
+ * (to be revised e.g. to differentiate read & update capability for core & dynamic)
  */
 define('XARUSER_AUTH_AUTHENTICATION', 1);
 define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
@@ -52,8 +55,6 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables = array('roles'            => $systemPrefix . '_roles',
-                    'user_data'        => $systemPrefix . '_user_data',
-                    'user_property'    => $systemPrefix . '_user_property',
                     'realms'           => $systemPrefix . '_security_realms',
                     'rolemembers' => $systemPrefix . '_rolemembers');
 
@@ -134,8 +135,12 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     // Keep a reference to auth module that authenticates successfully
     xarSessionSetVar('authenticationModule', $authModName);
 
+// TODO: re-think dynamic user capabilities of auth* modules for read/update,
+//       and see how they should fit in for different scenarios (master/slave, ...)
+/*
     // Sync core fields that're duplicates in users table
     if (!xarUser__syncUsersTableFields()) return;
+*/
 
     // FIXME: <marco> here we could also set a last_logon timestamp
 
@@ -261,6 +266,11 @@ function xarUserSetNavigationLocale($locale)
  * User variables API functions
  */
 
+/*
+ * Initialise the user object
+ */
+$GLOBALS['xarUser_objectRef'] = null;
+
 /**
  * Get a user variable
  *
@@ -269,7 +279,7 @@ function xarUserSetNavigationLocale($locale)
  * @param name string the name of the variable
  * @param uid integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
- * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
+ * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
  * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
  */
@@ -284,7 +294,6 @@ function xarUserGetVar($name, $userId = NULL)
         $userId = xarSessionGetVar('uid');
     }
     if ($name == 'uid') {
-        // User id for Anonymous is NULL, so we check later for this
         return $userId;
     }
     if ($userId == _XAR_ID_UNREGISTERED) {
@@ -297,42 +306,67 @@ function xarUserGetVar($name, $userId = NULL)
         return;
     }
 
-/* TODO: #1
+    // Don't allow any module to retrieve passwords in this way
+    if ($name == 'pass') {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
+        return;
+    }
+
+/* TODO: #1 - some security check from the roles module needed here
     if ($userId != xarSessionGetVar('uid')) {
         // Security check
-        // Here we use a trick
-        // One user can make private some of its data by creating a permission with ACCESS_NONE as level
-        // The trick is that this permission is applied to other users
-        if (!xarSecAuthAction(0, 'users::Variables', "$name::", ACCESS_READ, $userId)) {
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
-            $msg = xarML('No permission to get value of #(1) user variable for uid #(2).', $name, $userId);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                           new SystemException($msg));
-            return;
-        }
     }
 */
 
     if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
-        // check that $name variable appears in the dynamic user data fields
-        $infos = xarUser__getUserVarInfo($name);
-        if (!isset($infos)) {
-        // TODO: #2
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION &&
-                xarExceptionId() == 'VARIABLE_NOT_REGISTERED') {
-                xarVarSetCached('User.Variables.'.$userId, $name, false);
-                // Here we can't raise an exception
-                // so what we can do here is only to log the exception
-                // and call xarExceptionFree
-                xarLogException(XARLOG_LEVEL_ERROR);
-                xarExceptionFree();
+
+        if ($name == 'name' || $name == 'uname' || $name == 'email') {
+            // retrieve the item from the roles module
+            $userRole = xarModAPIFunc('roles',
+                                      'user',
+                                      'get',
+                                       array('uid' => $userId)); 
+
+            if (empty($userRole) || $userRole['uid'] != $userId) {
+                $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
             }
-            // Of sure got an exception
-            return; // throw back
+
+            xarVarSetCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
+            xarVarSetCached('User.Variables.'.$userId, 'name', $userRole['name']);
+            xarVarSetCached('User.Variables.'.$userId, 'email', $userRole['email']);
+
+        } elseif (!xarUser__isVarDefined($name)) {
+            xarVarSetCached('User.Variables.'.$userId, $name, false);
+            // Here we can't raise an exception (why was that again ?)
+            $msg = xarML('User variable #(1) was not correctly registered', $name);
+            xarLogMessage($msg, XARLOG_LEVEL_ERROR);
+            return;
+
+        } else {
+            // retrieve the user item
+            $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
+            if (empty($itemid) || $itemid != $userId) {
+                $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+                return;
+            }
+
+            // save the properties
+            $properties =& $GLOBALS['xarUser_objectRef']->getProperties();
+            foreach (array_keys($properties) as $key) {
+                if (isset($properties[$key]->value)) {
+                    xarVarSetCached('User.Variables.'.$userId, $key, $properties[$key]->value);
+                }
+            }
         }
-        extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
+
+/*
+    // TODO: re-think dynamic user capabilities of auth* modules for read/update,
+    //       and see how they should fit in for different scenarios (master/slave, ...)
 
         $authModName = xarUser__getAuthModule($userId);
         if (!isset($authModName)) return; // throw back
@@ -385,6 +419,7 @@ function xarUserGetVar($name, $userId = NULL)
         }
 
         xarVarSetCached('User.Variables.'.$userId, $name, $value);
+*/
     }
 
     if (!xarVarIsCached('User.Variables.'.$userId, $name)) {
@@ -410,7 +445,7 @@ function xarUserGetVar($name, $userId = NULL)
  * @param value ??? the value of the variable
  * @param userId integer user's ID
  * @return bool true if the set was successful, false if validation fails
- * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
+ * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
  */
 function xarUserSetVar($name, $value, $userId = NULL)
 {
@@ -419,7 +454,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
-    if ($name == 'uid' || $name == 'authenticationModule') {
+    if ($name == 'uid' || $name == 'authenticationModule' || $name == 'pass') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
@@ -431,46 +466,50 @@ function xarUserSetVar($name, $value, $userId = NULL)
         // Anonymous user
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
     }
-    /*
-    Disabled for now!
+
+/* TODO: #1 - some security check from the roles module needed here
     if ($userId != xarSessionGetVar('uid')) {
-        // If you want to set a variable owned by another user
-        // you must have ACCESS_EDIT permission
         // Security check
-        if (!xarSecAuthAction(0, 'users::Variables', "$name::", ACCESS_EDIT)) {
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
-            $msg = xarML('No permission to set value of #(1) user variable for uid #(2).', $name, $userId);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                           new SystemException($msg));
+    }
+*/
+
+    if ($name == 'name' || $name == 'uname' || $name == 'email') {
+    // TODO: replace with some roles API
+        xarUser__setUsersTableUserVar($name, $value, $userId);
+
+    } elseif (!xarUser__isVarDefined($name)) {
+        xarVarSetCached('User.Variables.'.$userId, $name, false);
+        $msg = xarML('User variable #(1) was not correctly registered', $name);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+                       new SystemException($msg));
+        return;
+
+    } else {
+        // retrieve the user item
+        $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
+        if (empty($itemid) || $itemid != $userId) {
+            $msg = xarML('User identified by uid #(1) doesn\'t exist.', $userId);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
         }
-    }
-    */
 
-
-    // check that $name variable appears in the dynamic user data fields
-    $infos = xarUser__getUserVarInfo($name);
-    if (!isset($infos)) return; // throw back
-
-    extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
-
-    // FIXME: <marco> Do we want this?
-    /*
-    if ($value == $prop_default) {
-        // Avoid duplicating default value into database
-        return true;
-    }
-    */
-
-    if (!xarUserValidateVar($name, $value)) {
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return; // throw back
+        // check if we need to update the item
+        if ($value != $GLOBALS['xarUser_objectRef']->properties[$name]->value) {
+            // validate the new value
+            if (!$GLOBALS['xarUser_objectRef']->properties[$name]->validateValue($value)) {
+                return false;
+            }
+            // update the item
+            $itemid = $GLOBALS['xarUser_objectRef']->updateItem(array($name => $value));
+            if (!isset($itemid)) return; // throw back
         }
-        // Validation failed
-        return false;
+
     }
+
+/*
+    // TODO: re-think dynamic user capabilities of auth* modules for read/update,
+    //       and see how they should fit in for different scenarios (master/slave, ...)
 
     if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
         // Keep in sync core fields
@@ -514,54 +553,10 @@ function xarUserSetVar($name, $value, $userId = NULL)
         return;
     }
 
+*/
+
     // Keep in sync the UserVariables cache
     xarVarSetCached('User.Variables.'.$userId, $name, $value);
-
-    return true;
-}
-
-/**
- * Validate a user variable
- *
- * @since 1.60 - 2002/05/02
- * @author Marco Canini
- * @param name user variable name
- * @param value value to be validated
- * @return bool true when validation was successfully accomplished, false otherwise
- * @raise ID_NOT_EXIST, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, UNKNOWN
- */
-function xarUserValidateVar($name, $value)
-{
-    if (xarVarIsCached('User.Variables.Validated', $name) &&
-        xarVarGetCached('User.Variables.Validated', $name) == $value) {
-        return true;
-    }
-
-    // check that $name variable appears in the dynamic user data fields
-    $infos = xarUser__getUserVarInfo($name);
-    if (!isset($infos)) {
-        // Of sure got an exception
-        return; // throw back
-    }
-    extract($infos); // $prop_id, $prop_dtype, $prop_default, $prop_validation
-
-    if (isset($prop_validation)) {
-        switch ($prop_dtype) {
-            case XARUSER_DUD_TYPE_DOUBLE:
-                $value = (float) $value;
-                break;
-            case XARUSER_DUD_TYPE_INTEGER:
-                $value = (int) $value;
-                break;
-        }
-
-        // Do validation
-        $res = xarUser__validationApply($prop_validation, $value);
-        if (!isset($res)) return; // throw back
-        if (!$res) return false; // Validation failed
-    }
-
-    xarVarSetCached('User.Variables.Validated', $name, $value);
 
     return true;
 }
@@ -575,6 +570,13 @@ function xarUserValidateVar($name, $value)
  */
 function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
 {
+    $md5pass = md5($givenPassword);
+    if (strcmp($md5pass, $realPassword) == 0)
+        return $md5pass;
+
+// TODO: re-evaluate whether we want to keep this, e.g. for PAM/external DB/... authentication
+//       If so, we'll need an updateUserPass() function again somewhere
+/*
     $compare2crypt = true;
     $compare2text = true;
 
@@ -597,6 +599,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
              updateUserPass($userName, $md5pass);
              return $md5pass;
     }
+*/
 
     return false;
 }
@@ -622,6 +625,8 @@ function xarUser__getAuthModule($userId)
             return $authModName;
         }
     }
+
+// TODO: replace with some roles API ?
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -655,120 +660,26 @@ function xarUser__getAuthModule($userId)
 
 /*
  * @access private
- * @raise DATABASE_ERROR, ID_NOT_EXIST
+ * @returns bool
+ * @return true if the variable is defined
  */
-function xarUser__getUserVarInfo($name)
+function xarUser__isVarDefined($name)
 {
-    $xartable = xarDBGetTables();
-
-    $rolestable = $xartable['roles'];
-
-    // Core fields aren't handled with Dynamic User Data
-    if ($name == 'name' || $name == 'uname' ||
-        $name == 'email' || $name == 'url') {
-        // You're asking metainfo for a core field
-        // We can safely return a default value
-        // prop_id = 0 means variable won't go in user_data table
-        return array('prop_id' => 0, 'prop_dtype' => XARUSER_DUD_TYPE_CORE);
-    }
-
-    if (!xarVarIsCached('User.Variables.Info', $name)) {
-        xarVarSetCached('User.Variables.Info', $name, false); // If at the end of operations it still
-                                                             // be false we're sure that the property
-                                                             // was searched but not found
-
-        list($dbconn) = xarDBGetConn();
-
-        $propertiestable = $xartable['user_property'];
-
-        if (($ind = strpos($name, '_')) > 0) {
-            // Here we do a pre-caching
-            $name_prefix = substr($name, 0, $ind + 1);
-            // Select all user vars that begins with $name_prefix
-            $query = "SELECT xar_prop_id,
-                             xar_prop_label,
-                             xar_prop_dtype,
-                             xar_prop_default,
-                             xar_prop_validation
-                             FROM $propertiestable
-                             WHERE xar_prop_label LIKE '" . xarVarPrepForStore($name_prefix) ."%%'";
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
-
-            while (!$result->EOF) {
-                list($prop_id, $prop_label, $prop_dtype, $prop_default, $prop_validation) = $result->fields;
-
-                $info['prop_id'] = (int) $prop_id;
-                $info['prop_dtype'] = (int) $prop_dtype;
-                if (isset($prop_default)) {
-                    switch($info['prop_dtype']) {
-                        case XARUSER_DUD_TYPE_STRING:
-                        case XARUSER_DUD_TYPE_TEXT:
-                            $info['prop_default'] = $prop_default;
-                            break;
-                        case XARUSER_DUD_TYPE_DOUBLE:
-                            $info['prop_default'] = (float) $prop_default;
-                            break;
-                        case XARUSER_DUD_TYPE_INTEGER:
-                            $info['prop_default'] = (int) $prop_default;
-                            break;
-                    }
-                }
-                $info['prop_validation'] = $prop_validation;
-                // Cache info
-                xarVarSetCached('User.Variables.Info', $prop_label, $info);
-
-                $result->MoveNext();
-            }
-
-            $result->Close();
-        } else {
-            // Confirm that this is a known value
-            $query = "SELECT xar_prop_id,
-                      xar_prop_dtype,
-                      xar_prop_default,
-                      xar_prop_validation
-                      FROM $propertiestable
-                      WHERE xar_prop_label = '" . xarVarPrepForStore($name) ."'";
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
-
-            if (!$result->EOF) {
-                list($prop_id, $prop_dtype, $prop_default, $prop_validation) = $result->fields;
-
-                $info['prop_id'] = (int) $prop_id;
-                $info['prop_dtype'] = (int) $prop_dtype;
-                if (isset($prop_default)) {
-                    switch($info['prop_dtype']) {
-                        case XARUSER_DUD_TYPE_STRING:
-                        case XARUSER_DUD_TYPE_TEXT:
-                        $info['prop_default'] = $prop_default;
-                        break;
-                        case XARUSER_DUD_TYPE_DOUBLE:
-                        $info['prop_default'] = (float) $prop_default;
-                        break;
-                        case XARUSER_DUD_TYPE_INTEGER:
-                        $info['prop_default'] = (int) $prop_default;
-                        break;
-                    }
-                }
-                $info['prop_validation'] = $prop_validation;
-                // Cache info
-                xarVarSetCached('User.Variables.Info', $name, $info);
-
-                $result->Close();
-            }
+    // Retrieve the dynamic user object if necessary
+    if (!isset($GLOBALS['xarUser_objectRef']) && xarModIsHooked('dynamicdata','roles')) {
+        $GLOBALS['xarUser_objectRef'] =& xarModAPIFunc('dynamicdata', 'user', 'getobject',
+                                                       array('module' => 'roles'));
+        if (empty($GLOBALS['xarUser_objectRef']) || empty($GLOBALS['xarUser_objectRef']->objectid)) {
+            $GLOBALS['xarUser_objectRef'] = false;
         }
     }
 
-    $info = xarVarGetCached('User.Variables.Info', $name);
-    if ($info == false) {
-        $msg = xarML('Metadata for user variable #(1) are not correctly registered in database.', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
-                       new SystemException($msg));
-        return;
+    // Check if this property is defined for the dynamic user object
+    if (empty($GLOBALS['xarUser_objectRef']) || empty($GLOBALS['xarUser_objectRef']->properties[$name])) {
+        return false;
     }
-    return $info;
+
+    return true;
 }
 
 /*
@@ -782,6 +693,8 @@ function xarUser__syncUsersTableFields()
     $userId = xarSessionGetVar('uid');
     assert('$userId != _XAR_ID_UNREGISTERED');
 
+// TODO: configurable one- or two-way re-synchronisation of core + dynamic fields ?
+
     $authModName = xarUser__getAuthModule($userId);
     if (!isset($authModName)) return; // throw back
     if ($authModName == 'authsystem') return true; // Already synced
@@ -790,6 +703,8 @@ function xarUser__syncUsersTableFields()
                          array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
     if (!isset($res)) return; // throw back
     if ($res == false) return true; // Impossible to go out of sync
+
+// TODO: improve multi-update operations
 
     $name = xarUserGetVar('name');
     if (!isset($name)) return; // throw back
@@ -815,6 +730,9 @@ function xarUser__syncUsersTableFields()
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {
+
+// TODO: replace with some roles API ?
+
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
@@ -831,228 +749,4 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     return true;
 }
 
-/**
- * Validation stuff
- */
-
-
-// validation_string := validator_list
-// validator_list := validator | validator + '&' + validator_list
-// validator := ['!' +] type + ':' + operator + ':' + param
-
-/*
- * type can be one of these values:    num
- *                                     string
- *                                     stringlen
- *                                     func
- * operator is type-sensitive
- * valid operators for num type are:      ==, !=, <, >, <=, >=
- * valid operators for string type are:   is, contains, starts, ends, regex
- * valid operators for stringlen are the same as num type.
- * there's only one valid operator for func type: it's a string composed from Modname + ',' + Funcname
- */
-
-/**
- * @access private
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, UNKNOWN
- */
-function xarUser__validationApply($validation, $valueToCheck)
-{
-    // TODO: set a ML errmsg on failure
-
-    // Syntax trees of parsed validation strings are cached
-    if (!xarVarIsCached('User.Variables.Validators', $validation)) {
-        $val_stack = xarUser__validationParse($validation);
-        if (!isset($val_stack)) {
-            return;
-        }
-        xarVarSetCached('User.Variables.Validators', $validation, $val_stack);
-    }
-    $val_stack = xarVarGetCached('User.Variables.Validators', $validation);
-
-    foreach($val_stack as $val_entry) {
-        $res = false;
-        // Easy trick to use less code
-        if ($val_entry->type == 'stringlen') {
-            $val_entry->type = 'num';
-            $value = strlen($valueToCheck);
-        } else {
-            $value = $valueToCheck;
-        }
-
-        if ($val_entry->type == 'num') {
-            if (!is_numeric($value)) {
-                $value = (strpos($value, '.') !== false) ? (float) $val_entry->param : (int) $val_entry->param;
-            }
-            $param = (strpos($val_entry->param, '.') !== false) ? (float) $val_entry->param : (int) $val_entry->param;
-            if ($val_entry->operator == '==') {
-                $res = ($value == $param) ? true : false;
-            } elseif ($val_entry->operator == '!=') {
-                $res = ($value != $param) ? true : false;
-            } elseif ($val_entry->operator == '<') {
-                $res = ($value < $param) ? true : false;
-            } elseif ($val_entry->operator == '>') {
-                $res = ($value > $param) ? true : false;
-            } elseif ($val_entry->operator == '<=') {
-                $res = ($value <= $param) ? true : false;
-            } elseif ($val_entry->operator == '>=') {
-                $res = ($value >= $param) ? true : false;
-            } else {
-                $msg = xarML('Invalid operator \'#(1)\' for type \'num\'.', $val_entry->operator);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-                return;
-            }
-        } elseif ($val_entry->type == 'string') {
-            $param = $val_entry->param;
-            if ($val_entry->operator == 'is') {
-                $res = (strcmp($value, $param) == 0) ? true : false;
-            } elseif ($val_entry->operator == 'contains') {
-                $res = (strpos($value, $param) !== false) ? true : false;
-            } elseif ($val_entry->operator == 'starts') {
-                if (preg_match("/^$param/", $value)) {
-                    $res = true;
-                }
-            } elseif ($val_entry->operator == 'ends') {
-                if (preg_match("/$param\$/", $value)) {
-                    $res = true;
-                }
-            } elseif ($val_entry->operator == 'like') {
-                // FIXME: How to implement this?
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_IMPLEMENTED',
-                               new SystemException(__FILE__.'('.__LINE__."): Operator like isn't implemented."));
-                return;
-            } elseif ($val_entry->operator == 'regex') {
-                if (substr($param, 0, 1) != '/') {
-                    $param = "/$param/";
-                }
-                if (preg_match($param, $value)) {
-                    $res = true;
-                }
-            } else {
-                $msg = xarML('Invalid operator \'#(1)\' for type \'string\'.', $val_entry->operator);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-                return;
-            }
-        } elseif ($val_entry->type == 'func') {
-            list($modname, $funcname) = explode(',', $val_entry->param);
-
-            // Load module
-            $res = xarModAPILoad($modname, 'user');
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
-
-            $args = array('value' => $value);
-            if ($val_entry->param != 'none') {
-                $args['param'] = $val_entry->param;
-            }
-
-            // Call module API function
-            $res = xarModAPIFunc($modname, 'user', $funcname, $args);
-            if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back
-            }
-        } else {
-            $msg = xarML('Invalid type \'#(1)\'.', $val_entry->type);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
-        }
-
-        // Negation
-        if ($val_entry->negation == true) {
-            $res = !$res;
-        }
-        // If at least one check fails return false
-        if ($res == false) {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Simple data structure used by validation stuff
-/**
- *
- *
- * @package user
- */
-class xarUser__ValEntry
-{
-    var $negation = false;
-    var $type;
-    var $operator;
-    var $param;
-}
-
-/**
- * @access private
- */
-function xarUser__validationExplodeEsc($delimiter, $str)
-{
-    $ind = strpos($str, "\\$delimiter");
-    if ($ind === false) {
-        return explode($delimiter, $str);
-    }
-    $chunks = array();
-    $ind = strpos($str, $delimiter);
-    if ($ind === false) {
-        return $str;
-    }
-    $last_ind = -1;
-    while ($ind !== false) {
-        if ($ind > 0 && substr($str, $ind - 1, 1) != "\\") {
-            $chunk = substr($str, $last_ind + 1, $ind - $last_ind - 1);
-            $chunk = str_replace("\\$delimiter", $delimiter, $chunk);
-            $chunks[] = $chunk;
-            $last_ind = $ind;
-        }
-        $ind = strpos($str, $delimiter, $ind + 1);
-    }
-    $chunk = substr($str, $last_ind + 1);
-    $chunk = str_replace("\\$delimiter", $delimiter, $chunk);
-    $chunks[] = $chunk;
-
-    return $chunks;
-}
-
-/**
- * @access private
- * @returns array
- * @return validation string parsed tree or void on failure
- * @raise UNKNOWN
- */
-function xarUser__validationParse($validationString)
-{
-    $val_stack = array();
-
-    $validator_list = xarUser__validationExplodeEsc('&', $validationString);
-
-    foreach($validator_list as $validator_string) {
-        $val_entry = new xarUser__ValEntry();
-
-        $validator = xarUser__validationExplodeEsc(':', $validator_string);
-
-        if (count($validator) != 3) {
-            $msg = xarML('Parse failed for validation string: \'#(1)\'.', $validationString);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
-        }
-        if (substr($validator[0], 0, 1) == '!') {
-            // Negation
-            $val_entry->negation = true;
-            $val_entry->type = substr($validator[0], 1);
-        } else {
-            $val_entry->type = $validator[0];
-        }
-        $val_entry->operator = $validator[1];
-        $val_entry->param = $validator[2];
-        // Push the new entry into the stack
-        $val_stack[] = $val_entry;
-    }
-    return $val_stack;
-}
 ?>

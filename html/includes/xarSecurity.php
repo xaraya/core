@@ -420,7 +420,8 @@ function xarRemoveMasks($module)
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
-    $msg = xarML('This call needs to be converted to the Xaraya security system');
+    $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
+                 $testRealm, $testComponent, $testInstance, $testLevel);
     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                     new SystemException($msg));
     return true;

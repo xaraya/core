@@ -424,6 +424,12 @@ class Dynamic_Object extends Dynamic_Object_Master
     function getItem($args = array())
     {
         if (!empty($args['itemid'])) {
+            if ($args['itemid'] != $this->itemid) {
+                // initialise the properties again
+                foreach (array_keys($this->properties) as $name) {
+                    $this->properties[$name]->value = $this->properties[$name]->default;
+                }
+            }
             $this->itemid = $args['itemid'];
         }
         if (empty($this->itemid)) {

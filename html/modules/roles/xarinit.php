@@ -32,8 +32,6 @@ function roles_init()
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['roles'] = $sitePrefix . '_roles';
     $tables['rolemembers'] = $sitePrefix . '_rolemembers';
-    $tables['user_data']     = $sitePrefix . '_user_data';
-    $tables['user_property'] = $sitePrefix . '_user_property';
 
     // prefix_roles
     /*********************************************************************
@@ -99,6 +97,8 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
+// FIXME: why is the unique index on uname still commented out ?
+
 /*    $index = array(
     'name'      => 'i_xar_roles_1',
     'fields'    => array('xar_uname'),
@@ -138,59 +138,6 @@ function roles_init()
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['rolemembers'],$index);
     if (!$dbconn->Execute($query)) return;
-
-    /*********************************************************************
-    * prefix_user_data
-    *********************************************************************/
-    $query = xarDBCreateTable($tables['user_data'],
-                             array('xar_uda_id'     => array('type'        => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0',
-                                                            'increment'   => true,
-                                                            'primary_key' => true),
-                                   'xar_uda_propid' => array('type'        => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0'),
-                                   'xar_uda_uid'    => array('type'        => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0'),
-                                   'xar_uda_value'  => array('type'        => 'blob',
-                                                            'size'        => 'medium',
-                                                            'null'        => 'false')));
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    /*********************************************************************
-    * prefix_user_property
-    *********************************************************************/
-    $query = xarDBCreateTable($tables['user_property'],
-                             array('xar_prop_id'         => array('type'        => 'integer',
-                                                                 'null'        => false,
-                                                                 'default'     => '0',
-                                                                 'increment'   => true,
-                                                                 'primary_key' => true),
-                                   'xar_prop_label'      => array('type'        => 'varchar',
-                                                                 'size'        => 255,
-                                                                 'null'        => false,
-                                                                 'default'     => ''),
-                                   'xar_prop_dtype'      => array('type'        => 'integer',
-                                                                 'null'        => false,
-                                                                 'default'     => NULL),
-                                   'xar_prop_default'    => array('type'        => 'varchar',
-                                                                 'size'        => 255,
-                                                                 'default'     => NULL),
-                                   'xar_prop_validation' => array('type'        => 'varchar',
-                                                                 'size'        => 255,
-                                                                 'default'     => NULL)));
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $query = xarDBCreateIndex($tables['user_property'],
-                             array('name'   => 'i_xar_user_property_1',
-                                   'fields' => array('xar_prop_label'),
-                                   'unique' => 'true'));
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     // Initialisation successful
     return true;
@@ -333,14 +280,6 @@ function roles_delete()
     if (!$dbconn->Execute($query)) return;
 
     $query = xarDBDropTable($tables['rolemembers']);
-    if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
-
-    $query = xarDBDropTable($tables['user_data']);
-    if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
-
-    $query = xarDBDropTable($tables['user_property']);
     if (empty($query)) return; // throw back
     if (!$dbconn->Execute($query)) return;
 
