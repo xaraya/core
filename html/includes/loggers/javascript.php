@@ -27,8 +27,7 @@ class xarLogger_javascript extends xarLogger
     *
     * @access private
     */
-    function getCommonCode() 
-    {
+    function getCommonCode() {
         $header = "<hr size=\\\"1\\\"></hr><span style=\\\"font-face: Verdana,arial; font-size: 10pt;\\\">".
                   date("Y-m-d H:i:s").
                   "</span>";
@@ -50,8 +49,7 @@ class xarLogger_javascript extends xarLogger
     * @access public
     */
 
-    function notify($message, $level)
-    {
+    function notify($message, $level) {
         static $first = true;
 
         if ($first) {
