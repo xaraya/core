@@ -1071,14 +1071,14 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
         // Otherwise we instantiate the right class
         $tagClass ='xarTpl__Xar' .$tagName.'Node';
-        $tagfile = "includes/tagnodes/" .strtolower($tagName) .'.php';
+        $tagfile = "includes/nodes/tags/" .strtolower($tagName) .'.php';
         
         // FIXME: sync the implementation of core / custom tags, handle them the same way
         if(file_exists($tagfile)) {
             include_once($tagfile);
             $node =& new $tagClass($parser, $tagName);
         } else {
-            include_once("includes/tagnodes/other.php");
+            include_once("includes/nodes/tags/other.php");
             $node =& new xarTpl__XarOtherNode($parser, $tagName);
             if(!isset($node->tagobject)) unset($node);
         }
