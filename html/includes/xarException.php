@@ -474,7 +474,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     }
     else {
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
-            $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
+            $module = $GLOBALS['xarRequest_shortURLVariables']['module'];
         // Then check in $_GET
         } elseif (isset($_GET['module'])) {
             $module = $_GET['module'];
