@@ -1163,7 +1163,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if ((!empty($funcName)) && ($funcName != 'main')) {
         $urlArgs[] = "func=$funcName";
     }
-    $urlArgs = join('&', $urlArgs);
+    $urlArgs = join('&amp;', $urlArgs);
 
     $url = "index.php?$urlArgs";
 
@@ -1171,11 +1171,11 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         if (is_array($v)) {
             foreach($v as $l=>$w) {
                 if (isset($w)) {
-                    $url .= "&$k" . "[$l]=$w";
+                    $url .= "&amp;$k" . "[$l]=$w";
                 }
             }
         } elseif (isset($v)) {
-            $url .= "&$k=$v";
+            $url .= "&amp;$k=$v";
         }
     }
 
