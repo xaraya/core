@@ -12,13 +12,13 @@
           <xar:else />
             FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.
           </xar:if>
-          <br />
+          <br /><br />
           <xar:if condition="$systemConfigIsWritable">
             SUCCESS: The installer can write to the configuration file.
           <xar:else />
             FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.
           </xar:if>
-          <br />
+          <br /><br />
           <xar:if condition="$cacheTemplatesIsWritable">
             SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.
           <xar:else />
