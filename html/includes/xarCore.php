@@ -467,7 +467,12 @@ function xarCore_getSystemVar($name)
     }
 
     if (!isset($systemVars[$name])) {
-        xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
+        // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
+        if ($name == 'DB.UseADODBCache') {
+            $systemVars[$name] = false;
+        } else {
+            xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
+        }
     }
 
     xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
