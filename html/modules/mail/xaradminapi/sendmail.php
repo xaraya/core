@@ -128,6 +128,18 @@ function mail_adminapi_sendmail($args)
         if (!isset($usetemplates)) {
             $usetemplates = true;
         }
+        // Check if headers/footers have been configured by the admin
+        $textheadfoot = xarModGetVar('mail', 'textuseheadfoot');
+        if (!empty($textheadfoot)) {
+            $header = xarModGetVar('mail', 'textheader');
+            if (!empty($header)) {
+                $message = $header . $message;
+            }
+            $footer = xarModGetVar('mail', 'textfooter');
+            if (!empty($footer)) {
+                $message .= $footer;
+            }
+        }
 
         // Call private sendmail
         return xarModAPIFunc('mail', 'admin', '_sendmail',
