@@ -118,6 +118,11 @@ function xarModGetVar($modName, $name, $prep = NULL)
         if ($value === '*!*MiSSiNG*!*') {
             return;
         } else {
+            if ($prep == 1){
+                $value = xarVarPrepForDisplay($value);
+            } elseif ($prep == 2){
+                $value = xarVarPrepHTMLDisplay($value);
+            }
             return $value;
         }
     } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
@@ -162,6 +167,8 @@ function xarModGetVar($modName, $name, $prep = NULL)
     
     if ($prep == 1){
         $value = xarVarPrepForDisplay($value);
+    } elseif ($prep == 2){
+        $value = xarVarPrepHTMLDisplay($value);
     }
 
     xarVarSetCached('Mod.Variables.' . $modName, $name, $value);

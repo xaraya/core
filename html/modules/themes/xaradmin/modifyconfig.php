@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is a standard function to modify the configuration parameters of the
  * module
@@ -19,7 +18,7 @@ function themes_admin_modifyconfig()
     $data['themes'] = xarModAPIFunc('themes',
         'admin',
         'getlist', $filter);
-    $data['defaulttheme'] = xarVarPrepForDisplay(xarModGetVar('themes', 'default'));
+    $data['defaulttheme'] = xarModGetVar('themes', 'default', 1);
     $data['defaultthemelabel'] = xarVarPrepForDisplay(xarML('Default Theme:'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
     $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;
@@ -28,5 +27,4 @@ function themes_admin_modifyconfig()
     // everything else happens in Template for now
     return $data;
 } 
-
 ?>
