@@ -424,7 +424,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     if (empty($userId)) {
         $userId = xarSessionGetVar('uid');
     }
-    if ($userId == 0) {
+    if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
     }
@@ -777,7 +777,7 @@ function xarUser__getUserVarInfo($name)
 function xarUser__syncUsersTableFields()
 {
     $userId = xarSessionGetVar('uid');
-    assert('$userId != 0');
+    assert('$userId != _XAR_ID_UNREGISTERED');
 
     $authModName = xarUser__getAuthModule($userId);
     if (!isset($authModName)) return; // throw back
