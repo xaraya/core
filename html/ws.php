@@ -55,7 +55,7 @@ function xarWebservicesMain() {
     case  'xmlrpc':
         // xmlrpc server does automatic processing directly
         $server=false;
-        if (xarModIsAvialable('xmlrpcserver')) {
+        if (xarModIsAvailable('xmlrpcserver')) {
             $server = xarModAPIFunc('webservices','user','initxmlrpcserver');
         }
         if (!$server) {
