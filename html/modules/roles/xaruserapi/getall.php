@@ -15,7 +15,8 @@
  * get all users
  * @param $args['order'] comma-separated list of order items; default 'name'
  * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['group'] comma-separated list of group names or IDs
+ * @param $args['group'] comma-separated list of group names or IDs, or
+ * @param $args['uidlist'] array of user ids
  * @returns array
  * @return array of users, or false on failure
  */
@@ -145,6 +146,10 @@ function roles_userapi_getall($args)
         $query .= ' ' . $selection;
     }
 
+    if (isset($uidlist) && is_array($uidlist) && count($uidlist) > 0) {
+        $query .= ' AND roletab.xar_uid IN (' . join(',',$uidlist) . ') ';
+    }
+
     // Add the order clause.
     if (!empty($order_clause)) {
         $query .= ' ORDER BY ' . implode(', ', $order_clause);
@@ -162,14 +167,25 @@ function roles_userapi_getall($args)
     for (; !$result->EOF; $result->MoveNext()) {
         list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
         if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
-            $roles[] = array(
-                'uid'       => $uid,
-                'uname'     => $uname,
-                'name'      => $name,
-                'email'     => $email,
-                'state'     => $state,
-                'date_reg'  => $date_reg
-            );
+            if (!empty($uidlist)) {
+                $roles[$uid] = array(
+                    'uid'       => $uid,
+                    'uname'     => $uname,
+                    'name'      => $name,
+                    'email'     => $email,
+                    'state'     => $state,
+                    'date_reg'  => $date_reg
+                );
+            } else {
+                $roles[] = array(
+                    'uid'       => $uid,
+                    'uname'     => $uname,
+                    'name'      => $name,
+                    'email'     => $email,
+                    'state'     => $state,
+                    'date_reg'  => $date_reg
+                );
+            }
         }
     }
 
