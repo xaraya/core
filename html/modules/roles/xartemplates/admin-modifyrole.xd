@@ -116,7 +116,12 @@
                   <td>
                       <xar:if condition="$ptype eq 1 and $haschildren">
                         <xar:mlstring>Group</xar:mlstring>
-                    <xar:else />                
+                        <xar:comment>
+                            value should still be there in the form, otherwise validation will fail,
+                            do it with a hidden input now, but this should really be done with readonly attribute
+                        </xar:comment>
+                        <input type="hidden" name="ptype" value="#$ptype#"/>
+                      <xar:else />                
                       <select name="ptype" id="ptype"  tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-roles-admin-modifyrole;';this.form.submit();">
                                 <xar:if condition="$ptype eq 1">
                                    <option value="1" selected="selected">Group</option>
