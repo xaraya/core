@@ -125,7 +125,7 @@ function themes_init()
     $res = &$dbconn->Execute($query);
     if (!$res) return;
 
-    xarModSetVar('themes', 'default', 'installer');
+    xarModSetVar('themes', 'default', 'Xaraya_Classic');
     xarModSetVar('themes', 'selsort', 'nameasc'); 
     // Initialisation successful
     return true;
