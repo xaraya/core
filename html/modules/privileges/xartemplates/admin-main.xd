@@ -1,15 +1,15 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body" style="display:block;">
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
-        <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
+    <div style="border-width: 1px; border-style: solid; border-color: #B3B3B3; padding: 1px;">
+        <div style="float:right;display:block;background-color:#ffffff;padding:10px;">
             <xar:if condition="file_exists('modules/privileges/xarimages/admin.gif')" >
                 <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="96" height="96" />
             <xar:else />
                 <img src="modules/privileges/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
             </xar:if>
         </div>
-        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>What is it?</xar:mlstring>
         </div>
         <br />
@@ -25,7 +25,7 @@
 
 		</div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>How to use it?</xar:mlstring>
         </div>
         <br />
@@ -41,7 +41,7 @@
                 </ul>
         </div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>Included Blocks</xar:mlstring>
         </div>
         <br />
@@ -49,7 +49,7 @@
 			<xar:mlstring>There are no included blocks</xar:mlstring>
         </div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>Included Hooks</xar:mlstring>
         </div>
         <br />
@@ -57,7 +57,7 @@
             <xar:mlstring>There are no included hooks.</xar:mlstring>
         </div>
         <br />
-        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: #B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
             <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
         </div>
     </div>

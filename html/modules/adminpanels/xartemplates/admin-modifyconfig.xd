@@ -1,12 +1,12 @@
 <!-- adminpanels configuration template; file path: modules/adminpanels/xartemplates/admin-modifyconfig.xd -->
 <!--- we are getting rid of formatting tables in this template, and hopefully elsewhere in the future, so we need some custom styles --->
 <style>
-    .adminpanels-float-wrapper {float: left; width: 68%; min-height:28px; color: ##5D5D5D; background-color: ##f5f5f5;line-height: 140%;vertical-align:middle;}
+    .adminpanels-float-wrapper {float: left; width: 68%; min-height:28px; color: #5D5D5D; background-color: #f5f5f5;line-height: 140%;vertical-align:middle;}
     .adminpanels-checkbox-and-label {float: right; width: 59%;font-weight: bold;}
     .adminpanels-leftlabel {margin-right: 61%;text-align:right;font-weight: bold;}
     .adminpanels-other {float: right; width: 59%;line-height: 1.5em;}
-    .adminpanels-note {margin-left: 70%;color: ##CC0000;}
-    .adminpanels-submit {text-align:right;line-height: 1.5em;background-color: ##ffffff;padding:5px;border-top:3px solid ##e1e1e1;}
+    .adminpanels-note {margin-left: 70%;color: #CC0000;}
+    .adminpanels-submit {text-align:right;line-height: 1.5em;background-color: #ffffff;padding:5px;border-top:3px solid #e1e1e1;}
     .adminpanels-clearfooter {clear: both;height:1px;}
     .adminpanels-heightspacer {float: left;height:32px;display:inline;}
 </style> 

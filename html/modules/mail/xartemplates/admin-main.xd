@@ -1,15 +1,15 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
 <div class="xar-mod-body" style="display:block;">
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
-        <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
+    <div style="border-width: 1px; border-style: solid; border-color: #B3B3B3; padding: 1px;">
+        <div style="float:right;display:block;background-color:#ffffff;padding:10px;">
             <xar:if condition="file_exists('modules/mail/xarimages/admin.gif')" >
                 <img src="modules/mail/xarimages/admin.gif" alt="official icon" width="96" height="96" />
             <xar:else />
                 <img src="modules/mail/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
             </xar:if>
         </div>
-        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>What is it?</xar:mlstring>
         </div>
         <br />
@@ -17,7 +17,7 @@
             <xar:mlstring>The mail module controls the ways that your Xaraya system sends mail to users or groups of users.  This module is a utility module and takes information from other modules installed on your Xaraya system and formats the mail for them.  This module at its heart is using the</xar:mlstring> <a href="http://phpmailer.sourceforge.net" target="_BLANK"><xar:mlstring>phpmailer</xar:mlstring></a> <xar:mlstring> classes for processing.  These classes extend Xaraya to allow you to use SMTP, SendMail or the normal PHP Mail functions.</xar:mlstring>
 		</div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>How to use it?</xar:mlstring>
         </div>
         <br />
@@ -26,7 +26,7 @@
             <xar:mlstring>"Modify Configuration".  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.</xar:mlstring>
         </div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>Included Blocks</xar:mlstring>
         </div>
         <br />
@@ -34,7 +34,7 @@
 			<xar:mlstring>The Mail Module has no blocks included at this time.</xar:mlstring>
         </div>
         <br />
-        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
             <xar:mlstring>Included Hooks</xar:mlstring>
         </div>
         <br />
@@ -42,7 +42,7 @@
             <xar:mlstring>The mail hook allows you to send an email to the site admin when something (content, users, etc) is created or deleted.  This can be configured in the modules module.</xar:mlstring>
         </div>
         <br />
-        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: #B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
             <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
         </div>
     </div>

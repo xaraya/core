@@ -3,7 +3,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Themes List</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-themes-admin-settings;">
-        <div style="border: 1px solid ##B3B3B3; padding: 0px;">
+        <div style="border: 1px solid #B3B3B3; padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
             <table width="100%" border="0" cellspacing="0" cellpadding="2">
               <tr>
@@ -73,7 +73,7 @@
         </div>
     </form>
         <!-- the Module List table -->
-        <div style="border: 1px solid ##B3B3B3; padding: 0px 0px 5px 0px;">
+        <div style="border: 1px solid #B3B3B3; padding: 0px 0px 5px 0px;">
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr>
                     <th style="text-align: center;">
@@ -100,16 +100,16 @@
                         <!--- skip the row --->
                     <xar:else />
                         <tr>
-                            <td class="xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-bottom: 1px dotted ##B3B3B3;">
+                            <td class="xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-bottom: 1px dotted #B3B3B3;">
                                 #$displayname#
                             </td>
-                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted ##B3B3B3;">
+                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted #B3B3B3;">
                                 #$version#
                             </td>
-                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted ##B3B3B3;">
+                            <td style="text-align: center;width: 100px;border-bottom: 1px dotted #B3B3B3;">
                                 <xar:mlstring>RSS n/a</xar:mlstring>
                             </td>
-                            <td style="text-align: center;width: 35px;border-bottom: 1px dotted ##B3B3B3;">
+                            <td style="text-align: center;width: 35px;border-bottom: 1px dotted #B3B3B3;">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="info" id="info" value="#$infolabel#" />
                                 <xar:elseif condition="$selstyle eq 'icons'" />
@@ -118,12 +118,12 @@
                                     <a href="#$infourl#"><xar:mlstring>Info</xar:mlstring></a>
                                 </xar:if>
                             </td>
-                            <td style="text-align: right;width: 100px;vertical-align: middle;border-bottom: 1px dotted ##B3B3B3;">
+                            <td style="text-align: right;width: 100px;vertical-align: middle;border-bottom: 1px dotted #B3B3B3;">
                                 <div style="padding-right: 1em;">
                                     #$statelabel#
                                 </div>
                             </td>
-                            <td style="text-align: left;border-bottom: 1px dotted ##B3B3B3;" nowrap="nowrap">
+                            <td style="text-align: left;border-bottom: 1px dotted #B3B3B3;" nowrap="nowrap">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <xar:if condition="$coremod">
                                         <select name="action" id="action" disabled="disabled">
@@ -177,11 +177,11 @@
                 </tr>
             </table>
         </div>
-        <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+        <div class="xar-accent" style="text-align: center; border-width: thin; border-style: solid; border-color: #B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
             <xar:mlstring>You can make your theme loading as default by selecting it in Themes - Modify Config panel</xar:mlstring>
             <xar:if condition="$selstyle eq 'icons'"><br />
                 <!--- need to de-hardcode ---> 
-                <div style="vertical-align: middle; background-color: ##FFFFFF; margin:5px; padding: 3px; border-width: thin; border-style: solid; border-color: ##B3B3B3;">
+                <div style="vertical-align: middle; background-color: #FFFFFF; margin:5px; padding: 3px; border-width: thin; border-style: solid; border-color: #B3B3B3;">
                     <img src="modules/themes/xarimages/set1/disabled.png" alt="disabled" hspace="5" />Disabled
                     <img src="modules/themes/xarimages/set1/activate.png" alt="activate" hspace="5" />Activate
                     <img src="modules/themes/xarimages/set1/deactivate.png" alt="deactivate" hspace="5" />Deactivate
