@@ -3,18 +3,18 @@
 <h2><xar:mlstring>Recent Certified Module Releases</xar:mlstring></h2>
 <xar:if condition="empty($warning)">
 	<xar:if condition="!empty($feedcontent)">
-		<xar:loop name="$feedcontent">
+		<xar:foreach in="$feedcontent" value="$release">
 		<p>
-			<xar:if condition="!empty($loop:item['link'])">
-				&bull;<a href = "#$loop:item['link']#" target = "_BLANK"> #$loop:item['title']# </a>:
+			<xar:if condition="!empty($release['link'])">
+				&bull;<a href="#$release['link']#" target="_BLANK"> #$release['title']# </a>:
 			<xar:else />
-				&bull; <b>#$loop:item['title']#</b>:
+				&bull; <b>#$release['title']#</b>:
 			</xar:if>
-			<xar:if condition="!empty($loop:item['description'])">
-				#$loop:item['description']#
+			<xar:if condition="!empty($release['description'])">
+				#$release['description']#
 			</xar:if>
 		</p>
-		</xar:loop>
+		</xar:foreach>
 	</xar:if>
 <xar:else />
 	#$warning#

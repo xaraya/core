@@ -70,7 +70,7 @@ function modules_admin_hooks()
                                             array('hook' => $curhook));
 
             foreach ($hooklist[$curhook] as $hook => $hookedmods) {
-                $data['hooktypes'][] = array('hooktype' => $hook);
+                $data['hooktypes'][] = $hook;
             }
         } else {
             $data['DetailsLabel'] = xarML('Show Details');
