@@ -665,6 +665,15 @@
      */
     function &Execute($sql,$inputarr=false,$arg3=false)
     {
+        // XARAYA MODIFICATION - START
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            global $xarDebug_sqlCalls;
+            $xarDebug_sqlCalls++;
+            // initialise time to render by proca
+            $lmtime = explode(' ', microtime());
+            $lstarttime = $lmtime[1] + $lmtime[0];
+        }
+        // XARAYA MODIFICATION - END
         if ($this->fnExecute) {
             $fn = $this->fnExecute;
             $fn($this,$sql,$inputarr);
@@ -754,6 +763,15 @@
         } else if ($this->_queryID === true) {
         // return simplified empty recordset for inserts/updates/deletes with lower overhead
             $rs = new ADORecordSet_empty();
+            // XARAYA MODIFICATION - START
+            //  time to render SQL by proca
+            if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+                $lmtime = explode(" ", microtime());
+                $lendtime = $lmtime[1] + $lmtime[0];
+                $ltotaltime = ($lendtime - $lstarttime);
+                xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
+            }
+            // XARAYA MODIFICATION - END
             return $rs;
         }
 
@@ -776,6 +794,15 @@
                     $rs->_numOfRows = 0;
             }
         }
+        // XARAYA MODIFICATION - START
+        //  time to render SQL by proca
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            $lmtime = explode(" ", microtime());
+            $lendtime = $lmtime[1] + $lmtime[0];
+            $ltotaltime = ($lendtime - $lstarttime);
+            xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
+        }
+        // XARAYA MODIFICATION - END
         return $rs;
     }
 
