@@ -537,7 +537,7 @@ class Dynamic_Property_Master
             list(...) = $result->fields;
 
 // Security Check
-		if(securitycheck('Overview',0) {
+		if (securitycheck('Overview',0) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();

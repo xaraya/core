@@ -1384,7 +1384,7 @@ function dynamicdata_adminapi_getmenulinks()
     $menulinks = array();
 
 // Security Check
-	if(securitycheck('Admin',0)) {
+	if (securitycheck('Admin',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',
@@ -1394,7 +1394,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if(securitycheck('Admin',0)) {
+	if (securitycheck('Admin',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'admin',
                                                   'modifyconfig'),
@@ -1403,7 +1403,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if(securitycheck('Admin',0)) {
+	if (securitycheck('Admin',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'util',
                                                   'main'),
