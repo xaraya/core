@@ -11,7 +11,7 @@
         #$tpl:headJavaScript#
     </head>
     <body>
-<table width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td style="text-align:left; background-image:url(themes/Xaraya_Classic/images/header_fill.gif)">
             <a href="&xar-baseurl;">
@@ -38,12 +38,12 @@
 
 <!-- start body -->
 
-<table width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0" border="1">
     <tr>
         <td style="width: 18%;" align="left" valign="top">
-            <table width="100%" cellpadding="0" cellspacing="0">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="background-color:##ffffff">
+                    <td style="background-color:##ffffff;">
                         <xar:blockgroup name="left" id="left" />
                     </td>
                 </tr>
@@ -53,6 +53,7 @@
                     </td>
                 </tr>
             </table>
+        </td>
         <td style="width:1%; background-image: url(themes/Xaraya_Classic/images/vline.gif);">
 			<img src="themes/Xaraya_Classic/images/dot.gif" alt="" style="align:middle; vertical-align:top; width:2px; height:1px; border:0px" />
         </td>
@@ -73,7 +74,7 @@
         </td>
     </tr>
 </table>
-<div align="center">
+<div style="text-align: center;">
 <b>#xarConfigGetVar('Site.Core.CopyRight')#</b>
 <br />
 <br />
