@@ -232,11 +232,13 @@ class xarTpl__CodeGenerator
                 if (!isset($childCode)) {
                     return; // throw back
                 }
-                if ($child->tagName != 'TextNode' || !$checkNode->needAssignment()) {
+                // Commented out the code that will patch a security hole in xar:set
+                // We need to see if there is anyone using xar:set with php/xaraya functions
+                //if ($child->tagName != 'TextNode' || !$checkNode->needAssignment()) {
                     $code .= $childCode;
-                } else {
-                    $code .= "'" . strtr($childCode, array("\\" => "\\\\", "'" => "\\'")) . "'";
-                }
+                //} else {
+                    //$code .= "'" . strtr($childCode, array("\\" => "\\\\", "'" => "\\'")) . "'";
+                //}
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     //xarLogVariable('checkNode', $checkNode, XARLOG_LEVEL_ERROR);
                     //xarLogMessage('here', XARLOG_LEVEL_ERROR);
