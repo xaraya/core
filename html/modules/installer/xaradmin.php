@@ -34,6 +34,7 @@ function installer_admin_phase1()
     //$locales = xarMLSListSiteLocales();
 
     $data['languages'] = array('eng' => 'English');
+
     
     return $data;
 }
@@ -252,16 +253,17 @@ function installer_admin_bootstrap()
 function installer_admin_create_administrator()
 {
 	xarTplSetThemeName('installer');
+    $data['language'] = 'English';
 
     if (!xarSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
-
+     
     if (!xarVarCleanFromInput('create')) {
-        return array();
+        return $data;
     }
-
+    
     list ($username,
           $name,
           $password,
@@ -271,7 +273,7 @@ function installer_admin_create_administrator()
                                        'install_admin_password',
                                        'install_admin_email',
                                        'install_admin_url');
-
+    
     if (!xarModAPILoad('users', 'admin')) {
         return;
     }
@@ -288,8 +290,9 @@ function installer_admin_create_administrator()
                                                         'state' => 3))) {
         return;
     }
-
+    
     xarResponseRedirect(xarModURL('installer', 'admin', 'finish'));
+    
 }
 
 
