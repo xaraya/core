@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Draft schema for Blocklayout 1.0. 2003-01-25, Gregor J. Rothfuss gregor@xaraya.com -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:xar="http://www.xaraya.com/blocklayout"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           targetNameSpace="http://www.xaraya.com/blocklayout">
+
+  <!-- Introduction -->
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+      Blocklayout 1.0 XML schema experiment for Xaraya.
+      Copyright 2002 Xaraya Development Group All rights reserved.
+      Author: Gregor J. Rothfuss gregor@xaraya.com
+      Author: Marcel R. van der Boom marcel@xaraya.com
+    </xs:documentation>
+  </xs:annotation>
+
 	<xs:element name="while">
 		<xs:complexType>
 			<xs:sequence>
@@ -13,6 +26,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="var">
 		<xs:complexType>
 			<xs:attribute name="name" type="xs:string" use="required"/>
@@ -20,6 +34,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="template">
 		<xs:complexType>
 			<xs:attribute name="compile" type="xs:string" use="optional" default="true"/>
@@ -28,12 +43,14 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="set">
 		<xs:complexType>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="sec">
 		<xs:complexType>
 			<xs:attribute name="level" type="xs:string" use="required"/>
@@ -43,27 +60,32 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="module">
 		<xs:complexType>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="mlvar">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="mlstring">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="mlkey">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="ml">
 		<xs:complexType mixed="true">
 			<xs:sequence>
@@ -76,6 +98,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="loop">
 		<xs:complexType>
 			<xs:sequence>
@@ -88,6 +111,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="if">
 		<xs:complexType mixed="true">
 			<xs:sequence>
@@ -101,6 +125,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="foreach">
 		<xs:complexType>
 			<xs:sequence>
@@ -114,6 +139,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="for">
 		<xs:complexType>
 			<xs:sequence>
@@ -128,6 +154,7 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="elseif">
 		<xs:complexType>
 			<xs:attribute name="condition" type="xs:string" use="required"/>
@@ -139,8 +166,11 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
+
 	<xs:element name="continue"/>
+
 	<xs:element name="break"/>
+
 	<xs:element name="blockgroup">
 		<xs:complexType>
 			<xs:attribute name="template" type="xs:string" use="optional"/>
@@ -148,38 +178,114 @@
 			<xs:attribute name="id" type="xs:integer" use="optional"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="block">
-		<xs:complexType>
-			<xs:attribute name="type" type="xs:string" use="required"/>
-			<xs:attribute name="template" type="xs:string" use="optional"/>
-			<xs:attribute name="module" type="xs:string" use="required"/>
-			<xs:attribute name="name" type="xs:string" use="required"/>
-			<xs:attribute name="instance" type="xs:integer" use="optional"/>
-			<xs:attribute name="id" use="optional"/>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="blocklayout">
+
+  <!-- block tag -->
+  <xs:element name="block" type="block_type"/>
+
+  <xs:complexType name="block_type">
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <!-- FIXME: template is only for static blocks -->
+    <xs:attribute name="template" type="xs:string" use="optional"/>
+    <xs:attribute name="module" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <!-- FIXME: if block is dynamic, then instance nr. 
+                if block is static, then what? -->
+    <xs:attribute name="instance" type="xs:integer" use="required"/>
+    <xs:attribute name="id" type="blocktype_type" use="optional"/>
+  </xs:complexType>
+
+  <!-- type attribute type definition -->
+  <xs:simpleType name="blocktype_type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="static"/>
+      <xs:enumeration value="dynamic"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- End block tag -->
+
+ 
+  <!-- blocklayout root tag -->
+
+  <!-- Define the blocklayout tag as a complex type -->
+  <xs:element name="blocklayout" type="blocklayout_type">
 		<xs:annotation>
 			<xs:documentation>Blocklayout root element</xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:sequence>
-				<xs:choice maxOccurs="unbounded">
-					<xs:element ref="block" maxOccurs="unbounded"/>
-					<xs:element ref="blockgroup" maxOccurs="unbounded"/>
-					<xs:element ref="for" maxOccurs="unbounded"/>
-					<xs:element ref="foreach" maxOccurs="unbounded"/>
-					<xs:element ref="if" maxOccurs="unbounded"/>
-					<xs:element ref="loop" maxOccurs="unbounded"/>
-					<xs:element ref="ml" maxOccurs="unbounded"/>
-					<xs:element ref="module" maxOccurs="unbounded"/>
-					<xs:element ref="sec" maxOccurs="unbounded"/>
-					<xs:element ref="set" maxOccurs="unbounded"/>
-					<xs:element ref="template" maxOccurs="unbounded"/>
-					<xs:element ref="var" maxOccurs="unbounded"/>
-					<xs:element ref="while" maxOccurs="unbounded"/>
-				</xs:choice>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+  </xs:element>
+
+  <!-- The blocklayout tag contains all others -->
+  <!-- QUESTION: What is the diff between name and ref -->
+  <xs:complexType mixed="true" name="blocklayout_type">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="block"/>
+        <xs:element ref="blockgroup"/>
+        <xs:element ref="comment" type="xs:string"/>
+        <xs:element ref="commentnav"/>
+        <xs:element ref="crumb"/>
+        <xs:element ref="if"/>
+        <xs:element ref="else"/>
+        <xs:element ref="elseif"/>
+        <xs:element ref="for"/>
+        <xs:element ref="foreach"/>
+        <xs:element ref="include"/>
+        <xs:element ref="loop"/>
+        <xs:element ref="menu"/>
+        <xs:element ref="ml"/>
+        <xs:element ref="mlkey"/>
+        <xs:element ref="mlstring"/>
+        <xs:element ref="modules"/>
+        <xs:element ref="sec"/>
+        <xs:element ref="set"/>
+        <xs:element ref="template"/>
+        <xs:element ref="var"/>
+        <xs:element ref="ternary"/>
+        <xs:element ref="while"/>
+      
+        <!-- Child elements -->
+        <xs:element ref="break"/>
+        <xs:element ref="continue"/>
+        <xs:element ref="mlvar"/>
+        <xs:element ref="param"/>
+        <xs:element ref="urlvar"/>
+        
+        <!-- Widgets not supported in BL 1.0 
+        <xs:element ref="alphalist"/>
+        <xs:element ref="command"/>
+        <xs:element ref="confirm"/>
+        <xs:element ref="date"/>
+        <xs:element ref="help"/>
+        <xs:element ref="hgraphbar"/>
+        <xs:element ref="noauth"/>
+        <xs:element ref="pager"/>
+        <xs:element ref="tabs"/>
+        <xs:element ref="vgraphbar"/>
+        -->
+      </xs:choice>
+    </xs:sequence>
+    
+    <!-- Define the atrributes for the blocklayout tag -->
+    <xs:attribute ref="id" type="xs:string" use="optional"/>
+    <xs:attribute ref="type" type="bl_type" use="required"/>
+    <!-- FIXME: this attribute can only be used on master templates -->
+    <xs:attribute ref="multimod" type="xs:boolean"/>
+    <!-- FIXME: this attribute can only be used on internal templates -->
+    <xs:attribute ref="cache" type="xs:boolean"/>
+    <!-- FIXME: this attribute only valid if cache attribute is true -->
+    <xs:attribute ref="duration" type="xs:integer"/>
+    <!-- FIXME: is theme optional? -->
+    <xs:attribute ref="theme" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <!-- Which types of block layout templates do we have -->
+  <xs:simpleType name="bl_type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="master"/>
+      <xs:enumeration value="slave"/>
+      <xs:enumeration value="internal"/>
+      <xs:enumeration value="include"/>
+      <xs:enumeration value="widget"/>	
+    </xs:restriction>
+  </xs:simpleType>
+
 </xs:schema>
