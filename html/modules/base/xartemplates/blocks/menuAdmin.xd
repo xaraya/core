@@ -39,7 +39,7 @@
 </p>
 <p style="float:left; width:100%;">
 	<span style="float: left; width: 20%; text-align: right;">
-		<span class="help" title="#xarML('Select if you would like Xaraya to generate a link to you RSS at the bottom of the menu.')#">
+		<span class="help" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
 			<label for="displayrss">
 				<xar:mlstring>
 					Display RSS Link 

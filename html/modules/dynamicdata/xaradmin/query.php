@@ -427,7 +427,7 @@ function dynamicdata_admin_query($args)
         $data['label'] = xarML('Dynamic Objects');
     }
     $data['whereoptions'] = array(
-                                  array('id' => 'eq', 'name' => xarML('equals')),
+                                  array('id' => 'eq', 'name' => xarML('equal to')),
                                   array('id' => 'gt', 'name' => xarML('greater than')),
                                   array('id' => 'lt', 'name' => xarML('less than')),
                                   array('id' => 'ne', 'name' => xarML('not equal to')),
