@@ -175,17 +175,17 @@ class ExceptionRendering
             for ($i = 2, $j = 1, $max = count($stack); $i < $max; $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
-                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
+                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>at '.$function.'(';
                 // Note: eval() doesn't generate file or line
                 if (isset($stack[$j]['file'])) $text .= basename($stack[$j]['file']).':';
                 if (isset($stack[$j]['line'])) $text .= $stack[$j]['line'];
-                $text .= ')' . $this->linebreak;
+                $text .= ')</strong>' . $this->linebreak;
                 if ($showParams && isset($stack[$i]['args']) && is_array($stack[$i]['args']) && count($stack[$i]['args']) > 0) {
                     ob_start();
                     print_r($stack[$i]['args']);
                     $dump = ob_get_contents();
                     ob_end_clean();
-                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . htmlspecialchars($dump);
+                    $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<pre>' . htmlspecialchars($dump) . '</pre>';
                     $text .= $this->linebreak;
                 }
             }
