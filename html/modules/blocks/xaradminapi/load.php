@@ -2,7 +2,7 @@
 /**
  * Load a block
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
  * @param string modName the module name
  * @param string blockType the name of the block

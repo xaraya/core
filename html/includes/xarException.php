@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  */
 
 /**
@@ -58,7 +58,7 @@ include "includes/exceptions/errorcollection.class.php";
 /**
  * Initializes the Error Handling System
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool true
  */
@@ -73,7 +73,7 @@ function xarError_init($systemArgs, $whatToLoad)
  *
  * Valid value for $major paramter are: XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, XAR_SYSTEM_EXCEPTION, XAR_SYSTEM_MESSAGE.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param major integer error major number
  * @param errorID string error identifier
@@ -148,7 +148,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * Allows the caller to establish whether an error was raised, and to get the major number of raised error.
  * The major number XAR_NO_EXCEPTION identifies the state in which no error was raised.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return integer the major value of raised error
  */
@@ -168,7 +168,7 @@ function xarCurrentErrorType()
  * Returns the error identifier corresponding to the current error.
  * If invoked when no error was raised, a void value is returned.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the error identifier
  */
@@ -188,7 +188,7 @@ function xarCurrentErrorID()
  * Returns the value corresponding to the current error.
  * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return mixed error value object
  */
@@ -208,7 +208,7 @@ function xarCurrentError()
  * You must always call this function when you handle a caught error or
  * equivalently you don't throw the error back to the caller.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return void
  */
@@ -225,7 +225,7 @@ function xarErrorFree()
  *
  * You must always call this function when you handle a caught error.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return void
  */
@@ -249,7 +249,7 @@ function xarErrorHandled()
  * available on current error.
  * If there is no error currently raised an empty string is returned.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param format string one of html or text
  * @return string the string representing the raised error
@@ -318,7 +318,7 @@ function xarErrorRender($format,$thisstack = "ERROR")
 /**
  * PHP error handler bridge to Xaraya exceptions
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access private
  * @return void
  */
@@ -395,7 +395,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 /**
  * Returns a debug back trace
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access private
  * @return array back trace
  */
@@ -422,7 +422,7 @@ function xarException__backTrace()
  *
  * Converts a xdebug stack trace to a valid back trace.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access private
  * @return array back trace
  */

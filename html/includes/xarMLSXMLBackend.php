@@ -9,7 +9,7 @@
  * @link http://www.xaraya.com
  *
  * @subpackage xml_backend
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  */
 
 /**

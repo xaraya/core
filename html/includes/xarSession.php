@@ -9,7 +9,7 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Jim McDonald
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @author Michel Dalle
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
@@ -17,7 +17,7 @@
 /**
  * Initialise the Session Support
  * 
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ * @author Jim McDonald, Marco Canini <marco@xaraya.com>
  * @return bool true
  */
 function xarSession_init($args, $whatElseIsGoingLoaded)

@@ -8,13 +8,13 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  */
 
 /**
  * Initializes the HTTP Protocol Server/Request/Response utilities
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @global xarRequest_allowShortURLs bool
  * @global xarRequest_defaultModule array
@@ -53,7 +53,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
  * {@link http://www.php.net/manual/en/reserved.variables.html#reserved.variables.server PHP manual}.
  * If the server variable doesn't exist void is returned.
  *
- * @author Marco Canini <m.canini@libero.it>, Michel Dalle
+ * @author Marco Canini <marco@xaraya.com>, Michel Dalle
  * @access public
  * @param name string the name of the variable
  * @return mixed value of the variable
@@ -146,7 +146,7 @@ function xarServerGetBaseURI()
  * Returns the server host name fetched from HTTP headers when possible.
  * The host name is in the canonical form (host + : + port) when the port is different than 80.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string HTTP host name
  */
@@ -168,7 +168,7 @@ function xarServerGetHost()
  *
  * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string current HTTP protocol
  */

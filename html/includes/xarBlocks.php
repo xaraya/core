@@ -46,7 +46,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
 /**
  * Renders a block
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
  * @param array blockInfo block information parameters
  * @return string output the block to show
@@ -120,7 +120,7 @@ function xarBlock_render($blockInfo)
 /**
  * Renders a block group
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
  * @param string groupName the name of the block group
  * @return string

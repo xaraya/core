@@ -205,7 +205,7 @@ function xarUserIsLoggedIn()
 /**
  * Gets the user navigation theme name
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  */
 function xarUserGetNavigationThemeName()
 {

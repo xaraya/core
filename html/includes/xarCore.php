@@ -94,7 +94,7 @@ define ('XAR_INCLUDE_MAY_NOT_EXIST', 2);
 /**
  * Initializes the core engine
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param integer whatToLoad What optional systems to load.
  * @return bool true
@@ -371,7 +371,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 /**
  * Returns the relative path name for the var directory
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the var directory path name
  */
