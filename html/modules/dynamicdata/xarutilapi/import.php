@@ -24,6 +24,9 @@ function dynamicdata_utilapi_import($args)
         $name2id[$proptype['name']] = $propid;
     }
 
+    $prefix = xarDBGetSystemTablePrefix();
+    $prefix .= '_';
+
     $fp = @fopen($file, 'r');
     if (!$fp) {
         $msg = xarML('Unable to open import file');
@@ -157,6 +160,10 @@ function dynamicdata_utilapi_import($args)
                         $property['type'] = 1;
                     }
                 }
+            // TODO: watch out for multi-sites
+                // replace default xar_* table prefix with local one
+                $property['source'] = preg_replace("/^xar_/",$prefix,$property['source']);
+
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $property);
                 if (!isset($prop_id)) {

@@ -46,6 +46,9 @@ function dynamicdata_utilapi_export($args)
 
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
 
+    $prefix = xarDBGetSystemTablePrefix();
+    $prefix .= '_';
+
     $xml = '';
 
     $xml .= '<object name="'.$myobject->name.'">'."\n";
@@ -68,7 +71,13 @@ function dynamicdata_utilapi_export($args)
         foreach (array_keys($property_properties) as $key) {
             if ($key != 'name' && isset($myobject->properties[$name]->$key)) {
                 if ($key == 'type') {
+                    // replace numeric property type with text version
                     $xml .= "      <$key>".xarVarPrepForDisplay($proptypes[$myobject->properties[$name]->$key]['name'])."</$key>\n";
+                } elseif ($key == 'source') {
+                    // replace local table prefix with default xar_* one
+                    $val = $myobject->properties[$name]->$key;
+                    $val = preg_replace("/^$prefix/",'xar_',$val);
+                    $xml .= "      <$key>".xarVarPrepForDisplay($val)."</$key>\n";
                 } else {
                     $xml .= "      <$key>".xarVarPrepForDisplay($myobject->properties[$name]->$key)."</$key>\n";
                 }
