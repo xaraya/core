@@ -2939,7 +2939,7 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
                         $out .= "'$val', ";
                     }
                 }
-                $out .= '))';
+                $out = substr($out,0,-2) . '))';
                 return $out;
             } else {
                 return 'xarModFunc("'.$module.'", "'.$type.'", "'.$func.'")';
