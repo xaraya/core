@@ -143,6 +143,9 @@ function installer_adminapi_createdb($args)
     $dbPass  = xarCore_getSystemVar('DB.Password');
     $dbType  = xarCore_getSystemVar('DB.Type');
 */
+    // {ML_dont_parse 'includes/xarDB.php'}
+    include_once 'includes/xarDB.php';
+
     // Load in Table Maintainance API
     include_once 'includes/xarTableDDL.php';
 
@@ -151,8 +154,16 @@ function installer_adminapi_createdb($args)
     if (!defined('ADODB_DIR')) {
         define('ADODB_DIR','xaradodb');
     }
-   include_once ADODB_DIR . '/adodb.inc.php';
-   $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
+    include_once ADODB_DIR . '/adodb.inc.php';
+    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
+
+    // Check if there is a xar- version of the driver, and use it.
+    // Note the driver we load does not affect the database type.
+    if (xarDBdriverExists('xar' . $dbType, 'adodb')) {
+        $dbDriver = 'xar' . $dbType;
+    } else {
+        $dbDriver = $dbType;
+    }
 
     // Start connection
     $dbconn = ADONewConnection($dbType);
