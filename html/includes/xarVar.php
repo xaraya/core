@@ -96,7 +96,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
     $subject = xarRequestGetVar($name, $allowOnlyMethod);
-    
+
     if ($subject == NULL) {
         if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
             $value = $defaultValue;
@@ -295,7 +295,7 @@ class xarVarValidator_int extends xarVarValidator {
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
-            } elseif ($value > (int) $this->parameters[0]) {
+            } elseif ($value < (int) $this->parameters[0]) {
                 return false;
             }
         }
