@@ -322,6 +322,23 @@ $schemas = array();
         return $roles->getgroups();
     }
 
+ * xarFindRole: returns a role object by its name
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   name string
+ * @return  role object
+ * @throws  none
+ * @todo    none
+*/
+
+    function xarFindRole($name) {
+        $roles = new xarRoles();
+        return $roles->findRole($name);
+    }
+
 /**
  * xarSecurityCheck: check a role's privileges against the masks of a component
  *
