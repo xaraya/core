@@ -16,6 +16,7 @@
 /* local variables */
 $all = false;            /* default to run all checks?         */
 $verbose = false;        /* use verbose output?                */
+$weave = true;           /* execute per test or per file?      */
 $fatal = false;          /* has a critical check failed?       */
 $checks = array();       /* array of QACheck instances         */
 $regexpchecks = array(); /* array of QACheckRegexp instances   */
@@ -44,6 +45,10 @@ foreach($_SERVER['argv'] as $index => $arg) {
         chdir(substr($arg, 10));
     } else if (substr($arg, 0, 5) == '--all') {
         $all = true;
+    } else if (substr($arg, 0, 7) == '--weave') {
+        $weave = true;
+    } else if (substr($arg, 0, 9) == '--noweave') {
+        $weave = false;
     } else if (substr($arg, 0, 9) == '--verbose') {
         $verbose = true;
     } else if ($index != 0){
@@ -60,7 +65,9 @@ Usage: php qachecks.php [options] filename1 [filename2] [filename3]...
 Options:
   --checks=x,y,z   comma separated list of checker ids to run
   --working=path   path to where the script is being run from
-  --verbose        use verbose output
+  --verbose        use verbose output - displays offending lines
+  --weave          run each test on every file (default)
+  --noweave        run every test on each file
   --all            default to all checks if none are listed
                    (otherwise, only the default checks are run)
 ";             
@@ -128,19 +135,9 @@ function blank_comments($matches)
     return preg_replace(':[^\n]:', '', $matches[0]);
 }
 
-echo "
-XARAYA QA CHECKS.
-
-These QA checks are based on the Code Review Checklist (v0.2.0), found in
-/tests/qa/doc.
-";
-
-/* process each file on the command line */
+/* load all the files into memory */
+$files = array();
 foreach ($filenames as $filename) {
-    echo "
----------------------------------------
-Checking $filename...
----------------------------------------\n";
 
     /* determine filetype */
     if (preg_match('/\.php$/', $filename)) {
@@ -151,6 +148,76 @@ Checking $filename...
         $filetype = 'unknown';
         echo "Warning: unknown filetype\n";
     }
+
+    /* create a version without the comments */
+    $file = fopen($filename, 'r');
+    $nocomments = fread($file, filesize($filename));
+    fclose($file);
+
+    if ($filetype == 'php') {
+
+        /* line comments are easy */
+        $nocomments = preg_replace(':^[ \011]*#.*$:m', "", $nocomments);
+        $nocomments = preg_replace(':^[ \011]*//.*$:m', "", $nocomments);
+
+        /* multiline comments use a callback function */
+        $nocomments = preg_replace_callback(':/\*.*?\*/:s',
+                "blank_comments", $nocomments);
+
+    } else if ($filetype == 'template') {
+
+        /* TODO: strip comments from template */
+    }
+    
+    /* create array from uncommented version */
+    $nocommentlines = split("\n", $nocomments);
+
+    /* split always leaves an extra empty line */
+    unset($nocommentlines[count($nocommentlines) - 1]);
+
+    /* read line by line */
+    $lines = file($filename);
+
+    /* debugging 
+    var_export($lines);
+    var_export($nocommentlines);
+    */
+
+    /* check the line count matches */
+    if (count($lines) != count($nocommentlines) &&
+
+            /* sometimes the line count is out by 1 (maybe due to split?) */
+            count($lines) - 1 != count($nocommentlines)) {
+
+        echo "\nERROR: line count difference after removing comments. ".
+             "\n(lines = ".count($lines).", but nocommentlines = ".
+             count($nocommentlines). ". This is a bug, please report at".
+             "\nhttp://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core&component=QA)\n\n";
+    }
+
+    /* add to the array */
+    $thisfile = array('name' => $filename,
+                      'type' => $filetype,
+                      'lines' => $lines,
+                      'nocommentlines' => $nocommentlines);
+    $files[] = $thisfile;
+}
+
+echo "
+XARAYA QA CHECKS.
+
+These QA checks are based on the Code Review Checklist (v0.2.1), found in
+/tests/qa/doc.
+";
+
+/* process each file on the command line */
+if ($weave == false) {
+
+  foreach ($files as $file) {
+    echo "
+---------------------------------------
+Checking ". $file['name']."...
+---------------------------------------\n";
 
     /* now run each of the requested checks */
     $run = 0;
@@ -167,10 +234,10 @@ Checking $filename...
 
         /* run the check */
         if ($check->enabled && ($check->filetype == 'all' || 
-                $check->filetype == $filetype)) {
+                $check->filetype == $file['type'])) {
             $result = false;
             $run++;
-            $check->filename = $filename;
+            $check->filename = $file['name'];
 
             /* results of check */
             if (!$check->execute()) {
@@ -193,54 +260,14 @@ Checking $filename...
     /* now run the regexp checks */
     if (!empty($regexpchecks)) {
 
-        /* create a version without the comments */
-        $file = fopen($filename, 'r');
-        $nocomments = fread($file, filesize($filename));
-        fclose($file);
-
-        if ($filetype == 'php') {
-
-            /* line comments are easy */
-            $nocomments = preg_replace(':^[ \011]*#.*$:m', "", $nocomments);
-            $nocomments = preg_replace(':^[ \011]*//.*$:m', "", $nocomments);
-
-            /* multiline comments use a callback function */
-            $nocomments = preg_replace_callback(':/\*.*?\*/:s',
-                    "blank_comments", $nocomments);
-
-        } else if ($filetype == 'template') {
-
-            /* TODO: strip comments from template */
-        }
-        
-        /* create array from uncommented version */
-        $nocommentlines = split("\n", $nocomments);
-
-        /* split always leaves an extra empty line */
-        unset($nocommentlines[count($nocommentlines) - 1]);
-
-        /* read line by line */
-        $lines = file($filename);
-
-        /* debugging 
-        var_export($lines);
-        var_export($nocommentlines);
-        */
-
-        if (count($lines) != count($nocommentlines)) {
-            echo "\nERROR: line count difference after removing comments. ".
-                 "\n(lines = ".count($lines).", but nocommentlines = ".
-                 count($nocommentlines). ". This is a bug, please report at".
-                 "\nhttp://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core&component=QA)\n\n";
-        }
-        foreach ($lines as $number => $line) {
+        foreach ($file['lines'] as $number => $line) {
 
             /* iterate over each check */
             foreach ($regexpchecks as $index => $check) {
 
                 /* are we running this check? */
                 if ($check->enabled && ($check->filetype == 'all' || 
-                        $check->filetype == $filetype)) {
+                        $check->filetype == $file['type'])) {
 
                     /* iterate each regexp in the check */
                     foreach ($check->regexps as $regexp) {
@@ -250,7 +277,7 @@ Checking $filename...
                             $fail = preg_match($regexp, $line);
                         } else {
                             $fail = preg_match($regexp,
-                                    $nocommentlines[$number]);
+                                    $file['nocommentlines'][$number]);
                         }
                         if ($check->negate) {
                             $fail = !$fail;
@@ -258,7 +285,6 @@ Checking $filename...
                         if ($fail) {
 
                             /* check failed */
-                            $regexpchecks[$index]->failedlines[] = $number;
                             if ($regexpchecks[$index]->success) {
                                 $regexpchecks[$index]->success = false;
                                 echo "  FAILED Check ".$check->id." (".
@@ -269,10 +295,14 @@ Checking $filename...
                                 }
                                 echo "\n";
                             }
+
+                            /* don't show which line its on (bug #3232) *|
                             if ($verbose) {
                                 echo "    ".sprintf("%4d", $number + 1).
                                         ":  $line";
-                            }
+                            } else {
+                                echo "     Line ". ($number + 1)."\n";
+                            } /* */
                         }
                     } /* each regexp */
                 } /* run check? */
@@ -282,9 +312,9 @@ Checking $filename...
         /* report on regexp results */
         foreach ($regexpchecks as $index => $check) {
 
-            /* did we running this check? */
+            /* did we run this check? */
             if ($check->enabled && ($check->filetype == 'all' || 
-                     $check->filetype == $filetype)) {
+                     $check->filetype == $file['type'])) {
                 $run++;
                 if (!$check->success) {
                     $failed++;
@@ -300,16 +330,117 @@ Checking $filename...
     } /* regexpchecks */
 
     /* report on file */
-    echo "\nFinished checking $filename";
-    echo "
-Checks passed: $passed
-Checks failed: $failed ($fatal fatal)
-Checks run: $run\n";
+    if ($verbose) {
+      echo "\n  Finished checking ". $file['name'];
+      echo "
+    Checks passed: $passed
+    Checks failed: $failed ($fatal fatal)
+    Checks run: $run\n";
+    }
     $totalpassed += $passed;
     $totalfailed += $failed;
     $totalfatal += $fatal;
     $totalrun += $run;
-} /* each file */
+  } /* each file */
+} else { /* weave = false */
+
+    /* if weave is true, we run every test for each file */
+    foreach ($checks as $index => $check) {
+        $run = 0;
+        $passed = 0;
+        $failed = 0;
+        $fatal = 0;
+
+        echo "
+-----------------------------------------------------------
+Check #". $check->id." (". $check->name.")...
+-----------------------------------------------------------\n";
+
+        /* run the check on each file */
+        foreach ($files as $file) {
+            $check->success = true;
+            if ($check->enabled && ($check->filetype == 'all' || 
+                    $check->filetype == $file['type'])) {
+                $result = false;
+                $run++;
+                $check->filename = $file['name'];
+
+                /* regexp checks are handled differently */
+                if (get_parent_class($check) == 'qacheckregexp') {
+                   foreach ($file['lines'] as $number => $line) {
+         
+                      /* iterate each regexp in the check */
+                      foreach ($check->regexps as $regexp) {
+
+                        /* do we check commented lines? */
+                        if ($check->checkcomments == true) {
+                            $fail = preg_match($regexp, $line);
+                        } else {
+                            $fail = preg_match($regexp,
+                                    $file['nocommentlines'][$number]);
+                        }
+                        if ($check->negate) {
+                            $fail = !$fail;
+                        }
+                        if ($fail) {
+
+                            /* check failed */
+                            if ($check->success) {
+                                $check->success = false;
+                                echo "  FAILED on ".$file['name'];
+                                $failed++;
+                                if ($check->fatal) {
+                                    echo " (FATAL)";
+                                    $fatal++;
+                                }
+                                echo "\n";
+                            }
+                            echo "    ".sprintf("%4d", $number + 1).
+                                        ":  $line";
+                        } /* check failed */
+                      } /* each regexp in check */
+                    } /* each line */
+
+                    /* if no lines failed, the check passed */
+                    if ($check->success) {
+                        $passed++;
+                        echo "  Pass on ".$file['name']."\n";
+                    }
+                    continue;
+                } /* regexp checks */
+
+                /* results of check */
+                if (!$check->execute()) {
+                    $failed++;
+                    echo "  FAILED on ".$file['name'];
+                    $checks[$index]->success = false;
+                    if ($check->fatal) {
+                        echo " (FATAL)";
+                        $fatal = true;
+                    }
+                    echo "\n";
+                } else {
+                    $passed++;
+                    echo "  Pass on ".$file['name']."\n";
+                }
+            } /* run check? */
+        } /* each file */
+
+        /* report on check */
+        if ($verbose) {
+            echo "\n  Finished check #". $check->id;
+            echo "
+    Files passed: $passed
+    Files failed: $failed ($fatal fatal)
+    Files checked: $run\n";
+        }
+        $totalpassed += $passed;
+        $totalfailed += $failed;
+        $totalfatal += $fatal;
+        $totalrun += $run;
+
+    } /* each checks */
+} /* weave? */
 
 /* check for fatal errors */
 echo "\nTotal checks passed: $totalpassed\n";

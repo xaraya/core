@@ -12,14 +12,20 @@
  * comment really. */
 die();
 exit();
+$exitToken = 's';
 
-/* 2.1.5 says don't use echo() and print() */
+/* 2.3.2 says don't use echo() and print() */
 echo '';
 print '';
+// pass the printer ribbon
 
 /* 2.3.2 no non-templated output */
 echo '<html>
   <body>';
+
+/* 2.4.3 dbconn */
+list($foo) = xarDBGetConn();
+$dbconn = xarDBGetConn();
 
 /* 2.6.1 use xarInclude */
 xarInclude ('hello.php');
@@ -49,6 +55,7 @@ function ($args = array());
 /* 3.2.4 use include in preference of include */
 include_once('foobar');
 include('foobar');
+ require('foobar');
    $a = 3; require('x');
    require_once('x');
 
@@ -93,6 +100,14 @@ function bad_foobar() {
 }
 
 function good_foobar()
+{
+
+}
+
+class BadBrace {
+
+}
+class TrueBrace
 {
 
 }
