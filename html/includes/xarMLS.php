@@ -1467,7 +1467,6 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
             return;
         }
-        echo $ctxType. $ctxName;exit;
         include $fileName;
 
         return true;
