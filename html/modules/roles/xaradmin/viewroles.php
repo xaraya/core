@@ -20,7 +20,7 @@ function roles_admin_viewroles()
     // Clear Session Vars
     xarSessionDelVar('roles_statusmsg');
     // Security Check
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class
     $roles = new xarRoles();
 
