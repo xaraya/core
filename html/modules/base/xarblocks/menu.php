@@ -89,7 +89,7 @@ function base_menublock_display($blockinfo)
                           'getlist',
                           array('filter'     => array('UserCapable' => 1)));
     if(empty($mods)) {
-    // there aren't any admin modules, dont display adminmenu
+    // there aren't any user capable modules, dont display user menu
         return;
     }
 
