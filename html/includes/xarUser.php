@@ -813,13 +813,15 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     $xartable = xarDBGetTables();
 
     $rolestable = $xartable['roles'];
+    $usercolumns = $xartable['users_column'];
 
-    $query = "UPDATE $rolestable
-              SET xar_name = '" . xarVarPrepForStore($value) . "'
-              WHERE xar_pid = " . xarVarPrepForStore($userId);
+    // The $name variable will be used to get the appropriate column
+    // from the users table.
+    $query = "UPDATE $userstable
+              SET $usercolumns[$name] = '" . xarVarPrepForStore($value) . "'
+              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
     return true;
 }
 
