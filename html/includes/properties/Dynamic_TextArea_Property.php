@@ -22,7 +22,21 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 {
     var $rows = 8;
     var $cols = 50;
-
+ 
+  function Dynamic_TextArea_Property($args)
+  {
+         $this->Dynamic_Property($args);
+        // check validation for allowed rows/cols (or values)
+        if (!empty($this->validation) && strchr($this->validation,':')) {
+            list($rows,$cols) = explode(':',$this->validation);
+            if ($rows !== '' && is_numeric($rows)) {
+                $this->rows = $rows;
+            }
+            if ($cols !== '' && is_numeric($cols)) {
+                $this->cols = $cols;
+            }
+        }
+    }
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -33,7 +47,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $rows = 8, $cols = 50, $wrap = 'soft', $id = '', $tabindex = '')
+//   function showInput($name = '', $value = null, $rows = 8, $cols = 50, $wrap = 'soft', $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
@@ -59,7 +73,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
-        $data['cols']     = !empty($cols) ? $cols : $this->cols; 
+        $data['cols']     = !empty($cols) ? $cols : $this->cols;
 
         $template="textarea";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
@@ -91,7 +105,8 @@ class Dynamic_TextArea_Property extends Dynamic_Property
      **/
      function getBasePropertyInfo()
      {
-        $args['rows'] = 8;     
+        $args = array();
+        $args['rows'] = 8;
         $aliases[] = array(
                             'id'         => 4,
                             'name'       => 'textarea_medium',
@@ -120,7 +135,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                             // ...
                            );
 
-        $args['rows'] = 2;     
+        $args['rows'] = 2;
          $baseInfo = array(
                             'id'         => 3,
                             'name'       => 'textarea_small',
