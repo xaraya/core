@@ -96,7 +96,7 @@ function roles_admin_sendmail()
                 'subject' => $mailsubject,
                 'message' => $mailmessage))) return;
     }
-    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail', array('uid' => $uid)));
     // Return
     return true;
 }

@@ -36,35 +36,31 @@ function roles_admin_createmail()
     }
 
     $xartable =& xarDBGetTables();
-
     if ($type == 'single') {
-        $data['users'][$role->getID()] = array('uid' => $role->getID(),
+        $uid = $role->getID();
+        $data['users'][$role->getID()] = array('uid' => $uid,
             'name' => $role->getName(),
             'uname' => $role->getUser(),
             'email' => $role->getEmail(),
             'status' => $role->getState(),
             'date_reg' => $role->getDateReg()
         );
-        if ($selstyle == 0) $selstyle = 2;
-
-        // Create a query for this single user, and save it in the session
-        // for use in subsequent screens.
+        if ($selstyle == 0) $selstyle =2;
+        // Create a query to send to sendmail
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
-        $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
         $q->eq('r.xar_uid',$uid);
         xarSessionSetVar('rolesquery', serialize($q));
-    } else {
-        if ($selstyle == 0) $selstyle = 1;
+    }
+    else {
+        if ($selstyle == 0) $selstyle =1;
 
         // Get the current query or create a new one if need be
-        if ($uid == -1) {
-            $q = xarSessionGetVar('rolesquery');
-        }
-
-        if (isset($q)) {
+        if ($uid == -1) $q = xarSessionGetVar('rolesquery');
+        if(isset($q)) {
             $q = unserialize($q);
-        } else {
+        }
+        else {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
             $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
@@ -82,9 +78,8 @@ function roles_admin_createmail()
             if ($state == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
             elseif ($state == ROLES_STATE_ALL) {}
             else $q->eq('xar_state',$state);
-        } else {
-            $state = -1;
         }
+        else $state = -1;
 
         if ($uid != -1) {
             if ($uid != 0) {
