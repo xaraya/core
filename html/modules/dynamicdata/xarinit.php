@@ -498,7 +498,7 @@ function dynamicdata_init()
    /*********************************************************************
     * Define instances for this module
     * Format is
-    * setInstance(Module,Type,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
 	$query = "SELECT xar_prop_name,xar_prop_type,xar_prop_id FROM xar_dynamic_properties";

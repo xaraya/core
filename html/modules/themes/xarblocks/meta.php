@@ -64,13 +64,7 @@ function themes_metablock_info()
 function themes_metablock_display($blockinfo)
 {
 // Security Check
-//TODO (marc) fix this for God's sake!
-// get the Roles class
-		include_once 'modules/roles/xarroles.php';
-    	$roles = new xarRoles();
-	$userID = xarSessionGetVar('uid');
-			$role = $roles->getRole($userID);
-	if(!xarSecurityCheck('ViewThemes',1,'metablock','$blockinfo[title]::',$role->getName(),'All')) return;
+	if(!xarSecurityCheck('ViewThemes',1,'metablock','$blockinfo[title]::','All')) return;
 
     // Get current content
     $vars = @unserialize($blockinfo['content']);

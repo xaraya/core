@@ -280,7 +280,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$role='',$module='')
+	function xarSecurityCheck($mask,$showexception=1,$component='',$instance='',$module='',$role='')
 	{
 		global $installing;
 
