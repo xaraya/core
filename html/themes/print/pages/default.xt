@@ -11,12 +11,9 @@
         <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css); </style>
     </head>
     <body>
-
-<h2><xar:mlstring>Document From </xar:mlstring> <a href="index.php"><xar:var scope="module" module="themes" name="SiteName"/></a></h2>
-
-<div id="main">
-    <xar:module id="modulespace" main="true" />
-</div>
-</body>
+    <div id="main">
+        <xar:module id="modulespace" main="true" />
+    </div>
+    </body>
 </html>
 </xar:blocklayout>

@@ -21,7 +21,7 @@ a:hover {
     margin-left: 20px;
     margin-bottom: 20px;
     width: 90%;
-    border:1px dashed #000; 
+    border:1px solid #000; 
     background: #fff;
     padding-left: 20px;
     padding-right: 20px;
@@ -109,52 +109,6 @@ PRE {
    font-size: 8pt;
    font-family: Courier,fixed-width;
 }
-INPUT {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   text-indent: 2px;
-   color: #000000;
-}
-BUTTON {
-   border: 2px outset #f0f0f0;
-   background-color: #CDD5F8;
-   color: #000000;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-}
-
-SELECT {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   color: #000000;
-}
-TEXTAREA {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   text-indent: 0px;
-   color: #000000;
-}
 IMG {
    border: 0px;
 }
@@ -195,90 +149,11 @@ HR {
    width:100%;
    color:#C0C0C0;
 }
-FORM {
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-}
-CHECKBOX {
-   background-color: transparent;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-}
+
 
 /*  XARAYA REQUIRED INDIVIDUAL CLASSES */
 TD.xar-norm {}
 TD.xar-alt {}
-
-
-/*  XARAYA REQUIRED ANONYMOUS CLASSES  */
-
-/* these defaults apply to the left block group */
-.xar-block-head{
-    border-bottom: 1px solid #000000;
-    color: #000000;
-}
-.xar-block-title {
-    font-weight: bold;
-    font-style: italic;
-    font-size: 11pt;
-}
-.xar-block-body {}
-.xar-block-foot {
-    border-bottom: 2px dotted #dddddd;
-    margin-bottom: 8px;
-}
-
-/* right block group classes */
-.xar-block-head-right{
-    border: 1px solid #E47C55;
-    background-color: #efefef;
-}
-.xar-block-title-right {
-    font-weight: bold;
-    font-size: 11pt;
-}
-.xar-block-body-right {}
-.xar-block-foot-right {
-    border-bottom: 2px solid #cccccc;
-    margin-bottom: 8px;
-}
-
-/* topnav block group classes */
-.xar-block-head-topnav{}
-.xar-block-title-topnav {}
-.xar-block-body-topnav {
-    margin: auto;
-    border: 1px solid #CCE6FF;
-}
-.xar-block-foot-topnav {}
-
-/* center block group classes */
-.xar-block-head-center{
-    background-image: url(../images/sh_line.gif);
-    height: 6px;
-    width: 100%;
-    background-position: center center;
-    background-repeat: repeat-y;
-}
-.xar-block-title-center {
-    color: #E47C55;
-    background-color: inherit;
-    font-weight: bold;
-    font-size: 11pt;
-    text-align: center;
-}
-.xar-block-body-center {
-    background-color: #CCE6FF;
-}
-.xar-block-foot-center {
-    background-image: url(../images/sh_line.gif);
-    height: 3px;
-    width: 100%;
-    background-position: center center;
-    background-repeat: repeat-y;
-    margin-bottom: 4px;
-}
 
 .xar-mod-head {
    border: 2px solid #a0a0a0;
@@ -287,6 +162,7 @@ TD.xar-alt {}
    text-align: center;
    font-weight: bold;
    font-size: 11pt;
+   display: none;
 }
 .xar-mod-title {
    color: #000000;
@@ -294,7 +170,10 @@ TD.xar-alt {}
    font-weight: bold;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
-.xar-mod-body {}
+.xar-mod-body {
+	padding: 3px;
+	padding-bottom: 20px;
+}
 .xar-mod-foot {}
 .xar-alt {background-color: #E47C55; }
 .xar-accent {background-color: #CCE6FF; }
@@ -303,138 +182,6 @@ TD.xar-alt {}
 .xar-norm-outline {border: 1px solid #c0c0c0; }
 .xar-norm {background-color: #FFFFFF; }
 .xar-sub {font-size: smaller;}
-.xar-menu-section {
-   color: #000000;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: thin dotted #a0a0a0;
-   line-height: 170%;
-   width: 100%;
-   margin-top: 4px;
-   margin-bottom: 4px;
-}
-.xar-menu-section-current {
-   background-color: #CCE6FF;
-   color: #000000;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: 1px solid #000000;
-   line-height: 170%;
-}
-.xar-menu-item {
-   font-size: 9.5pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   padding-left: .5em;
-}
-.xar-menu-item-current {
-   background-color: #CCE6FF;
-   font-size: 9.5pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   padding-left: .5em;
-   padding-bottom: .3em;
-}
-.xar-menu-item:hover {
-   background-color: #f0f0f0;
-}
-.xar-menu-subitem {
-   font-size: 9pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   margin-left: 6px;
-   padding-left: 0px;
-}
-.xar-menu-subitem:hover {
-   background-color: #CDD5F8;
-}
-.xar-menu-subitem-current {
-   font-weight: bold;
-   color: #000000;
-   background-color: #f0f0f0;
-   font-size: 9pt;
-   margin-left: 6px;
-   padding-left: 0px;
-}
-.xar-menu-item-current > .xar-menu-subitem > A {
-   color: #193970;
-}
-.xar-menu-item-current > .xar-menu-subitem > A:visited {
-   color: #003366;
-}
-
 .xar-error {
    color: #FF0000;
-}
-
-/*  THEME SPECIFIC ANONYMOUS CLASSES  */
-.txttitle {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#336699;
-   text-decoration: none;
-}
-.sidebtns {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#336699;
-   text-decoration: none;
-}
-.subhead {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#60A9F0;
-   text-decoration: none;
-}
-.btns {
-   text-decoration: none;
-   background-color:#FFD800;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-}
-.busbtns {
-   text-decoration: none;
-   background-color:#85B8EA;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-}
-.blk {
-   text-decoration: none;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-}
-.LightUp {
-   background-color:#CFE5FA;
-   color:#FFFFFF;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   text-decoration: none;
-}
-.LightDown {
-   background-color:#FFFFFF;
-   color:#336699;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   text-decoration: none;
-}
-.formUp {
-   background-color:#E3F1FF;
-}
-.copyright {
-   font-size: 9pt;
-   line-height: 150%;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
