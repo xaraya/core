@@ -113,7 +113,8 @@ function base_admin_updateconfig()
                 if (!empty($timezoneinfo)) {
                     xarConfigSetVar('Site.Core.TimeZone', $defaulttimezone);
                     list($hours,$minutes) = explode(':',$timezoneinfo[0]);
-                    $offset = ((int) $hours * 60 + (int) $minutes) * 60;
+                    // tz offset is in hours
+                    $offset = (float) $hours + (float) $minutes / 60;
                     xarConfigSetVar('Site.MLS.DefaultTimeOffset', $offset);
                     if (!empty($timezoneinfo[1]) && $timezoneinfo[1] != '-') {
                         $dstrules = xarModAPIFunc('base','user','dstrules',
