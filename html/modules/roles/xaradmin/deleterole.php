@@ -84,7 +84,7 @@ if (empty($check)) {
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $type; // we might have something separate for groups later on
             $pargs['itemid'] = $uid;
-            xarModCallHooks('item', 'delete', $uid, $data);
+            xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {
             $msg = xarML('That user has a current active session', 'roles');
             xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
