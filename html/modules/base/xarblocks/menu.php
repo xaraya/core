@@ -256,6 +256,8 @@ function base_menublock_display($blockinfo)
                 //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
                 $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
                 $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
+                $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
+                $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
 
                 if (isset($vars['displayprint'])) {
                     $displayprint = $vars['displayprint'];
@@ -285,6 +287,8 @@ function base_menublock_display($blockinfo)
                                                             'showlogout'       => $showlogout,
                                                             'where'            => $thismodname,
                                                             'what'             => $thisfuncname,
+                                                            'displayrss'       => $displayrss,
+                                                            'displayprint'     => $displayprint,
                                                             'displayrss'       => $displayrss,
                                                             'displayprint'     => $displayprint,
                                                             'printurl'         => $printurl,
@@ -354,6 +358,8 @@ function base_menublock_insert($blockinfo)
 {
     // Should be boolean, but needs to review the where this variable is coming from to change it.
     if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('displayrss', 'str:1', $vars['displayrss'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayrss', 'str:1', $vars['displayrss'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
