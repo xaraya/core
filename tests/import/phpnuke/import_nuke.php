@@ -54,7 +54,7 @@ if (isset($step)) {
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
 ?>
-    Requirement : you must be using the same database, but a different prefix...
+    Requirement for use : The PHP-Nuke data and the Xaraya data HAVE to be in the same database for this script to work and they HAVE to be using a different prefix.  We read the PHP-Nuke data and use the Xaraya API to import the data into Xaraya.  In order to do this we must be reading from the same database.  Easiest solution is to copy your PHP-Nuke data into the same database as your Xaraya installation.
     <p></p>
     <form method="POST" action="import_nuke.php">
     <table border="0" cellpadding="4">
