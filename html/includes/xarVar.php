@@ -92,7 +92,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 {
     //<nuncanada> XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
     // default value and it will work fine
-    // XARVAR_NOTREQUIRED should be some idependent integer so it could be mixed(!) with XARVAR_GET_OR_POST
+    // XARVAR_NOTREQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
     // What about cookie/env/request/server variables?
 
     assert('is_int($flags)');
@@ -101,18 +101,22 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
 
-    $value = xarRequestGetVar($name, $allowOnlyMethod);
+    //This allows us to have a extract($args) before the xarVarFetch and still run
+    //the variables thru the tests here.
+    if (!isset($value)) {
+        $value = xarRequestGetVar($name, $allowOnlyMethod);
 
-    if ($value == NULL) {
-        if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
-            $value = $defaultValue;
-            
-            return true;
-        } else {
-            // Raise an exception
-            $msg = xarML('The required input variable \'#(1)\' could not be found.', $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+        if ($value == NULL) {
+            if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
+                $value = $defaultValue;
+
+                return true;
+            } else {
+                // Raise an exception
+                $msg = xarML('The required input variable \'#(1)\' could not be found.', $name);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+                return;
+            }
         }
     }
 
