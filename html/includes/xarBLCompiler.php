@@ -32,6 +32,9 @@ define('XAR_TOKEN_PI_DELIM'          , '?'      ); // Processing instruction del
 define('XAR_TOKEN_NS_DELIM'          , ':'      ); // Namespace delimiter
 define('XAR_TOKEN_HTMLCOMMENT_DELIM' , '--'     ); // HTML comment
 
+define('XAR_TOKEN_DOCTYPE_START'     , 'DOCTYPE'); // DOCTYPE start inside non markup section
+define('XAR_TOKEN_DOCTYPE_END'       , '>'      ); // DOCTYPE end marker
+
 define('XAR_TOKEN_CDATA_START'       , '[CDATA['); // CDATA start inside non markup section
 define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 
@@ -58,6 +61,44 @@ define('XAR_BL_MISSING_ATTRIBUTE','MISSING_ATTRIBUTE');
 define('XAR_BL_MISSING_PARAMETER','MISSING_PARAMETER');
 
 define('XAR_BL_DEPRECATED_ATTRIBUTE','DEPRECATED_ATTRIBUTE');
+
+/**
+ * DTD identifiers
+ *
+ * @todo in php5 make this class constants
+ * @todo move this to somewhere editable
+ */
+class DTDIdentifiers
+{
+    // List taken from : http://www.w3.org/QA/2002/04/valid-dtd-list.html
+    function get($key) 
+    {    
+        $dtds = array
+        (
+         'html2'                => '<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">',
+         'html32'               => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">',
+         'html401-strict'       => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">',
+         'html401-transitional' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">',
+         'html401-frameset'     => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"  "http://www.w3.org/TR/html4/frameset.dtd">',
+         'xhtml1-strict'        => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+         'xhtml1-transitional'  => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+         'xhtml1-frameset'      => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
+         'xhtml11'              => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
+         'mathml101'            => '<!DOCTYPE math SYSTEM "http://www.w3.org/Math/DTD/mathml1/mathml.dtd">',
+         'mathml2'              => '<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd">',
+         'svg10'                => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">',
+         'svg11'                => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+         'svg11-basic'          => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">',
+         'svg11-tiny'           => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Tiny//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd">',
+         'xhtml-math-svg'       => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">',
+         'svg-xhtml-math'       => '<!DOCTYPE svg:svg PUBLIC  "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">'
+        );
+        if(isset($dtds[$key])) {
+            return $dtds[$key];
+        }
+        return '';
+    }
+}
 
 /**
  * xarTpl__CompilerError
@@ -331,7 +372,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  * @package blocklayout
  * @access private
  * @todo this is an xml parser type functionality, can't we use an xml parser for this?
- * @todo the nodesfactory doesnt have to be a member of this class, it only clutters the method calling
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
@@ -573,16 +613,27 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $nextChar = $this->getNextToken();
                             while(trim($nextChar)) {
                                 $buildup .= $nextChar;
-                                switch($buildup) {
+                                switch(strtoupper($buildup)) {
                                     case XAR_TOKEN_HTMLCOMMENT_DELIM:
                                         $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                        break 2; // done
+                                        break 2; // we found the delimiter, carry on
+                                    case XAR_TOKEN_DOCTYPE_START:
+                                        // doctype before root tag isnt ours to process, we skip that completely
+                                        if(!$this->tagRootSeen) {
+                                            // While we are not using an XML parser do this very simplistic, just wind to the end and skip the
+                                            // whole she bang. When an internal subset is specified this may go bang-bang
+                                            $between = $this->windTo(XAR_TOKEN_TAG_END);
+                                            $this->getNextToken(); // eat the '>'
+                                            $text = ''; $token = '';
+                                            break 4; // Start all over, leaving nothing open
+                                        }
+                                        // doctype after root tag is invalid, but we allow it for now
                                     case XAR_TOKEN_CDATA_START:
                                         // Treat it as text
                                         // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
                                         // See also bug #3111
                                         $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
-                                        break 3;
+                                        break 3; // continue parsing the content
                                 }
                                 $nextChar = $this->getNextToken();
                             }
@@ -1604,5 +1655,4 @@ function noop($input)
 {
     return $input;
 }
-
 ?>
