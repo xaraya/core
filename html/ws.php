@@ -145,7 +145,13 @@ function xarWebservicesMain()
       	xarLogMessage("FlashRemoting request");
         if(xarModIsAvailable('flashservices')) {
           $server = xarModAPIFunc('flashservices','user','initflashservices');
-      	  $server->service();
+          if (is_object($server)) {
+        	  $server->service();
+        	  
+          } else {
+            echo "could not create flashremoting server";
+            
+          }// if
         }// if
 		    break; 
 
