@@ -553,6 +553,7 @@ function xarLocaleFormatDate($time = null, $format = null, $offset = null)
  *  Returns a valid timestamp for the current user.  It will
  *  make adjustments for timezone and should be used in gmstrftime
  *  or gmdate functions only.
+ *
  *  @author Roger Raymond <roger@asphyxia.com>
  *  @access public
  *  @return int unix timestamp.
@@ -569,6 +570,13 @@ function xarLocaleUserTime($time=null)
     return $time;
 }
 
+/**
+ *  Returns the user's current tz offset
+ *
+ *  @author Roger Raymond <roger@asphyxia.com>
+ *  @access public
+ *  @return int tz offset
+ */
 function xarLocaleUserOffset()
 {
     // get the correct timezone offset for this user
