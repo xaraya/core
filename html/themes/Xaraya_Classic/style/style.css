@@ -344,7 +344,10 @@ td.xar-alt {}
 .xar-menu-item-current > .xar-menu-subitem > a:visited {
    color: #003366;
 }
-
+.xar-title {
+   font-weight: bold;
+   font-size: 13px;
+}
 .xar-error {
    color: #ff0000;
 }
