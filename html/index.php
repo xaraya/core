@@ -46,18 +46,23 @@ function xarMain()
     }
 
     $caching = 0;
+    $pageCaching = 0;
 
-    // Set up caching if enabled
+    // Set up output caching if enabled
     if (file_exists('var/cache/output/cache.touch')) {
         $caching = 1;
         include 'includes/xarCache.php';
         if (xarCache_init(array('cacheDir' => 'var/cache/output')) == false) {
             $caching = 0;
         }
+    }
+
+    if ($caching == 1 && file_exists('var/cache/output/cache.pagelevel')) {
+        $pageCaching = 1;
         $cacheKey = "$modName-$modType-$funcName";
     }
 
-    if ($caching == 1 && xarPageIsCached($cacheKey,'page')) {
+    if ($pageCaching == 1 && xarPageIsCached($cacheKey,'page')) {
         // output the cached page *or* a 304 Not Modified status
         xarPageGetCached($cacheKey,'page');
 
@@ -113,9 +118,9 @@ function xarMain()
         // Handle exceptions (the bubble at the top handler
         if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
-        if ($caching == 1) {
+        if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
-            xarPageSetCached($cacheKey,'page',$pageOutput);
+            xarPageSetCached($cacheKey, 'page', $pageOutput);
         }
 
         echo $pageOutput;

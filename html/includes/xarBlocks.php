@@ -122,6 +122,11 @@ function xarBlock_renderGroup($groupName)
         return;
     }
 
+    $caching = 0;
+    if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch') && xarModGetVar('xarcachemanager','CacheBlockOutput')) {
+        $caching = 1;
+    }
+
     list($dbconn) = xarDBGetConn();
     $tables =& xarDBGetTables();
 
@@ -161,54 +166,53 @@ function xarBlock_renderGroup($groupName)
     $output = '';
     while(!$result->EOF) {
         $blockInfo = $result->GetRowAssoc(false);
-        $caching = 0;
-        if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch')) {
-            $caching = 1;
+
+        if ($caching == 1) {
             $cacheKey = $blockInfo['module'] . "-blockid" . $blockInfo['bid'] . "-" . $groupName;
             $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockInfo['bid']);
         }
- 
+
         if ($caching == 1 && xarBlockIsCached($args)) {
             // output the cached block
             $output .= xarBlockGetCached($cacheKey,'block');
-            
+
         } else {
-            
+
             $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
-        // Get the overriding template name.
-        // Levels, in order (most significant first): group instance, instance, group
-        // TODO: allow over-riding of inner and outer templates at different levels independantly.
-        $group_inst_bl_template = split(';', $blockInfo['group_inst_bl_template'], 3);
-        $inst_bl_template = split(';', $blockInfo['inst_bl_template'], 3);
-        $group_bl_template = split(';', $blockInfo['group_bl_template'], 3);
+            // Get the overriding template name.
+            // Levels, in order (most significant first): group instance, instance, group
+            // TODO: allow over-riding of inner and outer templates at different levels independantly.
+            $group_inst_bl_template = split(';', $blockInfo['group_inst_bl_template'], 3);
+            $inst_bl_template = split(';', $blockInfo['inst_bl_template'], 3);
+            $group_bl_template = split(';', $blockInfo['group_bl_template'], 3);
 
-        if (empty($group_bl_template[0])) {
-            // Default the box template to the group name.
-            $group_bl_template[0] = $blockInfo['group_name'];
-        }
+            if (empty($group_bl_template[0])) {
+                // Default the box template to the group name.
+                $group_bl_template[0] = $blockInfo['group_name'];
+            }
 
-        if (empty($group_bl_template[1])) {
-            // Default the block template to the instance name.
-            // TODO
-            $group_bl_template[1] = $blockInfo['name'];
-        }
+            if (empty($group_bl_template[1])) {
+                // Default the block template to the instance name.
+                // TODO
+                $group_bl_template[1] = $blockInfo['name'];
+            }
 
-        // Cascade level over-rides for the box template.
-        $blockInfo['_bl_box_template'] = !empty($group_inst_bl_template[0]) ? $group_inst_bl_template[0]
-            : (!empty($inst_bl_template[0]) ? $inst_bl_template[0] : $group_bl_template[0]);
+            // Cascade level over-rides for the box template.
+            $blockInfo['_bl_box_template'] = !empty($group_inst_bl_template[0]) ? $group_inst_bl_template[0]
+                : (!empty($inst_bl_template[0]) ? $inst_bl_template[0] : $group_bl_template[0]);
 
-        // Cascade level over-rides for the block template.
-        $blockInfo['_bl_block_template'] = !empty($group_inst_bl_template[1]) ? $group_inst_bl_template[1]
-            : (!empty($inst_bl_template[1]) ? $inst_bl_template[1] : $group_bl_template[1]);
+            // Cascade level over-rides for the block template.
+            $blockInfo['_bl_block_template'] = !empty($group_inst_bl_template[1]) ? $group_inst_bl_template[1]
+                : (!empty($inst_bl_template[1]) ? $inst_bl_template[1] : $group_bl_template[1]);
 
-        // Unset a few elements that clutter up the block details.
-        // They are for internal use and we don't want them used within blocks.
-        unset($blockInfo['group_inst_bl_template']);
-        unset($blockInfo['inst_bl_template']);
-        unset($blockInfo['group_bl_template']);
+            // Unset a few elements that clutter up the block details.
+            // They are for internal use and we don't want them used within blocks.
+            unset($blockInfo['group_inst_bl_template']);
+            unset($blockInfo['inst_bl_template']);
+            unset($blockInfo['group_bl_template']);
             
-        $blockoutput = xarBlock_render($blockInfo);
+            $blockoutput = xarBlock_render($blockInfo);
 
             if ($caching == 1) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
