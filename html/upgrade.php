@@ -93,8 +93,10 @@ if (empty($step)) {
     }
 
     // Now we can check whether people are logged in
-    if(!xarSecurityCheck('AdminPanel')){
-        echo xarML('You must be logged in with admin permissions to upgrade Xaraya.');
+    if(XARCORE_VERSION_NUM == $xarVersion){
+        echo xarML('You have already upgraded to ');
+        echo $xarVersion;
+        echo xarML('.  The upgrade script only needs to run once.');
         echo '</div></div>';
         // catch the output
         CatchOutput();
