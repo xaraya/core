@@ -31,15 +31,6 @@ function roles_admin_newrole()
         } 
     } 
     // Load Template
-    $item = array();
-    $item['module'] = 'roles';
-    $hooks = xarModCallHooks('item', 'new', '', $item);
-    if (empty($hooks) || !is_string($hooks)) {
-        $data['hooks'] = '';
-    } else {
-        $data['hooks'] = $hooks;
-    } 
-
     if (isset($name)) {
         $data['pname'] = $name;
     } else {
@@ -81,6 +72,12 @@ function roles_admin_newrole()
     } else {
         $data['pparentid'] = 1;
     } 
+
+    // call item new hooks (for DD etc.)
+    $item = $data;
+    $item['module'] = 'roles';
+    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
+    $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
     $data['authid'] = xarSecGenAuthKey();
     $data['addlabel'] = xarML('Add');

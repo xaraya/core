@@ -79,6 +79,14 @@ function roles_admin_updaterole()
     if (!$modifiedrole) {
         return;
     }
+
+    // call item update hooks (for DD etc.)
+// TODO: move to update() function
+    $pargs['module'] = 'roles';
+    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+    $pargs['itemid'] = $uid;
+    xarModCallHooks('item', 'update', $uid, $pargs);
+
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
 }

@@ -68,6 +68,13 @@ function roles_admin_modifyrole()
         $data['pstate'] = $role->getState();
     }
 
+    // call item modify hooks (for DD etc.)
+    $item = $data;
+    $item['module']= 'roles';
+    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
+    $item['itemid']= $uid;
+    $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
+
     include_once 'modules/roles/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
 

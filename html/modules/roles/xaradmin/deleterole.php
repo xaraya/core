@@ -48,6 +48,13 @@ function roles_admin_deleterole()
         if (empty($check)) {
             // Try to remove the role and bail if an error was thrown
             if (!$role->remove()) return;
+
+            // call item delete hooks (for DD etc.)
+// TODO: move to remove() function
+            $pargs['module'] = 'roles';
+            $pargs['itemtype'] = $type; // we might have something separate for groups later on
+            $pargs['itemid'] = $uid;
+            xarModCallHooks('item', 'delete', $uid, $data);
         } else {
             $msg = xarML('That user has a current active session', 'roles');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));

@@ -105,6 +105,17 @@ function roles_admin_addrole()
     if (!$role->add()) {
         return;
     }
+
+    // retrieve the uid of this new user
+    $uid = $role->uid;
+
+    // call item create hooks (for DD etc.)
+// TODO: move to add() function
+    $pargs['module'] = 'roles';
+    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+    $pargs['itemid'] = $uid;
+    xarModCallHooks('item', 'create', $uid, $pargs);
+
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));
 }

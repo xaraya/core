@@ -124,6 +124,11 @@
 					</td>
 				</tr>
 			</xar:if>
+			<xar:if condition="!empty($hooks) and count($hooks) gt 0">
+				<xar:foreach in="$hooks" key="$hookmodule">
+					#$hooks[$hookmodule]#
+				</xar:foreach>
+			</xar:if>
 			<tr>
 				<td align="center" colspan="2"><br />
 					<input type="submit" value="#$updatelabel#" align="middle" tabindex="8" />
