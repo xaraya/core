@@ -30,6 +30,12 @@
          			<xar:else />
          			  FAILURE: The installer cannot write to the #$rssTemplatesDir# Please verify that your webserver has write access to the #$rssTemplatesDir#  directory.
          			</xar:if>
+					<br /><br />
+         			<xar:if condition="$adodbTemplatesIsWritable">
+         			  SUCCESS: The installer can write to the #$adodbTemplatesDir# directory.
+         			<xar:else />
+         			  FAILURE: The installer cannot write to the #$adodbTemplatesDir# Please verify that your webserver has write access to the #$adodbTemplatesDir#  directory.
+         			</xar:if>
        			</span>
 						<br /><br />
           </div>
