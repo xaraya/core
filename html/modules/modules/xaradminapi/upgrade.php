@@ -33,7 +33,7 @@ function modules_adminapi_upgrade($args)
                        'admin',
                        'executeinitfunction',
                        array('regid'    => $regid,
-                             'function' => 'init'))) {
+                             'function' => 'upgrade'))) {
         //Raise an Exception
         return;
     }

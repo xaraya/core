@@ -70,11 +70,17 @@ function modules_adminapi_executeinitfunction ($args)
 
     $func = $modInfo['name'] . '_'.$args['function'];
     if (function_exists($func)) {
-        if ($func() === false) {
+        if ($args['function'] == 'upgrade') {
+            // pass the old version as argument to the upgrade function
+            $result = $func($modInfo['version']);
+        } else {
+            $result = $func();
+        }
+        if ($result === false) {
             $msg = xarML('While changing state of a module, the function #(1) returned a false value when executed.', $func);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
-        } elseif ($func != true) {
+        } elseif ($result != true) {
             $msg = xarML('An error ocurred while changing state of module, executing function #(1)', $func);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
