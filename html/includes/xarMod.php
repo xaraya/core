@@ -98,7 +98,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
  * @return mixed The value of the variable or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
-function xarModGetVar($modName, $name)
+function xarModGetVar($modName, $name, $prep = NULL)
 {
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
@@ -107,6 +107,10 @@ function xarModGetVar($modName, $name)
     if (empty($name)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
+    }
+
+    if (empty($prep)) {
+        $prep = 0;
     }
 
     if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
@@ -155,6 +159,10 @@ function xarModGetVar($modName, $name)
     }
     list($value) = $result->fields;
     $result->Close();
+    
+    if ($prep == 1){
+        $value = xarVarPrepForDisplay($value);
+    }
 
     xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
 

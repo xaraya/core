@@ -34,7 +34,8 @@ function xarMain()
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
     // Default Page Title
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteSlogan'));
+    $SiteSlogan = xarModGetVar('themes', 'SiteSlogan');
+    xarTplSetPageTitle(xarVarPrepForDisplay($SiteSlogan));
 
     // Theme Override
     xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED);
