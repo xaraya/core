@@ -3,6 +3,6 @@
 <link>&pnt-var-notes;</link>
 <description>&pnt-var-summary;</description>
 <author>&pnt-var-author;</author>
-<date>&pnt-var-date;</date>
-<hits>&pnt-var-counter;</hits>
+<PubDate>&pnt-var-date;</PubDate>
+<comments>&pnt-modurl-comments-user-view;</comments>
 </item>

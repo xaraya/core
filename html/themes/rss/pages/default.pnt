@@ -3,14 +3,17 @@ header('Content-type: text/xml');
 echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 ?>
 
-<!-- DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"
- "http://my.netscape.com/publish/formats/rss-0.91.dtd" -->
-
-<rss version="0.91">
+<rss version="2.0">
 <channel>
 <title>&pnt-config-sitename;</title>
 <link><?php echo pnVarPrepForDisplay(pnGetBaseURL()) ?></link>
 <description>&pnt-config-backend_title;</description>
+<language>&pnt-config-locale;</language>
+<copyright>&pnt-config-foot;</copyright>
+<managingEditor>&pnt-config-sitemanagingeditor;</managingEditor>
+<webMaster>&pnt-config-adminmail;</webMaster>
+<generator>Xaraya 1.0</generator>
+<docs>http://backend.userland.com/rss</docs>
 <pnt:module id="modulespace" main="true" />
 </channel>
 </rss>
