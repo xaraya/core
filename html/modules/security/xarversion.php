@@ -14,6 +14,6 @@ $modversion['contact'] = 'http://www.mcdee.net/';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Permissions::' => '::');
-$modversion['class'] = 'Core Admin';
+$modversion['class'] = 'Admin';
 $modversion['category'] = 'Users & Groups';
 ?>
