@@ -55,15 +55,23 @@ function xarPageIsCached($cacheKey, $name = '')
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
 
-    if (strpos($cacheKey, '-user-') &&
+    if (// if this page is a user type page AND
+        strpos($cacheKey, '-user-') &&
+        // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
+        // the http request is a GET AND
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        // the file is present AND
         file_exists($cache_file) &&
+        // the file has something in it AND
         filesize($cache_file) > 0 &&
+        // (cached pages don't expire OR this file hasn't expired yet) AND
         ($xarPage_cacheTime == 0 ||
          filemtime($cache_file) > time() - $xarPage_cacheTime) &&
+        // the current user is eligible for receiving cached pages...
         xarPage_checkUserCaching()) {
 
         // create another copy for session-less page caching if necessary
@@ -121,6 +129,7 @@ function xarPageSetCached($cacheKey, $name, $value)
            $xarOutput_cacheTheme,
            $xarPage_cacheDisplay,
            $xarOutput_cacheSizeLimit,
+           $xarPage_cacheShowTime,
            $xarPage_cacheCode;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
@@ -130,16 +139,33 @@ function xarPageSetCached($cacheKey, $name, $value)
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
 
-    if (strpos($cacheKey, '-user-') &&
+    if (// if this page is a user type page AND
+        strpos($cacheKey, '-user-') &&
+        // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
+        // the http request is a GET AND
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        // ((the cache file doesn't exist) OR (expires AND has expired)) AND
         (!file_exists($cache_file) ||
-        ($xarPage_cacheTime != 0 &&
-         filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
+         ($xarPage_cacheTime != 0 &&
+          filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
+        // the cache collection directory hasn't reached its size limit AND
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
+        // the current user's page views are eligible for caching...
         xarPage_checkUserCaching()) {
+        
+        // if request, modify the end of the file with a time stamp
+        if ($xarPage_cacheShowTime == 1) {
+            $now = xarML('Last updated on #(1)',
+                         strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
+            $value = preg_replace('#</body>#',
+                                  // TODO: set this up to be templated
+                                  '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
+                                  $value);
+        }
         
         xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
 

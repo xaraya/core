@@ -159,23 +159,12 @@ function xarCache__shutdown_handler()
  */
 function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
 {
-    global $xarOutput_cacheCollection,
-           $xarPage_cacheShowTime,
-           ${'xar' . $cacheType . '_cacheCode'};
+    global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheCode'};
 
     $tmp_cache_file = tempnam($xarOutput_cacheCollection . '/' . strtolower($cacheType),
                               "$cacheKey-${'xar' . $cacheType . '_cacheCode'}");
     $fp = @fopen($tmp_cache_file, "w");
     if (!empty($fp)) {
-
-        if (($cacheType == 'Page') && ($xarPage_cacheShowTime == 1)) {
-            $now = xarML('Last updated on #(1)',
-                         strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
-            $value = preg_replace('#</body>#',
-                // TODO: set this up to be templated
-                '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
-                $value);
-        }
 
         //if ($cacheType == 'Block') { $value .= 'Cached Block'; }// This line is used for testing
 
