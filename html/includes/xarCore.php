@@ -122,7 +122,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Legacy systems
     // {ML_dont_parse 'includes/pnHTML.php'}
     include_once 'includes/pnHTML.php';
-    // {ML_dont_parse 'includes/xarLegacy.php'}
+    // {ML_dont_parse 'includes/pnLegacy.php'}
     include_once 'includes/pnLegacy.php';
 
     // Initialise system args array

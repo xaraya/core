@@ -1,13 +1,13 @@
 <div align="center">
-<span class="pn-pagetitle">Xaraya Installation</font><br />
-<span class="pn-sub">Page 5/6</font><br /><br />
-<span class="pn-title">Administrator Account Creation</span><br /><br />
-<form action="&pnt-modurl-installer-admin-create_administrator;" method="post">
+<span class="xar-pagetitle">Xaraya Installation</font><br />
+<span class="xar-sub">Page 5/6</font><br /><br />
+<span class="xar-title">Administrator Account Creation</span><br /><br />
+<form action="&xar-modurl-installer-admin-create_administrator;" method="post">
 <input type="hidden" name="install_language" value="<?php echo $language; ?>" />
 <table width="50%" align="center">
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the users module.
             </span>
             <br /><br />
@@ -15,7 +15,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Administrator Username
             </span>
         </td>
@@ -25,7 +25,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Administrator Name
             </span>
         </td>
@@ -35,17 +35,17 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Administrator Password
             </span>
         </td>
         <td>
-            <input type="password" name="install_admin_password" maxlength="80" value="">
+            <input type="text" name="install_admin_password" maxlength="80" value="">
         </td>
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Administrator Email
             </span>
         </td>
@@ -55,27 +55,27 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Administrator URL
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_url" maxlength="255" value="<?php echo pnGetBaseURL(); ?>">
+            <input type="text" name="install_admin_url" maxlength="10" value="<?php echo xarServerGetBaseURI(); ?>">
         </td>
     </tr>
     <tr>
         <td colspan="2" style="text-align:justify;">
-            <span class="pn-normal">
+            <span class="xar-normal">
                  Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.
             </span><br /><br />
         </td>
     </tr>
     <tr>
-        <td align="center" colspan="2" class="pn-normal">
+        <td align="center" colspan="2" class="xar-normal">
             <input type="submit" name="create" value="Continue &gt;" />
         </td>
     </tr>
 </table>
 </form>
-<font class="pn-sub">Thank you for trying Xaraya.</font>
+<font class="xar-sub">Thank you for trying Xaraya.</font>
 </div>

@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Users Administration</pnt:mlstring>            
+            <xar:mlstring>Users Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
@@ -9,13 +9,13 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-new;"><pnt:mlstring>Add User</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-new;"><xar:mlstring>Add User</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-view;"><pnt:mlstring>View Users</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-view;"><xar:mlstring>View Users</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifyconfig;"><pnt:mlstring>Modify Users Configuration</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifyconfig;"><xar:mlstring>Modify Users Configuration</xar:mlstring></a>
         </td>
     </tr>
     <tr align="center">
@@ -26,10 +26,10 @@
             <a href="&pnt-modurl-users-admin-modifydynamicdata;"><pnt:mlstring>Dynamic User Data</pnt:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifyconfirmationemail;"><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifyconfirmationemail;"><xar:mlstring>Modify Confirmation Email</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifywelcomeemail;"><pnt:mlstring>Modify Welcome Email</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifywelcomeemail;"><xar:mlstring>Modify Welcome Email</xar:mlstring></a>
         </td>
     </tr>
 </table>

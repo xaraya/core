@@ -1,9 +1,9 @@
-<form action="&pnt-modurl-users-user-login;" method="post" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="redirecturl" id="returnurl" value="&pnt-var-return_url;" />
+<form action="&xar-modurl-users-user-login;" method="post" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="redirecturl" id="returnurl" value="&xar-var-return_url;" />
     <table border="0" width="100%">
         <tr>
             <td>
-                <pnt:mlstring>Username</pnt:mlstring>
+                <xar:mlstring>Username</pnt:mlstring>
             </td>
             <td>
                 <input type="text" name="uname" maxlength="64" size="10" />
@@ -11,19 +11,19 @@
         </tr>
         <tr>
             <td>
-                <pnt:mlstring>Password</pnt:mlstring>
+                <xar:mlstring>Password</xar:mlstring>
             </td>
             <td>
                 <input type="password" name="pass" maxlength="64" size="10" />
             </td>
         </tr>
-        <pnt:if condition="pnConfigGetVar('seclevel') neq 'High'">
+        <xar:if condition="xarConfigGetVar('seclevel') neq 'High'">
             <tr>
                 <td colspan="2">
-                    <input type="checkbox" name="rememberme" value="1" /><pnt:mlstring>Remember me</pnt:mlstring>
+                    <input type="checkbox" name="rememberme" value="1" /><xar:mlstring>Remember me</xar:mlstring>
                 </td>
             </tr>
-        </pnt:if>
+        </xar:if>
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" value="Sign in" align="middle" />
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td colspan="2" align="justify">
-                <pnt:mlstring>Need an account?</pnt:mlstring> <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>Register here</pnt:mlstring></a>.
+                <xar:mlstring>Need an account?</xar:mlstring> <a href="&xar-modurl-users-user-new;"><xar:mlstring>Register here</xar:mlstring></a>.
             </td>
         </tr>
     </table>

@@ -522,7 +522,7 @@ function xarSession__phpGC($maxlifetime)
  *
  * @return Boolean
  */
-function pnSession__sniff()
+function xarSession__sniff()
 {
 //  sniff process
     include_once 'phpSniff.class.php';
@@ -530,24 +530,24 @@ function pnSession__sniff()
     $client->init();
 
 /*
-//  Get database setup (see pntables.php root)
-    list($dbconn) = pnDBGetConn();
-    $pntable      = pnDBGetTables();
+//  Get database setup (see xartables.php root)
+    list($dbconn) = xarDBGetConn();
+    $xartable      = xarDBGetTables();
 
 //  set some variables used in the database call
-    $uatable  =  $pntable['user_agent'];
-    $uacolumn = &$pntable['user_agent_column'];
+    $uatable  =  $xartable['user_agent'];
+    $uacolumn = &$xartable['user_agent_column'];
 
     $sql = "SELECT $uacolumn[id]
             FROM $uatable
-            WHERE $uacolumn[agent] = '" . pnVarPrepForStore($client->get_property('ua')) . "'";
+            WHERE $uacolumn[agent] = '" . xarVarPrepForStore($client->get_property('ua')) . "'";
     $result = $dbconn->Execute($sql);
 
     if (!$result->EOF) {
         $uaid = $result->fields[0];
     } else {
         $dbconn->GenId('useragent')
-        $insarr = array($dbconn->GenId($uatable), pnVarPrepForStore($client->get_property('ua')),
+        $insarr = array($dbconn->GenId($uatable), xarVarPrepForStore($client->get_property('ua')),
         $client->property('platform'), $client->property('os'),
                         $client->property('browser'), $client->property('version'));
 
@@ -561,14 +561,14 @@ function pnSession__sniff()
 */
 
 //  provide user agent details as session variables
-    pnSessionSetVar("uaid", $uaid);
-    pnSessionSetVar('browsername', $client->property('browser'));
-    pnSessionSetVar('browserversion', $client->property('version'));
-    pnSessionSetVar('osname', $client->property('platform'));
-    pnSessionSetVar('osversion', $client->property('os'));
-//  pnSessionSetVar('caps', $client->property('caps'));
-//  pnSessionSetVar('quirks', $client->property('quirks'));
-//  pnSessionSetVar('browserlang', $client->property('language'));
+    xarSessionSetVar("uaid", $uaid);
+    xarSessionSetVar('browsername', $client->property('browser'));
+    xarSessionSetVar('browserversion', $client->property('version'));
+    xarSessionSetVar('osname', $client->property('platform'));
+    xarSessionSetVar('osversion', $client->property('os'));
+//  xarSessionSetVar('caps', $client->property('caps'));
+//  xarSessionSetVar('quirks', $client->property('quirks'));
+//  xarSessionSetVar('browserlang', $client->property('language'));
 
 //  end of sniffin ... bark-bark
     return true;

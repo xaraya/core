@@ -1,12 +1,12 @@
 <div align="center">
-<span class="pn-pagetitle">Xaraya Installation</font><br />
-<span class="pn-sub">Page 6/6</font><br /><br />
-<span class="pn-title">Installation completed</span><br /><br />
+<span class="xar-pagetitle">Xaraya Installation</font><br />
+<span class="xar-sub">Page 6/6</font><br /><br />
+<span class="xar-title">Installation completed</span><br /><br />
 <table width="50%" align="center">
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
-            <span class="pn-normal">
-                <b>Congratulations, you have successfully installed <pnt:var name="Version_ID" scope="config" /> <pnt:var name="Version_Num" scope="config" /> ("<pnt:var name="Version_Sub" scope="config" />")!</b>
+            <span class="xar-normal">
+                <b>Congratulations, you have successfully installed <xar:var name="Version_ID" scope="config" /> <xar:var name="Version_Num" scope="config" /> ("<xar:var name="Version_Sub" scope="config" />")!</b>
                 <br /><br />
                 Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
             <br /><br />
@@ -16,5 +16,5 @@
         </td>
     </tr>
 </table>
-<font class="pn-sub">Thank you for trying Xaraya.</font>
+<font class="xar-sub">Thank you for trying Xaraya.</font>
 </div>

@@ -1,7 +1,7 @@
 <div align="center">
-<span class="pn-pagetitle">Xaraya Installation</font><br />
-<span class="pn-sub">Page 4/6</font><br /><br />
-<span class="pn-title">Database Settings Collection</span><br /><br />
+<span class="xar-pagetitle">Xaraya Installation</font><br />
+<span class="xar-sub">Page 4/6</font><br /><br />
+<span class="xar-title">Database Settings Collection</span><br /><br />
 <form action="install.php" method="post">
 <input type="hidden" name="install_language" value="<?php echo $language; ?>" />
 
@@ -10,7 +10,7 @@
 <table width="50%" align="center">
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.
             </span>
             <br /><br />
@@ -18,7 +18,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Database Host
             </span>
         </td>
@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Database Username
             </span>
         </td>
@@ -38,7 +38,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Database Password
             </span>
         </td>
@@ -48,7 +48,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Database Name
             </span>
         </td>
@@ -58,7 +58,7 @@
     </tr>
     <tr>
         <td align="left">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 Table Prefix (for Table Sharing)
             </span>
         </td>
@@ -68,7 +68,7 @@
     </tr>
     <tr>
         <td align="left">
-            <font class="pn-normal">Database Type</font>
+            <font class="xar-normal">Database Type</font>
         </td>
         <td>
             <select name="install_database_type">
@@ -81,12 +81,12 @@
     <tr>
         <td align="left" colspan="2">
             <input type="checkbox" name="install_create_database" value="1">
-            <span class="pn-normal">Create the database</span>
+            <span class="xar-normal">Create the database</span>
         </td>
     </tr>
     <tr>
         <td colspan="2" style="text-align:justify;">
-            <span class="pn-normal">
+            <span class="xar-normal">
                  If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.
             </span><br /><br />
         </td>
@@ -94,19 +94,19 @@
     <tr>
         <td align="left" colspan="2">
             <input type="checkbox" name="install_intranet" value="1">
-            <span class="pn-normal">This site is for intranet or other local (non-internet) use</span>
+            <span class="xar-normal">This site is for intranet or other local (non-internet) use</span>
         </td>
     </tr>
     <tr>
         <td colspan="2" style="text-align:justify;">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.Xaraya.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b>
             </span><br /><br />
         </td>
     </tr>
     <tr>
         <td align="center" colspan="2">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 <input type="radio" name="install_type" value="new" checked />&nbsp;New install
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="install_type" value="upgrade" />&nbsp;Upgrade
@@ -114,12 +114,12 @@
         </td>
     </tr>
     <tr>
-        <td align="center" colspan="2" class="pn-normal">
+        <td align="center" colspan="2" class="xar-normal">
             <input type="hidden" name="install_phase" value="5" />
             <input type="submit" value="Continue &gt;" />
         </td>
     </tr>
 </table>
 </form>
-<font class="pn-sub">Thank you for trying Xaraya.</font>
+<font class="xar-sub">Thank you for trying Xaraya.</font>
 </div>
