@@ -241,8 +241,13 @@ function xarMLByKey($key/*, ...*/)
 {
     global $xarMLS_backend;
 
-    assert('!empty($key) && strpos($key, " ") === false');
-
+    // <mrb> Really check for key contains a space with an assert?
+    // rather fail gracefully here. This will happen a lot!!
+    // FIXME: Find a better way to check for spaces in $key
+    // and also for empty keys, we just can't keep bombing out like this.
+    //assert('!empty($key) && strpos($key, " ") === false');
+    assert(!empty($key));
+    
     if (isset($xarMLS_backend)) {
         $trans = $xarMLS_backend->translateByKey($key);
     } else {
