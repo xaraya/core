@@ -7,7 +7,7 @@
     </h1>
 
     <div id="license">
-    	<xar:mlstring>
+        <xar:mlstring>
 <h2>GNU GENERAL PUBLIC LICENSE</h2>
 <p>Version 2, June 1991</p>
 
@@ -416,21 +416,21 @@ YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
 PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGES.
 </p>
-    	</xar:mlstring>
-    	
+        </xar:mlstring>
+        
     </div>
 
     <form action="install.php" method="post">
         <p>
             <label for="agree">
-            	<input type="radio" name="agree" id="agree" value="agree" />
+                <input type="radio" name="agree" id="agree" value="agree" />
                 <xar:mlstring>I have read and agree to abide by the Terms and Conditions as stated above</xar:mlstring>
             </label>
         </p>
 
-		<p>            
+        <p>            
             <label for="disagree">
-            	<input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
+                <input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
                 <xar:mlstring>I have read and do NOT agree to abide by the Terms and Conditions as stated above</xar:mlstring>
             </label>
         </p>

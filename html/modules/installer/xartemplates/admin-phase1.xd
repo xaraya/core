@@ -14,8 +14,8 @@
 
     <form action="install.php" method="post">
         <p class="center">
-        	<label for="install_language">
-            	<xar:mlstring>Language:</xar:mlstring>
+            <label for="install_language">
+                <xar:mlstring>Language:</xar:mlstring>
             </label>
             <select name="install_language" class="xar-text">
                 <xar:foreach in="$languages" key="$key" value="$value">

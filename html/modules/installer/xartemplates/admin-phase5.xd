@@ -27,39 +27,39 @@
             </h4>
             <h4>
                 <xar:ml>
-	                <xar:mlstring>If you continue, tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
-	                <xar:mlvar>#$dbPrefix#</xar:mlvar>
+                    <xar:mlstring>If you continue, tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
+                    <xar:mlvar>#$dbPrefix#</xar:mlvar>
                 </xar:ml>
             </h4>
             <div class="center">
-	            <form action="install.php" method="post" style="display: inline;">
-		            <span>
-	                    <input type="hidden" name="install_phase" id="install_phase" value="4" />
-	                    <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-	                    <xar:set name="buttonprevious">
-	                        <xar:mlstring>Back</xar:mlstring>
-	                    </xar:set>
-	                    <input type="submit" value="#$buttonprevious#" />
-		            </span>
-	            </form>
                 <form action="install.php" method="post" style="display: inline;">
-		            <span>
-	                    <input type="hidden" name="install_phase" id="install_phase" value="5" />
-	                    <input type="hidden" name="install_database_host" id="dbHost" value="#$dbHost#" />
-	                    <input type="hidden" name="install_database_name" id="dbName" value="#$dbName#" />
-	                    <input type="hidden" name="install_database_username" id="dbUname" value="#$dbUname#" />
-	                    <input type="hidden" name="install_database_password" id="dbPass" value="#$dbPass#" />
-	                    <input type="hidden" name="install_database_password2" id="dbPass2" value="#$dbPass#" />
-	                    <input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#" />
-	                    <input type="hidden" name="install_database_type" id="dbType" value="#$dbType#" />
-	                    <input type="hidden" name="confirmDB" id="confirmDB" value="true" />
-	                    <!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#" /> -->
-	                    <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-	                    <xar:set name="buttonnext">
-	                        <xar:mlstring>Continue</xar:mlstring>
-	                    </xar:set>
-	                    <input type="submit" value="#$buttonnext#" />
-					</span>
+                    <span>
+                        <input type="hidden" name="install_phase" id="install_phase" value="4" />
+                        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                        <xar:set name="buttonprevious">
+                            <xar:mlstring>Back</xar:mlstring>
+                        </xar:set>
+                        <input type="submit" value="#$buttonprevious#" />
+                    </span>
+                </form>
+                <form action="install.php" method="post" style="display: inline;">
+                    <span>
+                        <input type="hidden" name="install_phase" id="install_phase" value="5" />
+                        <input type="hidden" name="install_database_host" id="dbHost" value="#$dbHost#" />
+                        <input type="hidden" name="install_database_name" id="dbName" value="#$dbName#" />
+                        <input type="hidden" name="install_database_username" id="dbUname" value="#$dbUname#" />
+                        <input type="hidden" name="install_database_password" id="dbPass" value="#$dbPass#" />
+                        <input type="hidden" name="install_database_password2" id="dbPass2" value="#$dbPass#" />
+                        <input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#" />
+                        <input type="hidden" name="install_database_type" id="dbType" value="#$dbType#" />
+                        <input type="hidden" name="confirmDB" id="confirmDB" value="true" />
+                        <!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#" /> -->
+                        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                        <xar:set name="buttonnext">
+                            <xar:mlstring>Continue</xar:mlstring>
+                        </xar:set>
+                        <input type="submit" value="#$buttonnext#" />
+                    </span>
                 </form>
             </div>
         </div>

@@ -58,7 +58,7 @@
                 </p>
 
             </div>
-			<br class="clear" />
+            <br class="clear" />
 
             <p>
                 <xar:mlstring>Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</xar:mlstring>

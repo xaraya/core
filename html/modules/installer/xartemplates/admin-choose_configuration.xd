@@ -15,7 +15,7 @@
             <xar:if condition="isset($warning)">
                 #$warning# 
             <xar:else />
-            	<xar:set name="configsize">count($names)</xar:set>
+                <xar:set name="configsize">count($names)</xar:set>
                 <select id="configuration" name="configuration" size="#$configsize#">
                     <xar:loop name="$names">
                         <xar:if condition="$loop:item['selected']">

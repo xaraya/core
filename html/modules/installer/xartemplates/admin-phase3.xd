@@ -45,7 +45,7 @@
             <xar:else />
                 <p>
                     <strong>#$failuretitle#:</strong> 
-					
+                    
                     <xar:mlstring>The installer cannot write to the configuration file. Please verify that your webserver has write access to the file</xar:mlstring>
                     #$systemConfigFile#
                 </p>

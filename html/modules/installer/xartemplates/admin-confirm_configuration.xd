@@ -36,36 +36,36 @@
 
             <div class="configuration">
 
-	            <h4>
-	                <xar:mlstring>Configuration Modules</xar:mlstring>
-	            </h4>
+                <h4>
+                    <xar:mlstring>Configuration Modules</xar:mlstring>
+                </h4>
 
-	            <div class="scroller">
-	                <xar:if condition="$missing eq '' and count($options2) eq 0">
-	                    <p>
-	                        <xar:mlstring>This configuration does not need to load any modules.</xar:mlstring>
-	                    </p>
+                <div class="scroller">
+                    <xar:if condition="$missing eq '' and count($options2) eq 0">
+                        <p>
+                            <xar:mlstring>This configuration does not need to load any modules.</xar:mlstring>
+                        </p>
                     <xar:else />
-	                    <xar:loop name="$options2">
-	                        <xar:if condition="$loop:item['option'] eq ''">
-	                            <p>
-	                                #$loop:item['comment']# 
-	                            </p>
+                        <xar:loop name="$options2">
+                            <xar:if condition="$loop:item['option'] eq ''">
+                                <p>
+                                    #$loop:item['comment']# 
+                                </p>
                             <xar:else />
-	                            <p class="xar-normal">
-	                                <xar:if condition="$loop:item['option'] == 'true'">
-	                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                                <p class="xar-normal">
+                                    <xar:if condition="$loop:item['option'] == 'true'">
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                                     <xar:else />
-	                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
-	                                </xar:if>
-	                                <label for="chosen2_#$loop:index#">
-	                                    #$loop:item['comment']# 
-	                                </label>
-	                            </p>
-	                        </xar:if>
-	                    </xar:loop>
-	                </xar:if>
-	            </div>
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
+                                    </xar:if>
+                                    <label for="chosen2_#$loop:index#">
+                                        #$loop:item['comment']# 
+                                    </label>
+                                </p>
+                            </xar:if>
+                        </xar:loop>
+                    </xar:if>
+                </div>
             <xar:if condition="$installed ne ''">
                 <p class="xar-normal">
                     <xar:mlstring>The following modules for this configuration are already installed:</xar:mlstring>
