@@ -139,11 +139,16 @@ class xarLogger_simple extends xarLogger
         }
 
         $this->_buffer          = '--------------------------------------------------------------------------------------------------------------------------------------'
-                                           ."\r\n"
-                                           .'REQUEST_URI: ' . $_SERVER["REQUEST_URI"]
-                                           ."\r\n"
-                                           .'HTTP_REFERER: ' . $_SERVER["HTTP_REFERER"]
                                            ."\r\n";
+
+         if (isset($_SERVER["REQUEST_URI"])) {
+            $this->_buffer .= "REQUEST_URI:  {$_SERVER['REQUEST_URI']} \r\n";
+         }
+
+         if (isset($_SERVER["HTTP_REFERER"])) {
+            $this->_buffer .= "HTTP_REFERER:  {$_SERVER['HTTP_REFERER']} \r\n";
+         }
+         
         $this->_writeOut        = true;
         $this->_isFileOpen      = false;
         $this->_isFileWriteable = false;
