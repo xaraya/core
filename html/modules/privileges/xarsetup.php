@@ -196,9 +196,6 @@ function initializeSetup()
 
     xarRegisterMask('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
 
-    xarRegisterMask('ViewThemes','All','themes','Block','All:All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
-
     xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditPanel','All','adminpanels','All','All','ACCESS_EDIT');
     xarRegisterMask('AddPanel','All','adminpanels','Item','All','ACCESS_ADD');
