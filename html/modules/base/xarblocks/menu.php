@@ -105,11 +105,6 @@ function base_menublock_display($blockinfo)
     // Dirty right now, need to do a block group check and fix.
     $menustyle = 'side';
 
-    // Ensure we have a title for the block.
-    if (empty($blockinfo['title'])){
-        $blockinfo['title'] = xarML('Main Menu');
-    }
-
     switch(strtolower($menustyle)) {
         default:
         case 'side':
@@ -336,6 +331,11 @@ function base_menublock_insert($blockinfo)
     $vars['content'] = implode("LINESPLIT", $content);
 
     $blockinfo['content']= serialize($vars);
+
+    // Ensure we have a title for the block.
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('Main Menu');
+    }
 
     return($blockinfo);
 }
