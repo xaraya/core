@@ -43,13 +43,13 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         foreach($content as $attr_name => $attr_value) {
             $content[$attr_name] = '\'' . $attr_name . '\'=>"' . xarVar_addSlashes($attr_value) . '"';
         }
-$override = 'array(' . implode(', ', $content) . ')';
+        $override = 'array(' . implode(', ', $content) . ')';
                    
-                   // Code for rendering the block tag.
-                   // Use double-quotes so variables can be expanded within the attributes
-                   // for more dynamic blocks.
-                   $blockgrouptemplate = isset($this->blockgrouptemplate) ? $this->blockgrouptemplate : '';
-                   $code = <<<EOT
+        // Code for rendering the block tag.
+        // Use double-quotes so variables can be expanded within the attributes
+        // for more dynamic blocks.
+        $blockgrouptemplate = isset($this->blockgrouptemplate) ? $this->blockgrouptemplate : '';
+        $code = <<<EOT
                    xarBlock_renderBlock(
                                         array(
                                               'instance' => $instance,
@@ -64,17 +64,17 @@ $override = 'array(' . implode(', ', $content) . ')';
                                               'content' => $override
                                               )
                                         )
-                   EOT;
-                   return $code;
-                   
-                   // TODO: what shall we do about the content?
-                   // Ideally we could have child tags to supply content not appropriate to attributes.
-                   if (isset($this->children) && count($this->children) > 0) {
-                       $contentNode = $this->children[0];
-                       if (isset($contentNode)) {
-                           $content = trim(addslashes($contentNode->render()));
-                       }
-                   }
+EOT;
+        return $code;
+                  
+        // TODO: what shall we do about the content?
+        // Ideally we could have child tags to supply content not appropriate to attributes.
+        if (isset($this->children) && count($this->children) > 0) {
+            $contentNode = $this->children[0];
+            if (isset($contentNode)) {
+                $content = trim(addslashes($contentNode->render()));
+            }
+        }
     }
 
     function renderEndTag()
