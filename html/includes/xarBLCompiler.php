@@ -2425,6 +2425,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
 
+        $in = xarTpl__ExpressionTransformer::transformPHPExpression($in);
         if (isset($key) && isset($value)) {
             return "foreach ($in as $key => $value) { ";
         } elseif (isset($value)) {
