@@ -89,6 +89,7 @@ function roles_admin_showusers()
     }
     else {
         $data['title'] = xarML('All ')." ";
+		$data['groupname'] = '';
     }
 
      if ($uid != 0) {
@@ -147,7 +148,7 @@ function roles_admin_showusers()
                 'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user->getName())
                 );
         }
-	 $data['title'] .= " ".xarML('of group')." ".$data['groupname'];
+	 $data['title'] .= " ".xarML('of group')." ";
     } else {
         //$data['pname'] = xarML("All Users");
         while (list($key, $user) = each($usrs)) {

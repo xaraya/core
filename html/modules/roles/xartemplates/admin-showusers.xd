@@ -43,11 +43,7 @@
 					<xar:set name="$prevgroup">""</xar:set>
 					<xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
 						<xar:if condition="$prevgroup ne $groups[$i]['name']">
-							<xar:if condition="$groups[$i]['uid'] eq $groupuid">
-								<div><a href="#xarModURL('roles', 'admin', 'displayrole')#&uid=#$groups[$i]['uid']#" title="#xarML('Display this group')#" class="active">#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
-							<xar:else/>
 								<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">#$groups[$i]['name']# (#$groups[$i]['users']#)</a></div>
-							</xar:if>
 						</xar:if>
 						<xar:set name="$prevgroup">#$groups[$i]['name']#</xar:set>
 					</xar:for>
@@ -139,9 +135,15 @@
 				<br/>
 				<table cellspacing="1" class="xar-accent" style="width:inherit;">
 					<tr>
-						<th colspan="8" style="text-align: left;">#$title# 
+						<th colspan="8" style="text-align: left;">
+						<xar:if condition="$groupuid ne 0 && $display eq 'tabbed' ">
+							<a href="#xarModURL('roles', 'admin', 'createmail', array('uid' => $groupuid))#" title="#xarML('Email the Users in this Group')#" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>
+							<a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $groupuid))#" title="#xarML('Show the Privileges assigned to this Group')#" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+							<a href="#xarModURL('roles', 'admin', 'testprivileges', array('uid' => $groupuid))#" title="#xarML('Test this Groups\'s Privileges')#" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+						</xar:if>
+						#$title# <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $groupuid))#" title="#xarML('Modify role')#" class="active">#$groupname#</a>
 						<xar:if condition="$search ne ''">
-								<xar:mlstring>matching</xar:mlstring> '#$search#'
+								&nbsp;<xar:mlstring>matching</xar:mlstring> '#$search#'
 							</xar:if>
 						(#$totalselect#)
 		      <!--<xar:if condition="$groupuid != 0">
