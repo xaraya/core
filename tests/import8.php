@@ -770,7 +770,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT pn_tid, pn_sid, pn_pid, pn_date, pn_uname, pn_uid,
+    $query = 'SELECT pn_tid, pn_sid, pn_pid, UNIX_TIMESTAMP(pn_date), pn_uname, pn_uid,
               pn_host_name, pn_subject, pn_comment 
               FROM ' . $oldprefix . '_comments 
               LEFT JOIN ' . $oldprefix . '_users
