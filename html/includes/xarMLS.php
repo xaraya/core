@@ -485,44 +485,238 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
  * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
  * @param offset timezone offset (default user timezeone)
  * @return date string
+ *
+ *  TODO: reorder the parameters to [$format [,$time [,$offset]]]  ?
+ *        do we really need the $offset argument?
  */
 function xarLocaleFormatDate($time = null, $format = null, $offset = null)
 {
     if (empty($time)) { // yes, null or 0 or whatever :)
-        $time = time();
+//TODO: we should really get the user/site time based on timezone settings
+//      this will require UTC timestamps to be generated and then modified
+        //$time = time();
+        //$time = gmmktime(gmdate('H'),gmdate('i'),gmdate('s'),gmdate('m'),gmdate('d'),gmdate('Y'));
+        $time = xarLocaleUserTime();
     } elseif (!is_numeric($time)) {
+        // strtotime creates a timestamp based on the server's locale settings
         $time = strtotime($time);
+        // we need to adjust for the server's timezone offset because
+        // we'll be using the gmstrftime function later.
+        // doing so will allow for the correct time to be displayed
+        // TODO: does this work everywhere or just on my machine???
+        $time += date('Z',$time);
         if ($time < 0) {
             return ''; // return empty string here (no exception)
         }
+    } else {
+        // adjust for the user's timezone offset
+        $time += xarLocaleUserOffset() * 3600;
     }
-
+    
 // TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
+//       let this be handled by the xarMLS_strftime function?
     if (empty($format)) {
     //    $format = '%a, %d %B %Y %H:%M:%S %Z';
         $format = '%a, %d %B %Y %H:%M %Z';
     }
 
 // CHECKME: see how this interacts with user/site locale below
+//          This interacts fine with the new xarMLS_strftime function
+
+// NOTE: This is now handled by xarLocaleUserTime()
+/*
     if (!isset($offset)) { // could be set to 0 here
         if (xarUserIsLoggedIn()) {
             $offset = xarUserGetVar('timezone'); // cfr. dynamicdata for roles
         }
         if (!isset($offset)) {
         // TODO: add default offset configured by admin ?
-            $offset = 0;
+            $offset = 0; // this will currently keep the time UTC
         }
     }
 
 // TODO: add site offset in case the server time is wrong ?
     $time += $offset * 3600;
+*/
 
 // CHECKME: set locale here !? That doesn't seem right somehow...
 //    setlocale(LC_TIME,xarConfigGetVar('locale'));
 //    setlocale(LC_TIME,xarUserGetNavigationLocale());
-    setlocale(LC_TIME,xarMLSGetCurrentLocale());
+    
+// NOTE: We don't need to do this anymore since we can use the new
+//       xarMLS_strftime function to handle correct date translations   
+//    setlocale(LC_TIME,xarMLSGetCurrentLocale());
 
-    return strftime($format,$time);
+    return xarMLS_strftime($format,$time);
+}
+
+/**
+ *  Returns a valid timestamp for the current user.  It will
+ *  make adjustments for timezone and should be used in gmstrftime
+ *  or gmdate functions only.
+ *  @author Roger Raymond <roger@asphyxia.com>
+ *  @access public
+ *  @return int unix timestamp.
+ */
+function xarLocaleUserTime($time=null) 
+{
+    // get the current UTC time
+    // gmmktime acts unexpectedly when not passed any arguments
+    if (!isset($time)) {
+        $time = gmmktime(gmdate('H'),gmdate('i'),gmdate('s'),gmdate('m'),gmdate('d'),gmdate('Y'));
+    }
+    $time += xarLocaleUserOffset() * 3600;
+    // return the corrected timestamp
+    return $time;
+}
+
+function xarLocaleUserOffset()
+{
+    // get the correct timezone offset for this user
+    if (xarUserIsLoggedIn()) {
+        // TODO: cfr. dynamicdata for roles
+        $offset = xarUserGetVar('timezone');
+    } 
+    //TODO: Get site's timezone setting?
+    if (!isset($offset)) {
+        $offset = 0;
+    }
+    
+    return $offset;
+}
+/**
+ *  Used in place of strftime() for locale translation.
+ *  This function uses gmstrftime() so it should be passed
+ *  a timestamp that has been modified for the user's current
+ *  timezone setting.
+ *
+ *  @author Roger Raymond <roger@asphyxia.com>
+ *  @access protected
+ *  @param string $format valid format params from strftime() function\
+ *  @param int $timestamp optional unix timestamp to translate
+ *  @return string datetime string with locale translations
+ *   
+ *  // supported strftime() format rules
+ *  %a - abbreviated weekday name according to the current locale
+ *  %A - full weekday name according to the current locale
+ *  %b - abbreviated month name according to the current locale
+ *  %B - full month name according to the current locale
+ *  %D - same as %m/%d/%y (abbreviated date according to locale)
+ *  %h - same as %b
+ *  %p - either `am' or `pm' according to the given time value, or the corresponding strings for the current locale
+ *  %r - time in a.m. and p.m. notation
+ *
+ *  // TODO: formats not supported on windows
+ *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
+ *
+ *  // TODO: unsupported strftime() format rules
+ *  %c - preferred date and time representation for the current locale
+ *  %x - preferred date representation for the current locale without the time
+ *  %X - preferred time representation for the current locale without the date
+ *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
+ */
+function xarMLS_strftime($format=null,$timestamp=null)
+{
+    // if we don't have a timestamp, get the user's current time
+    if(!isset($timestamp)) {
+        $timestamp = xarLocaleUserTime();
+    }
+    
+    // load the locale date
+    $localeData = xarMLSLoadLocaleData();
+    
+    // TODO
+    // if no $format is provided we need to use the default for the locale
+    
+    // parse the format string
+    preg_match_all('/%[a-z]/i',$format,$modifiers);
+    
+    // replace supported format rules
+    foreach($modifiers[0] as $modifier) {
+        switch($modifier) {
+            case '%a' :
+                // figure out what weekday it is
+                $w = (int) gmstrftime('%w',$timestamp);
+                // increment because the locales start at 1
+                $w++;
+                // replace the weekeday in the format string
+                $format = str_replace($modifier,$localeData["/dateSymbols/weekdays/$w/short"],$format);
+                // clean up
+                unset($w);
+                break;
+              
+            case '%A' :
+                // figure out what weekday it is
+                $w = (int) gmstrftime('%w',$timestamp);
+                // increment because the locales start at 1
+                $w++;
+                // replace the weekeday in the format string
+                $format = str_replace($modifier,$localeData["/dateSymbols/weekdays/$w/full"],$format);
+                // clean up
+                unset($w);
+                break; 
+            
+            case '%b' :
+            case '%h' :
+                // figure out what month it is
+                $m = (int) gmstrftime('%m',$timestamp);
+                // replace the month in the format string
+                $format = str_replace($modifier,$localeData["/dateSymbols/months/$m/short"],$format);
+                // clean up
+                unset($m);
+                break;
+                
+            case '%B' :
+                // figure out what month it is
+                $m = (int) gmstrftime('%m',$timestamp);
+                // replace the month in the format string
+                $format = str_replace($modifier,$localeData["/dateSymbols/months/$m/full"],$format);
+                // clean up
+                unset($m);
+                break;
+            
+            case '%D' :
+                // just use the abbreviated formating string that %D represents
+                $locale_format = $localeData['/dateFormats/short'];
+                //TODO: either modify locale.xml or convert the data to valid strftime flags
+                $format = str_replace($modifier,gmstrftime($locale_format,$timestamp),$format);
+                break;
+                
+            case '%r' :
+                // recursively call the xarMLS_strftime function
+                $format = str_replace($modifier,xarMLS_strftime('%I:%M %p',$timestamp),$format);
+                break;
+                
+            case '%R' :
+                // 24 hour time for windows compatibility
+                $format = str_replace($modifier,gmstrftime('%H:%M',$timestamp),$format);
+                break;
+            
+            case '%T' :
+                // current time for windows compatibility
+                $format = str_replace($modifier,gmstrftime('%H:%M:%S',$timestamp),$format);
+                break;
+                
+            case '%Z' :
+                // TODO: we want to display the user or site's timezone not the servers
+                $format = str_replace($modifier,'N/A',$format);
+                break;
+            
+            case '%p' :
+                // figure out if it's am or pm
+                $h = gmstrftime('%H',$timestamp);
+                if($h > 11) {
+                    // replace with PM string
+                    $format = str_replace($modifier,$localeData["/dateSymbols/pm"],$format);
+                } else {
+                    // replace with AM string
+                    $format = str_replace($modifier,$localeData["/dateSymbols/am"],$format);
+                }  
+                break;
+        }
+    }
+    // convert the rest of the format string and return it
+    return gmstrftime($format,$timestamp);
 }
 
 // PROTECTED FUNCTIONS
