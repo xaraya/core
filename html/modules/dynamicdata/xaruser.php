@@ -105,7 +105,7 @@ function dynamicdata_user_displayhook($args)
 function dynamicdata_user_main()
 {
 // Security Check
-	if(!securitycheck('Overview')) return;
+	if(!xarSecurityCheck('Overview')) return;
 
     $data = dynamicdata_user_menu();
 

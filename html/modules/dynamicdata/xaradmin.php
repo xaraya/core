@@ -21,7 +21,7 @@ require_once 'modules/dynamicdata/class/objects.php';
 function dynamicdata_admin_main()
 {
 // Security Check
-	if(!securitycheck('Edit')) return;
+	if(!xarSecurityCheck('Edit')) return;
 
     $data = dynamicdata_admin_menu();
 
@@ -90,7 +90,7 @@ function dynamicdata_admin_view($args)
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!securitycheck('Edit')) return;
+	if(!xarSecurityCheck('Edit')) return;
 
     // show other modules
     $data['modlist'] = array();
@@ -503,7 +503,7 @@ function dynamicdata_admin_modifyprop()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     list($itemid,
          $modid,
@@ -1070,7 +1070,7 @@ function dynamicdata_admin_modifyconfig()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();

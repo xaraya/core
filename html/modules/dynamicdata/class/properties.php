@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Dynamic Property Classes
  *
  * @package Xaraya eXtensible Management System
@@ -639,7 +639,7 @@ class Dynamic_Property_Master
             list(...) = $result->fields;
 
 // Security Check
-		if (securitycheck('Overview',0) {
+		if (xarSecurityCheck('Overview',0) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();

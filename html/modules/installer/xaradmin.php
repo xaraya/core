@@ -8,7 +8,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage module name
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
@@ -56,12 +56,12 @@ function installer_admin_phase1()
  * @todo <johnny> accept locale and run the rest of the install using that locale if the locale exists.
  */
 function installer_admin_phase2()
-{   
+{
     // TODO: fix installer ML
     $data['language'] = 'English';
     $data['phase'] = 2;
     $data['phase_label'] = xarML('Step Two');
-    
+
     return $data;
 }
 
@@ -82,27 +82,27 @@ function installer_admin_phase3()
         // didn't agree to license, don't install
         xarResponseRedirect('install.php');
     }
-    
+
     //Defaults
     $systemConfigIsWritable   = false;
     $siteConfigIsWritable     = true;
     $cacheTemplatesIsWritable = true;
-    
+
     $systemVarDir             = xarCoreGetVarDirPath();
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
     $siteConfigFile           = $systemVarDir . '/config.site.xml';
-    
+
     if (is_writable($systemConfigFile)) {
         $systemConfigIsWritable = true;
     }
-    
+
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['systemConfigFile'] = $systemConfigFile;
     $data['siteConfigFile']   = $siteConfigFile;
     $data['siteConfigIsWritable'] = $siteConfigIsWritable;
     $data['systemConfigIsWritable'] = $systemConfigIsWritable;
-    
+
     $data['language'] = 'English';
     $data['phase'] = 3;
     $data['phase_label'] = xarML('Step Three');
@@ -125,12 +125,12 @@ function installer_admin_phase4()
     $data['database_password']   = xarCore_getSystemvar('DB.Password');
     $data['database_name']       = xarCore_getSystemvar('DB.Name');
     $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
-    
+
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => 'MySQL',
                                          'oci8'     => 'Oracle',
                                          'postgres' => 'Postgres');
-                                         
+
     $data['language'] = 'English';
     $data['phase'] = 4;
     $data['phase_label'] = xarML('Step Four');
@@ -160,7 +160,7 @@ function installer_admin_phase5()
     $createDb = false;
     $intranetMode = false;
     $dbPass = '';
-    
+
     // Get arguments
     list($dbHost,
          $dbName,
@@ -210,7 +210,7 @@ function installer_admin_phase5()
     xarCoreInit(XARCORE_SYSTEM_ADODB);
 
 // install the security stuff here, but disable the registerMask and
-// and securitycheck functions until we've finished the installation process
+// and xarSecurityCheck functions until we've finished the installation process
 	global $installing;
 	$installing = true;
 	include_once 'includes/xarSecurity.php';
@@ -223,13 +223,13 @@ function installer_admin_phase5()
         return;
     }
 
-    //session_start(); 
+    //session_start();
     //session_destroy();
 
     $data['language'] = 'English';
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
-    
+
     return $data;
 }
 
@@ -282,10 +282,10 @@ function installer_admin_create_administrator()
     $data['phase_label'] = xarML('Create Administrator');
 
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     include_once 'modules/roles/xarroles.php';
-     
+
     if (!xarVarCleanFromInput('create')) {
 // create a role from the data
     	$roles = new xarRoles();
@@ -297,7 +297,7 @@ function installer_admin_create_administrator()
     	$data['install_admin_email'] = $role->getEmail();
         return $data;
     }
-    
+
     list ($username,
           $name,
           $pass,
@@ -307,7 +307,7 @@ function installer_admin_create_administrator()
                                        'install_admin_password',
                                        'install_admin_email',
                                        'install_admin_url');
-    
+
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 

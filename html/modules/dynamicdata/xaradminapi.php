@@ -1350,7 +1350,7 @@ function dynamicdata_adminapi_browse($args)
     }
 
     // Security check - we require ADMIN rights here for now...
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     // Get arguments from argument array
     extract($args);
@@ -1392,7 +1392,7 @@ function dynamicdata_adminapi_getmenulinks()
     $menulinks = array();
 
 // Security Check
-	if (securitycheck('Admin',0)) {
+	if (xarSecurityCheck('Admin',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',
@@ -1402,7 +1402,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (securitycheck('Admin',0)) {
+	if (xarSecurityCheck('Admin',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'admin',
                                                   'modifyconfig'),
@@ -1411,7 +1411,7 @@ function dynamicdata_adminapi_getmenulinks()
     }
 
 // Security Check
-	if (securitycheck('Admin',0)) {
+	if (xarSecurityCheck('Admin',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'util',
                                                   'main'),

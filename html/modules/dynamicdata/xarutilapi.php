@@ -25,7 +25,7 @@ function dynamicdata_utilapi_export($args)
 {
     // restricted to DD Admins
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     extract($args);
 
@@ -39,7 +39,7 @@ function dynamicdata_utilapi_import($args)
 {
     // restricted to DD Admins
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     extract($args);
 
@@ -483,7 +483,7 @@ function dynamicdata_utilapi_getmeta($args)
     static $propertybag = array();
 
 // Security Check
-	if(!securitycheck('Admin')) return;
+	if(!xarSecurityCheck('Admin')) return;
 
     extract($args);
 

@@ -248,7 +248,7 @@ $schemas = array();
 	}
 
 /**
- * securitycheck: check a role's privileges against the masks of a component
+ * xarSecurityCheck: check a role's privileges against the masks of a component
  *
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
@@ -261,7 +261,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function securitycheck($component,$showexception=1,$instancetype='',$instance='',$role='',$module='')
+	function xarSecurityCheck($component,$showexception=1,$instancetype='',$instance='',$role='',$module='')
 	{
 		global $installing;
 
@@ -270,7 +270,7 @@ $schemas = array();
 		}
 		else {
 			$masks = new xarMasks();
-			return $masks->securitycheck($component,$showexception,$instancetype,
+			return $masks->xarSecurityCheck($component,$showexception,$instancetype,
 			$instance,$role,$module);
 		}
 	}

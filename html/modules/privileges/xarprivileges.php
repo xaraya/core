@@ -280,7 +280,7 @@ class xarMasks
 	}
 
 /**
- * securitycheck: check a role's privileges against the masks of a component
+ * xarSecurityCheck: check a role's privileges against the masks of a component
  *
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
@@ -293,7 +293,7 @@ class xarMasks
  * @todo    none
 */
 
-	function securitycheck($component,$showexception=1,$instancetype='', $instance='',$rolename='',$module='')
+	function xarSecurityCheck($component,$showexception=1,$instancetype='', $instance='',$rolename='',$module='')
 	{
 
 // get the masks pertaining to the current module and the component requested
@@ -794,7 +794,7 @@ class xarPrivileges extends xarMasks
  *
  * Returns an array of all the components that have been registered for a given module.
  * The components correspond to masks in the masks table. Each one can be used to
- * construct a privilege's securitycheck.
+ * construct a privilege's xarSecurityCheck.
  * They are used to populate dropdowns in displays
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
