@@ -1025,4 +1025,4 @@ function installer_admin_finish()
 {
     xarResponseRedirect('index.php');
 }
-
+?>
