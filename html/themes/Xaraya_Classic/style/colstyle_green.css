@@ -33,9 +33,6 @@ th {
     background-image: url(../images/page_bg_green.gif);
 }
 
-/* MENUS */
-.xar-menu-section h4 { color: #336633; }
-
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 div#xc-header { background-color: #E2F0DF; }
 div#xc-header h1 a { background-image: url(../images/xaraya_logo_green.gif); }
@@ -44,4 +41,75 @@ div#xc-footer {
     background-image: url(../images/page_bg_green.gif);
     background-repeat: repeat-x;
     background-position: 0% 20%;
+}
+
+/* MENUS (in sideblocks) */
+
+.xar-block-body ul li.xar-menu-section, 
+.xar-block-body-right ul li.xar-menu-section { background-color: #669980; }
+
+.xar-block-body ul li.xar-menu-section h4, 
+.xar-block-body-right ul li.xar-menu-section h4 {
+    color: #efefef;
+    background-image: url(../images/page_bg_green.gif);
+}
+
+.xar-block-body ul li a, 
+.xar-block-body-right ul li a {
+    color: #336633;
+    background-color: #EBF0ED;
+}
+
+.xar-block-body ul li a:hover, 
+.xar-block-body-right ul li a:hover {
+    color: #ffffff;
+    background-color: #B7C9C0;
+}
+
+.xar-block-body ul ul ul li a, 
+.xar-block-body-right ul ul ul li a { background-color: #F0F5F2; }
+
+.xar-block-body ul ul li.xar-menu-item a, 
+.xar-block-body-right ul ul li.xar-menu-item a {
+    border-right-color: #8FBFA7;
+    border-left-color: #B8CCC2;
+}
+
+.xar-block-body ul ul li.xar-menu-item a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item a:hover {
+    border-right-color: #75BF9A;
+    border-left-color: #D5EDE1;
+}
+
+.xar-block-body ul ul li.xar-menu-item, 
+.xar-block-body-right ul ul li.xar-menu-item,
+.xar-block-body ul ul li.xar-menu-item-current, 
+.xar-block-body-right ul ul li.xar-menu-item-current { border-bottom-color: #F2FFF9; }
+
+.xar-block-body ul ul li.xar-menu-item-current a, 
+.xar-block-body-right ul ul li.xar-menu-item-current a {
+    border-right-color: #D5DED9;
+}
+
+.xar-block-body ul ul li.xar-menu-item-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover { border-right-color: #79C7A0; }
+
+
+.xar-block-body ul ul li.xar-menu-subitem-current, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current {
+    border-color: #FFFFFF;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+    color: #333333;
+    border-right-color: #73FFB9;
+    background-color: #f9f9f9;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a:hover {
+    color: #fafafa;
+    border-right-color: #73FFB9;
+    background-color: #679980;
 }

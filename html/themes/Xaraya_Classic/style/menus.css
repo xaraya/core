@@ -18,23 +18,26 @@
 }
 
 .xar-block-body ul li.xar-menu-section, 
-.xar-block-body-right ul li.xar-menu-section { background-color: #9a9a9a; }
-
+.xar-block-body-right ul li.xar-menu-section { background-color: #666699; }
 
 /* offset collapsing margins effect for heading tags */
 .xar-block-body ul li.xar-menu-section h4, 
 .xar-block-body-right ul li.xar-menu-section h4 {
-    margin:0;
+    margin: 0;
     padding: 0 8px;
     color: #efefef;
+    background-image: url(../images/page_bg.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 50%;
 }
+
 
 .xar-block-body ul li a, 
 .xar-block-body-right ul li a {
     text-decoration: none;
     display: block;
-    color: #666666;
-    background-color: #f5f5f5;
+    color: #333366;
+    background-color: #EBECEF;
     padding: 0 4px;
     margin: 0;
 }
@@ -44,7 +47,7 @@
     text-decoration: none;
     display: block;
     color: #ffffff;
-    background-color: #bbbbbb;
+    background-color: #B6B6C9;
     padding: 0 4px;
 }
 
@@ -56,25 +59,33 @@
     text-align: right;
     font-weight: normal;
     font-size: 11px;
-    background-color: #f5f5f5;
+    background-color: #F2F3F6;
 }
 
 .xar-block-body ul ul li.xar-menu-item a, 
 .xar-block-body-right ul ul li.xar-menu-item a {
-    border-right: 10px solid #bbbbbb;
-    border-left: 4px solid #cccccc;
+    border-right: #9090BF;
+    border-left: #B8BECC;
+    border-width: 0 10px 0 4px;
+    border-style: none solid none solid;
 }
 
 .xar-block-body ul ul li.xar-menu-item a:hover, 
 .xar-block-body-right ul ul li.xar-menu-item a:hover {
-    border-right: 10px solid #9a9a9a;
-    border-left: 4px solid #9a9a9a;
+    border-right: #7575C0;
+    border-left: #D6DDED;
+    border-width: 0 10px 0 4px;
+    border-style: none solid none solid;
 }
 
 .xar-block-body ul ul li.xar-menu-item, 
 .xar-block-body-right ul ul li.xar-menu-item,
 .xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current { border-bottom: 1px solid #eeeeee; }
+.xar-block-body-right ul ul li.xar-menu-item-current {
+    border-bottom: #F3F3FF;
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+}
 
 
 .xar-block-body ul ul li.xar-menu-item-current, 
@@ -84,29 +95,44 @@
     below is one of the possible implementations */
 
 .xar-block-body ul ul li.xar-menu-item-current a, 
-.xar-block-body-right ul ul li.xar-menu-item-current a { border-right: 10px solid #dfdfdf; }
+.xar-block-body-right ul ul li.xar-menu-item-current a {
+    border-right: #D5D5DF;
+    border-width: 0 10px 0 0;
+    border-style: none solid none none;
+}
 
 
 .xar-block-body ul ul li.xar-menu-item-current a:hover, 
-.xar-block-body-right ul ul li.xar-menu-item-current a:hover { border-right: 10px solid #9a9a9a; }
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover {
+    border-right: #7A7AC7;
+    border-width: 0 10px 0 0;
+    border-style: none solid none none;
+}
+
 
 .xar-block-body ul ul li.xar-menu-subitem-current, 
-.xar-block-body-right ul ul li.xar-menu-subitem-current { border: 1px solid #ffffff; }
+.xar-block-body-right ul ul li.xar-menu-subitem-current {
+    border-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+}
 
 .xar-block-body ul ul li.xar-menu-subitem-current a, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a {
     padding-right: 4px;
     color: #333333;
-    border-right: 9px solid #cc0000;
+    border-right: #7272FF;
     background-color: #f9f9f9;
+    border-width: 0 9px 0 0;
+    border-style: none solid none none;
 }
 
 .xar-block-body ul ul li.xar-menu-subitem-current a:hover, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a:hover {
     padding-right: 4px;
     color: #fafafa;
-    border-right: 9px solid #cc0000;
-    background-color: #bbbbbb;
+    border-right: 9px solid #7272FF;
+    background-color: #666699;
 }
 
 /*  small problem - good browsers can calculate height of li elements just fine but ie-win cannot, 

@@ -34,9 +34,6 @@ th {
     background-image: url(../images/page_bg_hicontrast.gif);
 }
 
-/* MENUS */
-.xar-menu-section h4 { color: #666666; }
-
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 div#xc-header { background-color: #ffffff; }
 div#xc-header h1 a { background-image: url(../images/xaraya_logo_contrast.gif); }
@@ -45,4 +42,68 @@ div#xc-footer {
     background-image: url(../images/page_bg_hicontrast.gif);
     background-repeat: repeat-x;
     background-position: 0% 20%;
+}
+
+/* MENUS (in sideblocks) */
+.xar-menu-section h4 { color: #666666; }
+.xar-block-body ul li.xar-menu-section, 
+.xar-block-body-right ul li.xar-menu-section { background-color: #9a9a9a; }
+
+.xar-block-body ul li.xar-menu-section h4, 
+.xar-block-body-right ul li.xar-menu-section h4 {
+    color: #efefef;
+    background-image: url(../images/page_bg_hicontrast.gif);
+}
+
+.xar-block-body ul li a, 
+.xar-block-body-right ul li a {
+    color: #666666;
+    background-color: #f5f5f5;
+}
+
+.xar-block-body ul li a:hover, 
+.xar-block-body-right ul li a:hover {
+    color: #ffffff;
+    background-color: #bbbbbb;
+}
+
+.xar-block-body ul ul ul li a, 
+.xar-block-body-right ul ul ul li a { background-color: #f5f5f5; }
+
+.xar-block-body ul ul li.xar-menu-item a, 
+.xar-block-body-right ul ul li.xar-menu-item a {
+    border-right: 10px solid #bbbbbb;
+    border-left: 4px solid #cccccc;
+}
+
+.xar-block-body ul ul li.xar-menu-item a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item a:hover {
+    border-right: 10px solid #9a9a9a;
+    border-left: 4px solid #9a9a9a;
+}
+
+.xar-block-body ul ul li.xar-menu-item, 
+.xar-block-body-right ul ul li.xar-menu-item,
+.xar-block-body ul ul li.xar-menu-item-current, 
+.xar-block-body-right ul ul li.xar-menu-item-current { border-bottom: 1px solid #eeeeee; }
+
+.xar-block-body ul ul li.xar-menu-item-current a, 
+.xar-block-body-right ul ul li.xar-menu-item-current a { border-right: 10px solid #dfdfdf; }
+.xar-block-body ul ul li.xar-menu-item-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover { border-right: 10px solid #9a9a9a; }
+.xar-block-body ul ul li.xar-menu-subitem-current, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current { border: 1px solid #ffffff; }
+
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+    color: #333333;
+    border-right: 9px solid #cc0000;
+    background-color: #f9f9f9;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a:hover {
+    color: #fafafa;
+    border-right: 9px solid #cc0000;
+    background-color: #bbbbbb;
 }
