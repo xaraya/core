@@ -321,24 +321,36 @@ function xarModDelAllVars($modName)
         $module_uservarstable = $tables['site/module_uservars'];
     }
 
-    // FIXME: this syntax is not supported by 
     // PostGres (allows only one table in DELETE)
     // MySql: multiple table delete only from 4.0 up
-
-    // Delete the user variables first
-    $query = "DELETE $module_uservarstable, $module_varstable FROM $module_uservarstable, $module_varstable
-              WHERE $module_uservarstable.xar_mvid = $module_varstable.xar_id AND
-                    $module_varstable.xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
-    
-    $result =& $dbconn->Execute($query);
+    // Select the id's which need to be removed
+    $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
+    $result =& $dbconn->Execute($sql);
     if(!$result) return;
+
+    // Seems that at least mysql and pgsql support the scalar IN operator
+    $idlist = array();
+    while (!$result->EOF) {
+        list($id) = $result->fields;
+        $result->MoveNext();
+        $idlist[] = $id;
+    }
+
+    if(count($idlist) != 0 ) {
+            $idlist = join(', ',$idlist);
+
+            $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$idlist.")";
+            $result =& $dbconn->Execute($sql);
+            if(!$result) return; 
+            $result->Close;
+    }
 
     // Now delete the module vars
     $query = "DELETE FROM $module_varstable
               WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     return true;
 }
 
