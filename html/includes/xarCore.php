@@ -413,15 +413,7 @@ function xarCore__shutdown_handler()
  */
 function xarCoreGetVarDirPath()
 {
-    static $varpath = null;
-    if (isset($varpath)) return $varpath;
-    if (file_exists('./var/.key.php')) {
-        include './var/.key.php';
-        $varpath = './var/'.$protectionKey;
-    } else {
-        $varpath = './var';
-    }
-    return $varpath;
+    return xarPreCoreGetVarDirPath();
 }
 
 /**

@@ -64,7 +64,7 @@ function xarCache_init($args = false)
     }
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarCache__shutdown_handler');
+    //register_shutdown_function ('xarCache__shutdown_handler');
     return true;
 }
 

@@ -10,7 +10,7 @@
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @todo Dynamic Translations
- *       Timezone and DST support
+ *       Timezone and DST support (default offset is supported now)
  *       Write standard core translations
  *       Complete changes as described in version 0.9 of MLS RFC
  *       Implements the request(ed) locale APIs for backend interactions
@@ -67,6 +67,11 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
+    $GLOBALS['xarMLS_defaultTimeZone'] = isset($args['defaultTimeZone']) ?
+                                         $args['defaultTimeZone'] : '';
+    $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
+                                           $args['defaultTimeOffset'] : 0;
+
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
     xarEvt_registerEvent('MLSMissingTranslationString');
@@ -80,7 +85,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     }
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarMLS__shutdown_handler');
+    //register_shutdown_function ('xarMLS__shutdown_handler');
     return true;
 }
 
@@ -528,23 +533,17 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 }
 
 /**
- *  Wrapper to xarLocalGetFormattedDate
- *
- *  @todo Take into account System.Core.TimZone
+ *  Wrapper to xarLocaleGetFormattedDate without timezone offset
  */
-function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
+function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $addoffset = false)
 {
-    $offset = xarMLS_userOffset() * 3600;
     if(!isset($timestamp)) {
         // get UTC timestamp
         $timestamp = time();
     }
 
-    // apply the offset for later manipulation
-    $timestamp -= xarMLS_userOffset() * 3600;
-
-    // pass this to the regular function
-    return xarLocaleGetFormattedDate($length,$timestamp);
+    // pass this to the regular function, but without using the timezone offset here
+    return xarLocaleGetFormattedDate($length,$timestamp,$addoffset);
 }
 
 /**
@@ -553,9 +552,10 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
  * @access public
  * @param string $length what date locale we want (short|medium|long)
  * @param int $timestamp optional unix timestamp in UTC to format
+ * @param bool $addoffset add user timezone offset (default true)
  * @todo Check the exceptions when $length is not in the $validlengths (assert on it?)
  */
-function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
+function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
@@ -580,26 +580,21 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
 
-    return xarLocaleFormatDate($locale_format,$timestamp);
+    return xarLocaleFormatDate($locale_format,$timestamp,$addoffset);
 }
 
 /**
- *  Wrapper to xarLocaleGetFormattedTime
- *
- * @todo Take into account System.Core.TimeZone
+ *  Wrapper to xarLocaleGetFormattedTime without timezone offset
  */
-function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
+function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addoffset = false)
 {
     if(!isset($timestamp)) {
         // get UTC timestamp
         $timestamp = time();
     }
 
-    // apply the offset for later manipulation
-    $timestamp -= xarMLS_userOffset() * 3600;
-
-    // pass this to the regualr function
-    return xarLocaleGetFormattedTime($length,$timestamp);
+    // pass this to the regular function, but without using the timezone offset here
+    return xarLocaleGetFormattedTime($length,$timestamp,$addoffset);
 }
 
 /**
@@ -608,14 +603,32 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
  *  @access public
  *  @param string $length what time locale we want (short|medium|long)
  *  @param int $timestamp optional unix timestamp in UTC to format
+ *  @param bool $addoffset add user timezone offset (default true)
  */
-function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
+function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
+
+    if (empty($timestamp)) {
+        if ($addoffset) {
+            $timestamp = xarMLS_userTime();
+        } else {
+            $timestamp = time();
+        }
+    } elseif ($timestamp >= 0) {
+        if ($addoffset) {
+            // adjust for the user's timezone offset
+            $timestamp += xarMLS_userOffset($timestamp) * 3600;
+        }
+    } else {
+        // invalid dates < 0 (e.g. from strtotime) return an empty date string
+        return '';
+    }
+    $addoffset = false;
 
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
@@ -631,21 +644,29 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     $locale_format = str_replace('a','%p',$locale_format);
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
-    $locale_format = str_replace('H',sprintf('%1d',xarLocaleFormatDate('%H',$timestamp)),$locale_format);
-    $locale_format = str_replace('h',sprintf('%1d',xarLocaleFormatDate('%I',$timestamp)),$locale_format);
-    $locale_format = str_replace('m',sprintf('%1d',xarLocaleFormatDate('%M',$timestamp)),$locale_format);
-    $locale_format = str_replace('s',sprintf('%1d',xarLocaleFormatDate('%S',$timestamp)),$locale_format);
+    if (strpos($locale_format,'H') !== false)
+        $locale_format = str_replace('H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
+    if (strpos($locale_format,'h') !== false)
+        $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
+    if (strpos($locale_format,'m') !== false)
+        $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
+    if (strpos($locale_format,'s') !== false)
+        $locale_format = str_replace('s',sprintf('%1d',gmstrftime('%S',$timestamp)),$locale_format);
 
-    return xarLocaleFormatDate($locale_format,$timestamp);
+    return xarLocaleFormatDate($locale_format,$timestamp,$addoffset);
 }
 
-function xarLocaleFormatUTCDate($format = null, $time = null)
+/**
+ *  Wrapper to xarLocaleFormatDate without timezone offset
+ */
+function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false)
 {
     if(!isset($time)) {
         $time = time();
     }
-    $time -= xarMLS_userOffset() * 3600;
-    return xarLocaleFormatDate($format,$time);
+
+    // pass this to the regular function, but without using the timezone offset here
+    return xarLocaleFormatDate($format,$time,$addoffset);
 }
 
 /**
@@ -654,19 +675,25 @@ function xarLocaleFormatUTCDate($format = null, $time = null)
  * @access public
  * @param time mixed timestamp or date string (default now)
  * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
- * @param offset timezone offset (default user timezeone)
+ * @param addoffset bool add user timezone offset (default true)
  * @return date string
  *
  */
-function xarLocaleFormatDate($format = null, $timestamp = null)
+function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = true)
 {
     // CHECKME: should we default to current time only when timestamp is not set at all ?
     //if (!isset($timestamp)) {
     if (empty($timestamp)) {
-        $timestamp = xarMLS_userTime();
+        if ($addoffset) {
+            $timestamp = xarMLS_userTime();
+        } else {
+            $timestamp = time();
+        }
     } elseif ($timestamp >= 0) {
-        // adjust for the user's timezone offset
-        $timestamp += xarMLS_userOffset() * 3600;
+        if ($addoffset) {
+            // adjust for the user's timezone offset
+            $timestamp += xarMLS_userOffset($timestamp) * 3600;
+        }
     } else {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
         return '';
@@ -689,33 +716,57 @@ function xarMLS_userTime($time=null)
     if (!isset($time)) {
         $time = time();
     }
-    $time += xarMLS_userOffset() * 3600;
+    $time += xarMLS_userOffset($time) * 3600;
     // return the corrected timestamp
     return $time;
 }
 
 /**
- *  Returns the user's current tz offset
+ *  Returns the user's current tz offset (+ daylight saving) in hours
  *
  *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
- *  @return int tz offset
+ *  @param int $timestamp optional unix timestamp that we want to get the offset for
+ *  @return float tz offset + possible daylight saving adjustment
  */
-function xarMLS_userOffset()
+function xarMLS_userOffset($timestamp = null)
 {
-    static $offset;
-    if(!isset($offset)) {
+    static $offset; // minimal information for timezone offset handling
+    static $timezone; // more information for daylight saving
+
+    if (!isset($offset)) {
+    // CHECKME: use dynamicdata for roles, module user variable and/or session variable
+    //          (see also 'locale' in xarUserGetNavigationLocale())
         // get the correct timezone offset for this user
         if (xarUserIsLoggedIn()) {
-            // TODO: cfr. dynamicdata for roles
             $offset = xarUserGetVar('timezone');
+            // get the actual timezone for the user (in addition to the timezone offset)
+            if (isset($offset) && !is_numeric($offset)) {
+                $info = @unserialize($offset);
+                if (!empty($info) && is_array($info)) {
+                    $offset = isset($info['offset']) ? $info['offset'] : null;
+                    $timezone = isset($info['timezone']) ? $info['timezone'] : null;
+                }
+            }
         }
-        //TODO: Get site's timezone setting?
         if (!isset($offset)) {
-            $offset = 0;
+            // use default time offset for this site
+            $offset = $GLOBALS['xarMLS_defaultTimeOffset'];
+            // use default timezone for this site
+            $timezone = $GLOBALS['xarMLS_defaultTimeZone'];
         }
     }
-    return $offset;
+    // this will depend on the current $timestamp
+    if (isset($timestamp) && !empty($timezone) && function_exists('xarModAPIFunc')) {
+        $adjust = xarModAPIFunc('base','user','dstadjust',
+                                array('timezone' => $timezone,
+                                      // pass the timestamp *with* the offset
+                                      'time'     => $timestamp + $offset * 3600));
+        //echo $adjust;
+    } else {
+        $adjust = 0;
+    }
+    return $offset + $adjust;
 }
 /**
  *  Used in place of strftime() for locale translation.
@@ -877,7 +928,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 break;
 
             case '%z' :
-                $user_offset = (string) xarMLS_userOffset();
+                $user_offset = (string) xarMLS_userOffset($timestamp);
                 // check to see if this is a negative or positive offset
                 $f_offset = strstr($user_offset,'-')  ? '-' : '+';
                 $user_offset = str_replace('-','',$user_offset); // replace the - if it exists
