@@ -13,6 +13,16 @@
 		See adodb/tests/test-datadict.php for docs and examples.
 */
 
+// XARAYA MODIFICATION - START
+// Fallback function for ctype_alnum (necessary for some earlier versions of PHP)
+// This could be moved to a core script to allow support for other modules too.
+if (!function_exists('ctype_alnum')) {
+    function ctype_alnum($text) {
+        return preg_match('/^[a-z0-9]*$/i', $text);
+    }
+}
+// XARAYA MODIFICATION - END
+
 /*
 	Test script for parser
 */
