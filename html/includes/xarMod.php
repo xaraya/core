@@ -284,8 +284,8 @@ function xarModDelVar($modName, $name)
 
     // Delete the user variables first
     $modvarid = xarModGetVarId($modName, $name);
-
     if(!$modvarid) return;
+
     // MrB: we could use xarModDelUserVar in a loop here, but this is
     //      much faster.
     $query = "DELETE FROM $module_uservarstable
@@ -643,12 +643,13 @@ function xarModGetVarId($modName, $name)
     if(!$result) return;
 
     // If there was no such thing return
+    /*
     if ($result->EOF) {
         $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', xarML('modvarid for module #(1) variable #(2)',$modName,$name));
         return;
        }
-
+    */
     list($modvarid) = $result->fields;
     $result->Close();
 
