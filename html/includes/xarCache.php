@@ -285,7 +285,7 @@ function xarBlockIsCached($args)
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
 
     if (
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        //xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
         ($blockCacheExpireTime == 0 ||
          filemtime($cache_file) > time() - $blockCacheExpireTime)) {
@@ -382,7 +382,8 @@ function xarPageSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
         xarPage_checkUserCaching()) {
-        $fp = @fopen($cache_file,"w");
+        $tmp_cache_file = $cache_file . '.' . getmypid();
+        $fp = @fopen($tmp_cache_file, "w");
         if (!empty($fp)) {
             if ($xarPage_cacheShowTime == 1) {
                 $now = xarML('Last updated on #(1)',
@@ -394,6 +395,7 @@ function xarPageSetCached($cacheKey, $name, $value)
             }
             @fwrite($fp,$value);
             @fclose($fp);
+            @rename($tmp_cache_file, $cache_file);
         }
     }
 }
@@ -431,11 +433,13 @@ function xarBlockSetCached($cacheKey, $name, $value)
          filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
-        $fp = @fopen($cache_file,"w");
+        $tmp_cache_file = $cache_file . '.' . getmypid();
+        $fp = @fopen($tmp_cache_file, "w");
         if (!empty($fp)) {
             //$value .= 'Cached Block';// This line is used for testing
             @fwrite($fp, $value);
             @fclose($fp);
+            @rename($tmp_cache_file, $cache_file);
         }
     }
 }
