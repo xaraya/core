@@ -64,12 +64,12 @@ function roles_admin_purge($args)
 // --- display roles that can be recalled
         //Create the selection
         $q = new xarQuery('SELECT',$rolestable);
-        $q->addfields(array('xar_uid',
-                    'xar_uname',
-                    'xar_name',
-                    'xar_email',
-                    'xar_type',
-                    'xar_date_reg'));
+        $q->addfields(array('xar_uid as uid',
+                    'xar_uname as uname',
+                    'xar_name as name',
+                    'xar_email as email',
+                    'xar_type as type',
+                    'xar_date_reg as date_reg'));
         $q->setorder('xar_name');
         if (!empty($data['recallsearch'])) {
             $c[1] = $q->like('xar_name','%' . $data['recallsearch'] . '%');
@@ -130,17 +130,10 @@ function roles_admin_purge($args)
                     }
                     
                }
-                if (!$skip) {                    
-                    $role['xar_type'] = $role['xar_type'] ? "Group" : "User";
-// Not elegant, but this version of xarQuery doesn't support field aliases
-                    $recallroles[] = array(
-                        'uid'       => $role['xar_uid'],
-                        'uname'     => $role['xar_uname'],
-                        'name'      => $role['xar_name'],
-                        'email'     => $role['xar_email'],
-                        'type'      => $role['xar_type'],
-                        'date_reg'  => $role['xar_date_reg'],
-                        'unique'    => $unique);
+                if (!$skip) {
+                    $role['type'] = $role['type'] ? "Group" : "User";
+                    $role['unique'] = $unique;
+                    $recallroles[] = $role;
                 }
             }
         }
