@@ -140,13 +140,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarTemplate.php';
     // {ML_dont_parse 'includes/xarTheme.php'}
     include 'includes/xarTheme.php';
-    // Legacy systems
-    if (xarCore_getSiteVar('Core.LoadLegacy') == true){
-        // {ML_dont_parse 'includes/pnHTML.php'}
-        include 'includes/pnHTML.php';
-        // {ML_dont_parse 'includes/pnLegacy.php'}
-        include 'includes/pnLegacy.php';
-    }
 
     // Start Exception Handling System
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
@@ -203,19 +196,27 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
 
+    // Legacy systems
+    if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
+        // {ML_dont_parse 'includes/pnHTML.php'}
+        include 'includes/pnHTML.php';
+        // {ML_dont_parse 'includes/pnLegacy.php'}
+        include 'includes/pnLegacy.php';
+    }
+
     // Start HTTP Protocol Server/Request/Response utilities
-    $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
-                        'defaultModuleName' => xarCore_getSiteVar('Core.DefaultModuleName'),
-                        'defaultModuleType' => xarCore_getSiteVar('Core.DefaultModuleType'),
-                        'defaultModuleFunction' => xarCore_getSiteVar('Core.DefaultModuleFunction'),
+    $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
+                        'defaultModuleName' => xarConfigGetVar('Site.Core.DefaultModuleName'),
+                        'defaultModuleType' => xarConfigGetVar('Site.Core.DefaultModuleType'),
+                        'defaultModuleFunction' => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
                         'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
     // Start Multi Language System
-    $systemArgs = array('translationsBackend' => xarCore_getSiteVar('MLS.TranslationsBackend'),
-                        'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
-                        'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
-                        'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
+    $systemArgs = array('translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
+                        'MLSMode' => xarConfigGetVar('Site.MLS.MLSMode'),
+                        'defaultLocale' => xarConfigGetVar('Site.MLS.DefaultLocale'),
+                        'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales'));
     xarMLS_init($systemArgs, $whatToLoad);
 
     // Start Sessions Subsystem
@@ -227,16 +228,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         //include 'includes/xarSession2.php';
         include 'includes/xarSession.php';
 
-        // Migrated into xarSession.php
-        //     if (phpversion() >= "4.2.0") {
-        //             $oldsessions = false;
-        //         } else {
-        //             $oldsessions = true;
-        //         }
         // Start Session Support
-        $systemArgs = array('securityLevel' => xarCore_getSiteVar('Session.SecurityLevel'),
-                            'duration' => xarCore_getSiteVar('Session.Duration'),
-                            'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'));
+        $systemArgs = array('securityLevel' => xarConfigGetVar('Site.Session.SecurityLevel'),
+                            'duration' => xarConfigGetVar('Site.Session.Duration'),
+                            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'));
         xarSession_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
@@ -260,7 +255,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
         // or XHTML site compliance. For now just pass false.
-        $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
+        $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_MODULES;
@@ -268,8 +263,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     // Start BlockLayout Template Engine
-    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
-                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
+    $systemArgs = array('enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
+                        'themesBaseDirectory' => xarConfigGetVar('Site.BL.ThemesDirectory'),
                         'defaultThemeName' => xarModGetVar('themes','default'));
     xarTpl_init($systemArgs, $whatToLoad);
         // TODO (marcinmilan): review what pasts of the old user system need to be retained
