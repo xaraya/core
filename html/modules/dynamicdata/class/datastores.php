@@ -159,7 +159,6 @@ class Dynamic_DataStore
     var $groupby;
     var $join;
     var $itemids;  // reference to itemids in Dynamic_Object_List
-    var $itemtype; // reference to itemtype in Dynamic_Object
 
     function Dynamic_DataStore($name)
     {
