@@ -44,7 +44,8 @@ function base_user_rawexit()
     $rawmsg .= "Normal error processing has been stopped because of a recurring PHP error. <br /><br />";
     $rawmsg .= "The last registered error message is: <br /><br />";
     $rawmsg .= "Error code: " . $errorcode . "<br /><br />";
-    $rawmsg .= $msg;
+    // avoid nasties trying to post fake exceptions
+    $rawmsg .= xarVarPrepHTMLDisplay($msg);
     echo $rawmsg;
     exit;
 }

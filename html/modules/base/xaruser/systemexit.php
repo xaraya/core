@@ -40,7 +40,8 @@ function base_user_systemexit()
     if (!xarVarFetch('code', 'str', $code, NULL, XARVAR_NOT_REQUIRED)) return;
     if($CoreStack->isempty()) $CoreStack->initialize();
     // avoid nasties trying to post fake exceptions
-    $exception = new SystemException(urldecode($msg));
+    $msg = xarVarPrepHTMLDisplay($msg);
+    $exception = new SystemException($msg);
     if (empty($code) || !isset($errorcodes[$code])) {
         $code = 1;
     }
