@@ -1,0 +1,230 @@
+This file contains summaries of *ALL* changes we made to adodb library,
+please keep this file up to date when making changes to the library
+so we have an easy cheatsheet when upgrading and have a document ready
+when we want things merged into the upstream code.
+
+Current adodb version in repo: 4.05
+
+
+adodb.inc.php, line 765-773:
+
+        // XARAYA MODIFICATION - START
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            global $xarDebug_sqlCalls;
+            $xarDebug_sqlCalls++;
+            // initialise time to render by proca
+            $lmtime = explode(' ', microtime());
+            $lstarttime = $lmtime[1] + $lmtime[0];
+        }
+        // XARAYA MODIFICATION - END
+
+adodb.inc.php, lines 838 - 846:
+
+           // XARAYA MODIFICATION - START
+            //  time to render SQL by proca
+            if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+                $lmtime = explode(" ", microtime());
+                $lendtime = $lmtime[1] + $lmtime[0];
+                $ltotaltime = ($lendtime - $lstarttime);
+                xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
+            }
+            // XARAYA MODIFICATION - END
+
+adodb.inc.php, lines 868-876:
+
+        // XARAYA MODIFICATION - START
+        //  time to render SQL by proca
+        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            $lmtime = explode(" ", microtime());
+            $lendtime = $lmtime[1] + $lmtime[0];
+            $ltotaltime = ($lendtime - $lstarttime);
+            xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
+        }
+        // XARAYA MODIFICATION - END
+
+Reason:
+        Gathering xaraya specific debug information
+        when the sql debug flag is set
+
+Upstream:    
+        No, xaraya specific, not a general issue
+
+Notes:
+        - the 3 changes are not equal, the first counts the sqlCalls, the other two do not, intentional?
+        - can we move this into a function in one place? easier to maintain.
+
+
+
+adodb.inc.php lines 906- 920:
+
+        // XARAYA MODIFICATION - START - TURN OFF/ON ERROR HANDLER
+        // execute is allowed to fail getting the next sequence
+        // as it will create it if it does not exist
+
+		//$getnext = sprintf($this->_genIDSQL,$seqname);
+		//$holdtransOK = $this->_transOK;
+		//$rs = @$this->Execute($getnext);
+
+        $errorfn = $this->raiseErrorFn;
+        $this->raiseErrorFn = false;
+        $getnext = sprintf($this->_genIDSQL,$seqname);
+		$holdtransOK = $this->_transOK;
+        $rs = $this->Execute($getnext);
+        $this->raiseErrorFn = $errorfn;
+        // XARAYA MODIFICATION - END - TURN OFF/ON ERROR HANDLER
+
+Reason:
+        ??
+
+Upstream:
+        ??
+
+
+drivers/adodb-postgres64.inc.php lines 84-96:
+    // XARAYA MODIFICATION - START
+	//var $_genIDSQL = "SELECT NEXTVAL('%s')";
+	//var $_genSeqSQL = "CREATE SEQUENCE %s START %s";
+	//var $_dropSeqSQL = "DROP SEQUENCE %s";
+    // Prefix the sequence number to make it unique
+    var $_genIDSQL = "SELECT NEXTVAL('seq%s')";
+    var $_genSeqSQL = "CREATE SEQUENCE seq%s START %s";
+	var $_dropSeqSQL = "DROP SEQUENCE seq%s";
+    // XARAYA MODIFICATION - END
+
+Reason:
+        prefixing the sequence number (number?) to make it unique
+
+Upstream:         
+        seems like a general issue, not sure
+
+
+drivers/adodb-postgres64.inc.php lines 144-149:
+
+        // XARAYA MODIFICATION - START
+		//if (!is_resource($this->_resultid) || get_resource_type($this->_resultid) !== 'pgsql result') return false;
+	   	//return pg_getlastoid($this->_resultid);
+        // return the GenID value
+        return $this->genID;
+        // XARAYA MODIFICATION - END
+
+Reason:
+        ??
+
+Upstream:
+        ??
+
+drivers/adodb-postgres64.inc.php lines 580-584:
+
+        // XARAYA MODIFICATION - START
+        // XARAYA TO DO - find out why following line fails
+        // $this->Execute("set datestyle='ISO'");
+        // XARAYA MODIFICATION - END
+
+Reason:
+        the statement failed
+
+Upstream:
+        not literally i think, but once we know why it fails this seems like a general problem
+
+
+drivers/adodb-oci8.inc.php lines 54-61:
+
+    // XARAYA MODIFICATION - START
+	//var $_genIDSQL = "SELECT (%s.nextval) FROM DUAL";
+	//var $_genSeqSQL = "CREATE SEQUENCE %s START WITH %s";
+	//var $_dropSeqSQL = "DROP SEQUENCE %s";
+	var $_genIDSQL = "SELECT (seq%s.nextval) FROM DUAL";
+	var $_genSeqSQL = "CREATE SEQUENCE seq%s START WITH %s";
+	var $_dropSeqSQL = "DROP SEQUENCE seq%s";
+    // XARAYA MODIFICATION - END
+
+Reason:
+        making the sequences unique?
+
+Upstream:
+        ??
+
+
+adodb-datadict.inc.php lines 16-24:
+// XARAYA MODIFICATION - START
+// Fallback function for ctype_alnum (necessary for some earlier versions of PHP)
+// This could be moved to a core script to allow support for other modules too.
+if (!function_exists('ctype_alnum')) {
+    function ctype_alnum($text) {
+        return preg_match('/^[a-z0-9]*$/i', $text);
+    }
+}
+// XARAYA MODIFICATION - END
+
+Reason:
+        ctype_alnum function is not always present in
+        php installs
+
+Upstream:
+        yes
+
+
+
+adodb-datadict.inc.php lines 577-585:
+
+        // XARAYA MODIFICATION - START
+		// if (!$colarr) return $this->CreateTableSQL($tablename,$flds,$tableoptions);
+		if (!$colarr) {
+            if (xarExceptionId()) {
+                xarExceptionHandled();
+            }
+            return $this->CreateTableSQL($tablename,$flds);
+        }
+        // XARAYA MODIFICATION - END
+
+Reason:
+        inserting exception code for xaraya
+
+Upstream:
+        no, xaraya specific
+
+
+drivers/adodb-mysql.inc.php lines 28-31:
+
+// XARAYA MODIFICATION - START
+	//var $hasGenID = true;
+	var $hasGenID = false;
+// XARAYA MODIFICATION - END
+
+Reason:
+        legacy change, makes things easier for us
+
+Upstream:
+        no
+
+drivers/adodb-mysql.inc.php lines 49-55:
+
+// XARAYA MODIFICATION - START
+		//$arr['description'] = $this->GetOne("select version()");
+		$arr['description'] = $this->_query('select version()', false);
+		$result = $this->_query('select version()', false);
+		$resultfields = mysql_fetch_row($result);
+		$arr['description'] = $resultfields[0];
+// XARAYA MODIFICATION - END
+
+Reason:
+        on versions 3 and 4 of mysql behaviour is different
+
+Upstream:
+        probably, our change seems a bit clumsy, re-evaluate
+
+
+drivers/adodb-mysql.inc.php lines 194-198:
+
+        // XARAYA MODIFICATION - START
+		// // post-nuke sets hasGenID to false
+		//if (!$this->hasGenID) return false;
+        if (!$this->hasGenID) return 0;
+        // XARAYA MODIFICATION - END
+
+Reason:
+        legacy change?
+
+Upstream:
+        no
+
