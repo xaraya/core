@@ -964,6 +964,10 @@ function drawindent() {
             if (!$this->dbconn->Execute($query)) return;
         }
 
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
+
 // done
         return true;
     }
@@ -1007,6 +1011,10 @@ function drawindent() {
                     " WHERE xar_uid =" . $this->getID();
             if (!$this->dbconn->Execute($query)) return;
         }
+
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
 
 // done
         return true;
@@ -1165,6 +1173,10 @@ function drawindent() {
                 VALUES (" . $this->getID() . "," . $perm->getID() . ")";
         if (!$this->dbconn->Execute($query)) return;
 
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
+
         return true;
     }
 
@@ -1186,6 +1198,10 @@ function drawindent() {
               WHERE xar_partid=" . $this->uid .
               " AND xar_permid=" . $perm->getID();
         if (!$this->dbconn->Execute($query)) return;
+
+// empty the privset cache
+        $privileges = new xarPrivileges();
+        $privileges->forgetprivsets();
 
         return true;
     }

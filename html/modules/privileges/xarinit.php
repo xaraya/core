@@ -33,7 +33,7 @@ function privileges_init()
  // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-	xarDBLoadTableMaintenanceAPI();
+    xarDBLoadTableMaintenanceAPI();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['privileges'] = $sitePrefix . '_privileges';
@@ -42,16 +42,17 @@ function privileges_init()
     $tables['security_masks'] = $sitePrefix . '_security_masks';
     $tables['security_instances'] = $sitePrefix . '_security_instances';
     $tables['security_realms']      = $sitePrefix . '_security_realms';
+    $tables['security_privsets']      = $sitePrefix . '_security_privsets';
 
     // Create tables
     /*********************************************************************
      * Here we create all the tables for the privileges module
      *
      * prefix_privileges       - holds privileges info
-     * prefix_privmembers 	   - holds info on privileges group membership
-     * prefix_security_acl	   - holds info on privileges assignments to roles
+     * prefix_privmembers      - holds info on privileges group membership
+     * prefix_security_acl     - holds info on privileges assignments to roles
      * prefix_security_masks   - holds info on masks for security checks
-     * prefix_security_instances 	   - holds module instance definitions
+     * prefix_security_instances       - holds module instance definitions
      * prefix_security_realms  - holds realsm info
      ********************************************************************/
 
@@ -78,17 +79,17 @@ function privileges_init()
 
     // prefix_privileges
     /*********************************************************************
- 	* CREATE TABLE xar_privileges (
- 	*   xar_pid int(11) NOT NULL auto_increment,
- 	*   xar_name varchar(100) NOT NULL default '',
- 	*   xar_realm varchar(100) NOT NULL default '',
- 	*   xar_module varchar(100) NOT NULL default '',
- 	*   xar_component varchar(100) NOT NULL default '',
- 	*   xar_instance varchar(100) NOT NULL default '',
- 	*   xar_level int(11) NOT NULL default '0',
- 	*   xar_description varchar(255) NOT NULL default '',
- 	*   PRIMARY KEY  (xar_pid)
- 	* )
+    * CREATE TABLE xar_privileges (
+    *   xar_pid int(11) NOT NULL auto_increment,
+    *   xar_name varchar(100) NOT NULL default '',
+    *   xar_realm varchar(100) NOT NULL default '',
+    *   xar_module varchar(100) NOT NULL default '',
+    *   xar_component varchar(100) NOT NULL default '',
+    *   xar_instance varchar(100) NOT NULL default '',
+    *   xar_level int(11) NOT NULL default '0',
+    *   xar_description varchar(255) NOT NULL default '',
+    *   PRIMARY KEY  (xar_pid)
+    * )
     *********************************************************************/
 
     $query = xarDBCreateTable($tables['privileges'],
@@ -311,6 +312,29 @@ function privileges_init()
 
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
+    // prefix_security_privsets
+    /*********************************************************************
+    * CREATE TABLE xar_security_privsets (
+    *  xar_uid int(11) NOT NULL auto_increment,
+    *  xar_set varchar(255) NOT NULL default '',
+    *  PRIMARY KEY  (xar_rid)
+    * )
+    *********************************************************************/
+    $query = xarDBCreateTable($tables['security_privsets'],
+             array('xar_uid'  => array('type'        => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0',
+                                      'increment'   => true,
+                                      'primary_key' => true),
+                   'xar_set' => array('type'        => 'text',
+                                      'size'        => 'long',
+                                      'null'        => false,
+                                      'default'     => '')));
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
+
     // Initialisation successful
     return true;
 }
@@ -344,7 +368,7 @@ function privileges_delete()
  // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-	xarDBLoadTableMaintenanceAPI();
+    xarDBLoadTableMaintenanceAPI();
 
     $query = xarDBDropTable($tables['privileges']);
     if (empty($query)) return; // throw back

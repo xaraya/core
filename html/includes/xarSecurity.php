@@ -50,7 +50,8 @@ define('ACCESS_ADMIN', 800);
                     'security_realms' => xarDBGetSiteTablePrefix() . '_security_realms',
                     'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances',
                     'modules' => xarDBGetSiteTablePrefix() . '_modules',
-                    'module_states' => xarDBGetSiteTablePrefix() . '_module_states'
+                    'module_states' => xarDBGetSiteTablePrefix() . '_module_states',
+                    'security_privsets' => xarDBGetSiteTablePrefix() . '_security_privsets'
                     );
 
     xarDB_importTables($tables);
@@ -428,8 +429,8 @@ function xarRemoveMasks($module)
     return $privileges->removeMasks($module);
 }
 
-
 /**
+
  * see if a user is authorised to carry out a particular task
  *
  * @access public
