@@ -29,11 +29,13 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     // Blocks Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $tables = array('blocks'                => $systemPrefix . '_blocks',
-                    'block_instances'       => $systemPrefix . '_block_instances',
-                    'block_groups'          => $systemPrefix . '_block_groups',
-                    'block_group_instances' => $systemPrefix . '_block_group_instances',
-                    'block_types'           => $systemPrefix . '_block_types');
+    $tables = array(
+        'blocks'                => $systemPrefix . '_blocks',
+        'block_instances'       => $systemPrefix . '_block_instances',
+        'block_groups'          => $systemPrefix . '_block_groups',
+        'block_group_instances' => $systemPrefix . '_block_group_instances',
+        'block_types'           => $systemPrefix . '_block_types'
+    );
 
     xarDB_importTables($tables);
 
@@ -60,7 +62,7 @@ function xarBlock_render($blockInfo)
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
     // xarModSetVar('blocks','currentmodule',$modName);
-    xarVarSetCached('Security.Variables','currentmodule',$modName);
+    xarVarSetCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
     if (!xarModAPIFunc(
@@ -263,8 +265,6 @@ function xarBlock_renderGroup($groupName)
  */
 function xarBlock_renderBlock($args)
 {
-    extract($args);
-
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);

@@ -8,6 +8,8 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @TODO: provide admin functions for this block - not site global settings
+ * @TODO: this script seems to be the same code repeated over and over - let's remove that duplication
  * 
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
@@ -21,7 +23,9 @@
  */
 function adminpanels_adminmenublock_init()
 {
-    return true;
+    // Nothing to configure...
+    // TODO: ...yet
+    return array();
 }
 
 /**
@@ -37,13 +41,15 @@ function adminpanels_adminmenublock_init()
 function adminpanels_adminmenublock_info()
 {
     // Values
-    return array('text_type' => 'adminmenu',
-                 'module' => 'adminpanels',
-                 'text_type_long' => 'Admin Menu',
-                 'allow_multiple' => false,
-                 'form_content' => false,
-                 'form_refresh' => false,
-                 'show_preview' => false);
+    return array(
+        'text_type' => 'adminmenu',
+        'module' => 'adminpanels',
+        'text_type_long' => 'Admin Menu',
+        'allow_multiple' => false,
+        'form_content' => false,
+        'form_refresh' => false,
+        'show_preview' => false
+    );
 }
 
 /**
@@ -56,15 +62,14 @@ function adminpanels_adminmenublock_info()
 */
 function adminpanels_adminmenublock_display($blockinfo)
 {
-
     // Security Check
-    if(!xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All")) return;
+    if (!xarSecurityCheck('AdminPanel', 0, 'adminmenu', "$blockinfo[title]:All:All")) {return;}
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
-    $mods = xarModAPIFunc('modules', 'admin', 'GetList', array('filter' => array('AdminCapable' => 1)));
+    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
     
-    if(empty($mods)) {
+    if (empty($mods)) {
         // there aren't any admin modules, dont display adminmenu
         return;
     }
@@ -74,15 +79,16 @@ function adminpanels_adminmenublock_display($blockinfo)
     // we just switch to the block mode that is not dependent on the module's api
     // the only such mode at the moment is sort by name
     // TODO: eradicate dependency on module api for other sort orders too
-    if(!xarModIsAvailable('adminpanels')){
+    if (!xarModIsAvailable('adminpanels')) {
          xarModSetVar('adminpanels', 'menustyle', 'byname');
     }
 
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
     $dec = '';
+
     // dont show marker unless specified
-    if(!xarModGetVar('adminpanels', 'showmarker')){
+    if (!xarModGetVar('adminpanels', 'showmarker')) {
         $marker = '';
     }
 
@@ -91,24 +97,31 @@ function adminpanels_adminmenublock_display($blockinfo)
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
     // Sort Order, Status, Common Labels and Links Display preparation
-    $menustyle = xarModGetVar('adminpanels','menustyle');
+    // TODO: pick these up from block settings.
+    $menustyle = xarModGetVar('adminpanels', 'menustyle');
+    // TODO: prep for display in the template, not here.
     $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
     // Get current URL for later comparisons
     // because we need to compare xhtml compliant url, we replace '&' instances with '&amp;'
+    // TODO: fix this. The &amp; should only be an issue when rendering a URL in a web page,
+    // i.e. within a template. We shouldn't be handling it internally here.
     $currenturl = str_replace('&', '&amp;', xarServerGetCurrentURL());
 
+    // TODO: why isn't the menustyle part of the block admin?
+    // Set up like it is, means we are forced to use global menu
+    // style settings site-wide.
     switch(strtolower($menustyle)){
         case 'byname':
             // display by name
 			foreach($mods as $mod){
 				$modname = $mod['name'];    
 				// if this module is loaded we probably want to display it with -current css rule in the menu
-				if($modname == $thismodname && $thismodtype == 'admin'){
+				if ($modname == $thismodname && $thismodtype == 'admin') {
 					
 					// get URL to module's main function
-					$link = xarModURL($modname ,'admin', 'main', array());
+					$link = xarModURL($modname, 'admin', 'main', array());
 					
 					// this module is currently loaded (active), we need to display
 					// 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
@@ -116,23 +129,29 @@ function adminpanels_adminmenublock_display($blockinfo)
 					$labelDisplay = $modname;
 					
 					// adding attributes and flags to each module link for the template
-					if ($thisfuncname == 'main'){
-						$adminmods[$modname]['features'] = array( 	'label'     => $labelDisplay,
-																		'link'      => $link,
-																		'modactive' => 1,
-																		'overview' 	=> 0,
-																		'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+					if ($thisfuncname == 'main') {
+						$adminmods[$modname]['features'] = array(
+                            'label'     => $labelDisplay,
+                            'link'      => $link,
+                            'modactive' => 1,
+                            'overview' 	=> 0,
+                            // TODO: sentance structure not properly translatable.
+                            'maintitle' => xarML('Show administration options for module ') . $labelDisplay);
 					} else {
-						$adminmods[$modname]['features'] = array( 	'label'     => $labelDisplay,
-																		'link'      => $link,
-																		'modactive' => 1,
-																		'overview' 	=> 1,
-																		'maintitle' => xarML('Display overview information for module ').$labelDisplay);
+						$adminmods[$modname]['features'] = array(
+                            'label'     => $labelDisplay,
+                            'link'      => $link,
+                            'modactive' => 1,
+                            'overview' 	=> 1,
+                            // TODO: sentance structure not properly translatable.
+                            'maintitle' => xarML('Display overview information for module ') . $labelDisplay);
 					}			
-					// For active module we need to display the mod functions links
+
+                    // For active module we need to display the mod functions links
 					// call the api function to obtain function links, but don't raise an exception if it's not there
 					$menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
-					// scan array and prepare the links
+
+                    // scan array and prepare the links
 					if (!empty($menulinks)) {
 						foreach($menulinks as $menulink){
 							
@@ -143,39 +162,41 @@ function adminpanels_adminmenublock_display($blockinfo)
 								$funcactive = 0;
 							}
 	
-							$adminmods[$modname]['indlinks'][] = array(	'adminlink' 	=> $menulink['url'],
-																			'adminlabel'    => $menulink['label'],
-																			'admintitle'    => $menulink['title'],
-																			'funcactive'    => $funcactive);
+							$adminmods[$modname]['indlinks'][] = array(
+                                'adminlink' 	=> $menulink['url'],
+                                'adminlabel'    => $menulink['label'],
+                                'admintitle'    => $menulink['title'],
+                                'funcactive'    => $funcactive
+                            );
 						}							
-					}else{
+					} else {
 						// not sure if we need this
-						$indlinks= array();
+						$indlinks = array();
 					}
-				}else{
-				   $link = xarModURL($modname ,'admin', 'main', array());
+				} else {
+				   $link = xarModURL($modname, 'admin', 'main', array());
 				   $labelDisplay = $modname;
-				   $adminmods[$modname]['features'] = array('label'     => $labelDisplay,
-																'link'      => $link,
-																'modactive' => 0,
-																'overview' 	=> 0,
-																'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+				   $adminmods[$modname]['features'] = array(
+                        'label'     => $labelDisplay,
+                        'link'      => $link,
+                        'modactive' => 0,
+                        'overview' 	=> 0,
+                        // TODO: sentance structure not properly translatable.
+                        'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                   );
 				}
 			}
+            // TODO: move prep to template
             $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-            // TPL override
-            if (empty($blockinfo['template'])) {
-                $template = 'verticallistbyname';
-            } else {
-                $template = $blockinfo['template'];
-            }
-            $data = xarTplBlock('adminpanels',
-                                $template,
-                                array(  'adminmods'     => $adminmods,
-                                        'menustyle'     => $menustyle,
-                                        'logouturl'     => $logouturl,
-                                        'logoutlabel'   => $logoutlabel,
-                                        'marker'        => $marker));
+
+            $template = 'verticallistbyname';
+            $data = array(
+                'adminmods'     => $adminmods,
+                'menustyle'     => $menustyle,
+                'logouturl'     => $logouturl,
+                'logoutlabel'   => $logoutlabel,
+                'marker'        => $marker
+            );
             // this should do for now
             break;
 
@@ -184,25 +205,25 @@ function adminpanels_adminmenublock_display($blockinfo)
             // sort by categories
                 
             // check if we need to update the table, return error if check has failed           
-            if(!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')) return;
+            if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')) {return;}
             
             // get an array of modules sorted by categories from db 
             $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
 
             // scan the array and set labels and states
-            foreach($catmods as $cat=>$mods){
+            foreach ($catmods as $cat => $mods) {
                 
                 // display label for each category
                 // TODO: make them ML
                 $label = $cat;
                 
-                foreach($mods as $modname=>$mod){
+                foreach ($mods as $modname=>$mod){
                     
                     // if this module is loaded we probably want to display it with -current css rule in the menu
-                    if($modname == $thismodname && $thismodtype == 'admin'){
+                    if ($modname == $thismodname && $thismodtype == 'admin') {
                         
                         // get URL to module's main function
-                        $link = xarModURL($modname ,'admin', 'main', array());
+                        $link = xarModURL($modname, 'admin', 'main', array());
                         
                         // this module is currently loaded (active), we need to display
                         // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
@@ -211,21 +232,28 @@ function adminpanels_adminmenublock_display($blockinfo)
                         
                         // adding attributes and flags to each module link for the template
                         if ($thisfuncname == 'main'){
-                            $catmods[$cat][$modname]['features'] = array( 	'label'     => $labelDisplay,
-																			'link'      => $link,
-																			'modactive' => 1,
-																			'overview' 	=> 0,
-																			'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+                            $catmods[$cat][$modname]['features'] = array(
+                                'label'     => $labelDisplay,
+                                'link'      => $link,
+                                'modactive' => 1,
+                                'overview' 	=> 0,
+                                // TODO: untranslatable
+                                'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                            );
                         } else {
-                            $catmods[$cat][$modname]['features'] = array( 	'label'     => $labelDisplay,
-                                                                			'link'      => $link,
-                                                                			'modactive' => 1,
-                                                                			'overview' 	=> 1,
-                                                                			'maintitle' => xarML('Display overview information for module ').$labelDisplay);
+                            $catmods[$cat][$modname]['features'] = array(
+                                'label'     => $labelDisplay,
+                                'link'      => $link,
+                                'modactive' => 1,
+                                'overview' 	=> 1,
+                                // TODO: untranslatable
+                                'maintitle' => xarML('Display overview information for module ') . $labelDisplay
+                            );
                         }			
                         // For active module we need to display the mod functions links
                         // call the api function to obtain function links, but don't raise an exception if it's not there
                         $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+
                         // scan array and prepare the links
                         if (!empty($menulinks)) {
                             foreach($menulinks as $menulink){
@@ -237,10 +265,12 @@ function adminpanels_adminmenublock_display($blockinfo)
                                     $funcactive = 0;
                                 }
 
-                                $catmods[$cat][$modname]['indlinks'][] = array(	'adminlink' 	=> $menulink['url'],
-                                                    							'adminlabel'    => $menulink['label'],
-                                                    							'admintitle'    => $menulink['title'],
-                                                    							'funcactive'    => $funcactive);
+                                $catmods[$cat][$modname]['indlinks'][] = array(
+                                    'adminlink' 	=> $menulink['url'],
+                                    'adminlabel'    => $menulink['label'],
+                                    'admintitle'    => $menulink['title'],
+                                    'funcactive'    => $funcactive
+                                );
                             }							
                         }else{
                             // not sure if we need this
@@ -249,31 +279,33 @@ function adminpanels_adminmenublock_display($blockinfo)
                     }else{
                        $link = xarModURL($modname ,'admin', 'main', array());
                        $labelDisplay = $modname;
-                       $catmods[$cat][$modname]['features'] = array('label'     => $labelDisplay,
-                                                           			'link'      => $link,
-                                                           			'modactive' => 0,
-                                                           			'overview' 	=> 0,
-                                                           			'maintitle' => xarML('Show administration options for module ').$labelDisplay);
+                       $catmods[$cat][$modname]['features'] = array(
+                            'label'     => $labelDisplay,
+                            'link'      => $link,
+                            'modactive' => 0,
+                            'overview' 	=> 0,
+                            // TODO: untranslatable
+                            'maintitle' => xarML('Show administration options for module ') . $labelDisplay
+                       );
                     }
                 }
             }
             // prepare the data for template(s)
+            // TODO: move prepare to template.
             $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
                         
             if (empty($indlinks)){
                 $indlinks = '';
             }
-            if (empty($blockinfo['template'])) {
-                $template = 'verticallistbycats';
-            } else {
-                $template = $blockinfo['template'];
-            }
-            $tpldata = array(  	'catmods'     	=> $catmods,
-								'logouturl'     => $logouturl,
-								'logoutlabel'   => $logoutlabel,
-								'marker'        => $marker);
+
+            $template = 'verticallistbycats';
+            $data = array(
+                'catmods'     	=> $catmods,
+                'logouturl'     => $logouturl,
+                'logoutlabel'   => $logoutlabel,
+                'marker'        => $marker
+            );
 	
-            $data = xarTplBlock('adminpanels', $template, $tpldata);
             // this should do for now
             break;
 
@@ -281,49 +313,50 @@ function adminpanels_adminmenublock_display($blockinfo)
                 // sort by weight
                 // $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
 
-                $adminmods = 'not implemented';
+                $adminmods = xarML('not implemented');
+
                 // prepare the data for template(s)
+                // TODO: move prep to template
                 $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
-                if (empty($blockinfo['template'])) {
-                    $template = 'sidemenu';
-                } else {
-                    $template = $blockinfo['template'];
-                }
-                $data = xarTplBlock('adminpanels',
-                                    $template,
-                                    array(  'adminmods'     => $adminmods = array(),
-                                            'indlinks'      => $indlinks ='',
-                                            'menustyle'     => $menustyle,
-                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
-                                            'logoutlabel'   => $logoutlabel ='not implemented',
-                                            'marker'        => $marker));
+
+                $template = 'sidemenu';
+                $data = array(
+                    'adminmods'     => $adminmods = array(),
+                    'indlinks'      => $indlinks ='',
+                    'menustyle'     => $menustyle,
+                    // TODO: use xarModURL()
+                    'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
+                    'logoutlabel'   => $logoutlabel ='not implemented',
+                    'marker'        => $marker
+                );
                 break;
 
         case 'bygroup':
                 // sort by group
                 $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
 
-                $adminmods = 'not implemented';
+                $adminmods = xarML('not implemented');
+
                 // prepare the data for template(s)
+                // TODO: move prep to template
                 $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
-                if (empty($blockinfo['template'])) {
-                    $template = 'sidemenu';
-                } else {
-                    $template = $blockinfo['template'];
-                }
-                $data = xarTplBlock('adminpanels',
-                                    $template,
-                                    array(  'adminmods'     => $adminmods = array(),
-                                            'indlinks'      => $indlinks ='',
-                                            'menustyle'     => $menustyle,
-                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
-                                            'logoutlabel'   => $logoutlabel ='not implemented',
-                                            'marker'        => $marker));
+
+                $template = 'sidemenu';
+                $data = array(
+                    'adminmods'     => $adminmods = array(),
+                    'indlinks'      => $indlinks ='',
+                    'menustyle'     => $menustyle,
+                    // TODO: use xarModURL()
+                    'logouturl'     => $logouturl = 'index.php?module=adminpanels&amp;type=admin&amp;func=modifyconfig',
+                    'logoutlabel'   => $logoutlabel = xarML('not implemented'),
+                    'marker'        => $marker
+                );
                 break;
 
     }
 
-    // default view is by categories
+    // Set template base.
+    $blockinfo['_bl_template_base'] = $template;
 
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
