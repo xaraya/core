@@ -5,27 +5,32 @@
 <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="confirm" id="confirm" value="true" />
-    <input type="hidden" name="bid" id="bid" value="#$instance['id']#" />
+    <input type="hidden" name="bid" id="bid" value="#$instance['bid']#" />
     <div style="text-align: center;">
     <h3><xar:ml>
-            <xar:mlstring>Really delete block "#(1)"?</xar:mlstring>
-            <xar:mlvar>#$instance['title']#</xar:mlvar>
+            <xar:mlstring>Really delete block #(1) [#(2)]?</xar:mlstring>
+            <xar:mlvar>#xarVarPrepForDisplay($instance['name'])#</xar:mlvar>
+            <xar:mlvar>#xarVarPrepForDisplay($instance['title'])#</xar:mlvar>
         </xar:ml></h3>
     <table border="0" cellpadding="2" cellspacing="0" style="margin: auto;">
-        <tr>
-            <td>
-                <xar:mlstring>Group</xar:mlstring>:
-            </td>
-            <td>
-                #$instance['group_name']#
-            </td>
-        </tr>
+        <xar:if condition="!empty($instance['groups'])">
+            <tr>
+                <td>
+                    <xar:mlstring>Groups</xar:mlstring>:
+                </td>
+                <td>
+                    <xar:loop name="$instance['groups']">
+                        #xarVarPrepForDisplay($loop:item.name)#
+                    </xar:loop>
+                </td>
+            </tr>
+        </xar:if>
         <tr>
             <td>
                 <xar:mlstring>Type</xar:mlstring>:
             </td>
             <td>
-                #$instance['module']#\#$instance['type']#
+                #xarVarPrepForDisplay($instance['module'])#\#xarVarPrepForDisplay($instance['type'])#
             </td>
         </tr>
         <tr>
@@ -35,7 +40,7 @@
         </tr>
     </table>
 	<br /><br />
-	<a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel deletion of Block Instance</xar:mlstring></a>
+	<a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel</xar:mlstring></a>
     </div>
 </form>
 </div>
