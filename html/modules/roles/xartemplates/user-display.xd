@@ -1,31 +1,13 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Memberslist</xar:mlstring></span></div>
-<!-- common admin menu for this module - remove link to the current function -->
-<div class="xar-mod-body">
-<h2>#$name#</h2>
+<div class="xar-mod-body"><h2>#$name#</h2><br />
+<div style="margin: auto;">
 
 <table border="0" width="50%" cellspacing="1" cellpadding="2">
 	<tr class="xar-norm" valign="top">
 		<td>
-			<xar:mlstring>Real Name</xar:mlstring>: 
+			<xar:mlstring>Display Name</xar:mlstring>: 
 		</td>
 		<td>
 			#$name#
-		</td>
-	</tr>
-	<tr class="xar-norm" valign="top">
-		<td>
-			<xar:mlstring>Email</xar:mlstring>: 
-		</td>
-		<td>
-			#$email#	
-		</td>
-	</tr>
-	<tr class="xar-norm" valign="top">
-		<td>
-			<xar:mlstring>Home Page</xar:mlstring>: 
-		</td>
-		<td>
-			#$url#
 		</td>
 	</tr>
 	<tr>
@@ -34,4 +16,5 @@
 		</td>
 	</tr>
 </table>
-
+</div>
+</div>

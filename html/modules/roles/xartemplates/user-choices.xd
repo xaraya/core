@@ -1,20 +1,13 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>User registration/login</xar:mlstring>           
-        </th>
-    </tr>
-</table>
-
-<br />
+<div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:mlstring>Please select an option from the menu below</xar:mlstring>:
-<br /><br />
-<a href="#xarModURL('roles', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a>
-<br /><br />
-<xar:if condition="xarModGetVar('roles', 'minage') eq 0">
+<p><a href="#xarModURL('roles', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a></p>
+<p><xar:if condition="xarModGetVar('roles', 'minage') eq 0">
 	<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>Register</xar:mlstring></a>
 <xar:else />
 	<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register</xar:mlstring></a>
 </xar:if>
-<br /><br />
-<a href="#xarModURL('roles', 'user', 'lostpassword')#"><xar:mlstring>Retrieve lost password</xar:mlstring></a>
+</p>
+<p><a href="#xarModURL('roles', 'user', 'lostpassword')#"><xar:mlstring>Retrieve lost password</xar:mlstring></a></p>
+</div>
+</div>

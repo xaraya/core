@@ -1,11 +1,5 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Request lost password</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<br /><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Request Lost Password</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:mlstring>Enter your username or your e-mail address.</xar:mlstring>
 <br /><br />
 <form action="#xarModURL('roles', 'user', 'lostpassword')#" method="post" enctype="application/x-www-form-urlencoded">
@@ -36,3 +30,5 @@
 	</tr>
 </table>
 </form>
+</div>
+</div>

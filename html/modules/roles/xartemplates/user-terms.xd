@@ -1,6 +1,6 @@
+<div class="xar-mod-body"><h2><xar:mlstring>Terms of Use</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:if condition="xarModGetVar('roles', 'showterms')">
-
-	<h2><xar:mlstring>Terms of Use v1.11 for</xar:mlstring> &xar-config-display.sitename;</h2>
 	<h3><xar:mlstring>1. Acceptance of Terms of Use and Amendments.</xar:mlstring></h3>
 	<xar:mlstring>Each time you use or cause access to this web site, you agree to be bound by these </xar:mlstring><a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>,<xar:mlstring> and as amended from time to time with or without notice to you. In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.<xar:mlstring> Please see our</xar:mlstring> <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>,<xar:mlstring> which is incorporated into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> by reference.</a>.
 
@@ -87,3 +87,5 @@
 <xar:else />
 	<xar:mlstring>Terms of Service not active</xar:mlstring>
 </xar:if>
+</div>
+</div>

@@ -1,6 +1,6 @@
+<div class="xar-mod-body"><h2><xar:mlstring>Privacy Policy</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:if condition="xarModGetVar('roles', 'showprivacy')">
-
-	<h2><xar:mlstring>Privacy Policy v1.11 for</xar:mlstring> &xar-config-display.sitename;</h2>
 	<h3><xar:mlstring>Introduction.</xar:mlstring></h3>
 	<xar:mlstring>We take your right to privacy seriously and want you to feel comfortable using our web site. This Privacy Policy deals with personally identifiable information (referred to as "Data" below) that may be collected by us on our site. This Policy does not apply to other entities that we do not own or control or persons that are not our employees, agents or within our control. Please take time to read our</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
 	<h3><xar:mlstring>1. Collection of Data.</xar:mlstring></h3>
@@ -39,3 +39,5 @@
 <xar:else />
 	<xar:mlstring>Privay Policy Not Active</xar:mlstring>
 </xar:if>
+</div>
+</div>

@@ -1,11 +1,5 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Confirm Registration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<br /><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Confirm Registration</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
 <table cellpadding="0" cellspacing="0" border="0">
 	<tr>
@@ -74,3 +68,5 @@
 	</tr>
 </table>
 </form>
+</div>
+</div>

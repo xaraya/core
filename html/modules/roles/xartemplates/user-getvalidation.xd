@@ -1,9 +1,5 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Account Validated</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<br /><br />
-<xar:mlstring>Your account has been validated and you can now log in.</xar:mlstring> 
+<div class="xar-mod-body"><h2><xar:mlstring>Account Validated</xar:mlstring></h2><br />
+<div style="margin: auto;">
+<xar:mlstring>Your account has been validated and you can now log in.</xar:mlstring>
+</div>
+</div>

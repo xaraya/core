@@ -1,7 +1,10 @@
-<h2><xar:mlstring>Your Account</xar:mlstring></h2>
+<div class="xar-mod-body"><h2><xar:mlstring>Your Account</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:if condition="!empty($message)">
 	#$message#
 <xar:else />
 	#$output#
 	<br /><br />
 </xar:if>
+</div>
+</div>

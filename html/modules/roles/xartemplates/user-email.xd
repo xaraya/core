@@ -1,7 +1,5 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Email</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Send Email to</xar:mlstring>: #$name#</h2>
-<div style="text-align: center;margin: auto;">
-<br /><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Send Email To</xar:mlstring> #$name#</h2><br />
+<div style="margin: auto;">
 	<form action="&xar-modurl-roles-user-email;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="name" id="name" value="#$name#" />

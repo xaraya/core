@@ -1,11 +1,5 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Start Validation of Your Account</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<br /><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Start Validation</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.</xar:mlstring> 
 <br /><br />
 <xar:if condition="!empty($valcode)">
@@ -43,3 +37,5 @@
 		<input type="submit" value="Resend Validation Information" />
 	</form>
 </xar:if>
+</div>
+</div>

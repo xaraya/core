@@ -1,7 +1,5 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Memberslist</xar:mlstring></span></div>
-<!-- common admin menu for this module - remove link to the current function -->
-<div class="xar-mod-body">
-<h2>#$title#</h2>
+<div class="xar-mod-body"><h2><xar:mlstring>Memberslist</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 
 <form action="#xarModURL('roles', 'user', 'view')#" method="post">
@@ -93,13 +91,6 @@
 							<a href="#$emailurl#">#$emailicon#</a>
 						</xar:if>
 					</td>
-					<td class="xar-accent">
-					   <xar:if condition="!empty($urlicon)">
-						   <a href="#$url#">#$urlicon#</a>
-						<xar:else />
-							&nbsp;&nbsp;
-						</xar:if>
-					</td>
 				    <xar:if condition="isset($properties) and count($properties) gt 0">
 				    <xar:foreach in="$properties" key="$key">
 					<td class="xar-accent">
@@ -120,3 +111,5 @@
 	<!-- add the pager here -->
 	<div align="center">#$pager#</div>
 </xar:if>
+</div>
+</div>
