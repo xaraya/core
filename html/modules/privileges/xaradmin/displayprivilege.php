@@ -40,19 +40,6 @@ function privileges_admin_displayprivilege()
                                     'parentname'=>$parent->getName());
     }
 
-// remove duplicate entries from the list of privileges
-//Get the array of all privileges, minus the current one
-// need this for the dropdown display
-    $privileges = array();
-    $names = array();
-    foreach($privs->getprivileges() as $temp){
-        $nam = $temp['name'];
-        if (!in_array($nam,$names) && $temp['pid'] != $pid){
-            $names[] = $nam;
-            $privileges[] = $temp;
-        }
-    }
-
 // Load Template
     if(isset($pid)) {$data['ppid'] = $pid;}
     else {$data['ppid'] = $priv->getID();}

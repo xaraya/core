@@ -34,10 +34,17 @@ function privileges_admin_deleteprivilege()
 
     if (empty($confirmation)) {
 
+//Get the array of parents of this privilege
+        $parents = array();
+        foreach ($priv->getParents() as $parent) {
+            $parents[] = array('parentid'=>$parent->getID(),
+                                        'parentname'=>$parent->getName());
+        }
         //Load Template
         $data['authid'] = xarSecGenAuthKey();
         $data['pid'] = $pid;
         $data['pname'] = $name;
+        $data['parents'] = $parents;
         return $data;
 
     }

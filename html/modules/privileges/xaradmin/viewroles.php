@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Display the roles this privilege is assigned to
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -47,6 +47,13 @@ function privileges_admin_viewroles()
     include_once 'modules/privileges/xartreerenderer.php';
     $renderer = new xarTreeRenderer();
 
+//Get the array of parents of this privilege
+    $parents = array();
+    foreach ($priv->getParents() as $parent) {
+        $parents[] = array('parentid'=>$parent->getID(),
+                                    'parentname'=>$parent->getName());
+    }
+
     $data['pname'] = $priv->getName();
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
@@ -57,6 +64,7 @@ function privileges_admin_viewroles()
                              'removerole',
                              array('pid'=>$pid));
     $data['trees'] = $renderer->drawtrees($data['show']);
+    $data['parents'] = $parents;
     return $data;
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
