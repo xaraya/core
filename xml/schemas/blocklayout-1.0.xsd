@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:xar="http://www.xaraya.com/2003/blocklayout"
-           elementFormDefault="qualified" attributeFormDefault="unqualified"
-           targetNameSpace="http://www.xaraya.com/blocklayout">
+<!DOCTYPE xs:schema SYSTEM "XMLSchema.dtd">
+<xs:schema targetNamespace="http://www.xaraya.com/2003/blocklayout" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
 
   <!-- Introduction -->
   <xs:annotation>
@@ -186,14 +186,14 @@
   </xs:element>
 
   <!-- continue tag -->
-  <xs:element name="continue"/>
+  <xs:element name="continue">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
   <!-- break tag -->
-  <xs:element name="break"/>
+  <xs:element name="break">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
@@ -233,7 +233,7 @@
         <xs:enumeration value="dynamic"/>
       </xs:restriction>
     </xs:simpleType>
-  </xs:element>  
+
   <!-- End block tag -->
 
  
