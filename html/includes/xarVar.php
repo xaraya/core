@@ -957,11 +957,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             return xarModGetVar($modName, $name);
         }
         break;
-    case 'themevar':
-        $cacheCollection = 'Theme.Variables.' . $modName ;  // <mrb> kinda confusing here
-        break;
     case 'configvar':
-        $cacheCollection = 'Config.Variables';
         $setTo = NULL;
         break;
     default:
@@ -979,24 +975,11 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     $result->Close();
     
     // We finally found it, update the appropriate cache
-    switch(strtolower($type)) {
-        case 'modvar':
-            default:
-            xarVarSetCached('Mod.Variables.' . $modName, $cacheName, $value);
-            break;
-        case 'moduservar':
-            xarVarSetCached('ModUser.Variables.' . $modName, $cacheName, $value);
-            break;
-        case 'themevar':
-            xarVarSetCached('Theme.Variables.' . $modName, $cacheName, $value);
-            break;
-        case 'configvar':
-            $value = unserialize($value);
-            xarVarSetCached('Config.Variables', $cacheName, $value);
-            break;
-
+    if($type == 'configvar') {
+        $value = unserialize($value);
     }
-    
+    xarVarSetCached($cacheCollection, $cacheName, $value);
+
     // Optionally prepare it
     // FIXME: This may sound convenient now, feels wrong though, prepping introduces
     //        an unnecessary dependency here.
