@@ -388,11 +388,10 @@ function xarRequestGetInfo()
     xarVarFetch('type', 'str:1:', $modType, 'user');
     xarVarFetch('func', 'str:1:', $funcName, 'main');
 
-    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != '') {
-        // NOTE: <marco> The '-' character is not allowed in modules, types and function names,
-        //               so it's not present in this regex
-        //preg_match_all('|/([a-z0-9_]+)|i', $path, $matches);
-    // FIXME: we need to match anything that might be used as module params here too ! (without compromising security)
+    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+        // IIS fix
+        && $path != xarServerGetVar('SCRIPT_NAME')) {
+    // Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ +-]+)|i', $path, $matches);
         $params = $matches[1];
         if (count($params) > 0) {
@@ -403,7 +402,7 @@ function xarRequestGetInfo()
             // Check if this is an alias for some other module
             $modName = xarRequest__resolveModuleAlias($modName);
             // Call the appropriate decode_shorturl function
-            if (xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
+            if (xarModIsAvailable($modName) && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
                 $loopHole = array($modName,$modType,$funcName);
                 $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
                 if (is_array($res)) {
@@ -433,7 +432,7 @@ function xarRequestGetInfo()
                 if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' && xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
                     // In all other cases we just log the exception since we must always
                     // return a valid request info.
-                    xarLogException(XARDBG_LEVEL_ERROR);
+                    xarLogException(XARLOG_LEVEL_ERROR);
                 }
                 // IMPORTANT: As this is exactly the same construct as in xarModUrl and that was 
                 // causing a lot of exceptions to be hidden, i commented this one out as well
