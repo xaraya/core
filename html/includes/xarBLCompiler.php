@@ -2474,7 +2474,6 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
 
-        // FIXME: this doesn't do what you think, and there's no way to test for this at compilation
         if (!is_array($in)) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                            new xarTpl__ParserError('Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this));
