@@ -549,7 +549,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             break;
                         case XAR_TOKEN_ENDTAG_START: 
                             // Check for xar end tag
-                            $xarToken = $this->getNextToken(4);
+                            $xarToken = $this->getNextToken(4,true); // don't except, template could end with non xar tag
                             if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
                                 // Situation: [...text...]</xar:...
                                 $trimmer='xmltrim';
