@@ -713,7 +713,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $token .= '(';
                     break;
                 }
-                // We expect a variable after the # now or a function
+                // We expect a variable after the # now or a function   
                 if ($nextToken == XAR_TOKEN_VAR_START || $nextToken == 'x') {
                     // Check if we have a function in here
                     if($nextToken == 'x'){
@@ -741,9 +741,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     // Add text to parent, if applicable
                     // Situation: [...text...]#$....# or [...text...]#xarFunction()#
-                    if (xmltrim($text) != '') {
+                    $trimmer='xmltrim';
+                    if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
+                    if ($trimmer($text) != '') {
                         if ($parent->hasText()) {
-                            $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
+                            $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
                         } elseif(trim($text) != '') {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                             return;
