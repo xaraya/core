@@ -48,7 +48,7 @@ document.forms[0].submit();}
 					<xar:mlstring>Type</xar:mlstring>
 				</td>
         		<td>
-        			<select name="ptype" id="ptype"  tabindex="3" onChange="javascript:setaction('&xar-modurl-roles-admin-newrole;')">
+        			<select name="ptype" id="ptype"  tabindex="2" onChange="javascript:setaction('&xar-modurl-roles-admin-newrole;')">
 							<xar:if condition="$ptype eq 1">
 		                    	<option value="1" selected="selected">Group
 							<xar:else />
@@ -67,7 +67,7 @@ document.forms[0].submit();}
 					<xar:mlstring>Member of</xar:mlstring>
 				</td>
 				<td>
-					<select name="pparentid" id="pparentid" tabindex="5">
+					<select name="pparentid" id="pparentid" tabindex="3">
 					<xar:loop name="$groups">
 								<option value="#$uid#">#$name#
 					</xar:loop>
@@ -94,7 +94,7 @@ document.forms[0].submit();}
 						<xar:mlstring>User Name</xar:mlstring>
 					</td>
 					<td>
-						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="20" tabindex="2" />
+						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="20" tabindex="4" />
 					</td>
 					<td width="20">
 						&nbsp;
@@ -103,7 +103,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Email</xar:mlstring>
 					</td>
 					<td>
-						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="50" tabindex="4" />
+						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="20" tabindex="5" />
 					</td>
 				</tr>
 				<tr>
@@ -120,7 +120,43 @@ document.forms[0].submit();}
 						<xar:mlstring>Pwd. Again</xar:mlstring>
 					</td>
 					<td>
-						<input type="password" name="ppass2" id="ppass2" value="" size="20" maxlength="20" tabindex="6" />
+						<input type="password" name="ppass2" id="ppass2" value="" size="20" maxlength="20" tabindex="7" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<xar:mlstring>State</xar:mlstring>
+					</td>
+					<td>
+					<select name="pstate" id="pstate" size="1" tabindex="8">				
+						<xar:if condition="$pstate eq 1">
+							<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+						<xar:else />
+							<option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$pstate eq 2">
+							<option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+						<xar:else />
+							<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$pstate eq 3">
+							<option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+						<xar:else />
+							<option value="3"><xar:mlstring>Active</xar:mlstring></option>
+						</xar:if>						
+						<xar:if condition="$pstate eq 4">
+							<option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+						<xar:else />
+							<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+						</xar:if>						
+					</select>
+					</td>
+					<td width="20">
+						&nbsp;
+					</td>
+					<td>
+					</td>
+					<td>
 					</td>
 				</tr>
 			</xar:if>
@@ -128,7 +164,7 @@ document.forms[0].submit();}
 					
 		<br />
 
-		<input type="submit" value="Add" align="middle" tabindex="7" />
+		<input type="submit" value="Add" align="middle" tabindex="9" />
 	</form>
 </div>
 <br />
