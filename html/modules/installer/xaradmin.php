@@ -135,7 +135,7 @@ function installer_admin_phase5()
                                              'install_type',
                                              'install_intranet',
                                              'install_create_database');
-    
+
     // Check necessary arguments
     if (empty($dbHost) || empty($dbName) || empty($dbUname)
         || empty($dbPrefix) || empty($dbType) || empty($installType)) {
@@ -164,7 +164,7 @@ function installer_admin_phase5()
     } else {
         $intranetMode = FALSE;
     }
-    
+
     if ('new' == $installType) {
         $initFunc = 'init';
     } elseif ('upgrade' == $installType) {
@@ -173,10 +173,12 @@ function installer_admin_phase5()
 
 
 
-    xarInstallAPILoad('installer','admin');
+    if (!xarInstallAPILoad('installer','admin')) {
+        return NULL;
+    }
 
     // Save config data
-    $res = xarInstallAPIFunc('installer',
+    if (!xarInstallAPIFunc('installer',
                             'admin',
                             'modifyconfig',
                             array('dbHost'    => $dbHost,
@@ -184,19 +186,17 @@ function installer_admin_phase5()
                                   'dbUname'   => $dbUname,
                                   'dbPass'    => $dbPass,
                                   'dbPrefix'  => $dbPrefix,
-                                  'dbType'    => $dbType));
-    // throw back
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                                  'dbType'    => $dbType))) {
         return NULL;
     }
 
+
     // Create the database if necessary
     if ($createDb) {
-        $res = xarInstallAPIFunc('installer',
-                                'admin',
-                                'createdb');
-        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return NULL;
+        if (!xarInstallAPIFunc('installer',
+                               'admin',
+                               'createdb')) {
+           return NULL;
         }
     }
 
@@ -204,24 +204,23 @@ function installer_admin_phase5()
     xarCoreInit(XARCORE_SYSTEM_ADODB);
 
     // Load in modules/installer/xarinit.php and choose a new install or upgrade
-    $res = xarInstallAPIFunc('installer',
+    if (!xarInstallAPIFunc('installer',
                             'admin',
                             'initialise',
                             array('directory' => 'installer',
-                                  'initfunc'  => $initFunc));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                                  'initfunc'  => $initFunc))) {
         return NULL;
     }
-   
+
     return array();
 }
 
-/*function installer_admin_phase6
+function installer_admin_phase6
 {
 
 
     return array();
-}*/
+}
 
 /**
  * Bootstrap Xaraya
@@ -233,26 +232,25 @@ function installer_admin_bootstrap()
 {
 
     // log in admin user
-    $res = xarUserLogIn('Admin', 'password', 0);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarUserLogIn('Admin', 'password', 0)) {
+        return NULL;
     }
 
     // Load installer API
-    xarModAPILoad('installer','admin');
+    if (!xarModAPILoad('installer','admin')) {
+        return NULL;
+    }
 
     // Activate modules
-    $res = xarModAPIFunc('installer',
+    if (!xarModAPIFunc('installer',
                         'admin',
                         'initialise',
                         array('directory' => 'base',
-                              'initfunc' => 'activate'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+                              'initfunc' => 'activate'))) {
+        return NULL;
     }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
-
 }
 
 /**
@@ -266,7 +264,8 @@ function installer_admin_create_administrator()
 {
     if (!xarSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));return;
+                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));
+        return;
     }
 
     if (!xarVarCleanFromInput('create')) {
@@ -283,19 +282,19 @@ function installer_admin_create_administrator()
                                        'install_admin_email',
                                        'install_admin_url');
 
-    xarModAPILoad('users', 'admin');
+    if (!xarModAPILoad('users', 'admin')) {
+        return NULL;
+    }
 
     $password = md5($password);
 
-    $res = xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
+    if(!xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
                                                           'name'  => $name,
                                                           'uname' => $username,
                                                           'email' => $email,
                                                           'pass'  => $password,
-                                                          'url'   => $url));
-
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+                                                          'url'   => $url))) {
+        return NULL;
     }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'finish'));
@@ -335,40 +334,48 @@ function installer_admin_finish()
 
     list ($leftBlockGroup) = $result->fields;
 
-    if (!xarModAPILoad('blocks', 'admin') && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPILoad('blocks', 'admin')) {
         return NULL;
     }
+
     $adminBlockId = xarBlockTypeExists('adminpanels', 'adminmenu');
 
-    $block_id = xarModAPIFunc('blocks',
-                             'admin',
-                             'create_instance', array('title'    => 'Admin',
-                                                      'type'     => $adminBlockId,
-                                                      'group'    => $leftBlockGroup,
-                                                      'template' => '',
-                                                      'state'    => 2));
-
-    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return NULL;
     }
-    
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Admin',
+                                                'type'     => $adminBlockId,
+                                                'group'    => $leftBlockGroup,
+                                                'template' => '',
+                                                'state'    => 2))) {
+        return NULL;
+    }
+
+
+
     $now = time();
 
-    $varshtml['html_content'] = 'Reminder message body will go here.';
+    $varshtml['html_content'] = 'Please deleate the install.php from your webroot .';
     $varshtml['expire'] = $now + 24000;
     $msg = serialize($varshtml);
 
     $htmlBlockId = xarBlockTypeExists('base', 'html');
-    $block_id = xarModAPIFunc('blocks',
-                             'admin',
-                             'create_instance', array('title'    => 'Reminder',
-                                                      'content'  => $msg,
-                                                      'type'     => $htmlBlockId,
-                                                      'group'    => $leftBlockGroup,
-                                                      'template' => '',
-                                                      'state'    => 2));
-    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+
+    if (!isset($htmlBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return NULL;
+    }
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Reminder',
+                                                'content'  => $msg,
+                                                'type'     => $htmlBlockId,
+                                                'group'    => $leftBlockGroup,
+                                                'template' => '',
+                                                'state'    => 2))) {
+        return NULL;
     }
 
     $query = "SELECT    xar_id as id
@@ -396,17 +403,21 @@ function installer_admin_finish()
     list ($rightBlockGroup) = $result->fields;
 
     $loginBlockId = xarBlockTypeExists('users', 'login');
-    $block_id = xarModAPIFunc('blocks',
-                             'admin',
-                             'create_instance', array('title'    => 'Login',
-                                                      'type'     => $loginBlockId,
-                                                      'group'    => $rightBlockGroup,
-                                                      'template' => '',
-                                                      'state'    => 2));
 
-    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return NULL;
     }
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Login',
+                                                'type'     => $loginBlockId,
+                                                'group'    => $rightBlockGroup,
+                                                'template' => '',
+                                                'state'    => 2))) {
+        return NULL;
+    }
+
+
 
     xarConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
 
@@ -416,6 +427,7 @@ function installer_admin_finish()
 
     return array();
 }
+
 
 function installer_admin_modifyconfig(){}
 

@@ -293,7 +293,7 @@ function base_init()
                   'u',
 		          'ul',
 		          'var');
-    
+
     foreach ($htmltags as $htmltag) {
         $id_configvar = $dbconn->GenId($configVarsTable);
         $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$htmltag','html')";
@@ -306,18 +306,18 @@ function base_init()
         }
     }
 
-    $censortags = array('fuck',
-                  'fucked',
-                  'motherfucker',
-                  'pussy',
-                  'cock',
-		          'cunt',
-		          'cocksucker',
-                  'cum');
-    
-    foreach ($censortags as $censortag) {
-        $id_configvar = $dbconn->GenId($configVarsTable);
-        $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$censortag','censored')";
+    $censoredWords = array('fuck',
+                           'fucked',
+                           'motherfucker',
+                           'pussy',
+                           'cock',
+                           'cunt',
+                           'cocksucker',
+                           'cum');
+
+    foreach ($censoredWords as $censoredWord) {
+        $id_configVar = $dbconn->GenId($configVarsTable);
+        $query = "INSERT INTO $configVarsTable VALUES ($id_configVar,'$censoredWords','censored')";
         $dbconn->Execute($query);
         if ($dbconn->ErrorNo() != 0) {
             $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -361,24 +361,25 @@ function base_init()
     }
     
     // Load in installer API
-    xarInstallAPILoad('installer','admin');
+    if (!xarInstallAPILoad('installer','admin')) {
+        return NULL;
+    }
     
     /****************************************************************
     * Install users module and set up default users
     ****************************************************************/
-    $res = xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'users',
-                                  'initfunc'  => 'init'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarInstallAPIFunc('installer',
+                           'admin',
+                           'initialise',
+                           array('directory' => 'users',
+                                 'initfunc'  => 'init'))) {
         return NULL;
     }
 
     $usersTable = $systemPrefix . '_users';
     $id_anonymous = $dbconn->GenId($usersTable);
     $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','')";
-    
+
     $dbconn->Execute($query);
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
@@ -405,12 +406,11 @@ function base_init()
     /***************************************************************
     * Install groups module and setup default groups
     ***************************************************************/
-    $res = xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'groups',
-                                  'initfunc'  => 'init'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarInstallAPIFunc('installer',
+                           'admin',
+                           'initialise',
+                           array('directory' => 'groups',
+                                 'initfunc'  => 'init'))) {
         return NULL;
     }
 
@@ -468,13 +468,11 @@ function base_init()
     /**************************************************************
     * Install permissions module and setup default permissions
     **************************************************************/
-    $res = xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'permissions',
-                                  'initfunc'  => 'init'));
-
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarInstallAPIFunc('installer',
+                           'admin',
+                           'initialise',
+                           array('directory' => 'permissions',
+                                 'initfunc'  => 'init')) {
         return NULL;
     }
     $groupPermsTable = $systemPrefix . '_group_perms';
@@ -520,13 +518,11 @@ function base_init()
     /**************************************************************
     * Install modules table and insert the modules module
     **************************************************************/
-    $res = xarInstallAPIFunc('installer',
-                            'admin',
-                            'initialise',
-                            array('directory' => 'modules',
-                                  'initfunc'  => 'init'));
-
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarInstallAPIFunc('installer',
+                           'admin',
+                           'initialise',
+                           array('directory' => 'modules',
+                                 'initfunc'  => 'init'))) {
         return NULL;
     }
     $modulesTable = $systemPrefix .'_modules';
@@ -641,7 +637,9 @@ function base_activate()
     // Set up default user properties, etc.
 
     // load modules admin API
-    xarModAPILoad('modules', 'admin');
+    if (!xarModAPILoad('modules', 'admin')) {
+        return NULL;
+    }
 
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) {
@@ -649,24 +647,20 @@ function base_activate()
     }
 
     // Activate the groups module
-    $res = xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('groups'),
-                                                              'state' => XARMOD_STATE_INACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('groups'),
+                                                              'state' => XARMOD_STATE_INACTIVE))) {
         return;
     }
-    $res = xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('groups')));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('groups')))) {
         return;
     }
 
     // Activate the permissions module
-    $res = xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('permissions'),
-                                                              'state' => XARMOD_STATE_INACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('permissions'),
+                                                              'state' => XARMOD_STATE_INACTIVE))) {
         return;
     }
-    $res = xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('permissions')));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('permissions')))) {
         return;
     }
 
@@ -682,67 +676,44 @@ function base_activate()
     }
 
     // initialize & activate adminpanels module
-    $res = xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => xarModGetIDFromName('adminpanels')));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => xarModGetIDFromName('adminpanels')))) {
+        return NULL;
     }
 
-    $res = xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('adminpanels')));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('adminpanels')))) {
+        return NULL;
     }
 
     // Activate the user's module
-    $res = xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('users'),
-                                                              'state' => XARMOD_STATE_INACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('users'),
+                                                              'state' => XARMOD_STATE_INACTIVE))) {
         return;
     }
-    $res = xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('users')));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => xarModGetIDFromName('users')))) {
         return;
     }
 
     //initialise and activate base module by setting the states
-    $res = xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),                                                          'state' => XARMOD_STATE_INACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),
+                                                             'state' => XARMOD_STATE_INACTIVE))) {
         return;
     }
-    $res = xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),
-                                                              'state' => XARMOD_STATE_ACTIVE));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => xarModGetIDFromName('base'),
+                                                              'state' => XARMOD_STATE_ACTIVE))) {
         return;
     }
     // initialize installer module
 
     // Register Block types
-    if (!xarBlockTypeRegister('base', 'finclude')) {
-        return NULL;
-    }
+    $blocks = array('finclude','html','menu','php','rss','text');
 
-    $res = xarBlockTypeRegister('base', 'html');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
+    foreach ($blocks as $block) {
 
-    $res = xarBlockTypeRegister('base', 'menu');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    $res = xarBlockTypeRegister('base', 'php');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    $res = xarBlockTypeRegister('base', 'rss');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    $res = xarBlockTypeRegister('base', 'text');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+        if (!xarBlockTypeRegister('base', $block)) {
+            return NULL;
+        }
     }
 
     //$res = xarBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???
@@ -753,21 +724,19 @@ function base_activate()
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
         xarVarDelCached('Mod.BaseInfos', 'blocks');
     }
+
     // Create default block groups/instances
-    $res = xarModAPILoad('blocks', 'admin');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarModAPILoad('blocks', 'admin')) {
+        return NULL;
     }
 
-    $res = xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) {
+        return NULL;
     }
 
-    $res = xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                                 'template' => 'right'));
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
+                                                                'template' => 'right'))) {
+        return NULL;
     }
 
     return true;
