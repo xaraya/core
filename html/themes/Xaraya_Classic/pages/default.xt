@@ -47,8 +47,6 @@ ________________________________________________________________________________
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
         <!--- Additional CSS rules promoted by Xaraya modules - be careful, these may alter the main theme rules --->
         #$tpl:additionalStyles#
-        <!--- Styleswitcher JavaScript --->
-        <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
         <!--- Head JavaScript --->
         <xar:base-render-javascript position="head" />
     </head>
@@ -171,5 +169,7 @@ ________________________________________________________________________________
         </div>
         <!--- Body JavaScript --->
         <xar:base-render-javascript position="body" />
+        <!--- Styleswitcher JavaScript --->
+        <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
     </body>
 </html>
