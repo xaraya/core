@@ -328,7 +328,7 @@
                 <tr class="xar-norm">
                     <td colspan="7">
                         <a href="#xarModURL('roles', 'admin', 'newrole', array('ptype' => 0, 'pparentid' => $groupuid))#" title="#xarML('Add a new user')#">
-                            <xar:mlstring>New User</xar:mlstring>
+                            <xar:mlstring>Add a New User to this Group</xar:mlstring>
                         </a>
                     </td>
                 </tr>
