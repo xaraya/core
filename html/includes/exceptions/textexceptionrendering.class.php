@@ -16,7 +16,6 @@ include "includes/exceptions/exceptionrendering.class.php";
 class TextExceptionRendering extends ExceptionRendering
 {
     function TextExceptionRendering() {
-        ExceptionRendering();
         $this->linebreak = "\n";
     }
 }
