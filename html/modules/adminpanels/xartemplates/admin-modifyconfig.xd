@@ -109,7 +109,7 @@
                         </xar:mlstring>
                     </td>
                 </tr>
-                <tr>
+<!--                <tr>
                     <td align="right">
                         <xar:mlstring>
                             Sort order "By Weight" configuration: 
@@ -166,7 +166,7 @@
                         </xar:mlstring>
                     </td>
                 </tr>
-                <tr>
+-->                <tr>
                     <td align="right">
                         <label for="menuposition">
                             <xar:mlstring>
@@ -195,7 +195,7 @@
                         </xar:mlstring>
                     </td>
                 </tr>
-                <tr>
+<!--                <tr>
                     <td align="right">
                         &nbsp; 
                     </td>
@@ -217,7 +217,7 @@
                         </xar:mlstring>
                     </td>
                 </tr>
-                <tr>
+-->                <tr>
                     <td align="right">
                         &nbsp; 
                     </td>

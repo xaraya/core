@@ -26,15 +26,15 @@ function adminpanels_admin_modifyconfig()
     $data['sortorder'] = array();
     $data['sortorder']['byname']    = xarML('By Name');
     $data['sortorder']['bycat']     = xarML('By Category');
-    $data['sortorder']['byweight']  = xarML('By Weight');
-    $data['sortorder']['bygroup']   = xarML('By Group');
+    //$data['sortorder']['byweight']  = xarML('By Weight');
+    //$data['sortorder']['bygroup']   = xarML('By Group');
 
     $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
     //TODO: need a better routine for building select in template
 
     $data['menuselect']             = array();
     $data['menuselect']['l']        = xarML('Left');
-    $data['menuselect']['c']        = xarML('Center');
+    //$data['menuselect']['c']        = xarML('Center');
     $data['menuselect']['r']        = xarML('Right');
     $data['menuposition']           = xarModGetVar('adminpanels', 'menuposition');
     //TODO: need a better routine for building select in template
