@@ -14,7 +14,7 @@
     </tr>
     <tr>
         <td align="center" class="xar-normal">
-                <textarea name="license" cols="50" rows="8" readonly="readonly">GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+                <textarea name="license" id="license" cols="50" rows="8" readonly="readonly">GNU GENERAL PUBLIC LICENSE Version 2, June 1991
 
 Copyright (C) 1989, 1991 Free Software Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
@@ -106,21 +106,21 @@ END OF TERMS AND CONDITIONS
         </td>
     </tr>
     <form action="install.php" method="post">
-        <input type="hidden" name="install_language" value="#$language#" />
-        <input type="hidden" name="install_phase" value="3" />
+        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+        <input type="hidden" name="install_phase" id="install_phase" value="3" />
         <tr>
             <td>
-                <input type="radio" name="agree" value="agree" />I have read and agree to abide by the Terms and Conditions as stated above<br />
+                <input type="radio" name="agree" id="agree" value="agree" />I have read and agree to abide by the Terms and Conditions as stated above<br />
             </td>
         </tr>
         <tr>
             <td>
-                <input type="radio" name="agree" value="disagree" checked="checked" />I have read and do <b>NOT</b> agree to abide by the Terms and Conditions as stated above<br />
+                <input type="radio" name="agree" id="agree" value="disagree" checked="checked" />I have read and do <b>NOT</b> agree to abide by the Terms and Conditions as stated above<br />
             </td>
         </tr>
         <tr>
             <td align="center">
-                <input type="submit" value="Continue &gt;">
+                <input type="submit" value="Continue &gt;" />
             </td>
         </tr>
     </form>
