@@ -275,28 +275,28 @@ class xarMasks
  * @throws  none
  * @todo    create exceptions for bad input
 */
-    function trump($perms1, $perms2)
+    function trump($privs1, $privs2)
     {
-        if ((($perms1 == array()) || ($perms1 == '')) &&
-            (($perms2 == array()) || ($perms2 == ''))) return array();
-        if ($perms1 == array()) return $perms2;
-        if ($perms2 == array()) return $perms1;
+        if ((($privs1 == array()) || ($privs1 == '')) &&
+            (($privs2 == array()) || ($privs2 == ''))) return array();
+        if ($privs1 == array()) return $privs2;
+        if ($privs2 == array()) return $privs1;
 
-        foreach ($perms1 as $perm1) {
-            $isimplied = false;
-            foreach ($perms2 as $key=>$perm2) {
-                if (($perm2->isEqual($perm1)) ||
-                    ($perm1->implies($perm2,true)) ||
-                    ($perm2->implies($perm1,true))) {
-                    array_splice($perms1,$key);
-                    array_push($perms1,$perm2);
-                    $isimplied = true;
+        foreach ($privs1 as $key1 => $priv1) {
+            foreach ($privs2 as $key2 => $priv2) {
+//                echo "Trumping: ";
+//                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2,true);
+//                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1,true);
+                if ($priv1->implies($priv2,true)) array_splice($privs2,$key2);
+                elseif ($priv2->implies($priv1,true)) $privs1[$key1] = $priv2;
+                else {
+                    $privs1[] = $priv2;
                 }
             }
         }
 
 // done
-        return $perms1;
+        return $privs1;
     }
 
 /**
@@ -320,24 +320,7 @@ class xarMasks
         if ($module == '') list($module) = xarRequestGetInfo();
         if ($module == 'blocks') $module = xarModGetVar('blocks','currentmodule');
 
-
-/*      $temppriv = new xarPrivileges();
-        if ($module == '') {
-            $path = strrev(dirname(__FILE__));
-            $module = strtok($path,"/\\");
-            if(!in_array(strrev($module),$temppriv->getmodules())) {
-                $module = strtok("/\\");
-                if(!in_array(strrev($module),$temppriv->getmodules())) {
-                    $msg = xarML('Module not found for mask ' . $mask);
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'NO_MASK',
-                                   new DefaultUserException($msg));
-                    return;
-                }
-            }
-            $module = strrev($module);
-        }
-*/
-$mask =  $this->getMask($mask);
+        $mask =  $this->getMask($mask);
         if (!$mask) {
             if ($component == "") {
                 $msg = xarML('Did not find a mask registered for an unspecified component in module ') . $module;
@@ -424,13 +407,17 @@ $mask =  $this->getMask($mask);
 // get the assigned privileges and winnow them
         $roleprivs = $role->getAssignedPrivileges();
         $roleprivileges = array();
-// for each one winnow the  assigned privileges and then the inherited
+// for each one winnow the assigned privileges and then the inherited
         foreach ($roleprivs as $priv) {
             $roleprivileges = $this->winnow(array($priv),$roleprivileges);
             $roleprivileges = $this->winnow($priv->getDescendants(),$roleprivileges);
         }
+//      echo "Assigned: ";
+//      foreach($roleprivileges as $test) echo $test->getName();
+
 // trump them against the accumulated privileges from higher levels
         $irreducibleset = $this->trump($irreducibleset,$roleprivileges);
+//      echo "Irreducible: ";
 //      foreach($irreducibleset as $test) echo $test->getName();
 // check each privilege from the irreducible set
         $pass = false;
