@@ -711,7 +711,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if (!xarCorIsApiAllowed($modType)) {
+    if (!xarCoreIsApiAllowed($modType)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
