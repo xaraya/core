@@ -268,6 +268,11 @@ function modules_init()
     VALUES (".$dbconn->GenId($tables['module_vars']).",1,'startpage','overview')";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
+    // expertlist
+    $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value) 
+    VALUES (".$dbconn->GenId($tables['module_vars']).",1,'expertlist',0)";
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
     
     // Initialisation successful
     return true;
