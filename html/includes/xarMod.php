@@ -1931,5 +1931,18 @@ function xarModDelAlias($modName, $alias)
     return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
 }
 
+/**
+ * get name of current top-level module
+ *
+ * @deprec
+ * @access public
+ * @return string the name of the current top-level module, false if not in a module
+ */
+function xarModGetName()
+{
+    //TODO Work around for the prefix.
+    list($modName) = xarRequestGetInfo();
 
+    return $modName;
+}
 ?>

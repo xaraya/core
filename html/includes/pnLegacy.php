@@ -258,21 +258,6 @@ function pnModGetName()
 }
 
 /**
- * get name of current top-level module
- *
- * @deprec
- * @access public
- * @return string the name of the current top-level module, false if not in a module
- */
-function xarModGetName()
-{
-    //TODO Work around for the prefix.
-    list($modName) = xarRequestGetInfo();
-
-    return $modName;
-}
-
-/**
  * checks if a module is installed and its state is _PNMODULE_ACTIVE_STATE
  *
  * @deprec
