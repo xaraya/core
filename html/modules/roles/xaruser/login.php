@@ -59,6 +59,17 @@ function roles_user_login()
                 break;
 
             case 'authimap':
+            case 'authsso':
+
+                // The authsso module delegates login authority to
+                // web server (trusts the web server to authenticate
+                // the user's credentials), just as authldap
+                // delegates to an LDAP server. Behavior same as
+                // described in authldap case.
+                $state = 3;
+                $extAuthentication = true;
+                break;
+
             case 'authsystem':
 
                 // Still need to check if user exists as the user may be
