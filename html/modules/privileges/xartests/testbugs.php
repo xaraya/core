@@ -68,9 +68,6 @@ class testPrivilegesBugs extends xarTestCase
                             'databaseType' => xarCore_getSystemVar('DB.Type'),
                             'databaseName' => xarCore_getSystemVar('DB.Name'),
                             'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
-                            // uncomment this and remove the next line when we can store
-                            // site vars that are pre DB
-                            //'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
                             'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, 0);

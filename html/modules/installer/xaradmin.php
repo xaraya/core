@@ -275,9 +275,6 @@ function installer_admin_phase5()
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
                         'systemTablePrefix' => $dbPrefix,
-                        // uncomment this and remove the next line when we can store
-                        // site vars that are pre DB
-                        //'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
                         'siteTablePrefix' => $dbPrefix);
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
