@@ -15,7 +15,11 @@
 					<span class="xar-normal">
 						<p>
 							<xar:mlstring>
-								Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed. 
+								Please enter your database settings. You can connect to databases on non-standard ports using 'hostname:port' in the Host field. (e.g. 'localhost:12345')
+							</xar:mlstring>
+						<br/>
+							<xar:mlstring> 
+								If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed. 
 							</xar:mlstring>
 						</p>
 						<p>
