@@ -7,7 +7,7 @@
 function privileges_admin_newprivilege()
 {
     $data = array();
-    
+
     if (!xarVarFetch('pid',        'isset', $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
