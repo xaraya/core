@@ -1,0 +1,23 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+</table>
+<br />
+
+<h2>#$label# </h2>
+
+<form>
+<textarea name="xml" id="xml" rows="30" cols="80">
+#$xml#
+</textarea>
+</form>
+
+<xar:if condition="!empty($formlink)">
+<a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
+</xar:if>
+
+<xar:if condition="!empty($filelink)">
+<a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
+</xar:if>
+

@@ -12,7 +12,7 @@
     <tr>
         <td align="left" width="33%"><a href="#xarModURL('dynamicdata','admin','view',array('itemid' => $itemid))#"><xar:mlstring>View Items</xar:mlstring></a></td>
         <td align="center"><a href="#xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $itemid))#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
-        <td align="right"><a href="#xarModURL('dynamicdata','admin','export',array('objectid' => $itemid))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
+        <td align="right"><a href="#xarModURL('dynamicdata','util','export',array('objectid' => $itemid))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
     </tr>
 </table>
 <br />

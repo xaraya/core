@@ -15,7 +15,7 @@
         <td align="left"><a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#"><xar:mlstring>Modify Object Definition</xar:mlstring></a></td>
         <!-- show some basic info about this dynamic object -->
         <td align="center"><xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" /></td>
-        <td align="right"><a href="#xarModURL('dynamicdata','admin','export',array('modid' => $modid, 'itemtype' => $itemtype))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
+        <td align="right"><a href="#xarModURL('dynamicdata','util','export',array('modid' => $modid, 'itemtype' => $itemtype))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
     </tr>
 </table>
 <br />
@@ -152,7 +152,7 @@ Tip : empty label -> delete field for all items
     <tr>
        <td colspan="6" align="center">
        <xar:loop name="$tables">
-           <form method="post" action="&xar-modurl-dynamicdata-admin-importprops;">
+           <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
                <input type="hidden" name="authid" id="authid" value="#$authid#" />
                <input type="hidden" name="modid" id="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
