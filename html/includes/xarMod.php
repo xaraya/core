@@ -593,7 +593,6 @@ function xarModGetInfo($modRegId, $type = 'module')
         case 'module':
             default:
             xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
-            xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modInfo['name'], 'modules:', 'version');
             break;
         case 'theme':
             xarCore_SetCached('Theme.Infos', $modRegId, $modInfo);
@@ -1499,6 +1498,9 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                     $modversion['id'] = "666" . substr($checksum,5);
                 }
             }
+            // If the locale is already present, it means we can make the translations available
+            if(!empty($GLOBALS['xarMLS_currentLocale']))
+                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
