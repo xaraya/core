@@ -2960,7 +2960,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return;
         }
 
-                // Resolve the file attribute
+        // Resolve the file attribute
         $file = xarTpl__ExpressionTransformer::transformPHPExpression($file);
         if (!isset($file)) {
             return;
@@ -2996,6 +2996,11 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             $module = xarTpl__ExpressionTransformer::transformPHPExpression($module);
 
             return "xarTpl_includeModuleTemplate(\"$module\", \"$file\", $subdata)";
+            break;
+        case 'system':
+            // Tpl Include which cannot be overridden (for xml data for example), file is relative wrt containing file.
+            $tplFile = dirname($this->fileName) . '/' . $file;
+            return "xarTplFile(\"$tplFile\",$subdata)";
             break;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
