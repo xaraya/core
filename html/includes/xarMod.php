@@ -1404,20 +1404,27 @@ function xarModIsAvailable($modName)
     if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
 
         $modBaseInfo = xarMod_getBaseInfo($modName);
+        // Catch the MODULE_NOT_EXIST exception first, 
+        // because that is what we're testing
+        // here, we don't want to except on that.
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            if (xarExceptionId() != 'MODULE_NOT_EXIST') {
+                // Other exceptions are still thrown however
+                return;
+            } else {
+                xarExceptionFree();
+                return false;
+            }
+        }
+        // Also return null if the result wasn't set
         if (!isset($modBaseInfo)) return; // throw back
 
+        // We should be ok now, return the state of the module
         $modState = $modBaseInfo['state'];
         $modAvailableCache[$modName] = false;
 
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            if (xarExceptionId() != 'MODULE_NOT_EXIST') {
-                return; // throw back
-            }
-            xarExceptionFree();
-        } else {
-            if ($modState == XARMOD_STATE_ACTIVE) {
-                $modAvailableCache[$modName] = true;
-            }
+        if ($modState == XARMOD_STATE_ACTIVE) {
+            $modAvailableCache[$modName] = true;
         }
     }
     return $modAvailableCache[$modName];
