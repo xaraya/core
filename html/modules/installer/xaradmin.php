@@ -587,41 +587,41 @@ function installer_admin_confirm_configuration()
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
 
-        include $configuration;
-        $fileModules = unserialize(xarModGetVar('installer','modulelist'));
-        $func = "installer_" . basename("$configuration",'.conf.php') . "_moduleoptions";
-        $modules = $func();
-        $availablemodules = $awolmodules = array();
-        foreach ($modules as $module) {
-            if (in_array($module['name'],array_keys($fileModules))) {
-                if ($module['regid'] == $fileModules[$module['name']]['regid']) {
-                    $availablemodules[] = $module;
-                    unset($fileModules[$module['name']]);
-                }
+    include $configuration;
+    $fileModules = unserialize(xarModGetVar('installer','modulelist'));
+    $func = "installer_" . basename("$configuration",'.conf.php') . "_moduleoptions";
+    $modules = $func();
+    $availablemodules = $awolmodules = array();
+    foreach ($modules as $module) {
+        if (in_array($module['name'],array_keys($fileModules))) {
+            if ($module['regid'] == $fileModules[$module['name']]['regid']) {
+                $availablemodules[] = $module;
+                unset($fileModules[$module['name']]);
             }
-            else $awolmodules[] = ucfirst($module['name']);
         }
+        else $awolmodules[] = ucfirst($module['name']);
+    }
 
-        $options2 = $options3 = array();
-        foreach ($availablemodules as $availablemodule) {
+    $options2 = $options3 = array();
+    foreach ($availablemodules as $availablemodule) {
 //            if(xarMod_getState($availablemodule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
 //                echo var_dump($availablemodule);exit;
-                $options2[] = array(
-                           'item' => $availablemodule['regid'],
-                           'option' => 'true',
-                           'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
-                           );
+            $options2[] = array(
+                       'item' => $availablemodule['regid'],
+                       'option' => 'true',
+                       'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
+                       );
 //            }
-        }
-        foreach ($fileModules as $fileModule) {
+    }
+    foreach ($fileModules as $fileModule) {
 //            if(xarMod_getState($fileModule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-                $options3[] = array(
-                           'item' => $fileModule['regid'],
-                           'option' => 'false',
-                           'comment' => xarML('Install the #(1) module.',ucfirst($fileModule['name']))
-                           );
+            $options3[] = array(
+                       'item' => $fileModule['regid'],
+                       'option' => 'false',
+                       'comment' => xarML('Install the #(1) module.',ucfirst($fileModule['name']))
+                       );
 //            }
-        }
+    }
 
     if (!$confirmed) {
 
@@ -632,10 +632,62 @@ function installer_admin_confirm_configuration()
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
         return $data;
-        // Huh? This is never reached
-        //xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer','options' => $options)));
     }
     else {
+        /*********************************************************************
+        * Empty the privilege tables
+        *********************************************************************/
+        list($dbconn) = xarDBGetConn();
+        $sitePrefix = xarDBGetSiteTablePrefix();
+        $query = "DELETE FROM " . $sitePrefix . '_privileges';
+        if (!$dbconn->Execute($query)) return;
+        $query = "DELETE FROM " . $sitePrefix . '_privmembers';
+        if (!$dbconn->Execute($query)) return;
+        $query = "DELETE FROM " . $sitePrefix . '_security_acl';
+        if (!$dbconn->Execute($query)) return;
+
+        /*********************************************************************
+        * Enter some default privileges
+        * Format is
+        * register(Name,Realm,Module,Component,Instance,Level,Description)
+        *********************************************************************/
+
+        xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
+        xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+        xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
+        xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
+        xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
+        xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
+        xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
+        xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
+
+        /*********************************************************************
+        * Arrange the  privileges in a hierarchy
+        * Format is
+        * makeEntry(Privilege)
+        * makeMember(Child,Parent)
+        *********************************************************************/
+
+        xarMakePrivilegeRoot('Administration');
+        xarMakePrivilegeRoot('GeneralLock');
+        xarMakePrivilegeMember('LockMyself','GeneralLock');
+        xarMakePrivilegeMember('LockEverybody','GeneralLock');
+        xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+        xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+        xarMakePrivilegeMember('LockAdministration','GeneralLock');
+        xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+
+        /*********************************************************************
+        * Assign the default privileges to groups/users
+        * Format is
+        * assign(Privilege,Role)
+        *********************************************************************/
+
+        xarAssignPrivilege('Administration','Administrators');
+        xarAssignPrivilege('GeneralLock','Everybody');
+        xarAssignPrivilege('GeneralLock','Administrators');
+        xarAssignPrivilege('GeneralLock','Users');
+
         // disable caching of module state in xarMod.php
             $GLOBALS['xarMod_noCacheState'] = true;
             xarModAPIFunc('modules','admin','regenerate');
@@ -734,6 +786,16 @@ function installer_admin_finish()
                        new SystemException($msg));
         return false;
     }
+
+    $data['phase'] = 6;
+    $data['phase_label'] = xarML('Step Six');
+    $data['finalurl'] = xarModURL('installer', 'admin', 'cleanup');
+
+    return $data;
+}
+
+
+function installer_admin_cleanup() {
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
@@ -849,13 +911,7 @@ function installer_admin_finish()
                                                 'state'    => 2))) {
         return;
     }
-
-    $data['phase'] = 6;
-    $data['phase_label'] = xarML('Step Six');
-
-    return $data;
+    xarResponseRedirect('index.php');
 }
-
-
 function installer_admin_modifyconfig() {}
 ?>

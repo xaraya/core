@@ -6,7 +6,7 @@
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage privileges
@@ -37,48 +37,6 @@ function initializeSetup()
     xarMakeRoleMemberByName('Users','Everybody');
     xarMakeRoleMemberByName('Anonymous','Everybody');
     xarMakeRoleMemberByName('Myself','Everybody');
-
-    /*********************************************************************
-    * Enter some default privileges
-    * Format is
-    * register(Name,Realm,Module,Component,Instance,Level,Description)
-    *********************************************************************/
-
-    xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
-    xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
-    xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
-    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
-    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
-    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
-    xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
-    xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
-
-    /*********************************************************************
-    * Arrange the  privileges in a hierarchy
-    * Format is
-    * makeEntry(Privilege)
-    * makeMember(Child,Parent)
-    *********************************************************************/
-
-    xarMakePrivilegeRoot('Administration');
-    xarMakePrivilegeRoot('GeneralLock');
-    xarMakePrivilegeMember('LockMyself','GeneralLock');
-    xarMakePrivilegeMember('LockEverybody','GeneralLock');
-    xarMakePrivilegeMember('LockAnonymous','GeneralLock');
-    xarMakePrivilegeMember('LockAdministrators','GeneralLock');
-    xarMakePrivilegeMember('LockAdministration','GeneralLock');
-    xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-
-    /*********************************************************************
-    * Assign the default privileges to groups/users
-    * Format is
-    * assign(Privilege,Role)
-    *********************************************************************/
-
-    xarAssignPrivilege('Administration','Administrators');
-    xarAssignPrivilege('GeneralLock','Everybody');
-    xarAssignPrivilege('GeneralLock','Administrators');
-    xarAssignPrivilege('GeneralLock','Users');
 
     /*********************************************************************
     * Define instances for the core modules

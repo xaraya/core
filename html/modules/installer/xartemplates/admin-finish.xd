@@ -54,7 +54,7 @@
                 </code>
             </p>
             <p>
-                <a href=index.php>
+                <a href="#$finalurl#">
                     <xar:mlstring>
                         Launch the site! 
                     </xar:mlstring>
