@@ -574,7 +574,7 @@ function xarModGetInfo($modRegId, $type = 'module')
         $modFileInfo['publishdate'] = xarML('Unknown');
         $modFileInfo['license'] = xarML('Unknown');
     }
-    
+
     $modInfo = array_merge($modFileInfo, $modInfo);
 
     switch(strtolower($type)) {
@@ -930,9 +930,9 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
     if (!$found) {
         if ($throwException) {
-            if (!$isLoaded) {
-                $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
-            }
+//            if (!$isLoaded)
+            $msg = xarML('Module API function #(1) doesn\'t exist or couldn\'t be loaded.', $modAPIFunc);
+
             // MrB: When there is a parse error in the api file we sometimes end up
             // here, the error is never shown !!!! (xmlrpc for example)
             // TODO: the isloaded stuff -should- fix the problem above
@@ -1349,7 +1349,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $query .= " AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
                 AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
               ORDER BY xar_order ASC";
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1411,7 +1411,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
             // Itemtype is not specified, get only the generic hooks
             $query .= " AND xar_stype = ''";
         } else {
-            // FIXME: if itemtype is specified, i think we should not return the generic hook 
+            // FIXME: if itemtype is specified, i think we should not return the generic hook
             // hooks can be enabled for all or for a particular item type <-- this logic is strange
             $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
         }
@@ -1455,7 +1455,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.getFileInfos', $modOsDir)) {
         return xarVarGetCached('Mod.getFileInfos', $modOsDir);
     }
-    
+
     // TODO redo legacy support via type.
     switch(strtolower($type)) {
         case 'module':
@@ -1473,7 +1473,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             if (!file_exists($fileName)) {
                 $fileName = 'themes/' . $modOsDir . '/xartheme.php';
             }
-            
+
             break;
     }
 
@@ -1772,22 +1772,22 @@ function xarMod_getVarsByName($varName, $type = 'module')
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
-    
+
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-    
+
     switch(strtolower($type)) {
     case 'module':
     default:
-        
-        // NOTE: Not trivial to determine whether we should fetch from system 
-        //       or site table because this spans all modules / themes 
+
+        // NOTE: Not trivial to determine whether we should fetch from system
+        //       or site table because this spans all modules / themes
         // <mrb> the prefix thing should be rethought, it's not scalable (at least for sites)
 
         // Takes the right table basing on module mode
         $module_varstable = $tables['system/module_vars'];
         $module_table = $tables['system/modules'];
-        
+
         $query = "SELECT mods.xar_name, vars.xar_value
                       FROM $module_table as mods , $module_varstable as vars
                       WHERE mods.xar_id = vars.xar_modid AND
@@ -1801,7 +1801,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
                       WHERE xar_name = '" . xarVarPrepForStore($varName) . "'";
         break;
     }
-    
+
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1815,7 +1815,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
             xarVarSetCached('Theme.GetVarsByName', $varName, true);
             break;
     }
-    
+
     return true;
 }
 
@@ -1908,14 +1908,14 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
         case 'theme':
             if ($modMode == XARTHEME_MODE_SHARED) {
                 $theme_statesTable = $tables['system/theme_states'];
-            } else { 
+            } else {
                 $theme_statesTable = $tables['site/theme_states'];
             }
 
             $query = "SELECT xar_state
                       FROM $theme_statesTable
                       WHERE xar_regid = '" . xarVarPrepForStore($modRegId) . "'";
-            
+
             break;
     }
 

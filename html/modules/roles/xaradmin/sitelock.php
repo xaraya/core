@@ -35,7 +35,7 @@ function roles_admin_sitelock($args)
             }
         }
 
-        if ($cmd == 'add') {
+        elseif ($cmd == 'add') {
             if (!xarVarFetch('newname', 'str', $newname, NULL, XARVAR_DONT_SET)) return;
             if (isset($newname)) {
                 $r = xaruFindRole($newname);
@@ -49,7 +49,7 @@ function roles_admin_sitelock($args)
             }
         }
 
-        if ($cmd == 'save') {
+        elseif ($cmd == 'save') {
             if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
             if(!isset($notify)) $notify = array();
             for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
@@ -61,37 +61,72 @@ function roles_admin_sitelock($args)
             xarResponseRedirect(xarModURL('roles', 'admin', 'sitelock'));
         }
 
-        if ($cmd == 'toggle') {
+        elseif ($cmd == 'toggle') {
+
+            // turn the site on or off
             $toggle = $toggle ? 0 : 1;
-            $spared = array();
-            for($i=0;$i<count($roles);$i++) $spared[] = $roles[$i]['uid'];
+
+            // Send notification emails
+            $rolesarray = array();
+            $rolemaker = new xarRoles();
+            for($i=0;$i<count($roles);$i++) {
+                if($roles[$i]['notify'] == 1) {
+                    $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
+                }
+            }
+            $notify = array();
+            foreach($rolesarray as $roletotell) {
+                if ($roletotell->isUser()) $notify[] = $roletotell;
+                else $notify = array_merge($notify,$roletotell->getUsers());
+            }
+            $mailinfo = array('subject' => 'Site Lock',
+                              'from' => 'mfl@netspan.ch'
+            );
+
             if ($toggle == 1) {
+
+            // Clear the active sessions
+                $spared = array();
+                for($i=0;$i<count($roles);$i++) $spared[] = $roles[$i]['uid'];
                 if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
+                     return;
                 }
+                $mailinfo['message'] = 'The site has been locked.';
+            }
+            else {
+               $mailinfo['message'] = 'The site has been unlocked.';
+            }
+
+            $mailinfo['message'] .= "\n\n" . $notifymsg;
+
+            // Send the mails
+            foreach($notify as $recipient) {
+                $mailinfo['info'] = $recipient->getEmail();
+                xarModAPIFunc('mail','admin','sendmail', $mailinfo);
             }
         }
     }
 
-        $data['roles'] = $roles;
-        $data['serialroles'] = xarVarPrepForDisplay(serialize($roles));
-        $data['lockedoutmsg'] = $lockedoutmsg;
-        $data['notifymsg'] = $notifymsg;
-        $data['toggle'] = $toggle;
-        if ($toggle == 1) {
-            $data['togglelabel']    = xarML('Unlock the Site');
-            $data['statusmessage']    = xarML('The site is locked');
-        }
-        else {
-            $data['togglelabel']    = xarML('Lock the Site');
-            $data['statusmessage']    = xarML('The site is unlocked');
-        }
-        $data['addlabel']    = xarML('Add a role');
-        $data['deletelabel']    = xarML('Remove');
-        $data['savelabel']    = xarML('Save the configuration');
+    $data['roles'] = $roles;
+    $data['serialroles'] = xarVarPrepForDisplay(serialize($roles));
+    $data['lockedoutmsg'] = $lockedoutmsg;
+    $data['notifymsg'] = $notifymsg;
+    $data['toggle'] = $toggle;
+    if ($toggle == 1) {
+        $data['togglelabel']    = xarML('Unlock the Site');
+        $data['statusmessage']    = xarML('The site is locked');
+    }
+    else {
+        $data['togglelabel']    = xarML('Lock the Site');
+        $data['statusmessage']    = xarML('The site is unlocked');
+    }
+    $data['addlabel']    = xarML('Add a role');
+    $data['deletelabel']    = xarML('Remove');
+    $data['savelabel']    = xarML('Save the configuration');
 
     return $data;
 }

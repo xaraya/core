@@ -24,19 +24,19 @@ function roles_adminapi_clearsessions($spared)
     $result = $dbconn->Execute($query);
     if (!$result) return;
     while (!$result->EOF) {
- /*        list($thissession, $thisuid) = $result->fields;
-       foreach ($spare as $uid) {
+       list($thissession, $thisuid) = $result->fields;
+       foreach ($spared as $uid) {
             $thisrole = $roles->getRole($thisuid);
             $thatrole = $roles->getRole($uid);
-            if ($thisuid == $uid || $thisrole->isAncestor($thatrole)) {
+            if (!$thisuid == $uid && !$thisrole->isAncestor($thatrole)) {
                 $query = "DELETE FROM $sessionstable
-                  WHERE xar_sessid =" . $thissession";
-                if (!dbconn->Execute($query)) return;
+                  WHERE xar_sessid = '" . $thissession . "'";
+                if (!$dbconn->Execute($query)) return;
                 break;
             }
         }
-        $result->MoveNext();
-*/   }
+       $result->MoveNext();
+   }
 
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;
