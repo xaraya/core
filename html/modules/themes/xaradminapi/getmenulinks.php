@@ -21,7 +21,7 @@
 */
 function themes_adminapi_getmenulinks()
 {
-
+    $menulinks = array();
     // Security Check
     if (!xarSecurityCheck('AdminTheme',0)) return;
 
@@ -53,11 +53,6 @@ function themes_adminapi_getmenulinks()
     'title' => xarML('Modify the configuration of the themes module'),
     'label' => xarML('Modify Config'));
 
-
-
-    if (empty($menulinks)){
-        $menulinks = '';
-    }
 
     return $menulinks;
 }
