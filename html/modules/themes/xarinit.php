@@ -126,24 +126,10 @@ function themes_init()
     if (!$res) return;
 
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
-    xarModSetVar('themes', 'selsort', 'nameasc');
-    
-    // Register css tags
-    xarModAPIFunc('themes', 'css', 'registercsstags');
-    // Initialisation successful
-    return true;
-} 
+    xarModSetVar('themes', 'selsort', 'nameasc'); 
 
-function themes_activate()
-{
-    if (file_exists(xarConfigGetVar('Site.BL.ThemesDirectory').'/Xaraya_Classic/xartheme.php')) {
-        xarModSetVar('themes', 'default', 'Xaraya_Classic');
-    } 
-
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-        // return false;
-    } 
-    // make sure we dont miss empty variables (which were not passed thru)
+    // Make sure we dont miss empty variables (which were not passed thru)
+    // FIXME: how would these values ever be passed in?
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
@@ -162,12 +148,22 @@ function themes_activate()
     xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
     xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', 0);
     xarModSetVar('themes', 'ShowTemplates', 0);
-    // Register blocks
-    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                           array('modName' => 'themes', 'blockType' => 'meta'))) return; 
-    }
-    
+
+    // Register theme tags.
+    // Additional styles, see bug 3868 note below.
+    xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
+
+    // Set up usermenu hook
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
+        return false;
+    } 
+
+    // Register the meta blocktype 
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                        array('modName' => 'themes',
+                              'blockType' => 'meta'))) return; 
+
+    // Initialisation successful
     return true;
 } 
 
@@ -181,20 +177,33 @@ function themes_upgrade($oldversion)
 { 
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case 1.0:
-
+        case '1.0':
             if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
                 return false;
             } 
 
-        case 1.1:
-
+        case '1.1':
             if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
                 array('modName' => 'themes', 'blockType' => 'meta'))) return; 
-        case 1.4:
-            // Register css tags
-            xarModAPIFunc('themes', 'css', 'registercsstags');
-            
+
+        case '1.2':
+        case '1.3.0':
+            // Register additional styles tag.
+            // This is for bug 3868 only - available to those that want to use it, but
+            // not a permanent replacement for the additional styles global or corecss.
+            // TODO: we should not have to 'unregister' a tag just in case.
+            xarTplUnregisterTag('themes-additional-styles');
+            xarTplRegisterTag(
+                'themes', 'themes-additional-styles',
+                array(), 'themes_userapi_handleadditionalstyles'
+            );
+
+            // Ensure the meta blocktype is registered
+            if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
+                if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                                    array('modName' => 'themes',
+                                          'blockType' => 'meta'))) return; 
+            }
 
     } 
     // Update successful

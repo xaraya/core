@@ -1354,6 +1354,14 @@ if (empty($step)) {
             return;
         }
     } // End bug 630
+    
+    // after 0911, make sure CSS class lib is deployed and css tags are registered
+    echo "<h5>Making sure CSS tags are registered</h5>";
+    if(!xarModAPIFunc('themes', 'css', 'registercsstags')) {
+        echo "FAILED to register CSS tags<br/>";
+    } else {
+        echo "CSS tags registered successfully, css subsystem is ready to be deployed.<br/>";
+    }
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
