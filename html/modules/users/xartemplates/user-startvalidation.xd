@@ -6,4 +6,14 @@
     </tr>
 </table>
 <br /><br />
-<xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.  To continue, please follow</xar:mlstring> <a href="#xarModURL('users', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
+<xar:if condition="!empty($valcode)">
+	<xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.  To continue, please follow</xar:mlstring> <a href="#xarModURL('users', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
+<xar:else />
+	<xar:mlstring>If you did not recieve your validation code, we will try to resend it now.</xar:mlstring>
+	<br /><br />
+	<form action="#xarModURL('users', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="phase" value="resend">
+		<input type="text" name="uname" />
+		<input type="submit" value="Resend Validation Information" />
+	</form>
+</xar:if>
