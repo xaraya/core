@@ -26,6 +26,7 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('showphpcbit', 'checkbox', $showphpcbit, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('cachetemplates', 'checkbox', $cachetemplates, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('var_dump', 'checkbox', $var_dump, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('slogan', 'str::', $slogan, 'Your Site Slogan', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
@@ -44,6 +45,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', $showphpcbit);
     xarModSetVar('themes', 'ShowTemplates', $showtemplates);
     xarModSetVar('themes', 'AtomTag', $atomtag);
+    xarModSetVar('themes', 'var_dump', $var_dump);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     $whatwasbefore = xarModGetVar('themes', 'default');

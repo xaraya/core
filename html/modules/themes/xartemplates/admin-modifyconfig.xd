@@ -101,6 +101,14 @@
         <input type="checkbox" name="cachetemplates" id="cachetemplates" value="1" />
       </xar:if>
     </p>
+    <p><label for="var_dump">
+      <xar:mlstring>Debug Templates by Showing Variables Available</xar:mlstring></label>:
+      <xar:if condition="xarModGetVar('themes', 'var_dump')">
+        <input type="checkbox" name="var_dump" id="var_dump" value="1" checked="checked"/>
+      <xar:else/>
+        <input type="checkbox" name="var_dump" id="var_dump" value="1" />
+      </xar:if>
+    </p>
 	<xar:if condition="xarThemeIsAvailable('atom')">
 		<!-- This should be moved if we ever fully support the atom spec -->
 		<p><label for="AtomTag"><xar:mlstring>Atom Tag</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" /></p>
