@@ -1451,13 +1451,6 @@ function xarDB__sqliteCreateTable($tableName, $fields)
         }
     }
     
-    // There are instances when we don't want to drop the table, but
-    // look for the exception to know the table has been created.
-    //$dbconn =& xarDBGetConn();
-    //$query = 'DROP TABLE IF EXISTS ' . $tableName;
-    // CHECKME: Do we want to use bind vars here?
-    //$result =& $dbconn->Execute($query);
-    
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
                                          
     if (!empty($primary_key)) {
@@ -1468,51 +1461,47 @@ function xarDB__sqliteCreateTable($tableName, $fields)
     return $sql;
 }
 
+/**
+ * SQLite specific column type generation
+ *
+ * Note that SQLite only cares about INTEGER PRIMARY KEY 
+ * all other specs are not needed. We left them in here, so the SQL generated
+ * is at least more clear. 
+ *
+ * @access private
+ * @param field_name
+ * @param parameters
+ *
+ */
 function xarDB__sqliteColumnDefinition($field_name, $parameters) 
 {
     $this_field = array();
 
     switch($parameters['type']) {
         case 'integer':
-            if (empty($parameters['size'])) 
-                $parameters['size'] = 'int';
-            $this_field['type'] = 'INTEGER';
+            if (empty($parameters['size']))  $parameters['size'] = 'int';
+            // Let's always use integer instead of int, so when it gets set as primary key, we get the GenId behaviour for free
+            $this_field['type'] = 'INTEGER'; 
             break;
-
         case 'char':
-            if (empty($parameters['size'])) {
-                return false;
-            } else {
-                $this_field['type'] = 'CHAR('.$parameters['size'].')';
-            }
+            if (empty($parameters['size'])) return false;
+            $this_field['type'] = 'CHAR('.$parameters['size'].')';
             break;
-
         case 'varchar':
-            if (empty($parameters['size'])) {
-                return false;
-            } else {
-                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
-            }
+            if (empty($parameters['size'])) return false;
+            $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
             break;
-
         case 'text':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'text';
-            }
+            if (empty($parameters['size'])) $parameters['size'] = 'text';
             $this_field['type'] = 'TEXT';
             break;
-
         case 'blob':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'blob';
-            }
+            if (empty($parameters['size'])) $parameters['size'] = 'blob';
             $this_field['type'] = 'BLOB';
             break;
-
         case 'boolean':
             $this_field['type'] = "BOOL";
             break;
-
         case 'datetime':
             $this_field['type'] = "DATETIME";
             if (isset($parameters['default'])) {
@@ -1529,7 +1518,6 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                 }
             }
             break;
-
         case 'date':
             $this_field['type'] = "DATE";
             if (isset($parameters['default'])) {
@@ -1543,11 +1531,8 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                 }
             }
             break;
-
         case 'float':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'float';
-            }
+            if (empty($parameters['size'])) $parameters['size'] = 'float';
             switch ($parameters['size']) {
                 case 'double':
                     $data_type = 'DOUBLE';
@@ -1563,14 +1548,11 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
             }
             $this_field['type'] = $data_type;
             break;
-        // Added Time field via marsel@phatcom.net (David Taylor)
-        case 'time':
+       case 'time':
             $this_field['type'] = "TIME";
             break;
         case 'timestamp':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'timestamp';
-            }
+            if (empty($parameters['size'])) $parameters['size'] = 'timestamp';
             switch ($parameters['size']) {
                 case 'YY':
                     $this_field['type'] = 'TIMESTAMP(2)';
@@ -1597,8 +1579,6 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                     $this_field['type'] = 'TIMESTAMP';
             }
             break;
-
-        // undefined type
         default:
             return false;
     }
@@ -1624,22 +1604,6 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
     $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
                                   ? ''
                                   : '';
-
-    // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
-//    if (!empty($this_field['auto_increment'])) {
-//        if (isset($parameters['increment_start']))
-//            $this_field['increment_start'] = $parameters['increment_start'];
-//        else {
-//            // FIXME: <mrb> IMO the default auto_increment start = 1, why not use 
-//            //        that and  simplify code a bit?
-//            $this_field['increment_start'] = 0;
-//        }
-//    }
-
-    // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)
-//    if (!empty($this_field['auto_increment'])) {
-//        $this_field['default'] = '';
-//    }
 
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
