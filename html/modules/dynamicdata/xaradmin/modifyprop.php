@@ -1,0 +1,185 @@
+<?php
+
+/**
+ * Modify the dynamic properties for a module + itemtype
+ */
+function dynamicdata_admin_modifyprop()
+{
+    // Initialise the $data variable that will hold the data to be used in
+    // the blocklayout template, and get the common menu configuration - it
+    // helps if all of the module pages have a standard menu at the top to
+    // support easy navigation
+    $data = xarModAPIFunc('dynamicdata','admin','menu');
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+// Security Check
+	if(!xarSecurityCheck('AdminDynamicData')) return;
+
+    list($itemid,
+         $modid,
+         $itemtype,
+         $details) = xarVarCleanFromInput('itemid',
+                                          'modid',
+                                          'itemtype',
+                                          'details');
+
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+/*
+    if (!empty($itemid)) {
+        $where = 'objectid eq '.$itemid;
+    } else {
+        $where = 'moduleid eq '.$modid.' and itemtype eq '.$itemtype;
+    }
+    $myobject = new Dynamic_Object_List(array('objectid' => 2,
+                                              'fieldlist' => array('id','label','type','default','source','validation','status','objectid','moduleid','itemtype'),
+                                              'where' => $where));
+    if ($myobject->items) {
+        $myobject->getItems();
+    }
+    $data['myobject'] = & $myobject;
+    //echo var_dump($myobject);
+*/
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
+                            array('objectid' => $itemid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+
+    if (isset($object)) {
+        $objectid = $object['objectid'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
+        $label =  $object['label'];
+    }
+    if (empty($modid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module id', 'admin', 'modifyprop', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $data['modid'] = $modid;
+    $data['itemtype'] = $itemtype;
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey();
+
+    $modinfo = xarModGetInfo($modid);
+    if (!isset($object)) {
+        $data['objectid'] = 0;
+        if (!empty($itemtype)) {
+            $data['label'] = xarML('for module #(1) - item type #(2)', $modinfo['displayname'], $itemtype);
+        } else {
+            $data['label'] = xarML('for module #(1)', $modinfo['displayname']);
+        }
+    } else {
+        $data['objectid'] = $object['objectid'];
+        if (!empty($itemtype)) {
+            $data['label'] = xarML('for #(1)', $object['label']);
+        } else {
+            $data['label'] = xarML('for #(1)', $object['label']);
+        }
+    }
+
+    $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
+                                   array('modid' => $modid,
+                                         'itemtype' => $itemtype));
+    if (!isset($data['fields']) || $data['fields'] == false) {
+        $data['fields'] = array();
+    }
+
+    // get possible data sources
+    $data['sources'] = Dynamic_DataStore_Master::getDataSources();
+    if (empty($data['sources'])) {
+        $data['sources'] = array();
+    }
+
+    $data['labels'] = array(
+                            'id' => xarML('ID'),
+                            'name' => xarML('Name'),
+                            'label' => xarML('Label'),
+                            'type' => xarML('Property Type'),
+                            'default' => xarML('Default'),
+                            'source' => xarML('Data Source'),
+                            'status' => xarML('Status'),
+                            'validation' => xarML('Validation'),
+                            'new' => xarML('New'),
+                      );
+
+    // Specify some labels and values for display
+    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
+
+    if (empty($details)) {
+        $data['static'] = array();
+        $data['relations'] = array();
+        if (!empty($objectid)) {
+            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                             array('itemid' => $objectid,
+                                                   'details' => 1));
+        } else {
+            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                             array('modid' => $modid,
+                                                   'itemtype' => empty($itemtype) ? null : $itemtype,
+                                                   'details' => 1));
+        }
+        return $data;
+    }
+
+    $data['details'] = $details;
+
+// TODO: allow modules to specify their own properties
+    // (try to) show the "static" properties, corresponding to fields in dedicated
+    // tables for this module
+    $data['static'] = xarModAPIFunc('dynamicdata','util','getstatic',
+                                   array('modid' => $modid,
+                                         'itemtype' => $itemtype));
+    if (!isset($data['static']) || $data['static'] == false) {
+        $data['static'] = array();
+        $data['tables'] = array();
+    } else {
+        $data['tables'] = array();
+        foreach ($data['static'] as $field) {
+            if (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
+                $table = $matches[1];
+                $data['tables'][$table] = array('tname' => $table);
+            }
+        }
+    }
+
+    $data['statictitle'] = xarML('Static Properties (guessed from module table definitions for now)');
+
+// TODO: allow other kinds of relationships than hooks
+    // (try to) get the relationships between this module and others
+    $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
+                                       array('modid' => $modid,
+                                             'itemtype' => $itemtype));
+    if (!isset($data['relations']) || $data['relations'] == false) {
+        $data['relations'] = array();
+    }
+
+    $data['relationstitle'] = xarML('Relationships with other Modules/Properties (only item display hooks for now)');
+    $data['labels']['module'] = xarML('Module');
+    $data['labels']['linktype'] = xarML('Link Type');
+    $data['labels']['linkfrom'] = xarML('From');
+    $data['labels']['linkto'] = xarML('To');
+
+    if (!empty($objectid)) {
+        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                         array('itemid' => $objectid));
+    } else {
+        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+                                         array('modid' => $modid,
+                                               'itemtype' => empty($itemtype) ? null : $itemtype));
+    }
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+?>

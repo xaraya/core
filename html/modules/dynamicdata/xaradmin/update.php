@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * This is a standard function that is called with the results of the
+ * form supplied by xarModFunc('dynamicdata','admin','modify') to update a current item
+ * @param 'exid' the id of the item to be updated
+ * @param 'name' the name of the item to be updated
+ * @param 'number' the number of the item to be updated
+ */
+function dynamicdata_admin_update($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid,
+         $return_url,
+         $preview) = xarVarCleanFromInput('objectid',
+                                          'modid',
+                                          'itemtype',
+                                          'itemid',
+                                          'return_url',
+                                          'preview');
+
+    extract($args);
+
+    if (!xarSecConfirmAuthKey()) return;
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+    if (empty($preview)) {
+        $preview = 0;
+    }
+
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    $myobject->getItem();
+
+    $isvalid = $myobject->checkInput();
+
+    if (!empty($preview) || !$isvalid) {
+        $data = xarModAPIFunc('dynamicdata','admin','menu');
+        $data['object'] = & $myobject;
+
+        $data['objectid'] = $myobject->objectid;
+        $data['itemid'] = $itemid;
+        $data['authid'] = xarSecGenAuthKey();
+        $data['preview'] = $preview;
+
+        return xarTplModule('dynamicdata','admin','modify', $data);
+    }
+
+    $itemid = $myobject->updateItem();
+
+    if (!isset($itemid)) return; // throw back
+
+    // special case for dynamic objects themselves
+    if ($myobject->objectid == 1) {
+        // check if we need to set a module alias (or remove it) for short URLs
+        $name = $myobject->properties['name']->value;
+        $alias = xarModGetAlias($name);
+        $isalias = $myobject->properties['isalias']->value;
+        if (!empty($isalias)) {
+            // no alias defined yet, so we create one
+            if ($alias == $name) {
+                xarModSetAlias($name,'dynamicdata');
+            }
+        } else {
+            // this was a defined alias, so we remove it
+            if ($alias == 'dynamicdata') {
+                xarModDelAlias($name,'dynamicdata');
+            }
+        }
+
+        // resynchronise properties with object in terms of module id and itemtype (for now)
+        $objectid = $myobject->properties['objectid']->value;
+        $moduleid = $myobject->properties['moduleid']->value;
+        $itemtype = $myobject->properties['itemtype']->value;
+        if (!xarModAPIFunc('dynamicdata','admin','syncprops',
+                           array('objectid' => $objectid,
+                                 'moduleid' => $moduleid,
+                                 'itemtype' => $itemtype))) {
+            return;
+        }
+    }
+
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+                                      array('itemid' => $myobject->properties['objectid']->value)));
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('itemid' => $myobject->objectid)));
+    }
+
+    // Return
+    return true;
+}
+
+
+?>

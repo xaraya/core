@@ -1,0 +1,150 @@
+<?php
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * list some items in a template
+ *
+ * @param $args array containing the items or fields to show
+ * @returns string
+ * @return string containing the HTML (or other) text to output in the BL template
+ */
+function dynamicdata_userapi_showview($args)
+{
+    extract($args);
+
+    // optional layout for the template
+    if (empty($layout)) {
+        $layout = 'default';
+    }
+    // or optional template, if you want e.g. to handle individual fields
+    // differently for a specific module / item type
+    if (empty($template)) {
+        $template = '';
+    }
+
+    // we got everything via template parameters
+    if (isset($items) && is_array($items)) {
+        return xarTplModule('dynamicdata','user','showview',
+                            array('items' => $items,
+                                  'labels' => $labels,
+                                  'layout' => $layout),
+                            $template);
+    }
+
+    if (empty($modid)) {
+        if (empty($module)) {
+            $modname = xarModGetName();
+        } else {
+            $modname = $module;
+        }
+        if (is_numeric($modname)) {
+            $modid = $modname;
+            $modinfo = xarModGetInfo($modid);
+            $modname = $modinfo['name'];
+        } else {
+            $modid = xarModGetIDFromName($modname);
+        }
+    } else {
+            $modinfo = xarModGetInfo($modid);
+            $modname = $modinfo['name'];
+    }
+    if (empty($modid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'user', 'showview', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (empty($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = null;
+    }
+
+// TODO: what kind of security checks do we want/need here ?
+	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+
+    // try getting the item id list via input variables if necessary
+    if (!isset($itemids)) {
+        $itemids = xarVarCleanFromInput('itemids');
+    }
+
+    // try getting the sort via input variables if necessary
+    if (!isset($sort)) {
+        $sort = xarVarCleanFromInput('sort');
+    }
+
+    // try getting the numitems via input variables if necessary
+    if (!isset($numitems)) {
+        $numitems = xarVarCleanFromInput('numitems');
+    }
+
+    // try getting the startnum via input variables if necessary
+    if (!isset($startnum)) {
+        $startnum = xarVarCleanFromInput('startnum');
+    }
+
+    // don't try getting the where clause via input variables, obviously !
+    if (empty($where)) {
+        $where = '';
+    }
+
+    // check the optional field list
+    if (!empty($fieldlist)) {
+        // support comma-separated field list
+        if (is_string($fieldlist)) {
+            $myfieldlist = explode(',',$fieldlist);
+        // and array of fields
+        } elseif (is_array($fieldlist)) {
+            $myfieldlist = $fieldlist;
+        }
+        $status = null;
+    } else {
+        $myfieldlist = null;
+        // get active properties only (+ not the display only ones)
+        $status = 1;
+    }
+
+    // include the static properties (= module tables) too ?
+    if (empty($static)) {
+        $static = false;
+    }
+
+    $object = new Dynamic_Object_List(array('moduleid'  => $modid,
+                                           'itemtype'  => $itemtype,
+                                           'itemids' => $itemids,
+                                           'sort' => $sort,
+                                           'numitems' => $numitems,
+                                           'startnum' => $startnum,
+                                           'where' => $where,
+                                           'fieldlist' => $myfieldlist,
+                                           'status' => $status));
+    if (!isset($object)) return;
+
+    $object->getItems();
+
+    // label to use for the display link (if you don't use linkfield)
+    if (empty($linklabel)) {
+        $linklabel = '';
+    }
+    // function to use in the display link
+    if (empty($linkfunc)) {
+        $linkfunc = '';
+    }
+    // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
+    if (empty($param)) {
+        $param = '';
+    }
+    // field to add the display link to (otherwise it'll be in a separate column)
+    if (empty($linkfield)) {
+        $linkfield = '';
+    }
+
+    return $object->showView(array('layout'    => $layout,
+                                   'template'  => $template,
+                                   'linklabel' => $linklabel,
+                                   'linkfunc'  => $linkfunc,
+                                   'param'     => $param,
+                                   'linkfield' => $linkfield));
+}
+
+?>

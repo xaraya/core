@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * (try to) get the "meta" properties of tables via PHP ADODB
+ *
+ * @author the DynamicData module development team
+ * @param $args['table']  optional table you're looking for
+ * @returns mixed
+ * @return array of field definitions, or null on failure
+ * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ */
+function dynamicdata_utilapi_getmeta($args)
+{
+    static $propertybag = array();
+
+// Security Check
+	if(!xarSecurityCheck('AdminDynamicData')) return;
+
+    extract($args);
+
+    if (empty($table)) {
+        $table = '';
+    } elseif (isset($propertybag[$table])) {
+        return $propertybag[$table];
+    }
+
+    list($dbconn) = xarDBGetConn();
+
+    if (!empty($table)) {
+        $tables = array($table);
+    } else {
+        $tables = $dbconn->MetaTables();
+    }
+    if (!isset($tables)) {
+        return;
+    }
+
+    $metadata = array();
+    foreach ($tables as $table) {
+        $fields = $dbconn->MetaColumns($table);
+        $keys = $dbconn->MetaPrimaryKeys($table);
+
+        $id = 1;
+        $columns = array();
+        foreach ($fields as $field) {
+            $fieldname = $field->name;
+            $datatype = $field->type;
+            $size = $field->max_length;
+
+            // assign some default label for now, by removing everything except the last part (xar_..._)
+            $name = preg_replace('/^.+_/','',$fieldname);
+            $label = ucfirst($name);
+            if (isset($columns[$name])) {
+                $i = 1;
+                while (isset($columns[$name . '_' . $i])) {
+                    $i++;
+                }
+                $name = $name . '_' . $i;
+                $label = $label . '_' . $i;
+            }
+
+            // (try to) assign some default property type for now
+            // = obviously limited to basic data types in this case
+            $dtype = $datatype;
+            // skip special definitions (unsigned etc.)
+            $dtype = preg_replace('/\(.*$/','',$dtype);
+            switch ($dtype) {
+                case 'char':
+                case 'varchar':
+                    $proptype = 2; // Text Box
+                    break;
+                case 'int':
+                case 'integer':
+                case 'tinyint':
+                case 'smallint':
+                case 'mediumint':
+                    if ($size == 1) {
+                        $proptype = 14; // Checkbox
+                    } else {
+                        $proptype = 15; // Number Box
+                    }
+                    break;
+                case 'float':
+                case 'decimal':
+                case 'double':
+                    $proptype = 17; // Number Box (float)
+                    break;
+                case 'boolean':
+                    $proptype = 14; // Checkbox
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timestamp':
+                    $proptype = 8; // Calendar
+                    break;
+                case 'text':
+                    $proptype = 4; // Medium Text Area
+                    break;
+                case 'longtext':
+                    $proptype = 5; // Large Text Area
+                    break;
+                case 'blob':       // caution, could be binary too !
+                    $proptype = 4; // Medium Text Area
+                    break;
+                case 'enum':
+                    $proptype = 6; // Dropdown
+                    break;
+                default:
+                    $proptype = 1; // Static Text
+                    break;
+            }
+
+            // assign some default validation for now
+            $validation = $datatype;
+            $validation .= (empty($size) || $size < 0) ? '' : ' (' . $size . ')';
+
+            // try to figure out if it's the item id
+            if (!empty($keys) && in_array($fieldname,$keys)) {
+                // not allowed to modify primary key !
+                $proptype = 21; // Item ID
+            }
+
+            $columns[$name] = array('name' => $name,
+                                   'label' => $label,
+                                   'type' => $proptype,
+                                   'id' => $id,
+                                   'default' => '', // unknown here
+                                   'source' => $table . '.' . $fieldname,
+                                   'status' => 1,
+                                   'order' => $id,
+                                   'validation' => $validation);
+            $id++;
+        }
+        $metadata[$table] = $columns;
+    }
+
+    $propertybag = $metadata;
+    return $metadata;
+}
+
+?>
