@@ -1,56 +1,117 @@
-	<div id="install">
-	  <div style="padding:10px;">
-      <div style="text-align:center;"><span class="xar-pagetitle">Choose a Configuration</span></div><br />
-			<form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
-			  <div style="text-align:center;">
-    		<input type="hidden" name="install_language" id="install_language" value="#$language#" />
-  			  <br />
-      		<div style="text-align:justify;">
-    			  <table cellspacing="0" border="0" summary="For choosing a configuration">
-           	  <thead>
-           		  <tr>
-           			  <th>Available configurations</th>
-             		</tr>
-             	</thead>
-             	<tbody>
-           		  <tr>
-               	  <td class="xar-normal">
-               		  <xar:if condition="isset($warning)">
-                 			#$warning#
-                 		<xar:else />
-				  					<select name="configuration"size="5" style="width:250px;">
-				  					<xar:loop name="$names">
-				  					  <xar:if condition="$loop:item['display'] eq 'Community Site'">
-				  						  <option value="#$loop:item['value']#" selected>#$loop:item['display']#</option>
-				  					  <xar:else />
-				  						  <option value="#$loop:item['value']#">#$loop:item['display']#</option>
-				  					  </xar:if>
-				  					</xar:loop>
-				  					</select>
-                 		</xar:if>
-                 	</td>
-                 </tr>
-             	</tbody>
-         		</table>
-       		</div>
-       		<br />
-       		<div style="text-align:justify;">
-      		  <p><span class="xar-normal">Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.</span></p>
-      		</div>
-      		<div style="text-align:center;">
-      		  <input type="submit" name="create" id="create" value="Continue &gt;" />
-      		</div>
-    		</div>
-  		</form>
-		</div>
-	</div>
-	<div id="status">
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Selecting Language</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Checking System Settings</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Collecting Database Settings</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Beginning Initialization</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Creating an Administrator</span><br />
-	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Choosing a Configuration</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Options</span><br />
-	</div>
+<div id="install">
+    <div style="padding:10px;">
+        <div style="text-align:center;">
+            <span class="xar-pagetitle">
+                <xar:mlstring>
+                    Choose a Configuration
+                </xar:mlstring>
+            </span>
+        </div>
+        <br />
+        <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+            <div style="text-align:center;">
+                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                <br />
+                <div style="text-align:justify;">
+                    <table cellspacing="0" border="0" summary="For choosing a configuration">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <xar:mlstring>
+                                        Available configurations
+                                    </xar:mlstring> 
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="xar-normal">
+                                    <xar:if condition="isset($warning)">
+                                        #$warning# 
+                                        <xar:else />
+                                        <select name="configuration" size="5" style="width:250px;">
+                                            <xar:loop name="$names">
+                                                <xar:if condition="$loop:item['display'] eq 'Community Site'">
+                                                    <option value="#$loop:item['value']#" selected>
+                                                        #$loop:item['display']# 
+                                                    </option>
+                                                    <xar:else />
+                                                    <option value="#$loop:item['value']#">
+                                                        #$loop:item['display']# 
+                                                    </option>
+                                                </xar:if>
+                                            </xar:loop>
+                                        </select>
+                                    </xar:if>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div style="text-align:justify;">
+                    <p>
+                        <span class="xar-normal">
+                            <xar:mlstring>
+                                Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of chosen configuration.
+                            </xar:mlstring>
+                        </span>
+                    </p>
+                </div>
+                <div style="text-align:center;">
+                    <input type="submit" name="create" id="create" value="Continue &gt;" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="status">
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Selecting Language
+        </xar:mlstring>
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Agreeing to License
+        </xar:mlstring>
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Checking System Settings
+        </xar:mlstring>
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Collecting Database Settings
+        </xar:mlstring>
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Beginning Initialization
+        </xar:mlstring>
+    </p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        <xar:mlstring>
+            Creating an Administrator
+        </xar:mlstring>
+    </p>
+    <p class="active">
+        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+        <xar:mlstring>
+            Choosing a Configuration
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Choosing Options
+        </xar:mlstring>
+    </p>
+</div>

@@ -44,155 +44,154 @@
 											<xar:mlstring>
 												Host 
 											</xar:mlstring>
-											/label> 
-										</span>
-									</td>
-									<td align="left">
-										<input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
-									</td>
-								</tr>
-								<tr>
-									<td align="left">
-										<span class="xar-normal">
-											<label for="install_database_username">
-												<xar:mlstring>
-													Username 
-												</xar:mlstring>
-											</label>
-										</span>
-									</td>
-									<td align="left">
-										<input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
-									</td>
-								</tr>
-								<tr>
-									<td align="left">
-										<span class="xar-normal">
-											<label for="install_database_password">
-												<xar:mlstring>
-													Password 
-												</xar:mlstring>
-											</label>
-										</span>
-									</td>
-									<td align="left">
-										<input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
-									</td>
-								</tr>
-								<tr>
-									<td align="left">
-										<span class="xar-normal">
-											<label for="install_database_name">
-												<xar:mlstring>
-													Database Name 
-												</xar:mlstring>
-											</label>
-										</span>
-									</td>
-									<td align="left">
-										<input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
-									</td>
-								</tr>
-								<tr>
-									<td align="left">
-										<span class="xar-normal">
-											<label for="install_database_prefix">
-												<xar:mlstring>
-													Table Prefix 
-												</xar:mlstring>
-											</label>
-										</span>
-									</td>
-									<td align="left">
-										<input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
-										<span class="xar-normal">
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
+								</td>
+							</tr>
+							<tr>
+								<td align="left">
+									<span class="xar-normal">
+										<label for="install_database_username">
 											<xar:mlstring>
-												(for Table Sharing) 
+												Username 
 											</xar:mlstring>
-										</span>
-									</td>
-								</tr>
-								<tr>
-									<td align="left">
-										<span class="xar-normal">
-											<label for="install_database_type">
-												<xar:mlstring>
-													Database Type 
-												</xar:mlstring>
-											</label>
-										</span>
-									</td>
-									<td align="left">
-										<select name="install_database_type" id="install_database_type">
-											<xar:foreach in="$database_types" key="$key" value="$value">
-												<option value="#$key#">
-													#$value# 
-												</option>
-											</xar:foreach>
-										</select>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<br />
-					<div style="text-align:justify;">
-						<input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
-						<span class="xar-normal">
-							<label for="install_create_database">
-								<xar:mlstring>
-									Create the database 
-								</xar:mlstring>
-							</label>
-						</span>
-						<span class="xar-sub">
-							<p>
-								<xar:mlstring>
-									This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though. 
-								</xar:mlstring>
-							</p>
-						</span>
-					</div>
-					<div style="text-align:center;">
-						<input type="hidden" name="install_phase" id="install_phase" value="5" />
-						<input type="submit" value="Continue &gt;" />
-					</div>
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
+								</td>
+							</tr>
+							<tr>
+								<td align="left">
+									<span class="xar-normal">
+										<label for="install_database_password">
+											<xar:mlstring>
+												Password 
+											</xar:mlstring>
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+								</td>
+							</tr>
+							<tr>
+								<td align="left">
+									<span class="xar-normal">
+										<label for="install_database_name">
+											<xar:mlstring>
+												Database Name 
+											</xar:mlstring>
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
+								</td>
+							</tr>
+							<tr>
+								<td align="left">
+									<span class="xar-normal">
+										<label for="install_database_prefix">
+											<xar:mlstring>
+												Table Prefix 
+											</xar:mlstring>
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
+									<span class="xar-normal">
+										<xar:mlstring>
+											(for Table Sharing) 
+										</xar:mlstring>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td align="left">
+									<span class="xar-normal">
+										<label for="install_database_type">
+											<xar:mlstring>
+												Database Type 
+											</xar:mlstring>
+										</label>
+									</span>
+								</td>
+								<td align="left">
+									<select name="install_database_type" id="install_database_type">
+										<xar:foreach in="$database_types" key="$key" value="$value">
+											<option value="#$key#">
+												#$value# 
+											</option>
+										</xar:foreach>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-			</form>
-		</div>
+				<br />
+				<div style="text-align:justify;">
+					<input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
+					<span class="xar-normal">
+						<label for="install_create_database">
+							<xar:mlstring>
+								Create the database 
+							</xar:mlstring>
+						</label>
+					</span>
+					<span class="xar-sub">
+						<p>
+							<xar:mlstring>
+								This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though. 
+							</xar:mlstring>
+						</p>
+					</span>
+				</div>
+				<div style="text-align:center;">
+					<input type="hidden" name="install_phase" id="install_phase" value="5" />
+					<input type="submit" value="Continue &gt;" />
+				</div>
+			</div>
+		</form>
 	</div>
-	<div id="status">
-		<p class="completed">
-			<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-			Selecting Language 
-		</p>
-		<p class="completed">
-			<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-			Agreeing to License 
-		</p>
-		<p class="completed">
-			<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
-			Checking System Settings 
-		</p>
-		<p class="active">
-			<img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
-			Collecting Database Settings 
-		</p>
-		<p class="greyed">
-			<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-			Beginning Initialization 
-		</p>
-		<p class="greyed">
-			<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-			Creating an Administrator 
-		</p>
-		<p class="greyed">
-			<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-			Choosing a Configuration 
-		</p>
-		<p class="greyed">
-			<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
-			Choosing Options 
-		</p>
-	</div>
+</div>
+<div id="status">
+	<p class="completed">
+		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+		Selecting Language 
+	</p>
+	<p class="completed">
+		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+		Agreeing to License 
+	</p>
+	<p class="completed">
+		<img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+		Checking System Settings 
+	</p>
+	<p class="active">
+		<img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+		Collecting Database Settings 
+	</p>
+	<p class="greyed">
+		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+		Beginning Initialization 
+	</p>
+	<p class="greyed">
+		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+		Creating an Administrator 
+	</p>
+	<p class="greyed">
+		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+		Choosing a Configuration 
+	</p>
+	<p class="greyed">
+		<img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+		Choosing Options 
+	</p>
 </div>
