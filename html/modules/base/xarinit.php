@@ -195,7 +195,14 @@ function base_init()
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
     xarConfigSetVar('Site.Core.TimeZone', 'US/New York');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
-    xarConfigSetVar('Site.Core.EnableSecureServer', false);
+    // when installing via https, we assume that we want to support that :)
+    $HTTPS = xarServerGetVar('HTTPS');
+    // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
+    if (!empty($HTTPS) && $HTTPS != 'off') {
+        xarConfigSetVar('Site.Core.EnableSecureServer', true);
+    } else {
+        xarConfigSetVar('Site.Core.EnableSecureServer', false);
+    }
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
@@ -215,6 +222,7 @@ function base_init()
         xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
     }
     
+
     $authModules = array('authsystem');
     xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
 
