@@ -215,8 +215,8 @@ function roles_user_register()
             if (xarModGetVar('roles', 'chooseownpassword')) {
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
-                    $invalid['pass1'] = xarML('Your password must be ' . $minpasslength . ' characters long.');
-                    $invalid['pass2'] = xarML('Your password must be ' . $minpasslength . ' characters long.');
+                    $invalid['pass1'] = xarML('Your password must be #(1) characters long.', $minpasslength);
+                    $invalid['pass2'] = xarML('Your password must be #(1) characters long.', $minpasslength);
                 }
 
                 if ((empty($pass1)) || (empty($pass2))) {
