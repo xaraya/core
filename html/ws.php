@@ -142,12 +142,11 @@ function xarWebservicesMain()
         }
         break;
   	case 'flashremoting' :
-          // FIXME: dont do this, use either a mod api function or explicit mod api load
-	   	  include "./modules/flashservices/classes/app/Gateway.php";
-	      $gateway = new Gateway();
-          // FIXME: use a modvar for this
-    	  $gateway->setBaseClassPath("./modules/flashservices/services/");
-    	  $gateway->service();
+      	xarLogMessage("FlashRemoting request");
+        if(xarModIsAvailable('flashservices')) {
+          $server = xarModAPIFunc('flashservices','user','initflashservices');
+      	  $server->service();
+        }// if
 		    break; 
 
     default:
