@@ -57,7 +57,7 @@
                         </xar:mlstring>
                     </xar:if>
                     | 
-                    <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#">
+                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
                         <xar:mlstring>
                             E 
                         </xar:mlstring>
@@ -116,7 +116,7 @@
                         </xar:mlstring>
                     </xar:if>
                     | 
-                    <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#">
+                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
                         <xar:mlstring>
                             E 
                         </xar:mlstring>

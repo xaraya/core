@@ -18,56 +18,56 @@
             : 
         </dt>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=1">
                 <xar:mlstring>
                     General info 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 2))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=2">
                 <xar:mlstring>
                     Credits 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 4))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=4">
                 <xar:mlstring>
                     Configuration 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 8))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=8">
                 <xar:mlstring>
                     Modules 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 16))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=16">
                 <xar:mlstring>
                     Enviroment 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 32))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=32">
                 <xar:mlstring>
                     Variables 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 64))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=64">
                 <xar:mlstring>
                     License 
                 </xar:mlstring>
             </a>
         </dd>
         <dd>
-            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => -1))#">
+            <a href="&xar-modurl-base-admin-sysinfo;&amp;what=-1">
                 <xar:mlstring>
                     All 
                 </xar:mlstring>

@@ -106,7 +106,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     include "includes/xarTheme.php";
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarTemplate__shutdown_handler');
+    //register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
 }
 
