@@ -802,220 +802,215 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     // Lets first check to see if any of our type vars are alread set in the cache.
     switch(strtolower($type)) {
-        case 'modvar':
-            default:
-            if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
-                $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
-                if ($value === '*!*MiSSiNG*!*') {
-                    return;
-                } else {
-                    if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                        $value = xarVarPrepForDisplay($value);
-                    } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                        $value = xarVarPrepHTMLDisplay($value);
-                    }
-                    return $value;
-                }
-            } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
-                // we already got everything for this module, and didn't find it above
+    case 'modvar':
+    default:
+        if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
+            $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
+            if ($value === '*!*MiSSiNG*!*') {
                 return;
-            } elseif (xarVarIsCached('Mod.GetVarsByName', $name)) {
-                // we already got everything for this name, and didn't find it above
-                return;
-            }
-
-            break;
-        case 'moduservar':
-            $cachename = $uid . $name;
-            if (xarVarIsCached('ModUser.Variables.' . $modName, $cachename)) {
-                $value = xarVarGetCached('ModUser.Variables.' . $modName, $cachename);
-                if ($value === '*!*MiSSiNG*!*') {
-                    return;
-                } else {
-                    if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                        $value = xarVarPrepForDisplay($value);
-                    } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                        $value = xarVarPrepHTMLDisplay($value);
-                    }
-                    return $value;
+            } else {
+                if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                    $value = xarVarPrepForDisplay($value);
+                } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                    $value = xarVarPrepHTMLDisplay($value);
                 }
+                return $value;
             }
-            break;
-        case 'themevar':
-            if (xarVarIsCached('Theme.Variables.' . $modName, $name)) {
-                $value = xarVarGetCached('Theme.Variables.' . $modName, $name);
-                if ($value === '*!*MiSSiNG*!*') {
-                    return;
-                } else {
-                    if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                        $value = xarVarPrepForDisplay($value);
-                    } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                        $value = xarVarPrepHTMLDisplay($value);
-                    }
-                    return $value;
-                }
-            } elseif (xarVarIsCached('Theme.GetVarsByTheme', $modName)) {
-                // we already got everything for this module, and didn't find it above
+        } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
+            // we already got everything for this module, and didn't find it above
+            return;
+        } elseif (xarVarIsCached('Mod.GetVarsByName', $name)) {
+            // we already got everything for this name, and didn't find it above
+            return;
+        }
+        
+        break;
+    case 'moduservar':
+        $cachename = $uid . $name;
+        if (xarVarIsCached('ModUser.Variables.' . $modName, $cachename)) {
+            $value = xarVarGetCached('ModUser.Variables.' . $modName, $cachename);
+            if ($value === '*!*MiSSiNG*!*') {
                 return;
-            } elseif (xarVarIsCached('Theme.GetVarsByName', $name)) {
-                // we already got everything for this name, and didn't find it above
-                return;
-            }
-
-            break;
-        case 'configvar':
-            if (xarVarIsCached('Config.Variables', $name)) {
-                return xarVarGetCached('Config.Variables', $name);
-                if ($value === '*!*MiSSiNG*!*') {
-                    return;
-                } else {
-                    if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                        $value = xarVarPrepForDisplay($value);
-                    } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                        $value = xarVarPrepHTMLDisplay($value);
-                    }
-                    return $value;
+            } else {
+                if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                    $value = xarVarPrepForDisplay($value);
+                } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                    $value = xarVarPrepHTMLDisplay($value);
                 }
+                return $value;
             }
-
-            break;
+        }
+        break;
+    case 'themevar':
+        if (xarVarIsCached('Theme.Variables.' . $modName, $name)) {
+            $value = xarVarGetCached('Theme.Variables.' . $modName, $name);
+            if ($value === '*!*MiSSiNG*!*') {
+                return;
+            } else {
+                if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                    $value = xarVarPrepForDisplay($value);
+                } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                    $value = xarVarPrepHTMLDisplay($value);
+                }
+                return $value;
+            }
+        } elseif (xarVarIsCached('Theme.GetVarsByTheme', $modName)) {
+            // we already got everything for this module, and didn't find it above
+            return;
+        } elseif (xarVarIsCached('Theme.GetVarsByName', $name)) {
+            // we already got everything for this name, and didn't find it above
+            return;
+        }
+        
+        break;
+    case 'configvar':
+        if (xarVarIsCached('Config.Variables', $name)) {
+            return xarVarGetCached('Config.Variables', $name);
+            if ($value === '*!*MiSSiNG*!*') {
+                return;
+            } else {
+                if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                    $value = xarVarPrepForDisplay($value);
+                } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                    $value = xarVarPrepHTMLDisplay($value);
+                }
+                return $value;
+            }
+        }
+        
+        break;
     }
-
+    
     switch(strtolower($type)) {
-        case 'modvar':
-        case 'moduservar':
-            default:
-            $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) {
-                return; // throw back
-            }
-            break;
-
-        case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
-            if (!isset($modBaseInfo)) {
-                return; // throw back
-            }
-            break;
-       case 'configvar':
-           break;
+    case 'modvar':
+    case 'moduservar':
+    default:
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        if (!isset($modBaseInfo)) {
+            return; // throw back
+        }
+        break;
+        
+    case 'themevar':
+        $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
+        if (!isset($modBaseInfo)) {
+            return; // throw back
+        }
+        break;
+    case 'configvar':
+        break;
     }
-
+    
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-
+    
     switch(strtolower($type)) {
-        case 'modvar':
-            default:
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_varstable = $tables['system/module_vars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_varstable = $tables['site/module_vars'];
-            }
-
-            $query = "SELECT xar_value
+    case 'modvar':
+    default:
+        // Takes the right table basing on module mode
+        if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+            $module_varstable = $tables['system/module_vars'];
+        } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+            $module_varstable = $tables['site/module_vars'];
+        }
+        
+        $query = "SELECT xar_value
                       FROM $module_varstable
                       WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
                       AND xar_name = '" . xarVarPrepForStore($name) . "'";
-            break;
-        case 'moduservar':
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_uservarstable = $tables['system/module_uservars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_uservarstable = $tables['site/module_uservars'];
-            }
-            unset($modvarid);
-            $modvarid = xarModGetVarId($modName, $name);
-            if (!$modvarid) return;
-
-            $query = "SELECT xar_value
+        break;
+    case 'moduservar':
+        // Takes the right table basing on module mode
+        if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+            $module_uservarstable = $tables['system/module_uservars'];
+        } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+            $module_uservarstable = $tables['site/module_uservars'];
+        }
+        unset($modvarid);
+        $modvarid = xarModGetVarId($modName, $name);
+        if (!$modvarid) return;
+        
+        $query = "SELECT xar_value
                       FROM $module_uservarstable
                       WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
                       AND xar_uid ='" . xarVarPrepForStore($uid). "'";
-            break;
-        case 'themevar':
-             // Takes the right table basing on theme mode
-            if ($ModBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
-                $theme_varsTable = $tables['theme_vars'];
-            } elseif ($ModBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
-                $theme_varsTable = $tables['site/theme_vars'];
-            }
-
-            $query = "SELECT xar_value,
+        break;
+    case 'themevar':
+        // Takes the right table basing on theme mode
+        if ($ModBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+            $theme_varsTable = $tables['theme_vars'];
+        } elseif ($ModBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+            $theme_varsTable = $tables['site/theme_vars'];
+        }
+        
+        $query = "SELECT xar_value,
                       xar_prime,
                       xar_description
                       FROM $theme_varsTable
                       WHERE xar_themename = '" . xarVarPrepForStore($themeName) . "'
                       AND xar_name = '" . xarVarPrepForStore($name) . "'";
-            break;
-        case 'configvar':
-
-            $config_varsTable = $tables['config_vars'];
-
-            $query = "SELECT xar_value
+        break;
+    case 'configvar':
+        
+        $config_varsTable = $tables['config_vars'];
+        
+        $query = "SELECT xar_value
                       FROM $config_varsTable
                       WHERE xar_name='" . xarVarPrepForStore($name) . "'";
-
-            break;
-
+        
+        break;
+        
     }
-
+    
     if (xarCore_getSystemVar('DB.UseADODBCache')){
         switch(strtolower($type)) {
-            case 'modvar':
-            case 'themevar':
-            case 'configvar':
-                $result =& $dbconn->CacheExecute(3600*24*7,$query);
-                if (!$result) return;
-                break;
-            case 'moduservar':
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-                break;
+        case 'modvar':
+        case 'themevar':
+        case 'configvar':
+            $result =& $dbconn->CacheExecute(3600*24*7,$query);
+            if (!$result) return;
+            break;
+        case 'moduservar':
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+            break;
         }
     } else {
         $result =& $dbconn->Execute($query);
         if (!$result) return;
     }
-
+    
+    $setTo = '*!*MiSSiNG!*';
     switch(strtolower($type)) {
-        case 'modvar':
-            default:
-            if ($result->EOF) {
-                $result->Close();
-                xarVarSetCached('Mod.Variables.' . $modName, $name, '*!*MiSSiNG*!*');
-                return;
-            }
-            break;
-        case 'moduservar':
-            // If there is no such thing, return the global setting.
-            if ($result->EOF) {
-                $result->Close();
-                // return global setting
-                return xarModGetVar($modName, $name);
-            }
-            break;
-        case 'themevar':
-            if ($result->EOF) {
-                $result->Close();
-                xarVarSetCached('Theme.Variables.' . $modName, $name, '*!*MiSSiNG*!*');
-                return;
-            }
-            break;
-        case 'configvar':
-            if ($result->EOF) {
-                $result->Close();
-                xarVarSetCached('Config.Variables', $name, NULL);
-                return;
-            }
-            break;
+    case 'moduservar':
+        // If there is no such thing, return the global setting.
+        if ($result->EOF) {
+            $result->Close();
+            // return global setting
+            return xarModGetVar($modName, $name);
+        }
+        break;
+    case 'themevar':
+        $cacheCollection = 'Theme.Variables.' . $modName ;  // <mrb> kinda confusing here
+        break;
+    case 'configvar':
+        $cacheCollection = 'Config.Variables';
+        $setTo = NULL;
+        break;
+    default:
+        $cacheCollection = 'Mod.Variables.' . $modName;
+        break;
     }
-
+    if ($result->EOF) {
+        $result->Close();
+        xarVarSetCached($cacheCollection, $name, $setTo);
+        return;
+    }
+    
+    
     list($value) = $result->fields;
     $result->Close();
-
+    
     switch(strtolower($type)) {
         case 'modvar':
             default:
