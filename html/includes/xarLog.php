@@ -90,7 +90,7 @@ function xarLogException($level = XARLOG_LEVEL_DEBUG)
 
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
-    $args = array('name'=>$name, 'var'=>$var, 'format'=>'html');
+    $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
     xarLogMessage(xarModAPIFunc('base','log','dumpvariable', $args), $level);
 }
 ?>
