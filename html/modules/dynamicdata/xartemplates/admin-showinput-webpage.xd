@@ -20,7 +20,7 @@
 		</xar:foreach>
 	</select>
 <xar:else />
-	No web pages specified in validation field.	
+	<span id="#$id#">No web pages specified in validation field.</span>
 </xar:if> 
 
 <xar:if condition="!empty($invalid)">

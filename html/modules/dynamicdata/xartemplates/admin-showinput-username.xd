@@ -10,7 +10,7 @@ FIXME:  The target="" needs to be replaced by something that works in xhtml.
         #$user#
     </xar:if>
 </xar:comment>
-        #$user#
+        <span id="#$id#">#$user#</span>
 
 
     <xar:if condition="!empty($invalid)">
