@@ -169,18 +169,35 @@ function xarBlock_renderGroup($groupName)
     $output = '';
     while(!$result->EOF) {
         $blockInfo = $result->GetRowAssoc(false);
-        $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
+        $caching = 0;
+        if (file_exists(xarCoreGetVarDirPath() . '/cache/output/cache.touch')) {
+            $caching = 1;
+            $cacheKey = $blockInfo['module']."-blockid".$blockInfo['bid'];
+        }
+ 
+        if ($caching == 1 && xarBlockIsCached($cacheKey,'block')) {
+            // output the cached block
+            $output .= xarBlockGetCached($cacheKey,'block');
+            
+        } else {
+            
+            $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
-    if (!empty($blockInfo['inst_bl_template'])) {
-        $blockInfo['_bl_template'] = $blockInfo['inst_bl_template'];
-    } else {
-        $blockInfo['_bl_template'] = $blockInfo['bgroups_bl_template'];
-    }
+            if (!empty($blockInfo['inst_bl_template'])) {
+                $blockInfo['_bl_template'] = $blockInfo['inst_bl_template'];
+            } else {
+                $blockInfo['_bl_template'] = $blockInfo['bgroups_bl_template'];
+            }
+            $blockoutput = xarBlock_render($blockInfo);
+            
+            if ($caching == 1) {
+                xarBlockSetCached($cacheKey,'block', $blockoutput);
+            }
+            $output .= $blockoutput;
+        }
 
-        $output .= xarBlock_render($blockInfo);
-
-// don't throw back exception for broken blocks
-//        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+        // don't throw back exception for broken blocks
+        //if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             $output .= xarExceptionRender('html');
             // We handled the exception(s) so we can clear it

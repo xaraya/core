@@ -131,6 +131,58 @@ function xarPageIsCached($cacheKey, $name = '')
     }
 }
 
+function xarBlockIsCached($cacheKey, $name = '')
+{
+    global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarBlock_cacheCode;
+    
+    global $xarTpl_themeDir;
+    $factors = $xarTpl_themeDir;
+    //if (xarBlockDynamic == 1) {
+        $factors .= xarServerGetVar('REQUEST_URI');
+        $param = xarServerGetVar('QUERY_STRING');
+        if (!empty($param)) {
+            $factors .= '?' . $param;
+        }
+    //}
+    //if (xarBlockPermissions == 1) {
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $rolemembers = $systemPrefix . '_rolemembers';
+        $cuid = xarSessionGetVar('uid');
+        list($dbconn) = xarDBGetConn();
+        $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = $cuid ";
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+        $gids ='';
+        while(!$result->EOF) {
+            $parentid = $result->GetRowAssoc(false);
+            $gids .= $parentid['xar_parentid'];
+            $result->MoveNext();
+        }
+        $result->Close();
+        $factors .=$gids;
+    //} elseif (xarBlockPermission == 2) {
+    //    $factors .= xarSessionGetVar('uid');
+    //} else {
+    //    $factors .= 0;
+    //}
+    $xarBlock_cacheCode = md5($factors);
+    
+    // CHECKME: use $name for something someday ?
+    $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
+    
+    if (
+        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        file_exists($cache_file) &&
+        filesize($cache_file) > 0 &&
+        filemtime($cache_file) > time() - $xarPage_cacheTime) {
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  * get the content of a cached page
  *
@@ -148,6 +200,17 @@ function xarPageGetCached($cacheKey, $name = '')
     $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
     @readfile($cache_file);
 
+    xarPageCleanCached();
+}
+
+function xarBlockGetCached($cacheKey, $name = '')
+{
+    global $xarPage_cacheCollection, $xarBlock_cacheCode;
+    
+    // CHECKME: use $name for something someday ?
+    $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
+    @readfile($cache_file);
+    
     xarPageCleanCached();
 }
 
@@ -185,6 +248,29 @@ function xarPageSetCached($cacheKey, $name, $value)
             } else {
                 $value = preg_replace('#</body>#','<!--'.$now.'--></body>',$value);
             }
+            @fwrite($fp,$value);
+            @fclose($fp);
+        }
+        xarPageCleanCached();
+    }
+}
+
+function xarBlockSetCached($cacheKey, $name, $value)
+{
+    global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarPage_cacheShowTime, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode;
+    global $xarTpl_themeDir;
+    
+    // CHECKME: use $name for something someday ?
+    $cache_file = "$xarPage_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
+    if (
+        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        preg_match('#'.$xarPage_cacheTheme.'#', $xarTpl_themeDir) &&
+        (!file_exists($cache_file) ||
+         filemtime($cache_file) < time() - $xarPage_cacheTime) &&
+        xarCacheDirSize($xarPage_cacheCollection) <= $xarOutput_cacheSizeLimit
+        ) {
+        $fp = @fopen($cache_file,"w");
+        if (!empty($fp)) {
             @fwrite($fp,$value);
             @fclose($fp);
         }
