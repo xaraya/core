@@ -31,7 +31,7 @@
     define('_USER_STATE_ACTIVE', 3);
     define('_ARTICLE_STATE_',0);
 
-    echo "<strong>$step. Grabbing all data</strong><br>\n";
+    echo "<strong>$step. Grabbing all data</strong><br/>\n";
 
     $pubtype_config = array('title'     => array('label' => 'Title',
                                          'format' => 'textbox',
@@ -276,7 +276,7 @@
         }
     }
 
-    echo "<br/><br/><HR><br /><br />";
+    echo "<br/><br/><hr><br /><br />";
 
     echo "<br />Adding Publication Type: [<b>blog</b>]";
 
