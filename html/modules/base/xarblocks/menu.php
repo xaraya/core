@@ -130,12 +130,14 @@ function base_menublock_display($blockinfo)
                     {
                         // Credit to Elek Márton for further expansion
                         $url = explode(':', substr($url, 1,  - 1));
-                        if (empty($url[1])) $url[1]="user";
-                        if (empty($url[2])) $url[2]="main";
                         // if the current module is active, then we are here
-                        if ($url[0] == $thismodname && $url[2] == $thisfuncname) {
+                        if ($url[0] == $thismodname &&
+                            (!isset($url[1]) || $url[1] == $thismodtype) && 
+                            (!isset($url[2]) || $url[2] == $thisfuncname)) {
                             $here = 'true';
                         }
+                        if (empty($url[1])) $url[1]="user";
+                        if (empty($url[2])) $url[2]="main";
                         $url = xarModUrl($url[0],$url[1],$url[2]);
                         break;
                     }
