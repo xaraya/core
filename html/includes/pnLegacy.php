@@ -785,4 +785,59 @@ function pnUserGetTheme()
     return;
 }
 
+/**
+ * get a list of database connections
+ * @deprec
+ * @access public
+ * @returns array
+ * @return array of database connections
+ */
+function pnDBGetConn()
+{
+    return xarDBGetConn();
+}
+
+/**
+ * get a list of database tables
+ * @deprec
+ * @access public
+ * @returns array
+ * @return array of database tables
+ */
+function pnDBGetTables()
+{
+    return xarDBGetTables;
+}
+
+/**
+ * Get a session variable
+ * @deprec
+ * @param name name of the session variable to get
+ */
+function pnSessionGetVar($name)
+{
+    return xarSessionGetVar($name);
+}
+
+/** 
+ * Set a session variable
+ * @deprec
+ * @param name name of the session variable to set
+ * @param value value to set the named session variable
+ */
+function pnSessionSetVar($name, $value)
+{
+    return xarSessionSetVar($name, $value);
+}
+
+/**
+ * Delete a session variable
+ * @deprec
+ * @param name name of the session variable to delete
+ */
+function pnSessionDelVar($name)
+{
+    return SessionDelVar($name);
+}
+
 ?>
