@@ -25,22 +25,32 @@ function modules_adminapi_activate($args)
         return NULL;
     }
 
+    if (empty($modInfo['osdirectory']) || !is_dir('modules/'. $modInfo['osdirectory'])) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid - directory: $modInfo[osdirectory]) does not exist."));
+        return;
+    }
+
     // Get module database info
     xarMod__loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
     // Module activate function
 
     // pnAPI compatibility
-    $xarinitfilename = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
-    if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
+    $xarinitfile = '';
+    if (file_exists('modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
+        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
+    } elseif (file_exists('modules/'. $modInfo['osdirectory'] .'/pninit.php')) {
+        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
     }
-    @include_once $xarinitfilename;
+    if (!empty($xarinitfile)) {
+        include_once $xarinitfile;
 
-    $func = $modInfo['name'] . '_activate';
-    if (function_exists($func)) {
-        if ($func() != true) {
-            return false;
+        $func = $modInfo['name'] . '_activate';
+        if (function_exists($func)) {
+            if ($func() != true) {
+                return false;
+            }
         }
     }
 

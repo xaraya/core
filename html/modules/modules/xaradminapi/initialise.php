@@ -28,6 +28,12 @@ function modules_adminapi_initialise($args)
                        return;
     }
 
+    if (empty($modInfo['osdirectory']) || !is_dir('modules/'. $modInfo['osdirectory'])) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid - directory: $modInfo[osdirectory]) does not exist."));
+        return;
+    }
+
     // Get module database info
     xarModDBInfoLoad($modInfo['name'], $modInfo['directory']);
 
@@ -35,10 +41,14 @@ function modules_adminapi_initialise($args)
     //FIXME: added module File not exist exception
 
     // pnAPI compatibility
+    $xarinitfile = '';
     if (file_exists('modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
-        include_once 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
-    } else  {
-        @include_once 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
+        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
+    } elseif (file_exists('modules/'. $modInfo['osdirectory'] .'/pninit.php')) {
+        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
+    }
+    if (!empty($xarinitfile)) {
+        include_once $xarinitfile;
     }
 
 /*  FIXME xarUserGetLang appears to be legacy, do we need to enable the new locales?
@@ -56,19 +66,20 @@ function modules_adminapi_initialise($args)
         }
     }
 */
-    // FIXME: perhaps we need a module function not exist except to be raised here?
-    // Load module init function
-    $func = $modInfo['name'] . '_init';
-    if (function_exists($func)) {
-        if ($func() != true) {
-            xarSessionSetVar('errormsg', xarML('Module initialisation failed because the function returned false'));
+    if (!empty($xarinitfile)) {
+        // FIXME: perhaps we need a module function not exist except to be raised here?
+        // Load module init function
+        $func = $modInfo['name'] . '_init';
+        if (function_exists($func)) {
+            if ($func() != true) {
+                xarSessionSetVar('errormsg', xarML('Module initialisation failed because the function returned false'));
+                return false;
+            }
+        } else {
+            // file exists, but function not found. Exception!
+            xarSessionSetVar('errormsg', xarML('Module initialisation failed because your module did not include an init function'));
             return false;
         }
-
-    } else {
-        // file exists, but function not found. Exception!
-        xarSessionSetVar('errormsg', xarML('Module initialisation failed because your module did not include an init function'));
-        return false;
     }
 
     // Update state of module

@@ -385,7 +385,7 @@ function xarExceptionRender($format)
                 $text .= $exception['value']->toString();
             }
             $stack = $exception['value']->__stack;
-            for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
+            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
                 $text .= '     at '.$function.'(';
