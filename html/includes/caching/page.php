@@ -70,7 +70,7 @@ function xarPageIsCached($cacheKey, $name = '')
         if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
             $cacheKey = 'static';
             $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$cacheCode.php";
+            $cache_file2 = "$xarOutput_cacheCollection/page/$cacheKey-$cacheCode.php";
         // Note that if we get here, the first-time visitor will receive a session cookie,
         // so he will no longer benefit from this himself ;-)
             @copy($cache_file, $cache_file2);

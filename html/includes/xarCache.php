@@ -90,7 +90,7 @@ function xarCache_init($args)
         global $xarPage_cacheCode;
         $cacheKey = 'static';
         $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-        $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
+        $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
         if (file_exists($cache_file) &&
             filesize($cache_file) > 0 &&
             ($xarPage_cacheTime == 0 ||
@@ -193,7 +193,7 @@ function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
         if (($cacheType == 'Page') && (!empty($GLOBALS['xarPage_cacheNoSession']))) {
             $cacheKey = 'static';
             $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
+            $cache_file2 = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
         // Note that if we get here, the first-time visitor will receive a session cookie,
         // so he will no longer benefit from this himself ;-)
             @copy($cache_file, $cache_file2);
