@@ -46,14 +46,8 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarVar_allowableHTML'] = $args['allowableHTML'];
     $GLOBALS['xarVar_fixHTMLEntities'] = $args['fixHTMLEntities'];
 
-    $GLOBALS['xarVar_enableCensoringWords'] = $args['enableCensoringWords'];
-    $GLOBALS['xarVar_censoredWords'] = $args['censoredWords'];
-    $GLOBALS['xarVar_censoredWords']Replacers = $args['censoredWordsReplacers'];
-
     return true;
     */
-    if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_CONFIGURATION) {
-
         $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
         if (!isset($GLOBALS['xarVar_allowableHTML']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
@@ -63,21 +57,6 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
         if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return; // throw back exception
         }
-
-    } else {
-            // hardcode it until there is a file to draw this info from
-            $GLOBALS['xarVar_allowableHTML'] = '';
-            //$GLOBALS['xarVar_allowableHTML'] = xarCore_getSiteVar('Core.AllowableHTML');
-            /*if (!isset($GLOBALS['xarVar_allowableHTML']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back exception
-            }*/
-
-            $GLOBALS['xarVar_fixHTMLEntities'] = xarCore_getSiteVar('Core.FixHTMLEntities');
-            if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                return; // throw back exception
-            }
-
-    }
 
     return true;
 }

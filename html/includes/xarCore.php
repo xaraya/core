@@ -149,13 +149,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     // Start Exception Handling System
-    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
+    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
     xarException_init($systemArgs, $whatToLoad);
 
     // Start Logging Facilities
-    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
-                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
-                        'level' => xarCore_getSiteVar('Log.LogLevel'));
+    $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
+                        'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
+                        'level' => xarCore_getSystemVar('Log.LogLevel'));
     xarLog_init($systemArgs, $whatToLoad);
 
     // Start Database Connection Handling System
