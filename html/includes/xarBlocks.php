@@ -266,9 +266,9 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             // don't throw back exception for broken blocks
             //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
             if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarExceptionRender('template');
+                $output .= xarErrorRender('template');
                 // We handled the exception(s) so we can clear it
-                xarExceptionFree();
+                xarErrorFree();
             }
         }
 
@@ -324,9 +324,9 @@ function xarBlock_renderBlock($args)
             // don't throw back exception for broken blocks
             //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
             if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarExceptionRender('template');
+                $output .= xarErrorRender('template');
                 // We handled the exception(s) so we can clear it
-                xarExceptionFree();
+                xarErrorFree();
             }
         }
     } else {
