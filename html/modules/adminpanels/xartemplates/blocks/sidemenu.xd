@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <xar:if condition="isset($menustyle)">
     #$menustyle# 
 </xar:if>

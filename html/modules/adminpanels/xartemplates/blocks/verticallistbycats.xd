@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <xar:foreach in="$catmods" key="$catname" value="$cats">
     <xar:comment>
         we dont really want to display a category if there are no modules that belong to it,
