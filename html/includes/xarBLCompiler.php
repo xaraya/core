@@ -1445,7 +1445,7 @@ class xarTpl__ExpressionTransformer
         // var name.
         // Let's dissect the expression so it's a bit more clear:
         //  1. /..../i      => we're matching in a case - insensitive  way what's betwteen the /-es
-        //  2. \\\$         => matches \$ which is and escaped $ in the string to match 
+        //  2. \\\$         => matches \$ which is and escaped $ in the string to match
         //  3. (            => this starts a subpattern
         //  4.  [a-z_]      => matches a letter or underscore
         //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
@@ -2048,7 +2048,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $output .= '$_bl_loop_number'.$loopCounter." = 1; ";
         $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
 
-        if(!isset($id)) 
+        if(!isset($id))
             $prefix = '_bl_loop_'.$loopCounter;
         else
             $prefix = '_bl_loop_'.$id;
@@ -2474,7 +2474,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
 
-        if (!is_array($in)) {
+        if (!array($in)) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ATTRIBUTE',
                            new xarTpl__ParserError('Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this));
             return;
