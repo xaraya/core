@@ -85,7 +85,7 @@ function dynamicdata_adminapi_removehook($args)
         $result->MoveNext();
         $ids[] = $id;
     }
-    $result->Close;
+    $result->Close();
 
     if (count($ids) == 0) {
         return $extrainfo;
