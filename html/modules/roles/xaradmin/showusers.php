@@ -32,23 +32,22 @@ function roles_admin_showusers()
     if (!xarVarFetch('uid', 'int:0:', $uid, $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('display', 'isset', $data['display'], NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED)) return;
     
-    $userdisplay = xarSessionGetVar('rolesdisplay');
-    if (!isset($data['display'])) {
+    /*if (!isset($data['selstyle'])) {
         if (isset($userdisplay)) {
-            $data['display'] = $userdisplay;
+            $data['selstyle'] = $userdisplay;
         } else {
-            $data['display'] ="tabbed";
+            $data['selstyle'] ="tabbed";
         }
-    }
-    xarSessionSetVar('rolesdisplay', $data['display']);
+    }*/
+    xarSessionSetVar('rolesdisplay', $data['selstyle']);
 
     //Create the role tree
-    if ($data['display'] == 'tree') {
+    if ($data['selstyle'] == '1') {
         include_once 'modules/roles/xartreerenderer.php';
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
@@ -162,6 +161,11 @@ function roles_admin_showusers()
                 );
         }
     }
+    //selstyle
+    $data['style'] = array('0' => xarML('Simple'),
+                                       '1' => xarML('Tree'),
+                                       '2' => xarML('Tabbed')
+                                       );
 
     // Load Template
     $data['uid'] = $uid;

@@ -1122,6 +1122,38 @@ class xarRole
         // done
         return $ancestors;
     }
+    /**
+     * getDescendants: get the members of a group that are users
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param integer state get users in this state
+     * @return list of users
+     * @throws none
+     * @todo none
+     */
+    function getDescendants($state = 0)
+    {
+        $roles = new xarRoles();
+        $role = $roles->getRole($this->uid);
+        $users = $role->getUsers($state);
+        $ua = array();
+        foreach($users as $user){
+            //using the ID as the key so that if a person is in more than one sub group they only get one email
+            $ua[$user->getID()] = $user;
+        }
+        //Get the sub groups and go for another round
+        $groups = $roles->getSubGroups($this->uid);
+        foreach($groups as $group){
+             $roles = new xarRoles();
+             $role = $roles->getRole($group['uid']);
+            $users = $role->getDescendants($state);
+            foreach($users as $user){
+                $ua[$user->getID()] = $user;
+            }
+        }
+        return($ua);
+    }
 
     /**
      * isEqual: checks whether two roles are equal

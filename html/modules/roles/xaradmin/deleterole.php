@@ -83,7 +83,7 @@ function roles_admin_deleterole()
         }
 
         // redirect to the next page
-        xarResponseRedirect(xarModURL('roles', 'admin', 'viewroles'));
+        xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
     }
 }
 

@@ -27,6 +27,20 @@ function roles_admin_sendmail()
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
+    
+    //Get the common search and replace values
+    $sitename = xarModGetVar('themes', 'SiteName');
+    $siteadmin = xarModGetVar('mail', 'adminname');
+    $adminmail = xarModGetVar('mail', 'adminmail');
+    $siteurl = xarServerGetBaseURL();
+	$search = array('/%%sitename%%/','/%%siteadmin%%/', '/%%adminmail%%/','/%%siteurl%%/');
+    $replace = array("$sitename", "$siteadmin", "$adminmail", "$siteurl");
+    $message = preg_replace($search,
+                              $replace,
+                              $message);
+    $subject = preg_replace($search,
+                              $replace,
+                              $subject);
 
     $roles = new xarRoles();
     if ($uid != 0) {

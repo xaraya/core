@@ -1,96 +1,229 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:set name="$messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
+<h2>
+		<a href="#xarModURL('roles', 'admin', 'createmail')#">
+		    <xar:mlstring>Messaging system</xar:mlstring>
+		</a>&nbsp;&gt;&nbsp;
+		<xar:mlstring>Modify notification template</xar:mlstring>
+		&nbsp;:&nbsp;#$mailtype#
+</h2>
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')"></xar:if>
-<br />
 <div id="tabnav">
         <xar:set name="$tmptitle"><xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates</xar:mlstring></xar:set>
-	<div class="help" title="#$tmptitle#"><xar:mlstring>Email notifications</xar:mlstring></div>
+	<div class="help" title="#$tmptitle#"><xar:mlstring>Actions</xar:mlstring></div>
 	<div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
 	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#"><xar:mlstring>Configure</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'validation'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'validation'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'validation'))#">
-	</xar:if>
-	<xar:mlstring>Validation</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'confirmation'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'confirmation'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'confirmation'))#">
-	</xar:if>
-	<xar:mlstring>Confirmation</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'welcome'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'welcome'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'welcome'))#">
-	</xar:if>
-	<xar:mlstring>Welcome</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'reminder'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'reminder'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'reminder'))#">
-	</xar:if>
-	<xar:mlstring>Reminder</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'pending'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'pending'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'pending'))#">
-	</xar:if>
-	<xar:mlstring>Pending</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'deactivation'">
-		<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'deactivation'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'deactivation'))#">
-	</xar:if>
-	<xar:mlstring>Deactivation</xar:mlstring></a></div>
-	<div><xar:if condition="$mailtype eq 'password'">
-	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'password'))#" class="active">
-	<xar:else/>	
-		<a href="#xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => 'password'))#">
-	</xar:if>
-	<xar:mlstring>Password</xar:mlstring></a></div>
+	<div><a href="#xarModURL('roles', 'admin', 'modifyemail')#" class="active"><xar:mlstring>Templates</xar:mlstring></a></div>
 </div>
-<div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
-<br />
-<form action="#xarModURL('roles', 'admin', 'modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
+<div style="margin: auto;">
+	<div style="float:left;width:100%"> <!--- containing float - quick fix for JC's css layouts [andyv] --->
+		<div style="clear: both; padding-top: 10px;">
+		<form method="post" action="#xarModUrl('roles', 'admin', 'modifyemail')#">
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('Select the template to edit')#">
+                            <label for="subject"><xar:mlstring>Template</xar:mlstring></label>:
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+			<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
+				<xar:if condition="$mailtype eq 'validation'">
+					<option value="validation" selected="selected">
+						<xar:mlstring>Validation</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (i.e. change email address)</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="validation">
+						<xar:mlstring>Validation</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'confirmation'">
+					<option value="confirmation" selected="selected">
+						<xar:mlstring>Confirmation</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="confirmation">
+						<xar:mlstring>Confirmation</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'welcome'">
+					<option value="welcome" selected="selected">
+						<xar:mlstring>Welcome</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="welcome">
+						<xar:mlstring>Welcome</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'reminder'">
+					<option value="reminder" selected="selected">
+						<xar:mlstring>Reminder</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="reminder">
+						<xar:mlstring>Reminder</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'pending'">
+					<option value="pending" selected="selected">
+						<xar:mlstring>Pending</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="pending">
+						<xar:mlstring>Pending</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'deactivation'">
+					<option value="deactivation" selected="selected">
+						<xar:mlstring>Deactivation</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="deactivation">
+						<xar:mlstring>Deactivation</xar:mlstring>
+					</option>
+				</xar:if>
+				<xar:if condition="$mailtype eq 'password'">
+					<option value="password" selected="selected">
+						<xar:mlstring>Password</xar:mlstring>
+					</option>
+					<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when an administrator changes their password</xar:mlstring></xar:set>
+				<xar:else/>
+					<option value="password">
+						<xar:mlstring>Password</xar:mlstring>
+					</option>
+				</xar:if>
+			</select>
+                    </span>
+		 </form>
+		 </div>	
+	<form action="#xarModURL('roles', 'admin', 'modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
 	<input type="hidden" name="phase" id="phase" value="update" />
 	<input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-	<table>
-		<tr><th colspan="2">#$explanation#.</th></tr>
-		<tr><th><label for="subject"><xar:mlstring>Subject</xar:mlstring> :</label></th><td><input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" /></td></tr>
-		<tr><th><label for="message"><xar:mlstring>Message</xar:mlstring> :</label></th><td><textarea name="message" id="message" rows="20" cols="80" tabindex="1">#$message#</textarea></td></tr>
-        <xar:set name="$tmpupdatevalue"><xar:mlstring>Update</xar:mlstring></xar:set>
-        <tr><th colspan="2"><input type="submit" value="#$tmpupdatevalue#"  tabindex="2" /></th></tr>
-        <tr><th colspan="2"><xar:mlstring>The following variables will be replaced in the text with specific information</xar:mlstring> :</th></tr>
-        <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
-	        <tr><th>%%password%%</th><td><xar:mlstring>Password of the user</xar:mlstring></td></tr>
-	        <tr><th>%%validationlink%%</th><td><xar:mlstring>Validation link for the user</xar:mlstring></td></tr>
-	        <tr><th>%%valcode%%</th><td><xar:mlstring>Validation code of the user</xar:mlstring></td></tr>
-	        <tr><th>%%ipaddress%%</th><td><xar:mlstring>IP address of the user</xar:mlstring></td></tr>
-        <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>	
-        	<tr><th>%%password%%</th><td><xar:mlstring>Password of the user</xar:mlstring></td></tr>	
-        </xar:if>
-        <tr><th>%%sitename%%</th><td><xar:mlstring>Name of the site</xar:mlstring></td></tr>
-        <tr><th>%%siteadmin%%</th><td><xar:mlstring>Name of the administrator</xar:mlstring></td></tr>
-        <tr><th>%%adminmail%%</th><td><xar:mlstring>Email address of the administrator</xar:mlstring></td></tr>
-        <tr><th>%%siteurl%%</th><td><xar:mlstring>URL of the site</xar:mlstring>(#xarServerGetBaseURL()#)</td></tr>
-        <tr><th>%%name%%</th><td><xar:mlstring>Name of the user</xar:mlstring></td></tr>
-        <tr><th>%%username%%</th><td><xar:mlstring>Username of the user</xar:mlstring></td></tr>
-        <tr><th>%%useremail%%</th><td><xar:mlstring>Email address of the user</xar:mlstring></td></tr>
-        <xar:if condition="isset($properties)">
-		   <xar:foreach in="$properties" key="$name">
-			<tr><th>%%#$name#%%</th><td><xar:data-label property="$properties[$name]" /> (<xar:mlstring>dynamic property</xar:mlstring>)</td></tr>
-		   </xar:foreach>
+                <div style="clear: both; padding-top: 10px;">
+		   	<span style="float: right; width: 95%; text-align: left;font-weight: bold;">
+                        #$explanation#.
+			</span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+                    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('Title of the notification')#">
+                            <label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+                        <input type="text" name="subject" id="subject" size="40" value="#$subject#"  maxlength="150" />
+                    </span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+                        <span class="help" title="#xarML('Body of the notification')#">
+                             <label for="message"><xar:mlstring>Message</xar:mlstring></label>:
+                        </span>
+                    </span>
+                    <span style="float: right; width: 78%; text-align: left;">
+                        <textarea name="message" id="message" rows="20" cols="60">#$message#</textarea>
+                    </span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <div style="float: left; width: 50%; text-align: right; margin-top: 5px;"><input type="submit" value="#xarML('Update')#" /></div>
+                </div>
+		<div style="clear: both; padding-top: 10px;">
+			   <span style="float: right; width: 95%; text-align: left;">
+				<xar:mlstring>The following variables will be replaced in the text with specific information</xar:mlstring> :
+			    </span>
+		 </div>
+		 <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
+			<div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%pass%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Password of the user</xar:mlstring></span>
+			 </div>
+			 <div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%validationlink%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Validation link for the user</xar:mlstring></span>
+			 </div>
+			 <div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%valcode%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Validation code for the user</xar:mlstring></span>
+			 </div>
+			 <div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%ipaddress%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>IP address of the user</xar:mlstring></span>
+			 </div>
+		<xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>	
+			<div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%pass%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Password of the user</xar:mlstring></span>
+			 </div>
 		</xar:if>
-	</table>	
-	</form>
+		<div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%sitename%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the site</xar:mlstring></span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%siteadmin%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the administrator</xar:mlstring></span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%adminmail%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the administrator</xar:mlstring></span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%siteurl%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>URL of the site</xar:mlstring>(#xarServerGetBaseURL()#)</span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%name%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Name of the user</xar:mlstring></span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%username%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Username of the user</xar:mlstring></span>
+		 </div>
+		 <div style="clear: both; padding-top: 10px;">
+		    <span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#$messagetitle#">%%useremail%%</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;"><xar:mlstring>Email address of the user</xar:mlstring></span>
+		 </div>
+		 <xar:if condition="isset($properties)">
+			<xar:foreach in="$properties" key="$name">
+			<div style="clear: both; padding-top: 10px;">
+			    <span style="float: left; width: 20%; text-align: right;">
+				<span class="help" title="#$messagetitle#">%%#$name#%%</span>
+			    </span>
+			    <span style="float: right; width: 78%; text-align: left;"><xar:data-label property="$properties[$name]" /> (<xar:mlstring>Dynamic property</xar:mlstring>)</span>
+			 </div>
+			</xar:foreach>
+		</xar:if>
+	</div>
+</form>
 </div>
 </div>
