@@ -51,6 +51,9 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     
     include_once 'xaradodb/adodb.inc.php';
 
+	// ADODB-to-Xaraya error-to-exception bridge
+	define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
+
     // Database connection is a global (for now)
     global $dbconn;
 
@@ -219,4 +222,11 @@ function xarDB_importTables($tables)
     $xartable = array_merge($xartable, $tables);
 }
 
+// PRIVATE FUNCTIONS
+
+function xarDB__adodbErrorHandler($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
+{
+    // I need to complete it.
+    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DB_ERROR', new SystemException($errmsg));
+}
 ?>
