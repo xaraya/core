@@ -250,12 +250,12 @@ function roles_init()
 function roles_activate()
 {
     // Set up an initial value for module variables.
-    xarModSetVar('users', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
-    xarModSetVar('users', 'usersperpage', 20);
-    xarModSetVar('users', 'showtacs', 0);
-    xarModSetVar('users', 'defaultgroup', 'Users');
-    xarModSetVar('users', 'confirmationtitle', 'Confirmation Email for %%username%%');
-    xarModSetVar('users', 'welcometitle', 'Welcome to %%sitename%%');
+    xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
+    xarModSetVar('roles', 'usersperpage', 20);
+    xarModSetVar('roles', 'showtacs', 0);
+    xarModSetVar('roles', 'defaultgroup', 'Users');
+    xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
+    xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
@@ -276,26 +276,26 @@ Thank you,
 
 %%siteadmin%%';
 
-    xarModSetVar('users', 'confirmationemail', $confirmationemail);
+    xarModSetVar('roles', 'confirmationemail', $confirmationemail);
 
     $names = 'Admin
 Root
 Linux';
     $disallowednames = serialize($names);
-    xarModSetVar('users', 'disallowednames', $disallowednames);
+    xarModSetVar('roles', 'disallowednames', $disallowednames);
 
     $emails = 'none@none.com
 president@whitehouse.gov';
     $disallowedemails = serialize($emails);
-    xarModSetVar('users', 'disallowedemails', $disallowedemails);
+    xarModSetVar('roles', 'disallowedemails', $disallowedemails);
 
-    xarModSetVar('users', 'minage', 13);
+    xarModSetVar('roles', 'minage', 13);
 
     // Register blocks
-    xarBlockTypeRegister('users', 'login');
-    xarBlockTypeRegister('users', 'online');
-    xarBlockTypeRegister('users', 'user');
-    xarBlockTypeRegister('users', 'language');
+    xarBlockTypeRegister('roles', 'login');
+    xarBlockTypeRegister('roles', 'online');
+    xarBlockTypeRegister('roles', 'user');
+    xarBlockTypeRegister('roles', 'language');
 
     if (!xarModRegisterHook('item', 'search', 'GUI',
                            'users', 'user', 'search')) {
@@ -334,7 +334,7 @@ function roless_upgrade($oldVersion)
 }
 
 /**
- * Delete the users module
+ * Delete the roles module
  *
  * @access public
  * @param none
@@ -368,11 +368,11 @@ function roles_delete()
     if (!$dbconn->Execute($query)) return;
 
     // Delete any module variables
-    xarModDelVar('users', 'tacs');
-    xarModDelVar('users', 'showtacs');
-    xarModDelVar('users', 'usersperpage');
-    xarModDelVar('users', 'disallowednames');
-    xarModDelVar('users', 'disallowedemails');
+    xarModDelVar('roles', 'tacs');
+    xarModDelVar('roles', 'showtacs');
+    xarModDelVar('roles', 'usersperpage');
+    xarModDelVar('roles', 'disallowednames');
+    xarModDelVar('roles', 'disallowedemails');
 
     // Deletion successful
     return true;

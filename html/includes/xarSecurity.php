@@ -43,7 +43,9 @@ define('ACCESS_ADMIN', 800);
 	include_once 'modules/privileges/xarprivileges.php';
     $tables = array('masks' => xar . '_masks',
     				'acl' => xar. '_acl',
-    				'privileges' => xar. '_privileges');
+    				'privileges' => xar. '_privileges',
+    				'privmembers' => xar. '_privmembers',
+    				'instances' => xar. '_instances');
 
     xarDB_importTables($tables);
 
