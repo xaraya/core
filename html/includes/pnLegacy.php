@@ -294,22 +294,17 @@ function pnModRegisterHook($hookObject,
 
     // Insert hook
     $query = "INSERT INTO $hookstable (
-              xar_id,
-              xar_object,
-              xar_action,
-              xar_tarea,
-              xar_tmodule,
-              xar_ttype,
-              xar_tfunc)
-              VALUES (
-              " . xarVarPrepForStore($dbconn->GenId($hookstable)) . ",
-              '" . xarVarPrepForStore($hookObject) . "',
-              '" . xarVarPrepForStore($hookAction) . "',
-              '" . xarVarPrepForStore($hookArea) . "',
-              '" . xarVarPrepForStore($hookModName) . "',
-              '" . xarVarPrepForStore($hookModType) . "',
-              '" . xarVarPrepForStore($hookFuncName) . "')";
-    $result =& $dbconn->Execute($query);
+              xar_id, xar_object, xar_action, xar_tarea,
+              xar_tmodule, xar_ttype, xar_tfunc)
+              VALUES (?,?,?,?,?,?,?)";
+    $bindvars = array($dbconn->GenId($hookstable),
+                      $hookObject,
+                      $hookAction,
+                      $hookArea,
+                      $hookModName,
+                      $hookModType,
+                      $hookFuncName);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
@@ -344,13 +339,12 @@ function pnModUnregisterHook($hookObject,
 
     // Remove hook
     $query = "DELETE FROM $hookstable
-              WHERE xar_object = '" . xarVarPrepForStore($hookObject) . "'
-              AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
-              AND xar_tarea = '" . xarVarPrepForStore($hookArea) . "'
-              AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
-              AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
-              AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
-    $result =& $dbconn->Execute($query);
+              WHERE xar_object = ?
+              AND xar_action = ?  AND xar_tarea = ?
+              AND xar_tmodule = ? AND xar_ttype = ?
+              AND xar_tfunc = ?";
+    $bindvars = array($hookObject,$hookAction,$hookArea,$hookModName,$hookModType,$hookFuncName);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
