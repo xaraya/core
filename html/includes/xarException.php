@@ -80,7 +80,10 @@ function xarError_init($systemArgs, $whatToLoad)
  * @param value error object
  * @return void
  */
-function xarExceptionSet($major, $errorID, $value = NULL) { xarErrorSet($major, $errorID, $value); }    // deprecated
+function xarExceptionSet($major, $errorID, $value = NULL) 
+{ 
+    xarErrorSet($major, $errorID, $value); 
+}    // deprecated
 
 function xarErrorSet($major, $errorID, $value = NULL)
 {
@@ -152,7 +155,10 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * @access public
  * @return integer the major value of raised error
  */
-function xarExceptionMajor() { return xarCurrentErrorType(); }    // deprecated
+function xarExceptionMajor() 
+{ 
+    return xarCurrentErrorType(); 
+}    // deprecated
 
 function xarCurrentErrorType()
 {
@@ -172,7 +178,10 @@ function xarCurrentErrorType()
  * @access public
  * @return string the error identifier
  */
-function xarExceptionId() { return xarCurrentErrorID(); }    // deprecated
+function xarExceptionId() 
+{ 
+    return xarCurrentErrorID(); 
+}    // deprecated
 
 function xarCurrentErrorID()
 {
@@ -192,7 +201,10 @@ function xarCurrentErrorID()
  * @access public
  * @return mixed error value object
  */
-function xarExceptionValue() { return xarCurrentError(); }    // deprecated
+function xarExceptionValue() 
+{ 
+    return xarCurrentError(); 
+}    // deprecated
 
 function xarCurrentError()
 {
@@ -212,7 +224,10 @@ function xarCurrentError()
  * @access public
  * @return void
  */
-function xarExceptionFree() { xarErrorFree(); }    // deprecated
+function xarExceptionFree() 
+{ 
+    xarErrorFree(); 
+}    // deprecated
 
 function xarErrorFree()
 {
@@ -229,7 +244,10 @@ function xarErrorFree()
  * @access public
  * @return void
  */
-function xarExceptionHandled() { xarErrorHandled(); }    // deprecated
+function xarExceptionHandled() 
+{ 
+    xarErrorHandled(); 
+}    // deprecated
 
 function xarErrorHandled()
 {
@@ -255,7 +273,10 @@ function xarErrorHandled()
  * @param stacktype string one of CORE or ERROR
  * @return string the string representing the raised error
  */
-function xarExceptionRender($format) { return xarErrorRender($format); }    // deprecated
+function xarExceptionRender($format) 
+{ 
+    return xarErrorRender($format); 
+}    // deprecated
 
 function xarErrorRender($format,$stacktype = "ERROR")
 {

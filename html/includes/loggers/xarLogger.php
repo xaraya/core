@@ -45,7 +45,8 @@ class xarLogger {
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) {
+    function setConfig(&$conf) 
+    {
         $this->_maxLevel = $this->stringToLevel($conf['maxLevel']);
 
         /* If no identity is given yet to this page view, then create it */

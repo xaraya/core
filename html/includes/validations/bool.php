@@ -12,7 +12,8 @@
 /**
  * Boolean Validation Function
  */
-function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc) {
+function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc) 
+{
 
     if ($subject == 'true') {
         $subject = true;

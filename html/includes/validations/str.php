@@ -12,7 +12,8 @@
 /**
  * Strings Validation Class
  */
-function variable_validations_str (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_str (&$subject, $parameters, $supress_soft_exc) 
+{
 
     if (!is_string($subject)) {
         $msg = xarML('Not a string: "#(1)"', $subject);

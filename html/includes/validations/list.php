@@ -13,7 +13,8 @@
 /**
  * Lists Validation Function
  */
-function variable_validations_list (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_list (&$subject, $parameters, $supress_soft_exc) 
+{
 
     if (!is_array($subject)) {
         $msg = xarML('Not an array: "#(1)"', $subject);

@@ -22,7 +22,7 @@
  */
 //<nuncanada>These defines are useless if logging is not set up
 // Didnt take them out, because it would be 'ugly' to make
-// function xarLogMessage($message, $level = 255) {
+// function xarLogMessage($message, $level = 255) 
 define('XARLOG_LEVEL_EMERGENCY', 1);
 define('XARLOG_LEVEL_ALERT',     2);
 define('XARLOG_LEVEL_CRITICAL',  4);
@@ -32,7 +32,8 @@ define('XARLOG_LEVEL_NOTICE',    32);
 define('XARLOG_LEVEL_INFO',      64);
 define('XARLOG_LEVEL_DEBUG',     128);
 
-function xarLog_init($args, $whatElseIsGoingLoaded) {
+function xarLog_init($args, $whatElseIsGoingLoaded) 
+{
 
     $GLOBALS['xarLog_loggers'] = array();
 
@@ -94,7 +95,8 @@ function xarLog__shutdown_handler()
     }
 }
 
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {
+function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) 
+{
 
     if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
     // this makes a copy of the object, so the original $this->_buffer was never updated

@@ -220,7 +220,8 @@ class xarLogger_simple extends xarLogger
     * @param file $file Path to the logger file 
     * @access private
     */
-	function _ensureFileWriteable() {
+	function _ensureFileWriteable() 
+    {
         if (!file_exists($this->_filename) && 
             !is_writable(dirname($this->_filename))) {
        		die ('Logger file path given is not writeable: '.$this->_filename);

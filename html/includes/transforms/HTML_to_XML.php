@@ -1,6 +1,7 @@
 <?php
 
-function variable_transforms_HTML_to_XML ($text) {
+function variable_transforms_HTML_to_XML ($text) 
+{
 
     //Taken from Reverend's Jim feedparser
     //http://revjim.net/code/feedParser/feedParser-0.5.phps

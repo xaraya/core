@@ -25,7 +25,8 @@ class ExceptionRendering
     var $stack;
     var $linebreak = "<br/>";
 
-    function ExceptionRendering($exception = NULL){
+    function ExceptionRendering($exception = NULL)
+    {
         $this->exception = $exception;
         $this->id = $exception->getID();
         $this->major = $exception->getMajor();
@@ -71,7 +72,8 @@ class ExceptionRendering
         $this->defaults = '';
     }
 
-    function load() {
+    function load() 
+    {
         $id = $this->id;
         $this->title = array_key_exists("title", $this->defaults[$id]) ? $this->defaults[$id]['title'] : '';
         $this->short = array_key_exists("short", $this->defaults[$id]) ? $this->defaults[$id]['short'] : '';
@@ -79,16 +81,48 @@ class ExceptionRendering
         $this->hint = array_key_exists("hint", $this->defaults[$id]) ? $this->defaults[$id]['hint'] : '';
     }
 
-    function getMajor() { return $this->major; }
-    function getType() { return $this->type; }
-    function getTitle() { return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle(); }
-    function getLong() { return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); }
-    function getHint() { return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); }
-    function getShort() { return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); }
-    function getProduct() { return $this->exception->getProduct(); }
-    function getComponent() { return $this->exception->getComponent(); }
+    function getMajor() 
+    { 
+        return $this->major; 
+    }
+    
+    function getType() 
+    { 
+        return $this->type; 
+    }
+    
+    function getTitle() 
+    { 
+        return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle(); 
+    }
+    
+    function getLong() 
+    { 
+        return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); 
+    }
+    
+    function getHint() 
+    { 
+        return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); 
+    }
+    
+    function getShort() 
+    { 
+        return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); 
+    }
+    
+    function getProduct() 
+    { 
+        return $this->exception->getProduct(); 
+    }
+    
+    function getComponent() 
+    { 
+        return $this->exception->getComponent(); 
+    }
 
-    function isadmin(){
+    function isadmin()
+    {
         if (!class_exists("xarRoles"))
             return false;
 
@@ -106,14 +140,19 @@ class ExceptionRendering
         else return true;
     }
 
-    function iserrorcollection(){ return get_class($this->exception) == 'errorcollection';}
+    function iserrorcollection()
+    { 
+        return get_class($this->exception) == 'errorcollection';
+    }
 
-    function getID() {
+    function getID() 
+    {
         if ($this->iserrorcollection()) $this->id = "PHP_ERROR";
         else $this->id = $this->exception->getID();
     }
 
-    function getMsg() {
+    function getMsg() 
+    {
         if ($this->iserrorcollection()) {
           $collection = $this->exception->exceptions;
           $message = "One or more PHP errors were encountered." . $this->linebreak . $this->linebreak;
@@ -126,7 +165,8 @@ class ExceptionRendering
         else return $this->exception->getMsg();
     }
 
-    function getStack() {
+    function getStack() 
+    {
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
 
         if ($this->exception->getMajor() != XAR_USER_EXCEPTION && $this->isadmin()) {

@@ -12,7 +12,8 @@
 /**
  * Checkbox Validation Class
  */
-function variable_validations_checkbox (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_checkbox (&$subject, $parameters, $supress_soft_exc)
+{
 
     if (empty($subject) || is_null($subject)) {
         $subject = false;

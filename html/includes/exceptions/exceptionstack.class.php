@@ -15,18 +15,40 @@ class xarExceptionStack
 {
     var $stack;
 
-    function xarExceptionStack(){}
+    function xarExceptionStack()
+    {}
 
-    function isempty() { return count($this->stack) == 0; }
-    function size() { return count($this->stack); }
-    function peek() { return $this->stack[count($this->stack)-1]; }
-    function pop() {
+    function isempty() 
+    { 
+        return count($this->stack) == 0; 
+    }
+    
+    function size() 
+    { 
+        return count($this->stack); 
+    }
+    
+    function peek() 
+    { 
+        return $this->stack[count($this->stack)-1]; 
+    }
+    
+    function pop() 
+    {
         $obj = $this->stack[count($this->stack)-1];
         array_pop($this->stack);
         return $obj;
     }
-    function push($obj) { $this->stack[] = $obj;}
-    function initialize() { $this->stack = array(new NoException());}
+    
+    function push($obj) 
+    { 
+        $this->stack[] = $obj;
+    }
+    
+    function initialize() 
+    { 
+        $this->stack = array(new NoException());
+    }
 }
 
 ?>

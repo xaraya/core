@@ -368,17 +368,38 @@ class xarXmlParser
 class xarAbstractXmlHandler
 {
     // Abstract functions
-    function default_handler(){}
-    function character_data(){}
-    function open_tag(){}
-    function close_tag(){}
-    function process_instruction(){}
-    function unparsed_entity(){}
-    function notation_declaraion(){}
-    function external_entity_declaraion(){}
-    function start_namespace(){}
-    function end_namespace(){}
-    function _reset(){}
+    function default_handler()
+    {}
+
+    function character_data()
+    {}
+
+    function open_tag()
+    {}
+
+    function close_tag()
+    {}
+
+    function process_instruction()
+    {}
+
+    function unparsed_entity()
+    {}
+
+    function notation_declaraion()
+    {}
+
+    function external_entity_declaraion()
+    {}
+
+    function start_namespace()
+    {}
+
+    function end_namespace()
+    {}
+
+    function _reset()
+    {}
 }
 
 /**
@@ -749,7 +770,8 @@ function getSubTree($element_id, $tree=NULL)
  * @todo remove the @
  *
  */
-function queryTree($subtree, $query, $nodetype,$returnsubtree=false) {
+function queryTree($subtree, $query, $nodetype,$returnsubtree=false) 
+{
     $results = array();
     
     // If the node has children inspect them first, so we have simpler code in the second part (the unset)

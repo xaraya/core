@@ -35,7 +35,8 @@ class xarLogger_html extends xarLogger_simple
     *               'timeFormat'   => string      Time format to be used in the file (optional)
     * @access public
     */
-    function setConfig ($conf) {
+    function setConfig ($conf) 
+    {
         parent::setConfig($conf);
         $this->_fileheader = '<?xml version="1.0"?>
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

@@ -12,7 +12,8 @@
 /**
  * Integer Validation Class
  */
-function variable_validations_int (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_int (&$subject, $parameters, $supress_soft_exc) 
+{
 
     $value = intval($subject);
 

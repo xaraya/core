@@ -15,7 +15,8 @@ include_once "includes/exceptions/exception.class.php";
 
 class NoException extends xarException
 {
-    function NoException() {
+    function NoException() 
+    {
         $this->major = XAR_NO_EXCEPTION;
         $this->id = "NoException initialized";
         $this->title = "No Exception";

@@ -36,7 +36,8 @@
  *    e.g. $x[123][456] = 'anything'
  *
  */
-function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc) 
+{
 
     if (!is_array($subject)) {
         $msg = xarML('Not an array: "#(1)"', $subject);

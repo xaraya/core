@@ -35,7 +35,8 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
  * valdidate email
  *
  */
-function variable_validations_mxcheck (&$subject, $parameters=null, $supress_soft_exc) {
+function variable_validations_mxcheck (&$subject, $parameters=null, $supress_soft_exc) 
+{
 
     global $HTTP_HOST;
 

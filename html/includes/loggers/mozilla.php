@@ -29,7 +29,8 @@ class xarLogger_mozilla extends xarLogger
 
     var $commoncodeinserted = false;
 
-    function getCommonCode() {
+    function getCommonCode() 
+    {
         // Common javascript to get a variable which has the logmessage method
         $code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
               "var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".

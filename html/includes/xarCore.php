@@ -574,7 +574,8 @@ function xarCore_getSiteVar($name)
  * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
  * @return bool   true if file was loaded successfully, false on error (with exception set)
  */
-function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) {
+function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) 
+{
 
     if (!file_exists($fileName)) {
         if ($flags & XAR_INCLUDE_MAY_NOT_EXIST) {
@@ -697,7 +698,8 @@ EOM;
  * @param string apiType type of API to check whether allowed to load
  * @return bool
  */
-function xarCoreIsApiAllowed($apiType) {
+function xarCoreIsApiAllowed($apiType) 
+{
     // Testing for an empty API type just returns false
     if (empty($apiType)) return false;
     if (preg_match ("/api$/i", $apiType)) return false;

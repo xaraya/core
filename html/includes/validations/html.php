@@ -12,7 +12,8 @@
 /**
  * HTML Validation Class
  */
-function variable_validations_html (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_html (&$subject, $parameters, $supress_soft_exc) 
+{
 
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||

@@ -26,7 +26,8 @@ class ErrorCollection extends xarException
 {
     var $exceptions = array();
 
-    function ErrorCollection() {
+    function ErrorCollection() 
+    {
         $this->title = "PHP Error";
 //        $this->msg = xarML("Default message");
     }

@@ -24,7 +24,8 @@ class SystemMessage extends xarException
         $this->link = $link;
     }
 
-    function load($id) {
+    function load($id) 
+    {
         if (array_key_exists($id, $this->defaults)) parent::load($id);
         else {
             $this->title = $id;

@@ -12,7 +12,8 @@
 /**
  * Float Validation Function
  */
-function variable_validations_float (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_float (&$subject, $parameters, $supress_soft_exc) 
+{
 
         $value = floatval($subject);
 

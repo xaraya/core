@@ -13,7 +13,8 @@
 /**
  * notempty Validation Function
  */
-function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc) 
+{
 
     if (empty($subject)) {
         $msg = xarML('Variable "#(1)" should not be empty', $subject);

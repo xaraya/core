@@ -12,7 +12,8 @@
 /**
  * Enum Validation Function
  */
-function variable_validations_enum (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_enum (&$subject, $parameters, $supress_soft_exc) 
+{
 
     $found = false;
 

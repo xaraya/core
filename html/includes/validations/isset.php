@@ -13,7 +13,8 @@
 /**
  * IsSet Validation Function
  */
-function variable_validations_isset (&$subject, $parameters, $supress_soft_exc) {
+function variable_validations_isset (&$subject, $parameters, $supress_soft_exc) 
+{
 
     if (!isset($subject)) {
         $msg = xarML('Variable not set!');

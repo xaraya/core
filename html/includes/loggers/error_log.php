@@ -54,7 +54,8 @@ class xarLogger_error_log extends xarLogger {
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) {
+    function setConfig(&$conf) 
+    {
         parent::setConfig($conf);
         
         /* If it is given a destionation, then use it. */
