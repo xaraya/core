@@ -213,18 +213,27 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
 
     $stack = xarException__backTrace();
     if (!is_object($value)) {
-        if ($major == XAR_SYSTEM_EXCEPTION) {
-            if (is_string($value)) {
-                // FIXME: creates a loop in install, don't know how to fix properly
-                //$value = new SystemException(xarMLByKey($exceptionId, $value));
-                $value = new SystemException(xarML($value));
+        // The exception passed in is just a msg or an identifier, try to construct
+        // the object here.
+        if (is_string($value)) {
+            // A msg was passed in, use that
+            $value = xarML($value); // possibly redundant
+        } else {
+            if ($major == XAR_SYSTEM_EXCEPTION) {
+                $value = xarMLByKey($exceptionId);
             } else {
-                $value = new SystemException(xarMLByKey($exceptionId));
+                $value = xarML("No further information available.");
             }
-        } elseif ($major == XAR_USER_EXCEPTION) {
-            $value = new DefaultUserException('No further information available.');
+        }
+        
+        if ($major == XAR_SYSTEM_EXCEPTION) {
+            $value = new SystemException($value);
+        } else {
+            // FIXME: is defaulting to user exception the right thing?
+            $value = new DefaultUserException($value);
         }
     }
+    // value is now the appropriate exception object
 
     // Set new status
     $GLOBALS['xarException_stack'][] = array ('major' => $major,
