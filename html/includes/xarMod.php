@@ -128,7 +128,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
     $tables['hooks']                 = $systemPrefix . '_hooks';
 
     xarDB_importTables($tables);
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarMod__shutdown_handler');
     return true;
@@ -419,7 +419,7 @@ function xarModGetVarId($modName, $name)
         $module_varstable = $tables['site/module_vars'];
     }
 
-    $query = "SELECT xar_id FROM $module_varstable 
+    $query = "SELECT xar_id FROM $module_varstable
               WHERE xar_modid = ? AND xar_name = ?";
     $result =& $dbconn -> Execute($query,array($modBaseInfo['systemid'],$name));
 
@@ -507,7 +507,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-    
+
     switch(strtolower($type)) {
         case 'module':
         default:
@@ -593,6 +593,7 @@ function xarModGetInfo($modRegId, $type = 'module')
         case 'module':
             default:
             xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
+            xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modInfo['name'], 'modules:', 'version');
             break;
         case 'theme':
             xarCore_SetCached('Theme.Infos', $modRegId, $modInfo);
@@ -1008,7 +1009,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if (!isset($generateXMLURL)) {
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
-    
+
     // Check the global short URL setting before trying to load the URL encoding function
     // for the module.
     // Don't try and process short URLs if a custom entry point has been defined.
@@ -1365,7 +1366,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
         //         itemtypes here...
     }
     $query .= " AND xar_object = ? AND xar_action = ? ORDER BY xar_order ASC";
-    $bindvars[] = $hookObject;  
+    $bindvars[] = $hookObject;
     $bindvars[] = $hookAction;
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
@@ -1525,7 +1526,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         $modversion = array();
     }
     $version = array_merge($themeinfo, $modversion);
-    
+
     // name and id are required, assert them, otherwise the module is invalid
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
@@ -1607,7 +1608,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     // installation), since the state changes of those modules weren't taken
     // into account. The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
     // to cache module (+state) information in that case...
-    
+
     if ($type == 'module') {
         $cacheCollection = 'Mod.BaseInfos';
         $checkNoState = 'xarMod_noCacheState';
@@ -1617,7 +1618,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 //    $cacheCollection = $upperFirstLetter.'.BaseInfos';
 //    $checkNoState = 'xar'.$upperFirstLetter.'_noCacheState';
- 
+
      if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
         return xarCore_GetCached($cacheCollection, $modName);
      }
@@ -1628,10 +1629,10 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modulestable = $tables[$type.'s'];
     //The Shared Mode should not use 2 different tables!!!!!
     //It should add an extra column
-    
+
     //FIXME:
     //This is a hack while we have 2 different tables for modules states
-    //It will look in the most probable one first (SHARED) 
+    //It will look in the most probable one first (SHARED)
     $modules_statesTable = $tables['system/'.$type.'_states'];
 
     $query = "SELECT $modulestable.xar_regid,
@@ -1640,7 +1641,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
                                     $modulestable.xar_id,
                                     $modules_statesTable.xar_state
                          FROM $modulestable
-                   LEFT JOIN $modules_statesTable 
+                   LEFT JOIN $modules_statesTable
                               ON $modulestable.xar_regid = $modules_statesTable.xar_regid
                        WHERE xar_name = ? OR xar_directory = ?";
      $bindvars = array($modName, $modName);
@@ -1662,14 +1663,14 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 
     $modBaseInfo = array();
-    
+
      list($modBaseInfo['regid'],
             $modBaseInfo['directory'],
             $mode,
             $modBaseInfo['systemid'],
             $modBaseInfo['state']) = $result->fields;
      $result->Close();
- 
+
     $modBaseInfo['name'] = $modName;
     $modBaseInfo['mode'] = (int) $mode;
     $modBaseInfo['displayname'] = xarModGetDisplayableName($modName);

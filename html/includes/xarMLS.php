@@ -78,7 +78,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         // MLS will use the default locale
         xarMLS_setCurrentLocale($args['defaultLocale']);
     }
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarMLS__shutdown_handler');
     return true;
@@ -237,7 +237,7 @@ function xarML($string/*, ...*/)
     // if an empty string is passed in, just return an empty string. it's
     // the most sensible thing to do
     if(empty($string)) return '';
-    
+
     // Make sure string is sane
     $string=preg_replace('[\x0d]','',$string);
 
@@ -1474,11 +1474,11 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         } elseif (strpos($ctxType, 'core:') !== false) {
             $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
         } else {
-            die("Bad Context:" . $ctxType);
+            die("Bad Context: " . $ctxType);
         }
         $fileName = str_replace('//','/',$fileName);
         if (!file_exists($fileName)) {
-//            die("File does not exist:" . $fileName);
+//            die("File does not exist: " . $fileName);
             return false;
         }
         return $fileName;
