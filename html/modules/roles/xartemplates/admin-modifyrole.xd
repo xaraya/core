@@ -32,11 +32,11 @@ document.forms[0].submit();}
 
 	<br /><br />
 	<form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="puid" id="puid" value="#$puid#" />
+		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 		<table border="0" cellpadding="5">
-			<xar:if condition="$puid lt 5">
+			<xar:if condition="$uid lt 5">
 			<tr>
 				<td>
 					<xar:mlstring>Name</xar:mlstring>
@@ -63,7 +63,7 @@ document.forms[0].submit();}
 				</td>
 				<td>
 					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
-					<input type="hidden" name="puid" id="puid" value="#$puid#" />
+					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
 				<td width="20">
@@ -73,7 +73,7 @@ document.forms[0].submit();}
 					<xar:mlstring>Type</xar:mlstring>
 				</td>
         		<td>
-        			<select name="ptype" id="ptype"  tabindex="3" onChange="javascript:setaction('&xar-modurl-roles-admin-modifyrole;&puid=#$puid#')">
+        			<select name="ptype" id="ptype"  tabindex="3" onChange="javascript:setaction('&xar-modurl-roles-admin-modifyrole;&uid=#$uid#')">
 							<xar:if condition="$ptype eq 1">
 		                    	<option value="1" selected="selected">Group
 							<xar:else />
@@ -151,7 +151,7 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 	<tr>
-		<xar:if condition="$puid gt 4">
+		<xar:if condition="$uid gt 4">
 			<td valign="top" width ="50%">
 				<table border="0" width="100%">
 					</tr>
@@ -188,7 +188,7 @@ document.forms[0].submit();}
 					<br />
 					<input type="submit" value="Add" align="middle" tabindex="2" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
-					<input type="hidden" name="puid" id="puid" value="#$puid#" />
+					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 				</form>
 				</div>
 			</td>
@@ -208,7 +208,7 @@ document.forms[0].submit();}
 					<tr>
 						<td width="150">
 							<xar:if condition="$parentid gt 4">
-								<a href="&xar-modurl-roles-admin-modifyrole;&amp;puid=#$parentid#">
+								<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$parentid#">
 								#$parentname#
 								</a>
 							<xar:else />
@@ -226,7 +226,7 @@ document.forms[0].submit();}
 						</td>
 						<td width="50" align="right">
 							<xar:if condition="count($parents) ne 1">
-								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$puid#&amp;parentid=#$parentid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 							<xar:else />
 								&nbsp;
 							</xar:if>

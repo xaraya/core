@@ -22,8 +22,8 @@
 		<tr>
 			<td  colspan="7">
 				<b>Test Result:
-				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;puid=#$puid#">'#$pname#'</a>
-				<xar:else /><xar:mlstring>User</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;puid=#$puid#">'#$pname#'</a>
+				<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+				<xar:else /><xar:mlstring>User</xar:mlstring> <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
 				</xar:if>
 				
 				<xar:if condition="$testresult eq false"><xar:mlstring>is not admitted</xar:mlstring>
@@ -145,7 +145,7 @@
 			</td>
 		</tr>
 	</table>
-	<input type="hidden" name="puid" id="puid" value="#$puid#" />
+	<input type="hidden" name="uid" id="uid" value="#$uid#" />
 </form>
 <table border="0" width="100%" cellpadding="2">
 	<xar:if condition="count($masks) eq 0">
@@ -181,7 +181,7 @@
         <xar:foreach in="$masks" value="$mask">
 		<tr>
 			<td width="150">
-				<a href="&xar-modurl-roles-admin-testprivileges;&puid=&xar-var-puid;&name=#$mask->getName()#&test=true">				
+				<a href="&xar-modurl-roles-admin-testprivileges;&uid=&xar-var-uid;&name=#$mask->getName()#&test=true">				
 					#$mask->getName()#
 				</a>
 			</td>

@@ -19,19 +19,19 @@
 <table border="0" width="100%" cellpadding="2">
 	<tr>
 		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('puid' => $uid))#"><xar:mlstring>View All</xar:mlstring></a>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>View All</xar:mlstring></a>
 		</td>
 		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','puid' => $uid))#"><xar:mlstring>View Inactive</xar:mlstring></a>		</td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','uid' => $uid))#"><xar:mlstring>View Inactive</xar:mlstring></a>		</td>
 		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','puid' => $uid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>		</td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','uid' => $uid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>		</td>
 		<td>
 			<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
-				<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','puid' => $uid))#"><xar:mlstring>View Pending</xar:mlstring></a>
+				<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','uid' => $uid))#"><xar:mlstring>View Pending</xar:mlstring></a>
 			</xar:if>
 		</td>
 		<td>
-			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','puid' => $uid))#"><xar:mlstring>View Active</xar:mlstring></a>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','uid' => $uid))#"><xar:mlstring>View Active</xar:mlstring></a>
 		</td>
 	</tr>
     <tr>
@@ -84,7 +84,7 @@
 			<tr>
 				<td width="150">
 					<xar:if condition="$uid gt 4">
-						<a href="&xar-modurl-roles-admin-modifyrole;&amp;puid=#$uid#">				
+						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">				
 						#$name#
 						</a>
 					<xar:else />
@@ -102,17 +102,17 @@
 				</td>
 				<td>
 					<xar:if condition="$uid gt 4">
-						<a href="&xar-modurl-roles-admin-deleterole;&amp;puid=#$uid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;
 					</xar:if>
 				</td>
 				<td>
-					<a href="&xar-modurl-roles-admin-showprivileges;&amp;puid=#$uid#"
+					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"
 					title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
 				<td>
-					<a href="&xar-modurl-roles-admin-testprivileges;&amp;puid=#$uid#"
+					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#"
 					 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>

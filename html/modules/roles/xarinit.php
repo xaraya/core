@@ -130,61 +130,6 @@ function roles_init()
     if (!$dbconn->Execute($query)) return;
 
     /*********************************************************************
-    * Enter some default groups and users
-    *********************************************************************/
-
-/*	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
-			VALUES (1, 'Everybody', 1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
-			VALUES (2, 'Current', 0, 'current', 'current@xaraya.com')";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
-			VALUES (3, 'Oversight', 1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
-			VALUES (4, 'Overseer', 0, 'overseer', 'overseer@xaraya.com', md5('xaraya'))";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
-			VALUES (5, 'Admins', 1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type)
-			VALUES (6, 'Users', 1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
-			VALUES (7, 'User', 0, 'user', 'user@xaraya.com')";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_uid, xar_name, xar_type, xar_uname, xar_email)
-			VALUES (8, 'Anonymous', 0, 'anonymous', 'anonymous@xaraya.com')";
-	if (!$dbconn->Execute($query)) return;
-	*/
-
-    /*********************************************************************
-    * Arrange the roles in a hierarchy
-    * Format is
-    * makeMember(Child,Parent)
-    *********************************************************************/
-
-	/*
-	$query = "INSERT INTO xar_rolemembers VALUES (1,0)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (2,1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (3,2)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (4,3)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (5,1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (6,5)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (7,1)";
-	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (8,1)";
-	if (!$dbconn->Execute($query)) return;
-	*/
-
-    /*********************************************************************
     * prefix_user_data
     *********************************************************************/
     $query = xarDBCreateTable($tables['user_data'],
@@ -276,7 +221,7 @@ Validation Code to activate your account:  %%valcode%%
 
 If you did not create this account, then do nothing.  The account will be deemed inactive after a period of time and deleted from our records.  You will recieve no further emails from us.
 
-Thank you, 
+Thank you,
 
 %%siteadmin%%';
 

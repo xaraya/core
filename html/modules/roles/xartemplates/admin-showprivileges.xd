@@ -84,7 +84,7 @@
 				#$level#
 			</td>
 			<td align="right">
-				<a href="#$groupurl#&amp;puid=#$groupid#">				
+				<a href="#$groupurl#&amp;uid=#$groupid#">				
 				#$groupname#
 				</a>
 			</td>

@@ -280,7 +280,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'deleterole',
-				 array('puid'=>$object['uid'])) .
+				 array('uid'=>$object['uid'])) .
 				 '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -293,7 +293,7 @@ function drawbranch($node){
 				xarModURL('roles',
 					 'admin',
 					 'showusers',
-					 array('puid'=>$object['uid'])) .
+					 array('uid'=>$object['uid'])) .
 					 '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -306,7 +306,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'showprivileges',
-				 array('puid'=>$object['uid'])) .
+				 array('uid'=>$object['uid'])) .
 				 '" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -319,7 +319,7 @@ function drawbranch($node){
 			xarModURL('roles',
 				 'admin',
 				 'testprivileges',
-				 array('puid'=>$object['uid'])) .
+				 array('uid'=>$object['uid'])) .
 				 '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
 	}
 
@@ -354,7 +354,7 @@ function drawbranch($node){
 					xarModURL('roles',
 						 'admin',
 						 'modifyrole',
-						 array('puid'=>$object['uid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
+						 array('uid'=>$object['uid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
 		$this->html .= count($this->getsubgroups($object['uid'])) . ' subgroups';
 		$this->html .= ' | ' . $object['users'] . ' users</span>';
 	}

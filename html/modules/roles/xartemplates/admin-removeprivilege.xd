@@ -22,6 +22,6 @@
 
 	<input type="submit" value="Confirm" align="middle" tabindex="1" /><br /><br />
 	
-	<a href="&xar-modurl-roles-admin-showprivileges;&amp;puid=#$roleid#"><xar:mlstring>Cancel the removal</a>
+	<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$roleid#"><xar:mlstring>Cancel the removal</a>
 </form>        
 </div>
