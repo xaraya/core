@@ -919,6 +919,8 @@ class pnTpl__NodesFactory
             $node->attributes = $attributes;
             return $node;
         }
+// FIXME: how do you handle new tags registered by module developers ?
+// TODO: is pnTplRegisterTag still supposed to work for this ?
         //If we get here, the tag doesn't exist so we raise a user exception
         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                        new pnTpl__ParserError("Cannot instantiate unexistent tag '$tagName'.", $parser));
@@ -946,6 +948,9 @@ class pnTpl__NodesFactory
             case 'url':
                 $node = new pnTpl__PntUrlEntityNode();
                 break;
+            case 'baseurl':
+                $node = new pnTpl__PntBaseurlEntityNode();
+                break;
         }
         if (isset($node)) {
             $node->tagName = 'EntityNode';
@@ -957,6 +962,8 @@ class pnTpl__NodesFactory
             $node->parameters = $parameters;
             return $node;
         }
+// FIXME: how do you handle new entities registered by module developers ?
+// TODO: how do you register new entities in the first place ?
         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidEntity',
                        new pnTpl__ParserError("Cannot instantiate unexistent entity '$entityType'.", $parser));
         return;
@@ -1400,6 +1407,14 @@ class pnTpl__PntUrlEntityNode extends pnTpl__EntityNode
             $args = ', $'.$this->parameters[3];
         }
         return "pnModURL('$module', '$type', '$func'$args)";
+    }
+}
+
+class pnTpl__PntBaseurlEntityNode extends pnTpl__EntityNode
+{
+    function render()
+    {
+        return "pnServerGetBaseURL()";
     }
 }
 
@@ -1929,9 +1944,11 @@ class pnTpl__PntBlockNode extends pnTpl__TplTagNode
         // FIXME: <marco> What is this for?
         $bid = md5(pnUserGetTheme().$id);
 		
-		$contentNode = $this->children[0];
-        if (isset($contentNode)) {
-			$content = trim(addslashes($contentNode->render()));
+        if (isset($this->children) && count($this->children) > 0) {
+            $contentNode = $this->children[0];
+            if (isset($contentNode)) {
+                $content = trim(addslashes($contentNode->render()));
+            }
         }
 
         $this->children = array();

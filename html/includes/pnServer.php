@@ -25,7 +25,8 @@
 
 function pnSerReqRes_init($args)
 {
-    global $pnRequest_allowShortURLs, $pnRequest_defaultModule;
+    global $pnRequest_allowShortURLs, $pnRequest_defaultModule,
+           $pnRequest_shortURLVariables;
 
     $pnRequest_allowShortURLs = $args['enableShortURLsSupport'];
 
@@ -274,7 +275,7 @@ function pnRequestGetInfo()
                 }
                 // FIXME: <marco> Investigate this aliases thing before to integrate and promote it!
                 // Check if this is an alias for some other module
-                // $modName = pnModGetAlias($modName);
+                $modName = pnModGetAlias($modName);
                 // Call the appropriate decode_shorturl function
                 if (pnModGetVar($modName, 'SupportShortURLs') &&
                     pnModAPILoad($modName, $modType)) {

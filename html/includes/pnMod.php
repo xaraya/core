@@ -81,6 +81,11 @@ function pnMod_init($args)
 
     pnDB_importTables($tables);
 
+    // Pre-fetch all 'SupportShortURLs' variables if needed
+    if (!empty($pnMod_generateShortURLs)) {
+        pnMod_getVarsByName('SupportShortURLs');
+    }
+
     return true;
 }
 
@@ -104,9 +109,21 @@ function pnModGetVar($modName, $name)
     }
 
     if (pnVarIsCached('Mod.Variables.' . $modName, $name)) {
-        return pnVarGetCached('Mod.Variables.' . $modName, $name);
+        $value = pnVarGetCached('Mod.Variables.' . $modName, $name);
+        if ($value == '*!*MiSSiNG*!*') {
+            return;
+        } else {
+            return $value;
+        }
+    } elseif (pnVarIsCached('Mod.GetVarsByModule', $modName)) {
+        // we already got everything for this module, and didn't find it above
+        return;
+    } elseif (pnVarIsCached('Mod.GetVarsByName', $name)) {
+        // we already got everything for this name, and didn't find it above
+        return;
     }
-    // TODO: add pre-loading of all module variables for $modName
+    // TODO: add pre-loading of all module variables for $modName ?
+    // pnMod_getVarsByModule($modName);
 
     $modBaseInfo = pnMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
@@ -137,7 +154,7 @@ function pnModGetVar($modName, $name)
     }
     if ($result->EOF) {
         $result->Close();
-        pnVarSetCached('Mod.Variables.' . $modName, $name, NULL);
+        pnVarSetCached('Mod.Variables.' . $modName, $name, '*!*MiSSiNG*!*');
         return;
     }
     list($value) = $result->fields;
@@ -840,7 +857,7 @@ function pnModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args 
 
         $encoderArgs = $args;
         $encoderArgs['func'] = $funcName;
-        $path = pnModAPIFunc($modName, $modType, 'encode_shorturl', $args);
+        $path = pnModAPIFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
         if (!empty($path)) {
             if ($generateXMLURL) {
                 $path = htmlspecialchars($path);
@@ -858,7 +875,7 @@ function pnModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args 
             pnExceptionId() != 'MODULE_FILE_NOT_EXIST') {
             // In all other cases we just log the exception since we must always
             // return a valid url
-            pnLogException(PNDBG_LEVEL_ERROR);
+            pnLogException(PNLOG_LEVEL_ERROR);
         }
         pnExceptionFree();
     }
@@ -1320,6 +1337,108 @@ function pnMod_getBaseInfo($modName)
     pnVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
 
     return $modBaseInfo;
+}
+
+/**
+ * Get all module variables for a particular module
+ *
+ * @access protected
+ * @returns bool
+ * @return true on success
+ * @raise DATABASE_ERROR, BAD_PARAM
+ */
+function pnMod_getVarsByModule($modName)
+{
+    if (empty($modName)) {
+        $msg = pnML('Empty module name (#(1)).', $modName);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    $modBaseInfo = pnMod_getBaseInfo($modName);
+    if (!isset($modBaseInfo)) {
+        return; // throw back
+    }
+
+    list($dbconn) = pnDBGetConn();
+    $tables = pnDBGetTables();
+
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == PNMOD_MODE_SHARED) {
+        $module_varsTable = $tables['system/module_vars'];
+    } elseif ($modBaseInfo['mode'] == PNMOD_MODE_PER_SITE) {
+        $module_varsTable = $tables['site/module_vars'];
+    }
+
+    $query = "SELECT pn_name,
+                     pn_value
+              FROM $module_varsTable
+              WHERE pn_modname = '" . pnVarPrepForStore($modName) . "'";
+    $result = $dbconn->Execute($query);
+
+    if($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+    while (!$result->EOF) {
+        list($name,$value) = $result->fields;
+        pnVarSetCached('Mod.Variables.' . $modName, $name, $value);
+        $result->MoveNext();
+    }
+    $result->Close();
+
+    pnVarSetCached('Mod.GetVarsByModule', $modName, true);
+    return true;
+}
+
+/**
+ * Get all module variables with a particular name
+ *
+ * @access protected
+ * @returns bool
+ * @return true on success
+ * @raise DATABASE_ERROR, BAD_PARAM
+ */
+function pnMod_getVarsByName($name)
+{
+    if (empty($name)) {
+        $msg = pnML('Empty variable name (#(1)).', $name);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = pnDBGetConn();
+    $tables = pnDBGetTables();
+
+    $module_varsTable = $tables['system/module_vars'];
+// TODO: fetch from site table too ?
+//    $module_varsTable = $tables['site/module_vars'];
+
+    $query = "SELECT pn_modname,
+                     pn_value
+              FROM $module_varsTable
+              WHERE pn_name = '" . pnVarPrepForStore($name) . "'";
+    $result = $dbconn->Execute($query);
+
+    if($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        return;
+    }
+    while (!$result->EOF) {
+        list($modName,$value) = $result->fields;
+        pnVarSetCached('Mod.Variables.' . $modName, $name, $value);
+        $result->MoveNext();
+    }
+    $result->Close();
+
+    pnVarSetCached('Mod.GetVarsByName', $name, true);
+    return true;
 }
 
 // PRIVATE FUNCTIONS

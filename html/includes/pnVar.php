@@ -35,7 +35,9 @@
  */
 function pnVar_init($args)
 {
-    global $pnVar_allowableHTML, $pnVar_fixHTMLEntities, $pnVar_enableCensoringWords, $pnVar_censoredWords, $pnVar_censoredWordsReplacers;
+    global $pnVar_allowableHTML, $pnVar_fixHTMLEntities,
+           $pnVar_enableCensoringWords, $pnVar_censoredWords,
+           $pnVar_censoredWordsReplacers;
     /*
     $pnVar_allowableHTML = $args['allowableHTML'];
     $pnVar_fixHTMLEntities = $args['fixHTMLEntities'];
@@ -454,6 +456,11 @@ function pnVarCensor()
  * ...
  *
  */
+
+/**
+ * Initialise the variable cache
+ */
+$GLOBALS['pnVar_cacheCollection'] = array();
 
 /**
  * check if the value of a variable is available in cache or not
