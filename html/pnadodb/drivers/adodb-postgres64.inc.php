@@ -91,7 +91,9 @@ Unless you are very careful, you might end up with a tuple having
 a different OID if a database must be reloaded. */
 	function _insertid()
 	{
-		return pg_getlastoid($this->_resultid);
+        // XARAYA MODIFICATION - return the GenID value
+        return $this->genID;
+	//`	return pg_getlastoid($this->_resultid);
 	}
 
 // I get this error with PHP before 4.0.6 - jlim
