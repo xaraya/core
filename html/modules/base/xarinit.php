@@ -596,7 +596,7 @@ function base_init()
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0', 1, 'Core Utility', 'Global', 1, 0)";
+     ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0', 1, 'Core Utility', 'Global', 0, 0)";
 
     $dbconn->Execute($query);
 
