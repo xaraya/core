@@ -468,6 +468,8 @@ function dynamicdata_userapi_getsources($args)
 */
 
     list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
     $systemPrefix = xarDBGetSystemTablePrefix();
     $metaTable = $systemPrefix . '_tables';
 
@@ -508,6 +510,159 @@ function dynamicdata_userapi_getsources($args)
 }
 
 /**
+ * (try to) get the "static" properties, corresponding to fields in dedicated
+ * tables for this module + item type
+// TODO: allow modules to specify their own properties
+ *
+ * @author the DynamicData module development team
+ * @param $args['module'] module name of the item fields, or
+ * @param $args['modid'] module id of the item field to get
+ * @param $args['itemtype'] item type of the item field to get
+ * @returns mixed
+ * @return value of the field, or false on failure
+ * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ */
+function dynamicdata_userapi_getstatic($args)
+{
+    static $propertybag = array();
+
+    extract($args);
+
+    if (empty($modid) && !empty($module)) {
+        $modid = xarModGetIDFromName($module);
+    }
+    $modinfo = xarModGetInfo($modid);
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    $invalid = array();
+    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
+        $invalid[] = 'module id ' . xarVarPrepForDisplay($modid);
+    }
+    if (!isset($itemtype) || !is_numeric($itemtype)) {
+        $invalid[] = 'item type';
+    }
+    if (count($invalid) > 0) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    join(', ',$invalid), 'user', 'getstatic', 'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (isset($propertybag["$modid:$itemtype"])) {
+        return $propertybag["$modid:$itemtype"];
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+// TODO: support site tables as well
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $metaTable = $systemPrefix . '_tables';
+
+// TODO: allow modules to define which tables they use too
+    if ($modinfo['name'] == 'dynamicdata') {
+        // let's cheat a little for DD, because otherwise it won't find any tables :)
+        $modinfo['name'] = 'dynamic';
+    }
+    // try to get any table that starts with prefix_modulename
+    $query = "SELECT xar_tableid,
+                     xar_table,
+                     xar_field,
+                     xar_type,
+                     xar_size,
+                     xar_default,
+                     xar_increment,
+                     xar_primary_key
+              FROM $metaTable 
+              WHERE xar_table LIKE '" . xarVarPrepForStore($systemPrefix)
+                                   . '_' . xarVarPrepForStore($modinfo['name']) . '%' . "'
+              ORDER BY xar_tableid ASC";
+
+    $result =& $dbconn->Execute($query);
+
+    if (!isset($result)) return;
+
+    $static = array();
+
+    // add the list of table + field
+    while (!$result->EOF) {
+        list($id,$table, $field, $datatype, $size, $default,$increment,$primary_key) = $result->fields;
+    // TODO: what kind of security checks do we want/need here ?
+        //if (xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
+        //}
+
+        // assign some default label for now, by removing the first part (xar_)
+// TODO: let modules define this
+        $label = ucfirst(preg_replace('/^[^_]+_/','',$field));
+
+        // (try to) assign some default property type for now
+        // = obviously limited to basic data types in this case
+        switch ($datatype) {
+            case 'char':
+            case 'varchar':
+                $proptype = 2; // Text Box
+                break;
+            case 'integer':
+                $proptype = 15; // Number Box
+                break;
+            case 'float':
+                $proptype = 17; // Number Box (float)
+                break;
+            case 'boolean':
+                $proptype = 14; // Checkbox
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $proptype = 8; // Calendar
+                break;
+            case 'text':
+                $proptype = 4; // Medium Text Area
+                break;
+            case 'blob':       // caution, could be binary too !
+                $proptype = 4; // Medium Text Area
+                break;
+            default:
+                $proptype = 1; // Static Text
+                break;
+        }
+
+        // assign some default validation for now
+// TODO: improve this based on property type validations
+        $validation = $datatype;
+        $validation .= empty($size) ? '' : ' (' . $size . ')';
+
+        // try to figure out if it's the item id
+// TODO: let modules define this
+        if (!empty($increment) || !empty($primary_key)) {
+            $is_primary = 1;
+            // not allowed to modify primary key !
+            $proptype = 1; // Static Text
+        } else {
+            $is_primary = 0;
+        }
+
+        $static[$id] = array('label' => $label,
+                             'type' => $proptype,
+                             'id' => $id,
+                             'default' => $default,
+                             'source' => $table . '.' . $field,
+                             'validation' => $validation,
+                             'increment' => $increment,
+                             'is_itemid' => $is_primary);
+        $result->MoveNext();
+    }
+
+    $result->Close();
+
+    $propertybag["$modid:$itemtype"] = $static;
+    return $static;
+}
+
+/**
  * get the list of defined property types from somewhere...
  *
  * @author the DynamicData module development team
@@ -523,69 +678,199 @@ function dynamicdata_userapi_getproptypes($args)
     $proptypes = array();
 
 // TODO: replace with something else
-    $name2label = array(
-        'static'          => xarML('Static Text'),
-        'textbox'         => xarML('Text Box'),
-        'textarea_small'  => xarML('Small Text Area'),
-        'textarea_medium' => xarML('Medium Text Area'),
-        'textarea_large'  => xarML('Large Text Area'),
-// TODO: define how to fill this in (cfr. status)
-//        'dropdown'        => xarML('Dropdown List'),
-        'username'        => xarML('Username'),
-        'calendar'        => xarML('Calendar'),
-        'fileupload'      => xarML('File Upload'),
-        'status'          => xarML('Status'),
-        'url'             => xarML('URL'),
-        'image'           => xarML('Image'),
-        'webpage'         => xarML('HTML Page'),
-    );
-
-    $name2num = array(
-        'static'          => 1,
-        'textbox'         => 2,
-        'textarea_small'  => 3,
-        'textarea_medium' => 4,
-        'textarea_large'  => 5,
-// TODO: define how to fill this in (cfr. status)
-//        'dropdown'        => 6,
-        'username'        => 7,
-        'calendar'        => 8,
-        'fileupload'      => 9,
-        'status'          => 10,
-        'url'             => 11,
-        'image'           => 12,
-        'webpage'         => 13,
-    );
+    $proptypes[1] = array(
+                          'id'         => 1,
+                          'name'       => 'static',
+                          'label'      => 'Static Text',
+                          'format'     => '1',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[2] = array(
+                          'id'         => 2,
+                          'name'       => 'textbox',
+                          'label'      => 'Text Box',
+                          'format'     => '2',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[3] = array(
+                          'id'         => 3,
+                          'name'       => 'textarea_small',
+                          'label'      => 'Small Text Area',
+                          'format'     => '3',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[4] = array(
+                          'id'         => 4,
+                          'name'       => 'textarea_medium',
+                          'label'      => 'Medium Text Area',
+                          'format'     => '4',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[5] = array(
+                          'id'         => 5,
+                          'name'       => 'textarea_large',
+                          'label'      => 'Large Text Area',
+                          'format'     => '5',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[6] = array(
+                          'id'         => 6,
+                          'name'       => 'dropdown',
+                          'label'      => 'Dropdown List',
+                          'format'     => '6',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[7] = array(
+                          'id'         => 7,
+                          'name'       => 'username',
+                          'label'      => 'Username',
+                          'format'     => '7',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[8] = array(
+                          'id'         => 8,
+                          'name'       => 'calendar',
+                          'label'      => 'Calendar',
+                          'format'     => '8',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[9] = array(
+                          'id'         => 9,
+                          'name'       => 'fileupload',
+                          'label'      => 'File Upload',
+                          'format'     => '9',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[10] = array(
+                          'id'         => 10,
+                          'name'       => 'status',
+                          'label'      => 'Status',
+                          'format'     => '10',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[11] = array(
+                          'id'         => 11,
+                          'name'       => 'url',
+                          'label'      => 'URL',
+                          'format'     => '11',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[12] = array(
+                          'id'         => 12,
+                          'name'       => 'image',
+                          'label'      => 'Image',
+                          'format'     => '12',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[13] = array(
+                          'id'         => 13,
+                          'name'       => 'webpage',
+                          'label'      => 'HTML Page',
+                          'format'     => '13',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[14] = array(
+                          'id'         => 14,
+                          'name'       => 'checkbox',
+                          'label'      => 'Checkbox',
+                          'format'     => '14',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[15] = array(
+                          'id'         => 15,
+                          'name'       => 'integerbox',
+                          'label'      => 'Number Box',
+                          'format'     => '15',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[16] = array(
+                          'id'         => 16,
+                          'name'       => 'integerlist',
+                          'label'      => 'Number List',
+                          'format'     => '16',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[17] = array(
+                          'id'         => 17,
+                          'name'       => 'floatbox',
+                          'label'      => 'Number Box (float)',
+                          'format'     => '17',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[18] = array(
+                          'id'         => 18,
+                          'name'       => 'hidden',
+                          'label'      => 'Hidden',
+                          'format'     => '18',
+                          'validation' => '',
+                          // ...
+                         );
 
     // add some property types supported by utility modules
     if (xarModIsAvailable('categories') && xarModAPILoad('categories','user')) {
-        $name2label['categories'] = xarML('Categories');
-        $name2num['categories'] = 14;
+        $proptypes[100] = array(
+                                'id'         => 100,
+                                'name'       => 'categories',
+                                'label'      => 'Categories',
+                                'format'     => '100',
+                                'validation' => '',
+                                'source'     => 'hook module',
+                                // ...
+                              );
     }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','user')) {
-        $name2label['hitcount'] = xarML('Hit Count');
-        $name2num['hitcount'] = 15;
+        $proptypes[101] = array(
+                                'id'         => 101,
+                                'name'       => 'hitcount',
+                                'label'      => 'Hit Count',
+                                'format'     => '101',
+                                'validation' => '',
+                                'source'     => 'hook module',
+                                // ...
+                               );
     }
     if (xarModIsAvailable('ratings') && xarModAPILoad('ratings','user')) {
-        $name2label['ratings'] = xarML('Rating');
-        $name2num['ratings'] = 16;
+        $proptypes[102] = array(
+                                'id'         => 102,
+                                'name'       => 'ratings',
+                                'label'      => 'Rating',
+                                'format'     => '102',
+                                'validation' => '',
+                                'source'     => 'hook module',
+                                // ...
+                               );
     }
 // TODO: replace fileupload above with this one someday ?
 /*
     if (xarModIsAvailable('uploads') && xarModAPILoad('uploads','user')) {
-        $name2label['uploads'] = xarML('Upload');
-        $name2num['uploads'] = 17;
-    }
-*/
-    foreach ($name2label as $name => $label) {
-        $id = $name2num[$name];
-        $proptypes[$id] = array('id' => $id,
-                                'name' => $name,
-                                'label' => $label,
-                                'format' => $id,
-                                //...
+        $proptypes[103] = array(
+                                'id'         => 103,
+                                'name'       => 'uploads',
+                                'label'      => 'Upload',
+                                'format'     => '103',
+                                'validation' => '',
+                                'source'     => 'hook module',
+                                // ...
                                );
     }
+*/
 
 // TODO: yes :)
 /*
@@ -908,6 +1193,53 @@ function dynamicdata_userapi_showinput($args)
             }
             $output .= '</select>';
             break;
+        case 'checkbox':
+        // TODO: allow different values here, and verify $checked ?
+            $output .= '<input type="checkbox" name="'.$name.'" value="1"'.$id.$tabindex;
+            if (!empty($value)) {
+                $output .= ' checked';
+            }
+            $output .= ' />';
+            break;
+        case 'integerbox':
+            if (empty($size)) {
+                $size = 10;
+            }
+            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
+            break;
+        case 'integerlist':
+            if (!isset($selected)) {
+                if (!empty($value)) {
+                    $selected = $value;
+                } else {
+                    $selected = '';
+                }
+            }
+            if (!isset($options) || !is_array($options)) {
+                $options = array();
+            // TODO: specify how to give a range of numbers
+                if (isset($min) && isset($max)) {
+                    for ($i = $min; $i <= $max; $i++) {
+                        $options[] = array('id' => $i, 'name' => $i);
+                    }
+                }
+            }
+            $output .= '<select name="'.$name.'"'.$id.$tabindex.'>';
+            foreach ($options as $option) {
+                $output .= '<option value="'.$option['id'].'"';
+                if ($option['id'] == $selected) {
+                    $output .= ' selected';
+                }
+                $output .= '>'.$option['name'].'</option>';
+            }
+            $output .= '</select>';
+            break;
+        case 'floatbox':
+            if (empty($size)) {
+                $size = 10;
+            }
+            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
+            break;
         case 'categories':
             $output .= '// TODO: get categories select lists for this item';
             break;
@@ -1135,6 +1467,29 @@ function dynamicdata_userapi_showoutput($args)
                 $output .= $proptypes[$value]['label'];
             }
             break;
+        case 'checkbox':
+        // TODO: allow different values here, and verify $checked ?
+            if (empty($value)) {
+                $output .= xarML('no');
+            } else {
+                $output .= xarML('yes');
+            }
+            break;
+        case 'integerbox':
+            $output .= $value;
+            break;
+        case 'integerlist':
+            $output .= $value;
+            break;
+        case 'floatbox':
+        // TODO: allow precision etc.
+            if (isset($precision) && is_numeric($precision)) {
+                $output .= sprintf("%.".$precision."f",$value);
+            } else {
+                $output .= $value;
+            }
+            break;
+
         case 'categories':
             // TODO: show categories for this item
             break;

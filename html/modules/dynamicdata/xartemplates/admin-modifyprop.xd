@@ -69,4 +69,104 @@ Tip : empty label -> delete field for all items
 
 </table>
 <br />
- 
+
+<xar:if condition="count($static) gt 0">
+<table border="0" width="100%" cellspacing="1" cellpadding="8">
+    <tr>
+        <th align="center">&xar-var-statictitle;<br/>&xar-var-module;</th>
+    </tr>
+</table>
+<br />
+
+// TODO: very much under construction, obviously :-)
+<br /><br />
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<!-- don't accept updates for this (for now) -->
+<form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+    <tr>
+       <td><strong>&xar-var-labels.id;</strong></td>
+       <td><strong>&xar-var-labels.label;</strong></td>
+       <td><strong>&xar-var-labels.type;</strong></td>
+       <td><strong>&xar-var-labels.default;</strong></td>
+       <td><strong>&xar-var-labels.source;</strong></td>
+       <td><strong>&xar-var-labels.validation;</strong></td>
+       <td><strong>&xar-var-labels.is_itemid;</strong></td>
+    </tr>
+
+<xar:loop name="$static">
+    <tr align="left" valign="middle">
+        <td>&xar-var-id;</td>
+        <td><input type="text" name="static_label[&xar-var-id;]" size="15" value="&xar-var-label;" /></td>
+        <td><xar:data-input type="fieldtype" name="static_type['.$id.']" value="$type" /></td>
+        <td><input type="text" name="static_default[&xar-var-id;]" size="15" value="&xar-var-default;" /></td>
+        <td>&xar-var-source;</td>
+        <td><input type="text" name="static_validation[&xar-var-id;]" size="15" value="&xar-var-validation;" /></td>
+        <td><xar:if condition="!empty($is_itemid)"> X <xar:else /> &nbsp; </xar:if></td>
+    </tr>
+</xar:loop>
+
+</form>
+</table>
+<br />
+</xar:if> 
+
+<xar:if condition="count($relations) gt 0">
+<table border="0" width="100%" cellspacing="1" cellpadding="8">
+    <tr>
+        <th align="center">&xar-var-relationstitle;<br/>&xar-var-module;</th>
+    </tr>
+</table>
+<br />
+
+// TODO: very much under construction, obviously :-)
+<br /><br />
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<!-- don't accept updates for this (for now) -->
+<form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+    <tr>
+       <td><strong>&xar-var-labels.module;</strong></td>
+       <td><strong>&xar-var-labels.linktype;</strong></td>
+       <td><strong>&xar-var-labels.linkfrom;</strong></td>
+       <td><strong>&xar-var-labels.linkto;</strong></td>
+    </tr>
+
+<xar:loop name="$relations">
+    <xar:if condition="count($links) gt 0">
+        <xar:loop name="$links">
+        <tr align="left" valign="middle">
+            <td>#$module#</td>
+            <td>#$type#</td>
+            <td>
+                <select name="dummy">
+                <xar:loop name="$fields">
+                   <xar:if condition="$source eq $from">
+                       <option selected>#$source#</option>
+                   <xar:else />
+                       <option>#$source#</option>
+                   </xar:if>
+                </xar:loop>
+                </select>
+            </td>
+            <td>#$to#</td>
+        </tr>
+        </xar:loop>
+    <xar:else />
+        <tr align="left" valign="middle">
+            <td>&xar-var-module;</td>
+            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
+            <td>
+                <select name="dummy">
+                <xar:loop name="$fields">
+                   <option>#$source#</option>
+                </xar:loop>
+                </select>
+            </td>
+            <td>(<xar:mlstring>not found</xar:mlstring>)</td>
+        </tr>
+    </xar:if>
+</xar:loop>
+
+</form>
+</table>
+<br />
+</xar:if> 

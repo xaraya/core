@@ -92,6 +92,80 @@ function dynamicdata_admin_modifyprop()
     // Specify some labels and values for display
     $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
 
+// TODO: allow modules to specify their own properties
+    // (try to) show the "static" properties, corresponding to fields in dedicated
+    // tables for this module
+    $data['static'] = xarModAPIFunc('dynamicdata','user','getstatic',
+                                   array('modid' => $modid,
+                                         'itemtype' => $itemtype));
+    if (!isset($data['static']) || $data['static'] == false) {
+        $data['static'] = array();
+    }
+
+    $data['statictitle'] = xarML('Static Properties (guessed from module table definitions for now)');
+// TODO: handle item type too, if it's in the same table (cfr. articles for instance)
+    $data['labels']['is_itemid'] = xarML('Item ID');
+
+// TODO: allow other kinds of relationships than hooks
+    $data['relations'] = array();
+    $data['relationstitle'] = xarML('Relationships with other Modules/Properties (only item display hooks for now)');
+    $data['labels']['module'] = xarML('Module');
+    $data['labels']['linktype'] = xarML('Link Type');
+    $data['labels']['linkfrom'] = xarML('From');
+    $data['labels']['linkto'] = xarML('To');
+
+    // get the list of hook modules that are enabled for this module
+// TODO: get all hooks types, not only item display hooks
+    $hooklist = xarModGetHookList($modinfo['name'],'item','display');
+    $modlist = array();
+    foreach ($hooklist as $hook) {
+        $modlist[$hook['module']] = 1;
+    }
+    if (count($modlist) > 0) {
+        // first look for the (possible) item id field in the current module
+        $itemid = '???';
+        foreach ($data['static'] as $field) {
+            if (!empty($field['is_itemid'])) {
+                $itemid = $field['source'];
+                break;
+            }
+        }
+        // for each enabled hook module
+        foreach ($modlist as $mod => $val) {
+            // get the list of static properties for this hook module
+            $modstatic = xarModAPIFunc('dynamicdata','user','getstatic',
+                                       array('modid' => xarModGetIDFromName($mod)));
+                                       // skip this for now
+                                       //      'itemtype' => $itemtype));
+        // TODO: automatically find the link(s) on module, item type, item id etc.
+        //       or should hook modules tell us that ?
+            $links = array();
+            foreach ($modstatic as $field) {
+                // link on module name/id
+                if (preg_match('/_module$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
+                } elseif (preg_match('/_moduleid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                } elseif (preg_match('/_modid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+
+                // link on item type
+                } elseif (preg_match('/_itemtype$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemtype, 'type' => 'itemtype');
+
+                // link on item id
+                } elseif (preg_match('/_itemid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
+                } elseif (preg_match('/_iid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
+                }
+            }
+            $data['relations'][] = array('module' => $mod,
+                                         'fields' => $modstatic,
+                                         'links'  => $links);
+        }
+    }
+
     // Return the template variables defined in this function
     return $data;
 }
@@ -664,7 +738,9 @@ function dynamicdata_admin_modifyconfig()
                             'id' => xarML('ID'),
                             'name' => xarML('Name'),
                             'label' => xarML('Description'),
-                            'format' => xarML('Format'),
+                            'informat' => xarML('Input Format'),
+                            'outformat' => xarML('Display Format'),
+                            'validation' => xarML('Validation'),
                         // etc.
                             'new' => xarML('New'),
                       );

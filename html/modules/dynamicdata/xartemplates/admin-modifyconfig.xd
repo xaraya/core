@@ -35,7 +35,8 @@
 <!-- the specific template for the current admin function comes here -->
 
 <!-- some variable filled in by the admin function using this template -->
-
+<xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties</xar:mlstring>
+<br /><br />
 // TODO: very much under construction, obviously :-)
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
@@ -46,7 +47,9 @@
        <td><strong>&xar-var-labels.id;</strong></td>
        <td><strong>&xar-var-labels.name;</strong></td>
        <td><strong>&xar-var-labels.label;</strong></td>
-       <td><strong>&xar-var-labels.format;</strong></td>
+       <td><strong>&xar-var-labels.informat;</strong></td>
+       <td><strong>&xar-var-labels.outformat;</strong></td>
+       <td><strong>&xar-var-labels.validation;</strong></td>
        <td><strong>...</strong></td>
     </tr>
 
@@ -56,6 +59,8 @@
         <td><input type="text" name="name[&xar-var-id;]" size="15" value="&xar-var-name;" /></td>
         <td><input type="text" name="label[&xar-var-id;]" size="20" value="&xar-var-label;" /></td>
         <td><xar:data-input type="fieldtype" name="format['.$id.']" value="$format" /></td>
+        <td>&lt;-- see input</td>
+        <td><input type="text" name="validation[&xar-var-id;]" size="20" value="&xar-var-validation;" /></td>
         <td>...</td>
     </tr>
 </xar:loop>
@@ -65,6 +70,8 @@
         <td><input type="text" name="name[0]" size="15" /></td>
         <td><input type="text" name="label[0]" size="20" /></td>
         <td><xar:data-input type="fieldtype" name="format[0]" value="" /></td>
+        <td>&lt;-- see input</td>
+        <td><input type="text" name="validation[0]" size="20" value="" /></td>
         <td>...</td>
     </tr>
 
