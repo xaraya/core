@@ -191,11 +191,11 @@ function installer_admin_phase5()
     xarVarSetCached('installer','installing', true);
 
     // Get arguments
-    if (!xarVarFetch('install_database_host','str',$dbHost)) return;
-    if (!xarVarFetch('install_database_name','str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_username','str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_password','str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_prefix','str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_host','pre:trim:passthru:str',$dbHost)) return;
+    if (!xarVarFetch('install_database_name','pre:trim:passthru:str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_username','pre:trim:passthru:str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
@@ -410,7 +410,7 @@ function installer_admin_create_administrator()
 
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
-    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2003 ' . $name);
+    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $name);
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
