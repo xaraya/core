@@ -15,8 +15,13 @@
         </xar:mlstring>
         #$label# 
     </h2>
-<!-- this does all the hard work :) -->
-    <xar:data-list layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" startnum="$startnum" catid="$catid" sort="$sort" />
+    <xar:if condition="empty($numitems)">
+        <xar:set name="numitems">30</xar:set>
+    </xar:if>
+<xar:comment>
+    this does all the hard work :)
+</xar:comment>
+    <xar:data-list layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
     <xar:if condition="!empty($querylink)">
         <p>
             <a href="#$querylink#">
@@ -28,7 +33,9 @@
         </p>
     </xar:if>
     <xar:if condition="!empty($modlist) and count($modlist) gt 0">
-<!-- when we're viewing the Dynamic Objects themselves, show other modules -->
+<xar:comment>
+    when we're viewing the Dynamic Objects themselves, show other modules
+</xar:comment>
         <h2>
             <xar:mlstring>
                 Other Modules 
