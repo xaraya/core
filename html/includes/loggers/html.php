@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * The HTML logger
+ *
+ * @package logging
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * 
+*/
+
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/simple.php');
 
 /**

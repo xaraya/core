@@ -2,8 +2,15 @@
 /**
  * Data Store is offered by a user function
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
+ */
+
+/**
+ * Handly function data store
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_Function_DataStore extends Dynamic_DataStore
 {

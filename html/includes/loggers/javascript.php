@@ -9,8 +9,17 @@
  * @package logging
  */
 
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
+/**
+ * Javascript logger
+ *
+ * @package logging
+ */
 class xarLogger_javascript extends xarLogger
 {
     /**

@@ -2,8 +2,15 @@
 /**
  * Dynamic Static Text Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * handle static text property
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_StaticText_Property extends Dynamic_Property
 {

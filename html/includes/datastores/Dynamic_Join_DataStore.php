@@ -2,8 +2,15 @@
 /**
  * Data Store is a join between other data stores (?)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
+ */
+
+/**
+ * handle join datastore
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_Join_DataStore extends Dynamic_DataStore
 {

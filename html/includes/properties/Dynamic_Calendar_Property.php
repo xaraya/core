@@ -2,8 +2,14 @@
 /**
  * Dynamic Calendar Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Class for dynamic calendar property
+ *
+ * @package dynamicdata
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {

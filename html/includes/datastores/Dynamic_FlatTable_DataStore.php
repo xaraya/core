@@ -2,12 +2,21 @@
 /**
  * Data Store is a flat SQL table (= typical module tables)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
  */
 
+/**
+ * include the base class
+ *
+ */
 include_once "includes/datastores/Dynamic_SQL_DataStore.php";
 
+/**
+ * Class for flat table 
+ *
+ * @package dynamicdata
+ */
 class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 {
 

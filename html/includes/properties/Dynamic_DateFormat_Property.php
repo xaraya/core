@@ -2,12 +2,21 @@
 /**
  * Dynamic Date Format Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_Select_Property.php";
 
+/**
+ * Class for the date format property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
     function Dynamic_DateFormat_Property($args)

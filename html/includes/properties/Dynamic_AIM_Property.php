@@ -2,12 +2,21 @@
 /**
  * Dynamic AIM Address Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_URLIcon_Property.php";
 
+/**
+ * Class to handle the AIM property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
     function validateValue($value = null)

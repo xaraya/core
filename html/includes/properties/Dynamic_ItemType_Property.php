@@ -2,12 +2,21 @@
 /**
  * Dynamic Item Type Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_NumberBox_Property.php";
 
+/**
+ * Handle the item type property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
 // TODO: evaluate if we want some other output here

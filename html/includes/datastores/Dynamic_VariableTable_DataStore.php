@@ -2,12 +2,22 @@
 /**
  * Data Store is a variable SQL table (= only xar_dynamic_data for now)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
  */
 
+
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/datastores/Dynamic_SQL_DataStore.php";
 
+/**
+ * Data store is a variable SQL table
+ *
+ * @package dynamicdata
+ */
 class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 {
 

@@ -2,12 +2,21 @@
 /**
  * Dynamic URL Icon Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_TextBox_Property.php";
 
+/**
+ * Handle the URLIcon property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 {
     var $icon;

@@ -2,12 +2,21 @@
 /**
  * Dynamic Field Type Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_Select_Property.php";
 
+/**
+ * Class to handle field type property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
     function Dynamic_FieldType_Property($args)

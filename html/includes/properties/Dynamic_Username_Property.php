@@ -2,8 +2,15 @@
 /**
  * Dynamic Username Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * handle username property
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_Username_Property extends Dynamic_Property
 {

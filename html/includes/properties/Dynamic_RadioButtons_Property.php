@@ -2,12 +2,21 @@
 /**
  * Dynamic Radio Buttons Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_Select_Property.php";
 
+/**
+ * handle radio buttons property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
 {
     function showInput($args = array())

@@ -2,8 +2,15 @@
 /**
  * Data Store is managed by a hook/utility module
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
+ */
+
+/**
+ * Class to handle hook datastore
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_Hook_DataStore extends Dynamic_DataStore
 {

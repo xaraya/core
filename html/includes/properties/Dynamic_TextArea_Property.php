@@ -2,8 +2,14 @@
 /**
  * Dynamic Text Area Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * handle textarea property
+ *
+ * @package dynamicdata
  */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {

@@ -2,8 +2,14 @@
 /**
  * Base class for File Data Stores
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage datastores
+ */
+
+/**
+ * Base class for File Data Stores
+ *
+ * @package dynamicdata
  */
 class Dynamic_File_DataStore extends Dynamic_DataStore
 {

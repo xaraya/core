@@ -45,11 +45,20 @@
 * 
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package Log
+* @package logging
 */
 
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
+/**
+ * Simple logging class
+ *
+ * @package logging
+ */
 class xarLogger_simple extends xarLogger
 {
     /** 

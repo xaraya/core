@@ -9,9 +9,13 @@
 *
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package Log
+* @package logging
 */
 
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
 /**
@@ -19,7 +23,7 @@ include_once ('./includes/loggers/xarLogger.php');
  * abstract class which sends messages to to the web server's error log, a TCP port or to a file.
  *
  * @author  Flavio Botelho <nuncanada@xaraya.com>
- * @package Logger
+ * @package logging
  */
 class xarLogger_error_log extends xarLogger {
     //Take a look at http://br.php.net/manual/en/function.error_log.php

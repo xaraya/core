@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * Short description of purpose of file
+ *
+ * @package validation
+ * @copyright (C) 2003 by the Xaraya Development Team.
+*/
+
+
 // Taken from http://www.zend.com/codex.php?id=449&single=1
 
 /* =======================================================================
@@ -21,6 +31,10 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
 
 ========================================================================= */
 
+/**
+ * valdidate email
+ *
+ */
 function variable_validations_mxcheck (&$subject, $parameters=null) {
 
     global $HTTP_HOST;

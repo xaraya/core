@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * SQL based logger
+ *
+ * @package logging
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * 
+*/
+
+/**
+ * Include the base class
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 // Modified from the original by the Xaraya Team
 
@@ -23,7 +37,7 @@ include_once ('./includes/loggers/xarLogger.php');
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.21 $
  * @since   Horde 1.3
- * @package Log 
+ * @package logging
  */
 class xarLogger_sql extends xarLogger
 {

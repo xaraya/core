@@ -2,8 +2,14 @@
 /**
  * Data Store is the user settings (user variables per module) // TODO: integrate user variable handling with DD
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamic data
+ * @subpackage datastores
+ */
+
+/**
+ * User settings datastore
+ *
+ * @package dynamicdata
  */
 class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
 {

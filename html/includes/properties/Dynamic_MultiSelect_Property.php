@@ -2,8 +2,14 @@
 /**
  * Dynamic Multi Select Property (saved as serialized array internally)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * handle the multiselect property
+ *
+ * @package dynamicdata
  */
 class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 {

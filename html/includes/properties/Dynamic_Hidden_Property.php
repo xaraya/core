@@ -2,8 +2,14 @@
 /**
  * Dynamic Hidden Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Class to handle hidden properties
+ *
+ * @package dynamicdata
  */
 class Dynamic_Hidden_Property extends Dynamic_Property
 {

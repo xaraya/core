@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * Mozilla js console logger
+ *
+ * @package logging
+ * @copyright (C) 2003 by the Xaraya Development Team.
+*/
+
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
 /**

@@ -2,8 +2,14 @@
 /**
  * Base class for SQL Data Stores
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamic data
+ * @subpackage datastores
+ */
+
+/**
+ * Base class for SQL Data Stores
+ *
+ * @package dynamicdata
  */
 class Dynamic_SQL_DataStore extends Dynamic_DataStore
 {

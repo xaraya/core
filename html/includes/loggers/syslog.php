@@ -9,9 +9,13 @@
 *
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package Log
+* @package logging
 */
 
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
 /**
@@ -22,7 +26,7 @@ include_once ('./includes/loggers/xarLogger.php');
  * @author  Chuck Hagenbuch <chuck@horde.org>
  * @version $Revision: 1.12 $
  * @since   Horde 1.3
- * @package Log 
+ * @package logging
  */
 class xarLogger_syslog extends xarLogger {
     //Take a look at http://br.php.net/manual/en/function.openlog.php for the options/facilities

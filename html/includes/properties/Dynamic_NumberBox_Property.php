@@ -2,12 +2,21 @@
 /**
  * Dynamic Number Box Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_TextBox_Property.php";
 
+/**
+ * handle a numberbox property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
     var $size = 10;

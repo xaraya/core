@@ -4,9 +4,14 @@
  * This class implements the Logger
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
- * @package Log
+ * @package logging
  */
 
+/**
+ * Base class for all loggers
+ *
+ * @package logging 
+ */
 class xarLogger {
 
     /**

@@ -2,8 +2,14 @@
 /**
  * Dynamic Select Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Handle the select property
+ *
+ * @package dynamicdata
  */
 class Dynamic_Select_Property extends Dynamic_Property
 {

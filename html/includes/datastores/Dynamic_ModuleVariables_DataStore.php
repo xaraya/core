@@ -2,8 +2,14 @@
 /**
  * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamic data
+ * @subpackage datastores
+ */
+
+/**
+ * Class to handle module variables datastores
+ *
+ * @package dynamicdata
  */
 class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
 {

@@ -2,12 +2,21 @@
 /**
  * Dynamic HTML Page Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_Select_Property.php";
 
+/**
+ * Class to handle dynamic html page property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
     var $basedir;

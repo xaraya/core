@@ -2,12 +2,22 @@
 /**
  * Dynamic Yahoo Messenger Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_URLIcon_Property.php";
 
+/**
+ * handle yahoo property
+ *
+ * @package dynamicdata
+ *
+ */
 class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 {
     function validateValue($value = null)

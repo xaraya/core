@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * File: $Id$
+ *
+ * Short description of purpose of file
+ *
+ * @package validation
+ * @copyright (C) 2003 by the Xaraya Development Team.
+*/
+
+/**
  * Array Validation Function
  */
 function variable_validations_array (&$subject, $parameters) {

@@ -2,8 +2,14 @@
 /**
  * Dynamic Text Box Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * handle the textbox property
+ *
+ * @package dynamicdata
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {

@@ -11,7 +11,7 @@
  * @subpackage Module handling subsystem
  * @author Jim McDonald
  * @author Marco Canini <m.canini@libero.it>
- * @uathor Marcel van der Boom <marcel@xaraya.com>
+ * @aathor Marcel van der Boom <marcel@xaraya.com>
  * @todo Use serialize in module variables?
  */
 

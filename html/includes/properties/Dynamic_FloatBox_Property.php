@@ -2,12 +2,21 @@
 /**
  * Dynamic Number Box (float) Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_TextBox_Property.php";
 
+/**
+ * Class to handle floatbox property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 {
     var $size = 10;

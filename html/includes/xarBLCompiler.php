@@ -17,7 +17,10 @@
  */
 
 
-// <garett> define token for comment specifiers
+/**
+ * Defines for comment specifiers
+ *
+ */
 define('XAR_TOKEN_BL_COMMENT', 1);
 define('XAR_TOKEN_BL_COMMENT_OPEN', '<!---');
 define('XAR_TOKEN_BL_COMMENT_CLOSE', '--->');

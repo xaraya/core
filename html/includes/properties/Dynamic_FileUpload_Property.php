@@ -2,8 +2,14 @@
 /**
  * Dynamic File Upload Property (TODO: work with uploads module)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Class to handle file upload properties
+ *
+ * @package dynamicdata
  */
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {

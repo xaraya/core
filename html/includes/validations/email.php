@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * Short description of purpose of file
+ *
+ * @package validation
+ * @copyright (C) 2003 by the Xaraya Development Team.
+*/
+
+/**
+ * validate an email address
+ *
+ */
 function variable_validations_email (&$subject, $parameters=null)
 {
     if (!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $subject)) {

@@ -1,7 +1,26 @@
 <?php
 
+/**
+ * File: $Id$
+ *
+ * Windows system log
+ *
+ * @package logging
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * 
+*/
+
+/**
+ * Include the base class
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
+/**
+ * Class to handle winsys logggin
+ *
+ * @package logging
+ */
 class xarLogger_winsyslog extends xarLogger_syslog {
     /**
      * Converts a XARLOG_LEVEL* constant into a syslog LOG_* constant.

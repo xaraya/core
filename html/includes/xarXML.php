@@ -126,6 +126,7 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  * document structure and actt accordingly.
  *
  * @access public
+ * @package xml
  */
 class xarXmlParser 
 {

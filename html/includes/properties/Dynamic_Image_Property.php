@@ -2,12 +2,21 @@
 /**
  * Dynamic Image Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_TextBox_Property.php";
 
+/**
+ * handle the image property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
     function validateValue($value = null)

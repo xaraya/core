@@ -2,12 +2,22 @@
 /**
  * Dynamic URL Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * Include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_TextBox_Property.php";
 
+/**
+ * handle the URL property
+ *
+ * @package dynamicdata
+ *
+ */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
     function validateValue($value = null)

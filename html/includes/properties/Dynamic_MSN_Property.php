@@ -2,12 +2,21 @@
 /**
  * Dynamic MSN Messenger Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
  */
 
+/**
+ * include the base class
+ *
+ */
 include_once "includes/properties/Dynamic_URLIcon_Property.php";
 
+/**
+ * handle MSN property
+ *
+ * @package dynamicdata
+ */
 class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 {
     function validateValue($value = null)

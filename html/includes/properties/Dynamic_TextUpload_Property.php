@@ -2,8 +2,15 @@
 /**
  * Dynamic Text Upload Property (TODO: work with uploads module)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Handle text upload property
+ *
+ * @package dynamicdata
+ *
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {

@@ -17,11 +17,20 @@
  * @author  Ronnie Garcia <ronnie@mk2.net>
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.8 $
- * @package Log
+ * @package logging
  */
  
+/**
+ * Include the base file
+ *
+ */
 include_once ('./includes/loggers/xarLogger.php');
 
+/**
+ * Mail logger
+ *
+ * @package logging
+ */
 class xarLog_mail extends xarLogger {
 
     /** 

@@ -2,8 +2,14 @@
 /**
  * Dynamic Checkbox Property
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package dynamicdata
+ * @subpackage properties
+ */
+
+/**
+ * Class to handle check box property
+ *
+ * @package dynamicdata
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
