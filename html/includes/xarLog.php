@@ -43,26 +43,6 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
             xarCore_die('xarLog_init: Log configuration file is invalid!');
         }
 
-    //FIXME: This fallback should disappear some time after the logconfig module is consolidated 
-    } elseif (isset($args['loggerName']) && ($args['loggerName'] != NULL)) {
-        //Fallback for the older configuration within the config.php
-        
-        // If someone doesnt want logging, then dont event load any code.
-        if ($args['loggerName'] == 'dummy') {
-            //Do nothing
-        } else {
-            if (!isset($args['loggerArgs']['maxLevel'])) {
-                $args['loggerArgs']['maxLevel'] = $args['level'];
-            }
-            
-            //Lazy load these functions... With php5 this will be easier.
-            //Encapsulate core libraries in classes and let __call work lazy loading
-            xarInclude('includes/log/functions/stringtolevel.php');
-            $args['loggerArgs']['logLevel'] = 2 * (xarLog__stringToLevel($args['loggerArgs']['maxLevel'])) - 1;
-
-            $xarLogConfig[] = array('type'    => $args['loggerName'],
-                                                      'config' => $args['loggerArgs']);
-        }
     } elseif (xarLogFallbackPossible()) {
         //Fallback mechanism to allow some logging in important cases when
         //the user might now have logging yet installed, or for some reason we
