@@ -1,8 +1,11 @@
 #$recipientname#,
 
 Here is your new password for #$sitename#. You may now login to #$siteurl#
+
 using the following username and password:
+
 username: #$username#
+
 password: #$password#
 
 -- #$siteadmin#
