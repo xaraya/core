@@ -943,8 +943,6 @@
         $this->raiseErrorFn = $errorfn;
         // XARAYA MODIFICATION - END - TURN OFF/ON ERROR HANDLER
 
-		$holdtransOK = $this->_transOK;
-		$rs = @$this->Execute($getnext);
 		if (!$rs) {
 			$this->_transOK = $holdtransOK; //if the status was ok before reset
 			$createseq = $this->Execute(sprintf($this->_genSeqSQL,$seqname,$startID));
