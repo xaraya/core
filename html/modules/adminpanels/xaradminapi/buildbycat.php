@@ -19,7 +19,7 @@ function adminpanels_adminapi_buildbycat($args){
     // TODO: store our categories in module variable to be able add/remove them via interface
     $cats = array(  '1'=>'Global',
                     '2'=>'Content',
-                    '3'=>'Users & Groups',
+                    '3'=>'Users &amp; Groups',
                     '4'=>'Miscellaneous');
 
     list($dbconn) = xarDBGetConn();
