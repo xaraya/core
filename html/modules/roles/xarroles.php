@@ -1187,28 +1187,44 @@ function drawindent() {
  * @throws  none
  * @todo    none
 */
-    function getUsers() {
+    function getUsers($state='') {
 
 // set up the query and get the data
+	if ($state == '') {
 		$query = "SELECT xar_roles.xar_pid,
-					xar_roles.xar_name,
-					xar_roles.xar_type,
-					xar_roles.xar_uname,
-					xar_roles.xar_email,
-					xar_roles.xar_pass,
-					xar_roles.xar_url,
-					xar_roles.xar_auth_module
-					FROM $this->rolestable INNER JOIN $this->rolememberstable
-					ON xar_roles.xar_pid = xar_rolemembers.xar_pid
-					WHERE xar_roles.xar_type = 0
-					AND xar_rolemembers.xar_parentid = $this->pid";
+						xar_roles.xar_name,
+						xar_roles.xar_type,
+						xar_roles.xar_uname,
+						xar_roles.xar_email,
+						xar_roles.xar_pass,
+						xar_roles.xar_url,
+						xar_roles.xar_auth_module
+						FROM $this->rolestable INNER JOIN $this->rolememberstable
+						ON xar_roles.xar_pid = xar_rolemembers.xar_pid
+						WHERE xar_roles.xar_type = 0
+						AND xar_rolemembers.xar_parentid = $this->pid";
+	}
+	else {
+		$query = "SELECT xar_roles.xar_pid,
+						xar_roles.xar_name,
+						xar_roles.xar_type,
+						xar_roles.xar_uname,
+						xar_roles.xar_email,
+						xar_roles.xar_pass,
+						xar_roles.xar_url,
+						xar_roles.xar_auth_module
+						FROM $this->rolestable INNER JOIN $this->rolememberstable
+						ON xar_roles.xar_pid = xar_rolemembers.xar_pid
+						WHERE xar_roles.xar_type = 0 AND xar_state = $state
+						AND xar_rolemembers.xar_parentid = $this->pid";
+	}
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
-// arrange the data in an array of role object
+// arrange the data in an array of role objects
 		$users = array();
 		while(!$result->EOF) {
-		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($pid,$name,$type,$uname,$email,$pass,$url,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('pid'=>$pid,
 						'name'=>$name,

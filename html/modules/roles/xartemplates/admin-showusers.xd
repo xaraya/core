@@ -15,15 +15,40 @@
  window.onload = doOnLoad;
  window.onunload = doOnUnload;
 </script>
+
+<table border="0" width="100%" cellpadding="2">
+	<tr>
+		<td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('ppid' => $pid))#"><xar:mlstring>View All</xar:mlstring></a>
+		</td>
+		<td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'inactive','ppid' => $pid))#"><xar:mlstring>View Inactive</xar:mlstring></a>		</td>
+		<td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'notvalidated','ppid' => $pid))#"><xar:mlstring>View Not Validated</xar:mlstring></a>		</td>
+		<td>
+			<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
+				<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'pending','ppid' => $pid))#"><xar:mlstring>View Pending</xar:mlstring></a>
+			</xar:if>
+		</td>
+		<td>
+			<a href="#xarModURL('roles', 'admin', 'showusers', array('phase' => 'active','ppid' => $pid))#"><xar:mlstring>View Active</xar:mlstring></a>
+		</td>
+	</tr>
+    <tr>
+        <td>
+            &nbsp;
+        </td>
+    </tr>
+</table>
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <xar:mlstring>Users of Group</xar:mlstring>
+        	#$title# 
+            <xar:mlstring>of Group</xar:mlstring>
             '#$pname#'
         </th>
     </tr>
 </table>
-
 <table border="0" width="100%" cellpadding="2">
 	<tr>
 		<td width="150">
@@ -45,49 +70,57 @@
 			&nbsp;            
 		</td>
 	</tr>
-	<xar:loop name="$users">
-		<tr>
-			<td width="150">
-				<xar:if condition="$pid gt 4">
-					<a href="&xar-modurl-roles-admin-modifyrole;&amp;ppid=#$pid#">				
-					#$name#
-					</a>
-				<xar:else />
-					<b>#$name#</b>
-				</xar:if>
-			</td>
-			<td width="50">
-				#$uname#
-			</td>
-			<td width="100">
-				#$email#
-			</td>
-			<td>
-				&nbsp;
-			</td>
-			<td width="50" align="right">
-				<xar:if condition="$pid gt 4">
-					<a href="&xar-modurl-roles-admin-deleterole;&amp;ppid=#$pid#" title="Delete this User">				
-						&nbsp;Delete&nbsp;    
-					</a>
-				<xar:else />
+	<xar:if condition="count($users)==0">
+	<tr>
+	<td>
+		<em>#$message#<em>
+	</td>
+	</tr>
+	<xar:else />
+		<xar:loop name="$users">
+			<tr>
+				<td width="150">
+					<xar:if condition="$pid gt 4">
+						<a href="&xar-modurl-roles-admin-modifyrole;&amp;ppid=#$pid#">				
+						#$name#
+						</a>
+					<xar:else />
+						<b>#$name#</b>
+					</xar:if>
+				</td>
+				<td width="50">
+					#$uname#
+				</td>
+				<td width="100">
+					#$email#
+				</td>
+				<td>
 					&nbsp;
-				</xar:if>
-			</td>
-			<td width="60" align="right">
-				<a href="&xar-modurl-roles-admin-showprivileges;&amp;ppid=#$pid#"
-				title="Show the Privileges assigned to this User">				
-					&nbsp;Privileges&nbsp;    
-				</a>
-			</td>
-			<td width="30" align="right">
-				<a href="&xar-modurl-roles-admin-testprivileges;&amp;ppid=#$pid#"
-				 title="Test this User's Privileges">				
-					&nbsp;Test&nbsp;    
-				</a>
-			</td>
-		</tr>
-	</xar:loop>
+				</td>
+				<td width="50" align="right">
+					<xar:if condition="$pid gt 4">
+						<a href="&xar-modurl-roles-admin-deleterole;&amp;ppid=#$pid#" title="Delete this User">				
+							&nbsp;Delete&nbsp;    
+						</a>
+					<xar:else />
+						&nbsp;
+					</xar:if>
+				</td>
+				<td width="60" align="right">
+					<a href="&xar-modurl-roles-admin-showprivileges;&amp;ppid=#$pid#"
+					title="Show the Privileges assigned to this User">				
+						&nbsp;Privileges&nbsp;    
+					</a>
+				</td>
+				<td width="30" align="right">
+					<a href="&xar-modurl-roles-admin-testprivileges;&amp;ppid=#$pid#"
+					 title="Test this User's Privileges">				
+						&nbsp;Test&nbsp;    
+					</a>
+				</td>
+			</tr>
+		</xar:loop>
+	</xar:if>
 </table>
 <br />
 
