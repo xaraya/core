@@ -81,7 +81,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM " . join(', ', $tables) . $more . "
-                   WHERE $itemidfield = " . xarVarPrepForStore($itemid);
+                   WHERE $itemidfield = ?";
 
         if (count($this->join) > 0) {
             if (count($keys) > 0) {
@@ -92,7 +92,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array($itemid));
 
         if (!$result) return;
 
@@ -164,12 +164,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             if (is_numeric($value)) {
                 $query .= $join . $value;
             } else {
-                $query .= $join . "'" . xarVarPrepForStore($value) . "'";
+                $query .= $join . " ? ";
             }
             $join = ', ';
         }
         $query .= " )";
-        $result = & $dbconn->Execute($query);
+        $result = & $dbconn->Execute($query,array($value));
         if (!$result) return;
 
         // get the real next id from ADODB for this table now
@@ -206,6 +206,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $query = "UPDATE $table ";
         $join = 'SET ';
+        $bindvars = array();
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
@@ -215,16 +216,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 continue;
             }
             // TODO: improve this based on static table info
-            if (is_numeric($value)) {
-                $query .= $join . $field . ' = ' . $value;
-            } else {
-                $query .= $join . $field . ' = ' . "'" . xarVarPrepForStore($value) . "'";
-            }
+            $query .= $join . $field . '=?';
+            $bindvars[] = $value;
             $join = ', ';
         }
-        $query .= " WHERE $itemidfield = " . xarVarPrepForStore($itemid);
-
-        $result =& $dbconn->Execute($query);
+        $query .= " WHERE $itemidfield=?";
+        $bindvars[] = $itemid;
+        
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         return $itemid;
@@ -243,10 +242,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $dbconn =& xarDBGetConn();
 
-        $query = "DELETE FROM $table 
-                   WHERE $itemidfield = " . xarVarPrepForStore($itemid);
-
-        $result =& $dbconn->Execute($query);
+        $query = "DELETE FROM $table WHERE $itemidfield = ?";
+        
+        $result =& $dbconn->Execute($query,array($itemid));
         if (!$result) return;
 
         return $itemid;
@@ -351,10 +349,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
+        $bindvars = array();
         if (count($itemids) > 1) {
-            $query .= " $next $itemidfield IN (" . join(', ',$itemids) . ") ";
+            $bindmarkers = '?' . str_repeat(',?',count($itemids));
+            $query .= " $next $itemidfield IN ($bindmarkers) ";
+            $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
-            $query .= " $next $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
+            $query .= " $next $itemidfield = ? ";
+            $bindvars[] = $itemids[0];
         } elseif (count($this->where) > 0) {
             $query .= " $next ";
             foreach ($this->where as $whereitem) {
@@ -385,9 +387,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         if ($numitems > 0) {
-            $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+            $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
         } else {
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
         }
         if (!$result) return;
 
@@ -448,10 +450,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $query = "SELECT COUNT(DISTINCT $itemidfield)
                     FROM $table ";
 
+        $bindvars = array();
         if (count($itemids) > 1) {
-            $query .= " WHERE $itemidfield IN (" . join(', ',$itemids) . ") ";
+            $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
+            $query .= " WHERE $itemidfield IN ($bindvars) ";
+            $bindvars = $itemids;
         } elseif (count($itemids) == 1) {
-            $query .= " WHERE $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
+            $query .= " WHERE $itemidfield = ? ";
+            $bindvars[] = $itemids[0];
         } elseif (count($this->where) > 0) {
             $query .= " WHERE ";
             foreach ($this->where as $whereitem) {
@@ -461,7 +467,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result || $result->EOF) return;
 
         $numitems = $result->fields[0];
@@ -490,9 +496,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $query = "SELECT xar_field, xar_type
                     FROM $metaTable
                    WHERE xar_primary_key = 1
-                     AND xar_table='" . xarVarPrepForStore($table) . "'";
+                     AND xar_table=?";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array($table));
 
         if (!$result || $result->EOF) return;
 
@@ -544,10 +550,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                         FROM $table ";
 
+            $bindvars = array();
             if (count($itemids) > 1) {
-                $query .= " WHERE $itemidfield IN (" . join(', ',$itemids) . ") ";
+                $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
+                $query .= " WHERE $itemidfield IN ($bindmarkers) ";
+                $bindvars = $itemids;
             } elseif (count($itemids) == 1) {
-                $query .= " WHERE $itemidfield = " . xarVarPrepForStore($itemids[0]) . " ";
+                $query .= " WHERE $itemidfield = ? ";
+                $bindvars[] = $itemids[0];
             } elseif (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {
@@ -569,9 +579,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
 
             if ($numitems > 0) {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
             } else {
-                $result =& $dbconn->Execute($query);
+                $result =& $dbconn->Execute($query,$bindvars);
             }
             if (!$result) return;
             $temp['result'] =& $result;

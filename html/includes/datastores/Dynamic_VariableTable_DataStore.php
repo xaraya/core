@@ -42,14 +42,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-
-        $query = "SELECT xar_dd_propid,
-                         xar_dd_value
+        
+        $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
+        $query = "SELECT xar_dd_propid, xar_dd_value
                     FROM $dynamicdata
-                   WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
-                     AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
+                   WHERE xar_dd_propid IN ($bindmarkers)
+                     AND xar_dd_itemid = ?";
+        $bindvars = $propids;
+        $bindvars[] = $itemid;
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
 
         if (!$result) return;
 
@@ -99,20 +101,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $nextId = $dbconn->GenId($dynamicdata);
 
-            $query = "INSERT INTO $dynamicdata (
-                          xar_dd_id,
-                          xar_dd_propid,
-                          xar_dd_itemid,
-                          xar_dd_value)
-                      VALUES (
-                          $nextId,
-                          " . xarVarPrepForStore($propid) . ",
-                          " . xarVarPrepForStore($itemid) . ",
-                          '" . xarVarPrepForStore($value) . "')";
-
-            $result =& $dbconn->Execute($query);
+            $query = "INSERT INTO $dynamicdata (xar_dd_id,xar_dd_propid,xar_dd_itemid,xar_dd_value)
+                      VALUES (?,?,?,?)";
+            $bindvars = array($nextId,$propid,$itemid,$value);
+            $result =& $dbconn->Execute($query,$bindvars);
             if (!$result) return;
-
         }
 
         return $itemid;
@@ -133,13 +126,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $dynamicdata = $xartable['dynamic_data'];
 
         // get the current dynamic data fields for all properties of this item
-        $query = "SELECT xar_dd_id,
-                         xar_dd_propid
+        $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
+        $query = "SELECT xar_dd_id, xar_dd_propid
                     FROM $dynamicdata
-                   WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
-                     AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
+                   WHERE xar_dd_propid IN ($bindmarkers)
+                     AND xar_dd_itemid = ?";
+        $bindvars = $propids;
+        $bindvars[] = $itemid;
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         $datafields = array();
@@ -162,30 +157,20 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             // update the dynamic data field if it exists
             if (!empty($datafields[$propid])) {
-                $query = "UPDATE $dynamicdata
-                             SET xar_dd_value = '" . xarVarPrepForStore($value) . "'
-                           WHERE xar_dd_id = " . xarVarPrepForStore($datafields[$propid]);
-
+                $query = "UPDATE $dynamicdata SET xar_dd_value = ? WHERE xar_dd_id = ?";
+                $bindvars = array($value, $datafields[$propid]);
             // or create it if necessary (e.g. when you add properties afterwards etc.)
             } else {
                 $nextId = $dbconn->GenId($dynamicdata);
 
-                $query = "INSERT INTO $dynamicdata (
-                              xar_dd_id,
-                              xar_dd_propid,
-                              xar_dd_itemid,
-                              xar_dd_value)
-                          VALUES (
-                              $nextId,
-                              " . xarVarPrepForStore($propid) . ",
-                              " . xarVarPrepForStore($itemid) . ",
-                              '" . xarVarPrepForStore($value) . "')";
+                $query = "INSERT INTO $dynamicdata 
+                            (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
+                          VALUES (?,?,?,?)";
+                $bindvars = array($nextId,$propid,$itemid,$value);
             }
-
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
             if (!$result) return;
         }
-
         return $itemid;
     }
 
@@ -204,11 +189,14 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $dynamicdata = $xartable['dynamic_data'];
 
         // get the current dynamic data fields for all properties of this item
+        $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
         $query = "DELETE FROM $dynamicdata
-                   WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
-                     AND xar_dd_itemid = " . xarVarPrepForStore($itemid);
+                   WHERE xar_dd_propid IN ($bindmarkers)
+                     AND xar_dd_itemid = ?";
+        $bindvars = $propids;
+        $bindvars[] = $itemid;
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         return $itemid;
@@ -245,19 +233,22 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
-            $query = "SELECT xar_dd_itemid,
-                             xar_dd_propid,
-                             xar_dd_value
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
+            $query = "SELECT xar_dd_itemid, xar_dd_propid, xar_dd_value
                         FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE xar_dd_propid IN ($bindmarkers) ";
+            $bindvars = $propids;
 
             if (count($itemids) > 1) {
-                $query .= " AND xar_dd_itemid IN (" . join(', ',$itemids) . ") ";
+                $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
+                $query .= " AND xar_dd_itemid IN ($bindmarkers) ";
+                $bindvars = array_merge($bindvars, $itemids);
             } else {
-                $query .= " AND xar_dd_itemid = " . xarVarPrepForStore($itemids[0]) . " ";
+                $query .= " AND xar_dd_itemid = ?";
+                $bindvars[] = $itemids[0];
             }
 
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
 
             if (!$result) return;
 
@@ -366,7 +357,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             $result->Close();
 
-    // TODO: make sure this is portable !
+        // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0) {
 
@@ -423,13 +414,14 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // here we grab everyting
         } else {
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT xar_dd_itemid,
                              xar_dd_propid,
                              xar_dd_value
                         FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE xar_dd_propid IN ($bindmarkers)";
 
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$propids);
 
             if (!$result) return;
 
@@ -468,17 +460,22 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
                         FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE xar_dd_propid IN ($bindmarkers) ";
+            $bindvars = $propids;
 
             if (count($itemids) > 1) {
-                $query .= " AND xar_dd_itemid IN (" . join(', ',$itemids) . ") ";
+                $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
+                $query .= " AND xar_dd_itemid IN ($bindmarkers) ";
+                $bindvars = array_merge($bindvars,$itemids);
             } else {
-                $query .= " AND xar_dd_itemid = " . xarVarPrepForStore($itemids[0]) . " ";
+                $query .= " AND xar_dd_itemid = ? ";
+                $bindvars[] = $itemids[0];
             }
 
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
 
             if (!$result || $result->EOF) return;
 
@@ -488,7 +485,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             return $numitems;
 
-    // TODO: make sure this is portable !
+            // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
         } elseif (count($this->where) > 0) {
 
@@ -513,11 +510,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         // here we grab everyting
         } else {
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
                         FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE xar_dd_propid IN ($bindmarkers) ";
 
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$propids);
 
             if (!$result || $result->EOF) return;
 
@@ -565,26 +563,32 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $dynamicobjects = $xartable['dynamic_objects'];
 
         // increase the max id for this object
+        $bindvars = array();
         $query = "UPDATE $dynamicobjects
                      SET xar_object_maxid = xar_object_maxid + 1 ";
         if (!empty($objectid)) {
-            $query .= "WHERE xar_object_id = " . xarVarPrepForStore($objectid);
+            $query .= "WHERE xar_object_id = ? ";
+            $bindvars[] = $objectid;
         } else {
-            $query .= "WHERE xar_object_moduleid = " . xarVarPrepForStore($modid) . "
-                         AND xar_object_itemtype = " . xarVarPrepForStore($itemtype);
+            $query .= "WHERE xar_object_moduleid = ?
+                         AND xar_object_itemtype = ?";
+            $bindvars[] = $modid; $bindvars[] = $itemtype;
         }
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
+        $bindvars = array();
         $query = "SELECT xar_object_maxid
                     FROM $dynamicobjects ";
         if (!empty($objectid)) {
-            $query .= "WHERE xar_object_id = " . xarVarPrepForStore($objectid);
+            $query .= "WHERE xar_object_id = ? ";
+            $bindvars[] = $objectid;
         } else {
-            $query .= "WHERE xar_object_moduleid = " . xarVarPrepForStore($modid) . "
-                         AND xar_object_itemtype = " . xarVarPrepForStore($itemtype);
+            $query .= "WHERE xar_object_moduleid = ?
+                         AND xar_object_itemtype = ? ";
+            $bindvars[] = $modid; $bindvars[] = $itemtype;
         }
 
         $result =& $dbconn->Execute($query);
