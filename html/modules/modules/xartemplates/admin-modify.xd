@@ -1,6 +1,3 @@
-<!-- Insert the common header for this module -->
-<xar:template file="admin-header" type="module"/>
-
 <!-- The form for editting the module settings and hooks -->
 <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" name="authid" id="authid" value="#$authid#" />
