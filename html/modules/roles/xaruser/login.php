@@ -85,7 +85,7 @@ function roles_user_login()
                 if (empty($user) && ($extAuthentication == false))
                 {
                     $msg = xarML('Problem logging in: Invalid username or password.');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'LOGGIN_IN', new DefaultUserException($msg));
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
                 }
 
@@ -153,7 +153,7 @@ function roles_user_login()
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
                 $msg = xarML('Problem logging in: Invalid username or password.');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'LOGGIN_IN', new DefaultUserException($msg));
+                xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                 return;
             }
 
