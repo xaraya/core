@@ -269,7 +269,7 @@ function base_menublock_display($blockinfo)
                     if($modinfo){
                         $desc = $modinfo['displaydescription'];
                     } else {
-                 	      $desc = xarML('No description');
+                           $desc = xarML('No description');
                     }
 */
                     $labelDisplay = $label;
@@ -285,7 +285,7 @@ function base_menublock_display($blockinfo)
             if ($modinfo){
                 $title = $modinfo['displaydescription'];
             } else {
-            	  $title = xarML('No description');
+                  $title = xarML('No description');
             }
             $usermods[] = array('label' => xarModGetDisplayableName('roles'),
                 'link' => xarModUrl('roles', 'user', 'main'),
