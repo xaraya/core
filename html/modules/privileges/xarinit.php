@@ -275,6 +275,11 @@ function privileges_init()
     $privileges->register('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
     $privileges->register('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
     $privileges->register('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
+    $privileges->register('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
+    $privileges->register('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
+    $privileges->register('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
+    $privileges->register('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
+    $privileges->register('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy
@@ -294,6 +299,8 @@ function privileges_init()
 	//$privileges->makeMember('NoPrivileges','AddAll');
 	$privileges->makeEntry('DeleteAll');
 	//$privileges->makeMember('NoPrivileges','DeleteAll');
+	$privileges->makeEntry('AdminPrivilege');
+	$privileges->makeEntry('AdminRole');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -303,7 +310,8 @@ function privileges_init()
 
 	$privileges->assign('NoPrivileges','Everybody');
 	$privileges->assign('FullPrivileges','Oversight');
-	$privileges->assign('FullPrivileges','Overseer');
+	$privileges->assign('AdminPrivilege','Anonymous');
+	$privileges->assign('AdminRole','Anonymous');
 
     /*********************************************************************
     * Define instances for some modules
@@ -327,18 +335,21 @@ function privileges_init()
     include_once 'modules/privileges/xarprivileges.php';
     $masks = new xarMasks();
 
-    $masks->register('Gateway','All','Privileges','All','All',ACCESS_READ);
-    $masks->register('ModPrivAll','All','Privileges','ModifyPrivilege','All',ACCESS_EDIT);
-    $masks->register('AddPrivAll','All','Privileges','AddPrivilege','All',ACCESS_ADD);
-    $masks->register('DelPrivAll','All','Privileges','DelPrivilege','All',ACCESS_DELETE);
+    $masks->register('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
+    $masks->register('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
+    $masks->register('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
+    $masks->register('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
+    $masks->register('ViewPrivilegeRoles','All','Privileges','ViewRoles','All',ACCESS_READ);
+    $masks->register('RemoveRole','All','Privileges','RemoveRole','All',ACCESS_DELETE);
 
     $masks->register('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
     $masks->register('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
 
-    $masks->register('Gateway','All','Roles','All','All',ACCESS_READ);
-   	$masks->register('ModMember','All','Roles','ModifyMember','All',ACCESS_EDIT);
+    $masks->register('RolesGateway','All','Roles','All','All',ACCESS_READ);
+   	$masks->register('ViewRoles','All','Roles','ViewRoles','All',ACCESS_READ);
+   	$masks->register('ModMemberAll','All','Roles','EditMember','All',ACCESS_EDIT);
     $masks->register('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
-    $masks->register('DelMemberAll','All','Roles','DelMember','All',ACCESS_DELETE);
+    $masks->register('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
 
     // Initialisation successful
     return true;

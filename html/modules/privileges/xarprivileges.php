@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage Security Module
+ * @subpackage Privileges Module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
 */
 
@@ -73,64 +73,70 @@ class xarMasks
 	}
 
 /**
- * getmasks: returns all the current masks.
+ * getmasks: returns all the current masks for a given module and component.
  *
- * Returns an array of all the masks in the masks repository
+ * Returns an array of all the masks in the masks repository for a given module and component
  * The repository contains an entry for each mask.
  * This function will initially load the masks from the db into an array and return it.
  * On subsequent calls it just returns the array .
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
- * @return  array of masks
+ * @param   string: module name
+ * @param   string: component name
+ * @return  array of mask objects
  * @throws  list of exception identifiers which can be thrown
  * @todo    list of things which must be done to comply to relevant RFC
 */
-    function getmasks($module = 'All') {
+    function getmasks($module = 'All',$component='All') {
 
-	if ((!isset($allmasks)) || count($allmasks)==0) {
-			if ($module == '' || $module == 'All') {
-				$query = "SELECT * FROM $this->maskstable";
+		if ($module == '' || $module == 'All') {
+			if ($component == '' || $component == 'All') {
+				$query = "SELECT * FROM $this->maskstable ORDER BY xar_component";
 			}
 			else {
-				$query = "SELECT *
-						FROM $this->maskstable WHERE xar_module = '$module'
-						ORDER BY xar_name";
+				$query = "SELECT * FROM $this->maskstable
+						WHERE xar_component = '$component' ORDER BY xar_name";
 			}
-
-			$result = $this->dbconn->Execute($query);
-			if (!$result) return;
-
-			$masks = array();
-			$ind = 0;
-			while(!$result->EOF) {
-				list($sid, $name, $realm, $module, $component, $instance, $level,
-						$description) = $result->fields;
-				$ind = $ind + 1;
-				$masks[$ind] = array('sid' => $sid,
-								   'name' => $name,
-								   'realm' => $realm,
-								   'module' => $module,
-								   'component' => $component,
-								   'instance' => $instance,
-								   'level' => $this->levels[$level],
-								   'description' => $description);
-				$result->MoveNext();
-			}
-			$allmasks = $masks;
-			return $masks;
 		}
 		else {
-			return $allmasks;
+			if ($component == '' || $component == 'All') {
+				$query = "SELECT * FROM $this->maskstable
+						WHERE xar_module = '$module' ORDER BY xar_component, xar_name";
+			}
+			else {
+			$query = "SELECT *
+					FROM $this->maskstable WHERE xar_module = '$module'
+					AND xar_component = '$component'
+					ORDER BY xar_name";
+			}
 		}
+		$result = $this->dbconn->Execute($query);
+		if (!$result) return;
+
+		$masks = array();
+		while(!$result->EOF) {
+			list($sid, $name, $realm, $module, $component, $instance, $level,
+					$description) = $result->fields;
+			$pargs = array('sid' => $sid,
+							   'name' => $name,
+							   'realm' => $realm,
+							   'module' => $module,
+							   'component' => $component,
+							   'instance' => $instance,
+							   'level' => $level,
+							   'description' => $description);
+			array_push($masks, new xarMask($pargs));
+			$result->MoveNext();
+		}
+		return $masks;
     }
 
 /**
  * register: register a mask
  *
  * Creates a mask entry in the masks table
- * This function should be invoked every time a new instance is created
+ * This function should be invoked every time a new mask is created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -166,7 +172,7 @@ class xarMasks
  * unregister: unregister a mask
  *
  * Removes a mask entry from the masks table
- * This function should be invoked every time an instance is removed
+ * This function should be invoked every time a mask is removed
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -245,6 +251,8 @@ class xarMasks
 */
  	function trump($perms1, $perms2)
 	{
+		if ((($perms1 == array()) || ($perms1 == '')) &&
+			(($perms2 == array()) || ($perms2 == ''))) return array();
 		if ($perms1 == array()) return $perms2;
 		if ($perms2 == array()) return $perms1;
 
@@ -259,8 +267,8 @@ class xarMasks
 					$isimplied = true;
 					break;
 				}
-			}
 			if (!$isimplied) array_push($perms1, $perm2);
+			}
 		}
 
 // done
@@ -268,10 +276,10 @@ class xarMasks
 	}
 
 /**
- * challenge: challenge a role against a component
+ * securitycheck: check a role's privileges against the masks of a component
  *
  * Checks the current group or user's privileges against a component
- * This function should be invoked every time a a privileges check needs to be done
+ * This function should be invoked every time a security check needs to be done
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -281,27 +289,41 @@ class xarMasks
  * @todo    none
 */
 
-	function challenge($maskname,$role='')
+	function securitycheck($component,$showexception=1,$instance='',$role='',$module='')
 	{
-//	return $this->getMask($maskname);
+
+// get the masks pertaining to the current module and the component requested
+		if ($module == '') list($module) = xarRequestGetInfo();
+		$masks =  $this->getMasks($module, $component);
+		if ($masks == array()) {
+			$msg = xarML('No masks registered for component name: ') . $component;
+			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_COMPONENT',
+						   new SystemException($msg));
+        	return;
+		}
 
 // get the Roles class
 		include_once 'modules/roles/xarroles.php';
     	$roles = new xarRoles();
 
-// get the uid of the current user
-//		define('_XARSEC_UNREGISTERED', '8');
-		if (empty($userID)) {
-			$userID = xarSessionGetVar('uid');
-			if (empty($userId)) {
-//				$userID = _XARSEC_UNREGISTERED;
-				$userID = 8;
-			}
-		}
-
+// get the uid of the user we will check against
 // an empty role means take the current user
-		if ($role == '') $role = $roles->getRole($userID);
-
+// TODO: what if the id is a group?
+		if ($role == '') {
+	//		define('_XARSEC_UNREGISTERED', '8');
+			if (empty($userID)) {
+				$userID = xarSessionGetVar('uid');
+				if (empty($userId)) {
+	//				$userID = _XARSEC_UNREGISTERED;
+				}
+			}
+// default to Anonymous right now
+//		$role = $roles->getRole($userID);
+			$role = $roles->findRole('Anonymous');
+		}
+		else {
+			$role = $roles->findRole($role);
+		}
 // get the inherited ancestors of the role
 		$ancestors = $role->getAncestors();
 
@@ -357,22 +379,32 @@ class xarMasks
 		}
 
 // get the assigned privileges and winnow them
-		$roleprivileges = $role->getAssignedPrivileges();
-		$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
-
+			$roleprivileges = $role->getAssignedPrivileges();
+			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
 
-// check against the mask
+// check each privilege from the irreducible set
 		$pass = false;
 		foreach ($irreducibleset as $chiave) {
-			if ($chiave->implies($this->getMask($maskname))) {
+
+// check against each mask defined for the component
+			foreach ($masks as $mask) {
+//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
+				if ($chiave->implies($mask)) {
 
 // found a privilege that admits: return the privilege
-			return $chiave;
+				return $chiave;
+				}
 			}
 		}
 // nothing found: return false
+// check if the exception needs to be caught here or not
+		if ($showexception) {
+        $msg = xarML('No privilege for modifying this item');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+		}
 		return $pass;
 	}
 
@@ -395,13 +427,7 @@ class xarMasks
 					WHERE xar_masks.xar_name= '$name'";
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
-
-		if (count($result->fields) == 0) {
-			$msg = xarML('Unknown mask name: ') . $name;
-			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_SCHEMA',
-						   new SystemException($msg));
-        return;
-    }
+//		if ($result->EOF) return array();
 
 // reorganize the data into an array and create the masks object
 		list($sid, $name, $realm, $module, $component, $instance, $level,$description) = $result->fields;
@@ -769,7 +795,7 @@ class xarPrivileges extends xarMasks
  *
  * Returns an array of all the components that have been registered for a given module.
  * The components correspond to masks in the masks table. Each one can be used to
- * construct a privileges challenge.
+ * construct a privilege's securitycheck.
  * They are used to populate dropdowns in displays
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -848,7 +874,7 @@ class xarPrivileges extends xarMasks
 			$instances[1] = array('id' => -2,
 							   'name' => '');
 		}
-		elseif((count($result->fields) == 0) || ($result->fields[0] =='')) {
+		elseif($result->EOF) {
 			$instances[1] = array('id' => -1,
 							   'name' => 'All');
 			$instances[2] = array('id' => 0,
@@ -1131,7 +1157,7 @@ function drawbranch($node){
 	$this->html .= '<a href="' .
 			xarModURL('privileges',
 				 'admin',
-				 'showroles',
+				 'viewroles',
 				 array('pid'=>$object['pid'])) .
 				 '" title="Show the Groups/Users this Privilege is assigned to">&nbsp;Groups/Users</a>';
 
@@ -1437,16 +1463,18 @@ function drawindent() {
 		else {$xRealm = false;}
 
 		if (
-			($this->getModule() == 'All') ||
-			($this->getModule() == 'None') && ($mask->getModule() != 'All')
-			)
+			($this->getModule() == $mask->getModule()) ||
+//			($mask->getModule() == 'All') ||
+			($this->getModule() == 'All') && ($mask->getModule() != 'None')
+		)
 		{$xModule = true;}
 		else {$xModule = false;}
 
 		if (
-			($this->getComponent() == 'All') ||
-			($this->getComponent() == 'None') && ($mask->getComponent() != 'All')
-			)
+			($this->getComponent() == $mask->getComponent()) ||
+//			($mask->getComponent() == 'All') ||
+			($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
+		)
 		{$xComponent = true;}
 		else {$xComponent = false;}
 

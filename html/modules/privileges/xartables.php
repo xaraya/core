@@ -24,7 +24,7 @@ function privileges_xartables()
     $privileges = xarDBGetSiteTablePrefix() . '_privileges';
     $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
     $roles = xarDBGetSiteTablePrefix() . '_roles';
-    $rolemembers = xarDBGetSiteTablePrefix() . 'rolemembers';
+    $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
     $acl = xarDBGetSiteTablePrefix() . '_acl';
     $masks = xarDBGetSiteTablePrefix() . '_masks';
     $instances = xarDBGetSiteTablePrefix() . '_instances';
