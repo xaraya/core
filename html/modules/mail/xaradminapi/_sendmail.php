@@ -83,7 +83,10 @@ function mail_adminapi__sendmail($args)
     $message = $replace['message'];
     $htmlmessage = $replace['htmlmessage'];
 
-    ini_set("sendmail_from", $from);
+    // Bug 4219 calls this out for the silly safe mode.  That said, I am not sure we want
+    // to be doing this since mail could be from a user on the site.
+    // so it be commented out for the time being.
+    //ini_set("sendmail_from", $from);
 
     include_once 'modules/mail/xarclass/class.phpmailer.php';
 
