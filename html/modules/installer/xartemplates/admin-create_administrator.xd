@@ -16,6 +16,11 @@
                     Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the roles module. 
                 </xar:mlstring>
             </p>
+            <xar:if condition="!empty($msg)">
+                <p class="xar-error">
+                    <strong>#$msg#</strong>
+                </p>
+            </xar:if>
             <h3>
                 <xar:mlstring>
                     Administrator Information 
