@@ -69,7 +69,7 @@
             </select>
         </td>
         <td><input type="text" name="dd_validation[0]" id="dd_validation_0" size="10" /></td>
-        <td><xar:data-input property="$fieldstatusprop" name="dd_status_0" value="1" /></td>
+        <td><xar:data-input property="$fieldstatusprop" name="dd_status[0]" value="1" /></td>
     </tr>
 
 <xar:if condition="$modid eq 182">
