@@ -1,0 +1,56 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <pnt:mlstring>Users Administration</pnt:mlstring>
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-new;"><pnt:mlstring>Add
+User</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-view;"><pnt:mlstring>View
+Users</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a
+href="&pnt-modurl-users-admin-modifyconfig;"><pnt:mlstring>Modify Users
+Configuration</pnt:mlstring></a>
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center">
+
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifytac;"><pnt:mlstring>Modify
+Terms and Conditions</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a
+href="&pnt-modurl-users-admin-modifyconfirmationemail;"><pnt:mlstring>Modify
+Confirmation Email</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a
+href="&pnt-modurl-users-admin-modifywelcomeemail;"><pnt:mlstring>Modify
+Welcome Email</pnt:mlstring></a>
+        </td>
+    </tr>
+</table>
+
+
+<center>
+	<br /><br />
+	<p>
+		<pnt:if condition="$uid eq 0">
+			User could not be created.
+		<pnt:else />
+			User successfully created with UID &pnt-var-uid;	
+		</pnt:if>
+	</p>
+</center>
