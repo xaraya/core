@@ -77,7 +77,7 @@
       <tr>
         <td colspan="2">
           <xar:data-list object="$object" layout="subform" />
-          <strong>TODO: allow creating/updating of child items</strong>
+          <strong>TODO: allow removal/deleting of child items</strong>
         </td>
       </tr>
 

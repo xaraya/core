@@ -89,7 +89,7 @@
         </label>
         <label for="#$id#_title_1">
           <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1" />
-          <xar:mlstring>fixed (use dummy datastore)</xar:mlstring>
+          <xar:mlstring>fixed (use itemid field)</xar:mlstring>
         </label>
       <xar:else/>
         <label for="#$id#_title_0">
@@ -98,7 +98,7 @@
         </label>
         <label for="#$id#_title_1">
           <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1" checked="checked" />
-          <xar:mlstring>fixed (use dummy datastore)</xar:mlstring>
+          <xar:mlstring>fixed (use itemid field)</xar:mlstring>
         </label>
       </xar:if>
     </td>
