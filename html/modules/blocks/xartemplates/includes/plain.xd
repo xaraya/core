@@ -2,41 +2,13 @@
 <div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
     <table border="0" width="100%">
         <tr>
-            <th>
-                <xar:mlstring>
-                    Name 
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Groups
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Module 
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Type 
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Template 
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Status 
-                </xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>
-                    Actions 
-                </xar:mlstring>
-            </th>
+            <th><xar:mlstring>Name</xar:mlstring></th>
+            <th><xar:mlstring>Groups</xar:mlstring></th>
+            <th><xar:mlstring>Module</xar:mlstring></th>
+            <th><xar:mlstring>Type</xar:mlstring></th>
+            <th><xar:mlstring>Template</xar:mlstring></th>
+            <th><xar:mlstring>Status</xar:mlstring></th>
+            <th><xar:mlstring>Actions</xar:mlstring></th>
         </tr>
         <xar:loop name="$blocks">
             <tr>

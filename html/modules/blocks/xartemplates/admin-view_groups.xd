@@ -4,7 +4,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Groups</xar:mlstring></h2>
 
-<table cellpadding="4px">
+<table cellpadding="4" cellspacing="1" class="xar-norm-outline">
     <tr>
         <th><span class="help" title="#xarML('The group name as it is called in your theme.')#"><xar:mlstring>Group Name</xar:mlstring></span></th>
         <th><span class="help" title="#xarML('The individual instances which belong in this group in order as they appear.')#"><xar:mlstring>Group Members</xar:mlstring></span></th>
