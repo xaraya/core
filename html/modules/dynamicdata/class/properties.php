@@ -206,6 +206,10 @@ class Dynamic_Property_Master
      */
     function getPropertyTypes()
     {
+        if (xarVarIsCached('DynamicData','PropertyTypes')) {
+            return xarVarGetCached('DynamicData','PropertyTypes');
+        }
+
         // Attempt to retreive properties from DB
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -276,7 +280,7 @@ class Dynamic_Property_Master
         }
     */
 
-
+        xarVarSetCached('DynamicData','PropertyTypes',$property_types);
         return $property_types;
     }
 
