@@ -54,6 +54,9 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
     // Initialise the name of the field.
     $fieldname = '';
 
+    // Default return value (success).
+    $return = true;
+
     // TODO: input filters for use with content that is known will be
     // stored as comments etc. These filters should take the current
     // user privileges into account so, for example, admins can post
@@ -127,28 +130,25 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     // Roll up the remaining parameters.
                     $validation = implode(':', $parameters);
                     $return = xarVarValidate($validation, $subject, $supress_soft_exc);
-                    if (!$return) {
-                        if (empty($fieldname)) {
-                            return $return;
-                        } else {
-                            // Add another error message, naming the field.
-                            // Get the 'long' details of the last message logged, with the
-                            // assumption that it will contain some useful details.
-                            $errorstack = xarErrorGet();
-                            $error = array_shift($errorstack);
-                            $msg = xarML('Field #(1) is invalid. [#(2)]', $fieldname, $error['long']);
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                            return $return;
-                        }
+                    if (!$return && !empty($fieldname)) {
+                        // Add another error message, naming the field.
+                        // Combine it with the 'short' details of the last message logged,
+                        // with the assumption that it will contain some useful details.
+                        $errorstack = xarErrorGet();
+                        $error = array_shift($errorstack);
+                        $msg = xarML('#(1) is invalid. [#(2)]', $fieldname, $error['short']);
+                        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                        //return $return;
                     }
-                    // Break out of the switch and the parameter loop.
-                    break 2;
                 }
-                break;
+                // Break out of the switch *and* the parameter loop.
+                // Once we hit the passthru, we have nothing more to process here.
+                break 2;
         }
     }
     
-    return true;
+    // Single point of exit.
+    return $return;
 }
 
 ?>
