@@ -59,10 +59,10 @@ function roles_user_usermenu()
             break;
 
         case 'updatebasic':
-    if(!xarVarFetch('uid',   'isset', $uid,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('name',  'isset', $name,   , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pass1', 'isset', $pass1,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pass2', 'isset', $pass2,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('uid',   'isset', $uid,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name',  'isset', $name,   NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pass1', 'isset', $pass1,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pass2', 'isset', $pass2,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
             $uname = xarUserGetVar('uname');
             $email = xarUserGetVar('email');

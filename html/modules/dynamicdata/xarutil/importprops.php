@@ -8,10 +8,10 @@ function dynamicdata_util_importprops()
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',

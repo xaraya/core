@@ -8,10 +8,10 @@ function dynamicdata_util_static($args)
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    if(!xarVarFetch('module',   'isset', $module,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 
     $export = xarVarCleanFromInput('export');

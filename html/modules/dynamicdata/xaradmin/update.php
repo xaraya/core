@@ -11,12 +11,12 @@ function dynamicdata_admin_update($args)
 {
     extract($args);
 
-    if(!xarVarFetch('objectid',   'isset', $objectid,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',      'isset', $modid,       , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype',   'isset', $itemtype,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemid',     'isset', $itemid,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('return_url', 'isset', $return_url,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('preview',    'isset', $preview,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',      'isset', $modid,       NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype',   'isset', $itemtype,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('preview',    'isset', $preview,     NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 

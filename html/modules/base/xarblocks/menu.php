@@ -360,10 +360,10 @@ function base_menublock_insert($blockinfo)
     $content = array();
     $c = 1;
     if (isset($blockinfo['linkname'])) {
-    if(!xarVarFetch('linkurl',   'isset', $linkurl,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('linkname',  'isset', $linkname,   , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('linkdesc',  'isset', $linkdesc,   , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('linkchild', 'isset', $linkchild,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('linkurl',   'isset', $linkurl,   NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('linkname',  'isset', $linkname,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('linkdesc',  'isset', $linkdesc,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('linkchild', 'isset', $linkchild, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
         foreach ($blockinfo['linkname'] as $v) {
             if (!isset($blockinfo['linkdelete'][$c])) {

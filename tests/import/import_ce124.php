@@ -17,9 +17,9 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-list($step,
-     $startnum) = xarVarCleanFromInput('step',
-                                       'startnum');
+    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -38,7 +38,8 @@ $prefix = xarDBGetSystemTablePrefix();
 // Get user entered information about the old database (from Form or mod_vars)
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-        //list($oldprefix) = xarVarCleanFromInput('oldprefix');
+        //    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+
         $oldprefix = "nuke";
         echo "GOT $oldprefix<br>";
     } elseif ($step > 1 || isset($startnum)) {

@@ -3,14 +3,14 @@
 function roles_user_search()
 {
 
-    if(!xarVarFetch('startnum', 'isset', $startnum,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('email',    'isset', $email,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('uname',    'isset', $uname,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('q',        'isset', $q,         , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('bool',     'isset', $bool,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('sort',     'isset', $sort,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('author',   'isset', $author,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('email',    'isset', $email,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('uname',    'isset', $uname,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('q',        'isset', $q,         NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('bool',     'isset', $bool,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('author',   'isset', $author,    NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 
     $data = array();

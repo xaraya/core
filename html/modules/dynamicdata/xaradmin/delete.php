@@ -9,11 +9,11 @@ function dynamicdata_admin_delete($args)
 {
    extract($args);
  
-    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('confirm',  'isset', $confirm,   , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('confirm',  'isset', $confirm,   NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',

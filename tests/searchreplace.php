@@ -2,6 +2,8 @@
 
 $GLOBALS['called'] = false;
 
+set_time_limit(360);
+
 function replace( $matches )
 {
     $GLOBALS['called'] = true;
@@ -26,11 +28,11 @@ function replace( $matches )
         $localmax1 = $max1-strlen($list1[$key]) + 1;
         $localmax2 = $max2-strlen($list2[$key]) + 1;
 
-        $text .= "    if(!xarVarFetch(${list2[$key]},";
+        $text .= "    if (!xarVarFetch(${list2[$key]},";
         for ($i=0;$i<$localmax2;$i++) $text.=' ';
         $text .= "'isset', ${list1[$key]},";
         for ($i=0;$i<$localmax1;$i++) $text.=' ';
-        $text .= " , XARVAR_NOT_REQUIRED)) {return;}\r\n";
+        $text .= " NULL, XARVAR_NOT_REQUIRED)) {return;}\r\n";
     }
     return $text;
 //    return array ($matches[0] => $text);
