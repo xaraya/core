@@ -81,7 +81,7 @@ xarSerReqRes_init($systemArgs, $whatToLoad);
 // Start BlockLayout Template Engine
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory' => 'themes',
-                    'defaultThemeDir' => 'installer');
+                    'defaultThemeDir' => 'Xaraya_Classic');
 xarTpl_init($systemArgs, $whatToLoad);
 
 
@@ -140,8 +140,8 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Make sure we can render a page
     xarTplSetPageTitle('Xaraya installer');
-    if (!xarTplSetThemeName('installer')) {
-        xarCore_die('You need the installer theme if you want to install Xaraya.');
+    if (!xarTplSetThemeName('Xaraya_Classic')) {
+        xarCore_die('You need the Xaraya_Classic theme if you want to install Xaraya.');
     }
 
     // Handle installation phase designation
@@ -212,8 +212,8 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Here we check for exceptions even if $res isn't empty
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
 
-    // Render page
-    $pageOutput = xarTpl_renderPage($mainModuleOutput);
+    // Render page using the installer.xt page template
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
 
     // Handle exceptions
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {

@@ -468,16 +468,21 @@ function xarTplGetImage($modImage, $modName = NULL)
     }
 
     // obtain current module name if not specified
+    // FIXME: make a fallback for weird requests
     if(!isset($modName)){
         list($modName) = xarRequestGetInfo();
     }
 
     // get module directory (could be different from module name)
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-
-    if (!isset($modBaseInfo)) return; // throw back
-
-    $modOsDir = $modBaseInfo['osdirectory'];
+    if(function_exists('xarMod_getBaseInfo')) {
+        xarLogMessage('xarMod_getBaseInfo exists already?');
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        if (!isset($modBaseInfo)) return; // throw back
+        $modOsDir = $modBaseInfo['osdirectory'];
+    } else {
+        // Assume dir = modname
+        $modOsDir = $modName;
+    }
 
     // relative url to the current module's image
     $moduleImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;

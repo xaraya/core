@@ -1,0 +1,133 @@
+body {
+	background-color: #FFFFFF;
+	color: #000000;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	text-align: center;
+	margin: 10px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+#main {
+	background-color: transparent;
+	vertical-align: bottom;
+	position: relative;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #000000;
+	width: 760px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#install {
+	background-color: transparent;
+	position: relative;
+	float: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #000000;
+	width: 440px;
+	padding: 10px;
+	margin: 0px 15px 10px 10px;
+	text-align: justify;
+}
+
+#status {
+	background-color: transparent;
+	font-weight: bold;
+	position: relative;
+	float: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #000000;
+	width: 225px;
+	padding: 5px;
+	margin: 0px 10px 0px 10px;
+	text-align: left;
+	line-height: 15px;
+}
+
+.complete {
+	background-color: transparent;
+	color: #4B0A86;
+	font-size: 10pt;
+	line-height: 20px;
+	text-decoration: line-through;
+}
+
+.active {
+	background-color: transparent;
+	color: #8200A8;
+	font-size: 10pt;
+	line-height: 20px;
+}
+
+.greyed {
+	background-color: transparent;
+	color: #B0B0B0;
+	font-size: 10pt;
+	line-height: 20px;
+}
+
+.xar-pagetitle {
+	background-color: transparent;
+	color: #4B0A86;
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+.xar-normal {
+	color: #000000;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+
+.xar-normal a:link {
+	color: #8200A8;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.xar-normal a:visited {
+	color: #4B0A86;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.xar-normal a:hover {
+	color: #4B0A86;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration: overline underline;
+}
+
+.xar-normal a:active {
+	color: #4B0A86;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration: overline underline;
+}
+
+.xar-title p strong {
+	color: #4B0A86;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+	font-weight: bold;
+}
+
+.xar-title p { text-align: left; }
+
+#status p {
+	line-height: 2em;
+	padding:0;
+	margin:0;
+}
