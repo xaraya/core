@@ -95,7 +95,7 @@ function base_versionsapi_compare($args)
     }
 
     // Explode the strings into arrays for comparing, if not already done.
-    if (!is_array($verl)) {$ver1 = explode($sep, $ver1);}
+    if (!is_array($ver1)) {$ver1 = explode($sep, $ver1);}
     if (!is_array($ver2)) {$ver2 = explode($sep, $ver2);}
 
     // Get the highest number of levels in a version.
