@@ -1177,10 +1177,10 @@ Password : %%password%%
 
                     $result->MoveNext();
                 }
+                // Close result set
+                $result->Close();
             }
 
-            // Close result set
-            $result->Close();
         } else {
             echo "Table $module_states_table does not require updating<br/>";
         }
