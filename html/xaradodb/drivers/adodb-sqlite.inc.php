@@ -260,6 +260,9 @@ class ADODB_sqlite extends ADOConnection {
      */
     function &Execute($sql,$inputarr=false)
     {
+        // Sqlite doesnt like backquotes, get rid of em
+        $sql = str_replace('`','',$sql);
+        
         if(strtolower(substr(ltrim($sql),0,5))=='alter') {
             $queryparts = preg_split("/[\s]+/",$sql,4,PREG_SPLIT_NO_EMPTY);
             $tablename = $queryparts[2];
