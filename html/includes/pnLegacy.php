@@ -1204,7 +1204,6 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL)
 function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
 {
     return xarDBDropIndex($tableName, $fields, $databaseType);
->>>>>>>
 }
 
 /**
