@@ -1,4 +1,6 @@
-ADOdb is dual licensed using BSD-Style and LGPL. Where there is any discrepancy, the BSD-Style license will take precedence.
+ADOdb is dual licensed using BSD-Style and LGPL. Where there is any discrepancy, the BSD-Style license will take precedence. In plain English, you do not need to distribute your application  in source code form, nor do you need to distribute ADOdb source code, provided you follow the rest of terms of the BSD-style license.
+
+Commercial use of ADOdb is encouraged. Make money and multiply!
 
 BSD Style-License
 =================

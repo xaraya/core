@@ -40,7 +40,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_password" maxlength="80" value="">
+            <input type="password" name="install_admin_password" maxlength="80" value="">
         </td>
     </tr>
     <tr>
@@ -60,7 +60,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_url" maxlength="10" value="<?php echo pnGetBaseURL(); ?>">
+            <input type="text" name="install_admin_url" maxlength="255" value="<?php echo pnGetBaseURL(); ?>">
         </td>
     </tr>
     <tr>

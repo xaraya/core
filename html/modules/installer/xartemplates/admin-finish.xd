@@ -9,6 +9,8 @@
                 <b>Congratulations, you have successfully installed <pnt:var name="Version_ID" scope="config" /> <pnt:var name="Version_Num" scope="config" /> ("<pnt:var name="Version_Sub" scope="config" />")!</b>
                 <br /><br />
                 Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
+            <br /><br />
+	    <a href=index.php>Launch the site!</a>
             </span>
             <br /><br />
         </td>

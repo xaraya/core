@@ -1,7 +1,7 @@
 <?php
 /*
 
-  version V2.42 4 Oct 2002 (c) 2000-2002 John Lim. All rights reserved.
+  version V2.50 14 Nov 2002 (c) 2000-2002 John Lim. All rights reserved.
 
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
@@ -63,6 +63,7 @@ class ADODB_oci8 extends ADOConnection {
 	var $firstrows = true; // enable first rows optimization on SelectLimit()
 	var $selectOffsetAlg1 = 100; // when to use 1st algorithm of selectlimit.
 	var $NLS_DATE_FORMAT = 'YYYY-MM-DD';
+ 	var $useDBDateFormatForTextInput=false;
 	
 	// var $ansiOuter = true; // if oracle9
     
@@ -100,7 +101,7 @@ NATSOFT.DOMAIN =
 	
 */
 	// returns true or false
-	function _connect($argHostname, $argUsername, $argPassword, $argDatabasename,$persist=false)
+	function _connect($argHostname, $argUsername, $argPassword, $argDatabasename,$persist=false, $new=false)
 	{
 		if($argHostname) { // added by Jorma Tuomainen <jorma.tuomainen@ppoy.fi>
 			if(strpos($argHostname,":")) {
@@ -120,9 +121,13 @@ NATSOFT.DOMAIN =
 		}
 				
  		//if ($argHostname) print "<p>Connect: 1st argument should be left blank for $this->databaseType</p>";
-	   if ($persist)$this->_connectionID = OCIPLogon($argUsername,$argPassword, $argDatabasename);
-	   else $this->_connectionID = OCILogon($argUsername,$argPassword, $argDatabasename);
-		
+		if ($persist) {
+			$this->_connectionID = OCIPLogon($argUsername,$argPassword, $argDatabasename);
+		} else if ($new) {
+			$this->_connectionID = OCINLogon($argUsername,$argPassword, $argDatabasename);
+		} else {
+			$this->_connectionID = OCILogon($argUsername,$argPassword, $argDatabasename);
+		}
 		if ($this->_connectionID === false) return false;
 		if ($this->_initdate) {
 			$this->Execute("ALTER SESSION SET NLS_DATE_FORMAT='".$this->NLS_DATE_FORMAT."'");
@@ -141,7 +146,12 @@ NATSOFT.DOMAIN =
 	{
 		return $this->_connect($argHostname, $argUsername, $argPassword, $argDatabasename,true);
 	}
-
+	
+	// returns true or false
+	function _nconnect($argHostname, $argUsername, $argPassword, $argDatabasename)
+	{
+		return $this->_connect($argHostname, $argUsername, $argPassword, $argDatabasename,false, true);
+	}
 	
 	function Affected_Rows()
 	{
@@ -154,8 +164,9 @@ NATSOFT.DOMAIN =
 		if (empty($d) && $d !== 0) return 'null';
 		
 		if (is_string($d)) $d = ADORecordSet::UnixDate($d);
-		return 'TO_DATE('.date($this->fmtDate,$d).",'YYYY-MM-DD')";
+		return "TO_DATE(".date($this->fmtDate,$d).",'".$this->NLS_DATE_FORMAT."')";
 	}
+
 	
 	// format and return date string in database timestamp format
 	function DBTimeStamp($ts)
@@ -173,6 +184,8 @@ NATSOFT.DOMAIN =
 	
 	function BeginTrans()
 	{	
+		if ($this->transOff) return true;
+		$this->transCnt += 1;
 		$this->autoCommit = false;
 		$this->_commit = OCI_DEFAULT;
 		return true;
@@ -180,7 +193,10 @@ NATSOFT.DOMAIN =
 	
 	function CommitTrans($ok=true) 
 	{ 
+		if ($this->transOff) return true;
 		if (!$ok) return $this->RollbackTrans();
+		
+		if ($this->transCnt) $this->transCnt -= 1;
 		$ret = OCIcommit($this->_connectionID);
 		$this->_commit = OCI_COMMIT_ON_SUCCESS;
 		$this->autoCommit = true;
@@ -189,6 +205,8 @@ NATSOFT.DOMAIN =
 	
 	function RollbackTrans()
 	{
+		if ($this->transOff) return true;
+		if ($this->transCnt) $this->transCnt -= 1;
 		$ret = OCIrollback($this->_connectionID);
 		$this->_commit = OCI_COMMIT_ON_SUCCESS;
 		$this->autoCommit = true;
@@ -342,7 +360,7 @@ NATSOFT.DOMAIN =
 			 
 			 $ncols = OCINumCols($stmt);
 			 for ( $i = 1; $i <= $ncols; $i++ ) {
-				 $cols[] = '"'.OCIColumnName($stmt, $i)."'";
+				 $cols[] = '"'.OCIColumnName($stmt, $i).'"';
 			 }
 			 $result = false;
 			
@@ -666,16 +684,21 @@ NATSOFT.DOMAIN =
 		$this->_stmt = false;
 		$this->_connectionID = false;
 	}
-
-	function MetaPrimaryKeys($table)
+	
+	function MetaPrimaryKeys($table, $owner=false)
 	{
 	// tested with oracle 8.1.7
 		$table = strtoupper($table);
+		if ($owner) {
+			$owner_clause = "AND ((a.OWNER = b.OWNER) AND (a.OWNER = UPPER('$owner')))";
+		} else $owner_clause = '';
+		
 		$sql = "SELECT /*+ RULE */ distinct b.column_name
    FROM ALL_CONSTRAINTS a
 	  , ALL_CONS_COLUMNS b
   WHERE ( UPPER(b.table_name) = ('$table'))
 	AND (UPPER(a.table_name) = ('$table') and a.constraint_type = 'P')
+	$owner_clause
 	AND (a.constraint_name = b.constraint_name)";
  		$rs = $this->Execute($sql);
 		if ($rs && !$rs->EOF) {
@@ -739,7 +762,7 @@ NATSOFT.DOMAIN =
 	$nofixquotes=false;
 	
 	
-		if ($this->noNullStrings && $s === '')$s = ' ';
+		if ($this->noNullStrings && strlen($s)==0)$s = ' ';
 		if (!$magic_quotes) {	
 			if ($this->replaceQuote[0] == '\\'){
 				$s = str_replace('\\','\\\\',$s);

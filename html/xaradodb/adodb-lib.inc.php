@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -107,7 +107,7 @@ function &_adodb_pageexecute_all_rows(&$zthis, $sql, $nrows, $page,
 				if (!$rs->EOF) $qryRecs = reset($rs->fields);
 				$rs->Close();
 			}
-		} else $qryRecs = $zthis->GetOne($rewritesql);
+		} else $qryRecs = $zthis->GetOne($rewritesql,$inputarr);
 	  	if ($qryRecs !== false)
 	   		$lastpageno = (int) ceil($qryRecs / $nrows);
 	}
@@ -116,20 +116,20 @@ function &_adodb_pageexecute_all_rows(&$zthis, $sql, $nrows, $page,
 	if ($qryRecs === false) {
 		$rstest = &$zthis->Execute($sql);
 		if ($rstest) {
-			//save total records
 	   		$qryRecs = $rstest->RecordCount();
-			if ($qryRecs == -1)
-				if (!$rstest->EOF) {
-					$rstest->MoveLast();
-					$qryRecs = $zthis->_currentRow;
-				} else
-					$qryRecs = 0;
+			if ($qryRecs == -1) { 
+			// some databases will return -1 on MoveLast() - change to MoveNext()
+				while(!$rstest->EOF) {
+					$rstest->MoveNext();
+				}
+				$qryRecs = $rstest->_currentRow;
+			}
+			if ($qryRecs == -1) $qryRecs = 0;
 					
 		   	$lastpageno = (int) ceil($qryRecs / $nrows);
 		}
 		if ($rstest) $rstest->Close();
 	}
-	
 	
 	$zthis->_maxRecordCount = $qryRecs;
 	
@@ -233,6 +233,7 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 		// the existing query.
 		preg_match('/\sWHERE\s(.*)/i', $rs->sql, $whereClause);
 		
+		$discard = false;
 		// not a good hack, improvements?
 		if ($whereClause)
 			preg_match('/\s(LIMIT\s.*)/i', $whereClause[1], $discard);

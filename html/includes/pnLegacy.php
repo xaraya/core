@@ -71,7 +71,7 @@ define('_PNAUTH_FAILED', -1);
  */
 function pnGetRequestInfo()
 {
-    return pnRequestGetInfo();
+    return xarRequestGetInfo();
 }
 
 /**
@@ -84,7 +84,7 @@ function pnGetRequestInfo()
  */
 function pnGetBaseURI()
 {
-    return pnServerGetBaseURI();
+    return xarServerGetBaseURI();
 }
 
 /**
@@ -97,7 +97,7 @@ function pnGetBaseURI()
  */
 function pnGetBaseURL()
 {
-    return pnServerGetBaseURL();
+    return xarServerGetBaseURL();
 }
 
 /**
@@ -110,7 +110,7 @@ function pnGetBaseURL()
  */
 function pnRedirect($redirecturl)
 {
-    return pnResponseRedirect($redirecturl);
+    return xarResponseRedirect($redirecturl);
 }
 
 /**
@@ -123,7 +123,7 @@ function pnRedirect($redirecturl)
  */
 function pnIsRedirected()
 {
-    return pnResponseIsRedirected();
+    return xarResponseIsRedirected();
 }
 
 /**
@@ -136,7 +136,7 @@ function pnIsRedirected()
  */
 function pnLocalReferer()
 {
-    return pnResponseIsLocalReferer();
+    return xarResponseIsLocalReferer();
 }
 
 /**
@@ -147,7 +147,7 @@ function pnLocalReferer()
  */
 function pnUserLoggedIn()
 {
-    return pnUserIsLoggedIn();
+    return xarUserIsLoggedIn();
 }
 
 /**
@@ -161,7 +161,7 @@ function pnUserLoggedIn()
  */
 function pnUserGetVars($userId)
 {
-    pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return;
 }
@@ -177,7 +177,7 @@ function pnUserGetVars($userId)
  */
 function pnUserDelVar($name)
 {
-    pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return;
 }
@@ -195,7 +195,7 @@ function pnUserDelVar($name)
  */
 function pnUserGetAll($startnum = 1, $numitems = -1)
 {
-    pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return;
 }
@@ -225,7 +225,7 @@ function pnModGetName() {
  */
 function pnModAvailable($modName)
 {
-    return pnModIsAvailable($modName);
+    return xarModIsAvailable($modName);
 }
 
 /**
@@ -316,17 +316,17 @@ function pnModUnregisterHook($hookObject,
 
     // Remove hook
     $query = "DELETE FROM $hookstable
-              WHERE pn_object = '" . pnVarPrepForStore($hookObject) . "'
-              AND pn_action = '" . pnVarPrepForStore($hookAction) . "'
-              AND pn_tarea = '" . pnVarPrepForStore($hookArea) . "'
-              AND pn_tmodule = '" . pnVarPrepForStore($hookModName) . "'
-              AND pn_ttype = '" . pnVarPrepForStore($hookModType) . "'
-              AND pn_tfunc = '" . pnVarPrepForStore($hookFuncName) . "'";
+              WHERE pn_object = '" . xarVarPrepForStore($hookObject) . "'
+              AND pn_action = '" . xarVarPrepForStore($hookAction) . "'
+              AND pn_tarea = '" . xarVarPrepForStore($hookArea) . "'
+              AND pn_tmodule = '" . xarVarPrepForStore($hookModName) . "'
+              AND pn_ttype = '" . xarVarPrepForStore($hookModType) . "'
+              AND pn_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
     $dbconn->Execute($query);
 
     if($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
     }
@@ -336,10 +336,10 @@ function pnModUnregisterHook($hookObject,
 
 function pnGetStatusMsg()
 {
-    $msg = pnSessionGetVar('statusmsg');
-    pnSessionDelVar('statusmsg');
-    $errmsg = pnSessionGetVar('errormsg');
-    pnSessionDelVar('errormsg');
+    $msg = xarSessionGetVar('statusmsg');
+    xarSessionDelVar('statusmsg');
+    $errmsg = xarSessionGetVar('errormsg');
+    xarSessionDelVar('errormsg');
 
     // Error message overrides status message
     if (!empty($errmsg)) {
@@ -358,7 +358,7 @@ function pnGetStatusMsg()
  */
 function pnBlock_show($blockInfo)
 {
-    return pnBlock_render($blockInfo);
+    return xarBlock_render($blockInfo);
 }
 
 /**
@@ -370,7 +370,7 @@ function pnBlock_show($blockInfo)
  */
 function pnBlock_groupShow($groupName)
 {
-    return pnBlock_renderGroup($groupName);
+    return xarBlock_renderGroup($groupName);
 }
 
 /*
@@ -489,7 +489,7 @@ function pnVarValidate($var, $type, $args = NULL)
  */
 function pnModGetUserMods()
 {
-    return pnModGetList(array('UserCapable' => 1));
+    return xarModGetList(array('UserCapable' => 1));
 }
 
 /**
@@ -501,7 +501,7 @@ function pnModGetUserMods()
  */
 function pnModGetAdminMods()
 {
-    return pnModGetList(array('AdminCapable' => 1));
+    return xarModGetList(array('AdminCapable' => 1));
 }
 
 /**

@@ -1,64 +1,47 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <b><a href="&xar-modurl-modules-admin-main;">Modules Administration</a></b>
+            <xar:mlstring>Modules Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
-        <td align="center" width="25%">
-            <a href="&xar-modurl-modules-admin-list;">List available modules</a>
+        <td align="center">
+        
         </td>
         <td align="center" width="25%">
             <a href="&xar-modurl-modules-admin-regenerate;">Regenerate module list</a>
         </td>
+        <td align="center">
+            <a href="&xar-modurl-modules-admin-regenerate&;authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Modules</xar:mlstring></a>
+        </td>
+
     </tr>
 </table>
-<br />
-<center>Modify Module Settings</center>
-<br />
 
-<center>
-<form method="post" action="&xar-modurl-modules-admin-update;">
-    <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
-    <input type="hidden" name="id" value="&xar-var-regId;" />
+<form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+	<input type="hidden" name="id" id="id" value="&xar-var-id;" />
+		<xar:mlstring>Enter new display name(Does not work)</xar:mlstring>
+		<br />
+	<input type="text" name="newdisplayname" id="newdisplayname" value="&xar-var-displayname;" size="30" maxlength="30" tabindex="1" />
+		<br /><br />
+		<xar:mlstring>Available hooks for this module</xar:mlstring>&nbsp;&nbsp;
+		<!-- TODO~  Not Working:( [<a href="&xar-var-DetailsURL;">&xar-var-DetailsLabel;</a>] -->
+		<br /><br />
+			<xar:loop name="hooklist">
+				Enable hooks from &xar-var-modname; 
+				<xar:if condition="$checked eq 1">
+					<input type="checkbox" name="hooks_&xar-var-modname;" id="hooks_&xar-var-modname;" value="&xar-var-checked;" checked="checked" tabindex="2" />
+				<xar:else />
+					<input type="checkbox" name="hooks_&xar-var-modname;" id="hooks_&xar-var-modname;" value="&xar-var-checked;" tabindex="2" />
+				</xar:if>
+				<br /><br />
+				<xar:if condition="$details eq 1">
+					<xar:loop name="hooks">
+						&nbsp;&nbsp;&xar-var-hook;
+					</xar:loop>
+				</xar:if>
+			</xar:loop>
+		<br /><br />
+	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
 
-    <table border="0" width="300">
-        <tr>
-            <td>
-                 Edit Display Name:
-            </td>
-            <td>
-                <input type="text" name="newdisplayname" value="&xar-var-displayName;" length="40" maxlength="254" style="width:150px;" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                 Edit Display Name:
-            </td>
-            <td>
-                 <input type="text" name="newdescription" value="&xar-var-description;" length="60" maxlength="254" style="width:150px;" />
-            </td>
-        </tr>
-        <xar:loop name="hooks">
-        <tr>
-            <td>
-                Activate &xar-var-hooks['tmodName']; for this module
-            </td>
-            <td>
-               <xar:if condition="$hooks['checked'] eq 1">
-                    <input type="checkbox" name="hook_&xar-var-hooks['tmodName'];" value="1" checked="checked" />
-                    <xar:else />
-                        <input type="checkbox" name="hook_&xar-var-hooks['tmodName'];" value="1" />
-                </xar:if>
-            </td>
-        </tr>
-        </xar:loop>
-        <tr>
-            <td colspan="2" align="center"><br />
-                    <input type="submit" value="Save Changes" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
-            </td>
-        </tr>
-    </table>
-</form>
-</center>

@@ -1,6 +1,6 @@
 <?php
 /*
- V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -24,7 +24,8 @@ class ADODB_postgres64 extends ADOConnection{
 	var $hasInsertID = true;
 	var $_resultid = false;
   	var $concat_operator='||';
-	var $metaTablesSQL = "select tablename from pg_tables where tablename not like 'pg_%' order by 1";
+	var $metaTablesSQL = "select tablename from pg_tables where tablename not like 'pg\_%' order by 1";
+	//"select tablename from pg_tables where tablename not like 'pg_%' order by 1";
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = "CURRENT_DATE";
 	var $sysTimeStamp = "CURRENT_TIMESTAMP";
@@ -42,7 +43,6 @@ SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg_%' ORDER BY 1"
 	// get primary key etc -- from Freek Dijkstra
 	var $metaKeySQL = "SELECT ic.relname AS index_name, a.attname AS column_name,i.indisunique AS unique_key, i.indisprimary AS primary_key FROM pg_class bc, pg_class ic, pg_index i, pg_attribute a WHERE bc.oid = i.indrelid AND ic.oid = i.indexrelid AND (i.indkey[0] = a.attnum OR i.indkey[1] = a.attnum OR i.indkey[2] = a.attnum OR i.indkey[3] = a.attnum OR i.indkey[4] = a.attnum OR i.indkey[5] = a.attnum OR i.indkey[6] = a.attnum OR i.indkey[7] = a.attnum) AND a.attrelid = bc.oid AND bc.relname = '%s'";
 	
-	var $_hastrans = false;
 	var $hasAffectedRows = true;
 	var $hasLimit = false;	// set to true for pgsql 7 only. support pgsql/mysql SELECT * FROM TABLE LIMIT 10
 	// below suggested by Freek Dijkstra 
@@ -52,11 +52,11 @@ SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg_%' ORDER BY 1"
 	var $fmtTimeStamp = "'Y-m-d G:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
 	var $hasMoveFirst = true;
 	var $hasGenID = true;
-    // XARAYA MODIFICATION
-    // prefix the sequencwe number as it'll be the same id as the table name - GM
+    // XARAYA MODIFICATION - START
+    // Prefix the sequence number to make it unique
 	var $_genIDSQL = "SELECT NEXTVAL('seq%s')";
 	var $_genSeqSQL = "CREATE SEQUENCE seq%s START %s";
-    // END XARAYA MODIFICATION
+    // XARAYA MODIFICATION - END
 	var $metaDefaultsSQL = "SELECT d.adnum as num, d.adsrc as def from pg_attrdef d, pg_class c where d.adrelid=c.oid and c.relname='%s' order by d.adnum";
 		
 	// The last (fmtTimeStamp is not entirely correct: 
@@ -91,9 +91,11 @@ Unless you are very careful, you might end up with a tuple having
 a different OID if a database must be reloaded. */
 	function _insertid()
 	{
-        // XARAYA MODIFICATION - return the GenID value
+        // XARAYA MODIFICATION - START
+		// return pg_getlastoid($this->_resultid);
+        // return the GenID value
         return $this->genID;
-	//`	return pg_getlastoid($this->_resultid);
+        // XARAYA MODIFICATION - END
 	}
 
 // I get this error with PHP before 4.0.6 - jlim
@@ -107,28 +109,32 @@ a different OID if a database must be reloaded. */
 		// returns true/false
 	function BeginTrans()
 	{
-		$this->_hastrans = true;
+		if ($this->transOff) return true;
+		$this->transCnt += 1;
 		return @pg_Exec($this->_connectionID, "begin");
 	}
 	
 	function RowLock($tables,$where) 
 	{
-		if (!$this->_hastrans) $this->BeginTrans();
+		if (!$this->transCnt) $this->BeginTrans();
 		return $this->GetOne("select 1 as ignore from $tables where $where for update");
 	}
 
 	// returns true/false. 
 	function CommitTrans($ok=true) 
 	{ 
+		if ($this->transOff) return true;
 		if (!$ok) return $this->RollbackTrans();
-		$this->_hastrans = false;
+		
+		$this->transCnt -= 1;
 		return @pg_Exec($this->_connectionID, "commit");
 	}
 	
 	// returns true/false
 	function RollbackTrans()
 	{
-		$this->_hastrans = false;
+		if ($this->transOff) return true;
+		$this->transCnt -= 1;
 		return @pg_Exec($this->_connectionID, "rollback");
 	}
 	
@@ -145,11 +151,11 @@ a different OID if a database must be reloaded. */
 			switch($ch) {
 			case 'Y':
 			case 'y':
-				$s .= "(date_part('year',$col)";
+				$s .= "date_part('year',$col)";
 				break;
 			case 'Q':
 			case 'q':
-				$s .= "lpad(date_part('quarter',$col),2,'0')";
+				$s .= "date_part('quarter',$col)";
 				break;
 				
 			case 'M':
@@ -346,8 +352,8 @@ a different OID if a database must be reloaded. */
 		//if ($user) $linea = "user=$user host=$linea password=$pwd dbname=$db port=5432";
 		$this->_connectionID = pg_connect($str);
 		if ($this->_connectionID === false) return false;
-        // find out why this fails
-		//$this->Execute("set datestyle='ISO'");
+        // XARAYA TO DO - find out why following line fails
+		// $this->Execute("set datestyle='ISO'");
 				return true;
 	}
 	
@@ -399,7 +405,7 @@ a different OID if a database must be reloaded. */
 	// returns true or false
 	function _close()
 	{
-		if ($this->_hastrans) $this->RollbackTrans();
+		if ($this->transCnt) $this->RollbackTrans();
 		@pg_close($this->_connectionID);
 		$this->_resultid = false;
 		$this->_connectionID = false;

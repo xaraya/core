@@ -1,6 +1,6 @@
 <?php
 /** 
- * @version V2.42 4 Oct 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+ * @version V2.50 14 Nov 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license. 
  * Whenever there is any discrepancy between the two licenses, 
  * the BSD license will take precedence. 
@@ -25,21 +25,22 @@
  *						Since 2.3.1, if you can use your own aggregate function 
  *						instead of SUM, eg. $sumfield = 'AVG(fieldname)';
  * @sumlabel		Prefix to display in sum columns. Optional.
+ * @aggfn			Aggregate function to use (could be AVG, SUM, COUNT)
+ * @showcount		Show count of records
  *
  * @returns			Sql generated
  */
  
  function PivotTableSQL($db,$tables,$rowfields,$colfield, $where=false,
- 	$aggfield = false,$sumlabel='Sum ',$aggfn ='SUM', $agglabel='Sum ',$show1=true)
+ 	$aggfield = false,$sumlabel='Sum ',$aggfn ='SUM', $showcount = true)
  {
- 	if ($show1) {
-		if ($aggfield) $hidecnt = true;
-		else $hidecnt = false;
-	} 
+	if ($aggfield) $hidecnt = true;
+	else $hidecnt = false;
+	
 	
 	//$hidecnt = false;
 	
- 	if ($where) $where = " WHERE $where";
+ 	if ($where) $where = "\nWHERE $where";
 	if (!is_array($colfield)) $colarr = $db->GetCol("select distinct $colfield from $tables $where order by 1");
 	if (!$aggfield) $hidecnt = false;
 	
@@ -68,7 +69,8 @@
 		$sel .= "\n\t$agg as \"$sumlabel$aggfield\", ";		
 	}
 	
-	$sel .= "\n\tSUM(1) as Total";
+	if ($showcount)
+		$sel .= "\n\tSUM(1) as Total";
 	
 	
 	$sql = "SELECT $sel \nFROM $tables $where \nGROUP BY $rowfields";

@@ -211,7 +211,7 @@ function xarSession_close()
 // PRIVATE FUNCTIONS
 
 /**
- * Set all PHP options for PostNuke session handling
+ * Set all PHP options for Xaraya session handling
  *
  * @param $args['securityLevel'] the current security level
  * @param $args['duration'] duration of the session
@@ -280,8 +280,8 @@ function xarSession__setup($args)
         $domain = preg_replace('/:.*/', '', $domain);
         // this is only necessary for sharing sessions across multiple servers,
         // and should be configurable for multi-site setups
-        // Example: .postnuke.com for all *.postnuke.com servers
-        // Example: www.postnuke.com for www.postnuke.com and *.www.postnuke.com
+        // Example: .Xaraya.com for all *.Xaraya.com servers
+        // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
         //ini_set('session.cookie_domain', $domain);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -78,7 +78,6 @@ class ADODB_mssql extends ADOConnection {
 	var $metaTablesSQL="select name from sysobjects where type='U' or type='V' and (name not in ('sysallocations','syscolumns','syscomments','sysdepends','sysfilegroups','sysfiles','sysfiles1','sysforeignkeys','sysfulltextcatalogs','sysindexes','sysindexkeys','sysmembers','sysobjects','syspermissions','sysprotects','sysreferences','systypes','sysusers','sysalternates','sysconstraints','syssegments','REFERENTIAL_CONSTRAINTS','CHECK_CONSTRAINTS','CONSTRAINT_TABLE_USAGE','CONSTRAINT_COLUMN_USAGE','VIEWS','VIEW_TABLE_USAGE','VIEW_COLUMN_USAGE','SCHEMATA','TABLES','TABLE_CONSTRAINTS','TABLE_PRIVILEGES','COLUMNS','COLUMN_DOMAIN_USAGE','COLUMN_PRIVILEGES','DOMAINS','DOMAIN_CONSTRAINTS','KEY_COLUMN_USAGE'))";
 	var $metaColumnsSQL = "select c.name,t.name,c.length from syscolumns c join systypes t on t.xusertype=c.xusertype join sysobjects o on o.id=c.id where o.name='%s'";
 	var $hasTop = 'top';		// support mssql SELECT TOP 10 * FROM TABLE
-	var $_hastrans = false;
 	var $hasGenID = true;
 	var $sysDate = 'convert(datetime,convert(char,getdate(),102),102)';
 	var $sysTimeStamp = 'GetDate()';
@@ -106,13 +105,6 @@ class ADODB_mssql extends ADOConnection {
 		return $this->GetOne('select @@rowcount');
 	}
 	
-	function BeginTrans()
-	{	   
-		$this->_hastrans = true;
-	   	$this->Execute('BEGIN TRAN');
-	   	return true;
-	}
-		
 	function GenID($seq='adodbseq',$start=1)
 	{	
 		//$this->debug=1;
@@ -176,18 +168,26 @@ class ADODB_mssql extends ADOConnection {
 	}
 
 	
+	function BeginTrans()
+	{
+		if ($this->transOff) return true; 
+		$this->transCnt += 1;
+	   	$this->Execute('BEGIN TRAN');
+	   	return true;
+	}
+		
 	function CommitTrans($ok=true) 
 	{ 
+		if ($this->transOff) return true; 
 		if (!$ok) return $this->RollbackTrans();
-		if (!$this->_hastrans) return false;
-		$this->_hastrans = false;
+		if ($this->transCnt) $this->transCnt -= 1;
 		$this->Execute('COMMIT TRAN');
 		return true;
 	}
 	function RollbackTrans()
 	{
-		if (!$this->_hastrans) return false;
-		$this->_hastrans = false;
+		if ($this->transOff) return true; 
+		if ($this->transCnt) $this->transCnt -= 1;
 		$this->Execute('ROLLBACK TRAN');
 		return true;
 	}
@@ -206,7 +206,7 @@ class ADODB_mssql extends ADOConnection {
 	*/
 	function RowLock($tables,$where) 
 	{
-		if (!$this->_hastrans) $this->BeginTrans();
+		if (!$this->transCnt) $this->BeginTrans();
 		return $this->GetOne("select top 1 null as ignore from $tables with (ROWLOCK,HOLDLOCK) where $where");
 	}
 	
@@ -375,7 +375,7 @@ class ADODB_mssql extends ADOConnection {
 	// returns true or false
 	function _close()
 	{ 
-		if ($this->_hastrans) $this->RollbackTrans();
+		if ($this->transCnt) $this->RollbackTrans();
 		$rez = @mssql_close($this->_connectionID);
 		$this->_connectionID = false;
 		return $rez;
@@ -471,21 +471,55 @@ class ADORecordset_mssql extends ADORecordSet {
 	{
 		if (!$this->EOF) {		
 			$this->_currentRow++;
-			if ($this->fetchMode & ADODB_FETCH_ASSOC) $this->fields = @mssql_fetch_array($this->_queryID);
-			else $this->fields = @mssql_fetch_row($this->_queryID);
-			
+			if ($this->fetchMode & ADODB_FETCH_ASSOC) {
+			global $ADODB_mssql_has_datetimeconvert;
+				if ($ADODB_mssql_has_datetimeconvert) // only for PHP 4.2.0 or later
+					$this->fields = @mssql_fetch_assoc($this->_queryID);
+				else {
+					$flds = @mssql_fetch_array($this->_queryID);
+					if (is_array($flds)) {
+						$fassoc = array();
+						foreach($flds as $k => $v) {
+							if (is_numeric($k)) continue;
+							$fassoc[$k] = $v;
+						}
+						$this->fields = $fassoc;
+					} else 
+						$this->fields = $flds;
+				}
+			} else {
+				$this->fields = @mssql_fetch_row($this->_queryID);
+			}
 			if (is_array($this->fields)) return true;
 			$this->EOF = true;
 		}
 		return false;
 	}
+
 	
 	// INSERT UPDATE DELETE returns false even if no error occurs in 4.0.4
 	// also the date format has been changed from YYYY-mm-dd to dd MMM YYYY in 4.0.4. Idiot!
 	function _fetch($ignore_fields=false) 
 	{
-		if ($this->fetchMode & ADODB_FETCH_ASSOC) $this->fields = @mssql_fetch_array($this->_queryID);
-		else $this->fields = @mssql_fetch_row($this->_queryID);
+		if ($this->fetchMode & ADODB_FETCH_ASSOC) {
+		global $ADODB_mssql_has_datetimeconvert;
+			if ($ADODB_mssql_has_datetimeconvert) // only for PHP 4.2.0 or later
+				$this->fields = @mssql_fetch_assoc($this->_queryID);
+			else {
+				$flds = @mssql_fetch_array($this->_queryID);
+				if (is_array($flds)) {
+					$fassoc = array();
+					foreach($flds as $k => $v) {
+						if (is_integer($k)) continue;
+						$fassoc[$k] = $v;
+					}
+					$this->fields = $fassoc;
+				} else
+					$this->fields = $flds;
+			}
+		} else {
+			$this->fields = @mssql_fetch_row($this->_queryID);
+		}
 		return (!empty($this->fields));
 	}
 	

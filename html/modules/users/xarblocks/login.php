@@ -46,7 +46,7 @@ function users_loginblock_display($blockinfo)
 
     // Display logout block if user is already logged in
     // e.g. when the login/logout block also contains a search box
-    if (pnUserLoggedIn()) {
+    if (pnUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = pnUserGetVar('name');
             $blockinfo['content'] = pnTplBlock('users', 'logout', $args);

@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim. All rights reserved.
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim. All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -48,20 +48,30 @@ class ADODB_sybase extends ADOConnection {
 
 			  
 	function BeginTrans()
-	{	   
+	{	
+	
+		if ($this->transOff) return true;
+		$this->transCnt += 1;
+		   
 		$this->Execute('BEGIN TRAN');
 		return true;
 	}
 	
 	function CommitTrans($ok=true) 
 	{ 
+		if ($this->transOff) return true;
+		
 		if (!$ok) return $this->RollbackTrans();
+	
+		$this->transCnt -= 1;
 		$this->Execute('COMMIT TRAN');
 		return true;
 	}
 	
 	function RollbackTrans()
 	{
+		if ($this->transOff) return true;
+		$this->transCnt -= 1;
 		$this->Execute('ROLLBACK TRAN');
 		return true;
 	}

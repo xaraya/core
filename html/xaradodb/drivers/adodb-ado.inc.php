@@ -1,6 +1,6 @@
 <?php
 /* 
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -25,7 +25,6 @@ class ADODB_ado extends ADOConnection {
 	var $adoParameterType = 201; // 201 = long varchar, 203=long wide varchar, 205 = long varbinary
 	var $_affectedRows = false;
 	var $_thisTransactions;
-	var $_inTransaction = 0;
 	var $_cursor_type = 3; // 3=adOpenStatic,0=adOpenForwardOnly,1=adOpenKeyset,2=adOpenDynamic
 	var $_cursor_location = 3; // 2=adUseServer, 3 = adUseClient;
 	var $_lock_type = -1;
@@ -227,6 +226,8 @@ class ADODB_ado extends ADOConnection {
 	
 	function BeginTrans() 
 	{ 
+		if ($this->transOff) return true;
+		
 		if (isset($this->_thisTransactions))
 			if (!$this->_thisTransactions) return false;
 		else {
@@ -235,19 +236,22 @@ class ADODB_ado extends ADOConnection {
 			if (!$o) return false;
 		}
 		@$this->_connectionID->BeginTrans();
-		$this->_inTransaction += 1;
+		$this->transCnt += 1;
 		return true;
 	}
 	function CommitTrans($ok=true) 
 	{ 
 		if (!$ok) return $this->RollbackTrans();
+		if ($this->transOff) return true;
+		
 		@$this->_connectionID->CommitTrans();
-		if ($this->_inTransaction) @$this->_inTransaction -= 1;
+		if ($this->transCnt) @$this->transCnt -= 1;
 		return true;
 	}
 	function RollbackTrans() {
+		if ($this->transOff) return true;
 		@$this->_connectionID->RollbackTrans();
-		if ($this->_inTransaction) @$this->_inTransaction -= 1;
+		if ($this->transCnt) @$this->transCnt -= 1;
 		return true;
 	}
 	
@@ -542,7 +546,7 @@ class ADORecordSet_ado extends ADORecordSet {
 		@$rs->MoveNext(); // @ needed for some versions of PHP!
 		
 		if ($this->fetchMode == ADODB_FETCH_ASSOC) {
-			$this->fields = $this->GetRowAssoc(false);
+			$this->fields = $this->GetRowAssoc(ADODB_ASSOC_CASE);
 		}
 		return true;
 	}

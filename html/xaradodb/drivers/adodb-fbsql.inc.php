@@ -1,6 +1,6 @@
 <?php
 /*
- @version V2.42 4 Oct 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+ @version V2.50 14 Nov 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
  Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -80,7 +80,7 @@ class ADODB_fbsql extends ADOConnection {
  	function &MetaColumns($table) 
 	{
 		if ($this->metaColumnsSQL) {
-		
+			
 			$rs = $this->Execute(sprintf($this->metaColumnsSQL,$table));
 			
 			if ($rs === false) return false;

@@ -11,6 +11,9 @@
         <td align="center">
             <a href="&xar-modurl-base-admin-sysinfo;"><xar:mlstring>View System Information</xar:mlstring></a>
         </td>
+        <td align="center">
+            <a href="&xar-modurl-base-admin-addallowed;"><xar:mlstring>Add Allowed Vars</xar:mlstring></a>
+        </td>
     </tr>
 </table>
 

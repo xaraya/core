@@ -1,142 +1,172 @@
-<!-- admin menu for adminpaanels module -->
+<!-- admin menu configuration template -->
+<!-- Formatting table to center the menu -->
 <table border="0" width="100%">
     <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Adminpanels Administration</xar:mlstring>            
+        <th align="center" valign="top">
+            <!-- Menu title -->
+            &xar-var-title;
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-            <a href="&xar-modurl-adminpanels-admin-view;"><xar:mlstring>Quick View</xar:mlstring></a>
+    <tr>
+        <td align="center" valign="top">
+            <!-- Menu table -->
+            <table border="0" cellspacing="10">
+                <tr>
+                    <td align="center">
+                        <a href="&xar-modurl-adminpanels-admin-view;">&xar-var-overview;</a>
+                    </td>
+                    <td align="center">
+                        <a href="&xar-modurl-adminpanels-admin-config_view;">&xar-var-configoverview;</a>
+                    </td>
+                    <td align="center">
+                        <b>&xar-var-configadmin;</b>
+                    </td>
+                </tr>
+            </table>
         </td>
-        <td align="center">
-            <b><xar:mlstring>Configure</xar:mlstring></b>
-        </td>
-
     </tr>
 </table>
-
+<!-- End of formatting table -->
 <!-- BL style form for adminpanels configuration options -->
 <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-    <input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
-    <table border="0" width="100%">
-        <tr>
-            <td>
-                <table border="0" width="100%">
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>Use marker against active module:</xar:mlstring>
-                        </td>
-                        <td>
-                            <xar:if condition="xarModGetVar('adminpanels', 'showold')">
-                                <input type="checkbox" name="showold" id="showold" value="0" checked="checked" tabindex="1" />
-                            <xar:else />
-                                <input type="checkbox" name="showold" id="showold" value="1"tabindex="1" />
+<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+<table border="0" width="100%">
+    <tr>
+        <td>
+            <table border="0" width="100%" cellpadding="4">
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-showontoplabel;
+                    </td>
+                    <td>
+                        <input type="checkbox" name="showontop" id="showontop" value="1" &xar-var-showontop; />
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-showmarkerlabel;
+                    </td>
+                    <td>
+                        <input type="checkbox" name="showold" id="showold" value="1" &xar-var-showold; />
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-markertypelabel;
+                    </td>
+                    <td>
+                        <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
+                        <input type="text" name="marker" size=3 maxlength=3 value="[x]" />
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-sortorderlabel;
+                    </td>
+                    <td>
+                        <select name="menustyle" id="menustyle" size="1">
+                        <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
+                            <xar:if condition="'byname' eq xarModGetVar('adminpanels', 'menustyle')">
+                                <option value="byname" selected="selected">&xar-var-sortorderselbyname;</option>
+                                <option value="bycat">&xar-var-sortorderselbycat;</option>
+                                <option value="byweight">&xar-var-sortorderselbyweight;</option>
+                                <option value="bygroup">&xar-var-sortorderselbygroup;</option>
+                            <xar:elseif condition="'bycat' eq xarModGetVar('adminpanels', 'menustyle')" />
+                                <option value="byname">&xar-var-sortorderselbyname;</option>
+                                <option value="bycat" selected="selected">&xar-var-sortorderselbycat;</option>
+                                <option value="byweight">&xar-var-sortorderselbyweight;</option>
+                                <option value="bygroup">&xar-var-sortorderselbygroup;</option>
+                            <pnt:elseif condition="'byweight' eq xarModGetVar('adminpanels', 'menustyle')" />
+                                <option value="byname">&xar-var-sortorderselbyname;</option>
+                                <option value="bycat">&xar-var-sortorderselbycat;</option>
+                                <option value="byweight" selected="selected">&xar-var-sortorderselbyweight;</option>
+                                <option value="bygroup">&xar-var-sortorderselbygroup;</option>
+                            <xar:elseif condition="'bygroup' eq xarModGetVar('adminpanels', 'menustyle')" />
+                                <option value="byname">&xar-var-sortorderselbyname;</option>
+                                <option value="bycat">&xar-var-sortorderselbycat;</option>
+                                <option value="byweight">&xar-var-sortorderselbyweight;</option>
+                                <option value="bygroup" selected="selected">&xar-var-sortorderselbygroup;</option>
                             </xar:if>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>Specify type of marker: (not implemented yet)</xar:mlstring>
-                        </td>
-                        <td>
-                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
-                            <input type="text" name="marker" size=3 maxlength=3 value="[x]">
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>Sort admin menu items:</xar:mlstring>
-                        </td>
-                        <td>
-                            <select name="menustyle" id="menustyle" size="1" tabindex="2">
-                            <!-- ToDo: ML labels for all selects -->
-                            <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
-                                <xar:if condition="'byname' eq xarModGetVar('adminpanels', 'menustyle')">
-                                    <option value="byname" selected="selected">By Name</option>
-                                    <option value="bycat">By Category</option>
-                                    <option value="byweight">By Weight</option>
-                                    <option value="bygroup">By Group</option>
-                                <xar:elseif condition="'bycat' eq xarModGetVar('adminpanels', 'menustyle')" />
-                                    <option value="byname">By Name</option>
-                                    <option value="bycat" selected="selected">By Category</option>
-                                    <option value="byweight">By Weight</option>
-                                    <option value="bygroup">By Group</option>
-                                <xar:elseif condition="'byweight' eq xarModGetVar('adminpanels', 'menustyle')" />
-                                    <option value="byname">By Name</option>
-                                    <option value="bycat">By Category</option>
-                                    <option value="byweight" selected="selected">By Weight</option>
-                                    <option value="bygroup">By Group</option>
-                                <xar:elseif condition="'bygroup' eq xarModGetVar('adminpanels', 'menustyle')" />
-                                    <option value="byname">By Name</option>
-                                    <option value="bycat">By Category</option>
-                                    <option value="byweight">By Weight</option>
-                                    <option value="bygroup" selected="selected">By Group</option>
-                                </xar:if>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>If sort order is "By Weight", please specify here:</xar:mlstring>
-                        </td>
-                        <td>
-                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
-                            <xar:mlstring>LIST of WEIGHTS/MODULES<br />(not implemented)</xar:mlstring>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>If sort order is "By Group", please select here:</xar:mlstring>
-                        </td>
-                        <td>
-                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
-                            <xar:mlstring>LIST of GROUPS/MODULES<br />(not implemented)</xar:mlstring>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>Add/Delete/Modify Module Groups:</xar:mlstring>
-                        </td>
-                        <td>
-                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
-                            <xar:mlstring>LINK to FUNCTION<br />(not implemented)</xar:mlstring>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>Position admin menu:</xar:mlstring>
-                        </td>
-                        <td>
-                            <select name="menuposition" id="menuposition" size="1" tabindex="3">
-                               <xar:if condition="'l' eq xarModGetVar('adminpanels', 'menuposition')">
-                                    <option value="l" selected="selected">Left</option>
-                                    <option value="c">Centre</option>
-                                    <option value="r">Right</option>
-                                 <xar:elseif condition="'c' eq xarModGetVar('adminpanels', 'menuposition')" />
-                                    <option value="l">Left</option>
-                                    <option value="c" selected="selected">Centre</option>
-                                    <option value="r">Right</option>
-                                 <xar:elseif condition="'r' eq xarModGetVar('adminpanels', 'menuposition')" />
-                                    <option value="l">Left</option>
-                                    <option value="c">Centre</option>
-                                    <option value="r" selected="selected">Right</option>
-                                </xar:if>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <xar:mlstring>When finished, click Submit:</xar:mlstring>
-                        </td>
-                        <td>
-                            <!-- submit button -->
-                            <br />
-                            <input type="submit" value="Submit Options" align="middle" tabindex="4" />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+                        </select>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-byweightlabel;
+                    </td>
+                    <td>
+                        <!-- function link to configure sort order by weights -->
+                        <a href="&xar-modurl-adminpanels-admin-config_byweight;">&xar-var-byweightlink;</a>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-bygrouplabel;
+                    </td>
+                    <td>
+                        <!-- function link to configure sort order by groups -->
+                        <a href="&xar-modurl-adminpanels-admin-config_bygroup;">&xar-var-bygrouplink;</a>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-groupconfiglabel;
+                    </td>
+                    <td>
+                        <!-- function link to add, delete or modify module groups -->
+                        <a href="&xar-modurl-adminpanels-admin-config_modgroups;">&xar-var-groupconfiglink;</a>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-menupositionlabel;
+                    </td>
+                    <td>
+                        <select name="menuposition" id="menuposition" size="1">
+                           <xar:if condition="'l' eq xarModGetVar('adminpanels', 'menuposition')">
+                                <option value="l" selected="selected">&xar-var-menupositionselleft;</option>
+                                <option value="c">&xar-var-menupositionselcentre;</option>
+                                <option value="r">&xar-var-menupositionselright;</option>
+                             <xar:elseif condition="'c' eq xarModGetVar('adminpanels', 'menuposition')" />
+                                <option value="l">&xar-var-menupositionselleft;</option>
+                                <option value="c" selected="selected">&xar-var-menupositionselcentre;</option>
+                                <option value="r">&xar-var-menupositionselright;</option>
+                             <xar:elseif condition="'r' eq xarModGetVar('adminpanels', 'menuposition')" />
+                                <option value="l">&xar-var-menupositionselleft;</option>
+                                <option value="c">&xar-var-menupositionselcentre;</option>
+                                <option value="r" selected="selected">&xar-var-menupositionselright;</option>
+                            </xar:if>
+                        </select>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-showhelplabel;
+                    </td>
+                    <td>
+                        <input type="checkbox" name="showhelp" id="showhelp" value="1" &xar-var-showhelp; />
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-submitlabel;
+                    </td>
+                    <td>
+                        <!-- submit button -->
+                        <input type="submit" value="Submit" align="middle" />
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td>
+                        <xar:mlstring>Status:</xar:mlstring>
+                    </td>
+                    <td>
+                        <!-- status -->
+                        <xar:mlstring>Configuration status</xar:mlstring>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </form>

@@ -1,7 +1,7 @@
 <?php 
 
 /** 
- * @version V2.42 4 Oct 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+ * @version V2.50 14 Nov 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license. 
  * Whenever there is any discrepancy between the two licenses, 
  * the BSD license will take precedence. 
@@ -31,8 +31,18 @@
 	define('ADODB_FETCH_ASSOC',2);
 	define('ADODB_FETCH_BOTH',3);
 	
+	/*
+	Controls ADODB_FETCH_ASSOC field-name case. Default is 0, use lowercase names.
+	For maximum compatibility with other drivers, set to 2.
+ 		0 = assoc lowercase field names. $rs->fields['orderid']
+		1 = assoc uppercase field names. $rs->fields['ORDERID']
+		2 = use native-case field names. $rs->fields['OrderID']
+	*/
+	if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE',0); 
+	
 	// allow [ ] @ and . in table names
 	define('ADODB_TABLE_REGEX','([]0-9a-z_\.\@\[-]*)');
+	
 	if (!defined('MAX_BLOB_SIZE')) define('MAX_BLOB_SIZE',999999); // 900K
 	
 	if (!defined('ADODB_PREFETCH_ROWS')) define('ADODB_PREFETCH_ROWS',10);
@@ -44,7 +54,7 @@
 	if (!defined('ADODB_DIR')) define('ADODB_DIR',dirname(__FILE__));
 	
 	if (strpos(strtoupper(PHP_OS),'WIN') !== false) {
-	// windows, negative timestamps are illegal as of php 4.2.0
+	// on windows, negative timestamps are illegal as of php 4.2.0
 		define('TIMESTAMP_FIRST_YEAR',1970);
 	} else
 		define('TIMESTAMP_FIRST_YEAR',1904);
@@ -90,7 +100,7 @@
 	/**
 	 * ADODB version as a string.
 	 */
-	$ADODB_vers = 'V2.42 4 Oct 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+	$ADODB_vers = 'V2.50 14 Nov 2002 (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 
 	/**
 	 * Determines whether recordset->RecordCount() is used. 
@@ -189,8 +199,11 @@
 	
 	var $_bindInputArray = false; // set to true if ADOConnection.Execute() permits binding of array parameters.
 	
-	 var $autoCommit = true; 	// do not modify this yourself - actually private
+	var $autoCommit = true; 	// do not modify this yourself - actually private
 	
+	var $transOff = false; // temporarily disable transactions
+	
+	var $transCnt = 0; 	// count of nested transactions
 	/**
 	 * Constructor
 	 */
@@ -227,7 +240,7 @@
 	 *
 	 * @return true or false
 	 */	  
-	function Connect($argHostname = "", $argUsername = "", $argPassword = "", $argDatabaseName = "") 
+	function Connect($argHostname = "", $argUsername = "", $argPassword = "", $argDatabaseName = "", $forceNew = false) 
 	{
 		if ($argHostname != "") $this->host = $argHostname;
 		if ($argUsername != "") $this->user = $argUsername;
@@ -236,17 +249,46 @@
 		
 		$this->_isPersistentConnection = false;	
 		if ($fn = $this->raiseErrorFn) {
-			if ($this->_connect($this->host, $this->user, $this->password, $this->database)) return true;
+			if ($forceNew) {
+				if ($this->_nconnect($this->host, $this->user, $this->password, $this->database)) return true;
+			} else {
+				 if ($this->_connect($this->host, $this->user, $this->password, $this->database)) return true;
+			}
 			$err = $this->ErrorMsg();
 			if (empty($err)) $err = "Connection error to server '$argHostname' with user '$argUsername'";
 			$fn($this->databaseType,'CONNECT',$this->ErrorNo(),$err,$this->host,$this->database);
-		} else 
-			if ($this->_connect($this->host, $this->user, $this->password, $this->database)) return true;
-
+		} else {
+			if ($forceNew) {
+				if ($this->_nconnect($this->host, $this->user, $this->password, $this->database)) return true;
+			} else {
+				if ($this->_connect($this->host, $this->user, $this->password, $this->database)) return true;
+			}
+		}
 		if ($this->debug) ADOConnection::outp( $this->host.': '.$this->ErrorMsg());
 		
 		return false;
 	}	
+	
+	 function _nconnect($argHostname, $argUsername, $argPassword, $argDatabaseName)
+	 {
+	 	return $this->_connect($argHostname, $argUsername, $argPassword, $argDatabaseName);
+	 }
+	
+	
+	/**
+	 * Always force a new connection to database - currently only works with oracle
+	 *
+	 * @param [argHostname]		Host to connect to
+	 * @param [argUsername]		Userid to login
+	 * @param [argPassword]		Associated password
+	 * @param [argDatabaseName]	database
+	 *
+	 * @return true or false
+	 */	  
+	function NConnect($argHostname = "", $argUsername = "", $argPassword = "", $argDatabaseName = "") 
+	{
+		return $this->Connect($argHostname, $argUsername, $argPassword, $argDatabaseName, true);
+	}
 	
 	/**
 	 * Establish persistent connect to database
@@ -279,12 +321,12 @@
 		
 		return false;
 	}
-
+/*
 	function UnixDate($d)
 	{
 		return ADORecordSet::UnixDate($d);
 	}
-	
+*/
 	// Format date column in sql string given an input format that understands Y M D
 	function SQLDate($fmt, $col=false)
 	{	
@@ -452,6 +494,7 @@
 	 */
 	function &Execute($sql,$inputarr=false,$arg3=false) 
 	{
+        // XARAYA MODIFICATION - START
         if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             global $xarDebug_sqlCalls;
             $xarDebug_sqlCalls++;
@@ -459,6 +502,7 @@
             $lmtime = explode(' ', microtime());
             $lstarttime = $lmtime[1] + $lmtime[0];
         }
+        // XARAYA MODIFICATION - END
 
 		if (!$this->_bindInputArray && $inputarr) {
 			$sqlarr = explode('?',$sql);
@@ -543,13 +587,17 @@
 		} else if ($this->_queryID === true){
 		// return simplified empty recordset for inserts/updates/deletes with lower overhead
 			$rs = new ADORecordSet_empty();
+
+            // XARAYA MODIFICATION - START
             //  time to render SQL by proca
-            if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+            if (xarCoreIsDebugFlagSet(PNDBG_SQL)) {
                 $lmtime = explode(" ", microtime());
                 $lendtime = $lmtime[1] + $lmtime[0];
                 $ltotaltime = ($lendtime - $lstarttime);
                 xarLogMessage("Query ($ltotaltime Seconds): ".$sql);
             }
+            // XARAYA MODIFICATION - END
+
 			return $rs;
 		}
 		
@@ -570,13 +618,15 @@
 			} else
 				$rs->_numOfRows = 0;
 		}
+        // XARAYA MODIFICATION - START
         //  time to render SQL by proca
-        if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
+        if (xarCoreIsDebugFlagSet(PNDBG_SQL)) {
             $lmtime = explode(' ', microtime());
             $lendtime = $lmtime[1] + $lmtime[0];
             $ltotaltime = ($lendtime - $lstarttime);
             xarLogMessage("Query ($ltotaltime Seconds):\n".$sql);
         }
+        // XARAYA MODIFICATION - END
 		return $rs;
 	}
 
@@ -674,8 +724,9 @@
 	/**
 	 * @returns an array with the primary key columns in it.
 	 */
-	function MetaPrimaryKeys($table)
+	function MetaPrimaryKeys($table, $owner=false)
 	{
+	// owner not used in base class - see oci8
 		$p = array();
 		$objs = $this->MetaColumns($table);
 		if ($objs) {
@@ -781,7 +832,7 @@
 	
 	
 	/**
-	* Convert recordset to an array recordset
+	* Convert database recordset to an array recordset
 	* input recordset's cursor should be at beginning, and
 	* old $rs will be closed.
 	*
@@ -948,9 +999,8 @@
 	}
 	
 	/**
-	* Insert or replace a single record. Note: this is not the same as MySQL's replace
-	*   function as the replace works even if no primary key is defined. ADOdb's Replace()
-	*   uses update-insert semantics, not insert-delete-duplicates that MySQL uses...
+	* Insert or replace a single record. Note: this is not the same as MySQL's replace. 
+	*  ADOdb's Replace() uses update-insert semantics, not insert-delete-duplicates of MySQL.
 	*
 	* $this->Replace('products', array('prodname' =>"'Nails'","price" => 3.99), 'prodname');
 	*
@@ -966,7 +1016,7 @@
 	* returns 0 = fail, 1 = update, 2 = insert 
 	*/
 	
-	function Replace($table, $fieldArray, $keyCol,$autoQuote=false, $has_autoinc=false)
+	function Replace($table, $fieldArray, $keyCol, $autoQuote=false, $has_autoinc=false)
 	{
 		if (count($fieldArray) == 0) return 0;
 		$first = true;
@@ -1064,7 +1114,10 @@
 		}
 	}
 	
-	
+	/**
+	* Flush cached recordsets that match a particular $sql statement. 
+	* If $sql == false, then we purge all files in the cache.
+ 	*/
 	function CacheFlush($sql=false)
 	{
 	global $ADODB_CACHE_DIR;
@@ -1087,7 +1140,19 @@
 		@unlink($f);
 	}
 	
-	
+	/**
+	* Private function to generate filename for caching.
+	* Filename is generated based on:
+	*
+	*  - sql statement
+	*  - database type (oci8, ibase, ifx, etc)
+	*  - database name
+	*  - userid
+	*
+	* We create 256 sub-directories in the cache directory ($ADODB_CACHE_DIR). 
+	* Assuming that we can have 50,000 files per directory with good performance, 
+	* then we can scale to 12.8 million unique cached recordsets. Wow!
+ 	*/
 	function _gencachename($sql,$createdir)
 	{
 	global $ADODB_CACHE_DIR;
@@ -1120,8 +1185,6 @@
 			$secs2cache = $this->cacheSecs;
 		}
 		include_once(ADODB_DIR.'/adodb-csvlib.inc.php');
-		// cannot cache if $inputarr set
-		//if ($inputarr) return $this->Execute($sql, $inputarr, $arg3); 
 		
 		$md5file = $this->_gencachename($sql.serialize($inputarr),true);
 		$err = '';
@@ -1137,6 +1200,9 @@
 		if (!$rs) {
 		// no cached rs found
 			if ($this->debug) {
+				if (get_magic_quotes_runtime()) {
+					ADOConnection::outp("Please disable magic_quotes_runtime - it corrupts cache files :(");
+				}
 				ADOConnection::outp( " $md5file cache failure: $err (see sql below)");
 			}
 			$rs = &$this->Execute($sql,$inputarr,$arg3);
@@ -1164,7 +1230,7 @@
 			$rs->connection = &$this; // Pablo suggestion
 			if ($this->debug){ 
 			global $HTTP_SERVER_VARS;
-			
+        			
 				$inBrowser = isset($HTTP_SERVER_VARS['HTTP_USER_AGENT']);
 				$ttl = $rs->timeCreated + $secs2cache - time();
 				$s = is_array($sql) ? $sql[0] : $sql;
@@ -1211,10 +1277,19 @@
 	
 
 	/**
-	* Usage:
-	*	UpdateBlob('TABLE', 'COLUMN', $var, 'ID=1', 'BLOB');
-	*	
-	*	$blobtype supports 'BLOB' and 'CLOB'
+	* Update a blob column, given a where clause. There are more sophisticated
+	* blob handling functions that we could have implemented, but all require
+	* a very complex API. Instead we have chosen something that is extremely
+	* simple to understand and use. 
+	*
+	* Note: $blobtype supports 'BLOB' and 'CLOB', default is BLOB of course.
+	*
+	* Usage to update a $blobvalue which has a primary key blob_id=1 into a 
+	* field blobtable.blobcolumn:
+	*
+	*	UpdateBlob('blobtable', 'blobcolumn', $blobvalue, 'blob_id=1');
+	*
+	* Insert example:
 	*
 	*	$conn->Execute('INSERT INTO blobtable (id, blobcol) VALUES (1, null)');
 	*	$conn->UpdateBlob('blobtable','blobcol',$blob,'id=1');
@@ -1225,9 +1300,9 @@
 		return $this->Execute("UPDATE $table SET $column=? WHERE $where",array($val)) != false;
 	}
 
-		/**
+	/**
 	* Usage:
-	*	UpdateBlob('TABLE', 'COLUMN', '/path/to/file', 'ID=1', 'BLOB');
+	*	UpdateBlob('TABLE', 'COLUMN', '/path/to/file', 'ID=1');
 	*	
 	*	$blobtype supports 'BLOB' and 'CLOB'
 	*
@@ -1292,8 +1367,7 @@
 			return false;
 		}
 	}
-	
-	
+
 	/*
 	* Maximum size of C field
 	*/
@@ -1311,7 +1385,6 @@
 		return 4000; // make it conservative if not defined
 	}
 	
-	
 	/**
 	 * Close Connection
 	 */
@@ -1324,7 +1397,6 @@
 		//if ($this->_isPersistentConnection != true) return $this->_close();
 		//else return true;	
 	}
-	
 	
 	/**
 	 * Begin a Transaction. Must be followed by CommitTrans() or RollbackTrans().
@@ -2007,7 +2079,7 @@
 	*/
 	function NumCols()
 	{
-		return $this->_numOfCols;
+		return $this->_numOfFields;
 	}
 	
 	/**
@@ -2147,15 +2219,18 @@
    *
    * If you don't want uppercase cols, set $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC
    * before you execute your SQL statement, and access $rs->fields['col'] directly.
+   *
+   * $upper  0 = lowercase, 1 = uppercase, 2 = whatever is returned by FetchField
    */
-	function GetRowAssoc($upper=true)
+	function GetRowAssoc($upper=1)
 	{
 	 
 	   	if (!$this->bind) {
 			$this->bind = array();
 			for ($i=0; $i < $this->_numOfFields; $i++) {
 				$o = $this->FetchField($i);
-				$this->bind[($upper) ? strtoupper($o->name) : strtolower($o->name)] = $i;
+				if ($upper === 2) $this->bind[$o->name] = $i;
+				else $this->bind[($upper) ? strtoupper($o->name) : strtolower($o->name)] = $i;
 			}
 		}
 		
@@ -2351,7 +2426,7 @@
 	*/
 	function MetaType($t,$len=-1,$fieldobj=false)
 	{
-	// changed in 2.32 to hashing instead of switch for speed...
+	// changed in 2.32 to hashing instead of switch stmt for speed...
 	static $typeMap = array(
 		'VARCHAR' => 'C',
 		'VARCHAR2' => 'C',
@@ -2423,9 +2498,11 @@
 		$tmap = @$typeMap[strtoupper($t)];
 		switch ($tmap) {
 		case 'C':
-			if (!empty($this)) if ($len <= $this->blobSize) return 'C';
-			else if ($len <= 250) return 'C';
-			
+			if (!empty($this)) {
+				if ($len <= $this->blobSize) return 'C';
+			} else if ($len <= 250) {
+				return 'C';
+			}
 			// ok, the char field is too long, return as text field... 
 			return 'X';
 			

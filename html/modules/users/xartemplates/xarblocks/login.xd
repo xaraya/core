@@ -3,7 +3,7 @@
     <table border="0" width="100%">
         <tr>
             <td>
-                Username
+                <pnt:mlstring>Username</pnt:mlstring>
             </td>
             <td>
                 <input type="text" name="uname" maxlength="64" size="10" />
@@ -11,7 +11,7 @@
         </tr>
         <tr>
             <td>
-                Password
+                <pnt:mlstring>Password</pnt:mlstring>
             </td>
             <td>
                 <input type="password" name="pass" maxlength="64" size="10" />
@@ -20,7 +20,7 @@
         <pnt:if condition="pnConfigGetVar('seclevel') neq 'High'">
             <tr>
                 <td colspan="2">
-                    <input type="checkbox" name="rememberme" value="1" />Remember me
+                    <input type="checkbox" name="rememberme" value="1" /><pnt:mlstring>Remember me</pnt:mlstring>
                 </td>
             </tr>
         </pnt:if>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td colspan="2" align="justify">
-                Need an account? <a href="&pnt-modurl-users-user-new;">Register here</a>.
+                <pnt:mlstring>Need an account?</pnt:mlstring> <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>Register here</pnt:mlstring></a>.
             </td>
         </tr>
     </table>

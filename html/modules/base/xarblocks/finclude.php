@@ -43,6 +43,7 @@ function base_fincludeblock_display($blockinfo)
  */
 function base_fincludeblock_modify($blockinfo)
 {
-    return '<tr><td class="xar-normal">File:</td><td><input type="text" name="url" size="30" maxlength="255" value="'.$blockinfo['url'].'" /></td></tr>';
+    // Return information to BlockLayout
+    return array();
 }
 ?>

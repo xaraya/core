@@ -1,6 +1,6 @@
 <?php
 /*
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.  
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.  
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -51,6 +51,8 @@ class ADODB_ibase extends ADOConnection {
 
 	function BeginTrans()
 	{	 
+		if ($this->transOff) return true;
+		$this->transCnt += 1;
 		$this->autoCommit = false;
 	 	$this->_transactionID = $this->_connectionID;//ibase_trans($this->ibasetrans, $this->_connectionID);
 		return $this->_transactionID;
@@ -59,6 +61,8 @@ class ADODB_ibase extends ADOConnection {
 	function CommitTrans($ok=true) 
 	{ 
 		if (!$ok) return $this->RollbackTrans();
+		if ($this->transOff) return true;
+		if ($this->transCnt) $this->transCnt -= 1;
 		$ret = false;
 		$this->autoCommit = true;
 		if ($this->_transactionID) {
@@ -71,6 +75,8 @@ class ADODB_ibase extends ADOConnection {
 	
 	function RollbackTrans()
 	{
+		if ($this->transOff) return true;
+		if ($this->transCnt) $this->transCnt -= 1;
 		$ret = false;
 		$this->autoCommit = true;
 		if ($this->_transactionID) 
@@ -422,7 +428,7 @@ class ADORecordset_ibase extends ADORecordSet
 		
 		$this->fields = $f;
 		if ($this->fetchMode & ADODB_FETCH_ASSOC) {
-			$this->fields = $this->GetRowAssoc(false);
+			$this->fields = $this->GetRowAssoc(ADODB_ASSOC_CASE);
 		}
 		return true;
 	}

@@ -2,7 +2,7 @@
 // $Id$
 $modversion['name'] = 'Administration';
 $modversion['id'] = '9';
-$modversion['version'] = '1.0';
+$modversion['version'] = '2.0';
 $modversion['official'] = 1;
 $modversion['author'] = 'Andy Varganov';
 $modversion['contact'] = 'andyv@msmph.com';

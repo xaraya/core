@@ -43,7 +43,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_database_password" maxlength="80" value="<?php echo $database_password; ?>">
+            <input type="password" name="install_database_password" maxlength="80" value="<?php echo $database_password; ?>">
         </td>
     </tr>
     <tr>

@@ -11,7 +11,7 @@ $modversion['license'] = '';
 $modversion['official'] = 1;
 $modversion['author'] = 'Paul Rosania';
 $modversion['contact'] = 'paul@postnuke.com';
-$modversion['admin'] = 1;
+$modversion['admin'] = 0;
 $modversion['user'] = 0;
 $modversion['securityschema'] = array('Installer::' => '::');
 $modversion['class'] = 'Core Admin';

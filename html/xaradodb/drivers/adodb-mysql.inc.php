@@ -1,6 +1,6 @@
 <?php
 /*
-V2.42 4 Oct 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
+V2.50 14 Nov 2002  (c) 2000-2002 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -25,7 +25,7 @@ class ADODB_mysql extends ADOConnection {
 	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $hasLimit = true;
 	var $hasMoveFirst = true;
-	var $hasGenID = false;
+	var $hasGenID = false;  // XARAYA MODIFICATION
 	var $upperCase = 'upper';
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = 'CURDATE()';
@@ -54,9 +54,11 @@ class ADODB_mysql extends ADOConnection {
 	
 	function GenID($seqname='adodbseq',$startID=1)
 	{
+        // XARAYA MODIFICATION - START
 		//if (!$this->hasGenID) return false;
         // temporal fix proca
         if (!$this->hasGenID) return 0;
+        // XARAYA MODIFICATION - END
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		$rs = @$this->Execute($getnext);
 		if (!$rs) {

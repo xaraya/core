@@ -23,7 +23,7 @@
         
         </td>
         <td align="center">
-			Extra Link TaC Removed
+            <a href="&pnt-modurl-users-admin-modifydynamicdata;"><pnt:mlstring>Dynamic User Data</pnt:mlstring></a>
         </td>
         <td align="center">
             <a href="&pnt-modurl-users-admin-modifyconfirmationemail;"><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></a>
