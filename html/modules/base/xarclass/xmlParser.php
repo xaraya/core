@@ -131,10 +131,10 @@ class XMLParser {
     
         $this->data = array();
         $i = 0;
-        $ns = $this->getnamespaces($vals[$i]['attributes']);
+        $ns = $this->getnamespaces(isset($vals[$i]['attributes']));
         array_push($this->data, array(
             'tag' => $this->_convertTagNs($vals[$i]['tag'],$ns), 
-            'attributes' => $vals[$i]['attributes'],
+            'attributes' => isset($vals[$i]['attributes']),
             'children' => $this->_getXmlChildren($vals, $ns, $i)
         ));
     }     
