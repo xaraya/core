@@ -1,24 +1,20 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<p class="param">
-    <label for="showlogout#$blockid#">
-        <span class="help" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
-            <xar:mlstring>Show a logout link in this admin menu</xar:mlstring>:
-        </span>
-    </label>
+<div class="xar-form-input-wrapper-after">
     <xar:if condition="$showlogout eq 1">
         <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" checked="checked" />
     <xar:else />
         <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
     </xar:if>
-</p>
-
-<p class="param">
-    <label for="menustyle">
-        <span class="help" title="#xarML('How should the meny items be ordered?')#">
-            <xar:mlstring>Sort admin menu items</xar:mlstring>:
-        </span>
+    <label for="showlogout#$blockid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+        <xar:mlstring>Show A Logout Link In This Admin Menu</xar:mlstring>
     </label>
-    <select name="menustyle" id="menustyle" size="1">
+</div>
+
+<div class="xar-form-input-wrapper">
+    <label for="menustyle" title="#xarML('How should the meny items be ordered?')#" class="xar-form-label">
+        <xar:mlstring>Sort Admin Menu Items:</xar:mlstring>
+    </label>
+    <select name="menustyle" id="menustyle">
         <xar:foreach in="$sortorder" value="$v" key="$k">
             <xar:if condition="$k eq $menustyle">
                 <option value="#$k#" selected="selected">
@@ -31,4 +27,4 @@
             </xar:if>
         </xar:foreach>
     </select>
-</p>
+</div>
