@@ -41,7 +41,7 @@ function pnMain()
             $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
                                  should not happen. The module is probably directly calling functions
                                  like echo, print, or printf. Please modify the module to exclude direct output.
-                                 The module is violating PostNuke architecture principles.<br /><br />'.
+                                 The module is violating Xaraya architecture principles.<br /><br />'.
                                  $rawOutput.
                                  '<br /><br />This is the real module output:<br /><br />'.
                                  $mainModuleOutput;
