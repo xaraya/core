@@ -170,13 +170,18 @@ function installer_admin_phase5()
 
     // Get arguments
     if (!xarVarFetch('install_database_host','str',$dbHost)) return;
-    if (!xarVarFetch('install_database_name','str:1:',$dbName)) return;
-    if (!xarVarFetch('install_database_username','str:1:',$dbUname)) return;
-    if (!xarVarFetch('install_database_password','str::',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_prefix','str:1:',$dbPrefix)) return;
+    if (!xarVarFetch('install_database_name','str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_username','str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_password','str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_prefix','str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
+    if ($dbName == '') {
+        $msg = xarML('No database was specified');
+        xarCore_die($msg);
+        return;
+    }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
                          'dbName'    => $dbName,
