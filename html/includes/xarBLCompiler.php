@@ -476,10 +476,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Situation: [...text...]<xar:...
                         // NOTE: WHITESPACE EATER HERE
                         $trimmer='xmltrim';
-                        if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
+                        if($parent->tagName == 'set' || $parent->tagName == 'ml' || $parent->tagName == 'blockgroup') $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
+                                $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -543,7 +543,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Situation: [...text...]</xar:...
                         if (trim($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
+                                $children[] =& $this->nodesFactory->createTextNode(xmltrim($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -2345,6 +2345,8 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
+    var $blockgrouptemplate = NULL;
+    
     function renderBeginTag()
     {
         extract($this->attributes);
@@ -2376,6 +2378,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         // Code for rendering the block tag.
         // Use double-quotes so variables can be expanded within the attributes
         // for more dynamic blocks.
+        $blockgrouptemplate = isset($this->blockgrouptemplate) ? $this->blockgrouptemplate : '';
         $code = <<<EOT
         xarBlock_renderBlock(
             array(
@@ -2386,7 +2389,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
                     'title' => $title,
                     'template' => $template,
                     // Allow the box template to be set from a xar:blockgroup tag.
-                    'box_template' => (isset(\$_bl_blockgroup_template) ? \$_bl_blockgroup_template : NULL),
+                    'box_template' => ('$blockgrouptemplate'),
                     'state' => $state,
                     'content' => $override
             )
@@ -2434,6 +2437,8 @@ EOT;
  */
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
+    var $template = NULL;
+    
     function renderBeginTag()
     {
         extract($this->attributes);
@@ -2444,20 +2449,20 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         }
 
         // Template attribute is optional.
-        if (isset($template)) {
-            // TODO: not sure about use of semi-colons here. This command seems to get
-            // an echo prepended, but the renderEndTag output does not. Similarly, a
-            // terminating semi-colon is needed here, but not in the renderEndTag() method.
-            // Is this right?
-            return '; $_bl_blockgroup_template = "' . xarVar_addSlashes($template) . '";';
-        } else {
-            return ';';
+        $code =';';
+        // If a grouptemplate is set, notify the children
+        if (isset($template)) {            
+            $children =& $this->children; 
+            for($i=0;$i<count($children); $i++) {
+                $children[$i]->blockgrouptemplate = $template;
+            }
         }
+        return $code;
     }
 
     function renderEndTag()
     {
-        return 'unset($_bl_blockgroup_template)';
+        return '';
     }
 
     function render()
@@ -2482,6 +2487,10 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     }
 
     function needExceptionsControl()
+    {
+        return true;
+    }
+    function isAssignable() 
     {
         return true;
     }
