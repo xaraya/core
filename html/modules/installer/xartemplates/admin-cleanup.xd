@@ -1,13 +1,13 @@
-<div style="padding:10px;">
-  <span class="xar-pagetitle">
+<div id="install"><h1>
+<!--   <span class="xar-pagetitle"> -->
     <xar:mlstring>
       Installation Complete 
-    </xar:mlstring>
-  </span>
-  <br />
-  <br />
-  <div style="justify;">
-    <span class="xar-normal">
+    </xar:mlstring></h1>
+<!--   </span> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <div style="justify;"> -->
+<!--     <span class="xar-normal"> -->
       <p>
         <strong>
           <xar:mlstring>
@@ -60,13 +60,13 @@
           </xar:mlstring>
         </a>
       </p>
-    </span>
-  </div>
+<!--     </span> -->
+<!--   </div> -->
 </div>
-<div style="text-align:center;padding:5px;">
-  <p class="xar-sub">
+<!-- <div style="text-align:center;padding:5px;"> -->
+  <h2>
     <xar:mlstring>
       Thank you for using Xaraya. 
     </xar:mlstring>
-  </p>
-</div>
+  </h2>
+<!-- </div> -->

@@ -782,22 +782,3 @@ It is a small price to pay, considering there are only 3 places like this
 in the whole theme - leftblocks content and rightblocks, which need to be wrapped
 in this _special_ _fixer_ container.. [andyv]
 ------------------------------------------------------------------[important note] */
-
-
-
-* html div#classicheader { 
-/* 	width: expression((body.clientWidth <= 710) ? "710px" : "auto"); */
-}
-
-* html div#classicfooter { 
-/* 	width: expression((body.clientWidth <= 710) ? "710px" : "auto"); */
-}
-
-* html table#classiccontentarea { 
-/* 	width: expression((body.clientWidth <= 710) ? "710px" : "100%"); */
-} /*
-rules above are min-width equvivalent for IE-Win browsers only, 
-because they dont support this property along with many 
-other ordinary and extremely useful w3c standards, fancy that :-{
-The only problem is how to make these things validate - uncomment at your own risk..
--------------------------------------------------------------------------[comment] */
