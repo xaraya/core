@@ -1,6 +1,14 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Configuration</xar:mlstring></h2><br />
 <div style="margin: auto;">
+<p><xar:mlstring>Please note that the default theme variable has moved to the themes module
+and that you cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0
+with the mbstring extension compiled in.
+
+Legacy Testers Note: The Load Legacy allows the usage of pnHTML and and other legacy PostNuke functions.
+Xaraya itself is completely legacy free, but other modules may still yet use them.
+
+</p></xar:mlstring>
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
@@ -49,7 +57,7 @@
 			<option value="High">High</option>
 			<option value="Medium">Medium</option>
 			<option value="Low" selected="selected">Low</option>
-		</xar:if>									
+		</xar:if>
 	</select></p>
 	<xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
 		<p><xar:mlstring>Session Duration (In Days)</xar:mlstring>:
@@ -57,11 +65,32 @@
 	</xar:if>
 	<p><xar:mlstring>Session Iactivity Time Out</xar:mlstring>:&nbsp;&nbsp;
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3"></p>
-	<h4><xar:mlstring>Language Options</xar:mlstring></h4>
-	<p><xar:mlstring>Default Locale</xar:mlstring>:&nbsp;&nbsp;
-	<select name="defaultlocale" id="defaultlocale" size="1">
-
 	</select></p>
+
+    <h4><xar:mlstring>Multi-Language Configuration</xar:mlstring></h4>
+	<p><label for="mlsmode"><xar:mlstring>Mode</xar:mlstring></label>:
+    <select name="mlsmode" id="mlsmode" size="1">
+    	<xar:if condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'SINGLE'">
+			<option value="SINGLE" selected="selected">SINGLE</option>
+			<option value="BOXED">BOXED</option>
+			<option value="UNBOXED">UNBOXED</option>
+		<xar:elseif condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'BOXED'" />
+			<option value="SINGLE">SINGLE</option>
+			<option value="BOXED" selected="selected">BOXED</option>
+			<option value="UNBOXED">UNBOXED</option>
+		<xar:elseif condition="xarConfigGetVar('Site.MLS.MLSMode') eq 'UNBOXED'" />
+			<option value="SINGLE">SINGLE</option>
+			<option value="BOXED">BOXED</option>
+			<option value="UNBOXED" selected="selected">UNBOXED</option>
+		</xar:if>
+    </select></p>
+    <p><label for="mlsmode"><xar:mlstring>Default Locale</xar:mlstring></label>:&nbsp;&nbsp;
+	<select name="defaultlocale" id="defaultlocale" size="1">
+         <xar:foreach in="$locales" value="$locale">
+             <option value="#$locale#">#$locale#</option>
+         </xar:foreach>
+    </select></p>
+
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
 	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
 	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
