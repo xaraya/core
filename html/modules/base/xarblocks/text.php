@@ -42,7 +42,7 @@ function base_textblock_info()
  */
 function base_textblock_display($blockinfo)
 {
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('ViewBase',0,'Textblock','$blockinfo[title]::')) return;
 
     // Get variables from content block

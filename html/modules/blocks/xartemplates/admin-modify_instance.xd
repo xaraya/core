@@ -104,7 +104,7 @@
         </tr>
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
         <tr>
-            <td colspan="2">
+            <td colspan="2" align="left">
                 Content:
             </td>
         </tr>

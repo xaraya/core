@@ -35,7 +35,7 @@ function roles_onlineblock_display($blockinfo)
 {
     // Security check
     // Security check
-    if (!xarSecurityCheck('ReadRole',1,'Onlineblock','$blockinfo[title]::')) return;
+    if (!xarSecurityCheck('OverviewRole',0,'Onlineblock','$blockinfo[title]::')) return;
 
     // Get variables from content block
     $vars = unserialize($blockinfo['content']);
@@ -47,7 +47,7 @@ function roles_onlineblock_display($blockinfo)
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     $sql = "SELECT COUNT(1)
             FROM $sessioninfotable
-            WHERE xar_lastused > $activetime AND xar_uid > 1
+            WHERE xar_lastused > $activetime AND xar_uid > 2
 		    GROUP BY xar_uid
             ";
     $result = $dbconn->Execute($sql);
@@ -55,12 +55,12 @@ function roles_onlineblock_display($blockinfo)
     if ($dbconn->ErrorNo() != 0) {
         return false;
     }
-    $args['numroles'] = $result->RecordCount();
+    $args['numusers'] = $result->RecordCount();
     $result->Close();
 
    $query2 = "SELECT count( 1 )
              FROM $sessioninfotable
-              WHERE xar_lastused > $activetime AND xar_uid = '0'
+              WHERE xar_lastused > $activetime AND xar_uid = '2'
 			  GROUP BY xar_ipaddr
 			 ";
    $result2 = $dbconn->Execute($query2);
@@ -75,10 +75,10 @@ function roles_onlineblock_display($blockinfo)
        $args['guests'] = xarML('guests');
    }
 
-   if ($args['numroles'] == 1) {
-       $args['roles'] = xarML('user');
+   if ($args['numusers'] == 1) {
+       $args['users'] = xarML('user');
    } else {
-       $args['roles'] = xarML('roles');
+       $args['users'] = xarML('users');
    }
 
 

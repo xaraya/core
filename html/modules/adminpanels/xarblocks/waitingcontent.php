@@ -36,7 +36,7 @@ function adminpanels_waitingcontentblock_info()
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
 // Security Check
-	if(!xarSecurityCheck('EditPanel',1,'Waitingcontentblock','$blockinfo[title]::')) return;
+	if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock','$blockinfo[title]::')) return;
 
     $moditems = array();
 
