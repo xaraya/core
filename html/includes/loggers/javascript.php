@@ -36,7 +36,7 @@ class xarLogger_javascript extends xarLogger
         $code = "\ndebugWindow = window.open(\"\",".
                 "\"Xaraya_Javascript_Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
                 "if (debugWindow) {\n".
-                "    debugWindow.focus();\n".
+//                "    debugWindow.focus();\n".
                 "    debugWindow.document.write(\"".$header."\"+'<p><b>'+window.location.href+'</b></p>');\n".
                 "}\n";
         return $code;
