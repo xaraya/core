@@ -1,7 +1,7 @@
 <META http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#">
 	<div id="install">
 	  <div style="padding:10px;">
-      <div style="text-align:center;"><span class="xar-pagetitle">Begin the Boot Process</span></div><br />
+      <div style="text-align:center;"><span class="xar-pagetitle">Begin Initialization</span></div><br />
 			<div style="text-align:center;">
   		  <form action="install.php" method="post">
 					<div style="text-align:center;">
