@@ -391,7 +391,7 @@ function roles_user_register()
                                          '/%%siteadmin%%/',
                                          '/%%valcode%%/');
 
-                $confemailreplace = array("".$baseurl."val.php?v=".$confcode."&u=".$user['uid']."",
+                $confemailreplace = array("".$baseurl."val.php?v=".$confcode."&u=".$uid."",
                                           "$realname",
                                           "$username",
                                           "$ip",
@@ -406,13 +406,13 @@ function roles_user_register()
                     $object =& xarModAPIFunc('dynamicdata','user','getobject',
                                              array('module' => 'roles',
                                                    // we know the item id now...
-                                                   'itemid' => $user['uid']));
+                                                   'itemid' => $uid));
                     if (isset($object) && !empty($object->objectid)) {
 
                         // retrieve the item itself
                         $itemid = $object->getItem();
 
-                        if (!empty($itemid) && $itemid == $user['uid']) {
+                        if (!empty($itemid) && $itemid == $uid) {
                             // get the Dynamic Properties of this object
                             $properties =& $object->getProperties();
                             foreach (array_keys($properties) as $key) {
