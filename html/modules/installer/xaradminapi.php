@@ -166,7 +166,7 @@ function installer_adminapi_createdb($args)
     }
 
     // Start connection
-    $dbconn = ADONewConnection($dbType);
+    $dbconn = ADONewConnection($dbDriver);
     if ($dbType == 'postgres') {
         // quick hack to enable Postgres DB creation
         $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass, 'template1');
