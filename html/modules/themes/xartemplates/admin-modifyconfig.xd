@@ -74,6 +74,7 @@
 		</xar:if>
 	</select></p>
 	<h3><xar:mlstring>Template Debugging options</xar:mlstring></h3>
+	<xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
     <p>
       <xar:mlstring>Show template filenames in HTML comments</xar:mlstring>
         <xar:if condition="xarModGetVar('themes', 'ShowTemplates')">
@@ -82,6 +83,7 @@
           <input type="checkbox" name="showtemplates" id="showtemplates" value="1" />
         </xar:if>
 	  </p>
+	</xar:if>
     <p>
       <xar:mlstring>Cache templates</xar:mlstring>
       <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
