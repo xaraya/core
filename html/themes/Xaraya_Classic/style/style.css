@@ -178,7 +178,7 @@ FORM {
    font-size: 11px;
 }
 CHECKBOX {
-   background-color: none;
+   background-color: transparent;
    font-family: Verdana,Arial,Helvetica,sans-serif;
    font-size: 10px;
    font-weight: normal;
