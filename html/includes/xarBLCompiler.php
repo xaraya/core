@@ -791,6 +791,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $node = $this->nodesFactory->createTextNode($text, $this);
             $children[] = $node;
         }
+        // Check if there is something left at the stack
+        $stackTagName = array_pop($this->tagNamesStack);
+        if(!empty($stackTagName)) {
+            $this->raiseError(XAR_BL_INVALID_SYNTAX,"Reached end of file while tag '$stackTagName' was open",$this);
+            return;
+        }
         return $children;
     }
 
