@@ -37,6 +37,7 @@ define('XARMLS_CTXTYPE_ADMIN', 6);
 define('XARMLS_CTXTYPE_ADMINAPI', 7);
 define('XARMLS_CTXTYPE_USER', 8);
 define('XARMLS_CTXTYPE_USERAPI', 9);
+define('XARMLS_CTXTYPE_VISUALAPI', 10);
 
 $MLSData = array(
                 'file' => array(
@@ -88,6 +89,11 @@ $MLSData = array(
                           'type' => XARMLS_CTXTYPE_USERAPI,
                           'dir' => 'userapi',
                           'label' => 'UserAPI'
+                         ),
+                'visualapi' => array(
+                          'type' => XARMLS_CTXTYPE_VISUALAPI,
+                          'dir' => 'visualapi',
+                          'label' => 'VisualAPI'
                          )
 );
 

@@ -848,9 +848,14 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     // Load the translations file
-    if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMIN;
-    elseif ($modType == "user") $type = XARMLS_CTXTYPE_USER;
-    else $type = 1;
+    // if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMIN;
+    // elseif ($modType == "user") $type = XARMLS_CTXTYPE_USER;
+    // else $type = 1;
+    $allcontexts = $GLOBALS['MLS']->getContexts();
+    $type = 1;
+    foreach ($allcontexts as $context) {
+        if ($context->getName() == $modType) $type = $context->getType();
+    }
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, $type, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
@@ -952,9 +957,14 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         return;
     }
     // Load the translations file
-    if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMINAPI;
-    elseif ($modType == "user") $type = XARMLS_CTXTYPE_USERAPI;
-    else $type = 1;
+    // if ($modType == "admin") $type = XARMLS_CTXTYPE_ADMINAPI;
+    // elseif ($modType == "user") $type = XARMLS_CTXTYPE_USERAPI;
+    // else $type = 1;
+    $allcontexts = $GLOBALS['MLS']->getContexts();
+    $type = 1;
+    foreach ($allcontexts as $context) {
+        if ($context->getName() == $modType.'api') $type = $context->getType();
+    }
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, $type, $funcName) === NULL) return;
     return $modAPIFunc($args);
 }
