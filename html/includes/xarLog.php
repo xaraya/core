@@ -109,9 +109,7 @@ function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
-    // no go for the xarModAPIFunc, that subsystem is not there yet
-    
-    xarLogMessage(xarLog__dumpVariable($args,$level));
+    xarLogMessage(xarLog__dumpVariable($args),$level);
 }
 
 
