@@ -43,6 +43,7 @@ function modules_adminapi_initialise($args)
 		//TODO: Add description of the dependencies
     	$msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+		
         return;
     }
 
@@ -82,13 +83,13 @@ function modules_adminapi_initialise($args)
         if (function_exists($func)) {
             if ($func() != true) {
 		    	$msg = xarML('Module initialisation failed because the function returned false');
-		        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+		        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
         		return;
             }
         } else {
             // file exists, but function not found. Exception!
 	    	$msg = xarML('Module initialisation failed because your module did not include an init function');
-	        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+	        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
        		return;
         }
     }
@@ -103,7 +104,7 @@ function modules_adminapi_initialise($args)
 //    die(var_dump($set));
     if (!isset($set)) {
     	$msg = xarML('Module state change failed');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
    		return;
     }
 

@@ -23,6 +23,9 @@ function modules_admin_initialise()
 	//First check the modules dependencies
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
     	//Oops, we got problems...
+		//Handle the exception with a nice GUI:
+		xarExceptionHandled();
+
     	//Checking if we have already sent a GUI to the user:
     	xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
     } else {
@@ -55,10 +58,11 @@ function modules_admin_initialise()
     
     // attempt to activate
     $activated = xarModAPIFunc('modules',
-                              'admin',
-                              'setstate',
-                              array('regid' => $id,
-                                    'state' => XARMOD_STATE_ACTIVE));
+                               'admin',
+                               'activate',
+                               array('regid' => $id));
+	
+	//For some strange reason it is not sending me to list anymore?
     if (!isset($activated)){                             
         // something gone wrong with normal activation
         xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));

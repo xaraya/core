@@ -11,15 +11,15 @@
  */
 function modules_adminapi_verifydependency($args)
 {
-	$mainId = $args['regid'];
-	
+    $mainId = $args['regid'];
+
     // Security Check
     // need to specify the module because this function is called by the installer module
     if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
 
     // Argument check
     if (!isset($mainId)) {
-       $msg = xarML('Missing module regid (#(1)).', $mainId);
+    	$msg = xarML('Missing module regid (#(1)).', $mainId);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
     }
@@ -31,23 +31,28 @@ function modules_adminapi_verifydependency($args)
                        new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
                        return;
     }
-    
+
+
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules','admin','checkmissing')) {return;}
-    
+    if (!xarModAPIFunc('modules','admin','checkmissing')) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Missing Module');
+        return;
+    }
+
     // Get all modules in DB
-    // A module is dependent only if it was already initialised at least.
+    // A module is able to fullfil a dependency only if it is activated at least.
     // So db modules should be a safe start to go looking for them
     $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
-    if (!isset($dbModules)) return;
+    if (!isset($dbModules)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Unable to find modules in the database');
+        return;
+    }
 
     $dbMods = array();
 
-	//Find the modules which are active
+    //Find the modules which are active (should upgraded be added too?)
     foreach ($dbModules as $name => $dbInfo) {
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE ||
-            $dbInfo['state'] == XARMOD_STATE_INACTIVE ||
-            $dbinfo['state'] == XARMOD_STATE_UPGRADED) 
+        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) 
         {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
@@ -56,7 +61,7 @@ function modules_adminapi_verifydependency($args)
     $dependency = $modInfo['dependency'];
     
     if (empty($dependency)) {
-	$dependency = array();
+        $dependency = array();
     }
 
     foreach ($dependency as $module_id => $conditions) {
@@ -65,6 +70,7 @@ function modules_adminapi_verifydependency($args)
 
             //Required module inexistent
             if (!isset($dbMods[$module_id])) {
+		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Required module missing');
                 //Need to add some info for the user
                 return false;
             }
@@ -72,7 +78,7 @@ function modules_adminapi_verifydependency($args)
             if (xarModAPIFunc('base','versions','compare',array(
                 'ver1'      => $conditions['minversion'],
                 'ver2'      => $dbMods[$module_id]['version'],
-		'normalize' => 'numeric')) < 0) {
+                'normalize' => 'numeric')) < 0) {
                 //Need to add some info for the user
                 return false; // 1st version is bigger
             }
@@ -82,7 +88,7 @@ function modules_adminapi_verifydependency($args)
             if (xarModAPIFunc('base','versions','compare',array(
                 'ver1'       => $conditions['maxversion'],
                 'ver2'       => $dbMods[$module_id]['version'],
-		'normalize'  => 'numeric')) > 0) {
+                'normalize'  => 'numeric')) > 0) {
                 //Need to add some info for the user
                 return false; // 1st version is smaller
             }
@@ -91,6 +97,7 @@ function modules_adminapi_verifydependency($args)
         } else {
             //Required module inexistent
             if (!isset($dbMods[$conditions])) {
+		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Required module missing');
                 //Need to add some info for the user
                 return false;
             }
