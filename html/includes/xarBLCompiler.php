@@ -290,6 +290,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         } else {
             // If there are no children or no text, we can render it as is.
             $code = $node->render();
+            if(!isset($code)) xarLogVariable('offending node:', $node);
             assert('isset($code); /* The rendering code for a node is not working properly */');
             if (!isset($code))  return; // throw back
         }
@@ -2987,6 +2988,9 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         if (!isset($file)) {
             return;
         }
+
+        // resolve subdata attribute
+        $subdata = xarTpl__ExpressionTransformer::transformPHPExpression($subdata);
 
         switch($type) {
         case 'theme':
