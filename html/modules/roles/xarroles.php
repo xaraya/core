@@ -564,13 +564,9 @@ class xarRole
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
 
-        $query = "SELECT MAX(xar_uid) FROM $this->rolestable";
-        // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-
-        list($uid) = $result->fields;
-        $this->uid = $uid;
+        // Fetch the last inserted user ID, bail if an exception was thrown
+        $this->uid = $this->dbconn->PO_Insert_ID($this->rolestable, 'xar_uid');
+        if (!$this->uid) return;
 
         $parts = new xarRoles();
         $parentpart = $parts->getRole($this->parentid);
