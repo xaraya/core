@@ -3617,7 +3617,6 @@ marcel@hsdev.com|html/modules/comments/xarincludes/rendering/flat.php|2002122901
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/nested.php|20021229014640|29999|dcaba3759da027b4
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/renderbase.php|20021229014640|33771|60a22f8172d51c53
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/threaded.php|20021229014640|37538|30c409fb5b4eeee2
-marcel@hsdev.com|html/var/cache/templates/index.html|20030203085125|46538|5592895c37061f27
 marcel@hsdev.com|tests/bk/tobedeletd3|20021201185524|27771|2ad34953b9eb374d
 marcel@hsdev.com|tests/bk/tobedelted1|20021201185524|23311|4964bad518a1862a
 marcel@hsdev.com|tests/bk/tobedleted2|20021201185524|24280|230730a268eb4cc3
@@ -3651,7 +3650,6 @@ marco@jabawack.canini.org|BitKeeper/etc/ignore|20030102180532|43897
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030111102716|44898
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030114090110|45797
 marco@jabawack.canini.org|docs/rfc/rfc0020.txt|20021222121721|50563|f9c640e3b20a4ae
-marco@jabawack.canini.org|html/locales/en_US.ISO-8859-1/php/core/core.php|20030107014412|05069|697a3d6fe51ae916
 marco@jabawack.canini.org|html/locales/en_US.iso-8859-1/locale.xml|20021230150718|58635|f0e901602454777b
 marco@jabawack.canini.org|html/locales/en_US.iso-8859-1/php/xarcore.php|20021130224109|33405|f52cf649f7788c15
 marco@jabawack.canini.org|html/modules/translations/class/PHPParser.php|20030107020326|20525
