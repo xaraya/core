@@ -1,5 +1,5 @@
 <?php 
-// File: $Id$
+// File: $Id: s.pninit.php 1.11 02/10/27 12:47:46-05:00 John.Cox@d38yrl11. $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.

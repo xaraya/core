@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td colspan="2" align="justify">
-                Need an account? <a href="&pnt-modurl-users-user-register;">Register here</a>.
+                Need an account? <a href="&pnt-modurl-users-user-new;">Register here</a>.
             </td>
         </tr>
     </table>

@@ -1,5 +1,5 @@
 <?php 
-// $Id$
+// $Id: s.pnversion.php 1.7 02/08/09 19:00:48-00:00 johnny $
 $modversion['name'] = 'users';
 $modversion['id'] = '27';
 $modversion['version'] = '1.01';
