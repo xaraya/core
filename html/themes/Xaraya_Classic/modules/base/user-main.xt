@@ -1,6 +1,10 @@
-Xaraya is currently in Beta Production.  If you notice any unexpected functionality, please use our bug tracker at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>.  Thank you for your support, and feel free to join our development or user discussions to become involved in our community.
-<br /><br />
-For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website.
-<br /><br />
-This message can be edited by creating an override template (#xarConfigGetVar('Site.BL.ThemesDirectory')#/themename/modules/base/user-main.xt ) for the base module.
-
+<p>
+    Xaraya is currently in Beta Production. If you notice any unexpected functionality, please use our bug tracker at 
+    <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>. Thank you for your support, and feel free to join our development or user discussions to become involved in our community. 
+</p>
+<p>
+    For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a>website. 
+</p>
+<p>
+    This message can be edited by creating an override template (#xarConfigGetVar('Site.BL.ThemesDirectory')#/themename/modules/base/user-main.xt ) for the base module. 
+</p>

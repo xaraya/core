@@ -1,450 +1,649 @@
-/* XARAYA REQUIRED CLASSES */
-a {
-   text-decoration: none;
-   color: #6a5acd;
-   font-weight: bold;
-}
-a:hover {
-   color: #003366;
-}
-blockquote {
-   color: #191970;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   margin: 2em;
-}
+/*  Xaraya_Classic - default theme.. [revision 2 by andyv_at_xaraya.com]
+
+Lets make the CSS a bit more interesting and better organised than before;
+Differences and aims of this revision will be:
+
+	- improved readability and formatting of source
+	- rules arranged according to page structure, layout and other properties
+	- detailed comments for each class and selector
+	- the page layouts should be rendered similar by a wide range of browsers
+	- improved consistency for the theme typography
+	- increased reliance on relative sizing and positioning
+	- a few more advanced rules provided as examples of theme capabilities
+	- cleaned up and removed unnecessary duplication of inheritable properties
+	- introduced professional quality in colour co-ordination and graphics
+*/
+
+/* XARAYA REQUIRED CLASSES [gen_heading] */
+
+/*
+Main (X)HTML Selectors - Typography, Colours and Positioning 
+-------------------------------------------------------------------------[comment] */
 body {
-   color: #000000;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   background-color: #ffffff;
-}
-code {
-   color: #191970;
-   font-size: 9.5pt;
-   font-family: Courier,fixed-width;
-}
-h1 {
-   color: #191970;
-   font-size: 14pt;
-   font-weight: bolder;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-}
-h2 {
-   color: #191970;
-   font-size: 12.5pt;
-   font-weight: bolder;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: 1px solid #191970;
-   line-height: 170%;
-}
-h3 {
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   line-height: 100%;
-}
-h4 {
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: 1px solid #191970;
-   line-height: 170%;
-}
-th {
-   color: #000000;
-   font-size: 11pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-weight: bolder;
-   background-color:#cdd5f8;
-}
-td {
-   color: #000000;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-}
+	color: #003780;
+	background-color: #8296BB;
+	margin: 0;
+	padding: 10px;
+	min-width:710px;
+	background-image: url(../images/page_bg.jpg);
+	background-repeat: repeat-x;
+	background-position: 100% 0;
+} /*
+body defines basic viewport properties 
+-------------------------------------------------------------------------[comment] */
+
+body {
+	font-family: "trebuchet ms", verdana, helvetica, sans-serif;
+	font-size: 76.666%;
+	line-height:140%;
+} /*
+shared typography, which should be inherited by the descendants 
+-------------------------------------------------------------------------[comment] */
+
+table, td, th, thead, tbody, tfoot, button, input, select, textarea {
+	font-family: "trebuchet ms", verdana, helvetica, sans-serif;
+	font-size: 1em;
+	line-height:140%;
+	
+} /*
+more shared typography to reinforce it on certain browsers (IE/Win and Opera) 
+-------------------------------------------------------------------------[comment] */
+
+a {
+	text-decoration: none;
+	color: #58657E;
+	font-weight: bold;
+} /*
+a normal link is being styled similarly across all pages, unless re-specified
+-------------------------------------------------------------------------[comment] */
+
+a:hover { color: #F12600; }
+
+/*
+Tables and related selectors
+-------------------------------------------------------------------------[comment] */
 table {
-	border: 0px;
-	margin: 0px;
-	padding: 0px;
+	border-collapse: collapse;
+	border-style: solid;
+	border-color: #757F8B;
+	border-width: 0px;
+} /*
+the actual border should be displayed only when border-width is re-specified later
+------------------------------------------------------------------[important note] */
+
+th {
+	color: #55627A;
+	background-color: #DEE3ED;
 }
-thead {}
-tbody {}
+
 tfoot {
-   color: #000000;
-   font-size: 11pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-weight: bolder;
-   background-color:#cdd5f8;
+	font-weight: bold;
+	background-color: #cdd5f8;
 }
-p {
-   color: #000000;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+
+/*
+General text and related selectors 
+-------------------------------------------------------------------------[comment] */
+h1 {
+	font-size: 130%;
+	line-height: 120%;
 }
+
+h2 {
+	font-size: 120%;
+	line-height: 120%;
+}
+
+h3 {
+	font-size: 110%;
+	line-height: 120%;
+}
+
+h4 {
+	font-size: 100%;
+	line-height: 120%;
+}
+
+h1, h2, h3, h4 {
+	font-family: helvetica, tahoma, arial, sans-serif;
+	font-weight: bold;
+	color: #BA1D00;
+	padding: 0;
+	margin: .2em;
+} /*
+page headers - shared typography and positioning 
+-------------------------------------------------------------------------[comment] */
+
+p { line-height: 140%; }
+
 pre {
-   color: #191970;
-   font-size: 9.5pt;
-   font-family: Courier,fixed-width;
+	color: #80005C;
+	font-size: 95%;
+	font-family: monaco, courier, monospaced, fixed-width;
 }
+
+blockquote {
+	color: #191970;
+	margin: 2em;
+}
+
+code {
+	color: #191970;
+	font-family: monaco, courier, monospaced, fixed-width;
+}
+
+sup, sub {
+	font-size: 90%;
+	font-weight: normal;
+}
+
+/*
+Form elements 
+-------------------------------------------------------------------------[comment] */
+form {
+	margin:0;
+	padding:0;
+}
+
+
 input {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   text-indent: 2px;
-   color: #191970;
+	font-weight: normal;
+	text-indent: 2px;
 }
+
 button {
-   border: 2px outset #f0f0f0;
-   background-color: #cdd5f8;
-   color: #191970;
-   font-size: 9.5pt;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	border: 2px outset #f0f0f0;
 }
 
 select {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   color: #191970;
-}
+	font-weight: normal;
+} /*
+in many browsers appearance of select is handled by OSs widgets, not by css
+------------------------------------------------------------------[important note] */
+
 textarea {
-   background-color: #f0f0f0;
-   border-bottom-width: 1px;
-   border-color: #000000;
-   border-left-width: 1px;
-   border-right-width: 1px;
-   border-top-width: 1px;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
-   text-indent: 0px;
-   color: #191970;
-}
-img {
-   border: 0px;
-}
-li {
-   color: #000000;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   line-height: 150%;
-   margin-bottom: 10px;
-}
-ul {
-   color: #000000;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   line-height: 150%;
-   margin-bottom: 10px;
-}
-ol {
-   color: #000000;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   line-height: 150%;
-   margin-bottom: 10px;
-}
-sup {
-   font-size: 6.5pt;
-}
-sub {
-   font-size: 6.5pt;
+	font-weight: normal;
+	text-indent: 2px;
 }
 
+button, input, select, textarea {
+	color: #002D80;
+	background-color: #F8F8F8;
+} /*
+shared properties for form elements
+-------------------------------------------------------------------------[comment] */
 
-/*  THEME SPECIFIC CLASSES */
+/*
+replaced elements 
+-------------------------------------------------------------------------[comment] */
+img { border: 0px; }
+
+
+/*
+list elements 
+-------------------------------------------------------------------------[comment] */
+ul, li, ol {
+	line-height: 140%;
+}
+
+/* THEME SPECIFIC CLASSES [gen_heading] */
 h5, h6 {
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	color: #191970;
+	font-size: 95%;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
 }
+
 hr {
-   width:100%;
-   color:#c0c0c0;
+	width: 100%;
+	color: #c0c0c0;
 }
-form {
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-}
+
 checkbox {
-   background-color: transparent;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   font-weight: normal;
+	background-color: transparent;
+	font-weight: normal;
 }
 
-/*  XARAYA REQUIRED INDIVIDUAL CLASSES */
-td.xar-norm {}
-td.xar-alt {}
+/* XARAYA REQUIRED INDIVIDUAL CLASSES [gen_heading] */
+td.xar-norm { }
+td.xar-alt { }
 
+/* XARAYA REQUIRED ANONYMOUS CLASSES  [gen_heading] */
 
-/*  XARAYA REQUIRED ANONYMOUS CLASSES  */
-
-/* these defaults apply to the left block group */
-.xar-block-head{
-    border-bottom: 1px solid #191970;
-    color: #191970;
+/*
+these defaults apply to the left block group 
+-------------------------------------------------------------------------[comment] */
+.xar-block-head {
+	border-bottom: 1px solid #191970;
+	color: #191970;
 }
+
 .xar-block-title {
-    font-weight: bold;
-    font-style: italic;
-    font-size: 11pt;
+	font-weight: bold;
+	font-size: 110%;
 }
-.xar-block-body {}
+
+.xar-block-body { }
+
 .xar-block-foot {
-    border-bottom: 2px dotted #dddddd;
-    margin-bottom: 8px;
+	margin-bottom: 5px;
 }
 
-/* right block group classes */
-.xar-block-head-right{
-    border: 1px solid #e47c55;
-    background-color: #efefef;
-}
+/*
+these defaults apply to the right block group 
+-------------------------------------------------------------------------[comment] */ 
+.xar-block-head-right {}
+
 .xar-block-title-right {
-    font-weight: bold;
-    font-size: 11pt;
+	font-weight: bold;
+	font-size: 110%;
 }
-.xar-block-body-right {}
+
+.xar-block-body-right { }
+
 .xar-block-foot-right {
-    border-bottom: 2px solid #cccccc;
-    margin-bottom: 8px;
+	margin-bottom: 5px;
 }
 
-/* topnav block group classes */
-.xar-block-head-topnav{}
-.xar-block-title-topnav {}
+/*
+topnav block group classes 
+-------------------------------------------------------------------------[comment] */
+.xar-block-head-topnav { }
+.xar-block-title-topnav { }
+
 .xar-block-body-topnav {
-    margin: auto;
-    border: 1px solid #CCE6FF;
+	margin: auto;
 }
-.xar-block-foot-topnav {}
 
-/* center block group classes */
-.xar-block-head-center{
-    background-image: url(../images/sh_line.gif);
-    height: 6px;
-    width: 100%;
-    background-position: center center;
-    background-repeat: repeat-y;
+.xar-block-foot-topnav { }
+
+/*
+center block group classes 
+-------------------------------------------------------------------------[comment] */
+.xar-block-head-center {
+	height: 6px;
+	width: 100%;
 }
+
 .xar-block-title-center {
-    color: #e47c55;
-    background-color: inherit;
-    font-weight: bold;
-    font-size: 11pt;
-    text-align: center;
+	color: #e47c55;
+	background-color: inherit;
+	font-weight: bold;
+	text-align: center;
 }
+
 .xar-block-body-center {
-    background-color: #cce6ff;
+	background-color: #E7EAEE;
 }
+
 .xar-block-foot-center {
-    background-image: url(../images/sh_line.gif);
-    height: 3px;
-    width: 100%;
-    background-position: center center;
-    background-repeat: repeat-y;
-    margin-bottom: 4px;
+	height: 3px;
+	width: 100%;
+	margin-bottom: 4px;
 }
 
+/*
+module rendering area and related rules 
+-------------------------------------------------------------------------[comment] */
 .xar-mod-head {
-   border: 2px solid #a0a0a0;
-   background-color: #cdd5f8;
-   padding: 3px;
-   text-align: center;
-   font-weight: bold;
-   font-size: 11pt;
-}
-.xar-mod-title {
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-}
-.xar-mod-body {}
-.xar-mod-foot {}
-.xar-alt {background-color: #e47c55; }
-.xar-accent {background-color: #cce6ff; }
-.xar-alt-outline {border: 1px solid #e47c55; }
-.xar-accent-outline {border: 1px solid #cce6ff; }
-.xar-norm-outline {border: 1px solid #c0c0c0; }
-.xar-norm {background-color: #ffffff; }
-.xar-sub {font-size: smaller;}
-.xar-menu-section {
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: thin dotted #a0a0a0;
-   line-height: 170%;
-   width: 100%;
-   margin-bottom: 4px;
-   list-style-type: none;
-padding: 0px;
-}
-ul.xar-menu-section, ol.xar-menu-section {
-margin: 0px;
-}
-li.xar-menu-section {
-   border: 0px;
-}
-.xar-menu-section-current {
-border: 1px solid #f00;
-   background-color: #cce6ff;
-   color: #191970;
-   font-size: 11pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: 1px solid #191970;
-   line-height: 130%;
-   list-style-type: none;
-}
-.xar-menu-item {
-   font-size: 10pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   padding-left: 0px;
-   line-height: 100%;
-   list-style-type: none;
-   margin: 0px;
-}
-.xar-menu-item-current {
-   background-color: #cce6ff;
-   font-size: 9.5pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   padding-left: .5em;
-   padding-bottom: .3em;
-   list-style-type: none;
-}
-li.xar-menu-item:hover {
-   background-color: #f0f0f0;
-}
-.xar-menu-subitem {
-   font-size: 8pt;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   margin: 0px 0px 0px 6px;
-   padding-left: 0px;
-   list-style-type: none;
-   background-color: #cdd5f8;
-   line-height: 120%;
-}
-.xar-menu-subitem:hover {
-}
-.xar-menu-subitem-current {
-   font-weight: bold;
-   color: #000000;
-   background-color: #f0f0f0;
-   font-size: 8pt;
-   margin-left: 6px;
-   padding-left: 0px;
-   list-style-type: none;
-}
-.xar-menu-item > a, .xar-menu-subitem > a {
-display: block;
-}
-.xar-menu-item-current > .xar-menu-subitem > a {
-   color: #193970;
-}
-.xar-menu-subitem > a:hover {
-   background-color: #cce6ff;
-}
-.xar-menu-item-current > .xar-menu-subitem > a:visited {
-   color: #003366;
-}
-.xar-title {
-   font-weight: bold;
-   font-size: 13px;
-}
-.xar-error {
-   color: #ff0000;
+	color: #ffffff;
+	background-color: #8296BB;
+	padding: 2px;
+	text-align: center;
+	font-weight: bold;
+	border-color: #A0B8E5;
+	border-width: 1px;
+	border-style: solid;
 }
 
-/*  THEME SPECIFIC ANONYMOUS CLASSES  */
+.xar-mod-title {
+	font-size: 110%;
+	font-weight: bold;
+}
+
+.xar-mod-body { }
+.xar-mod-foot { }
+
+/*
+complementary styling - backgrounds and outlines 
+-------------------------------------------------------------------------[comment] */
+.xar-alt { background-color: #E7E9F4; }
+
+.xar-accent { background-color: #E7EAF4; }
+
+.xar-alt-outline {
+	border-color: #A782BB;
+	border-width: 1px;
+	border-style: solid;
+}
+.xar-accent-outline {
+	border-color: #82BBA7;
+	border-width: 1px;
+	border-style: solid;
+}
+.xar-norm-outline {
+	border-color: #8296BB;
+	border-width: 1px;
+	border-style: solid;
+}
+
+.xar-norm { background-color: #FFFFFF; }
+
+.xar-sub { font-size: 80%; }
+
+/*
+system menus and related rules 
+-------------------------------------------------------------------------[comment] */
+.xar-menu-section {
+	color: #BB8296;
+	font-weight: bold;
+	font-family: Helvetica,Arial,sans-serif;
+	line-height: 140%;
+	list-style-type: none;
+	padding: 2px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #A9AFBA;
+}
+
+ul.xar-menu-section, ol.xar-menu-section { margin: 1px 0px; }
+li.xar-menu-section { border: 0px; }
+
+.xar-menu-section-current {
+	background-color: #E9E7EE;
+	color: #191970;
+	font-weight: bold;
+	border-bottom: 1px solid #191970;
+	line-height: 140%;
+	list-style-type: none;
+}
+
+.xar-menu-item {
+	font-weight: bold;
+	padding-left: 0px;
+	line-height: 120%;
+	list-style-type: none;
+	margin: 0px;
+}
+
+.xar-menu-item-current {
+	background-color: #FFFFFF;
+	font-weight: bold;
+/* 	padding-left: 1em; */
+	list-style-type: none;
+}
+
+li.xar-menu-item:hover {
+	background-color: #FFFFFF;
+}
+
+.xar-menu-subitem {
+	font-size:95%;
+	font-weight: bold;
+	margin: 2px .5em;
+	padding: 0;
+	list-style-type: none;
+	background-color: #FFFFFF;
+	line-height: 120%;
+}
+
+.xar-menu-subitem:hover { background-color: transparent; }
+
+.xar-menu-subitem-current {
+	font-size:95%;
+	font-weight: bold;
+	margin: 2px .5em;
+	padding: 0;
+	list-style-type: none;
+	background-color: #FFFFFF;
+	line-height: 120%;
+}
+
+/* .xar-menu-item > a, .xar-menu-subitem > a { display: block; } */
+/* .xar-menu-item-current > .xar-menu-subitem > a { color: #193970; } */
+/* .xar-menu-subitem > a:hover { background-color: #cce6ff; } */
+/* .xar-menu-item-current > .xar-menu-subitem > a:visited { color: #003366; } */
+
+.xar-title {
+	font-weight: bold;
+}
+
+.xar-error { color: #ff0000; }
+
+/* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
+div#header {
+	width:100%;
+	height:70px;
+}
+
+div#header img {
+	float:left;
+} /*
+the only image we use in the header itself is logo 
+-------------------------------------------------------------------------[comment] */
+
+div#themecontrols {
+	position:relative;
+	width: 200px;
+	height: 70px;
+	float: right;
+	text-align:center;
+	background-image: url(../images/theme_ctrls.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 100%;
+}
+
+div#themecontrols span {
+	position:relative;
+	font-size:90%;
+	top:30px;
+}
+
+
+td#leftmenus {
+	width: 180px;
+	vertical-align: top;
+	background-image: url(../images/leftmenus_bg.jpg);
+	background-repeat: repeat-y;
+	background-position: 0 0;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+}
+
+div#leftmenuswrapper {
+	margin:5px;
+}
+
+
+td#rightmenus {
+	width: 180px;
+	vertical-align: top;
+	background-image: url(../images/rightmenus_bg.jpg);
+	background-repeat: repeat-y;
+	background-position: 0 0;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+}
+
+div#rightmenuswrapper {
+	margin:5px;
+	width:100%
+}
+
+td#maincontent {
+	width: auto;
+	vertical-align: top;
+	background-image: url(../images/leftmenus_bg.jpg);
+	background-repeat: repeat;
+	background-position: 0 0;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+}
+
+table#contentarea {
+	width: 100%;
+	margin: 0;
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+}
+
+div#footerwrapper {
+	padding: 3px;
+	margin-top: 3px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+}
+
+div#footer {
+	position: relative;
+	height:54px;
+	text-align: left;
+	background-image: url(../images/footer_bg.jpg);
+	background-repeat: repeat-x;
+}
+
+p#footermsg {
+	position: relative;
+	float: right;
+	padding: 3px 2px;
+	width: 250px;
+	text-align: right;
+	margin:0;
+} 
+
+p#slogan {
+	float: left;
+	padding: 20px 0 0 5px;
+	width:auto;
+	text-align: left;
+	margin:0;
+}
+
+p#copyright {
+	float: left;
+	padding: 20px 0 0 5px;
+	width:180px;
+	text-align: center;
+	margin:0;
+}
+
+div.validators {
+	float:right;
+	height:23px;
+	width:102px;	
+	padding-top:2px;
+	margin-right:3px;
+}
+
+div.validators img {
+/* 	padding: 1px 0; */
+	margin: 1px 0;
+	display:block;
+}
+
+/* MISCELLANEOUS [gen_heading] */
 .txttitle {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#336699;
-   text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+	text-decoration: none;
 }
+
 .sidebtns {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#336699;
-   text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+	text-decoration: none;
 }
+
 .subhead {
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   color:#60a9f0;
-   text-decoration: none;
+	font-weight: bold;
+	color: #60a9f0;
+	text-decoration: none;
 }
+
 .btns {
-   text-decoration: none;
-   background-color:#FFD800;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
+	text-decoration: none;
+	background-color: #FFD800;
+	color: #000000;
+	font-weight: bold;
+	font-size: 9.5pt;
 }
+
 .busbtns {
-   text-decoration: none;
-   background-color:#85b8ea;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
+	text-decoration: none;
+	background-color: #85b8ea;
+	color: #000000;
+	font-weight: bold;
+	font-size: 9.5pt;
 }
+
 .blk {
-   text-decoration: none;
-   color:#000000;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
+	text-decoration: none;
+	color: #000000;
+	font-weight: bold;
 }
+
 .LightUp {
-   background-color:#cfe5fa;
-   color:#ffffff;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   text-decoration: none;
+	background-color: #cfe5fa;
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
 }
+
 .LightDown {
-   background-color:#ffffff;
-   color:#336699;
-   font-weight: bold;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-   font-size: 9.5pt;
-   text-decoration: none;
+	background-color: #ffffff;
+	color: #336699;
+	font-weight: bold;
+	font-size: 9.5pt;
+	text-decoration: none;
 }
-.formUp {
-   background-color:#e3f1ff;
-}
-.copyright {
-   font-size: 9pt;
-   line-height: 150%;
-   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-}
+
+.formUp { background-color: #e3f1ff; }
+
+.copyright {}
 
 abbr, acronym, .help {
-  border-bottom: 1px dotted #999;
-  cursor: help;
+	border-bottom: 1px dotted #999;
+	cursor: help;
 }
+
+/* EXPERIMENTAL RULES - keep them near the bottom [gen_heading] */
+
+div.iewintablefixer {
+	width: 100%;
+	padding:0;
+	margin:0;
+} /*
+it is a known fact that IE-Windows cannot correctly calculate width of a table in %,
+when such table is positioned inside a div without explicit width, so
+in order to avoid multiple hacks in this theme we just make sure that 
+every container for every potential table has the width specified as 100%.
+It is a small price to pay, considering there are only 3 places like this
+in the whole theme - leftblocks content and rightblocks, which need to be wrapped
+in this _special_ _fixer_ container.. [andyv]
+------------------------------------------------------------------[important note] */
+
+
+
+* html div#header { 
+	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
+}
+
+* html div#footer { 
+	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
+}
+
+* html table#contentarea { 
+	width: expression((body.clientWidth <= 710) ? "710px" : "100%");
+} /*
+min-width equvivalent for IE-Win browsers only, 
+because they dont support this pre=operty along with many 
+other ordinary and extremely useful w3c standards, fancy that :-{
+-------------------------------------------------------------------------[comment] */
