@@ -211,12 +211,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
-    // Start BlockLayout Template Engine
-    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
-                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
-                        'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
-    xarTpl_init($systemArgs, $whatToLoad);
-
     // Start Multi Language System
     $systemArgs = array('translationsBackend' => xarCore_getSiteVar('MLS.TranslationsBackend'),
                         'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
@@ -273,6 +267,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     }
 
+    // Start BlockLayout Template Engine
+    $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
+                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
+                        'defaultThemeName' => xarModGetVar('themes','default'));
+    xarTpl_init($systemArgs, $whatToLoad);
         // TODO (marcinmilan): review what pasts of the old user system need to be retained
         if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
