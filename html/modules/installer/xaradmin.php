@@ -284,8 +284,9 @@ function installer_admin_create_administrator()
     if (!xarModAPILoad('users', 'admin')) {
         return NULL;
     }
-
-    $password = md5($password);
+    
+    // The users API md5's the password.  Shouldn't need to do it here.
+    //$password = md5($password);
 
     if(!xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
                                                           'name'  => $name,
