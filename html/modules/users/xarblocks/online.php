@@ -85,8 +85,8 @@ function users_onlineblock_display($blockinfo)
         return;
     }
 
-    $numusers = 0;
-    $numguests = 0;
+    //$numusers = 0;
+    //$numguests = 0;
 
     $userlist = array();
     while (!$result->EOF) {
@@ -115,11 +115,11 @@ function users_onlineblock_display($blockinfo)
             $users = xarML('members');
         }
 
-        $output->Text(xarML('guest'));//(_USERSCURRENTLY);
+        $output->Text(xarML('There are currently'));//(_USERSCURRENTLY);
         $output->Text(" $numguests $guests ");
-        $output->Text(xarML('guest'));//(_USERSAND);
+        $output->Text(xarML('and'));//(_USERSAND);
         $output->Text(" $numusers $users ");
-        $output->Text(xarML('guest'));//(_USERSONLINE);
+        $output->Text(xarML('online'));//(_USERSONLINE);
         $output->Linebreak();
     }
 
@@ -130,7 +130,7 @@ function users_onlineblock_display($blockinfo)
         $sql = "SELECT xar_uname,
                        xar_uid
                 FROM $userstable
-                WHERE xar_uid in (" . xarVarPrepForStore($userlist) . ")
+                WHERE xar_uid = 1
                 ORDER BY xar_uname";
         $result = $dbconn->Execute($sql);
 
