@@ -7,24 +7,6 @@
             &xar-var-title;
         </th>
     </tr>
-    <tr>
-        <td align="center" valign="top">
-            <!-- Menu table -->
-            <table border="0" cellspacing="10">
-                <tr>
-                    <td align="center">
-                        <a href="&xar-modurl-adminpanels-admin-view;">&xar-var-overview;</a>
-                    </td>
-                    <td align="center">
-                        <a href="&xar-modurl-adminpanels-admin-config_view;">&xar-var-configoverview;</a>
-                    </td>
-                    <td align="center">
-                        <b>&xar-var-configadmin;</b>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
 </table>
 <!-- End of formatting table -->
 <!-- BL style form for adminpanels configuration options -->

@@ -6,18 +6,6 @@
             <xar:mlstring>Administration</xar:mlstring>
         </th>
     </tr>
-    <tr>
-        <td align="center" valign="top">
-            <!-- Menu table -->
-            <table border="0" cellspacing="10">
-                <tr>
-                    <td align="center">
-                        &xar-var-warning;
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
 </table>
 <!-- Confirmation -->
 <div align="center"><h2>&xar-var-question;</h2></div><br />
