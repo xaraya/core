@@ -86,7 +86,16 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fields'] = $fields;
     $data['fieldtypeprop'] = & Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
 
-    return xarTplModule('dynamicdata','admin','modifyconfighook',$data);
+    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                                       'itemtype' => $itemtype));
+    if (!isset($object)) return;
+
+    if (!empty($object->template)) {
+        $template = $object->template;
+    } else {
+        $template = $object->name;
+    }
+    return xarTplModule('dynamicdata','admin','modifyconfighook',$data,$template);
 }
 
 ?>

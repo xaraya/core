@@ -1,4 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>
+    You can use different admin-modifyconfighook-[objectname].xd templates for different objects
+</xar:comment>
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center" colspan="7">

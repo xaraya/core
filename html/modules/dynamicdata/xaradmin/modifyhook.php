@@ -83,8 +83,14 @@ function dynamicdata_admin_modifyhook($args)
         $object->checkInput();
     }
 
+    if (!empty($object->template)) {
+        $template = $object->template;
+    } else {
+        $template = $object->name;
+    }
     return xarTplModule('dynamicdata','admin','modifyhook',
-                         array('properties' => & $object->properties));
+                        array('properties' => & $object->properties),
+                        $template);
 }
 
 ?>

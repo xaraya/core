@@ -13,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 /**
- * display dynamicdata for an item - hook for ('item','display','GUI')
+ * display dynamicdata for an item - hook for ('item','display','GUI') - currently unused
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
@@ -79,9 +79,14 @@ function dynamicdata_user_displayhook($args)
     if (!isset($object)) return;
     $object->getItem();
 
-// TODO: use custom template per module + itemtype ?
-     return xarTplModule('dynamicdata','user','displayhook',
-                         array('properties' => & $object->properties));
+    if (!empty($object->template)) {
+        $template = $object->template;
+    } else {
+        $template = $object->name;
+    }
+    return xarTplModule('dynamicdata','user','displayhook',
+                        array('properties' => & $object->properties),
+                        $template);
 
 }
 
