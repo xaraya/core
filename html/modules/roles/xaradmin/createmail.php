@@ -49,6 +49,7 @@ function roles_admin_createmail()
         // Create a query to send to sendmail
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
+        $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
         $q->eq('r.xar_uid',$uid);
         xarSessionSetVar('rolesquery', serialize($q));
     }

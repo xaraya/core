@@ -30,6 +30,8 @@ class xarQuery
     var $row;
     var $dbconn;
     var $statement;
+    var $bindvars;
+    var $bindstring;
     var $limits = 1;
 
 //---------------------------------------------------------
@@ -56,6 +58,7 @@ class xarQuery
         $this->result = array();
         $this->output = array();
         $this->row = array();
+        $this->bindvars = array();
         $this->dbconn =& xarDBGetConn();
     }
 
@@ -626,6 +629,7 @@ class xarQuery
     function assembledfields($type)
     {
         $f = "";
+        $this->bindstring = "";
         switch ($this->type) {
         case "SELECT" :
             if (count($this->fields) == 0) return "*";
@@ -642,8 +646,10 @@ class xarQuery
             break;
         case "INSERT" :
             $f .= " (";
+            $this->bindstring .= " (";
             $names = '';
             $values = '';
+            $bindvalues = '';
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
@@ -655,6 +661,8 @@ class xarQuery
                         }
                         $names .= $field['name'] . ", ";
                         $values .= $sqlfield . ", ";
+                        $bindvalues .= "?, ";
+                        $this->bindvars[] = $sqlfield;
                     }
                 }
                 else {
@@ -665,6 +673,8 @@ class xarQuery
             $values = substr($values,0,strlen($values)-2);
             $f .= $names . ") VALUES (" . $values;
             $f .= ")";
+            $this->bindstring = $names . ") VALUES (" . $bindvalues;
+            $this->bindstring .= ")";
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
@@ -681,12 +691,15 @@ class xarQuery
                             $sqlfield = $field['value'];
                         }
                     $f .= $field['name'] . " = " . $sqlfield . ", ";
+                    $this->bindstring .= $field['name'] . " = ?, ";
+                    $this->bindvars[] = $sqlfield;
                 }
                 else {
 //                    $f .= $field . ", ";
                 }
             }
             if ($f != "") $f = substr($f,0,strlen($f)-2);
+            if ($this->bindstring != "") $this->bindstring = substr($this->bindstring,0,strlen($this->bindstring)-2);
             break;
         case "DELETE" :
             break;
@@ -749,6 +762,11 @@ class xarQuery
     function result()
     {
         return $this->result;
+    }
+    function clearresult()
+    {
+        $this->result = NULL;
+        $this->output = NULL;
     }
     function gettype()
     {
@@ -840,6 +858,7 @@ class xarQuery
     function setstatement($statement='')
     {
         if ($statement != '') {
+            $this->bindvars = array();
             $this->statement = $statement;
             $st = explode(" ",$statement);
             $this->type = strtoupper($st[0]);
