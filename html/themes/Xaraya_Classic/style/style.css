@@ -350,37 +350,18 @@ system menus and related rules
 /* 	background-color: #E7EAEE; */
 }
 
-
-
-/* li.xar-menu-item a { */
-/* 	color: #FFFFFF; */
-/* } */
-/*  */
-/* li.xar-menu-item a:hover, li.xar-menu-item:hover { */
-/* 	background-color: #FFFFFF; */
-/* 	text-decoration: none; */
-/* } */
+li.xar-menu-item a {
+	padding-left:10px;
+}
 
 .xar-menu-subitem {
 	padding: 0;
 }
 
-/* .xar-menu-subitem:hover { background-color: transparent; } */
-
-
-
-
-.xar-menu-section {
+.xar-menu-section, .xar-menu-section ul {
 	list-style-type: none;
 	margin: 0;
 	padding:0;
-}
-
-.xar-menu-section ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-/* 	font-family: helvetica, verdana, arial, sans-serif; */
 }
 
 .xar-menu-section li {
@@ -389,8 +370,8 @@ system menus and related rules
 
 .xar-menu-section a {
 	display: block;
-	padding: 1px 10px;
-	width: 150px;
+	padding: 1px 0;
+	width: 160px;
 	color: #003780;
 	background-color: #E7EAEE;
 	text-decoration: none;
@@ -402,7 +383,7 @@ system menus and related rules
 	text-decoration: none;
 }
 
-.xar-menu-section ul ul li {
+.xar-menu-section ul ul li, li.xar-menu-subitem-current {
 	margin: 0 0 1px 10px;
 }
 
@@ -420,9 +401,15 @@ system menus and related rules
 	 this is done only because of the horisontal space restriction in side menus
 ------------------------------------------------------------------[important note] */
 
-.xar-menu-section-current, li.xar-menu-subitem-current {
+li.xar-menu-section-current, li.xar-menu-subitem-current {
 	color: #2C3F58;
 	background-color: #B1C2E3;
+}
+
+li.xar-menu-item-current {
+	color: #2C3F58;
+	background-color: #E7EAEE;
+	padding-left: 10px;
 }
 
 .xar-menu-section ul ul a:hover {
@@ -458,24 +445,32 @@ div#classicheader {
 }
 
 div#classicheader img {
+	width: 245px;
+	height: 70px;
 	float:left;
-} /*
-the only image we use in the header itself is a transparent logo overlay 
--------------------------------------------------------------------------[comment] */
+}
 
 div#classicthemecontrols {
 	position:relative;
-	width: 183px;
-	height: 70px;
+	width: 187px;
 	float: right;
-	text-align:center;
+	padding:0 3px 0 0;
+	margin:0;
 }
 
-div#classicthemecontrols span {
-	position:relative;
-	font-size:90%;
-	top:30px;
+div#classicthemecontrols img {
+	position: relative;
+	float: right;
+	width:26px;
+	height:21px;
 }
+
+* html div#classicthemecontrols img, * html div#classicheader img {
+	margin: 0 -3px; ma\rgin: 0;
+} /*
+thus rule (with Tantek filter) is for the benefit of Win-IE browsers only - they 
+cannot float linked images properly, without inserting 3px margins around them
+------------------------------------------------------------------[important note] */
 
 div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
 	display: inline;

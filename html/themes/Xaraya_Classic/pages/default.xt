@@ -1,18 +1,18 @@
 <!---
-	Default theme - main template [rev2]
-	
+    Default theme - main template [rev2]
+    
     .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience, imnsho,
     it would be perfect if BL compiler could just somehow _exclude_ the linefeeds (and extra spaces) from this _data_assembly_area_
     i guess we could introduce a <xar:compact> tag or something specifically for that purpose, to avoid the problems..
    
-	1) get data for the default blockgroups
+    1) get data for the default blockgroups
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
 <xar:set name="$leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
 <xar:set name="$centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
 <xar:set name="$topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
 <!---
-	2) set some multilingual text that we intend to use in titles and alt attributes
+    2) set some multilingual text that we intend to use in titles and alt attributes
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$changetexttosmall"><xar:mlstring>Change text to small (default)</xar:mlstring></xar:set>
 <xar:set name="$changetexttomedium"><xar:mlstring>Change text to midium</xar:mlstring></xar:set>
@@ -38,13 +38,13 @@ ________________________________________________________________________________
         <style type="text/css" media="screen">@import url(&xar-baseurl;#$classicthemedir#/style/style.css); </style>
         <!--- Styleswitcher CSS rules --->
         <link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/style_textsmall.css" title="Small classictext" media="screen" />
-		<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
-		<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textlarge.css" title="Large classictext" media="screen" />
-		
-		<link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_blue.css" title="Blue classiccolors" media="screen" />
-		<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_highcontrast.css" title="Contrast classiccolors" media="screen" />
-		<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_green.css" title="Green classiccolors" media="screen" />
-		<link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
+        <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
+        <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textlarge.css" title="Large classictext" media="screen" />
+        
+        <link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_blue.css" title="Blue classiccolors" media="screen" />
+        <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_highcontrast.css" title="Contrast classiccolors" media="screen" />
+        <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_green.css" title="Green classiccolors" media="screen" />
+        <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/colstyle_orange.css" title="Orange classiccolors" media="screen" />
         <!--- Additional CSS rules promoted by Xaraya modules - be careful, these may alter the main theme rules --->
         #$tpl:additionalStyles#
         <!--- Styleswitcher JavaScript --->
@@ -54,38 +54,38 @@ ________________________________________________________________________________
     </head>
     <body>
         <div id="classicheader">
-            <div id="classicthemecontrols">
-            	<a href="#" onclick="setActiveStyleSheetTxt('Small classictext'); createCookie('xarayaclassic_textsize','Small classictext',365); return false;" title="#$changetexttosmall#">
-					<img src="#$classicthemedir#/images/txt_small.gif" id="butsm" width="26" height="21" alt="#$changetexttosmall#" />
+			<div id="classicthemecontrols">
+				<a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
+					<img src="#$classicthemedir#/images/txt_large.gif" id="butlg" alt="#$changetexttolarge#" />
 				</a>
 				<a href="#" onclick="setActiveStyleSheetTxt('Medium classictext'); createCookie('xarayaclassic_textsize','Medium classictext',365); return false;" title="#$changetexttomedium#">
-					<img src="#$classicthemedir#/images/txt_medium.gif" id="butmd" width="26" height="21" alt="#$changetexttomedium#" />
+					<img src="#$classicthemedir#/images/txt_medium.gif" id="butmd" alt="#$changetexttomedium#" />
 				</a>
-				<a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
-					<img src="#$classicthemedir#/images/txt_large.gif" id="butlg" width="26" height="21" alt="#$changetexttolarge#" />
+				<a href="#" onclick="setActiveStyleSheetTxt('Small classictext'); createCookie('xarayaclassic_textsize','Small classictext',365); return false;" title="#$changetexttosmall#">
+					<img src="#$classicthemedir#/images/txt_small.gif" id="butsm" alt="#$changetexttosmall#" />
 				</a>
 				<a href="#" onclick="setActiveStyleSheetCol('Contrast classiccolors'); createCookie('xarayaclassic_colscheme','Contrast classiccolors',365); return false;" title="#$changecoltocontrast#">
-					<img src="#$classicthemedir#/images/contrast.gif" id="butct" width="26" height="21" alt="#$changecoltocontrast#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Blue classiccolors'); createCookie('xarayaclassic_colscheme','Blue classiccolors',365); return false;" title="#$changecoltoblue#">
-					<img src="#$classicthemedir#/images/blue.gif" id="butbl" width="26" height="21" alt="#$changecoltoblue#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Green classiccolors'); createCookie('xarayaclassic_colscheme','Green classiccolors',365); return false;" title="#$changecoltogreen#">
-					<img src="#$classicthemedir#/images/green.gif" id="butgr" width="26" height="21" alt="#$changecoltogreen#" />
+					<img src="#$classicthemedir#/images/contrast.gif" id="butct" alt="#$changecoltocontrast#" />
 				</a>
 				<a href="#" onclick="setActiveStyleSheetCol('Orange classiccolors'); createCookie('xarayaclassic_colscheme','Orange classiccolors',365); return false;" title="#$changecoltoorange#">
-					<img src="#$classicthemedir#/images/orange.gif" id="butor" width="26" height="21" alt="#$changecoltoorange#" />
+					<img src="#$classicthemedir#/images/orange.gif" id="butor" alt="#$changecoltoorange#" />
 				</a>
-            </div>
+				<a href="#" onclick="setActiveStyleSheetCol('Green classiccolors'); createCookie('xarayaclassic_colscheme','Green classiccolors',365); return false;" title="#$changecoltogreen#">
+					<img src="#$classicthemedir#/images/green.gif" id="butgr" alt="#$changecoltogreen#" />
+				</a>
+				<a href="#" onclick="setActiveStyleSheetCol('Blue classiccolors'); createCookie('xarayaclassic_colscheme','Blue classiccolors',365); return false;" title="#$changecoltoblue#">
+					<img src="#$classicthemedir#/images/blue.gif" id="butbl" alt="#$changecoltoblue#" />
+				</a>
+			</div>
             <a href="&xar-baseurl;">
-            	<!-- in this theme we just use a transparent gif to overlay the logo -->
-                <img src="#$classicthemedir#/images/transparent_pix.gif" width="245" height="70" alt="#xarModGetVar('themes', 'SiteName')#" />
+                <!-- in this theme we just use a transparent gif to overlay the logo -->
+                <img src="#$classicthemedir#/images/transparent_pix.gif" alt="#xarModGetVar('themes', 'SiteName')#" />
             </a>
         </div>
         <xar:if condition="!empty($topnavblocksgroup)">
-<!--         	<div id="classictopnavigation"> -->
-        		#$topnavblocksgroup#
-<!--         	</div> -->
+<!--            <div id="classictopnavigation"> -->
+                #$topnavblocksgroup#
+<!--            </div> -->
         </xar:if>
         <table id="classiccontentarea">
             <tr>
