@@ -159,6 +159,9 @@ function roles_admin_purge($args)
             if(!xarSecurityCheck('AdminRole')) return;
             $roleslist = new xarRoles();
             foreach ($purgeuids as $uid => $val) {
+// --- skip if we are trying to remove the designated site admin.
+// TODO: insert error feedabck here somehow
+                if($uid == xarModGetVar('roles','admin')) continue;
 // --- do this in 2 stages. First, delete the role: this will update the user
 // --- count on all the role's parents
                 $role = $roleslist->getRole($uid);

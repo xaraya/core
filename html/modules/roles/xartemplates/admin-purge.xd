@@ -327,7 +327,7 @@
     </form>
     <br />
     <span class="xar-title">
-          <xar:mlstring>Note: Purged users cannot be recalled. Groups cannot be purged.</xar:mlstring>
+          <xar:mlstring>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</xar:mlstring>
     </span>
     </div>
 </xar:if>
