@@ -71,6 +71,7 @@ function blocks_userapi_getinfo($args)
             'title' => '',
             'template' => '',
             'bid' => 0,
+            'state' => 3,
             'name' => (!is_null($name) ? $name : '')
         );
 
@@ -108,7 +109,7 @@ function blocks_userapi_getinfo($args)
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.
             // Only override non-array and empty elements for now.
-            if (empty($blockinfo['content'][$pname]) && !is_array($blockinfo['content'][$pname])) {
+            if (empty($blockinfo['content'][$pname]) || !is_array($blockinfo['content'][$pname])) {
                 $blockinfo['content'][$pname] = $pvalue;
             }
         }
