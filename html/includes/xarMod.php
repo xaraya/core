@@ -601,12 +601,18 @@ function xarModLoad($modName, $modType = 'user')
     $modOsDir = $modBaseInfo['osdirectory'];
 
     $osfile = "modules/$modOsDir/xar$modOsType.php";
+
+    // pnAPI compatibility
     if (!file_exists($osfile)) {
-        // File does not exist
-        $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        $osfile = "modules/$modOsDir/pn$modOsType.php";
+        if (!file_exists($osfile)) {
+
+            // File does not exist
+            $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
-        return;
+            return;
+        }
     }
 
     // Load file
@@ -615,6 +621,18 @@ function xarModLoad($modName, $modType = 'user')
 
     // Load the module translations files
     if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType) === NULL) return;
+
+    // pnAPI compatibility
+    $defaultlang = pnConfigGetVar('language');
+    if (empty($defaultlang)) {
+        $defaultlang = 'eng';
+    }
+    $currentlang = pnUserGetLang();
+    if (file_exists("modules/$modOsDir/pnlang/$currentlang/$modType.php")) {
+        include "modules/$modOsDir/pnlang/" . xarVarPrepForOS($currentlang) . "/$modType.php";
+    } elseif (file_exists("modules/$modOsDir/pnlang/$defaultlang/$modType.php")) {
+        include "modules/$modOsDir/pnlang/" . xarVarPrepForOS($defaultlang) . "/$modType.php";
+    }
 
     // Load database info
     xarMod__loadDbInfo($modName, $modOsDir);
@@ -671,10 +689,15 @@ function xarModAPILoad($modName, $modType = 'user')
     $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
     if (!file_exists($osfile)) {
         // File does not exist
-        $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        // pnAPI compatibility
+        $osfile = "modules/$modOsDir/pn{$modOsType}api.php";
+        if (!file_exists($osfile)) {
+            // File does not exist
+            $msg = xarML('Module file #(1) doesn\'t exist.', $osfile);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
-        return;
+            return;
+        }
     }
 
     // Load the file
@@ -683,6 +706,21 @@ function xarModAPILoad($modName, $modType = 'user')
 
     // Load the API translations files
     if (xarMLS_loadTranslations('module', $modName, 'modules/'.$modOsDir, 'file', $modType.'api') === NULL) return;
+
+    // pnAPI compatibility
+    // Load the module language files
+    $currentlang = pnUserGetLang();
+    $defaultlang = pnConfigGetVar('language');
+    if (empty($defaultlang)) {
+        $defaultlang = 'eng';
+    }
+    $oscurrentlang = xarVarPrepForOS($currentlang);
+    $osdefaultlang = xarVarPrepForOS($defaultlang);
+    if (file_exists("modules/$modOsDir/pnlang/$oscurrentlang/{$modType}api.php")) {
+        include "modules/$modOsDir/pnlang/$oscurrentlang/{$modType}api.php";
+    } elseif (file_exists("modules/$modOsDir/pnlang/$osdefaultlang/{$modType}api.php")) {
+        include "modules/$modOsDir/pnlang/$osdefaultlang/{$modType}api.php";
+    }
 
     // Load database info
     xarMod__loadDbInfo($modName, $modOsDir);
@@ -728,7 +766,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL)
 
 /**
  * Calls a module function.
- * 
+ *
  * @access public
  * @param modName registered name of module
  * @param modType type of function to run
@@ -824,7 +862,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL)
 {
     global $xarMod_generateShortURLs, $xarMod_generateXMLURLs;
-    
+
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
     }
@@ -992,7 +1030,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     foreach ($hooklist as $hook) {
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
-            $res = xarModAvailable($hook['module'], $hook['type']);
+            $res = xarModIsAvailable($hook['module'], $hook['type']);
             if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return;
             }
@@ -1010,7 +1048,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
                 }
             }
         } else {
-            $res = xarModAvailable($hook['module'], $hook['type']);
+            $res = xarModIsAvailable($hook['module'], $hook['type']);
             if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return;
             }
@@ -1237,12 +1275,18 @@ function xarMod_getFileInfo($modOsDir)
     $resarray = array();
     // Spliffster, additional mod info from modules/$modOsDir/xarversion.php
     $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+
+    // pnAPI compatibility
     if (!file_exists($fileName)) {
-        $msg = xarML('Module file #(1) doesn\'t exist.', $fileName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        $fileName = 'modules/' . $modOsDir . '/pnversion.php';
+        if (!file_exists($fileName)) {
+            $msg = xarML('Module file #(1) doesn\'t exist.', 'modules/' . $modOsDir . '/xar(pn)version.php');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
-        return;
+            return;
+        }
     }
+
     include($fileName);
 
     $modFileInfo['id']             = $modversion['id'];
@@ -1446,13 +1490,23 @@ function xarMod__loadDbInfo($modName, $modOsDir)
     // Load the database definition if required
     $osxartablefile = "modules/$modOsDir/xartables.php";
     if (!file_exists($osxartablefile)) {
-        return false;
+       // pnAPI compatibility
+       $osxartablefile = "modules/$modOsDir/pntables.php";
+       if (!file_exists($osxartablefile)) {
+           return false;
+       }
     }
     include_once $osxartablefile;
 
     $tablefunc = $modName . '_' . 'xartables';
     if (function_exists($tablefunc)) {
         xarDB_importTables($tablefunc());
+    } else {
+        // pnAPI compatibility
+        $tablefunc = $modName . '_' . 'pntables';
+        if (function_exists($tablefunc)) {
+            xarDB_importTables($tablefunc());
+        }
     }
 
     $loadedDbInfoCache[$modName] = true;
@@ -1506,4 +1560,3 @@ function xarMod__getState($modRegId, $modMode)
 
     return (int) $modState;
 }
-
