@@ -85,10 +85,10 @@ $schemas = array();
  * @todo    none
 */
 
-	function securitycheck($component,$showexception=1,$instance='',$role='',$module='')
+	function securitycheck($component,$showexception=1,$instancetype='',instance='',$role='',$module='')
 	{
 		$masks = new xarMasks();
-		return $masks->securitycheck($component,$showexception,$instance,$role,$module);
+		return $masks->securitycheck($component,$showexception,$instancetype,instance='',$role,$module);
 	}
 
 /**

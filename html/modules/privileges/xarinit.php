@@ -349,7 +349,7 @@ function privileges_init()
     /*********************************************************************
     * Define instances for some modules
     * Format is
-    * setInstance(Module,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    * setInstance(Module,Instancetable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
 	$query = "INSERT INTO xar_instances VALUES (
