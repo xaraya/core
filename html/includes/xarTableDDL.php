@@ -585,6 +585,10 @@ function xarDB__mysqlCreateTable($tableName, $fields)
         }
     }
 
+    list($dbconn) = xarDBGetConn();
+    $query = 'DROP TABLE IF EXISTS ' . $tableName;
+    $result =& $dbconn->Execute($query);    
+
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
     if (!empty($primary_key)) {
         $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
