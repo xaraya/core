@@ -1052,10 +1052,13 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 
     // Load the appropriate translations
     if($use_internal) {
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/$tplSubPart', $tplBase) === NULL) return;
+        $domain  = XARMLS_DNTYPE_MODULE; $instance= $modName;
+        $context = rtrim("modules:templates/$tplSubPart",'/');
     } else {
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, $GLOBALS['xarTpl_themeName'], "themes:$tplBase/$tplSubPart", $tplBase) === NULL) return;
+        $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
+        $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
     }
+    if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
 
     return $sourceFileName;
 }
