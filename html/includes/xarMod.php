@@ -1477,7 +1477,6 @@ function xarModIsAvailable($modName)
  * @param hookId integer the id of the object the hook is called for (module-specific)
  * @param extraInfo mixed extra information for the hook, dependent on hookAction
  * @param callerModName string for what module are we calling this (default = current main module)
- *        Note : better pass the caller module via $extrainfo['module'] if necessary, so that hook functions receive it too
  * @param callerItemType string optional item type for the calling module (default = none)
  *        Note : better pass the item type via $extrainfo['itemtype'] if necessary, so that hook functions receive it too
  * @return mixed output from hooks, or null if there are no hooks
@@ -1504,15 +1503,18 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
             $modName = $extraInfo['module'];
         } else {
             list($modName) = xarRequestGetInfo();
+            $extraInfo['module'] = $modName;
         }
     } else {
         $modName = $callerModName;
+        // Make sure the $extrainfo contains the module name if it was passed in, so the receiving end gets it.
+        $extraInfo['module'] = $callerModName;
     }
     // retrieve the item type from $extraInfo if necessary (e.g. for articles, xarbb, ...)
     if (empty($callerItemType) && isset($extraInfo) &&
         is_array($extraInfo) && !empty($extraInfo['itemtype'])) {
         $callerItemType = $extraInfo['itemtype'];
-    }
+    } 
     xarLogMessage("xarModCallHooks: getting $hookObject $hookAction hooks for $modName.$callerItemType");
     $hooklist = xarModGetHookList($modName, $hookObject, $hookAction, $callerItemType);
 
@@ -1602,7 +1604,14 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $xartable = xarDBGetTables();
     $hookstable = $xartable['hooks'];
 
-    // Get applicable hooks
+    // Get applicable hooks based on parameters:
+    // 1. callerItemtype has a value: get only hooks for that type
+    // 2. callerItemType has no value: get any hooks for the module
+    // This means that if itemtype is not specified this function return true
+    // if the "catch-all" is specified OR an itemtype hook is specifiek
+    // actually the db model is wrong, sigh..., ok, off to hack mode
+
+    // In any case, we need only the hooks for $callerModName
     $query = "SELECT DISTINCT xar_tarea,
                    xar_tmodule,
                    xar_ttype,
@@ -1610,15 +1619,19 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
                    xar_order
               FROM $hookstable
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
+
     if (empty($callerItemType)) {
-        $query .= " AND xar_stype = ''";
+        // No itemtype, just get them all
+        //$query .= " AND xar_stype = ''";
     } else {
+        // Get only hooks for the specified itemtype
         // hooks can be enabled for all or for a particular item type
-        $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
+        $query .= " AND (xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
     }
     $query .= " AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
                 AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
               ORDER BY xar_order ASC";
+    
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1672,15 +1685,26 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         $xartable = xarDBGetTables();
         $hookstable = $xartable['hooks'];
 
-        // Get applicable hooks
+        // Get applicable hooks based on parameters:
+        // 1. callerItemtype has a value: get only hooks for that type
+        // 2. callerItemType has no value: get any hooks for the module
+        // This means that if itemtype is not specified this function return true
+        // if the "catch-all" is specified OR an itemtype hook is specifiek
+        // actually the db model is wrong, sigh..., ok, off to hack mode
+
+        // In any case, we need only the hooks for $callerModName
         $query = "SELECT DISTINCT xar_tmodule
                   FROM $hookstable
                   WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
+
         if (empty($callerItemType)) {
-            $query .= " AND xar_stype = ''";
+            // No itemtype, just get them all
+            // $query .= " AND xar_stype = ''";
         } else {
-        // hooks can be enabled for all or for a particular item type
-            $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
+            // Get only hooks for the specified itemtype
+            // hooks can be enabled for all or for a particular item type
+            // $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
+            $query .= " AND (xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
         }
 
         $result =& $dbconn->Execute($query);
