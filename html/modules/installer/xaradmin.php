@@ -194,6 +194,7 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_name','pre:trim:passthru:str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_username','pre:trim:passthru:str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_password2','pre:trim:passthru:str',$dbPass2,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
@@ -201,6 +202,11 @@ function installer_admin_phase5()
 
     if ($dbName == '') {
         $msg = xarML('No database was specified');
+        xarCore_die($msg);
+        return;
+    }
+    if ($dbPass != $dbPass2) {
+        $msg = xarML('The database passwords do not match');
         xarCore_die($msg);
         return;
     }
@@ -481,6 +487,30 @@ function installer_admin_create_administrator()
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+
+    if (empty($userName)) {
+        $msg = xarML('You must provide a preferred username to continue.');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+
+    // check for spaces in the username
+    } elseif (preg_match("/[[:space:]]/",$userName)) {
+        $msg = xarML('There is a space in the username.');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+
+    // check the length of the username
+    } elseif (strlen($userName) > 255) {
+        $msg = xarML('Your username is too long.');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+
+    // check for spaces in the username (again ?)
+    } elseif (strrpos($userName,' ') > 0) {
+        $msg = xarML('There is a space in your username.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
