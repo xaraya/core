@@ -45,7 +45,9 @@ function modules_adminapi_updatehooks($args)
     if (!$result) return;
 
     // get the list of all (active) modules
-    $modList = xarModGetList();
+    $modList = xarModAPIFunc('modules', 
+                             'admin', 
+                             'GetList');
     //throw back
     if (!isset($modList)) return;
 

@@ -16,6 +16,10 @@ function blocks_adminapi_groupgetinfo($args)
         return;
     }
 
+    if (xarVarIsCached('Block.Group.Infos', $blockGroupId)) {
+        return xarVarGetCached('Block.Group.Infos', $blockGroupId);
+    }
+
     list ($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
@@ -74,6 +78,8 @@ function blocks_adminapi_groupgetinfo($args)
     $result->Close();
 
     $group['instances'] = $instances;
+
+    xarVarSetCached('Block.Group.Infos', $blockGroupId, $group);
 
     return $group;
 }

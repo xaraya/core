@@ -46,18 +46,16 @@ function themes_admin_list()
     if($regen){
         // lets regenerate the list on the fly
         xarModAPIFunc('themes', 'admin', 'regenerate');
-        $modlist = xarThemeGetList(
-            array('State' => $data['selfilter']), 
-            $startNum = NULL, 
-            $numItems = NULL, 
-            $orderBy = 'name');
+        $modlist = xarModAPIFunc('themes', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => $data['selfilter'])));
     }else{
         // or just fetch the quicker old list
-        $modlist = xarThemeGetList(
-            array('State' => $data['selfilter']), 
-            $startNum = NULL, 
-            $numItems = NULL, 
-            $orderBy = 'name');
+        $modlist = xarModAPIFunc('themes', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => $data['selfilter'])));
     }
 
     // get action icons/images

@@ -65,7 +65,10 @@ function dynamicdata_admin_view($args)
             $seenmod[$object['moduleid']] = 1;
         }
 
-        $modList = xarModGetList(array(),NULL,NULL,'category/name');
+        $modList = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('orderBy'     => 'category/name'));
         $oldcat = '';
         for ($i = 0; $i < count($modList); $i++) {
             if (!empty($seenmod[$modList[$i]['regid']])) {

@@ -58,7 +58,11 @@ function adminpanels_adminmenublock_display($blockinfo){
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
-    $mods = xarModGetList(array('AdminCapable' => 1), NULL, NULL, 'name');
+    $mods = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('AdminCapable' => 1)));
+    
     if(empty($mods)) {
         // there aren't any admin modules, dont display adminmenu
         return;

@@ -527,7 +527,10 @@ function pnVarValidate($var, $type, $args = NULL)
  */
 function pnModGetUserMods()
 {
-    return xarModGetList(array('UserCapable' => 1));
+    return xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('UserCapable' => 1)));
 }
 
 /**
@@ -538,7 +541,10 @@ function pnModGetUserMods()
  */
 function pnModGetAdminMods()
 {
-    return xarModGetList(array('AdminCapable' => 1));
+    return xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('AdminCapable' => 1)));
 }
 
 /**

@@ -15,6 +15,11 @@ function blocks_adminapi_getinfo($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'blockId');
         return;
     }
+
+    if (xarVarIsCached('Block.Infos', $blockId)) {
+        return xarVarGetCached('Block.Infos', $blockId);
+    }
+
     list ($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
@@ -60,6 +65,8 @@ function blocks_adminapi_getinfo($args)
     $blockInfo['bkey'] = $blockInfo['id'];
 
     $result->Close();
+
+    xarVarSetCached('Block.Infos', $blockId, $blockInfo);
 
     return $blockInfo;
 }

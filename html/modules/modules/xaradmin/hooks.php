@@ -27,7 +27,10 @@ function modules_admin_hooks()
     if (!empty($curhook)) {
         // Get list of modules likely to be "interested" in hooks
         //$modList = xarModGetList(array('Category' => 'Content'));
-        $modList = xarModGetList(array(),NULL,NULL,'category/name');
+        $modList = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('orderBy'     => 'category/name'));
         //throw back
         if (!isset($modList)) return;
 

@@ -72,7 +72,10 @@ function base_menublock_display($blockinfo)
 
     // are there any user modules, then get their names
     // checking as early as possible :)
-    $mods = xarModGetList(array('UserCapable' => 1));
+    $mods = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('UserCapable' => 1)));
     if(empty($mods)) {
     // there aren't any admin modules, dont display adminmenu
         return;

@@ -62,18 +62,16 @@ function modules_admin_list()
     if($regen){
         // lets regenerate the list on the fly
         xarModAPIFunc('modules', 'admin', 'regenerate');
-        $modlist = xarModGetList(
-            array('State' => $data['selfilter']), 
-            $startNum = NULL, 
-            $numItems = NULL, 
-            $orderBy = 'name');
+        $modlist = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => $data['selfilter'])));
     }else{
         // or just fetch the quicker old list
-        $modlist = xarModGetList(
-            array('State' => $data['selfilter']), 
-            $startNum = NULL, 
-            $numItems = NULL, 
-            $orderBy = 'name');
+        $modlist = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => $data['selfilter'])));
     }
     
     // get action icons/images

@@ -15,7 +15,10 @@ function adminpanels_adminapi_updatemenudb($args){
     extract($args);
 
     // what admin mods do we have here?
-    $mods = xarModGetList(array('AdminCapable' => 1));
+    $mods = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('AdminCapable' => 1)));
     if(empty($mods)) {
         // none, so dont do anything
         // happy return

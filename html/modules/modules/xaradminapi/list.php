@@ -18,7 +18,10 @@ function modules_adminapi_list($args)
 
     // Obtain information
     if (!isset($state)) $state = '';
-    $modList = xarModGetList(array('State' => $state));
+    $modList = xarModAPIFunc('modules', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => $state)));
     //throw back
     if (!isset($modList)) return;
 

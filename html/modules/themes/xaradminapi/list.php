@@ -14,7 +14,10 @@ function themes_adminapi_list()
 	if(!xarSecurityCheck('AdminTheme')) return;
 
     // Obtain information
-    $themeList = xarThemeGetList(array('State' => XARTHEME_STATE_ANY));
+    $themeList = xarModAPIFunc('themes', 
+                          'admin', 
+                          'GetList', 
+                          array('filter'     => array('State' => XARTHEME_STATE_ANY)));
     //throw back
     if (!isset($themeList)) return;
 
