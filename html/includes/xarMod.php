@@ -377,7 +377,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
 }
 
 /**
- * Support function for xarModUser*Var functions
+ * Support function for xarMod*UserVar functions
  *
  * private function which delivers a module user variable
  * id based on the module name and the variable name
@@ -387,7 +387,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
  * @param name    The name of the variable
  * @return int id identifier for the variable
  * @raise BAD_PARAM
- * @see xarModUserSetVar, xarModUserGetVar, xarModUserDelVar
+ * @see xarModSetUserVar, xarModGetUserVar, xarModDelUserVar
 */
 function xarModGetVarId($modName, $name)
 {
