@@ -534,9 +534,9 @@ function dynamicdata_init()
     * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    $query1 = "SELECT DISTINCT xar_prop_name FROM $xartable['dynamic_properties']";
-    $query2 = "SELECT DISTINCT xar_prop_type FROM $xartable['dynamic_properties']";
-    $query3 = "SELECT DISTINCT xar_prop_id FROM $xartable['dynamic_properties']";
+    $query1 = "SELECT DISTINCT xar_prop_name FROM " . xarDBGetSiteTablePrefix() . "dynamic_properties";
+    $query2 = "SELECT DISTINCT xar_prop_type FROM " . xarDBGetSiteTablePrefix() . "dynamic_properties";
+    $query3 = "SELECT DISTINCT xar_prop_id FROM " . xarDBGetSiteTablePrefix() . "dynamic_properties";
     $instances = array(
                         array('header' => 'Property Name:',
                                 'query' => $query1,
@@ -553,9 +553,9 @@ function dynamicdata_init()
                     );
     xarDefineInstance('dynamicdata','Type',$instances);
 
-    $query1 = "SELECT DISTINCT xar_name FROM  $xartable['modules']";
-    $query2 = "SELECT DISTINCT xar_object_itemtype FROM $xartable['dynamic_objects']";
-    $query3 = "SELECT DISTINCT xar_object_id FROM $xartable['dynamic_objects']";
+    $query1 = "SELECT DISTINCT xar_name FROM " . xarDBGetSiteTablePrefix() . "modules";
+    $query2 = "SELECT DISTINCT xar_object_itemtype FROM " . xarDBGetSiteTablePrefix() . "dynamic_objects";
+    $query3 = "SELECT DISTINCT xar_object_id FROM " . xarDBGetSiteTablePrefix() . "dynamic_objects";
     $instances = array(
                         array('header' => 'Module Name:',
                                 'query' => $query1,
