@@ -102,22 +102,6 @@ class xarTpl__ParserError extends SystemException
 }
 
 /**
- * xarTpl_PositionInfo
- *
- * Instance of this class record where we are doing what in the templates
- *
- * @package blocklayout
- * @access private
- */
-class xarTpl__PositionInfo extends xarTpl__ParserError
-{
-    var $fileName = '';
-    var $line = 1;
-    var $column = 1;
-    var $lineText = '';
-}
-
-/**
  * xarTpl__Compiler - the abstraction of the BL compiler
  *
  * The compiler holds the parser and the code generator as objects
@@ -157,6 +141,22 @@ class xarTpl__Compiler extends xarTpl__CompilerError
 
         return $this->codeGenerator->generate($documentTree);
     }
+}
+
+/**
+* xarTpl_PositionInfo
+ *
+ * Instance of this class record where we are doing what in the templates
+ *
+ * @package blocklayout
+ * @access private
+ */
+class xarTpl__PositionInfo extends xarTpl__ParserError
+{
+    var $fileName = '';
+    var $line = 1;
+    var $column = 1;
+    var $lineText = '';
 }
 
 /**
@@ -306,7 +306,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             // If there are no children or no text, we can render it as is.
             // Recursion end condition as well.
             $code = $node->render();
-            if(!isset($code)) xarLogVariable('offending node:', $node);
+            if(!isset($code)) ;//xarLogVariable('offending node:', $node);
             // Either code must have a value, or an exception must be pending.
             assert('isset($code) || xarCurrentErrorType() != XAR_NO_EXCEPTION; /* The rendering code for a node is not working properly */');
             if (!isset($code))  return; // throw back
@@ -1132,20 +1132,16 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
         // Otherwise we instantiate the right class
         $tagClass ='xarTpl__Xar' .$tagName.'Node';
+        
         if(class_exists($tagClass)) {
-            $node =& new $tagClass($parser);
+            $node =& new $tagClass($parser, $tagName);
         } else {
-            $node =& new xarTpl__XarOtherNode($tagName);
+            $node =& new xarTpl__XarOtherNode($parser, $tagName);
             if(!isset($node->tagobject)) unset($node);
         }
 
         if (isset($node)) {
-            $node->tagName = $tagName;
             $node->parentTagName = $parentTagName;
-            $node->fileName = $parser->fileName;
-            $node->line = $parser->line;
-            $node->column = $parser->column;
-            $node->lineText = $parser->lineText;
             $node->attributes = $attributes;
             return $node;
         }
@@ -1158,15 +1154,10 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplEntityNode($entityType, $parameters, &$parser)
     {
         $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
-        $node =& new $entityClass();
+        $node =& new $entityClass($parser,'EntityNode');
 
         if (isset($node)) {
-            $node->tagName = 'EntityNode';
             $node->entityType = $entityType;
-            $node->fileName = $parser->fileName;
-            $node->line = $parser->line;
-            $node->column = $parser->column;
-            $node->lineText = $parser->lineText;
             $node->parameters = $parameters;
             return $node;
         }
@@ -1179,17 +1170,12 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplInstructionNode($instruction, &$parser)
     {
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
-            $node =& new xarTpl__XarVarInstructionNode();
+            $node =& new xarTpl__XarVarInstructionNode($parser, 'InstructionNode');
         } else {
-            $node =& new xarTpl__XarApiInstructionNode();
+            $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode');
         }
 
         if (isset($node)) {
-            $node->tagName = 'InstructionNode';
-            $node->fileName = $parser->fileName;
-            $node->line = $parser->line;
-            $node->column = $parser->column;
-            $node->lineText = $parser->lineText;
             $node->instruction = $instruction;
             return $node;
         }
@@ -1201,21 +1187,14 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTextNode($content, &$parser)
     {
-        $node =& new xarTpl__TextNode();
-        $node->tagName = 'TextNode';
-        $node->content = $content;
-        $node->fileName = $parser->fileName;
-        $node->line = $parser->line;
-        $node->column = $parser->column;
-        $node->lineText = $parser->lineText;
+        $node =& new xarTpl__TextNode($parser, 'TextNode');
+        $node->content = $content;  
         return $node;
     }
 
     function createDocumentNode(&$parser)
     {
-        $node =& new xarTpl__DocumentNode();
-        $node->tagName = 'DocumentNode';
-        $node->fileName = $parser->fileName;
+        $node =& new xarTpl__DocumentNode($parser,'DocumentNode');
         return $node;
     }
 }
@@ -1409,8 +1388,28 @@ class xarTpl__ExpressionTransformer
  */
 class xarTpl__Node extends xarTpl__PositionInfo
 {
-    var $tagName;
-
+    var $tagName;   // This is an internal name of the node, not the actual tag name
+    
+    // What we're doing here is create an alias for the constructor, so
+    // it derives properly. That way we decouple the class name from the 
+    // constructor. Oh, the beauty of PHP :-(
+    // Like this we can call parent::constructor(...) in the subclasses independent
+    // of the base class.
+    function xarTpl__Node(&$parser, $nodeName)
+    {
+        // If constructor is defined in subclass, that one is called!!
+        $this->constructor($parser, $nodeName);
+    }
+    
+    function constructor(&$parser, $nodeName)
+    {
+        $this->tagName = $nodeName;
+        $this->fileName = $parser->fileName;
+        $this->line = $parser->line;
+        $this->column = $parser->column;
+        $this->lineText = $parser->lineText;
+    }
+    
     function render()
     {
         die('xarTpl__Node::render: abstract');
@@ -1547,7 +1546,7 @@ class xarTpl__EntityNode extends xarTpl__Node
 {
     var $entityType;
     var $parameters;
-
+    
     function isPHPCode()
     {
         return true;
@@ -1819,7 +1818,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
     var $attributes;
     var $parentTagName;
     var $children;
-
+    
     function isPHPCode()
     {
         return true;
@@ -3144,9 +3143,10 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
     var $tagobject;
 
-    function xarTpl__XarOtherNode($tagName)
+    function constructor(&$parser, $tagName)
     {
         xarLogMessage("Constructing custom tag: $tagName");
+        parent::constructor($parser, $tagName);
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
     }
 
@@ -3207,8 +3207,9 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
-    function xarTpl__XarBlocklayoutNode(&$parser)
+    function constructor(&$parser,$tagName)
     {
+        parent::constructor($parser, $tagName);
         // TODO: check if we are in a page template, and whether we already have the root tag
         $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
     }
