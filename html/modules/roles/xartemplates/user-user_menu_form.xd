@@ -1,20 +1,19 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Information</xar:mlstring></span></div>
 <h2><xar:mlstring>Edit User</xar:mlstring>: #$uname#</h2>
-
 <xar:if condition="isset($withupload) AND $withupload">
     <xar:set name="enc_type">'multipart/form-data'</xar:set>
 <xar:else/>
     <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
 </xar:if>
 
-<div style="margin: auto;">
+<div class="xar-fullwidth" style="margin: auto;">
     <form action="#xarModURL('roles', 'user', 'usermenu')#" method="post" id="post" name="post" enctype="#$enc_type#">
         <div>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />    
             <input type="hidden" name="uid" id="uid" value="#$uid#" />
             <input type="hidden" name="phase" id="phase" value="updatebasic" />
-            <table border="0" cellpadding="2" cellspacing="0">
+            <table class="xar-fullwidth" border="0" cellpadding="2" cellspacing="0">
                 <tr>
                     <td><xar:mlstring>User Name</xar:mlstring>:</td>
                     <td>#xarVarPrepForDisplay($uname)#</td>
@@ -66,7 +65,3 @@
                         <input type="submit" value="#xarVarPrepForDisplay($submitlabel)#"  />
                     </td>
                 </tr>
-            </table>
-        </div>
-    </form>
-</div>
