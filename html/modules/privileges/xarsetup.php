@@ -310,6 +310,7 @@ function initializeSetup()
     xarRegisterMask('AddRole','All','roles','All','All',ACCESS_ADD);
     xarRegisterMask('DeleteRole','All','roles','All','All',ACCESS_DELETE);
     xarRegisterMask('AdminRole','All','roles','All','All',ACCESS_ADMIN);
+    xarRegisterMask('MailRoles','All','roles','Mail','All',ACCESS_ADMIN);
 
     xarRegisterMask('EditMail','All','mail','All','All',ACCESS_EDIT);
     xarRegisterMask('AdminMail','All','mail','All','All',ACCESS_ADMIN);

@@ -261,7 +261,7 @@ document.forms[0].submit();}
 </table>
 <table border="0" cellspacing="5" width="100%">
 	<tr>
-		<td align="right">Show Privileges that are: 
+		<td align="left">Show Privileges that are: 
 			<xar:if condition="$show eq 'assigned'">
 			<input type="radio" name="show" id="show" value="assigned" checked="checked" />
 			<xar:else />

@@ -191,15 +191,15 @@ var $indent;
 var $level;
 
 // convenience variables to hold strings referring to pictures
-var $el = '<img src="modules/roles/xarimages/el.gif" style="vertical-align: middle"/>';
-var $tee = '<img src="modules/roles/xarimages/T.gif" style="vertical-align: middle"/>';
-var $aye = '<img src="modules/roles/xarimages/I.gif" style="vertical-align: middle"/>';
-var $bar = '<img src="modules/roles/xarimages/s.gif" style="vertical-align: middle"/>';
-var $emptybox = '<img class="box" src="modules/roles/xarimages/k1.gif" style="vertical-align: middle"/>';
-var $expandedbox = '<img class="box" src="modules/roles/xarimages/k2.gif" style="vertical-align: middle"/>';
-var $collapsedbox = '<img class="box" src="modules/roles/xarimages/k3.gif" style="vertical-align: middle"/>';
-var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle"/>';
-var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+var $el = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle"/>';
+var $tee = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle"/>';
+var $aye = '<img src="modules/roles/xarimages/I.gif" alt="" style="vertical-align: middle"/>';
+var $bar = '<img src="modules/roles/xarimages/s.gif" alt="" style="vertical-align: middle"/>';
+var $emptybox = '<img class="box" src="modules/roles/xarimages/k1.gif" alt="" style="vertical-align: middle"/>';
+var $expandedbox = '<img class="box" src="modules/roles/xarimages/k2.gif" alt="" style="vertical-align: middle"/>';
+var $collapsedbox = '<img class="box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle"/>';
+var $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle"/>';
+var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
 // we'll use this to check whether a group has already been processed
 var $alreadydone;
@@ -292,6 +292,19 @@ function drawbranch($node){
                      'showusers',
                      array('uid'=>$object['uid'])) .
                      '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
+    }
+
+// link to group email
+    if($object['users'] == 0 || (!$drawchildren)) {
+        $this->html .= $this->bigblank;
+    }
+    else {
+        $this->html .= '<a href="' .
+                xarModURL('roles',
+                     'admin',
+                     'createmail',
+                     array('uid'=>$object['uid'])) .
+                     '" title="Email the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>';
     }
 
 // offer to show the privileges of this group

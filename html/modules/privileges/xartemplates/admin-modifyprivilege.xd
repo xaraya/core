@@ -358,7 +358,9 @@ document.forms[0].submit();}
 				<xar:mlstring>Add Privilege</xar:mlstring>
 			</a>
 		</td>
-		<td align="right">Show Privileges that are: 
+	</tr>
+	<tr>
+		<td align="left">Show Privileges that are: 
 			<xar:if condition="$show eq 'assigned'">
 			<input type="radio" name="show" id="show" value="assigned" checked="checked" />
 			<xar:else />

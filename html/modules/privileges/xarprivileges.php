@@ -1168,15 +1168,15 @@ var $indent;
 var $level;
 
 // convenience variables to hold strings referring to pictures
-var $el = '<img src="modules/privileges/xarimages/el.gif" style="vertical-align: middle" />';
-var $tee = '<img src="modules/privileges/xarimages/T.gif" style="vertical-align: middle" />';
-var $aye = '<img src="modules/privileges/xarimages/I.gif" style="vertical-align: middle" />';
-var $bar = '<img src="modules/privileges/xarimages/s.gif" style="vertical-align: middle" />';
-var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle" />';
-var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle" />';
-var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle" />';
-var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle" />';
-var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+var $el = '<img src="modules/privileges/xarimages/el.gif" alt="" style="vertical-align: middle" />';
+var $tee = '<img src="modules/privileges/xarimages/T.gif" alt="" style="vertical-align: middle" />';
+var $aye = '<img src="modules/privileges/xarimages/I.gif" alt="" style="vertical-align: middle" />';
+var $bar = '<img src="modules/privileges/xarimages/s.gif" alt="" style="vertical-align: middle" />';
+var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" alt="" style="vertical-align: middle" />';
+var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" alt="" style="vertical-align: middle" />';
+var $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle" />';
+var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" alt="" style="vertical-align: middle" />';
+var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
 
 // we'll use this to check whether a group has already been processed
 var $alreadydone;
