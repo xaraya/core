@@ -172,7 +172,6 @@ function base_init()
     xarConfigSetVar('System.Core.VersionNum', '.900');
     xarConfigSetVar('System.Core.VersionId', 'Xaraya');
     xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
-    xarConfigSetVar('System.Core.LoadLegacy', true);
     $allowedAPITypes = array();
     xarConfigSetVar('System.Core.AllowedAPITypes',$allowedAPITypes);
     /*****************************************************************
@@ -186,6 +185,7 @@ function base_init()
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
+    xarConfigSetVar('Site.Core.LoadLegacy', true);
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
