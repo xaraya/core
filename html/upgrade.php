@@ -925,6 +925,12 @@ if (empty($step)) {
         }
     }
 
+    $offset = xarConfigGetVar('Site.MLS.DefaultTimeOffset');
+    if (!isset($offset)) {
+        xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
+        echo "Site.MLS.DefaultTimeOffset incorrect, attempting to set.... done!<br />";
+    }
+
     // Check the installed roles
     echo "<h5>Checking Role Structure</h5>";
 

@@ -104,6 +104,14 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
             xarConfigSetVar('Site.MLS.AllowedLocales', $localesList);
             xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
+
+            if (!xarVarFetch('defaultoffset','int',$defaultoffset,0,XARVAR_NOT_REQUIRED)) return;
+        // CHECKME: see also Site.Core.TimeZone (currently unused) - we *could* load
+        //          all timezone info and set some daylight saving information here !
+            xarConfigSetVar('Site.MLS.DefaultTimeOffset', $defaultoffset);
+            //xarConfigSetVar('Site.MLS.DaylightStartInfo', ...); // when daylight savings start each year ?
+            //xarConfigSetVar('Site.MLS.DaylightEndInfo', ...); // when daylight savings end each year ?
+
             break;
         case 'other':
             if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;

@@ -49,6 +49,11 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
+    $offset = xarConfigGetVar('Site.MLS.DefaultTimeOffset');
+    if (!isset($offset)) {
+        xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
+    }
+
     $data['editor'] = xarModGetVar('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
