@@ -40,6 +40,14 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
+							<xar:mlstring>Minimum age to be a user</xar:mlstring>
+						</td>
+						<td>
+							<input type="text" name="minage" id="minage" value="#xarModGetVar('users', 'minage')#" size="3" maxlength="3">
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
 							<xar:mlstring>Allow users to choose their own password when registering</xar:mlstring>
 						</td>
 						<td>

@@ -1,0 +1,16 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>User registration/login</xar:mlstring>           
+        </th>
+    </tr>
+</table>
+
+<br />
+<xar:mlstring>Please select an option from the menu below</xar:mlstring>:
+<br /><br />
+<a href="#xarModURL('users', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a>
+<br /><br />
+<a href="#xarModURL('users', 'user', 'register')#"><xar:mlstring>Register</xar:mlstring></a>
+<br /><br />
+<a href="#xarModURL('users', 'user', 'lostpassword')#"><xar:mlstring>Retrieve lost password</xar:mlstring></a>

@@ -185,6 +185,7 @@ function users_activate()
     xarModSetVar('users', 'disallowednames', $disallowednames);
     $disallowedemails = array('@cnn.com', '@whitehouse.gov');
     xarModSetVar('users', 'disallowedemails', $disallowedemails);
+    xarModSetVar('users', 'minage', 13);
 
     // Register blocks
     xarBlockTypeRegister('users', 'login');
