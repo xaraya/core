@@ -23,6 +23,9 @@ function roles_userapi_getallactive($args)
     if (!isset($numitems)) {
         $numitems = -1;
     }
+    if (!isset($order)) {
+        $order = "name";
+    }
 
     if (empty($filter)){
         $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
