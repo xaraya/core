@@ -178,6 +178,8 @@ function adminpanels_init()
 
     // Set up module hooks
 
+/* FIXME: you need to use a real module name here, not some dummy waitingcontent
+
     // when a module item is displayed
     // (use xarVarSetCached('Hooks.hitcount','save', 1) to tell hitcount *not*
     // to display the hit count, but to save it in 'Hooks.hitcount', 'value')
@@ -201,7 +203,7 @@ function adminpanels_init()
                            'waitingcontent', 'admin', 'deleteall')) {
         return false;
     }
-
+*/
     // Initialisation successful
     return true;
 }
