@@ -1,0 +1,30 @@
+<!--- Process only if there is JavaScript present --->
+<xar:if condition="is_array($javascript)">
+    <!--- Loop for each item (could be an array of positions, or an array of items for a position) --->
+    <xar:loop name="$javascript" id="top">
+        <!--- Array of items for a given position --->
+        <xar:if condition="!empty($position) and is_array($loop:top:item)">
+            <xar:if condition="$loop:top:item.type == 'code' and (empty($type) or $type == 'code')">
+                <script language="Javascript" type="text/javascript">
+                #$loop:top:item.data#
+                </script>
+            </xar:if>
+            <xar:if condition="$loop:top:item.type == 'src' and (empty($type) or $type == 'src')">
+                <script language="Javascript" type="text/javascript" src="#$loop:top:item.data#"></script>
+            </xar:if>
+        </xar:if>
+        <!--- Array of positions (all positions) so a sub-loop is needed --->
+        <xar:if condition="empty($position) and is_array($loop:top:item)">
+            <xar:loop name="$loop:top:item" id="detail">
+                <xar:if condition="$loop:detail:item.type == 'code' and (empty($type) or $type == 'code')">
+                    <script language="Javascript" type="text/javascript">
+                    #$loop:detail:item.data#
+                    </script>
+                </xar:if>
+                <xar:if condition="$loop:detail:item.type == 'src' and (empty($type) or $type == 'src')">
+                    <script language="Javascript" type="text/javascript" src="#$loop:detail:item.data#"></script>
+                </xar:if>
+            </xar:loop>
+        </xar:if>
+    </xar:loop>
+</xar:if>

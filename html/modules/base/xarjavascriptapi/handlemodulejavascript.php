@@ -3,7 +3,7 @@
 /**
  * Handle <xar:base-include-javascript ...> form field tags
  * Format : <xar:base-include-javascript definition="$definition" /> with $definition an array
- *       or <xar:articles-include-javascript filename="thisname.js" module="modulename" position="head|body|whatever"/>
+ *       or <xar:base-include-javascript filename="thisname.js" module="modulename" position="head|body|whatever"/>
  * Default module is 'base' and default position is 'head'; filename is mandatory.
  *
  * @author Jason Judge

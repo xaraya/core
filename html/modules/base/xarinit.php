@@ -367,6 +367,11 @@ function base_init()
         'base', 'base-include-javascript', array(),
         'base_javascriptapi_handlemodulejavascript'
     );
+    // Render JavaScript in a page
+    xarTplRegisterTag(
+        'base', 'base-render-javascript', array(),
+        'base_javascriptapi_handlerenderjavascript'
+    );
 
     
     // Initialisation successful
