@@ -194,6 +194,16 @@ function xarPageIsCached($cacheKey, $name = '')
          filemtime($cache_file) > time() - $xarPage_cacheTime) &&
         xarPage_checkUserCaching()) {
 
+        // create another copy for session-less page caching if necessary
+        if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
+            $cacheKey = 'static';
+            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$cacheCode.php";
+        // Note that if we get here, the first-time visitor will receive a session cookie,
+        // so he will no longer benefit from this himself ;-)
+            @copy($cache_file, $cache_file2);
+        }
+
         xarPage_httpCacheHeaders($cache_file);
 
         return true;
@@ -264,10 +274,10 @@ function xarBlockIsCached($args)
         return false;
     }
     if (empty($pageShared)) {
-    	$pageShared = 0;
+        $pageShared = 0;
     }
     if (empty($userShared)) {
-    	$userShared = 0;
+        $userShared = 0;
     }
     if (!isset($blockCacheExpireTime)) {
         $blockCacheExpireTime = $xarBlock_cacheTime;
@@ -347,7 +357,7 @@ function xarBlockGetCached($cacheKey, $name = '')
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
     
     if (function_exists('file_get_contents')) {
-    	$blockCachedOutput = file_get_contents($cache_file);
+        $blockCachedOutput = file_get_contents($cache_file);
     } else {
         $blockCachedOutput = '';
         $file = @fopen($cache_file, "rb");
@@ -457,7 +467,7 @@ function xarOutputSetCached($cacheKey, $cache_file, $cacheType, $value)
            ${'xar' . $cacheType . '_cacheCode'};
 
     $tmp_cache_file = tempnam($xarOutput_cacheCollection,
-    						  "$cacheKey-${'xar' . $cacheType . '_cacheCode'}");
+                              "$cacheKey-${'xar' . $cacheType . '_cacheCode'}");
     $fp = @fopen($tmp_cache_file, "w");
     if (!empty($fp)) {
 
@@ -516,7 +526,7 @@ function xarOutputDelCached($cacheKey, $name)
  */
 function xarPageDelCached($cacheKey, $name)
 {
-	xarOutputDelCached($cacheKey, $name);
+    xarOutputDelCached($cacheKey, $name);
 }
 
 /**
@@ -546,7 +556,7 @@ function xarOutputFlushCached($cacheKey)
  */
 function xarPageFlushCached($cacheKey)
 {
-	xarOutputFlushCached($cacheKey);
+    xarOutputFlushCached($cacheKey);
 }
 
 /**
@@ -575,7 +585,7 @@ function xarOutputCleanCached($cacheType, $cacheKey = '')
     if (!@touch($touch_file)) {
         // hmm, somthings amiss... better let the administrator know,
         // without disrupting the site
-    	error_log('Error from Xaraya::xarCache::xarOutputCleanCached
+        error_log('Error from Xaraya::xarCache::xarOutputCleanCached
                   - web process can not touch ' . $touch_file);
     }
     if ($handle = @opendir($xarOutput_cacheCollection)) {
@@ -725,7 +735,69 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
             filemtime('var/cache/output/autocache.start') < time() - $xarPage_autoCachePeriod) {
             @touch('var/cache/output/autocache.start');
 
-// TODO: re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
+            // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
+            $cachingConfigFile = 'var/cache/config.caching.php';
+            if (file_exists($cachingConfigFile) &&
+                is_writable($cachingConfigFile)) {
+
+                include $cachingConfigFile;
+                if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
+                    file_exists('var/cache/output/autocache.log') &&
+                    filesize('var/cache/output/autocache.log') > 0) {
+
+                    $logs = @file('var/cache/output/autocache.log');
+                    $autocacheproposed = array();
+                    foreach ($logs as $entry) {
+                        if (empty($entry)) continue;
+                        list($time,$status,$addr,$url) = explode(' ',$entry);
+                        $url = trim($url);
+                        if (!isset($autocacheproposed[$url])) $autocacheproposed[$url] = 0;
+                        $autocacheproposed[$url]++;
+                    }
+                    unset($logs);
+                    // check that all required URLs are included
+                    if (!empty($cachingConfiguration['AutoCache.Include'])) {
+                        foreach ($cachingConfiguration['AutoCache.Include'] as $url) {
+                            if (!isset($autocacheproposed[$url]) ||
+                                $autocacheproposed[$url] < $cachingConfiguration['AutoCache.Threshold'])
+                                $autocacheproposed[$url] = 99999999;
+                        }
+                    }
+                    // check that all forbidden URLs are excluded
+                    if (!empty($cachingConfiguration['AutoCache.Exclude'])) {
+                        foreach ($cachingConfiguration['AutoCache.Exclude'] as $url) {
+                            if (isset($autocacheproposed[$url])) unset($autocacheproposed[$url]);
+                        }
+                    }
+                    // sort descending by count
+                    arsort($autocacheproposed, SORT_NUMERIC);
+                    // build the list of URLs proposed for session-less caching
+                    $checkurls = array();
+                    foreach ($autocacheproposed as $url => $count) {
+                        if (count($checkurls) >= $cachingConfiguration['AutoCache.MaxPages'] ||
+                            $count < $cachingConfiguration['AutoCache.Threshold']) {
+                            break;
+                        }
+                    // TODO: check against base URL ? (+ how to determine that without core)
+                        $checkurls[] = $url;
+                    }
+                    sort($checkurls);
+                    sort($cachingConfiguration['Page.SessionLess']);
+                    if (count($checkurls) > 0 &&
+                        $checkurls != $cachingConfiguration['Page.SessionLess']) {
+
+                        $sessionlesslist = "'" . join("','",$checkurls) . "'";
+
+                        $cachingConfig = join('', file($cachingConfigFile));
+                        $cachingConfig = preg_replace('/\[\'Page.SessionLess\'\]\s*=\s*array\s*\((.*)\)\s*;/i', "['Page.SessionLess'] = array($sessionlesslist);", $cachingConfig);
+                        $fp = @fopen ($cachingConfigFile, 'wb');
+                        if ($fp) {
+                            @fwrite ($fp, $cachingConfig);
+                            @fclose ($fp);
+                        }
+                    }
+                }
+            }
 
             $fp = @fopen('var/cache/output/autocache.log', 'w');
         } else {
@@ -740,11 +812,11 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
 
 function xarPage_httpCacheHeaders($cache_file)
 {
-	global $xarPage_cacheCode,
-	        $xarPage_cacheExpireHeader,
-	        $xarPage_cacheTime;
+    global $xarPage_cacheCode,
+            $xarPage_cacheExpireHeader,
+            $xarPage_cacheTime;
 
-	$mod = filemtime($cache_file);
+    $mod = filemtime($cache_file);
     // doesn't seem to be taken into account ?
     $etag = $xarPage_cacheCode . $mod;
     header("ETag: $etag");
