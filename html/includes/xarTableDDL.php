@@ -390,7 +390,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
-    if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
+    if (!is_array($index) ||  empty($index['name'])) {
         $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
@@ -445,11 +445,26 @@ function xarDB__mysqlAlterTable($tableName, $args)
             }
        // TODO: adapt mysqlColumnDefinition to return field name too
             $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
-            $sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
+            $coldef = xarDB__mysqlColumnDefinition($args['field'],$args);
+            $sql .= $coldef['type'] . ' '
+                . $coldef['unsigned'] . ' '
+                . $coldef['null'] . ' '
+                . $coldef['default'] . ' '
+                . $coldef['auto_increment'] . ' ';
+
+            if($coldef['primary_key']) {
+                $sql.= 'PRIMARY KEY ';
+            }
+            //$sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
             if (!empty($args['first']) && $args['first'] == true) {
                 $sql .= ' FIRST';
             } elseif (!empty($args['after_field'])) {
                 $sql .= ' AFTER '.$args['after_field'];
+            }
+            
+            // Add table options, if any
+            if($coldef['increment_start'] > 0) {
+                $sql.= 'AUTO_INCREMENT=' .$coldef['increment_start'] . ' ';
             }
             break;
         case 'rename':
@@ -467,6 +482,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
+
     return $sql;
 }
 
@@ -838,8 +854,11 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
     if (!empty($this_field['auto_increment'])) {
         if (isset($parameters['increment_start']))
             $this_field['increment_start'] = $parameters['increment_start'];
-        else
+        else {
+            // FIXME: <mrb> IMO the default auto_increment start = 1, why not use 
+            //        that and  simplify code a bit?
             $this_field['increment_start'] = 0;
+        }
     }
 
     // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)

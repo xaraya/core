@@ -13,7 +13,7 @@
  */
 $modversion['name']           = 'Modules Administration';
 $modversion['id']             = '1';
-$modversion['version']        = '2.2.0';
+$modversion['version']        = '2.3.0';
 $modversion['description']    = 'Configure modules, view install/docs/credits.';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = '';

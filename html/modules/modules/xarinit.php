@@ -92,13 +92,16 @@ function modules_init()
     // prefix_module_states
     /**
      * CREATE TABLE xar_module_states (
+     *   xar_id    int(11) unsigned NOT NULL auto_increment,
      *   xar_regid int(11) unsigned NOT NULL default '0',
      *   xar_state tinyint(1) NOT NULL default '0',
-     *   PRIMARY KEY  (xar_regid)
+     *   PRIMARY KEY  (xar_id),
+     *   UNIQUE (xar_regid)
      * )
      */
-    $fields = array('xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => false),
-        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
+    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
+                    'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true), 
+                    'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
         );
 
     $query = xarDBCreateTable($tables['module_states'], $fields);
@@ -106,8 +109,7 @@ function modules_init()
     $result = &$dbconn->Execute($query);
     if (!$result) return;
 
-    $index = array('name' => 'i_' . $sitePrefix . '_module_states_regid',
-        'fields' => array('xar_regid'));
+    $index = array('name' => 'i_' . $sitePrefix . '_module_states_regid', 'unique' => true, 'fields' => array('xar_regid'));
 
     $query = xarDBCreateIndex($tables['module_states'], $index);
 
@@ -118,7 +120,8 @@ function modules_init()
               ) VALUES (1, 3)";
 
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
+
     // prefix_module_vars
     /**
      * CREATE TABLE xar_module_vars (
@@ -295,10 +298,50 @@ function modules_activate()
  */
 function modules_upgrade($oldVersion)
 {
+    // Get database information
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    $sitePrefix = xarDBGetSiteTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
+
+    $tables['module_states'] = $sitePrefix . '_module_states';
+
     switch($oldVersion) {
     case '2.02':
         // compatability upgrade, nothing to be done
-        break;
+    case '2.2.0':
+        // TODO: use adodb transactions to ensure atomicity?
+        // The changes for bug 1716:
+        // - add xar_id as primary key
+        // - make index on xar_regid unique
+        // 1. Add the primary key: save operation
+        $changes = array('command'     => 'add', 
+                         'field'       => 'xar_id', 
+                         'type'        => 'integer', 
+                         'null'        => false, 
+                         'unsigned'    => true, 
+                         'increment'   => true, 
+                         'primary_key' => true,
+                         'first'       => true);
+        $query = xarDBAlterTable($tables['module_states'], $changes);
+        $result = &$dbconn->Execute($query);
+        if (!$result) return; 
+
+        // 2. change index for reg_id to unique
+        $indexname = 'i_' . $sitePrefix . '_module_states_regid';
+        $query = xarDBDropIndex($tables['module_states'], array('name' => $indexname));
+        $result = &$dbconn->Execute($query);
+        if (!$result) return; 
+
+        // 3. Add the new index.
+        $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
+        $query = xarDBCreateIndex($tables['module_states'], $index);
+        
+        $result = &$dbconn->Execute($query);
+        if (!$result) return; 
+    case '2.3.0':
+        // current version
     }
     return true;
 } 

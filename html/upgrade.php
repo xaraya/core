@@ -1090,7 +1090,56 @@ Password : %%password%%
         }
     }
 
+    // Bug 1716 module states table
+    echo "<h5>Upgrade module states table</h5>";
+    // TODO: use adodb transactions to ensure atomicity?
+    // The changes for bug 1716:
+    // - add xar_id as primary key
+    // - make index on xar_regid unique
+    // 1. Add the primary key: save operation
+    $changes = array('command'     => 'add', 
+                     'field'       => 'xar_id', 
+                     'type'        => 'integer', 
+                     'null'        => false, 
+                     'unsigned'    => true, 
+                     'increment'   => true, 
+                     'primary_key' => true,
+                     'first'       => true);
+    $query = xarDBAlterTable($sitePrefix . '_module_states', $changes);
+    $result = &$dbconn->Execute($query);
+    if (!$result) {
+        echo "FAILED to alter the module_states table<br/>";
+    } 
+    
+    // 2. change index for reg_id to unique
+    $indexname = 'i_' . $sitePrefix . '_module_states_regid';
+    $query = xarDBDropIndex($sitePrefix . '_module_states', array('name' => $indexname));
+    $result = &$dbconn->Execute($query);
+    if (!$result) {
+        echo "FAILED to drop the old index on the module states regid column<br/>";
+    } else {
+        echo "Dropped old index for module_states table<br/>";
+    }
+    
+    // 3. Add the new index.
+    $index = array('name' => $indexname, 'unique' => true, 'fields' => array('xar_regid'));
+    $query = xarDBCreateIndex($sitePrefix . '_module_states', $index);
+    
+    $result = &$dbconn->Execute($query);
+    if (!$result) {
+        echo "FAILED to create the new index for the module states regid column<br/>";
+    } else {
+        echo "Added a new index on the module_status table<br/>";
+    }
 
+    // 4. Set the version number of the modules module
+    $query = 'UPDATE ' . $sitePrefix . "_modules SET xar_version='2.3.0' WHERE xar_regid=1";
+    $result = &$dbconn->Execute($query);
+    if(!$result) {
+        echo "FAILED to update the version number for the modules module<br/>";
+    } else {
+        echo "Updated the version number for modules module<br/>";
+    }
 
     // Bug 630, let's throw the reminder back up after upgrade.
 
