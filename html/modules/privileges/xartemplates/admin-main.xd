@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <div style="float:right;padding:10px;">
+    <div class="xar-module-icon">
         <xar:if condition="file_exists('modules/privileges/xarimages/admin.gif')" >
             <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="96" height="96" />
         <xar:else />
