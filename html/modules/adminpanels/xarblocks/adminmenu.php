@@ -219,10 +219,11 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
                 foreach($catmods as $mod){
                     $label = $mod;
-                    $link = xarModURL($mod ,'admin', 'main', array());
                     // depending on which module is currently loaded we display accordingly
                     // also we are treating category lables in ML fasion
                     if($label == $thismodname && $thismodtype == 'admin'){
+                        // Do this here, we know now it's a module
+                        $link = xarModURL($mod ,'admin', 'main', array());
                         // clarification (to avoid new template bugs)
                         // this module is currently loaded (active), we need to display
                         // NOTE: it has been changed a bit to satisfy users logic (bug/feature request #472) 
@@ -266,6 +267,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                             $indlinks= '';
                         }
                     }else{
+                        // It's probably a category
                         switch (strtolower($label)) {
                             case 'global':
                                     $adminmods[] = array(   'label' => xarML($label),
@@ -293,6 +295,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                                     if($modinfo){
                                         $desc = $modinfo['description'];
                                     }
+                                    $link = xarModURL($label ,'admin', 'main', array());
                                     $labelDisplay = ucwords($label);
                                     $adminmods[] = array(   'label'     => $labelDisplay,
                                                 'link'      => $link,
