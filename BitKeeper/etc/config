@@ -7,7 +7,6 @@ single_user:
 single_host: 
 compression: gzip
 autofix:yes
-[marcel]checkout:get
 checkout:edit
 contact: Marcel van der Boom
 email: marcel@xaraya.com
