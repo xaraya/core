@@ -126,7 +126,15 @@ function &xarDBNewConn()
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
     }
     // Set the default settings for this connection
-    $conn->SetFetchMode(ADODB_FETCH_NUM);
+    // FIXME: ADODB currently allows setting of fetch mode via global and the method setfetchmode()
+    // however, it doesn't seem to take into account the global setting when setfetchmode is set
+    // which causes problems in postgres drivers (and possibly others). reason being that these drivers,
+    // don't actually use the setFetchMode method everywhere - instead opting for the global (which can be out 
+    // of sync with the latter). -- rabbitt
+    $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
+
+    // Commented out due to FIXME above.
+    // $conn->SetFetchMode(ADODB_FETCH_NUM);
 
     // force oracle to a consistent date format for comparison methods later on
     // FIXME: <mrb> this doesn't belong here
