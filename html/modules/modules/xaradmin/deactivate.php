@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Deactivate a module
@@ -34,6 +34,10 @@ function modules_admin_deactivate ()
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
+    // set the target location (anchor) to go to within the page
+    $minfo=xarModGetInfo($id);
+    $target=$minfo['name'];
+
     // If we haven't been to the deps GUI, check that first
     if (!$command) {
         //First check the modules dependencies
@@ -56,7 +60,7 @@ function modules_admin_deactivate ()
                 return;
             } else {
                 xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-            }               
+            }
         }
     }
 
@@ -65,7 +69,6 @@ function modules_admin_deactivate ()
         return;
     }
 
-    $minfo=xarModGetInfo($id);
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
         //Deactivate with dependents, first dependents
@@ -75,9 +78,6 @@ function modules_admin_deactivate ()
             return;
         } // Else
     }
-
-    // set the target location (anchor) to go to within the page
-    $target=$minfo['name'];
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
