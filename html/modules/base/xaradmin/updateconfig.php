@@ -59,6 +59,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('securitylevel','str:1:',$securityLevel)) return;
             if (!xarVarFetch('sessionduration','int:1:',$sessionDuration,30,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('authmodule_order','str:1:',$authmodule_order,'',XARVAR_NOT_REQUIRED)) {return;}
 
             xarConfigSetVar('Site.Core.EnableSecureServer', $secureServer);
 
@@ -67,6 +68,12 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.Session.SecurityLevel', $securityLevel);
             xarConfigSetVar('Site.Session.Duration', $sessionDuration);
             xarConfigSetVar('Site.Session.InactivityTimeout', $sessionTimeout);
+
+            // Authentication modules
+            if (!empty($authmodule_order)) {
+                $authmodules = explode(';', $authmodule_order);
+                xarConfigSetVar('Site.User.AuthenticationModules', $authmodules);
+            }
             break;
         case 'locales':
             if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;

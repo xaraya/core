@@ -212,6 +212,13 @@
 
 <xar:comment> ----------------- Begin Security Options ------------------- </xar:comment>
     <xar:elseif condition="$tab eq 'security'" />
+        <xar:set name="authmodules">#xarConfigGetVar('Site.User.AuthenticationModules')#</xar:set>
+        <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+            <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
+            <script type="text/javascript">
+                xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
+            </script>
+        </xar:if>
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="tab" id="tab" value="#$tab#" />
@@ -276,6 +283,33 @@
                 <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" />
             </span>
             </div>
+
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+            <span class="help" title="#xarML('Change the order of authentication')#">
+                <label for="authmodules"><xar:mlstring>Authentication Modules</xar:mlstring></label>:</span>
+            </span>
+            <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+                <span style="float: right; width: 68%; text-align: left;">
+                    <xar:set name="size">count($authmodules)</xar:set>
+                    <select name="authmodules" id="authmodules" size="#$size#">
+                       <xar:foreach in="$authmodules" value="$authmodule">
+                           <option value="#$authmodule#">#$authmodule#</option>
+                       </xar:foreach>
+                    </select>
+                </span>
+                <span style="float: right; width: 10%; text-align: left;">
+                    <input type="hidden" name="authmodule_order" id="authmodule_order" value="" />
+                    <input type="image" src="#xarTplGetImage('up.gif','blocks')#" onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');" title="#xarML('Move Up')#" /><br />
+                    <input type="image" src="#xarTplGetImage('down.gif','blocks')#" onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');" title="#xarML('Move Down')#" />
+                </span>
+            <xar:else/>
+                <span style="float: right; width: 78%; text-align: left;">
+                    #$authmodules[0]#
+                </span>
+            </xar:if>
+            </div>
+
             <div style="clear: both; padding-top: 10px;">
                 <input type="submit" value="#$updatelabel#" />
             </div>
