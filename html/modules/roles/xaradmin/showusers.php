@@ -47,7 +47,7 @@ function roles_admin_showusers()
                                     'getallgroups');
     $data['groupuid'] = $uid;
     $numitems = xarModGetVar('roles', 'rolesperpage');
-    $data['totalusers'] = count(xarModAPIFunc('roles','user','getall'));
+    $data['totalusers'] = xarModAPIFunc('roles','user','countall');
     // Make sure a value was retrieved for rolesperpage
     if (empty($numitems))
         $numitems = -1;
@@ -75,10 +75,10 @@ function roles_admin_showusers()
         default:
             if ($uid != 0) {
                 $usrs = $role->getUsers(0, $startnum, $numitems);
-                $data['totalstate'] = count($role->getUsers(0));
+                $data['totalstate'] = $role->countUsers(0);
             } else {
                 $usrs = xarModAPIFunc('roles','user','getall', array('startat' => $startnum, 'numitems' => $numitems));
-                $data['totalstate'] = count(xarModAPIFunc('roles','user','getall'));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall');
             }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no users');
@@ -88,11 +88,11 @@ function roles_admin_showusers()
 
         case 1:
             if ($uid != 0) {
-                $data['totalstate'] = count($role->getUsers(1));
+                $data['totalstate'] = $role->countUsers(1);
                 $usrs = $role->getUsers(1, $startnum, $numitems);
             } else {
                 $usrs = xarModAPIFunc('roles','user','getall', array('state' => 1, 'startat' => $startnum, 'numitems' => $numitems));
-                $data['totalstate'] = count(xarModAPIFunc('roles','user','getall', array('state' => 1)));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 1));
             }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no inactive users');
@@ -102,10 +102,10 @@ function roles_admin_showusers()
 
         case 2:
              if ($uid != 0) {
-                $data['totalstate'] = count($role->getUsers(2));
+                $data['totalstate'] = $role->countUsers(2);
                 $usrs = $role->getUsers(2, $startnum, $numitems);
              } else {
-                $data['totalstate'] = count(xarModAPIFunc('roles','user','getall', array('state' => 2)));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 2));
                 $usrs = xarModAPIFunc('roles','user','getall', array('state' => 2, 'startat' => $startnum, 'numitems' => $numitems));
              }
             if ($data['totalstate'] == 0) {
@@ -116,10 +116,10 @@ function roles_admin_showusers()
 
         case 3:
             if ($uid != 0) {
-                $data['totalstate'] = count($role->getUsers(3));
+                $data['totalstate'] = $role->countUsers(3);
                 $usrs = $role->getUsers(3, $startnum, $numitems);
             } else {
-                $data['totalstate'] = count(xarModAPIFunc('roles','user','getall', array('state' => 3)));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 3));
                 $usrs = xarModAPIFunc('roles','user','getall', array('state' => 3, 'startat' => $startnum, 'numitems' => $numitems));
              }
             if ($data['totalstate'] == 0) {
@@ -130,10 +130,10 @@ function roles_admin_showusers()
 
         case 4:
             if ($uid != 0) {
-                $data['totalstate'] = count($role->getUsers(4));
+                $data['totalstate'] = $role->countUsers(4);
                 $usrs = $role->getUsers(4, $startnum, $numitems);
             } else {
-                $data['totalstate'] = count(xarModAPIFunc('roles','user','getall', array('state' => 4)));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 4));
                 $usrs = xarModAPIFunc('roles','user','getall', array('state' => 4, 'startat' => $startnum, 'numitems' => $numitems));
              }
             if ($data['totalstate'] == 0) {
