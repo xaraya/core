@@ -59,12 +59,12 @@
                     </dt>
                     <xar:if condition="$groupuid eq 0">
                         <dd class="active">
-                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#">
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search, 'reload' => 'reload'))#">
                                 <xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a>
                         </dd>
                     <xar:else/>
                         <dd>
-                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search))#">
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => 0, 'state' => $state, 'order' => $order, 'search' => $search, 'reload' => 'reload'))#">
                                 <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
                         </dd>
                     </xar:if>
@@ -73,13 +73,13 @@
                         <xar:if condition="$prevgroup ne $groups[$i]['name']">
                             <xar:if condition="$groupuid eq $groups[$i]['uid']">
                                 <dd class="active">
-                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">
+                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search, 'reload' => 'reload'))#" title="#xarML('Display the users in this group')#">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                     </a>
                                 </dd>
                             <xar:else/>
                                 <dd>
-                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search))#" title="#xarML('Display the users in this group')#">
+                                    <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $groups[$i]['uid'], 'state' => $state, 'order' => $order, 'search' => $search, 'reload' => 'reload'))#" title="#xarML('Display the users in this group')#">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                     </a>
                                 </dd>
