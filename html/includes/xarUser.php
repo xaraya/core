@@ -39,6 +39,7 @@ define('XARUSER_AUTH_USER_ENUMERABLE', 128);
  * Error codes
  */
 define('XARUSER_AUTH_FAILED', -1);
+define('XARUSER_AUTH_DENIED', -2);
 
 /**
  * Initialise the User System
@@ -109,13 +110,19 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         if (!xarModAPILoad($authModName, 'user')) continue;
 
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
-        if (!isset($userId)) return; // throw back
-        elseif ($userId != XARUSER_AUTH_FAILED) break; // Someone authenticated us
+        if (!isset($userId)) {
+            return; // throw back
+        } elseif ($userId != XARUSER_AUTH_FAILED) {
+            // Someone authenticated the user or passed XARUSER_AUTH_DENIED
+            break;
+        }
+
         // if here $userId is XARUSER_AUTH_FAILED, try with next auth module
         // but free exceptions set by previous auth module
-        xarExceptionFree();
+        xarErrorFree();
     }
-    if ($userId == XARUSER_AUTH_FAILED) return false;
+    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) 
+        return false;
 
     // Catch common variations (0, false, '', ...)
     if (empty($rememberMe)) $rememberMe = 0;
