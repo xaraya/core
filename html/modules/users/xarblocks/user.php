@@ -36,7 +36,7 @@ function users_userblock_info()
  */
 function users_userblock_display($blockinfo)
 {
-    if ((xarUserLoggedIn()) && (xarUserGetVar('ublockon') == 1)) {
+    if ((xarUserIsLoggedIn()) && (xarUserGetVar('ublockon') == 1)) {
         $ublock = xarUserGetVar('ublock');
         if ($ublock === false) {
             $ublock = '';
