@@ -356,11 +356,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     function parse($templateSource)
     {
         //xarLogVariable('templateSource', $templateSource, XARLOG_LEVEL_ERROR);
-        // <garrett> make sure we only have to deal with \n as CR tokens, replace \r\n
+        // <garrett> make sure we only have to deal with \n as CR tokens, replace \r\n and \r
         // <MrB> : Macintosh: \r
         //         Unix     :  \n
         //         Windows  :  \r\n
-        $this->templateSource = str_replace('\r\n','\n',$templateSource);
+        $this->templateSource = str_replace(array('\r\n','\r'),'\n',$templateSource);
 
         // Initializing parse trace variables
         $this->line = 1; $this->column = 1; $this->pos = 0; $this->lineText = '';
@@ -550,42 +550,47 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $this->stepBack(4);
                 } elseif ($nextToken == XAR_TOKEN_NONMARKUP_START) {
                     $token .= $nextToken; // <!
-                    // Assumption on informal grammar: <!identifier  content [identifier]>
-                    // FIXME: this is not completely correct, the space is not required according to spec
-                    $identifier = ''; $tagrest='';
-                    // Get all tokens till the first whitespace char
-                    while(trim($nextChar = $this->getNextToken())) {
-                        $identifier .= $nextChar;
-                    }
-                    $tagrest .= $identifier . ' ';
-
-                    // Search for the identifier in the rest
-                    if($identifier!= XAR_TOKEN_BLCOMMENT_DELIM && $identifier!=XAR_TOKEN_HTMLCOMMENT_DELIM) {
-                        $identifier= XAR_TOKEN_TAG_END;
-                    }
-                    // Get the rest of the non markup tag, recording along the way
-                    $matchToken='';
-                    while(isset($nextChar) && $matchToken != $identifier) {
-                        // Keep strlen(identifier) things in the token
-                        $nextChar = $this->getNextToken();
-                        $tagrest .= $nextChar;
-                        $matchToken = substr($tagrest,-1 * strlen($identifier));
-                    }
-                    
-                    // We either found an identifier match, or we are at the end
-                    if(isset($nextChar) && $matchToken != XAR_TOKEN_TAG_END) {
-                        while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
-                            $nextChar = $this->getNextToken();
+                    $buildup='';
+                    // Get all tokens till the first whitespace char, and check whether we found the comment tokens
+                    $nextChar = $this->getNextToken();
+                    while(trim($nextChar)) {
+                        $buildup .= $nextChar;
+                        
+                        switch($buildup) {
+                        case XAR_TOKEN_BLCOMMENT_DELIM:
+                            $identifier = XAR_TOKEN_BLCOMMENT_DELIM;
+                            break 2; // done
+                        case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                            if(($buildup . $this->peek()) != XAR_TOKEN_BLCOMMENT_DELIM) {
+                                $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
+                                break 2; // done
+                            }
+                            break;
                         }
+                        $nextChar = $this->getNextToken();
                     }
-                                        
+                    if(!isset($identifier)) $identifier = $nextChar;
+                    // identifier if now a token or free form (in our case  -- or --- or the first whitespace char
+
+                    // Get the rest of the non markup tag, recording along the way
+                    $matchToken=''; $match = '';
+                    $nextChar = $this->getNextToken();
+                    while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END && $nextChar!=XAR_TOKEN_TAG_END){
+                        $match .= $nextChar;
+                        // Match on the length of the identifier
+                        $nextChar = $this->getNextToken();
+                        $matchToken = substr($match,-1* strlen($identifier));
+                    }
+                    $tagrest = substr($match,0,-1 * strlen($identifier));
+
+                    while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
+                        $nextChar = $this->getNextToken();
+                    }
                     
                     // Was it properly ended?
                     if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
-                        // the tag was
-                        $parts = explode($identifier,$tagrest);
-                        // array should hold empty,tag content,empty
-                        $valid_ending = (count($parts) == 3 && trim($parts[2]) == '');
+                        // the tag was properly ended.
+                        $invalid = strpos($tagrest,$matchToken);
                         switch($identifier) {
                         case XAR_TOKEN_BLCOMMENT_DELIM:
                             // <!--- Blocklayout comment, ignore completely if properly ended
@@ -593,19 +598,23 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             break;
                         case XAR_TOKEN_HTMLCOMMENT_DELIM:
                             // <!-- HTML comment, copy to output
-                            $token .= $tagrest . XAR_TOKEN_TAG_END;
+                            $token .= $identifier . $tagrest . $matchToken . $nextChar;
                             break;
                         default:
                             // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy 
-                            $valid_ending =  true;
-                            $token .= $tagrest;
+                            $invalid = false;
+                            $token .= $buildup . $identifier . $tagrest . $matchToken . $nextChar;
                         }
-                        if(!$valid_ending) {
-                            $this->raiseError(XAR_BL_INVALID_TAG,"A non-markup tag (probably a comment) does not adhere to proper XML syntax",$this);
+                        if($invalid) {
+                            $this->raiseError(XAR_BL_INVALID_TAG,
+                                              "A non-markup tag (probably a comment) contains its identifier (".
+                                              $matchToken.") in its contents. This is invalid XML syntax",$this);
                             return;
-                        }   
+                        }
                     } else {
-                        $this->raiseError(XAR_BL_INVALID_TAG,"File ended before tag was completed",$this);
+                        $this->raiseError(XAR_BL_INVALID_TAG,
+                                          "A non-markup tag (probably a comment) wasn't properly matches (".
+                                          $matchToken." vs. ". $identifier .") This is invalid XML syntax",$this);
                         return;
                     }
                     break;
