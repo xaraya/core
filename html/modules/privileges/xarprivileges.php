@@ -1695,8 +1695,6 @@ function drawindent() {
 */
     function canonical($mask)
     {
-        $priv1 = $this->normalize();
-        $priv2 = $mask->normalize();
         $p1 = $this->normalize();
         $p2 = $mask->normalize();
         if(count($p1) != count($p2)) {
