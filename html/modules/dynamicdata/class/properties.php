@@ -313,18 +313,18 @@ class Dynamic_Property_Master
             case 201: // (htmlarea_small) Small GUI Editor
                 $args['rows'] = 2;
                 require_once "includes/properties/Dynamic_HTMLArea_Property.php";
-                $property = new Dynamic_TextArea_Property($args);
+                $property = new Dynamic_HTMLArea_Property($args);
                 break;
             case 202: // (htmlarea_medium) Medium GUI Editor
                 $args['rows'] = 8;
                 require_once "includes/properties/Dynamic_HTMLArea_Property.php";
-                $property = new Dynamic_TextArea_Property($args);
+                $property = new Dynamic_HTMLArea_Property($args);
                 break;
             case 203: // (htmlarea_large) Large GUI Editor
                 $args['rows'] = 20;
                 $args['cols'] = 80;
                 require_once "includes/properties/Dynamic_HTMLArea_Property.php";
-                $property = new Dynamic_TextArea_Property($args);
+                $property = new Dynamic_HTMLArea_Property($args);
                 break;
 
 
