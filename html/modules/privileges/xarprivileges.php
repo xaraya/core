@@ -421,7 +421,7 @@ class xarMasks
             }
 
             // get the privileges and test against them
-            $privileges = $this->irreducibleset(array('roles' => array($role)));
+            $privileges = $this->irreducibleset(array('roles' => array($role)),$module);
 
             // leave this as same-page caching, even if the db cache is finished
             // if this is the current user, save the irreducible set of privileges to cache
@@ -488,7 +488,7 @@ class xarMasks
         $query = "SELECT xar_set FROM $this->privsetstable WHERE xar_uid =?";
         $result = $this->dbconn->Execute($query,array($role->getID()));
         if (!$result) return;
-                                         
+
         if ($result->EOF) {
             $privileges = $this->irreducibleset(array('roles' => array($role)));
             $query = "INSERT INTO $this->privsetstable VALUES (?,?)";
@@ -513,7 +513,7 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function irreducibleset($coreset)
+    function irreducibleset($coreset,$module='')
     {
         $roles = $coreset['roles'];
         $coreset['privileges'] = array();
@@ -528,10 +528,14 @@ class xarMasks
                 $privileges = $this->winnow(array($priv),$privileges);
                 $privileges = $this->winnow($priv->getDescendants(),$privileges);
             }
-            $coreset['privileges'] = $this->winnow($coreset['privileges'],$privileges);
+            $privs = array();
+            foreach ($privileges as $priv)
+                if ($priv->getModule() == "All" || $priv->getModule() != $module)
+                    $privs[] = $priv;
+            $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
-        $coreset['children'] = $this->irreducibleset(array('roles' => $parents));
+        $coreset['children'] = $this->irreducibleset(array('roles' => $parents),$module);
         return $coreset;
     }
 
