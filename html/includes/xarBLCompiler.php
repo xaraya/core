@@ -213,16 +213,16 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             // Register special variables for templates of type page
             $resolver->push('tpl:pageTitle', '$_bl_page_title');
             $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
-            // Bug 1109: tpl:JavaScript is replacing tpl:{head|body}JavaScript
             $resolver->push('tpl:JavaScript', '$_bl_javascript');
         }
 
         // Start the code generation
         $this->code = '';
         $this->code = $this->generateNode($documentTree);
-        // FIXME: due to the initialization above this will never return
         if (!isset($this->code)) return; // throw back
 
+        // This seems a bit strange, but we always want to end with return 
+        // true at then end, even if we're not in a php block
         if (!$this->isPHPBlock()) {
             $this->code .= "<?php ";
             $this->setPHPBlock(true);
@@ -352,7 +352,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parse(&$templateSource)
     {
-
         // <make sure we only have to deal with \n as CR tokens, replace \r\n and \r
         // Macintosh: \r, Unix: \n, Windows: \r\n
         $this->templateSource = str_replace(array('\r\n','\r'),'\n',$templateSource);
@@ -369,6 +368,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $res = $this->parseNode($documentTree);
         if (!isset($res)) return; // throw back
 
+        // Fill the tree with the parsed result and its variables and return
         $documentTree->children = $res;
         $documentTree->variables = $this->tplVars;
 
@@ -523,7 +523,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                         if (!isset($node)) return; // throw back
 
-                        //xarLogVariable('node', $node, XARLOG_LEVEL_ERROR);
                         if (!$closed) {
                             array_push($this->tagNamesStack, $tagName);
                             $res = $this->parseNode($node);
@@ -561,7 +560,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
                             return;
                         }
-                        //print_r($children);
                         return $children;
                     }
                     $this->stepBack(4);
@@ -573,6 +571,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     while(trim($nextChar)) {
                         $buildup .= $nextChar;
 
+                        // FIXME: Ultimately adapt this for the deprecating of <!--- and --->
+                        //        it can be simpler now. We spent a lot of time figuring out
+                        //        what kind of comment we have on our hands.
                         switch($buildup) {
                         case XAR_TOKEN_BLCOMMENT_DELIM:
                             $identifier = XAR_TOKEN_BLCOMMENT_DELIM;
