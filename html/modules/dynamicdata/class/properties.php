@@ -272,6 +272,10 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_LanguageList_Property.php";
                 $property = new Dynamic_LanguageList_Property($args);
                 break;
+            case 37: // (userlist) User List
+                require_once "includes/properties/Dynamic_UserList_Property.php";
+                $property = new Dynamic_UserList_Property($args);
+                break;
             default:
                 $property = new Dynamic_Property($args);
                 break;
@@ -603,6 +607,14 @@ class Dynamic_Property_Master
                               'name'       => 'language',
                               'label'      => 'Language List',
                               'format'     => '36',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[37] = array(
+                              'id'         => 37,
+                              'name'       => 'userlist',
+                              'label'      => 'User List',
+                              'format'     => '37',
                               'validation' => '',
                               // ...
                              );
