@@ -820,6 +820,9 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         return;
     }
 
+    // good thing this information is cached :)
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+
     // Build function name and call function
     $funcName = strtolower($funcName);
     $modFunc = "{$modName}_{$modType}_{$funcName}";
@@ -828,11 +831,9 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     $msg='';
     if (!function_exists($modFunc)) {
         // attempt to load the module's api
-        xarModLoad($modName,$modType);
+        xarModLoad($modName, $modType);
         // let's check for that function again to be sure
         if (!function_exists($modFunc)) {
-            // good thing this information is cached :)
-            $modBaseInfo = xarMod_getBaseInfo($modName);
             if (!isset($modBaseInfo)) return; // throw back
 
             $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'/'.$funcName.'.php';
