@@ -1,4 +1,13 @@
 <?php
+/**
+ * Class for conversion between charsets
+ *
+ * @package multilanguage
+ * @copyright (C) 2003,2004,2005 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * @author Mikolaj Jedrzejak <mikolajj@op.pl>
+ * @author Vladimirs Metenchuks <voll@xaraya.com>
+*/ 
 
 define ("CONVERT_TABLES_DIR", 'includes/transforms/convtables/');
 
@@ -270,7 +279,7 @@ class xarCharset
      **/
     function convert ($inString, $fromCharset, $toCharset, $turnOnEntities = false)
     {
-        if (function_exists('iconvx')) {
+        if (function_exists('iconv')) {
             $outString = @iconv($fromCharset, $toCharset, $inString);
             if ($outString === false) $outString = '';
         } else {
