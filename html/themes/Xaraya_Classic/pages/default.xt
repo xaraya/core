@@ -3,26 +3,26 @@
     
     .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience
    
-    1) get data for the default blockgroups
+    1) get data for the default blockgroups and set local variables to hold the data
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
 <xar:set name="$leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
 <xar:set name="$centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
 <xar:set name="$topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
 <!---
-    2) set some multilingual text that we intend to use in titles and alt attributes
+    2) set local variables to hold some multilingual text that we intend to use in titles and alt attributes
 _____________________________________________________________________________________________________________[comment]--->
-<xar:set name="$changetexttosmall"><xar:mlstring>Change text to small (default)</xar:mlstring></xar:set>
-<xar:set name="$changetexttomedium"><xar:mlstring>Change text to medium</xar:mlstring></xar:set>
-<xar:set name="$changetexttolarge"><xar:mlstring>Change text to large</xar:mlstring></xar:set>
-<xar:set name="$changecoltocontrast"><xar:mlstring>Change to high contrast</xar:mlstring></xar:set>
-<xar:set name="$changecoltoblue"><xar:mlstring>Change to blue (default)</xar:mlstring></xar:set>
-<xar:set name="$changecoltogreen"><xar:mlstring>Change to green</xar:mlstring></xar:set>
-<xar:set name="$changecoltoorange"><xar:mlstring>Change to orange</xar:mlstring></xar:set>
+<xar:set name="$changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
+<xar:set name="$changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
+<xar:set name="$changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
+<xar:set name="$changecoltocontrast"><xar:mlstring>High contrast</xar:mlstring></xar:set>
+<xar:set name="$changecoltoblue"><xar:mlstring>Blue hues (default)</xar:mlstring></xar:set>
+<xar:set name="$changecoltogreen"><xar:mlstring>Green hues</xar:mlstring></xar:set>
+<xar:set name="$changecoltoorange"><xar:mlstring>Orange hues</xar:mlstring></xar:set>
 <xar:set name="$validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
 <xar:set name="$validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
 <!---
-    3) prepare some common variables once, then use them as many times as required
+    3) prepare some common local variables once, then use them as many times as required
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$classicthemedir">#xarTplGetThemeDir()#</xar:set>
 <xar:set name="$sitename">#xarModGetVar('themes', 'SiteName')#</xar:set>
