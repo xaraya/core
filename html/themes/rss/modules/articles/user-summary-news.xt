@@ -9,7 +9,6 @@
 <guid isPermaLink="true">#$link#</guid>
 <xar:if condition="!empty($categories) and count($categories) gt 0">
 <xar:loop name="$categories">
-<category>#$rsscname#</category>
 </xar:loop>
 </xar:if>
 </item>
