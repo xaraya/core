@@ -107,7 +107,7 @@
 							<a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
 						</xar:if>
 					</td>
-				    <xar:if condition="isset($loop:item['properties']) and count($loop:item['properties']) gt 0">
+				    <xar:if condition="isset($properties) and count($properties) gt 0">
 				    <xar:foreach in="$properties" key="$key">
 					<td class="xar-norm">
 					    <xar:if condition="isset($values[$uid][$key])">
@@ -140,7 +140,7 @@
 							<a href="#$loop:item['emailurl']#">#$loop:item['emailicon']#</a>
 						</xar:if>
 					</td>
-				    <xar:if condition="isset($loop:item['properties']) and count($loop:item['properties']) gt 0">
+				    <xar:if condition="isset($properties) and count($properties) gt 0">
 				    <xar:foreach in="$properties" key="$key">
 					<td class="xar-accent">
 					    <xar:if condition="isset($values[$uid][$key])">
