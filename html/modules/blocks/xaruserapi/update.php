@@ -17,6 +17,7 @@
  * @param $args['bid'] blockid to fold
  * @return true on success, false on failure
  */
+/*
 function blocks_userapi_update($args)
 {
     extract($args);
@@ -25,20 +26,23 @@ function blocks_userapi_update($args)
         xarSessionSetVar('errmsg', 'Error in API');
         return false;
     }
+
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $uid = xarUserGetVar('uid');
 
-    $ublockstable = $xartable['userblocks'];
+    if (empty($uid)) {return;}
 
-    $query="SELECT xar_active 
-              FROM $ublockstable 
-             WHERE xar_bid='".xarVarPrepForStore($bid)."' AND xar_uid=".xarVarPrepForStore($uid)."";
+    $ublockstable =& $xartable['userblocks'];
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) 
+    $query = 'SELECT xar_active FROM ' . $ublockstable 
+        . ' WHERE xar_bid = ? AND xar_uid = ?';
+
+    $result =& $dbconn->Execute($query, array($bid, $uid));
+    if (!$result) {
         return;
+    }
 
     list($active) = $result->fields;
     if ($active) {
@@ -46,14 +50,13 @@ function blocks_userapi_update($args)
     } else {
         $active = 1;
     }
-    $query="UPDATE $ublockstable 
-               SET xar_active='".xarVarPrepForStore($active)."' 
-             WHERE xar_uid=".xarVarPrepForStore($uid)." AND xar_bid='".xarVarPrepForStore($bid)."'";
+    $query = 'UPDATE ' . $ublockstable 
+        . ' SET xar_active = ?'
+        . ' WHERE xar_uid = ? AND xar_bid = ?';
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) 
-        return;
+    $result =& $dbconn->Execute($query, array($active, $uid, $bid));
 
     return;
 }
+*/
 ?>

@@ -7,6 +7,7 @@
             <th><span class="help" title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></span></th>
             <th><span class="help" title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></span></th>
             <th><span class="help" title="#xarML('A short description of what the block does.')#"><xar:mlstring>Description</xar:mlstring></span></th>
+            <th><xar:mlstring>Actions</xar:mlstring></th>
         </tr>
         <xar:loop name="$block_types" id="foo2">
             <tr>
@@ -16,6 +17,9 @@
                     <xar:if condition="!empty($loop:item['info']['text_type_long'])">
                         #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
                     </xar:if>
+                </td>
+                <td>
+                    <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
                 </td>
             </tr>
         </xar:loop>
