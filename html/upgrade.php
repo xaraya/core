@@ -59,26 +59,6 @@ if (empty($step)) {
         case .901:
             xarConfigSetVar('System.Core.VersionNum', '.902');
 
-            // Themes
-            xarModSetVar('themes', 'hidecore', 0);
-            xarModSetVar('themes', 'selstyle', 'plain');
-            xarModSetVar('themes', 'selfilter', 'XARMOD_STATE_ANY');
-            xarModSetVar('themes', 'selsort', 'namedesc');
-            xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
-            xarModSetVar('themes', 'ShowTemplates', 0);
-            xarModSetVar('comments','CollapsedBranches',serialize(array()));
-
-
-            // Modules
-
-            // expertlist
-            $query = "INSERT INTO ".$tables['module_vars']." (xar_id, xar_modid, xar_name, xar_value)
-            VALUES (".$dbconn->GenId($tables['module_vars']).",1,'expertlist',0)";
-            $result =& $dbconn->Execute($query);
-            if(!$result) return;
-
-            // Articles
-
             // Remove Masks and Instances
             xarRemoveMasks('articles');
             xarRemoveInstances('articles');
@@ -151,65 +131,11 @@ if (empty($step)) {
 
         case .902:
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.3');
-
-                $blockGroupsTable = $tables['block_groups'];
-
-                // Register blocks
-                if (!xarModAPIFunc('blocks',
-                                   'admin',
-                                   'register_block_type',
-                                   array('modName'  => 'themes',
-                                         'blockType'=> 'syndicate'))) return;
-
-                if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
-                                                                            'template' => 'syndicate'))) return;
-
-                $query = "SELECT    xar_id as id
-                          FROM      $blockGroupsTable
-                          WHERE     xar_name = 'syndicate'";
-
-                // Check for db errors
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-
-                // Freak if we don't get one and only one result
-                if ($result->PO_RecordCount() != 1) {
-                    $msg = xarML("Group 'syndicate' not found.");
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                   new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                    return;
-                }
-
-                list ($syndicateBlockGroup) = $result->fields;
-
-                $syndicateBlockId= xarModAPIFunc('blocks',
-                                                 'admin',
-                                                 'block_type_exists',
-                                                 array('modName'  => 'themes',
-                                                       'blockType'=> 'syndicate'));
-
-                if (!isset($syndicateBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                    return;
-                }
-
-                if (!xarModAPIFunc('blocks',
-                                   'admin',
-                                   'create_instance', array('title'    => 'Syndicate',
-                                                            'type'     => $syndicateBlockId,
-                                                            'group'    => $syndicateBlockGroup,
-                                                            'template' => '',
-                                                            'state'    => 2))) {
-                    return;
-                }
-
             continue;
 
         case '0.903':  // this is how it's defined in modules/base/xarinit.php
         case '.9.0.3': // this is how it's defined in upgrade.php
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
-
-                xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
-                xarModSetVar('themes', 'SiteTitleOrder', 'default');
 
                 $instances = array(
                                    array('header' => 'external', // this keyword indicates an external "wizard"
@@ -243,10 +169,7 @@ if (empty($step)) {
          * privileges changes
          */
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.5');
-                if (!xarModRegisterHook('item', 'waitingcontent', 'GUI',
-                                       'articles', 'admin', 'waitingcontent')) {
-                    return false;
-                }
+
 
                 $role = xarFindRole('Everybody');
                 xarModSetVar('roles', 'everybody', $role->getID());
@@ -317,13 +240,13 @@ if (empty($step)) {
 ?>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
-<div class="xar-mod-body"><h2><?php echo $in_process; ?></h2><br />
+<div class="xar-mod-body"><h2><?php echo $in_process; ?></h2>
 <div style="margin: auto;">
 <?php
 
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
-    
+    echo "<h5>Checking Table Structure</h5>";
     // Drop the admin_wc table and the hooks for the admin panels.
     $table_name['admin_wc'] = $sitePrefix . '_admin_wc'; 
 
@@ -333,8 +256,8 @@ if (empty($step)) {
                                                 array('table_name' => $table_name['admin_wc']));
     if ($upgrade['waiting_content']) {
         echo "$table_name[admin_wc] table still exists, attempting to drop... ";
-
-            // when a module item is created
+            xarModRegisterHook('item', 'waitingcontent', 'GUI',
+                               'articles', 'admin', 'waitingcontent');
             xarModUnregisterHook('item', 'create', 'API',
                                  'adminpanels', 'admin', 'createwc');
             xarModUnregisterHook('item', 'update', 'API',
@@ -483,9 +406,109 @@ if (empty($step)) {
         echo "$table_name[security_levels] already exists, moving to next check. <br />";  
     }
 
-               
+    // Add the syndicate block type and syndicate block for RSS display.
+    echo "<h5>Checking Installed Blocks</h5>";
 
+    $upgrade['syndicate'] = xarModAPIFunc('blocks',
+                                          'admin',
+                                          'block_type_exists',
+                                           array('modName'      => 'themes',
+                                                 'blockType'    => 'syndicate'));
+    if (!$upgrade['syndicate']) {
+        echo "Syndicate block type does not exist, attempting to create... ";
+        $blockGroupsTable = $tables['block_groups'];
+        // Register blocks
+        if (!xarModAPIFunc('blocks',
+                           'admin',
+                           'register_block_type',
+                           array('modName'  => 'themes',
+                                 'blockType'=> 'syndicate'))) return;
 
+        if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
+                                                                    'template' => 'syndicate'))) return;
+        $query = "SELECT    xar_id as id
+                  FROM      $blockGroupsTable
+                  WHERE     xar_name = 'syndicate'";
+        // Check for db errors
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+
+        // Freak if we don't get one and only one result
+        if ($result->PO_RecordCount() != 1) {
+            $msg = xarML("Group 'syndicate' not found.");
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return;
+        }
+        list ($syndicateBlockGroup) = $result->fields;
+        $syndicateBlockId= xarModAPIFunc('blocks',
+                                         'admin',
+                                         'block_type_exists',
+                                         array('modName'  => 'themes',
+                                               'blockType'=> 'syndicate'));
+        if (!isset($syndicateBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+        if (!xarModAPIFunc('blocks',
+                           'admin',
+                           'create_instance', array('title'    => 'Syndicate',
+                                                    'type'     => $syndicateBlockId,
+                                                    'group'    => $syndicateBlockGroup,
+                                                    'template' => '',
+                                                    'state'    => 2))) {
+            return;
+        }
+        if (!$result){ 
+            echo "failed</font><br>\r\n";
+        } else {
+            echo "done!</font><br>\r\n";
+        }
+    } else {
+        echo "Syndicate block type exists, moving to next check. <br />";  
+    }
+
+    // Set any empty modvars.
+    echo "<h5>Setting Module Variables</h5>";
+    $modvars[] = array(array('name'    =>  'hidecore',
+                             'module'  =>  'themes',
+                             'set'     =>  0),
+                       array('name'    =>  'selstyle',
+                             'module'  =>  'themes',
+                             'set'     =>  'plain'),
+                       array('name'    =>  'selfilter',
+                             'module'  =>  'themes',
+                             'set'     =>  'XARMOD_STATE_ANY'),
+                       array('name'    =>  'selsort',
+                             'module'  =>  'themes',
+                             'set'     =>  'namedesc'),
+                       array('name'    =>  'SiteTitleSeparator',
+                             'module'  =>  'themes',
+                             'set'     =>  ' :: '),
+                       array('name'    =>  'SiteTitleOrder',
+                             'module'  =>  'themes',
+                             'set'     =>  'default'),
+                       array('name'    =>  'SiteFooter',
+                             'module'  =>  'themes',
+                             'set'     =>  '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>'),
+                       array('name'    =>  'ShowTemplates',
+                             'module'  =>  'themes',
+                             'set'     =>  0),
+                       array('name'    =>  'CollapsedBranches',
+                             'module'  =>  'comments',
+                             'set'     =>  serialize(array())),
+                       array('name'    =>  'modules',
+                             'module'  =>  'expertlist',
+                             'set'     =>  0));
+ 
+    foreach($modvars as $modvar){
+        foreach($modvar as $var){
+            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            if (isset($currentvar)){
+                echo "$var[module] -> $var[name] is set, proceeding to next check<br />";
+            } else {
+                xarModSetVar($var['module'], $var['name'], $var['set']);
+                echo "$var[module] -> $var[name] empty, attempting to set.... done!<br />";
+            }
+        }
+    }
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete.
