@@ -1301,35 +1301,35 @@ function xarModIsAvailable($modName, $type = 'module')
 {
     xarLogMessage("xarModIsAvailable: begin $type:$modName");
 
+    // FIXME: there is no point to the cache here, since
+    // xarMod_getBaseInfo() caches module details anyway.
     static $modAvailableCache = array();
-
-    if ('theme' != $type) {
-        $modName = strtolower($modName);
-    }
 
     if (empty($modName)) {
         $msg = xarML('Empty Module or Theme Name (#(1)).', $modName);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
-    if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
-        $modBaseInfo = xarMod_getBaseInfo($modName, $type);
+    // Get the real module details.
+    // The module details will be cached anyway.
+    $modBaseInfo = xarMod_getBaseInfo($modName, $type);
 
-        // Also return null if the result wasn't set
-        if (!isset($modBaseInfo)) return false; // throw back
+    // Return null if the result wasn't set
+    if (!isset($modBaseInfo)) return false; // throw back
 
+    if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
         // We should be ok now, return the state of the module
         $modState = $modBaseInfo['state'];
         $modAvailableCache[$modBaseInfo['name']] = false;
 
         if ($modState == XARMOD_STATE_ACTIVE) {
-            $modAvailableCache[$modName] = true;
+            $modAvailableCache[$modBaseInfo['name']] = true;
         }
     }
     xarLogMessage("xarModIsAvailable: end $type:$modName");
 
-    return $modAvailableCache[$modName];
+    return $modAvailableCache[$modBaseInfo['name']];
 }
 
 /**
@@ -1757,12 +1757,15 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 
     $type = strtolower($type);
-    $modName = strtolower($modName); // bug 2870
 
     if ($type != 'module' && $type != 'theme') {
         $msg = xarML('Wrong type, it must be \'module\' or \'theme\': #(1).', $type);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
         return;
+    }
+
+    if ($type != 'theme') {
+        $modName = strtolower($modName); // bug 2870
     }
 
     // Fixme: this is a presentation issue.
@@ -1786,9 +1789,9 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         $checkNoState = 'xarTheme_noCacheState';
     }
 
-     if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
-        return xarCore_GetCached($cacheCollection, $modName);
-     }
+    if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
+       return xarCore_GetCached($cacheCollection, $modName);
+    }
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
