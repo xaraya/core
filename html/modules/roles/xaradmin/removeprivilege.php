@@ -14,20 +14,30 @@
 /**
  * removeprivilege - remove a privilege
  * prompts for confirmation
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_admin_removeprivilege()
 {
     if (!xarVarFetch('privid', 'int:1:', $privid)) return;
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
-    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return; 
+    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     // Call the Roles class and get the role
     $roles = new xarRoles();
-    $role = $roles->getRole($roleid); 
+    $role = $roles->getRole($roleid);
+
+    // get the array of parents of this role
+    // need to display this in the template
+    $parents = array();
+    foreach ($role->getParents() as $parent) {
+        $parents[] = array('parentid' => $parent->getID(),
+            'parentname' => $parent->getName());
+    }
+    $data['parents'] = $parents;
+
     // Call the Privileges class and get the privilege
     $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($privid); 
+    $priv = $privs->getPrivilege($privid);
     // some assignments can't be removed, for your own good
     if ((($roleid == 1) && ($privid == 1)) ||
             (($roleid == 2) && ($privid == 6)) ||
@@ -36,9 +46,9 @@ function roles_admin_removeprivilege()
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
             new DefaultUserException($msg));
         return;
-    } 
+    }
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return; 
+    if (!xarSecurityCheck('EditRole')) return;
     // some info for the template display
     $rolename = $role->getName();
     $privname = $priv->getName();
@@ -55,7 +65,7 @@ function roles_admin_removeprivilege()
         return $data;
     } else {
         // Check for authorization code
-        if (!xarSecConfirmAuthKey()) return; 
+        if (!xarSecConfirmAuthKey()) return;
         // Try to remove the privilege and bail if an error was thrown
         if (!$role->removePrivilege($priv)) return;
 
@@ -66,7 +76,7 @@ function roles_admin_removeprivilege()
 
         // redirect to the next page
         xarResponseRedirect(xarModURL('roles', 'admin', 'showprivileges', array('uid' => $roleid)));
-    } 
-} 
+    }
+}
 
 ?>
