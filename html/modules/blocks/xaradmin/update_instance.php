@@ -58,7 +58,8 @@ function blocks_admin_update_instance()
             'blocks', 'admin', 'load',
             array(
                 'modName' => $blockinfo['module'],
-                'blockName' => $blockinfo['type']
+                'blockName' => $blockinfo['type'],
+                'blockFunc' => 'modify'
             )
         )
     ) {return;}

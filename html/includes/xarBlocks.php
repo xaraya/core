@@ -65,7 +65,7 @@ function xarBlock_render($blockInfo)
     // Load the block.
     if (!xarModAPIFunc(
         'blocks', 'admin', 'load',
-        array('modName' => $modName, 'blockType' => $blockType) )
+        array('modName' => $modName, 'blockType' => $blockType, 'blockFunc' => 'display') )
     ) {return;}
 
     // Get the block display function name.

@@ -40,7 +40,8 @@ function blocks_admin_modify_instance()
         'blocks', 'admin', 'load',
         array(
             'modName' => $instance['module'],
-            'blockName' => $instance['type'])
+            'blockName' => $instance['type'],
+            'blockFunc' => 'modify')
         )
     ) {return;}
 

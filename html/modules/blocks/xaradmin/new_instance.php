@@ -17,7 +17,7 @@
  */
 function blocks_admin_new_instance()
 {
-// Security Check
+    // Security Check
 	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     $dbconn =& xarDBGetConn();
@@ -56,13 +56,6 @@ function blocks_admin_new_instance()
 
         $result->MoveNext();
     }
-
-    // Include 'formcheck' JavaScript.
-    // TODO: move this to a template widget when available.
-//    xarModAPIfunc(
-//        'base', 'javascript', 'modulefile',
-//        array('module'=>'base', 'filename'=>'formcheck.js')
-//    );
 
     return array('block_types'  => $block_types,
                  'block_groups' => $block_groups,
