@@ -60,11 +60,11 @@ function xarServerGetVar($name)
 }
 
 /**
- * get base URI for PostNuke
+ * get base URI for Xaraya
  *
  * @access public
  * @returns string
- * @return base URI for PostNuke
+ * @return base URI for Xaraya
  */
 function xarServerGetBaseURI()
 {
@@ -101,11 +101,11 @@ function xarServerGetBaseURI()
 }
 
 /**
- * get base URL for PostNuke
+ * get base URL for Xaraya
  *
  * @access public
  * @returns string
- * @return base URL for PostNuke
+ * @return base URL for Xaraya
  */
 function xarServerGetBaseURL()
 {

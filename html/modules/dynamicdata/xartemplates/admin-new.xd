@@ -36,7 +36,7 @@
 <!--
     // Start form - note the use of xarModURL() to create the recipient URL of
     // this form.  All URLs should be generated through xarModURL() to ensure
-    // compatibility with future versions of PostNuke
+    // compatibility with future versions of Xaraya
 -->
 <form method="post" action="&xar-modurl-example-admin-create;">
 <!--

@@ -270,7 +270,7 @@ function base_init()
     $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
     $id_admin = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
+    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','authsystem')";
 
     $dbconn->Execute($query);
     // Check for db errors

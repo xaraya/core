@@ -312,7 +312,7 @@ function xarVarPrepForStore()
  * ready operating system output
  *
  * Gets a variable, cleaning it up such that any attempts
- * to access files outside of the scope of the PostNuke
+ * to access files outside of the scope of the Xaraya
  * system is not allowed. Can have as many parameters as desired.
  *
  * @access public

@@ -371,7 +371,7 @@ class xarLog__HTMLLogger extends xarLog__Logger
 
         if (file_exists($this->fileName) ||
             !($fd = @fopen($this->fileName, 'a'))) return;
-        $str = "<html><head><title>PostNuke HTML Logger</title></head><body>";
+        $str = "<html><head><title>Xaraya HTML Logger</title></head><body>";
         fwrite($fd, $str);
         fclose($fd);
     }
@@ -420,12 +420,12 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
     function getWindowLoaderScript()
     {
         $header = "<table size=\\\"100%\\\" cellspacing=\\\"0\\\" cellpadding=\\\"0\\\" border=\\\"0\\\"><tr><td>".
-                  "<hr size=\\\"1\\\">PostNuke Javascript Logger</hr></td><td width=\\\"1%\\\"><font face=\\\"Verdana,arial\\\" size=\\\"1\\\">".
+                  "<hr size=\\\"1\\\">Xaraya Javascript Logger</hr></td><td width=\\\"1%\\\"><font face=\\\"Verdana,arial\\\" size=\\\"1\\\">".
                   date("Y-m-d H:i:s").
                   "</font></td></tr></table>";
 
         $str = "<script language=\"javascript\">\n".
-               "debugWindow = window.open(\"PostNuke Javascript Logger\",\"PostNuke Javascript Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
+               "debugWindow = window.open(\"Xaraya Javascript Logger\",\"Xaraya Javascript Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
                "if (debugWindow) {\n".
                "    debugWindow.focus();\n".
                "    debugWindow.document.write(\"".$header."\"+'<p><b>'+window.location.href+'</b></p>');\n".

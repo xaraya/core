@@ -16,7 +16,7 @@ define('XAR_NO_EXCEPTION', 0);
 define('XAR_USER_EXCEPTION', 1);
 define('XAR_SYSTEM_EXCEPTION', 2);
 
-/* PostNuke System Exceptions */
+/* Xaraya System Exceptions */
 
 // SystemException class
 
@@ -300,7 +300,7 @@ function xarExceptionRender($format)
 // PRIVATE FUNCTIONS
 
 /**
- * PHP error handler bridge to PostNuke exceptions
+ * PHP error handler bridge to Xaraya exceptions
  */
 function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {

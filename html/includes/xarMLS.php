@@ -1075,7 +1075,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 /**
  * Implements a concrete translations backend based on the XML language.
  * All xml files are encoded in UTF-8. This backend is useful only when
- * running PostNuke in the multi-language mode (UTF-8).
+ * running Xaraya in the multi-language mode (UTF-8).
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 {
