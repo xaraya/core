@@ -41,9 +41,6 @@
 			<th width="10%">
 				<xar:mlstring>Email</xar:mlstring>
 			</th>
-			<th width="10%">
-				<xar:mlstring>URL</xar:mlstring>
-			</th>
 		    <xar:if condition="isset($properties) and count($properties) gt 0">
 	<!-- TODO: adapt % of column widths -->
 		    <xar:foreach in="$properties" key="$key">
@@ -67,13 +64,6 @@
 						   #$emailicon#
 						<xar:else />
 							<a href="#$emailurl#">#$emailicon#</a>
-						</xar:if>
-					</td>
-					<td class="xar-norm">
-					   <xar:if condition="!empty($urlicon)">
-						   <a href="#$url#">#$urlicon#</a>
-						<xar:else />
-							&nbsp;&nbsp;
 						</xar:if>
 					</td>
 				    <xar:if condition="isset($properties) and count($properties) gt 0">
