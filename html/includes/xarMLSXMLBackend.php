@@ -86,6 +86,20 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
     function loadContext($ctxType, $ctxName)
     {
+        static $xmlExtensionLoaded = null;
+
+        if  ($xmlExtensionLoaded === null) {
+            if (function_exists('xml_parser_create')) {
+                $xmlExtensionLoaded = true;
+            } else {
+                $xmlExtensionLoaded = false;
+            }
+        }
+        
+        if ($xmlExtensionLoaded === false) {
+            xarCore_die('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
+        }
+        
         $this->curData = '';
 
         if (!isset($this->locale)) {
