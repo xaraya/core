@@ -377,11 +377,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
  */
 function xarCoreGetVarDirPath()
 {
+    static $varpath = null;
+    if (isset($varpath)) return $varpath;
     if (file_exists('./var/.key.php')) {
         include './var/.key.php';
-        return './var/'.$protectionKey;
+        $varpath = './var/'.$protectionKey;
+    } else {
+        $varpath = './var';
     }
-    return './var';
+    return $varpath;
 }
 
 /**

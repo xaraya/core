@@ -1082,6 +1082,12 @@ function xarMLS_setCurrentLocale($locale)
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
     static $loadedCommons = array();
+    static $loadedTranslations = array();
+
+    // only load each translation once
+    if (isset($loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"])) {
+        return $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"];
+    }
 
     if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
 
@@ -1095,12 +1101,14 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
         }
 
         if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return; // throw back
+        $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = true;
         return true;
     }
 
     // FIXME: postpone
     //xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
 
+    $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = false;
     return false;
 }
 
@@ -1458,10 +1466,12 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
     var $backendtype;
     var $space;
     var $spacedir;
+    var $domaincache;
 
     function xarMLS__ReferencesBackend($locales)
     {
         $this->locales = $locales;
+        $this->domaincache = array();
     }
     /**
      * Gets a translation entry for a string based translation.
@@ -1497,6 +1507,11 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 
     function bindDomain($dnType, $dnName)
     {
+        // only bind each domain once (?)
+        //if (isset($this->domaincache["$dnType.$dnName"])) {
+        // CHECKME: make sure we can cache this (e.g. set $this->domainlocation here first ?)
+        //    return $this->domaincache["$dnType.$dnName"];
+        //}
         $this->spacedir = $GLOBALS['MLS']->getSpace($dnType);
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
@@ -1509,9 +1524,12 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
             }
             if (file_exists($this->domainlocation)) {
                 $this->locale = $locale;
+                // CHECKME: save $this->domainlocation here instead ?
+                //$this->domaincache["$dnType.$dnName"] = true;
                 return true;
             }
         }
+        //$this->domaincache["$dnType.$dnName"] = false;
         return false;
     }
 
