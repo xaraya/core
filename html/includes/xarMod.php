@@ -969,6 +969,27 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 }
 
 /**
+ * Format GET parameters formed by nested arrays, to support xarModURL().
+ * This function will recurse for each level to the arrays.
+ *
+ * @access private
+ * @param args array the array to be expanded as a GET parameter
+ * @param prefix string the prefix for the GET parameter
+ * @return string the expanded GET parameter(s)
+ */
+function xarMod__URLnested($args, $prefix) {
+    $path = '';
+    foreach ($args as $key => $arg) {
+        if (is_array($arg)) {
+            $path .= xarMod__URLnested($arg, $prefix . '['.rawurlencode($key).']');
+        } else {
+            $path .= $prefix . '['.rawurlencode($key).']' . '=' . rawurlencode($arg);
+        }
+    }
+    return $path;
+}
+
+/**
  * Generates an URL that reference to a module function.
  *
  * @access public
@@ -1075,13 +1096,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // Add further parameters to the path, ensuring each value is encoded correctly.
         foreach ($args as $k=>$v) {
             if (is_array($v)) {
-                // TODO: walk the array tree to as many levels as necessary:
-                // ...&foo[bar][dee][doo]=value&...
-                foreach($v as $l=>$w) {
-                    if (isset($w)) {
-                        $path .= $psep . $k . "[$l]=" . rawurlencode($w);
-                    }
-                }
+                // Recursively walk the array tree to as many levels as necessary
+                // e.g. ...&foo[bar][dee][doo]=value&...
+                $path .= xarMod__URLnested($v, $psep . $k);
             } elseif (isset($v)) {
                 $path .= $psep . $k . '=' . rawurlencode($v);
             }
