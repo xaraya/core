@@ -231,7 +231,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Pre-load site config variables
     // CHECKME: see if this doesn't hurt install before activating :-)
-        //xarConfig_loadVars();
+        xarConfig_loadVars();
 
         // Start Variables utilities
         xarVar_init($systemArgs, $whatToLoad);
@@ -334,7 +334,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Pre-load themes module variables
     // CHECKME: see if this doesn't hurt install before activating :-)
-        //xarMod_getVarsByModule('themes');
+        xarMod_getVarsByModule('themes');
     }
 
     /**
