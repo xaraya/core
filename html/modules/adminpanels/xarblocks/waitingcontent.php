@@ -41,9 +41,9 @@ function adminpanels_waitingcontentblock_display($blockinfo)
                          ACCESS_EDIT)) {
         return;
     }
-/*
+
     // Load API
-    if (!xarModAPILoad('adminpanels', 'user')) return;
+    if (!xarModAPILoad('adminpanels', 'admin')) return;
 
     $data['moditems'] = array();
 
@@ -58,15 +58,26 @@ function adminpanels_waitingcontentblock_display($blockinfo)
         $data['moditems'][] = $moditem;
     }
 
+    if (empty($moditem)){
+        $moditem['link'] = '';
+        $moditem['numitems'] = '';
+        $moditem['name'] = '';
+    }
+
     $data = xarTplBlock('adminpanels','waitingcontent', array('link'     => $moditem['link'],
                                                               'items'    => $moditem['numitems'],
                                                               'modname'  => $moditem['name']));
 
     // Populate block info and pass to BlockLayout.
-    $blockinfo['content'] = $data;
-    */
 
-    return;
+    if (empty($blockinfo['title'])){
+        $blockinfo['title'] = xarML('Waiting Content');
+    }
+
+    $blockinfo['content'] = $data;
+
+
+    return $blockinfo;
 
 }
 

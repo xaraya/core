@@ -1,0 +1,5 @@
+<xar:if condition="empty($link)">
+	<xar:mlstring>There is no waiting content to approve</xar:mlstring>
+<xar:else />
+	<a href="#$link#">#$modname#</a> -- #$items# <xar:mlstring>waiting items</xar:mlstring><br />
+</xar:if>
