@@ -1,4 +1,4 @@
-	
+
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="Generator" content="#$generator#" />
 	<meta name="Keywords" content="#$keywords#" />
@@ -7,7 +7,7 @@
 
 	<xar:if condition="!empty($geourl)">
 	<meta name="ICBM" content="#$latitude#, #$longitude#">
-	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName')#"> 
+	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName')#">
 	</xar:if>
 
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepage#&amp;theme=rss" />
@@ -19,7 +19,7 @@
 			 xmlns:dc="http://purl.org/dc/elements/1.1/"
 			 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns##">
 	<Work rdf:about="&xar-baseurl;">
-	<dc:title>#xarConfigGetVar('Site.Core.SiteName')#</dc:title>
+	<dc:title>#xarModGetVar('themes', 'SiteName')#</dc:title>
 	<dc:description>#$description#</dc:description>
 	<license rdf:resource="http://creativecommons.org/licenses/by-sa/1.0" />
 	</Work>

@@ -23,8 +23,7 @@ include 'includes/xarCore.php';
  * @access public
  * @return bool
  * @todo <marco> <mikespub> #1 decide whether to accept index.php?theme=$theme URL for rss, print, wap themes, etc..
- * @todo <marco>  #2 decide whether to remove or keep the cancel button clicking functionality
- * @todo <marco> #3 Do fallback if raised exception is coming from template engine
+ * @todo <marco> #2 Do fallback if raised exception is coming from template engine
  */
 function xarMain()
 {
@@ -60,20 +59,8 @@ function xarMain()
         ob_start();
     }
 
-    // FIXME: <marco> What's this insanity for?
-    // Run the function - also handle cancel button clicking
+    $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
 
-    // Run the function - also handle cancel button clicking
-    // TODO: 2
-    /* <marco> Disable until someone answer.
-    if (xarVarCleanFromInput('cancel')) {
-        $mainModuleOutput = xarModFunc($modName, $modType);
-    } else {
-    */
-        $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
-    /*
-    }
-    */
 
     if (xarCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {
@@ -142,7 +129,7 @@ if (!xarMain()) {
 
     xarLogException(XARLOG_LEVEL_ERROR);
 
-    // TODO: 3
+    // TODO: #2
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
         echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$text</body></html>";
     } else {
