@@ -88,7 +88,10 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             if (!empty($return[1])) {
                 $magiclinks = xarModAPIFunc('uploads','user','showoutput',
                                             array('value' => $return[1],
-                                                  'format' => 'textupload'));
+                                                  'format' => 'textupload',
+                                                  'style' => 'icon'));
+                // strip template comments if necessary
+                $magiclinks = preg_replace('/<\!--.*?-->/','',$magiclinks);
                 $magiclinks = trim($magiclinks);
             }
             if (!empty($value) && !empty($magiclinks)) {
