@@ -285,7 +285,7 @@ function roles_user_register()
             if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
-//            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) return;
             if (empty($pass)){
                 $pass = xarModAPIFunc('roles',
                                       'user',
@@ -303,6 +303,7 @@ function roles_user_register()
                 $pending = xarModGetVar('roles', 'explicitapproval');
                 if ($pending == 1) $state = 4;
                 else $state = 3;
+
                 $uid = xarModAPIFunc('roles',
                                        'admin',
                                        'create',
