@@ -1,6 +1,7 @@
 /*  Xaraya_Classic - default theme.. [revision 2 by andyv_at_xaraya.com]
 
 Lets make the CSS a bit more interesting and better organised than before;
+
 Differences and aims of this revision will be:
 
 	- improved readability and formatting of source
@@ -34,7 +35,7 @@ body defines basic viewport properties
 
 body {
 	font-family: "trebuchet ms", verdana, helvetica, sans-serif;
-	font-size: 76.666%;
+	font-size: 76%;
 	line-height:140%;
 } /*
 shared typography, which should be inherited by the descendants 
@@ -54,10 +55,18 @@ a {
 	color: #58657E;
 	font-weight: bold;
 } /*
-a normal link is being styled similarly across all pages, unless re-specified
+a normal link is being styled similarly across all pages, unless re-declared
 -------------------------------------------------------------------------[comment] */
 
-a:hover { color: #F12600; }
+a:link 		{}
+a:visited 	{}
+a:active 	{}
+a:hover 	{
+	color: #F12600;
+	text-decoration: underline;
+} /*
+leave pseudo-selectors exactly in this order even if you decide to re-declare them 
+------------------------------------------------------------------[important note] */
 
 /*
 Tables and related selectors
@@ -68,7 +77,7 @@ table {
 	border-color: #757F8B;
 	border-width: 0px;
 } /*
-the actual border should be displayed only when border-width is re-specified later
+the actual border should be visible only when border-width is re-declared
 ------------------------------------------------------------------[important note] */
 
 th {
@@ -84,42 +93,42 @@ tfoot {
 /*
 General text and related selectors 
 -------------------------------------------------------------------------[comment] */
-h1 {
-	font-size: 130%;
-	line-height: 120%;
-}
-
-h2 {
-	font-size: 120%;
-	line-height: 120%;
-}
-
-h3 {
-	font-size: 110%;
-	line-height: 120%;
-}
-
-h4 {
-	font-size: 100%;
-	line-height: 120%;
-}
-
 h1, h2, h3, h4 {
 	font-family: helvetica, tahoma, arial, sans-serif;
 	font-weight: bold;
 	color: #BA1D00;
-	padding: 0;
-	margin: .2em;
+	padding: 0em;
+	margin: .5em 0 .5em 0;
 } /*
 page headers - shared typography and positioning 
 -------------------------------------------------------------------------[comment] */
+
+h1 {
+	font-size: 140%;
+	line-height: 120%;
+}
+
+h2 {
+	font-size: 130%;
+	line-height: 120%;
+}
+
+h3 {
+	font-size: 120%;
+	line-height: 120%;
+}
+
+h4 {
+	font-size: 110%;
+	line-height: 120%;
+}
 
 p { line-height: 140%; }
 
 pre {
 	color: #80005C;
 	font-size: 95%;
-	font-family: monaco, courier, monospaced, fixed-width;
+	font-family: monaco, courier, monospace;
 }
 
 blockquote {
@@ -129,7 +138,7 @@ blockquote {
 
 code {
 	color: #191970;
-	font-family: monaco, courier, monospaced, fixed-width;
+	font-family: monaco, courier, monospace;
 }
 
 sup, sub {
@@ -239,7 +248,7 @@ these defaults apply to the right block group
 	font-size: 110%;
 }
 
-.xar-block-body-right { }
+.xar-block-body-right {}
 
 .xar-block-foot-right {
 	margin-bottom: 5px;
@@ -251,9 +260,7 @@ topnav block group classes
 .xar-block-head-topnav { }
 .xar-block-title-topnav { }
 
-.xar-block-body-topnav {
-	margin: auto;
-}
+.xar-block-body-topnav { }
 
 .xar-block-foot-topnav { }
 
@@ -424,7 +431,7 @@ div#classicheader img {
 the only image we use in the header itself is logo 
 -------------------------------------------------------------------------[comment] */
 
-div#themecontrols {
+div#classicthemecontrols {
 	position:relative;
 	width: 200px;
 	height: 70px;
@@ -435,13 +442,36 @@ div#themecontrols {
 	background-position: 0 100%;
 }
 
-div#themecontrols span {
+div#classicthemecontrols span {
 	position:relative;
 	font-size:90%;
 	top:30px;
 }
 
-table#contentarea {
+div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
+	display: inline;
+	list-style-type: none;
+	padding: 0 5px;
+	margin:0;
+	border:0;
+} /*
+since topnav group is available by default, we must be able to lay it out
+-------------------------------------------------------------------------[comment] */
+
+
+div.xar-block-body-topnav {
+	min-width: 710px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+	margin-bottom: 2px;
+	padding: 2px 0;
+}
+
+/* .xar-block-head-topnav, .xar-block-title-topnav, .xar-block-foot-topnav  { display:none; } */
+
+
+table#classiccontentarea {
 	width: 100%;
 	margin: 0;
 	border-collapse: separate;
@@ -553,7 +583,7 @@ p#slogan {
 	text-align: left;
 	margin:0;
 } /*
-site slogan can 'sit' in the footer for now 
+site slogan can sit in the footer for now 
 -------------------------------------------------------------------------[comment] */
 
 p#copyright {
@@ -573,7 +603,7 @@ div.validators {
 	padding-top:2px;
 	margin-right:3px;
 } /*
-it is a kind of 'modern trend' to display links to w3c validators 
+it is a kind of modern trend to display links to w3c validators 
 -------------------------------------------------------------------------[comment] */
 
 div.validators img {
@@ -641,8 +671,6 @@ not so much a decoration, but rather a high visibility tool for beta-testers
 
 .formUp { background-color: #e3f1ff; }
 
-.copyright {}
-
 abbr, acronym, .help {
 	border-bottom: 1px dotted #999;
 	cursor: help;
@@ -666,18 +694,18 @@ in this _special_ _fixer_ container.. [andyv]
 
 
 
-* html div#header { 
+* html div#classicheader { 
 	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
 }
 
-* html div#footer { 
+* html div#classicfooter { 
 	width: expression((body.clientWidth <= 710) ? "710px" : "auto");
 }
 
-* html table#contentarea { 
+* html table#classiccontentarea { 
 	width: expression((body.clientWidth <= 710) ? "710px" : "100%");
 } /*
-min-width equvivalent for IE-Win browsers only, 
-because they dont support this pre=operty along with many 
+rules above are min-width equvivalent for IE-Win browsers only, 
+because they dont support this property along with many 
 other ordinary and extremely useful w3c standards, fancy that :-{
 -------------------------------------------------------------------------[comment] */

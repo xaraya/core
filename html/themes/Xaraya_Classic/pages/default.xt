@@ -19,10 +19,10 @@
         
         <!--- build layout depending on availability of the relevant data --->
         <div id="classicheader">
-            <div id="themecontrols">
+            <div id="classicthemecontrols">
                 <span>
                     <xar:mlstring>
-                        Theme controls [to be implemented..]
+                        Theme controls
                     </xar:mlstring>
                 </span>
             </div>
@@ -30,8 +30,12 @@
                 <img src="#xarTplGetThemeDir()#/images/xa_logo.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
             </a>
         </div>
-        <!-- xar:blockgroup name="topnav" id="topnav" / -->
-        <table id="contentarea">
+        <xar:if condition="!empty($topnavblocksgroup)">
+<!--         	<div id="classictopnavigation"> -->
+        		#$topnavblocksgroup#
+<!--         	</div> -->
+        </xar:if>
+        <table id="classiccontentarea">
             <tr>
                 <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
                     <td id="leftmenus">
