@@ -1471,9 +1471,9 @@ class xarTpl__DocumentNode extends xarTpl__Node
 class xarTpl__TextNode extends xarTpl__Node
 {
     var $content;
-
+    
     function render()
-    {
+    {   
         return $this->content;
     }
 
@@ -2548,16 +2548,28 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
                            new xarTpl__ParserError('The <xar:mlkey> tag takes no attributes.', $this));
             return;
         }
-        // Children are only of text type
-        foreach($this->children as $node) {
-            $key .= $node->render();
+        // Children of mlkey are only of text type (the text to be translated)
+        // so this goes to TextNode render
+        // MrB: isn't there always 1 child here?
+        foreach($this->children as $child) {
+            $key .= $child->render();
         }
-        $key = trim($key);
+        
+        // FIXME: bug#45 makes this into a parse error if we don't 
+        //        add slashes here.
+        // 1. can't be done in xarMLKey-> too late
+        // 2. we can test for it above and raise an exception if we don't 
+        //    want to allow unescaped quotes in templates (unfriendly but right)
+        //    (offer developer to use xarMLString instead)
+        // 3. we can silently escape the key -> problem transferred to translators
+        // FIXME: chose 3 for now, out of laziness.
+        $key = trim(addslashes($key));
         if ($key == '') {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                            new xarTpl__ParserError('Missing content in <xar:mlkey> tag.', $this));
             return;
         }
+
         return "xarMLByKey('$key'";
     }
 
