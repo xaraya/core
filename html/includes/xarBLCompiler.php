@@ -103,6 +103,15 @@ class xarTpl__CodeGenerator
 
     function generate($documentTree)
     {
+        if ($documentTree->variables->get('type') == 'page') {
+            $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
+            // Register special variables for templates of type page
+            $resolver->push('tpl:pageTitle', '$_bl_page_title');
+            $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
+            $resolver->push('tpl:headJavaScript', '$_bl_head_javascript');
+            $resolver->push('tpl:bodyJavaScript', '$_bl_body_javascript');
+        }
+
         $code = $this->generateNode($documentTree);
         if (!isset($code)) {
             return; // throw back
@@ -238,6 +247,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->tagNamesStack = array();
         $this->tagIds = array();
 
+        $this->tplVars = new xarTpl__TemplateVariables();
+
         $documentTree = $this->nodesFactory->createDocumentNode($this);
 
         $res = $this->parseNode($documentTree);
@@ -245,6 +256,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             return; // throw back
         }
         $documentTree->children = $res;
+        $documentTree->variables = $this->tplVars;
+
         //xarLogVariable('documentTree', $documentTree, XARLOG_LEVEL_ERROR);
         return $documentTree;
     }
@@ -277,9 +290,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             if (!isset($variables)) {
                                 return; // throw back
                             }
-                            $tplVars =& xarTpl__TemplateVariables::instance();
                             foreach ($variables as $name => $value) {
-                                $tplVars->set($name, $value);
+                                $this->tplVars->set($name, $value);
                             }
                             // Here we set token to an empty string so that $text .= $token will result in $text
                             $token = '';
@@ -1185,19 +1197,15 @@ class xarTpl__TemplateVariables
         // Fill defaults
         $this->tplVars['version'] = '1.0';
         $this->tplVars['encoding'] = 'us-ascii';
-    }
-
-    function &instance() {
-        static $instance = NULL;
-        if (!isset($instance)) {
-            $instance = new xarTpl__TemplateVariables();
-        }
-        return $instance;
+        $this->tplVars['type'] = 'module';
     }
 
     function get($name)
     {
-        return $this->tplVars[$name];
+        if (isset($this->tplVars[$name])) {
+            return $this->tplVars[$name];
+        }
+        return '';
     }
 
     function set($name, $value)
@@ -1344,6 +1352,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
 class xarTpl__DocumentNode extends xarTpl__Node
 {
     var $children;
+    var $variables;
 
     function renderBeginTag()
     {
