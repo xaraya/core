@@ -26,6 +26,7 @@ function base_admin_updateconfig()
     if (!xarVarFetch('localeslist','str:1:',$localesList)) return;
     if (!xarVarFetch('translationsbackend','str:1:',$translationsBackend)) return;
     if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -39,6 +40,7 @@ function base_admin_updateconfig()
 
     // TODO move this to the API once complete.
     xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
+    xarConfigSetVar('Site.Core.EnableSecureServer', $secureServer);
     xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
     //xarConfigSetVar('Site.BL.CacheTemplates', $cacheTemplates);
     xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);

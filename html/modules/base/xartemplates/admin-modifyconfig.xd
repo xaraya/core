@@ -46,6 +46,12 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<xar:else />
 		<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
 	</xar:if></p>
+	<p><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:
+	<xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
+		<input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="secureserver" id="secureserver" value="1" />
+	</xar:if></p>
 	<h4><xar:mlstring>Sessions and Security</xar:mlstring></h4>
 	<p><xar:mlstring>Security Level</xar:mlstring>:
 	<select name="securitylevel" id="securitylevel" size="1">

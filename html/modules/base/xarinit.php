@@ -183,6 +183,7 @@ function base_init()
     xarConfigSetVar('Site.Core.FixHTMLEntities',false);
     xarConfigSetVar('Site.Core.TimeZone', 'US/New York');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
+    xarConfigSetVar('Site.Core.EnableSecureServer', false);
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');

@@ -28,16 +28,14 @@
  */
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
-    $GLOBALS['xarServer_generateXMLURLs'] = $args['generateXMLURLs'];
-
-    $GLOBALS['xarRequest_allowShortURLs'] = $args['enableShortURLsSupport'];
-    $GLOBALS['xarRequest_defaultRequestInfo'] = array($args['defaultModuleName'],
-                                                      $args['defaultModuleType'],
-                                                      $args['defaultModuleFunction']);
-    $GLOBALS['xarRequest_shortURLVariables'] = array();
-
-    $GLOBALS['xarResponse_closeSession'] = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
-    $GLOBALS['xarResponse_redirectCalled'] = false;
+    $GLOBALS['xarServer_generateXMLURLs']       = $args['generateXMLURLs'];
+    $GLOBALS['xarRequest_allowShortURLs']       = $args['enableShortURLsSupport'];
+    $GLOBALS['xarRequest_defaultRequestInfo']   = array($args['defaultModuleName'],
+                                                        $args['defaultModuleType'],
+                                                        $args['defaultModuleFunction']);
+    $GLOBALS['xarRequest_shortURLVariables']    = array();
+    $GLOBALS['xarResponse_closeSession']        = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
+    $GLOBALS['xarResponse_redirectCalled']      = false;
 
     // Register the ServerRequest event
     xarEvt_registerEvent('ServerRequest');
@@ -164,9 +162,13 @@ function xarServerGetHost()
  */
 function xarServerGetProtocol()
 {
-    $HTTPS = xarServerGetVar('HTTPS');
-    // IIS seems to set HTTPS = off for some reason
-    return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+    if (xarConfigGetVar('Site.Core.EnableSecureServer') == true){
+        $HTTPS = xarServerGetVar('HTTPS');
+        // IIS seems to set HTTPS = off for some reason
+        return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+    } else {
+        return 'http';
+    }
 }
 
 /**
