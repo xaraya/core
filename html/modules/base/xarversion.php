@@ -1,5 +1,5 @@
 <?php 
-// $Id$
+// $Id: s.xarversion.php 1.8 03/01/17 16:29:55+00:00 johnny@falling.local.lan $
 $modversion['name'] = 'Base';
 $modversion['id'] = '68';
 $modversion['version'] = '0.1';

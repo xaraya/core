@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: s.xarinit.php 1.52 03/01/18 15:32:55+00:00 mikespub@sasquatch.pulpcontent.com $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.

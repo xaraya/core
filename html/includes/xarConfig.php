@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarConfig.php 1.17 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
  * 
  * Configuration Unit
  * 

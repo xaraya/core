@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarSession.php 1.54 03/01/25 16:38:25-05:00 John.Cox@mcnabb. $
  * 
  * Session Support
  * 

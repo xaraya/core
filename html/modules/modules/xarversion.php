@@ -1,5 +1,5 @@
 <?php
-// $Id$
+// $Id: s.xarversion.php 1.10 02/11/28 23:18:27+00:00 miko@miko.homelinux.org $
 $modversion['name'] = 'Modules Administration';
 $modversion['id'] = '1';
 $modversion['version'] = '2.02';

@@ -1,6 +1,6 @@
 <?php
 /*
- * File: $Id$
+ * File: $Id: s.ws.php 1.18 03/01/18 15:56:23+00:00 miko@power.dudleynet $
  * 
  * Xaraya WebServices Interface
  * 

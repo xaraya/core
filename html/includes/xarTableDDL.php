@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarTableDDL.php 1.26 03/01/18 15:33:56+00:00 mikespub@sasquatch.pulpcontent.com $
  * 
  * Table Maintenance API
  * 

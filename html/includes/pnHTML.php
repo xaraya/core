@@ -1,6 +1,6 @@
 <?php 
 /**
- * File: $Id$
+ * File: $Id: s.pnHTML.php 1.43 03/01/18 11:53:04+01:00 marcel@hsdev.com $
  * 
  * HTML Helpers
  *
@@ -99,7 +99,7 @@ define('_PNH_PARSEINPUT', 1);
  * @author Patrick Kellum
  * @link http://www.Xaraya.com/ The Official Xaraya website
  * @copyright (C) 2001, 2002 by the Post-Nuke Development Team
- * @version $Revision$
+ * @version $Revision: 1.43 $
  * @todo need to add text sanitizer
  */
 class pnHTML

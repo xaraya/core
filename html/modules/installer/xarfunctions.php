@@ -98,6 +98,7 @@ function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args =
     }
 
     $tplData = $modFunc($args);
+echo '*'.ob_get_contents()."*\n\n$tplData\n\n.";exit;
 
     if (!is_array($tplData)) {
         return $tplData;

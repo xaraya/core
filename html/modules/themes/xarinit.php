@@ -177,3 +177,4 @@ function themes_delete()
 {
     return false;
 }
+?>
