@@ -1,37 +1,37 @@
 div#xc-leftbg-wrapper {
-	width: auto;
-	background-image: url(../images/bkgr200.gif);
-	background-repeat: repeat-y;
-	background-position: left top;
+    width: auto;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat-y;
+    background-position: left top;
 }
 
 div#xc-rightbg-wrapper {
-	width: auto;
-	background-image: url(../images/bkgr200.gif);
-	background-repeat: repeat-y;
-	background-position: right top;
+    width: auto;
+    background-image: url(../images/bkgr200.gif);
+    background-repeat: repeat-y;
+    background-position: right top;
 }
 
 div#xc-outermargin-wrapper {
-	width: auto;
-	margin-left: 210px;
-	margin-right: 210px;
+    width: auto;
+    margin-left: 210px;
+    margin-right: 210px;
 }
 
 div#xc-outermargin-noright-wrapper {
-	width: auto;
-	margin-left: 210px;
+    width: auto;
+    margin-left: 210px;
 }
 
 div#xc-outermargin-noleft-wrapper {
-	width: auto;
-	margin-right: 210px;
+    width: auto;
+    margin-right: 210px;
 }
 
 div#xc-inner-wrapper {
-	margin: 0;
-	width: 100%;
-	background-color: #ffffff;
+    margin: 0;
+    width: 100%;
+    background-color: #ffffff;
 }
 
 div#xc-innerbg-top { width: auto; }
@@ -45,83 +45,83 @@ div#xc-innerbg > div#xc-innerbg-top,
 div#xc-innerbg > div#xc-innerbg-bottom { height: 1px; }
 
 div#xc-left {
-	float: left;
-	position: relative;
-	width: 200px;
-	margin-left: -210px;
-	background-color: transparent;
-	z-index: 10;
+    float: left;
+    position: relative;
+    width: 200px;
+    margin-left: -210px;
+    background-color: transparent;
+    z-index: 10;
 }
 
 div#xc-right {
-	float: right;
-	position: relative;
-	width: 200px;
-	margin-right: -210px;
-	background-color: transparent;
-	z-index: 11;
+    float: right;
+    position: relative;
+    width: 200px;
+    margin-right: -210px;
+    background-color: transparent;
+    z-index: 11;
 }
 
 div.xc-side-content {
-	margin: 0;
-	padding: 10px;
+    margin: 0;
+    padding: 10px;
 }
 
 div#xc-center-wrapper {
-	float: left;
-	position: relative;
-	width: 100%;
-	z-index: 12;
+    float: left;
+    position: relative;
+    width: 100%;
+    z-index: 12;
 }
 
 div#xc-center {
-	padding: 10px;
-	position: relative;
+    padding: 10px;
+    position: relative;
 }
 
 div#xc-header {
-	position: relative;
-	z-index: 13;
-	background-color: #DDDDF0;
-	height: 70px;
-	margin-bottom: 3px;
+    position: relative;
+    z-index: 13;
+    background-color: #DDDDF0;
+    height: 70px;
+    margin-bottom: 3px;
 }
 
 div#xc-header h1, div#xc-header h1 a {
-	float: left;
-	width: 245px;
-	height: 70px;
-	margin: 0;
-	padding: 0;
+    float: left;
+    width: 245px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
 }
 
 div#xc-header h1 a {
-	position: relative;
-	background-image: url(../images/xaraya_logo_blue.gif);
-	background-repeat: no-repeat;
-	background-position: 0px 0px;
+    position: relative;
+    background-image: url(../images/xaraya_logo_blue.gif);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
 }
 
 /* hopefully enough for off-screen placement in all circumstances */
 div#xc-header h1 a span {
-	position: absolute;
-	left: -9000px;
+    position: absolute;
+    left: -9000px;
 }
 
 div#xc-footer {
-	position: relative;
-	z-index: 14;
-	height: 50px;
-	margin-top: 3px;
+    position: relative;
+    z-index: 14;
+    height: 50px;
+    margin-top: 3px;
 }
 
 #xc-clear { clear: both; }
 
 div#xc-outer-wrapper {
-	min-width: 740px;
-	max-width: 1024px;
-	margin: 0 auto;
-	text-align: left;
+    min-width: 740px;
+    max-width: 1024px;
+    margin: 0 auto;
+    text-align: left;
 }
 
 div#xc-left { margin-right: 20px; }

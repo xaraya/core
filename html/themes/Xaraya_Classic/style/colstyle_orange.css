@@ -8,9 +8,9 @@ lets keep these alternative stylesheets relatively small and easy to work with.
 ------------------------------------------------------------------[important note] */
 
 body {
-	color: #7F5300;
-	background-color: #996600;
-	background-image: url(../images/page_bg_orange.gif);
+    color: #7F5300;
+    background-color: #996600;
+    background-image: url(../images/page_bg_orange.gif);
 }
 
 a { color: #FF9900; }
@@ -18,14 +18,14 @@ a:link:hover, a:visited:hover { color: #E54000; }
 h1, h2, h3, h4 { color: #996600; }
 
 .xar-mod-head {
-	color: #7F5300;
-	background-color: #FFD37F;
-	border-color: #7F5300;
+    color: #7F5300;
+    background-color: #FFD37F;
+    border-color: #7F5300;
 }
 
 th {
-	color: #7F5300;
-	background-color: #F2EADD;
+    color: #7F5300;
+    background-color: #F2EADD;
 }
 
 .xar-alt { background-color: #FFDE80; }
@@ -37,9 +37,9 @@ th {
 
 /* BLOCKS */
 .xar-block-title, .xar-block-title-right {
-	color: #7F5300;
-	background-color: #F2EADD;
-	padding: 0 4px;
+    color: #7F5300;
+    background-color: #F2EADD;
+    padding: 0 4px;
 }
 
 /* MENUS */
@@ -50,7 +50,7 @@ div#xc-header { background-color: #EDEBD5; }
 div#xc-header h1 a { background-image: url(../images/xaraya_logo_orange.gif); }
 
 div#xc-footer {
-	background-image: url(../images/page_bg_orange.gif);
-	background-repeat: repeat-x;
-	background-position: 0% 20%;
+    background-image: url(../images/page_bg_orange.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 20%;
 }

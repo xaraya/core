@@ -8,9 +8,9 @@ lets keep these alternative stylesheets relatively small and easy to work with.
 ------------------------------------------------------------------[important note] */
 
 body {
-	color: #000000;
-	background-color: #666666;
-	background-image: url(../images/page_bg_hicontrast.gif);
+    color: #000000;
+    background-color: #666666;
+    background-image: url(../images/page_bg_hicontrast.gif);
 }
 
 a { color: #CC3333; }
@@ -19,14 +19,14 @@ a:link:hover, a:visited:hover { color: #CD2000; }
 h1, h2, h3, h4 { color: #000000; }
 
 .xar-mod-head {
-	color: #000000;
-	background-color: #EEEEEE;
-	border-color: #000000;
+    color: #000000;
+    background-color: #EEEEEE;
+    border-color: #000000;
 }
 
 th {
-	color: #000000;
-	background-color: #F6F6F6;
+    color: #000000;
+    background-color: #F6F6F6;
 }
 
 .xar-alt { background-color: #EEE7EC; }
@@ -38,9 +38,9 @@ th {
 
 /* BLOCKS */
 .xar-block-title, .xar-block-title-right {
-	color: #ffffff;
-	background-color: #666666;
-	padding: 0 4px;
+    color: #ffffff;
+    background-color: #666666;
+    padding: 0 4px;
 }
 
 /* MENUS */
@@ -51,7 +51,7 @@ div#xc-header { background-color: #ffffff; }
 div#xc-header h1 a { background-image: url(../images/xaraya_logo_contrast.gif); }
 
 div#xc-footer {
-	background-image: url(../images/page_bg_hicontrast.gif);
-	background-repeat: repeat-x;
-	background-position: 0% 20%;
+    background-image: url(../images/page_bg_hicontrast.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 20%;
 }

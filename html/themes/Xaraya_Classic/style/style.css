@@ -7,15 +7,15 @@ Lets make the CSS a bit more interesting and a lot better organised than the old
 
 Differences so far are as follows:
 
-	- improved readability and formatting of source
-	- rules arranged according to page structure, layout and other properties
-	- detailed comments for each class and selector
-	- the page layouts should be rendered similar by a wide range of browsers
-	- improved consistency for the theme typography
-	- increased reliance on relative sizing and positioning
-	- a few more advanced rules provided as examples of theme capabilities
-	- cleaned up and removed unnecessary duplication of inheritable properties
-	- introduced professional quality in colour co-ordination and graphics
+    - improved readability and formatting of source
+    - rules arranged according to page structure, layout and other properties
+    - detailed comments for each class and selector
+    - the page layouts should be rendered similar by a wide range of browsers
+    - improved consistency for the theme typography
+    - increased reliance on relative sizing and positioning
+    - a few more advanced rules provided as examples of theme capabilities
+    - cleaned up and removed unnecessary duplication of inheritable properties
+    - introduced professional quality in colour co-ordination and graphics
 
 additions and corrections as of Aug 15 - 2004 
 
@@ -44,11 +44,11 @@ additions and corrections as of Oct 15 - 2004
     so that we know exactly where we are */
 
 /* body, div, ul, li, td, h1, h2, h3, h4, h5, h6, code, pre { */
-/* 	font-size: 1em; */
+/*  font-size: 1em; */
 /* } */
 /* p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, blockquote, fieldset, input { */
-/* 	margin: 0; */
-/* 	padding: 0; */
+/*  margin: 0; */
+/*  padding: 0; */
 /* } */
 /* :link, :visited { text-decoration: none; } */
 /* ul, ol { list-style-type: none; } */
@@ -60,23 +60,23 @@ Main (X)HTML Selectors - Typography, Colours and Positioning
 -------------------------------------------------------------------------[comment] */
 
 body {
-	font-family: "trebuchet ms", "luxi sans", verdana, helvetica, sans-serif;
-	font-size: 100.01%;
-	line-height: 145%;
-	margin: 15px 2%;
-	padding: 0;
-	color: #333333;
-	background-color: #333366;
-	background-image: url(../images/page_bg.gif);
-	background-repeat: repeat-x;
-	background-position: 0% 0%;
-	/* 	background-attachment: fixed; */
-	text-align: center;
+    font-family: "trebuchet ms", "luxi sans", verdana, helvetica, sans-serif;
+    font-size: 100.01%;
+    line-height: 145%;
+    margin: 15px 2%;
+    padding: 0;
+    color: #333333;
+    background-color: #333366;
+    background-image: url(../images/page_bg.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 0%;
+    /*  background-attachment: fixed; */
+    text-align: center;
 }
 
 a {
-	color: #666699;
-	font-weight: bold;
+    color: #666699;
+    font-weight: bold;
 }
 
 /*
@@ -93,8 +93,8 @@ leave pseudo-classes exactly in this order even if you decide to re-declare them
 ------------------------------------------------------------------[important note] */
 
 a:link:hover, a:visited:hover {
-	color: #CC3300;
-	text-decoration: underline;
+    color: #CC3300;
+    text-decoration: underline;
 }
 
 /*
@@ -106,10 +106,10 @@ Tables and related selectors
 -------------------------------------------------------------------------[comment] */
 
 table {
-	border-collapse: collapse;
-	border-style: solid;
-	border-color: #757F8B;
-	border-width: 0px;
+    border-collapse: collapse;
+    border-style: solid;
+    border-color: #757F8B;
+    border-width: 0px;
 }
 
 /*
@@ -117,13 +117,13 @@ the actual border should be visible only when border-width is re-declared
 ------------------------------------------------------------------[important note] */
 
 th {
-	color: #666699;
-	background-color: #DCDCE5;
+    color: #666699;
+    background-color: #DCDCE5;
 }
 
 tfoot {
-	font-weight: bold;
-	background-color: #DCDCE1;
+    font-weight: bold;
+    background-color: #DCDCE1;
 }
 
 /*
@@ -131,12 +131,12 @@ General text and related selectors
 -------------------------------------------------------------------------[comment] */
 
 h1, h2, h3, h4 {
-	font-family: arial, helvetica, tahoma, sans-serif;
-	font-weight: bold;
-	line-height: 120%;
-	color: #CC3300;
-	padding: 0;
-	margin: .5em 0 .5em 0;
+    font-family: arial, helvetica, tahoma, sans-serif;
+    font-weight: bold;
+    line-height: 120%;
+    color: #CC3300;
+    padding: 0;
+    margin: .5em 0 .5em 0;
 }
 
 /*
@@ -150,34 +150,34 @@ h4 { font-size: 120%; }
 p { margin: .7em 0 0 .3em; }
 
 pre {
-	color: #990066;
-	font-size: 95%;
-	font-family: monaco, courier, monospace;
+    color: #990066;
+    font-size: 95%;
+    font-family: monaco, courier, monospace;
 }
 
 ul {
-	padding: 0;
-	margin: 0;
-	list-style-position: inside;
-	list-style-image: url(../images/bullet.png);
-	list-style-type: none;
+    padding: 0;
+    margin: 0;
+    list-style-position: inside;
+    list-style-image: url(../images/bullet.png);
+    list-style-type: none;
 }
 
 ul li { margin-left: 0.5em; }
 
 blockquote {
-	color: #333366;
-	margin: 2em;
+    color: #333366;
+    margin: 2em;
 }
 
 code {
-	color: #990066;
-	font-family: monaco, courier, monospace;
+    color: #990066;
+    font-family: monaco, courier, monospace;
 }
 
 sup, sub {
-	font-size: 95%;
-	font-weight: normal;
+    font-size: 95%;
+    font-weight: normal;
 }
 
 /*
@@ -185,14 +185,14 @@ Form elements
 -------------------------------------------------------------------------[comment] */
 
 form {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 input {
-	font-weight: normal;
-	text-indent: 2px;
-	margin: 2px;
+    font-weight: normal;
+    text-indent: 2px;
+    margin: 2px;
 }
 
 button { border: 2px outset #f0f0f0; }
@@ -203,13 +203,13 @@ in many browsers appearance of select is handled by OSs widgets, not by css
 ------------------------------------------------------------------[important note] */
 
 textarea {
-	font-weight: normal;
-	text-indent: 2px;
+    font-weight: normal;
+    text-indent: 2px;
 }
 
 button, input, select, textarea {
-	color: #003399;
-	background-color: #F8F8F8;
+    color: #003399;
+    background-color: #F8F8F8;
 }
 
 /*
@@ -230,15 +230,15 @@ ul, li, ol { line-height: 140%; }
 
 /* THEME SPECIFIC CLASSES [gen_heading] */
 h5, h6 {
-	color: #333399;
-	font-size: 95%;
-	font-family: Helvetica, Arial, sans-serif;
-	font-weight: bold;
+    color: #333399;
+    font-size: 95%;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
 }
 
 hr {
-	width: 100%;
-	color: #c0c0c0;
+    width: 100%;
+    color: #c0c0c0;
 }
 
 /* XARAYA REQUIRED INDIVIDUAL CLASSES [gen_heading] */
@@ -254,8 +254,8 @@ these defaults apply to the left block group
 .xar-block-head { color: #333399; }
 
 .xar-block-title {
-	font-weight: bold;
-	font-size: 110%;
+    font-weight: bold;
+    font-size: 110%;
 }
 
 .xar-block-body { }
@@ -268,8 +268,8 @@ these defaults apply to the right block group
 .xar-block-head-right { color: #333399; }
 
 .xar-block-title-right {
-	font-weight: bold;
-	font-size: 110%;
+    font-weight: bold;
+    font-size: 110%;
 }
 
 .xar-block-body-right { }
@@ -291,16 +291,16 @@ center block group classes
 .xar-block-head-center { width: 100%; }
 
 .xar-block-title-center {
-/* 	background-color: inherit; */
-	font-weight: bold;
+/*  background-color: inherit; */
+    font-weight: bold;
 }
 
 .xar-block-body-center { }
 
 .xar-block-foot-center {
-	width: 100%;
-	margin-bottom: 4px;
-	border-bottom: 1px solid #A0B8E5;
+    width: 100%;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #A0B8E5;
 }
 
 /*
@@ -308,19 +308,19 @@ module rendering area and related rules
 -------------------------------------------------------------------------[comment] */
 
 .xar-mod-head {
-	color: #ffffff;
-	background-color: #8296BB;
-	padding: 2px;
-	text-align: center;
-	font-weight: bold;
-	border-color: #A0B8E5;
-	border-width: 1px;
-	border-style: solid;
+    color: #ffffff;
+    background-color: #8296BB;
+    padding: 2px;
+    text-align: center;
+    font-weight: bold;
+    border-color: #A0B8E5;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .xar-mod-title {
-	font-size: 110%;
-	font-weight: bold;
+    font-size: 110%;
+    font-weight: bold;
 }
 
 .xar-mod-body { padding: .3em .6em; }
@@ -334,21 +334,21 @@ complementary styling - colors, backgrounds and outlines
 .xar-accent { background-color: #E7EAF4; }
 
 .xar-alt-outline {
-	border-color: #A782BB;
-	border-width: 1px;
-	border-style: solid;
+    border-color: #A782BB;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .xar-accent-outline {
-	border-color: #82BBA7;
-	border-width: 1px;
-	border-style: solid;
+    border-color: #82BBA7;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .xar-norm-outline {
-	border-color: #8296BB;
-	border-width: 1px;
-	border-style: solid;
+    border-color: #8296BB;
+    border-width: 1px;
+    border-style: solid;
 }
 
 /*
@@ -366,23 +366,23 @@ not sure if we still using this rule anywhere TODO: check
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 div#classicthemecontrols {
-	position: relative;
-	width: 187px;
-	float: right;
-	padding: 0 3px 0 0;
-	margin: 0;
+    position: relative;
+    width: 187px;
+    float: right;
+    padding: 0 3px 0 0;
+    margin: 0;
 }
 
 div#classicthemecontrols img {
-	position: relative;
-	float: right;
-	width: 26px;
-	height: 21px;
+    position: relative;
+    float: right;
+    width: 26px;
+    height: 21px;
 }
 
 * html div#classicthemecontrols img, * html div#classicheader img {
-	margin: 0 -3px;
-	ma\rgin: 0;
+    margin: 0 -3px;
+    ma\rgin: 0;
 }
 
 /*
@@ -391,11 +391,11 @@ cannot float linked images properly, without inserting 3px margins around them
 ------------------------------------------------------------------[important note] */
 
 div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
-	display: inline;
-	list-style-type: none;
-	padding: 0 5px;
-	margin: 0;
-	border: 0;
+    display: inline;
+    list-style-type: none;
+    padding: 0 5px;
+    margin: 0;
+    border: 0;
 }
 
 /*
@@ -406,18 +406,18 @@ div.xar-block-body-topnav .xar-menu-section h4 { display: none; }
 
 /* hide section heading [gen_heading] */
 div.xar-block-body-topnav .xar-menu-section ul li a {
-	display: inline;
-	padding-right: .5em;
-	padding-left: .5em;
+    display: inline;
+    padding-right: .5em;
+    padding-left: .5em;
 }
 
 /* all links should display horizontally in topnav block in this theme */
 div.xar-block-body-topnav {
-	border-color: #757F8B;
-	border-width: 1px;
-	border-style: solid;
-	margin-bottom: 2px;
-	padding: 2px 0;
+    border-color: #757F8B;
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 2px;
+    padding: 2px 0;
 }
 
 /*
@@ -425,9 +425,9 @@ positioning and minimal styling of footer
 -------------------------------------------------------------------------[comment] */
 
 div#xc-footer {
-	background-image: url(../images/page_bg.gif);
-	background-repeat: repeat-x;
-	background-position: 0% 20%;
+    background-image: url(../images/page_bg.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 20%;
 }
 
 /*
@@ -435,11 +435,11 @@ footer container itself - watch for the explicit height limitations
 -------------------------------------------------------------------------[comment] */
 
 p#footermsg {
-	float: right;
-	padding: 1px 2px;
-	width: 250px;
-	text-align: right;
-	margin: 0;
+    float: right;
+    padding: 1px 2px;
+    width: 250px;
+    text-align: right;
+    margin: 0;
 }
 
 /*
@@ -447,11 +447,11 @@ standard content of the footer, limited by explicit width and height
 -------------------------------------------------------------------------[comment] */
 
 p#slogan {
-	float: left;
-	padding: 17px 0 0 5px;
-	width: auto;
-	text-align: left;
-	margin: 0;
+    float: left;
+    padding: 17px 0 0 5px;
+    width: auto;
+    text-align: left;
+    margin: 0;
 }
 
 /*
@@ -459,11 +459,11 @@ site slogan can sit in the footer for now
 -------------------------------------------------------------------------[comment] */
 
 p#copyright {
-	float: left;
-	padding: 17px 0 0 5px;
-	width: 200px;
-	text-align: center;
-	margin: 0;
+    float: left;
+    padding: 17px 0 0 5px;
+    width: 200px;
+    text-align: center;
+    margin: 0;
 }
 
 /*
@@ -471,11 +471,11 @@ and so can the copyright info
 -------------------------------------------------------------------------[comment] */
 
 div.validators {
-	float: right;
-	height: 23px;
-	width: 80px;
-	/* 	padding-top:2px; */
-	margin-right: 7px;
+    float: right;
+    height: 23px;
+    width: 80px;
+    /*  padding-top:2px; */
+    margin-right: 7px;
 }
 
 /*
@@ -483,8 +483,8 @@ it is a kind of modern trend to display links to w3c validators
 -------------------------------------------------------------------------[comment] */
 
 div.validators img {
-	margin: 1px 0;
-	display: block;
+    margin: 1px 0;
+    display: block;
 }
 
 /*
@@ -493,65 +493,65 @@ not so much a decoration, but rather a high visibility tool for beta-testers
 
 /* MISCELLANEOUS [gen_heading] */
 .txttitle {
-	font-weight: bold;
-	color: #336699;
-	text-decoration: none;
+    font-weight: bold;
+    color: #336699;
+    text-decoration: none;
 }
 
 .sidebtns {
-	font-weight: bold;
-	color: #336699;
-	text-decoration: none;
+    font-weight: bold;
+    color: #336699;
+    text-decoration: none;
 }
 
 .subhead {
-	font-weight: bold;
-	color: #60a9f0;
-	text-decoration: none;
+    font-weight: bold;
+    color: #60a9f0;
+    text-decoration: none;
 }
 
 .btns {
-	text-decoration: none;
-	background-color: #FFD800;
-	color: #000000;
-	font-weight: bold;
-	font-size: 9.5pt;
+    text-decoration: none;
+    background-color: #FFD800;
+    color: #000000;
+    font-weight: bold;
+    font-size: 9.5pt;
 }
 
 .busbtns {
-	text-decoration: none;
-	background-color: #85b8ea;
-	color: #000000;
-	font-weight: bold;
-	font-size: 9.5pt;
+    text-decoration: none;
+    background-color: #85b8ea;
+    color: #000000;
+    font-weight: bold;
+    font-size: 9.5pt;
 }
 
 .blk {
-	text-decoration: none;
-	color: #000000;
-	font-weight: bold;
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
 }
 
 .LightUp {
-	background-color: #cfe5fa;
-	color: #ffffff;
-	font-weight: bold;
-	text-decoration: none;
+    background-color: #cfe5fa;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .LightDown {
-	background-color: #ffffff;
-	color: #336699;
-	font-weight: bold;
-	font-size: 9.5pt;
-	text-decoration: none;
+    background-color: #ffffff;
+    color: #336699;
+    font-weight: bold;
+    font-size: 9.5pt;
+    text-decoration: none;
 }
 
 .formUp { background-color: #e3f1ff; }
 
 abbr, acronym, .help {
-	border-bottom: 1px dotted #999;
-	cursor: help;
+    border-bottom: 1px dotted #999;
+    cursor: help;
 }
 
 /* EXPERIMENTAL RULES - keep them near the bottom */
