@@ -104,7 +104,8 @@ function blocks_adminapi_update_instance($args)
     }
     
     $args['module'] = 'blocks';
-
+    $args['itemtype'] = 3; // block instance
+    $args['itemid'] = $bid;
     xarModCallHooks('item', 'update', $bid, $args);
     
     return true;

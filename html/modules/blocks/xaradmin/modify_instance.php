@@ -108,7 +108,11 @@ function blocks_admin_modify_instance()
         }
     }
 
-    $hooks = xarModCallHooks('item', 'modify', $bid, '');
+    $args = array();
+    $args['module'] = 'blocks';
+    $args['itemtype'] = 3; // block instance
+    $args['itemid'] = $bid;
+    $hooks = xarModCallHooks('item', 'modify', $bid, $args);
 
     if (empty($hooks)) {
         $hooks = '';

@@ -51,6 +51,8 @@ function blocks_adminapi_delete_instance($args)
     xarModAPIFunc('blocks', 'admin', 'resequence');
 
     $args['module'] = 'blocks';
+    $args['itemtype'] = 3; // block instance
+    $args['itemid'] = $bid;
     xarModCallHooks('item', 'delete', $bid, $args);
 
     return true;
