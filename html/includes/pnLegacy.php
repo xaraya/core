@@ -957,20 +957,6 @@ function xarBlockTypeExists($modName, $blockType)
     return xarModAPIFunc('blocks', 'admin', 'block_type_exists', $args);
 }
 
-function xarBlockTypeRegister($modName, $blockType)
-{
-    if (!xarModAPILoad('blocks', 'admin')) return;
-    $args = array('modName'=>$modName, 'blockType'=>$blockType);
-    return xarModAPIFunc('blocks', 'admin', 'register_block_type', $args);
-}
-
-function xarBlockTypeUnregister($modName, $blockType)
-{
-    if (!xarModAPILoad('blocks', 'admin')) return;
-    $args = array('modName'=>$modName, 'blockType'=>$blockType);
-    return xarModAPIFunc('blocks', 'admin', 'unregister_block_type', $args);
-}
-
 /**
  * get the user's language
  *

@@ -411,4 +411,39 @@ function xarBlock_renderGroup($groupName)
 
     return $output;
 }
+
+/**
+ * Register block type
+ *
+ * @access public
+ * @param modName the module name
+ * @param blockType the block type
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise DATABASE_ERROR, BAD_PARAM
+ */
+function xarBlockTypeRegister($modName, $blockType)
+{
+    if (!xarModAPILoad('blocks', 'admin')) return;
+    $args = array('modName'=>$modName, 'blockType'=>$blockType);
+    return xarModAPIFunc('blocks', 'admin', 'register_block_type', $args);
+}
+
+/**
+ * Unregister block type
+ *
+ * @access public
+ * @param modName the module name
+ * @param blockType the block type
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise DATABASE_ERROR, BAD_PARAM
+ */
+function xarBlockTypeUnregister($modName, $blockType)
+{
+    if (!xarModAPILoad('blocks', 'admin')) return;
+    $args = array('modName'=>$modName, 'blockType'=>$blockType);
+    return xarModAPIFunc('blocks', 'admin', 'unregister_block_type', $args);
+}
+
 ?>
