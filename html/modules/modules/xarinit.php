@@ -1,13 +1,16 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Johnny Robeson
-// Purpose of file:  Initialisation functions for modules module
-// ----------------------------------------------------------------------
+/**
+ * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
+ *
+ * Modules System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage modules module
+ * @author Xaraya Team
+*/
 
 // Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
@@ -176,8 +179,8 @@ function modules_init()
     'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
     'xar_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
-    'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>false),
-    'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>true),
+    'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>true),
     'xar_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
     'xar_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),

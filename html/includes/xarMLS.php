@@ -58,25 +58,25 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
     default:
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
-    
+
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml') {
         xarCore_die('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
     }
-    
+
     $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
     $GLOBALS['xarMLS_localeDataCache'] = array();
-    
+
     $GLOBALS['xarMLS_currentLocale'] = '';
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
-    
+
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
     xarEvt_registerEvent('MLSMissingTranslationString');
     xarEvt_registerEvent('MLSMissingTranslationKey');
     xarEvt_registerEvent('MLSMissingTranslationDomain');
-    
+
     if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
         // The User System won't be started
         // MLS will use the default locale
@@ -145,12 +145,12 @@ function xarMLSLoadLocaleData($locale = NULL)
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
-    
+
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
-   
+
 // TODO: figure out why we go through this function for xarModIsAvailable
-//       (this one breaks on upper/lower-case issues, BTW) 
+//       (this one breaks on upper/lower-case issues, BTW)
     if (!in_array($locale, $siteLocales)) {
         if (preg_match('/ISO/',$locale)) {
             $locale = preg_replace('/ISO/','iso',$locale);
@@ -163,10 +163,10 @@ function xarMLSLoadLocaleData($locale = NULL)
             return;
         }
     }
-    
+
     if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
         $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
-        
+
         if (!isset($res)) return; // Throw back
         if ($res == false) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST');
@@ -257,7 +257,7 @@ function xarMLByKey($key/*, ...*/)
     // and also for empty keys, we just can't keep bombing out like this.
     //assert('!empty($key) && strpos($key, " ") === false');
     assert(!empty($key));
-    
+
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
     } else {
@@ -490,7 +490,7 @@ function xarMLS_setCurrentLocale($locale)
     // What are you trying to do here, make sure this function is called only once?
     // that's not really the proper use of assert is it?
     // FIXME: What is the purpose of it?
-    //        If to ensure only called once, make a singleton design patter for it 
+    //        If to ensure only called once, make a singleton design patter for it
     ///       and fail gracefully.
         //assert('$called == 0');
     $called++;
@@ -511,7 +511,7 @@ function xarMLS_setCurrentLocale($locale)
     }
     // Set current locale
     $GLOBALS['xarMLS_currentLocale'] = $locale;
-    
+
     $curCharset = xarMLSGetCharsetFromLocale($locale);
     if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
         assert('$curCharset == "utf-8"');
@@ -522,11 +522,11 @@ function xarMLS_setCurrentLocale($locale)
     //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
     //$curCharset != 'koi8-r') {
     // Do not use mbstring for single byte charsets
-    
+
     //}
     //}
     header("Content-Type: text/html; charset=$curCharset");
-    
+
     $alternatives = xarMLS__getLocaleAlternatives($locale);
     switch ($GLOBALS['xarMLS_backendName']) {
     case 'xml':
@@ -537,10 +537,10 @@ function xarMLS_setCurrentLocale($locale)
         $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
         break;
     }
-    
+
     // Load core translations
     xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', XARMLS_CTXTYPE_FILE, 'core');
-    
+
     //xarMLSLoadLocaleData($locale);
 }
 
@@ -556,7 +556,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
     static $loadedCommons = array();
 
     if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
-        
+
         if ($dnType == XARMLS_DNTYPE_MODULE) {
             // Handle in a special way the module type
             // for which it's necessary to load common translations
@@ -569,7 +569,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
         if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return; // throw back
         return true;
     }
-    
+
     // FIXME: postpone
     //xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
 
@@ -648,7 +648,7 @@ function xarMLS__getLocaleAlternatives($locale)
 function xarMLS__parseLocaleString($locale)
 {
     $res = array('lang'=>'', 'country'=>'', 'specializer'=>'', 'charset'=>'utf-8');
-    // Match the locales standard format  : en_US.iso-8859-1 
+    // Match the locales standard format  : en_US.iso-8859-1
     // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(@([0-9a-zA-Z]+))?(\.([0-9a-z\-]+))?/', $locale, $matches)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
@@ -696,7 +696,7 @@ function xarMLS__getSingleByteCharset($langISO2Code) {
 /**
  * This class loads a valid locale descriptor XML file and returns its content
  * in the form of a locale data array
- * 
+ *
  * @package multilanguage
  */
 class xarMLS__LocaleDataLoader
@@ -958,7 +958,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 /**
  * This is the default translations backend and should be used for production sites.
  * Note that it does not support the xarMLS__ReferencesBackend interface.
- * 
+ *
  * @package multilanguage
  */
 class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
@@ -989,7 +989,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         $GLOBALS['xarML_PHPBackend_entries'] = array();
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
-    
+
     function bindDomain($dnType, $dnName)
     {
         switch ($dnType) {
@@ -1011,7 +1011,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         }
         return false;
     }
-    
+
     function loadKEYS($dnName)
     {
         $modBaseInfo = xarMod_getBaseInfo($dnName);
@@ -1046,12 +1046,12 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
         if (!file_exists($this->baseDir.$fileName)) return false;
         return $this->baseDir.$fileName;
     }
-    
+
     function hasContext($ctxType, $ctxName)
     {
         return $this->findContext($ctxType, $ctxName) != false;
     }
-    
+
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
@@ -1059,10 +1059,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             return;
         }
         include $fileName;
-        
+
         return true;
     }
-    
+
     function getContextNames($ctxType)
     {
         $dirName = $this->baseDir;
