@@ -1026,6 +1026,7 @@ function xarTplGetTagObjectFromName($tag_name)
     }
 
     list($obj) = $result->fields;
+    $result->Close();
 
     $obj = unserialize($obj);
 
