@@ -91,11 +91,13 @@ function roles_user_register()
                     // get the Dynamic Properties of this object
                     $properties =& $object->getProperties();
                 }
-                
+
                 $withupload = (int) FALSE;
-                foreach ($properties as $key => $prop) {
-                    if (isset($prop->upload) && $prop->upload == TRUE) {
-                        $withupload = (int) TRUE;
+                if (isset($properties)) {
+                    foreach ($properties as $key => $prop) {
+                        if (isset($prop->upload) && $prop->upload == TRUE) {
+                            $withupload = (int) TRUE;
+                        }
                     }
                 }
             }
@@ -325,8 +327,8 @@ function roles_user_register()
                                             'date'     => $now,
                                             'valcode'  => $confcode,
                                             'state'   => $state));
-                 if ($uid == 0) return;  
-                 //send an email to the admin                 
+                 if ($uid == 0) return;
+                 //send an email to the admin
                  if (xarModGetVar('roles', 'sendnotice')){
                     //Todo create a new notification
                     $adminname = xarModGetVar('mail', 'adminname');
@@ -334,16 +336,16 @@ function roles_user_register()
                     $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
                     $message .= "".xarML('Username')." = $username\n";
                     $message .= "".xarML('Email Address')." = $email";
-    
+
                     $messagetitle = "".xarML('A New User Has Registered')."";
-    
+
                     if (!xarModAPIFunc('mail', 'admin','sendmail',
                                         array('info' => $adminemail,
                                               'name' => $adminname,
                                               'subject' => $messagetitle,
                                               'message' => $message))) return;
                 }
-                 
+
                 //Insert the user into the default users role
                 $userRole = xarModGetVar('roles', 'defaultgroup');
 
@@ -387,17 +389,17 @@ function roles_user_register()
 
                 // Check for user creation failure
                 if ($uid == 0) return;
-                //send an email to the admin                 
+                //send an email to the admin
                 if (xarModGetVar('roles', 'sendnotice')){
-    
+
                     $adminname = xarModGetVar('mail', 'adminname');
                     $adminemail = xarModGetVar('mail', 'adminmail');
                     $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
                     $message .= "".xarML('Username')." = $username\n";
                     $message .= "".xarML('Email Address')." = $email";
-    
+
                     $messagetitle = "".xarML('A New User Has Registered')."";
-    
+
                     if (!xarModAPIFunc('mail', 'admin', 'sendmail',
                                         array('info' => $adminemail,
                                               'name' => $adminname,
@@ -418,7 +420,7 @@ function roles_user_register()
                 if(!xarMakeRoleMemberByID($uid, $defaultRole['uid'])) return;
 
                 // TODO: make sending mail configurable too, depending on the other options ?
-                if (!xarModAPIFunc('roles', 'admin', 'senduseremail', 
+                if (!xarModAPIFunc('roles', 'admin', 'senduseremail',
                                     array('uid'      => array($uid => '1'),
                                           'mailtype' => 'confirmation',
                                           'ip'       => $ip,

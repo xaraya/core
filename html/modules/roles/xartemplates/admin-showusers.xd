@@ -205,7 +205,7 @@
 			<table style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
 				<tr>
 				<form method="post" action="#xarModURL('roles','admin','updatestate')#">
-					<td colspan="7" style="text-align:right;">
+					<td colspan="6" style="text-align:right;">
 						<label for="status">
 							<xar:mlstring>Change the state of selected users</xar:mlstring>
 						</label>&nbsp;:
