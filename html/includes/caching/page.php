@@ -109,7 +109,7 @@ function xarPageGetCached($cacheKey, $name = '')
     $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
     @readfile($cache_file);
 
-    xarOutputCleanCached('Page');
+    xarCache_CleanCached('Page');
 }
 
 /**
@@ -161,7 +161,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         // the current user's page views are eligible for caching AND
         xarPage_checkUserCaching() &&
         // the cache collection directory hasn't reached its size limit...
-        !xarCacheSizeLimit($xarOutput_cacheCollection, 'Page')) {
+        !xarCache_SizeLimit($xarOutput_cacheCollection, 'Page')) {
         
         // if request, modify the end of the file with a time stamp
         if ($xarPage_cacheShowTime == 1) {
@@ -425,6 +425,63 @@ function xarPage_httpCacheHeaders($cache_file)
         header("Pragma: public");
     } else {
         header("Pragma:");
+    }
+}
+
+function xarPage_sessionLess()
+{
+    global $xarOutput_cacheCollection;
+    global $xarOutput_cacheTheme;
+    global $xarOutput_cacheSizeLimit;
+    global $xarPage_cacheTime;
+    global $xarPage_cacheDisplay;
+    global $xarPage_cacheShowTime;
+    global $xarPage_cacheExpireHeader;
+    global $xarPage_cacheGroups;
+    global $xarPage_cacheHookedOnly;
+    global $xarBlock_cacheTime;
+    global $xarPage_autoCachePeriod;
+    global $cachingConfiguration;
+    
+    // Session-less page caching (TODO: extend and place in separate function)
+    if (!empty($cachingConfiguration['Page.SessionLess']) &&
+        is_array($cachingConfiguration['Page.SessionLess']) &&
+    // we have no session id in a cookie or URL parameter
+        empty($_REQUEST['XARAYASID']) &&
+    // we're dealing with a GET OR a HEAD request
+        !empty($_SERVER['REQUEST_METHOD']) &&
+        ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') &&
+    // the URL is one of the candidates for session-less caching
+    // TODO: make compatible with IIS and https (cfr. xarServer.php)
+        !empty($_SERVER['HTTP_HOST']) &&
+        !empty($_SERVER['REQUEST_URI']) &&
+        in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+                 $cachingConfiguration['Page.SessionLess'])
+       ) {
+        global $xarPage_cacheCode;
+        $cacheKey = 'static';
+        $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        $cache_file = "$xarOutput_cacheCollection/page/$cacheKey-$xarPage_cacheCode.php";
+        if (file_exists($cache_file) &&
+            filesize($cache_file) > 0 &&
+            ($xarPage_cacheTime == 0 ||
+             filemtime($cache_file) > time() - $xarPage_cacheTime)) {
+
+            xarPage_httpCacheHeaders($cache_file);
+
+            if (file_exists('var/cache/output/autocache.start')) {
+                xarPage_autoCacheLogStatus('HIT');
+            }
+
+            xarPageGetCached($cacheKey);
+            // we're done here !
+            exit;
+
+        } else {
+            // tell xarPageSetCached() that we want to save another copy here
+            $GLOBALS['xarPage_cacheNoSession'] = 1;
+            // we'll continue with the core loading etc. here
+        }
     }
 }
 

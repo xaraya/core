@@ -35,6 +35,7 @@ function xarCache_init($args)
     global $xarPage_cacheHookedOnly;
     global $xarBlock_cacheTime;
     global $xarPage_autoCachePeriod;
+    global $cachingConfiguration;
 
     if (!include_once('var/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
@@ -74,6 +75,12 @@ function xarCache_init($args)
     $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
         $cachingConfiguration['AutoCache.Period'] : 0;
 
+    
+    if (defined('XARCACHE_PAGE_IS_ENABLED')) {
+        xarPage_sessionLess();
+    }
+
+/*
     // Session-less page caching (TODO: extend and place in separate function)
     if (!empty($cachingConfiguration['Page.SessionLess']) &&
         is_array($cachingConfiguration['Page.SessionLess']) &&
@@ -115,7 +122,7 @@ function xarCache_init($args)
             // we'll continue with the core loading etc. here
         }
     }
-
+*/
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarCache__shutdown_handler');
     return true;
@@ -260,11 +267,11 @@ function xarOutputFlushCached($cacheKey, $dir = false)
  * note: for blocks, this only gets called when the cache size limit has been
  *       reached, and when called by blocks, all cached blocks are flushed.
  *
- * @access  public
+ * @access  protected
  * @param   string $cacheType
  * @returns void
  */
-function xarOutputCleanCached($cacheType)
+function xarCache_CleanCached($cacheType)
 {
     global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, ${'xar' . $cacheType . '_cacheTime'};
 
@@ -290,7 +297,7 @@ function xarOutputCleanCached($cacheType)
     if (!@touch($touch_file)) {
         // hmm, somthings amiss... better let the administrator know,
         // without disrupting the site
-        error_log('Error from Xaraya::xarCache::xarOutputCleanCached
+        error_log('Error from Xaraya::xarCache::xarCache_CleanCached
                   - web process can not touch ' . $touch_file);
     }
 
@@ -314,13 +321,13 @@ function xarOutputCleanCached($cacheType)
 /**
  * helper function to determine if the cache size limit has been reached
  *
- * @access public
+ * @access protected
  * @param  string  $dir
  * @param  string  $cacheType
  * @return boolean
  * @author jsb
  */
-function xarCacheSizeLimit($dir = FALSE, $cacheType)
+function xarCache_SizeLimit($dir = FALSE, $cacheType)
 {
     global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit;
     
@@ -353,7 +360,7 @@ function xarCacheSizeLimit($dir = FALSE, $cacheType)
         }
     }
     if ($value && !xarCore_IsCached($cacheType . '.Caching', 'cleaned')) {
-        xarOutputCleanCached($cacheType);
+        xarCache_CleanCached($cacheType);
         xarCore_SetCached($cacheType . '.Caching', 'cleaned', TRUE);
     }
     return $value;
