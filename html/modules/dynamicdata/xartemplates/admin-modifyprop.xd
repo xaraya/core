@@ -44,11 +44,11 @@
                     Hint : empty the Label to delete a property for all items 
                 </xar:mlstring>
             </legend>
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
+            <input type="hidden" name="modid" id="modid" value="#$modid#" />
+            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />           
             <xar:if condition="!empty($objectid) and $objectid lt 3">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
-                <input type="hidden" name="modid" id="modid" value="#$modid#" />
-                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                 <strong>
                     <xar:mlstring>
                         Warning ! This is a system object used internally by the Dynamic Data module. Trying to modify the properties of this object may break the Dynamic Data module. Proceed with caution... 
