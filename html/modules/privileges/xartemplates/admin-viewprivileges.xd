@@ -1,0 +1,59 @@
+<script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js">
+</script>
+<script language="JavaScript">
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ function doOnLoad() {
+      oldOnLoadFunction();      
+      xarTree_init();
+      }
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ function doOnUnload() {
+      oldOnUnloadFunction();      
+      xarTree_init();
+      }
+ 
+ window.onload = doOnLoad;
+ window.onunload = doOnUnload;
+</script>
+<script language="JavaScript">
+<!--
+function setaction(target){
+document.forms[0].action = target;
+document.forms[0].submit();}
+//-->
+</script>
+
+<table border="0" width="100%">
+	<tr>
+		<th align="center">
+			<xar:mlstring>Current Privileges</xar:mlstring>
+		</th>
+	</tr>
+</table>
+<table border="0" cellspacing="5" width="100%">
+	<tr>
+		<td>
+			<a href="&xar-modurl-privileges-admin-newprivilege;">
+				<xar:mlstring>Add Privilege</xar:mlstring>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<xar:loop name="$trees">
+				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
+					<tr>
+						<td>
+							&xar-var-tree;
+						</td>
+					</tr>
+				</table>			
+			</xar:loop>
+		</td>
+	</tr>
+</table>			
