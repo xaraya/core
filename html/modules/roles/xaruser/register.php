@@ -322,7 +322,7 @@ function roles_user_register()
                  $defaultRole = xarModAPIFunc('roles',
                                                  'user',
                                                  'get',
-                                                 array('uname'  => $userRole,
+                                                 array('name'  => $userRole,
                                                        'type'   => 1));
 
                  if (empty($defaultRole)) return;
@@ -365,7 +365,7 @@ function roles_user_register()
                 $defaultRole = xarModAPIFunc('roles',
                                              'user',
                                              'get',
-                                             array('uname'  => $userRole,
+                                             array('name'  => $userRole,
                                                    'type'   => 1));
 
                 if (empty($defaultRole)) return;
