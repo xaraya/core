@@ -11,14 +11,20 @@
 </xar:if>
 
 <p><xar:mlstring>Search on</xar:mlstring>:</p>
+<table border="0" cellpadding="4" cellspacing="0">
+<tr><td valign="top">
 <p><input type="checkbox" name="name" value=1 checked /> <xar:mlstring>Real Name</xar:mlstring></p>
 <p><input type="checkbox" name="uname" value=1 checked /> <xar:mlstring>Username</xar:mlstring></p>
 <p><input type="checkbox" name="email" value=1 checked /> <xar:mlstring>Email Address </xar:mlstring></p>
 
 <xar:if condition="!empty($properties) and count($properties) gt 0">
+<xar:set name="$i">2</xar:set>
 <!-- you can also specify individual fields here, if you don't want to allow searching
      through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...) -->
 <xar:foreach in="$properties" key="$field">
+    <xar:if condition="$i++ and $i % 4 eq 0">
+</td><td valign="top">
+    </xar:if>
     <xar:if condition="!empty($checked[$field])">
         <p><input type="checkbox" name="#$field#" value=1 checked /> <xar:data-label property="$properties[$field]" /></p>
     <xar:else />
@@ -26,3 +32,5 @@
     </xar:if>
 </xar:foreach>
 </xar:if>
+</td></tr></table>
+
