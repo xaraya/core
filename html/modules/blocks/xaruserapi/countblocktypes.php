@@ -27,7 +27,7 @@ function blocks_userapi_countblocktypes($args)
 {
     extract($args);
 
-    $where = [];
+    $where = array();
 
     if (!empty($module)) {
         $where[] = 'xar_module = \'' . xarVarPrepForStore($module) . '\'';
