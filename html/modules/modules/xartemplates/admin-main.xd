@@ -10,46 +10,38 @@
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>What is it?</xar:mlstring>
+            <p><xar:mlstring>What is it?</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System. It basically controls the install, upgrades, and removal of modules.</xar:mlstring>
+            <p><xar:mlstring>The Modules Module controls the modules that you have installed on your Xaraya System. It basically controls the install, upgrades, and removal of modules.</xar:mlstring></p>
 		</div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>How to use it?</xar:mlstring>
+            <p><xar:mlstring>How to use it?</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <xar:mlstring>
+                <p><xar:mlstring>
                 From the menu, you have three choices.  "View", "Configure Hooks", and "Certified Releases". 
-                </xar:mlstring>
+                </xar:mlstring></p>
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Configure Hooks -- Allows you to set certain hooks for modules to be reused (such as allowing comments to a module data)</xar:mlstring></li>
                     <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcements from Xaraya.com</xar:mlstring></li>
                 </ul>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Blocks</xar:mlstring>
+            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-			<xar:mlstring>The Modules Module has no blocks included at this time.</xar:mlstring>
+	    <p><xar:mlstring>The Modules Module has no blocks included at this time.</xar:mlstring></p>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Hooks</xar:mlstring>
+            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>The Modules Module has no hooks included at this time.</xar:mlstring>
+            <p><xar:mlstring>The Modules Module has no hooks included at this time.</xar:mlstring></p>
         </div>
-        <br />
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
         </div>
     </div>
 </div>

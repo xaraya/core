@@ -11,9 +11,9 @@
         <br />
         <input type="text" name="newdisplayname" id="newdisplayname" value="#$displayname#" size="30" maxlength="30" tabindex="1" /> -->
         <xar:if condition="count($hooklist) eq 0">
-            <p><xar:mlstring>No hooks available for</xar:mlstring> #$displayname#</p>
+            <p><xar:mlstring>No hooks available for </xar:mlstring> #$displayname#</p>
         <xar:else />
-            <p><xar:mlstring>Available hooks for</xar:mlstring> #$displayname#&nbsp;&nbsp;
+            <p><xar:mlstring>Available hooks for </xar:mlstring> #$displayname#&nbsp;&nbsp;
             [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]</p>
             <table border="1" cellpadding="5" cellspacing="0">
             <tr>

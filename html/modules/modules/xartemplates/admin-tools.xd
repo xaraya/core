@@ -5,21 +5,19 @@
     <form method="post" action="&xar-modurl-modules-admin-tools;">
         <div class="xar-norm-outline" style="padding: 1px;">
             <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-                <xar:mlstring>Module Information Generator/Validator</xar:mlstring>
+                <p><xar:mlstring>Module Information Generator/Validator</xar:mlstring></p>
             </div>
-            <br />
             <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <xar:mlstring>Although Xaraya modules system still recognses the 'old style' modinfo 
+                <p><xar:mlstring>Although Xaraya modules system still recognses the 'old style' modinfo 
                 from xarversion.php, we strongly encourage all module developers to re-generate 
-                their module's information to comply with the 'new' XML format.</xar:mlstring>
+                their module's information to comply with the 'new' XML format.</xar:mlstring></p>
                 <p>
                     <xar:mlstring>Please select the module for which you wish to generate/validate the information:</xar:mlstring>
                 </p>
             </div>
             
-            <br />
             <div class="xar-accent xar-norm-outline" style="text-align: center;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-                <xar:mlstring>Footer</xar:mlstring>
+                <p><xar:mlstring>Footer</xar:mlstring></p>
             </div>
         </div>
     </form>
