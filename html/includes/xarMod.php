@@ -1476,7 +1476,12 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             if (!file_exists($fileName)) {
                 $fileName = 'modules/' . $modOsDir . '/pnversion.php';
                 if (file_exists($fileName)) {
-                    $fd = fopen($fileName, 'r') or die("Cannot open file");
+                    $fd = fopen($fileName, 'r');
+                    if (!$fd){
+                        $msg = xarML('Cannot open file (#1).', $fd);
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FILE_NOT_EXIST', new SystemException($msg));
+                        return;
+                    }
                     $buf = '';
                     while (!feof($fd)) {
                         $buf .= fgets($fd, 1024);
