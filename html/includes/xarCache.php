@@ -38,15 +38,23 @@ function xarCache_init($args)
         return FALSE;
     }
 
-    $xarOutput_cacheCollection = $cacheDir;
-    $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ? $cachingConfiguration['Output.DefaultTheme'] : '';
-    $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ? $cachingConfiguration['Output.SizeLimit'] : 2097152;
-    $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ? $cachingConfiguration['Page.TimeExpiration'] : 1800;
-    $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ? $cachingConfiguration['Page.DisplayView'] : 0;
-    $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ? $cachingConfiguration['Page.ShowTime'] : 1;
-    $xarPage_cacheExpireHeader = isset($cachingConfiguration['Page.ExpireHeader']) ? $cachingConfiguration['Page.ExpireHeader'] : 1;
-    $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ? $cachingConfiguration['Page.CacheGroups'] : '';
-    $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ? $cachingConfiguration['Block.TimeExpiration'] : 7200;
+    $xarOutput_cacheCollection  = $cacheDir;
+    $xarOutput_cacheTheme       = isset($cachingConfiguration['Output.DefaultTheme']) ?
+                                    $cachingConfiguration['Output.DefaultTheme'] : '';
+    $xarOutput_cacheSizeLimit   = isset($cachingConfiguration['Output.SizeLimit']) ?
+                                    $cachingConfiguration['Output.SizeLimit'] : 2097152;
+    $xarPage_cacheTime          = isset($cachingConfiguration['Page.TimeExpiration']) ?
+                                    $cachingConfiguration['Page.TimeExpiration'] : 1800;
+    $xarPage_cacheDisplay       = isset($cachingConfiguration['Page.DisplayView']) ?
+                                    $cachingConfiguration['Page.DisplayView'] : 0;
+    $xarPage_cacheShowTime      = isset($cachingConfiguration['Page.ShowTime']) ?
+                                    $cachingConfiguration['Page.ShowTime'] : 1;
+    $xarPage_cacheExpireHeader  = isset($cachingConfiguration['Page.ExpireHeader']) ?
+                                    $cachingConfiguration['Page.ExpireHeader'] : 1;
+    $xarPage_cacheGroups        = isset($cachingConfiguration['Page.CacheGroups']) ?
+                                    $cachingConfiguration['Page.CacheGroups'] : '';
+    $xarBlock_cacheTime         = isset($cachingConfiguration['Block.TimeExpiration']) ?
+                                    $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarCache__shutdown_handler');
@@ -93,7 +101,13 @@ function xarCache__shutdown_handler()
  */
 function xarPageIsCached($cacheKey, $name = '')
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheExpireHeader, $xarPage_cacheCode, $xarPage_cacheGroups;
+    global $xarOutput_cacheCollection,
+           $xarPage_cacheTime,
+           $xarOutput_cacheTheme,
+           $xarPage_cacheDisplay,
+           $xarPage_cacheExpireHeader,
+           $xarPage_cacheCode,
+           $xarPage_cacheGroups;
 
     $xarTpl_themeDir = xarTplGetThemeDir();
 
@@ -112,8 +126,9 @@ function xarPageIsCached($cacheKey, $name = '')
     if (!empty($param)) {
         $page .= '?' . $param;
     }
-    // use this global instead of $cache_file so we can cache several things based on different
-    // $cacheKey (and $name if necessary) in one page request - e.g. for module and block caching
+    // use this global instead of $cache_file so we can cache several things
+    // based on different $cacheKey (and $name if necessary) in one page request
+    // - e.g. for module and block caching
     $xarPage_cacheCode = md5($page);
 
     // CHECKME: use $name for something someday ?
@@ -121,12 +136,15 @@ function xarPageIsCached($cacheKey, $name = '')
 
     if (strpos($cacheKey, '-user-') &&
         !strpos($cacheKey, '-search') &&
-        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
+        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) ||
+         ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        (empty($xarOutput_cacheTheme) ||
+         strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
-        ($xarPage_cacheTime == 0 || filemtime($cache_file) > time() - $xarPage_cacheTime) &&
+        ($xarPage_cacheTime == 0 ||
+         filemtime($cache_file) > time() - $xarPage_cacheTime) &&
         xarPage_checkUserCaching()) {
 
         // start 304 test
@@ -146,9 +164,11 @@ function xarPageIsCached($cacheKey, $name = '')
             }
         }
         if (!empty($xarPage_cacheExpireHeader)) {
-            // this tells clients and proxies that this file is good until local cache file
-            // is due to expire
-        	header("Expires: " . gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) . " GMT");
+            // this tells clients and proxies that this file is good until local
+            // cache file is due to expire
+            header("Expires: " .
+                   gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
+                   " GMT");
         }
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
         // we can't use this after session_start()
@@ -177,7 +197,11 @@ function xarPageIsCached($cacheKey, $name = '')
  */
 function xarBlockIsCached($args)
 {
-    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime, $blockCacheExpireTime, $xarBlock_noCache;
+    global $xarOutput_cacheCollection,
+           $xarBlock_cacheCode,
+           $xarBlock_cacheTime,
+           $blockCacheExpireTime,
+           $xarBlock_noCache;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
@@ -199,7 +223,11 @@ function xarBlockIsCached($args)
         if (!$result) return;
         $blocks = array();
         while (!$result->EOF) {
-            list ($bid, $noCache, $pageShared, $userShared, $blockCacheExpireTime) = $result->fields;
+            list ($bid,
+                  $noCache,
+                  $pageShared,
+                  $userShared,
+                  $blockCacheExpireTime) = $result->fields;
             $blocks[$bid] = array('bid'         => $bid,
                                   'nocache'     => $noCache,
                                   'pageshared'  => $pageShared,
@@ -259,7 +287,8 @@ function xarBlockIsCached($args)
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
-        ($blockCacheExpireTime == 0 || filemtime($cache_file) > time() - $blockCacheExpireTime)) {
+        ($blockCacheExpireTime == 0 ||
+         filemtime($cache_file) > time() - $blockCacheExpireTime)) {
         return true;
     } else {
         return false;
@@ -318,14 +347,21 @@ function xarBlockGetCached($cacheKey, $name = '')
  * set the content of a cached page
  *
  * @access public
- * @param string $cacheKey the key identifying the particular cache you want to access
+ * @param string $cacheKey the key identifying the particular cache you want to
+ *                         access
  * @param string $name     the name of the page in that particular cache
  * @param string $value    value the new content for that page
  * @returns void
  */
 function xarPageSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheShowTime, $xarOutput_cacheSizeLimit, $xarPage_cacheCode;
+    global $xarOutput_cacheCollection,
+           $xarPage_cacheTime,
+           $xarOutput_cacheTheme,
+           $xarPage_cacheDisplay,
+           $xarPage_cacheShowTime,
+           $xarOutput_cacheSizeLimit,
+           $xarPage_cacheCode;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
@@ -336,18 +372,25 @@ function xarPageSetCached($cacheKey, $name, $value)
 
     if (strpos($cacheKey, '-user-') &&
         !strpos($cacheKey, '-search') &&
-        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
+        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) ||
+         ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
+        (empty($xarOutput_cacheTheme) ||
+         strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
         (!file_exists($cache_file) ||
-        ($xarPage_cacheTime != 0 && filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
+        ($xarPage_cacheTime != 0 &&
+         filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
         xarPage_checkUserCaching()) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
             if ($xarPage_cacheShowTime == 1) {
-                $now = xarML('Last updated on #(1)',strftime('%a, %d %B %Y %H:%M:%S %Z',time()));
-                $value = preg_replace('#</body>#','<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',$value);
+                $now = xarML('Last updated on #(1)',
+                             strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
+                $value = preg_replace('#</body>#',
+                                      // TODO: set this up to be templated
+                                      '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
+                                      $value);
             }
             @fwrite($fp,$value);
             @fclose($fp);
@@ -366,7 +409,11 @@ function xarPageSetCached($cacheKey, $name, $value)
  */
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $blockCacheExpireTime, $xarBlock_noCache;
+    global $xarOutput_cacheCollection,
+           $xarOutput_cacheSizeLimit,
+           $xarBlock_cacheCode,
+           $blockCacheExpireTime,
+           $xarBlock_noCache;
     
     if ($xarBlock_noCache == 1) {
         $xarBlock_noCache = '';
@@ -380,7 +427,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (!file_exists($cache_file) ||
-        ($blockCacheExpireTime != 0 && filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
+        ($blockCacheExpireTime != 0 &&
+         filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
         xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
         ) {
         $fp = @fopen($cache_file,"w");
@@ -396,7 +444,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
  * delete a cached file
  *
  * @access public
- * @param string $cacheKey the key identifying the particular cache you want to access
+ * @param string $cacheKey the key identifying the particular cache you want to
+ *                         access
  * @param string $name     the name of the file in that particular cache
  * @returns void
  */
@@ -420,7 +469,8 @@ function xarPageDelCached($cacheKey, $name)
  * flush a particular cache (e.g. when a new item is created)
  *
  * @access  public
- * @param   string $cacheKey the key identifying the particular cache you want to wipe out
+ * @param   string $cacheKey the key identifying the particular cache you want
+ *                           to wipe out
  * @returns void
  */
 function xarOutputFlushCached($cacheKey)
@@ -429,7 +479,8 @@ function xarOutputFlushCached($cacheKey)
 
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
-            if ((preg_match("#$cacheKey#", $file)) && (strpos($file, '.php') !== false)) {
+            if ((preg_match("#$cacheKey#", $file)) &&
+                (strpos($file, '.php') !== false)) {
                 @unlink($xarOutput_cacheCollection . '/' . $file);
             }
         }
@@ -446,8 +497,9 @@ function xarPageFlushCached($cacheKey)
 
 /**
  * clean the cache of old entries
- * note: for blocks, this only gets called when the cache size limit has been reached,
- *       and when called by blocks, the global cache timeout takes precedents 
+ * note: for blocks, this only gets called when the cache size limit has been
+ *       reached, and when called by blocks, the global cache timeout takes
+ *       precedents 
  *
  * @access  public
  * @param   string $type
@@ -460,12 +512,17 @@ function xarOutputCleanCached($type, $cacheKey = '')
 
     $touch_file = $xarOutput_cacheCollection . '/' . 'cache.touch';
 
-    if (${'xar' . $type . '_cacheTime'} == 0 || (file_exists($touch_file) && filemtime($touch_file) > time() - ${'xar' . $type . '_cacheTime'})) {
+    if (${'xar' . $type . '_cacheTime'} == 0 ||
+        (file_exists($touch_file) &&
+         filemtime($touch_file) > time() - ${'xar' . $type . '_cacheTime'})
+        ) {
         return;
     }
     if (!@touch($touch_file)) {
-        // hmm, somthings amiss... better let the administrator know, without disrupting the site
-    	error_log('Error from Xaraya::xarCache::xarOutputCleanCached - web process can not touch ' . $touch_file);
+        // hmm, somthings amiss... better let the administrator know,
+        // without disrupting the site
+    	error_log('Error from Xaraya::xarCache::xarOutputCleanCached
+                  - web process can not touch ' . $touch_file);
     }
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
@@ -493,8 +550,9 @@ function xarOutputCleanCached($type, $cacheKey = '')
  * @author laurie@oneuponedown.com 
  * @author jsb
  * @todo   $dir changes type
- * @todo   come up with a good way to determine which cacheKeys are the least important and flush them to make more space.
- *         atime would be a possibility, but is often disabled at the filesystem
+ * @todo   come up with a good way to determine which cacheKeys are the least
+ *         important and flush them to make more space.  atime would be a
+ *         possibility, but is often disabled at the filesystem
  */
 function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 {
