@@ -19,13 +19,6 @@
  * Defines for token handling
  *
  */
-define('XAR_TOKEN_BL_COMMENT'        , 1      );
-define('XAR_TOKEN_BL_COMMENT_OPEN'   , '<!---');
-define('XAR_TOKEN_BL_COMMENT_CLOSE'  , '--->' );
-define('XAR_TOKEN_HTML_COMMENT'      , 2      );
-define('XAR_TOKEN_HTML_COMMENT_OPEN' , '<!--' );
-define('XAR_TOKEN_HTML_COMMENT_CLOSE', '-->'  );
-
 // Tags
 define('XAR_TOKEN_TAG_START'         , '<'    ); // Opening a tag
 define('XAR_TOKEN_TAG_END'           , '>'    ); // Closing a tag
@@ -39,6 +32,8 @@ define('XAR_TOKEN_ENTITY_END'        , ';'    ); // End of an entity
 define('XAR_TOKEN_NONMARKUP_START'   , '!'    ); // Start of non markup inside tag
 define('XAR_TOKEN_PI_DELIM'          , '?'    ); // Processing instruction delimiter inside tag
 define('XAR_TOKEN_NS_DELIM'          , ':'    ); // Namespace delimiter
+define('XAR_TOKEN_BLCOMMENT_DELIM'   , '---'  ); // Blocklayout comment
+define('XAR_TOKEN_HTMLCOMMENT_DELIM' , '--'   ); // HTML comment
 
 // Other
 define('XAR_TOKEN_VAR_START'         , '$'    ); // Start of a variable
@@ -554,84 +549,48 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     $this->stepBack(4);
                 } elseif ($nextToken == XAR_TOKEN_NONMARKUP_START) {
-                    // Check for comments or doctype
-                    // <garett> handle both <!-- and <!--- comment types
-                    // (html comments are passed through, BL comments are stripped out)
+                    $token .= $nextToken; // <!
+                    // Assumption on informal grammar: <!identifier  content [identifier]>
+                    $identifier = ''; $tagrest='';
+                    // Get all tokens till the first whitespace char and reset for easier handling
+                    while(trim($nextChar = $this->getNextToken())) {
+                        $identifier .= $nextChar;
+                        $tagrest .= $nextChar;
+                    }
+                                        
+                    // Get the rest of the non markup tag, recording along the way
+                    while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
+                        $tagrest .= $nextChar;
+                        $nextChar = $this->getNextToken();
+                    }
                     
-                    /**
-                     * quick check to see if this is comment candidate
-                     */
-                    $temptoken = $this->getNextToken(1);
-                    if ($temptoken == '-') {
-
-                        /**
-                         * Rewind back to '<' character to symplify handling of BL comments
-                         */
-                        $this->stepBack(3); // puts us back at the '<'
-
-                        $commentTag = '';
-                        $closingTag = '';
-
-                        /**
-                         * Try grabbing the entire token
-                         */
-                        $temptoken = $this->getNextToken(5);
-                        if ($temptoken == XAR_TOKEN_BL_COMMENT_OPEN) {
-                            $commentTag = XAR_TOKEN_BL_COMMENT;
-                            $closingTag = XAR_TOKEN_BL_COMMENT_CLOSE;
-                        } elseif (substr($temptoken,0,4) == XAR_TOKEN_HTML_COMMENT_OPEN) {
-                            $commentTag = XAR_TOKEN_HTML_COMMENT;
-                            $closingTag = XAR_TOKEN_HTML_COMMENT_CLOSE;
+                    // Was it properly ended?
+                    if($nextChar == XAR_TOKEN_TAG_END) {
+                        // the tag was
+                        $parts = explode($identifier,$tagrest);
+                        // array should hold empty,tag content,empty
+                        $valid_ending = (count($parts) == 3 && trim($parts[2]) == '');
+                        switch($identifier) {
+                        case XAR_TOKEN_BLCOMMENT_DELIM:
+                            // <!--- Blocklayout comment, ignore completely if properly ended
+                            $token='';
+                            break;
+                        case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                            // <!-- HTML comment, copy to output
+                            $token .= $tagrest . XAR_TOKEN_TAG_END;
+                            break;
+                        default:
+                            // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy 
+                            $valid_ending =  true;
+                            $token .= $tagrest . XAR_TOKEN_TAG_END;
                         }
-
-                        /**
-                         * Rewind to the beginning of the token for consistency
-                         */
-                        $this->stepBack(5);
-
-                        /**
-                         * We clear the token here in the event the token turns out
-                         * to be a BL comment, which are stripped out of compiled source
-                         */
-                        $token = '';
-
-                        $foundClosingTag = FALSE;
-                        while (!$foundClosingTag) {
-                            $temptoken = $this->getNextToken(1);
-
-                            /**
-                             * Check for end of file
-                             */
-                            if (!isset($temptoken)) {
-                                $foundClosingTag = TRUE;
-                            } elseif ($temptoken == '-') {
-                                /**
-                                 * Is this the start of a closing tag?
-                                 */
-                                $endtag = $temptoken . $this->getNextToken(strlen($closingTag)-1);
-
-                                if ($endtag == $closingTag) {
-                                    $foundClosingTag = TRUE;
-                                    $temptoken = $endtag;
-                                } else {
-                                    $this->stepBack(strlen($closingTag)-1);
-                                }
-                            }
-
-                            /**
-                             * We rebuild the token in order to avoid evaluating #$foo#
-                             * inside comments
-                             */
-                            if ($commentTag == XAR_TOKEN_HTML_COMMENT) {
-                                $token .= $temptoken;
-                            }
-
-                        } // END while
-                    } else { // end if '-'
-                        /**
-                         * It's not a comment tag ignore & continue on
-                         */
-                        $this->stepBack(2);
+                        if(!$valid_ending) {
+                            $this->raiseError(XAR_BL_INVALID_TAG,"A non-markup tag (probably a comment) does not adhere to proper XML syntax",$this);
+                            return;
+                        }   
+                    } else {
+                        $this->raiseError(XAR_BL_INVALID_TAG,"File ended before tag was completed",$this);
+                        return;
                     }
                     break;
                 } // end elseif
