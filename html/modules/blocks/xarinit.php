@@ -176,7 +176,7 @@ function blocks_init()
                                    'unique' => true));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
 
     // Register BL tags
     xarTplRegisterTag('blocks', 'blocks-stateicon',
@@ -210,7 +210,8 @@ function blocks_upgrade($oldversion)
  */
 function blocks_delete()
 {
-    return false;
+  //this module cannot be removed
+  return false;
 }
 
 ?>

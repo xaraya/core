@@ -291,6 +291,9 @@ function adminpanels_upgrade($oldVersion)
 */
 function adminpanels_delete()
 {
+  //this module cannot be removed
+  return false;
+
     // temporary workaround to enable deactivate and upgrade
     // TODO: remove prior to xarays 1.0 release
 

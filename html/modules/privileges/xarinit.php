@@ -324,6 +324,9 @@ function privileges_upgrade($oldVersion)
  */
 function privileges_delete()
 {
+    // this module cannot be removed
+    return false;
+
     /*********************************************************************
     * Drop the tables
     *********************************************************************/

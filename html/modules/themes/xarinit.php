@@ -149,6 +149,15 @@ function themes_init()
         return NULL;
     }
 
+    /*********************************************************************
+    * Register the module components that are privileges objects
+    * Format is
+    * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
+    *********************************************************************/
+
+    xarRegisterMask('ViewThemes','All','themes','All','All',ACCESS_OVERVIEW);
+    xarRegisterMask('AdminTheme','All','themes','All','All',ACCESS_ADMIN);
+
     // Initialisation successful
     return true;
 }
@@ -177,7 +186,7 @@ function themes_activate()
                              'blockType'=> 'meta'))) return;
 
     return true;
-    
+
 }
 
 /**
@@ -191,7 +200,7 @@ function themes_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch($oldVersion) {
         case 1.0:
-            
+
                 if (!xarModRegisterHook('item', 'usermenu', 'GUI',
                                         'themes', 'user', 'usermenu')) {
                     return false;
@@ -199,7 +208,7 @@ function themes_upgrade($oldversion)
 
             break;
         case 1.1:
-                
+
                 xarBlockTypeRegister('themes', 'meta');
 
             break;
@@ -217,6 +226,7 @@ function themes_upgrade($oldversion)
  */
 function themes_delete()
 {
+    // this module cannot be removed
     return false;
 }
 ?>

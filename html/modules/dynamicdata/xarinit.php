@@ -598,7 +598,10 @@ function dynamicdata_upgrade($oldversion)
 function dynamicdata_delete()
 {
 
-    /**
+  //this module cannot be removed
+  return false;
+
+  	/**
      * Drop tables
      */
     list($dbconn) = xarDBGetConn();
