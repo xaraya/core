@@ -98,6 +98,10 @@ class SystemException extends Exception
                 'title' => xarML('Deprecated API'),
                 'short' => xarML('A function call encountered belongs to a deprecated API.'),
                 'long' => xarML('A function call encountered belongs to an old API and is therefore no longer supported.') ),
+            'DEPRECATED_ATTRIBUTE' => array(
+                'title' => xarML('Deprecated Blocklayout Attribute'),
+                'short' => xarML('A tag in a template contains a deprecated attribute.'),
+                'long' => xarML('A tag in a template contains a deprecated attribute and needs to be replaced by a new one, or be left out, see BL documentation for the right syntax.') ),
             'EMPTY_PARAM' => array(
                 'title' => xarML('Empty Parameter'),
                 'short' => xarML('A parameter value was not provided.'),
