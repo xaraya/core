@@ -319,7 +319,7 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'setstate',
                        array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
-	xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 }
 
 /**
@@ -383,9 +383,92 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration', array('theme' => 'installer')));
 }
 
+/**
+ * Choose the configuration to be installed
+ *
+ * @access public
+ * @param create
+ * @return bool
+ */
+function installer_admin_choose_configuration()
+{
+
+    xarTplSetThemeName('installer');
+    $data['language'] = 'English';
+    $data['phase'] = 7;
+    $data['phase_label'] = xarML('Choose your configuration');
+
+    // Security Check
+    if(!xarSecurityCheck('AdminInstaller')) return;
+
+    $basedir = realpath('modules/installer/xarconfigurations');
+
+    $files = array();
+    if ($handle = opendir($basedir)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && !is_dir($file)) $files[] = $file;
+        }
+        closedir($handle);
+    }
+    if (!isset($files) || count($files) < 1) {
+        $data['warning'] = xarML('There are currently no configuration files available.');
+        return $data;
+    }
+
+    $names = array();
+    foreach ($files as $file) {
+        include $basedir . '/' . $file;
+        $names[] = array('value' => $basedir . '/' . $file,
+                        'display' => $configuration_name);
+    }
+    $data['names'] = $names;
+    return $data;
+
+    xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer')));
+}
+
+/**
+ * Choose the configuration options
+ *
+ * @access public
+ * @param create
+ * @return bool
+ */
+function installer_admin_confirm_configuration()
+{
+    list($configuration,
+         $confirmed,
+         $chosen,
+         $options) = xarVarCleanFromInput('configuration',
+                                          'confirmed',
+                                          'chosen',
+                                          'options');
+    xarTplSetThemeName('installer');
+    $data['language'] = 'English';
+    $data['phase'] = 8;
+    $data['phase_label'] = xarML('Choose configuration options');
+
+    // Security Check
+    if(!xarSecurityCheck('AdminInstaller')) return;
+
+    if (!isset($confirmed)) {
+        include $configuration;
+        $data['options'] = $configuration_options;
+        $data['configuration'] = $configuration;
+        return $data;
+        xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer','options' => $options)));
+    }
+    else {
+        include $configuration;
+        $func = "installer_" . basename($configuration,'.conf.php') . "_configuration_load";
+        $func($chosen);
+        xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
+    }
+
+}
 
 
 function installer_admin_finish()

@@ -216,15 +216,15 @@ function initializeSetup()
     xarRegisterMask('ReadBaseBlock','All','base','Block','All:All:All',ACCESS_READ);
     xarRegisterMask('EditBaseBlock','All','base','Block','All:All:All',ACCESS_EDIT);
     xarRegisterMask('AddBaseBlock','All','base','Block','All:All:All',ACCESS_ADD);
-    xarRegisterMask('DeleteBaseBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
-    xarRegisterMask('AdminBaseBlock','All','base','Block','All:All:ALL',ACCESS_ADMIN);
+    xarRegisterMask('DeleteBaseBlock','All','base','Block','All:All:All',ACCESS_DELETE);
+    xarRegisterMask('AdminBaseBlock','All','base','Block','All:All:All',ACCESS_ADMIN);
     xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
     xarRegisterMask('ReadBase','All','base','All','All',ACCESS_READ);
     xarRegisterMask('AdminBase','All','base','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('AdminInstaller','All','installer','All','All',ACCESS_ADMIN);
 
-    xarRegisterMask('ViewThemes','All','themes','Block','All:All:ALL',ACCESS_OVERVIEW);
+    xarRegisterMask('ViewThemes','All','themes','Block','All:All:All',ACCESS_OVERVIEW);
     xarRegisterMask('AdminTheme','All','themes','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('EditPanel','All','adminpanels','All','All',ACCESS_EDIT);
