@@ -2472,6 +2472,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         $name = NULL;
         $title = NULL;
         $template = NULL;
+        $state = NULL;
 
         extract($this->attributes);
 
@@ -2484,7 +2485,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         $content = $this->attributes;
 
         // Remove the attributes that are handled outside the content.
-        foreach(array('instance', 'module', 'type', 'name', 'title', 'template') as $std_attribute) {
+        foreach(array('instance', 'module', 'type', 'name', 'title', 'template', 'state') as $std_attribute) {
             if (isset($content[$std_attribute])) {unset ($content[$std_attribute]);}
         }
 
@@ -2505,6 +2506,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
                     \'name\' => "' . xarVar_addSlashes($name) . '",
                     \'title\' => "' . xarVar_addSlashes($title) . '",
                     \'template\' => "' . xarVar_addSlashes($template) . '",
+                    \'state\' => "' . xarVar_addSlashes($state) . '",
                     \'content\' => ' . $override . '
             )
         );';

@@ -6,7 +6,6 @@
  * This will return the details for a block.
  *
  * TODO: big changes planned for in here.
- * - references to groups will be removed
  * - block can be an instance or a 'one-off' standalone block
  * - standalone blocks will be seeded with the block init details (if available)
  * - arbitrary parameters can be passed in to override the block content array elements
@@ -30,6 +29,8 @@ function blocks_userapi_getinfo($args)
 {
     extract($args);
 
+    // TODO: security check on the block name here, if $name or $instance is set.
+
     // We will be selecting either a block instance or a stand-alone block.
     if (!empty($instance)) {
         // Block instance - fetch it from the database.
@@ -49,15 +50,58 @@ function blocks_userapi_getinfo($args)
                 // Cache the block details if available
                 xarVarSetCached('Block.Infos2', $blockinfo['bid'], $blockinfo);
             }
+
+            // TODO: return here if the block name fails a security check.
         } else {
             $blockinfo = xarModAPIfunc('blocks', 'user', 'get', array('name' => $instance));
         }
     } else {
         // Standalone block - load it from file and seed with default details.
-        // TODO: under development.
-        return;
+        $blockinfo = array(
+            'module' => $module,
+            'type' => $type,
+            'title' => '',
+            'template' => '',
+            'bid' => 0,
+            'name' => (!is_null($name) ? $name : '')
+        );
+
+        // Get block default content.
+        $default_content = xarModAPIfunc(
+            'blocks', 'user', 'read_type_init',
+            array('module' => $module, 'type' => $type)
+        );
+
+        if (!empty($default_content)) {
+            // Default details for the block are available - use them.
+            // Note that this will be an array, not serialized. Blocks
+            // that provide initialization data must also be able to
+            // accept a non-serialized content array.
+            $blockinfo['content'] = $default_content;
+        } else {
+            $blockinfo['content'] = '';
+        }
     }
 
+    // Do standard overrides.
+    if (!is_null($title)) {$blockinfo['title'] = $title;}
+    if (!is_null($state)) {$blockinfo['state'] = $state;}
+
+    // Now do the custom overrides.
+    foreach($content as $pname => $pvalue) {
+        // If the array element exists, then over-ride it.
+        // There is no validation here (yet) - so arrays can
+        // override strings and strings can override arrays.
+        // TODO: allow a block to provide validation rules to 
+        // pass $pvalue through for each $pname.
+        // Such validation would also be able to convert numbers
+        // into booleans, string lists into arrays etc.
+        if (isset($blockinfo['content'][$pname])) {
+            $blockinfo['content'][$pname] = $pvalue;
+        }
+    }
+
+    if (is_null($template)) {$template = $blockinfo['template'];}
     // Split template name into outer and inner using the ';' separator.
     if (strpos($template, ';') === FALSE) {
         $blockinfo['_bl_box_template'] = $template;
@@ -67,6 +111,7 @@ function blocks_userapi_getinfo($args)
         $blockinfo['_bl_box_template'] = $template[0];
         $blockinfo['_bl_block_template'] = $template[1];
     }
+    //$blockinfo['template'] = $template;
 
     // Legacy support.
     $instance['id'] = $blockinfo['bid'];
