@@ -275,8 +275,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
                         'MLSMode' => xarConfigGetVar('Site.MLS.MLSMode'),
                         'defaultLocale' => xarConfigGetVar('Site.MLS.DefaultLocale'),
-                        'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales'),
-                        'MLSData' => $MLSData);
+                        'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales')
+// FIXME voll delete after testing
+//                        ,'MLSData' => $MLSData
+                        );
     xarMLS_init($systemArgs, $whatToLoad);
 
 

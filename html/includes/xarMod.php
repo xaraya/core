@@ -669,7 +669,7 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
     }
 
     // Load the module translations files (common functions, uncut functions etc.)
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
+    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
 
     //Try to load PN style translations -- Bridge mechanism -- Should disappear later on
     //How to find out what language is being used and what is the correspondent in pn style?
@@ -843,11 +843,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
 
     // Load the translations file
-    //$allcontexts = $GLOBALS['MLS']->getContexts();
-    //$type = 1;
-    //foreach ($allcontexts as $context) {
-    //    if ($context->getName() == $modType) $type = $context->getType();
-    //}
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
@@ -949,11 +944,6 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         return;
     }
     // Load the translations file
-    //$allcontexts = $GLOBALS['MLS']->getContexts();
-    //$type = 1;
-    //foreach ($allcontexts as $context) {
-    //    if ($context->getName() == $modType.'api') $type = $context->getType();
-    //}
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
 
     return $modAPIFunc($args);

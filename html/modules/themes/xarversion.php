@@ -13,8 +13,8 @@
 */
 $modversion['name']           = 'Themes Administration';
 $modversion['id']             = '70';
-$modversion['version']        = '1.3';
-$modversion['description']    = 'Configure themes, change site appearance';
+$modversion['version']        = '1.3.0';
+$modversion['description']    = 'Enable/disable themes/change site appearance';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = '';
 $modversion['changelog']      = 'xardocs/changelog.txt';
