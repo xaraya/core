@@ -12,8 +12,8 @@ function modules_admin_updatehooks()
     if(!xarSecurityCheck('AdminModules')) return;
 
     if (!xarSecConfirmAuthKey()) return;
+    if (!xarVarFetch('curhook', 'str:1:', $curhook)) return; 
 
-    $curhook = xarVarCleanFromInput('curhook');
     $regId = xarModGetIDFromName($curhook);
     if (!isset($curhook) || !isset($regId)) {
         $msg = xarML('Invalid hook');

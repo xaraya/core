@@ -81,14 +81,9 @@ function themes_init()
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
-    $dbconn->Execute($query); 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarML('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-            new SystemException(__FILE__ . '(' . __LINE__ . '): ' . $msg));
-        return null;
-    } 
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
     // prefix_theme_states
     /**
      * CREATE TABLE xar_theme_states (

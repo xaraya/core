@@ -18,15 +18,7 @@ function modules_admin_deactivate()
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
-    $id = xarVarCleanFromInput('id');
-    if (empty($id)) {
-        $msg = xarML('No module id specified',
-                    'modules');
-        xarExceptionSet(XAR_USER_EXCEPTION, 
-                    'MISSING_DATA',
-                     new DefaultUserException($msg));
-        return;
-    }
+    if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
     // deactivate
     $deactivated = xarModAPIFunc('modules',

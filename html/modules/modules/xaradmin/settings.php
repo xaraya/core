@@ -10,17 +10,11 @@ function modules_admin_settings()
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
-    // form parameters
-    $hidecore   = xarVarCleanFromInput('hidecore');
-    $regen      = xarVarCleanFromInput('regen');
-    $selstyle   = xarVarCleanFromInput('selstyle');
-    $selfilter  = xarVarCleanFromInput('selfilter');
-    $selsort    = xarVarCleanFromInput('selsort');
-    // make sure we dont miss empty variables (which were not passed thru)
-    if(empty($selstyle)) $selstyle                  = 'plain';
-    if(empty($selfilter)) $selfilter                = XARMOD_STATE_ANY;
-    if(empty($hidecore)) $hidecore                  = 0;
-    if(empty($selsort)) $selsort                    = 'namedesc';
+    if (!xarVarFetch('hidecore', 'str:1:', $hidecore, '0', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARMOD_STATE_ANY', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('selsort', 'str:1:', $selsort, 'namedesc', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
     
     xarModSetVar('modules', 'hidecore', $hidecore);
     xarModSetVar('modules', 'selstyle', $selstyle);

@@ -13,14 +13,6 @@ function modules_adminapi_remove($args)
     // Get arguments from argument array
     extract($args);
 
-    // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
     // Security Check
 	if(!xarSecurityCheck('AdminModules')) return;
 
@@ -30,10 +22,6 @@ function modules_adminapi_remove($args)
 
     // Get module information
     $modinfo = xarModGetInfo($regid);
-    if (empty($modinfo)) {
-        xarSessionSetVar('errormsg', xarML('No such module'));
-        return false;
-    }
 
     // Get module database info
     xarModDBInfoLoad($modinfo['name'], $modinfo['directory']);
