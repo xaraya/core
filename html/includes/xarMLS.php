@@ -1419,11 +1419,14 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if (strpos($ctxType, 'modules:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+            $fileName = str_replace('//','/',$fileName);
         } elseif (strpos($ctxType, 'themes:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+            $fileName = str_replace('//','/',$fileName);
         } elseif (strpos($ctxType, 'core:') !== false) {
             $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
+            $fileName = str_replace('//','/',$fileName);
         } else {
             die("Bad Context:" . $ctxType);
         }
