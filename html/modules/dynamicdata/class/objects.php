@@ -43,7 +43,10 @@ class Dynamic_Object_Master
     var $layout = 'default';
     var $template = '';
 
+    // primary key is item id
     var $primary = null;
+    // secondary key could be item type (e.g. for articles)
+    var $secondary = null;
 
     // flag indicating if this object has some property that provides file upload
     var $upload = false;
@@ -196,9 +199,13 @@ class Dynamic_Object_Master
                 $this->datastores[$storename]->setPrimary($this->properties[$name]);
             }
 
-            // keep track of what property holds the primary key
+            // keep track of what property holds the primary key (item id)
             if (!isset($this->primary) && $property->type == 21) {
                 $this->primary = $name;
+            }
+            // keep track of what property holds the secondary key (item type)
+            if (!isset($this->secondary) && $property->type == 20) {
+                $this->secondary = $name;
             }
         }
         return $this->datastores;
@@ -876,6 +883,15 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     // TODO: handle fieldlist, status and primary too -> reset data store field lists !
 
+        // add where clause if itemtype is one of the properties (e.g. articles)
+        if (isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) {
+           if (empty($args['where'])) {
+               $args['where'] = $this->secondary . ' eq ' . $this->itemtype;
+           } else {
+               $args['where'] .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
+           }
+        }
+
         // Note: they can be empty here, which means overriding any previous criteria
         if (isset($args['sort']) || isset($args['where'])) {
             foreach (array_keys($this->datastores) as $name) {
@@ -899,6 +915,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['where'])) {
             $this->setWhere($args['where']);
         }
+
     }
 
     function setSort($sort)
@@ -1094,26 +1111,39 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
-			if(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+            if(xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
                                                array($args['param'] => $itemid,
                                                      'itemtype'     => $itemtype)),
                                    'ojoin'  => '');
-            }
-			if(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($modname,'admin','modify',
                                                array($args['param'] => $itemid,
                                                      'itemtype'     => $itemtype)),
                                    'ojoin'  => '|');
-            }
-			if(xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($modname,'admin','delete',
                                                array($args['param'] => $itemid,
                                                      'itemtype'     => $itemtype)),
                                    'ojoin'  => '|');
+            } elseif(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+                $options[] = array('otitle' => xarML('View'),
+                                   'olink'  => xarModURL($modname,$viewtype,$viewfunc,
+                                               array($args['param'] => $itemid,
+                                                     'itemtype'     => $itemtype)),
+                                   'ojoin'  => '');
+                $options[] = array('otitle' => xarML('Edit'),
+                                   'olink'  => xarModURL($modname,'admin','modify',
+                                               array($args['param'] => $itemid,
+                                                     'itemtype'     => $itemtype)),
+                                   'ojoin'  => '|');
+            } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+                $options[] = array('otitle' => xarML('View'),
+                                   'olink'  => xarModURL($modname,$viewtype,$viewfunc,
+                                               array($args['param'] => $itemid,
+                                                     'itemtype'     => $itemtype)),
+                                   'ojoin'  => '');
             }
             $args['links'][$itemid] = $options;
         }
