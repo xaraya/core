@@ -1,7 +1,20 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" #$tabindex#  />
+test here
+<xar:set name="inputField">'input type="text" id="'.$id.'" name="'.$name.'" value="'.$value.'"'</xar:set>
 
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+<xar:if condition="!empty($size) && !empty($tabindex)">
+	<xar:set name="inputField">$inputField.' size="'.$size.'"'</xar:set>
+<xar:elseif condition="!empty($maxlength)"/>
+	<xar:set name="inputField">$inputField.' maxlength="'.$maxlength.'"'</xar:set>
+<xar:elseif condition="!empty($tabindex)"/>
+	<xar:set name="inputField">$inputField.' tabindex="'.$tabindex.'"'</xar:set>
+</xar:if>
+ 
+<#$inputField# />
+
+
+<xar:if condition="!empty($invalid)">
+	<span class="xar-error">#$invalid#</span>
+</xar:if>
+  

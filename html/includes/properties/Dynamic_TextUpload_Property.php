@@ -23,7 +23,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 {
     var $rows = 8;
     var $cols = 50;
-    var $wrap = 'soft';
 
     var $size = 40;
     var $maxsize = 1000000;
@@ -200,7 +199,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['upid']     = !empty($id) ? $id.'_upload' : '';
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
-        $data['wrap']     = !empty($wrap) ? $wrap : $this->wrap;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';

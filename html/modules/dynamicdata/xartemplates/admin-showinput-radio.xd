@@ -1,17 +1,19 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="idx">0</xar:set>
 
+<fieldset id="#$id#">
     <xar:foreach in="$options" value="$option" >
         <xar:if condition="$option['id'] eq $value" >
-            <input type="radio" name="#$name#" id="#$name#_#$idx#" value="#$option['id']#" checked="checked">
+            <input type="radio" name="#$name#" id="#$name#_#$idx#" value="#$option['id']#" checked="checked" />
         <xar:else />
-            <input type="radio" name="#$name#" id="#$name#_#$idx#" value="#$option['id']#">
+            <input type="radio" name="#$name#" id="#$name#_#$idx#" value="#$option['id']#" />
         </xar:if>
-            <label for="#$name#_#$idx#">#$option['name']# </label>
-            </input>
+            
+		<label for="#$name#_#$idx#">#$option['name']# </label>
+			
         <xar:set name="idx">++$idx</xar:set>
     </xar:foreach>
-
+</fieldset>
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>

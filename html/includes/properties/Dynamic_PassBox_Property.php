@@ -99,7 +99,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property
          $data['name']     = !empty($name) ? $name :'';
          $data['name1']    = !empty($name) ? $name : 'dd_'.$this->id.'[0]';
          $data['name2']    = !empty($name) ? $name : 'dd_'.$this->id.'[1]';
-         $data['id']       = !empty($id) ? ' id="'.$id.'"' : '';
+         $data['id']       = !empty($id)   ? $id   : $this->id;
          $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
          $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"'  : '';
          $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';

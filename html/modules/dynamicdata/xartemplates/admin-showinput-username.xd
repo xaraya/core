@@ -2,11 +2,16 @@
 <xar:set name="profile"><xar:mlstring>Profile</xar:mlstring></xar:set>
 <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
+<xar:comment>
+FIXME:  The target="" needs to be replaced by something that works in xhtml.  
     <xar:if condition="!empty($linkurl)">
         #$user# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
     <xar:else />
         #$user#
     </xar:if>
+</xar:comment>
+        #$user#
+
 
     <xar:if condition="!empty($invalid)">
         <span class="xar-error">#$invalid#</span>

@@ -22,7 +22,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 {
     var $rows = 8;
     var $cols = 50;
-    var $wrap = 'soft';
 
     function validateValue($value = null)
     {
@@ -61,7 +60,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols; 
-        $data['wrap']     = !empty($wrap) ? $wrap : $this->wrap;
 
         $template="textarea";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);

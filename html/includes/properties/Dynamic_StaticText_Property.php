@@ -39,6 +39,15 @@ class Dynamic_StaticText_Property extends Dynamic_Property
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
 */      $data=array();
 
+        if (empty($name)) {
+            $name = 'dd_' . $this->id;
+        }
+        if (empty($id)) {
+            $id = $name;
+        }
+		$data['name']     = $name;
+		$data['id']       = $id;
+
 
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';

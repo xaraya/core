@@ -2,10 +2,10 @@
 <xar:set name="alttext"><xar:mlstring>Click Here to select a color</xar:mlstring></xar:set>
 <xar:set name="pickerimage">xarTplGetImage('tcolorpicker.gif', 'base')</xar:set>
 
-<input type="text" name="#$name#" id="#$id#_input" value="#$value#" size="#$size#" maxlength="#$maxlength#" />
+<input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" />
 
 <a href="javascript:TCP.popup(document.getElementById('#$id#_input'), 1)">
-<img src="#$pickerimage#" width="15" height="13" border="0" alt="#$alttext#" /></a>
+<img src="#$pickerimage#" style="border: 0px none;" alt="#$alttext#" /></a>
 
     <xar:if condition="!empty($invalid)">
         <span class="xar-error">#$invalid#</span>
