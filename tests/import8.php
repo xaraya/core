@@ -42,10 +42,10 @@ global $pnconfig;
 //$prefix = $pnconfig['prefix'];
 $prefix = pnDBGetSiteTablePrefix();
 if (isset($step) && ($step > 1 || isset($startnum))) {
-    $oldprefix = pnModGetVar('import','oldprefix');
-    $reset = pnModGetVar('import','reset');
-    $resetcat = pnModGetVar('import','resetcat');
-    $imgurl = pnModGetVar('import','imgurl');
+    $oldprefix = pnModGetVar('installer','oldprefix');
+    $reset = pnModGetVar('installer','reset');
+    $resetcat = pnModGetVar('installer','resetcat');
+    $imgurl = pnModGetVar('installer','imgurl');
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',$oldprefix)) {
 ?>
@@ -72,13 +72,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
-        pnModSetVar('import','oldprefix',$oldprefix);
+        pnModSetVar('installer','oldprefix',$oldprefix);
         if (!isset($reset)) { $reset = 0; }
-        pnModSetVar('import','reset',$reset);
+        pnModSetVar('installer','reset',$reset);
         if (!isset($resetcat)) { $resetcat = 0; }
-        pnModSetVar('import','resetcat',$resetcat);
+        pnModSetVar('installer','resetcat',$resetcat);
         if (!isset($imgurl)) { $imgurl = 0; }
-        pnModSetVar('import','imgurl',$imgurl);
+        pnModSetVar('installer','imgurl',$imgurl);
     }
 
     list($dbconn) = pnDBGetConn();
@@ -273,19 +273,19 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $result->Close();
     echo "<strong>TODO : copy the topic images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
-    pnModSetVar('import','topics',$topics);
-    pnModSetVar('import','topicid',serialize($topicid));
-    pnModSetVar('import','categories',$categories);
-    pnModSetVar('import','catid',serialize($catid));
+    pnModSetVar('installer','topics',$topics);
+    pnModSetVar('installer','topicid',serialize($topicid));
+    pnModSetVar('installer','categories',$categories);
+    pnModSetVar('installer','catid',serialize($catid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 3) {
-    $topics = pnModGetVar('import','topics');
-    $topicid = unserialize(pnModGetVar('import','topicid'));
-    $categories = pnModGetVar('import','categories');
-    $catid = unserialize(pnModGetVar('import','catid'));
+    $topics = pnModGetVar('installer','topics');
+    $topicid = unserialize(pnModGetVar('installer','topicid'));
+    $categories = pnModGetVar('installer','categories');
+    $catid = unserialize(pnModGetVar('installer','catid'));
     echo "<strong>3. Importing articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_stories';
     $result = $dbconn->Execute($query);
@@ -391,10 +391,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
 
     if ($step == 4) {
-    $topics = pnModGetVar('import','topics');
-    $topicid = unserialize(pnModGetVar('import','topicid'));
-    $categories = pnModGetVar('import','categories');
-    $catid = unserialize(pnModGetVar('import','catid'));
+    $topics = pnModGetVar('installer','topics');
+    $topicid = unserialize(pnModGetVar('installer','topicid'));
+    $categories = pnModGetVar('installer','categories');
+    $catid = unserialize(pnModGetVar('installer','catid'));
     echo "<strong>4. Importing queued articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_queue';
     $result = $dbconn->Execute($query);
@@ -517,16 +517,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->Close();
     }
     echo "<strong>TODO : copy the section images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
-    pnModSetVar('import','sections',$sections);
-    pnModSetVar('import','sectionid',serialize($sectionid));
+    pnModSetVar('installer','sections',$sections);
+    pnModSetVar('installer','sectionid',serialize($sectionid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 6) {
     $regid = pnModGetIDFromName('articles');
-    $sections = pnModGetVar('import','sections');
-    $sectionid = unserialize(pnModGetVar('import','sectionid'));
+    $sections = pnModGetVar('installer','sections');
+    $sectionid = unserialize(pnModGetVar('installer','sectionid'));
     echo "<strong>6. Importing section content</strong><br>\n";
     $query = 'SELECT pn_artid, pn_secid, pn_title, pn_content, pn_language, pn_counter
               FROM ' . $oldprefix . '_seccont
@@ -588,7 +588,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->MoveNext();
     }
     $result->Close();
-    echo "<strong>TODO : support page breaks in articles :-)</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
@@ -636,16 +635,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         }
         $result->Close();
     }
-    pnModSetVar('import','faqs',$faqs);
-    pnModSetVar('import','faqid',serialize($faqid));
+    pnModSetVar('installer','faqs',$faqs);
+    pnModSetVar('installer','faqid',serialize($faqid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 8) {
     $regid = pnModGetIDFromName('articles');
-    $faqs = pnModGetVar('import','faqs');
-    $faqid = unserialize(pnModGetVar('import','faqid'));
+    $faqs = pnModGetVar('installer','faqs');
+    $faqid = unserialize(pnModGetVar('installer','faqid'));
     echo "<strong>8. Importing FAQ questions & answers</strong><br>\n";
     $query = 'SELECT pn_id, pn_id_cat, pn_question, pn_answer, pn_submittedby
               FROM ' . $oldprefix . '_faqanswer
@@ -804,7 +803,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->MoveNext();
     }
     $result->Close();
-    pnModSetVar('import','weblinks',serialize($weblinks));
+    pnModSetVar('installer','weblinks',serialize($weblinks));
 
     $settings = unserialize(pnModGetVar('articles', 'settings.6'));
     $settings['number_of_categories'] = 1;
@@ -822,7 +821,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
         $docounter = 1;
     }
-    $weblinks = unserialize(pnModGetVar('import','weblinks'));
+    $weblinks = unserialize(pnModGetVar('installer','weblinks'));
     $regid = pnModGetIDFromName('articles');
     $query = 'SELECT pn_lid, pn_cat_id, pn_title, ' . $oldprefix . '_links_links.pn_url, pn_description,
                      UNIX_TIMESTAMP(pn_date), ' . $oldprefix . '_links_links.pn_name, ' . $oldprefix . '_links_links.pn_email, pn_hits,
@@ -913,19 +912,19 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['comments']);
 
     echo "<strong>TODO : import the rest...</strong><br><br>\n";
-    pnModDelVar('import','oldprefix');
-    pnModDelVar('import','reset');
-    pnModDelVar('import','resetcat');
-    pnModDelVar('import','imgurl');
-    pnModDelVar('import','topics');
-    pnModDelVar('import','topicid');
-    pnModDelVar('import','categories');
-    pnModDelVar('import','catid');
-    pnModDelVar('import','sections');
-    pnModDelVar('import','sectionid');
-    pnModDelVar('import','faqs');
-    pnModDelVar('import','faqid');
-    pnModDelVar('import','weblinks');
+    pnModDelVar('installer','oldprefix');
+    pnModDelVar('installer','reset');
+    pnModDelVar('installer','resetcat');
+    pnModDelVar('installer','imgurl');
+    pnModDelVar('installer','topics');
+    pnModDelVar('installer','topicid');
+    pnModDelVar('installer','categories');
+    pnModDelVar('installer','catid');
+    pnModDelVar('installer','sections');
+    pnModDelVar('installer','sectionid');
+    pnModDelVar('installer','faqs');
+    pnModDelVar('installer','faqid');
+    pnModDelVar('installer','weblinks');
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="index.php">Go to your imported site</a><br>';
     }
@@ -941,8 +940,9 @@ $return = ob_get_contents();
 ob_end_clean();
 
 // render the page
-$regenerate = false;
-pnTplPrintPage($return, pnUserGetTheme(), 'default', $regenerate);
+//$regenerate = false;
+//pnTplPrintPage($return, pnUserGetTheme(), 'default', $regenerate);
+echo pnTpl_renderPage($return);
 }
 
 // close the session
