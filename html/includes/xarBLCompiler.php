@@ -1887,6 +1887,8 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             return "xarConfigGetVar('".$name."')";
         case 'session':
             return "xarSessionGetVar('".$name."')";
+        case 'user':
+            return "xarUserGetVar('".$name."')";
         case 'module':
             if (!isset($module)) {
                 $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:var> tag.', $this);
@@ -1915,7 +1917,9 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
         if (!isset($this->attributes['scope'])) {
             return false;
         }
-        return ($this->attributes['scope'] == 'module' || $this->attributes['scope'] == 'config');
+        return ($this->attributes['scope'] == 'module' || 
+                $this->attributes['scope'] == 'config' ||
+                $this->attributes['scope'] == 'user');
     }
 }
 
