@@ -794,30 +794,18 @@ function xarVarPrepForStore()
  */
 function xarVarPrepForOS()
 {
-//    static $search = array('!\.\./!si',  // .. (directory traversal)
-//                           '!^.*://!si', // .*:// (start of URL)
-//                           '!/!si',      // Forward slash (directory traversal)
-//                           '!\\\\!si');  // Backslash (directory traversal)
-
-//    static $replace = array('',
-//                            '',
-//                            '_',
-//                            '_');
-
-//    $resarray = array();
-
-    static $replace_array = array(':'  => '',
-                                  '/'  => '',
-                                  '\\' => '',
-                                  '..' => '',
-                                  '?'  => '',
-                                  '*'  => '');
+    static $special_characters = array(':'  => ' ',
+                                       '/'  => ' ',
+                                       '\\' => ' ',
+                                       '..' => ' ',
+                                       '?'  => ' ',
+                                       '*'  => ' ');
 
     $args = func_get_args();
     
     foreach ($args as $key => $var) {
         // Remove out bad characters
-        $args[$key] = strtr($var, $replace_array);
+        $args[$key] = strtr($var, $special_characters);
     }
     
 
