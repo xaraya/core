@@ -792,26 +792,27 @@ function xarVarPrepForOS()
 
 //    $resarray = array();
 
-    static $replace_array = array(':' => '',
-                                  '/' => '',
-                                  '\' => '',
-                                  '.' => '',
-                                  '?' => '',
-                                  '*' => '');
+    static $replace_array = array(':'  => '',
+                                  '/'  => '',
+                                  '\\' => '',
+                                  '..' => '',
+                                  '?'  => '',
+                                  '*'  => '');
 
     $args = func_get_args();
     
     foreach ($args as $key => $var) {
         // Remove out bad characters
-        $$args[$key] = strtr($var, $replace_array);
+        $args[$key] = strtr($var, $replace_array);
     }
+    
 
     // Return vars
-    // Nuncanada: I really dont like this kind of behaviour... It´s not consistent.
+    // <nuncanada> I really dont like this kind of behaviour... It´s not consistent.
     if (func_num_args() == 1) {
-        return $resarray[0];
+        return $args[0];
     } else {
-        return $resarray;
+        return $args;
     }
 }
 
