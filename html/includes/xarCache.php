@@ -105,8 +105,6 @@ function xarPageIsCached($cacheKey, $name = '')
         filesize($cache_file) > 0 &&
         ($xarPage_cacheTime == 0 || filemtime($cache_file) > time() - $xarPage_cacheTime) &&
         !xarUserIsLoggedIn()) {
-        //echo $xarPage_cacheTime;
-        //die();
 
         // start 304 test
         $mod = filemtime($cache_file);
@@ -141,7 +139,7 @@ function xarPageIsCached($cacheKey, $name = '')
 //function xarBlockIsCached($cacheKey, $blockDynamics, $blockPermission, $name = '')
 function xarBlockIsCached($args)
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarBlock_cacheCode, $xarBlock_cacheTime;
+    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
@@ -157,9 +155,7 @@ function xarBlockIsCached($args)
     }
     // todo: replace this with a separate xarBlock_cacheTime config value
     if (!isset($blockCacheExpireTime)) {
-        $xarBlock_cacheTime = $xarPage_cacheTime;
-    } else {
-        $xarBlock_cacheTime = $blockCacheExpireTime;
+        $blockCacheExpireTime = $xarBlock_cacheTime;
     }
     
     if ($blockDynamics == 1) {
@@ -199,7 +195,7 @@ function xarBlockIsCached($args)
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
         filesize($cache_file) > 0 &&
-        filemtime($cache_file) > time() - $xarBlock_cacheTime) {
+        ($blockCacheExpireTime == 0 || filemtime($cache_file) > time() - $blockCacheExpireTime)) {
         
         return true;
     } else {
@@ -224,7 +220,7 @@ function xarPageGetCached($cacheKey, $name = '')
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
     @readfile($cache_file);
 
-    xarOutputCleanCached();
+    xarOutputCleanCached('Page');
 }
 
 function xarBlockGetCached($cacheKey, $name = '')
@@ -243,7 +239,7 @@ function xarBlockGetCached($cacheKey, $name = '')
         fclose($file);
     }
 
-    xarOutputCleanCached();
+    xarOutputCleanCached('Block');
     return $blockCachedOutput;
 }
 
@@ -273,7 +269,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         (empty($xarOutput_cacheTheme) || strstr($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
         (!file_exists($cache_file) ||
         ($xarPage_cacheTime == 0 || filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
-        xarCacheDirSize($xarOutput_cacheCollection) <= $xarOutput_cacheSizeLimit &&
+        xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
         !xarUserIsLoggedIn()) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
@@ -284,13 +280,13 @@ function xarPageSetCached($cacheKey, $name, $value)
             @fwrite($fp,$value);
             @fclose($fp);
         }
-        xarOutputCleanCached();
+        xarOutputCleanCached('Page');
     }
 }
 
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $xarBlock_cacheTime;
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $xarBlock_cacheTime;
 
     $xarTpl_themeDir = xarTplGetThemeDir();
     
@@ -299,8 +295,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (!file_exists($cache_file) ||
-         filemtime($cache_file) < time() - $xarBlock_cacheTime) &&
-        xarCacheDirSize($xarOutput_cacheCollection) <= $xarOutput_cacheSizeLimit
+        ($xarBlock_cacheTime == 0 || filemtime($cache_file) < time() - $xarBlock_cacheTime)) &&
+        xarCacheDirSize($xarOutput_cacheCollection, 'Block') <= $xarOutput_cacheSizeLimit
         ) {
         $fp = @fopen($cache_file,"w");
         if (!empty($fp)) {
@@ -308,7 +304,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
             @fwrite($fp, trim($value));
             @fclose($fp);
         }
-        xarOutputCleanCached();
+        xarOutputCleanCached('Block');
     }
 }
 
@@ -356,13 +352,13 @@ function xarPageFlushCached($cacheKey)
  * @access public
  * @returns void
  */
-function xarOutputCleanCached()
+function xarOutputCleanCached($type)
 {
-    global $xarOutput_cacheCollection, $xarPage_cacheTime;
+    global $xarOutput_cacheCollection, ${'xar' . $type . '_cacheTime'};
 
     $touch_file = $xarOutput_cacheCollection . '/' . 'cache.touch';
 
-    if ($xarPage_cacheTime == 0 || (file_exists($touch_file) && filemtime($touch_file) > time() - $xarPage_cacheTime)) {
+    if (${'xar' . $type . '_cacheTime'} == 0 || (file_exists($touch_file) && filemtime($touch_file) > time() - ${'xar' . $type . '_cacheTime'})) {
         return;
     }
     touch($touch_file);
@@ -384,7 +380,7 @@ function xarOutputCleanCached()
  * @returns float
  * @author nospam@jusunlee.com | laurie@oneuponedown.com | jsb
  */
-function xarCacheDirSize($dir = FALSE)
+function xarCacheDirSize($dir = FALSE, $type)
 {
     global $xarOutput_cacheSizeLimit;
     $size = 0;
@@ -394,7 +390,7 @@ function xarCacheDirSize($dir = FALSE)
             while (($item = readdir($dirId)) !== FALSE) {
                 if ($item != "." && $item != "..") {
                     if (is_dir($dir . $item)) {
-                        $size += xarCacheDirSize($dir . $item);
+                        $size += xarCacheDirSize($dir . $item, $type);
                     } else {
                         $size += filesize($dir . $item);
                     }
@@ -405,7 +401,7 @@ function xarCacheDirSize($dir = FALSE)
     }
 
     if($size > $xarOutput_cacheSizeLimit) {
-        xarOutputCleanCached();
+        xarOutputCleanCached($type);
         // todo: come up with a good way to determine which cacheKeys are the least important
         // and fush them to make more space.
         //xarPageFlushCached('articles-user-view');
