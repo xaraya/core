@@ -645,6 +645,7 @@ function pnModGetAdminMods()
 function xarModGetAdminMods()
 {
     //TODO Workaround for admin panels.
+    // <andyv> already updated, can be removed at will
     return xarModGetList(array('AdminCapable' => 1));
 }
 
