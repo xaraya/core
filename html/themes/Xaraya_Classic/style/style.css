@@ -254,10 +254,10 @@ TD.xar-alt {}
    background-color: #f0f0f0;
 }
 .xar-menu-subitem {
-   font-size: 8.5pt;
+   font-size: 8pt;
    font-weight: bold;
    font-family: Verdana,Arial,Helvetica,sans-serif;
-   margin-left: 4px;
+   margin-left: 6px;
    padding-left: 0px;
 }
 .xar-menu-subitem:hover {
@@ -267,8 +267,8 @@ TD.xar-alt {}
    font-weight: bold;
    color: #000000;
    background-color: #f0f0f0;
-   font-size: 8.5pt;
-   margin-left: 4px;
+   font-size: 8pt;
+   margin-left: 6px;
    padding-left: 0px;
 }
 .xar-menu-item-current > .xar-menu-subitem > A {

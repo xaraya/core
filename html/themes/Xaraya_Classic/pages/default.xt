@@ -47,7 +47,7 @@
                         <xar:blockgroup name="left" id="left" />
                     </td>
                 </tr>
-                <tr style="height:200">
+                <tr style="height:200px;">
                     <td style="background-image: url(themes/Xaraya_Classic/images/sideline.gif)" >
                         <img src="themes/Xaraya_Classic/images/dot.gif" alt="" />
                     </td>
