@@ -26,7 +26,6 @@
 function dynamicdata_adminapi_syncprops($args)
 {
     extract($args);
-
     // Required arguments
     $invalid = array();
     if (!isset($objectid) || !is_numeric($objectid)) {
@@ -41,8 +40,7 @@ function dynamicdata_adminapi_syncprops($args)
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'admin', 'syncprops', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

@@ -42,8 +42,7 @@ function dynamicdata_adminapi_deleteprop($args)
     if (count($invalid) > 0) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     join(', ',$invalid), 'admin', 'deleteprop', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -54,7 +53,6 @@ function dynamicdata_adminapi_deleteprop($args)
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex
     // modules
