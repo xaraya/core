@@ -180,7 +180,8 @@ function roles_activate()
                                               'notify' => TRUE)
                                        ),
                       'message' => '',
-                      'locked' => 0);
+                      'locked' => 0,
+                      'notifymsg' => '');
     xarModSetVar('roles', 'lockdata', serialize($lockdata));
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
