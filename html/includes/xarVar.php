@@ -383,6 +383,25 @@ class xarVarValidator_bool extends xarVarValidator {
 }
 
 /**
+ * Checkbox Validation Class
+ */
+class xarVarValidator_checkbox extends xarVarValidator {
+
+    function validate (&$convValue) {
+        if (is_string($this->subject)) {
+            $this->subject = true;
+        } elseif (empty($this->subject) || is_null($this->subject)) {
+            $this->subject = false;
+        } else {
+            return false;
+        }
+
+        $convValue = $this->subject;
+        return true;
+    }
+}
+
+/**
  * Strings Validation Class
  */
 class xarVarValidator_str extends xarVarValidator {
@@ -465,6 +484,7 @@ xarVarRegisterValidation ('bool', 'xarVarValidator_bool');
 xarVarRegisterValidation ('str', 'xarVarValidator_str');
 xarVarRegisterValidation ('regexp', 'xarVarValidator_regexp');
 xarVarRegisterValidation ('html', 'xarVarValidator_html');
+xarVarRegisterValidation ('checkbox', 'xarVarValidator_checkbox');
 
 
 /**
