@@ -30,9 +30,9 @@ function roles_user_login()
 {
     global $xarUser_authenticationModules;
 
-    $locked  = xarSessionGetVar('roles.login.lockedout');
-    $now = time();
-    if (($now - $locked) < 54000){
+    $unlockTime  = (int) xarSessionGetVar('roles.login.lockedout');
+
+    if (time() < $unlockTime) {
         $msg = xarML('Your account has been locked for 15 minutes.');
         xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
@@ -222,9 +222,12 @@ function roles_user_login()
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
                 
-                $attempts = xarSessionGetVar('roles.login.attempts');
-                if ($attempts == 3){
-                    xarSessionSetVar('roles.login.lockedout', time());
+                // Cast the result to an int in case VOID is returned
+                $attempts = (int) xarSessionGetVar('roles.login.attempts');
+
+                if ($attempts >= 3){
+                    // set the time for fifteen minutes from now
+                    xarSessionSetVar('roles.login.lockedout', time() + (60 * 15));
                     xarSessionSetVar('roles.login.attempts', 0);
                     $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for 15 minutes.');
                     xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
