@@ -30,7 +30,6 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables = array(
-        'blocks'                => $systemPrefix . '_blocks',
         'block_instances'       => $systemPrefix . '_block_instances',
         'block_groups'          => $systemPrefix . '_block_groups',
         'block_group_instances' => $systemPrefix . '_block_group_instances',
@@ -38,7 +37,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     );
 
     xarDB_importTables($tables);
-    
+
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
     if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
@@ -49,7 +48,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
 
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarBlocks__shutdown_handler');
-    
+
     return true;
 }
 
@@ -132,7 +131,7 @@ function xarBlock_render($blockinfo)
             // Render this block template data.
             $blockinfo['content'] = xarTplBlock(
                 $modName, $blockType, $blockinfo['content'],
-                $blockinfo['_bl_block_template'], 
+                $blockinfo['_bl_block_template'],
                 !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
             );
         }
@@ -256,7 +255,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             unset($blockinfo['group_inst_bl_template']);
             unset($blockinfo['inst_bl_template']);
             unset($blockinfo['group_bl_template']);
-            
+
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
@@ -295,7 +294,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
  * @todo   this function calls a module function, keep an eye on it.
  */
 function xarBlock_renderBlock($args)
-{   
+{
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
@@ -316,7 +315,7 @@ function xarBlock_renderBlock($args)
 
         } else {
             $blockoutput = xarBlock_render($blockinfo);
-            
+
             if ($blockCaching) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }

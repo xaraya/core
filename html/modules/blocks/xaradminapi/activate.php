@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Activate a block
@@ -35,12 +35,12 @@ function blocks_adminapi_activate($args)
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $blockstable = $xartable['blocks'];
+    $blockstable = $xartable['block_instances'];
 
     // Deactivate
     $query = "UPDATE $blockstable
-            SET xar_active = 1
-            WHERE xar_bid = " . $bid;
+            SET xar_state = 2
+            WHERE xar_id = " . $bid;
     $result =& $dbconn->Execute($query);
     if (!$result) {return;}
 

@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Create a new block instance
@@ -27,8 +27,7 @@ function blocks_adminapi_create_instance($args)
     extract($args);
 
     // Argument check
-    if (!isset($title) ||
-        !xarVarValidate('pre:lower:ftoken:passthru:str:1', $name) ||
+    if ((!isset($name) || !xarVarValidate('pre:lower:ftoken:passthru:str:1', $name)) ||
         (!isset($type) || !is_numeric($type)) ||
         (!isset($state) || !is_numeric($state))) {
         // TODO: this type of error to be handled automatically
@@ -69,6 +68,9 @@ function blocks_adminapi_create_instance($args)
         // can be passed directly into this API.
         $content = serialize($content);
     }
+
+    if (!isset($template)) $template = '';
+    if (!isset($title)) $title = '';
 
     // Load up database details.
     $dbconn =& xarDBGetConn();

@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Deactivate a block
@@ -34,11 +34,11 @@ function blocks_adminapi_deactivate($args)
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $blockstable = $xartable['blocks'];
+    $blockstable = $xartable['block_instances'];
 
     // Deactivate
-    $query = "UPDATE $blockstable SET xar_active = ?  WHERE xar_bid = ?";
-    $result =& $dbconn->Execute($query,array(0, $bid));
+    $query = "UPDATE $blockstable SET xar_state = ?  WHERE xar_id = ?";
+    $result =& $dbconn->Execute($query,array(1, $bid));
     if (!$result) return;
 
     return true;
