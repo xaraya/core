@@ -3,10 +3,16 @@
     <xar:loop name="$usercontent">
         <xar:if condition="empty($loop:item['url'])">
             <div class="xar-menu-section">#$loop:item['title']#</div>
+        <xar:elseif condition="!empty($loop:item['child']) and ($loop:item['url'] eq $loop:item['here'])" />
+            <div style="padding-left: .5em;">
+            <div class="xar-menu-subitem-current">#$loop:item['title']#</div>
+            </div>
         <xar:elseif condition="!empty($loop:item['child'])" />
-			<div class="xar-menu-item-current">
-				<div class="xar-menu-subitem"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
-			</div>
+            <div style="padding-left: .5em;">
+            <div class="xar-menu-subitem">&nbsp;<a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
+            </div>
+        <xar:elseif condition="($loop:item['url'] eq $loop:item['here'])" />
+            <div class="xar-menu-item-current">#$loop:item['title']#</div>
         <xar:else />
             <div class="xar-menu-item"><a href="#$loop:item['url']#" title="#$loop:item['comment']#">#$loop:item['title']#</a></div>
         </xar:if>
@@ -42,13 +48,13 @@
     <br />
     [<a href="#$logouturl#">#$logoutlabel#</a>]
 </xar:if>
-    <br />
-	<xar:if condition="xarThemeIsAvailable('print')">
-		[<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
-	</xar:if>
-	<xar:if condition="xarThemeIsAvailable('rss')">
-		<xar:if condition="($where eq 'articles')">
-			<br />
-			[<a href="#$rssurl#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
-		</xar:if>
-	</xar:if>
+<br />
+<xar:if condition="xarThemeIsAvailable('print')">
+    [<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
+</xar:if>
+<xar:if condition="xarThemeIsAvailable('rss')">
+    <xar:if condition="($where eq 'articles')">
+        <br />
+        [<a href="#$rssurl#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
+    </xar:if>
+</xar:if>

@@ -146,7 +146,7 @@ function base_menublock_display($blockinfo)
                             $title = xarVarPrepForDisplay($title);
                             $comment = xarVarPrepForDisplay($comment);
                             $child = xarVarPrepForDisplay($child);
-                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child);
+                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $currenturl);
                         }
                     }
                 } else {
@@ -161,8 +161,7 @@ function base_menublock_display($blockinfo)
                             $link = xarModURL($mod['name'] ,'user', 'main', array());
                             // depending on which module is currently loaded we display accordingly
                             if($label == $thismodname && $thismodtype == 'user'){
-							
-							
+
                                 // Get list of links for modules
                                 $labelDisplay = ucwords($label);
                                 $usermods[] = array(   'label'     => $labelDisplay,
@@ -315,7 +314,7 @@ function base_menublock_modify($blockinfo)
     $c=1;
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
-		$vars['contentlines'] = array();
+        $vars['contentlines'] = array();
         foreach ($contentlines as $contentline) {
             $link = explode('|', $contentline);
             $vars['contentlines'][] = $link; 
