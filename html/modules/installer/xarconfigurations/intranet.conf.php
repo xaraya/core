@@ -83,17 +83,17 @@ $options = array(
         'item' => 'm28',
         'option' => 'true',
         'comment' => xarML('Install the Wiki module.')
-    )
+    ),
     array(
         'item' => 'm743',
         'option' => 'true',
         'comment' => xarML('Install the Xmlrpcserver module.')
-    )
+    ),
     array(
         'item' => 'm744',
         'option' => 'true',
         'comment' => xarML('Install the Xmlrpcsystemapi module.')
-    )
+    ),
     array(
         'item' => 'm746',
         'option' => 'true',
