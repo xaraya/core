@@ -143,7 +143,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageN
     // Override all admin modules types to is pages/admin exist.
     // TODO --> Allow master admin template.
     if($modType == 'admin'){
-        $sourceFileName = "$xarnTpl_themeDir/pages/$modType.xt";
+        $sourceFileName = "$xarTpl_themeDir/pages/$modType.xt";
         if (!file_exists($sourceFileName)) {
             // Revert to main theme
             $pageName = xarVarPrepForOS($pageName);

@@ -151,8 +151,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs);
 
-    xarEvt_registerEvent('BodyStartTag');
-    xarEvt_registerEvent('BodyEndTag');
+    xarEvt_registerEvent('StartBodyTag');
+    xarEvt_registerEvent('EndBodyTag');
 
     // Start Logging Facilities
     $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),

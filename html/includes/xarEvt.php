@@ -160,8 +160,8 @@ function xarEvt__checkEvent($eventName)
     Current list is:
     ModLoad
     ModAPILoad
-    PostBodyStart
-    PreBodyEnd
+    BodyStart
+    BodyEnd
     MLSMissingTranslationString
     MLSMissingTranslationKey
     MLSMissingTranslationContext
