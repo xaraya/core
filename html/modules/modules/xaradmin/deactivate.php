@@ -56,11 +56,8 @@ function modules_admin_deactivate ()
             return $data;
         } else {
             // No dependents, we can deactivate the module
-            if(!xarModAPIFunc('modules','admin','deactivate',array('regid' => $id))){
-                return;
-            } else {
-                xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-            }
+            if(!xarModAPIFunc('modules','admin','deactivate',array('regid' => $id)))  return;
+            xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));               
         }
     }
 
