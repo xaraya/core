@@ -10,10 +10,9 @@
 // ----------------------------------------------------------------------
 
 /**
- * This is a standard function to modify the configuration parameters of the
- * module
+ * Modify the dynamic properties for a module + itemtype
  */
-function dynamicdata_admin_modifyconfig()
+function dynamicdata_admin_modifyprop()
 {
     // Initialise the $data variable that will hold the data to be used in
     // the blocklayout template, and get the common menu configuration - it
@@ -33,7 +32,7 @@ function dynamicdata_admin_modifyconfig()
                                           'itemtype');
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'admin', 'modifyconfig', 'dynamicdata');
+                    'module id', 'admin', 'modifyprop', 'dynamicdata');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return $msg;
@@ -80,24 +79,23 @@ function dynamicdata_admin_modifyconfig()
     $data['labels'] = array(
                             'id' => xarML('ID'),
                             'label' => xarML('Label'),
-                            'type' => xarML('Type'),
+                            'type' => xarML('Property Type'),
                             'default' => xarML('Default'),
                             'validation' => xarML('Validation'),
                             'new' => xarML('New'),
                       );
 
     // Specify some labels and values for display
-    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Configuration'));
+    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
 
     // Return the template variables defined in this function
     return $data;
 }
 
 /**
- * This is a standard function to update the configuration parameters of the
- * module given the information passed back by the modification form
+ * Update the dynamic properties for a module + itemtype
  */
-function dynamicdata_admin_updateconfig()
+function dynamicdata_admin_updateprop()
 {
     // Get parameters from whatever input we need.  All arguments to this
     // function should be obtained from xarVarCleanFromInput(), getting them
@@ -192,7 +190,7 @@ function dynamicdata_admin_updateconfig()
         }
     }
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyconfig',
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                         array('modid' => $modid,
                               'itemtype' => $itemtype)));
 
@@ -209,7 +207,7 @@ function dynamicdata_admin_menu()
     $menu = array();
 
     // Specify the menu title to be used in your blocklayout template
-    $menu['menutitle'] = xarML('Dynamic Data Configuration');
+    $menu['menutitle'] = xarML('Dynamic Data Properties');
 
     // Preset some status variable
     $menu['status'] = '';
@@ -453,10 +451,17 @@ function dynamicdata_admin_modifyconfighook($args)
         $fields = array();
     }
 
-    $labels = array();
+    $labels = array(
+                    'id' => xarML('ID'),
+                    'label' => xarML('Label'),
+                    'type' => xarML('Field Format'),
+                    'default' => xarML('Default'),
+                    'validation' => xarML('Validation'),
+                   );
+
     $labels['dynamicdata'] = xarML('Dynamic Data Fields');
     $labels['config'] = xarML('modify');
-    $link = xarModURL('dynamicdata','admin','modifyconfig',
+    $link = xarModURL('dynamicdata','admin','modifyprop',
                      array('modid' => $modid,
                            'itemtype' => $itemtype));
 
@@ -465,10 +470,6 @@ function dynamicdata_admin_modifyconfighook($args)
                                'link' => $link,
                                'fields' => $fields));
 }
-
-// ----------------------------------------------------------------------
-// TODO: all of the 'standard' admin functions, if that makes sense someday...
-//
 
 /**
  * the main administration function
@@ -540,9 +541,10 @@ function dynamicdata_admin_view()
     $data['items'] = array();
 
     // Specify some labels for display
-    $data['namelabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENAME'));
-    $data['numberlabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENUMBER'));
-    $data['optionslabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLEOPTIONS'));
+    $data['modidlabel'] = xarVarPrepForDisplay(xarML('Module'));
+    $data['itemtypelabel'] = xarVarPrepForDisplay(xarML('Item Type'));
+    $data['numitemslabel'] = xarVarPrepForDisplay(xarML('# of Properties'));
+    $data['optionslabel'] = xarVarPrepForDisplay(xarML('Options'));
     $data['pager'] = '';
 
     // Security check - important to do this as early as possible to avoid
@@ -563,12 +565,12 @@ function dynamicdata_admin_view()
     // items.
     $items = xarModAPIFunc('dynamicdata',
                           'user',
-                          'getall',
+                          'getmodules',
                           array('startnum' => $startnum,
                                 'numitems' => xarModGetVar('dynamicdata',
                                                           'itemsperpage')));
     // Check for exceptions
-    if (!isset($item) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+    if (!isset($items) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
     // Check individual permissions for Edit / Delete
     // Note : we could use a foreach ($items as $item) here as well, as
@@ -576,33 +578,34 @@ function dynamicdata_admin_view()
     // 'in place', and *then* pass the complete items array to $data
     for ($i = 0; $i < count($items); $i++) {
         $item = $items[$i];
-        if (xarSecAuthAction(0, 'DynamicData::', "$item[name]::$item[exid]", ACCESS_EDIT)) {
+        $modinfo = xarModGetInfo($item['modid']);
+        $items[$i]['name'] = $modinfo['displayname'];
+        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_EDIT)) {
             $items[$i]['editurl'] = xarModURL('dynamicdata',
-                                             'admin',
-                                             'modify',
-                                             array('exid' => $item['exid']));
+                                              'admin',
+                                              'modifyprop',
+                                              array('modid' => $item['modid'],
+                                                    'itemtype' => $item['itemtype'],));
         } else {
             $items[$i]['editurl'] = '';
         }
         $items[$i]['edittitle'] = xarML('Edit');
-        if (xarSecAuthAction(0, 'DynamicData::', "$item[name]::$item[exid]", ACCESS_DELETE)) {
+/*
+        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_DELETE)) {
             $items[$i]['deleteurl'] = xarModURL('dynamicdata',
-                                               'admin',
-                                               'delete',
-                                               array('exid' => $item['exid']));
+                                                'admin',
+                                                'delete',
+                                                array('modid' => $item['modid'],
+                                                      'itemtype' => $item['itemtype'],));
         } else {
             $items[$i]['deleteurl'] = '';
         }
         $items[$i]['deletetitle'] = xarML('Delete');
+*/
     }
 
     // Add the array of items to the template variables
     $data['items'] = $items;
-
-    // Specify some labels for display
-    $data['namelabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENAME'));
-    $data['numberlabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLENUMBER'));
-    $data['optionslabel'] = xarVarPrepForDisplay(xarMLByKey('EXAMPLEOPTIONS'));
 
 // TODO : add a pager (once it exists in BL)
     $data['pager'] = '';
@@ -617,6 +620,66 @@ function dynamicdata_admin_view()
     //              'namelabel' => ...,
     //              ... => ...);
 }
+
+/**
+ * This is a standard function to modify the configuration parameters of the
+ * module
+ */
+function dynamicdata_admin_modifyconfig()
+{
+    // Initialise the $data variable that will hold the data to be used in
+    // the blocklayout template, and get the common menu configuration - it
+    // helps if all of the module pages have a standard menu at the top to
+    // support easy navigation
+    $data = dynamicdata_admin_menu();
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey();
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return;
+
+    // Get the defined property types from somewhere...
+    $data['fields'] = xarModAPIFunc('dynamicdata','user','getproptypes');
+    if (!isset($data['fields']) || $data['fields'] == false) {
+        $data['fields'] = array();
+    }
+
+    $data['labels'] = array(
+                            'id' => xarML('ID'),
+                            'name' => xarML('Name'),
+                            'label' => xarML('Description'),
+                            'format' => xarML('Format'),
+                        // etc.
+                            'new' => xarML('New'),
+                      );
+
+    // Specify some labels and values for display
+    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Property Types'));
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * This is a standard function to update the configuration parameters of the
+ * module given the information passed back by the modification form
+ */
+function dynamicdata_admin_updateconfig()
+{
+    return 'insert update code for property types here ?';
+}
+
+
+// ----------------------------------------------------------------------
+// TODO: all of the 'standard' admin functions, if that makes sense someday...
+//
 
 /**
  * add new item

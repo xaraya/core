@@ -261,10 +261,8 @@ function dynamicdata_userapi_getprop($args)
                    xar_prop_default,
                    xar_prop_validation
             FROM $dynamicprop
-            WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid);
-    if (!empty($itemtype)) {
-        $sql .= " AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
-    }
+            WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid) . "
+              AND xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
 
     $result = $dbconn->Execute($sql);
 
@@ -293,6 +291,101 @@ function dynamicdata_userapi_getprop($args)
 
     $propertybag["$modid:$itemtype"] = $fields;
     return $fields;
+}
+
+/**
+ * get the list of modules + itemtypes for which properties are defined
+ *
+ * @author the DynamicData module development team
+ * @returns array
+ * @return array of modid + itemtype + number of properties
+ * @raise DATABASE_ERROR, NO_PERMISSION
+ */
+function dynamicdata_userapi_getmodules($args)
+{
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+    $dynamicprop = $xartable['dynamic_properties'];
+
+    $query = "SELECT xar_prop_moduleid,
+                     xar_prop_itemtype,
+                     COUNT(xar_prop_id)
+              FROM $dynamicprop
+              GROUP BY xar_prop_moduleid, xar_prop_itemtype";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $modules = array();
+
+    while (!$result->EOF) {
+        list($modid, $itemtype, $count) = $result->fields;
+        if (xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
+            $modules[] = array('modid' => $modid,
+                               'itemtype' => $itemtype,
+                               'numitems' => $count);
+        }
+        $result->MoveNext();
+    }
+
+    $result->Close();
+
+    return $modules;
+}
+
+/**
+ * get the list of defined property types from somewhere...
+ *
+ * @author the DynamicData module development team
+ * @returns array
+ * @return array of property types
+ * @raise DATABASE_ERROR, NO_PERMISSION
+ */
+function dynamicdata_userapi_getproptypes($args)
+{
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+
+    $proptypes = array();
+
+// TODO: replace with something else
+    // Let's get them from articles for now...
+    if (!xarModAPILoad('articles','user')) return;
+
+    $formats = xarModAPIFunc('articles','user','getpubfieldformats');
+    $formatnums = xarModAPIFunc('articles','user','getfieldformatnums');
+    foreach ($formats as $name => $label) {
+        $id = $formatnums[$name];
+        $proptypes[] = array('id' => $id,
+                             'name' => $name,
+                             'label' => $label,
+                             'format' => $id
+                            );
+    }
+
+// TODO: yes :)
+/*
+    $dynamicproptypes = $xartable['dynamic_property_types'];
+
+    $query = "SELECT ...
+              FROM $dynamicproptypes";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    while (!$result->EOF) {
+        list(...) = $result->fields;
+        if (xarSecAuthAction(0, '...', "...", ACCESS_OVERVIEW)) {
+            $proptypes[] = array(...);
+        }
+        $result->MoveNext();
+    }
+
+    $result->Close();
+*/
+
+    return $proptypes;
 }
 
 // ----------------------------------------------------------------------

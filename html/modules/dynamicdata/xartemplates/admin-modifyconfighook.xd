@@ -7,11 +7,18 @@
         </td>
     </tr>
 <xar:if condition="!empty($fields)">
+    <tr>
+       <td><strong>&xar-var-labels.id;</strong></td>
+       <td><strong>&xar-var-labels.label;</strong></td>
+       <td><strong>&xar-var-labels.type;</strong></td>
+       <td><strong>&xar-var-labels.default;</strong></td>
+       <td><strong>&xar-var-labels.validation;</strong></td>
+    </tr>
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
         <td>&xar-var-label;</td>
-        <td>&xar-var-type;</td>
+        <td><xar:articles-field type="fieldtype" name="dd_type['.$id.']" value="$type" numeric_id="yes" /></td>
         <td>&xar-var-default;</td>
         <td>&xar-var-validation;</td>
     </tr>

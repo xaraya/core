@@ -1,48 +1,75 @@
+
+<!-- common admin menu for this module - remove link to the current function -->
+
 <table border="0" width="100%" cellspacing="1" cellpadding="8">
+
+    <!-- the variables used in this menu come from example_admin_menu() -->
+
     <tr>
-        <th align="center">&xar-var-menutitle;<br/>&xar-var-module;</th>
+        <th align="center">&xar-var-menutitle;</th>
     </tr>
+    <tr><td>
+        <table border="0" width="100%" cellspacing="1" cellpadding="8">
+        <tr align="center" valign="middle">
+
+        <!-- links to particular menu items -->
+
+        <!-- Simple URLs can be specified directly in the template -->
+<!--
+        <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
+-->
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Modules using Dynamic Data</xar:mlstring></a></td>
+        <td><strong><xar:mlstring>Configure Property Types</xar:mlstring></strong></a></td>
+
+        <!-- more menu items come here... -->
+
+        <!-- Note : you can also specify the links in example_admin_menu()
+             and pass them on as variables : e.g. &xar-var-menulink_view; -->
+        </tr>
+        </table>
+    </td></tr>
 </table>
 <br />
 
+<!-- the specific template for the current admin function comes here -->
+
+<!-- some variable filled in by the admin function using this template -->
+
 // TODO: very much under construction, obviously :-)
-<br /><br />
-Tip : empty label -> delete field for all items
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
     <input type="hidden" name="authid" value="&xar-var-authid;" />
-    <input type="hidden" name="modid" value="&xar-var-modid;" />
-    <input type="hidden" name="itemtype" value="&xar-var-itemtype;" />
 
     <tr>
        <td><strong>&xar-var-labels.id;</strong></td>
+       <td><strong>&xar-var-labels.name;</strong></td>
        <td><strong>&xar-var-labels.label;</strong></td>
-       <td><strong>&xar-var-labels.type;</strong></td>
-       <td><strong>&xar-var-labels.default;</strong></td>
-       <td><strong>&xar-var-labels.validation;</strong></td>
+       <td><strong>&xar-var-labels.format;</strong></td>
+       <td><strong>...</strong></td>
     </tr>
 
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
-        <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;"></td>
-        <td><xar:articles-field type="fieldtype" name="dd_type['.$id.']" value="$type" numeric_id="yes" /></td>
-        <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;"></td>
-        <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;"></td>
+        <td><input type="text" name="name[&xar-var-id;]" size="15" value="&xar-var-name;"></td>
+        <td><input type="text" name="label[&xar-var-id;]" size="20" value="&xar-var-label;"></td>
+        <td><xar:articles-field type="fieldtype" name="format['.$id.']" value="$format" numeric_id="yes" /></td>
+        <td>...</td>
     </tr>
 </xar:loop>
 
     <tr align="left" valign="middle">
         <td>&xar-var-labels.new;</td>
-        <td><input type="text" name="dd_label[0]" size="15"></td>
-        <td><xar:articles-field type="fieldtype" name="dd_type[0]" value="" numeric_id="yes" /></td>
-        <td><input type="text" name="dd_default[0]" size="15"></td>
-        <td><input type="text" name="dd_validation[0]" size="15"></td>
+        <td><input type="text" name="name[0]" size="15"></td>
+        <td><input type="text" name="label[0]" size="20"></td>
+        <td><xar:articles-field type="fieldtype" name="format[0]" value="" numeric_id="yes" /></td>
+        <td>...</td>
     </tr>
 
     <tr>
-        <td colspan="5" align="center">
+        <td colspan="4" align="center">
            <input type="submit" value="&xar-var-updatebutton;">
         </td>
     </tr>

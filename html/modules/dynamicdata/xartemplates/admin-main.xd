@@ -15,10 +15,12 @@
         <!-- links to particular menu items -->
 
         <!-- Simple URLs can be specified directly in the template -->
-
-        <td><a href="&xar-modurl-example-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
-        <td><a href="&xar-modurl-example-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
-        <td><a href="&xar-modurl-example-admin-modifyconfig;"><xar:mlstring>Configuration</xar:mlstring></a></td>
+<!--
+        <td><a href="&xar-modurl-dynamicdata-admin-new;"><xar:mlstring>New Data Property</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Data Properties</xar:mlstring></a></td>
+-->
+        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Modules using Dynamic Data</xar:mlstring></a></td>
+        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
 
         <!-- more menu items come here... -->
 
