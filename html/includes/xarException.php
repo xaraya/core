@@ -160,7 +160,7 @@ function xarExceptionMajor()
 function xarExceptionId()
 {
     global $ExceptionStack;
-    if ($ExceptionStack->isempty()) return '';
+    if ($ExceptionStack->isempty()) return false;
     $exp = $ExceptionStack->peek();
     return $exp->getID();
 }
@@ -178,7 +178,7 @@ function xarExceptionId()
 function xarExceptionValue()
 {
     global $ExceptionStack;
-    if ($ExceptionStack->isempty()) return '';
+    if ($ExceptionStack->isempty()) return false;
     return $ExceptionStack->peek();
 }
 
