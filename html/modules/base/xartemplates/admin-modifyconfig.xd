@@ -73,7 +73,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 		<p><label for="sessionduration"><xar:mlstring>Session Duration (In Days)</xar:mlstring></label>:
 		<input type="text" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" size="5" maxlength="3"></p>
 	</xar:if>
-	<p><label for="sessiontimeout"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>
+	<p><label for="sessiontimeout"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3"></p>
 
     <h4><xar:mlstring>Multi-Language Configuration</xar:mlstring></h4>

@@ -54,11 +54,11 @@ function base_htmlblock_display($blockinfo)
         if ($vars['expire'] != 0){
             return;
         } else {
-            $blockinfo['content'] = xarVarPrepHTMLDisplay($vars['html_content']);
+            $blockinfo['content'] = $vars['html_content'];
             return $blockinfo;
         }
     } else {
-        $blockinfo['content'] = xarVarPrepHTMLDisplay($vars['html_content']);
+        $blockinfo['content'] = $vars['html_content'];
         return $blockinfo;
     }
 

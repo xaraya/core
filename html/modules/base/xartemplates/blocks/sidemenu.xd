@@ -1,4 +1,3 @@
-<br />
 <xar:if condition="!empty($usercontent)">
     <xar:loop name="$usercontent">
         <xar:if condition="empty($loop:item['url'])">

@@ -9,30 +9,30 @@
 	</xar:if>
 	<!-- Linking for Mozilla and related browser site tab -->
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
-	<link rel="alternate" type="application/rss+xml" title="Print" href="#$activepageprint#" />
+	<link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
 	<link rel="pingback" href="&xar-baseurl;ws.php" />
-	<link rel="Top" href="#$baseurl#" />
-	<link rel="Parent" href="#$baseurl#" />
+	<link rel="Top" type="text/html" href="#$baseurl#" />
+	<link rel="Parent" type="text/html" href="#$baseurl#" />
 	<link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
 	<xar:if condition="!empty($copyrightpage)">
-		<link rel="copyright" href="#$copyrightpage#" />
+		<link rel="copyright" type="text/html" href="#$copyrightpage#" />
 	</xar:if>
 	<xar:if condition="!empty($helppage)">
-		<link rel="help" href="#$helppage#" />
+		<link rel="help" type="text/html" href="#$helppage#" />
 	</xar:if>
 	<xar:if condition="!empty($glossary)">
-		<link rel="glossary" href="#$glossary#" />
+		<link rel="glossary" type="text/html" href="#$glossary#" />
 	</xar:if>
 	<xar:if condition="!empty($first)">
-		<link rel="first" href="#$first#" />
+		<link rel="first" type="text/html" href="#$first#" />
 	</xar:if>
 	<xar:if condition="!empty($last)">
-		<link rel="last" href="#$last#" />
+		<link rel="last" type="text/html" href="#$last#" />
 	</xar:if>
 	<xar:if condition="xarModIsAvailable('articles')">
-		<link rel="contents" href="#xarModUrl('articles', 'user', 'viewmap')#" />
+		<link rel="contents" type="text/html" href="#xarModUrl('articles', 'user', 'viewmap')#" />
 	</xar:if>
 	<xar:if condition="xarModIsAvailable('search')">
-		<link rel="search" href="#xarModUrl('search', 'user', 'main')#" />
+		<link rel="search" type="text/html" href="#xarModUrl('search', 'user', 'main')#" />
 	</xar:if>
