@@ -133,7 +133,7 @@ function base_menublock_display($blockinfo)
                         if (empty($url[1])) $url[1]="user";
                         if (empty($url[2])) $url[2]="main";
                         // if the current module is active, then we are here
-                        if ($url[0] == $thismodname) {
+                        if ($url[0] == $thismodname && $url[2] == $thisfuncname) {
                             $here = 'true';
                         }
                         $url = xarModUrl($url[0],$url[1],$url[2]);
