@@ -651,12 +651,12 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
 }
 
 /**
- * TODO: add this description
+ * Execute a pre-compiled template string with the supplied template variables
  *
  * @access public
- * @param templateCode string
- * @param tplData string
- * @return  string
+ * @param templateCode string pre-compiled template code (see xarTplCompileString)
+ * @param tplData array template variables
+ * @return  string filled-in template
  */
 function xarTplString($templateCode, $tplData)
 {
@@ -664,12 +664,12 @@ function xarTplString($templateCode, $tplData)
 }
 
 /**
- * TODO: add this description
+ * Execute a specific template file with the supplied template variables
  *
  * @access public
- * @param templateCode string
- * @param tplData string
- * @return string
+ * @param fileName string location of the template file
+ * @param tplData array template variables
+ * @return string filled-in template
  */
 function xarTplFile($fileName, $tplData)
 {
@@ -677,11 +677,14 @@ function xarTplFile($fileName, $tplData)
 }
 
 /**
- * TODO: add this description
+ * Compile a template string for storage and/or later use in xarTplString()
+ * Note : your module should always support the possibility of re-compiling
+ *        template strings e.g. after an upgrade, so you should store both
+ *        the original template and the compiled version if necessary
  *
  * @access public
- * @param templateSource string
- * @return string
+ * @param templateSource string template source
+ * @return string compiled template
  */
 function xarTplCompileString($templateSource)
 {
