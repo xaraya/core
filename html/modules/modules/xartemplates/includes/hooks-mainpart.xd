@@ -26,11 +26,15 @@
                     </xar:if>
 
                     <!-- Store the checked attribute for reuse -->
-                    <xar:set name="NOTischecked">true</xar:set>
+                    <xar:set name="NOTischecked">false</xar:set>
                     <xar:set name="ALLischecked">false</xar:set>
-                    <xar:if condition="!empty($hookedmod['checked'][0])">
-                        <xar:set name="NOTischecked">false</xar:set>
+                    <xar:set name="SOMEischecked">false</xar:set>
+                    <xar:if condition="empty($hookedmod['checked']) or count($hookedmod['checked']) eq 0">
+                        <xar:set name="NOTischecked">true</xar:set>
+                    <xar:elseif condition="!empty($hookedmod['checked'][0])" />
                         <xar:set name="ALLischecked">true</xar:set>
+                    <xar:else/>
+                        <xar:set name="SOMEischecked">true</xar:set>
                     </xar:if>
                     
                     <!-- Store the disabled attribute for reuse -->
@@ -90,10 +94,18 @@
                         
                         <xar:if condition="count($hookedmod['itemtypes']) gt 0">
                             <!-- The SOME radio -->
-                            <xar:if condition="$hookedmoddisabled">
-                                <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" disabled="disabled" />
+                            <xar:if condition="$SOMEischecked">
+                                <xar:if condition="$hookedmoddisabled">
+                                    <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" checked="checked" disabled="disabled" />
+                                <xar:else/>
+                                    <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" checked="checked"/>
+                                </xar:if>
                             <xar:else/>
-                                <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" />
+                                <xar:if condition="$hookedmoddisabled">
+                                    <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" disabled="disabled" />
+                                <xar:else/>
+                                    <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" style="vertical-align: middle;" />
+                                </xar:if>
                             </xar:if>
                             <label for="SOME_hooked_#$hookedmod['name']#_0">
                                 <xar:ml>
