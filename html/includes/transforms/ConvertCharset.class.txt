@@ -1,0 +1,105 @@
+/**
+ * @author Mikolaj Jedrzejak <mikolajj@op.pl>
+ * @copyright Copyright Mikolaj Jedrzejak (c) 2003-2004
+ * @version 1.0 2004-07-27 00:37
+ * @link http://www.unicode.org Unicode Homepage
+ * @link http://www.mikkom.pl My Homepage
+ * 
+ **/
+
+/**
+ * Why ConvertCharset class?
+ * 
+ * I have made this class because I had a lot of problems with diferent charsets.
+ * 
+ * Notice & remember:
+ * - When I'm saying 1 byte string I mean 1 byte per char.
+ * - When I'm saying multibyte string I mean more than one byte per char.
+ * 
+ * So, this are main FEATURES of this class:
+ * - conversion between 1 byte charsets
+ * - conversion from 1 byte to multi byte charset (utf-8)
+ * - conversion from multibyte charset (utf-8) to 1 byte charset
+ * - every conversion output can be save with numeric entities (browser charset independent - not a full truth)
+ * 
+ * This is a list of charsets you can operate with, the basic rule is that a char have to be in both charsets,
+ * otherwise you'll get an error.
+ * 
+ * - WINDOWS
+ * - windows-1250 - Central Europe
+ * - windows-1251 - Cyrillic
+ * - windows-1252 - Latin I
+ * - windows-1253 - Greek
+ * - windows-1254 - Turkish
+ * - windows-1255 - Hebrew
+ * - windows-1256 - Arabic
+ * - windows-1257 - Baltic
+ * - windows-1258 - Viet Nam
+ * - cp874 - Thai - this file is also for DOS
+ * 
+ * - DOS
+ * - cp437 - Latin US
+ * - cp737 - Greek
+ * - cp775 - BaltRim
+ * - cp850 - Latin1
+ * - cp852 - Latin2
+ * - cp855 - Cyrylic
+ * - cp857 - Turkish
+ * - cp860 - Portuguese
+ * - cp861 - Iceland
+ * - cp862 - Hebrew
+ * - cp863 - Canada
+ * - cp864 - Arabic
+ * - cp865 - Nordic
+ * - cp866 - Cyrylic Russian (this is the one, used in IE "Cyrillic (DOS)" )
+ * - cp869 - Greek2
+ * 
+ * - MAC (Apple)
+ * - x-mac-cyrillic
+ * - x-mac-greek
+ * - x-mac-icelandic
+ * - x-mac-ce
+ * - x-mac-roman
+ * 
+ * - ISO (Unix/Linux)
+ * - iso-8859-1
+ * - iso-8859-2
+ * - iso-8859-3
+ * - iso-8859-4
+ * - iso-8859-5
+ * - iso-8859-6
+ * - iso-8859-7
+ * - iso-8859-8
+ * - iso-8859-9
+ * - iso-8859-10
+ * - iso-8859-11
+ * - iso-8859-12
+ * - iso-8859-13
+ * - iso-8859-14
+ * - iso-8859-15
+ * - iso-8859-16
+ * 
+ * - MISCELLANEOUS
+ * - gsm0338 (ETSI GSM 03.38)
+ * - cp037
+ * - cp424
+ * - cp500 
+ * - cp856
+ * - cp875
+ * - cp1006
+ * - cp1026
+ * - koi8-r (Cyrillic)
+ * - koi8-u (Cyrillic Ukrainian)
+ * - nextstep
+ * - us-ascii
+ * - us-ascii-quotes
+ * 
+ * - DSP implementation for NeXT
+ * - stdenc
+ * - symbol
+ * - zdingbat
+ * 
+ * - And specially for old Polish programs
+ * - mazovia
+ *  
+ **/
