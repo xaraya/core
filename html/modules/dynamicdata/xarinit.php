@@ -423,17 +423,18 @@ function dynamicdata_init()
         return false;
     }
 
-// TODO: replace this with block/cached variables/special template tag/... ?
-//
-//       Ideally, people should be able to use the dynamic fields in their
-//       module templates as if they were 'normal' fields -> this means
-//       adapting the get() function in the user API of the module, perhaps...
+//  Ideally, people should be able to use the dynamic fields in their
+//  module templates as if they were 'normal' fields -> this means
+//  adapting the get() function in the user API of the module, and/or
+//  using some common data retrieval function (DD) in the future...
 
+/*  display hook is now disabled by default - use the BL tags or APIs instead
     // when a module item is being displayed
     if (!xarModRegisterHook('item', 'display', 'GUI',
                            'dynamicdata', 'user', 'displayhook')) {
         return false;
     }
+*/
 
     /**
      * Register BL tags
@@ -681,16 +682,17 @@ function dynamicdata_delete()
         xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
 
-// TODO: replace this with block/cached variables/special template tag/... ?
-//
-//       Ideally, people should be able to use the dynamic fields in their
-//       module templates as if they were 'normal' fields -> this means
-//       adapting the get() function in the user API of the module, perhaps...
+//  Ideally, people should be able to use the dynamic fields in their
+//  module templates as if they were 'normal' fields -> this means
+//  adapting the get() function in the user API of the module, and/or
+//  using some common data retrieval function (DD) in the future...
 
+/*  display hook is now disabled by default - use the BL tags or APIs instead
     if (!xarModUnregisterHook('item', 'display', 'GUI',
                              'dynamicdata', 'user', 'displayhook')) {
         xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
+*/
 
     /**
      * Unregister BL tags

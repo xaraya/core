@@ -19,11 +19,12 @@ require_once 'modules/dynamicdata/class/objects.php';
 // ----------------------------------------------------------------------
 
 
-// TODO: replace this with block/cached variables/special template tag/... ?
-//
-//       Ideally, people should be able to use the dynamic fields in their
-//       module templates as if they were 'normal' fields -> this means
-//       adapting the get() function in the user API of the module, perhaps...
+//  Ideally, people should be able to use the dynamic fields in their
+//  module templates as if they were 'normal' fields -> this means
+//  adapting the get() function in the user API of the module, and/or
+//  using some common data retrieval function (DD) in the future...
+
+/*  display hook is now disabled by default - use the BL tags or APIs instead */
 
 /**
  * display dynamicdata for an item - hook for ('item','display','GUI')
