@@ -1,34 +1,19 @@
 <?php
-// File: $Id: import8.php,v 1.17 2002/09/15 11:30:35 mikespub Exp $
+// File: $Id$
 // ----------------------------------------------------------------------
-// PostNuke Content Management System
-// Copyright (C) 2002 by the PostNuke Development Team.
-// http://www.postnuke.com/
-// ----------------------------------------------------------------------
-// LICENSE
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License (GPL)
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// To read the license please visit http://www.gnu.org/copyleft/gpl.html
+// Xaraya eXtensible Management System
+// Copyright (C) 2002 by the Xaraya Development Team.
+// http://www.xaraya.org
 // ----------------------------------------------------------------------
 // Original Author of this file: mikespub
 // Purpose of this file: Quick & dirty import of .71 data to a .8 test site
 // ----------------------------------------------------------------------
 
-// initialize the PostNuke environment
-//include 'includes/pnAPI.php';
-//pnInit();
-include 'includes/pnCore.php';
-pnCoreInit(PNCORE_SYSTEM_ALL);
+// initialize the Xaraya core
+include 'includes/xarCore.php';
+xarCoreInit(XARCORE_SYSTEM_ALL);
 
+$step = xarVarCleanFromInput('step');
 if (!isset($step)) {
 // start the output buffer
 ob_start();
@@ -38,14 +23,12 @@ ob_start();
 <h3>Quick and dirty import of .8 test data from an existing .71 site</h3>
 
 <?php
-global $pnconfig;
-//$prefix = $pnconfig['prefix'];
-$prefix = pnDBGetSiteTablePrefix();
+$prefix = xarDBGetSystemTablePrefix();
 if (isset($step) && ($step > 1 || isset($startnum))) {
-    $oldprefix = pnModGetVar('installer','oldprefix');
-    $reset = pnModGetVar('installer','reset');
-    $resetcat = pnModGetVar('installer','resetcat');
-    $imgurl = pnModGetVar('installer','imgurl');
+    $oldprefix = xarModGetVar('installer','oldprefix');
+    $reset = xarModGetVar('installer','reset');
+    $resetcat = xarModGetVar('installer','resetcat');
+    $imgurl = xarModGetVar('installer','imgurl');
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',$oldprefix)) {
 ?>
@@ -72,33 +55,41 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
-        pnModSetVar('installer','oldprefix',$oldprefix);
+        xarModSetVar('installer','oldprefix',$oldprefix);
         if (!isset($reset)) { $reset = 0; }
-        pnModSetVar('installer','reset',$reset);
+        xarModSetVar('installer','reset',$reset);
         if (!isset($resetcat)) { $resetcat = 0; }
-        pnModSetVar('installer','resetcat',$resetcat);
+        xarModSetVar('installer','resetcat',$resetcat);
         if (!isset($imgurl)) { $imgurl = 0; }
-        pnModSetVar('installer','imgurl',$imgurl);
+        xarModSetVar('installer','imgurl',$imgurl);
     }
 
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    // log in admin user
+    if (!xarUserLogIn('Admin', 'password', 0)) {
+        die('Unable to log in');
+    }
 
-    if (!pnModAPILoad('users','admin')) {
+    list($dbconn) = xarDBGetConn();
+
+    if (!xarModAPILoad('users','admin')) {
         die("Unable to load the users admin API");
     }
-    if (!pnModAPILoad('categories','user')) {
+    if (!xarModAPILoad('categories','user')) {
         die("Unable to load the categories user API");
     }
-    if (!pnModAPILoad('categories','admin')) {
+    if (!xarModAPILoad('categories','admin')) {
         die("Unable to load the categories admin API");
     }
-    if (!pnModAPILoad('articles','admin')) {
+    if (!xarModAPILoad('articles','admin')) {
         die("Unable to load the articles admin API");
     }
-    if (!pnModAPILoad('comments','admin')) {
+    if (!xarModAPILoad('comments','admin')) {
         die("Unable to load the comments admin API");
     }
+    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
+        $docounter = 1;
+    }
+    $tables = xarDBGetTables();
 
     if (!isset($reset)) {
         $reset = 0;
@@ -133,26 +124,24 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         die("Oops, select users failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $pntable['users'] . " WHERE pn_uid > 2");
-        $dbconn->Execute('FLUSH TABLE ' . $pntable['users']);
+        $dbconn->Execute("DELETE FROM " . $tables['users'] . " WHERE xar_uid > 2");
+        $dbconn->Execute('FLUSH TABLE ' . $tables['users']);
     }
     $num = 1;
     while (!$result->EOF) {
         list($uid,$name,$uname,$email,$pass,$url) = $result->fields;
-//        $insert = 'INSERT DELAYED INTO ' . $pntable['users'] . '
-        $insert = 'INSERT INTO ' . $pntable['users'] . '
-                     (pn_uid, pn_name, pn_uname, pn_email, pn_pass, pn_url,
-                     pn_auth_module)
-                   VALUES (' .
-                     pnVarPrepForStore($uid) . ",'" .
-                     pnVarPrepForStore($name) . "','" .
-                     pnVarPrepForStore($uname) . "','" .
-                     pnVarPrepForStore($email) . "','" .
-                     pnVarPrepForStore($pass) . "','" .
-                     pnVarPrepForStore($url) . "','" .
-                     'authsystem' . "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
+        $newuid = xarModAPIFunc('users',
+                                'admin',
+                                'create',
+                                array('uid' => $uid,
+                                      'uname' => $uname,
+                                      'realname' => $name,
+                                      'email' => $email,
+                                      'pass'  => $pass,
+                                      'date'     => time(),
+                                      'valcode'  => 'createdbyadmin',
+                                      'state'   => 3));
+        if (!isset($newuid)) {
             echo "Insert user ($uid) $name failed : " . $dbconn->ErrorMsg() ."<br>\n";
         } elseif ($count < 200) {
             echo "Inserted user ($uid) $name - $uname<br>\n";
@@ -177,45 +166,44 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if ($step == 2) {
     echo "<strong>2. Importing old news topics into categories</strong><br>\n";
     if ($resetcat) {
-        $dbconn->Execute("DELETE FROM " . $pntable['categories']);
-        $dbconn->Execute('FLUSH TABLE ' . $pntable['categories']);
+        $dbconn->Execute("DELETE FROM " . $tables['categories']);
+        $dbconn->Execute('FLUSH TABLE ' . $tables['categories']);
     }
-    $regid = pnModGetIDFromName('articles');
+    $regid = xarModGetIDFromName('articles');
     if ($reset) {
-        $dbconn->Execute("DELETE FROM " . $pntable['categories_linkage'] . " WHERE pn_modid=$regid");
-        $dbconn->Execute('FLUSH TABLE ' . $pntable['categories_linkage']);
+        $dbconn->Execute("DELETE FROM " . $tables['categories_linkage'] . " WHERE xar_modid=$regid");
+        $dbconn->Execute('FLUSH TABLE ' . $tables['categories_linkage']);
     }
-    if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
+    if (!empty($docounter)) {
         if ($reset) {
-            $regid2 = pnModGetIDFromName('categories');
-            $dbconn->Execute("DELETE FROM " . $pntable['hitcount'] . " WHERE pn_moduleid = " . $regid2);
-            $dbconn->Execute('FLUSH TABLE ' . $pntable['hitcount']);
+            $regid2 = xarModGetIDFromName('categories');
+            $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid2);
+            $dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
         }
-        $docounter = 1;
     }
     echo "Creating root for old news topics<br>\n";
-    $topics = pnModAPIFunc('categories', 'admin', 'create', array(
+    $topics = xarModAPIFunc('categories', 'admin', 'create', array(
                                'name' => 'Topics',
                                'description' => 'News Topics (.7x style)',
                                'parent_id' => 0));
     echo "Creating root for old news categories<br>\n";
-    $categories = pnModAPIFunc('categories', 'admin', 'create', array(
+    $categories = xarModAPIFunc('categories', 'admin', 'create', array(
                                   'name' => 'Categories',
                                   'description' => 'News Categories (.7x style)',
                                   'parent_id' => 0));
     // preset the article categories to those two types
     if ($reset) {
-        $settings = unserialize(pnModGetVar('articles', 'settings.1'));
+        $settings = unserialize(xarModGetVar('articles', 'settings.1'));
         $settings['number_of_categories'] = 2;
         $settings['cids'] = array($topics, $categories);
-        pnModSetVar('articles', 'settings.1', serialize($settings));
-        pnModSetVar('articles', 'number_of_categories.1', 2);
-        pnModSetVar('articles', 'mastercids.1', $topics .';'.$categories);
+        xarModSetVar('articles', 'settings.1', serialize($settings));
+        xarModSetVar('articles', 'number_of_categories.1', 2);
+        xarModSetVar('articles', 'mastercids.1', $topics .';'.$categories);
     } else {
         // you'll be in trouble with your categories here...
     }
     echo "Creating old default 'Articles' news category<br>\n";
-    $catid[0] = pnModAPIFunc('categories', 'admin', 'create', array(
+    $catid[0] = xarModAPIFunc('categories', 'admin', 'create', array(
                                  'name' => 'Articles',
                                  'description' => 'Articles',
                                  'parent_id' => $categories));
@@ -229,14 +217,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     while (!$result->EOF) {
         list($id, $name, $text, $image, $counter) = $result->fields;
-        $topicid[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
+        $topicid[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                               'name' => $text,
                               'description' => $text,
                               'image' => "$imgurl/topics/$image",
                               'parent_id' => $topics));
         echo "Creating topic ($id) $text - $name [$image]<br>\n";
         if (!empty($docounter)) {
-            $hcid = pnModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
+            $hcid = xarModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
                                                                'objectid' => $topicid[$id],
                                                                'hits' => $counter));
             if (!isset($hcid)) {
@@ -256,13 +244,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     while (!$result->EOF) {
         list($id, $title, $counter) = $result->fields;
-        $catid[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
+        $catid[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                               'name' => $title,
                               'description' => $title,
                               'parent_id' => $categories));
         echo "Creating category ($id) $title - $title<br>\n";
         if (!empty($docounter)) {
-            $hcid = pnModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
+            $hcid = xarModAPIFunc('hitcount','admin','create',array('modname' => 'categories',
                                                                'objectid' => $catid[$id],
                                                                'hits' => $counter));
             if (!isset($hcid)) {
@@ -273,19 +261,19 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $result->Close();
     echo "<strong>TODO : copy the topic images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
-    pnModSetVar('installer','topics',$topics);
-    pnModSetVar('installer','topicid',serialize($topicid));
-    pnModSetVar('installer','categories',$categories);
-    pnModSetVar('installer','catid',serialize($catid));
+    xarModSetVar('installer','topics',$topics);
+    xarModSetVar('installer','topicid',serialize($topicid));
+    xarModSetVar('installer','categories',$categories);
+    xarModSetVar('installer','catid',serialize($catid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 3) {
-    $topics = pnModGetVar('installer','topics');
-    $topicid = unserialize(pnModGetVar('installer','topicid'));
-    $categories = pnModGetVar('installer','categories');
-    $catid = unserialize(pnModGetVar('installer','catid'));
+    $topics = xarModGetVar('installer','topics');
+    $topicid = unserialize(xarModGetVar('installer','topicid'));
+    $categories = xarModGetVar('installer','categories');
+    $catid = unserialize(xarModGetVar('installer','catid'));
     echo "<strong>3. Importing articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_stories';
     $result = $dbconn->Execute($query);
@@ -294,7 +282,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $count = $result->fields[0];
     $result->Close();
-    $regid = pnModGetIDFromName('articles');
+    $regid = xarModGetIDFromName('articles');
     $query = 'SELECT pn_sid, pn_title, pn_hometext, pn_bodytext, pn_aid,
                      UNIX_TIMESTAMP(pn_time), pn_language, pn_catid, pn_topic,
                      pn_notes, pn_ihome, pn_counter
@@ -313,15 +301,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         die("Oops, select stories failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $pntable['articles']);
-        $dbconn->Execute('FLUSH TABLE ' . $pntable['articles']);
+        $dbconn->Execute("DELETE FROM " . $tables['articles']);
+        $dbconn->Execute('FLUSH TABLE ' . $tables['articles']);
     }
-    if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
+    if (!empty($docounter)) {
         if ($reset && $startnum == 0) {
-            $dbconn->Execute("DELETE FROM " . $pntable['hitcount'] . " WHERE pn_moduleid = " . $regid);
-            $dbconn->Execute('FLUSH TABLE ' . $pntable['hitcount']);
+            $dbconn->Execute("DELETE FROM " . $tables['hitcount'] . " WHERE xar_moduleid = " . $regid);
+            $dbconn->Execute('FLUSH TABLE ' . $tables['hitcount']);
         }
-        $docounter = 1;
     }
     $num = 1;
     while (!$result->EOF) {
@@ -332,40 +319,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         } else {
             $status = 2;
         }
-        $insert = 'INSERT INTO ' . $pntable['articles'] . ' 
-                     (pn_aid, pn_title, pn_summary, pn_body, pn_authorid,
-                     pn_pubdate, pn_pubtypeid, pn_pages, pn_notes,
-                     pn_status, pn_language)
-                   VALUES (' .
-                     pnVarPrepForStore($aid) . ",'" .
-                     pnVarPrepForStore($title) . "','" .
-                     pnVarPrepForStore($summary) . "','" .
-                     pnVarPrepForStore($body) . "','" .
-                     pnVarPrepForStore($authorid) . "','" .
-                     pnVarPrepForStore($pubdate) . "','" .
-                     '1' . "','" .
-                     '0' . "','" .
-                     pnVarPrepForStore($notes) . "','" .
-                     pnVarPrepForStore($status) .  "','" .
-                     pnVarPrepForStore($language) . "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
-            echo "Insert article ($aid) $title failed : " . $dbconn->ErrorMsg() ."<br>\n";
-        } elseif ($count < 200) {
-            echo "Inserted article ($aid) $title<br>\n";
-        } elseif ($num % 100 == 0) {
-            echo "Inserted article " . ($num + $startnum) . "<br>\n";
-            flush();
-        }
-        $num++;
-        if (!empty($docounter)) {
-            $hcid = pnModAPIFunc('hitcount','admin','create',array('modname' => 'articles',
-                                                               'objectid' => $aid,
-                                                               'hits' => $counter));
-            if (!isset($hcid)) {
-                echo "Couldn't create hit counter $counter for article $aid $title<br>\n";
-            }
-        }
         $cids = array();
         if (isset($topicid[$topic])) {
             $cids[] = $topicid[$topic];
@@ -373,10 +326,33 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (isset($catid[$cat])) {
             $cids[] = $catid[$cat];
         }
-        pnModAPIFunc('categories', 'admin', 'linkcat', array(
-                     'cids' => $cids,
-                     'iids' => array($aid),
-                     'modid' => $regid ));
+        $newaid = xarModAPIFunc('articles',
+                                'admin',
+                                'create',
+                                array('aid' => $aid,
+                                      'title' => $title,
+                                      'summary' => $summary,
+                                      'body' => $body,
+                                      'notes' => $notes,
+                                      'status' => $status,
+                                      'ptid' => 1,
+                                      'pubdate' => $pubdate,
+                                      'authorid' => $authorid,
+                                      'language' => $language,
+                                      'cids' => $cids,
+                                      'hits' => $counter
+                                     )
+                               );
+        if (!isset($newaid) || $newaid != $aid) {
+            echo "Insert article ($aid) $title failed<br>\n";
+        } elseif ($count < 200) {
+            echo "Inserted article ($aid) $title<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted article " . ($num + $startnum) . "<br>\n";
+            flush();
+        }
+        $num++;
+
         $result->MoveNext();
     }
     $result->Close();
@@ -384,17 +360,17 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import8.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
-        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
     }
 
     if ($step == 4) {
-    $topics = pnModGetVar('installer','topics');
-    $topicid = unserialize(pnModGetVar('installer','topicid'));
-    $categories = pnModGetVar('installer','categories');
-    $catid = unserialize(pnModGetVar('installer','catid'));
+    $topics = xarModGetVar('installer','topics');
+    $topicid = unserialize(xarModGetVar('installer','topicid'));
+    $categories = xarModGetVar('installer','categories');
+    $catid = unserialize(xarModGetVar('installer','catid'));
     echo "<strong>4. Importing queued articles</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_queue';
     $result = $dbconn->Execute($query);
@@ -403,7 +379,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     }
     $count = $result->fields[0];
     $result->Close();
-    $regid = pnModGetIDFromName('articles');
+    $regid = xarModGetIDFromName('articles');
     $query = 'SELECT pn_qid, pn_subject, pn_story, pn_bodytext, pn_uid,
                      UNIX_TIMESTAMP(pn_timestamp), pn_language, pn_topic,
                      pn_arcd
@@ -430,27 +406,30 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         } else {
             $status = 1;
         }
-        $nextId = $dbconn->GenId($pntable['articles']);
         $notes = '';
-        $insert = 'INSERT INTO ' . $pntable['articles'] . ' 
-                     (pn_aid, pn_title, pn_summary, pn_body, pn_authorid,
-                     pn_pubdate, pn_pubtypeid, pn_pages, pn_notes,
-                     pn_status, pn_language)
-                   VALUES (' .
-                     pnVarPrepForStore($nextId) . ",'" .
-                     pnVarPrepForStore($title) . "','" .
-                     pnVarPrepForStore($summary) . "','" .
-                     pnVarPrepForStore($body) . "','" .
-                     pnVarPrepForStore($authorid) . "','" .
-                     pnVarPrepForStore($pubdate) . "','" .
-                     '1' . "','" .
-                     '0' . "','" .
-                     pnVarPrepForStore($notes) . "','" .
-                     pnVarPrepForStore($status) .  "','" .
-                     pnVarPrepForStore($language) . "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
-            echo "Insert queued article ($qid) $title failed : " . $dbconn->ErrorMsg() ."<br>\n";
+        $cids = array();
+        if (isset($topicid[$topic])) {
+            $cids[] = $topicid[$topic];
+        }
+        $counter = 0;
+        $newaid = xarModAPIFunc('articles',
+                                'admin',
+                                'create',
+                                array('title' => $title,
+                                      'summary' => $summary,
+                                      'body' => $body,
+                                      'notes' => $notes,
+                                      'status' => $status,
+                                      'ptid' => 1,
+                                      'pubdate' => $pubdate,
+                                      'authorid' => $authorid,
+                                      'language' => $language,
+                                      'cids' => $cids,
+                                      'hits' => $counter
+                                     )
+                               );
+        if (!isset($newaid)) {
+            echo "Insert queued article ($qid) $title failed <br>\n";
         } elseif ($count < 200) {
             echo "Inserted queued article ($qid) $title<br>\n";
         } elseif ($num % 100 == 0) {
@@ -458,16 +437,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             flush();
         }
         $num++;
-        $cids = array();
-        if (isset($topicid[$topic])) {
-            $cids[] = $topicid[$topic];
-        }
-        // Get aid to return
-        $aid = $dbconn->PO_Insert_ID($pntable['articles'], 'pn_aid');
-        pnModAPIFunc('categories', 'admin', 'linkcat', array(
-                     'cids' => $cids,
-                     'iids' => array($aid),
-                     'modid' => $regid ));
         $result->MoveNext();
     }
     $result->Close();
@@ -484,17 +453,17 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if ($step == 5) {
     echo "<strong>5. Importing old sections into categories</strong><br>\n";
     echo "Creating root for old sections<br>\n";
-    $sections = pnModAPIFunc('categories', 'admin', 'create', array(
+    $sections = xarModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'Sections',
                              'description' => 'Document Sections (.7x style)',
                              'parent_id' => 0));
     if ($reset) {
-        $settings = unserialize(pnModGetVar('articles', 'settings.2'));
+        $settings = unserialize(xarModGetVar('articles', 'settings.2'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($sections);
-        pnModSetVar('articles', 'settings.2', serialize($settings));
-        pnModSetVar('articles', 'number_of_categories.2', 1);
-        pnModSetVar('articles', 'mastercids.2', $sections);
+        xarModSetVar('articles', 'settings.2', serialize($settings));
+        xarModSetVar('articles', 'number_of_categories.2', 1);
+        xarModSetVar('articles', 'mastercids.2', $sections);
     }
     if ($sections > 0) {
         $query = 'SELECT pn_secid, pn_secname, pn_image
@@ -506,7 +475,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         }
         while (!$result->EOF) {
             list($id, $name, $image) = $result->fields;
-            $sectionid[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
+            $sectionid[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                               'name' => $name,
                               'description' => $name,
                               'image' => "$imgurl/sections/$image",
@@ -517,16 +486,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->Close();
     }
     echo "<strong>TODO : copy the section images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
-    pnModSetVar('installer','sections',$sections);
-    pnModSetVar('installer','sectionid',serialize($sectionid));
+    xarModSetVar('installer','sections',$sections);
+    xarModSetVar('installer','sectionid',serialize($sectionid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 6) {
-    $regid = pnModGetIDFromName('articles');
-    $sections = pnModGetVar('installer','sections');
-    $sectionid = unserialize(pnModGetVar('installer','sectionid'));
+    $regid = xarModGetIDFromName('articles');
+    $sections = xarModGetVar('installer','sections');
+    $sectionid = unserialize(xarModGetVar('installer','sectionid'));
     echo "<strong>6. Importing section content</strong><br>\n";
     $query = 'SELECT pn_artid, pn_secid, pn_title, pn_content, pn_language, pn_counter
               FROM ' . $oldprefix . '_seccont
@@ -535,43 +504,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if ($dbconn->ErrorNo() != 0) {
         die("Oops, select section content failed : " . $dbconn->ErrorMsg());
     }
-    if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
+    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
     }
     while (!$result->EOF) {
         list($artid, $secid, $title, $content, $language, $counter) = $result->fields;
-        $nextId = $dbconn->GenId($pntable['articles']);
-        $insert = 'INSERT INTO ' . $pntable['articles'] . ' 
-                     (pn_aid, pn_title, pn_summary, pn_body, pn_authorid,
-                     pn_pubdate, pn_pubtypeid, pn_pages, pn_status,
-                     pn_language)
-                   VALUES (' . 
-                     pnVarPrepForStore($nextId) . ",'" .
-                     pnVarPrepForStore($title) . "','" .
-                     '' . "','" .
-                     pnVarPrepForStore($content) . "','" .
-                     '1' . "','" .
-                     '0' . "','" .
-                     '2' . "','" .
-                     '0' . "','" .
-                     '2' . "','" .
-                     pnVarPrepForStore($language) . "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
-            echo "Insert section content ($artid) $title failed : " . $dbconn->ErrorMsg() ."<br>\n";
-        } else {
-            echo "Inserted section content ($artid) $title<br>\n";
-        }
-        // Get aid to return
-        $aid = $dbconn->PO_Insert_ID($pntable['articles'], 'pn_aid');
-        if (!empty($docounter)) {
-            $hcid = pnModAPIFunc('hitcount','admin','create',array('modname' => 'articles',
-                                                               'objectid' => $aid,
-                                                               'hits' => $counter));
-            if (!isset($hcid)) {
-                echo "Couldn't create hit counter $counter for article $aid $title<br>\n";
-            }
-        }
         $cids = array();
     // TODO: check if we want to add articles to the Sections root too or not
         //$cids[] = $sections;
@@ -581,10 +518,28 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (count($cids) == 0) {
             $cids[] = $sections;
         }
-        pnModAPIFunc('categories', 'admin', 'linkcat', array(
-                     'cids' => $cids,
-                     'iids' => array($aid),
-                     'modid' => $regid ));
+        $status = 2;
+        $newaid = xarModAPIFunc('articles',
+                                'admin',
+                                'create',
+                                array('title' => $title,
+                                      'summary' => '',
+                                      'body' => $content,
+                                      'notes' => '',
+                                      'status' => $status,
+                                      'ptid' => 2,
+                                      'pubdate' => 0,
+                                      'authorid' => 1,
+                                      'language' => $language,
+                                      'cids' => $cids,
+                                      'hits' => $counter
+                                     )
+                               );
+        if (!isset($newaid)) {
+            echo "Insert section content ($artid) $title failed <br>\n";
+        } else {
+            echo "Inserted section content ($artid) $title<br>\n";
+        }
         $result->MoveNext();
     }
     $result->Close();
@@ -595,17 +550,17 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if ($step == 7) {
     echo "<strong>7. Importing old FAQs into categories</strong><br>\n";
     echo "Creating root for old FAQs<br>\n";
-    $faqs = pnModAPIFunc('categories', 'admin', 'create', array(
+    $faqs = xarModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'FAQs',
                              'description' => 'Frequently Asked Questions (.7x style)',
                              'parent_id' => 0));
     if ($reset) {
-        $settings = unserialize(pnModGetVar('articles', 'settings.4'));
+        $settings = unserialize(xarModGetVar('articles', 'settings.4'));
         $settings['number_of_categories'] = 1;
         $settings['cids'] = array($faqs);
-        pnModSetVar('articles', 'settings.4', serialize($settings));
-        pnModSetVar('articles', 'number_of_categories.4', 1);
-        pnModSetVar('articles', 'mastercids.4', $faqs);
+        xarModSetVar('articles', 'settings.4', serialize($settings));
+        xarModSetVar('articles', 'number_of_categories.4', 1);
+        xarModSetVar('articles', 'mastercids.4', $faqs);
     }
     if ($faqs > 0) {
         $query = 'SELECT pn_id_cat, pn_categories, pn_parent_id
@@ -625,7 +580,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             if (!isset($faqid[$parent])) {
                 echo "Oops, missing parent $parent for FAQ ($id) $name<br>\n";
             } else {
-                $faqid[$id] = pnModAPIFunc('categories', 'admin', 'create',
+                $faqid[$id] = xarModAPIFunc('categories', 'admin', 'create',
                                            array('name' => $name,
                                            'description' => $name,
                                            'parent_id' => $faqid[$parent]));
@@ -635,16 +590,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         }
         $result->Close();
     }
-    pnModSetVar('installer','faqs',$faqs);
-    pnModSetVar('installer','faqid',serialize($faqid));
+    xarModSetVar('installer','faqs',$faqs);
+    xarModSetVar('installer','faqid',serialize($faqid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 8) {
-    $regid = pnModGetIDFromName('articles');
-    $faqs = pnModGetVar('installer','faqs');
-    $faqid = unserialize(pnModGetVar('installer','faqid'));
+    $regid = xarModGetIDFromName('articles');
+    $faqs = xarModGetVar('installer','faqs');
+    $faqid = unserialize(xarModGetVar('installer','faqid'));
     echo "<strong>8. Importing FAQ questions & answers</strong><br>\n";
     $query = 'SELECT pn_id, pn_id_cat, pn_question, pn_answer, pn_submittedby
               FROM ' . $oldprefix . '_faqanswer
@@ -656,29 +611,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     while (!$result->EOF) {
         list($id, $catid, $title, $content, $notes) = $result->fields;
         $language = '';
-        $nextId = $dbconn->GenId($pntable['articles']);
-        $insert = 'INSERT INTO ' . $pntable['articles'] . ' 
-                     (pn_aid, pn_title, pn_summary, pn_body, pn_authorid,
-                     pn_pubdate, pn_pubtypeid, pn_pages, pn_notes,
-                     pn_status, pn_language)
-                   VALUES (' . 
-                     pnVarPrepForStore($nextId) . ",'" .
-                     pnVarPrepForStore($title) . "','" .
-                     '' . "','" .
-                     pnVarPrepForStore($content) . "','" .
-                     '1' . "','" .
-                     '0' . "','" .
-                     '4' . "','" .
-                     '0' . "','" .
-                     pnVarPrepForStore($notes) . "','" .
-                     '2' . "','" .
-                     pnVarPrepForStore($language) .  "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
-            echo "Insert FAQ ($id) $title failed : " . $dbconn->ErrorMsg() ."<br>\n";
-        } else {
-            echo "Inserted FAQ ($id) $title<br>\n";
-        }
         $cids = array();
     // TODO: check if we want to add articles to the Sections root too or not
         //$cids[] = $sections;
@@ -688,22 +620,39 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (count($cids) == 0) {
             $cids[] = $faqs;
         }
-        // Get aid to return
-        $aid = $dbconn->PO_Insert_ID($pntable['articles'], 'pn_aid');
-        pnModAPIFunc('categories', 'admin', 'linkcat', array(
-                     'cids' => $cids,
-                     'iids' => array($aid),
-                     'modid' => $regid ));
+        $counter = 0;
+        $status = 2;
+        $newaid = xarModAPIFunc('articles',
+                                'admin',
+                                'create',
+                                array('title' => $title,
+                                      'summary' => '',
+                                      'body' => $content,
+                                      'notes' => $notes,
+                                      'status' => $status,
+                                      'ptid' => 4,
+                                      'pubdate' => 0,
+                                      'authorid' => 1,
+                                      'language' => $language,
+                                      'cids' => $cids,
+                                      'hits' => $counter
+                                     )
+                               );
+        if (!isset($newaid)) {
+            echo "Insert FAQ ($id) $title failed <br>\n";
+        } else {
+            echo "Inserted FAQ ($id) $title<br>\n";
+        }
         $result->MoveNext();
     }
     $result->Close();
     echo "<strong>TODO : do something with FAQ display</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 9) {
-    $regid = pnModGetIDFromName('articles');
+    $regid = xarModGetIDFromName('articles');
     echo "<strong>9. Importing comments</strong><br>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_comments';
     $result = $dbconn->Execute($query);
@@ -722,6 +671,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
     if (!isset($startnum)) {
         $startnum = 0;
     }
+/*
     if ($count > $numitems) {
         $result = $dbconn->SelectLimit($query, $numitems, $startnum);
     } else {
@@ -731,10 +681,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         die("Oops, select comments failed : " . $dbconn->ErrorMsg());
     }
     if ($reset && $startnum == 0) {
-        $dbconn->Execute("DELETE FROM " . $pntable['comments']);
+        $dbconn->Execute("DELETE FROM " . $tables['comments']);
     }
     $num = 1;
-    include_once('modules/comments/backend/backend.php');
+    include_once('modules/comments/xarincludes/backend/backend.php');
     while (!$result->EOF) {
         list($tid,$sid,$pid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
 
@@ -745,9 +695,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $data['itemid'] = $sid;
         $data['pid'] = $pid;
         $data['author'] = $uid;
-        $data['title'] = pnVarPrepForStore($subject);
-        $data['comment'] = pnVarPrepForStore($comment);
-        $data['hostname'] = pnVarPrepForStore($hostname);
+        $data['title'] = xarVarPrepForStore($subject);
+        $data['comment'] = xarVarPrepForStore($comment);
+        $data['hostname'] = xarVarPrepForStore($hostname);
         $data['cid'] = $tid;
         $data['date'] = $date;
 
@@ -763,6 +713,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->MoveNext();
     }
     $result->Close();
+*/
     echo "<strong>TODO : import other comments</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
@@ -776,7 +727,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 
     if ($step == 10) {
     echo "<strong>10. Importing old web link categories</strong><br>\n";
-    $weblinks[0] = pnModAPIFunc('categories', 'admin', 'create', array(
+    $weblinks[0] = xarModAPIFunc('categories', 'admin', 'create', array(
                                 'name' => 'Web Links',
                                 'description' => 'Web Link Categories (.7x style)',
                                 'parent_id' => 0));
@@ -794,7 +745,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
             $result->MoveNext();
             continue;
         }
-        $weblinks[$id] = pnModAPIFunc('categories', 'admin', 'create', array(
+        $weblinks[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                                       'name' => $title,
                                       'description' => $descr,
                                  //     'image' => "$imgurl/topics/$image",
@@ -803,26 +754,26 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         $result->MoveNext();
     }
     $result->Close();
-    pnModSetVar('installer','weblinks',serialize($weblinks));
+    xarModSetVar('installer','weblinks',serialize($weblinks));
 
-    $settings = unserialize(pnModGetVar('articles', 'settings.6'));
+    $settings = unserialize(xarModGetVar('articles', 'settings.6'));
     $settings['number_of_categories'] = 1;
     $settings['cids'] = array($weblinks[0]);
-    pnModSetVar('articles', 'settings.6', serialize($settings));
-    pnModSetVar('articles', 'number_of_categories.6', 1);
-    pnModSetVar('articles', 'mastercids.6', $weblinks[0]);
+    xarModSetVar('articles', 'settings.6', serialize($settings));
+    xarModSetVar('articles', 'number_of_categories.6', 1);
+    xarModSetVar('articles', 'mastercids.6', $weblinks[0]);
 
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
     }
 
     if ($step == 11) {
     echo "<strong>11. Importing old web links</strong><br>\n";
-    if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
+    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
     }
-    $weblinks = unserialize(pnModGetVar('installer','weblinks'));
-    $regid = pnModGetIDFromName('articles');
+    $weblinks = unserialize(xarModGetVar('installer','weblinks'));
+    $regid = xarModGetIDFromName('articles');
     $query = 'SELECT pn_lid, pn_cat_id, pn_title, ' . $oldprefix . '_links_links.pn_url, pn_description,
                      UNIX_TIMESTAMP(pn_date), ' . $oldprefix . '_links_links.pn_name, ' . $oldprefix . '_links_links.pn_email, pn_hits,
                      pn_submitter, pn_ratingsummary, pn_totalvotes, pn_uid
@@ -845,47 +796,31 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
         if (!empty($email)) {
             $email = ' <' . $email . '>';
         }
-        $nextId = $dbconn->GenId($pntable['articles']);
-        $insert = 'INSERT INTO ' . $pntable['articles'] . ' 
-                     (pn_aid, pn_title, pn_summary, pn_body, pn_authorid,
-                     pn_pubdate, pn_pubtypeid, pn_pages, pn_notes,
-                     pn_status, pn_language)
-                   VALUES (' .
-                     pnVarPrepForStore($nextId) . ",'" .
-                     pnVarPrepForStore($title) . "','" .
-                     pnVarPrepForStore($descr) . "','" .
-                     pnVarPrepForStore($url) . "','" .
-                     pnVarPrepForStore($uid) . "','" .
-                     pnVarPrepForStore($date) . "','" .
-                     '6' . "','" .
-                     '0' . "','" .
-                     pnVarPrepForStore($name . $email) . "','" .
-                     pnVarPrepForStore($status) .  "','" .
-                     pnVarPrepForStore($language) . "')";
-        $dbconn->Execute($insert);
-        if ($dbconn->ErrorNo() != 0) {
-            echo "Insert web link ($lid) $title failed : " . $dbconn->ErrorMsg() ."<br>\n";
-        } else {
-            echo "Inserted web link ($lid) $title<br>\n";
-        }
-        // Get aid to return
-        $aid = $dbconn->PO_Insert_ID($pntable['articles'], 'pn_aid');
-        if (!empty($docounter)) {
-            $hcid = pnModAPIFunc('hitcount','admin','create',array('modname' => 'articles',
-                                                               'objectid' => $aid,
-                                                               'hits' => $hits));
-            if (!isset($hcid)) {
-                echo "Couldn't create hit counter $counter for web link $lid $title<br>\n";
-            }
-        }
         $cids = array();
         if (isset($weblinks[$catid])) {
             $cids[] = $weblinks[$catid];
         }
-        pnModAPIFunc('categories', 'admin', 'linkcat', array(
-                     'cids' => $cids,
-                     'iids' => array($aid),
-                     'modid' => $regid ));
+        $newaid = xarModAPIFunc('articles',
+                                'admin',
+                                'create',
+                                array('title' => $title,
+                                      'summary' => $descr,
+                                      'body' => $url,
+                                      'notes' => $name . $email,
+                                      'status' => $status,
+                                      'ptid' => 6,
+                                      'pubdate' => $date,
+                                      'authorid' => $uid,
+                                      'language' => $language,
+                                      'cids' => $cids,
+                                      'hits' => $hits
+                                     )
+                               );
+        if (!isset($newaid)) {
+            echo "Insert web link ($lid) $title failed <br>\n";
+        } else {
+            echo "Inserted web link ($lid) $title<br>\n";
+        }
 // TODO: ratings
         $result->MoveNext();
     }
@@ -899,32 +834,32 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9]+$/i',
 
     if ($step == 12) {
     echo "<strong>12. Optimizing database tables</strong><br>\n";
-    $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['users']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['users']);
     if ($dbconn->ErrorNo() != 0) {
         echo $dbconn->ErrorMsg();
     }
-    $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['categories']);
-    $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['articles']);
-    $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['categories_linkage']);
-    if (pnModAvailable('hitcount') && pnModAPILoad('hitcount','admin')) {
-        $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['hitcount']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
     }
-    $dbconn->Execute('OPTIMIZE TABLE ' . $pntable['comments']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
     echo "<strong>TODO : import the rest...</strong><br><br>\n";
-    pnModDelVar('installer','oldprefix');
-    pnModDelVar('installer','reset');
-    pnModDelVar('installer','resetcat');
-    pnModDelVar('installer','imgurl');
-    pnModDelVar('installer','topics');
-    pnModDelVar('installer','topicid');
-    pnModDelVar('installer','categories');
-    pnModDelVar('installer','catid');
-    pnModDelVar('installer','sections');
-    pnModDelVar('installer','sectionid');
-    pnModDelVar('installer','faqs');
-    pnModDelVar('installer','faqid');
-    pnModDelVar('installer','weblinks');
+    xarModDelVar('installer','oldprefix');
+    xarModDelVar('installer','reset');
+    xarModDelVar('installer','resetcat');
+    xarModDelVar('installer','imgurl');
+    xarModDelVar('installer','topics');
+    xarModDelVar('installer','topicid');
+    xarModDelVar('installer','categories');
+    xarModDelVar('installer','catid');
+    xarModDelVar('installer','sections');
+    xarModDelVar('installer','sectionid');
+    xarModDelVar('installer','faqs');
+    xarModDelVar('installer','faqid');
+    xarModDelVar('installer','weblinks');
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="index.php">Go to your imported site</a><br>';
     }
@@ -940,17 +875,18 @@ $return = ob_get_contents();
 ob_end_clean();
 
 // render the page
-//$regenerate = false;
-//pnTplPrintPage($return, pnUserGetTheme(), 'default', $regenerate);
-echo pnTpl_renderPage($return);
+echo xarTpl_renderPage($return);
 }
 
-// close the session
-session_write_close();
+// Close the session
+xarSession_close();
 
 $dbconn->Close();
 
 flush();
+
+// Kill the debugger
+xarCore_disposeDebugger();
 
 // done
 exit;
