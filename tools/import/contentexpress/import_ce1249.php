@@ -39,8 +39,8 @@ $prefix = xarDBGetSystemTablePrefix();
 // Get user entered information about the old database (from Form or mod_vars)
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-        $oldprefix = xarVarCleanFromInput('oldprefix');
-        $subarticles = xarVarCleanFromInput('subarticles');
+        if (!xarVarFetch('oldprefix', 'str:1:', $oldprefix, '')) return;
+        if (!xarVarFetch('subarticles', 'str:1:', $subarticles, '')) return;
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $subarticles = xarModGetVar('installer','subarticles');

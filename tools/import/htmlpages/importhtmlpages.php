@@ -16,9 +16,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-list($step,
-     $startnum) = xarVarCleanFromInput('step',
-                                       'startnum');
+        if (!xarVarFetch('step', 'int:0:', $step, 0)) return;
+        if (!xarVarFetch('startnum', 'int:0:', $startnum, 0)) return;
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -34,15 +33,12 @@ if (!isset($step)) {
 <?php
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
-    if ($step == 1 && !isset($startnum)) {
-        list($oldprefix,
-             $reset,
-             $resetcat,
-             $imgurl) = xarVarCleanFromInput('oldprefix',
-                                             'reset',
-                                             'resetcat',
-                                             'imgurl');
-    } elseif ($step > 1 || isset($startnum)) {
+    if ($step == 1 && $startnum == 0) {
+        if (!xarVarFetch('oldprefix', 'str:1:', $oldprefix, '')) return;
+        if (!xarVarFetch('reset', 'int:0:1', $reset, 0)) return;
+        if (!xarVarFetch('resetcat', 'int:0:1', $resetcat, 0)) return;
+        if (!xarVarFetch('imgurl', 'str:1:', $imgurl, '')) return;
+    } elseif ($step > 1 || $startnum > 0) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
@@ -91,7 +87,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarModSetVar('installer','reset',$reset);
         if (!isset($resetcat)) { $resetcat = 0; }
         xarModSetVar('installer','resetcat',$resetcat);
-        if (!isset($imgurl)) { $imgurl = 0; }
+        if (!isset($imgurl)) { $imgurl = ''; }
         xarModSetVar('installer','imgurl',$imgurl);
     }
 

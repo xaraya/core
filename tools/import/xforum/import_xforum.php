@@ -20,9 +20,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-list($step,
-     $startnum) = xarVarCleanFromInput('step',
-                                       'startnum');
+        if (!xarVarFetch('step', 'int:0:', $step, 0)) return;
+        if (!xarVarFetch('startnum', 'int:0:', $startnum, 0)) return;
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -39,9 +38,8 @@ ob_start();
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-        list($oldprefix,
-             $importusers) = xarVarCleanFromInput('oldprefix',
-                                                  'importusers');
+        if (!xarVarFetch('oldprefix', 'str:1:', $oldprefix, '')) return;
+        if (!xarVarFetch('importusers', 'int:0:', $importusers, 0)) return;
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
     }

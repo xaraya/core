@@ -19,9 +19,8 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
 // avoid issues when caching is enabled - to be cleaned up
 include 'includes/xarCache.php';
 
-list($step,
-     $startnum) = xarVarCleanFromInput('step',
-                                       'startnum');
+        if (!xarVarFetch('step', 'int:0:', $step, 0)) return;
+        if (!xarVarFetch('startnum', 'int:0:', $startnum, 0)) return;
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -37,13 +36,11 @@ ob_start();
 <?php
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
-    if ($step == 1 && !isset($startnum)) {
-        list($oldprefix,
-             $importmodule,
-             $importusers) = xarVarCleanFromInput('oldprefix',
-                                                  'importmodule',
-                                                  'importusers');
-    } elseif ($step > 1 || isset($startnum)) {
+    if ($step == 1 && $startnum == 0) {
+        if (!xarVarFetch('oldprefix', 'str:1:', $oldprefix, '')) return;
+        if (!xarVarFetch('importmodule', 'str:1:', $importmodule, '')) return;
+        if (!xarVarFetch('importusers', 'int:0:', $importusers, 0)) return;
+    } elseif ($step > 1 || $startnum > 0) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $importmodule = xarModGetVar('installer','importmodule');
     }
