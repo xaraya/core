@@ -276,7 +276,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     $code .= "; ";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
-                        $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
+                        $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
@@ -299,7 +299,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     $code .= "<?php ";
                     $this->setPHPBlock(true);
                 }
-                $code .= "if (xarExceptionMajor() != XAR_NO_EXCEPTION) return false; ";
+                $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
                 $this->setPendingExceptionsControl(false);
             }
         } else {
