@@ -1652,7 +1652,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 }
                 return "xarModGetVar('".$module."', '".$name."')";
             case 'local':
-                $name = xarTpl__ExpressionTransformer::transformBLExpression($name);
+                $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
                 if (!isset($name)) {
                     return; // throw back
                 }
