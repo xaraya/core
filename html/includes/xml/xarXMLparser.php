@@ -18,9 +18,13 @@
  *
  * The Xaraya XML parser. This parser is generic in nature
  * in that it isn't configured to handle a specific XML variety
- * Using the public methods modules can instantiate a parser
+ * Using the public methods developers can instantiate a parser
  * and set the handlers of it, so it can parse a certain XML
  * document structure and act accordingly.
+ *
+ * The parser itself is solely responsible for parsing XML data, 
+ * in itself it doesn't do anything but fire of events to a handler
+ * object.
  *
  * @access public
  * @package xml
