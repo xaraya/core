@@ -31,18 +31,10 @@ class ExceptionRendering
         switch ($exception->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
                 include "includes/exceptions/systemexception.defaults.php";
-                if ($this->id == "ErrorCollection") {
-                $short = "";
-                foreach ($exception->exceptions as $excp)
-                $short .= $excp->getID() . ": " . $excp->getShort(). $this->linebreak;
-               $this->short = $short;
+                if (!array_key_exists($this->id, $this->defaults)) {
+                    $this->id = "EXCEPTION_FAILURE";
                 }
-                else {
-                    if (!array_key_exists($this->id, $this->defaults)) {
-                        $this->id = "EXCEPTION_FAILURE";
-                    }
-                    $this->load();
-                }
+                $this->load();
                 break;
             case XAR_USER_EXCEPTION:
                 include "includes/exceptions/defaultuserexception.defaults.php";
@@ -88,9 +80,9 @@ class ExceptionRendering
     function getShort() { return $this->exception->getShort() == '' ? $this->short : $this->exception->getShort(); }
 
     function isadmin(){
-    	if (!class_exists("xarRoles"))
-    		return false;
-    	
+        if (!class_exists("xarRoles"))
+            return false;
+
         if(!xarVarGetCached('installer','installing')) {
             $roles = new xarRoles();
             $admins = "Administrators";
