@@ -114,22 +114,22 @@
 				<select name="uid" id="groupuid" size="1" tabindex="5"  onchange="this.form.submit()">
 					<xar:if condition="$groupuid eq 0">
 						<option value="0" selected="selected">
-							<xar:mlstring>All Users</xar:mlstring> (#$totalusers#)
+							<xar:mlstring>All Users</xar:mlstring> - #$totalusers#
 						</option>
 					<xar:else/>
 						<option value="0">
-							<xar:mlstring>All Users</xar:mlstring> (#$totalusers#)
+							<xar:mlstring>All Users</xar:mlstring> - #$totalusers#
 						</option>
 					</xar:if>
 				<xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
 					<xar:if condition="$prevgroup ne $groups[$i]['name']">
 						<xar:if condition="$groups[$i]['uid'] eq $groupuid">
 							<option value="#$groups[$i]['uid']#" selected="selected">
-								#$groups[$i]['name']# (#$groups[$i]['users']#)
+								#$groups[$i]['name']# - #$groups[$i]['users']#
 							</option>
 						<xar:else/>
 							<option value="#$groups[$i]['uid']#">
-								#$groups[$i]['name']# (#$groups[$i]['users']#)
+								#$groups[$i]['name']# - #$groups[$i]['users']#
 							</option>
 						</xar:if>
 					</xar:if>

@@ -81,7 +81,7 @@
 					<xar:set name="$prevgroup">""</xar:set>
 					<xar:loop name="$groups">
 						<xar:if condition="$prevgroup ne $loop:item['name']">
-							<xar:if condition="$groupuid eq $loop:item['uid']">
+							<xar:if condition="$uid eq $loop:item['uid']">
 								<option value="#$loop:item['uid']#" selected="selected">#$loop:item['name']#</option>
 							<xar:else />
 								<option value="#$loop:item['uid']#">#$loop:item['name']#</option>

@@ -61,14 +61,17 @@ function roles_admin_createmail()
         $q->join('r.xar_uid','rm.xar_uid');
         $q->eq('rm.xar_parentid',$data['uid']);
     }
+    else {
+    // this is a single user
+        $data['groupuid'] = -1;
+    }
 
-    $roles = new xarRoles();
 
     // open a connection and run the query
     $q->open();
     $q->run();
     foreach($q->output() as $role) {
-        $data['users'][] = array('uid' => $role['r.xar_uid'],
+        $data['users'][$role['r.xar_uid']] = array('uid' => $role['r.xar_uid'],
             'name' => $role['r.xar_name'],
             'uname' => $role['r.xar_uname'],
             'email' => $role['r.xar_email'],
@@ -78,61 +81,16 @@ function roles_admin_createmail()
             );
     }
 
-    /*    if ($data['uid'] == 0) {
-      $users = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => '', 'numitems' => '', 'order' => $data['order'], 'selection' => ''));
-       while (list($key, $user) = each($users)) {
-            if (xarSecurityCheck('EditRole',0,'Roles',$user['name'])) {
-            $data['users'][] = array('uid' => $user['uid'],
-                'name' => $user['name'],
-                'uname' => $user['uname'],
-                'email' => $user['email'],
-                'status' => $user['state'],
-                'date_reg' => $user['date_reg']
-                );
-            }
-       }
-    } else {
-        $role = $roles->getRole($data['uid']);
-        if ($role->isUser() == 0) {
-            //Get the users from this group
-            $data['uid'] = 0;
-            $data['groupuid'] = $role->getID();
-            if ($data['includesubgroups'] == 1) $users = $role->getDescendants($data['state']);
-            else $users = $role->getUsers($data['state']);
+    // Check if we also want to send to subgroups
+    // In this case we'll just pick out the descendants in the same state
+    if ($data['uid'] != 0 && ($data['includesubgroups'] == 1)) {
+        $roles = new xarRoles();
+        $parentgroup = $roles->getRole($data['uid']);
+        $descendants = $parentgroup->getDescendants($data['state']);
 
-            while (list($key, $user) = each($users)) {
-                if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                    $data['users'][] = array('uid' => $user->getID(),
-                        'name' => $user->getName(),
-                        'uname' => $user->getUser(),
-                        'email' => $user->getEmail(),
-                        'status' => $user->getState(),
-                        'date_reg' => $user->getDateReg()
-                        );
-                }
-            }
-        } else {
-            $data['users'][] = array('uid' => $role->getID(),
-                    'name' => $role->getName(),
-                    'uname' => $role->getUser(),
-                    'email' => $role->getEmail(),
-                    'status' => $role->getState(),
-                    'date_reg' => $role->getDateReg()
-                    );
-            $data['groupuid'] = -1;
-        }
-    }
-
-    if (isset($uids)) {
-        $uidmail = array();
-        foreach ($uids as $uid => $val) {
-            //check if the user must be updated :
-            $uidmail[] = $roles->getRole($uid);
-        }
-        $mailusers = $uidmail;
-        while (list($key, $user) = each($mailusers)) {
-              if (!xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                $data['uids'][] = array('uid' => $user->getID(),
+        while (list($key, $user) = each($descendants)) {
+            if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
+                $data['users'][$user->getID()] = array('uid' => $user->getID(),
                     'name' => $user->getName(),
                     'uname' => $user->getUser(),
                     'email' => $user->getEmail(),
@@ -142,7 +100,7 @@ function roles_admin_createmail()
             }
         }
     }
-    */
+
     if (isset($data['users'])) $data['totalselected'] = count($data['users']);
     //templates select
     if ($data['mailtype'] == 'blank') {
