@@ -75,12 +75,11 @@ define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
 
 /**
- * Initializes the core engine
+ * Start the core engine.
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @param whatToLoad integer What optional systems to load.
- * @return bool true
+ * @return bool true on success,false on failure
  * @todo <johnny> remove LC_TIME code if we don't need it anymore
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
@@ -265,7 +264,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 /**
  * Returns the relative path name for the var directory
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @return string the var directory path name
  */
@@ -629,4 +627,3 @@ class xarCore__ConfigFileLoader
     }
 
 }
-?>
