@@ -26,15 +26,15 @@ $options  = array(
                         'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
                         )
                   );
-                  
-                  if (xarMod_getState(151) != XARMOD_STATE_MISSING) {
+
+                  if (xarMod_getState(151) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
                       $options[] = array('item' => 'm151',
                                          'option' => 'true',
                                          'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
                                          );
                   }
 
-if(xarMod_getState(11) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(11) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm11',
                       'option' => 'true',
@@ -42,7 +42,7 @@ if(xarMod_getState(11) != XARMOD_STATE_MISSING) {
                       );
 }
 
-if(xarMod_getState(745) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(745) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm745',
                       'option' => 'true',
@@ -50,14 +50,14 @@ if(xarMod_getState(745) != XARMOD_STATE_MISSING) {
                       );
         }
 
-if(xarMod_getState(147) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(147) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm147',
                       'option' => 'true',
                       'comment' => xarML('Install the Categories module.')
                       );
 }
-if(xarMod_getState(14) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(14) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm14',
                       'option' => 'true',
@@ -65,7 +65,7 @@ if(xarMod_getState(14) != XARMOD_STATE_MISSING) {
                       );
 }
 
-if(xarMod_getState(36) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(36) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm36',
                       'option' => 'true',
@@ -73,7 +73,7 @@ if(xarMod_getState(36) != XARMOD_STATE_MISSING) {
                       );
 }
 
-if(xarMod_getState(177) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(177) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] =array(
                       'item' => 'm177',
                       'option' => 'true',
@@ -81,7 +81,7 @@ if(xarMod_getState(177) != XARMOD_STATE_MISSING) {
                       );
 }
 
-if(xarMod_getState(747) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(747) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm747',
                        'option' => 'true',
@@ -89,7 +89,7 @@ if(xarMod_getState(747) != XARMOD_STATE_MISSING) {
                        );
 }
 
-if(xarMod_getState(41) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(41) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm41',
                        'option' => 'true',
@@ -97,7 +97,7 @@ if(xarMod_getState(41) != XARMOD_STATE_MISSING) {
                        );
 }
 
-if(xarMod_getState(32) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(32) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm32',
                        'option' => 'true',
@@ -105,15 +105,15 @@ if(xarMod_getState(32) != XARMOD_STATE_MISSING) {
                        );
 }
 
-if(xarMod_getState(748) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(748) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm748',
                        'option' => 'true',
                        'comment' => xarML('Install the Soapserver module.')
                        );
 }
- 
-if(xarMod_getState(28) != XARMOD_STATE_MISSING) {
+
+if(xarMod_getState(28) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm28',
                        'option' => 'true',
@@ -121,7 +121,7 @@ if(xarMod_getState(28) != XARMOD_STATE_MISSING) {
                        );
 }
 
-if(xarMod_getState(743) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(743) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm743',
                        'option' => 'true',
@@ -129,15 +129,15 @@ if(xarMod_getState(743) != XARMOD_STATE_MISSING) {
                        );
 }
 
-if(xarMod_getState(744) != XARMOD_STATE_MISSING) {
+if(xarMod_getState(744) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm744',
                        'option' => 'true',
                        'comment' => xarML('Install the Xmlrpcsystemapi module.')
                        );
 }
- 
-if(xarMod_getState(746) != XARMOD_STATE_MISSING) {
+
+if(xarMod_getState(746) != XARMOD_STATE_MISSING_FROM_UNINSTALLED) {
     $options[] = array(
                        'item' => 'm746',
                        'option' => 'true',
