@@ -1,10 +1,4 @@
-<table border="0" width="100%">
-    <tr>
-        <th colspan="4" align="center">
-            <xar:mlstring>Modules Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
+<xar:template file="admin-header" type="module"/>
 
 <b><xar:var scope="session" name="$autolinks_statusmsg" /></b>
 
