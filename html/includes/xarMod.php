@@ -941,7 +941,7 @@ function xarModPrivateLoad($modName, $modType)
     $fileName = "modules/$modDir/xar$modType.php";
 
     if (!file_exists($fileName)){
-            $fileName = "modules/$modDir/pn$modType.php";
+        $fileName = "modules/$modDir/pn$modType.php";
     }
     
     // Removed the execption.  Causing some wierd results with modules without an api.
@@ -1111,7 +1111,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
     if (empty($modName)) {
-        die("$modName, $modType, $funcName");
+        //die("$modName, $modType, $funcName");
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
@@ -1131,6 +1131,8 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         xarModAPILoad($modName,$modType);
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
+            // MrB: When there is a parse error in the api file we sometimes end up
+            // here, the error is never shown !!!! (xmlrpc for example)
             //die("api load went fine");
             $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
