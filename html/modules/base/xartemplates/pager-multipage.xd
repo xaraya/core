@@ -23,7 +23,7 @@
     <xar:comment> Display previous-page link if we are not on the first page </xar:comment>
     <xar:if condition="$currentpagenum ne $firstpagenum">
         &nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
-    </xar:else />
+    <xar:else />
         &nbsp;&nbsp;<span title="#xarML('Previous page')#">&lt;</span>
     </xar:if>
 
