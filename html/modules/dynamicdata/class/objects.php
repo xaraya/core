@@ -57,7 +57,8 @@ class Dynamic_Object_Master
      *
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['itemtype'] item type of the object to retrieve, or
+     * @param $args['table'] database table to turn into an object
      *
      * @param $args['fieldlist'] optional list of properties to use, or
      * @param $args['status'] optional status of the properties to use
@@ -74,6 +75,24 @@ class Dynamic_Object_Master
         if (!empty($args) && is_array($args) && count($args) > 0) {
             foreach ($args as $key => $val) {
                 $this->$key = $val;
+            }
+        }
+        if (!empty($this->table)) {
+            if (empty($this->name)) {
+                $this->name = $this->table;
+            }
+            $meta = xarModAPIFunc('dynamicdata','util','getmeta',
+                                  array('table' => $this->table));
+            // we throw an exception here because we assume a table should always exist (for now)
+            if (!isset($meta) || !isset($meta[$this->table])) {
+                $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
+                             'table',$this->table,$this->name);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+                return;
+            }
+            foreach ($meta[$this->table] as $name => $propinfo) {
+                $this->addProperty($propinfo);
             }
         }
         if (empty($this->moduleid)) {
@@ -107,6 +126,27 @@ class Dynamic_Object_Master
                                                         'allprops'  => $args['allprops'],
                                                         'objectref' => & $this)); // we pass this object along
         }
+        if (!empty($this->join)) {
+            $meta = xarModAPIFunc('dynamicdata','util','getmeta',
+                                  array('table' => $this->join));
+            // we throw an exception here because we assume a table should always exist (for now)
+            if (!isset($meta) || !isset($meta[$this->join])) {
+                $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
+                             'join',$this->join,$this->name);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+                return;
+            }
+            $count = count($this->properties);
+            foreach ($meta[$this->join] as $name => $propinfo) {
+                $this->addProperty($propinfo);
+            }
+            if (count($this->properties) > $count) {
+                // put join properties in front
+                $joinprops = array_splice($this->properties,$count);
+                $this->properties = array_merge($joinprops,$this->properties);
+            }
+        }
         // filter on property status if necessary
         if (isset($this->status) && count($this->fieldlist) == 0) {
             $this->fieldlist = array();
@@ -126,22 +166,30 @@ class Dynamic_Object_Master
     /**
      * Get the data stores where the dynamic properties of this object are kept
      */
-    function &getDataStores()
+    function &getDataStores($reset = false)
     {
         // if we already have the datastores
-        if (isset($this->datastores) && count($this->datastores) > 0) {
+        if (!$reset && isset($this->datastores) && count($this->datastores) > 0) {
             return $this->datastores;
         }
 
         // if we're filtering on property status and there are no properties matching this status
-        if (!empty($this->status) && count($this->fieldlist) == 0) {
+        if (!$reset && !empty($this->status) && count($this->fieldlist) == 0) {
             return $this->datastores;
+        }
+
+        // reset field list of datastores if necessary
+        if ($reset && count($this->datastores) > 0) {
+            foreach (array_keys($this->datastores) as $storename) {
+                $this->datastores[$storename]->fields = array();
+            }
         }
 
         foreach ($this->properties as $name => $property) {
             // skip properties we're not interested in (but always include the item id field)
             if (empty($this->fieldlist) || in_array($name,$this->fieldlist) || $property->type == 21) {
             } else {
+                $this->properties[$name]->datastore = '';
                 continue;
             }
 
@@ -234,6 +282,11 @@ class Dynamic_Object_Master
 
         // add it to the list of data stores
         $this->datastores[$datastore->name] =& $datastore;
+
+        // for dynamic object lists, put a reference to the $itemids array in the data store
+        if (method_exists($this, 'getItems')) {
+            $this->datastores[$datastore->name]->itemids =& $this->itemids;
+        }
     }
 
     /**
@@ -493,7 +546,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // see if we can access this object, at least in overview
-		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
+        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
+
+        // don't retrieve the item here yet !
         //$this->getItem();
     }
 
@@ -864,12 +919,12 @@ class Dynamic_Object extends Dynamic_Object_Master
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-//class Dynamic_Object_List extends Dynamic_Object
 class Dynamic_Object_List extends Dynamic_Object_Master
 {
     var $itemids;           // the list of item ids used in data stores
     var $where;
     var $sort;
+    var $groupby;
     var $numitems = null;
     var $startnum = null;
 
@@ -888,6 +943,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
      */
     function Dynamic_Object_List($args)
     {
+        // initialize the list of item ids
+        $this->itemids = array();
         // initialize the items array
         $this->items = array();
 
@@ -895,25 +952,14 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->Dynamic_Object_Master($args);
 
         // see if we can access these objects, at least in overview
-		if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
+        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
 
         // set the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
-
-        // put a reference to the $items array in all properties
-        foreach (array_keys($this->properties) as $name) {
-            $this->properties[$name]->items = & $this->items;
-        }
-
-        // put a reference to the $itemids array in all data stores
-        foreach (array_keys($this->datastores) as $name) {
-            $this->datastores[$name]->itemids = & $this->itemids;
-        }
     }
 
     function setArguments($args)
     {
-/* done automagically by Dynamic_Object_Master
         // set the number of items to retrieve
         if (!empty($args['numitems'])) {
             $this->numitems = $args['numitems'];
@@ -922,7 +968,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['startnum'])) {
             $this->startnum = $args['startnum'];
         }
-*/
         // set the list of requested item ids
         if (!empty($args['itemids'])) {
             if (is_numeric($args['itemids'])) {
@@ -937,7 +982,20 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $this->itemids = array();
         }
 
-    // TODO: handle fieldlist, status and primary too -> reset data store field lists !
+        // reset fieldlist and datastores if necessary
+        if (isset($args['fieldlist']) && (!isset($this->fieldlist) || $args['fieldlist'] != $this->fieldlist)) {
+            $this->fieldlist = $args['fieldlist'];
+            $this->getDataStores(true);
+        } elseif (isset($args['status']) && (!isset($this->status) || $args['status'] != $this->status)) {
+            $this->status = $args['status'];
+            $this->fieldlist = array();
+            foreach ($this->properties as $name => $property) {
+                if ($property->status == $this->status) {
+                    $this->fieldlist[] = $name;
+                }
+            }
+            $this->getDataStores(true);
+        }
 
         // add where clause if itemtype is one of the properties (e.g. articles)
         if (isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) {
@@ -971,7 +1029,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['where'])) {
             $this->setWhere($args['where']);
         }
-
     }
 
     function setSort($sort)

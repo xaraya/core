@@ -63,6 +63,7 @@ function dynamicdata_admin_query($args)
         $reset = true;
     // changed selected join table
     } elseif ($join != $oldjoin) {
+        $olditemid = 0;
         $table = '';
         $oldtable = '';
         $query = '';
@@ -113,6 +114,8 @@ function dynamicdata_admin_query($args)
                 $oldtable = $queryvars['oldtable'];
                 $query = $queryvars['query'];
                 $oldquery = $queryvars['oldquery'];
+                $join = $queryvars['join'];
+                $oldjoin = $queryvars['oldjoin'];
             }
         }
     }
@@ -141,11 +144,12 @@ function dynamicdata_admin_query($args)
     $data['jointables'] = '';
 
     if (!empty($itemid)) {
-        $data['object'] = new Dynamic_Object_List(array('objectid' => $itemid));
+        $data['object'] = new Dynamic_Object_List(array('objectid' => $itemid,
+                                                        'join' => $join));
         if (isset($data['object']) && !empty($data['object']->objectid)) {
             $data['itemid'] = $data['object']->objectid;
             $data['label'] = $data['object']->label;
-            if (empty($data['object']->primary)) {
+            if (!empty($join) || empty($data['object']->primary)) {
             // (try to) show the "static" properties, corresponding to fields in dedicated
             // tables for this module
                 $static = xarModAPIFunc('dynamicdata','util','getstatic',
@@ -161,41 +165,14 @@ function dynamicdata_admin_query($args)
                         }
                     }
                 }
-                if (!empty($join) && isset($data['jointables'][$join])) {
-                    $meta = xarModAPIFunc('dynamicdata','util','getmeta',
-                                          array('table' => $join));
-                    if (!isset($meta) || !isset($meta[$join])) {
-                        return xarML('Invalid table #(1)',xarVarPrepForDisplay($join));
-                    }
-                    $count = count($data['object']->properties);
-                    foreach ($meta[$join] as $name => $propinfo) {
-                        $data['object']->addProperty($propinfo);
-                        $data['object']->properties[$name]->items = & $data['object']->items;
-                    }
-                    if (count($data['object']->properties) > $count) {
-                        // put join properties in front
-                        $joinprops = array_splice($data['object']->properties,$count);
-                        $data['object']->properties = array_merge($joinprops,$data['object']->properties);
-                    }
-                }
             }
             $data['properties'] =& $data['object']->properties;
         } else {
             return;
         }
     } elseif (!empty($table)) {
-        $meta = xarModAPIFunc('dynamicdata','util','getmeta',
-                              array('table' => $table));
-        if (!isset($meta) || !isset($meta[$table])) {
-            return xarML('Invalid table #(1)',xarVarPrepForDisplay($table));
-        }
-        $data['object'] = new Dynamic_Object_List(array('objectid' => -1, // dummy object
-                                                        'moduleid' => 182, // needed for showlist check in template
-                                                        'name' => $table));
-        foreach ($meta[$table] as $name => $propinfo) {
-            $data['object']->addProperty($propinfo);
-            $data['object']->properties[$name]->items = & $data['object']->items;
-        }
+        $data['object'] = new Dynamic_Object_List(array('table' => $table));
+        if (!isset($data['object'])) return;
         $data['label'] = xarML('Table #(1)',$table);
         $data['properties'] =& $data['object']->properties;
     } else {
@@ -292,22 +269,15 @@ function dynamicdata_admin_query($args)
     // TODO: clean up generation of dummy object
     if ( (!empty($itemid) && $itemid == $olditemid) ||
          (!empty($table) && $table == $oldtable) ) {
-        $data['object']->fieldlist = $fieldlist;
-        $data['object']->startnum = $startnum;
-        $data['object']->numitems = $numitems;
-        // regenerate the data stores
-        $data['object']->datastores = null;
-        $data['object']->getDataStores();
-        foreach (array_keys($data['object']->datastores) as $name) {
-            $data['object']->datastores[$name]->itemids = & $data['object']->itemids;
-        }
-        $data['object']->getItems(array('where' => $whereclause,
-                                        'sort' => $sortlist));
+        $data['object']->getItems(array('fieldlist' => $fieldlist,
+                                        'where' => $whereclause,
+                                        'sort' => $sortlist,
+                                        'numitems' => $numitems,
+                                        'startnum' => $startnum));
         $data['mylist'] =& $data['object'];
         if (empty($newquery)) {
             $newquery = xarML('Last Query');
         }
-/* TODO: support join and table in data-view and data-list tags
         if (!empty($table)) {
             $data['sample'] = '&lt;xar:data-view table="' . $table . '" '; 
         } else {
@@ -322,15 +292,16 @@ function dynamicdata_admin_query($args)
             $data['sample'] .= 'fieldlist="' . xarVarPrepForDisplay(join(',',$fieldlist)) . '" ';
         }
         if (!empty($whereclause)) {
-            $data['sample'] .= 'where="' . xarVarPrepForDisplay($whereclause) . '" ';
+            $data['sample'] .= 'where="' . xarVarPrepForDisplay(addslashes($whereclause)) . '" ';
         }
         if (!empty($sortlist) && count($sortlist) > 0) {
             $data['sample'] .= 'sort="' . xarVarPrepForDisplay(join(',',$sortlist)) . '" ';
         }
+        $data['sample'] .= 'layout="list" ';
+        $data['sample'] .= 'linkfield="N/A" ';
         $data['sample'] .= 'numitems="' . xarVarPrepForDisplay($numitems) . '" ';
         $data['sample'] .= 'startnum="' . xarVarPrepForDisplay($startnum) . '" ';
         $data['sample'] .= '/&gt;';
-*/
         xarSessionSetVar('DynamicData.LastQuery',$newquery);
     } else {
         xarSessionSetVar('DynamicData.LastQuery','');

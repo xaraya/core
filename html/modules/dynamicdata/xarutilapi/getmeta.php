@@ -13,15 +13,12 @@ function dynamicdata_utilapi_getmeta($args)
 {
     static $propertybag = array();
 
-// Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
-
     extract($args);
 
     if (empty($table)) {
         $table = '';
     } elseif (isset($propertybag[$table])) {
-        return $propertybag[$table];
+        return array($table => $propertybag[$table]);
     }
 
     list($dbconn) = xarDBGetConn();
@@ -37,6 +34,10 @@ function dynamicdata_utilapi_getmeta($args)
 
     $metadata = array();
     foreach ($tables as $table) {
+        if (isset($propertybag[$table])) {
+             $metadata[$table] = $propertybag[$table];
+             continue;
+        }
         $fields = $dbconn->MetaColumns($table);
         $keys = $dbconn->MetaPrimaryKeys($table);
 
@@ -140,9 +141,9 @@ function dynamicdata_utilapi_getmeta($args)
             $id++;
         }
         $metadata[$table] = $columns;
+        $propertybag[$table] = $columns;
     }
 
-    $propertybag = $metadata;
     return $metadata;
 }
 

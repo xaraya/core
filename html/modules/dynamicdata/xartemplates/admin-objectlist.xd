@@ -1,7 +1,7 @@
-<xar:if condition="empty($layout) or $layout eq 'default'">
+<xar:if condition="empty($layout) or $layout eq 'list' or $layout eq 'default'">
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:foreach in="$properties" key="$name">
             <th align="center"><a href="#$sorturl#=#$name#"><xar:data-label property="$properties[$name]" /></a></th>
         </xar:foreach>
         <th align="center"><xar:mlstring>Options</xar:mlstring></th>
@@ -10,7 +10,7 @@
          is typically not an input form -->
     <xar:foreach in="$items" key="$itemid" value="$fields">
     <tr>
-        <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:foreach in="$properties" key="$name">
             <xar:if condition="!empty($fields[$name])">
             <td><xar:data-output property="$properties[$name]" value="$fields[$name]" /></td>
             <xar:else />
@@ -55,14 +55,14 @@
 <xar:elseif condition="$layout eq 'cells'" />
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
     <tr>
-        <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:foreach in="$properties" key="$name">
             <td><b><xar:data-label property="$properties[$name]" /></b></td>
         </xar:foreach>
     </tr>
     <!-- for this layout, we'll use xar:data-input here -->
     <xar:foreach in="$items" key="$itemid" value="$fields">
     <tr>
-        <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:foreach in="$properties" key="$name">
             <xar:if condition="!empty($fields[$name])">
             <td><xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" /></td>
             <xar:else />
@@ -72,7 +72,7 @@
     </tr>
     </xar:foreach>
     <tr>
-        <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:foreach in="$properties" key="$name">
             <td><xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]" /></td>
         </xar:foreach>
     </tr>

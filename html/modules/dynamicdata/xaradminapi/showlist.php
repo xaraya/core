@@ -103,9 +103,13 @@ function dynamicdata_adminapi_showlist($args)
         $status = 1;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
     }
 
     // check the URL parameter for the item id used by the module (e.g. exid, aid, ...)
@@ -121,6 +125,8 @@ function dynamicdata_adminapi_showlist($args)
                                            'startnum' => $startnum,
                                            'where' => $where,
                                            'fieldlist' => $myfieldlist,
+                                           'join' => $join,
+                                           'table' => $table,
                                            'status' => $status));
     $object->getItems();
     return $object->showList(array('layout'   => $layout,

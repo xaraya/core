@@ -114,6 +114,11 @@ class Dynamic_Property_Master
         // get a new property
         $property =& Dynamic_Property_Master::getProperty($args);
 
+        // for dynamic object lists, put a reference to the $items array in the property
+        if (method_exists($objectref, 'getItems')) {
+            $property->items =& $objectref->items;
+        }
+
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 

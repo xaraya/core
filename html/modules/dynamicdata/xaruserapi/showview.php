@@ -104,9 +104,13 @@ function dynamicdata_userapi_showview($args)
         $status = 1;
     }
 
-    // include the static properties (= module tables) too ?
-    if (empty($static)) {
-        $static = false;
+    // join a module table to a dynamic object
+    if (empty($join)) {
+        $join = '';
+    }
+    // make some database table available via DD
+    if (empty($table)) {
+        $table = '';
     }
 
     $object = new Dynamic_Object_List(array('moduleid'  => $modid,
@@ -117,6 +121,8 @@ function dynamicdata_userapi_showview($args)
                                            'startnum' => $startnum,
                                            'where' => $where,
                                            'fieldlist' => $myfieldlist,
+                                           'join' => $join,
+                                           'table' => $table,
                                            'status' => $status));
     if (!isset($object)) return;
 
