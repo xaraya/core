@@ -788,6 +788,11 @@ function drawindent() {
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
 
+    // FIXME: provide default values for undefined variables
+    //        (e.g. parentid, date_reg, val_code, auth_module)
+    //        or make sure the calling function sets all these vars
+    //        Cfr. exceptions logged during installation.
+
         $this->uid          = $uid;
         $this->name         = $name;
         $this->type         = $type;

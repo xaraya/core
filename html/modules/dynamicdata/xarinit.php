@@ -557,6 +557,9 @@ function dynamicdata_init()
 					);
     xarDefineInstance('dynamicdata','Item',$instances);
 
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
     // Initialisation successful
     return true;
 }

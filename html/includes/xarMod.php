@@ -616,7 +616,7 @@ function xarModGetVarId($modName, $name)
     // If there was no such thing return
     if ($result->EOF) {
         $result->Close();
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', 'modvarid');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', xarML('modvarid for module #(1) variable #(2)',$modName,$name));
         return;
        }
 
