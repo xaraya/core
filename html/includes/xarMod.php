@@ -1955,7 +1955,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
         return (int) $modState;
     } else {
         $result->Close();
-        return (int) XARMOD_STATE_MISSING;
+        return (int) XARMOD_STATE_UNINITIALISED;
     }
 }
 
