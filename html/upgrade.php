@@ -133,7 +133,8 @@ if (empty($step)) {
 
    //now check modules instances - only affected if their site prefix is other than 'xar'
  if ($sprefix == 'xar') { // check ratings, hitcount, articles and categories
-  echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating as your site prefix is the default 'xar'.";
+  echo "Categories, Articles, Hitcount and Ratings security_instances do not require updating.<br />";
+  echo "Updates are only required if your site prefix is not the default 'xar'.<br />";
  } else {
   //check categories instances - two bugs - hardcoded prefix bug and also instancetable2 column hardcoded prefix
       if (xarModIsAvailable('categories')) {
@@ -145,11 +146,7 @@ if (empty($step)) {
                                         array ('ccomponent'  => 'Category',
                                                'cheader'     => 'Category ID:',
                                                'cquery'      => 'SELECT DISTINCT xar_cid FROM '.$categorytable.'',
-                                               'ctable2'     => $categorytable),
-                                        array ('ccomponent'  => 'Block',
-                                               'cheader'     => 'Category Block Title:',
-                                               'cquery'      => 'SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'',
-                                               'ctable2'     => ''));
+                                               'ctable2'     => $categorytable));
 
           foreach($categoriesinstances as $categoriesinstance){
               foreach ($categoriesinstance as $instance) {
@@ -168,6 +165,22 @@ if (empty($step)) {
               }
 
           }//end foreach
+          //now do the last one as a separate instance - to get it to work properly
+          $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
+
+          list($dbconn) = xarDBGetConn();
+                  $query = "SELECT xar_iid, xar_header, xar_query
+                            FROM $instancestable
+                            WHERE xar_module= 'categories' AND xar_component = 'Block' AND xar_header='Category Block Title:'";
+                  $result =&$dbconn->Execute($query);
+
+          list($iid, $header, $xarquery) = $result->fields;
+          if ($categoryinstance != $xarquery) {
+               $categoriesupdate=true;
+               $query="UPDATE $instancestable SET xar_query= 'SELECT DISTINCT instances.xar_title FROM $blockinstancetable as instances LEFT JOIN $blocktypestable as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\''
+                       WHERE xar_module='categories' AND xar_component = 'Block' AND xar_header= 'Category Block Title:'";
+               $result =& $dbconn->Execute($query);
+          }
           if ($categoriesupdate) {
               echo "Categories security_instance entries require updating ...attempting to update... DONE! <br />";
           } else {
