@@ -29,7 +29,7 @@
 define('XARDBG_WINNOW', 0);
 define('XARDBG_TEST', 0);
 define('XARDBG_TESTDENY', 0);
-define('XARDBG_MASK', 'ViewRoles');
+define('XARDBG_MASK', 'All');
 define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
@@ -549,6 +549,7 @@ class xarMasks
     function testprivileges($mask,$privilegeset,$pass)
     {
         $matched = false;
+        $pass = false;
 
         // Note : DENY rules override all others here...
         foreach ($privilegeset['privileges'] as $privilege) {
@@ -567,30 +568,32 @@ class xarMasks
                 echo "<br />Comparing <br />" . $privilege->present() . " and <br />" . $mask->present() . ". <br />";
             }
             if ($privilege->includes($mask)) {
-                if (($privilege->level >= $mask->level) && ($mask->level > 0)) {
+                if ($privilege->implies($mask)) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
                     }
-                    return $privilege;
-                } else {
-                    if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Privilege includes mask. Privilege level lesser.<br />";
-                    }
-                    return false;
+                    if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
                 }
+                else {
+                    if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level lesser.<br />";
+                    }
+                }
+                $matched = true;
             }
             elseif ($mask->includes($privilege)) {
                 if ($privilege->level >= $mask->level) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
                     }
-                    return $privilege;
+                    if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
                         echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<br />Mask includes privilege. Privilege level lesser.<br />";
                     }
                 }
+                $matched = true;
             }
             else {
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
