@@ -6,7 +6,7 @@ BODY {font-size:11px; font-family: Verdana,Arial,Helvetica;  background-color : 
 
 TD {font-size:11px; font-family: Verdana,Arial,Helvetica;}
 
-TH, TFOOT {font-size:12px; font-family: Verdana,Arial,Helvetica; font-weight: bolder;}
+TH, TFOOT {font-size:12px; font-family: Verdana,Arial,Helvetica; font-weight: bolder;background-color:#CDD5F8;}
 
 input {
 background-color: transparent;
