@@ -64,6 +64,12 @@ function roles_user_getvalidation()
                                     'get',
                                      array('uname' => $uname));
 
+            // Trick the system when a user has double validated.
+            if (empty($status['valcode'])){
+                $data = xarTplModule('roles','user', 'getvalidation');
+                return $data;
+            }
+
             // Check Validation codes to ensure a match.
             if ($valcode != $status['valcode']) {
                 $msg = xarML('The validation codes do not match');
