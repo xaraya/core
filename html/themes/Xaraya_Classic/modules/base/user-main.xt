@@ -6,5 +6,5 @@
     For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website. 
 </p>
 <p>
-    This message can be edited by creating an override template (#xarConfigGetVar('Site.BL.ThemesDirectory')#/themename/modules/base/user-main.xt ) for the base module. 
+    This message can be edited by creating an override template (#xarConfigGetVar('Site.BL.ThemesDirectory')#/themename/modules/base/user-main.xt) for the base module. 
 </p>
