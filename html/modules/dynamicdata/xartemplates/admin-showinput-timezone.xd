@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<select name="#$name#" id="#$id#" #$tabindex# >
+<select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
     <xar:foreach in="$options" value="$option" >
         <xar:set name="gmttime">gmdate('H:i',$now + $option['id']*60*60)</xar:set>
         <xar:if condition="empty($option['id']) or ($option['id'] ne $option['name'])" >
