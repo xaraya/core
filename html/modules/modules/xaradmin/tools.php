@@ -26,14 +26,7 @@ function modules_admin_tools()
 
     $data = array();
     
-/*     if (!xarVarFetch('id', 'isset', $id,  NULL, XARVAR_DONT_SET)) {return;} */
-/*     if (empty($id)) { */
-/*         $msg = xarML('No module id specified', 'modules'); */
-/*         xarErrorSet(XAR_USER_EXCEPTION, */
-/*                         'MISSING_DATA', */
-/*                         new DefaultUserException($msg)); */
-/*         return; */
-/*     } */
+/*     if (!xarVarFetch('id', 'id', $id)) {return;} */
 /*     // obtain maximum information about module */
 /*     $modinfo = xarModGetInfo($id); */
 /*      */

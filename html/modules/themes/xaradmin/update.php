@@ -24,7 +24,7 @@
 function themes_admin_update()
 { 
     // Get parameters
-    if (!xarVarFetch('id', 'int:1:', $regId)) return;
+    if (!xarVarFetch('id', 'id', $regId)) return;
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -96,9 +96,9 @@ function themes_admin_update()
         } 
     } 
 
-    if (!xarVarFetch('return', 'isset', $return,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('return', 'bool', $return,  false, XARVAR_NOT_REQUIRED)) {return;}
 
-    if ($return == 1) {
+    if ($return) {
         xarResponseRedirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));
     } else {
         xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
