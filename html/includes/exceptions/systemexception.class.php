@@ -14,10 +14,10 @@
 
 include_once "includes/exceptions/exception.class.php";
 
-class SystemException extends Exception
+class SystemException extends xarException
 {
     function SystemException($msg = '') {
-        parent::Exception();
+        parent::xarException();
         $this->msg = $msg;
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
             $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];

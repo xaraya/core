@@ -13,13 +13,13 @@
 
 include_once "includes/exceptions/exception.class.php";
 
-class DefaultUserException extends Exception
+class DefaultUserException extends xarException
 {
     var $link;
 
     function DefaultUserException($msg = '', $link = NULL)
     {
-        parent::Exception();
+        parent::xarException();
         $this->msg = $msg;
         $this->link = $link;
     }

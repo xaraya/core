@@ -22,7 +22,7 @@ include_once "includes/exceptions/exception.class.php";
  * @package exceptions
  */
 
-class ErrorCollection extends Exception
+class ErrorCollection extends xarException
 {
     var $exceptions = array();
 

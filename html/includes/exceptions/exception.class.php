@@ -16,7 +16,7 @@
  *
  * @package exceptions
  */
-class Exception
+class xarException
 {
     var $msg = '';
     var $id = 0;
@@ -31,7 +31,7 @@ class Exception
     var $component = '';
     var $module = '';
 
-    function Exception() {
+    function xarException() {
         $this->stack = array();
     }
 

@@ -13,13 +13,13 @@
 
 include_once "includes/exceptions/exception.class.php";
 
-class SystemMessage extends Exception
+class SystemMessage extends xarException
 {
     var $link;
 
     function SystemMessage($msg = '', $link = NULL)
     {
-        parent::Exception();
+        parent::xarException();
         $this->msg = $msg;
         $this->link = $link;
     }

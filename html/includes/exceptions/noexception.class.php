@@ -13,7 +13,7 @@
 
 include_once "includes/exceptions/exception.class.php";
 
-class NoException extends Exception
+class NoException extends xarException
 {
     function NoException() {
         $this->major = XAR_NO_EXCEPTION;
