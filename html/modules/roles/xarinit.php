@@ -164,7 +164,6 @@ function roles_init()
     //Database Initialisation successful
     
     // Set up an initial value for module variables.
-    xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
@@ -178,8 +177,6 @@ function roles_init()
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     
-    xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
-    xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -190,6 +187,11 @@ function roles_init()
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
 
+/*---------------------------------------------------------------
+* Set welcome email
+*/
+    xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
+    xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
 /*---------------------------------------------------------------
 * Set confirmation email
 */
@@ -212,6 +214,7 @@ no further emails from us.Thank you,
 %%siteadmin%%';
 
     xarModSetVar('roles', 'confirmationemail', $confirmationemail);
+    xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
 
 /*---------------------------------------------------------------
 * Set disallowed names
@@ -248,14 +251,6 @@ password: %%password%%
 /*---------------------------------------------------------------
 * Set notification values
 */
-//Send notifications values
-    xarModSetVar('roles', 'askwelcomeemail', 1);
-    xarModSetVar('roles', 'askvalidationemail', 1);
-    xarModSetVar('roles', 'askdeactivationemail', 1);
-    xarModSetVar('roles', 'askpendingemail', 1);
-    xarModSetVar('roles', 'askpasswordemail', 1);
-    xarModSetVar('roles', 'rolesdisplay', 'tabbed');
-
     $validationtitle = 'Validate your account %%name%% at %%sitename%%';
     $validationemail = '%%name%%,
 
@@ -308,9 +303,9 @@ You will receive an email has soon as your account is activated again.
     $passwordemail = '%%name%%,
 
 Your password has been changed by an administrator.
-You can now login at %%siteurl%% with those information :
+You can now login at %%link%% with those information :
 Login : %%username%%
-Password : %%password%%
+Password : %%pass%%
 
 %%siteadmin%%';
 
@@ -325,7 +320,12 @@ Password : %%password%%
     xarModSetVar('roles', 'disallowedips', $disallowedips);
 
     xarModSetVar('roles', 'minage', 13);
-    // Register blocks
+    return true;
+}
+
+function roles_activate()
+{
+	// Register blocks
     if (!xarModAPIFunc('blocks',
             'admin',
             'register_block_type',
@@ -354,23 +354,17 @@ Password : %%password%%
             'roles', 'user', 'search')) {
         return false;
     }
-
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
             'roles', 'user', 'usermenu')) {
         return false;
     }
+    
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
-// This won't work because the dynamicdata hooks aren't registered yet when this is
-// called at installation --> put in xarinit.php of dynamicdata instead
-//xarModAPIFunc('modules','admin','enablehooks',
-// array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-
-    return true;
-}
-
-function roles_activate()
-{
+	// This won't work because the dynamicdata hooks aren't registered yet when this is
+	// called at installation --> put in xarinit.php of dynamicdata instead
+	//xarModAPIFunc('modules','admin','enablehooks',
+	// array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
 	return true;
 }
 
@@ -386,7 +380,7 @@ function roless_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch ($oldVersion) {
-        case 1.02:
+        case 1.01:
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here

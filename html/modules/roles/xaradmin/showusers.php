@@ -193,6 +193,8 @@ function roles_admin_showusers()
     $filter['startnum'] = '%%';
     $filter['uid'] = $uid;
     $filter['state'] = $data['state'];
+    $filter['search'] = $data['search'];
+    $filter['order'] = $data['order'];
     $data['pager'] = xarTplGetPager($startnum,
         $data['totalstate'],
         xarModURL('roles', 'admin', 'showusers',
