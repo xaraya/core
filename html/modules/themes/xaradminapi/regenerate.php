@@ -13,6 +13,9 @@ function themes_adminapi_regenerate()
 // Security Check
 	if(!xarSecurityCheck('AdminTheme')) return;
 
+    //Finds and updates missing modules
+    if (!xarModAPIFunc('themes','admin','checkmissing')) {return;}
+    
     //Get all themes in the filesystem
     $fileThemes = xarModAPIFunc('themes','admin','getfilethemes');
     if (!isset($fileThemes)) return;
@@ -22,24 +25,43 @@ function themes_adminapi_regenerate()
     if (!isset($dbThemes)) return;
 
     // See if we have lost any themes since last generation
-    foreach ($dbThemes as $name => $themeInfo) {
-        if (empty($fileThemes[$name])) {
-            // Old theme
-            // Get theme ID
-            $regId = $themeInfo['regid'];
-            // Set state of theme to 'missing'
-            $set = xarModAPIFunc('themes',
-                                'admin',
-                                'setstate',
-                                array('regid'=> $regId,
-                                      'state'=> XARTHEME_STATE_MISSING));
-            //throw back
-            if (!isset($set)) return;
-
-            unset($dbThemes[$name]);
+/*     foreach ($dbThemes as $name => $themeInfo) { */
+/*         if (empty($fileThemes[$name])) { */
+/*             // Old theme */
+/*             // Get theme ID */
+/*             $regId = $themeInfo['regid']; */
+/*             // Set state of theme to 'missing' */
+/*             $set = xarModAPIFunc('themes', */
+/*                                 'admin', */
+/*                                 'setstate', */
+/*                                 array('regid'=> $regId, */
+/*                                       'state'=> XARTHEME_STATE_MISSING)); */
+/*             //throw back */
+/*             if (!isset($set)) return; */
+/*  */
+/*             unset($dbThemes[$name]); */
+/*         } */
+/*     } */
+    // See if we have gained any themes since last generation,
+    // or if any current themes have been upgraded
+    foreach ($fileThemes as $name => $themeinfo) {
+        foreach ($dbThemes as $dbtheme) {
+            // Bail if 2 themes have the same regid but not the same name
+            if(($themeinfo['regid'] == $dbtheme['regid']) && ($themeinfo['name'] != $dbtheme['name'])) {
+                $msg = xarML('The same registered ID (#(1)) was found belonging to a #(2) theme in the file system and a registered #(3) theme in the database. Please correct this and regenerate the list.', $dbtheme['regid'], $themeinfo['name'], $dbtheme['name']);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException($msg));
+                return;
+            }
+            // Bail if 2 themes have the same name but not the same regid
+            if(($themeinfo['name'] == $dbtheme['name']) && ($themeinfo['regid'] != $dbtheme['regid'])) {
+                $msg = xarML('The theme #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.', $themeinfo['name'], $themeinfo['regid'], $dbtheme['regid']);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException($msg));
+                return;
+            }
         }
     }
-
     //Setup database object for theme insertion
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();

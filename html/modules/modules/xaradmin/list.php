@@ -26,7 +26,6 @@ function modules_admin_list()
     //if(empty($selsort)) $selsort                = 'namedesc';
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
-    // TODO: see if we could utilise new modUserVar functions any soon (done)
     $data['hidecore']                               = xarModGetUserVar('modules', 'hidecore');
     $data['regen']                                  = $regen;
     $data['selstyle']                               = xarModGetUserVar('modules', 'selstyle');
@@ -58,10 +57,7 @@ function modules_admin_list()
     // obtain list of modules based on filtering criteria
     // think we need to always check the filesystem
     xarModAPIFunc('modules', 'admin', 'regenerate');
-    $modlist = xarModAPIFunc('modules',
-                      'admin',
-                      'GetList',
-                      array('filter'     => array('State' => $data['selfilter'])));
+    $modlist = xarModAPIFunc('modules','admin','GetList',array('filter' => array('State' => $data['selfilter'])));
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('set1/disabled.png');

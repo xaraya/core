@@ -92,7 +92,7 @@ function installer_admin_phase3()
     $systemVarDir             = xarCoreGetVarDirPath();
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
     $rssTemplatesDir          = $systemVarDir . '/cache/rss';
-    $adodbTemplatesDir          = $systemVarDir . '/cache/adodb';
+    $adodbTemplatesDir        = $systemVarDir . '/cache/adodb';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
 
     if (function_exists('version_compare')) {
@@ -286,9 +286,7 @@ function installer_admin_bootstrap()
         // Set state to inactive
         $regid=xarThemeGetIDFromName($theme);
         if (isset($regid)) {
-            if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,
-                                                               'state'=> XARTHEME_STATE_INACTIVE)))
-            {
+            if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
                 return;
             }
             // Activate the module
@@ -313,11 +311,9 @@ function installer_admin_bootstrap()
 
     //initialise and activate base module by setting the states
     $baseId = xarModGetIDFromName('base');
-    if (!xarModAPIFunc('modules', 'admin', 'setstate',
-                       array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
     // Set module state to active
-    if (!xarModAPIFunc('modules', 'admin', 'setstate',
-                       array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 }
@@ -400,37 +396,19 @@ function installer_admin_create_administrator()
     $blocks = array('finclude','html','menu','php','text');
 
     foreach ($blocks as $block) {
-        if (!xarModAPIFunc('blocks',
-                           'admin',
-                           'register_block_type',
-                           array('modName'  => 'base',
-                                 'blockType'=> $block))) return;
-
+        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
     }
 
-    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
-        xarVarDelCached('Mod.BaseInfos', 'blocks');
-    }
+    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) xarVarDelCached('Mod.BaseInfos', 'blocks');
 
     // Create default block groups/instances
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                                'template' => 'right'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
-                                                                'template' => 'header'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'syndicate',
-                                                                'template' => 'syndicate'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'center',
-                                                                'template' => 'center'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'topnav',
-                                                                'template' => 'topnav'))) return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'left')))                                    return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'right',     'template' => 'right')))        return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'header',    'template' => 'header')))       return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'syndicate', 'template' => 'syndicate')))    return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'admin')))                                   return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'center',    'template' => 'center')))       return;
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
 
     // Load up database
     list($dbconn) = xarDBGetConn();
@@ -455,22 +433,19 @@ function installer_admin_create_administrator()
 
     list ($leftBlockGroup) = $result->fields;
 
-    $adminBlockId= xarModAPIFunc('blocks',
-                                 'admin',
-                                 'block_type_exists',
-                                 array('modName'  => 'adminpanels',
-                                       'blockType'=> 'adminmenu'));
+    $adminBlockId = xarModAPIFunc('blocks', 'admin', 'block_type_exists',
+                            array('modName'  => 'adminpanels',
+                                  'blockType'=> 'adminmenu'));
 
     if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'create_instance', array('title'    => 'Admin',
-                                                'type'     => $adminBlockId,
-                                                'group'    => $leftBlockGroup,
-                                                'template' => '',
-                                                'state'    => 2))) {
+    if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance', 
+                array(  'title'    => 'Admin',
+                        'type'     => $adminBlockId,
+                        'group'    => $leftBlockGroup,
+                        'template' => '',
+                        'state'    => 2))) {
         return;
     }
 
@@ -564,12 +539,12 @@ function installer_admin_confirm_configuration()
     xarVarSetCached('installer','installing', true);
 
     //We should probably break here if $configuration is not set.
-    if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
 
     //I am not sure if these should these break
-    if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('chosen',        'isset', $chosen,        NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET))   return;
+    if(!xarVarFetch('chosen',        'isset', $chosen,        NULL,  XARVAR_DONT_SET))  return;
+    if(!xarVarFetch('options',       'isset', $options,       NULL, XARVAR_DONT_SET))   return;
 
     xarTplSetThemeName('installer');
     $data['language'] = 'English';
@@ -633,26 +608,19 @@ function installer_admin_finish()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockId= xarModAPIFunc('blocks',
-                                 'admin',
-                                 'block_type_exists',
-                                 array('modName'  => 'roles',
-                                       'blockType'=> 'login'));
+    $loginBlockId = xarModAPIFunc(  'blocks', 'admin', 'block_type_exists', 
+                            array(  'modName'   => 'roles', 
+                                    'blockType' => 'login'));
 
-    if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
-
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'create_instance', array('title'    => 'Login',
-                                                'type'     => $loginBlockId,
-                                                'group'    => $rightBlockGroup,
-                                                'template' => '',
-                                                'state'    => 2))) {
-        return;
-    }
-
+    if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+    
+    if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance',
+                array(  'title'    => 'Login',
+                        'type'     => $loginBlockId,
+                        'group'    => $rightBlockGroup,
+                        'template' => '',
+                        'state'    => 2))) return;
+    
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";
@@ -671,10 +639,10 @@ function installer_admin_finish()
 
     list ($headerBlockGroup) = $result->fields;
 
-    $metaBlockId= xarModAPIFunc('blocks',
+    $metaBlockId = xarModAPIFunc('blocks',
                                  'admin',
                                  'block_type_exists',
-                                 array('modName'  => 'themes',
+                             array('modName'  => 'themes',
                                        'blockType'=> 'meta'));
 
     if (!isset($metaBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
@@ -731,7 +699,6 @@ function installer_admin_finish()
 
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
-
 
     return $data;
 }

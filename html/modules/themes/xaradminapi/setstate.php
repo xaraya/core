@@ -40,42 +40,91 @@ function themes_adminapi_setstate($args)
     $oldState = $themeInfo['state'];
 
     // Check valid state transition
-    switch ($state) {
+/*     switch ($state) { */
+/*         case XARTHEME_STATE_UNINITIALISED: */
+/*             // New Theme */
+/*             $theme_statesTable = $xartable['system/theme_states']; */
+/*             $sql = "INSERT INTO $theme_statesTable */
+/*                (xar_regid, */
+/*                 xar_state) */
+/*                 VALUES */
+/*                 ('" . xarVarPrepForStore($regid) . "', */
+/*                  '" . xarVarPrepForStore($state) . "')"; */
+/*  */
+/*             $result = $dbconn->Execute($sql); */
+/*             if (!$result) return; */
+/*  */
+/*             return true; */
+/*             break; */
+/*         case XARTHEME_STATE_INACTIVE: */
+/*             break; */
+/*         case XARTHEME_STATE_ACTIVE: */
+/*             if (($oldState == XARTHEME_STATE_UNINITIALISED) || */
+/*                 ($oldState == XARTHEME_STATE_MISSING) || */
+/*                 ($oldState == XARTHEME_STATE_UPGRADED)) { */
+/*                 xarSessionSetVar('errormsg', xarML('Invalid theme state transition')); */
+/*                 return false; */
+/*             } */
+/*             break; */
+/*         case XARTHEME_STATE_MISSING: */
+/*             break; */
+/*         case XARTHEME_STATE_UPGRADED: */
+/*             if ($oldState == XARTHEME_STATE_UNINITIALISED) { */
+/*                 xarSessionSetVar('errormsg', xarML('Invalid theme state transition')); */
+/*                 return false; */
+/*             } */
+/*             break; */
+/*     } */
+        switch ($state) {
         case XARTHEME_STATE_UNINITIALISED:
-            // New Theme
-            $theme_statesTable = $xartable['system/theme_states'];
-            $sql = "INSERT INTO $theme_statesTable
-               (xar_regid,
-                xar_state)
-                VALUES
-                ('" . xarVarPrepForStore($regid) . "',
-                 '" . xarVarPrepForStore($state) . "')";
 
-            $result = $dbconn->Execute($sql);
-            if (!$result) return;
+            if ($oldState == XARTHEME_STATE_MISSING_FROM_UNINITIALISED) break;
+            if ($oldState != XARTHEME_STATE_INACTIVE) {
+                // New Module
+                $theme_statesTable = $xartable['system/theme_states'];
+                $query = "SELECT * FROM $theme_statesTable WHERE xar_regid = $regid";
+                $result =& $dbconn->Execute($query);
+                if (!$result) return;
+                if ($result->EOF) {
+                    $query = "INSERT INTO $theme_statesTable
+                       (xar_regid,
+                        xar_state)
+                        VALUES
+                        ('" . xarVarPrepForStore($regid) . "',
+                         '" . xarVarPrepForStore($state) . "')";
 
-            return true;
+                    $result =& $dbconn->Execute($query);
+                    if (!$result) return;
+                }
+                return true;
+            }
+
             break;
         case XARTHEME_STATE_INACTIVE:
-            break;
-        case XARTHEME_STATE_ACTIVE:
-            if (($oldState == XARTHEME_STATE_UNINITIALISED) ||
-                ($oldState == XARTHEME_STATE_MISSING) ||
-                ($oldState == XARTHEME_STATE_UPGRADED)) {
+            if (($oldState != XARTHEME_STATE_UNINITIALISED) &&
+                ($oldState != XARTHEME_STATE_ACTIVE) &&
+                ($oldState != XARTHEME_STATE_MISSING_FROM_INACTIVE) &&
+                ($oldState != XARTHEME_STATE_UPGRADED)) {
                 xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
                 return false;
             }
             break;
-        case XARTHEME_STATE_MISSING:
+        case XARTHEME_STATE_ACTIVE:
+            if (($oldState != XARTHEME_STATE_INACTIVE) &&
+                ($oldState != XARTHEME_STATE_MISSING_FROM_ACTIVE)) {
+                xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
+                return false;
+            }
             break;
         case XARTHEME_STATE_UPGRADED:
-            if ($oldState == XARTHEME_STATE_UNINITIALISED) {
+            if (($oldState != XARTHEME_STATE_INACTIVE) &&
+                ($oldState != XARTHEME_STATE_ACTIVE) &&
+                $oldState != XARTHEME_STATE_MISSING_FROM_UPGRADED) {
                 xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
                 return false;
             }
             break;
     }
-
     //Get current theme mode to update the proper table
     $themeMode  = $themeInfo['mode'];
 

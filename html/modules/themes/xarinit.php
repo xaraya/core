@@ -124,21 +124,27 @@ function themes_init()
     if (!$res) return;
 
     xarModSetVar('themes', 'default', 'installer');
-    xarModSetVar('themes', 'selsort', 'nameasc'); 
+    xarModSetVar('themes', 'selsort', 'nameasc');
     // Initialisation successful
     return true;
 } 
 
-function themes_activate()
-{
+function themes_activate(){
+    // if we want to activate core modules after minor version upgrades, the vars and registrations
+    // should be checked before proceding, PITA really, making changes here for now <andyv>
+    
+    // assume it's not a new installation, but upgrade.. lets NOT change the theme back to Classic
     if (file_exists(xarConfigGetVar('Site.BL.ThemesDirectory').'/Xaraya_Classic/xartheme.php')) {
-        xarModSetVar('themes', 'default', 'Xaraya_Classic');
+        // lets also assume we are coming from installer theme
+        if(xarModGetVar('themes','default') === 'installer'){
+            xarModSetVar('themes', 'default', 'Xaraya_Classic');
+        }
     } 
 
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-            'themes', 'user', 'usermenu')) {
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
         return false;
-    } 
+    }
+    
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
@@ -149,27 +155,40 @@ function themes_activate()
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
     xarModSetVar('themes', 'selsort', $selsort);
-
-    xarModSetVar('themes', 'SiteName', 'Your Site Name');
-    xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
-    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
-    xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
-    xarModSetVar('themes', 'SiteTitleOrder', 'default');
-    xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
-    xarModSetVar('themes', 'ShowTemplates', 0); 
-    // Register blocks
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'themes',
-                'blockType' => 'meta'))) return; 
-    // Register blocks
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'themes',
-                'blockType' => 'syndicate'))) return;
-
+    
+    // we only really want to set vars if they dont exist (not even when they're empty strings)
+    if(xarModGetVar('themes', 'SiteName') === NULL){
+        xarModSetVar('themes', 'SiteName', 'Your Site Name');
+    }
+    if(xarModGetVar('themes', 'SiteSlogan') === NULL){
+        xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
+    }
+    if(xarModGetVar('themes', 'SiteCopyRight') === NULL){
+        xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
+    }
+    if(xarModGetVar('themes', 'SiteTitleSeparator') === NULL){
+        xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
+    }
+    if(xarModGetVar('themes', 'SiteTitleOrder') === NULL){
+        xarModSetVar('themes', 'SiteTitleOrder', 'default');
+    }
+    if(xarModGetVar('themes', 'SiteFooter') === NULL){
+        xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
+    }
+    if(xarModGetVar('themes', 'ShowTemplates') === NULL){
+        xarModSetVar('themes', 'ShowTemplates', 0); 
+    }
+    
+    // needed checks or we would be breaking all prospects of this module upgrades.. <andyv>
+    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))){
+        // Register block
+        if (!xarModAPIFunc('blocks','admin','register_block_type',array('modName' => 'themes','blockType' => 'meta'))) return;
+    }
+    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'syndicate'))){
+        // Register block
+        if (!xarModAPIFunc('blocks','admin','register_block_type',array('modName' => 'themes','blockType' => 'syndicate'))) return;
+    }
+    
     return true;
 } 
 
@@ -182,15 +201,14 @@ function themes_activate()
 function themes_upgrade($oldversion)
 { 
     // Upgrade dependent on old version number
-    switch ($oldVersion) {
+    switch ($oldversion) {
+        
         case 1.0:
 
             if (!xarModRegisterHook('item', 'usermenu', 'GUI',
                     'themes', 'user', 'usermenu')) {
                 return false;
             } 
-
-            break;
         case 1.1:
 
             if (!xarModAPIFunc('blocks',
@@ -198,7 +216,9 @@ function themes_upgrade($oldversion)
                     'register_block_type',
                     array('modName' => 'themes',
                         'blockType' => 'meta'))) return; 
-            break;
+        case 1.2:
+
+            xarModSetVar('themes', 'hidecore', 0);            
     } 
     // Update successful
     return true;

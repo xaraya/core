@@ -15,9 +15,7 @@ function themes_admin_modifyconfig()
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
 
     $filter['Class'] = 2;
-    $data['themes'] = xarModAPIFunc('themes',
-        'admin',
-        'getlist', $filter);
+    $data['themes'] = xarModAPIFunc('themes', 'admin', 'getlist', $filter);
     $data['defaulttheme'] = xarModGetVar('themes', 'default', 1);
     $data['defaultthemelabel'] = xarVarPrepForDisplay(xarML('Default Theme:'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));

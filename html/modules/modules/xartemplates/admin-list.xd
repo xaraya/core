@@ -64,9 +64,7 @@
                   </xar:if>
                 </td>
                 <td style="text-align: left;vertical-align: middle;">  
-                  <label for="hidecore">
                     <label for="hidecore"><xar:mlstring>Core Modules</xar:mlstring></label>
-                  </label>
                 </td>
                 <td colspan="3" style="text-align: center;vertical-align: middle;">
                   <input type="submit" name="reload" id="reload" value="#$reloadlabel#" />
