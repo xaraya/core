@@ -70,6 +70,7 @@ function installer_adminapi_modifyconfig($args)
 function installer_adminapi_initialise($args)
 {
     extract($args);
+    
 
     if (empty($directory) || empty($initfunc)) {
         $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
@@ -91,13 +92,14 @@ function installer_adminapi_initialise($args)
     }
 
     // Run the function, check for existence
+    
     $initFunc = $osDirectory.'_'.$initfunc;
     if (function_exists($initFunc)) {
         $res = $initFunc();
+   
         // Handle exceptions
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return;
-        }
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return;
+        
         if ($res == false) {
             // exception
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
@@ -110,7 +112,7 @@ function installer_adminapi_initialise($args)
                        new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
                        return;
     }
-
+   
     return true;
 }
 
@@ -144,8 +146,11 @@ function installer_adminapi_createdb($args)
     include_once 'includes/xarTableDDL.php';
 
     // Load in ADODB
-    define('ADODB_DIR','xaradodb');
-    include_once 'xaradodb/adodb.inc.php';
+    // FIXME: This is also in xarDB init, does it need to be here?
+    if (!defined('ADODB_DIR')) {
+        define('ADODB_DIR','xaradodb');
+    }
+   include_once ADODB_DIR . '/adodb.inc.php';
 
     // Start connection
     $dbconn = ADONewConnection($dbType);
