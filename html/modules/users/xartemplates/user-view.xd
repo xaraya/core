@@ -3,20 +3,14 @@
 		<th width="20%">
 			<xar:mlstring>Real Name</xar:mlstring>
 		</th>
-        <th width="20%">
-			<xar:mlstring>Nick Name</xar:mlstring>
-		</th>
-        <th width="60%">
+        <th width="80%">
 			<xar:mlstring>saved for icons, NEED SOME DUD HERE</xar:mlstring>
 		</th>
 	</tr>
     <xar:loop name="$items">
     <tr>
         <td>
-			<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$uname#</a>
-		</td>
-        <td>
-			#$name#
+			<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 		</td>
         <td>
            <xar:if condition="empty($emailurl)">
