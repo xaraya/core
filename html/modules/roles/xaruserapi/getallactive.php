@@ -63,8 +63,8 @@ function roles_userapi_getallactive($args)
 
     $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
 
-    if($startat==0) $result = $dbconn->Execute($query);
-    else $result = $dbconn->SelectLimit($query, $numitems, $startat-1);
+    if($startnum==0) $result = $dbconn->Execute($query);
+    else $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;
 
     // Put users into result array
