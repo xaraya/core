@@ -55,10 +55,11 @@
     [<a href="#$logouturl#">#$logoutlabel#</a>]
 </xar:if>
 <br />
-<xar:if condition="xarThemeIsAvailable('print')">
+
+<xar:if condition="(xarThemeIsAvailable('print')) and ($displayprint eq 1)">
     [<a href="#$printurl#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
 </xar:if>
-<xar:if condition="xarThemeIsAvailable('rss')">
+<xar:if condition="(xarThemeIsAvailable('rss')) and ($displayrss eq 1)">
     <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
     <xar:if condition="($where eq 'articles')">
         <br />
