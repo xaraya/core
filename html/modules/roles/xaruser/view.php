@@ -176,7 +176,7 @@ function roles_user_view()
             $items[$i]['ipaddr'] = '';
         }
 
-        $items[$i]['emailicon'] = '<img src="' . xarTplGetImage('emailicon.gif') . '" />';
+        $items[$i]['emailicon'] = '<img src="' . xarTplGetImage('emailicon.gif') . '" alt="Email" title="Email" />';
 
         $items[$i]['infoicon'] = '<img src="' . xarTplGetImage('infoicon.gif') . '" />';
 

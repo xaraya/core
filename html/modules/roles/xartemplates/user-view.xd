@@ -34,9 +34,9 @@
 
 <xar:if condition="$phase eq 'active'">
 <b><xar:mlstring>Active Users</xar:mlstring></b>&nbsp;|
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall&letter=#$letter#&search=#$search#&order=#$order#"><xar:mlstring>All Users</xar:mlstring></a>
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#"><xar:mlstring>All Users</xar:mlstring></a>
 <xar:else />
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active&letter=#$letter#&search=#$search#&order=#$order#"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
 <b><xar:mlstring>All Users</xar:mlstring></b>
 </xar:if>
 </td>
@@ -158,7 +158,7 @@
 	<br />
 
 	<!-- add the pager here -->
-	<div align="center">#$pager#</div>
+	<div style="text-align: center">#$pager#</div>
 </xar:if>
 </div>
 </div>
