@@ -20,20 +20,23 @@
  *
  */
 // Tags
-define('XAR_TOKEN_TAG_START'         , '<'    ); // Opening a tag
-define('XAR_TOKEN_TAG_END'           , '>'    ); // Closing a tag
-define('XAR_TOKEN_ENDTAG_START'      , '/'    ); // Start of an end tag
+define('XAR_TOKEN_TAG_START'         , '<'      ); // Opening a tag
+define('XAR_TOKEN_TAG_END'           , '>'      ); // Closing a tag
+define('XAR_TOKEN_ENDTAG_START'      , '/'      ); // Start of an end tag
 
 // Entities
-define('XAR_TOKEN_ENTITY_START'      , '&'    ); // Start of an entity
-define('XAR_TOKEN_ENTITY_END'        , ';'    ); // End of an entity
+define('XAR_TOKEN_ENTITY_START'      , '&'      ); // Start of an entity
+define('XAR_TOKEN_ENTITY_END'        , ';'      ); // End of an entity
 
 // Tag tokens
-define('XAR_TOKEN_NONMARKUP_START'   , '!'    ); // Start of non markup inside tag
-define('XAR_TOKEN_PI_DELIM'          , '?'    ); // Processing instruction delimiter inside tag
-define('XAR_TOKEN_NS_DELIM'          , ':'    ); // Namespace delimiter
-define('XAR_TOKEN_BLCOMMENT_DELIM'   , '---'  ); // Blocklayout comment
-define('XAR_TOKEN_HTMLCOMMENT_DELIM' , '--'   ); // HTML comment
+define('XAR_TOKEN_NONMARKUP_START'   , '!'      ); // Start of non markup inside tag
+define('XAR_TOKEN_PI_DELIM'          , '?'      ); // Processing instruction delimiter inside tag
+define('XAR_TOKEN_NS_DELIM'          , ':'      ); // Namespace delimiter
+define('XAR_TOKEN_BLCOMMENT_DELIM'   , '---'    ); // Blocklayout comment
+define('XAR_TOKEN_HTMLCOMMENT_DELIM' , '--'     ); // HTML comment
+
+define('XAR_TOKEN_CDATA_START'       , '[CDATA['); // CDATA start inside non markup section
+define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 
 // Other
 define('XAR_TOKEN_VAR_START'         , '$'    ); // Start of a variable
@@ -571,6 +574,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 break 2; // done
                             }
                             break;
+                        case XAR_TOKEN_CDATA_START:
+                            // Treat it as text
+                            // FIXME: total hack here, we dont check whether it ends properly for example, let's give the client
+                            // that problem for now
+                            $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
+                            break 3;
                         }
                         $nextChar = $this->getNextToken();
                     }
@@ -588,7 +597,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $match .= $nextChar;
                             // Match on the length of the identifier
                             $nextChar = $this->getNextToken();
-                            $matchToken = substr($match,-1* strlen($identifier));
+                            $matchToken = substr($match,-1 * strlen($identifier));
                         }
                     }
                     // Forward to the end token
@@ -621,6 +630,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         default:
                             // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy 
                             $invalid = false;
+                            // Take the $tagrest and resolve stuff #...# 
                             $token .= $buildup . $identifier . $tagrest . $nextChar;
                         }
                         if($invalid) {
@@ -771,6 +781,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     //$instruction = preg_replace('/&#(\d+);/me', "chr('\\1')", $instruction);
                     // Replace XML entities with their ASCII equivalents.
                     // An XML parser would do this for us automatically.
+                    // FIXME: this is assuming too much html like systems
                     $instruction = str_replace(
                         array('&amp;', '&gt;', '&lt;', '&quot;'),
                         array('&', '>', '<', '"'),
