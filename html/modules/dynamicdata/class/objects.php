@@ -426,7 +426,8 @@ class Dynamic_Object_Master
         $xartable =& xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
-
+        
+        $bindvars = array();
         $query = "SELECT xar_object_id,
                          xar_object_name,
                          xar_object_label,
@@ -438,9 +439,11 @@ class Dynamic_Object_Master
                          xar_object_isalias
                   FROM $dynamicobjects ";
         if (!empty($args['objectid'])) {
-            $query .= " WHERE xar_object_id = " . xarVarPrepForStore($args['objectid']);
+            $query .= " WHERE xar_object_id = ? ";
+            $bindvars[] = $args['objectid'];
         } elseif (!empty($args['name'])) {
-            $query .= " WHERE xar_object_name = '" . xarVarPrepForStore($args['name']) . "'";
+            $query .= " WHERE xar_object_name = ? ";
+            $bindvars[] = $args['name'];
         } else {
             if (empty($args['moduleid'])) {
                 $args['moduleid'] = xarModGetIDFromName(xarModGetName());
@@ -448,11 +451,11 @@ class Dynamic_Object_Master
             if (empty($args['itemtype'])) {
                 $args['itemtype'] = 0;
             }
-            $query .= " WHERE xar_object_moduleid = " . xarVarPrepForStore($args['moduleid']) . "
-                          AND xar_object_itemtype = " . xarVarPrepForStore($args['itemtype']);
+            $query .= " WHERE xar_object_moduleid = ? 
+                          AND xar_object_itemtype = ? ";
+            $bindvars[] = $args['moduleid']; $bindvars[] = $args['itemtype'];
         }
-        $result =& $dbconn->Execute($query);
-
+        $result =& $dbconn->Execute($query,$bindvars);
         if (!$result || $result->EOF) return;
 
         $info = array();
@@ -621,7 +624,7 @@ class Dynamic_Object_Master
                 // sanity check on SQL
                 if (count($pieces) < 2) {
                     $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                                 'query ' . xarVarPrepForStore($args['where']), 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
+                                 'query ' . $args['where'], 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
                     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                     new SystemException($msg));
                     return;
@@ -1077,9 +1080,9 @@ class Dynamic_Object extends Dynamic_Object_Master
 
         $query = "SELECT MAX(xar_object_itemtype)
                     FROM $dynamicobjects
-                   WHERE xar_object_moduleid = " . xarVarPrepForStore($args['moduleid']);
+                   WHERE xar_object_moduleid = ?";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array($args['moduleid']));
         if (!$result || $result->EOF) return;
 
         $nexttype = $result->fields[0];
@@ -1287,7 +1290,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             // sanity check on SQL
             if (count($pieces) < 2) {
                 $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                             'query ' . xarVarPrepForStore($where), 'Dynamic_Object_List', 'getWhere', 'DynamicData');
+                             'query ' . $where, 'Dynamic_Object_List', 'getWhere', 'DynamicData');
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;

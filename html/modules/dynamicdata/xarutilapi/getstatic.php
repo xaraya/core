@@ -83,6 +83,7 @@ function dynamicdata_utilapi_getstatic($args)
         }
     }
 
+    $bindvars = array();
     $query = "SELECT xar_tableid,
                      xar_table,
                      xar_field,
@@ -95,17 +96,16 @@ function dynamicdata_utilapi_getstatic($args)
 
     // it's easy if the table name is known
     if (!empty($table)) {
-        $query .= " WHERE xar_table = '" . xarVarPrepForStore($table) . "'";
-
+        $query .= " WHERE xar_table = ?";
+        $bindvars[] =  $table;
     // otherwise try to get any table that starts with prefix_modulename
     } else {
-        $query .= " WHERE xar_table LIKE '" . xarVarPrepForStore($systemPrefix)
-                                   . '_' . xarVarPrepForStore($modinfo['name']) . '%' . "' ";
+        $query .= " WHERE xar_table LIKE ?";
+        $bindvars[] = $systemPrefix . '_' . $modinfo['name'] . '%';
     }
     $query .= " ORDER BY xar_tableid ASC";
 
-    $result =& $dbconn->Execute($query);
-
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     $static = array();

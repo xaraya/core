@@ -279,16 +279,25 @@ function dynamicdata_admin_query($args)
         foreach ($where as $name => $what) {
             if (empty($what)) continue;
             if (!isset($value[$name])) continue;
-            if ($what == 'like') {
-                $whereclause .= $and . $name . " LIKE '%" . xarVarPrepForStore($value[$name]) . "%'";
-            } elseif ($what == 'start') {
-                $whereclause .= $and . $name . " LIKE '" . xarVarPrepForStore($value[$name]) . "%'";
-            } elseif ($what == 'end') {
-                $whereclause .= $and . $name . " LIKE '%" . xarVarPrepForStore($value[$name]) . "'";
-            } elseif ($what == 'in') {
-                $whereclause .= $and . $name . " IN (" . xarVarPrepForStore($value[$name]) . ")";
-            } else {
-                $whereclause .= $and . $name . " $what '" . xarVarPrepForStore($value[$name]) . "'";
+            
+            $whereclause .= $and . $name;
+            switch($what) {
+                case 'like':
+                    $whereclause .=  " LIKE '%" . $value[$name] . "%'";
+                    break;
+                case 'start':
+                    $whereclause .=  " LIKE '" . $value[$name] . "%'";
+                    break;
+                case 'end':
+                    $whereclause .=  " LIKE '%" . $value[$name] . "'";
+                    break;
+                case 'in':
+                    // FIXME: how to get rid of the xarVarPrepForStore here?
+                    $whereclause .=  " IN (" . xarVarPrepForStore($value[$name]) . ")";
+                    break;
+                default:
+                    // FIXME: how to get rid of the xarVarPrepForStore here?
+                    $whereclause .=  " $what '" . xarVarPrepForStore($value[$name]) . "'";
             }
             $and = ' and ';
         }

@@ -73,37 +73,43 @@ function dynamicdata_adminapi_updateprop($args)
     // modules
     $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "UPDATE $dynamicprop
-            SET xar_prop_label = '" . xarVarPrepForStore($label) . "',
-                xar_prop_type = " . xarVarPrepForStore($type);
+    $bindvars = array();
+    $sql = "UPDATE $dynamicprop SET xar_prop_label = ?, xar_prop_type = ?";
+    $bindvars[] = $label; $bindvars[] = $type;
     if (isset($default) && is_string($default)) {
-        $sql .= ", xar_prop_default = '" . xarVarPrepForStore($default) . "'";
+        $sql .= ", xar_prop_default = ?";
+        $bindvars[] = $default;
     }
 // TODO: verify that the data source exists
     if (isset($source) && is_string($source)) {
-        $sql .= ", xar_prop_source = '" . xarVarPrepForStore($source) . "'";
+        $sql .= ", xar_prop_source = ?";
+        $bindvars[] = $source;
     }
     if (isset($validation) && is_string($validation)) {
-        $sql .= ", xar_prop_validation = '" . xarVarPrepForStore($validation) . "'";
+        $sql .= ", xar_prop_validation = ?";
+        $bindvars[] = $validation;
     }
 // TODO: evaluate if we allow update those too
     if (isset($modid) && is_numeric($modid)) {
-        $sql .= ", xar_prop_moduleid = " . xarVarPrepForStore($modid);
+        $sql .= ", xar_prop_moduleid = ?";
+        $bindvars[] = $modid;
     }
     if (isset($itemtype) && is_numeric($itemtype)) {
-        $sql .= ", xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
+        $sql .= ", xar_prop_itemtype = ?";
+        $bindvars[] = $itemtype;
     }
     if (isset($name) && is_string($name)) {
-        $sql .= ", xar_prop_name = '" . xarVarPrepForStore($name) . "'";
+        $sql .= ", xar_prop_name = ?";
+        $bindvars[] = $name;
     }
     if (isset($status) && is_numeric($status)) {
-        $sql .= ", xar_prop_status = " . xarVarPrepForStore($status);
+        $sql .= ", xar_prop_status = ?";
+        $bindvars[] = $status;
     }
 
-    $sql .= " WHERE xar_prop_id = " . xarVarPrepForStore($prop_id);
-
-    $result = $dbconn->Execute($sql);
-
+    $sql .= " WHERE xar_prop_id = ?";
+    $bindvars[] = $prop_id;
+    $result =& $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     return true;

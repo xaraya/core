@@ -64,19 +64,17 @@ function dynamicdata_adminapi_removehook($args)
 
     $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "SELECT xar_prop_id
-            FROM $dynamicprop
-            WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid);
-
-    $result = $dbconn->Execute($sql);
-
-    if ($dbconn->ErrorNo() != 0) {
+    $sql = "SELECT xar_prop_id FROM $dynamicprop WHERE xar_prop_moduleid = ?";
+    $result =& $dbconn->Execute($sql,array($modid));
+    if (!$result) {
+        // CHECKME: do we need to set exception here? I thought this was taken care of
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'admin', 'removehook', 'dynamicdata');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
+        // MrB: why does the next hook need to run when we have a system exception 
+        // pending?
         return $extrainfo;
     }
     $ids = array();
@@ -95,24 +93,27 @@ function dynamicdata_adminapi_removehook($args)
 
 // TODO: don't delete if the data source is not in dynamic_data
     // Delete the item fields
+    $bindmarkers = '?' . str_repeat(',?',count($ids)-1);
     $sql = "DELETE FROM $dynamicdata
-            WHERE xar_dd_propid IN (" . join(', ',$ids) . ")";
-    $dbconn->Execute($sql);
+            WHERE xar_dd_propid IN ($bindmarkers)";
+    $result =& $dbconn->Execute($sql,$ids);
 
-    if ($dbconn->ErrorNo() != 0) {
+    if (!$result) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'admin', 'removehook', 'dynamicdata');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
+        // MrB: why does the next hook need to run when we have a system exception 
+        // pending?
         //return false;
         return $extrainfo;
     }
 
     // Delete the properties
     $sql = "DELETE FROM $dynamicprop
-            WHERE xar_prop_id IN (" . join(', ',$ids) . ")";
-    $dbconn->Execute($sql);
+            WHERE xar_prop_id IN ($bindmarkers)";
+    $dbconn->Execute($sql,$ids);
 
     if ($dbconn->ErrorNo() != 0) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
@@ -120,6 +121,8 @@ function dynamicdata_adminapi_removehook($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
+        // MrB: why does the next hook need to run when we have a system exception 
+        // pending?
         //return false;
         return $extrainfo;
     }

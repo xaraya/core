@@ -60,29 +60,16 @@ function dynamicdata_adminapi_deleteprop($args)
     // modules
     $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "DELETE FROM $dynamicprop
-            WHERE xar_prop_id = " . xarVarPrepForStore($prop_id);
-
-    $dbconn->Execute($sql);
-
-    // Check for an error with the database code, and if so raise an
-    // appropriate exception
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarML('DATABASE_ERROR', $sql);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    $sql = "DELETE FROM $dynamicprop WHERE xar_prop_id = ?";
+    $result =& $dbconn->Execute($sql,array($propid));
+    if (!$result) return;
 
 // TODO: don't delete if the data source is not in dynamic_data
     // delete all data too !
     $dynamicdata = $xartable['dynamic_data'];
 
-    $sql = "DELETE FROM $dynamicdata
-            WHERE xar_dd_propid = " . xarVarPrepForStore($prop_id);
-
-    $result = $dbconn->Execute($sql);
-
+    $sql = "DELETE FROM $dynamicdata WHERE xar_dd_propid = ?";
+    $result =& $dbconn->Execute($sql,array($prop_id));
     if (!$result) return;
 
     return true;

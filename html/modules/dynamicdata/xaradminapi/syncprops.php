@@ -52,12 +52,10 @@ function dynamicdata_adminapi_syncprops($args)
     $dynamicprop = $xartable['dynamic_properties'];
 
     $sql = "UPDATE $dynamicprop
-            SET xar_prop_moduleid = " . xarVarPrepForStore($moduleid) . ",
-                xar_prop_itemtype = " . xarVarPrepForStore($itemtype) . "
-            WHERE xar_prop_objectid = " . xarVarPrepForStore($objectid);
-
-    $result = $dbconn->Execute($sql);
-
+            SET xar_prop_moduleid = ?, xar_prop_itemtype = ?
+            WHERE xar_prop_objectid = ?";
+    $bindvars = array($moduleid, $itemtype, $objectid);
+    $result = $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     return true;
