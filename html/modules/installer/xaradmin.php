@@ -169,7 +169,7 @@ function installer_admin_phase5()
     xarVarSetCached('installer','installing', true);
 
     // Get arguments
-    if (!xarVarFetch('install_database_host','str:1:',$dbHost)) return;
+    if (!xarVarFetch('install_database_host','str',$dbHost)) return;
     if (!xarVarFetch('install_database_name','str:1:',$dbName)) return;
     if (!xarVarFetch('install_database_username','str:1:',$dbUname)) return;
     if (!xarVarFetch('install_database_password','str::',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
@@ -440,7 +440,7 @@ function installer_admin_create_administrator()
     if (!isset($adminBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
-    if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance', 
+    if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance',
                 array(  'title'    => 'Admin',
                         'type'     => $adminBlockId,
                         'group'    => $leftBlockGroup,
@@ -608,19 +608,19 @@ function installer_admin_finish()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockId = xarModAPIFunc(  'blocks', 'admin', 'block_type_exists', 
-                            array(  'modName'   => 'roles', 
+    $loginBlockId = xarModAPIFunc(  'blocks', 'admin', 'block_type_exists',
+                            array(  'modName'   => 'roles',
                                     'blockType' => 'login'));
 
     if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) return;
-    
+
     if (!xarModAPIFunc( 'blocks', 'admin', 'create_instance',
                 array(  'title'    => 'Login',
                         'type'     => $loginBlockId,
                         'group'    => $rightBlockGroup,
                         'template' => '',
                         'state'    => 2))) return;
-    
+
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";
