@@ -1149,7 +1149,7 @@ class xarMLS__LocaleDataLoader
             return false;
         }
 
-        if(file_size($filename) == 0 ) {
+        if(filesize($filename) == 0 ) {
             return false;
         }
 
