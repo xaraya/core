@@ -1432,7 +1432,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  **/
 function xarTplUnregisterTag($tag_name)
 {
-    if (!eregi(XARTPL_TAGNAME_REGEX, $tag_name)) {
+    if (!eregi(XAR_TPL_TAGNAME_REGEX, $tag_name)) {
         // throw exception
         return false;
     }
