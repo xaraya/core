@@ -15,7 +15,7 @@
         <xar:mlstring>Marker</xar:mlstring>:
     </td>
     <td>
-        <input type="text" name="marker" value="#$marker#" size="5" />
+        <input type="text" name="marker" value="#xarVarPrepForDisplay($marker)#" size="20" />
     </td>
 </tr>
 </table><table>

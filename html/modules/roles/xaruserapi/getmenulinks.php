@@ -19,22 +19,21 @@ function roles_userapi_getmenulinks()
                                      'label' => xarML('Your Account'));
             }
         }
-        if (xarModGetVar('roles', 'showprivacy')){
-            $menulinks[] = Array('url'   => xarModURL('roles',
-                                                      'user',
-                                                      'privacy'),
-                                 'title' => xarML('Privacy Policy for this Website'),
-                                 'label' => xarML('Privacy Policy'));
-        }
-        if (xarModGetVar('roles', 'showterms')){
-            $menulinks[] = Array('url'   => xarModURL('roles',
-                                                      'user',
-                                                      'terms'),
-                                 'title' => xarML('Terms of Use for this website'),
-                                 'label' => xarML('Terms of Use'));
-        }
     }
-
+    if (xarModGetVar('roles', 'showprivacy')){
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'user',
+                                                  'privacy'),
+                             'title' => xarML('Privacy Policy for this Website'),
+                             'label' => xarML('Privacy Policy'));
+    }
+    if (xarModGetVar('roles', 'showterms')){
+        $menulinks[] = Array('url'   => xarModURL('roles',
+                                                  'user',
+                                                  'terms'),
+                             'title' => xarML('Terms of Use for this website'),
+                             'label' => xarML('Terms of Use'));
+    }
 
     if (empty($menulinks)){
         $menulinks = '';

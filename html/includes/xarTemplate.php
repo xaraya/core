@@ -441,7 +441,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
 
     // Fix for the RSS theme.  We don't want to throw pager information
     // with the syndication.
-    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED);
+    $themeName = xarVarGetCached('Themes.name','CurrentTheme');
     if ($themeName == 'rss') {
         return '';
     }

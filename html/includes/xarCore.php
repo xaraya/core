@@ -505,8 +505,10 @@ EOM;
 function xarCoreIsApiAllowed($apiType) {
     // Testing for an empty API type just returns false
     if (empty($apiType)) return false;
+    if (preg_match ("/api/i", $apiType)) return false;
 
     $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
+
     // If no API type restrictions are given, return true
     if (empty($allowed) || count($allowed) == 0) return true;
     return in_array($apiType,$allowed);
