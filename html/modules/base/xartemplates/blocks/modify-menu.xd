@@ -103,13 +103,13 @@
         <xar:loop name="$contentlines">
             <tr>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkname[#$loop:index+1#]" id="linkname_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
+                    <input class="xar-norm fullright" type="text" name="linkname[#$loop:index#]" id="linkname_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
                 </td>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkurl[#$loop:index+1#]" id="linkurl_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
+                    <input class="xar-norm fullright" type="text" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
                 </td>
                 <td valign="top">
-                    <input class="xar-norm fullright" type="text" name="linkdesc[#$loop:index+1#]" id="linkdesc_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
+                    <input class="xar-norm fullright" type="text" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index+1#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
                 </td>
                 <td valign="top">
                     <input type="checkbox" name="linkdelete[#$loop:index+1#]" id="linkdelete_#$loop:index+1#" value="1" class="xar-norm" />

@@ -390,7 +390,7 @@ function base_menublock_modify($blockinfo)
     }
 
     // Prepare output array
-    $c=1;
+    $c=0;
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
         $vars['contentlines'] = array();
@@ -424,8 +424,8 @@ function base_menublock_insert($blockinfo)
 
     // User links.
     $content = array();
-    $c = 1;
-    if (!xarVarFetch('linkname', 'list:str', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+    $c = 0;
+    if (!xarVarFetch('linkname', 'array', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (isset($linkname)) {
         if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('linkdesc',  'list:str', $linkdesc,  NULL, XARVAR_NOT_REQUIRED)) {return;}
