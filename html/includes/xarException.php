@@ -348,7 +348,20 @@ function xarExceptionRender($format)
                 break;
             case XAR_USER_EXCEPTION:
                 $type = 'USER Error';
-                break;
+
+                if ($format == 'html') {
+                    $text .= '<br /><span style="color: purple">'.$type.'</span><br /><br />';
+                    if (method_exists($exception['value'], 'toHTML')) {
+                        $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
+                    }
+                } else {
+                    $text .= $type.": \n";
+                    if (method_exists($exception['value'], 'toString')) {
+                        $text .= $exception['value']->toString()."\n";
+                    }
+                }
+
+                break 2;
             default:
                 continue 2;
         }

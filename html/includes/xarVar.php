@@ -130,10 +130,8 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
             $value = $defaultValue;
             xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
         } else {
-            // Raise an exception
-            $msg = xarML('The required input variable \'#(1)\' contained invalid data.', $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            // We should already have an USER EXCEPTION on the stack...
+            // Let it go alone.
             return;
         }
     }
