@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Update a privilege
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,12 +25,11 @@ function privileges_admin_updateprivilege()
 
     if(!xarVarFetch('pid',        'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',     'isset', $realm,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pmodule',    'isset', $module,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pcomponent', 'isset', $component,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
-
 
     $i = 0;
     $instance = "";
@@ -75,7 +74,7 @@ function privileges_admin_updateprivilege()
 
 //Try to update the privilege to the repository and bail if an error was thrown
     if (!$priv->update()) {return;}
-    
+
     xarModCallHooks('item', 'update', $pid, '');
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
