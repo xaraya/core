@@ -119,8 +119,9 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         */
+        $data['basedir'] = $this->basedir;
         $data['name']    = $name;
-        $data['value']    = $value;        
+        $data['value']   = $value;
         $data['id']      = $id;
         $data['options'] = $options;
         $data['tabindex']= !empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
