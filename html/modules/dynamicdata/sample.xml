@@ -68,6 +68,16 @@
       <order>6</order>
       <validation>xarModAPIFunc('dynamicdata','util','demolist')</validation>
     </property>
+    <property name="avatar">
+      <id>51</id>
+      <label>Logo</label>
+      <type>35</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>7</order>
+      <validation>{theme}/images</validation>
+    </property>
   </properties>
   <items>
     <importsample itemid="1">
@@ -77,6 +87,7 @@
       <location>http://mikespub.net/xaraya/images/cuernos1.jpg</location>
       <sex>Male</sex>
       <employment_status>3</employment_status>
+      <avatar>header_logo1.gif</avatar>
     </importsample>
     <importsample itemid="2">
       <id>2</id>
@@ -85,6 +96,7 @@
       <location>http://mikespub.net/xaraya/images/agra1.jpg</location>
       <sex>Female</sex>
       <employment_status>1</employment_status>
+      <avatar>header_logo2.gif</avatar>
     </importsample>
     <importsample itemid="3">
       <id>3</id>
@@ -93,6 +105,7 @@
       <location>http://mikespub.net/xaraya/images/sydney1.jpg</location>
       <sex>Unknown</sex>
       <employment_status>7</employment_status>
+      <avatar></avatar>
     </importsample>
   </items>
 </object>
