@@ -170,7 +170,7 @@ function roles_activate()
     // only go through this once
     if (xarModGetVar('roles','rolesperpage')) return true;
 
-	// Set up an initial value for module variables.
+    // Set up an initial value for module variables.
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'allowregistration', 1);
     xarModSetVar('roles', 'requirevalidation', 1);
@@ -183,7 +183,7 @@ function roles_activate()
     xarModSetVar('roles', 'askpasswordemail', 1);
     //Default Display
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
-    
+
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -310,9 +310,9 @@ You will receive an email has soon as your account is activated again.
     $passwordemail = '%%name%%,
 
 Your password has been changed by an administrator.
-You can now login at %%link%% with those information :
+You can now login at %%siteurl%% with the following information:
 Login : %%username%%
-Password : %%pass%%
+Password : %%password%%
 
 %%siteadmin%%';
 
@@ -327,7 +327,7 @@ Password : %%pass%%
     xarModSetVar('roles', 'disallowedips', $disallowedips);
 
     xarModSetVar('roles', 'minage', 13);
-	// Register blocks
+    // Register blocks
     if (!xarModAPIFunc('blocks',
             'admin',
             'register_block_type',
@@ -360,14 +360,14 @@ Password : %%pass%%
             'roles', 'user', 'usermenu')) {
         return false;
     }
-    
+
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
-	// This won't work because the dynamicdata hooks aren't registered yet when this is
-	// called at installation --> put in xarinit.php of dynamicdata instead
-	//xarModAPIFunc('modules','admin','enablehooks',
-	// array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-	return true;
+    // This won't work because the dynamicdata hooks aren't registered yet when this is
+    // called at installation --> put in xarinit.php of dynamicdata instead
+    //xarModAPIFunc('modules','admin','enablehooks',
+    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+    return true;
 }
 
 /**

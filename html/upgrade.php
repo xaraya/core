@@ -681,7 +681,7 @@ if (empty($step)) {
                              'set'     =>  1),
                        array('name'    =>  'ShowPHPCommentBlockInTemplates',
                              'module'  =>  'themes',
-                             'set'     =>  0),                             
+                             'set'     =>  0),
                        array('name'    =>  'ShowTemplates',
                              'module'  =>  'themes',
                              'set'     =>  0),
@@ -811,7 +811,7 @@ You will receive an email has soon as your account is activated again.
                              'set'     =>  '%%name%%,
 
 Your password has been changed by an administrator.
-You can now login at %%siteurl%% with those information :
+You can now login at %%siteurl%% with the following information:
 Login : %%username%%
 Password : %%password%%
 
