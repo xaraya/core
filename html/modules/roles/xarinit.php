@@ -97,6 +97,11 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
+    $everybodyuid = _XAR_ID_UNREGISTERED - 1;
+    $query = "ALTER TABLE " . $tables['roles'] . " AUTO_INCREMENT = $everybodyuid";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // role type is used in all group look-ups (e.g. security checks)
     $index = array(
                    'name'      => 'i_' . $sitePrefix . '_roles_type',
@@ -135,6 +140,7 @@ function roles_init()
     $query = xarDBCreateIndex($tables['roles'],$index);
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+
 
     // prefix_rolemembers
     /*********************************************************************
@@ -178,7 +184,7 @@ function roles_activate()
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
-    xarModSetVar('roles', 'frozenroles', 3);
+    xarModSetVar('roles', 'frozenroles', _XAR_ID_UNREGISTERED + 1);
     xarModSetVar('privileges', 'frozenprivileges', 1);
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
