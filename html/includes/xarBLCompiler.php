@@ -566,16 +566,20 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $nextChar = $this->getNextToken();
                     while(trim($nextChar)) {
                         $buildup .= $nextChar;
+
+                        // FIXME: Ultimately adapt this for the deprecating of <!--- and --->
+                        //        it can be simpler now. We spent a lot of time figuring out
+                        //        what kind of comment we have on our hands.
                         switch($buildup) {
-                            case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                                // HTML comment
-                                $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                break 2; // done
-                            case XAR_TOKEN_CDATA_START:
-                                // CDATA section
-                                $identifier = XAR_TOKEN_CDATA_END;
-                                $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
-                                break 2;
+                        case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                            $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
+                            break 2; // done
+                        case XAR_TOKEN_CDATA_START:
+                            // Treat it as text
+                            // FIXME: total hack here, we dont check whether it ends properly for example, let's give the client
+                            // that problem for now
+                            $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
+                            break 3;
                         }
                         $nextChar = $this->getNextToken();
                     }
@@ -583,13 +587,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Remember what was after the buildup
                         $remember = $nextChar;
                     }
-                    // identifier is now either a define token, or free form
+                    // identifier is now a token or free form (in our case  -- or the first whitespace char)
 
                     // Get the rest of the non markup tag, recording along the way
                     $matchToken=''; $match = '';
                     $nextChar = $this->getNextToken();
                     if(isset($identifier)) {
-                        while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END) {
+                        while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END){
                             $match .= $nextChar;
                             // Match on the length of the identifier
                             $nextChar = $this->getNextToken();
@@ -615,19 +619,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // the tag was properly ended.
                         $invalid = strpos($tagrest,$matchToken);
                         switch($identifier) {
-                            case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                                // <!-- HTML comment, copy to output
-                                $token .= $identifier . $tagrest . $matchToken . $nextChar;
-                                break;
-                            case XAR_TOKEN_CDATA_END:
-                                // <![CDATA[ section, copy to output 
-                                $token .= $tagrest . $matchToken . $nextChar;
-                                break;
-                            default:
-                                // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
-                                $invalid = false;
-                                // Take the $tagrest and resolve stuff #...#
-                                $token .= $buildup . $identifier . $tagrest . $nextChar;
+                        case XAR_TOKEN_HTMLCOMMENT_DELIM:
+                            // <!-- HTML comment, copy to output
+                            $token .= $identifier . $tagrest . $matchToken . $nextChar;
+                            break;
+                        default:
+                            // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
+                            $invalid = false;
+                            // Take the $tagrest and resolve stuff #...#
+                            $token .= $buildup . $identifier . $tagrest . $nextChar;
                         }
                         if($invalid) {
                             $this->raiseError(XAR_BL_INVALID_TAG,
@@ -3241,7 +3241,7 @@ function xmltrim($input='')
     // Make 'almost right' 
     $input = $leftspace . trim($input,' ') . $rightspace;
     // Finish it
-    $input = str_replace(array(" \n","\n "),"\n",$input);
+    $input = str_replace(array(" \n","\n "),array("\n","\n"),$input);
     
     return $input;
 }
