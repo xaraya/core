@@ -84,7 +84,8 @@ function roles_admin_purge($args)
 //        $q->qecho();
         $q->run();
 
-        $data['totalselect'] = $q->getrows();
+//        $data['totalselect'] = $q->getrows();
+        $data['totalselect'] = $q->countall();
 
         if ($data['totalselect'] == 0) {
             $data['recallmessage'] = xarML('There are no deleted groups/users ');

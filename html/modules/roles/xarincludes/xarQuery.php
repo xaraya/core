@@ -66,16 +66,19 @@ class xarQuery
     function run($statement='',$pretty=1)
     {
         $this->setstatement($statement);
-        $result = $this->dbconn->Execute($this->statement);
 
         if ($this->type == 'SELECT') {
-            $this->rows = $result->_numOfRows;
             if($this->rowstodo != 0 && $this->limits == 1) {
                 $begin = $this->startat-1;
                 $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
                 $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
+            } else {
+                $result = $this->dbconn->Execute($this->statement);
             }
             if (!$result) return;
+        // this gives the number of rows for the actual query - use countall() if you want to get the
+        // total number of records matching the conditions without any limits
+            $this->rows = $result->_numOfRows;
             $this->result =& $result;
 
             if (($result->fields) === false) $numfields = 0;
@@ -84,19 +87,14 @@ class xarQuery
             if ($pretty == 1) {
                 if ($statement == '') {
                     if ($this->fields == array() && $numfields > 0) {
-                        $colnames = array();
-                        foreach ($this->tables as $table) {
-                            $colnames += $this->dbconn->MetaColumnNames($table['name']);
-                        }
-                        if (count($colnames) == $numfields) {
-                            for ($i=0;$i<$numfields;$i++) {
-                                $this->fields[$i]['name'] = $colnames[$i];
-                           }
-                        }
-                        else {
-                            $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                            return;
+                        for ($i=0;$i<$numfields;$i++) {
+                            $o =& $result->FetchField($i);
+                            if (!isset($o) || !isset($o->name)) {
+                                $msg = xarML('SELECT with total of columns different from the number retrieved.');
+                                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                                return;
+                            }
+                            $this->fields[$i]['name'] = strtolower($o->name);
                         }
                     }
                     while (!$result->EOF) {
@@ -118,6 +116,8 @@ class xarQuery
                     }
                 }
             }
+        } else {
+            $result = $this->dbconn->Execute($this->statement);
         }
         return true;
 
@@ -871,6 +871,35 @@ class xarQuery
     {
         $this->setstatement();
         echo $this->getstatement();
+    }
+    function countall()
+    {
+        $st =  $this->type . " ";
+        switch ($this->type) {
+        case "SELECT" :
+            $st .= 'COUNT(*)';
+            //$st .= $this->assembledfields("SELECT");
+            $st .= " FROM ";
+            $st .= $this->assembledtables();
+            break;
+        case "INSERT" :
+        case "UPDATE" :
+        case "DELETE" :
+        case "CREATE" :
+        case "DROP" :
+        default :
+            return;
+        }
+        $st .= $this->assembledconditions();
+        //$st .= $this->assembledsorts();
+
+        $result = $this->dbconn->Execute($st);
+        if (!$result) return;
+        if ($result->EOF) return 0;
+
+        $count = $result->fields[0];
+        $result->Close();
+        return $count;
     }
 }
 ?>

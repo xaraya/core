@@ -111,7 +111,8 @@ function roles_admin_showusers()
     // Save the query so we can reuse it somewhere
     xarSessionSetVar('rolesquery', serialize($q));
 
-    $data['totalselect'] = $q->getrows();
+//    $data['totalselect'] = $q->getrows();
+    $data['totalselect'] = $q->countall();
 
     switch ($data['state']) {
         case ROLES_STATE_CURRENT :
