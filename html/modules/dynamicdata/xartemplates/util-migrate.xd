@@ -128,7 +128,7 @@
                 </xar:if>
             </td>
         </tr>
-<xar:if condition="!empty($from['module']) && !empty($to['module'])">
+<xar:if condition="!empty($from['module']) and !empty($to['module'])">
         <tr>
             <td>
                 <label class="dd-norm" for="from_itemtype">
@@ -163,7 +163,7 @@
                 </xar:if>
             </td>
         </tr>
-    <xar:if condition="!empty($from['itemtype']) && !empty($to['itemtype'])">
+    <xar:if condition="!empty($from['itemtype']) and !empty($to['itemtype'])">
         <tr>
             <td>
                 <label class="dd-norm" for="from_itemid">
@@ -223,8 +223,8 @@
         </tr>
     </table>
     </fieldset>
-<xar:if condition="!empty($from['module']) && !empty($to['module'])">
-    <xar:if condition="!empty($from['itemtype']) && !empty($to['itemtype'])">
+<xar:if condition="!empty($from['module']) and !empty($to['module'])">
+    <xar:if condition="!empty($from['itemtype']) and !empty($to['itemtype'])">
     <fieldset>
     <table>
         <tr>
