@@ -146,7 +146,7 @@
 								&nbsp;<xar:mlstring>matching</xar:mlstring> '#$search#'
 							</xar:if>
 						(#$totalselect#)
-		      <!--<xar:if condition="$groupuid != 0">
+		      <!-- <xar:if condition="$groupuid != 0">
 			      <a href="#xarModURL('roles','admin','createmail', array('groupuid' => $groupuid, 'state' => $state))#" title="#xarML('Email the Users in this Group with this state')#" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;"/></a>
 							</xar:if>-->
 						</th>

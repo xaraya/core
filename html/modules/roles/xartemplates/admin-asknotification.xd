@@ -2,7 +2,7 @@
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Send notification</xar:mlstring></span></div>
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')"></xar:if>
 <br />
-<!--Contextual text
+<!-- Contextual text
 <xar:if condition="$mailtype eq 'validation'">
 	<xar:set name="$explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
 <xar:elseif condition="$mailtype eq 'confirmation'"/>

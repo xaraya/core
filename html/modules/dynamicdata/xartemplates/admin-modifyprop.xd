@@ -99,7 +99,7 @@ Tip : empty label -> delete field for all items
 </table>
 <br />
 
-<!--xar:data-list object="$myobject" layout="'cells'" template="''" /-->
+<!-- xar:data-list object="$myobject" layout="'cells'" template="''" /-->
 
 <div align="center">
 <br />[

@@ -3,7 +3,7 @@
   <div align="center">
         <p><xar:mlstring>Terms and Conditions</xar:mlstring></p>
         <p><xar:template file="user-terms" type="module" /></p>
-<!---this stuff shouldnt print        <p><a href="##xarModURL('roles',
+<!--- this stuff shouldnt print        <p><a href="##xarModURL('roles',
                            'user',
                            'new',
                             array('stage' => 2,
