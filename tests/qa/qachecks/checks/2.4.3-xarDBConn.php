@@ -10,11 +10,11 @@
 
 class XarDBConn extends QACheckRegexp
 {
-    var $id = '2.4.4';
+    var $id = '2.4.3';
     var $name = "xarDBConn no longer returns an array";
     var $fatal = true;
     var $filetype = 'php';
-    var $regexps = array('/list\(.*?\)\s*=\s*xarDBConn/');
+    var $regexps = array('/list\(.*?\)\s*=\s*xarDBGetConn/');
 }
 
 /* add to the list of checks when imported */

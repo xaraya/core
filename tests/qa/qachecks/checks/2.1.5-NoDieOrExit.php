@@ -17,7 +17,7 @@ class NoDieOrExit extends QACheckRegexp
     var $fatal = true;
     var $filetype = 'php';
     var $enabled = true;
-    var $regexps = array('/die(/', '/exit(/');
+    var $regexps = array('/die\(/', '/exit\(/');
 }
 
 /* add to the list of checks when imported */

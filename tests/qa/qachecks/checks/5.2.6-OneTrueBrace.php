@@ -18,7 +18,8 @@ class OneTrueBrace extends QACheckRegexp
     var $filetype = 'all';
     var $enabled = true;
     var $checkcomments = true;
-    var $regexps = array('/^(.*;)?\s*function.*{/');
+    var $regexps = array('/^(.*;)?\s*function.*{/',
+            '/^(.*;)?\s*class.*{/');
 }
 
 /* add to the list of checks when imported */

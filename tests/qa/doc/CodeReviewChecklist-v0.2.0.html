@@ -1391,8 +1391,8 @@ using <span style="font-family: monospace;">&lt;xar:template /&gt;</span></td>
       </td>
       <td>License included.</td>
       <td><code></code>
-      <pre>&lt;!--- License: GPL http://www.gnu.org/copyleft/gpl.html <span
- class="toowide">---&gt;<span style="font-style: italic;"><br></span></span><span
+      <pre>&lt;xar:comment&gt; License: GPL http://www.gnu.org/copyleft/gpl.html <span
+ class="toowide">&lt;/xar:comment&gt;<span style="font-style: italic;"><br></span></span><span
  class="toowide"><span style="font-style: italic;"></span></span></pre>
       <code> </code></td>
     </tr>
@@ -1422,6 +1422,18 @@ character.<br>
       <td style="vertical-align: top;">Templates are XML documents
 themselves, so if you want an ampersand character (for example, in a
 url) you need to use <span style="font-family: monospace;">&amp;amp;</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">5.4.9<br>
+      </td>
+      <td style="vertical-align: top;">No use of <span
+ style="font-family: monospace;">---&gt;</span> for comments<br>
+      </td>
+      <td style="vertical-align: top;">This is actually invalid XML,
+use &lt;xar:comment&gt; instead.<br>
       </td>
     </tr>
     <tr>

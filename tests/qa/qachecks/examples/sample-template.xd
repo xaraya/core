@@ -3,7 +3,7 @@ DDF
 <!-- 5.4.2 shouldn't be any <?php echo "php" ?> in these files -->
 <!-- 5.4.2 <? echo "php ?> is even worse
     <?="php"?> would be just as bad -->
-    but <?xml ?> is okay
+    but <?xml ?> is okay, so is <?xar ?>
 
  5.4.4 Hello #there# ! don't forget your dollar signs 
  inside #xarModAPI('template', 'tags')# !
@@ -14,3 +14,8 @@ DDF
 
  5.4.6 License include
  <!--- License My license --->
+
+ 5.4.9 Bad comment tags
+ <!--- these comments are invalid xml --->
+
+ <xar:comment>You should use xar:comment</xar:comment>

@@ -19,10 +19,10 @@ class QACheckExample extends QACheck
 {
     var $id = '0.0.1';
     var $name = 'Example Check - files is < 10000 bytes';
-    var $fatal = false;
+    var $fatal = true;
     var $score = 1;
-    var $filetype = 'php';
-    var $enabled = false;
+    var $filetype = 'all';
+    var $enabled = true;
 
     /**
      * Run the test.

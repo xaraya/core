@@ -21,7 +21,7 @@ class GoodPHPTags extends QACheckRegexp
     var $filetype = 'php';
     var $enabled = true;
     var $checkcomments = true;
-    var $regexps = array('/<\?=|<\?(?!php|xml)/');
+    var $regexps = array('/<\?=|<\?(?!php|xml|xar)/');
 }
 
 /* add to the list of checks when imported */

@@ -3,8 +3,8 @@
    tests/qa/preflight/blank.
 
  * Save the blank checklist in tests/qa/preflight/complete with a unique
-   filename that tells us information about the component, the tester and the  
-   date or revision. e.g. installer-rkeays-0.9.10rc1.html
+   filename that tells us information about the component, and the  
+   date or revision. e.g. installer-0.9.10rc1.html
 
  * Run through each of the tests and record the results as either:
 
@@ -36,10 +36,11 @@
      submitted to bugzilla because of this. Include the new bugzilla number
      and add the defect summary to the section 'new defects'.
 
- * Do a search in bugzilla for defects for your component marked
-   RESOLVED/FIXED. We want to go through this list and close as many of the
-   defects as possible. You can only close defects you know have been fixed
-   from the testing you did with the checklist.
+ * Do a search in bugzilla for defects for your components which have been
+   marked RESOLVED/FIXED since the last time the component was tested. We want
+   to go through this list and close as many of the defects as possible. You
+   can only close defects you know have been fixed from the testing you did
+   with the checklist.
 
    You can start at the top of the list, and whenever you close a defect
    you'll automatically be shown the next one in the list. Alternatively, you
@@ -47,6 +48,8 @@
    close, add it to the section in the preflight checklist 'Fixed defects
    marked closed'
 
- * add up the total of all the results for each of the tests and complete the
-   summary table
+ * Mark all RESOLVED/INVALID defects CLOSED. No need to record these anywhere.
+
+ * Add up the total of all the results for each of the tests and complete the
+   summary table.
 
