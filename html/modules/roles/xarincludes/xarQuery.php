@@ -30,6 +30,7 @@ class xarQuery
     var $row;
     var $dbconn;
     var $statement;
+    var $israwstatement = 0;
     var $bindvars;
     var $bindstring;
     var $limits = 1;
@@ -65,28 +66,18 @@ class xarQuery
 
     function run($statement='',$pretty=1)
     {
+        $this->setstatement($statement);
         if ($this->type != 'SELECT') {
-            $this->setstatement($statement);
             if(!$this->dbconn->Execute($this->statement)) return;
+            $this->rows = $result->_numOfRows;
             return true;
         }
-
-        if($this->rowstodo != 0 && $this->limits == 1 && $statement == '') {
-            $temp = $this->fields;
-            $this->clearfields();
-            $this->addfield('COUNT(*)');
-            $this->setstatement();
-            $result = $this->dbconn->Execute($this->statement);
-            list($this->rows) = $result->fields;
-            $this->fields = $temp;
-            $this->setstatement();
-
+        if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
             $begin = $this->startat-1;
             $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
         }
         else {
-            $this->setstatement($statement);
             $result = $this->dbconn->Execute($this->statement);
             $this->rows = $result->_numOfRows;
         }
@@ -794,6 +785,16 @@ class xarQuery
     }
     function getrows()
     {
+        if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
+            $temp = $this->fields;
+            $this->clearfields();
+            $this->addfield('COUNT(*)');
+            $this->setstatement();
+            $result = $this->dbconn->Execute($this->statement);
+            list($this->rows) = $result->fields;
+            $this->fields = $temp;
+            $this->setstatement();
+        }
         return $this->rows;
     }
     function getrowstodo()
@@ -866,12 +867,14 @@ class xarQuery
     function setstatement($statement='')
     {
         if ($statement != '') {
+            $this->israwstatement = 0;
             $this->bindvars = array();
             $this->statement = $statement;
             $st = explode(" ",$statement);
             $this->type = strtoupper($st[0]);
         }
         else {
+            $this->israwstatement = 1;
             $this->statement = $this->_statement();
         }
     }
