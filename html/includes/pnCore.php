@@ -199,6 +199,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         // Start Configuration Unit
         $systemArgs = array();
         pnConfig_init($systemArgs);
+
+    // FIXME: <mikespub> Well, whenever you're sure marco...
+        pnVar_init(array());
     }
 
     if ($whatToLoad & PNCORE_SYSTEM_MODULES) {

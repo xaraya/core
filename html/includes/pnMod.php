@@ -879,7 +879,7 @@ function pnModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args 
         if (is_array($v)) {
             foreach($v as $l=>$w) {
                 if (isset($w)) {
-                    $url .= "&$k[$l]=$w";
+                    $url .= "&$k" . "[$l]=$w";
                 }
             }
         } elseif (isset($v)) {
