@@ -49,6 +49,13 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
 
 /**
+ * Miscelaneous defines
+ *
+ */
+// Let's do this once here, not scattered all over the place
+define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
+
+/**
  * Initializes the BlockLayout Template Engine
  *
  * @author Paul Rosania <paul@xaraya.com>
@@ -79,10 +86,9 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     }
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
-        if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
+        if (!is_writeable(XAR_TPL_CACHE_DIR)) {
             $msg = "xarTpl_init: Cannot write in cache/templates directory '"
-                . xarCoreGetVarDirPath()
-                ."/cache/templates', but the setting: 'cache templates' is set to 'On'.\n"
+                . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
                 ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
             // Set the exception, but do not return just yet, because we *can* continue.
@@ -814,6 +820,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         $templateName = xarTplGetPageTemplateName();
     }
 
+    // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
 
@@ -839,6 +846,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
  */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
+    // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $themeDir = xarTplGetThemeDir();
 
@@ -862,6 +870,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
  */
 function xarTpl_includeThemeTemplate($templateName, $tplData)
 {
+    // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -878,6 +887,7 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
  */
 function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 {
+    // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
@@ -964,9 +974,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     $needCompilation = true;
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $varDir = xarCoreGetVarDirPath();
         $cacheKey = md5($sourceFileName);
-        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
+        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
         if (file_exists($cachedFileName)
             && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
             $needCompilation = false;
@@ -1001,14 +1010,13 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
-            $varDir = xarCoreGetVarDirPath();
-            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
 
         // Commented this out for now, a double entry should not occur anyway, eventually this could even be an assert.
             //if (!in_array($entry, $file)) {
-            //   $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            //   $fd = fopen($varDir . XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             //   fwrite($fd, $entry);
             //   fclose($fd);
             //}
@@ -1289,15 +1297,14 @@ function xarTpl__loadFromFile($sourceFileName)
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
-            $varDir = xarCoreGetVarDirPath();
-            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
 
             // commented this out for now, a double entry should never occure, eventuall this mayb even become an assert
             // for the details see bug #1600
             //if (!in_array($entry, $file)) {
-            //    $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            //    $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             //    fwrite($fd, $entry);
             //    fclose($fd);
             //}
