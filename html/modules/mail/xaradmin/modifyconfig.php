@@ -43,6 +43,9 @@ function mail_admin_modifyconfig()
     $data['searchstrings'] = unserialize(xarModGetVar('mail', 'searchstrings'));
     $data['replacestrings'] = unserialize(xarModGetVar('mail', 'replacestrings'));
 
+    // Get encoding
+    $data['encoding'] = xarModGetVar('mail', 'encoding');
+
     // Include 'formcheck' JavaScript.
     // TODO: move this to a template widget when available.
     xarModAPIfunc(

@@ -39,6 +39,7 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('textfooter', 'str:1:', $textfooter, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('wordwrap', 'int:1:', $wordwrap, '50')) return;
     if (!xarVarFetch('priority', 'str:1:', $priority, 'normal')) return;
+    if (!xarVarFetch('encoding', 'str:1:', $encoding)) return;
     if (!xarVarFetch('server', 'str:1:', $server, 'mail')) return;
     if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, 'Your SMTP Host', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('smtpPort', 'int:1:', $smtpPort, '25', XARVAR_NOT_REQUIRED)) return;
@@ -65,6 +66,7 @@ function mail_admin_updateconfig()
     xarModSetVar('mail', 'textheader', $textheader);
     xarModSetVar('mail', 'textfooter', $textfooter);
     xarModSetVar('mail', 'priority', $priority);
+    xarModSetVar('mail', 'encoding', $encoding);
     xarModSetVar('mail', 'wordwrap', $wordwrap);
     xarModSetVar('mail', 'server', $server);
     xarModSetVar('mail', 'smtpHost', $smtpHost);

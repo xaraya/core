@@ -178,6 +178,40 @@
 
         <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
+            <span class="help" title="#xarML('Enter the encoding to send messages.')#"><label for="encoding"><xar:mlstring>Default Encoding</xar:mlstring></label>:</span>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+            <select name="encoding" id="encoding" size="1">
+                <xar:if condition="$encoding eq '7bit'">
+                    <option label="7bit" value="7bit" selected="selected">7bit</option>
+                <xar:else />
+                    <option label="7bit" value="7bit">7bit</option>
+                </xar:if>
+                <xar:if condition="$encoding eq '8bit'">
+                    <option label="8bit" value="8bit" selected="selected">8bit</option>
+                <xar:else />
+                    <option label="8bit" value="8bit">8bit</option>
+                </xar:if>
+                <xar:if condition="$encoding eq 'binary'">
+                    <option label="binary" value="binary" selected="selected">binary</option>
+                <xar:else />
+                    <option label="binary" value="binary">binary</option>
+                </xar:if>
+                <xar:if condition="$encoding eq 'quoted-printable'">
+                    <option label="quoted-printable" value="quoted-printable" selected="selected">quoted-printable</option>
+                <xar:else />
+                    <option label="quoted-printable" value="quoted-printable">quoted-printable</option>
+                </xar:if>
+                <xar:if condition="$encoding eq 'base64'">
+                    <option label="base64" value="base64" selected="selected">base64</option>
+                <xar:else />
+                    <option label="base64" value="base64">base64</option>
+                </xar:if>
+            </select>
+        </span>
+        </div>
+        <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
             <span class="help" title="#xarML('Select the default method to send mail  Mail should work in most cases, however Windows installs might need to use the SMTP method.')#"><label for="server"><xar:mlstring>Default method to send mail</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">

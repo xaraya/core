@@ -113,10 +113,6 @@ function mail_adminapi_sendhtmlmail($args)
     // Check encoding
     if (!isset($encoding)) {
         $encoding = xarModGetVar('mail', 'encoding');
-        if (empty($encoding)) {
-            $encoding = '8bit';
-            xarModSetVar('mail', 'encoding', $encoding);
-        }
     }
     // Check if using mail templates - default is true
     if (!isset($usetemplates)) {
