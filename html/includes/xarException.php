@@ -415,7 +415,6 @@ function xarException__backTrace()
     }
     if ($btFuncName === '') return array();
     $stack = $btFuncName();
-    if (!$stack) $stack = array();
     return $stack;
 }
 

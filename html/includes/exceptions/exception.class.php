@@ -32,6 +32,8 @@ class Exception
     var $module = '';
 
     function Exception() {
+        $this->stack = array();
+        $this->msg = $msg;
     }
 
     function toString() {

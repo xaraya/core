@@ -20,7 +20,6 @@ class SystemMessage extends Exception
     function SystemMessage($msg = '', $link = NULL)
     {
         parent::Exception();
-        $this->msg = $msg;
         $this->link = $link;
     }
 

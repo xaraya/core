@@ -17,7 +17,8 @@ include_once "includes/exceptions/exception.class.php";
 class SystemException extends Exception
 {
     function SystemException($msg = '') {
-        $this->msg = $msg;
+        parent::Exception();
+
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
             $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
         // Then check in $_GET
