@@ -63,7 +63,11 @@ document.forms[0].submit();}
 				<td>
 					<select name="pparentid" id="pparentid" tabindex="3">
 					<xar:loop name="$groups">
+						<xar:if condition="$uid == $pparentid">
+								<option value="#$uid#" selected>#$name#
+						<xar:else />
 								<option value="#$uid#">#$name#
+						</xar:if>
 					</xar:loop>
 					</select>
 				</td>
@@ -97,24 +101,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Email</xar:mlstring>
 					</td>
 					<td>
-						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="20" maxlength="20" tabindex="5" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<xar:mlstring>Password</xar:mlstring>
-					</td>
-					<td>
-						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="20" maxlength="20" tabindex="6" />
-					</td>
-					<td width="20">
-						&nbsp;
-					</td>
-					<td>
-						<xar:mlstring>Pwd. Again</xar:mlstring>
-					</td>
-					<td>
-						<input type="password" name="ppass2" id="ppass2" value="" size="20" maxlength="20" tabindex="7" />
+						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="40" tabindex="5" />
 					</td>
 				</tr>
 				<tr>
@@ -149,8 +136,27 @@ document.forms[0].submit();}
 						&nbsp;
 					</td>
 					<td>
+						<xar:mlstring>Password</xar:mlstring>
 					</td>
 					<td>
+						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="6" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&nbsp;
+					</td>
+					<td>
+						&nbsp;
+					</td>
+					<td width="20">
+						&nbsp;
+					</td>
+					<td>
+						<xar:mlstring>Pwd. Again</xar:mlstring>
+					</td>
+					<td>
+						<input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="7" />
 					</td>
 				</tr>
 			</xar:if>
