@@ -60,13 +60,7 @@ function users_loginblock_display($blockinfo)
     }
 
     // URL of this page
-    // TODO - make this generic so that it works with all
-    //        webservers - pnGetThisURL?
-    //$args['return_url'] = pnServerGetVar('REQUEST_URI');
-    // Get base URL
-    $baseurl = pnServerGetBaseURL();
-    $baseurl = preg_replace('#^(https?://[^/]+)/.*$#','\\1',$baseurl);
-    $args['return_url'] = $baseurl . pnServerGetVar('REQUEST_URI');
+    $args['return_url'] = pnServerGetCurrentURL();
 
     $blockinfo['content'] = pnTplBlock('users', 'login', $args);
     

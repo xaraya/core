@@ -31,8 +31,8 @@ function pnSerReqRes_init($args)
  * get a server (or environment) variable
  *
  * Gets a SERVER variable, or an ENVironment variable if that fails. Tries the
- * new superglobals first. Private function for now - could become public ?
- * @access private
+ * new superglobals first.
+ * @access public
  * @param name the name of the variable
  * @return mixed value of the variable, or void if variable doesn't exist
  */
@@ -123,6 +123,51 @@ function pnServerGetBaseURL()
 
     // TODO : this still doesn't work for non-standard ports !
     return "$proto$server$path/";
+}
+
+/**
+ * get current URL
+ *
+ * @param $args additional parameters to be added to the URL (e.g. theme, ...)
+ * @access public
+ * @returns string
+ * @return current URL
+ */
+function pnServerGetCurrentURL($args = array())
+{
+    // get base URL
+    $baseurl = pnServerGetBaseURL();
+    // strip off everything except protocol, server (and port)
+    $baseurl = preg_replace('#^(https?://[^/]+)/.*$#','\\1',$baseurl);
+
+    // get current URI
+    $request = pnServerGetVar('REQUEST_URI');
+// TODO: cfr. BaseURI() for other possible ways, or try PHP_SELF
+    if (empty($request)) {
+        $request = '/';
+    }
+
+    // add optional parameters
+    if (strpos($request,'?') === false) {
+        $join = '?';
+    } else {
+        $join = '&';
+    }
+    foreach ($args as $k=>$v) {
+        if (is_array($v)) {
+            foreach($v as $l=>$w) {
+                if (isset($w)) {
+                    $request .= $join . $k . "[$l]=$w";
+                    $join = '&';
+                }
+            }
+        } elseif (isset($v)) {
+            $request .= $join . "$k=$v";
+            $join = '&';
+        }
+    }
+
+    return $baseurl . $request;
 }
 
 // REQUEST FUNCTIONS
