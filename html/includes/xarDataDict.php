@@ -268,13 +268,7 @@ class xarDataDict
      * @param   $index name of the index
      * @param   $table name of the table
      * @param   $fields string or array containing field info
-     * @param   $options array containing index creation options, including:
-     *              CLUSTERED       Create clustered index (only mssql)
-     *              BITMAP          Create bitmap index (only oci8)
-     *              UNIQUE          Make unique index
-     *              FULLTEXT        Make fulltext index (only mysql)
-     *              HASH            Create hash index (only postgres)
-     *              DROP            Drop legacy index
+     * @param   $options array containing index creation options
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none

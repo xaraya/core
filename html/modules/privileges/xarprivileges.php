@@ -267,15 +267,11 @@ class xarMasks
                 $matched = false;
                 foreach ($privs2 as $key2 => $priv2) {
                     if(XARDBG_WINNOW) {
-
-                        /* debug output */
-                        $w1 = $priv1->matchesexactly($priv2) ? "YES" : "NO";
-                        $w2 = $priv2->matchesexactly($priv1) ? "YES" : "NO";
-                        $msg = "Winnowing: \n  ".$priv1->getName()." implies ". 
-                                $priv2->getName()."?: ".$w1."\n  ". 
-                                $priv2->getName()." implies ".
-                                $priv1->getName()."?: ".$w2;
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
+                        $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
+                        echo "Winnowing: ";
+                        echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<br />";
+                        echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<br /><br />";
                     }
                     if ($priv1->matchesexactly($priv2)) {
                         $privs3 = $privs2;
@@ -560,19 +556,10 @@ class xarMasks
 
         // Note : DENY rules override all others here...
         foreach ($privilegeset['privileges'] as $privilege) {
-            if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || 
-                    XARDBG_MASK == "All")) {
-
-                /* debugging output */
-                $msg = "Comparing for DENY.\n  ".$privilege->present()."\n  ".
-                        $mask->present();
-                if (($privilege->level == 0) && 
-                        ($privilege->includes($mask))) {
-                    $msg .= $privilege->getName() . " FOUND. \n";
-                } else {
-                    $msg .= " NOT FOUND. \n";
-                }
-                xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+            if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
+                if (($privilege->level == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
+                else echo "not found. ";
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
                 return false;
@@ -581,26 +568,18 @@ class xarMasks
 
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                $msg = "Comparing \n  Privilege: ".$privilege->present().
-                        "\n       Mask: ".$mask->present();
-                xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                echo "<br />Comparing <br />" . $privilege->present() . " and <br />" . $mask->present() . ". <br />";
             }
             if ($privilege->includes($mask)) {
                 if ($privilege->implies($mask)) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        $msg = $privilege->getName() . " WINS! ".
-                                "Privilege includes mask. ".
-                                "Privilege level greater or equal.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
                     }
                     if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        $msg = $mask->getName() . " MATCHES! ".
-                                "Privilege includes mask. Privilege level ".
-                                "lesser.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level lesser.<br />";
                     }
                 }
                 $matched = true;
@@ -608,27 +587,20 @@ class xarMasks
             elseif ($mask->includes($privilege)) {
                 if ($privilege->level >= $mask->level) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        $msg = $privilege->getName()." WINS! ".
-                                "Mask includes privilege. Privilege level ".
-                                "greater or equal.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
                     }
                     if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                        $msg = $mask->getName()." MATCHES! ".
-                                "Mask includes privilege. Privilege level ".
-                                "lesser.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<br />Mask includes privilege. Privilege level lesser.<br />";
                     }
                 }
                 $matched = true;
             }
             else {
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
-                    $msg = "NO MATCH.\n";
-                    xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                    echo "<font color='red'>no match</font>. Continuing...<br />";
                 }
             }
         }

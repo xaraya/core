@@ -32,69 +32,21 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         } elseif (is_string($value)) {
             // assume dates are stored in UTC format
         // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
-            if ($this->validation == 'datetime') {
-                if (preg_match("/^\s*(\d\d\d\d)-(\d\d)-(\d\d)".
-                        " (\d\d):(\d\d):(\d\d)\s*$/", $value, $matches)) {
-
-                    /* check date is valid */
-                    if (!checkdate($matches[2], $matches[3], $matches[1])) {
-                        $this->invalid = xarML('date');
-                        $this->value = null;
-                        return false;
-                    }
-
-                    /* check time is valid */
-                    if ($matches[4] < 0 || $matches[4] > 23 ||
-                            $matches[5] < 0 || $matches[5] > 59 ||
-                            $matches[6] < 0 || $matches[6] > 59) {
-                        $this->invalid = xarML('time');
-                        $this->value = null;
-                        return false;
-                    }
-
-                    /* TODO: adjust for timezone */
-
-                    /* reformat date */
-                    $this->value = $matches[1]."-".$matches[2]."-".$matches[3]
-                            ." ".$matches[4].":".$matches[5].":".$matches[6];
-                } else {
-                    $this->invalid = xarML('date');
-                    $this->value = null;
-                    return false;
-                }
-            } else if ($this->validation == 'date') {
-                if (preg_match("/^\s*(\d\d\d\d)-(\d\d)-(\d\d)".
-                        "( (\d\d):(\d\d):(\d\d))?\s*$/", $value, 
-                        $matches)) {
-                
-                    /* check date is valid */
-                    if (!checkdate($matches[2], $matches[3], $matches[1])) {
-                        $this->invalid = xarML('date');
-                        $this->value = null;
-                        return false;
-                    }
-
-                    /* TODO: adjust for timezone */
-
-                    /* reformat date */
-                    $this->value = $matches[1]."-".$matches[2]."-".$matches[3];
-                } else {
-                    $this->invalid = xarML('date');
-                    $this->value = null;
-                    return false;
-                }
-            } else {
-            
-                $this->value = strtotime($value);
-                // adjust for the user's timezone offset
-                $this->value -= xarMLS_userOffset() * 3600;
-            } /* string times */
+            if (!preg_match('/[a-zA-Z]+/',$value)) {
+                $value .= ' GMT';
+            }
+            $this->value = strtotime($value);
+            // adjust for the user's timezone offset
+            $this->value -= xarMLS_userOffset() * 3600;
         } else {
             $this->invalid = xarML('date');
             $this->value = null;
             return false;
         }
-        
+        // TODO: improve this
+        if ($this->validation == 'datetime') {
+            $this->value = gmdate('Y-m-d H:i:s', $this->value);
+        }
         return true;
     }
 
