@@ -68,6 +68,10 @@
         </tr>
     </table>
 
+<xar:if condition="!empty($objectid) and $objectid eq 2">
+    <strong><a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid' => $itemid))#"><xar:mlstring>Edit validation</xar:mlstring></a></strong>
+</xar:if>
+
 </div>
 </form>
 </div>

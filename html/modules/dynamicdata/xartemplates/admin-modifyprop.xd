@@ -56,6 +56,9 @@
                 </strong>
             </xar:if>
             <xar:foreach in="$fields" value="$field">
+                <xar:set name="editvalidation">
+                    xarML('Edit validation for property "#(1)"',$field['name']) 
+                </xar:set>
                 <xar:set name="otherfields">
                     xarML('Edit property "#(1)"',$field['name']) 
                 </xar:set>
@@ -97,7 +100,9 @@
                     </label>
                     <label>
                         <strong>
+                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid' => $field['id']))#" title="#xarVarPrepForDisplay($editvalidation)#">
                             #$labels['validation']# 
+                            </a>
                         </strong>
                         <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['validation'])#" />
                     </label>

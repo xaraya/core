@@ -96,24 +96,37 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
      * @returns array
      * @return base information for this property
      **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 17,
-                              'name'       => 'floatbox',
-                              'label'      => 'Number Box (float)',
-                              'format'     => '17',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
+    function getBasePropertyInfo()
+    {
+        $args = array();
+        $baseInfo = array(
+                          'id'         => 17,
+                          'name'       => 'floatbox',
+                          'label'      => 'Number Box (float)',
+                          'format'     => '17',
+                          'validation' => '',
+                          'source'         => '',
+                          'dependancies'   => '',
+                          'requiresmodule' => '',
+                          'aliases'        => '',
+                          'args'           => serialize($args),
+                          // ...
+                         );
         return $baseInfo;
-     }
+    }
+
+    // Trick: use the parent method with a different template :-)
+    function showValidation($args = array())
+    {
+        // allow template override by child classes
+        if (!isset($args['template'])) {
+            $args['template'] = 'floatbox';
+        }
+
+        return parent::showValidation($args);
+    }
+
+    // default updateValidation() from Dynamic_TextBox_Property
 
 }
 

@@ -521,27 +521,131 @@ class Dynamic_Property
     }
 
     /**
+     * Parse the validation rule
+     */
+    function parseValidation($validation = '')
+    {
+        // if (... $validation ...) {
+        //     $this->whatever = ...;
+        // }
+    }
+
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
      **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                            'id'         => 0,
-                            'name'       => 'propertyName',
-                            'label'      => 'Property Label',
-                            'format'     => '0',
-                            'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',    // semi-colon seperated list of files that must be present for this property to be available (optional)
-                            'requiresmodule' => '', // this module must be available before this property is enabled (optional)
-                            'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-                            'args' => serialize( array() ),
-                            // ...
-                           );
+    function getBasePropertyInfo()
+    {
+        $baseInfo = array(
+                          'id'         => 0,
+                          'name'       => 'propertyName',
+                          'label'      => 'Property Label',
+                          'format'     => '0',
+                          'validation' => '',
+                          'source'     => '',
+                          'dependancies' => '',    // semi-colon seperated list of files that must be present for this property to be available (optional)
+                          'requiresmodule' => '', // this module must be available before this property is enabled (optional)
+                          'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+                          'args' => serialize( array() ),
+                          // ...
+                         );
         return $baseInfo;
-     }
+    }
+
+    /**
+     * The following methods provide an interface to show and update validation rules
+     * when editing dynamic properties. They should be customized for each property
+     * type, based on its specific format and interpretation of the validation rules.
+     *
+     * This allows property type developers to support more complex validation rules,
+     * while keeping them easy to modify for the site admins afterwards.
+     *
+     * If no validation methods are specified for a particular property type, the
+     * corresponding methods from its parent class will be used.
+     *
+     * Note: the methods can be called by DD's showpropval() function, or if you set the
+     *       type of the 'validation' property (21) to Dynamic_Validation_Property also
+     *       via DD's modify() and update() functions if you edit some dynamic property.
+     */
+
+    /**
+     * Show the current validation rule in a specific form for this property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['id'] id of the field
+     * @param $args['tabindex'] tab index of the field
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+        $data['size']       = !empty($size) ? $size : 50;
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            $this->parseValidation($validation);
+        }
+        // some known validation rule format
+        // if (... $this->whatever ...) {
+        //     $data['whatever'] = ...
+        //
+        // if we didn't match the above format
+        // } else {
+        $data['other'] = xarVarPrepForDisplay($this->validation);
+        // }
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = null;
+        }
+        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+    }
+
+    /**
+     * Update the current validation rule in a specific way for this property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['id'] id of the field
+     * @returns bool
+     * @return bool true if the validation rule could be processed, false otherwise
+     */
+    function updateValidation($args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                // handle arrays as you like in your property type
+                // $this->validation = serialize($validation);
+                $this->validation = '';
+                $this->invalid = 'array';
+                return false;
+
+            } else {
+                $this->validation = $validation;
+            }
+        }
+
+        // tell the calling function that everything is OK
+        return true;
+    }
 }
 ?>

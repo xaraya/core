@@ -23,20 +23,16 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     var $rows = 8;
     var $cols = 50;
  
-  function Dynamic_TextArea_Property($args)
-  {
+    function Dynamic_TextArea_Property($args)
+    {
          $this->Dynamic_Property($args);
+
         // check validation for allowed rows/cols (or values)
-        if (!empty($this->validation) && strchr($this->validation,':')) {
-            list($rows,$cols) = explode(':',$this->validation);
-            if ($rows !== '' && is_numeric($rows)) {
-                $this->rows = $rows;
-            }
-            if ($cols !== '' && is_numeric($cols)) {
-                $this->cols = $cols;
-            }
+        if (!empty($this->validation)) {
+            $this->parseValidation($this->validation);
         }
     }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -96,6 +92,19 @@ class Dynamic_TextArea_Property extends Dynamic_Property
          return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
+    // check validation for allowed rows/cols (or values)
+    function parseValidation($validation = '')
+    {
+        if (is_string($validation) && strchr($validation,':')) {
+            list($rows,$cols) = explode(':',$validation);
+            if ($rows !== '' && is_numeric($rows)) {
+                $this->rows = $rows;
+            }
+            if ($cols !== '' && is_numeric($cols)) {
+                $this->cols = $cols;
+            }
+        }
+    }
 
     /**
      * Get the base information for this property.
@@ -103,8 +112,8 @@ class Dynamic_TextArea_Property extends Dynamic_Property
      * @returns array
      * @return base information for this property
      **/
-     function getBasePropertyInfo()
-     {
+    function getBasePropertyInfo()
+    {
         $args = array();
         $args['rows'] = 8;
         $aliases[] = array(
@@ -136,7 +145,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                            );
 
         $args['rows'] = 2;
-         $baseInfo = array(
+        $baseInfo = array(
                             'id'         => 3,
                             'name'       => 'textarea_small',
                             'label'      => 'Small Text Area',
@@ -150,6 +159,101 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                             // ...
                            );
         return $baseInfo;
+    }
+
+    /**
+     * Show the current validation rule in a specific form for this property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['id'] id of the field
+     * @param $args['tabindex'] tab index of the field
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showValidation($args = array())
+    {
+        extract($args);
+
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        // get the original values first
+        $data['defaultrows'] = $this->rows;
+        $data['defaultcols'] = $this->cols;
+
+        if (isset($validation)) {
+            $this->validation = $validation;
+            // check validation for allowed rows/cols (or values)
+            $this->parseValidation($validation);
+        }
+        $data['rows'] = ($this->rows != $data['defaultrows']) ? $this->rows : '';
+        $data['cols'] = ($this->cols != $data['defaultcols']) ? $this->cols : '';
+        $data['other'] = '';
+        // if we didn't match the above format
+        if ($data['rows'] === '' &&  $data['cols'] === '') {
+            $data['other'] = xarVarPrepForDisplay($this->validation);
+        }
+
+        // allow template override by child classes
+        if (!isset($template)) {
+            $template = 'textarea';
+        }
+        return xarTplModule('dynamicdata', 'admin', 'validation', $data, $template);
+    }
+
+    /**
+     * Update the current validation rule in a specific way for each property type
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['validation'] new validation rule
+     * @param $args['id'] id of the field
+     * @returns bool
+     * @return bool true if the validation rule could be processed, false otherwise
+     */
+     function updateValidation($args = array())
+     {
+         extract($args);
+
+         // in case we need to process additional input fields based on the name
+         if (empty($name)) {
+             $name = 'dd_'.$this->id;
+         }
+
+         // do something with the validation and save it in $this->validation
+         if (isset($validation)) {
+             if (is_array($validation)) {
+                 if (isset($validation['rows']) && $validation['rows'] !== '' && is_numeric($validation['rows'])) {
+                     $rows = $validation['rows'];
+                 } else {
+                     $rows = '';
+                 }
+                 if (isset($validation['cols']) && $validation['cols'] !== '' && is_numeric($validation['cols'])) {
+                     $cols = $validation['cols'];
+                 } else {
+                     $cols = '';
+                 }
+                 // we have some rows and/or columns
+                 if ($rows !== '' || $cols !== '') {
+                     $this->validation = $rows .':'. $cols;
+
+                 // we have some other rule
+                 } elseif (!empty($validation['other'])) {
+                     $this->validation = $validation['other'];
+
+                 } else {
+                     $this->validation = '';
+                 }
+             } else {
+                 $this->validation = $validation;
+             }
+         }
+
+         // tell the calling function that everything is OK
+         return true;
      }
 
 }

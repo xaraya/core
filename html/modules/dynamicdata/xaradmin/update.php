@@ -52,6 +52,12 @@ function dynamicdata_admin_update($args)
                                          'itemid'   => $itemid));
     $myobject->getItem();
 
+    // if we're editing a dynamic property, save its property type to cache
+    // for correct processing of the validation rule (Dynamic_Validation_Property)
+    if ($myobject->objectid == 2) {
+        xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
+    }
+
     $isvalid = $myobject->checkInput();
 
     if (!empty($preview) || !$isvalid) {

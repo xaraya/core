@@ -1,0 +1,62 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table class="xar-norm">
+  <tr>
+    <td>
+      <xar:mlstring>Function</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[func]" id="#$id#_func" value="#$func#" size="40" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>File</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[file]" id="#$id#_file" value="#$file#" size="40" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Options</xar:mlstring> 
+    </td>
+    <td>
+      <xar:set name="idx">0</xar:set>
+      <xar:foreach in="$options" value="$option" >
+        <xar:if condition="$option['id'] ne $option['name']">
+          <input type="text" name="#$name#[options][#$idx#][id]" id="#$id#_options_#$idx#_id" value="#$option['id']#" size="5" tabindex="#$tabindex#" />
+          <input type="text" name="#$name#[options][#$idx#][name]" id="#$id#_options_#$idx#_name" value="#$option['name']#" size="30" tabindex="#$tabindex#" />
+        <xar:else />
+          <input type="text" name="#$name#[options][#$idx#][name]" id="#$id#_options_#$idx#_id" value="#$option['name']#" size="40" tabindex="#$tabindex#" />
+        </xar:if>
+        <xar:set name="idx">$idx+1</xar:set>
+        <br/>
+      </xar:foreach>
+      <input type="text" name="#$name#[options][#$idx#][id]" id="#$id#_options_#$idx#_id" value="" size="5" tabindex="#$tabindex#" />
+      <input type="text" name="#$name#[options][#$idx#][name]" id="#$id#_options_#$idx#_name" value="" size="30" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Predefined</xar:mlstring> 
+    </td>
+    <td>
+      <xar:if condition="empty($static)">
+        <xar:set name="static">0</xar:set>
+      </xar:if>
+      <xar:ml><xar:mlstring>#(1) options</xar:mlstring><xar:mlvar>#$static#</xar:mlvar></xar:ml>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="40" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>

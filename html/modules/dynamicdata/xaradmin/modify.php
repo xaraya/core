@@ -45,6 +45,12 @@ function dynamicdata_admin_modify($args)
     $myobject->getItem();
     $data['object'] = & $myobject;
 
+    // if we're editing a dynamic property, save its property type to cache
+    // for correct processing of the validation rule (Dynamic_Validation_Property)
+    if ($myobject->objectid == 2) {
+        xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
+    }
+
     $data['objectid'] = $myobject->objectid;
     $data['itemid'] = $itemid;
     $data['authid'] = xarSecGenAuthKey();
