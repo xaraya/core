@@ -78,7 +78,7 @@ rules
 /*
 floated box elements positioning
 */
-.xar-floatleft { float: left;background-color: #f0f; }
+.xar-floatleft { float: left; }
 .xar-floatright { float: right; }
 
 /*
