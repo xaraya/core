@@ -188,13 +188,13 @@ document.forms[0].submit();}
 					</tr>
 					<tr>
 						<td  align="middle" colspan="4">
-							<xar:mlstring>Add</xar:mlstring>
+							<xar:mlstring>Add </xar:mlstring>
 							<xar:if condition="$ptype eq 0">
 								<xar:mlstring>User</xar:mlstring>
 							<xar:else />
 								<xar:mlstring>Group</xar:mlstring>
 							</xar:if>
-							 <b>'#$pname#'</b> <xar:mlstring>to a Group</xar:mlstring>
+							 <b> '#$pname#' </b> <xar:mlstring>to a Group</xar:mlstring>
 						</td>
 					</tr>
 				</table>
@@ -231,7 +231,7 @@ document.forms[0].submit();}
 						<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 						<xar:else /><xar:mlstring>User</xar:mlstring>
 						</xar:if>
-						<b>'#$pname#'</b>
+						<b> '#$pname#' </b>
 						<xar:mlstring>is a member of the following groups:</xar:mlstring>
 					</td>
 				</tr>

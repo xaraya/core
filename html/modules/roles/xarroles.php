@@ -789,16 +789,18 @@ function drawindent() {
         $this->acltable = $xartable['security_acl'];
 
 
-        // FIXME: should parentid be zero if no parent?
+        if(empty($uid)) $uid =0;
         if(empty($parentid)) $parentid =0;
+        if(empty($uname)) $uname = xarSessionGetVar('uid').time();
+        if(empty($email)) $email = '';
+        if(empty($pass)) $pass = '';
+        if(empty($state)) $state = 1;
         // FIXME: why is date_reg a varchar in the database and not a date field?
-        // FIXME: why is date_reg set to allow null?
-        if(empty($date_reg)) $date_reg='';
-        // FIXME: is val_code set to '' a sensible default?
-        if(empty($val_code)) $val_code='';
+        if(empty($date_reg)) $date_reg = time();
+        if(empty($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if(empty($auth_module)) $auth_module='';
-       
+
         $this->uid          = $uid;
         $this->name         = $name;
         $this->type         = $type;
@@ -880,9 +882,11 @@ function drawindent() {
             $nextIdprep = xarVarPrepForStore($nextId);
             $nameprep = xarVarPrepForStore($this->name);
             $typeprep = xarVarPrepForStore($this->type);
+            $unameprep = xarVarPrepForStore($this->uname);
+            $valcodeprep = xarVarPrepForStore($this->val_code);
             $query = "INSERT INTO $this->rolestable
-                        (xar_uid, xar_name, xar_type)
-                      VALUES ($nextIdprep, '$nameprep', $typeprep)";
+                        (xar_uid, xar_name, xar_type, xar_uname, xar_valcode)
+                      VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$valcodeprep')";
         }
         else {
             $nextIdprep = xarVarPrepForStore($nextId);
