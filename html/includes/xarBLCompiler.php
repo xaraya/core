@@ -570,31 +570,36 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $nextChar = $this->getNextToken();
                     }
                     if(!isset($identifier)) {
-                        $identifier = $nextChar;
-                        $remember = $identifier;
+                        // Remember what was after the buildup
+                        $remember = $nextChar;
                     }
                     // identifier is now a token or free form (in our case  -- or --- or the first whitespace char
 
                     // Get the rest of the non markup tag, recording along the way
                     $matchToken=''; $match = '';
                     $nextChar = $this->getNextToken();
-                    while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END && $nextChar!=XAR_TOKEN_TAG_END){
-                        $match .= $nextChar;
-                        // Match on the length of the identifier
-                        $nextChar = $this->getNextToken();
-                        $matchToken = substr($match,-1* strlen($identifier));
+                    if(isset($identifier)) {
+                        while(isset($nextChar) && $matchToken . $nextChar != $identifier . XAR_TOKEN_TAG_END){
+                            $match .= $nextChar;
+                            // Match on the length of the identifier
+                            $nextChar = $this->getNextToken();
+                            $matchToken = substr($match,-1* strlen($identifier));
+                        }
                     }
-                    // special case for the freeform, set it to whatever it was after the buildup 
-                    // if the matchtoken doesn't match the identifier
-                    if($matchToken != $identifier && isset($remember)) {
-                        $match .= $matchToken;
-                        $matchToken = $remember;
-                    } 
-                    $tagrest = substr($match,0,-1 * strlen($identifier));
-
+                    // Forward to the end token
                     while(isset($nextChar) && $nextChar != XAR_TOKEN_TAG_END) {
+                        $match .= $nextChar;
                         $nextChar = $this->getNextToken();
                     }
+
+                    if(isset($identifier)) {
+                        $tagrest = substr($match,0,-1 * strlen($identifier));
+                    } else {
+                        $tagrest = $match;
+                        $matchToken = $remember;
+                        $identifier = $remember;
+                    }
+
                     // Was it properly ended?
                     if($matchToken == $identifier && $nextChar == XAR_TOKEN_TAG_END) {
                         // the tag was properly ended.
@@ -611,7 +616,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         default:
                             // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy 
                             $invalid = false;
-                            $token .= $buildup . $identifier . $tagrest . $matchToken . $nextChar;
+                            $token .= $buildup . $identifier . $tagrest . $nextChar;
                         }
                         if($invalid) {
                             $this->raiseError(XAR_BL_INVALID_TAG,
