@@ -216,7 +216,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $this->setPHPBlock(true);
         } 
         if ($this->isPHPBlock()) {
-            $code .= "return true;?>";
+            $code .= " return true;?>";
             $this->setPHPBlock(false);
         }
         //xarLogMessage('generate code: '.$code, XARLOG_LEVEL_ERROR);
@@ -3245,7 +3245,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 
     function renderEndTag()
     {
-        return '';
+        return ' ';
     }
 
     function isAssignable()
