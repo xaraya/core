@@ -36,7 +36,7 @@ $datadict =& xarDBNewDataDict($dbconn);
     Select table:
     </p>
     <table border="0" cellpadding="2">
-<?
+<?php
 
     // Get the Xaraya tables
     foreach($datadict->getTables() as $table) {
