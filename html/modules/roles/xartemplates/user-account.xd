@@ -43,7 +43,7 @@
                 </xar:if>
                 #$output#
                 <dd>
-                    <a href="&xar-modurl-roles-user-account;">
+                    <a href="&xar-modurl-roles-user-logout;">
                         <xar:mlstring>
                             Logout
                         </xar:mlstring>
