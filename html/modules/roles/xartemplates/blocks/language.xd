@@ -3,9 +3,9 @@
     <select name="#$form_picker_name#">
         <xar:loop name="$locales">
             <xar:if condition="$selected">
-                <option value="#$locale#" selected="selected">#$name# (#$country#)</option>
+                <option value="#$loop:item['locale']#" selected="selected">#$loop:item['name']# (#$loop:item['country']#)</option>
             <xar:else/>
-                <option value="#$locale#">#$name# (#$country#)</option>
+                <option value="#$loop:item['locale']#">#$loop:item['name']# (#$loop:item['country']#)</option>
             </xar:if>
         </xar:loop>
     </select>

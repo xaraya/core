@@ -189,7 +189,7 @@
 			</td>
 			<td width="50" style="text-align: center;">
 				<xar:if condition="count($parents) ne 1">
-					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$loop:item['uid']#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$loop:item['authid']#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 				<xar:else />
 					&nbsp;
 				</xar:if>

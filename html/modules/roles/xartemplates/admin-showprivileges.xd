@@ -61,7 +61,7 @@
 				#$loop:item['level']#
 			</td>
 			<td style="text-align: center;">
-				<a href="#$loop:item['groupurl']#&amp;uid=#$loop:item['groupid']#">				
+				<a href="#$groupurl#&amp;uid=#$loop:item['groupid']#">				
 				#$loop:item['groupname']#
 				</a>
 			</td>
