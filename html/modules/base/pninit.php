@@ -97,7 +97,7 @@ function base_init()
         return NULL;
     }
     // FIXME: should be unique or not?
-    $index = array('name'   => 'i_pn_config_vars_1',
+    $index = array('name'   => 'pn_name',
                    'fields' => array('pn_name'));
 
     $query = pnDBCreateIndex($tables['config_vars'],$index);
@@ -198,7 +198,6 @@ function base_init()
     }
     
     $id_anonymous = $dbconn->GenId($tables['users']);
-    //$query = "INSERT INTO ".$tables['users']." VALUES (1 ,'','Anonymous','','','','')";
     $query = "INSERT INTO ".$tables['users']." VALUES ($id_anonymous ,'','Anonymous','','','','')";
     
     $dbconn->Execute($query);
@@ -212,7 +211,6 @@ function base_init()
     $id_anonymous = $dbconn->PO_Insert_ID($tables['users'],'pn_uid');
 
     $id_admin = $dbconn->GenId($tables['users']);
-    //$query = "INSERT INTO ".$tables['users']." VALUES (2,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
     $query = "INSERT INTO ".$tables['users']." VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
 
     $dbconn->Execute($query);
@@ -238,7 +236,6 @@ function base_init()
     }
 
     $group_users = $dbconn->GenId($tables['groups']);
-    //$query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (1, 'Users');";
     $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_users, 'Users');";
     $dbconn->Execute($query);
 
@@ -252,7 +249,6 @@ function base_init()
     $group_users = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
 
     $group_admin = $dbconn->GenId($tables['groups']);
-    //$query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES (2, 'Admins');";
     $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_admin, 'Admins');";
     $dbconn->Execute($query);
     $group_admin = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
@@ -265,7 +261,6 @@ function base_init()
         return NULL;
     }
 
-    //$query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (1, 1);";
     $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_users, $id_anonymous);";
     $dbconn->Execute($query);
 
@@ -277,7 +272,6 @@ function base_init()
         return NULL;
     }
 
-    //$query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES (2, 2);";
     $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_admin, $id_admin);";
     $dbconn->Execute($query);
 
@@ -317,7 +311,6 @@ function base_init()
     }
 
     $id = $dbconn->GenId($tables['user_perms']);
-    //$query = "INSERT INTO ".$tables['user_perms']." VALUES (1,-1,1,0,'.*','.*',200,0)";
     $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,-1,1,0,'.*','.*',200,0)";
     $dbconn->Execute($query);
     // Check for db errors
@@ -329,7 +322,6 @@ function base_init()
     }
 
     $id = $dbconn->GenId($tables['user_perms']);
-    //$query = "INSERT INTO ".$tables['user_perms']." VALUES (2,2,0,0,'.*','.*',800,0)";
     $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
     $dbconn->Execute($query);
     // Check for db errors
