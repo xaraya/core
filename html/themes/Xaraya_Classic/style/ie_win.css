@@ -1,0 +1,42 @@
+/*  In this file we only place the rules to make the IE Windows browsers behave as expected.
+    It normally involves using expression instead CSS and corrections for broken box model.
+    Best way to include these special rules in the theme is via a conditional comment in head,
+    so that the pages still validate and appear rendered correctly in all broweser 
+    across the board and dont burden good browsers with extra css, workarounds and hacks */
+
+/* min-width equvivalent */
+div#xc-outer-wrapper {
+    width: expression((body.clientWidth <= 740) ? "740px" : "auto");
+}
+
+div.xc-side-content,
+div#xc-center {
+    width: 100%;
+    w\idth: auto;
+}
+
+.xar-mod-body {
+    padding:0 .5em;
+    margin:0;
+}
+
+div#classicthemecontrols img {
+    margin: 0 -3px;
+    ma\rgin: 0;
+}
+
+/* menus related fixes and corrections */
+.xar-block-body ul li, 
+.xar-block-body-right ul li, 
+.xar-block-body ul li a, 
+.xar-block-body-right ul li a { height: 1.4em; }
+
+/* fonts sizes in ie-win seem a little larger than in the rest, could compensate a bit */
+.xar-block-body ul ul li.xar-menu-subitem, 
+.xar-block-body-right ul ul li.xar-menu-subitem,
+.xar-block-body ul ul li.xar-menu-subitem-current, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current { height: 13px; }
+.xar-block-body ul ul li.xar-menu-subitem a, 
+.xar-block-body-right ul ul li.xar-menu-subitem a,
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a { font-size: 10px; }

@@ -1,0 +1,29 @@
+<div id="xc-rightbg-wrapper">
+    <div id="xc-outermargin-noleft-wrapper">
+        <div id="xc-inner-wrapper">
+            <div id="xc-innerbg-left">
+                <div id="xc-innerbg-right">
+                    <div id="xc-innerbg">
+                        <div id="xc-innerbg-top">
+                        </div>
+                        <div id="xc-center-wrapper">
+                            <div id="xc-center">
+                                <xar:var name="centerblocksgroup" />
+                                <xar:module class="modulespace" main="true" />
+                            </div>
+                        </div>
+                        <div id="xc-right">
+                            <div class="xc-side-content">
+                                <xar:var name="rightblocksgroup" />
+                            </div>
+                        </div>
+                        <div id="xc-clear">
+                        </div>
+                        <div id="xc-innerbg-bottom">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

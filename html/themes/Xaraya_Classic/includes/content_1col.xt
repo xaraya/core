@@ -1,0 +1,18 @@
+<div id="xc-inner-wrapper">
+    <div id="xc-innerbg-left">
+        <div id="xc-innerbg-right">
+            <div id="xc-innerbg">
+                <div id="xc-innerbg-top">
+                </div>
+                <div id="xc-center">
+                    <xar:var name="centerblocksgroup" />
+                    <xar:module class="modulespace" main="true" />
+                </div>
+                <div id="xc-clear">
+                </div>
+                <div id="xc-innerbg-bottom">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
