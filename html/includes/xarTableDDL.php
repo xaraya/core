@@ -686,7 +686,8 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
 
         // Test for increment field
         if (isset($parameters['increment']) && $parameters['increment'] == true) {
-            $seq_sql = 'CREATE SEQUENCE seq'.$tableName;
+            // TODO GM - Temporarily removed
+            // $seq_sql = 'CREATE SEQUENCE seq'.$tableName;
         }
     }
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
