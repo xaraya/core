@@ -1070,6 +1070,28 @@ Password : %%password%%
 
     echo "Time / Date structure verified in Roles. <br /> ";
 
+    // Check the installed privs and masks.
+    echo "<h5>Update Xaraya Installer theme name</h5>";
+    list($dbconn) = xarDBGetConn();
+    $sitePrefix = xarDBGetSiteTablePrefix();
+    $themestable = $sitePrefix . '_themes';
+    $query = "SELECT xar_id FROM $themestable WHERE xar_name = 'Xaraya Installer'";
+    $result =& $dbconn->Execute($query);
+    if ($result->EOF){
+        echo "Theme name update not required.<br/>\r\n";
+    } else {
+        $query2 = "UPDATE $themestable SET xar_name = 'Xaraya_Installer' WHERE xar_name = 'Xaraya Installer'";
+        // Check for db errors
+        $result2 =& $dbconn->Execute($query2);
+        if (!$result2){
+            echo "Theme name update failed<br/>\r\n";
+        } else {
+            echo "Theme name updated.<br/>\r\n";
+        }
+    }
+
+
+
     // Bug 630, let's throw the reminder back up after upgrade.
 
     $now = time();
