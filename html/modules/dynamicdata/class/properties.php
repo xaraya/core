@@ -306,6 +306,10 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_Affero_Property.php";
                 $property = new Dynamic_Affero_Property($args);
                 break;
+            case 41: // (urltitle) URL Title
+                require_once "includes/properties/Dynamic_URLTitle_Property.php";
+                $property = new Dynamic_URLTitle_Property($args);
+                break;
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
@@ -694,6 +698,14 @@ class Dynamic_Property_Master
                               'name'       => 'affero',
                               'label'      => 'Affero Username',
                               'format'     => '40',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[41] = array(
+                              'id'         => 41,
+                              'name'       => 'urltitle',
+                              'label'      => 'URL + Title',
+                              'format'     => '41',
                               'validation' => '',
                               // ...
                              );
