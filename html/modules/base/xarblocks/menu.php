@@ -99,6 +99,9 @@ function base_menublock_display($blockinfo)
     $logouturl = xarModURL('users' ,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();
 
+    // Get current URL
+    $currenturl = xarServerGetCurrentURL();
+
     // Dirty right now, need to do a block group check and fix.
     $menustyle = 'side';
 
@@ -153,10 +156,11 @@ function base_menublock_display($blockinfo)
                                 $indlinks = array();
                                 foreach($menulinks as $menulink){
 
-                                    if(!strstr($menulink['url'], 'func='.$thisfuncname)){
-                                        $funcactive = 0;
-                                    }else{
+                                    // Compare with current URL
+                                    if ($menulink['url'] == $currenturl) {
                                         $funcactive = 1;
+                                    }else{
+                                        $funcactive = 0;
                                     }
 
                                     if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$blockinfo[title]:", ACCESS_READ)) {
