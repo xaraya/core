@@ -264,9 +264,11 @@ class ADODB_sqlite extends ADOConnection {
             $queryparts = preg_split("/[\s]+/",$sql,4,PREG_SPLIT_NO_EMPTY);
             $tablename = $queryparts[2];
             $alterdefs = $queryparts[3];
-            if(strtolower($queryparts[1]) != 'table' || $queryparts[2] == '') {
-                ADOConnection::outp( "Syntax error in ALTER TABLE statement: ".htmlspecialchars($sql));
-                return false;
+            if(strtolower($queryparts[1]) != 'table' || $queryparts[2] == '' || $alterdefs =='') {
+                if($fn = $this->raiseErrorFn) {
+                    $fn('sqlite', 'EXECUTE', 666, "Syntax error in ALTER TABLE statement",$sql);
+                    return false;
+                }
             }
             $result = $this->_altertable($tablename,$alterdefs);
             return $result;
@@ -277,10 +279,156 @@ class ADODB_sqlite extends ADOConnection {
     
     function _altertable($tablename, $alterdefs)
     {
-        die("TODO: Implement the private _altertable function");
+        $fn = $this->raiseErrorFn;
+        
+        // First get the table definition
+        $sql = "SELECT sql,name,type FROM sqlite_master WHERE tbl_name = ? ORDER BY type DESC";
+        $result = $this->Execute($sql, array((string) $tablename));
+        if(!$result) return $result;
+        
+        // Return if the table isnt there, nothing to alter
+        if($result->RecordCount() <= 0 ) {
+            $fn('sqlite', 'EXECUTE', 666,  "Table $tablename not found",$sql);
+            return false;
+        }
+          
+        // Fetch the sql for the original table
+        $row = $result->GetRowAssoc();
+
+        // SQL to create the temporary table
+        $tmpname = 't'.time();
+        $origsql = trim(preg_replace("/[\s]+/"," ",str_replace(",",", ",preg_replace("/[\(]/","( ",$row['SQL'],1))));
+        $createtemptableSQL = trim('CREATE '.substr(trim(preg_replace("'".$tablename."'",$tmpname,$origsql,1)),6));
+
+        // SQL to copy the data from the original to the temporary table
+        $copytotempsql = "INSERT INTO $tmpname SELECT * FROM $tablename";
+
+        // SQL to drop the original table
+        $dropoldsql = 'DROP TABLE '.$tablename;
+
+        // Get the colums of the original table in an array so we can manipulate them easier
+        // split them first into array elements based on position of first "(" and strip off the last ")"
+        $oldcols = preg_split("/[,]+/",substr($createtemptableSQL,strpos($createtemptableSQL,'(') +1,-1), -1, PREG_SPLIT_NO_EMPTY);
+        
+        // Determine whether they are really all columns
+        $nrOfTableConstraints = 0; 
+        $constraintparts = array(); $parts = $oldcols;
+        $tblConstraints = array("PRIMARY", "UNIQUE", "CHECK");
+        $column_map = array();
+        for($i=sizeof($oldcols)-1;$i>=0;$i--){
+            $colparts = preg_split("/[\s]+/",$oldcols[$i],-1,PREG_SPLIT_NO_EMPTY);
+            
+            if(in_array(strtoupper($colparts[0]), $tblConstraints)) {
+                array_unshift($constraintparts, $oldcols[$i]);
+                array_pop($parts);
+            } else {
+                $column_map[$colparts[0]] = $colparts[0];
+            }
+        }
+
+        // SQL for the new table (essential part of the goal here)
+        $defs = preg_split("/[,]+/",$alterdefs,-1,PREG_SPLIT_NO_EMPTY);
+        foreach($defs as $def){
+            $defparts = preg_split("/[\s]+/",$def,-1,PREG_SPLIT_NO_EMPTY);
+            $action = strtolower(array_shift($defparts));
+            switch($action){
+                case 'add':
+                    // We have to insert the column at the end
+                    if(!(sizeof($defparts) >= 1)) { // field [spec]
+                        $fn('sqlite', 'EXECUTE', 666,'Syntax error in add part of ALTER TABLE');
+                        return false;
+                    }
+                    $parts[] = implode(' ',$defparts);
+                    break;
+                case 'change':
+                    if(!(sizeof($defparts) >= 2)) { // oldfield newfield [spec]
+                        $fn('sqlite', 'EXECUTE', 666,'Syntax error in change part of ALTER TABLE');
+                        return false;
+                    }
+                    // Find the position of the column in the parts array, and replace it 
+                    $repl_index = -1;
+                    foreach($parts as $index => $olddef) {
+                        $olddefparts = preg_split("/[\s]+/",$olddef,-1,PREG_SPLIT_NO_EMPTY);
+                        if($olddefparts[0] != $defparts[0]) continue;
+                        $repl_index = $index;
+                    }
+                    if($repl_index == -1) {
+                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$tablename.'"');
+                        return false;
+                    }
+                    $column_map[$defparts[0]] = $defparts[1];
+                    array_shift($defparts);
+                    $parts[$repl_index] = implode(' ', $defparts);
+                    
+                    break;
+                case 'drop':
+                    if(sizeof($defparts) != 1){ // field
+                        $fn('sqlite', 'EXECUTE', 666,'Syntax error in drop part of ALTER TABLE');
+                        return false;
+                    }
+                    // Find the position of the column in the parts array, and replace it 
+                    $repl_index = -1;
+                    foreach($parts as $index => $olddef) {
+                        $olddefparts = preg_split("/[\s]+/",$olddef,-1,PREG_SPLIT_NO_EMPTY);
+                        if($olddefparts[0] != $defparts[0]) continue;
+                        $repl_index = $index;
+                    }
+                    if($repl_index == -1) {
+                        $fn('sqlite', 'EXECUTE', 666,'Unknown column "'.$defparts[0].'" in "'.$tablename.'"');
+                        return false;
+                    }
+                    $column_map[$defparts[0]] = null;
+                    array_splice ($parts, $repl_index,1);
+                    break;
+                default:
+                    $fn('sqlite', 'EXECUTE', 666,'Syntax error in ALTER TABLE');
+                    return false;
+            }
+        }
+        // Reconstruct the sql from the arrays
+        $createtesttableSQL = 'CREATE TABLE '.$tmpname .'('.  implode(',',array_merge($parts,$constraintparts)) . ')';
+        $createnewtableSQL = 'CREATE TABLE '.$tablename .'('.  implode(',',array_merge($parts,$constraintparts)) . ')';
+
+        //this block of code generates a test table simply to verify that the columns specifed are valid in an sql statement
+        //this ensures that no reserved words are used as columns, for example
+        $result=$this->Execute($createtesttableSQL);
+        if(!$result) return false;
+        $droptempsql = 'DROP TABLE '.$tmpname;
+        $result = $this->Execute($droptempsql);
+        if(!$result) return false;
+        //end block
+
+        
+        // SQL to copy the new data back into the new table
+        $newcolumns = ''; $oldcolumns = '';
+        foreach($column_map as $oldcolumn => $newcolumn) {
+            if($newcolumn != null) {
+                $oldcolumns .= (($oldcolumns) ? ',':'') . $oldcolumn;
+                $newcolumns .= (($newcolumns) ? ',':'') . $newcolumn;
+            }
+        }
+        $copytonewsql = 'INSERT INTO '.$tablename.'('.$newcolumns.') SELECT '.$oldcolumns.' FROM '.$tmpname;
+
+//        echo "<pre>";
+//        echo $createtemptableSQL . "<br/>";
+//        echo $copytotempsql . "<br/>";
+//        echo $dropoldsql . "<br/>";
+//        echo $createnewtableSQL . "<br/>";
+//        echo $copytonewsql . "<br/>";
+//        echo $droptempsql. "<br/>";
+//        echo "</pre>";
+//        return true;
+
+        // FIXME: I can't get this to work in a transaction
+        if(!$this->Execute($createtemptableSQL)) return false;   // create temp table
+        if(!$this->Execute($copytotempsql)) return false;        // copy original data to temp table
+        if(!$this->Execute($dropoldsql)) return false;           // drop original table
+        if(!$this->Execute($createnewtableSQL)) return false;    // recreate original table
+        if(!$this->Execute($copytonewsql)) return false;         // copy data back to original table
+        if(!$this->Execute($droptempsql)) return false;          // drop the temp table
+        return true;
     }
     // END XARAYA MODIFICATION
-
 }
 
 /*--------------------------------------------------------------------------------------
