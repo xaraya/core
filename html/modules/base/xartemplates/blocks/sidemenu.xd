@@ -12,22 +12,32 @@
 	<br />
 </xar:if>
 
-<xar:loop name="$usermods">
-    <xar:if condition="$marker eq '' and $link eq ''">
-        <strong>&nbsp;</strong>
-    <xar:else />
-        <strong>&middot;</strong>
-    </xar:if>
-    <xar:if condition="empty($link)">
-        <b>&xar-var-label;</b>
-    <xar:else />
-        <a href="&xar-var-link;" title="&xar-var-label;">&xar-var-label;</a>
-    </xar:if>
-    <xar:if condition="!empty($marker)">
-        &xar-var-marker;
-    </xar:if>
-    <br />
-</xar:loop>
+<xar:if condition="!empty($usermods)">
+	<xar:loop name="$usermods">
+		<xar:if condition="$marker eq '' and $link eq ''">
+			<strong>&nbsp;</strong>
+		<xar:else />
+			<strong>&middot;</strong>
+		</xar:if>
+		<xar:if condition="empty($link)">
+			<b>&xar-var-label;</b>
+		<xar:else />
+			<a href="&xar-var-link;" title="&xar-var-label;">&xar-var-label;</a>
+		</xar:if>
+		<xar:if condition="!empty($marker)">
+			&xar-var-marker;
+<!-- 			<xar:if condition="!empty($indlinks)">
+				<br />
+				<xar:loop name="$indlinks">
+					<a href="&xar-var-userlink;" title="&xar-var-usertitle;">&xar-var-userlabel;</a>
+				</xar:loop>
+				<br />
+			</xar:if> -->
+		</xar:if>
+		<br />
+	</xar:loop>
+</xar:if>
+
 <br />
 <!-- Logout -->
 <xar:if condition = "$loggedin">

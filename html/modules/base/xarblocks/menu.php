@@ -87,7 +87,7 @@ function base_menublock_display($blockinfo)
     switch(strtolower($menustyle)) {
         default:
         case 'side':
-                // Content
+                // Added Content For non-modules list.
                 if (!empty($vars['content'])) {
                     $usercontent = array();
                     $contentlines = explode("LINESPLIT", $vars['content']);
@@ -103,17 +103,43 @@ function base_menublock_display($blockinfo)
                 } else {
                     $usercontent = '';
                 }
-                // sort by name
-                foreach($mods as $mod){
-                    $label = $mod['name'];
-                    $link = xarModURL($mod['name'] ,'user', 'main', array());
-                    // depending on which module is currently loaded we display accordingly
-                    if($label == $thismodname && $thismodtype == 'user'){
-                        $usermods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
-                    }else{
-                        $usermods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+
+                // Added list of modules if selected.
+                if (!empty($vars['displaymodules'])) {
+                    foreach($mods as $mod){
+                        $label = $mod['name'];
+                        $link = xarModURL($mod['name'] ,'user', 'main', array());
+                        // depending on which module is currently loaded we display accordingly
+                        if($label == $thismodname && $thismodtype == 'user'){
+                            // Get list of links for modules
+                            $usermods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+/*
+                            // Load API for individual links. 
+                            if (!xarModAPILoad($label, 'user')) return; // throw back
+
+
+                            // The user API function is called.
+                            $menulinks = xarModAPIFunc($label,
+                                       'user',
+                                       'getmenulinks');
+
+                            if (!empty($menulinks)) {
+                                $indlinks = array();
+                                foreach($menulinks as $menulink){
+                                    $indlinks[] = array('userlink' => $menulink['userlink'], 'userlabel' => $menulink['userlabel'], 'usertitle' => $menulink['usertitle']);
+                                } 
+                            } else {
+                                $indlinks= '';
+                            }
+*/
+                        }else{
+                            $usermods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                        }
                     }
+                } else {
+                    $usermods = '';
                 }
+
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
                 $data = xarTplBlock('base','sidemenu', array('usermods'     => $usermods, 
