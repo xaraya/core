@@ -14,15 +14,17 @@
 /**
  * Configure hooks by hook module
  *
- * @param none
+ * @param $args['curhook'] current hook module (optional)
+ * @param $args['return_url'] URL to return to after updating the hooks (optional)
  *
  */
-function modules_admin_hooks()
+function modules_admin_hooks($args)
 {
 // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
     if (!xarVarFetch('hook', 'isset', $curhook, '', XARVAR_NOT_REQUIRED)) {return;}
+    extract($args);
 
     // Get the list of all hook modules, and the current hooks enabled for all modules
     $hooklist = xarModAPIFunc('modules','admin','gethooklist');
@@ -34,6 +36,13 @@ function modules_admin_hooks()
     $data['curhook'] = '';
     $data['hooktypes'] = array();
     $data['authid'] = '';
+
+    // via arguments only, for use in BL tags :
+    // <xar:module main="false" module="modules" type="admin" func="hooks" curhook="hitcount" return_url="$thisurl" />
+    if (empty($return_url)) {
+        $return_url = '';
+    }
+    $data['return_url'] = $return_url;
 
     if (!empty($curhook)) {
         // Get list of modules likely to be "interested" in hooks
@@ -75,7 +84,7 @@ function modules_admin_hooks()
         }
         $data['curhook'] = $curhook;
         $data['hookedmodules'] = $modList;
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSecGenAuthKey('modules');
 
         $details = xarVarCleanFromInput('details');
         if ($details) {

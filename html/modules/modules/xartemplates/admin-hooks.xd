@@ -1,12 +1,16 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="empty($return_url)">
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Hooks Configuration</xar:mlstring></h2>
     <p><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></p>
     <p><xar:mlstring>Select the hook module providing the extra functionality and then check the boxes of the modules you would like to enable that functionality in. (e.g. select "comments" and then check "articles" to enable comments in the articles module)</xar:mlstring></p>
     <ul>
+</xar:if>
     <xar:foreach in="$hookmodules" value="$hookmod">
+<xar:if condition="empty($return_url)">
         <li><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a> : #$hookmod['modtitle']#</li>
+</xar:if>
         <xar:if condition="$hookmod['modname'] eq $curhook">
             <xar:mlstring>Use this functionality in the following modules</xar:mlstring>: [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]<br />
             <xar:if condition="count($hooktypes) gt 0">
@@ -22,6 +26,7 @@
                <div>
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
                 <xar:foreach in="$hookedmodules" value="$hookedmod">
                     <xar:if condition="!empty($hookedmod['header'])">
                         <br /><b>#$hookedmod['header']#</b><br />
@@ -71,5 +76,7 @@
             </form>
         </xar:if>
     </xar:foreach>
+<xar:if condition="empty($return_url)">
     </ul>
+</xar:if>
 </div>
