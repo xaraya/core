@@ -1457,8 +1457,10 @@ function xarModIsAvailable($modName)
  * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
  * @param hookId integer the id of the object the hook is called for (module-specific)
  * @param extraInfo mixed extra information for the hook, dependent on hookAction
- * @param callerModName string for what module are we calling this (used by modules admin)
+ * @param callerModName string for what module are we calling this (default = current main module)
+ *        Note : better pass the caller module via $extrainfo['module'] if necessary, so that hook functions receive it too
  * @param callerItemType string optional item type for the calling module (default = none)
+ *        Note : better pass the item type via $extrainfo['itemtype'] if necessary, so that hook functions receive it too
  * @return mixed output from hooks, or null if there are no hooks
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> #1 add BAD_PARAM exception
@@ -1477,13 +1479,17 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     //    return;
     //}
 
-    // allow override of current module in special cases (e.g. modules admin)
+    // allow override of current module if necessary (e.g. modules admin, blocks, API functions, ...)
     if (empty($callerModName)) {
-        list($modName) = xarRequestGetInfo();
+        if (isset($extraInfo) && is_array($extraInfo) && !empty($extraInfo['module'])) {
+            $modName = $extraInfo['module'];
+        } else {
+            list($modName) = xarRequestGetInfo();
+        }
     } else {
         $modName = $callerModName;
     }
-    // retrieve the item type from $extraInfo if necessary
+    // retrieve the item type from $extraInfo if necessary (e.g. for articles, xarbb, ...)
     if (empty($callerItemType) && isset($extraInfo) &&
         is_array($extraInfo) && !empty($extraInfo['itemtype'])) {
         $callerItemType = $extraInfo['itemtype'];

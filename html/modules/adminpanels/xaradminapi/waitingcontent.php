@@ -14,7 +14,7 @@ function adminpanels_adminapi_waitingcontent()
 {
 
     // Hooks (we specify that we want the ones for adminpanels here)
-    $output = xarModCallHooks('item', 'waitingcontent', '', array(), 'adminpanels');
+    $output = xarModCallHooks('item', 'waitingcontent', '', array('module' => 'adminpanels'));
 
     if (empty($output)) {
         $message = xarML('Waiting Content has not been configured');
