@@ -1,5 +1,5 @@
 <?php
-// File: $Id: s.pnBLCompiler.php 1.18 02/10/27 12:16:22-05:00 John.Cox@d38yrl11. $
+// File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.
@@ -122,7 +122,6 @@ class pnTpl__CodeGenerator
 
     function generateNode($node)
     {
-        //pnLogMessage('generateNode', PNLOG_LEVEL_ERROR);
         if ($node->hasChildren() /*|| $node->hasText()*/) {
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
                 $code .= "<?php ";
@@ -141,7 +140,6 @@ class pnTpl__CodeGenerator
                     $code .= "?>";
                     $this->setPHPBlock(false);
                 }
-                //pnLogVariable('child', $child, PNLOG_LEVEL_ERROR);
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
                     if (!$child->isAssignable()) {
                         pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
@@ -151,7 +149,6 @@ class pnTpl__CodeGenerator
                     if ($checkNode->needAssignment()) {
                         $code .= ' = ';
                     }
-                    //$checkNode = $child;
                 } elseif ($child->isAssignable()) {
                     $code .= 'echo ';
                 }
@@ -161,23 +158,16 @@ class pnTpl__CodeGenerator
                 }
                 $code .= $childCode;
                 if ($child->isAssignable() && !(/*$checkNode->needAssignment() ||*/ $checkNode->needParameter())) {
-                    //pnLogVariable('checkNode', $checkNode, PNLOG_LEVEL_ERROR);
-                    //pnLogMessage('here', PNLOG_LEVEL_ERROR);
                     $code .= ";\n";
                     if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
-                        //pnLogMessage('exception control 1', PNLOG_LEVEL_ERROR);
                         $code .= "if (pnExceptionMajor() != PN_NO_EXCEPTION) return false;\n";
                         $this->setPendingExceptionsControl(false);
                     }
                 } else {
-                    //pnLogVariable('pass here', $child->tagName, PNLOG_LEVEL_ERROR);
                     if ($child->needExceptionsControl()) {
-                        //pnLogVariable('pendingExceptionsControl', $child->tagName, PNLOG_LEVEL_ERROR);
                         $this->setPendingExceptionsControl(true);
                     }
                 }
-                
-                //$checkNode = $child;
             }
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
                 $code .= "<?php ";
@@ -193,8 +183,6 @@ class pnTpl__CodeGenerator
                     $code .= "<?php ";
                     $this->setPHPBlock(true);
                 }
-                //pnLogVariable('final control', $node->tagName, PNLOG_LEVEL_ERROR);
-                //pnLogVariable('final control', $node->needExceptionsControl(), PNLOG_LEVEL_ERROR); 
                 $code .= "if (pnExceptionMajor() != PN_NO_EXCEPTION) return false;\n";
                 $this->setPendingExceptionsControl(false);
             }
@@ -204,7 +192,6 @@ class pnTpl__CodeGenerator
                 return; // throw back
             }
         }
-        //pnLogMessage('exiting generateNode', PNLOG_LEVEL_ERROR);
         return $code;
     }
 }
@@ -228,7 +215,6 @@ class pnTpl__Parser extends pnTpl__PositionInfo
 
     function parse($templateSource)
     {
-        //pnLogVariable('templateSource', $templateSource, PNLOG_LEVEL_ERROR);
         $this->templateSource = $templateSource;
         $this->line = 1;
         $this->column = 1;
@@ -245,7 +231,6 @@ class pnTpl__Parser extends pnTpl__PositionInfo
             return; // throw back
         }
         $documentTree->children = $res;
-        //pnLogVariable('documentTree', $documentTree, PNLOG_LEVEL_ERROR);
         return $documentTree;
     }
 
@@ -253,7 +238,6 @@ class pnTpl__Parser extends pnTpl__PositionInfo
         $children = array();
         $text = '';
         while (true) {
-            //pnLogMessage('parseNode', PNLOG_LEVEL_ERROR);
             $token = $this->getNextToken();
             $nextToken = '';
             if (!isset($token)) {
@@ -266,12 +250,12 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                 case '<':
                     $nextToken = $this->getNextToken();
                     //
-                    // Check for header tag (<?pnt)
+                    // Check for header tag (<?xar)
                     //
                     if ($nextToken == '?') {
                         $nextToken = $this->getNextToken(3);
-                        if ($nextToken == 'pnt') {
-                            // <?pnt header tag
+                        if ($nextToken == 'xar') {
+                            // <?xar header tag
                             // Handle Header Tag
                             $variables = $this->parseHeaderTag();
                             if (!isset($variables)) {
@@ -287,13 +271,12 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                         }
                         $this->stepBack(3);
                     //
-                    // Check for pnt tag (<pnt:)
+                    // Check for xar tag (<xar:)
                     //
-                    } elseif ($nextToken == 'p') {
+                    } elseif ($nextToken == 'x') {
                         $nextToken = $this->getNextToken(3);
-                        if ($nextToken == 'nt:') {
-                            // <pnt: tag
-                            //pnLogMessage('found '.$nextToken, PNLOG_LEVEL_ERROR);
+                        if ($nextToken == 'ar:') {
+                            // <xar: tag
                             if (!$parent->hasChildren()) {
                                 pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                                new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
@@ -336,7 +319,6 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                             if (!isset($node)) {
                                 return; // throw back
                             }
-                            //pnLogVariable('node', $node, PNLOG_LEVEL_ERROR);
                             if (!$closed) {
                                 array_push($this->tagNamesStack, $tagName);
                                 $res = $this->parseNode($node);
@@ -420,13 +402,12 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                     } elseif ($nextToken == '/') {
                         $nextToken = $this->getNextToken();
                     //
-                    // Check for pnt end tag (</pnt:)
+                    // Check for pnt end tag (</xar:)
                     //
-                        if ($nextToken == 'p') {
+                        if ($nextToken == 'x') {
                             $nextToken = $this->getNextToken(3);
-                            if ($nextToken == 'nt:') {
-                                // </pnt: tag
-                                //pnLogMessage('found </pnt:', PNLOG_LEVEL_ERROR);
+                            if ($nextToken == 'ar:') {
+                                // </xar: tag
                                 // Add text to parent
                                 if ($text != '') {
                                     if ($parent->hasText()) {
@@ -490,14 +471,13 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                         $this->stepBack(1);
                     }
                     $this->stepBack(1);
-                    //pnLogVariable('token', $token, PNLOG_LEVEL_ERROR);
                     break;
                     //
                     // Check for pnt entity (&pnt-)
                     //
                 case '&':
                     $nextToken = $this->getNextToken(4);
-                    if ($nextToken == 'pnt-') {
+                    if ($nextToken == 'xar-') {
                         if (!$parent->hasChildren()) {
                             pnExceptionSet(PN_USER_EXCEPTION, 'InvalidTag',
                                            new pnTpl__ParserError("The '".$parent->tagName."' tag cannot have children.", $parent));
@@ -533,7 +513,6 @@ class pnTpl__Parser extends pnTpl__PositionInfo
                     break;
             }
             $text .= $token;
-            //pnLogVariable('text', $text, PNLOG_LEVEL_ERROR);
         }
         if ($text != '') {
             if (!$parent->hasText()) {
