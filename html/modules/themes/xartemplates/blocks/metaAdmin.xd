@@ -55,20 +55,25 @@
             <span class="help" title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.')#"><label for="usedk#$blockid#"><xar:mlstring>Use Dynamic Keywords from</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <xar:if condition="$usedk eq 1">
-              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" checked="checked" tabindex="1" /><xar:mlstring>Articles module</xar:mlstring></p>
+            <xar:if condition="$usedk eq 0">
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="0" checked="checked" tabindex="1" /><xar:mlstring>None</xar:mlstring></p>
             <xar:else />
-              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" tabindex="1" /><xar:mlstring>Articles module</xar:mlstring></p>
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="0" tabindex="1" /><xar:mlstring>None</xar:mlstring></p>
+            </xar:if>
+            <xar:if condition="$usedk eq 1">
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" checked="checked" tabindex="2" /><xar:mlstring>Articles module</xar:mlstring></p>
+            <xar:else />
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" tabindex="2" /><xar:mlstring>Articles module</xar:mlstring></p>
             </xar:if>
             <xar:if condition="$usedk eq 2">
-                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" checked="checked" tabindex="2" /><xar:mlstring>Keywords module</xar:mlstring></p>
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" checked="checked" tabindex="3" /><xar:mlstring>Keywords module</xar:mlstring></p>
             <xar:else />
-                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" tabindex="2" /><xar:mlstring>Keywords module</xar:mlstring></p>
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" tabindex="3" /><xar:mlstring>Keywords module</xar:mlstring></p>
             </xar:if>
              <xar:if condition="$usedk eq 3">
-                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" checked="checked" tabindex="3" /><xar:mlstring>Both</xar:mlstring></p>
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" checked="checked" tabindex="4" /><xar:mlstring>Both</xar:mlstring></p>
             <xar:else />
-                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" tabindex="2" /><xar:mlstring>Both</xar:mlstring></p>
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="3" tabindex="4" /><xar:mlstring>Both</xar:mlstring></p>
             </xar:if>
         </span>
         </div>

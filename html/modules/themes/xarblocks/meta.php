@@ -74,7 +74,8 @@ function themes_metablock_display($blockinfo)
 
     // Description
     $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
-    if (!empty($incomingdesc) and $vars['usedk'] == 1) {
+    
+    if (!empty($incomingdesc) and $vars['usedk'] >= 1) {
         // Strip -all- html
         $htmlless = strip_tags($incomingdesc);
         $meta['description'] = $htmlless;
