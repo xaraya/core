@@ -5,41 +5,34 @@
  */
 function roles_admin_modifyconfig()
 {
-// Security Check
-    if(!xarSecurityCheck('AdminRole')) return;
+    // Security Check
+    if (!xarSecurityCheck('AdminRole')) return;
 
-    $phase = xarVarCleanFromInput('phase');
+    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
 
-    if (empty($phase)){
-        $phase = 'modify';
-    }
-
-    switch(strtolower($phase)) {
-
+    switch (strtolower($phase)) {
         case 'modify':
-        default:
-
+        default: 
             // create the dropdown of groups for the template display
             // call the Roles class
-            $roles = new xarRoles();
-
+            $roles = new xarRoles(); 
             // get the array of all groups
             // remove duplicate entries from the list of groups
             $groups = array();
             $names = array();
-            foreach($roles->getgroups() as $temp){
+            foreach($roles->getgroups() as $temp) {
                 $nam = $temp['name'];
-                if (!in_array($nam,$names)){
-                    array_push($names,$nam);
-                    array_push($groups,$temp);
-                }
-            }
+                if (!in_array($nam, $names)) {
+                    array_push($names, $nam);
+                    array_push($groups, $temp);
+                } 
+            } 
 
             $checkip = xarModGetVar('roles', 'disallowedips');
-            if (empty($checkip)){
+            if (empty($checkip)) {
                 $ip = serialize('10.0.0.1');
                 xarModSetVar('roles', 'disallowedips', $ip);
-            }
+            } 
             $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
             $data['groups'] = $groups;
             $data['emails'] = unserialize(xarModGetVar('roles', 'disallowedemails'));
@@ -48,102 +41,43 @@ function roles_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
 
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
-                                    array('module' => 'roles'));
+                array('module' => 'roles'));
             if (empty($hooks) || !is_string($hooks)) {
                 $data['hooks'] = '';
             } else {
                 $data['hooks'] = $hooks;
-            }
+            } 
 
             break;
 
         case 'update':
-            list($showterms,
-                 $showprivacy,
-                 $shorturls,
-                 $minage,
-                 $defaultgroup,
-                 $chooseownpassword,
-                 $sendnotice,
-                 $explicitapproval,
-                 $sendwelcomeemail,
-                 $allowinvisible,
-                 $rolesperpage,
-                 $disallowedips,
-                 $disallowednames,
-                 $disallowedemails) = xarVarCleanFromInput('showterms',
-                                                           'showprivacy',
-                                                           'shorturls',
-                                                           'minage',
-                                                           'defaultgroup',
-                                                           'chooseownpassword',
-                                                           'sendnotice',
-                                                           'explicitapproval',
-                                                           'sendwelcomeemail',
-                                                           'allowinvisible',
-                                                           'rolesperpage',
-                                                           'disallowedips',
-                                                           'disallowednames',
-                                                           'disallowedemails');
-
+            if (!xarVarFetch('showterms', 'checkbox', $showterms, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('showprivacy', 'checkbox', $showprivacy, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('chooseownpassword', 'checkbox', $chooseownpassword, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('explicitapproval', 'checkbox', $explicitapproval, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('sendwelcomeemail', 'checkbox', $sendwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('sendnotice', 'checkbox', $sendnotice, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('minage', 'str:1:3:', $minage, '13', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('rolesperpage', 'str:1:4:', $rolesperpage, '20', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('disallowedemails', 'str:1', $disallowedemails, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('disallowednames', 'str:1', $disallowednames, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('disallowedips', 'str:1', $disallowedips, '', XARVAR_NOT_REQUIRED)) return; 
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
-
+            if (!xarSecConfirmAuthKey()) return; 
             // Update module variables
-            if (!isset($showterms)) {
-                $showterms = 0;
-            }
             xarModSetVar('roles', 'showterms', $showterms);
-
-            if (!isset($showprivacy)) {
-                $showprivacy = 0;
-            }
             xarModSetVar('roles', 'showprivacy', $showprivacy);
-
-            if (!isset($minage)) {
-                $minage = 13;
-            }
             xarModSetVar('roles', 'minage', $minage);
-
-            if (!isset($defaultgroup)) {
-                $defaultgroup = 'Users';
-            }
             xarModSetVar('roles', 'defaultgroup', $defaultgroup);
-
-            if (!isset($chooseownpassword)) {
-                $chooseownpassword = 0;
-            }
             xarModSetVar('roles', 'chooseownpassword', $chooseownpassword);
-
-            if (!isset($sendconfirmationemail)) {
-                $sendconfirmationemail = 0;
-            }
             xarModSetVar('roles', 'sendnotice', $sendnotice);
-
-            if (!isset($explicitapproval)) {
-                $explicitapproval = 0;
-            }
             xarModSetVar('roles', 'explicitapproval', $explicitapproval);
-
-            if (!isset($sendwelcomeemail)) {
-                $sendwelcomeemail = 0;
-            }
             xarModSetVar('roles', 'sendwelcomeemail', $sendwelcomeemail);
-
-            if (!isset($allowinvisible)) {
-                $allowinvisible = 0;
-            }
             xarModSetVar('roles', 'allowinvisible', $allowinvisible);
-
-            if (empty($rolesperpage)) {
-                $rolesperpage = 20;
-            }
-
-            if (!isset($shorturls)) {
-                $shorturls = 0;
-            }
             xarModSetVar('roles', 'SupportShortURLs', $shorturls);
-
             xarModSetVar('roles', 'rolesperpage', $rolesperpage);
 
             $disallowednames = serialize($disallowednames);
@@ -155,18 +89,17 @@ function roles_admin_modifyconfig()
             $disallowedips = serialize($disallowedips);
             xarModSetVar('roles', 'disallowedips', $disallowedips);
 
-            xarModCallHooks('module','updateconfig','roles',
-                           array('module' => 'roles'));
+            xarModCallHooks('module', 'updateconfig', 'roles',
+                array('module' => 'roles'));
 
-            xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig'));
-
+            xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig')); 
             // Return
             return true;
 
             break;
-    }
+    } 
 
     return $data;
-}
+} 
 
 ?>

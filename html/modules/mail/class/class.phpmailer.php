@@ -10,7 +10,7 @@
 //
 // License: LGPL, see LICENSE
 ////////////////////////////////////////////////////
-require("phpmailer.lang.php");   
+require("modules/mail/class/phpmailer.lang-en.php");   
 
 /**
  * PHPMailer - PHP email transport class
