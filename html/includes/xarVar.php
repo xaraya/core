@@ -370,7 +370,6 @@ function xarVarPrepHTMLDisplay()
 
     if (!isset($allowedHTML)) {
         $allowedHTML = array();
-
         foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
             if ($k == '!--') {
                 if ($v <> 0) {
@@ -384,7 +383,7 @@ function xarVarPrepHTMLDisplay()
                         $allowedHTML[] = "|<(/?$k)\s*/?>|i";
                         break;
                     case 2:
-                        $allowedHTML[] = "|<(/?$k(\s+[^>]?)?)/?>|i";
+                        $allowedHTML[] = "|<(/?$k(\s+[^>]*)?)/?>|i";
                         break;
                 }
             }
