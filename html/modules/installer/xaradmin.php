@@ -203,7 +203,6 @@ function installer_admin_phase5()
 
     // Start the database
     xarCoreInit(XARCORE_SYSTEM_ADODB);
-	xarTplSetThemeName('installer');
 
     // Load in modules/installer/xarinit.php and choose a new install or upgrade
     if (!xarInstallAPIFunc('installer',
@@ -213,13 +212,6 @@ function installer_admin_phase5()
                                   'initfunc'  => $initFunc))) {
         return NULL;
     }
-
-    return array();
-}
-
-function installer_admin_phase6()
-{
-	xarTplSetThemeName('installer');
 
     return array();
 }
@@ -421,8 +413,6 @@ function installer_admin_finish()
                                                 'state'    => 2))) {
         return NULL;
     }
-
-
 
     xarConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
 
