@@ -111,7 +111,7 @@ class xarSchemas
 								   'module' => $module,
 								   'component' => $component,
 								   'instance' => $instance,
-								   'level' => $level,
+								   'level' => $this->levels[$level],
 								   'description' => $description);
 				$result->MoveNext();
 			}
