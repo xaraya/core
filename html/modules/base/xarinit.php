@@ -350,14 +350,6 @@ function base_init()
         return;
     }
 
-    /**************************************************************
-    * Install the sniffer module
-    **************************************************************/
-    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
-                           array('directory'=>'sniffer', 'initfunc'=>'init'))) {
-        return;
-    }
-
     // Fill language list(?)
 
     // TODO: move this to some common place in Xaraya ?

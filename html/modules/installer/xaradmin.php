@@ -262,7 +262,7 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','sniffer', 'themes');
+    $modlist=array('roles','privileges','blocks','themes');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
