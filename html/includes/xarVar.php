@@ -289,7 +289,7 @@ class xarVarValidator_int extends xarVarValidator {
             return false;
         }
         
-        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
             if (!is_numeric($this->parameters[0])) {
                 $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -300,7 +300,7 @@ class xarVarValidator_int extends xarVarValidator {
             }
         }
 
-        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
             if (!is_numeric($this->parameters[1])) {
                 $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -338,7 +338,7 @@ class xarVarValidator_float extends xarVarValidator {
         
         $this->subject = $value;
 
-        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
             if (!is_numeric($this->parameters[0])) {
                 $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -349,7 +349,7 @@ class xarVarValidator_float extends xarVarValidator {
             }
         }
 
-        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
             if (!is_numeric($this->parameters[1])) {
                 $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -412,7 +412,7 @@ class xarVarValidator_str extends xarVarValidator {
 
         $length = strlen($this->subject);
 
-        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
+        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
             if (!is_numeric($this->parameters[0])) {
                 $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -423,7 +423,7 @@ class xarVarValidator_str extends xarVarValidator {
             }
         }
 
-        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
+        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
             if (!is_numeric($this->parameters[1])) {
                 $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -445,7 +445,7 @@ class xarVarValidator_str extends xarVarValidator {
 class xarVarValidator_regexp extends xarVarValidator {
 
     function validate (&$convValue) {
-        if (!isset($this->parameters[0]) || empty($this->parameters[0])) {
+        if (!isset($this->parameters[0]) || trim($this->parameters[0]) != '') {
                 $msg = 'There is no parameter to check against in Regexp validation';
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
