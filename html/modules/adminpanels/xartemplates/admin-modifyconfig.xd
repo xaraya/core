@@ -1,152 +1,151 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Administration - Adminpanels
+            Administration - Adminpanels 
         </xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
         <xar:mlstring>
-            Configure Administrator's Menus (built-in solutions)
+            Configure Administrator's Menus (built-in solutions) 
         </xar:mlstring>
     </h2>
-    <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <div style="width:100%;">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="formname" id="formname" value="adminmenu" />
-            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="4" align="center">
-                <tr>
-                    <td align="right" width="180">
-                        &nbsp; 
-                    </td>
-                    <td colspan="2">
-                        <xar:if condition="$showontop eq 1">
-                            <input type="checkbox" name="showontop" id="showontop" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="showontop" id="showontop" value="1" />
-                        </xar:if>
-                        <label for="showontop">
-                            <xar:mlstring>
-                                Always on top (position the menu in blockgroup)
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        &nbsp; 
-                    </td>
-                    <td colspan="2">
-                        <xar:if condition="$showmarker eq 1">
-                            <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="showmarker" id="showmarker" value="1" />
-                        </xar:if>
-                        <label for="showmarker">
-                            <xar:mlstring>
-                                Mark active item (when unchecked, marker is not displayed) 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        <label for="marker">
-                            <xar:mlstring>
-                                Specify marker: 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                    <td>
-                        <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" />
-                    </td>
-                    <td class="adminpanels-rednote">
+    <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+        <table class="xar-fullwidth xar-noborder">
+            <tr>
+                <td width="180">
+                </td>
+                <td colspan="2">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="formname" id="formname" value="adminmenu" />
+                    <xar:if condition="$showontop eq 1">
+                        <input type="checkbox" name="showontop" id="showontop" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="showontop" id="showontop" value="1" />
+                    </xar:if>
+                    <label for="showontop">
                         <xar:mlstring>
-                            (to be displayed next to active menu item)
+                            Always on top (position the menu in blockgroup) 
                         </xar:mlstring>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        <label for="menustyle">
-                            <xar:mlstring>
-                                Sort admin menu items: 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                    <td>
-                        <select name="menustyle" id="menustyle" size="1">
-                            <xar:foreach in="$sortorder" value="$v" key="$k">
-                                <xar:if condition="$k eq $menustyle">
-                                    <option value="#$k#" selected="selected">
-                                        #$v# 
-                                    </option>
-                                    <xar:else />
-                                    <option value="#$k#">
-                                        #$v# 
-                                    </option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
-                    </td>
-                    <td class="adminpanels-rednote">
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="2">
+                    <xar:if condition="$showmarker eq 1">
+                        <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="showmarker" id="showmarker" value="1" />
+                    </xar:if>
+                    <label for="showmarker">
                         <xar:mlstring>
-                            (only name and category implemented) 
+                            Mark active item (when unchecked, marker is not displayed) 
                         </xar:mlstring>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        <label for="menuposition">
-                            <xar:mlstring>
-                                Position admin menu: 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                    <td>
-                        <select name="menuposition" id="menuposition" size="1">
-                            <xar:foreach in="$menuselect" value="$v" key="$k">
-                                <xar:if condition="$k eq $menuposition">
-                                    <option value="#$k#" selected="selected">
-                                        #$v# 
-                                    </option>
-                                    <xar:else />
-                                    <option value="#$k#">
-                                        #$v# 
-                                    </option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
-                    </td>
-                    <td class="adminpanels-rednote">
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <label for="marker">
                         <xar:mlstring>
-                            (center blockgroup not implemented)
+                            Specify marker: 
                         </xar:mlstring>
-                    </td>
-                </tr>
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" />
+                </td>
+                <td class="adminpanels-rednote">
+                    <xar:mlstring>
+                        (to be displayed next to active menu item) 
+                    </xar:mlstring>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <label for="menustyle">
+                        <xar:mlstring>
+                            Sort admin menu items: 
+                        </xar:mlstring>
+                    </label>
+                </td>
+                <td>
+                    <select name="menustyle" id="menustyle" size="1">
+                        <xar:foreach in="$sortorder" value="$v" key="$k">
+                            <xar:if condition="$k eq $menustyle">
+                                <option value="#$k#" selected="selected">
+                                    #$v# 
+                                </option>
+                                <xar:else />
+                                <option value="#$k#">
+                                    #$v# 
+                                </option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td class="adminpanels-rednote">
+                    <xar:mlstring>
+                        (only name and category implemented) 
+                    </xar:mlstring>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <label for="menuposition">
+                        <xar:mlstring>
+                            Position admin menu: 
+                        </xar:mlstring>
+                    </label>
+                </td>
+                <td>
+                    <select name="menuposition" id="menuposition" size="1">
+                        <xar:foreach in="$menuselect" value="$v" key="$k">
+                            <xar:if condition="$k eq $menuposition">
+                                <option value="#$k#" selected="selected">
+                                    #$v# 
+                                </option>
+                                <xar:else />
+                                <option value="#$k#">
+                                    #$v# 
+                                </option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td class="adminpanels-rednote">
+                    <xar:mlstring>
+                        (center blockgroup not implemented) 
+                    </xar:mlstring>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    &nbsp; 
+                </td>
+                <td colspan="2">
+                    <xar:if condition="$showlogout eq 1">
+                        <input type="checkbox" name="showlogout" id="showlogout" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="showlogout" id="showlogout" value="1" />
+                    </xar:if>
+                    <label for="showlogout">
+                        <xar:mlstring>
+                            Display "Logout" link in the menus 
+                        </xar:mlstring>
+                    </label>
+                </td>
+            </tr>
+            <xar:comment>
                 <tr>
                     <td align="right">
                         &nbsp; 
-                    </td>
-                    <td colspan="2">
-                        <xar:if condition="$showlogout eq 1">
-                            <input type="checkbox" name="showlogout" id="showlogout" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="showlogout" id="showlogout" value="1" />
-                        </xar:if>
-                        <label for="showlogout">
-                            <xar:mlstring>
-                                Display "Logout" link in the menus
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                </tr>
-<xar:comment>
-                <tr>
-                    <td align="right">
-                        &nbsp;
                     </td>
                     <td colspan="2">
                         <xar:if condition="$showhelp eq 1">
@@ -156,73 +155,67 @@
                         </xar:if>
                         <label for="showhelp">
                             <xar:mlstring>
-                                Display "Help" link in the menus
+                                Display "Help" link in the menus 
                             </xar:mlstring>
                         </label>
                     </td>
                 </tr>
-</xar:comment>
-                <tr>
-                    <td align="right">
-                        &nbsp; 
-                    </td>
-                    <td>
-                        <input type="submit" value="#xarML('Submit')#"  />
-                    </td>
-                    <td class="adminpanels-rednote">
-                        &nbsp; 
-                    </td>
-                </tr>
-            </table>
-        </div>
+            </xar:comment>
+            <tr>
+                <td align="right">
+                    &nbsp; 
+                </td>
+                <td>
+                    <input type="submit" value="#xarML('Submit')#" />
+                </td>
+                <td class="adminpanels-rednote">
+                    &nbsp; 
+                </td>
+            </tr>
+        </table>
     </form>
-<!-- </div> -->
-<!-- <div class="xar-mod-body"> -->
     <h2>
         <xar:mlstring>
-            Configure Overviews
+            Configure Overviews 
         </xar:mlstring>
     </h2>
-    <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-        <div style="width:100%;">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="formname" id="formname" value="overviews" />
+    <form class="xar-fullwidth" method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
 <!-- Disable overviews -->
-            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="4" align="left" width="100%">
-                <tr>
-                    <td align="right" width="180">
-                        &nbsp; 
-                    </td>
-                    <td>
-                        <xar:if condition="$showoverviews eq 1">
-                            <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="overview" id="overview" value="1" />
-                        </xar:if>
-                        <label for="overview">
-                            <xar:mlstring>
-                                Disable Module Overviews 
-                            </xar:mlstring>
-                        </label>
-                    </td>
-                    <td class="adminpanels-rednote">
+        <table class="xar-fullwidth xar-noborder">
+            <tr>
+                <td width="180">
+                </td>
+                <td>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="formname" id="formname" value="overviews" />
+                    <xar:if condition="$showoverviews eq 1">
+                        <input type="checkbox" name="overview" id="overview" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="overview" id="overview" value="1" />
+                    </xar:if>
+                    <label for="overview">
                         <xar:mlstring>
-                            Bypass the overviews and go directly to the module's configuration 
+                            Disable Module Overviews 
                         </xar:mlstring>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        &nbsp; 
-                    </td>
-                    <td>
-                        <input type="submit" value="#xarML('Submit')#"  />
-                    </td>
-                    <td class="adminpanels-rednote">
-                        &nbsp; 
-                    </td>
-                </tr>
-            </table>
-        </div>
+                    </label>
+                </td>
+                <td class="adminpanels-rednote">
+                    <xar:mlstring>
+                        Bypass the overviews and go directly to the module's configuration 
+                    </xar:mlstring>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    &nbsp; 
+                </td>
+                <td>
+                    <input type="submit" value="#xarML('Submit')#" />
+                </td>
+                <td class="adminpanels-rednote">
+                    &nbsp; 
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
