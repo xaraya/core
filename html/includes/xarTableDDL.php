@@ -65,6 +65,8 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
 
     switch($databaseType) {
         case 'mysql':
+            $sql = 'CREATE DATABASE '.$databaseName;
+            break;
         case 'postgres':
             $sql = 'CREATE DATABASE "'.$databaseName .'"';
             break;
@@ -1011,7 +1013,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
                         $this_field['type'] .= " WITH TIME ZONE";
                     }
                 } else {
-                    // PostgreSQL doesn't allow a default value of 
+                    // PostgreSQL doesn't allow a default value of
                     // '00-00-00 00:00:00 as this it is not a valid timestamp
                     if ($parameters['default'] == '0000-00-00 00:00:00' ||
                         $parameters['default'] == '00-00-00 00:00:00') {
@@ -1162,7 +1164,7 @@ function xarDB__oracleCreateTable($tableName, $fields)
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
 
         $sql_fields[] = $sqlDDL;
-        
+
         // Check for primary key
         if (array_key_exists("primary_key", $this_field)) {
             if ($this_field['primary_key'] == true) {
