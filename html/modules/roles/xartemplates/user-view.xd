@@ -125,7 +125,7 @@
 				<tr>
 					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
 						<td class="xar-accent">
-							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$loop:item['name']#</a>
+							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#$loop:item['name']#</a>
 						</td>
 						<td class="xar-accent" style="text-align: center;">
 							<a href="http://www.geektools.com/cgi-bin/proxy.cgi?query=#$loop:item['ipaddr']#&amp;targetnic=auto">#$loop:item['ipaddr']#</a>

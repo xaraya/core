@@ -1,33 +1,26 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2>
-<div style="margin: auto;">
-<form method="post" action="&xar-modurl-blocks-admin-create_group;">
-    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-    
-    <table border="0" cellpadding="2" cellspacing="0">
-        <tr>
-            <td>
-                <label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:
-            </td>
-            <td>
-                <input type="text" name="group_name" id="group_name" value="" length="40" maxlength="255" style="width:150px;" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="group_template"><xar:mlstring>Default template (optional)</xar:mlstring></label>:
-            </td>
-            <td>
-                <input type="text" name="group_template" id="group_template" value="" length="40" maxlength="255" style="width:150px;" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center"><br />
-                    <input type="submit" value="#$createlabel#" align="middle" />&nbsp;&nbsp;&nbsp;
-                    <input type="submit" name="cancel" value="#$cancellabel#" align="middle" />
-            </td>
-        </tr>
-    </table>
-</form>
-</div>
+	<div style="margin: auto;">
+	<form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" enctype="application/x-www-form-urlencoded" />
+		<div style="clear: both; padding-top: 10px;">
+		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#"><label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="group_name" id="group_name" value="" size="40" maxlength="255" />
+		</span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#"><label for="group_template"><xar:mlstring>Default template (optional)</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="group_template" id="group_template" value="" size="40" maxlength="255" />
+		</span>
+		</div>
+		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$createlabel#" /></span>
+	</form>
+	</div>
 </div>

@@ -1,25 +1,33 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Types</xar:mlstring></h2>
-<div style="margin: auto;">
-<table border="1" cellpadding="20" cellspacing="0">
-    <tr align="center">
-        <th>
-            <xar:mlstring>Module</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>Type</xar:mlstring>
-        </th>
-    </tr>
-    <xar:loop name="$block_types" id="foo">
-    <tr align="center">
-        <td>
-            <a href="#$loop:item['modurl']#">#$loop:item['module']#</a>
-        </td>
-        <td>
-           #$loop:item['type']#
-        </td>
-    </tr>
-    </xar:loop>
-</table>
-</div>
+	<div style="margin: auto;">
+		<div class="xar-norm-outline" style="margin: 0px 3px 6px 3px;padding: 10px;text-align: left;">
+			<div class="xar-accent" style="padding-top: 10px; padding-bottom: 10px;">
+				<span style="float: left; text-align: center; width: 19%; font-weight: bold;">
+					<span class="help" title="#xarML('The module listed is the module of which this block originates')#"><xar:mlstring>Module</xar:mlstring></span>
+				</span>
+				<span style="float: left; text-align: center; width: 51%; font-weight: bold;">
+					&nbsp;
+				</span>
+				<span style="float: right; text-align: center; width: 19%; font-weight: bold;">
+					<span class="help" title="#xarML('The block type indicates the type of block which can be selected.')#"><xar:mlstring>Type</xar:mlstring></span>
+				</span>
+				<br />
+			</div>
+			<xar:loop name="$block_types" id="foo">
+			<div class="xar-norm" style="padding-top: 10px; padding-bottom: 10px;">
+				<span style="float: left; text-align: center; width: 19%; font-weight: bold;">
+					<a href="#$loop:item['modurl']#">#$loop:item['module']#</a>
+				</span>
+				<span style="float: left; text-align: center; width: 51%; font-weight: bold;">
+					&nbsp;
+				</span>
+				<span style="float: right; text-align: center; width: 19%; font-weight: bold;">
+					#$loop:item['type']#
+				</span>
+				<br />
+			</div>
+			</xar:loop>
+		</div>
+	</div>
 </div>

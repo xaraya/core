@@ -1,54 +1,65 @@
+<script type="text/javascript" src="modules/blocks//xartemplates/functions.js"></script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Instances</xar:mlstring></h2>
-<div style="margin: auto;">
-<table border="1" cellpadding="10" cellspacing="0">
-    <tr align="center">
-        <th>
-            <xar:mlstring>Group</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>Title</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>Type</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>Template</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>State</xar:mlstring>
-        </th>
-        <th>
-            <xar:mlstring>Operations</xar:mlstring>
-        </th>
-    </tr>
-    <xar:loop name="$blocks">
-    <tr align="center">
-        <td>
-            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a>
-        </td>
-        <td>
-            #$loop:item['title']#
-        </td>
-        <td>
-            <a href="&xar-modurl-blocks-admin-view_types;">#$loop:item['module']# \ #$loop:item['type']#</a>
-        </td>
-        <td>
-            <xar:if condition="$loop:item['template'] ne NULL">
-                #$loop:item['template']#
-            <xar:else />
-                #$loop:item['group_template']#
-            </xar:if>&nbsp;
-        </td>
-        <td>
-            #$loop:item['state_desc']#
-        </td>
-        <td>
-            <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#"><xar:mlstring>Edit</xar:mlstring></a> |
-            <a href="&xar-modurl-blocks-admin-delete_instance;&amp;bid=#$loop:item['id']#"><xar:mlstring>Delete</xar:mlstring></a>
-        </td>
-    </tr>
-    </xar:loop>
-</table>
-</div>
+	<div style="margin: auto;">
+		<div class="xar-norm-outline" style="margin: 0px 3px 6px 3px;padding: 10px;text-align: left;">
+			<div class="xar-accent" style="padding-top: 10px; padding-bottom: 10px;">
+				<span style="float: left; text-align: center; width: 12%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the group that the specific block instance is assigned.')#"><xar:mlstring>Group</xar:mlstring></span>
+				</span>
+				<span style="float: left; text-align: center; width: 12%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the title of the block and how it will appear listed when displayed.')#"><xar:mlstring>Title</xar:mlstring></span>
+				</span>
+				<span style="float: left; text-align: center; width: 22%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the type of block that the specific instance is.')#"><xar:mlstring>Type</xar:mlstring></span>
+				</span>
+				<span style="float: left; text-align: center; width: 22%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the template that the specific instance is assigned.')#"><xar:mlstring>Template</xar:mlstring></span>
+				</span>
+				<span style="float: left; text-align: center; width: 10%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the state of the block.  Maximized indicates that the block is active, Hidden indicates that the block is hidden.')#"><xar:mlstring>State</xar:mlstring></span>
+				</span>
+				<span style="float: right; text-align: center; width: 22%; font-weight: bold;">
+					<span class="help" title="#xarML('This is the specific action that you can take with the block.  Either edit the block or delete the block.')#"><xar:mlstring>Operations</xar:mlstring></span>
+				</span>
+				<br />
+			</div>
+			<xar:loop name="$blocks">
+			<div class="xar-norm" style="padding-top: 10px; padding-bottom: 10px;">
+				<span style="float: left; text-align: center; width: 12%; font-weight: normal;">
+					<a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:item['group_id']#">#$loop:item['group_name']#</a>
+				</span>
+				<span style="float: left; text-align: center; width: 12%; font-weight: normal;">
+					<xar:if condition="empty($loop:item['title'])">
+						&nbsp;
+					<xar:else />
+						#$loop:item['title']#
+					</xar:if>
+				</span>
+				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
+					<a href="&xar-modurl-blocks-admin-view_types;">#$loop:item['module']# \ #$loop:item['type']#</a>
+				</span>
+				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
+					<xar:if condition="$loop:item['template'] ne NULL">
+						#$loop:item['template']# &nbsp;
+					<xar:else />
+						<xar:if condition="empty($loop:item['group_template'])">
+							[ <xar:mlstring> default </xar:mlstring> ]
+						<xar:else />
+							#$loop:item['group_template']# &nbsp;
+						</xar:if>
+					</xar:if>
+				</span>
+				<span style="float: left; text-align: center; width: 10%; font-weight: normal;">
+					#$loop:item['state_desc']#
+				</span>
+				<span style="float: right; text-align: center; width: 22%; font-weight: normal;">
+					<a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>  |
+					<a href="#$loop:item['deleteurl']#" onClick="#$loop:item['javascript']#">Delete</a>
+				</span>
+				<br />
+			</div>
+			</xar:loop>
+		</div>
+	</div>
 </div>

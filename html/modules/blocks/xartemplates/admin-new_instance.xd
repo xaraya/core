@@ -1,72 +1,69 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2>
-<div style="margin: auto;">
-<form method="post" action="&xar-modurl-blocks-admin-create_instance;">
-    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-    
-    <table border="0" cellpadding="5" cellspacing="0">
-        <tr>
-            <td>
-                <label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:
-            </td>
-            <td>
-                <input type="text" name="block_title" id="block_title" value="" length="40" maxlength="255" style="width:150px;" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="block_type"><xar:mlstring>Type</xar:mlstring></label>:
-            </td>
-            <td>
-                <select name="block_type" id="block_type">
-                    <xar:loop name="$block_types">
-                        <option value="#$loop:item['id']#">
-                            #$loop:item['module']# \ #$loop:item['type']#
-                        </option>
-                    </xar:loop>                
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="block_group"><xar:mlstring>Group</xar:mlstring></label>:
-            </td>
-            <td>
-                <select name="block_group" id="block_group">
-                    <xar:loop name="$block_groups">
-                        <option value="#$loop:item['id']#">
-                            #$loop:item['name']#
-                        </option>
-                    </xar:loop>                
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="block_template"><xar:mlstring>Template (optional)</xar:mlstring></label>:
-            </td>
-            <td>
-                <input type="text" name="block_template" id="block_template" value="" length="40" maxlength="255" style="width:150px;" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:
-            </td>
-            <td>
-                <select name="block_state" id="block_state">
-                    <option value="0"><xar:mlstring>Hidden</xar:mlstring></option>
-                    <option value="1"><xar:mlstring>Minimized</xar:mlstring></option>
-                    <option value="2" selected="selected"><xar:mlstring>Maximized</xar:mlstring></option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center"><br />
-                    <input type="submit" value="#$createlabel#" align="middle" />
-            </td>
-        </tr>
-    </table>
-</form>
-</div>
+	<div style="margin: auto;">
+	<form action="#xarModURL('blocks', 'admin', 'create_instance')#"  method="post" enctype="application/x-www-form-urlencoded" />
+		<div style="clear: both; padding-top: 10px;">
+		<input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('The title of the block as you want it to appear on your website')#"><label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="block_title" id="block_title" size="30" value="" maxlength="255" />
+		</span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('The type of block that you wish to add.')#"><label for="block_type"><xar:mlstring>Type</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<select name="block_type" id="block_type">
+			<xar:loop name="$block_types">
+				<option value="#$loop:item['id']#">
+					#$loop:item['module']# \ #$loop:item['type']#
+				</option>
+			</xar:loop>  
+			</select>
+		</span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('The group that you want this block to be a member of.')#"><label for="block_group"><xar:mlstring>Group</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<select name="block_group" id="block_group">
+				<xar:loop name="$block_groups">
+					<option value="#$loop:item['id']#">
+						#$loop:item['name']#
+					</option>
+				</xar:loop>                
+			</select>
+		</span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('This field is optional.  This is a specific override template that you want to use for this block.')#"><label for="block_template"><xar:mlstring>Template (optional)</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="block_template" id="block_template" size="30" value="" maxlength="255" />
+		</span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#"><label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<select name="block_state" id="block_state">
+				<option value="0"><xar:mlstring>Hidden</xar:mlstring></option>
+				<option value="1"><xar:mlstring>Minimized</xar:mlstring></option>
+				<option value="2" selected="selected"><xar:mlstring>Maximized</xar:mlstring></option>
+			</select>
+		</span>
+		</div>
+		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$createlabel#" /></span>
+		</form>
+	</div>
 </div>

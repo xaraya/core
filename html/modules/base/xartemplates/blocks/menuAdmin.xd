@@ -1,31 +1,29 @@
-<tr>
-    <td class="xar-normal">
-        <xar:mlstring>Display Modules</xar:mlstring>:
-    </td>
-    <td>
-        <xar:if condition="!empty($displaymodules)">
-            <input type="checkbox" value="1" name="displaymodules" checked="checked" />
-        <xar:else />
-            <input type="checkbox" value="1" name="displaymodules" />
-        </xar:if>
-    </td>
-</tr>
-<tr>
-    <td class="xar-normal">
-        <xar:mlstring>Marker</xar:mlstring>:
-    </td>
-    <td>
-        <input type="text" name="marker" value="#xarVarPrepForDisplay($marker)#" size="20" />
-    </td>
-</tr>
-</table><table>
-<tr>
-    <td valign="top" class="xar-title">
-        <xar:mlstring>Menu Content</xar:mlstring>
-    </td>
-</tr>
-<tr>
-    <td>
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('If you would like Xaraya to generate a menu for you based on the modules that you have installed, check this box.')#"><label for="displaymodules"><xar:mlstring>Display Modules</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<xar:if condition="!empty($displaymodules)">
+				<input type="checkbox" value="1" name="displaymodules" checked="checked" />
+			<xar:else />
+				<input type="checkbox" value="1" name="displaymodules" />
+			</xar:if>
+		</span>
+		</div>
+
+		<xar:if condition="!empty($displaymodules)">
+		<div style="clear: both; padding-top: 10px;">
+		<span style="float: left; width: 20%; text-align: right;">
+			<span class="help" title="#xarML('When Xaraya is generating the menu, we can mark the current page.  Use this to configure the marker for that display.')#"><label for="marker"><xar:mlstring>Marker</xar:mlstring></label>:</span>
+		</span>
+		<span style="float: right; width: 78%; text-align: left;">
+			<input type="text" name="marker" value="#xarVarPrepForDisplay($marker)#" size="20" />
+		</span>
+		</div>
+		</xar:if>
+
+		<h4><xar:mlstring>Menu Content</xar:mlstring></h4>
+
         <table border="1">
             <tr>
                 <td align="center" class="xar-normal">
@@ -94,5 +92,3 @@
                 </td>
             </tr>
         </table>
-    </td>
-</tr>

@@ -7,7 +7,7 @@ function blocks_admin_view_instances()
 {
 // Security Check
 	if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
-
+    $authid = xarSecGenAuthKey();
     // Load up database
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -57,7 +57,8 @@ function blocks_admin_view_instances()
                 $block['state_desc'] = 'Maximized';
                 break;
         }
-
+        $block['javascript'] = "return confirmLink(this, '" . xarML('Delete instance') . " $block[title] ?')";
+        $block['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_instance', array('bid' => $block['id'], 'authid' => $authid));
         $blocks[] = $block;
 
         $result->MoveNext();

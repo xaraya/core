@@ -1017,4 +1017,24 @@ function xarSecAddSchema($component, $schema)
                     new SystemException($msg));
     return true;
 }
+
+function pnUserGetTheme()
+{
+    return xarUserGetNavigationThemeName();
+}
+
+function pnThemeLoad()
+{
+    return true;
+}
+
+function opentable()
+{
+    return '<table><tr><td>';
+}
+
+function closetable()
+{
+    return '</td></tr></table>';
+}
 ?>

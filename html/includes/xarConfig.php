@@ -53,6 +53,8 @@ function xarConfigGetVar($name, $prep = NULL)
         $name = $aliases[$name];
     }
 
+ 
+
     if ($name == 'Site.DB.TablePrefix') {
         //return xarCore_getSiteVar('DB.TablePrefix');
         return xarCore_getSystemVar('DB.TablePrefix');
@@ -62,6 +64,8 @@ function xarConfigGetVar($name, $prep = NULL)
         return XARCORE_VERSION_ID;
     } elseif ($name == 'System.Core.VersionSub') {
         return XARCORE_VERSION_SUB;
+    } elseif ($name == 'prefix') {
+        return xarDBGetSiteTablePrefix();
     }
 
     return xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');

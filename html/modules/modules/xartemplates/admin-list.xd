@@ -1,7 +1,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>View Modules (list mode)</xar:mlstring></h2>
-    <form method="post" action="&xar-modurl-modules-admin-settings;">
+    <form method="post" action="#xarModUrl('modules', 'admin', 'settings')#">
         <div class="xar-norm-outline" style="padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
             <table width="100%" border="0" cellspacing="1" cellpadding="1">
