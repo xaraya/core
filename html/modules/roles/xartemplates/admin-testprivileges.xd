@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
 </xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
@@ -7,44 +7,44 @@
 <xar:else /><xar:mlstring>User</xar:mlstring>
 </xar:if> '#$pname#'</h2>
 <xar:if condition="count($parents) ne 0">
-	<div>
-		<dl class="xar-tabs">
-			<dt class="help" title="These are the groups that #$pname# is a member of">
-				<xar:mlstring>Parent Groups</xar:mlstring> :
-			</dt>
-			<xar:set name="$prevgroup">""</xar:set>
-			<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-				<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-					<dd>
-						<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
-					</dd>
-				</xar:if>
-				<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
-			</xar:for>
+    div>
+	    dl class="xar-tabs">
+		    dt class="help" title="These are the groups that #$pname# is a member of">
+			    xar:mlstring>Parent Groups</xar:mlstring> :
+		    /dt>
+		    xar:set name="$prevgroup">""</xar:set>
+		    xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+			    xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+				    dd>
+					    a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
+				    /dd>
+			    /xar:if>
+			    xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+		    /xar:for>
 	  </dl>
   </div>
 </xar:if>
 <div>
-	<dl class="xar-tabs">
-		<dt class="help" title="Choose an action to perform on the selected user">
-			<xar:mlstring>Actions</xar:mlstring> :
-		</dt>
-		<dd>
-			<a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a>
-		</dd>    
-		<dd>
-			<a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#"><xar:mlstring>Modify</xar:mlstring></a>
-		</dd>    
-		<dd>
-			<a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a>
-		</dd>    
-		<dd>
-		<a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $uid))#" class="active"><xar:mlstring>Privileges</xar:mlstring></a></dd>    
-		<xar:if condition="$ptype eq 1">
-			<dd>
-				<a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a>
-			</dd>    
-		</xar:if>
+    dl class="xar-tabs">
+	    dt class="help" title="Choose an action to perform on the selected user">
+		    xar:mlstring>Actions</xar:mlstring> :
+	    /dt>
+	    dd>
+		    a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a>
+	    /dd>    
+	    dd>
+		    a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#"><xar:mlstring>Modify</xar:mlstring></a>
+	    /dd>    
+	    dd>
+		    a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a>
+	    /dd>    
+	    dd>
+	    a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $uid))#" class="active"><xar:mlstring>Privileges</xar:mlstring></a></dd>    
+	    xar:if condition="$ptype eq 1">
+		    dd>
+			    a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a>
+		    /dd>    
+	    /xar:if>
   </dl>
 </div>
 
