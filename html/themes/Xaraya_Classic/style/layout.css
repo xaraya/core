@@ -36,11 +36,9 @@ div#xc-inner-wrapper {
 
 div#xc-innerbg-top { width: auto; }
 div#xc-innerbg-bottom { width: auto; }
-
 div#xc-innerbg-right { width: auto; }
 div#xc-innerbg-left { width: auto; }
 div#xc-innerbg { width: auto; }
-
 div#xc-innerbg > div#xc-innerbg-top,
 div#xc-innerbg > div#xc-innerbg-bottom { height: 1px; }
 
@@ -128,4 +126,9 @@ div#xc-left { margin-right: 20px; }
 div#xc-right { margin-left: 20px; }
 div#xc-center-wrapper { margin: 0 -10px 0 -10px; }
 
-/* #xc-outermargin-wrapper > #xc-inner-wrapper { border-bottom: 1px solid transparent; } */
+/* hide from IE5-Mac and reset for IE6 \*/
+* html div.xc-side-content, * html div#xc-center {
+    width: 100%;
+    w\idth: auto;
+}
+/* IE5+ Win seems to need the above reinforcement due to it's broken box-model and inability to calculate table widths */

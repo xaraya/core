@@ -19,7 +19,7 @@
     <form method="post" action="#xarModUrl('modules', 'admin', 'settings')#">
         <div class="xar-norm-outline" style="padding: 0px; width: 100%;">
             <xar:comment> Module List Sort and Filter Controls table </xar:comment>
-            <table class="xar-fullwidth" border="0" cellspacing="1" cellpadding="1">
+            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
               <tr>
                 <th nowrap="nowrap">
                     <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>

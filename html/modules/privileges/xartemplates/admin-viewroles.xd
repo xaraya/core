@@ -149,8 +149,8 @@ document.forms['privilegeform'].submit();}
 </div>
 <br />
 
-<div style="width: 100%;">
-    <table class="xar-fullwidth" border="0">
+<div>
+    <table class="xar-fullwidth xar-noborder">
         <tr>
             <th align="center">
                 <xar:mlstring>Current Privileges</xar:mlstring>
