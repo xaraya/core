@@ -2,9 +2,6 @@
 </script>
 <script language="JavaScript">
 <!--
-function setaction(target){
-document.forms[0].action = target;
-document.forms[0].submit();}
  var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
  function doOnLoad() {
       oldOnLoadFunction();      

@@ -3,8 +3,8 @@
 <script language="JavaScript">
 <!--
 function setaction(target){
-document.forms[0].action = target;
-document.forms[0].submit();}
+document.forms["newrole"].action = target;
+document.forms["newrole"].submit();}
  var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
  function doOnLoad() {
       oldOnLoadFunction();      
@@ -24,7 +24,7 @@ document.forms[0].submit();}
 <div class="xar-mod-body"><h2><xar:mlstring>Add</xar:mlstring></h2><br />
 <div style="text-align: center; margin: auto;">
 	<p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
-	<form action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
+	<form name="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
 		
 		<table border="0" cellpadding="5">
 			<tr>

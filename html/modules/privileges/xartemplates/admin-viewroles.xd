@@ -57,8 +57,7 @@ document.forms[0].submit();}
 					&xar-var-name;
 				</td>
 			<td align="right">
-				<a href="&xar-var-removeurl;&roleid=&xar-var-roleid;"
-				title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+				<a href="&xar-var-removeurl;&roleid=&xar-var-roleid;" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 			</td>
 			</tr>
 		</xar:loop>

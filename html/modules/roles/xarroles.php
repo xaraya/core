@@ -965,8 +965,8 @@ function drawindent() {
         }
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
 // done
         return true;
@@ -1013,8 +1013,8 @@ function drawindent() {
         }
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
 // done
         return true;
@@ -1174,8 +1174,8 @@ function drawindent() {
         if (!$this->dbconn->Execute($query)) return;
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
         return true;
     }
@@ -1200,8 +1200,8 @@ function drawindent() {
         if (!$this->dbconn->Execute($query)) return;
 
 // empty the privset cache
-        $privileges = new xarPrivileges();
-        $privileges->forgetprivsets();
+//        $privileges = new xarPrivileges();
+//        $privileges->forgetprivsets();
 
         return true;
     }

@@ -3,8 +3,8 @@
 <script language="JavaScript">
 <!--
 function setaction(target){
-document.forms[0].action = target;
-document.forms[0].submit();}
+document.forms["modifyrole"].action = target;
+document.forms["modifyrole"].submit();}
  var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
  function doOnLoad() {
       oldOnLoadFunction();      
@@ -24,7 +24,7 @@ document.forms[0].submit();}
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify</xar:mlstring></h2><br />
 <div style="text-align: center; margin: auto;">
-	<form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+	<form name="modifyrole" action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
