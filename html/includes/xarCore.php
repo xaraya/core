@@ -537,6 +537,13 @@ function xarCore_disposeDebugger()
  */
 function xarCore_die($msg)
 {
+    static $dying = false;
+    if ($dying) {
+    //    echo $msg;
+        return;
+    }
+    $dying = true;
+
     //Cant we stardatize errors for both this and Exceptions????
     // It is useful for the developer to know this is happening before the
     // Exceptions is loaded, still for the end user it is still just an error.
