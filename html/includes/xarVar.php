@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- *
+ * 
  * Variable utilities
- *
+ * 
  * @package variables
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -34,7 +34,7 @@ define('XARVAR_NOT_REQUIRED', 64);
  * @global xarVar_enableCensoringWords bool
  * @global xarVar_censoredWords array
  * @global xarVar_censoredWordsReplacers array
- * @param args array
+ * @param args array 
  * @param whatElseIsGoingLoaded integer
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
@@ -217,7 +217,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
         return false;
     }
 
-    if (isset($validationList[$validation_name])) {
+    if (isset($_xarValidationList[$validation_name])) {
         // Raise an exception
         // ML system not loaded yet
         $msg = "The validation name '$validation_name' is already being used";
@@ -255,7 +255,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
 
 
     $_xarValidationList[$validation_name] =& $obj;
-
+    
     return true;
 
 }
@@ -263,7 +263,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
 
 
 /**
- *
+ * Basic Class to make a validation scheme
  *
  * @package variables
  */
@@ -284,14 +284,17 @@ class xarVarValidator {
     }
 }
 
+/**
+ * Interger Validation Class
+ */
 class xarVarValidator_int extends xarVarValidator {
     function validate (&$convValue) {
-
+    
         $value = intval($this->subject);
         if ("$this->subject" != "$value") {
             return false;
         }
-
+        
         if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
             if ($value < (int) $this->parameters[0]) {
                 return false;
@@ -309,12 +312,18 @@ class xarVarValidator_int extends xarVarValidator {
     }
 }
 
+/**
+ * Id Validation Class
+ */
 class xarVarValidator_id extends xarVarValidator_int {
     function setParameters ($paremeters) {
         $this->parameters = array(0 => 1, 1 => null);
     }
 }
 
+/**
+ * Float Validation Class
+ */
 class xarVarValidator_float extends xarVarValidator {
     function validate (&$convValue) {
 
@@ -322,7 +331,7 @@ class xarVarValidator_float extends xarVarValidator {
         if ("$this->subject" != "$value") {
             return false;
         }
-
+        
         $this->subject = $value;
 
         if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
@@ -342,6 +351,9 @@ class xarVarValidator_float extends xarVarValidator {
     }
 }
 
+/**
+ * Boolean Validation Class
+ */
 class xarVarValidator_bool extends xarVarValidator {
 
     function validate (&$convValue) {
@@ -358,6 +370,9 @@ class xarVarValidator_bool extends xarVarValidator {
     }
 }
 
+/**
+ * Strings Validation Class
+ */
 class xarVarValidator_str extends xarVarValidator {
 
     function validate (&$convValue) {
@@ -375,12 +390,15 @@ class xarVarValidator_str extends xarVarValidator {
                 return false;
             }
         }
-
+        
         $convValue = (string) $this->subject;
         return true;
     }
 }
 
+/**
+ * HTML Validation Class
+ */
 class xarVarValidator_html extends xarVarValidator {
 
     function validate (&$convValue) {
@@ -422,18 +440,18 @@ xarVarRegisterValidation ('html', 'xarVarValidator_html');
 
 /**
  *
- *
+ * 
  * @package variables
  */
 class xarVarGroupValidator extends xarVarValidator
 {
     var $validations;
-
+    
     function xarVarGroupValidator(/*...*/)
     {
         $this->validations = func_get_args();
     }
-
+    
     function validate($subject, &$convValue)
     {
         foreach ($this->validations as $validation) {
@@ -894,4 +912,3 @@ function xarVar__getAllowedTags($level)
     }
     return array();
 }
-?>
