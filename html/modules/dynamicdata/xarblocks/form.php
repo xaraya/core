@@ -131,18 +131,18 @@ function dynamicdata_formblock_modify($blockinfo)
 
     // Create row
     $row = array();
-    $output->SetOutputMode(_PNH_RETURNOUTPUT);
+    $output->SetOutputMode(_XARH_RETURNOUTPUT);
     $row[] = $output->Text(_NUMITEMS);
     $row[] = $output->FormText('numitems',
                                xarVarPrepForDisplay($vars['numitems']),
                                5,
                                5);
-    $output->SetOutputMode(_PNH_KEEPOUTPUT);
+    $output->SetOutputMode(_XARH_KEEPOUTPUT);
 
     // Add row
-    $output->SetInputMode(_PNH_VERBATIMINPUT);
+    $output->SetInputMode(_XARH_VERBATIMINPUT);
     $output->TableAddRow($row, 'left');
-    $output->SetInputMode(_PNH_PARSEINPUT);
+    $output->SetInputMode(_XARH_PARSEINPUT);
 
     // Return output
     return $output->GetOutput();
@@ -167,11 +167,11 @@ function dynamicdata_formblock_help()
 {
     $output = new xarHTML();
 
-    $output->SetInputMode(_PNH_VERBATIMINPUT);
+    $output->SetInputMode(_XARH_VERBATIMINPUT);
     $output->Text('Any related block info should be placed in your modname_blocknameblock_help() function.');
     $output->LineBreak(2);
     $output->Text('More information.');
-    $output->SetInputMode(_PNH_PARSEINPUT);
+    $output->SetInputMode(_XARH_PARSEINPUT);
 
     return $output->GetOutput();
 }
