@@ -549,7 +549,7 @@ function installer_admin_finish()
 
     $now = time();
 
-    $varshtml['html_content'] = 'Please delete the install.php from your webroot .';
+    $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
     $varshtml['expire'] = $now + 24000;
     $msg = serialize($varshtml);
 
