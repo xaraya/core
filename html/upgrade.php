@@ -1202,16 +1202,16 @@ Password : %%password%%
         $indexname .= '2';
         if (!isset($indexes[$indexname])) {
             // We need to remove duplicate regids before creating a unique index on that column.
-            $query = "select max(xar_id), xar_regid from $module_states_table group by xar_regid having count(xar_regid) > 1";
+            $query = "select min(xar_id), xar_regid from $module_states_table group by xar_regid having count(xar_regid) > 1";
             $result = &$dbconn->Execute($query);
             if ($result) {
                 // Get items from result array
                 while (!$result->EOF) {
-                    list ($xar_id, $xar_regid) = $result->fields;
-                    $query2 = "delete from $module_states_table where xar_id = $xar_id and xar_regid = $xar_regid";
+                    list ($xar_min_id, $xar_regid) = $result->fields;
+                    $query2 = "delete from $module_states_table where xar_id <> $xar_min_id and xar_regid = $xar_regid";
                     $result2 = &$dbconn->Execute($query2);
                     $result2->close();
-                    echo "Deleted duplicate module state row (xar_id=$xar_id)<br/>";
+                    echo "Deleted duplicate module state rows (xar_regid=$xar_regid, leaving xar_id=$xar_min_id)<br/>";
 
                     $result->MoveNext();
                 }
