@@ -188,6 +188,26 @@ class xarSchemas
 	}
 
 /**
+ * unregister: unregister a schema
+ *
+ * Removes a schema entry from the schemas table
+ * This function should be invoked every time an instance is removed
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string representing a schema name
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+	function unregister($name)
+	{
+		$query = "DELETE FROM $this->schemastable WHERE xar_name = '$name'";
+		if (!$this->dbconn->Execute($query)) return;
+		return true;
+	}
+
+/**
  * winnow: merges two arrays of permissions to a single array of permissions
  *
  * The permissions are compared for implication and the less mighty are discarded
@@ -205,8 +225,8 @@ class xarSchemas
 	{
 		if ((($perms1 == array()) || ($perms1 == '')) &&
 			(($perms2 == array()) || ($perms2 == ''))) return array();
-		if ($perms1 == array()) return $perms2 = array_pop($perms1);
-		if ($perms2 == array()) return $perms1 = array_pop($perms2);
+		if ($perms1 == array()) return $perms2;
+		if ($perms2 == array()) return $perms1;
 
 		foreach ($perms1 as $perm1) {
 			$isimplied = false;
@@ -288,9 +308,25 @@ class xarSchemas
 
 	function challenge($schemaname,$participant='')
 	{
-//	return $this->getSchema($schemaname);;
+//	return $this->getSchema($schemaname);
 
-//Get the inherited ancestors of the participant
+// get the Participants class
+		include_once 'modules/participants/xarparticipants.php';
+    	$parts = new xarParticipants();
+
+// get the uid of the current user
+		define('_XARSEC_UNREGISTERED', '8');
+		if (empty($userID)) {
+			$userID = xarSessionGetVar('uid');
+			if (empty($userId)) {
+				$userID = _XARSEC_UNREGISTERED;
+			}
+		}
+
+// an empty participant means take the current user
+		if ($participant == '') $participant = $parts->getParticipant($userID);
+
+// get the inherited ancestors of the participant
 		$ancestors = $participant->getAncestors();
 
 // set up an array to hold the permissions
@@ -426,7 +462,7 @@ class xarPermissions extends xarSchemas
 /**
  * register: register a permission
  *
- * Creates a schema entry in the schemas table
+ * Creates an entry in the permissions table
  * This function should be invoked every time a new instance is created
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
