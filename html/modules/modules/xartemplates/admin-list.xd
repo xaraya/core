@@ -175,7 +175,7 @@
                                         <xar:if condition="$removeurl eq ''">
                                             <img src="#$actionimg2#" alt="#$actionlabel#" />
                                         <xar:else />
-                                            <a href="#$removeurl#"><img src="#$actionimg2#" alt="#$actionlabel#" /></a>
+                                            <a href="#$removeurl#"><img src="#$actionimg2#" alt="#$actionlabel2#" /></a>
                                         </xar:if>
                                 <xar:else />
                                     <div style="padding-left: 1em;">
