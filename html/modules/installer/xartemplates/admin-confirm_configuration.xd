@@ -17,20 +17,20 @@
              	<tbody>
 								<xar:loop name="$options">
 								<tr>
-									<xar:if condition="$option eq ''">                  
+									<xar:if condition="$loop:item['option'] eq ''">                  
 					  			<td width="100%" class="xar-normal">
-									  #$comment#
+									  #$loop:item['comment']#
 					  			</td>
 									<xar:else />
 					  			<td width="10%" valign="top" class="xar-normal">
-									  <xar:if condition="$option == 'true'">
-										  <input type="checkbox" name="chosen[]" value=#$item# checked />
+									  <xar:if condition="$loop:item['option'] == 'true'">
+										  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# checked />
 					  				<xar:else />
-										  <input type="checkbox" name="chosen[]" value=#$item# />
+										  <input type="checkbox" name="chosen[]" value=#$loop:item['item']# />
 					  				</xar:if>
 					  			</td>
 					  			<td width="90%" class="xar-normal">
-									  #$comment#
+									  #$loop:item['comment']#
 					  			</td>
 									</xar:if>
 								</tr>

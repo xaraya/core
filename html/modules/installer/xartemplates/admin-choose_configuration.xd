@@ -20,10 +20,10 @@
                  		<xar:else />
 				  					<select name="configuration"size="5" style="width:250px;">
 				  					<xar:loop name="$names">
-				  					  <xar:if condition="$display eq 'Community Site'">
-				  						  <option value="#$value#" selected>#$display#</option>
+				  					  <xar:if condition="$loop:item['display'] eq 'Community Site'">
+				  						  <option value="#$loop:item['value']#" selected>#$loop:item['display']#</option>
 				  					  <xar:else />
-				  						  <option value="#$value#">#$display#</option>
+				  						  <option value="#$loop:item['value']#">#$loop:item['display']#</option>
 				  					  </xar:if>
 				  					</xar:loop>
 				  					</select>
