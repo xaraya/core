@@ -257,16 +257,54 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             if (!$result) return;
 
+            if (count($this->sort) > 0) {
+                $items = array();
+                $dosort = 1;
+            } else {
+                $dosort = 0;
+            }
+
             while (!$result->EOF) {
                 list($itemid,$propid, $value) = $result->fields;
                 if (isset($value)) {
-                    // add the item to the value list for this property
-                    $this->fields[$propid]->setItemValue($itemid,$value);
+                    if ($dosort) {
+                        $items[$itemid][$propid] = $value;
+                    } else {
+                        // add the item to the value list for this property
+                        $this->fields[$propid]->setItemValue($itemid,$value);
+                    }
                 }
                 $result->MoveNext();
             }
 
             $result->Close();
+
+            if ($dosort) {
+                $code = '';
+                foreach ($this->sort as $sortitem) {
+                    $code .= 'if (!isset($a['.$sortitem['field'].'])) $a['.$sortitem['field'].'] = "";';
+                    $code .= 'if (!isset($b['.$sortitem['field'].'])) $b['.$sortitem['field'].'] = "";';
+                    $code .= 'if ($a['.$sortitem['field'].'] != $b['.$sortitem['field'].']) {';
+                    if (!empty($sortitem['sortorder']) && strtolower($sortitem['sortorder']) == 'desc') {
+                        $code .= 'return ($b['.$sortitem['field'].'] > $a['.$sortitem['field'].']) ? 1 : -1;';
+                    } else {
+                        $code .= 'return ($a['.$sortitem['field'].'] > $b['.$sortitem['field'].']) ? 1 : -1;';
+                    }
+                    $code .= '} else {';
+                }
+                $code .= 'return 0;';
+                foreach ($this->sort as $sortitem) {
+                    $code .= '}';
+                }
+                $compare = create_function('$a, $b', $code);
+                uasort($items,$compare);
+                foreach ($items as $itemid => $values) {
+                    foreach ($values as $propid => $value) {
+                        $this->fields[$propid]->setItemValue($itemid,$value);
+                    }
+                }
+                unset($items);
+            }
 
         // join between dynamic_data and another table
         // (all items, single key, no sort, DD where clauses limited to ORing)
