@@ -67,25 +67,18 @@ function xarLog_init($args, $whatElseIsGoingLoaded) {
 
         $GLOBALS['xarLog_loggers'][] = &$observer;
     }
-    
+
     return true;
 }
 
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {
-    
+
     if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
     // this makes a copy of the object, so the original $this->_buffer was never updated
     //foreach ($_xarLoggers as $logger) {
     foreach (array_keys($GLOBALS['xarLog_loggers']) as $id) {
        $GLOBALS['xarLog_loggers'][$id]->notify($message, $level);
     }
-}
-
-function xarLogException($level = XARLOG_LEVEL_DEBUG)
-{
-    //This wasnt implemented anywhere, supposedly it exists because of
-    // a bug which causes a infinite loop (?)
-    xarLogMessage("logException()", $level);
 }
 
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)

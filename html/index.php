@@ -97,6 +97,7 @@ function xarMain()
 
      // Handle exceptions (the bubble at the top handler
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+//   echo xarModLoad($modName, $modType);exit;
 
     echo $pageOutput;
 
@@ -119,7 +120,7 @@ if (!xarMain()) {
         }
     }
 
-    xarLogException(XARLOG_LEVEL_ERROR);
+//    xarLogException(XARLOG_LEVEL_ERROR);
 
     // TODO: #2
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
@@ -127,7 +128,7 @@ if (!xarMain()) {
     } else {
         // It's important here to free exception before calling xarTplPrintPage
         // As we are in the exception handling phase, we can clear it without side effects.
-        xarExceptionFree();
+        xarErrorFree();
         // Render page
         $pageOutput = xarTpl_renderPage($text);
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {

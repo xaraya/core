@@ -106,7 +106,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user
         // user api function
-        if (!xarModAPILoad($authModName, 'user')) continue; 
+        if (!xarModAPILoad($authModName, 'user')) continue;
 
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) return; // throw back
@@ -245,7 +245,7 @@ function xarUserGetNavigationLocale()
                 // Here we need to return always a meaningfull result,
                 // so what we can do here is only to log the exception
                 // and call xarExceptionFree
-                xarLogException(XARLOG_LEVEL_ERROR);
+                // xarLogException(XARLOG_LEVEL_ERROR);
                 // This will Free all exceptions, including the ones pending
                 // as these are still unhandled if they are here i commented it out
                 // for now, as we had lots of exceptions hiding on us (MrB)

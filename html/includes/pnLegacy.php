@@ -998,8 +998,8 @@ function xarUser_getThemeName()
         // Here we can't raise an exception
         // so what we can do here is only to log the exception
         // and call xarExceptionFree
-        xarLogException(XARLOG_LEVEL_ERROR);
-        xarExceptionFree();
+        //xarLogException(XARLOG_LEVEL_ERROR);
+        //xarExceptionFree();
         return;
     }
     return $themeName;

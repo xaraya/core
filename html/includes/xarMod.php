@@ -1146,8 +1146,7 @@ function xarModIsAvailable($modName, $type = 'module')
                 $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
                 break;
         }
-
-        // Catch the MODULE_NOT_EXIST exception first,
+/*        // Catch the MODULE_NOT_EXIST exception first,
         // because that is what we're testing
         // here, we don't want to except on that.
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
@@ -1159,8 +1158,8 @@ function xarModIsAvailable($modName, $type = 'module')
                 return false;
             }
         }
-        // Also return null if the result wasn't set
-        if (!isset($modBaseInfo)) return; // throw back
+*/        // Also return null if the result wasn't set
+        if (!isset($modBaseInfo)) return false; // throw back
 
         // We should be ok now, return the state of the module
         $modState = $modBaseInfo['state'];
@@ -1591,16 +1590,16 @@ function xarMod_getBaseInfo($modName, $type = 'module')
             case 'module':
                 default:
 
-                $msg = xarML('Module #(1) doesn\'t exist.', $modName);
+/*                $msg = xarML('Module #(1) doesn\'t exist.', $modName);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
-                return;
+*/                return;
 
                 break;
             case 'theme':
-
+/*
                 $msg = xarML('Theme #(1) doesn\'t exist.', $themeName);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException($msg));
-                return;
+*/                return;
 
                 break;
         }

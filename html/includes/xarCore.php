@@ -150,15 +150,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     include 'includes/xarTemplate.php';
 
     /*
-     * Start Exception Handling System
-     *
-     * Before we do anything make sure we can except out of code in a predictable matter
-     *
-     */
-    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-    xarException_init($systemArgs, $whatToLoad);
-
-    /*
      * If there happens something we want to be able to log it
      *
      */
@@ -167,6 +158,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'level' => xarCore_getSystemVar('Log.LogLevel'));
     xarLog_init($systemArgs, $whatToLoad);
 
+    /*
+     * Start Exception Handling System
+     *
+     * Before we do anything make sure we can except out of code in a predictable matter
+     *
+     */
+    $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
+    xarCES_init($systemArgs);
+    xarError_init($systemArgs, $whatToLoad);
 
     /**
      * At this point we should be able to catch all low level errors
@@ -433,7 +433,7 @@ function xarCore__assertHandler($script,$line,$code)
     // Redirect the assertion to a system exception
     $msg = "ASSERTION FAILED: $script [$line] : $code";
     xarExceptionSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
-    
+
 }
 
 

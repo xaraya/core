@@ -31,8 +31,11 @@ class Exception
     function Exception() {
     }
 
+    function toString() {
+        return "code: " . $this->major . " " . $this->id . " | " . $this->msg;
+    }
+
     function getType() { return get_class($this); }
-    function toString() { return $this->msg; }
     function toHTML() { return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>'; }
     function getID() { return $this->id; }
     function getMajor() { return $this->major; }

@@ -54,17 +54,17 @@ include_once 'includes/xarTemplate.php';
 
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
-// Start Exception Handling System
-$systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-
-xarException_init($systemArgs, $whatToLoad);
-
 // Start Logging Facilities
 $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
                     'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
                     'level'      => xarCore_getSystemVar('Log.LogLevel'));
 
 xarLog_init($systemArgs, $whatToLoad);
+
+// Start Exception Handling System
+$systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
+
+xarError_init($systemArgs, $whatToLoad);
 
 // Start Event Messaging System
 $systemArgs = array('loadLevel' => $whatToLoad);
