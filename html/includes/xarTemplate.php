@@ -3,7 +3,7 @@
  * File: $Id: s.xarTemplate.php 1.119 03/06/30 16:10:26+01:00 miko@miko.homelinux.org $
  *
  * BlockLayout Template Engine
- * 
+ *
  * @package blocklayout
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -32,11 +32,11 @@ NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
  * @global xarTpl_defaultThemeName string
  * @global xarTpl_additionalStyles string
  * @global xarTpl_headJavaScript string
- * @global xarTpl_bodyJavaScript string 
+ * @global xarTpl_bodyJavaScript string
  * @param args['themesBaseDir'] string
  * @param args['defaultThemeName'] string
  * @param args['enableTemplateCaching'] bool
- * @param whatElseIsGoingLoaded int 
+ * @param whatElseIsGoingLoaded int
  * @return bool true
  */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
@@ -51,7 +51,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     if (!xarTplSetPageTemplateName('default')) {
         xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
-    
+
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
             xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
@@ -254,7 +254,7 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
  * @param code string
  * @deprec ?
  * @return bool
- */ 
+ */
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
     assert('$position == "head" || $position == "body"');
@@ -263,7 +263,7 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
 
 /**
  * Add JavaScript code or links to template output
- * 
+ *
  * @access public
  * @global xarTpl_JavaScript array
  * @param position string
@@ -860,15 +860,16 @@ function xarTpl__getCompilerInstance()
 // Now featuring *eval()* for your anti-caching pleasure :-)
 /**
  * Execute Template ?
- * 
+ *
  * @access private
  * @param templateCode string
  * @param tplData array
+ * @param sourceFileName string
  * @return string output
  */
-function xarTpl__execute($templateCode, $tplData)
+function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 {
-    // $tplData should be an array (-even-if- it only has one value in it) 
+    // $tplData should be an array (-even-if- it only has one value in it)
     assert('is_array($tplData)');
 
     //POINT of ENTRY for cleaning variables
@@ -876,34 +877,40 @@ function xarTpl__execute($templateCode, $tplData)
 
     $tplData['_bl_data'] = $tplData;
 
-    // $__tplData should be an array (-even-if- it only has one value in it), 
+    // $__tplData should be an array (-even-if- it only has one value in it),
     // if it's not throw an exception.
     if (is_array($tplData)) {
         extract($tplData, EXTR_OVERWRITE);
-    } else {  
+    } else {
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
-    
+
     // Start output buffering
     ob_start();
-    
     // Kick it
-    eval("?>".$templateCode);
-    
-    // Grab output and clean buffer
+    eval('?>' . $templateCode);
+
+	if($sourceFileName != '') {
+	    $tplOutput = ob_get_contents();
+	    ob_end_clean();
+		ob_start();
+        // this outputs the template and deals with start comments accordingly.        
+	    xarTpl_outputTemplate($sourceFileName, $tplOutput);
+	}
+
+    // Fetch output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
-    
+
     // Return output
     return $output;
 }
-
 /**
  * Execute template from  file?
- * 
+ *
  * @access private
  * @global xarTpl_cacheTemplates bool
  * @param sourceFileName string
@@ -912,7 +919,6 @@ function xarTpl__execute($templateCode, $tplData)
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
-
     // $tplData should be an array (-even-if- it only has one value in it)
     assert('is_array($tplData)');
 
@@ -933,20 +939,6 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         return;
     }
 
-    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
-        // CHECKME: not sure if this is needed, e.g. during installation
-        if (function_exists('xarModGetVar')){
-            $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
-            if (!empty($showphpcbit)) {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
-            } else {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
-            }
-        } else {
-            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
-        }
-    }
-
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
@@ -956,8 +948,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
-            // TODO: make a config var for this, so we can switch it off
-            if($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) {
+			if(xarTpl_outputPHPCommentBlockInTemplates()) {
                 $commentBlock = "<?php\n/*"
                               . "\n * Source:     " . $sourceFileName
                               . "\n * Theme:      " . xarTplGetThemeName()
@@ -973,17 +964,16 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
         } else {
-            return xarTpl__execute($templateCode, $tplData);
+            return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
     }
 
     // $cachedFileName should have a value from this point on
     // see the return statement couple of lines back.
-   
+
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
-
     // $__tplData should be an array (-even-if- it only has one value in it),
     // if it's not throw an exception.
     if (is_array($tplData)) {
@@ -996,6 +986,91 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         return;
     }
 
+    // Load cached template file
+    ob_start();
+    $res = include $cachedFileName;
+    $tplOutput = ob_get_contents();
+    ob_end_clean();
+
+    // Start output buffering
+    ob_start();
+    // this outputs the template and deals with start comments accordingly.
+    xarTpl_outputTemplate($sourceFileName, $tplOutput);
+
+    // Fetch output and clean buffer
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    // Return output
+    return $output;
+}
+/**
+ * Output template
+ *
+ * @access private
+ * @param sourceFileName string
+ * @param tplOutput string
+ * @return void
+ */
+function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
+{
+    // flag used to determine if the header content has been found.
+    static $isHeaderContent;
+    if(!isset($isHeaderContent))
+        $isHeaderContent = false;
+
+    if(xarTpl_outputTemplateFilenames()) {
+        $outputStartComment = true;
+        if($isHeaderContent === false) {
+            if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
+                $outputStartComment = false;
+        }
+        // optionally show template filenames if start comment has not already
+        // been added as part of a header determination.
+        if($outputStartComment === true)
+            echo '<!-- start: ' . $sourceFileName . '-->';
+        // output template, we're still buffering
+        echo $tplOutput;
+        // optionally show template filenames
+        echo '<!-- end: ' . $sourceFileName . '-->';
+    } else {
+		// output template, we're still buffering
+        echo $tplOutput;
+    }
+}
+/**
+ * Output php comment block in templates
+ *
+ * @global xarTpl_showPHPCommentBlockInTemplates int
+ * @access private
+ * @return value of xarTpl_showPHPCommentBlockInTemplates (0 or 1) int
+ */
+function xarTpl_outputPHPCommentBlockInTemplates()
+{
+    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
+        // CHECKME: not sure if this is needed, e.g. during installation
+        if (function_exists('xarModGetVar')){
+            $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
+            if (!empty($showphpcbit)) {
+                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+            } else {
+                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+            }
+        } else {
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+        }
+    }
+    return $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'];
+}
+/**
+ * Output template filenames
+ *
+ * @global xarTpl_showTemplateFilenames int
+ * @access private
+ * @return value of xarTpl_showTemplateFilenames (0 or 1) int
+ */
+function xarTpl_outputTemplateFilenames()
+{
     if (!isset($GLOBALS['xarTpl_showTemplateFilenames'])) {
         // CHECKME: not sure if this is needed, e.g. during installation
         if (function_exists('xarModGetVar')){
@@ -1009,82 +1084,58 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         }
     }
-
-    // Load cached template file    
-    ob_start();
-    $res = include $cachedFileName;
-    $tplOutput = ob_get_contents();
-    ob_end_clean();
-    
-    // flag used to determine if the header content has been found.
-    static $headerContentFound;
-    if(!isset($headerContentFound))
-        $headerContentFound = false;
-
-    // Start output buffering
-    ob_start();
-    
-    if($GLOBALS['xarTpl_showTemplateFilenames']) {
-        if($headerContentFound === false) {
-            $outputStartComment = true;
-
-            // $headerTagsRegexes is an array of string regexes to match tags that could
-            // be sent as part of a header. Important: the order here should be inside out
-            // as the first regex that matches will have a start comment appended.
-            // fixes bugs: #1427, #1190, #603
-            // - Comments that precede <!doctype... cause ie6 not to sniff the doctype 
-            //   correctly.
-            // - xml parsers dont like comments that precede xml output.
-            // At this time attempting to match <!doctype... and <?xml version... tags.
-	    // This is about the best we can do now, until we process xar documents with an xml parser and actually 'parse'
-	    // the document.
-            $headerTagRegexes = array('<!DOCTYPE[^>].*]>',// eg. <!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">]>
-                                      '<!DOCTYPE[^>]*>',// eg. <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-                                      '<\?xml\s+version[^>]*\?>');// eg. <?xml version="1.0"? > // remove space between qmark and gt
-            
-            foreach($headerTagRegexes as $headerTagRegex) {
-                if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
-                    $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
-                    // replace matched tag with an appended start comment tag in the first match
-                    // in the template output $tplOutput
-                    $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
-                    // set flag that header content has been found so this matching doesnt happen again.
-                    $headerContentFound = true;
-                    // dont want start comment to be sent below as it has already been added.
-                    $outputStartComment = false;
-                    break;
-                }
-            }
-        } else {
-            $outputStartComment = true;
-        }
-
-        // optionally show template filenames if start comment has not already
-        // been added as part of a header determination.
-        if($outputStartComment === true)
-            echo '<!-- start: ' . $sourceFileName . '-->';
-    }
-    
-    // output template, we're still buffering
-    echo $tplOutput;
-
-    // optionally show template filenames
-    if ($GLOBALS['xarTpl_showTemplateFilenames']) {
-        echo '<!-- end: ' . $sourceFileName . '-->';
-    }
-
-    // Fetch output and clean buffer
-    $output = ob_get_contents();
-    ob_end_clean();
-
-    // Return output
-    return $output;
+    return $GLOBALS['xarTpl_showTemplateFilenames'];
 }
+/**
+ * Modify header content
+ *
+ * Attempt to determine if $tplOutput contains header content and if
+ * so append a start comment after the first matched header tag
+ * found.
+ *
+ * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
+ *		 greedy in more complex xml documents and others.
+ * @access private
+ * @param sourceFileName string
+ * @param tplOutput string
+ * @return bool found header content
+ */
+function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
+{
+    $foundHeaderContent = false;
 
+    // $headerTagsRegexes is an array of string regexes to match tags that could
+    // be sent as part of a header. Important: the order here should be inside out
+    // as the first regex that matches will have a start comment appended.
+    // fixes bugs: #1427, #1190, #603
+    // - Comments that precede <!doctype... cause ie6 not to sniff the doctype
+    //   correctly.
+    // - xml parsers dont like comments that precede xml output.
+    // At this time attempting to match <!doctype... and <?xml version... tags.
+    // This is about the best we can do now, until we process xar documents with an xml parser and actually 'parse'
+    // the document.
+    $headerTagRegexes = array('<!DOCTYPE[^>].*]>',// eg. <!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">]>
+                              '<!DOCTYPE[^>]*>',// eg. <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                              '<\?xml\s+version[^>]*\?>');// eg. <?xml version="1.0"? > // remove space between qmark and gt
+
+    foreach($headerTagRegexes as $headerTagRegex) {
+        if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
+            $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
+            // replace matched tag with an appended start comment tag in the first match
+            // in the template output $tplOutput
+            $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
+            // dont want start comment to be sent below as it has already been added.
+            $foundHeaderContent = true;
+            break;
+        }
+    }
+    
+	return $foundHeaderContent;
+}
 /**
  * Load template from file (e.g. for use with recurring template snippets someday,
  * using xarTplString() to "fill in" the template afterwards)
- * 
+ *
  * @access private
  * @global xarTpl_cacheTemplates bool
  * @param sourceFileName string
