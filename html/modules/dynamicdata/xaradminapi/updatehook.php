@@ -91,7 +91,8 @@ function dynamicdata_adminapi_updatehook($args)
     }
 
     $myobject->getItem();
-    $isvalid = $myobject->checkInput();
+    // use the values passed via $extrainfo if available
+    $isvalid = $myobject->checkInput($extrainfo);
     if (!$isvalid) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'input', 'admin', $dd_function, 'dynamicdata');

@@ -539,7 +539,17 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
         $isvalid = true;
         foreach (array_keys($this->properties) as $name) {
-            if (!$this->properties[$name]->checkInput()) {
+            // for hooks, use the values passed via $extrainfo if available
+            $field = 'dd_' . $this->properties[$name]->id;
+            if (isset($args[$name])) {
+                if (!$this->properties[$name]->checkInput($name,$args[$name])) {
+                    $isvalid = false;
+                }
+            } elseif (isset($args[$field])) {
+                if (!$this->properties[$name]->checkInput($field,$args[$field])) {
+                    $isvalid = false;
+                }
+            } elseif (!$this->properties[$name]->checkInput()) {
                 $isvalid = false;
             }
         }
