@@ -1,9 +1,33 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Test Privileges Of </xar:mlstring> 
 <xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 <xar:else /><xar:mlstring>User</xar:mlstring>
 </xar:if> '#$pname#'</h2>
+<xar:if condition="count($parents) ne 0">
+  <div id="tabnav">
+		<div class="help" title="These are the groups that #$pname# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
+		<xar:set name="$prevgroup">""</xar:set>
+		<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+			<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+				<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+			</xar:if>
+			<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+		</xar:for>
+  </div>
+</xar:if>
+<div id="tabnav">
+	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $uid))#" class="active"><xar:mlstring>Privileges</xar:mlstring></a></div>	
+	<xar:if condition="$ptype eq 1">
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a></div>	
+	</xar:if>
+</div>
 <div style="margin: auto;">
 <p><b><a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">#$pname#</a></b>&nbsp;&nbsp;
 <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a></p>
