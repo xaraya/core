@@ -53,24 +53,24 @@
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
-        <td><input type="text" name="name[&xar-var-id;]" size="15" value="&xar-var-name;"></td>
-        <td><input type="text" name="label[&xar-var-id;]" size="20" value="&xar-var-label;"></td>
-        <td><xar:articles-field type="fieldtype" name="format['.$id.']" value="$format" numeric_id="yes" /></td>
+        <td><input type="text" name="name[&xar-var-id;]" size="15" value="&xar-var-name;" /></td>
+        <td><input type="text" name="label[&xar-var-id;]" size="20" value="&xar-var-label;" /></td>
+        <td><xar:data-input type="fieldtype" name="format['.$id.']" value="$format" /></td>
         <td>...</td>
     </tr>
 </xar:loop>
 
     <tr align="left" valign="middle">
         <td>&xar-var-labels.new;</td>
-        <td><input type="text" name="name[0]" size="15"></td>
-        <td><input type="text" name="label[0]" size="20"></td>
-        <td><xar:articles-field type="fieldtype" name="format[0]" value="" numeric_id="yes" /></td>
+        <td><input type="text" name="name[0]" size="15" /></td>
+        <td><input type="text" name="label[0]" size="20" /></td>
+        <td><xar:data-input type="fieldtype" name="format[0]" value="" /></td>
         <td>...</td>
     </tr>
 
     <tr>
         <td colspan="4" align="center">
-           <input type="submit" value="&xar-var-updatebutton;">
+           <input type="submit" value="&xar-var-updatebutton;" />
         </td>
     </tr>
 </form>

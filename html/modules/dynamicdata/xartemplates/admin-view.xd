@@ -49,7 +49,7 @@
     </tr>
     <xar:loop name="$items">
     <tr>
-        <td>(&xar-var-modid;) &xar-var-name;</td>
+        <td>&xar-var-name;</td>
         <td>&xar-var-itemtype;</td>
         <td>&xar-var-numitems;</td>
         <td>

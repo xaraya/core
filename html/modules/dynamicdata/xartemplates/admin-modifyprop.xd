@@ -26,24 +26,24 @@ Tip : empty label -> delete field for all items
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
-        <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;"></td>
-        <td><xar:articles-field type="fieldtype" name="dd_type['.$id.']" value="$type" numeric_id="yes" /></td>
-        <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;"></td>
-        <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;"></td>
+        <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;" /></td>
+        <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
+        <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;" /></td>
+        <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;" /></td>
     </tr>
 </xar:loop>
 
     <tr align="left" valign="middle">
         <td>&xar-var-labels.new;</td>
-        <td><input type="text" name="dd_label[0]" size="15"></td>
-        <td><xar:articles-field type="fieldtype" name="dd_type[0]" value="" numeric_id="yes" /></td>
-        <td><input type="text" name="dd_default[0]" size="15"></td>
-        <td><input type="text" name="dd_validation[0]" size="15"></td>
+        <td><input type="text" name="dd_label[0]" size="15" /></td>
+        <td><xar:data-input type="fieldtype" name="dd_type[0]" value="" /></td>
+        <td><input type="text" name="dd_default[0]" size="15" /></td>
+        <td><input type="text" name="dd_validation[0]" size="15" /></td>
     </tr>
 
     <tr>
         <td colspan="5" align="center">
-           <input type="submit" value="&xar-var-updatebutton;">
+           <input type="submit" value="&xar-var-updatebutton;" />
         </td>
     </tr>
 </form>

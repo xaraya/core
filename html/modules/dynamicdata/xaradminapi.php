@@ -252,114 +252,12 @@ function dynamicdata_adminapi_update($args)
  */
 function dynamicdata_adminapi_createhook($args)
 {
-    extract($args);
+    // we rely on the updatehook to do the real work here
+    $args['dd_function'] = 'createhook';
 
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object id', 'admin', 'createhook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-    if (!isset($extrainfo) || !is_array($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = xarModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-
-    if (!empty($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = null;
-    }
-
-    if (!empty($extrainfo['itemid'])) {
-        $itemid = $extrainfo['itemid'];
-    } else {
-        $itemid = $objectid;
-    }
-    if (empty($itemid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-
-    if (!xarModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = xarML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-    if (!isset($fields) || $fields == false) {
-        $fields = array();
-    }
-
-    $values = array();
-    foreach ($fields as $id => $field) {
-// TODO: allow field label (sanitized !) here too ?
-        if (isset($extrainfo['dd_'.$id])) {
-             $values[$id] = $extrainfo['dd_'.$id];
-        } else {
-             $values[$id] = xarVarCleanFromInput('dd_'.$id);
-        }
-    }
-
-    if (!xarModAPIFunc('dynamicdata', 'admin', 'create',
-                      array('modid' => $modid,
-                            'itemtype' => $itemtype,
-                            'itemid' => $itemid,
-                            'values'  => $values))) {
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
-    }
-
-    // update the extrainfo array
-    foreach ($fields as $id => $field) {
-        if (isset($values[$id])) {
-            $extrainfo['dd_'.$id] = $values[$id];
-        }
-    }
-
-    // Return the extra info
-    return $extrainfo;
+    return xarModAPIFunc('dynamicdata','admin','updatehook',$args);
 }
+
 
 /**
  * update fields for an item - hook for ('item','update','API')
@@ -375,9 +273,13 @@ function dynamicdata_adminapi_updatehook($args)
 {
     extract($args);
 
+    if (!isset($dd_function) || $dd_function != 'createhook') {
+        $dd_function = 'updatehook';
+    }
+
     if (!isset($objectid) || !is_numeric($objectid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object id', 'admin', 'createhook', 'dynamicdata');
+                    'object id', 'admin', $dd_function, 'dynamicdata');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
@@ -386,7 +288,7 @@ function dynamicdata_adminapi_updatehook($args)
     }
     if (!isset($extrainfo) || !is_array($extrainfo)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
+                    'extrainfo', 'admin', $dd_function, 'dynamicdata');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
@@ -405,7 +307,7 @@ function dynamicdata_adminapi_updatehook($args)
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
+                    'module name', 'admin', $dd_function, 'dynamicdata');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
@@ -426,7 +328,7 @@ function dynamicdata_adminapi_updatehook($args)
     }
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'updatehook', 'dynamicdata');
+                    'module name', 'admin', $dd_function, 'dynamicdata');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
@@ -451,17 +353,201 @@ function dynamicdata_adminapi_updatehook($args)
         $fields = array();
     }
 
+// TODO: replace with something else
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+
     $values = array();
+    $invalid = array();
     foreach ($fields as $id => $field) {
-// TODO: allow field label (sanitized !) here too ?
+        if (empty($proptypes[$field['type']]['name'])) {
+            $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                               'property', $id, $dd_function, 'dynamicdata');
+            continue;
+        }
+
+    // TODO: allow field label (sanitized !) here too ?
         if (isset($extrainfo['dd_'.$id])) {
-             $values[$id] = $extrainfo['dd_'.$id];
+            $value = $extrainfo['dd_'.$id];
         } else {
-             $values[$id] = xarVarCleanFromInput('dd_'.$id);
+            $value = xarVarCleanFromInput('dd_'.$id);
+        }
+
+// TODO: add some real property validation here !!!
+        $typename = $proptypes[$field['type']]['name'];
+        switch ($typename) {
+            case 'text':
+            case 'textbox':
+                if (!empty($value)) {
+            // TODO: check size etc.
+                }
+                $values[$id] = $value;
+                break;
+            case 'textarea':
+            case 'textarea_small':
+            case 'textarea_medium':
+            case 'textarea_large':
+                if (!empty($value)) {
+            // TODO: check size etc.
+                }
+                $values[$id] = $value;
+                break;
+        // TEST ONLY
+            case 'webpage':
+                if (!isset($options) || !is_array($options)) {
+                    $options = array();
+                // Load admin API for HTML file browser
+                    if (!xarModAPILoad('articles', 'admin'))  return 'Unable to load articles admin API';
+                    //$basedir = '/home/mikespub/www/pictures';
+                    $basedir = $field['validation'];
+                    $filetype = 'html?';
+                    $files = xarModAPIFunc('articles','admin','browse',
+                                           array('basedir' => $basedir,
+                                                 'filetype' => $filetype));
+                    natsort($files);
+                    array_unshift($files,'');
+                    foreach ($files as $file) {
+                        $options[] = array('id' => $file,
+                                           'name' => $file);
+                    }
+                    unset($files);
+                }
+                // fall through to the next one
+            case 'status':
+                if (!isset($options) || !is_array($options)) {
+                    $options = array(
+                                     array('id' => 0, 'name' => xarML('Submitted')),
+                                     array('id' => 1, 'name' => xarML('Rejected')),
+                                     array('id' => 2, 'name' => xarML('Approved')),
+                                     array('id' => 3, 'name' => xarML('Front Page')),
+                               );
+                }
+                if (empty($value)) {
+                    $value = 0;
+                }
+                // fall through to the next one
+            case 'select':
+            case 'dropdown':
+            case 'listbox':
+            // TODO: handle multiple select
+                if (!isset($selected)) {
+                    if (!empty($value)) {
+                        $selected = $value;
+                    } else {
+                        $selected = '';
+                    }
+                }
+            // TODO: get options from somewhere :)
+                if (!isset($options) || !is_array($options)) {
+                    $options = array();
+                }
+                $found = 0;
+                foreach ($options as $option) {
+                    if ($option['id'] == $selected) {
+                        $found = 1;
+                        $values[$id] = $option['id'];
+                    }
+                }
+                if (empty($found)) {
+                    $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                                       'selection', $id, $dd_function, 'dynamicdata');
+                }
+                break;
+            case 'file':
+            case 'fileupload':
+// TODO: replace with function from uploads module
+                if (!empty($value)) {
+                // FIXME : xarVarCleanFromInput() with magic_quotes_gpc On clashes with
+                //         the tmp_name assigned by PHP on Windows !!!
+                    global $HTTP_POST_FILES;
+                    $file = $HTTP_POST_FILES['dd_'.$id];
+                    // is_uploaded_file() : PHP 4 >= 4.0.3
+                    if (is_uploaded_file($file['tmp_name']) && $file['size'] < 1000000) {
+                        $values[$id] = join('', @file($file['tmp_name']));
+                    } else {
+                        $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                                           'file upload', $id, $dd_function, 'dynamicdata');
+                    }
+                } else {
+                    $values[$id] = '';
+                }
+                break;
+            case 'url':
+                if (!empty($value)) {
+            // TODO: add some URL validation routine !
+                }
+                $values[$id] = $value;
+                break;
+            case 'image':
+                if (!empty($value)) {
+            // TODO: add some image validation routine !
+                }
+                $values[$id] = $value;
+                break;
+            case 'static':
+                // TODO: check if we can leave this "as is"
+                //    $values[$id] = $value;
+                break;
+            case 'hidden':
+                // TODO: check if we can leave this "as is"
+                //    $values[$id] = $value;
+                break;
+            case 'username':
+                // default user is the current one
+                if (empty($value)) {
+                    $value = xarUserGetVar('uid');
+                }
+                // check that the user exists
+                if (is_numeric($value)) {
+                    $user = xarUserGetVar('uname', $value);
+                }
+                if (!is_numeric($value) || empty($user)) {
+                    $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                                       'user', $id, $dd_function, 'dynamicdata');
+                } else {
+                    $values[$id] = $value;
+                }
+                break;
+            case 'date':
+            case 'calendar':
+                // default time is now
+                if (empty($value)) {
+                    $values[$id] = time();
+                } elseif (is_numeric($value)) {
+                    $values[$id] = $value;
+                } elseif (is_array($value) && !empty($value['year'])) {
+                    if (!isset($value['sec'])) {
+                        $value['sec'] = 0;
+                    }
+                    $values[$id] = mktime($value['hour'],$value['min'],$value['sec'],
+                                          $value['mon'],$value['mday'],$value['year']);
+                } else {
+                    $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                                       'date', $id, $dd_function, 'dynamicdata');
+                }
+                break;
+            case 'fieldtype':
+                if (!empty($proptypes[$value]['name'])) {
+                    $values[$id] = $value;
+                } else {
+                    $invalid[] = xarML('Invalid #(1) for dynamic field #(2) in function #(3)() of module #(4)',
+                                       'property type', $id, $dd_function, 'dynamicdata');
+                }
+                break;
+            default:
+                $values[$id] = $value;
+                break;
         }
     }
+    if (count($invalid) > 0) {
+        $msg = join(' + ',$invalid);
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
 
-    if (!xarModAPIFunc('dynamicdata', 'admin', 'update',
+    if (!xarModAPIFunc('dynamicdata', 'admin', ($dd_function == 'createhook') ? 'create' : 'update',
                       array('modid' => $modid,
                             'itemtype' => $itemtype,
                             'itemid' => $itemid,
@@ -587,9 +673,9 @@ function dynamicdata_adminapi_updateconfighook($args)
     // Return the extra info
     return $args['extrainfo'];
 
-/*
- * currently NOT used (we're going through the 'normal' updateconfig for now)
-*/
+    /*
+     * currently NOT used (we're going through the 'normal' updateconfig for now)
+     */
 
 }
 

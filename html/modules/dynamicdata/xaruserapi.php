@@ -350,18 +350,48 @@ function dynamicdata_userapi_getproptypes($args)
     $proptypes = array();
 
 // TODO: replace with something else
-    // Let's get them from articles for now...
-    if (!xarModAPILoad('articles','user')) return;
+    $name2label = array(
+        'static'          => xarML('Static Text'),
+        'textbox'         => xarML('Text Box'),
+        'textarea_small'  => xarML('Small Text Area'),
+        'textarea_medium' => xarML('Medium Text Area'),
+        'textarea_large'  => xarML('Large Text Area'),
+// TODO: define how to fill this in (cfr. status)
+//        'dropdown'        => xarML('Dropdown List'),
+        'username'        => xarML('Username'),
+        'calendar'        => xarML('Calendar'),
+        'fileupload'      => xarML('File Upload'),
+        'status'          => xarML('Status'),
+        'url'             => xarML('URL'),
+        'image'           => xarML('Image'),
+        'webpage'         => xarML('HTML Page'),
+    );
 
-    $formats = xarModAPIFunc('articles','user','getpubfieldformats');
-    $formatnums = xarModAPIFunc('articles','user','getfieldformatnums');
-    foreach ($formats as $name => $label) {
-        $id = $formatnums[$name];
-        $proptypes[] = array('id' => $id,
-                             'name' => $name,
-                             'label' => $label,
-                             'format' => $id
-                            );
+    $name2num = array(
+        'static'          => 1,
+        'textbox'         => 2,
+        'textarea_small'  => 3,
+        'textarea_medium' => 4,
+        'textarea_large'  => 5,
+// TODO: define how to fill this in (cfr. status)
+//        'dropdown'        => 6,
+        'username'        => 7,
+        'calendar'        => 8,
+        'fileupload'      => 9,
+        'status'          => 10,
+        'url'             => 11,
+        'image'           => 12,
+        'webpage'         => 13,
+    );
+
+    foreach ($name2label as $name => $label) {
+        $id = $name2num[$name];
+        $proptypes[$id] = array('id' => $id,
+                                'name' => $name,
+                                'label' => $label,
+                                'format' => $id,
+                                //...
+                               );
     }
 
 // TODO: yes :)
@@ -386,6 +416,501 @@ function dynamicdata_userapi_getproptypes($args)
 */
 
     return $proptypes;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * Handle <xar:data-input ...> form field tags
+ * Format : <xar:data-input definition="$definition" /> with $definition an array
+ *                                             containing the type, name, value, ...
+ *       or <xar:data-input name="thisname" type="thattype" value="$val" ... />
+ * 
+ * @param $args array containing the input field definition or the type, name, value, ...
+ * @returns string
+ * @return the PHP code needed to invoke showinput() in the BL template
+ */
+function dynamicdata_userapi_handleInputTag($args)
+{
+    $out = "xarModAPILoad('dynamicdata','user');
+echo xarModAPIFunc('dynamicdata',
+                   'user',
+                   'showinput',\n";
+    if (isset($args['definition'])) {
+        $out .= '                   '.$args['definition']."\n";
+        $out .= '                  );';
+    } else {
+        $out .= "                   array(\n";
+        foreach ($args as $key => $val) {
+            if (is_numeric($val) || substr($val,0,1) == '$') {
+                $out .= "                         '$key' => $val,\n";
+            } else {
+                $out .= "                         '$key' => '$val',\n";
+            }
+        }
+        $out .= "                         ));";
+    }
+    return $out;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * show some predefined form input field in a template
+ * 
+ * @param $args array containing the definition of the field (type, name, value, ...)
+ * @returns string
+ * @return string containing the HTML (or other) text to output in the BL template
+ */
+function dynamicdata_userapi_showinput($args)
+{
+    extract($args);
+    if (empty($name)) {
+        return xarML('Missing \'name\' attribute in field tag or definition');
+    }
+    if (!isset($type)) {
+        $type = 1;
+    }
+    if (!isset($value)) {
+        $value = '';
+    }
+    if (!isset($id)) {
+        $id = '';
+    } else {
+        $id = ' id="'.$id.'"';
+    }
+    if (!isset($tabindex)) {
+        $tabindex = '';
+    } else {
+        $tabindex = ' tabindex="'.$tabindex.'"';
+    }
+
+// TODO: replace with something else
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    if (is_numeric($type)) {
+        if (!empty($proptypes[$type]['name'])) {
+            $typename = $proptypes[$type]['name'];
+        } else {
+            return xarML('Unknown property type #(1)',$type);
+        }
+    } else {
+        $typename = $type;
+    }
+
+    $output = '';
+    switch ($typename) {
+        case 'text':
+        case 'textbox':
+            if (empty($size)) {
+                $size = 50;
+            }
+            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
+            break;
+        case 'textarea':
+        case 'textarea_small':
+        case 'textarea_medium':
+        case 'textarea_large':
+            if (empty($wrap)) {
+                $wrap = 'soft';
+            }
+            if (empty($cols)) {
+                $cols = 50;
+            }
+            if (empty($rows)) {
+                if ($typename == 'textarea_small') {
+                    $rows = 2;
+                } elseif ($typename == 'textarea_large') {
+                    $rows = 20;
+                } else {
+                    $rows = 8;
+                }
+            }
+            $output .= '<textarea name="'.$name.'" wrap="'.$wrap.'" rows="'.$rows.'" cols="'.$cols.'"'.$id.$tabindex.'>'.$value.'</textarea>';
+            break;
+    // TEST ONLY
+        case 'webpage':
+            if (!isset($options) || !is_array($options)) {
+                $options = array();
+            // Load admin API for HTML file browser
+                if (!xarModAPILoad('articles', 'admin'))  return 'Unable to load articles admin API';
+                //$basedir = '/home/mikespub/www/pictures';
+                $basedir = 'd:/backup/mikespub/pictures';
+                $filetype = 'html?';
+                $files = xarModAPIFunc('articles','admin','browse',
+                                       array('basedir' => $basedir,
+                                             'filetype' => $filetype));
+                natsort($files);
+                array_unshift($files,'');
+                foreach ($files as $file) {
+                    $options[] = array('id' => $file,
+                                       'name' => $file);
+                }
+                unset($files);
+            }
+            // fall through to the next one
+        case 'status':
+            if (!isset($options) || !is_array($options)) {
+                $options = array(
+                                 array('id' => 0, 'name' => xarML('Submitted')),
+                                 array('id' => 1, 'name' => xarML('Rejected')),
+                                 array('id' => 2, 'name' => xarML('Approved')),
+                                 array('id' => 3, 'name' => xarML('Front Page')),
+                           );
+            }
+            if (empty($value)) {
+                $value = 0;
+            }
+            // fall through to the next one
+        case 'select':
+        case 'dropdown':
+        case 'listbox':
+            if (!isset($multiple)) {
+                $multiple = '';
+            } else {
+                $multiple = ' multiple';
+            }
+            $output .= '<select name="'.$name.'"'.$id.$tabindex.$multiple.'>';
+            if (!isset($selected)) {
+                if (!empty($value)) {
+                    $selected = $value;
+                } else {
+                    $selected = '';
+                }
+            }
+            if (!isset($options) || !is_array($options)) {
+                $options = array();
+            }
+            foreach ($options as $option) {
+                $output .= '<option value="'.$option['id'].'"';
+                if ($option['id'] == $selected) {
+                    $output .= ' selected';
+                }
+                $output .= '>'.$option['name'].'</option>';
+            }
+            $output .= '</select>';
+            break;
+        case 'file':
+        case 'fileupload':
+            if (empty($maxsize)) {
+                $maxsize = 1000000;
+            }
+            $output .= '<input type="hidden" name="MAX_FILE_SIZE" value="'.$maxsize.'" />';
+            if (empty($size)) {
+                $size = 40;
+            }
+            $output .= '<input type="file" name="'.$name.'" size="'.$size.'"'.$id.$tabindex.' />';
+            break;
+        case 'url':
+            if (empty($size)) {
+                $size = 50;
+            }
+            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
+            if (!empty($value)) {
+                $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('check').'</a> ]';
+            }
+            break;
+        case 'image':
+            if (empty($size)) {
+                $size = 50;
+            }
+            $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
+            if (!empty($value)) {
+                $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('show').'</a> ]';
+            }
+            $output .= '<br />// TODO: add image picker ?';
+            break;
+        case 'static':
+            $output .= $value;
+            break;
+        case 'hidden':
+            $output .= '<input type="hidden" name="'.$name.'" value="'.$value.'"'.$id.$tabindex.' />';
+            break;
+        case 'username':
+            if (empty($value)) {
+                $value = xarUserGetVar('uid');
+            }
+            $user = xarUserGetVar('name', $value);
+            if (empty($user)) {
+                $user = xarUserGetVar('uname', $value);
+            }
+            $output .= $user;
+            if ($value > 1) {
+                $output .= ' [ <a href="'.xarModURL('users','user','display',
+                                                    array('uid' => $value))
+                           . '" target="preview">'.xarML('profile').'</a> ]';
+            }
+            break;
+        case 'date':
+        case 'calendar':
+            if (empty($value)) {
+                $value = time();
+            }
+        // TODO: adapt to local/user time !
+            $output .= strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
+            $output .= '<br />';
+            $localtime = localtime($value,1);
+            $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.$id.$tabindex.'>';
+            if (empty($minyear)) {
+                $minyear = $localtime['tm_year'] + 1900 - 2;
+            }
+            if (empty($maxyear)) {
+                $maxyear = $localtime['tm_year'] + 1900 + 2;
+            }
+            for ($i = $minyear; $i <= $maxyear; $i++) {
+                if ($i == $localtime['tm_year'] + 1900) {
+                    $output .= '<option selected>' . $i;
+                } else {
+                    $output .= '<option>' . $i;
+                }
+            }
+            $output .= '</select> - <select name="'.$name.'[mon]">';
+            for ($i = 1; $i <= 12; $i++) {
+                if ($i == $localtime['tm_mon'] + 1) {
+                    $output .= '<option selected>' . $i;
+                } else {
+                    $output .= '<option>' . $i;
+                }
+            }
+            $output .= '</select> - <select name="'.$name.'[mday]">';
+            for ($i = 1; $i <= 31; $i++) {
+                if ($i == $localtime['tm_mday']) {
+                    $output .= '<option selected>' . $i;
+                } else {
+                    $output .= '<option>' . $i;
+                }
+            }
+            $output .= '</select> ';
+            $output .= xarML('Time') . ' <select name="'.$name.'[hour]">';
+            for ($i = 0; $i < 24; $i++) {
+                if ($i == $localtime['tm_hour']) {
+                    $output .= '<option selected>' . sprintf("%02d",$i);
+                } else {
+                    $output .= '<option>' . sprintf("%02d",$i);
+                }
+            }
+            $output .= '</select> : <select name="'.$name.'[min]">';
+            for ($i = 0; $i < 60; $i++) {
+                if ($i == $localtime['tm_min']) {
+                    $output .= '<option selected>' . sprintf("%02d",$i);
+                } else {
+                    $output .= '<option>' . sprintf("%02d",$i);
+                }
+            }
+            $output .= '</select> : <select name="'.$name.'[sec]">';
+            for ($i = 0; $i < 60; $i++) {
+                if ($i == $localtime['tm_sec']) {
+                    $output .= '<option selected>' . sprintf("%02d",$i);
+                } else {
+                    $output .= '<option>' . sprintf("%02d",$i);
+                }
+            }
+            $output .= '</select> ';
+            break;
+        case 'fieldtype':
+            $output .= '<select name="'.$name.'"'.$id.$tabindex.'>';
+            foreach ($proptypes as $propid => $proptype) {
+                $output .= '<option value="'.$propid.'"';
+                if ($propid == $value) {
+                    $output .= ' selected';
+                }
+                $output .= '>'.$proptype['label'].'</option>';
+            }
+            $output .= '</select>';
+            break;
+        default:
+            $output .= 'Unknown type '.xarVarPrepForDisplay($typename);
+            break;
+    }
+    return $output;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * Handle <xar:data-output ...> form field tags
+ * Format : <xar:data-output definition="$definition" /> with $definition an array
+ *                                             containing the type, name, value, ...
+ *       or <xar:data-output name="thisname" type="thattype" value="$val" ... />
+ * 
+ * @param $args array containing the input field definition or the type, name, value, ...
+ * @returns string
+ * @return the PHP code needed to invoke showinput() in the BL template
+ */
+function dynamicdata_userapi_handleOutputTag($args)
+{
+    $out = "xarModAPILoad('dynamicdata','user');
+echo xarModAPIFunc('dynamicdata',
+                   'user',
+                   'showoutput',\n";
+    if (isset($args['definition'])) {
+        $out .= '                   '.$args['definition']."\n";
+        $out .= '                  );';
+    } else {
+        $out .= "                   array(\n";
+        foreach ($args as $key => $val) {
+            if (is_numeric($val) || substr($val,0,1) == '$') {
+                $out .= "                         '$key' => $val,\n";
+            } else {
+                $out .= "                         '$key' => '$val',\n";
+            }
+        }
+        $out .= "                         ));";
+    }
+    return $out;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * show some predefined output field in a template
+ * 
+ * @param $args array containing the definition of the field (type, name, value, ...)
+ * @returns string
+ * @return string containing the HTML (or other) text to output in the BL template
+ */
+function dynamicdata_userapi_showoutput($args)
+{
+    extract($args);
+    if (empty($name)) {
+        return xarML('Missing \'name\' attribute in field tag or definition');
+    }
+    if (!isset($type)) {
+        $type = 1;
+    }
+    if (!isset($value)) {
+        $value = '';
+    }
+
+// TODO: replace with something else
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    if (is_numeric($type)) {
+        if (!empty($proptypes[$type]['name'])) {
+            $typename = $proptypes[$type]['name'];
+        } else {
+            return xarML('Unknown property type #(1)',$type);
+        }
+    } else {
+        $typename = $type;
+    }
+
+    $output = '';
+    switch ($typename) {
+        case 'text':
+        case 'textbox':
+            $output .= xarVarPrepHTMLDisplay($value);
+            break;
+        case 'textarea':
+        case 'textarea_small':
+        case 'textarea_medium':
+        case 'textarea_large':
+            $output .= xarVarPrepHTMLDisplay($value);
+            break;
+    // TEST ONLY
+        case 'webpage':
+            //$basedir = '/home/mikespub/www/pictures';
+            $basedir = 'd:/backup/mikespub/pictures';
+            $filetype = 'html?';
+            if (!empty($value) &&
+                preg_match('/^[a-zA-Z0-9_\/\\\:.-]+$/',$value) &&
+                preg_match("/$filetype$/",$value) &&
+                file_exists($value) &&
+                is_file($value)) {
+                $output .= join('', file($value));
+            }
+                    $output .= xarVarPrepForDisplay($value);
+            break;
+        case 'status':
+            if (!isset($options) || !is_array($options)) {
+                $options = array(
+                                 array('id' => 0, 'name' => xarML('Submitted')),
+                                 array('id' => 1, 'name' => xarML('Rejected')),
+                                 array('id' => 2, 'name' => xarML('Approved')),
+                                 array('id' => 3, 'name' => xarML('Front Page')),
+                           );
+            }
+            if (empty($value)) {
+                $value = 0;
+            }
+            // fall through to the next one
+        case 'select':
+        case 'dropdown':
+        case 'listbox':
+            if (!isset($selected)) {
+                if (!empty($value)) {
+                    $selected = $value;
+                } else {
+                    $selected = '';
+                }
+            }
+            if (!isset($options) || !is_array($options)) {
+                $options = array();
+            }
+        // TODO: support multiple selection
+            $join = '';
+            foreach ($options as $option) {
+                if ($option['id'] == $selected) {
+                    $output .= $join;
+                    $output .= xarVarPrepForDisplay($option['name']);
+                    $join = ' | ';
+                }
+            }
+            break;
+        case 'file':
+        case 'fileupload':
+        // TODO: link to download file ?
+            break;
+        case 'url':
+        // TODO: use redirect function here ?
+            if (!empty($value)) {
+                $value = xarVarPrepHTMLDisplay($value);
+        // TODO: add alt/title here ?
+                $output .= '<a href="'.$value.'">'.$value.'</a>';
+            }
+            break;
+        case 'image':
+            if (!empty($value)) {
+                $value = xarVarPrepHTMLDisplay($value);
+        // TODO: add size/alt here ?
+                $output .= '<img src="' . $value . '">';
+            }
+            break;
+        case 'static':
+            $output .= xarVarPrepForDisplay($value);
+            break;
+        case 'hidden':
+            $output .= '';
+            break;
+        case 'username':
+            if (empty($value)) {
+                $value = xarUserGetVar('uid');
+            }
+            $user = xarUserGetVar('name', $value);
+            if (empty($user)) {
+                $user = xarUserGetVar('uname', $value);
+            }
+            $output .= $user;
+            if ($value > 1) {
+                $output .= '<a href="'.xarModURL('users','user','display',
+                                                    array('uid' => $value))
+                           . '">'.xarVarPrepForDisplay($user).'</a>';
+            } else {
+                $output .= xarVarPrepForDisplay($user);
+            }
+            break;
+        case 'date':
+        case 'calendar':
+            if (empty($value)) {
+                $value = time();
+            }
+        // TODO: adapt to local/user time !
+            $output .= strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
+            break;
+        case 'fieldtype':
+            if (!empty($value) && !empty($proptypes[$value]['label'])) {
+                $output .= $proptypes[$value]['label'];
+            }
+            break;
+        default:
+            $output .= 'Unknown type '.xarVarPrepForDisplay($typename);
+            break;
+    }
+    return $output;
 }
 
 // ----------------------------------------------------------------------

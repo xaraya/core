@@ -68,6 +68,9 @@ function dynamicdata_user_displayhook($args)
 
     if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
+// TODO: find some better way to do this !
+    } elseif (xarVarIsCached('Hooks.display','itemtype')) {
+        $itemtype = xarVarGetCached('Hooks.display','itemtype');
     } else {
         $itemtype = null;
     }

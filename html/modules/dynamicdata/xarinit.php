@@ -225,6 +225,21 @@ function dynamicdata_init()
         return false;
     }
 
+// TODO: move this to some common place in Xaraya ('datadict' module ?)
+    // Register BL tags
+    xarTplRegisterTag('dynamicdata', 'data-input',
+                      array(),
+                      'dynamicdata_userapi_handleInputTag');
+    xarTplRegisterTag('dynamicdata', 'data-output',
+                      array(),
+                      'dynamicdata_userapi_handleOutputTag');
+    xarTplRegisterTag('dynamicdata', 'data-form',
+                      array(),
+                      'dynamicdata_userapi_handleFormTag');
+    xarTplRegisterTag('dynamicdata', 'data-display',
+                      array(),
+                      'dynamicdata_userapi_handleDisplayTag');
+
     // Initialisation successful
     return true;
 }
@@ -343,6 +358,13 @@ function dynamicdata_delete()
                              'dynamicdata', 'user', 'displayhook')) {
         xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
     }
+
+// TODO: move this to some common place in Xaraya ('datadict' module ?)
+    // Unregister BL tags
+    xarTplUnregisterTag('data-input');
+    xarTplUnregisterTag('data-output');
+    xarTplUnregisterTag('data-form');
+    xarTplUnregisterTag('data-display');
 
     // Deletion successful
     return true;
