@@ -1,6 +1,6 @@
 <!--- Display first-page link or text if there is more than one page --->
 <xar:if condition="$totalpages gt 1">
-    <xar:if condition="$currentpage ne $firstpage">
+    <xar:if condition="$currentpagenum ne $firstpagenum">
         &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
     <xar:else />
         &nbsp;&nbsp;|&lt;
@@ -84,7 +84,7 @@
 
 <!--- Display last-page link or text if there is more than one page --->
 <xar:if condition="$totalpages gt 1">
-    <xar:if condition="$currentpage ne $lastpage">
+    <xar:if condition="$currentpagenum ne $lastpagenum">
         &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
     <xar:else />
         &nbsp;&nbsp;&gt;|

@@ -5,7 +5,7 @@
 
 <!--- Display first-page link or text if there is more than one page --->
 <xar:if condition="$totalpages gt 1">
-    <xar:if condition="$currentpage ne $firstpage">
+    <xar:if condition="$currentpagenum ne $firstpagenum">
         &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
     <xar:else />
         &nbsp;&nbsp;|&lt;
@@ -40,7 +40,7 @@
             <xar:mlstring>Page #(1)</xar:mlstring>
             <xar:mlvar>#$pagenumber#</xar:mlvar>
         </xar:ml></xar:set>
-        <xar:if condition="$pagenumber eq $lastpage">
+        <xar:if condition="$pagenumber eq $lastpagenum">
             &nbsp;&nbsp;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#...</a>
         <xar:else/>
             &nbsp;&nbsp;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
@@ -51,7 +51,7 @@
 </xar:foreach>
 
 <!--- Display next-page link if there is just one block --->
-<xar:if condition="$currentpage ne $totalpages">
+<xar:if condition="$currentpagenum ne $lastpagenum">
     <xar:if condition="$nextpageitems gt 0">
         &nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
     <xar:else />

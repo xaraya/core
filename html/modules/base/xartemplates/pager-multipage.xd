@@ -1,7 +1,7 @@
 <!--- Pager for displaying page links on multi-page documents --->
 
 <!--- Display first-page link if there is more than one page and we are not on that page --->
-<xar:if condition="$currentpage ne $firstpage">
+<xar:if condition="$currentpagenum ne $firstpagenum">
     &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">#xarML('First')#</a>
 </xar:if>
 
@@ -15,12 +15,12 @@
 </xar:if>
 
 <!--- Display previous-page link if we are not on the first page --->
-<xar:if condition="$currentpage ne $firstpage">
+<xar:if condition="$currentpagenum ne $firstpagenum">
     &nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
 </xar:if>
 
 <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
-    <xar:if condition="$pagenumber ne $currentpage">
+    <xar:if condition="$pagenumber ne $currentpagenum">
         <xar:set name="$pageurllabel"><xar:ml>
             <xar:mlstring>Page #(1)</xar:mlstring>
             <xar:mlvar>#$pagenumber#</xar:mlvar>
@@ -32,7 +32,7 @@
 </xar:foreach>
 
 <!--- Display next-page link if we are not on the last page --->
-<xar:if condition="$currentpage ne $lastpage">
+<xar:if condition="$currentpagenum ne $lastpagenum">
     &nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
 </xar:if>
 
@@ -47,7 +47,7 @@
 
 <!--- Display last-page link if we are not on it --->
 <!---
-<xar:if condition="$currentpage ne $lastpage">
+<xar:if condition="$currentpagenum ne $lastpagenum">
     &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
 </xar:if>
 --->
