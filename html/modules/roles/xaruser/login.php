@@ -100,22 +100,14 @@ function roles_user_login()
                     $msg = xarML('Problem logging in: Invalid username or password.');
                     xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
-                }
-
-                $rolestate = $user['state'];
-                if (($extAuthentication == true) && ($state != $rolestate)) {
-                    $state = $rolestate;
-                } else {
+                } elseif (empty($user)) {
                     // Check if user has been deleted.
-//                    $user = xarModAPIFunc('roles',
-//                                          'user',
-//                                          'getdeleteduser',
-//                                          array('uname' => $uname));
-                // reinserting this for the moment until we can fix this ldap issue
-                    $state = $rolestate;
+                    $user = xarModAPIFunc('roles',
+                                          'user',
+                                          'getdeleteduser',
+                                          array('uname' => $uname));
                 }
 
-/*
                 if (!empty($user)) {
                     $rolestate = $user['state'];
                     // If external authentication has already been set but
@@ -128,7 +120,7 @@ function roles_user_login()
                         $state = $rolestate;
                     }
                 }
-*/
+
                 break;
             default:
                 // some other auth module is being used.  We're going to assume
