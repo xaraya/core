@@ -106,8 +106,6 @@ function dynamicdata_admin_modifyprop()
     }
 
     $data['statictitle'] = xarML('Static Properties (guessed from module table definitions for now)');
-// TODO: handle item type too, if it's in the same table (cfr. articles for instance)
-    $data['labels']['is_itemid'] = xarML('Item ID');
 
 // TODO: allow other kinds of relationships than hooks
     // (try to) get the relationships between this module and others

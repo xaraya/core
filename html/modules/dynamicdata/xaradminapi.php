@@ -1512,6 +1512,18 @@ function dynamicdata_adminapi_showinput($args)
                 $output .= xarML('The ratings module is currently unavailable');
             }
             break;
+        case 'module':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
+        case 'itemtype':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
+        case 'itemid':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
         default:
             $output .= xarML('Unknown type #(1)',xarVarPrepForDisplay($typename));
             break;
@@ -1813,7 +1825,7 @@ function dynamicdata_adminapi_showlist($args)
     $itemidfield = '';
     foreach ($fields as $label => $field) {
         $labels[$label] = array('label' => $label);
-        if (!empty($field['is_itemid'])) {
+        if ($field['type'] == 21) { // Item ID
             $itemidfield = $label;
             // take a wild guess at the parameter name this module expects
         // TODO: let the module tell us at installation ?

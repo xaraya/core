@@ -763,11 +763,8 @@ function dynamicdata_userapi_getstatic($args)
         // try to figure out if it's the item id
 // TODO: let modules define this
         if (!empty($increment) || !empty($primary_key)) {
-            $is_primary = 1;
             // not allowed to modify primary key !
-            $proptype = 1; // Static Text
-        } else {
-            $is_primary = 0;
+            $proptype = 21; // Item ID
         }
 
         $static[$label] = array('label' => $label,
@@ -776,8 +773,7 @@ function dynamicdata_userapi_getstatic($args)
                                 'default' => $default,
                                 'source' => $table . '.' . $field,
                                 'validation' => $validation,
-                                'increment' => $increment,
-                                'is_itemid' => $is_primary);
+                                'increment' => $increment);
         $result->MoveNext();
     }
 
@@ -853,7 +849,7 @@ function dynamicdata_userapi_getrelations($args)
         // first look for the (possible) item id field in the current module
         $itemid = '???';
         foreach ($static as $field) {
-            if (!empty($field['is_itemid'])) {
+            if ($field['type'] == 21) { // Item ID
                 $itemid = $field['source'];
                 break;
             }
@@ -869,6 +865,17 @@ function dynamicdata_userapi_getrelations($args)
         //       or should hook modules tell us that ?
             $links = array();
             foreach ($modstatic as $field) {
+
+        /* for hook modules, those should define the fields *relating to* other modules (not their own item ids etc.)
+                // try predefined field types first
+                if ($field['type'] == 19) { // Module
+                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                } elseif ($field['type'] == 20) { // Item Type
+                    $links[] = array('from' => $field['source'], 'to' => $itemtype, 'type' => 'itemtype');
+                } elseif ($field['type'] == 21) { // Item ID
+                    $links[] = array('from' => $field['source'], 'to' => $itemid, 'type' => 'itemid');
+        */
+                // try to guess based on field names *cough*
                 // link on module name/id
                 if (preg_match('/_module$/',$field['source'])) {
                     $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
@@ -1053,6 +1060,31 @@ function dynamicdata_userapi_getproptypes($args)
                           'name'       => 'hidden',
                           'label'      => 'Hidden',
                           'format'     => '18',
+                          'validation' => '',
+                          // ...
+                         );
+// handy for relationships, URLs etc.
+    $proptypes[19] = array(
+                          'id'         => 19,
+                          'name'       => 'module',
+                          'label'      => 'Module',
+                          'format'     => '19',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[20] = array(
+                          'id'         => 20,
+                          'name'       => 'itemtype',
+                          'label'      => 'Item Type',
+                          'format'     => '20',
+                          'validation' => '',
+                          // ...
+                         );
+    $proptypes[21] = array(
+                          'id'         => 21,
+                          'name'       => 'itemid',
+                          'label'      => 'Item ID',
+                          'format'     => '21',
                           'validation' => '',
                           // ...
                          );
@@ -1425,6 +1457,18 @@ function dynamicdata_userapi_showoutput($args)
                 $output .= xarML('The ratings module is currently unavailable');
             }
             break;
+        case 'module':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
+        case 'itemtype':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
+        case 'itemid':
+        // TODO: evaluate if we want some other output here
+            $output .= $value;
+            break;
         default:
             $output .= xarML('Unknown type #(1)',xarVarPrepForDisplay($typename));
             break;
@@ -1715,7 +1759,7 @@ function dynamicdata_userapi_showview($args)
     $itemidfield = '';
     foreach ($fields as $label => $field) {
         $labels[$label] = array('label' => $label);
-        if (!empty($field['is_itemid'])) {
+        if ($field['type'] == 21) { // Item ID
             $itemidfield = $label;
             // take a wild guess at the parameter name this module expects
         // TODO: let the module tell us at installation ?
