@@ -35,7 +35,7 @@ function xarCache_init($args)
     global $xarBlock_cacheTime;
     global $xarPage_autoCachePeriod;
 
-    if (!@include_once('var/cache/config.caching.php')) {
+    if (!include_once('var/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
         return FALSE;
@@ -220,6 +220,8 @@ function xarOutputFlushCached($cacheKey, $dir = false)
 {
     global $xarOutput_cacheCollection;
     
+    $lockfile = $xarOutput_cacheCollection . '/cache.full';
+    
     if (empty($dir)) {
         $dir = $xarOutput_cacheCollection;
     }
@@ -235,6 +237,7 @@ function xarOutputFlushCached($cacheKey, $dir = false)
                         if ((preg_match("#$cacheKey#", $item)) &&
                             (strpos($item, '.php') !== false)) {
                             @unlink($dir . $item);
+                            @unlink($lockfile);
                         }
                     }
                 }
@@ -260,6 +263,7 @@ function xarOutputCleanCached($cacheType)
     $sl_cacheType = strtolower($cacheType);
     $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' . $sl_cacheType;
     $touch_file = $xarOutput_cacheCollection . '/cache.' . $sl_cacheType . 'level';
+    $lockfile = $xarOutput_cacheCollection . '/cache.full';
 
     // If the cache type is Block, then the cache is full so we flush the blocks
     // to make more room
@@ -288,6 +292,7 @@ function xarOutputCleanCached($cacheType)
             if (filemtime($cache_file) < time() - (${'xar' . $cacheType . '_cacheTime'} + 60) &&
                 (strpos($file, '.php') !== false)) {
                 @unlink($cache_file);
+                @unlink($lockfile);
             }
         }
         closedir($handle);
@@ -295,35 +300,51 @@ function xarOutputCleanCached($cacheType)
 }
 
 /**
- * helper function to get the size of the cache
+ * helper function to determine if the cache size limit has been reached
  *
  * @access public
  * @param  string  $dir
  * @param  string  $cacheType
- * @return float
+ * @return boolean
  * @author jsb
- * @todo   come up with a good way to determine which cacheKeys are the least
- *         important and flush them to make more space.  atime would be a
- *         possibility, but is often disabled at the filesystem
  */
-function xarCacheDirSize($dir = FALSE, $cacheType)
+function xarCacheSizeLimit($dir = FALSE, $cacheType)
 {
-    global $xarOutput_cacheSizeLimit;
-
-    static $size = 0;
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit;
     
-    if (empty($size)) {
-        $size = xarCacheGetDirSize($dir);
+    if (empty($dir)) {
+       $dir = $xarOutput_cacheCollection;
     }
     
-    if($size >= $xarOutput_cacheSizeLimit) {
-        if (!xarCore_IsCached($cacheType . '.Caching', 'cleaned')) {
-            xarOutputCleanCached($cacheType);
-            xarCore_SetCached($cacheType . '.Caching', 'cleaned', TRUE);
+    static $value = NULL;
+    $lockfile = $xarOutput_cacheCollection . '/cache.full';
+    
+    if (!isset($value)) {
+        if (file_exists($lockfile)) {
+            $value = TRUE;
+        } elseif (mt_rand(1,5) > 1) {
+            // on average, 4 out of 5 pages go by without checking
+            $value = FALSE;
+        } else {
+    
+            static $size = 0;
+            
+            if (empty($size)) {
+                $size = xarCacheGetDirSize($dir);
+            }
+            if($size >= $xarOutput_cacheSizeLimit) {
+                $value = TRUE;
+                @touch($lockfile);
+            } else {
+                $value = FALSE;
+            }
         }
     }
-
-    return $size;
+    if ($value && !xarCore_IsCached($cacheType . '.Caching', 'cleaned')) {
+        xarOutputCleanCached($cacheType);
+        xarCore_SetCached($cacheType . '.Caching', 'cleaned', TRUE);
+    }
+    return $value;
 }
 
 /**

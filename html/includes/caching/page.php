@@ -155,7 +155,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         // the current user's page views are eligible for caching AND
         xarPage_checkUserCaching() &&
         // the cache collection directory hasn't reached its size limit...
-        xarCacheDirSize($xarOutput_cacheCollection, 'Page') < $xarOutput_cacheSizeLimit) {
+        !xarCacheSizeLimit($xarOutput_cacheCollection, 'Page')) {
         
         // if request, modify the end of the file with a time stamp
         if ($xarPage_cacheShowTime == 1) {
