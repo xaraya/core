@@ -553,7 +553,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                         $stackTagName = array_pop($this->tagNamesStack);
                         if ($tagName != $stackTagName) {
-                            $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
+                            $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where closed '$stackTagName' was expected.", $this);
                             return;
                         }
                         return $children;
@@ -1074,6 +1074,35 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             $len--;
         }
         return $result;
+    }
+    
+    // move the pointer to the position of the needle
+    // returns the number of tokens winded forward if found, on not found
+    // returns zero and the pointer hasn't moved
+    // returns null when $token is null
+    // FIXME: this is a temporary quick implementation for bug #3111
+    // FIXME: this does a literal search on the needle, no smart finding of end tags
+    function windTo($needle)
+    {
+        assert('strlen($needle) > 0; /* The search needle in parser->windTo has zero length */');
+        $wound = 0;
+        $buffer = $this->getNextToken(strlen($needle));
+        if(!isset($buffer)) return; // throw back
+        $wound = strlen($buffer);
+        while($buffer!= $needle) {
+            $next = $this->getNextToken();
+            if(!isset($next)) {
+                $this->stepBack($wound);
+                return; // throw back
+            }
+            $buffer = substr($buffer, 1) . $next;
+            $wound++;
+        }
+        // We found the needle and we are are at the end of it
+        // place the pointer before it
+        $this->stepBack(strlen($needle));
+        $wound-=strlen($needle);
+        return $wound;
     }
 
     function stepBack($len = 1)
@@ -2764,13 +2793,26 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access private
- * @todo let this class or derived ones also handle <!-- and <!---
+ * @todo let this class or derived ones also handle <!--
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser,$tagName)
+    {
+        parent::constructor($parser, $tagName);
+        // Completely skip the contents of the tag
+        // FIXME: This is a temporary solution for bug #3111
+        $res = $parser->windTo(XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END);
+    }
     function renderBeginTag()
     {
+        // Clear the children array
+        // FIXME: while ignoring it in the output, the content is still parsed which can result in
+        // errors. A solution would be to wrap in cdata sections then, but then parsing should really not be done
+        // meaning that our current RSS solution breaks
         $this->children = array();
+        
+        
         return '';
     }
 
@@ -3153,7 +3195,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access  private
- * @todo check if we are in a page templat, and whether we already have the root tag
+ * @todo check if we are in a page template, and whether we already have the root tag
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
