@@ -28,33 +28,12 @@ function themes_adminapi_upgrade($args)
         return false;
     }
 
-    // Get theme database info
-//    xarTheme__loadDbInfo($themeInfo['name'], $themeInfo['osdirectory']);
-
-    // Theme upgrade function
-
-    // pnAPI compatibility
-/*    $xarinitfilename = 'themes/'. $themeInfo['osdirectory'] .'/xarinit.php';
-    if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = 'themes/'. $themeInfo['osdirectory'] .'/pninit.php';
-    }
-    @include $xarinitfilename;
-
-    $func = $themeInfo['name'] . '_upgrade';
-    if (function_exists($func)) {
-        if ($func($themeInfo['version']) != true) {
-            return false;
-        }
-    }
-*/
-
     // Update state of theme
     $res = xarModAPIFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid, 'state' => XARTHEME_STATE_INACTIVE));
     
     if (!isset($res)) return;
 
-/*     return true; */
     // Get the new version information...
     $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
     if (!isset($themeFileInfo)) return;
@@ -63,13 +42,6 @@ function themes_adminapi_upgrade($args)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-/*     $sql = "UPDATE $xartable[themes] */
-/*             SET xar_version = '" . xarVarPrepForStore($themeFileInfo['version']) . "', */
-/*                 xar_admin_capable = '" . xarVarPrepForStore($themeFileInfo['admin_capable']) . "', */
-/*                 xar_user_capable = '" . xarVarPrepForStore($themeFileInfo['user_capable']) . "', */
-/*                 xar_class = '". xarVarPrepForStore($themeFileInfo['class']) . "', */
-/*                 xar_category '". xarVarPrepForStore($themeFileInfo['category']) . "' */
-/*             WHERE xar_regid = " . xarVarPrepForStore($regid); */
      $sql = "UPDATE $xartable[themes]
             SET xar_version = '" . xarVarPrepForStore($themeFileInfo['version']) . "',
                 xar_class = ". xarVarPrepForStore($themeFileInfo['class']) . " 

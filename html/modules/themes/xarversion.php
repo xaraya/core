@@ -14,14 +14,14 @@
 $modversion['name']           = 'Themes Administration';
 $modversion['id']             = '70';
 $modversion['version']        = '1.3.0';
-$modversion['description']    = 'Enable/disable themes/change site appearance';
+$modversion['description']    = 'Configure themes, change site appearance';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = '';
 $modversion['changelog']      = 'xardocs/changelog.txt';
 $modversion['license']        = '';
 $modversion['official']       = 1;
-$modversion['author']         = 'Marty Vance';
-$modversion['contact']        = '';
+$modversion['author']         = 'Marty Vance, Andy Varganov';
+$modversion['contact']        = 'andyv@xaraya.com';
 $modversion['admin']          = 1;
 $modversion['user']           = 0;
 $modversion['securityschema'] = array('Themes::' => '::');
