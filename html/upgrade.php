@@ -1215,6 +1215,10 @@ Password : %%password%%
 
     if ((!isset($dbModule)) || (!isset($fileModule))){
         echo "FAILED to update the davedap module to phpldapadmin module<br/>";
+    } else if (!isset($dbModule['name'])) {
+        echo "Module davedap/phpldapadmin does not exist in database -- rename not necessary<br/>";
+    } else if (!isset($fileModule['name'])) {
+        echo "Module davedap/phpldapadmin does not exist in the /modules directory -- rename not necessary<br/>";
     } elseif (($dbModule['name'] == 'davedap') && ($fileModule['name'] == 'phpldapadmin')) {
         // Update modules table with new module name
         echo "<h5>Rename davedap module to phpldapadmin module in database.</h5>";
