@@ -161,7 +161,7 @@ class xarQuery
                     return;
                 }
                 else {
-                    $newtable = explode('as',$table);
+                    $newtable = explode(' as ',$table);
                     if (count($newtable) > 1) {
                         $argsarray = array('name' => trim($newtable[0]), 'alias' => trim($newtable[1]));
                     }
@@ -296,6 +296,12 @@ class xarQuery
                                   'field2' => $field2,
                                   'op' => '=');
     }
+    function ne($field1,$field2)
+    {
+        $this->conditions[]=array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => '!=');
+    }
     function gt($field1,$field2)
     {
         $this->conditions[]=array('field1' => $field1,
@@ -325,6 +331,12 @@ class xarQuery
         $this->conditions[]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => 'like');
+    }
+    function regex($field1,$field2)
+    {
+        $this->conditions[]=array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'regexp');
     }
     function addorders($sorts)
     {
