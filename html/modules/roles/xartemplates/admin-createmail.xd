@@ -350,7 +350,7 @@
                     <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);"/>
                     &nbsp;&nbsp;&nbsp;
                     <xar:if condition="!isset($users) or $users eq 0">
-                        <input type="submit" value="#xarML('Send')#" disabled/>
+                        <input type="submit" value="#xarML('Send')#" disabled="disabled"/>
                     <xar:else />
                         <input type="submit" value="#xarML('Send')#" />
                     </xar:if>
