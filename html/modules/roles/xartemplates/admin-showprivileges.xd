@@ -3,7 +3,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Show Privileges</xar:mlstring></h2>
 <div style="margin: auto;">
-<h3><xar:mlstring>Privileges of </xar:mlstring>
+<h3><xar:mlstring>Privileges of</xar:mlstring>&nbsp;
 			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 			<xar:else /><xar:mlstring>User</xar:mlstring>
 			</xar:if>
@@ -116,7 +116,13 @@
 		</tr>
 	<xar:else />
 		<xar:loop name="$privileges">
-		<tr>
+		<xar:if condition="$loop:item['status'] eq 1">
+			<tr class="xar-overridden">
+		<xar:elseif condition="$loop:item['status'] eq 2" />
+			<tr class="xar-partial">
+		<xar:else />
+			<tr class="xar-norm">
+		</xar:if>
 			<td width="150">
 				#$loop:item['name']#
 			</td>
@@ -153,7 +159,7 @@
 	</xar:if>
 </table>
 <br />
-<h3><xar:mlstring>Assign a Privilege to </xar:mlstring>            
+<h3><xar:mlstring>Assign a Privilege to</xar:mlstring>&nbsp;         
 			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
 			<xar:else /><xar:mlstring>User</xar:mlstring>
 			</xar:if>

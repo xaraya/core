@@ -35,18 +35,33 @@ function roles_admin_showprivileges()
         $groupname = $ancestor->getName();
         $groupid = $ancestor->getID();
         foreach($allprivileges as $priv) {
-            $inherited[] = array('privid' => $priv->getID(),
-                    'name' => $priv->getName(),
-                    'realm' => $priv->getRealm(),
-                    'module' => $priv->getModule(),
-                    'component' => $priv->getComponent(),
-                    'instance' => $priv->getInstance(),
-                    'level' => $privileges->levels[$priv->getLevel()],
-                    'groupid' => $groupid,
-                    'groupname' => $groupname,
-                    'relation' => $ancestor->getLevel(),
-                    'status' => 3,
-                    'object' => $priv);
+            if ($priv->getModule() == "empty") {
+                $inherited[] = array('privid' => $priv->getID(),
+                        'name' => $priv->getName(),
+                        'realm' => "",
+                        'module' => "",
+                        'component' => "",
+                        'instance' => "",
+                        'level' => "",
+                        'groupid' => $groupid,
+                        'groupname' => $groupname,
+                        'relation' => $ancestor->getLevel(),
+                        'status' => 1,
+                        'object' => $priv);
+            } else {
+                $inherited[] = array('privid' => $priv->getID(),
+                        'name' => $priv->getName(),
+                        'realm' => $priv->getRealm(),
+                        'module' => $priv->getModule(),
+                        'component' => $priv->getComponent(),
+                        'instance' => $priv->getInstance(),
+                        'level' => $privileges->levels[$priv->getLevel()],
+                        'groupid' => $groupid,
+                        'groupname' => $groupname,
+                        'relation' => $ancestor->getLevel(),
+                        'status' => 3,
+                        'object' => $priv);
+            }
         }
     }
     // resort the array for display purposes
@@ -77,7 +92,7 @@ function roles_admin_showprivileges()
                 'level' => "",
                 'frozen' => $frozen,
                 'relation' => 0,
-                'status' => 3,
+                'status' => 1,
                 'object' => $priv);
         } else {
             $currentprivileges[] = array('privid' => $priv->getID(),
@@ -96,11 +111,12 @@ function roles_admin_showprivileges()
     $currentprivileges = array_reverse($currentprivileges);
 
 // -------------------------------------------------------------------
-// Now we have to compare the privileges among each other
+// Now we have to compare the privileges between the different levels
 
     $privilegesdone = $currentprivileges;
     $privilegestodo = $inherited;
-    $inherited = array();
+    unset($inherited);
+    $inherited[0] = $currentprivileges;
     for ($i=1;$i<$maxlevel+1;$i++) {
         foreach ($privilegestodo as $todo) {
             if ($todo['relation'] != $i) continue;
@@ -115,12 +131,45 @@ function roles_admin_showprivileges()
                 }
             }
             $privilegesdone[] = $todo;
-            unset($todo['object']);
-            $inherited[] = $todo;
+//            unset($todo['object']);
+            $inherited[$i][] = $todo;
+//            $inherited[] = $todo;
         }
     }
-    $inherited = array_reverse($inherited);
+//    $inherited = array_reverse($inherited);
+// -------------------------------------------------------------------
+// Finally we have to compare the privileges of a given level among each other
 
+    for ($i=0;$i<$maxlevel+1;$i++) {
+        $xs = $inherited[$i];
+        $ys = $xs;
+        $inherited[$i] = array();
+        foreach ($xs as $x) {
+            if ($x['status'] != 1) {
+                foreach ($ys as $y) {
+                    if ($y['module'] == 'empty') continue;
+                    if ($y['privid'] == $x['privid']) continue;
+                    if ($y['object']->implies($x['object'])) {
+                        $x['status'] = 1;
+                        break;
+                    }
+                    elseif ($x['object']->includes($y['object']) && !$x['object']->implies($y['object'])) {
+                        $x['status'] = 2;
+                    }
+                }
+            }
+        $inherited[$i][] = $x;
+        }
+    }
+    $xs = array();
+    for ($i=1;$i<$maxlevel+1;$i++) {
+        $xs = array_merge($xs, $inherited[$i]);
+    }
+    $currentprivileges = $inherited[0];
+    $inherited = array_reverse($xs);
+//    echo var_dump($inherited);exit;
+
+// -------------------------------------------------------------------
 // Load Template
     $data['pname'] = $role->getName();
     $data['ptype'] = $role->getType();
