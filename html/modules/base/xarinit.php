@@ -338,7 +338,7 @@ function base_init()
 
     $usersTable = $systemPrefix . '_users';
     $id_anonymous = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','','','','')";
+    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','','',0 ,'')";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -346,7 +346,7 @@ function base_init()
     $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
     $id_admin = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','','','3','authsystem')";
+    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','','',3 ,'authsystem')";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
