@@ -40,8 +40,9 @@ function adminpanels_admin_modifyconfig()
 
     // moved from modify overviews
     $data['showoverviews']          = xarModGetVar('adminpanels', 'overview');
+    // Dashboard
+    $data['dashboard']              = xarModGetVar('adminpanels', 'dashboard');
     // everything else happens in Template for now
     return $data;
 }
-
 ?>

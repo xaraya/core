@@ -20,10 +20,12 @@
  * @returns array
  * @todo change feed url once release module is moved
  */
-function base_admin_release()
+function base_admin_release($args)
 {
     // Security Check
     if(!xarSecurityCheck('EditModules')) return;
+    extract($args);
+
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {

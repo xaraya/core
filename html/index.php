@@ -126,7 +126,7 @@ function xarMain()
         }
 
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModGetVar('adminpanels', 'dashboard')) {
             // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTplSetPageTemplateName('admin-'.$modName)) {

@@ -1,0 +1,255 @@
+@import "verticlemenu.css";
+
+body {
+    background-color: #fff;
+    color: #000;
+    font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+	margin-bottom: 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #D7D7DD;
+    background-color: #ffffff;
+    background-image: url(../modules/installer/images/installerbg.png);
+    background-repeat: no-repeat;
+}
+
+#main {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#install { padding: 0 0 0 20px; }
+
+#adminmenu {
+	padding-top: 7px;
+}
+
+#header {
+    width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+	padding-top: 10px;
+	padding-left: 40px;
+	padding-bottom: 10px;
+	}
+
+#header a {
+	font-size: 12px;
+	color: #000;
+	text-decoration: none;
+	}
+
+.xar-mod-head {
+    color: #000;
+    padding: 2px;
+    text-align: center;
+    font-weight: bold;
+	text-align: right;
+}
+
+.xar-mod-body h2 {
+	padding-left: 20px;
+	text-align: left;
+	font-size: 18px;
+	font-weight: bold;
+	}
+
+h1,h2,h3,h4 {
+    font-weight: bold;
+    color: #000;
+    line-height: 1.2em;
+    text-align: center;
+    padding: 0 0 .4em 0;
+    margin: 0;
+    width: 460px;
+    text-shadow: -1px 3px 3px silver;
+}
+
+h1 { font-size: 1.4em; }
+h2 { font-size: 1.2em; }
+h3 { font-size: 1em; }
+h4 { font-size: .8em; }
+
+p {
+    font-size: .8em;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+form p.center { text-align: center; }
+
+form label {
+    font-weight: bold;
+    margin: 0 .5em;
+    color: gray;
+}
+
+textarea#license, select#configuration {
+    background-color: #fff;
+    border-color: #D7D7DD;
+    border-width: 1px;
+    font-size: 12px;
+    color: #000;
+    width: 440px;
+    height: 13em;
+    padding: .5em;
+    font-size: .8em;
+
+}
+
+label.block {
+    display: block;
+    padding: .5em 0;
+    clear: both;
+}
+
+div.configuration {
+    width: 460px;
+}
+
+div.simpleform {
+    float: left;
+    width: 460px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #B6A4BB;
+}
+
+div.simpleform p {
+    width: 460px;
+    padding: .35em 0;
+    margin: 0 auto;
+    text-align: left;
+    border-bottom: #ffffff;
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+    background-color: #f0f0f0;
+}
+
+div.simpleform label {
+    width: 30%;
+    float: left;
+    padding: 0 .5em;
+    margin: 0;
+}
+
+div.simpleform input {
+    width: 30%;
+    float: left;
+    padding: 0;
+    margin: 0 .25em;
+}
+
+div.scroller {
+    padding: 5px;
+    margin-bottom: .5em;
+    width:440px;
+    overflow: auto;
+    height: 150px;
+    border: 1px solid black;
+}
+div.scroller p, div.scroller input {
+    line-height: 1em;
+    padding: .25em 0;
+    margin: 0;
+}
+
+p.complete, p.active, p.greyed {
+    padding: 0 0 0 30px;
+    font-size: .8em;
+    line-height: 30px;
+    text-indent: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 .35em;
+}
+
+.complete {
+    color: #B0B0B0;
+    text-decoration: line-through;
+    background-image: url(../modules/installer/images/completed.gif);
+}
+
+.active {
+    color: #000;
+    background-image: url(../modules/installer/images/active.gif);
+}
+
+.greyed {
+    color: #B0B0B0;
+    background-image: url(../modules/installer/images/greyed.gif);
+}
+
+.xar-normal {
+    color: #000000;
+    font-size: .75em;
+}
+
+.xar-normal a:link {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.xar-normal a:visited {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.xar-normal a:hover {
+    color: #B0B0B0;
+    font-weight: bold;
+    text-decoration: overline underline;
+}
+
+.xar-normal a:active {
+    color: #B0B0B0;
+    font-weight: bold;
+    text-decoration: overline underline;
+}
+
+.xar-title p strong {
+    color: #B0B0B0;
+    font-weight: bold;
+}
+
+.xar-title p { text-align: left; }
+
+#status p {
+    padding: 0;
+    margin: 0;
+}
+
+.xar-sub { font-size: .7em; }
+.clear { clear: both; height:0px; }
+
+
+#navlist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+#navlist li a {
+    color: #B0B0B0;
+    font-size: .75em;
+}
+
+#navlist li a:hover {
+    color: #000;
+    font-size: .75em;
+}
+
+pre {
+	font-size: 10px;
+	}
