@@ -51,6 +51,20 @@ function pnUser_init($args)
 {
     global $pnUser_authenticationModules;
 
+    // User System and Security Service Tables
+    $systemPrefix = pnDBGetSystemTablePrefix();
+
+    $tables = array('users'            => $systemPrefix . '_users',
+                    'user_data'        => $systemPrefix . '_user_data',
+                    'user_property'    => $systemPrefix . '_user_property',
+                    'groups'           => $systemPrefix . '_groups',
+                    'realms'           => $systemPrefix . '_realms',
+                    'user_perms'       => $systemPrefix . '_user_perms',
+                    'group_perms'      => $systemPrefix . '_group_perms',
+                    'group_membership' => $systemPrefix . '_group_membership');
+
+    pnDB_importTables($tables);
+
     $pnUser_authenticationModules = $args['authenticationModules'];
 
     pnMLS_setCurrentLocale(pnUserGetNavigationLocale());
@@ -655,7 +669,7 @@ function pnUserComparePasswords($givenPassword, $realPassword, $userName, $crypt
  */
 function pnUser_getThemeName()
 {
-    if (!pnUserIsLoggedIn()) {
+    if (!pnUserLoggedIn()) {
         return;
     }
     $themeName = pnUserGetVar('Theme');

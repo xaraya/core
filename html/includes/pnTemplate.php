@@ -18,7 +18,12 @@ function pnTpl_init($args)
 
     $pnTpl_themeDir = $args['themeDirectory'];
     if (!file_exists($pnTpl_themeDir)) {
-        die("pnTpl_init: Unexistent theme '$pnTpl_themeDir'.");
+        pnCore_die("pnTpl_init: Unexistent theme directory '$pnTpl_themeDir'.");
+    }
+    if (!is_writeable(pnCoreGetVarDirPath().'/cache/templates')) {
+        pnCore_die("pnTpl_init: Cannot write in cache/templates directory '".
+                   pnCoreGetVarDirPath().'/cache/templates'.
+                   "'. Control directory permissions.");
     }
 
     $pnTpl_cacheTemplates = $args['enableTemplatesCaching'];
@@ -188,7 +193,7 @@ function pnTpl__execute($templateCode, $tplData)
     ob_start();
     
     // Kick it
-    eval('?>'.$templateCode);
+    eval("?>".$templateCode);
     
     // Grab output and clean buffer
     $output = ob_get_contents();

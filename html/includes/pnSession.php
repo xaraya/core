@@ -19,13 +19,20 @@ function pnSession_init($args)
     global $pnSession_systemArgs;
     $pnSession_systemArgs = $args;
 
+    // Session Support Tables
+    $systemPrefix = pnDBGetSystemTablePrefix();
+
+    $tables = array('session_info' => $systemPrefix . '_session_info');
+
+    pnDB_importTables($tables);
+
     pnSession__setup($args);
 
     // First thing we do is ensure that there is no attempted pollution
     // of the session namespace (yes, we still need this for now)
     foreach($GLOBALS as $k=>$v) {
         if (preg_match('/^PNSV/', $k)) {
-            die('pnSession_init: Session Support initialisation failed.');
+            pnCore_die('pnSession_init: Session Support initialisation failed.');
         }
     }
 

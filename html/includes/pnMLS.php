@@ -50,11 +50,11 @@ function pnMLS_init($args)
             $pnMLS_mode = PNMLS_UNBOXED_MULTI_LANGUAGE_MODE;
             if (!function_exists('mb_http_input')) {
                 // mbstring required
-                die('pnMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+                pnCore_die('pnMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
             }
             break;
         default:
-            die('pnMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+            pnCore_die('pnMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
     $backendName = $args['translationsBackend'];
@@ -66,7 +66,7 @@ function pnMLS_init($args)
             $pnMLS_backend = new pnMLS__PHPTranslationsBackend();
             break;
         default:
-            die('pnML_init: Unknown translations backend: '.$backendName);
+            pnCore_die('pnML_init: Unknown translations backend: '.$backendName);
     }
 
     $pnMLS_localeDataLoader = new pnMLS__LocaleDataLoader();
@@ -623,7 +623,7 @@ function pnMLS__setup($args)
     } else {
         if ($mode == PNMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
             // mbstring reuired
-            die('pnMLS__setup: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+            pnCore_die('pnMLS__setup: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
     }
 }

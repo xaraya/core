@@ -42,7 +42,7 @@ function pnLog_init($args)
             $pnLog_level = PNLOG_LEVEL_ERROR;
             break;
         default:
-            die('pnLog_init: Unknown logger level: '.$args['level']);
+            pnCore_die('pnLog_init: Unknown logger level: '.$args['level']);
     }
 
     switch ($loggerName) {
@@ -62,7 +62,7 @@ function pnLog_init($args)
             $pnLog_logger = new pnLog__EmailLogger($loggerArgs);
             break;
         default:
-            die('pnLog_init: Unknown logger name: '.$loggerName);
+            pnCore_die('pnLog_init: Unknown logger name: '.$loggerName);
     }
 
     return true;

@@ -138,7 +138,7 @@ function pnEvt_subscribeRawCallback($eventName, $funcName)
 {
     global $pnEvt_subscribed;
     if (!pnEvt__checkEvent($eventName)) {
-        die("pnEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
+        pnCore_die("pnEvt_subscribeRawCallback: Cannot subscribe to unexistent event $eventName.");
     }
 
     $pnEvt_subscribed[$eventName][] = $funcName;

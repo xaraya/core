@@ -10,8 +10,13 @@
 // ----------------------------------------------------------------------
 
 /*
- * Core version informations - Moved to Base Module
+ * Core version informations - should be upgraded on each release for
+ * better control on config settings
  */
+define('PNCORE_VERSION_NUM', '0.8');
+define('PNCORE_VERSION_ID',  'PostNuke');
+define('PNCORE_VERSION_SUB', 'adam_baum');
+
 /*
  * System dependencies for optional systems
  * ----------------------------------------------
@@ -69,6 +74,10 @@ define('PNDBG_EXCEPTIONS', 4);
  */
 function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 {
+    // FIXME: <marco> Shouldn't we use include instead of include_once?
+    // Since pnCoreInit is supposed to be called once per request there's
+    // no need to get this more overhead from include_once
+    
     //Comment this line to disable debugging
 //    pnCoreActivateDebugger(PNDBG_EXCEPTIONS /*| PNDBG_SQL*/);
     pnCoreActivateDebugger(PNDBG_SQL);
@@ -221,6 +230,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 
     if ($whatToLoad & PNCORE_SYSTEM_BLOCKS) {
         include_once 'includes/pnBlocks.php';
+        // Start Blocks Support Sytem
+        $systemArgs = array();
+        pnBlock_init($systemArgs);
     }
 
     $systemArgs = array('enableTemplatesCaching' => true);
@@ -322,7 +334,7 @@ function pnCore_getSystemVar($name)
         $systemVars = $systemConfiguration;
     }
     if (!isset($systemVars[$name])) {
-        die("pnCore_getSystemVar: Unknown system variable: ".$name);
+        pnCore_die("pnCore_getSystemVar: Unknown system variable: ".$name);
     }
     return $systemVars[$name];
 }
@@ -349,7 +361,7 @@ function pnCore_getSiteVar($name)
         $siteVars = $configLoader->getConfigVars();
     }
     if (!isset($siteVars[$name])) {
-        die("pnCore_getSiteVar: Unknown site variable: ".$name);
+        pnCore_die("pnCore_getSiteVar: Unknown site variable: ".$name);
     }
     return $siteVars[$name];
 
@@ -373,6 +385,20 @@ function pnCore_disposeDebugger()
         $totalTime = ($endTime - $pnDebug_startTime);
         pnLogMessage("Response was served in $totalTime seconds.");
     }
+}
+
+function pnCore_die($msg)
+{
+    // TODO: <marco> Write a good text here! Can we send the 500 http code from php?
+    $errPage = "<html><head><title>Fatal Error</title></head><body><p>
+                A fatal error occurred bla bla, we're sorry bla bla, retry,
+                or contact us bla bla</p>";
+    if (pnCoreIsDebuggerActive()) {
+        $errPage .= "<p><b>Technical motivation is</b>: " . nl2br($msg) . "</p>";
+    }
+    $errPage .= "</body></html";
+    echo $errPage;
+    die();
 }
 
 // CORE CLASSES
@@ -403,14 +429,14 @@ class pnCore__ConfigFileLoader
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!($fp = fopen($fileName, 'r'))) {
-            die("pnCore__ConfigFileLoader: cannot open configuration file $fileName.");
+            pnCore_die("pnCore__ConfigFileLoader: cannot open configuration file $fileName.");
         }
 
         while ($data = fread($fp, 4096)) {
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                die("pnCore__ConfigFileLoader: XML parser error in $fileName: $errstr at line $line.");
+                pnCore_die("pnCore__ConfigFileLoader: XML parser error in $fileName: $errstr at line $line.");
                 return;
             }
         }
@@ -431,25 +457,25 @@ class pnCore__ConfigFileLoader
         if ($tag == 'variable') {
             if (!isset($attribs['name'])) {
                 $line = xml_get_current_line_number($this->parser);
-                die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: attribute 'name' not found.");
             }
             if (!isset($attribs['type'])) {
                 $line = xml_get_current_line_number($this->parser);
-                die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: attribute 'type' not found.");
             }
             if ($attribs['type'] != 'string' && $attribs['type'] != 'boolean' &&
                 $attribs['type'] != 'args_string' && $attribs['type'] != 'scs_string' &&
                 $attribs['type'] != 'integer' && $attribs['type'] != 'double') {
                 $line = xml_get_current_line_number($this->parser);
-                die("pnCore__ConfigFileLoader: Invalid config variable in ".
+                pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in ".
                     "$fileName at line $line: unknown value for attribute 'type': $attribs[type].");
             }
             if (isset($attribs['encoded']) && $attribs['encoded'] == 'true') {
                 if ($attribs['type'] != 'string') {
                     $line = xml_get_current_line_number($this->parser);
-                    die("pnCore__ConfigFileLoader: Invalid config variable in "
+                    pnCore_die("pnCore__ConfigFileLoader: Invalid config variable in "
                         ."$fileName at line $line: only variables of type string can be encoded.");
                 }
                 $encoded = true;

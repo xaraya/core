@@ -58,8 +58,7 @@ function pnDB_init($args)
     $dbconn = ADONewConnection($dbtype);
     $dbh = $dbconn->Connect($dbhost, $dbuname, $dbpass, $dbname);
     if (!$dbh) {
-        $dbpass = '';
-        die("pnDB_init: Failed to connect to $dbtype://$dbuname:$dbpass@$dbhost/$dbname, error message: " . $dbconn->ErrorMsg());
+        pnCore_die("pnDB_init: Failed to connect to $dbtype://$dbuname@$dbhost/$dbname, error message: " . $dbconn->ErrorMsg());
     }
     global $ADODB_FETCH_MODE;
     $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
@@ -70,6 +69,7 @@ function pnDB_init($args)
     }
 
     // Initialise pntables
+    // FIXME: <marco> Can we get rid of globale $prefix? $pntable should become $pnDB_tables
     global $pntable, $prefix;
     $prefix = $args['systemTablePrefix'];
     $pntable = array();
@@ -80,27 +80,6 @@ function pnDB_init($args)
     //       which of them could be site prefixed?
 
     // Core tables
-    
-
-    // User System and Security Service Tables
-    $pntable['realms']                = $systemPrefix . '_realms';
-    $pntable['users']                 = $systemPrefix . '_users';
-    $pntable['user_data']             = $systemPrefix . '_user_data';
-    $pntable['user_perms']            = $systemPrefix . '_user_perms';
-    $pntable['user_property']         = $systemPrefix . '_user_property';
-    $pntable['groups']                = $systemPrefix . '_groups';
-    $pntable['group_perms']           = $systemPrefix . '_group_perms';
-    $pntable['group_membership']      = $systemPrefix . '_group_membership';
-
-    // Session Support Tables
-    $pntable['session_info']          = $systemPrefix . '_session_info';
-
-    // Blocks Support Tables
-    $pntable['blocks']                = $systemPrefix . '_blocks';
-    $pntable['block_instances']       = $systemPrefix . '_block_instances';
-    $pntable['block_groups']          = $systemPrefix . '_block_groups';
-    $pntable['block_group_instances'] = $systemPrefix . '_block_group_instances';
-    $pntable['block_types']           = $systemPrefix . '_block_types';
 
     // BlockLayout Template Engine Tables
     $pntable['template_tags']         = $systemPrefix . '_template_tags';
@@ -108,9 +87,9 @@ function pnDB_init($args)
     // FIXME: <marco> I think that those tables are not part of core, and should go into
     //        their proper module
     $pntable['admin_menu']            = $systemPrefix . '_admin_menu';
-        // FIXME: <marco> I don't need this in MLS, should we drop it?
+    // FIXME: <marco> I don't need this in MLS, should we drop it?
     $pntable['languages']             = $systemPrefix . '_languages';
-        // FIXME: <marco> Paul do we need it?
+    // FIXME: <marco> Paul do we need it?
     $pntable['userblocks']            = $systemPrefix . '_userblocks';
 
     return true;

@@ -14,6 +14,20 @@
  * And why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
  */
 
+function pnBlock_init($args)
+{
+    // Blocks Support Tables
+    $systemPrefix = pnDBGetSystemTablePrefix();
+
+    $tables = array('blocks' => $systemPrefix . '_blocks',
+                    'block_instances' => $systemPrefix . '_block_instances',
+                    'block_groups' => $systemPrefix . '_block_groups',
+                    'block_group_instances' => $systemPrefix . '_block_group_instances',
+                    'block_types' => $systemPrefix . '_block_types');
+
+    pnDB_importTables($tables);
+}
+
 /**
  * Get block information
  *
