@@ -31,8 +31,9 @@ define('XAR_SYSTEM_MESSAGE', 3);
 /* Xaraya System Exceptions */
 
 include "includes/exceptions/exceptionstack.class.php";
-global $ExceptionStack;
+global $ExceptionStack, $ErrorStack;
 $ExceptionStack = new xarExceptionStack();
+$ErrorStack = new xarExceptionStack();
 
 include "includes/exceptions/systemmessage.class.php";
 include "includes/exceptions/systemexception.class.php";

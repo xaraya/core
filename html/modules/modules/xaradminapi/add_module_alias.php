@@ -32,7 +32,7 @@ function modules_adminapi_add_module_alias($args)
     } else {
         // TODO: test this someday...
         //if (xarExceptionId() != 'MODULE_NOT_EXIST') return; // throw back
-        xarExceptionFree();
+        //xarExceptionFree();
     }
 
     // Check if the alias we want to set it to *does* exist
