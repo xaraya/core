@@ -63,7 +63,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Make sure we should still be here
     if ($phase >= XARINSTALL_PHASE_ADMIN_CREATION) {
         xarCoreInit(XARCORE_SYSTEM_ALL);
-        xarRedirect('index.php?module=installer&type=admin&func=bootstrap');
+        xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
     // Get module parameters

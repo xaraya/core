@@ -88,7 +88,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
 {
     global $xarUser_authenticationModules;
 
-    if (xarUserLoggedIn()) {
+    if (xarUserIsLoggedIn()) {
         return true;
     }
 
@@ -669,7 +669,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  */
 function xarUser_getThemeName()
 {
-    if (!xarUserLoggedIn()) {
+    if (!xarUserIsLoggedIn()) {
         return;
     }
     $themeName = xarUserGetVar('Theme');

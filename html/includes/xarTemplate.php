@@ -57,7 +57,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
+        $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
     }
 
     $tplData['_bl_module_name'] = $modName;
@@ -94,7 +94,7 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     $sourceFileName = "$xarTpl_themeDir/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xar' : "-$templateName.xar");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/xarblocks/$blockName" . (empty($templateName) ? '.xrd' : "-$templateName.xrd");
+        $sourceFileName = "modules/$modOsDir/xartemplates/xarblocks/$blockName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -139,15 +139,15 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageN
     // TODO --> Allow master admin template.
     if($modType == 'admin'){
         $pageName = xarVarPrepForOS($pageName);
-        $sourceFileName = "$xarTpl_themeDir/admin/$pageName.xar";
+        $sourceFileName = "$xarTpl_themeDir/admin/$pageName.xt";
         if (!file_exists($sourceFileName)) {
             // Revert to main theme
             $pageName = xarVarPrepForOS($pageName);
-            $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xar";
+            $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xt";
         }
     } else {
         $pageName = xarVarPrepForOS($pageName);
-        $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xar";
+        $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xt";
     }
 
     $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput);
@@ -165,7 +165,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 
     $templateName = xarVarPrepForOS($templateName);
 
-    $sourceFileName = "$xarTpl_themeDir/blocks/$templateName.xar";
+    $sourceFileName = "$xarTpl_themeDir/blocks/$templateName.xt";
     // FIXME: <marco> I'm removing the code to fall back to 'default' template since
     // I don't think it's what we need to do here.
 
