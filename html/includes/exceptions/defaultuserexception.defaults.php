@@ -19,6 +19,10 @@
             'title' => xarML('Bad Data'),
             'short' => xarML('The data provided was bad.'),
             'long' => xarML('The value provided during this operation could not be validated, or was not accepted for other reasons.')),
+        'CANNOT_CONTINUE' => array(
+            'title' => xarML('Operation Halted'),
+            'short' => xarML('This operation cannot be completed under the present circumstances.'),
+            'long' => xarML('This operation was stopped because, although it is not forbidden, it cannot be completed in this context.')),
         'DUPLICATE_DATA' => array(
             'title' => xarML('Duplicate Data'),
             'short' => xarML('The data provided was a duplicate.'),
