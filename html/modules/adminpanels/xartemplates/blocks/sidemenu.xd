@@ -45,4 +45,4 @@
     </xar:foreach>
 </xar:if>
 <!-- Logout -->
-[<a href="#$logouturl#">#$logoutlabel#</a>] 
+[<a href="#$logouturl#"><xar:mlstring>Admin logout</xar:mlstring></a>] 

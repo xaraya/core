@@ -104,12 +104,13 @@ function adminpanels_adminmenublock_display($blockinfo)
 
     // TODO: rather use a boolean to flag whether the logout is need and xar:mlstring
     //       the label inside a xar:if construct, i.e. dont set the text at all here.
+
+    // SETTING 1: Show a logout link in the block?
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) {
         $showlogout = true;
     }
     
-    $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
     // Get current URL for later comparisons because we need to compare
@@ -124,7 +125,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     switch(strtolower($menustyle)){
         case 'byname':
             // display by name
-            foreach($mods as $mod){
+            foreach($mods as $mod) {
                 $modname = $mod['name'];
                 $labelDisplay = $mod['displayname'];
                 // get URL to module's main function
@@ -167,8 +168,9 @@ function adminpanels_adminmenublock_display($blockinfo)
                         // not sure if we need this
                         $indlinks = array();
                     }
-                }
-            }
+                } // if
+            } // foreach
+            
             // TODO: move prep to template
             $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
 
@@ -177,7 +179,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                 'adminmods'     => $adminmods,
                 'menustyle'     => $menustyle,
                 'logouturl'     => $logouturl,
-                'logoutlabel'   => $logoutlabel,
                 'marker'        => $marker
             );
             // this should do for now
@@ -244,8 +245,9 @@ function adminpanels_adminmenublock_display($blockinfo)
                        // Why is this needed?
                        unset($mod['displayname']);
                     }
-                }
-            }
+                } //inner foreach
+            } // outer foreach
+                
             // prepare the data for template(s)
             // TODO: move prepare to template.
             $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
@@ -258,7 +260,6 @@ function adminpanels_adminmenublock_display($blockinfo)
             $data = array(
                 'catmods'       => $catmods,
                 'logouturl'     => $logouturl,
-                'logoutlabel'   => $logoutlabel,
                 'marker'        => $marker
             );
             break;
@@ -279,7 +280,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
                     'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
-                    'logoutlabel'   => $logoutlabel ='not implemented',
                     'marker'        => $marker
                 );
                 break;
@@ -300,7 +300,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                     'indlinks'      => $indlinks ='',
                     'menustyle'     => $menustyle,
                     'logouturl'     => $logouturl = xarModURL('adminpanels', 'admin', 'modifyconfig'),
-                    'logoutlabel'   => $logoutlabel = xarML('not implemented'),
                     'marker'        => $marker
                 );
                 break;
