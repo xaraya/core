@@ -126,6 +126,11 @@ function blocks_adminapi_update_instance_groups($args)
         $result =& $dbconn->Execute($query);
     }
 
+    // Resequence the position values, since we may have changed the existing values.
+    // Span the resequence across all groups, since any number of groups could have
+    // been affected.
+    xarModAPIfunc('blocks', 'admin', 'resequence');
+
     return true;
 }
 

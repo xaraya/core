@@ -110,8 +110,6 @@ function blocks_adminapi_create_instance($args)
     }
 
     // Resequence the blocks.
-    // TODO: support resequence by a single block type or for all
-    // block groups in which a block instance is a member.
     xarModAPIFunc('blocks', 'admin', 'resequence');
 
     $args['module'] = 'blocks';

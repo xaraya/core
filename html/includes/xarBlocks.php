@@ -169,11 +169,11 @@ function xarBlock_renderGroup($groupName)
               ON        inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as btypes
               ON        btypes.xar_id = inst.xar_type_id
-              WHERE     bgroups.xar_name = '$groupName'
+              WHERE     bgroups.xar_name = ?
               AND       inst.xar_state > 0
               ORDER BY  group_inst.xar_position ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query, array($groupName));
     if (!$result) {return;}
 
     $output = '';
