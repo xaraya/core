@@ -1,0 +1,11 @@
+<?php xarTplSetPageTemplateName('header') ?>
+<items>
+<xar:if condition="!empty($object)">
+    <?php xarVarSetCached('XML','itemname',$object->name); ?>
+    <xar:data-view object="$object" />
+<xar:elseif condition="!empty($modid)" />
+    <?php $modinfo = xarModGetInfo($modid); xarVarSetCached('XML','itemname',$modinfo['name'].'_'.$itemtype); ?>
+    <xar:data-view module="$modid" itemtype="$itemtype" numitems="30" startnum="$startnum" />
+</xar:if>
+</items>
+
