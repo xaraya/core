@@ -24,23 +24,23 @@ function nav_reset() {
 
 
 function show_layer(thisname) {
-	if(document.all) { // IE
-		document.all[thisname].style.visibility = 'visible';
-	} else if(document.layers) { // NS
- 		document.layers[thisname].visibility = 'visible';
-	} else { // DOM
-		document.getElementById(thisname).style.visibility = 'visible';
-	}
+    if(document.all) { // IE
+        document.all[thisname].style.visibility = 'visible';
+    } else if(document.layers) { // NS
+        document.layers[thisname].visibility = 'visible';
+    } else { // DOM
+        document.getElementById(thisname).style.visibility = 'visible';
+    }
 }
 
 function hide_layer(thisname) {
-	if(document.all) { // IE
-		document.all[thisname].style.visibility = 'hidden';
-	} else if(document.layers) { // NS
-		document.layers[thisname].visibility = 'hidden';
-	} else { // DOM
-		document.getElementById(thisname).style.visibility = 'hidden';
-	}
+    if(document.all) { // IE
+        document.all[thisname].style.visibility = 'hidden';
+    } else if(document.layers) { // NS
+        document.layers[thisname].visibility = 'hidden';
+    } else { // DOM
+        document.getElementById(thisname).style.visibility = 'hidden';
+    }
 }
 
 /* idea and implementation borrowed from http://wadny.com */
