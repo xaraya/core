@@ -154,11 +154,12 @@ function xarTplSetPageTemplateName($templateName)
 }
 
 /**
- * Set page title
+ * Set page title 
  *
  * @access public
  * @global xarTpl_pageTitle string
  * @param title string
+ * @param module string
  * @returns bool
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
