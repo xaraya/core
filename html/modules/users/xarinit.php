@@ -83,17 +83,8 @@ function users_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    $index = array('name'      => 'i_xar_users_1',
-                   'fields'    => array('xar_uid'),
-                   'unique'    => TRUE);
-
-    $query = xarDBCreateIndex($tables['users'],$index);
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
     $index = array(
-    'name'      => 'i_xar_users_2',
+    'name'      => 'i_xar_users_1',
     'fields'    => array('xar_uname'),
     'unique'    => true
     );
