@@ -1159,8 +1159,7 @@ class xarTpl__NodesFactory
     {
         $node = new xarTpl__TextNode();
         $node->tagName = 'TextNode';
-        // eat whitespace on the outside, CHECK THIS, not 100% sure
-        $node->content = trim($content);
+        $node->content = $content;
         $node->fileName = $parser->fileName;
         $node->line = $parser->line;
         $node->column = $parser->column;
