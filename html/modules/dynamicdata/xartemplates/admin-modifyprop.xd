@@ -51,22 +51,11 @@ Tip : empty label -> delete field for all items
 
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
-        <td>#$id#</td>
+        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $id))#">#$id#</a></td>
         <td><input type="text" name="dd_label[#$id#]" id="dd_label[#$id#]" size="10" value="#$label#" /></td>
         <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" id="dd_type['.$id.']" value="$type" /></td>
         <td><input type="text" name="dd_default[#$id#]" id="dd_default[#$id#]" size="10" value="#$default#" /></td>
-        <td>
-            <select name="dd_source[#$id#]" id="dd_source[#$id#]">
-            <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
-            <xar:foreach in="$sources" value="$mysource">
-                <xar:if condition="$mysource eq $source">
-                    <option selected="selected">#$mysource#</option>
-                <xar:else />
-                    <option>#$mysource#</option>
-                </xar:if>
-            </xar:foreach>
-            </select>
-        </td>
+        <td>#$source#</td>
         <td><input type="text" name="dd_validation[#$id#]" id="dd_validation[#$id#]" size="10" value="#$validation#" /></td>
         <td><xar:data-input type="fieldstatus" name="dd_status['.$id.']" size="15" value="$status" /></td>
     </tr>
