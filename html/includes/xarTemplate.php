@@ -301,7 +301,7 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
     assert('$position == "head" || $position == "body"');
-    return xarTplAddJavaScript($position, 'code', "<!--- JavaScript code from {$owner} --->\n" . $code);
+    return xarTplAddJavaScript($position, 'code', "<!-- JavaScript code from {$owner} -->\n" . $code);
 }
 
 /**
