@@ -8,14 +8,12 @@
  */
 function dynamicdata_admin_modify($args)
 {
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid)= xarVarCleanFromInput('objectid',
-                                        'modid',
-                                        'itemtype',
-                                        'itemid');
     extract($args);
+
+    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($itemid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',

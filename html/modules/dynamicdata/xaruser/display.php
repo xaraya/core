@@ -9,14 +9,12 @@
  */
 function dynamicdata_user_display($args)
 {
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid)= xarVarCleanFromInput('objectid',
-                                        'modid',
-                                        'itemtype',
-                                        'itemid');
     extract($args);
+
+    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
 
 /*  // we could also pass along the parameters to the template, and let it retrieve the object
     // but in this case, we'd need to retrieve the object label anyway

@@ -8,17 +8,13 @@ function dynamicdata_util_export($args)
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid,
-         $tofile) = xarVarCleanFromInput('objectid',
-                                         'modid',
-                                         'itemtype',
-                                         'itemid',
-                                         'tofile');
-
     extract($args);
+
+    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('tofile',   'isset', $tofile,    , XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');

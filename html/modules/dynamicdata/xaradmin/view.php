@@ -5,17 +5,13 @@
  */
 function dynamicdata_admin_view($args)
 {
-    list($itemid,
-         $modid,
-         $itemtype,
-         $startnum,
-         $sort) = xarVarCleanFromInput('itemid',
-                                           'modid',
-                                           'itemtype',
-                                           'startnum',
-                                           'sort');
-
     extract($args);
+
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'isset', $startnum,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('sort',     'isset', $sort,      , XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');

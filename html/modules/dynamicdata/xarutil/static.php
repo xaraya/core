@@ -8,13 +8,11 @@ function dynamicdata_util_static($args)
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    list($module,
-         $modid,
-         $itemtype,
-         $table) = xarVarCleanFromInput('module',
-                                        'modid',
-                                        'itemtype',
-                                        'table');
+    if(!xarVarFetch('module',   'isset', $module,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     , XARVAR_NOT_REQUIRED)) {return;}
+
 
     $export = xarVarCleanFromInput('export');
 

@@ -7,13 +7,11 @@
  */
 function dynamicdata_user_view()
 {
-    list($objectid,
-         $modid,
-         $itemtype,
-         $startnum) = xarVarCleanFromInput('objectid',
-                                           'modid',
-                                           'itemtype',
-                                           'startnum');
+    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'isset', $startnum,  , XARVAR_NOT_REQUIRED)) {return;}
+
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
     }

@@ -7,17 +7,13 @@
  */
 function dynamicdata_admin_new($args)
 {
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid,
-         $preview) = xarVarCleanFromInput('objectid',
-                                          'modid',
-                                          'itemtype',
-                                          'itemid',
-                                          'preview');
-
     extract($args);
+
+    if(!xarVarFetch('objectid', 'isset', $objectid,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('preview',  'isset', $preview,   , XARVAR_NOT_REQUIRED)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');

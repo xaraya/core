@@ -26,7 +26,7 @@ function replace( $matches )
         $localmax1 = $max1-strlen($list1[$key]) + 1;
         $localmax2 = $max2-strlen($list2[$key]) + 1;
 
-        $text .= "if(!xarVarFetch(${list2[$key]},";
+        $text .= "    if(!xarVarFetch(${list2[$key]},";
         for ($i=0;$i<$localmax2;$i++) $text.=' ';
         $text .= "'isset', ${list1[$key]},";
         for ($i=0;$i<$localmax1;$i++) $text.=' ';
@@ -60,12 +60,12 @@ function searchDir($path) {
                 
                 //This is to know if something was replace or not
                 $GLOBALS['called'] = false;
-                //"#list\((.*)\)[^=;]*=[^x;]*xarVarCleanFromInput\([(.*)[,\r\n]*]*\);#mU"
 
-                $new_file_contents = preg_replace_callback( "|list[ ]*\(([^)]*)\)[ ]*=[ ]*xarVarCleanFromInput[ ]*\(([^)]*)\)[ ]*;|mU", 'replace', $file_contents );
+                $new_file_contents = preg_replace_callback( "|[ ]*list[ ]*\(([^)]*)\)[ ]*=[ ]*xarVarCleanFromInput[ ]*\(([^)]*)\)[ ]*;|mU", 'replace', $file_contents );
 
                 if ($GLOBALS['called']) {
-                    $fp = fopen ( "$path/$entry.test", "w+" );
+                    echo "Changing file $path/$entry\r\n";
+                    $fp = fopen ( "$path/$entry", "w+" );
                     fwrite($fp, $new_file_contents);
                     fclose($fp);
 
@@ -80,6 +80,6 @@ function searchDir($path) {
 }
 
 $path = '../html';
-searchDir ('.');
+searchDir ($path);
 
 ?>

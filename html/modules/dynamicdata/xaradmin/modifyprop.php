@@ -16,13 +16,11 @@ function dynamicdata_admin_modifyprop()
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    list($itemid,
-         $modid,
-         $itemtype,
-         $details) = xarVarCleanFromInput('itemid',
-                                          'modid',
-                                          'itemtype',
-                                          'details');
+    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('details',  'isset', $details,   , XARVAR_NOT_REQUIRED)) {return;}
+
 
     if (empty($itemtype)) {
         $itemtype = 0;

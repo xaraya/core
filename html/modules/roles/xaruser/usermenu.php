@@ -59,13 +59,11 @@ function roles_user_usermenu()
             break;
 
         case 'updatebasic':
-            list($uid,
-                 $name,
-                 $pass1,
-                 $pass2) = xarVarCleanFromInput('uid',
-                                                'name',
-                                                'pass1',
-                                                'pass2');
+    if(!xarVarFetch('uid',   'isset', $uid,    , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name',  'isset', $name,   , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pass1', 'isset', $pass1,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pass2', 'isset', $pass2,  , XARVAR_NOT_REQUIRED)) {return;}
+
             $uname = xarUserGetVar('uname');
             $email = xarUserGetVar('email');
             // Confirm authorisation code.
