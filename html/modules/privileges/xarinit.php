@@ -491,7 +491,12 @@ function privileges_init()
  */
 function privileges_upgrade($oldVersion)
 {
-    return false;
+    switch($oldVersion) {
+    case '0.1':
+        // compatability upgrade to 3 positions, no functional changes
+        break;
+    }
+    return true;
 }
 
 /**
