@@ -467,7 +467,7 @@ class pnHTML
         $compoutput->Text($confirm_text);
         $compoutput->Linebreak(2);
         $arg['confirm'] = 1;
-        $arg['authid'] = pnSecGenAuthKey();
+        $arg['authid'] = xarSecGenAuthKey();
         $arg['confirmation'] = 1;
         $compoutput->FormHidden($arg);
         $compoutput->FormSubmit(_CONFIRM);

@@ -179,7 +179,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
  */
 function xarUserLogOut()
 {
-    if (!xarUserLoggedIn()) {
+    if (!xarUserIsLoggedIn()) {
         return true;
     }
     list($dbconn) = xarDBGetConn();
