@@ -92,11 +92,15 @@
 		</span>
 	</p>
 </xar:if>
+
+<div style="clear:both; padding-top: 10px;">
+
 <h4>
 	<xar:mlstring>
 		Menu Content 
 	</xar:mlstring>
 </h4>
+
 <table class="xar-norm-outline">
 	<tr>
 		<th align="center">
@@ -185,3 +189,4 @@
 		</td>
 	</tr>
 </table>
+</div>
