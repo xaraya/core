@@ -18,5 +18,5 @@ $modversion['securityschema'] = array('roles::' => 'Role uname::Role pid',
                                       'users::Field' => '::',
 				      'roles::Variables' => 'Role variable name::');
 $modversion['class'] = 'Core Complete';
-$modversion['category'] = 'Structure';
+$modversion['category'] = 'Users & Groups';
 ?>
