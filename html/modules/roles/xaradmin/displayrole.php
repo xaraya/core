@@ -33,13 +33,12 @@ function roles_admin_displayrole()
     
     
 
-    $hooks = xarModCallHooks('item',
-                             'display',
-                             $uid,
-                             xarModURL('roles',
-                                       'user',
-                                       'display',
-                                       array('uid' => $uid)));
+    $item = $data;
+    $item['module'] = 'roles';
+    $item['itemtype'] = $data['type']; // handle groups differently someday ?
+    $item['returnurl'] = xarModURL('roles', 'user', 'display',
+                                   array('uid' => $uid));
+    $hooks = xarModCallHooks('item', 'display', $uid, $item);
     if (empty($hooks)) {
         $data['hooks'] = '';
     } elseif (is_array($hooks)) {
