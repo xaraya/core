@@ -39,7 +39,7 @@ function roles_onlineblock_info()
 function roles_onlineblock_display($blockinfo)
 {
     // Security check
-    if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$blockinfo[title]:All")) {return;}
+    if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$blockinfo[title]:$blockinfo[id]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {
