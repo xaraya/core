@@ -16,13 +16,14 @@
  * modify a block instance
  * @TODO Need to sperate this out to API calls.
  */
+
 function blocks_admin_modify_instance()
 {
     // Get parameters
-    if (!xarVarFetch('bid','int:1:',$bid)) return;
+    if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
 
     // Security Check
-    if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
+    if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // TODO: move all database stuff to the API.
     $dbconn =& xarDBGetConn();
@@ -50,6 +51,10 @@ function blocks_admin_modify_instance()
 
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
+        if (is_array($extra)) {
+            // Render the extra settings if necessary.
+            $extra = xarTplBlock($instance['module'], 'admin-' . $instance['type'], $extra);
+        }
     } else {
         $extra = '';
     }

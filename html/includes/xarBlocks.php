@@ -58,8 +58,8 @@ function xarBlock_render($blockInfo)
     xarLogMessage("block rendering: module " . $modName . " / type " . $blockType);
 
     // This lets the security system know what module we're in
-// no need to update / select in database for each block here
-//    xarModSetVar('blocks','currentmodule',$modName);
+    // no need to update / select in database for each block here
+    // xarModSetVar('blocks','currentmodule',$modName);
     xarVarSetCached('Security.Variables','currentmodule',$modName);
 
     // Load the block.
@@ -190,12 +190,10 @@ function xarBlock_renderGroup($groupName)
             $output .= xarBlockGetCached($cacheKey,'block');
 
         } else {
-
             $blockInfo['last_update'] = $result->UnixTimeStamp($blockInfo['last_update']);
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
-            // TODO: allow over-riding of inner and outer templates at different levels independantly.
             $group_inst_bl_template = split(';', $blockInfo['group_inst_bl_template'], 3);
             $inst_bl_template = split(';', $blockInfo['inst_bl_template'], 3);
             $group_bl_template = split(';', $blockInfo['group_bl_template'], 3);
