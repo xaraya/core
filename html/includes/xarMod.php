@@ -696,10 +696,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     $fileName = 'modules/'.$modDir.'/pnlang/eng/'.$modType.'.php';
     if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
 
-    // FIXME: <marco> Remove it when the old language packs are gone
-    $fileName = 'modules/'.$modDir.'/xarlang/eng/'.$modType.'.php';
-    if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
-
     // Load database info
     xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
 
