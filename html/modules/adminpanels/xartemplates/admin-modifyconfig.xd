@@ -70,7 +70,8 @@
                     </label> 
                 </td>
                 <td>
-                    <input type="text" name="marker" id="marker" size="3" maxlength="3" value="#$marker#" /> 
+                    <!-- feature request 707 - 10 is the maximum number of characters accepted for html entities -->
+                    <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" /> 
                 </td>
                 <td class="adminpanels-rednote">
                     <xar:mlstring>
