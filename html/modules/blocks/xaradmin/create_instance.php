@@ -37,7 +37,6 @@ function blocks_admin_create_instance()
             'name'     => $name,
             'title'    => $title,
             'type'     => $type,
-            'group'    => $group,
             'template' => $template,
             'state'    => $state
         )
