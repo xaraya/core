@@ -65,7 +65,7 @@ function themes_metablock_info()
 function themes_metablock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$blockinfo[title].':All')) return;
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$blockinfo['title'].':All')) return;
 
     // Get current content
     if (!is_array($blockinfo['content'])) {
