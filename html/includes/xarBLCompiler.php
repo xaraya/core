@@ -2461,18 +2461,9 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
     {
         // Tag summary:
         // Mandatory attributes: either 'instance' or ('module' and 'type')
-        // Optional attributes: 'title', 'template', 'name'
+        // Optional attributes: 'title', 'template', 'name', 'state'
         // Other attributes: all remaining, collected into an array
         // Tag content: not supported for the present time
-
-        // Set defaults.
-        $instance = NULL;
-        $module = NULL;
-        $type = NULL;
-        $name = NULL;
-        $title = NULL;
-        $template = NULL;
-        $state = NULL;
 
         extract($this->attributes);
 
@@ -2486,7 +2477,12 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 
         // Remove the attributes that are handled outside the content.
         foreach(array('instance', 'module', 'type', 'name', 'title', 'template', 'state') as $std_attribute) {
-            if (isset($content[$std_attribute])) {unset ($content[$std_attribute]);}
+            if (isset($content[$std_attribute])) {
+                $$std_attribute = '"' . xarVar_addSlashes($content[$std_attribute]) . '"';
+                unset ($content[$std_attribute]);
+            } else {
+                $$std_attribute = 'NULL';
+            }
         }
 
         // PHP code for the block parameter override array.
@@ -2498,18 +2494,21 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         // Code for rendering the block tag.
         // Use double-quotes so variables can be expanded within the attributes
         // for more dynamic blocks.
-        return 'xarBlock_renderBlock(
+        $code = <<<EOT
+        xarBlock_renderBlock(
             array(
-                    \'instance\' => "' . xarVar_addSlashes($instance) . '",
-                    \'module\' => "' . xarVar_addSlashes($module) . '",
-                    \'type\' => "' . xarVar_addSlashes($type) . '",
-                    \'name\' => "' . xarVar_addSlashes($name) . '",
-                    \'title\' => "' . xarVar_addSlashes($title) . '",
-                    \'template\' => "' . xarVar_addSlashes($template) . '",
-                    \'state\' => "' . xarVar_addSlashes($state) . '",
-                    \'content\' => ' . $override . '
+                    'instance' => $instance,
+                    'module' => $module,
+                    'type' => $type,
+                    'name' => $name,
+                    'title' => $title,
+                    'template' => $template,
+                    'state' => $state,
+                    'content' => $override
             )
-        );';
+        );
+EOT;
+        return $code;
 
         // TODO: what shall we do about the content?
         // Ideally we could have child tags to supply content not appropriate to attributes.

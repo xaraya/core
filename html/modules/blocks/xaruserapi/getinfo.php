@@ -29,8 +29,11 @@ function blocks_userapi_getinfo($args)
 {
     extract($args);
 
-    // Exit now for templates that have not been recompiled.
-    if (!isset($instance) || !isset($module) || !isset($type)) {
+    // Exit now for templates that have not been recompiled - at least one of these elements
+    // will be missing.
+    if (!array_key_exists('instance', $args)
+        || !array_key_exists('module', $args)
+        || !array_key_exists('type', $args)) {
         return;
     }
 
@@ -97,14 +100,17 @@ function blocks_userapi_getinfo($args)
     // an array - don't try and set array elements for anything else.
     if (empty($blockinfo['content']) || is_array($blockinfo['content'])) {
         foreach($content as $pname => $pvalue) {
-            // If the array element exists, then over-ride it.
+            // If the array element exists, then override it.
             // There is no validation here (yet) - so arrays can
             // override strings and strings can override arrays.
             // TODO: allow a block to provide validation rules to 
             // pass $pvalue through for each $pname.
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.
-            $blockinfo['content'][$pname] = $pvalue;
+            // Only override non-array and empty elements for now.
+            if (empty($blockinfo['content'][$pname]) && !is_array($blockinfo['content'][$pname])) {
+                $blockinfo['content'][$pname] = $pvalue;
+            }
         }
     }
 
