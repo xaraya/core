@@ -67,7 +67,7 @@ function roles_admin_showprivileges()
                 'level' => "",
                 'frozen' => "");
         } else {
-            $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Roles',$role->getName());
+            $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),
                 'realm' => $priv->getRealm(),

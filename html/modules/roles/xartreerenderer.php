@@ -56,8 +56,7 @@ class xarTreeRenderer {
      */
     function maketree()
     {
-        $role = xarFindRole('Everybody');
-        return $this->addbranches(array('parent' => $this->roles->getgroup($role->getID())));
+        return $this->addbranches(array('parent' => $this->roles->getgroup(xarModGetVar('roles', 'everybody'))));
     }
 
     /**

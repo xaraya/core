@@ -787,45 +787,45 @@ class xarPrivileges extends xarMasks
                             AND pm.xar_parentid = 0
                             ORDER BY p.xar_name";
         }
-            $query = "SELECT p.xar_pid,
-                        p.xar_name,
-                        p.xar_realm,
-                        p.xar_module,
-                        p.xar_component,
-                        p.xar_instance,
-                        p.xar_level,
-                        p.xar_description,
-                        pm.xar_parentid ";
-            $query .= $fromclause;
-            $result = $this->dbconn->Execute($query);
-            if (!$result) return;
+        $query = "SELECT p.xar_pid,
+                    p.xar_name,
+                    p.xar_realm,
+                    p.xar_module,
+                    p.xar_component,
+                    p.xar_instance,
+                    p.xar_level,
+                    p.xar_description,
+                    pm.xar_parentid ";
+        $query .= $fromclause;
+        $result = $this->dbconn->Execute($query);
+        if (!$result) return;
 
-            $privileges = array();
-            $pids = array();
-            while(!$result->EOF) {
-                list($pid, $name, $realm, $module, $component, $instance, $level,
-                        $description,$parentid) = $result->fields;
-                $thisone = $pid;
-                if (!in_array($thisone,$pids)){
-                    $pids[] = $thisone;
-                    $privileges[] = array('pid' => $pid,
-                                       'name' => $name,
-                                       'realm' => $realm,
-                                       'module' => $module,
-                                       'component' => $component,
-                                       'instance' => $instance,
-                                       'level' => $level,
-                                       'description' => $description,
-                                       'parentid' => $parentid);
-                }
-                $result->MoveNext();
+        $privileges = array();
+        $pids = array();
+        while(!$result->EOF) {
+            list($pid, $name, $realm, $module, $component, $instance, $level,
+                    $description,$parentid) = $result->fields;
+            $thisone = $pid;
+            if (!in_array($thisone,$pids)){
+                $pids[] = $thisone;
+                $privileges[] = array('pid' => $pid,
+                                   'name' => $name,
+                                   'realm' => $realm,
+                                   'module' => $module,
+                                   'component' => $component,
+                                   'instance' => $instance,
+                                   'level' => $level,
+                                   'description' => $description,
+                                   'parentid' => $parentid);
             }
-            $alltoplevelprivileges = $privileges;
-            return $privileges;
-//        }
-//        else {
-//            return $alltoplevelprivileges;
-//        }
+            $result->MoveNext();
+        }
+        $alltoplevelprivileges = $privileges;
+        return $privileges;
+//    }
+//    else {
+//        return $alltoplevelprivileges;
+//    }
     }
 
 /**

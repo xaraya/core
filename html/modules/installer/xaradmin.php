@@ -347,8 +347,8 @@ function installer_admin_create_administrator()
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
-//    $role = xarFindRole('Myself');
-//    xarModSetVar('roles', 'myself', $role->getID());
+    $role = xarFindRole('Everybody');
+    xarModSetVar('roles', 'everybody', $role->getID());
 
     // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;

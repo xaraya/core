@@ -12,7 +12,6 @@ function privileges_admin_deleteprivilege()
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
-
 //Call the Privileges class and get the privilege to be deleted
     $privs = new xarPrivileges();
     $priv = $privs->getprivilege($pid);
