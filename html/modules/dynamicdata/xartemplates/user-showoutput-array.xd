@@ -1,0 +1,16 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:if condition="!empty($value)">
+    <xar:if condition="is_array($value)">
+        <xar:foreach in="$value" key="$key" value="$val">
+            <xar:if condition="!empty($key) and !is_numeric($key)">
+                #$key# : 
+            </xar:if>
+            #$val#
+            <br/>
+        </xar:foreach>
+    <xar:else/>
+        #$value#
+    </xar:if>
+</xar:if>
+
