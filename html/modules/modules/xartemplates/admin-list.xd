@@ -32,7 +32,7 @@
 				<xar:loop name="$items">
 				<tr class="xar-norm" valign="top">
 					<td>
-						#$displayname#
+						#$displayname#<a name="#$displayname#"/>
 					</td>
 					<td>
 						#$version#
