@@ -86,6 +86,9 @@ function dynamicdata_adminapi_showlist($args)
     if (empty($where)) {
         $where = '';
     }
+    if (empty($groupby)) {
+        $groupby = '';
+    }
 
     // check the optional field list
     if (!empty($fieldlist)) {
@@ -127,6 +130,7 @@ function dynamicdata_adminapi_showlist($args)
                                            'fieldlist' => $myfieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'groupby' => $groupby,
                                            'status' => $status));
     $object->getItems();
     return $object->showList(array('layout'   => $layout,

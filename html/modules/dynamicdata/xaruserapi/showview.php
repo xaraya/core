@@ -87,6 +87,9 @@ function dynamicdata_userapi_showview($args)
     if (empty($where)) {
         $where = '';
     }
+    if (empty($groupby)) {
+        $groupby = '';
+    }
 
     // check the optional field list
     if (!empty($fieldlist)) {
@@ -123,6 +126,7 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'groupby' => $groupby,
                                            'status' => $status));
     if (!isset($object)) return;
 

@@ -98,6 +98,9 @@ function &dynamicdata_userapi_getitems($args)
     if (empty($where)) {
         $where = null;
     }
+    if (empty($groupby)) {
+        $groupby = null;
+    }
 
     // join a module table to a dynamic object
     if (empty($join)) {
@@ -118,6 +121,7 @@ function &dynamicdata_userapi_getitems($args)
                                            'fieldlist' => $fieldlist,
                                            'join' => $join,
                                            'table' => $table,
+                                           'groupby' => $groupby,
                                            'status' => $status));
     if (!isset($object)) return;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
