@@ -139,25 +139,49 @@ function xarPageIsCached($cacheKey, $name = '')
 //function xarBlockIsCached($cacheKey, $blockDynamics, $blockPermission, $name = '')
 function xarBlockIsCached($args)
 {
-    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime;
+    global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime, $xarBlock_noCache;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
     extract($args);
-    
-    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir;
 
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    //$blocksettings = $systemPrefix . '_cache_blocks';
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
+    if (isset($xartable['cache_blocks'])) {
+    $blocksettings = $xartable['cache_blocks'];
+    $query = "SELECT xar_nocache,
+                     xar_dynamic,
+                     xar_priv,
+                     xar_expire
+             FROM $blocksettings WHERE xar_bid = $blockid ";
+    $result =& $dbconn->Execute($query);
+    if ($result) {
+        list ($noCache, $blockDynamics, $blockPriv, $blockCacheExpireTime) = $result->fields;
+    }
+    }
+
+    if (!isset($noCache)) {
+        $noCache = 0;
+    }
     if (!isset($blockDynamics)) {
     	$blockDynamics = 1;
     }
-    if (!isset($blockPermission)) {
-    	$blockPermission = 2;
+    if (!isset($blockPriv)) {
+    	$blockPriv = 2;
     }
-    // todo: replace this with a separate xarBlock_cacheTime config value
     if (!isset($blockCacheExpireTime)) {
         $blockCacheExpireTime = $xarBlock_cacheTime;
     }
-    
+
+    if ($noCache == 1) {
+        $xarBlock_noCache = 1;
+        return false;
+    }
+
+    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir;
+
     if ($blockDynamics == 1) {
         $factors .= xarServerGetVar('REQUEST_URI');
         $param = xarServerGetVar('QUERY_STRING');
@@ -165,7 +189,7 @@ function xarBlockIsCached($args)
             $factors .= '?' . $param;
         }
     }
-    if ($blockPermission == 1) {
+    if ($blockPriv == 1) {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $rolemembers = $systemPrefix . '_rolemembers';
         $currentuid = xarSessionGetVar('uid');
@@ -181,16 +205,16 @@ function xarBlockIsCached($args)
         }
         $result->Close();
         $factors .=$gids;
-    } elseif ($blockPermission == 2) {
+    } elseif ($blockPriv == 2) {
         $factors .= xarSessionGetVar('uid');
     } else {
         $factors .= 0;
     }
     $xarBlock_cacheCode = md5($factors);
-    
+
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
-    
+
     if (
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         file_exists($cache_file) &&
@@ -285,7 +309,12 @@ function xarPageSetCached($cacheKey, $name, $value)
 
 function xarBlockSetCached($cacheKey, $name, $value)
 {
-    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $xarBlock_cacheTime;
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $xarBlock_cacheTime, $xarBlock_noCache;
+    
+    if ($xarBlock_noCache == 1) {
+        $xarBlock_noCache = '';
+        return;
+    }
 
     $xarTpl_themeDir = xarTplGetThemeDir();
     

@@ -1235,24 +1235,27 @@ Password : %%password%%
     $varshtml['expire'] = $now + 24000;
     $msg = serialize($varshtml);
 
-    $htmlBlockId= xarModAPIFunc('blocks',
-                                 'admin',
-                                 'block_type_exists',
-                                 array('modName'  => 'base',
-                                       'blockType'=> 'html'));
+    $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                   array('module'  => 'base',
+                                         'type'    => 'html'));
 
-    if (!isset($htmlBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (empty($htmlBlockType) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    if (!xarModAPIFunc('blocks',
-                       'admin',
-                       'create_instance', array('title'    => 'Reminder',
-                                                'content'  => $msg,
-                                                'type'     => $htmlBlockId,
-                                                'group'    => 1,
-                                                'template' => '',
-                                                'state'    => 2))) return;
+    $htmlBlockTypeId = $htmlBlockType['tid'];
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                       array('title'    => 'Reminder',
+                             'name'     => 'reminder',
+                             'content'  => $msg,
+                             'type'     => $htmlBlockTypeId,
+                             'groups'    => array(array('gid'      => $leftBlockGroup,
+                                                        'template' => '')),
+                             'template' => '',
+                             'state'    => 2))) {
+        return;
+    }
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
