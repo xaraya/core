@@ -87,10 +87,10 @@
 							<xar:mlstring>Send welcome email on successful registration of user</xar:mlstring>
 						</td>
 						<td>
-							<xar:if condition="xarModGetVar('users', 'sendwelcomemail')">
-								<input type="checkbox" name="sendwelcomemail" id="sendwelcomemail" value="1" checked="checked" tabindex="2" />
+							<xar:if condition="xarModGetVar('users', 'sendwelcomeemail')">
+								<input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" checked="checked" tabindex="2" />
 							<xar:else />
-								<input type="checkbox" name="sendwelcomemail" id="sendwelcomemail" value="1" tabindex="2" />
+								<input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" tabindex="2" />
 							</xar:if>
 						</td>
 					</tr>
@@ -111,11 +111,7 @@
 							<xar:mlstring>Number of users to view per page</xar:mlstring>
 						</td>
 						<td>
-							<xar:if condition="xarModGetVar('users', 'usersperpage')">
-								<input type="checkbox" name="usersperpage" id="usersperpage" value="1" checked="checked" tabindex="2" />
-							<xar:else />
-								<input type="checkbox" name="usersperpage" id="usersperpage" value="1" tabindex="2" />
-							</xar:if>
+							<input type="text" name="usersperpage" id="usersperpage" value="#xarModGetVar('users', 'usersperpage')#" size="3" maxlength="3">
 						</td>
 					</tr>
 					<tr align="left" valign="top">

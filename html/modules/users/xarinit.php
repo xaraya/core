@@ -1,13 +1,19 @@
 <?php
-// File: $Id: s.xarinit.php 1.11 02/10/27 12:47:46-05:00 John.Cox@d38yrl11. $
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Jim McDonald
-// Purpose of file:  Initialisation functions for users
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Short description of purpose of file
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage Users Module
+ * @author Jan Schrage, John Cox, Gregor Rothfuss 
+ * @todo need the dynamic users menu
+ * @todo needs dyanamic data interface
+ * @todo ensure all mod vars are set
+*/
 
 /**
  * Initialise the users module
@@ -88,7 +94,7 @@ function users_init()
 
     $index = array(
     'name'      => 'i_xar_users_2',
-    'fields'    => array('xar_name'),
+    'fields'    => array('xar_uname'),
     'unique'    => true
     );
 
@@ -149,6 +155,14 @@ function users_init()
     return true;
 }
 
+/**
+ * Activate the users module
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
+ */
 function users_activate()
 {
     // Set up an initial value for module variables.
