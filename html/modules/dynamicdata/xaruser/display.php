@@ -38,6 +38,11 @@ function dynamicdata_user_display($args)
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $itemtype;
+    $item['returnurl'] = xarModURL('dynamicdata','user','display',
+                                   array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     if (empty($hooks)) {
         $data['hooks'] = '';
