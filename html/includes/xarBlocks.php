@@ -58,7 +58,7 @@ function xarBlock_render($blockinfo)
     $blockType = $blockinfo['type'];
     $blockName = $blockinfo['name'];
 
-    xarLogMessage("block rendering: module " . $modName . " / type " . $blockType);
+    xarLogMessage('xarBlock_render: rendering '.$modName.':'.$blockType.':'.$blockName);
 
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
