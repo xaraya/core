@@ -334,6 +334,8 @@ class ErrorCollection extends SystemException
         return $text;
     }
 
+    function foobar(){}
+
 }
 
 /* Exception Handling System implementation */
@@ -555,7 +557,7 @@ function xarExceptionRender($format)
         else $imadmin = true;
         if ($format == 'html') {
           if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (is_array($exception['value']->exceptions)) {
+              if (method_exists($exception['value'],"foobar")) {
                   $collection = $exception['value']->exceptions;
                   $message = "One or more PHP errors were encountered. <BR /><BR />";
                   foreach($collection as $collecteditem) {
@@ -587,7 +589,7 @@ function xarExceptionRender($format)
             }
         } else {
             if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (is_array($exception['value']->exceptions)) {
+              if (method_exists($exception['value'],"foobar")) {
                   $collection = $exception['value']->exceptions;
                   $message = "One or more PHP errors were encountered. \n\n";
                   foreach($collection as $collecteditem) {
