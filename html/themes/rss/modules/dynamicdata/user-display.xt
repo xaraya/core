@@ -1,8 +1,8 @@
-<?php xarTplSetPageTemplateName('header') ?>
+<xar:set name="dummy">xarTplSetPageTemplateName('header')</xar:set>
 <xar:if condition="!empty($object)">
-    <#$object->name#>
+    <#$object:name#>
     <xar:data-display object="$object" />
-    </#$object->name#>
+    </#$object:name#>
 <xar:else />
     <#$module.'_'.$itemtype#>
     <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
