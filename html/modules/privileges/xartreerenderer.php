@@ -101,7 +101,7 @@ class xarTreeRenderer {
             $node['selected'] = false;
             $node['children'] = array();
             foreach($this->privs->getsubprivileges($object['pid']) as $subnode){
-                array_push($node['children'],$this->addbranches(array('parent'=>$subnode)));
+                $node['children'][] = $this->addbranches(array('parent'=>$subnode));
             }
             return $node;
         }
@@ -247,6 +247,10 @@ class xarTreeRenderer {
                              'modifyprivilege',
                              array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
         $this->html .= count($this->privs->getsubprivileges($object['pid'])) . ' components';
+
+        $this->html .= "<span>";
+        $this->html .= $object['description'];
+        $this->html .= "</span>";
 
     // we've finished this row; now do the children of this privilege
         $this->html .= $isbranch ? '<div class="xarleaf" id="leaf' . $this->nodeindex . '" >' : '';

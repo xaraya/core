@@ -18,6 +18,7 @@ function initializeSetup()
     * Enter some default groups and users
     *********************************************************************/
 
+//    xarMakeUser('Self','self','self@xaraya.com','password');
     xarMakeGroup('Everybody');
     xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
     xarMakeUser('Admin','Admin','admin@xaraya.com','password');
@@ -35,6 +36,7 @@ function initializeSetup()
     xarMakeRoleMemberByName('Admin','Administrators');
     xarMakeRoleMemberByName('Users','Everybody');
     xarMakeRoleMemberByName('Anonymous','Everybody');
+//    xarMakeRoleMemberByName('Self','Everybody');
 
     /*********************************************************************
     * Enter some default privileges
@@ -273,3 +275,4 @@ function initializeSetup()
     return true;
 }
 
+?>
