@@ -59,6 +59,8 @@ function adminpanels_adminmenublock_display($blockinfo){
     
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
+    
+    // TODO: put in init
     if(!isset($marker)){
         xarModSetVar('adminpanels' ,'marker', '[x]');
         $marker = '[x]';
@@ -134,8 +136,8 @@ function adminpanels_adminmenublock_display($blockinfo){
                 xarModAPILoad('adminpanels', 'admin');
                 
                 // check if we need to update the table
-                if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')){
-                    // if we fail lets have at list an error displayed
+                if(!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')){
+                    // if we fail lets have at least an error displayed
                     return;
                 }
 
