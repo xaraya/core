@@ -47,10 +47,10 @@ class Exception
 
     function toString() { return $this->msg; }
     function load($id) {
-        $this->title = $this->defaults[$id]['title'];
-        $this->short = $this->defaults[$id]['short'];
-        $this->long = $this->defaults[$id]['long'];
-        $this->hint = $this->defaults[$id]['hint'];
+        if (array_key_exists("title", $this->defaults[$id])) $this->title = $this->defaults[$id]['title'];
+        if (array_key_exists("short", $this->defaults[$id])) $this->short = $this->defaults[$id]['short'];
+        if (array_key_exists("long", $this->defaults[$id])) $this->long = $this->defaults[$id]['long'];
+        if (array_key_exists("hint", $this->defaults[$id])) $this->hint = $this->defaults[$id]['hint'];
     }
     function getTitle() { return $this->title; }
     function getShort() {
