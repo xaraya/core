@@ -38,6 +38,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('defaulttype','str:1:',$defaultModuleType)) return;
             if (!xarVarFetch('defaultfunction','str:1:',$defaultModuleFunction,'main',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
             xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
@@ -50,7 +51,7 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
             xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
             // enable short urls for the base module itself too
-            xarModSetVar('base','SupportShortURLs', ($enableShortURLs ? 1 : 0));
+            xarModSetVar('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
             xarConfigSetVar('Site.Core.FixHTMLEntities', $FixHTMLEntities);
             break;
         case 'security':
