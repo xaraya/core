@@ -64,7 +64,7 @@ function modules_adminapi_GetList($args)
 
     if (!is_array($filter)) {
         $msg = xarML('Parameter filter must be an array.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -81,7 +81,7 @@ function modules_adminapi_GetList($args)
     $orderByClauses = array();
     foreach ($orderFields as $orderField) {
         if (!isset($validOrderFields[$orderField])) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'orderBy');
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'orderBy');
             return;
         }
         // Here $validOrderFields[$orderField] is the table alias

@@ -147,7 +147,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 function xarModGetVar($modName, $name, $prep = NULL)
 {
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -168,7 +168,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
 function xarModSetVar($modName, $name, $value)
 {
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -189,7 +189,7 @@ function xarModSetVar($modName, $name, $value)
 function xarModDelVar($modName, $name)
 {
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
@@ -207,7 +207,7 @@ function xarModDelVar($modName, $name)
 function xarModDelAllVars($modName)
 {
     if(empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -280,7 +280,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 {
     // Module name and variable name are necessary
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -318,7 +318,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 {
     // Module name and variable name are necessary
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -352,7 +352,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
 {
     // ModName and name are required
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -385,11 +385,11 @@ function xarModGetVarId($modName, $name)
 {
     // Module name and variable name are both necesary
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -423,7 +423,7 @@ function xarModGetVarId($modName, $name)
     /*
     if ($result->EOF) {
         $result->Close();
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', xarML('modvarid for module #(1) variable #(2)',$modName,$name));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', xarML('modvarid for module #(1) variable #(2)',$modName,$name));
         return;
        }
     */
@@ -449,7 +449,7 @@ function xarModGetIDFromName($modName, $type = 'module')
 {
     if (empty($modName)) {
         $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
 
@@ -482,7 +482,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     if (empty($modRegId) || $modRegId == 0) {
         $msg = xarML('Empty RegId (#(1)) or RegId is equal to 0.', $modRegId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
     }
 
     switch(strtolower($type)) {
@@ -533,7 +533,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     if ($result->EOF) {
         $result->Close();
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $modRegId);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $modRegId);
         return;
     }
 
@@ -615,11 +615,11 @@ function xarModGetInfo($modRegId, $type = 'module')
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
+function xarModPrivateLoad($modName, $modType, $flags = 0)
 {
     static $loadedModuleCache = array();
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -635,12 +635,12 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', xarML('Unable to find Base Info for Module: #(1)', $modName));
         return; // throw back
     }
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
         return;
     }
 
@@ -710,7 +710,7 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
 function xarModLoad($modName, $modType = 'user')
 {
     if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
     return xarModPrivateLoad($modName, $modType);
@@ -728,7 +728,7 @@ function xarModLoad($modName, $modType = 'user')
 function xarModAPILoad($modName, $modType = 'user')
 {
     if (!xarCoreIsAPIAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
@@ -748,7 +748,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 {
     if (empty($modName)) {
         $msg = xarML('Module Name #(1) is empty.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
     // Get the directory if we don't already have it
@@ -793,15 +793,15 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
     if (empty($funcName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
         return;
     }
 
@@ -846,7 +846,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         if (!$isLoaded || empty($msg)) {
             $msg = xarML('Module function #(1) does not exist.', $modFunc);
         }
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         return;
     }
 
@@ -890,15 +890,15 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 {
     if (empty($modName)) {
         //die("$modName, $modType, $funcName");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
     if (empty($funcName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
         return;
     }
 
@@ -946,7 +946,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
             // here, the error is never shown !!!! (xmlrpc for example)
             // TODO: the isloaded stuff -should- fix the problem above
             //       someone needs to double check this to be sure
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                             new SystemException($msg));
         }
         return;
@@ -970,195 +970,130 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param args array of arguments to put on the URL
  * @param entrypoint array of arguments for different entrypoint than index.php
  * @return mixed absolute URL for call, or false on failure
+ * @FIXME the parameter generateXMLURL here defaults to true, because the system setting $GLOBALS['xarMod_generateXMLURLs'] is false. Change system setting to true?
  */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL, $entrypoint = array())
+function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = true, $target = NULL, $entrypoint = array())
 {
-    if (!empty($entrypoint)){
-        // If for some reason someone set the entrypoint to be index then we want to continue
-        // and not process.
-        if (is_array($entrypoint)){
-            // Entry Point comes as an array since ws.php sets a type var.
-            // Entry array should be $entrypoint['entry'], $entrypoint['action']
-            // IE: ws.php?type=xmlrpc&args=foo
-            $url = $entrypoint['entry'] . '?type=' . $entrypoint['action'];
-            // Grab the arguments as well.
-            foreach ($args as $k=>$v) {
-                if (is_array($v)) {
-                    foreach($v as $l=>$w) {
-                        if (isset($w)) {
-                            $url .= "&amp;$k" . "[$l]=$w";
-                        }
-                    }
-                } elseif (isset($v)) {
-                    $url .= "&amp;$k=$v";
-                }
-            }
-            // The URL
-            return xarServerGetBaseURL() . $url;
-        }
-    }
+    // Parameter separator and initiator.
+    $psep = '&';
+    $pini = '?';
 
+    // Initialise the path.
+    $path = '';
+
+    // No module specified - just jump to the home page.
+    // FIXME: use baseModURL if it has been configured?
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
     }
 
+    // Take the global setting for XML format generation, if not specified.
     if (!isset($generateXMLURL)) {
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
-
-    // lets do a real quick check first, then everything else if necessary
-    // otherwise we are spending too much time and calling too many extra functions everytime
-    // even if what we need is just a plain simple mod url [andyv]
-    // this function is VERY popular, often called recursively, prolly need to be optimised or refactored
-    if ($GLOBALS['xarMod_generateShortURLs']) {
-        // WATCH OUT! : the encode_shorturl should be in userapi, so don't pass $modType
+	
+    // Check the global short URL setting before trying to load the URL encoding function
+    // for the module.
+    // Don't try and process short URLs if a custom entry point has been defined.
+    if ($GLOBALS['xarMod_generateShortURLs'] && empty($entrypoint)) {
+        // The encode_shorturl will be in userapi.
+        // Note: if a module declares itself as suppoting short URLs, then the encoding
+        // API subsequently fails to load, then we want those errors to be raised.
         if (xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') && xarModAPILoad($modName, 'user')) {
+			$encoderArgs = $args;
+			$encoderArgs['func'] = $funcName;
 
-            $encoderArgs = $args;
-            $encoderArgs['func'] = $funcName;
-            // don't throw exception on missing file or function anymore
-            $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
-            if (!empty($path)) {
-                if ($generateXMLURL) {
-                    $path = htmlspecialchars($path);
-                }
+            // Don't throw exception on missing file or function anymore.
+            // FIXME: why do we want to hide errors here? The encode_shorturl function *must*
+            // be available if 'SupportShortURLs' is set for the module, so we are only hiding
+            // parsing errors, which we want to know about. Also, if the file is missing, we
+            // want to know.
+			$path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
+			if (!empty($path)) {
+				// The following allows you to modify the BaseURL from the config file
+				// it can be used to configure Xaraya for mod_rewrite by
+				// setting BaseModURL = '' in config.php
+				$BaseModURL =  xarCore_getSystemVar('BaseModURL', true);
+				if (!isset($BaseModURL))
+				{
+					// Use xaraya default if BaseModURL not provided in config.php
+					$path = 'index.php' . $path;
+				} else {
+					// Build Base URL from Config.
+					// Remove the trailing / from the BaseModURL path.
+                    // FIXME: is the trailing '/' necessary to start with?
+					$path = preg_replace('/\/^/', '', $BaseModURL) . $path;
+				}
 
-                // FIXME: check if this works with all modules supporting short urls
-                if ($target != NULL) {
-                    $path = "$path#$target";
-                }
-
-                // The following allows you to modify the BaseURL from the config file
-                // it can be used to configure Xaraya for mod_rewrite by
-                // setting BaseModURL = '' in config.php
-                $BaseModURL =  xarCore_getSystemVar('BaseModURL',true);
-                if( !isSet($BaseModURL) )
-                {
-                    // Use xaraya default if BaseModURL not provided in config.php
-                    return xarServerGetBaseURL() . 'index.php' . $path;
-                } else {
-                    // Build Base URL from Config
-
-                    // remove the leading / from the short URL path
-                    $path = preg_replace('/^\//','',$path);
-                    // put everything together for the complete URL
-                    return xarServerGetBaseURL() . $BaseModURL . $path;
-                }
-            }
+                // We now have short form of the URL.
+                // Further custom manipulation of the URL can be added here.
+			}
         }
     }
 
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-        // this exception means that the module does not support short urls
-        // for this $modType.
-        // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-        // this exception means that the module does not have the $modType API.
-
-        // IMPORTANT: This freeing cause lots of error to be hidden, due to the fact that multiple
-        // exceptions may be pending. As xarModUrl is used very often, and we want the exceptions
-        // I commented it out (MrB). Not sure how to solve this in a better way.
-        //xarExceptionFree();
-
-        // <mikespub> see above :)
-    }
-
-    // The arguments
-    $urlArgs[] = "module=$modName";
-    if ((!empty($modType)) && ($modType != 'user')) {
-        $urlArgs[] = "type=$modType";
-    }
-    if ((!empty($funcName)) && ($funcName != 'main')) {
-        $urlArgs[] = "func=$funcName";
-    }
-    $urlArgs = join('&amp;', $urlArgs);
-
-    $url = "index.php?$urlArgs";
-
-    foreach ($args as $k=>$v) {
-        if (is_array($v)) {
-            foreach($v as $l=>$w) {
-                if (isset($w)) {
-                    $url .= "&amp;$k" . "[$l]=$w";
-                }
+    // If the path is still empty, then there is either no short URL support
+    // at all, or no short URL encoding was available for these arguments.
+    if (empty($path)) {
+        if (!empty($entrypoint)) {
+            // Custom entry-point.
+            // Entry Point comes as an array since ws.php sets a type var.
+            // Entry array should be $entrypoint['entry'], $entrypoint['action']
+            // e.g. ws.php?type=xmlrpc&args=foo
+            // * Can also pass in the 'action' to $modType, and the entry point as
+            // a string. It makes sense using existing parameters that way.
+            if (is_array($entrypoint)) {
+                $modType = $entrypoint['action'];
+                $entrypoint = $entrypoint['entry'];
             }
-        } elseif (isset($v)) {
-            $url .= "&amp;$k=$v";
+            $path = $entrypoint . $pini . 'type=' . $modType;
+        }  else {
+            // Standard entry point - index.php
+            $pathArgs[] = "module=$modName";
+            if ((!empty($modType)) && ($modType != 'user')) {
+                $pathArgs[] = 'type=' . $modType;
+            }
+            if ((!empty($funcName)) && ($funcName != 'main')) {
+                $pathArgs[] = 'func=' . $funcName;
+            }
+            $path = 'index.php' . $pini . join($psep, $pathArgs);
         }
+
+        // Add further parameters to the path, ensuring each value is encoded correctly.
+        foreach ($args as $k=>$v) {
+            if (is_array($v)) {
+                // TODO: walk the array tree to as many levels as necessary:
+                // ...&foo[bar][dee][doo]=value&...
+                foreach($v as $l=>$w) {
+                    if (isset($w)) {
+                        $path .= $psep . $k . "[$l]=" . rawurlencode($w);
+                    }
+                }
+            } elseif (isset($v)) {
+                $path .= $psep . $k . '=' . rawurlencode($v);
+            }
+        }
+        // Decode a few 'safe' characters as rawurlencode() goes too far.
+        $path = str_replace(
+            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29'),
+            array(',', '$', '!', '*', '\'', '(', ')'),
+            $path
+        );
+
+        // We have the long form of the URL here.
     }
 
-    if ($generateXMLURL) {
-        $url = htmlspecialchars($url);
-    }
-
+    // FIXME: check if this works with all modules supporting short and long URLs.
     if ($target != NULL) {
-        $url = "$url#$target";
+        $path = $path . '#' . urlencode($target);
     }
 
-    // The URL
-    return xarServerGetBaseURL() . $url;
-}
-
-/**
- * Generates an URL that reference to a module function via Email.
- *
- * @access public
- * @param modName string registered name of module
- * @param modType string type of function
- * @param funcName string module function
- * @param args array of arguments to put on the URL
- * @return mixed absolute URL for call, or false on failure
- */
-function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array())
-{
-//TODO: <garrett> either deprecate this function or keep it in synch with xarModURL *or* add another param
-//      to xarModURL to handle this functionality. See bug #372
-// Let's depreciate it for 1.0.0  next release I will remove it.
-    if (empty($modName)) {
-        return xarServerGetBaseURL() . 'index.php';
+    // Encode the URL if an XML-compatible format is required.
+    if ($generateXMLURL) {
+        $path = htmlspecialchars($path);
     }
 
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-        // this exception means that the module does not support short urls
-        // for this $modType.
-        // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-        // this exception means that the module does not have the $modType API.
-        if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
-            xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
-            // In all other cases we just log the exception since we must always
-            // return a valid url
-            xarLogException(XARLOG_LEVEL_ERROR);
-        }
-        xarExceptionFree();
-    }
-
-    // The arguments
-    $urlArgs[] = "module=$modName";
-    if ((!empty($modType)) && ($modType != 'user')) {
-        $urlArgs[] = "type=$modType";
-    }
-    if ((!empty($funcName)) && ($funcName != 'main')) {
-        $urlArgs[] = "func=$funcName";
-    }
-    $urlArgs = join('&', $urlArgs);
-
-    $url = "index.php?$urlArgs";
-
-    foreach ($args as $k=>$v) {
-        if (is_array($v)) {
-            foreach($v as $l=>$w) {
-                if (isset($w)) {
-                    $url .= "&$k" . "[$l]=$w";
-                }
-            }
-        } elseif (isset($v)) {
-            $url .= "&$k=$v";
-        }
-    }
-
-    // The URL
-    return xarServerGetBaseURL() . $url;
+    // Return the URL.
+    return xarServerGetBaseURL() . $path;
 }
 
 /**
@@ -1172,23 +1107,13 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
  */
 function xarModGetDisplayableName($modName)
 {
-    $modInfo = xarMod_getFileInfo($modName);
-    return xarML($modInfo['name']);
-}
+    // The module display name is language sensitive, so it's fetched through xarMLByKey
+    //$modInfo = xarMod_getFileInfo($modName);
+    //return xarML($modInfo['name']);
 
-/**
- * Get the displayable description for modName
- *
- * The displayable description is sensible to user language.
- *
- * @access public
- * @param modName string description of module
- * @return string the displayable description
- */
-function xarModGetDisplayableDescription($modName)
-{
-    $modInfo = xarMod_getFileInfo($modName);
-    return xarML($modInfo['description']);
+    return xarML($modName);
+
+    //return xarMLByKey($modName);
 }
 
 /**
@@ -1209,7 +1134,7 @@ function xarModIsAvailable($modName, $type = 'module')
 
     if (empty($modName)) {
         $msg = xarML('Empty Module or Theme Name (#(1)).', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
         return;
     }
 
@@ -1277,11 +1202,11 @@ function xarModIsAvailable($modName, $type = 'module')
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL, $callerItemType = '')
 {
     //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
+    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
     //    return;
     //}
     //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
+    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
     //    return;
     //}
 
@@ -1369,15 +1294,15 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     static $hookListCache = array();
 
     if (empty($callerModName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'callerModName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'callerModName');
         return;
     }
     //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
+    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
     //    return;
     //}
     //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
+    //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
     //    return;
     //}
 
@@ -1453,7 +1378,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     static $modHookedCache = array();
 
     if (empty($hookModName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'hookModName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'hookModName');
         return;
     }
     if (empty($callerModName)) {
@@ -1511,7 +1436,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
     if (empty($modOsDir)) {
         $msg = xarML('Directory information #(1) is empty.', $modOsDir);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
 
@@ -1531,7 +1456,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
                     $fd = fopen($fileName, 'r');
                     if (!$fd){
                         $msg = xarML('Cannot open file (#1).', $fd);
-                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FILE_NOT_EXIST', new SystemException($msg));
+                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FILE_NOT_EXIST', new SystemException($msg));
                         return;
                     }
                     $buf = '';
@@ -1558,7 +1483,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     if (!file_exists($fileName)) {
         // Don't raise an exception, it is too harsh, but log it tho (bug #295)
         xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php or pnversion.php, skipping $modOsDir");
-        //xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
+        //xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
         return;
     }
 
@@ -1571,7 +1496,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         $modversion = array();
     }
     $version = array_merge($themeinfo, $modversion);
-
+    
     // name and id are required, assert them, otherwise the module is invalid
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
@@ -1619,7 +1544,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 {
     if (empty($modName)) {
         $msg = xarML('Module or Theme Name #(1) is empty.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
         return;
     }
 
@@ -1684,14 +1609,14 @@ function xarMod_getBaseInfo($modName, $type = 'module')
                 default:
 
 /*                $msg = xarML('Module #(1) does not exist.', $modName);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException($msg));
 */                return;
 
                 break;
             case 'theme':
 /*
                 $msg = xarML('Theme #(1) does not exist.', $themeName);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException($msg));
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException($msg));
 */                return;
 
                 break;
@@ -1754,7 +1679,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
 {
     if (empty($modName)) {
         $msg = xarML('Empty theme or module name (#(1)).', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -1851,7 +1776,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
 {
     if (empty($varName)) {
         $msg = xarML('Empty Theme or Module variable name (#(1)).', 'varName');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -1915,11 +1840,11 @@ function xarMod__loadDbInfo($modName, $modDir)
     static $loadedDbInfoCache = array();
 
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     if (empty($modDir)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modDir');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modDir');
         return;
     }
 
@@ -1967,11 +1892,11 @@ function xarMod__loadDbInfo($modName, $modDir)
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {
     if ($modRegId < 1) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modRegId');
         return;
     }
     if ($modMode != XARMOD_MODE_SHARED && $modMode != XARMOD_MODE_PER_SITE) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modMode');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modMode');
         return;
     }
 
