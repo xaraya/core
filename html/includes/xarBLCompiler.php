@@ -573,6 +573,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                     case XAR_TOKEN_CDATA_START:
                                         // Treat it as text
                                         // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
+                                        // See also bug #3111
                                         $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
                                         break 3;
                                 }
@@ -1072,23 +1073,16 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         // FIXME: sync the implementation of core / custom tags, handle them the same way
         if(file_exists($tagfile)) {
             include_once($tagfile);
-            $node =& new $tagClass($parser, $tagName);
+            $node =& new $tagClass($parser, $tagName, $parentTagName, $attributes);
         } else {
             include_once(XAR_NODES_LOCATION .'tags/other.php');
-            $node =& new xarTpl__XarOtherNode($parser, $tagName);
-            if(!isset($node->tagobject)) unset($node);
+            $node =& new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
+            if(!isset($node->tagobject)) {
+                $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
+                return;
+            }
         }
-
-        if (isset($node)) {
-            $node->parentTagName = $parentTagName;
-            // FIXME: do sanity check on the values here? (like spaces and crs)
-            $node->attributes = $attributes;
-            return $node;
-        }
-
-        // If we get here, the tag doesn't exist so we raise a user exception
-        $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
-        return;
+        return $node;
     }
 
     function createTplEntityNode($entityType, $parameters, &$parser)
@@ -1383,10 +1377,25 @@ class xarTpl__TplTagNode extends xarTpl__Node
     var $parentTagName;
     var $children;
     
+    // Do the same here as we do in tplnode class
+    function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
+    {
+        // If constructor method is defined in subclass that one is called!!
+        $this->constructor($parser, $tagName, $parentTagName, $attributes);
+    }
+    
+    
+    function constructor(&$parser, $tagName, $parentTagName, $attributes)
+    {
+        parent::constructor($parser, $tagName);
+        $this->parentTagName = $parentTagName;
+        $this->attributes = $attributes;  
+    }
+    
     function isPHPCode()
-   {
+    {
         return true;
-   }
+    }
 }
 
 /**
@@ -1446,9 +1455,9 @@ class xarTpl__InstructionNode extends xarTpl__Node
     }
     
     function isPHPCode()
-   {
+    {
         return true;
-   }
+    }
 }
 
 /**

@@ -14,12 +14,12 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
     var $tagobject;
     
-    function constructor(&$parser, $tagName)
-   {
+    function constructor(&$parser, $tagName, $parentTagName, $attributes)
+    {
         xarLogMessage("Constructing custom tag: $tagName");
-        parent::constructor($parser, $tagName);
+        parent::constructor($parser, $tagName, $parentTagName, $attributes);
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
-   }
+    }
     
     function render()
    {
