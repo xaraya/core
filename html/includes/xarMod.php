@@ -1613,7 +1613,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
               FROM $hookstable
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
     if (empty($callerItemType)) {
-        $query .= " AND xar_stype = ''";
+        //$query .= " AND xar_stype = ''";
     } else {
         // hooks can be enabled for all or for a particular item type
         $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
@@ -1621,6 +1621,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $query .= " AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
                 AND xar_action = '" . xarVarPrepForStore($hookAction) . "'
               ORDER BY xar_order ASC";
+    
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -1679,7 +1680,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                   FROM $hookstable
                   WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
         if (empty($callerItemType)) {
-            $query .= " AND xar_stype = ''";
+            //$query .= " AND xar_stype = ''";
         } else {
         // hooks can be enabled for all or for a particular item type
             $query .= " AND (xar_stype = '' OR xar_stype = '" . xarVarPrepForStore($callerItemType) . "')";
