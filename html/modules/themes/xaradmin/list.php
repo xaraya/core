@@ -58,7 +58,6 @@ function themes_admin_list()
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
     $data['style']['icons']                         = xarML('Icons');
-    $data['style']['dev']                           = xarML('Developer');
     
     $data['filter'][XARTHEME_STATE_ANY]                         = xarML('All');
     $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('Installed');

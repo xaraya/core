@@ -1,46 +1,33 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:ml>
-            <xar:mlstring>Theme Selection For #(1)</xar:mlstring>
-            <xar:mlvar>#$name#</xar:mlvar>
-        </xar:ml>
-    </span>
-</div>
 <!-- common admin menu for this module - remove link to the current function -->
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Select Theme</xar:mlstring></h2>
-    <div align="center">
-        <form action="&xar-modurl-themes-user-usermenu;" method="post" enctype="application/x-www-form-urlencoded">
-        <div>
+    <h2>
+        <xar:mlstring>Select Theme</xar:mlstring>
+    </h2>
+
+    <form action="&xar-modurl-themes-user-usermenu;" method="post" enctype="application/x-www-form-urlencoded">
+
+        <div class="xar-form-input-wrapper">
+            <label for="defaulttheme" title="#xarML('Select the theme you would like to use on this site.')#" class="xar-form-label">
+                <xar:mlstring>Site Theme:</xar:mlstring>
+            </label>
+            <select name="defaulttheme" id="defaulttheme">
+                <xar:loop name="$themes">
+                    <xar:if condition="$loop:item['name'] eq $defaulttheme">
+                        <option value="#$loop:item['regid']#" selected="selected">#$loop:item['name']#</option>
+                    <xar:else />
+                        <option value="#$loop:item['regid']#">#$loop:item['name']#</option>
+                    </xar:if>
+                </xar:loop>
+            </select>
+        </div>
+
+        <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />    
             <input type="hidden" name="uid" id="uid" value="#$uid#" />    
             <input type="hidden" name="phase" id="phase" value="update" />
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
-                <tr align="left" valign="middle">
-                    <td>
-                        <xar:mlstring>Site Theme</xar:mlstring>
-                    </td>
-                    <td>
-                        <select name="defaulttheme" id="defaulttheme" size="1">
-                        <!-- there is a bug in BL which prevents using entities in if tag, 
-                        so for now this will work -->
-                        <xar:loop name="$themes">
-                            <xar:if condition="$loop:item['name'] eq $defaulttheme">
-                            <option value="#$loop:item['regid']#" selected="selected">#$loop:item['name']#</option>
-                            <xar:else />
-                            <option value="#$loop:item['regid']#">#$loop:item['name']#</option>
-                            </xar:if>
-                        </xar:loop>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <p>
-            <xar:set name="mlconfirm"><xar:mlstring>Modify Default Theme</xar:mlstring></xar:set>
-            <input type="submit" value="#$mlconfirm#" tabindex="2" />
-            </p>
+            <input type="submit" value="#xarML('Set Default Theme')#" />
         </div>
-        </form>
-    </div>
+
+    </form>
 </div>

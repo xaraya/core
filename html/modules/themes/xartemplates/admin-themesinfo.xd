@@ -1,107 +1,142 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Administration - Themes 
-        </xar:mlstring>
-    </span>
+    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            Detailed Theme Information 
-        </xar:mlstring>
+        <xar:mlstring>Detailed Theme Information</xar:mlstring>
     </h2>
-    <div class="xar-norm-outline">
-<!-- Theme Name -->
-        <p class="xar-norm-outline" style="width:90%; border:0; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Registered Name 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themename# 
-        </p>
-<!-- Description -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Description 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themedescr# 
-        </p>
-<!-- Theme Directory -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Directory 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themedir# 
-        </p>
-<!-- Theme ID -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Registered ID 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themeid# 
-        </p>
-<!-- Theme Class -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Class 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themeclass# 
-        </p>
-<!-- Theme Version -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Version 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themever# 
-        </p>
-<!-- Theme Author -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Author(s) 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themeauthor# 
-        </p>
-<!-- Theme Dependency -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Dependency 
-                </xar:mlstring>
-                : 
-            </span>
-            #$themedependency# 
-        </p>
-<!-- Theme Preview -->
-        <form action="../">
-            <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-                <span style="float: left; text-align: left;display:inline;">
-                    <xar:mlstring>
-                        Quick Preview 
-                    </xar:mlstring>
-                    : 
-                </span>
+
+    <!-- Theme Name -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Registered Name:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themename#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Description -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Description:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themedescr#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Directory -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Directory:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themedir#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme ID -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Registered ID:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themeid#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Class -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Class:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themeclass#
+                <xar:if condition="$themeclass eq 0">
+                    <xar:mlstring>(system theme)</xar:mlstring>
+                <xar:elseif condition="$themeclass eq 1" />
+                    <xar:mlstring>(utility theme)</xar:mlstring>
+                <xar:elseif condition="$themeclass eq 2" />
+                    <xar:mlstring>(user selectable)</xar:mlstring>
+                <xar:else />
+                    <xar:mlstring>(unknown class)</xar:mlstring>
+                </xar:if>
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Version -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Version:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themever#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Author -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Author(s):</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themeauthor#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Dependency -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Dependency:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
+                #$themedependency#
+            </p>
+        </div>
+    </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+    <!-- Theme Preview -->
+    <div class="xar-clearboth">
+        <div class="xar-floatleft xar-thirdwidth">
+            <p class="xar-mod-title">
+                <xar:mlstring>Quick Preview:</xar:mlstring>
+            </p>
+        </div>
+        <div class="xar-floatright xar-halfwidth xar-align-right">
+            <p class="xar-mod-title">
                 <select onchange="window.open(this.options[this.selectedIndex].value,'_blank')" >
                     <option value="#">Choose a page to preview..</option>
                     <!-- Next line cant be handled by entities yet -->
@@ -121,20 +156,7 @@
                     <input type="submit" value="Go" />
                 </noscript>
             </p>
-        </form>
-<!-- Theme Navigation -->
-        <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-            <span style="float: left; text-align: left;display:inline;">
-                <xar:mlstring>
-                    Other Themes 
-                </xar:mlstring>
-                : 
-            </span>
-            <a href="#$themelisturl#">
-                <xar:mlstring>
-                    View List 
-                </xar:mlstring>
-            </a>
-        </p>
+        </div>
     </div>
+    <hr class="xar-clearboth xar-border-solid xar-border-thin" />
 </div>

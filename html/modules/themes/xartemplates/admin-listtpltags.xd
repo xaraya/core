@@ -1,35 +1,39 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Template Tags</xar:mlstring></h2>
-    <div class="xar-norm-outline xar-fullwidth" style="padding: 0px 0px 5px 0px;">
-    
+    <h2>
+        <xar:mlstring>Template Tags</xar:mlstring>
+    </h2>
+
     <p>[<a href="#$addurl#"><xar:mlstring>Add a new Tag</xar:mlstring></a>]</p>
     
-    <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="2">
+    <table class="xar-fullwidth">
         <tr>
-            <th></th>
-            <th style="text-align: left;padding-left: 1em;">
+            <th>
                 <xar:mlstring>Name</xar:mlstring>
             </th>
-            <th style="text-align: left;padding-left: 1em;">
+            <th>
                 <xar:mlstring>Module</xar:mlstring>
+            </th>
+            <th>
+                <xar:mlstring>Actions</xar:mlstring>
             </th>
         </tr>
         <xar:foreach in="$tags" value="$item">
-        <tr>
-            <td nowrap="1" class="xar-norm-outline" style="text-align: left;width: 70px;border-width: 0px 0px 1px 0px;border-style: dotted;padding-left: 0.5em;">
-                [<a href="#$item['editurl']#"><xar:mlstring>Edit</xar:mlstring></a>]
-                [<a href="#$item['deleteurl']#" onclick="return confirm('#xarML('Are you sure you want to delete the tag: ')##$item['name']# ?');"
-                    ><xar:mlstring>Delete</xar:mlstring></a>]
-            </td>
-            <td class="xar-mod-title xar-norm-outline" style="vertical-align: middle; text-align: left; padding-left: 1em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;white-space: nowrap;">
-                &lt;#$item['name']#&gt;
-            </td>
-            <td class="xar-norm-outline" style="text-align: left;width: 70px;border-width: 0px 0px 1px 0px;border-style: dotted;padding-left: 0.5em;">
-                #$item['module']#
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    &lt;xar:#$item['name']#&gt;
+                </td>
+                <td>
+                    #$item['module']#
+                </td>
+                <td class="xar-align-center">
+                    <a href="#$item['editurl']#"><xar:mlstring>Edit</xar:mlstring></a> | 
+                    <a href="#$item['deleteurl']#" onclick="return confirm('#xarML('Are you sure you want to delete the tag: ')##$item['name']# ?');"><xar:mlstring>Delete</xar:mlstring></a>
+                </td>
+            </tr>
         </xar:foreach> 
     </table>    
     

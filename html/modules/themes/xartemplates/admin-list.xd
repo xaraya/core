@@ -1,157 +1,146 @@
-
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Theme System</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2 style="width:100%;height:1.5em;">
-        <span style="width:49%;float:left;text-align:left;">
-            <xar:mlstring>
-                View Theme (list mode)
-            </xar:mlstring>
-        </span>
-        <span style="width:49%;float:right;text-align:right;">
-            <xar:mlstring>
-                Total listed: 
-            </xar:mlstring>
-            <xar:set name="modscount">count($listrowsitems)</xar:set>
-            #$modscount#
-        </span>
+    <h2>
+        <xar:mlstring>View Themes</xar:mlstring>
     </h2>
-    <form class="xar-norm-outline xar-fullwidth" style="padding: 0px;" method="post" action="&xar-modurl-themes-admin-settings;">
-            <xar:comment> Theme List Sort and Filter Controls table </xar:comment>
-            <table class="xar-fullwidth xar-noborder" cellspacing="1" cellpadding="1">
-              <tr>
-                <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>
+
+    <p>
+        <xar:mlstring>Total listed:</xar:mlstring>
+        <xar:set name="modscount">count($listrowsitems)</xar:set>
+        #$modscount#
+    </p>
+
+    <form method="post" action="&xar-modurl-themes-admin-settings;">
+        <xar:comment> Theme List Sort and Filter Controls table </xar:comment>
+        <table class="xar-fullwidth">
+            <tr>
+                <th>
+                    <label for="selstyle">
+                        <xar:mlstring>Style</xar:mlstring>
+                    </label>
                 </th>
-                <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="filter"><xar:mlstring>View</xar:mlstring></label>
+                <th>
+                    <label for="filter">
+                        <xar:mlstring>View</xar:mlstring>
+                    </label>
                 </th>
-                <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="sort"><xar:mlstring>Sort by</xar:mlstring></label>
+                <th>
+                    <label for="sort">
+                        <xar:mlstring>Sort by</xar:mlstring>
+                    </label>
                 </th>
-                <th nowrap="nowrap" colspan="3">
-                    <label class="xar-mod-title" for="reload"><xar:mlstring>Action</xar:mlstring></label>
+                <th>
+                    <label for="reload">
+                        <xar:mlstring>Action</xar:mlstring>
+                    </label>
                 </th>
-              </tr>
-              <tr>
-                <td style="text-align: center;">
-                  <select name="selstyle" id="selstyle" onchange="this.form.submit()">
-                    <xar:foreach in="$style" key="$key" value="$value">
-                      <xar:if condition="$key eq $selstyle">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                      <xar:else />
-                        <option value="#$key#">#$value#</option>
-                      </xar:if>
-                    </xar:foreach>
-                  </select>
+            </tr>
+            <tr>
+                <td class="xar-align-center">
+                    <select name="selstyle" id="selstyle" onchange="this.form.submit()">
+                        <xar:foreach in="$style" key="$key" value="$value">
+                            <xar:if condition="$key eq $selstyle">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                            <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
                 </td>
-                <td style="text-align: center;">
-                  <select name="selfilter" id="selfilter" onchange="this.form.submit()">
-                    <xar:foreach in="$filter" key="$key" value="$value">
-                      <xar:if condition="$key eq $selfilter">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                      <xar:else />
-                        <option value="#$key#">#$value#</option>
-                      </xar:if>
-                    </xar:foreach>
-                  </select>
+                <td class="xar-align-center">
+                    <select name="selfilter" id="selfilter" onchange="this.form.submit()">
+                        <xar:foreach in="$filter" key="$key" value="$value">
+                            <xar:if condition="$key eq $selfilter">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                            <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
                 </td>
-                <td style="text-align: center;">
-                  <select name="selsort" id="selsort" onchange="this.form.submit()">
-                    <xar:foreach in="$sort" key="$key" value="$value">
-                      <xar:if condition="$key eq $selsort">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                      <xar:else />
-                        <option value="#$key#">#$value#</option>
-                      </xar:if>
-                    </xar:foreach>
-                  </select>
+                <td class="xar-align-center">
+                    <select name="selsort" id="selsort" onchange="this.form.submit()">
+                        <xar:foreach in="$sort" key="$key" value="$value">
+                            <xar:if condition="$key eq $selsort">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                            <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
                 </td>
-                <td colspan="3" style="text-align: center;vertical-align: middle;">
-                  <input type="submit" name="reload" id="reload" value="#$reloadlabel#" />
+                <td class="xar-align-center">
+                    <input type="submit" name="reload" id="reload" value="#xarML('Refresh')#" />
                 </td>
-              </tr>
-            </table>
+            </tr>
+        </table>
+
         <xar:if condition="$modstatus">
-            <xar:comment> lets display latest status on core modules upgrades if any </xar:comment>
-            <div class="xar-norm-outline" style="margin-top:1px;">
-                <p style="margin:.25em;text-align:center;">
-                    <xar:mlstring>
-                        Latest status - the following core modules have been successfully upgraded:
-                    </xar:mlstring>
+            <xar:comment> lets display latest status on themes upgrades if any</xar:comment>
+                <p>
+                    <xar:mlstring>Latest status - the following core modules have been successfully upgraded:</xar:mlstring>
                 </p>
-                <p class="xar-accent" style="margin:.25em;text-align:center;">
+                <p>
                     #$modstatus#
                 </p>
             </div>
         </xar:if>
+
         <xar:comment> the Module Lists css-based styles </xar:comment>
         <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
             <xar:template file="compactlist-ab" type="module" />
         <xar:else />
-        <xar:comment> the Module Lists table-based styles </xar:comment>
-            <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
-                <table class="xar-fullwidth xar-noborder" style="width:100%; border-collapse:collapse; border-spacing:1px; padding:0;">
+            <xar:comment> the Module Lists table-based styles </xar:comment>
+                <table class="xar-fullwidth">
                     <tr>
-                        <th style="text-align: left; padding-left: .5em;">
+                        <th>
                             <xar:mlstring>Name</xar:mlstring>
                         </th>
-                        <th style="text-align: left; padding-left: .5em;">
+                        <th>
                             <xar:mlstring>Version</xar:mlstring>
                         </th>
-                        <th style="text-align: center;">
+                        <th>
                             <xar:mlstring>Info</xar:mlstring>
                         </th>
-                        <th style="text-align: right; padding-right: .5em;">
+                        <th>
                             <xar:mlstring>Status</xar:mlstring>
                         </th>    
-                        <th style="text-align: left;padding-left: .5em;">
+                        <th>
                             <xar:mlstring>Actions</xar:mlstring>
                         </th>
                     </tr>
                     <xar:foreach in="$listrowsitems" value="$modinfo">
                         <tr>
                             <xar:comment> please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here </xar:comment>
-                            <td name="#$modinfo['displayname']#" id="#$modinfo['displayname']#" class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: .5em; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: solid;">
+                            <td>
                                 <xar:comment> if module is active and configurable (admin type) make its name a link to module main admin function </xar:comment>
                                 #$modinfo['displayname']#
                             </td>
-                            <td class="xar-norm-outline" style="text-align: left; padding-left: .5em; width: 5em;border-width: 0px 0px 1px 0px;border-style: solid;">
+                            <td class="xar-align-right">
                                 #$modinfo['version']#
                             </td>
-                            <td class="xar-norm-outline" style="text-align: center;width: 35px;border-width: 0px 0px 1px 0px;border-style: solid;">
-                                <xar:if condition="$selstyle eq 'pro'">
-                                    <input type="submit" name="info" id="info" value="#$infolabel#" />
-                                <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                            <td class="xar-align-center">
+                                <xar:if condition="$selstyle eq 'icons'" >
+                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     <noscript>
                                         <a href="#$modinfo['infourl']#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     </noscript>
                                 <xar:else />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
+                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;"><xar:mlstring>Info</xar:mlstring></a>
                                     <noscript>
                                         <a href="#$modinfo['infourl']#"><xar:mlstring>Info</xar:mlstring></a>
                                     </noscript>
                                 </xar:if>
                             </td>
-                            <td class="xar-norm-outline" style="text-align: right;width: 100px;border-width: 0px 0px 1px 0px;border-style: solid;vertical-align: middle;">
-                                <div style="padding-right: .5em;">
-                                    #$modinfo['statelabel']#
-                                </div>
+                            <td>
+                                #$modinfo['statelabel']#
                             </td>
-                            <td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: solid;white-space: nowrap;">
-                                <xar:if condition="$selstyle eq 'pro'">
-                                        <select name="action" id="action" onchange="this.form.submit()">
-                                            <option label="Initialise" selected="selected"></option>
-                                            <option label="Activate" ></option>
-                                            <option label="Deactivate" disabled="disabled"></option>
-                                            <option label="Remove" disabled="disabled"></option>
-                                        </select>
-                                        <noscript>
-                                            <input type="submit" name="ok" id="ok" value="OK" />
-                                        </noscript>
-                                <xar:elseif condition="$selstyle eq 'icons'"/>
+                            <td class="xar-nowrap xar-align-center">
+                                <xar:if condition="$selstyle eq 'icons'">
                                         <xar:if condition="$modinfo['actionurl'] eq ''">
                                             <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
                                         <xar:else />
@@ -163,30 +152,27 @@
                                             <a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" /></a>
                                         </xar:if>
                                 <xar:else />
-                                    <div style="padding-left: .5em;">
                                         <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
                                         <xar:if condition="$modinfo['state'] eq 2">
                                             | <a href="#$modinfo['removeurl']#">#$modinfo['removelabel']#</a>
                                         </xar:if>
-                                    </div>
                                 </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
                 </table>
-            </div>
         </xar:if>
-        <div class="xar-norm-outline xar-accent" style="text-align: center;margin-top: 1px;padding:.5em;">
-            <xar:if condition="$selstyle eq 'icons'"><br />
-                <div class="xar-alt-outline xar-norm" style="vertical-align: middle;margin:5px; padding: 3px;">
-                    <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" /><xar:mlstring>Disabled</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" /><xar:mlstring>Activate</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" /><xar:mlstring>Deactivate</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" /><xar:mlstring>Upgrade</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Install</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
-                </div>
-            </xar:if>
-        </div>
     </form>
+</div>
+<div class="xar-mod-foot xar-align-center">
+    <xar:if condition="$selstyle eq 'icons'">
+        <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
+            <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" /><xar:mlstring>Disabled</xar:mlstring>
+            <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" /><xar:mlstring>Activate</xar:mlstring>
+            <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" /><xar:mlstring>Deactivate</xar:mlstring>
+            <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" /><xar:mlstring>Upgrade</xar:mlstring>
+            <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Install</xar:mlstring>
+            <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
+        </div>
+    </xar:if>
 </div>
