@@ -1,132 +1,157 @@
-/* system menus and related rules -------------------------------------------------------------------------[comment] */
-.xar-block-body ul, .xar-block-body-right ul {
-    list-style-position: outside;
+/* system menus in left and right blocks */
+
+.xar-block-body ul, 
+.xar-block-body-right ul,
+.xar-block-body ul li, 
+.xar-block-body-right ul li {
+    font-family: arial, helvetica, verdana, sans-serif;
     list-style-type: none;
     margin: 0;
     padding: 0;
-    font-family: arial, helvetica, verdana, sans-serif;
-    font-weight: bold;
     display: block;
+    font-weight: bold;
     line-height: 1.4em;
 }
 
-.xar-block-body ul li, .xar-block-body-right ul li {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-image: none;
-}
+.xar-block-body ul, 
+.xar-block-body-right ul { list-style-position: outside; }
+
+.xar-block-body ul li, 
+.xar-block-body-right ul li { background-image: none; }
 
 .xar-block-body ul li.xar-menu-section, 
-.xar-block-body-right ul li.xar-menu-section { background-color: #666699; }
+.xar-block-body-right ul li.xar-menu-section {
+    border: 1px solid #BFBFD9;
+    padding-bottom: 1px;
+}
 
-/* offset collapsing margins effect for heading tags */
+/* offset collapsing margins effect and style up heading tags */
 .xar-block-body ul li.xar-menu-section h4, 
 .xar-block-body-right ul li.xar-menu-section h4 {
-    margin: 0;
-    padding: 0 8px;
-    color: #efefef;
-    background-image: url(../images/page_bg.gif);
-    background-repeat: repeat-x;
-    background-position: 0% 50%;
-}
-
-
-.xar-block-body ul li a, 
-.xar-block-body-right ul li a {
-    text-decoration: none;
-    display: block;
-    color: #333366;
-    background-color: #EBECEF;
-    padding: 0 4px;
-    margin: 0;
-}
-
-.xar-block-body ul li a:hover, 
-.xar-block-body-right ul li a:hover {
-    text-decoration: none;
-    display: block;
-    color: #ffffff;
-    background-color: #B6B6C9;
-    padding: 0 4px;
-}
-
-/* not sure if everybody likes right alignment and fixed font size, but here we go - change if it seems too annoying */
-.xar-block-body ul ul ul li a, 
-.xar-block-body-right ul ul ul li a {
-    margin: 0;
-    padding: 0 4px;
+    margin: 0 0 1px 0;
+    padding: 1px 7px;
+    color: #fefefe;
+    font-size: 95%;
     text-align: right;
-    font-weight: normal;
-    font-size: 11px;
-    background-color: #F2F3F6;
+    text-transform: lowercase;
+    background-color: #BFBFD9;
 }
 
-.xar-block-body ul ul li.xar-menu-item a, 
-.xar-block-body-right ul ul li.xar-menu-item a {
-    border-right: #9090BF;
-    border-left: #B8BECC;
-    border-width: 0 10px 0 4px;
-    border-style: none solid none solid;
-}
-
-.xar-block-body ul ul li.xar-menu-item a:hover, 
-.xar-block-body-right ul ul li.xar-menu-item a:hover {
-    border-right: #7575C0;
-    border-left: #D6DDED;
-    border-width: 0 10px 0 4px;
-    border-style: none solid none solid;
-}
-
+/* common rules for all items containers - li elements */
 .xar-block-body ul ul li.xar-menu-item, 
 .xar-block-body-right ul ul li.xar-menu-item,
 .xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current {}
-
-
-.xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current { margin-left: 4px; }
-
-/*  we probably want to visually highlight the currently active items and subitems
-    below is one of the possible implementations */
-
-.xar-block-body ul ul li.xar-menu-item-current a, 
-.xar-block-body-right ul ul li.xar-menu-item-current a {
-    border-right: #D5D5DF;
-    border-width: 0 10px 0 0;
-    border-style: none solid none none;
+.xar-block-body-right ul ul li.xar-menu-item-current {
+    padding: 0;
 }
 
-
+/* common rules for all anchors in the menus */
+.xar-block-body ul ul li.xar-menu-item a, 
+.xar-block-body-right ul ul li.xar-menu-item a,
+.xar-block-body ul ul li.xar-menu-item a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item a:hover,
+.xar-block-body ul ul li.xar-menu-item-current a, 
+.xar-block-body-right ul ul li.xar-menu-item-current a,
 .xar-block-body ul ul li.xar-menu-item-current a:hover, 
 .xar-block-body-right ul ul li.xar-menu-item-current a:hover {
-    border-right: #7A7AC7;
-    border-width: 0 10px 0 0;
-    border-style: none solid none none;
+    text-decoration: none;
+    display: block;
+    margin-left: 7px;
+    margin-right: 7px;
+    border-bottom: 1px solid #EDEDF2;   
 }
 
+/* menu items anchors - normal state */
+.xar-block-body ul ul li.xar-menu-item a, 
+.xar-block-body-right ul ul li.xar-menu-item a {
+    color: #8F8FB3;
+}
 
-.xar-block-body ul ul li.xar-menu-subitem-current, 
-.xar-block-body-right ul ul li.xar-menu-subitem-current {
-    border-color: #FFFFFF;
+/* menu items anchors - hover state */
+.xar-block-body ul ul li.xar-menu-item a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item a:hover {
+    padding: 0 6px;
+    margin: 0 1px 0 1px;
+    color: #333366;
+    background-color: #E4E4ED;
+}
+
+/*  visually highlight the currently active items and subitems,
+    below is one example of various possible implementations */
+.xar-block-body ul ul li.xar-menu-item-current, 
+.xar-block-body-right ul ul li.xar-menu-item-current {
+    padding: 1px;
+    margin: 0 -1px 0 -1px;
+    border-color: #A9A9C0;
     border-width: 1px;
     border-style: solid;
 }
 
-.xar-block-body ul ul li.xar-menu-subitem-current a, 
-.xar-block-body-right ul ul li.xar-menu-subitem-current a {
-    padding-right: 4px;
-    color: #333333;
-    border-right: #7272FF;
-    background-color: #f9f9f9;
-    border-width: 0 9px 0 0;
-    border-style: none solid none none;
+/* menu current items anchors - normal state */
+.xar-block-body ul ul li.xar-menu-item-current a, 
+.xar-block-body-right ul ul li.xar-menu-item-current a {
+    margin: 0;
+    padding: 0 6px;
+    background-color: #E4E4ED;
+    background-image: url(../images/itemarrowdown.gif);
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
+/* menu current items anchors - hover state */
+.xar-block-body ul ul li.xar-menu-item-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover {
+    margin: 0;
+    color: #FFFFFF;
+    background-color: #A9A9C0;
+}
+
+/*  common rules for subitems elements */
+.xar-block-body ul ul li.xar-menu-subitem, 
+.xar-block-body-right ul ul li.xar-menu-subitem,
+.xar-block-body ul ul li.xar-menu-subitem-current, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current {
+    display:block;
+    margin: 0;
+    border-right: 4px solid #D5D5DF;
+    border-left: 4px solid #D5D5DF;
+}
+
+/*  common rules for anchors in subitems,
+    if you dont like right alignment or fixed font size - change it here */
+.xar-block-body ul ul li.xar-menu-subitem a, 
+.xar-block-body-right ul ul li.xar-menu-subitem a,
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+    text-align: right;
+    font-size: 11px;
+    line-height:15px;
+    display: block;
+    padding: 0 4px 0 4px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #EDEDF2;
+    background-image: none;
+}
+
+/*  subitems anchors - hover state */
+.xar-block-body ul ul li.xar-menu-subitem a:hover, 
+.xar-block-body-right ul ul li.xar-menu-subitem a:hover {
+    color: #333366;
+    background-color: #D5D5DF;
+}
+
+/*  subitems anchors current - normal state */
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+    margin: 0;
+    color: #333333;
+    background-color: #D5D5DF;
+}
+
+/*  subitems anchors current - hover state */
 .xar-block-body ul ul li.xar-menu-subitem-current a:hover, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a:hover {
-    padding-right: 4px;
-    color: #fafafa;
-    border-right: 9px solid #7272FF;
-    background-color: #666699;
+    color: #FFFFFF;
+    margin: 0;
+    background-color: #A9A9C0;
 }

@@ -44,70 +44,73 @@ div#xc-footer {
 }
 
 /* MENUS (in sideblocks) */
-
 .xar-block-body ul li.xar-menu-section, 
-.xar-block-body-right ul li.xar-menu-section { background-color: #997766; }
+.xar-block-body-right ul li.xar-menu-section { border-color: #D9D0BF; }
 
 .xar-block-body ul li.xar-menu-section h4, 
 .xar-block-body-right ul li.xar-menu-section h4 {
-    color: #efefef;
-    background-image: url(../images/page_bg_orange.gif);
+    color: #fefefe;
+    background-color: #D9D0BF;
 }
-
-.xar-block-body ul li a, 
-.xar-block-body-right ul li a {
-    color: #664433;
-    background-color: #F0EDEB;
-}
-
-.xar-block-body ul li a:hover, 
-.xar-block-body-right ul li a:hover {
-    color: #ffffff;
-    background-color: #C9BDB7;
-}
-
-.xar-block-body ul ul ul li a, 
-.xar-block-body-right ul ul ul li a { background-color: #F5F2F0; }
 
 .xar-block-body ul ul li.xar-menu-item a, 
-.xar-block-body-right ul ul li.xar-menu-item a {
-    border-right-color: #BF9F8F;
-    border-left-color: #CCBEB8;
-}
+.xar-block-body-right ul ul li.xar-menu-item a,
+.xar-block-body ul ul li.xar-menu-item a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item a:hover,
+.xar-block-body ul ul li.xar-menu-item-current a, 
+.xar-block-body-right ul ul li.xar-menu-item-current a,
+.xar-block-body ul ul li.xar-menu-item-current a:hover, 
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover { border-bottom-color: #F2F1ED; }
+.xar-block-body ul ul li.xar-menu-item a, 
+.xar-block-body-right ul ul li.xar-menu-item a { color: #B2A78F; }
 
 .xar-block-body ul ul li.xar-menu-item a:hover, 
 .xar-block-body-right ul ul li.xar-menu-item a:hover {
-    border-right-color: #BF8E75;
-    border-left-color: #EDDDD5;
+    color: #665533;
+    background-color: #EDEAE4;
 }
 
-.xar-block-body ul ul li.xar-menu-item, 
-.xar-block-body-right ul ul li.xar-menu-item,
 .xar-block-body ul ul li.xar-menu-item-current, 
-.xar-block-body-right ul ul li.xar-menu-item-current { border-bottom-color: #FFF7F2; }
-
+.xar-block-body-right ul ul li.xar-menu-item-current { border-color: #BFB8A8; }
 .xar-block-body ul ul li.xar-menu-item-current a, 
-.xar-block-body-right ul ul li.xar-menu-item-current a { border-right-color: #DED8D5; }
+.xar-block-body-right ul ul li.xar-menu-item-current a { background-color: #EDEAE4; }
 
 .xar-block-body ul ul li.xar-menu-item-current a:hover, 
-.xar-block-body-right ul ul li.xar-menu-item-current a:hover { border-right-color: #C79379; }
+.xar-block-body-right ul ul li.xar-menu-item-current a:hover {
+    color: #FFFFFF;
+    background-color: #BFB8A8;
+}
 
-
+.xar-block-body ul ul li.xar-menu-subitem, 
+.xar-block-body-right ul ul li.xar-menu-subitem,
 .xar-block-body ul ul li.xar-menu-subitem-current, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current {
-    border-color: #FFFFFF;
+    border-right-color: #DEDBD5;
+    border-left-color: #DEDBD5;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem a, 
+.xar-block-body-right ul ul li.xar-menu-subitem a,
+.xar-block-body ul ul li.xar-menu-subitem-current a, 
+.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+    background-color: #FFFFFF;
+    border-bottom-color: #F2F1ED;
+}
+
+.xar-block-body ul ul li.xar-menu-subitem a:hover, 
+.xar-block-body-right ul ul li.xar-menu-subitem a:hover {
+    color: #665533;
+    background-color: #DEDBD5;
 }
 
 .xar-block-body ul ul li.xar-menu-subitem-current a, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a {
     color: #333333;
-    background-color: #f9f9f9;
-    border-right-color: #FFA173;
+    background-color: #DEDBD5;
 }
 
 .xar-block-body ul ul li.xar-menu-subitem-current a:hover, 
 .xar-block-body-right ul ul li.xar-menu-subitem-current a:hover {
-    color: #fafafa;
-    background-color: #997767;
-    border-right-color: #FFA173;
+    color: #FFFFFF;
+    background-color: #BFB8A8;
 }
