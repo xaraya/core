@@ -59,8 +59,8 @@ function xarPageIsCached($cacheKey, $name = '')
         strpos($cacheKey, '-user-') &&
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
-        // the http request is a GET AND
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        // the http request is a GET OR a HEAD AND
+        xarServerGetVar('REQUEST_METHOD') == ( 'GET' || 'HEAD' ) &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -143,8 +143,8 @@ function xarPageSetCached($cacheKey, $name, $value)
         strpos($cacheKey, '-user-') &&
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
-        // the http request is a GET AND
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        // the http request is a GET OR a HEAD AND
+        xarServerGetVar('REQUEST_METHOD') == ( 'GET' || 'HEAD' ) &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -230,7 +230,7 @@ function xarPage_checkUserCaching()
 function xarPage_autoCacheLogStatus($status = 'MISS')
 {
     if (!empty($_SERVER['REQUEST_METHOD']) &&
-        $_SERVER['REQUEST_METHOD'] == 'GET' &&
+        $_SERVER['REQUEST_METHOD'] == ( 'GET' || 'HEAD' ) &&
     // the URL is one of the candidates for session-less caching
     // TODO: make compatible with IIS and https (cfr. xarServer.php)
         !empty($_SERVER['HTTP_HOST']) &&
