@@ -38,6 +38,9 @@ function roles_user_view()
         $selection .= " OR (xar_email LIKE '%" . $search . "%')";
         $selection .= ")";
     }
+    else {
+        $selection = "";
+    }
 
     $data['searchlabel'] = xarML('Go');
     $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",

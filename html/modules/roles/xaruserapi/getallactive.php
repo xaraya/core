@@ -38,11 +38,12 @@ function roles_userapi_getallactive($args)
     $xartable = xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
+    $rolestable = $xartable['roles'];
 
     $query = "SELECT a.*,
-                     b.xar_ipaddr,
-              FROM $rolestable a, $sessioninfoTable b,
-              WHERE b. xar_lastused > $filter AND a. xar_uid > 1";
+                     b.xar_ipaddr
+              FROM $rolestable a, $sessioninfoTable b
+              WHERE b.xar_lastused > $filter AND a.xar_uid > 1 AND a.xar_type = 0";
 
     if (isset($selection)) $query .= $selection;
 
@@ -58,6 +59,7 @@ function roles_userapi_getallactive($args)
         $query .= " AND a.xar_uid != $thisrole[uid]";
     }
 
+//    echo $query; exit;
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;
 
