@@ -12,18 +12,6 @@
 <input type="radio" name="phase" id="phase" value="active"  />
 </xar:if><xar:mlstring>Active Users</xar:mlstring>
 
-<xar:if condition="$phase eq 'today'">
-<input type="radio" name="phase" id="phase" value="today" checked="checked" />
-<xar:else />
-<input type="radio" name="phase" id="phase" value="today"  />
-</xar:if><xar:mlstring>Active Today</xar:mlstring>
-
-<xar:if condition="$phase eq 'week'">
-<input type="radio" name="phase" id="phase" value="week" checked="checked" />
-<xar:else />
-<input type="radio" name="phase" id="phase" value="week"  />
-</xar:if><xar:mlstring>Active This Week</xar:mlstring>
-
 <xar:if condition="$phase eq 'viewall'">
 <input type="radio" name="phase" id="phase" value="viewall" checked="checked" />
 <xar:else />
