@@ -175,10 +175,31 @@ class xarMasks
 */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
+        // Check if the mask has already been registered, and update it if necessary.
+        // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
+        $query = 'SELECT xar_sid FROM ' . $this->maskstable
+            . ' WHERE xar_module = ? AND xar_name = ?';
+        $result = $this->dbconn->Execute($query, array($module, $name));
+        if (!$result) return;
+        if (!$result->EOF) {
+            list($sid) = $result->fields;
+            $query = 'UPDATE ' . $this->maskstable
+                . ' SET xar_realm = ?, xar_component = ?,'
+                . ' xar_instance = ?, xar_level = ?,'
+                . ' xar_description = ?'
+                . ' WHERE xar_sid = ?';
+            $bindvars = array(
+                $realm, $component, $instance, $level,
+                $description, $sid
+            );
+        } else {
         $query = "INSERT INTO $this->maskstable VALUES (?,?,?,?,?,?,?,?)";
-        $bindvars = array($this->dbconn->genID($this->maskstable),
+            $bindvars = array(
+                $this->dbconn->genID($this->maskstable),
                           $name, $realm, $module, $component, $instance, $level,
-                          $description);
+                $description
+            );
+        }
                                                
         if (!$this->dbconn->Execute($query,$bindvars)) return;
         return true;
@@ -728,12 +749,40 @@ class xarPrivileges extends xarMasks
                 $instance['query'] = str_replace($base,'',$instance['query']);
             }
 
+            // Check if the instance already exists.
+            // The instance is uniquely defined by its module, component and header.
+            // FIXME: since the header is just a label, it probably should not be
+            // treated as key information here. Do we need some further unique (within a
+            // module and component) name for an instance, independant of the header label?
+            $query = 'SELECT xar_iid FROM ' . $this->instancestable
+                . ' WHERE xar_module = ? AND xar_component = ? AND xar_header = ?';
+            $result = $this->dbconn->execute($query, array($module, $type, $instance['header']));
+            if (!$result) return;
+            if (!$result->EOF) {
+                // Instance exists: update it.
+                list($iid) = $result->fields;
+                $query = 'UPDATE ' . $this->instancestable
+                    . ' SET xar_query = ?, xar_limit = ?,'
+                    . ' xar_propagate = ?, xar_instancetable2 = ?, xar_instancechildid = ?,'
+                    . ' xar_instanceparentid = ?, xar_description = ?'
+                    . ' WHERE xar_iid = ?';
+                $bindvars = array(
+                    $instance['query'], $instance['limit'],
+                    $propagate, $table2, $childID, $parentID,
+                    $description, $iid
+                );
+            } else {
+                // FIXME: be explicit with the table columns.
             $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-            $bindvars = array($this->dbconn->genID($this->instancestable),
+                $bindvars = array(
+                    $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
                               $instance['query'], $instance['limit'],
                               $propagate, $table2, $childID, $parentID,
-                              $description);
+                    $description
+                );
+            }
+
             if (!$this->dbconn->Execute($query,$bindvars)) return;
         }
         return true;
