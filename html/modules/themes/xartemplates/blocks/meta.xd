@@ -7,7 +7,7 @@
 
 	<xar:if condition="!empty($geourl)">
 	<meta name="ICBM" content="#$latitude#, #$longitude#">
-	<meta name="DC.title" content="#xarConfigGetVar('Site.Core.SiteName')#"> 
+	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName')#"> 
 	</xar:if>
 
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepage#&amp;theme=rss" />

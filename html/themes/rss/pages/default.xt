@@ -4,11 +4,11 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns##">
 	 <channel>
-		<title><?php echo htmlentities(xarConfigGetVar('Site.Core.SiteName')); ?></title>
+		<title><?php echo htmlentities(xarModGetVar('themes', 'SiteName')); ?></title>
 		<link><?php echo htmlentities(xarServerGetBaseURL()); ?></link>
 		<description><?php echo htmlentities(xarConfigGetVar('Site.Core.MetaDescription')); ?></description>
 
-		<copyright><?php echo htmlentities(xarConfigGetVar('CopyRight')); ?></copyright>
+		<copyright><?php echo htmlentities(xarModGetVar('themes', 'SiteCopyRight')); ?></copyright>
 		<managingEditor><?php echo htmlentities(xarModGetVar('mail', 'adminname'))." ".htmlentities(xarModGetVar('mail', 'adminmail')); ?></managingEditor>
 		<webMaster><?php echo htmlentities(xarModGetVar('mail', 'adminname'))." ".htmlentities(xarModGetVar('mail', 'adminmail')); ?></webMaster>
 		<generator>Xaraya 1.0</generator>
