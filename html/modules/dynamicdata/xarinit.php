@@ -622,7 +622,7 @@ function dynamicdata_delete()
     /**
      * Unregister blocks
      */
-    xarBlockTypeUnregister('dynamicdata', 'form');
+    // xarBlockTypeUnregister('dynamicdata', 'form');
 
     /**
      * Unregister hooks

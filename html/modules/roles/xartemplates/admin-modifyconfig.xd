@@ -106,6 +106,7 @@
 							</select>
 						</td>
 					</tr>
+<!-- 					
 					<tr align="left" valign="middle">
 						<td>
 							<xar:mlstring>Allow users to be invisible in users list</xar:mlstring>
@@ -117,7 +118,8 @@
 								<input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" tabindex="1" />
 							</xar:if>
 						</td>
-					</tr>
+					</tr> 
+-->
 					<tr align="left" valign="middle">
 						<td>
 							<xar:mlstring>Number of users to view per page</xar:mlstring>

@@ -465,10 +465,12 @@ function base_activate()
     $blocks = array('finclude','html','menu','php','text');
 
     foreach ($blocks as $block) {
-
-        if (!xarBlockTypeRegister('base', $block)) {
-            return NULL;
-        }
+    // Register blocks
+        if (!xarModAPIFunc('blocks',
+                           'admin',
+                           'register_block_type',
+                           array('modName'  => 'base',
+                                 'blockType'=> $block))) return;
     }
 
     //$res = xarBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???

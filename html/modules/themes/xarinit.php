@@ -169,7 +169,12 @@ function themes_activate()
     xarModSetVar('themes', 'SiteCopyRight', '2003');
     xarModSetVar('themes', 'SiteFooter', 'Your Footer');
 
-    xarBlockTypeRegister('themes', 'meta');
+    // Register blocks
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'themes',
+                             'blockType'=> 'meta'))) return;
 
     return true;
     

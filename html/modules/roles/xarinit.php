@@ -241,11 +241,31 @@ president@whitehouse.gov';
     xarModSetVar('roles', 'minage', 13);
 
     // Register blocks
-    xarBlockTypeRegister('roles', 'login');
-    xarBlockTypeRegister('roles', 'online');
-    xarBlockTypeRegister('roles', 'user');
-    xarBlockTypeRegister('roles', 'language');
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'roles',
+                             'blockType'=> 'login'))) return;
 
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'roles',
+                             'blockType'=> 'online'))) return;
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'roles',
+                             'blockType'=> 'user'))) return;
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'roles',
+                             'blockType'=> 'language'))) return;
+
+    // Register Hooks
     if (!xarModRegisterHook('item', 'search', 'GUI',
                            'roles', 'user', 'search')) {
         return false;
@@ -327,3 +347,4 @@ function roles_delete()
     return true;
 }
 
+?>

@@ -133,17 +133,19 @@ function adminpanels_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // Register Block types
-    $res = xarBlockTypeRegister('adminpanels', 'adminmenu');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
+    // Register blocks
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'adminpanels',
+                             'blockType'=> 'adminmenu'))) return;
 
-    // Register Block types
-    $res = xarBlockTypeRegister('adminpanels', 'waitingcontent');
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'register_block_type',
+                       array('modName'  => 'adminpanels',
+                             'blockType'=> 'waitingcontent'))) return;
+
     
     // Set module variables
     xarModSetVar('adminpanels','showold', 1);
