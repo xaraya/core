@@ -1,5 +1,5 @@
 <xar:if condition="$confirmDB">
-<meta http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#" />
+<meta http-equiv="refresh" content="1;URL=&xar-modurl-installer-admin-bootstrap;&install_language=#$language#" />
 <div id="install">
     <div style="padding:10px;">
         <div style="text-align:center;">

@@ -413,7 +413,7 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
 /**
@@ -597,7 +597,7 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
 /**
