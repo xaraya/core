@@ -190,6 +190,7 @@ function users_activate()
     xarBlockTypeRegister('users', 'login');
     xarBlockTypeRegister('users', 'online');
     xarBlockTypeRegister('users', 'user');
+    xarBlockTypeRegister('users', 'language');
 
     return true;
 }
