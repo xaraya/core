@@ -46,7 +46,8 @@
 
 <xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
-        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#">#$field['id']#</a></td>
+        <xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
+        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#" title="#xarVarPrepForDisplay($otherfields)#">#$field['id']#</a></td>
         <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" size="10" value="#$field['label']#" /></td>
         <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type_'.$field['id'].'" value="$field['type']" /></td>
         <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" size="10" value="#xarVarPrepForDisplay($field['default'])#" /></td>
