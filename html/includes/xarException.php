@@ -733,26 +733,17 @@ function xarException__formatBacktrace ($vardump,$key=false,$level=0)
     else
         $return .= "$key $vardump\n";
         
-     //look recursief
      if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
         $level++;
         $return .= str_repeat(' ', $tabsize*$level);
         $return .= "(\n";
-    }
 
-    switch(gettype($vardump)){
-        case "object":
-            $vars=(array)get_object_vars($vardump);
-             foreach($vars as $key => $value)
-                $return .= xarException__formatBacktrace($value,$key,$level+1);
-            break;
-        case "array":
-            foreach ($vardump as $key => $value)
-                $return .= xarException__formatBacktrace($value,$key,$level+1);
-            break;
-    }
+        if (gettype($vardump) == 'object') 
+            $vardump = (array) get_object_vars($vardump);
 
-    if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
+        foreach($vadump as $key => $value)
+            $return .= xarException__formatBacktrace($value,$key,$level+1);
+
         $return .= str_repeat(' ', $tabsize*$level);
         $return .= ")\n";
         $level--;
