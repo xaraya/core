@@ -80,12 +80,11 @@
 	</tr>
 	<tr>
 		<td>
-			<hr/>
+			<hr />
 		</td>
 	</tr>
 </table>			
 	<xar:loop name="$trees">
 		#$tree#
 	</xar:loop>
-</div>
 </div>

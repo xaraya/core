@@ -85,22 +85,22 @@ document.forms['privilegeform'].submit();}
 	<tr>
 		<td align="left">Show Privileges that are: 
 			<xar:if condition="$show eq 'assigned'">
-			<input type="radio" name="show" id="show" value="assigned" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')"/>
+			<input type="radio" name="show" id="show" value="assigned" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();"/>
 			<xar:else />
-			<input type="radio" name="show" id="show" value="assigned" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')" />
+			<input type="radio" name="show" id="show" value="assigned" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();" />
 			</xar:if><xar:mlstring>Assigned</xar:mlstring>
 
 			<xar:if condition="$show eq 'all'">
-			<input type="radio" name="show" id="show" value="all" checked="checked" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')"/>
+			<input type="radio" name="show" id="show" value="all" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();"/>
 			<xar:else />
-			<input type="radio" name="show" id="show" value="all" onClick="javascript:setaction('&xar-modurl-privileges-admin-viewroles;')" />
+			<input type="radio" name="show" id="show" value="all" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();" />
 			</xar:if><xar:mlstring>All</xar:mlstring>
 		</td>
 	</tr>
 	</form>
 	<tr>
 		<td>
-			<hr/>
+			<hr />
 		</td>
 	</tr>
 </table>			
