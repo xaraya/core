@@ -3,7 +3,7 @@
     <table border="0" width="100%">
         <tr>
             <td>
-                <xar:mlstring>Username</pnt:mlstring>
+                <xar:mlstring>Username</xar:mlstring>
             </td>
             <td>
                 <input type="text" name="uname" maxlength="64" size="10" />

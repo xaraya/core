@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Users Administration</pnt:mlstring>            
+            <xar:mlstring>Users Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
@@ -9,13 +9,13 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-new;"><pnt:mlstring>Add User</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-new;"><xar:mlstring>Add User</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-view;"><pnt:mlstring>View Users</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-view;"><xar:mlstring>View Users</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifyconfig;"><pnt:mlstring>Modify Users Configuration</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifyconfig;"><xar:mlstring>Modify Users Configuration</xar:mlstring></a>
         </td>
     </tr>
     <tr align="center">
@@ -26,25 +26,25 @@
 			Extra Link TaC Removed
         </td>
         <td align="center">
-            <b><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></b>
+            <b><xar:mlstring>Modify Confirmation Email</xar:mlstring></b>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifywelcomeemail;"><pnt:mlstring>Modify Welcome Email</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifywelcomeemail;"><xar:mlstring>Modify Welcome Email</xar:mlstring></a>
         </td>
     </tr>
 </table>
 
 <center>
 	<br /><br />
-	<pnt:mlstring>Send an email to a user or group of users</pnt:mlstring>
+	<xar:mlstring>Send an email to a user or group of users</xar:mlstring>
 	<br /><br />
 	<br /><br />
-	<form action="&pnt-modurl-users-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="authid" id="authid" value="&pnt-var-authid;" />
+	<form action="&xar-modurl-users-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
 		<table>
 			<tr>
 				<td align=left>
-					<pnt:mlstring>Username</pnt:mlstring>
+					<xar:mlstring>Username</xar:mlstring>
 				</td>
 				<td align=left>
 					<input type="text" name="name" id="name" value="" size="32" maxlength="32" tabindex="1" />
@@ -52,14 +52,14 @@
 			</tr>
 			<tr align="left" valign="middle">
 				<td align=left>
-					<pnt:mlstring>User Number</pnt:mlstring>
+					<xar:mlstring>User Number</xar:mlstring>
 				</td>
 				<td align=left>
 					<input type="text" name="number" id="number" value="" size="5" maxlength="5" tabindex="2" />
 				</td>
 			</tr>
 		</table>
-		<pnt:mlstring>Message</pnt:mlstring>
+		<xar:mlstring>Message</xar:mlstring>
 		<br/>
 		<textarea name="confirmationemail" id="confirmationemail" wrap="soft" rows="20" cols="50" tabindex="1"></textarea>
 		<br /> 

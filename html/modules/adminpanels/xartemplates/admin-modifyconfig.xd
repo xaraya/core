@@ -76,7 +76,7 @@
                                 <option value="bycat" selected="selected">&xar-var-sortorderselbycat;</option>
                                 <option value="byweight">&xar-var-sortorderselbyweight;</option>
                                 <option value="bygroup">&xar-var-sortorderselbygroup;</option>
-                            <pnt:elseif condition="'byweight' eq xarModGetVar('adminpanels', 'menustyle')" />
+                            <xar:elseif condition="'byweight' eq xarModGetVar('adminpanels', 'menustyle')" />
                                 <option value="byname">&xar-var-sortorderselbyname;</option>
                                 <option value="bycat">&xar-var-sortorderselbycat;</option>
                                 <option value="byweight" selected="selected">&xar-var-sortorderselbyweight;</option>

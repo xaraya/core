@@ -23,7 +23,7 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifydynamicdata;"><pnt:mlstring>Dynamic User Data</pnt:mlstring></a>
+            <a href="&xar-modurl-users-admin-modifydynamicdata;"><xar:mlstring>Dynamic User Data</xar:mlstring></a>
         </td>
         <td align="center">
             <a href="&xar-modurl-users-admin-modifyconfirmationemail;"><xar:mlstring>Modify Confirmation Email</xar:mlstring></a>
