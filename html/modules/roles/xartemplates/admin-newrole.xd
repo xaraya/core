@@ -19,7 +19,7 @@
 					<label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
 				</td>
         		<td>
-        			<select name="ptype" id="ptype"  tabindex="2" onChange="javascript:setaction('&xar-modurl-roles-admin-newrole;')">
+        			<select name="ptype" id="ptype"  tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-roles-admin-newrole;';this.form.submit();">
 							<xar:if condition="$ptype eq 1">
 		                    	<option value="1" selected="selected">Group</option>
 							<xar:else />
