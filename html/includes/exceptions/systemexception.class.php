@@ -16,12 +16,12 @@ include_once "includes/exceptions/exception.class.php";
 
 class SystemException extends xarException
 {
-    function SystemException($msg = '') 
+    function SystemException($msg = '')
     {
         parent::xarException();
         $this->msg = $msg;
         if (isset($GLOBALS['xarRequest_allowShortURLs']) &&
-            $GLOBALS['xarRequest_allowShortURLs'] && 
+            $GLOBALS['xarRequest_allowShortURLs'] &&
             isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
             $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
         // Then check in $_GET
@@ -34,7 +34,7 @@ class SystemException extends xarException
         } else {
             $this->module = '';
         }
-        include("includes/exceptions/xarayacomponents.php");
+        if (!isset($core)) include("includes/exceptions/xarayacomponents.php");
         foreach ($core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
                 $this->component = $corecomponent['fullname'];
