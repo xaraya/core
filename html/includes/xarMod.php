@@ -1136,7 +1136,7 @@ function xarModGetDisplayableName($modName = NULL)
  * @param modName string registered name of module
  * @return string the displayable description
  */
-function xarModGetDisplayableDescription($modName)
+function xarModGetDisplayableDescription($modName = NULL)
 {
     if (empty($modName)) {
         $modName = xarModGetName();
