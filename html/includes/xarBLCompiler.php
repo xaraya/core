@@ -3211,17 +3211,29 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 
     function renderBeginTag()
     {        
+        $content = 'text/html'; // Default content type
         extract($this->attributes);
         if(!isset($version)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.', $this);
             return;
         }
-        return "'<!-- Rendered for xar:blocklayout tag -->';\n";
+        
+        // Literally copy the content type, charset is determined by MLS
+        $headercode = '
+            $_bl_locale  = xarMLSGetCurrentLocale();
+            $_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);
+            header("Content-Type: ' . $content . '; charset=$_bl_charset");';
+        return $headercode;
     }
 
     function renderEndTag()
     {
         return "'<!-- Rendered end for xar:blocklayout tag -->';\n";
+    }
+
+    function isAssignable()
+    {
+        return false;
     }
 }
 

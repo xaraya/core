@@ -906,7 +906,6 @@ function xarMLS_setCurrentLocale($locale)
 
     //}
     //}
-    header("Content-Type: text/html; charset=$curCharset");
 
     $alternatives = xarMLS__getLocaleAlternatives($locale);
     switch ($GLOBALS['xarMLS_backendName']) {
