@@ -454,6 +454,27 @@ EOM;
     die();
 }
 
+/**
+ * Check whether a certain API type is allowed 
+ *
+ * Check whether an API type is allowed to load
+ * normally the api types are 'user' and 'admin' but modules 
+ * may define other API types which do not fall in either of
+ * those categories. (for example: visual or soap)
+ * The list of API types is read from the Core configuration variable
+ * Core.AllowedAPITypes.
+ * 
+ * @access protected
+ * $param  apiType string Type of API to check whether allowed to load
+ * @author Marcel van der Boom marcel@hsdev.com
+ * @return bool
+ */
+function xarCoreIsApiAllowed($apiType) {
+    // Testing for an empty API type just returns false
+    if (empty($apiType)) return false;
+    return in_array($apiType,xarCore_getSiteVar('Core.AllowedAPITypes'));
+}
+
 // CORE CLASSES
 
 /**
@@ -608,4 +629,4 @@ class xarCore__ConfigFileLoader
     }
 
 }
-
+?>

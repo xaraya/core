@@ -541,8 +541,8 @@ function xarModLoad($modName, $modType = 'user')
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+    if (!xarCoreIsApiAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
         return;
     }
 
@@ -611,8 +611,9 @@ function xarModAPILoad($modName, $modType = 'user')
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+    
+    if (!xarCoreIsAPIAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
@@ -710,7 +711,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
+    if (!xarCorIsApiAllowed($modType)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
@@ -764,7 +765,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
+    if (!xarCoreIsApiAllowed($modType)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
         return;
     }
@@ -1359,3 +1360,4 @@ function xarMod__getState($modRegId, $modMode)
     }
 }
 
+?>

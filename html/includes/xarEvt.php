@@ -50,8 +50,8 @@ function xarEvtSubscribe($eventName, $modName, $modType)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+    if (!xarCoreIsApiAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
@@ -77,8 +77,8 @@ function xarEvtUnsubscribe($eventName, $modName, $modType)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+    if (!xarCoreIsApiAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
         return;
     }
 
@@ -124,8 +124,9 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    if ($modType != 'user' && $modType != 'admin') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType');
+    // Can we load this api?
+    if(!xarCoreIsApiAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
         return;
     }
 
