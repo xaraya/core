@@ -57,6 +57,19 @@ function users_init()
                                                              'size'        => 100,
                                                              'null'        => false,
                                                              'default'     => ''),
+                                   'xar_date_reg'    => array('type'        => 'varchar',
+                                                             'size'        => 25,
+                                                             'null'        => false,
+                                                             'default'     => ''),
+                                   'xar_valcode'     => array('type'        => 'varchar',
+                                                             'size'        => 35,
+                                                             'null'        => false,
+                                                             'default'     => ''),
+                                   'xar_state'       => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '3',
+                                                             'increment'   => false,
+                                                             'primary_key' => false),
                                    'xar_auth_module' => array('type'        => 'varchar',
                                                              'size'        => 64,
                                                              'null'        => false,
@@ -130,42 +143,6 @@ function users_init()
                              array('name'   => 'i_xar_user_property_1',
                                    'fields' => array('xar_prop_label'),
                                    'unique' => 'true'));
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $query = xarDBCreateTable($tables['user_status'],
-                             array('xar_uid'         => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0',
-                                                             'increment'   => true,
-                                                             'primary_key' => true),
-                                   'xar_uname'       => array('type'        => 'varchar',
-                                                             'size'        => 25,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_date_reg'    => array('type'        => 'varchar',
-                                                             'size'        => 25,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_valcode'     => array('type'        => 'varchar',
-                                                             'size'        => 35,
-                                                             'null'        => false,
-                                                             'default'     => ''),
-                                   'xar_state'       => array('type'        => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0',
-                                                             'increment'   => false,
-                                                             'primary_key' => false)));
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $index = array('name'      => 'i_xar_users_1',
-                   'fields'    => array('xar_uid'),
-                   'unique'    => TRUE);
-
-    $query = xarDBCreateIndex($tables['user_status'],$index);
-
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 

@@ -59,25 +59,31 @@
 			</td>
 		</tr>
     </xar:if>
-	<xar:if condition="xarModGetVar('users','showtac') eq 0">
+	<xar:if condition="xarModGetVar('users','showtac') eq 0 and xarModGetVar('users','showprivacy') eq 1">
 		<tr>
 			<td colspan="2">
 				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 			</td>
 		</tr>
-	<xar:elseif condition="xarModGetVar('users','showprivacy') eq 0" />
+	<xar:elseif condition="xarModGetVar('users','showprivacy') eq 0 and xarModGetVar('users','showtac') eq 1" />
 		<tr>
 			<td colspan="2">
 				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
 			</td>
 		</tr>
-	<xar:else />
+	<xar:elseif condition="xarModGetVar('users','showprivacy') eq 1 and xarModGetVar('users','showtac') eq 1" />
 		<tr>
 			<td colspan="2">
 				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
-				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> <xar:mlstring> and </xar:mlstring> <a href="#xarModURL('users', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('users', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
+			</td>
+		</tr>
+	<xar:else />
+		<tr>
+			<td colspan="2">
+				<input type="hidden" name="agreetoterms" id="agreetoterms" value="1">
 			</td>
 		</tr>
 	</xar:if>

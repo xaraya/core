@@ -334,7 +334,7 @@ function base_init()
 
     $usersTable = $systemPrefix . '_users';
     $id_anonymous = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','')";
+    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','','','','')";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -342,30 +342,12 @@ function base_init()
     $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
     $id_admin = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','authsystem')";
+    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','','','3','authsystem')";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $id_admin = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
-
-    $user_statusTable = $systemPrefix . '_user_status';
-    $idstatus_anonymous = $dbconn->GenId($user_statusTable);
-    $query = "INSERT INTO $user_statusTable VALUES ($idstatus_anonymous,'anonymous','','','0')";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $idstatus_anonymous = $dbconn->PO_Insert_ID($user_statusTable,'xar_uid');
-
-    $idstatus_admin = $dbconn->GenId($user_statusTable);
-    $now = time();
-    $query = "INSERT INTO $user_statusTable VALUES ($idstatus_admin, 'Admin', '$now','','3')";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $idstatus_admin = $dbconn->PO_Insert_ID($user_statusTable,'xar_uid');
 
     /***************************************************************
     * Install groups module and setup default groups
@@ -593,6 +575,7 @@ function base_activate()
                                                               'state' => XARMOD_STATE_ACTIVE))) {
         return;
     }
+
     // initialize installer module
 
     // Register Block types

@@ -19,7 +19,11 @@
 			#$name#
 		</td>
         <td>
-			<a href="#$emailurl#">#$email#</a>
+           <xar:if condition="empty($emailurl)">
+               #$email#
+               <xar:else />
+               <a href="#$emailurl#">#$email#</a>
+           </xar:if>
 		</td>
     </tr>
     </xar:loop>
