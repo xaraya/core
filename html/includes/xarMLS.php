@@ -1448,6 +1448,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             break;
         }
         $fileName .= '.php';
+        if (!file_exists($this->baseDir.$fileName)) {
+        die("File does not exist:".$this->baseDir.$fileName);
+        return false;
+        }
         return $this->baseDir.$fileName;
     }
 
@@ -1463,6 +1467,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
             return;
         }
+        echo $ctxType. $ctxName;exit;
         include $fileName;
 
         return true;
