@@ -651,7 +651,12 @@ class ADODB_DataDict {
 		global $ADODB_FETCH_MODE;
 		$save = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-		$cols = &$this->MetaColumns($tablename);
+        // XARAYA: We would like to have a @ in here, cos the table might not exist.
+        // but i dont know how to combine & anbd @, am i missing something?
+        // putting a @ in now, so we can still see the real error in the log
+        // if we get to a more stable stage, we can put the & back and move the @
+        // to the sqlite_query command in the driver.
+		$cols = @$this->MetaColumns($tablename);
 		$ADODB_FETCH_MODE = $save;
 
 		if (empty($cols)) {

@@ -21,6 +21,7 @@
  */
 function blocks_adminapi_getmenulinks()
 {
+    $menulinks = array();
     if (xarSecurityCheck('EditBlock', 0)) {
         $menulinks[] = array(
             'url'   => xarModURL('blocks', 'admin', 'view_instances'),
@@ -57,11 +58,6 @@ function blocks_adminapi_getmenulinks()
             'label' => xarML('Add Block Type')
         );
     }
-
-    if (empty($menulinks)) {
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 

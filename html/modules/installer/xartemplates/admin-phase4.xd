@@ -1,134 +1,101 @@
-<xar:set name="active_step">
-    4 
-</xar:set>
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="active_step">4</xar:set>
 <div id="install">
     <xar:template file="status" />
     <h1>
-        <xar:mlstring>
-            Database Settings Collection 
-        </xar:mlstring>
+        <xar:mlstring>Database Settings Collection</xar:mlstring>
     </h1>
-    <form action="install.php" method="post">
-        <div>
-            <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-            <p class="xar-normal">
-                <xar:mlstring>
-                    Please enter your database settings. You can connect to databases on non-standard ports using 'hostname:port' in the Host field. (e.g. 'localhost:12345') 
-                </xar:mlstring>
-                <br />
-                <xar:mlstring>
-                    If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed. 
-                </xar:mlstring>
-            </p>
-            <p class="xar-normal">
-                <xar:mlstring>
-                    UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script. 
-                </xar:mlstring>
-            </p>
-            <h3>
-                <xar:mlstring>
-                    Database Information 
-                </xar:mlstring>
-            </h3>
-            <div class="simpleform">
-                <p>
-                    <label for="install_database_type">
-                        <xar:mlstring>
-                            Database Type 
-                        </xar:mlstring>
-                    </label>
-                    <select name="install_database_type" id="install_database_type">
-                        <xar:foreach in="$database_types" key="$adodbdriver" value="$info">
-                            <xar:if condition="!$info.available">
-                                <option value="#$adodbdriver#" disabled="disabled">#$info.name# <xar:mlstring>[not available]</xar:mlstring></option>
-                            <xar:else/>
-                                <xar:if condition="$database_type == $adodbdriver">
-                                    <option selected="selected" value="#$adodbdriver#">#$info.name#</option>
-                                <xar:else/>
-                                    <option value="#$adodbdriver#">#$info.name#</option>
-                                </xar:if>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_database_host">
-                        <xar:mlstring>
-                            Host 
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
-                    <span class="xar-sub">
-                        <xar:mlstring>
-                            (for SQLite: a directory) 
-                        </xar:mlstring>
-                    </span>
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_database_username">
-                        <xar:mlstring>
-                            Username 
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_database_password">
-                        <xar:mlstring>
-                            Password 
-                        </xar:mlstring>
-                    </label>
-                    <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_database_name">
-                        <xar:mlstring>
-                            Database Name 
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_database_prefix">
-                        <xar:mlstring>
-                            Table Prefix 
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
-                    <span class="xar-sub">
-                        <xar:mlstring>
-                            (for Table Sharing) 
-                        </xar:mlstring>
-                    </span>
-                    <br class="clear" />
-                </p>
 
-            </div>
+    <form action="install.php" method="post">
+        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+        <p>
+            <xar:mlstring>Please enter your database settings. You can connect to databases on non-standard ports using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</xar:mlstring>
+        </p>
+        <p>
+            <xar:mlstring>If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.</xar:mlstring>
+        </p>
+        <p>
+            <xar:mlstring>UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script.</xar:mlstring>
+        </p>
+
+        <h3>
+            <xar:mlstring>Database Information</xar:mlstring>
+        </h3>
+
+        <div class="simpleform">
             <p>
-                <label class="block" for="install_create_database">
-                    <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
-                    <xar:mlstring>
-                        Create the database 
-                    </xar:mlstring>
+                <label for="install_database_host">
+                    <xar:mlstring>Host</xar:mlstring>
                 </label>
+                <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
             </p>
-            <p class="xar-sub">
-                <xar:mlstring>
-                    This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though. 
-                </xar:mlstring>
+            <p>
+                <label for="install_database_username">
+                    <xar:mlstring>Username</xar:mlstring>
+                </label>
+                <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
             </p>
-            <input type="hidden" name="install_phase" id="install_phase" value="5" />
-            <xar:set name="buttonnext">
-                <xar:mlstring>
-                    Continue &gt; 
-                </xar:mlstring>
-            </xar:set>
-            <input type="submit" value="#$buttonnext#" />
+            <p>
+                <label for="install_database_password">
+                    <xar:mlstring>Password</xar:mlstring>
+                </label>
+                <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+            </p>
+            <p>
+                <label for="install_database_password2">
+                    <xar:mlstring>Re-Enter Password</xar:mlstring>
+                </label>
+                <input type="password" name="install_database_password2" id="install_database_password2" maxlength="80" value="#$database_password#" />
+            </p>
+            <p>
+                <label for="install_database_name">
+                    <xar:mlstring>Database Name</xar:mlstring>
+                </label>
+                <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
+            </p>
+            <p>
+                <label for="install_database_prefix">
+                    <xar:mlstring>Table Prefix</xar:mlstring>
+                </label>
+                <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
+                <span class="xar-sub">
+                    <xar:mlstring>(for Table Sharing)</xar:mlstring>
+                </span>
+            </p>
+            <p>
+                <label for="install_database_type">
+                    <xar:mlstring>Database Type</xar:mlstring>
+                </label>
+                <select name="install_database_type" id="install_database_type">
+                    <xar:foreach in="$database_types" value="$info">
+                        <xar:if condition="!empty($info['php_extension']) and !extension_loaded($info['php_extension'])">
+                            <option value="#$info.adodb_driver#" disabled="disabled">
+                                #$info.name# 
+                            </option>
+                        <xar:else/>
+                            <option value="#$info.adodb_driver#">
+                                #$info.name# 
+                            </option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </p>
         </div>
+        <p>
+            <label class="block" for="install_create_database">
+                <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
+                <xar:mlstring>Create the database</xar:mlstring>
+            </label>
+        </p>
+        <p class="xar-sub">
+            <xar:mlstring>This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though.</xar:mlstring>
+        </p>
+        <input type="hidden" name="install_phase" id="install_phase" value="5" />
+        <xar:set name="buttonnext">
+            <xar:mlstring>Continue</xar:mlstring>
+        </xar:set>
+    <div class="center">
+        <input type="submit" value="#$buttonnext#" />
+    </div>
     </form>
 </div>

@@ -24,58 +24,24 @@
 */
 function adminpanels_admin_updateconfig()
 {
+    // Confirm authorisation code
+    if (!xarSecConfirmAuthKey()) return;
+    
     // Get parameters
-
-    // obsolete, need to comment out or delete after upgrade..
-    // but for now we just re-use it to indicate if we want a marker against active module
-    if(!xarVarFetch('showmarker', 'isset', $showmarker, NULL, XARVAR_DONT_SET)) {return;}
-
-    // type of the marker symbol(s)
-    if(!xarVarFetch('marker', 'isset', $marker, '[x]', XARVAR_NOT_REQUIRED)) {return;}
 
     // this is actually a sort order switch, which of course affect the style of the menu
     if(!xarVarFetch('menustyle', 'isset', $menustyle, 'byname', XARVAR_NOT_REQUIRED)) {return;}
 
-    // show or hide a link in adminmenu to administrators logout
-    if(!xarVarFetch('showlogout', 'isset', $showlogout, NULL, XARVAR_DONT_SET)) {return;}
-    
     // show or hide a link in adminmenu to a contectual on-line help for the active module
-    if(!xarVarFetch('showhelp', 'isset', $showhelp, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('showhelp', 'isset', $showhelp, false, XARVAR_DONT_SET)) {return;}
 
     // enable or disable overviews
-    if(!xarVarFetch('overview', 'isset', $overview, NULL, XARVAR_DONT_SET)) {return;}
-
-    // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return;
-
-    if(!$showmarker){
-        xarModSetVar('adminpanels', 'showmarker', 0);
-    }else{
-        xarModSetVar('adminpanels', 'showmarker', 1);
-    }
+    if(!xarVarFetch('overview', 'isset', $overview, false, XARVAR_DONT_SET)) {return;}
 
     xarModSetVar('adminpanels', 'menustyle', $menustyle);
+    xarModSetVar('adminpanels', 'showhelp', (!$showhelp) ? 1 : 0);
+    xarModSetVar('adminpanels', 'overview', (!$overview) ? 1 : 0);
 
-    xarModSetVar('adminpanels', 'marker', $marker);
-
-    if(!$showlogout){
-        xarModSetVar('adminpanels', 'showlogout', 0);
-    }else{
-        xarModSetVar('adminpanels', 'showlogout', 1);
-    }
-    
-    if(!$showhelp){
-        xarModSetVar('adminpanels', 'showhelp', 0);
-    }else{
-        xarModSetVar('adminpanels', 'showhelp', 1);
-    }
-
-    if ($overview !== null) {
-        xarModSetVar('adminpanels', 'overview', 1);
-    } else {
-        xarModSetVar('adminpanels', 'overview', 0);
-    }
-    
     // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('adminpanels', 'admin', 'modifyconfig'));
 
@@ -83,4 +49,3 @@ function adminpanels_admin_updateconfig()
     return true;
 }
 
-?>
