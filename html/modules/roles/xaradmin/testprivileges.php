@@ -79,7 +79,7 @@ function roles_admin_testprivileges()
     $data['pmodule'] = $module;
     $data['uid'] = $uid;
     $data['allmodules'] = $allmodules;
-    if (!isset($module)) $data['masks'] = array();
+    if (empty($module)) $data['masks'] = array();
     else $data['masks'] = $masks->getmasks($module);
     $data['authid'] = xarSecGenAuthKey();
     return $data; 
