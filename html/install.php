@@ -62,6 +62,13 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Handle installation phase designation
     $phase = (int) xarRequestGetVar('install_phase', 'POST');
 
+    // if we can't find the phase in the POST variables, check
+    // the GET cuz we might have been redirected
+    if (!$phase) {
+        $phase = (int) xarRequestGetVar('install_phase', 'GET');
+    }
+
+
     if ($phase == 0) {
         $phase = 1;
     }
@@ -79,7 +86,6 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Build function name from phase
     $funcName = 'phase' . $phase;
-
     // Handle language setting
 
     // Load installer module

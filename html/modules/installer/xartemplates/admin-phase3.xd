@@ -33,6 +33,7 @@
             <input type="submit" value="Next Step &gt;" />
           <xar:else />
             <input type="hidden" name="install_phase" id="install_phase" value="3" />
+            <input type="hidden" name="agree" id="agree" value="agree" />
             <input type="submit" value="Check Again &gt;" />
           </xar:if>
             </span>
