@@ -41,7 +41,8 @@ function roles_languageblock_display($blockinfo)
     // Security check
     if (!xarSecurityCheck('ReadRole', 1, 'Block', "All:" . $blockinfo['title'] . ":All")) {return;}
 
-    if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+    // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+    if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) {
         return;
     }
 
@@ -50,6 +51,10 @@ function roles_languageblock_display($blockinfo)
     $site_locales = xarMLSListSiteLocales();
 
     asort($site_locales);
+
+    if (count($site_locales) <= 1) {
+        return;
+    }
 
     foreach ($site_locales as $locale) {
         $locale_data =& xarMLSLoadLocaleData($locale);

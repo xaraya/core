@@ -240,6 +240,9 @@ function xarML($string/*, ...*/)
 
     // Make sure string is sane
     $string=preg_replace('[\x0d]','',$string);
+    // FIXME: Below i'm trying fix MLS/BL whitespaces issue 
+    // $string = str_replace(array("\n"),array("\n "),$string);
+    // $string=preg_replace('/\n\s/','\n  ',$string);
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
@@ -247,6 +250,7 @@ function xarML($string/*, ...*/)
         // This happen in rare cases when xarML is called before xarMLS_init has been called
         $trans = $string;
     }
+
     if (empty($trans)) {
         // FIXME: postpone
         //xarEvt_fire('MLSMissingTranslationString', $string);

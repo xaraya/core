@@ -286,7 +286,8 @@ function xarUserGetNavigationLocale()
 function xarUserSetNavigationLocale($locale)
 {
     $mode = xarMLSGetMode();
-    if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+    // if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+    if (xarMLSGetMode() != XARMLS_SINGLE_LANGUAGE_MODE) {
         xarSessionSetVar('navigationLocale', $locale);
     }
 }
