@@ -69,9 +69,11 @@
             <th>
                 <xar:mlstring>Mask</xar:mlstring>    
             </th>
-            <th>
-                <xar:mlstring>Realm</xar:mlstring>            
-            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <th>
+                    <xar:mlstring>Realm</xar:mlstring>            
+                </th>
+            </xar:if>
             <th>
                 <xar:mlstring>Module</xar:mlstring>            
             </th>
@@ -90,9 +92,11 @@
             <td width="150">                        
                 #$loop:item['sname']#
             </td>
-            <td width="50" style="text-align: center;">
-                #$loop:item['srealm']#
-            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <td width="50" style="text-align: center;">
+                    #$loop:item['srealm']#
+                </td>
+            </xar:if>
             <td width="100" style="text-align: center;">
                 #$loop:item['smodule']#
             </td>
@@ -112,9 +116,11 @@
             <th>
                 <xar:mlstring>Privilege</xar:mlstring>    
             </th>
-            <th>
-                <xar:mlstring>Realm</xar:mlstring>            
-            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <th>
+                    <xar:mlstring>Realm</xar:mlstring>            
+                </th>
+            </xar:if>
             <th>
                 <xar:mlstring>Module</xar:mlstring>            
             </th>
@@ -132,9 +138,11 @@
                 <td width="150">                        
                     #$rname#
                 </td>
-                <td width="50" style="text-align: center;">
-                    #$rrealm#
-                </td>
+                <xar:if condition="xarModGetVar('privileges','showrealms')">
+                    <td width="50" style="text-align: center;">
+                        #$rrealm#
+                    </td>
+                </xar:if>
                 <td width="100" style="text-align: center;">
                     #$rmodule#
                 </td>
@@ -186,9 +194,11 @@
             <th>
                 <xar:mlstring>Mask</xar:mlstring>    
             </th>
-            <th>
-                <xar:mlstring>Realm</xar:mlstring>            
-            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <th>
+                    <xar:mlstring>Realm</xar:mlstring>            
+                </th>
+            </xar:if>
             <th>
                 <xar:mlstring>Module</xar:mlstring>            
             </th>
@@ -209,9 +219,11 @@
                     #$mask->getName()#
                 </a>
             </td>
-            <td width="50" style="text-align: center;">
-                #$mask->getRealm()#
-            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <td width="50" style="text-align: center;">
+                    #$mask->getRealm()#
+                </td>
+            </xar:if>
             <td width="100" style="text-align: center;">
                 #$mask->getModule()#
             </td>

@@ -94,9 +94,11 @@
             <th>
                 <xar:mlstring>Name</xar:mlstring>            
             </th>
-            <th>
-                <xar:mlstring>Realm</xar:mlstring>            
-            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <th>
+                    <xar:mlstring>Realm</xar:mlstring>            
+                </th>
+            </xar:if>
             <th>
                 <xar:mlstring>Module</xar:mlstring>            
             </th>
@@ -131,9 +133,11 @@
             <td width="150">
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
-            <td width="50" style="text-align: center;">
-                #xarVarPrepForDisplay($loop:item['realm'])#
-            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <td width="50" style="text-align: center;">
+                    #xarVarPrepForDisplay($loop:item['realm'])#
+                </td>
+            </xar:if>
             <td width="100" style="text-align: center;">
                 #$loop:item['module']#
             </td>
@@ -166,9 +170,11 @@
             <th>
                 <xar:mlstring>Name</xar:mlstring>            
             </th>
-            <th>
-                <xar:mlstring>Realm</xar:mlstring>            
-            </th>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <th>
+                    <xar:mlstring>Realm</xar:mlstring>            
+                </th>
+            </xar:if>
             <th>
                 <xar:mlstring>Module</xar:mlstring>            
             </th>
@@ -203,9 +209,11 @@
             <td width="150">
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
             </td>
-            <td width="50" style="text-align: center;">
-                #xarVarPrepForDisplay($loop:item['realm'])#
-            </td>
+            <xar:if condition="xarModGetVar('privileges','showrealms')">
+                <td width="50" style="text-align: center;">
+                    #xarVarPrepForDisplay($loop:item['realm'])#
+                </td>
+            </xar:if>
             <td width="100" style="text-align: center;">
                 #$loop:item['module']#
             </td>
