@@ -42,12 +42,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $name = 'dd_'.$this->id;
         }
 
+
         // retrieve new value for preview + new/modify combinations (in case we miss the preview)
+/*
         if (xarVarIsCached('DynamicData.SubForm',$name)) {
             $this->value = xarVarGetCached('DynamicData.SubForm',$name);
             return true;
         }
-
+*/
         // see if we're still dealing with the same item here
         if ($this->style == 'itemid' && !empty($this->title)) {
             $oldname = $name . '_old';
@@ -132,12 +134,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
             // if we don't know we're previewing, we don't really have a choice here
             if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-            if (empty($preview)) {
+            if (empty($preview)) 
+            {
                 if (empty($value) || empty($object->itemid)) {
                     $itemid = $object->createItem();
                 } else {
                     $itemid = $object->updateItem();
                 }
+
                 if (empty($itemid)) {
                     $this->invalid = 'object';
                     return false;
@@ -148,9 +152,88 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
             $this->value = $value;
 
-        } elseif ($this->style == 'childlist' && empty($value) && !empty($newvalue)) {
-            $this->value = $newvalue;
+//        } elseif ($this->style == 'childlist' && (empty($value) || $value == $oldvalue)) {
+        } elseif ($this->style == 'childlist' && (empty($value) || !empty($newvalue)) ) {
 
+            // check user input for the object item
+            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist));
+
+            
+            if (!empty($value)) 
+            {
+                if( is_numeric($value) )
+                {
+                    $myobject->getItem(array('itemid' => $value));
+                    $value = array($value);
+                } else {
+                    $unserializedvalue = unserialize($value);
+                    if( $unserializedvalue === false )
+                    {
+                        $myobject->getItem(array('itemid' => $value));
+                        $value = array($value);
+                    } else {
+                        if( !empty($unserializedvalue) )
+                        {
+                            $myobject->getItem(array('itemid' => $unserializedvalue[0]));
+                            $value = $unserializedvalue;
+                        }
+                    }
+                }
+            } else {
+                $value = array();
+            }
+
+            // Check over existing items for updates
+            foreach( $object->itemids as $itemid )
+            {
+                // Grab the values for the for the property
+                $propertyvalues = array();
+                foreach( $object->properties as $property)
+                {
+                    $propertyname = $property->name;
+                    $propertyid = $property->id;
+                    $propertyid = "dd_".$propertyid;
+                    unset($propertyvaluearray);
+                    xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
+                    if( $propertyvaluearray !== NULL )
+                    {
+                        $propertyvalues[$propertyname] = $propertyvaluearray[$itemid];
+                    }
+                }
+
+                $propertyvalues['itemid'] = $itemid;
+                $itemid = $myobject->updateItem($propertyvalues);                
+            }
+
+            // Grab the values for the for the new property, id = 0
+            $addNewItem = false;
+            $propertyvalues = array();
+            foreach( $object->properties as $property)
+            {
+                $propertyname = $property->name;
+                $propertyid = $property->id;
+                $propertyid = "dd_".$propertyid;
+                unset($propertyvaluearray);
+                xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
+                if( $propertyvaluearray !== NULL )
+                {
+                    $propertyvalues[$propertyname] = $propertyvaluearray[0];
+                    if( !empty($propertyvalues[$propertyname]) )
+                    {
+                        $addNewItem = true;
+                    }
+                } else {
+                    $propertyvalues[$propertyname] = 0;
+                }
+            }
+            if( $addNewItem )
+            {
+                $itemid = $myobject->createItem($propertyvalues);                
+                $value[] = $itemid;
+            }
+
+            $this->value = serialize($value);
         } else {
             // just accept the new value
             $this->value = $value;
@@ -194,6 +277,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $data[$item]   = $this->$item;
         }
         $data['value']     = $value;
+
+
         if (!empty($this->objectid)) {
             $data['object'] =& $this->getObject($value);
 
@@ -204,6 +289,8 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                                                                       'where'     => $this->where));
                 $data['dropdown'] = $mylist->getItems();
             } elseif ($this->style == 'childlist' && !empty($this->link) && empty($this->title)) {
+            
+            
                 // pick some field to count with
                 if (!empty($data['object']->primary)) {
                     // preferably the primary key
@@ -236,6 +323,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     function showOutput($args = array())
     {
         extract($args);
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -261,6 +349,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         if (!isset($template)) {
             $template = 'subform';
         }
+        
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
@@ -306,11 +395,23 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
-                if (!empty($this->link) && !empty($value)) {
+                if (!empty($this->link) && !empty($value)) 
+                {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
                     } else {
-                        $where = $this->link . " eq '" . $value . "'";
+                        $unserializedvalue = unserialize($value);
+                        if( $unserializedvalue === false )
+                        {
+                            $where = $this->link . " eq '" . $value . "'";
+                        } else {
+                            if( is_numeric($unserializedvalue[0]) )
+                            {
+                                $where = $this->link . ' IN (' . implode(",",$unserializedvalue) . ')';
+                            } else {
+                                $where = $this->link . " IN ('" . implode('\',\'',$unserializedvalue) . "')";
+                            }
+                        }
                     }
                     $myobject->getItems(array('where' => $where));
                 } else {
