@@ -920,8 +920,19 @@
 		$getnext = sprintf($this->_genIDSQL,$seqname);
 		
 		$holdtransOK = $this->_transOK;
+
+        // XARAYA MODIFICATION - START
+        // Suppress errors raised when the table does not exist.
+        // See http://phplens.com/lens/lensforum/msgs.php?id=11956
+        // There is not an easy way to provide this customisation as an
+        // overloaded class.
+        $save_handler = $this->connection->raiseErrorFn;
+        $this->connection->raiseErrorFn = '';
 		@($rs = $this->Execute($getnext));
-		if (!$rs) {
+        $this->connection->raiseErrorFn = $save_handler;
+        // XARAYA MODIFICATION - END
+
+        if (!$rs) {
 			$this->_transOK = $holdtransOK; //if the status was ok before reset
 			$createseq = $this->Execute(sprintf($this->_genSeqSQL,$seqname,$startID));
 			$rs = $this->Execute($getnext);
