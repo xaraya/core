@@ -61,48 +61,8 @@ function dynamicdata_util_export($args)
     if (empty($itemid)) {
         $data['label'] = xarML('Export Object Definition for #(1)', $myobject->label);
 
-        // get the list of properties for a Dynamic Object
-        $object_properties = Dynamic_Property_Master::getProperties(array('objectid' => 1));
-
-        // get the list of properties for a Dynamic Property
-        $property_properties = Dynamic_Property_Master::getProperties(array('objectid' => 2));
-
-        $xml .= '<object name="'.$myobject->name.'">'."\n";
-        foreach (array_keys($object_properties) as $name) {
-            if ($name != 'name' && isset($myobject->$name)) {
-                if (is_array($myobject->name)) {
-                    $xml .= "  <$name>\n";
-                    foreach ($myobject->$name as $field => $value) {
-                        $xml .= "    <$field>" . xarVarPrepForDisplay($value) . "</$field>\n";
-                    }
-                    $xml .= "  </$name>\n";
-                } else {
-                    $xml .= "  <$name>" . xarVarPrepForDisplay($myobject->$name) . "</$name>\n";
-                }
-            }
-        }
-        $xml .= "  <properties>\n";
-        foreach (array_keys($myobject->properties) as $name) {
-            $xml .= '    <property name="'.$name.'">' . "\n";
-            foreach (array_keys($property_properties) as $key) {
-                if ($key != 'name' && isset($myobject->properties[$name]->$key)) {
-                    if ($key == 'type') {
-                        // replace numeric property type with text version
-                        $xml .= "      <$key>".xarVarPrepForDisplay($proptypes[$myobject->properties[$name]->$key]['name'])."</$key>\n";
-                    } elseif ($key == 'source') {
-                        // replace local table prefix with default xar_* one
-                        $val = $myobject->properties[$name]->$key;
-                        $val = preg_replace("/^$prefix/",'xar_',$val);
-                        $xml .= "      <$key>".xarVarPrepForDisplay($val)."</$key>\n";
-                    } else {
-                        $xml .= "      <$key>".xarVarPrepForDisplay($myobject->properties[$name]->$key)."</$key>\n";
-                    }
-                }
-            }
-            $xml .= "    </property>\n";
-        }
-        $xml .= "  </properties>\n";
-        $xml .= "</object>\n";
+        $xml = xarModAPIFunc('dynamicdata','util','export',
+                             array('objectref' => &$myobject));
 
         $data['formlink'] = xarModURL('dynamicdata','util','export',
                                       array('objectid' => $myobject->objectid,
