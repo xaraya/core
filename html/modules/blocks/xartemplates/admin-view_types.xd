@@ -97,7 +97,7 @@
         <xar:loop name="$block_types" id="foo2">
             <tr>
                 <td><a href="#$loop:item['modurl']#" title="#xarML('Administer module')#">#$loop:item['module']#</a></td>
-                <td>#$loop:item['type']#</td>
+                <td><a href="#$loop:item['detailurl']#" title="#xarML('Display further details')#">#$loop:item['type']#</a></td>
                 <td>
                     <xar:if condition="!empty($loop:item['info']['text_type_long'])">
                         #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
@@ -105,7 +105,6 @@
                 </td>
                 <td>
                     <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
-                    | <a href="#$loop:item['detailurl']#" title="#xarML('Display further details')#"><xar:mlstring>Details</xar:mlstring></a>
                 </td>
             </tr>
         </xar:loop>

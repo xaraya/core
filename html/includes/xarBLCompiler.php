@@ -2001,8 +2001,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $prefix = '_bl_loop_'.$loopCounter;
         else
             $prefix = '_bl_loop_'.$id;
-        $output .= 'extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
-
+        $output .= 'if (is_array($_bl_loop_item'.$loopCounter.')) extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
         return $output;
     }
 
