@@ -76,7 +76,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         if (!empty($value)) {
             $link = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$value;
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('Affero').'" /></a>';
             }
         }
         return '';
