@@ -316,7 +316,7 @@ function privileges_init()
 }
 
 /**
- * Upgrade the roles module from an old version
+ * Upgrade the privileges module from an old version
  *
  * @param oldVersion the old version to upgrade from
  * @returns bool
@@ -327,7 +327,7 @@ function privileges_upgrade($oldVersion)
 }
 
 /**
- * Delete the roles module
+ * Delete the privileges module
  *
  * @param none
  * @returns boolean

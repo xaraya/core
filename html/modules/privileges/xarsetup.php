@@ -61,7 +61,8 @@ function initializeSetup() {
 
     xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('CasualAccess','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
+    xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
 //    xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
@@ -88,6 +89,7 @@ function initializeSetup() {
 	xarMakePrivilegeRoot('CasualAccess');
 	xarMakePrivilegeRoot('ViewLogin');
 	xarMakePrivilegeRoot('ViewBlocks');
+	xarMakePrivilegeRoot('ViewLoginItems');
 //	xarMakePrivilegeMember('DenyRoles','DenyRolesPrivileges');
 //	xarMakePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
 //	xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
@@ -96,6 +98,7 @@ function initializeSetup() {
 //	xarMakePrivilegeMember('DenyRolesPrivileges','Reading');
 	xarMakePrivilegeMember('ViewLogin','CasualAccess');
 	xarMakePrivilegeMember('ViewBlocks','CasualAccess');
+	xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
