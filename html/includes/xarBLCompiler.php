@@ -328,16 +328,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
-    var $nodesFactory;
     var $tagNamesStack;
     var $tagIds;
     var $tagRootSeen;
-
-    // FIXME: if we remove the factory as a member this can go
-    function xarTpl__Parser()
-    {
-        $this->nodesFactory =& new xarTpl__NodesFactory();
-    }
 
     function parse(&$templateSource)
     {
@@ -351,7 +344,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
         // Initializing the containers for template variables and the doctree
         $this->tplVars =& new xarTpl__TemplateVariables();
-        $documentTree = $this->nodesFactory->createDocumentNode($this);
+        $documentTree = xarTpl__NodesFactory::createDocumentNode($this);
 
         // Parse the document tree
         $res = $this->parseNode($documentTree);
@@ -489,7 +482,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
-                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
+                                    $children[] =& xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
 
@@ -525,7 +518,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 }
 
                                 // Create the node we parsed.
-                                $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
+                                $node = xarTpl__NodesFactory::createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                                 if (!isset($node)) return; // throw back
 
                                 if (!$closed) {
@@ -551,7 +544,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if(in_array($parent->tagName, $natives,true)) $trimmer='trim';
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
-                                    $children[] =& $this->nodesFactory->createTextNode($trimmer($text), $this);
+                                    $children[] =& xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -668,7 +661,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
                             if(!$this->canHaveText($parent)) return;
-                            $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
+                            $children[] = xarTpl__NodesFactory::createTextNode(xmltrim($text), $this);
                             $text = '';
                         }
                         // Handle Entity
@@ -676,7 +669,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if (!isset($res)) return; // throw back
 
                         list($entityType, $parameters) = $res;
-                        $node = $this->nodesFactory->createTplEntityNode($entityType, $parameters, $this);
+                        $node = xarTpl__NodesFactory::createTplEntityNode($entityType, $parameters, $this);
                         if (!isset($node)) return; // throw back
 
                         $children[] = $node;
@@ -719,7 +712,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if(in_array($parent->tagName,$natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if(!$this->canHaveText($parent) && trim($text) != '') return;
-                            $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
+                            $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
                             $text = '';
                         }
 
@@ -735,7 +728,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                     
                         // Instruction is now set to $varname or xarFunction(.....)
-                        $node = $this->nodesFactory->createTplInstructionNode($instruction, $this);
+                        $node = xarTpl__NodesFactory::createTplInstructionNode($instruction, $this);
                         if (!isset($node)) return; // throw back
 
                         $children[] = $node;
@@ -753,7 +746,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $trimmer = 'xmltrim';
         if ($trimmer($text) != '') {
             if(!$this->canHaveText($parent)) return;
-            $children[] = $this->nodesFactory->createTextNode($trimmer($text),$this);
+            $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text),$this);
         }
         // Check if there is something left at the stack
         $stackTagName = array_pop($this->tagNamesStack);
