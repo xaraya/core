@@ -408,7 +408,12 @@ function installer_admin_create_administrator()
     $blocks = array('finclude','html','menu','php','text');
 
     foreach ($blocks as $block) {
-        if (!xarBlockTypeRegister('base', $block)) return;
+        if (!xarModAPIFunc('blocks',
+                           'admin',
+                           'register_block_type',
+                           array('modName'  => 'base',
+                                 'blockType'=> $block))) return;
+
     }
 
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {

@@ -26,7 +26,10 @@ function blocks_admin_view_groups()
     $block_groups = array();
     while(!$result->EOF) {
         $group = $result->GetRowAssoc(false);
-        $group = xarBlockGroupGetInfo($group['id']);
+        // Get details on current group
+        $group = xarModAPIFunc('blocks', 
+                               'admin', 
+                               'groupgetinfo', array('blockGroupId' => $group['id']));
 
         $block_groups[] = $group;
 

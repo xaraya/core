@@ -17,7 +17,9 @@ function blocks_admin_delete_instance()
         // No confirmation yet - get one
 
         // Get details on current block
-        $blockinfo = xarBlockGetInfo($bid);
+        $blockinfo = xarModAPIFunc('blocks', 
+                                   'admin', 
+                                   'getinfo', array('blockId' => $bid));
 
         return array('instance' => $blockinfo,
                      'authid' => xarSecGenAuthKey());

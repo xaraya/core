@@ -193,8 +193,11 @@ function themes_upgrade($oldversion)
             break;
         case 1.1:
 
-            xarBlockTypeRegister('themes', 'meta');
-
+            if (!xarModAPIFunc('blocks',
+                    'admin',
+                    'register_block_type',
+                    array('modName' => 'themes',
+                        'blockType' => 'meta'))) return; 
             break;
     } 
     // Update successful

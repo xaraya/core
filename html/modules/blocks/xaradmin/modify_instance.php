@@ -49,9 +49,12 @@ function blocks_admin_modify_instance()
     // Fetch instance data
     $instance = $result->GetRowAssoc(false);
 
-    // Block-specific
-    // TODO: exception here
-    xarBlock_Load($instance['module'], $instance['type']);
+    // Load block
+    if (!xarModAPIFunc('blocks', 
+                       'admin', 
+                       'load', array('modName' => $instance['module'],
+                                     'blockName' => $instance['type']))) return;
+
 
     $usname = preg_replace('/ /', '_', $instance['module']);
     $modfunc = $usname . '_' . $instance['type'] . 'block_modify';

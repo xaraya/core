@@ -22,7 +22,9 @@ function blocks_admin_update_instance()
 	if(!xarSecurityCheck('AddBlock',0,'Instance')) return;
 
     // Get and update block info
-    $blockinfo = xarBlockGetInfo($bid);
+    $blockinfo = xarModAPIFunc('blocks', 
+                               'admin', 
+                               'getinfo', array('blockId' => $bid));
     $blockinfo['title'] = $title;
     $blockinfo['bid'] = $bid;
     $blockinfo['template'] = $template;
@@ -37,9 +39,10 @@ function blocks_admin_update_instance()
     }
 
     // Load block
-    if (!xarBlock_Load($blockinfo['module'], $blockinfo['type'])) {
-        return xarML('Block instance not found.');
-    }
+    if (!xarModAPIFunc('blocks', 
+                       'admin', 
+                       'load', array('modName' => $blockinfo['module'],
+                                     'blockName' => $blockinfo['type']))) return;
 
     // Do block-specific update
     $usname = preg_replace('/ /', '_', $blockinfo['module']);

@@ -10,7 +10,10 @@ function blocks_admin_modify_group()
     // Security Check
 	if(!xarSecurityCheck('EditBlock',0,'Group')) return;
 
-    $group = xarBlockGroupGetInfo($gid);
+    // Get details on current group
+    $group = xarModAPIFunc('blocks', 
+                           'admin', 
+                           'groupgetinfo', array('blockGroupId' => $gid));
 
     $up_arrow_src   = xarTplGetImage('up.gif');
     $down_arrow_src = xarTplGetImage('down.gif');

@@ -535,23 +535,4 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
         return;
 }
 
-/*
- * Register an instance schema with the security
- * system
- *
- * @access public
- * @param string component the component to add
- * @param string schema the security schema to add
- *
- * Will fail if an attempt is made to overwrite an existing schema
- */
-function xarSecAddSchema($component, $schema)
-{
-    $msg = xarML('This call needs to be removed');
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
-}
-
-
 ?>

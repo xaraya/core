@@ -16,10 +16,11 @@ function blocks_admin_delete_group()
         // No confirmation yet - get one
 
         // Get details on current group
-        $group = xarBlockGroupGetInfo($gid);
-        if ($group == NULL) {
-            return;
-        }
+        $group = xarModAPIFunc('blocks', 
+                               'admin', 
+                               'groupgetinfo', array('blockGroupId' => $gid));
+
+        if ($group == NULL) return;
 
         return array('group' => $group,
                      'authid' => xarSecGenAuthKey());
