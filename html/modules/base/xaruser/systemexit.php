@@ -39,10 +39,16 @@ function base_user_systemexit()
     if (!xarVarFetch('component', 'str', $component, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('code', 'str', $code, NULL, XARVAR_NOT_REQUIRED)) return;
     if($CoreStack->isempty()) $CoreStack->initialize();
+    // avoid nasties trying to post fake exceptions
+    $msg = xarVarPrepForDisplay($msg);
     $exception = new SystemException($msg);
+    if (empty($code) || !isset($errorcodes[$code])) {
+        $code = 1;
+    }
     $exception->setID($errorcodes[$code]);
     $exception->setMajor(XAR_SYSTEM_EXCEPTION);
     if ($component != '') {
+    // CHECKME: sanitize this too ?
         $exception->setProduct($product);
         $exception->setComponent($component);
     }
