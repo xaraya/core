@@ -387,74 +387,8 @@ function dynamicdata_init()
 
 
 
-
-	/**
-	  * Dynamic Data Properties Definition Table
-	  */
-	$propdefs = array('xar_dd_id'   => array('type'        => 'integer',
-											  'null'        => false,
-											  'default'     => '0',
-											  'increment'   => true,
-											  'primary_key' => true),
-				/* the name of this property */
-					'xar_prop_name'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* the label of this property */
-					'xar_prop_label'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* this property's parent */
-					'xar_prop_parent'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* path to the file defining this property */
-					'xar_prop_filepath'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* name of the Class to be instantiated for this property */
-					'xar_prop_class'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				
-				/* the default validation string for this property */
-					'xar_prop_validation'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* the source of this property */
-					'xar_prop_source'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* the semi-colon seperated list of file required to be present before this property is active */
-					'xar_prop_reqfiles'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* the semi-colon seperated list of modules required to be active before this property is active */
-					'xar_prop_reqmodules'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/* the default args for this property -- serialized array */
-					'xar_prop_args'    => array('type'        => 'text', 
-											  'size'        => 'medium',
-											  'null'        => 'false'),
-											  
-				/*  */
-					'xar_prop_aliases'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
-				/*  */
-					'xar_prop_format'   => array('type'        => 'integer',
-											  'default'     => '0'),
-			  );
-
-	// Create the Table - the function will return the SQL is successful or
-	// raise an exception if it fails, in this case $query is empty
-	$query = xarDBCreateTable($$dynamic_properties_def,$propdefs);
-	if (empty($query)) return; // throw back
-	$result = $dbconn->Execute($query);
-	if (!isset($result)) return;
-
-
+	// Add Dynamic Data Properties Definition Table
+	if( !dynamicdata_createPropDefTable() ) return;
 
 
     /**
@@ -688,76 +622,10 @@ function dynamicdata_upgrade($oldVersion)
 
         // Fall through to next upgrade
 	case '1.2.0':
-		/**
-		  * Dynamic Data Properties Definition Table
-		  */
-		  
-		// Get existing DB info
-		$dbconn =& xarDBGetConn();
-		$xartable =& xarDBGetTables();
-	    $dynamic_properties_def = $xartable['dynamic_properties_def'];
+		// Add Dynamic Data Properties Definition Table
+		if( !dynamicdata_createPropDefTable() ) return;
 
-		//Load Table Maintenance API
-		xarDBLoadTableMaintenanceAPI();
-
-		$propdefs = array('xar_prop_id'   => array('type'        => 'integer',
-												  'null'        => false,
-												  'default'     => '0',
-												  'increment'   => true,
-												  'primary_key' => true),
-                	/* the name of this property */
-                        'xar_prop_name'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* the label of this property */
-                        'xar_prop_label'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* this property's parent */
-                        'xar_prop_parent'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* path to the file defining this property */
-                        'xar_prop_filepath'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-					/* name of the Class to be instantiated for this property */
-                        'xar_prop_class'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-					/* format value for this property */
-                        'xar_prop_format'   => array('type'        => 'integer',
-												     'default'     => '0'),					
-                	/* the default validation string for this property */
-                        'xar_prop_validation'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* the source of this property */
-                        'xar_prop_source'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* the semi-colon seperated list of file required to be present before this property is active */
-                        'xar_prop_reqfiles'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                	/* the semi-colon seperated list of modules required to be active before this property is active */
-                        'xar_prop_reqmodules'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-					/* the default args for this property -- serialized array */
-						'xar_prop_args'    => array('type'        => 'text', 
-												  'size'        => 'medium',
-												  'null'        => 'false')
-				  );
-	
-		// Create the Table - the function will return the SQL is successful or
-		// raise an exception if it fails, in this case $query is empty
-		$query = xarDBCreateTable($dynamic_properties_def,$propdefs);
-		if (empty($query)) return; // throw back
-		$result = $dbconn->Execute($query);
-		if (!isset($result)) return;
-		
-
+        // Fall through to next upgrade
     case '2.0.0':
         // Code to upgrade from version 2.0.0 goes here
         break;
@@ -913,4 +781,83 @@ function dynamicdata_delete()
     return true;
 }
 
+function dynamicdata_createPropDefTable()
+{
+	/**
+	  * Dynamic Data Properties Definition Table
+	  */
+	  
+	// Get existing DB info
+	$dbconn =& xarDBGetConn();
+	$xartable =& xarDBGetTables();
+	$dynamic_properties_def = $xartable['dynamic_properties_def'];
+
+	//Load Table Maintenance API
+	xarDBLoadTableMaintenanceAPI();
+
+	$propdefs = array('xar_dd_id'   => array('type'        => 'integer',
+											  'null'        => false,
+											  'default'     => '0',
+											  'increment'   => true,
+											  'primary_key' => true),
+				/* the name of this property */
+					'xar_prop_name'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* the label of this property */
+					'xar_prop_label'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* this property's parent */
+					'xar_prop_parent'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* path to the file defining this property */
+					'xar_prop_filepath'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* name of the Class to be instantiated for this property */
+					'xar_prop_class'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				
+				/* the default validation string for this property */
+					'xar_prop_validation'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* the source of this property */
+					'xar_prop_source'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* the semi-colon seperated list of file required to be present before this property is active */
+					'xar_prop_reqfiles'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* the semi-colon seperated list of modules required to be active before this property is active */
+					'xar_prop_reqmodules'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/* the default args for this property -- serialized array */
+					'xar_prop_args'    => array('type'        => 'text', 
+											  'size'        => 'medium',
+											  'null'        => 'false'),
+											  
+				/*  */
+					'xar_prop_aliases'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/*  */
+					'xar_prop_format'   => array('type'        => 'integer',
+											  'default'     => '0'),
+			  );
+
+		// Create the Table - the function will return the SQL is successful or
+		// raise an exception if it fails, in this case $query is empty
+		$query = xarDBCreateTable($$dynamic_properties_def,$propdefs);
+		if (empty($query)) return false; // throw back
+		$result = $dbconn->Execute($query);
+		if (!isset($result)) return false;
+		
+		return true;
+	}
 ?>
