@@ -46,16 +46,15 @@ define('XARVAR_PREP_TRIM',        8);
  * @param whatElseIsGoingLoaded integer
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
- * @todo <johnny> remove censored words and allowable HTML
+ * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
  */
 function xarVar_init($args, $whatElseIsGoingLoaded)
 {
     /*
-    $GLOBALS['xarVar_allowableHTML'] = $args['allowableHTML'];
-    $GLOBALS['xarVar_fixHTMLEntities'] = $args['fixHTMLEntities'];
-
-    return true;
-    */
+     * Initialise the variable cache
+     */
+    $GLOBALS['xarVar_cacheCollection'] = array();
+    
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
@@ -363,11 +362,6 @@ function xarVarValidate($validation, &$subject, $supress = false)
  * ...
  *
  */
-
-/*
- * Initialise the variable cache
- */
-$GLOBALS['xarVar_cacheCollection'] = array();
 
 /**
  * Check if the value of a variable is available in cache or not

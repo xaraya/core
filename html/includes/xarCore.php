@@ -9,6 +9,7 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini
+ * @todo dependencies and runlevels!
 */
 
 /**
@@ -24,6 +25,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
 
 /*
  * System dependencies for (optional) systems
+ * FIXME: This diagram isn't correct (or at least not detailed enough)
  * ----------------------------------------------
  * | Name           | Depends on                |
  * ----------------------------------------------
@@ -31,7 +33,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * | SESSION        | ADODB                     |
  * | CONFIGURATION  | ADODB                     |
  * | USER           | SESSION, ADODB            |
- * | BLOCKS         | CONFIGURATION, ADODB      | (Paul, can you confirm this?)
+ * | BLOCKS         | CONFIGURATION, ADODB      | 
  * | MODULES        | CONFIGURATION, ADODB      |
  * | EVENTS         | MODULES                   |
  * ----------------------------------------------
@@ -58,8 +60,6 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
  * dependancies will be automatically resolved
  */
-
-//TODO: <besfred> rethink runlevels and make them independant from one another
 
 define('XARCORE_SYSTEM_NONE', 0);
 define('XARCORE_SYSTEM_ADODB', 1);
@@ -129,20 +129,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * system.
      *
      */
-    // {ML_dont_parse 'includes/xarLog.php'}
-    include 'includes/xarLog.php';
-    // {ML_dont_parse 'includes/xarEvt.php'}
-    include 'includes/xarEvt.php';
-    include 'includes/xarException.php';
+    // FIXME: due to core calling xarVarIsCached this needs to be here
     include 'includes/xarVar.php';
-    include 'includes/xarServer.php';
-    include 'includes/xarMLS.php';
-    include 'includes/xarTemplate.php';
-
+    
     /*
      * If there happens something we want to be able to log it
      *
      */
+    // {ML_dont_parse 'includes/xarLog.php'}
+    include 'includes/xarLog.php';
     $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName', true),
                         'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs', true),
                         'level' => xarCore_getSystemVar('Log.LogLevel', true));
@@ -154,6 +149,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before we do anything make sure we can except out of code in a predictable matter
      *
      */
+    include 'includes/xarException.php';
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
     xarCES_init($systemArgs, $whatToLoad);
     xarError_init($systemArgs, $whatToLoad);
@@ -182,7 +178,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * It think this is the earliest we can do
      *
      */
-    if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
+    if ($whatToLoad & XARCORE_SYSTEM_ADODB) { // yeah right, as if this is optional
         include 'includes/xarDB.php';
 
         // Decode encoded DB parameters
@@ -214,6 +210,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * be as early as possible in place. This system is for *core* events
      *
      */
+    // {ML_dont_parse 'includes/xarEvt.php'}
+    include 'includes/xarEvt.php';
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 
@@ -238,6 +236,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarConfig_loadVars();
 
         // Start Variables utilities
+        
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
@@ -247,7 +246,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * Before anything fancy is loaded, let's start the legacy systems
      *
-     * @todo <mrb> check if this is on/off by default.
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
         include 'includes/pnHTML.php';
@@ -264,10 +262,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
      */
+    include 'includes/xarServer.php';
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
-                        'defaultModuleName' => xarConfigGetVar('Site.Core.DefaultModuleName'),
-                        'defaultModuleType' => xarConfigGetVar('Site.Core.DefaultModuleType'),
-                        'defaultModuleFunction' => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
+                        'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
+                        'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
+                        'defaultModuleFunction'  => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
                         'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
@@ -276,10 +275,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring Multi Language System online
      *
      */
+    include 'includes/xarMLS.php';
     $systemArgs = array('translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
-                        'MLSMode' => xarConfigGetVar('Site.MLS.MLSMode'),
-                        'defaultLocale' => xarConfigGetVar('Site.MLS.DefaultLocale'),
-                        'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales')
+                        'MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
+                        'defaultLocale'       => xarConfigGetVar('Site.MLS.DefaultLocale'),
+                        'allowedLocales'      => xarConfigGetVar('Site.MLS.AllowedLocales')
                         );
     xarMLS_init($systemArgs, $whatToLoad);
 
@@ -297,8 +297,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         include 'includes/xarSession.php';
 
-        $systemArgs = array('securityLevel' => xarConfigGetVar('Site.Session.SecurityLevel'),
-                            'duration' => xarConfigGetVar('Site.Session.Duration'),
+        $systemArgs = array('securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
+                            'duration'          => xarConfigGetVar('Site.Session.Duration'),
                             'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'));
         xarSession_init($systemArgs, $whatToLoad);
 
@@ -347,9 +347,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start BlockLayout Template Engine
      *
      */
+    include 'includes/xarTemplate.php';
     $systemArgs = array('enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
-                        'themesBaseDirectory' => xarConfigGetVar('Site.BL.ThemesDirectory'),
-                        'defaultThemeDir' => xarModGetVar('themes','default'));
+                        'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
+                        'defaultThemeDir'        => xarModGetVar('themes','default'));
     xarTpl_init($systemArgs, $whatToLoad);
 
 
@@ -442,10 +443,11 @@ function xarCoreActivateDebugger($flags)
         // Proper error reporting
         error_reporting(E_ALL);
         // Activate assertions
-        assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
-        assert_options(ASSERT_WARNING, 1);   // Issue a php warning
-        assert_options(ASSERT_BAIL, 0);      // Stop processing?
-        assert_options(ASSERT_QUIET_EVAL,0); // Quiet evaluation of assert condition?
+        assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
+        assert_options(ASSERT_WARNING,   1);    // Issue a php warning
+        assert_options(ASSERT_BAIL,      0);    // Stop processing?
+        assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
+        // Dependency! (move to xarException?)
         assert_options(ASSERT_CALLBACK,'xarException__assertErrorHandler'); // Call this function when the assert fails
         $GLOBALS['xarDebug_sqlCalls'] = 0;
         $lmtime = explode(' ', microtime());
@@ -519,6 +521,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
         }
     }
 
+    // Dependency
     xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
 
     return $systemVars[$name];
@@ -555,6 +558,7 @@ function xarCore_getSiteVar($name)
         xarCore_die("xarCore_getSiteVar: Unknown site variable: ".$name);
     }
 
+    // Dependency
     xarVarSetCached('Core.getSiteVar', $name, $siteVars[$name]);
 
     return $siteVars[$name];
@@ -577,7 +581,8 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
         if ($flags & XAR_INCLUDE_MAY_NOT_EXIST) {
             return true;
         } else {
-            $msg = xarML("Could not load file: [#(1)].", $fileName);
+            $msg = "Could not load file: " . $fileName;
+            // Dependency!
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
             return false;
         }
@@ -595,7 +600,8 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
     ob_end_clean();
 
     if (empty($r) || !$r) {
-        $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
+        $msg = "Could not load file: [" . $fileName . "]\n\n Error Caught:\n " . $error_msg;
+        // Dependency
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
         return false;
     }
@@ -667,7 +673,8 @@ EOM;
  *
  * @author Marcel van der Boom marcel@hsdev.com
  * @access protected
- * @param string apiType type of API to check whether allowed to load
+ * @param  string apiType type of API to check whether allowed to load
+ * @todo   See if we can get rid of this, nobody is using this
  * @return bool
  */
 function xarCoreIsApiAllowed($apiType) 
@@ -676,7 +683,7 @@ function xarCoreIsApiAllowed($apiType)
     if (empty($apiType)) return false;
     if (preg_match ("/api$/i", $apiType)) return false;
 
-    // <mrb> Where do we config this again?
+    // Dependency
     $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
 
     // If no API type restrictions are given, return true

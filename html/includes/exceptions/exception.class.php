@@ -48,6 +48,7 @@ class xarException
 
     function toHTML()
     {
+        // Dependency!!
         return nl2br(xarVarPrepForDisplay($this->msg)) . '<br/>';
     }
 

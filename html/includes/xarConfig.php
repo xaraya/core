@@ -77,9 +77,11 @@ function xarConfigGetVar($name, $prep = NULL)
     } elseif ($name == 'System.Core.VersionSub') {
         return XARCORE_VERSION_SUB;
     } elseif ($name == 'prefix') {
+        // Can we do this another way (dependency)
         return xarDBGetSiteTablePrefix();
     }
 
+    // Nice, but introduces dependency
     return xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
 }
 
@@ -96,6 +98,7 @@ function xarConfigGetVar($name, $prep = NULL)
  */
 function xarConfigSetVar($name, $value)
 {
+    // Nice, but introduces dependency
     return xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'configvar');
 }
 
@@ -122,6 +125,7 @@ function xarConfig_loadVars()
     while (!$result->EOF) {
         list($name,$value) = $result->fields;
         $newval = unserialize($value);
+        // Dependency
         xarVarSetCached($cacheCollection, $name, $newval);
         $result->MoveNext();
     }

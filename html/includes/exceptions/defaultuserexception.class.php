@@ -35,6 +35,7 @@ class DefaultUserException extends xarException
 
     function toHTML()
     {
+        // Dependency!!
         $str = "<pre>\n" . xarVarPrepForDisplay($this->msg) . "\n</pre><br/>";
         if ($this->link) {
             $str .= '<a href="'.$this->link[1].'">'.$this->link[0].'</a><br/>';

@@ -1,4 +1,5 @@
 <?php
+// FIXME: this is unmaintainable, dont hardcode it, determine once what is available, then store somewhere
 $core = array(
               array('name' => '', 'fullname' => 'BlockLayout', 'description' => 'Templating engine'),
               array('name' => 'XMLS', 'fullname' => 'Multi-Language', 'description' => 'The multi-language system and translation engine'),

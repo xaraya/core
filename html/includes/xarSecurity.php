@@ -26,16 +26,17 @@
 
     include_once 'modules/privileges/xarprivileges.php';
     include_once 'modules/roles/xarroles.php';
-    $tables = array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks',
-                    'security_acl' => xarDBGetSiteTablePrefix() . '_security_acl',
-                    'privileges' => xarDBGetSiteTablePrefix() . '_privileges',
-                    'privmembers' => xarDBGetSiteTablePrefix() . '_privmembers',
-                    'security_realms' => xarDBGetSiteTablePrefix() . '_security_realms',
-                    'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances',
-                    'security_levels' => xarDBGetSiteTablePrefix() . '_security_levels',
-                    'modules' => xarDBGetSiteTablePrefix() . '_modules',
-                    'module_states' => xarDBGetSiteTablePrefix() . '_module_states',
-                    'security_privsets' => xarDBGetSiteTablePrefix() . '_security_privsets'
+    $prefix = xarDBGetSiteTablePrefix();
+    $tables = array('security_masks' => $prefix . '_security_masks',
+                    'security_acl' => $prefix . '_security_acl',
+                    'privileges' => $prefix . '_privileges',
+                    'privmembers' => $prefix . '_privmembers',
+                    'security_realms' => $prefix . '_security_realms',
+                    'security_instances' => $prefix . '_security_instances',
+                    'security_levels' => $prefix . '_security_levels',
+                    'modules' => $prefix . '_modules',
+                    'module_states' => $prefix . '_module_states',
+                    'security_privsets' => $prefix . '_security_privsets'
                     );
 
     xarDB_importTables($tables);

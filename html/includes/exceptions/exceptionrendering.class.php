@@ -124,6 +124,7 @@ class ExceptionRendering
         return $this->exception->getComponent();
     }
 
+    // FIXME: This method doesnt belong here
     function isadmin()
     {
         if (!class_exists("xarRoles"))
@@ -133,6 +134,7 @@ class ExceptionRendering
             $roles = new xarRoles();
             $admins = "Administrators";
             $admingroup = $roles->findRole("Administrators");
+            // Dependency! (session)
             $me = $roles->getRole(xarSessionGetVar('uid'));
             if (!empty($admingroup) && isset($me)) {
                 return $me->isParent($admingroup);
@@ -161,6 +163,7 @@ class ExceptionRendering
           $message = "One or more PHP errors were encountered." . $this->linebreak . $this->linebreak;
           foreach($collection as $collecteditem) {
               $message .= $collecteditem['id'] . $this->linebreak;
+              // FIXME: Dependency!
               $message .= xarVarPrepForDisplay($collecteditem['value']->msg) . $this->linebreak;
           }
           return $message;
@@ -178,6 +181,7 @@ class ExceptionRendering
             for ($i = 2, $j = 1, $max = count($stack); $i < $max; $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
+                // FIXME: guess ;-)
                 $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at ' . $this->openstrong .$function.'(';
                 // Note: eval() doesn't generate file or line
                 if (isset($stack[$j]['file'])) $text .= basename(strval($stack[$j]['file'])).':';
