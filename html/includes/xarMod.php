@@ -124,14 +124,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
     $tables['hooks']                 = $systemPrefix . '_hooks';
 
     xarDB_importTables($tables);
-
-    // Not feasible here in this way!
-    /*
-    // Pre-fetch all 'SupportShortURLs' variables if needed
-    if (!empty($xarMod_generateShortURLs)) {
-        xarMod_getVarsByName('SupportShortURLs');
-    }
-    */
+    
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarMod__shutdown_handler');
     return true;
@@ -408,8 +401,8 @@ function xarModGetVarId($modName, $name)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
-    if (xarVarIsCached('Mod.GetVarID', $modName . $name)) {
-        return xarVarGetCached('Mod.GetVarID', $modName . $name);
+    if (xarCore_IsCached('Mod.GetVarID', $modName . $name)) {
+        return xarCore_GetCached('Mod.GetVarID', $modName . $name);
     }
 
     $dbconn =& xarDBGetConn();
@@ -439,7 +432,7 @@ function xarModGetVarId($modName, $name)
     list($modvarid) = $result->fields;
     $result->Close();
 
-    xarVarSetCached('Mod.GetVarID', $modName . $name, $modvarid);
+    xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
 }
@@ -497,13 +490,13 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            if (xarVarIsCached('Mod.Infos', $modRegId)) {
-                return xarVarGetCached('Mod.Infos', $modRegId);
+            if (xarCore_IsCached('Mod.Infos', $modRegId)) {
+                return xarCore_GetCached('Mod.Infos', $modRegId);
             }
             break;
         case 'theme':
-            if (xarVarIsCached('Theme.Infos', $modRegId)) {
-                return xarVarGetCached('Theme.Infos', $modRegId);
+            if (xarCore_IsCached('Theme.Infos', $modRegId)) {
+                return xarCore_GetCached('Theme.Infos', $modRegId);
             }
             break;
     }
@@ -595,10 +588,10 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            xarVarSetCached('Mod.Infos', $modRegId, $modInfo);
+            xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
             break;
         case 'theme':
-            xarVarSetCached('Theme.Infos', $modRegId, $modInfo);
+            xarCore_SetCached('Theme.Infos', $modRegId, $modInfo);
             break;
     }
 
@@ -993,17 +986,25 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     // Initialise the path.
     $path = '';
 
+    // The following allows you to modify the BaseModURL from the config file
+    // it can be used to configure Xaraya for mod_rewrite by
+    // setting BaseModURL = '' in config.system.php
+    $BaseModURL = xarCore_getSystemVar('BaseModURL', true);
+    if (!isset($BaseModURL)) {
+        $BaseModURL = 'index.php';
+    }
+
     // No module specified - just jump to the home page.
     // FIXME: use baseModURL if it has been configured?
     if (empty($modName)) {
-        return xarServerGetBaseURL() . 'index.php';
+        return xarServerGetBaseURL() . $BaseModURL;
     }
 
     // Take the global setting for XML format generation, if not specified.
     if (!isset($generateXMLURL)) {
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
-	
+    
     // Check the global short URL setting before trying to load the URL encoding function
     // for the module.
     // Don't try and process short URLs if a custom entry point has been defined.
@@ -1012,30 +1013,25 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // Note: if a module declares itself as suppoting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
         if (xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') && xarModAPILoad($modName, 'user')) {
-			$encoderArgs = $args;
-			$encoderArgs['func'] = $funcName;
+            $encoderArgs = $args;
+            $encoderArgs['func'] = $funcName;
 
             // Don't throw exception on missing file or function anymore.
             // FIXME: why do we want to hide errors here? The encode_shorturl function *must*
             // be available if 'SupportShortURLs' is set for the module, so we are only hiding
             // parsing errors, which we want to know about. Also, if the file is missing, we
             // want to know.
-			$path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
-			if (!empty($path)) {
-				// The following allows you to modify the BaseURL from the config file
-				// it can be used to configure Xaraya for mod_rewrite by
-				// setting BaseModURL = '' in config.php
-				$BaseModURL = xarCore_getSystemVar('BaseModURL', true);
+            $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
+            if (!empty($path)) {
+                // Use xaraya default (index.php) or BaseModURL if provided in config.system.php
+                $path = $BaseModURL . $path;
 
-                // Use xaraya default (index.php) or BaseModURL if provided in config.php
-                $path = (isset($BaseModURL) ? $BaseModURL : '/index.php') . $path;
-
-                // Remove the leading / from the path.
+                // Remove the leading / from the path (if any).
                 $path = preg_replace('/^\//', '', $path);
 
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
-			}
+            }
         }
     }
 
@@ -1055,7 +1051,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             }
             $path = $entrypoint . $pini . 'type=' . $modType;
         }  else {
-            // Standard entry point - index.php
+            // Standard entry point - index.php or BaseModURL if provided in config.system.php
             $pathArgs[] = "module=$modName";
             if ((!empty($modType)) && ($modType != 'user')) {
                 $pathArgs[] = 'type=' . $modType;
@@ -1063,7 +1059,12 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             if ((!empty($funcName)) && ($funcName != 'main')) {
                 $pathArgs[] = 'func=' . $funcName;
             }
-            $path = 'index.php' . $pini . join($psep, $pathArgs);
+            // CHECKME: do we allow http://www.mysite.com/?module=this here, or do we
+            // always want to fall back to index.php when we don't have short urls ?
+            //if ($BaseModURL == '') {
+            //    $BaseModURL = 'index.php';
+            //}
+            $path = $BaseModURL . $pini . join($psep, $pathArgs);
         }
 
         // Add further parameters to the path, ensuring each value is encoded correctly.
@@ -1461,8 +1462,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         return;
     }
 
-    if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.getFileInfos', $modOsDir)) {
-        return xarVarGetCached('Mod.getFileInfos', $modOsDir);
+    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
+        return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
     }
 
     // TODO redo legacy support via type.
@@ -1558,7 +1559,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     }
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-    xarVarSetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+    xarCore_SetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
 
     return $FileInfo;
 }
@@ -1592,13 +1593,13 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.BaseInfos', $modName)) {
-                return xarVarGetCached('Mod.BaseInfos', $modName);
+            if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.BaseInfos', $modName)) {
+                return xarCore_GetCached('Mod.BaseInfos', $modName);
             }
             break;
         case 'theme':
-            if (empty($GLOBALS['xarTheme_noCacheState']) && xarVarIsCached('Theme.BaseInfos', $modName)) {
-                return xarVarGetCached('Theme.BaseInfos', $modName);
+            if (empty($GLOBALS['xarTheme_noCacheState']) && xarCore_IsCached('Theme.BaseInfos', $modName)) {
+                return xarCore_GetCached('Theme.BaseInfos', $modName);
             }
             break;
     }
@@ -1687,13 +1688,13 @@ function xarMod_getBaseInfo($modName, $type = 'module')
             $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode']);
             if (!isset($modState)) return; // throw back
             $modBaseInfo['state'] = $modState;
-            xarVarSetCached('Mod.BaseInfos', $modName, $modBaseInfo);
+            xarCore_SetCached('Mod.BaseInfos', $modName, $modBaseInfo);
             break;
         case 'theme':
             $modState = xarMod_getState($modBaseInfo['regid'], $modBaseInfo['mode'], $type = 'theme');
             if (!isset($modState)) return; // throw back
             $modBaseInfo['state'] = $modState;
-            xarVarSetCached('Theme.BaseInfos', $modName, $modBaseInfo);
+            xarCore_SetCached('Theme.BaseInfos', $modName, $modBaseInfo);
             break;
     }
     return $modBaseInfo;
@@ -1752,12 +1753,12 @@ function xarMod_getVarsByModule($modName, $type = 'module')
 
             while (!$result->EOF) {
                 list($name,$value) = $result->fields;
-                xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+                xarCore_SetCached('Mod.Variables.' . $modName, $name, $value);
                 $result->MoveNext();
             }
             $result->Close();
 
-            xarVarSetCached('Mod.GetVarsByModule', $modName, true);
+            xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
             break;
         case 'theme':
             // Takes the right table basing on theme mode
@@ -1776,12 +1777,12 @@ function xarMod_getVarsByModule($modName, $type = 'module')
             while (!$result->EOF) {
                 list($name,$prime,$value,$description) = $result->fields;
                 $themevars[] = array('name' => $name, 'prime' => $prime, 'value' => $value, 'description' => $description);
-                xarVarSetCached('Theme.Variables.' . $themeName, $name, $value);
+                xarCore_SetCached('Theme.Variables.' . $themeName, $name, $value);
                 $result->MoveNext();
             }
             $result->Close();
 
-            xarVarSetCached('Theme.GetVarsByTheme', $themeName, true);
+            xarCore_SetCached('Theme.GetVarsByTheme', $themeName, true);
             break;
     }
 
@@ -1842,7 +1843,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     // Add module variables to cache
     while (!$result->EOF) {
         list($name,$value) = $result->fields;
-        xarVarSetCached('Mod.Variables.' . $name, $varName, $value);
+        xarCore_SetCached('Mod.Variables.' . $name, $varName, $value);
         $result->MoveNext();
     }
 
@@ -1850,10 +1851,10 @@ function xarMod_getVarsByName($varName, $type = 'module')
     switch(strtolower($type)) {
         case 'module':
             default:
-            xarVarSetCached('Mod.GetVarsByName', $varName, true);
+            xarCore_SetCached('Mod.GetVarsByName', $varName, true);
             break;
         case 'theme':
-            xarVarSetCached('Theme.GetVarsByName', $varName, true);
+            xarCore_SetCached('Theme.GetVarsByName', $varName, true);
             break;
     }
 
