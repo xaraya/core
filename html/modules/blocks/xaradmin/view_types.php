@@ -20,6 +20,69 @@ function blocks_admin_view_types()
     // Security Check
 	if (!xarSecurityCheck('EditBlock')) {return;}
 
+    // Parameter to indicate a block type for which to get further details.
+    if (!xarVarFetch('tid', 'id', $tid, 0, XARVAR_NOT_REQUIRED)) {return;}
+
+    $params = array();
+    $info = array();
+    $detail = array();
+    if (!empty($tid)) {
+        // Get details for a specific block type.
+        $detail = xarModAPIfunc(
+            'blocks', 'user', 'getblocktype', array('tid' => $tid)
+        );
+        if (!empty($detail)) {
+            // The block type exists.
+
+            // Get info data.
+            $info = xarModAPIfunc(
+                'blocks', 'user', 'read_type_info',
+                array(
+                    'module' => $detail['module'],
+                    'type' => $detail['type']
+                )
+            );
+
+            // Get initialisation data.
+            $init = xarModAPIfunc(
+                'blocks', 'user', 'read_type_init',
+                array(
+                    'module' => $detail['module'],
+                    'type' => $detail['type']
+                )
+            );
+
+            if (is_array($init)) {
+                // Parse the initialisation data to extract further details.
+                foreach($init as $key => $value) {
+                    $valuetype = gettype($value);
+                    $params[$key]['name'] = $key;
+
+                    if ($valuetype == 'string') {
+                        $value = "'" . $value . "'";
+                    }
+
+                    if ($valuetype == 'boolean') {
+                        if ($value) {
+                            $params[$key]['value'] = 'true';
+                        } else {
+                            $params[$key]['value'] = 'false';
+                        }
+                    } else {
+                        $params[$key]['value'] = $value;
+                    }
+
+                    $params[$key]['type'] = $valuetype;
+                    if ($valuetype == 'boolean' || $valuetype == 'integer' || $valuetype == 'float' || $valuetype == 'string' || $valuetype == 'NULL') {
+                        $params[$key]['overrideable'] = true;
+                    } else {
+                        $params[$key]['overrideable'] = false;
+                    }
+                }
+            }
+        }
+    }
+
     $block_types = xarModAPIfunc(
         'blocks', 'user', 'getallblocktypes', array('order' => 'module,type')
     );
@@ -31,10 +94,20 @@ function blocks_admin_view_types()
             'blocks', 'admin', 'update_type_info',
             array('modulename'=>$block_type['module'], 'blocktype'=>$block_type['type'])
         );
+        $block_types[$index]['detailurl'] = xarModURL(
+            'blocks', 'admin', 'view_types',
+            array('tid'=>$block_type['tid'])
+        );
         $block_types[$index]['info'] = $block_type['info'];
     }
 
-    return array('block_types' => $block_types);
+    return array(
+        'block_types' => $block_types,
+        'tid' => $tid,
+        'params' => $params,
+        'info' => $info,
+        'detail' => $detail
+    );
 }
 
 ?>
