@@ -547,7 +547,7 @@ function xarModLoad($modName, $modType = 'user')
         return;
     }
     if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'modType : $modType for $modName');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
