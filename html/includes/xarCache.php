@@ -119,12 +119,17 @@ function xarPageIsCached($cacheKey, $name = '')
                 exit;
             }
         }
-        // Netscape 6.2 doesn't like this one ?
         header("Expires: " . gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) . " GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
-        // Netscape 6.2 doesn't like this one either ?
-        // FIXME: This belongs in session subsystem, what does it do? Does it need to be here?
-        session_cache_limiter('public');
+        // we can't use this after session_start()
+        //session_cache_limiter('public');
+        header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
+        // PHP doesn't set the Pragma header when sending back a cookie
+        if (isset($_COOKIE['XARAYASID'])) {
+            header("Pragma: public");
+        } else {
+            header("Pragma:");
+        }
         // end 304 test
 
         return true;
