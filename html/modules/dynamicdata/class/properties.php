@@ -315,6 +315,14 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_URLTitle_Property.php";
                 $property = new Dynamic_URLTitle_Property($args);
                 break;
+            case 42: // (countrylist) Country Listing
+                require_once "includes/properties/Dynamic_CountryList_Property.php";
+                $property = new Dynamic_CountryList_Property($args);
+                break;
+            case 43: // (statelist) State Listing
+                require_once "includes/properties/Dynamic_StateList_Property.php";
+                $property = new Dynamic_StateList_Property($args);
+                break;
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
@@ -711,6 +719,22 @@ class Dynamic_Property_Master
                               'name'       => 'urltitle',
                               'label'      => 'URL + Title',
                               'format'     => '41',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[42] = array(
+                              'id'         => 42,
+                              'name'       => 'countrylisting',
+                              'label'      => 'Country Dropdown',
+                              'format'     => '42',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[43] = array(
+                              'id'         => 43,
+                              'name'       => 'statelisting',
+                              'label'      => 'State Dropdown',
+                              'format'     => '43',
                               'validation' => '',
                               // ...
                              );
