@@ -38,7 +38,7 @@
                                         </xar:if>
                                     </td>
                                     <td width="90%" class="xar-normal">
-                                        <label for="chosen_#$loop:index#"">#$loop:item['comment']#</label>
+                                        <label for="chosen_#$loop:index#">#$loop:item['comment']#</label>
                                     </td>
                                 </xar:if>
                             </tr>
@@ -96,7 +96,7 @@
                                             </xar:if>
                                         </td>
                                         <td width="90%" class="xar-normal">
-                                            <lable for="chosen_#">$loop:index#"#$loop:item['comment']#</label>
+                                            <label for="chosen_#$loop:index#">#$loop:item['comment']#</label>
                                         </td>
                                     </xar:if>
                                 </tr>
@@ -166,7 +166,7 @@
                                             </xar:if>
                                         </td>
                                         <td width="90%" class="xar-normal">
-                                            <label for="chosen_#">$loop:index#"#$loop:item['comment']#</label>
+                                            <label for="chosen_#$loop:index#">#$loop:item['comment']#</label>
                                         </td>
                                     </xar:if>
                                 </tr>
