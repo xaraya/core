@@ -13,8 +13,19 @@
  */
 
 /**
- * Index Function
-*/
+ * Set up output caching if enabled
+ */
+if (file_exists('var/cache/output/cache.touch')) {
+    include_once('includes/xarCache.php');
+    // Note : we may already exit here if session-less page caching is enabled
+    if (xarCache_init(array('cacheDir' => 'var/cache/output'))) {
+        define('XARCACHE_IS_ENABLED',1);
+    }
+}
+
+/**
+ * Load the Xaraya core
+ */
 include 'includes/xarCore.php';
 
 /**
@@ -22,7 +33,6 @@ include 'includes/xarCore.php';
  *
  * @access public
  * @return bool
- * @todo <marco> <mikespub> #1 decide whether to accept index.php?theme=$theme URL for rss, print, wap themes, etc..
  * @todo <marco> #2 Do fallback if raised exception is coming from template engine
  */
 function xarMain()
@@ -47,19 +57,9 @@ function xarMain()
         }
     }
 
-    $caching = 0;
+    // Check if page caching is enabled
     $pageCaching = 0;
-
-    // Set up output caching if enabled
-    if (file_exists('var/cache/output/cache.touch')) {
-        $caching = 1;
-        include_once('includes/xarCache.php');
-        if (!xarCache_init(array('cacheDir' => 'var/cache/output'))) {
-            $caching = 0;
-        }
-    }
-
-    if ($caching == 1 && file_exists('var/cache/output/cache.pagelevel')) {
+    if (defined('XARCACHE_IS_ENABLED') && file_exists('var/cache/output/cache.pagelevel')) {
         $pageCaching = 1;
         $cacheKey = "$modName-$modType-$funcName";
     }
@@ -78,6 +78,7 @@ function xarMain()
             ob_start();
         }
 
+        // Call the main module function
         $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
 
 

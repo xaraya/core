@@ -56,6 +56,44 @@ function xarCache_init($args)
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
         $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
+    // Session-less page caching (TODO: extend and place in separate function)
+    if (!empty($cachingConfiguration['Page.SessionLess']) &&
+        is_array($cachingConfiguration['Page.SessionLess']) &&
+        file_exists('var/cache/output/cache.pagelevel') &&
+    // we have no session id in a cookie or URL parameter
+        empty($_REQUEST['XARAYASID']) &&
+    // we're dealing with a GET request
+        !empty($_SERVER['REQUEST_METHOD']) &&
+        $_SERVER['REQUEST_METHOD'] == 'GET' &&
+    // the URL is one of the candidates for session-less caching
+    // TODO: make compatible with IIS and https (cfr. xarServer.php)
+        !empty($_SERVER['HTTP_HOST']) &&
+        !empty($_SERVER['REQUEST_URI']) &&
+        in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+                 $cachingConfiguration['Page.SessionLess'])
+       ) {
+        global $xarPage_cacheCode;
+        $cacheKey = 'static';
+        $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
+        if (file_exists($cache_file) &&
+            filesize($cache_file) > 0 &&
+            ($xarPage_cacheTime == 0 ||
+             filemtime($cache_file) > time() - $xarPage_cacheTime)) {
+
+        // TODO: send some headers too
+        // TODO: check ETag here too
+
+            xarPageGetCached($cacheKey);
+            // we're done here !
+            exit;
+
+        } else {
+            // tell xarPageSetCached() that we want to save another copy here
+            $GLOBALS['xarPage_cacheNoSession'] = 1;
+        }
+    }
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarCache__shutdown_handler');
     return true;
@@ -395,6 +433,16 @@ function xarPageSetCached($cacheKey, $name, $value)
             @fwrite($fp, $value);
             @fclose($fp);
             @rename($tmp_cache_file, $cache_file);
+
+            // create another copy for session-less page caching if necessary
+            if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
+                $cacheKey = 'static';
+                $xarPage_cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+                $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
+            // Note that if we get here, the first-time visitor will receive a session cookie,
+            // so he will no longer benefit from this himself ;-)
+                @copy($cache_file, $cache_file2);
+            }
         }
     }
 }
