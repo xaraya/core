@@ -125,7 +125,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 $this->invalid = xarML('value');
                 return false;
             } else {
-                $this->value = $return[1];
+                if (empty($return[1])) {
+                    $this->value = '';
+                } else {
+                    $this->value = $return[1];
+                }
                 // save new value for preview + new/modify combinations
                 xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
                 return true;
