@@ -23,8 +23,10 @@
 // Purpose of file:  Initialisation functions for base
 // ----------------------------------------------------------------------
 
+//Load Table Maintainance API
+pnDBLoadTableMaintenanceAPI();
 /**
- * initialise the base module
+ * Initialise the base module
  */
 function base_init()
 {
@@ -33,7 +35,7 @@ function base_init()
     $pntable = pnDBGetTables();
     $prefix = pnConfigGetVar('prefix');
 
-    pnDBLoadTableMaintenanceAPI();
+
     // Create tables
 
     // *_session_info
@@ -156,66 +158,66 @@ function base_init()
 
 
     include 'includes/pnBlocks.php';
-    
+
     // coverups for missing funcs at this point (hack!)
     define ('ACCESS_ADMIN', 1);
     define ('ACCESS_EDIT', 3);
     define ('ACCESS_ADD', 2);
     function pnSecAuthAction() {return true;}
     function pnUserGetLang() {return 'eng';}
-    
+
     // load modules admin API
     $res = pnModAPILoad('modules', 'admin');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // load modules into *_modules table
     $res = pnModAPIFunc('modules', 'admin', 'regenerate');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // initialize blocks module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('blocks')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('blocks'),
                                                               'state' => _PNMODULE_STATE_ACTIVE));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // initialize users module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('users')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('blocks'),
                                                               'state' => _PNMODULE_STATE_ACTIVE));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // initialize installer module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('installer')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('blocks'),
                                                               'state' => _PNMODULE_STATE_ACTIVE));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
-    // Set up groups    
+
+    // Set up groups
     $query = "INSERT INTO {$prefix}_groups (pn_gid, pn_name) VALUES (1, 'Users');";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -223,10 +225,10 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = "INSERT INTO {$prefix}_groups (pn_gid, pn_name) VALUES (2, 'Admins');";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -234,10 +236,10 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = "INSERT INTO {$prefix}_group_membership (pn_gid, pn_uid) VALUES (1, 1);";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -245,10 +247,10 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = "INSERT INTO {$prefix}_group_membership (pn_gid, pn_uid) VALUES (2, 2);";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -256,11 +258,11 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // Install basic permissions
     $query = "INSERT INTO {$prefix}_group_perms (pn_pid, pn_gid, pn_sequence, pn_realm, pn_component, pn_instance, pn_level, pn_bond) VALUES (1, 2, 1, 0, '.*', '.*', 800, 0);";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -268,17 +270,17 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // Set up default user properties, etc.
-    
+
     // Fill language list(?)
-    
+
     // Set up blocks
-    
+
     // Create admin user (l/p: admin/password) and Anonymous
     $query = "INSERT INTO {$prefix}_users (pn_uid, pn_name, pn_uname, pn_email, pn_pass, pn_url, pn_auth_module) VALUES (1, '', 'Anonymous', '', '', '', '');";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -286,10 +288,10 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = "INSERT INTO {$prefix}_users (pn_uid, pn_name, pn_uname, pn_email, pn_pass, pn_url, pn_auth_module) VALUES (2, 'Admin', 'Admin', 'none@none.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'http://www.postnuke.com', 'authsystem');";
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -297,7 +299,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // Register Block types
     pnBlockTypeRegister('base', 'finclude');
     pnBlockTypeRegister('base', 'html');
@@ -308,7 +310,7 @@ function base_init()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
     // Register BL tags
     pnTplRegisterTag('base', 'var',
                      array(new pnTemplateAttribute('name', PN_TPL_STRING|PN_TPL_REQUIRED),
@@ -322,7 +324,7 @@ function base_init()
                            new pnTemplateAttribute('template', PN_TPL_STRING|PN_TPL_OPTIONAL),
                            new pnTemplateAttribute('type', PN_TPL_STRING|PN_TPL_OPTIONAL)),
                      'base_userapi_handleBlockTag');
-         
+
     pnTplRegisterTag('base', 'blockgroup',
                      array(new pnTemplateAttribute('name', PN_TPL_STRING|PN_TPL_REQUIRED),
                            new pnTemplateAttribute('template', PN_TPL_STRING|PN_TPL_OPTIONAL)),
@@ -340,7 +342,7 @@ function base_init()
     pnTplRegisterTag('base', 'elseif',
                      array(new pnTemplateAttribute('condition', PN_TPL_STRING|PN_TPL_REQUIRED)),
                      'base_userapi_handleElseifTag');
-         
+
     pnTplRegisterTag('base', 'else', array(), 'base_userapi_handleElseTag');
 
     pnTplRegisterTag('base', 'loop',
@@ -352,7 +354,7 @@ function base_init()
                      array(new pnTemplateAttribute('name', PN_TPL_STRING|PN_TPL_REQUIRED),
                            new pnTemplateAttribute('scope', PN_TPL_STRING|PN_TPL_OPTIONAL)),
                      'base_userapi_handleSetTag');
-    
+
     pnTplRegisterTag('base', 'sec',
                      array(new pnTemplateAttribute('realm', PN_TPL_INTEGER|PN_TPL_OPTIONAL),
                            new pnTemplateAttribute('component', PN_TPL_STRING|PN_TPL_REQUIRED),
@@ -363,13 +365,13 @@ function base_init()
     pnTplRegisterTag('base', 'baseurl',
                      array(),
                 	 'base_userapi_handleBaseurlTag');
-        
+
     pnTplRegisterTag('base', 'mlstring',
                      array(new pnTemplateAttribute('name', PN_TPL_STRING|PN_TPL_OPTIONAL)),
                      'base_userapi_handleMlstringTag');
-                     
-    
-    
+
+
+
     // Initialisation successful
     return true;
 }

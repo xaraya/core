@@ -23,22 +23,42 @@
 // Purpose of file:  Initialisation functions for adminpanels
 // ----------------------------------------------------------------------
 
-include_once 'includes/pnTableDDL.php';
+// Load Table Maintaince API
+pnDBLoadTableMaintenanceAPI();
 
 /**
- * initialise the adminpanels module
+ * Initialise the adminpanels module
+ * 
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
  */
 function adminpanels_init()
 {
     // Get database information
     list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
-    $admin_menu_table = $pntable['admin_menu'];
+    $table = pnDBGetTables();
 
     // Create tables
+    /*********************************************************************
+     * Here we create all the tables for the adminpanels module
+     *
+     * prefix_admin_menu       - admin modules
+     ********************************************************************/
 
+    // prefix_admin_menu
+    /*********************************************************************
+    * CREATE TABLE pn_admin_menu (
+    *  pn_amid int(11) NOT NULL auto_increment,
+    *  pn_name varchar(32) NOT NULL default '',
+    *  pn_category varchar(32) NOT NULL default '',
+    *  pn_weight int(11) NOT NULL default '0',
+    *  pn_flag tinyint(4) NOT NULL default '1',
+    *  PRIMARY KEY  (pn_amid)
+    * )
+    *********************************************************************/
     // *_admin_menu
-    $query = pnDBCreateTable($admin_menu_table,
+    $query = pnDBCreateTable($table['admin_menu'],
                              array('pn_amid'        => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0',
@@ -74,7 +94,7 @@ function adminpanels_init()
 
     
     // Fill admin menu
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (1, 'adminpanels', 'Global', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (1, 'adminpanels', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -85,7 +105,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (2, 'authsystem', 'Global', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (2, 'authsystem', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -96,7 +116,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (4, 'base', 'Global', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (4, 'base', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -107,7 +127,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (5, 'blocks', 'Global', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (5, 'blocks', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -118,7 +138,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (7, 'groups', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (7, 'groups', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -129,7 +149,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (8, 'modules', 'Global', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (8, 'modules', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -140,7 +160,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (9, 'permissions', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (9, 'permissions', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -151,7 +171,7 @@ function adminpanels_init()
         return NULL;
     }
     
-    $query = "INSERT INTO $admin_menu_table (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (10, 'users', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES (10, 'users', 'Users & Groups', 0, 1);";
     
     $dbconn->Execute($query);
     
@@ -174,15 +194,21 @@ function adminpanels_init()
 }
 
 /**
- * upgrade the adminpanels module from an old version
+ * Upgrade the adminpanels module from an old version
+ * 
+ * @param oldVersion old version of module to upgrade from
+ * @returns bool
  */
-function adminpanels_upgrade($oldversion)
+function adminpanels_upgrade($oldVersion)
 {
     return false;
 }
 
 /**
- * delete the adminpanels module
+ * Delete the adminpanels module
+ * 
+ * @param none
+ * @returns bool
  */
 function adminpanels_delete()
 {
