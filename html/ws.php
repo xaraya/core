@@ -17,6 +17,8 @@ include 'includes/xarCore.php';
 
 function xarWebservicesMain()
 {
+
+// TODO: don't load the whole core
     xarCoreInit(XARCORE_SYSTEM_ALL);
 
     // Load user API for xmlrpc module
@@ -38,8 +40,28 @@ function xarWebservicesMain()
     }
 
     elseif ($type == 'soap') {
-    // TODO: load SOAP server here.
+        $server = xarModAPIFunc('webservices','user','initSOAPServer');
+        if (!$server) {
+            $fault = new soap_fault( 
+                'Server', '', 
+                'Unable to start SOAP server', '' 
+            ); 
+        // TODO: check this
+            echo $fault->serialize();
+        }
+        if ($server) {
+            global $HTTP_RAW_POST_DATA;
+            $server->service($HTTP_RAW_POST_DATA);
+        }
 
+    } elseif (xarServerGetVar('QUERY_STRING') == 'wsdl') {
+        header('Location: ' . xarServerGetBaseURL() . 'modules/webservices/xaraya.wsdl');
+
+    } else {
+    // TODO: show something nice(r) ?
+        echo '<a href="ws.php?wsdl">WSDL</a><br />
+<a href="ws.php?type=xmlrpc">XML-RPC Interface</a><br />
+<a href="ws.php?type=soap">SOAP Interface</a>';
     }
 }
 
