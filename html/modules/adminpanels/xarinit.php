@@ -179,29 +179,24 @@ function adminpanels_init()
 
     // Set up module hooks
 
-/* FIXME: you need to use a real module name here, not some dummy waitingcontent
 
-    // when a module item is displayed
-    // (use xarVarSetCached('Hooks.hitcount','save', 1) to tell hitcount *not*
-    // to display the hit count, but to save it in 'Hooks.hitcount', 'value')
-    if (!xarModRegisterHook('item', 'display', 'GUI',
-                           'waitingcontent', 'user', 'display')) {
-        return false;
-    }
+
     // when a module item is created (set extrainfo to the module name ?)
     if (!xarModRegisterHook('item', 'create', 'API',
-                           'waitingcontent', 'admin', 'create')) {
+                           'adminpanels', 'admin', 'createwc')) {
         return false;
     }
+
+    /* FIXME: you need to use a real module name here, not some dummy waitingcontent
     // when a module item is deleted (set extrainfo to the module name ?)
     if (!xarModRegisterHook('item', 'delete', 'API',
-                           'waitingcontent', 'admin', 'delete')) {
+                           'adminpanels', 'admin', 'delete')) {
         return false;
     }
     // when a whole module is removed, e.g. via the modules admin screen
     // (set object ID to the module name !)
     if (!xarModRegisterHook('module', 'remove', 'API',
-                           'waitingcontent', 'admin', 'deleteall')) {
+                           'adminpanels', 'admin', 'deleteall')) {
         return false;
     }
 */
