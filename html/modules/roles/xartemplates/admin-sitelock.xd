@@ -30,7 +30,7 @@
 		<tr>
 			<td>
 				<xar:mlstring>On a locked site only the following users and groups will have access. <br/>
-				Entering a group allows access to the users of that group. <br/>
+				Entering a group name allows access to the users of that group. <br/>
 				Unknown names will be ignored.</xar:mlstring>			
 			</td>
 		</tr>
