@@ -163,7 +163,7 @@ function xarInstallMain()
     xarTplSetPageTitle("Installing Xaraya");
 
     // Run installer function
-    $mainModuleOutput = xarInstallFunc($modName, $modType, $funcName);
+    $mainModuleOutput = xarInstallFunc($funcName);
 
     if (xarCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {

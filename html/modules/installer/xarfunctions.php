@@ -15,28 +15,24 @@
 /**
  * Call an installer function.
  *
- * NOTE: this function is identical to
- *       xarModFunc except that it uses xarTplInstall
- *       instead of xarTplModule
- * UPDATE: Not anymore, migrated xarTplInstall function out
+ * This function is similar to xarModFunc but simplified. 
+ * We need this because during install we cant have the module
+ * subsystem online directly, so we need a direct way of calling
+ * the admin functions of the installer. The actual functions
+ * called adhere to normal Xaraya module functions, so we can use
+ * the installer later on when xaraya is installed
  *
  * @access public
- * @param modName registered name of module
- * @param modType type of function to run
  * @param funcName specific function to run
  * @param args argument array
  * @returns mixed
  * @return The output of the function, or false on failure
  * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
-function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
+function xarInstallFunc($funcName = 'main', $args = array())
 {
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    $modName = 'installer';
+    $modType = 'admin';
 
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
@@ -56,6 +52,7 @@ function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args =
         return $tplData;
     }
 
+    // <mrb> Why is this here?
     $templateName = NULL;
     if (isset($tplData['_bl_template'])) {
         $templateName = $tplData['_bl_template'];
@@ -181,8 +178,6 @@ function xarInstallLoad($modName, $modType = 'user')
 {
     static $loadedModuleCache = array();
 
-    //xarLogMessage("xarModLoad: loading $modName:$modType");
-
     if (empty($modName)) {
         $msg = xarML('Empty modname.');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -194,19 +189,7 @@ function xarInstallLoad($modName, $modType = 'user')
         // Already loaded from somewhere else
         return true;
     }
-    /*
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) {
-        return; // throw back
-    }
-
-    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
-        $msg = xarML('Module #(1) is not active.', $modName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE',
-                       new SystemException($msg));
-        return;
-    }
-    */
+   
     // Load the module files
     $modOsType = xarVarPrepForOS($modType);
     //$modOsDir = $modBaseInfo['osdirectory'];
@@ -231,12 +214,6 @@ function xarInstallLoad($modName, $modType = 'user')
         return; // throw back exception
     }
  
-    // Load database info
-    //xarMod__loadDbInfo($modName, $modOsDir);
-
-    // Module loaded successfully, notify the proper event
-    //xarEvt_notify($modName, $modType, 'ModLoad', NULL);
-
     return true;
 }
 
