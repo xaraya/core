@@ -8,13 +8,20 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
- * @subpackage adminpanels
+ * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
 
 /**
  * initialise block
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  nothing
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_adminmenublock_init(){
     // Security
     xarSecAddSchema('adminpanels:adminmenublock:', 'Block title::');
@@ -22,7 +29,14 @@ function adminpanels_adminmenublock_init(){
 
 /**
  * get information on block
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_adminmenublock_info(){
     // Values
     return array('text_type' => 'adminmenu',
@@ -35,23 +49,26 @@ function adminpanels_adminmenublock_info(){
 }
 
 /**
- * display block
- */
+ * display adminmenu block
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  data array on success or void on failure
+ * @throws  no exceptions
+ * @todo    implement centre and right menu position
+*/
 function adminpanels_adminmenublock_display($blockinfo){
-    // ToDo: 
-    // 1. Implement centre and right position
 
     // Security check
-    if (!xarSecAuthAction(0,
-                         'adminpanels:adminmenu:',
-                         "$blockinfo[title]::",
-                         ACCESS_ADMIN)) {
+    if (!xarSecAuthAction(0, 'adminpanels:adminmenu:', "$blockinfo[title]::", ACCESS_ADMIN)){
+        // not admin? tough luck.. bye bye baby
         return;
     }
     
-    // are there any admin modules, then get their names
-    // checking as early as possible :)
-    $mods = xarModGetList(array('AdminCapable' => 1));
+    // are there any admin modules, then get the whole list sorted by names
+    // checking this as early as possible
+    $mods = xarModGetList(array('AdminCapable' => 1), NULL, NULL, 'name');
 	if(empty($mods)) {
 	// there aren't any admin modules, dont display adminmenu
 	    return;
@@ -246,7 +263,14 @@ function adminpanels_adminmenublock_display($blockinfo){
 
 /**
  * modify block settings
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_adminmenublock_modify($blockinfo)
 {
     // Return - nothing to modify
@@ -255,7 +279,14 @@ function adminpanels_adminmenublock_modify($blockinfo)
 
 /**
  * update block settings
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   $blockinfo
+ * @return  $blockinfo data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_adminmenublock_update($blockinfo)
 {
 

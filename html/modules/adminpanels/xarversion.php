@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
- * @subpackage adminpanels
+ * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
 $modversion['name'] = 'Administration';

@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
- * @subpackage adminpanels
+ * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
 
@@ -17,11 +17,14 @@ xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the adminpanels module
- * 
- * @param none
- * @returns bool
- * @raise DATABASE_ERROR
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  true on success or void or false on failure
+ * @throws  'DATABASE_ERROR'
+ * @todo    nothing
+*/
 function adminpanels_init()
 {
     // Get database information
@@ -205,10 +208,14 @@ function adminpanels_init()
 
 /**
  * Upgrade the adminpanels module from an old version
- * 
- * @param oldVersion old version of module to upgrade from
- * @returns bool
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   $oldVersion
+ * @return  true on success or false on failure
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_upgrade($oldVersion)
 {
     return false;
@@ -216,10 +223,14 @@ function adminpanels_upgrade($oldVersion)
 
 /**
  * Delete the adminpanels module
- * 
- * @param none
- * @returns bool
- */
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   no parameters
+ * @return  true on success or false on failure
+ * @todo    nothing
+*/
+
 function adminpanels_delete()
 {
     return false;

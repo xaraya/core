@@ -8,10 +8,20 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * 
- * @subpackage adminpanels
+ * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
 
+/**
+ * specifies module tables namees
+ *
+ * @author  Andy Varganov <andyv@yaraya.com>
+ * @access  public
+ * @param   none
+ * @return  $xartable array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_xartables()
 {
     // Initialise table array
