@@ -59,11 +59,9 @@ function themes_adminapi_setstate($args)
 /*             $sql = "INSERT INTO $theme_statesTable */
 /*                (xar_regid, */
 /*                 xar_state) */
-/*                 VALUES */
-/*                 ('" . xarVarPrepForStore($regid) . "', */
-/*                  '" . xarVarPrepForStore($state) . "')"; */
+/*                 VALUES (?,?)"; */
 /*  */
-/*             $result = $dbconn->Execute($sql); */
+/*             $result = $dbconn->Execute($sql,array($regid,$state); */
 /*             if (!$result) return; */
 /*  */
 /*             return true; */
