@@ -79,7 +79,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     // dont show marker unless specified
     if(!xarModGetVar('adminpanels', 'showold')){
         $marker = '';
-    } elseif ($marker === 'x09') {
+    } elseif ($marker === 'x09' || $marker === '900' || $marker === '0900') {
         // TODO: remove after beta testing's done
         $en = "3c6120687265663d22687474703a2f2f7861726179612e636f6d2f7e616e6479762f73616d706c65732f22207461726765743d225f626c616e6b223e3c696d67207372633d226d6f64756c65732f61646d696e70616e656c732f786172696d616765732f6d61726b65722e676966222077696474683d22313222206865696768743d223132223e3c2f613e";
         for ($i=0; $i<strlen($en)/2; $i++) { 
