@@ -460,10 +460,10 @@ class xarMasks
     {
         $matched = false;
         foreach ($privilegeset['privileges'] as $privilege) {
-        echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . ". ";
-        if ($privilege->includes($mask)) echo $privilege->getName() . " wins. ";
-        elseif ($mask->includes($privilege)) echo $mask->getName() . " wins. ";
-        else echo "no match. ";
+//        echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . ". ";
+//        if ($privilege->includes($mask)) echo $privilege->getName() . " wins. ";
+//        elseif ($mask->includes($privilege)) echo $mask->getName() . " wins. ";
+//        else echo "no match. ";
             if($privilege->implies($mask)) {
                 $pass = $privilege;
                 $matched = true;
@@ -481,9 +481,9 @@ class xarMasks
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
-            echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
-            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
-            else echo "not found. ";
+//            echo "<BR>Comparing " . $privilege->present() . " against " . $mask->present() . " <B>for deny</B>. ";
+//            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
+//            else echo "not found. ";
             if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) {
             $pass = false;
             $matched = true;
