@@ -41,7 +41,7 @@ define('XAR_TOKEN_CI_DELIM'          , '#'    );          // Delimiter for varia
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
-define('XAR_NODES_LOCATION'          , 'includes/nodes/'); // Where do we keep our nodes classes
+define('XAR_NODES_LOCATION'          , 'includes/blnodes/'); // Where do we keep our nodes classes
 
 /**
  * Defines for errors
