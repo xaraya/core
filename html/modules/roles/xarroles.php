@@ -433,7 +433,7 @@ function drawindent() {
 		if (!$result) return;
 
 // set the data in an array
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 
 		$pargs = array('uid'=>$uid,
@@ -443,7 +443,6 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
@@ -479,7 +478,7 @@ function drawindent() {
 		if (!$result) return;
 
 // set the data in an array
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('uid'=>$uid,
 						'name'=>$name,
@@ -488,7 +487,6 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
@@ -523,7 +521,7 @@ function drawindent() {
 		if (!$result) return;
 
 // create the parent object
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('uid'=>$uid,
 						'name'=>$name,
@@ -532,7 +530,6 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
@@ -548,7 +545,7 @@ function drawindent() {
 		if (!$result) return;
 
 // create the child object
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('uid'=>$uid,
 						'name'=>$name,
@@ -557,7 +554,6 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
@@ -743,7 +739,6 @@ function drawindent() {
 	var $uname;         //the user name (not used by groups)
 	var $email;         //the email address (not used by groups)
 	var $pass;          //the password (not used by groups)
-	var $url;           //the url (not used by groups)
 	var $date_reg;      //the date of registration
 	var $val_code;      //the validation code of this user or group
 	var $state;         //the state of this user or group
@@ -788,7 +783,6 @@ function drawindent() {
         $this->uname        = $uname;
         $this->email        = $email;
         $this->pass         = $pass;
-        $this->url          = $url;
         $this->state        = $state;
         $this->date_reg     = $date_reg;
         $this->val_code     = $val_code;
@@ -1189,7 +1183,6 @@ function drawindent() {
 						xar_roles.xar_uname,
 						xar_roles.xar_email,
 						xar_roles.xar_pass,
-						xar_roles.xar_url,
 						xar_roles.xar_auth_module
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
 						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
@@ -1203,7 +1196,6 @@ function drawindent() {
 						xar_roles.xar_uname,
 						xar_roles.xar_email,
 						xar_roles.xar_pass,
-						xar_roles.xar_url,
 						xar_roles.xar_auth_module
 						FROM $this->rolestable INNER JOIN $this->rolememberstable
 						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
@@ -1216,7 +1208,7 @@ function drawindent() {
 // arrange the data in an array of role objects
 		$users = array();
 		while(!$result->EOF) {
-		list($uid,$name,$type,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('uid'=>$uid,
 						'name'=>$name,
@@ -1225,12 +1217,11 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
 						'auth_module'=>$auth_module);
-			array_push($users,new xarRole($pargs));
+			$users[] = new xarRole($pargs);
 			$result->MoveNext();
 		}
 
@@ -1282,7 +1273,7 @@ function drawindent() {
 
 // collect the table values and use them to create new role objects
 			while(!$result->EOF) {
-		list($uid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		list($uid,$name,$type,$parentid,$uname,$email,$pass,
 		$date_reg,$val_code,$state,$auth_module) = $result->fields;
 		$pargs = array('uid'=>$uid,
 						'name'=>$name,
@@ -1291,7 +1282,6 @@ function drawindent() {
 						'uname'=>$uname,
 						'email'=>$email,
 						'pass'=>$pass,
-						'url'=>$url,
 						'date_reg'=>$date_reg,
 						'val_code'=>$val_code,
 						'state'=>$state,
@@ -1498,7 +1488,6 @@ function drawindent() {
     function getUser()          {return $this->uname;}
     function getEmail()         {return $this->email;}
     function getPass()          {return $this->pass;}
-    function getURL()           {return $this->url;}
     function getState()         {return $this->state;}
     function getDateReg()       {return $this->date_reg;}
     function getValCode()       {return $this->val_code;}
@@ -1510,7 +1499,6 @@ function drawindent() {
     function setUser($var)      {$this->uname = $var;}
     function setEmail($var)     {$this->email = $var;}
     function setPass($var)      {$this->pass = $var;}
-    function setURL($var)       {$this->url = $var;}
     function setState($var)     {$this->state = $var;}
     function setDateReg($var)   {$this->date_reg = $var;}
     function setValCode($var)   {$this->val_code = $var;}

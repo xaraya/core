@@ -1919,7 +1919,6 @@ class xarPrivilege extends xarMask
 					xar_roles.xar_uname,
 					xar_roles.xar_email,
 					xar_roles.xar_pass,
-					xar_roles.xar_url,
 					xar_roles.xar_auth_module
 					FROM $this->rolestable INNER JOIN $this->acltable
 					ON xar_roles.xar_uid = xar_security_acl.xar_partid
@@ -1933,7 +1932,7 @@ class xarPrivilege extends xarMask
 		$roles = array();
 //		$ind = 0;
 		while(!$result->EOF) {
-			list($uid,$name,$type,$uname,$email,$pass,$url,$auth_module) = $result->fields;
+			list($uid,$name,$type,$uname,$email,$pass,$auth_module) = $result->fields;
 //			$ind = $ind + 1;
 			$role = new xarRole(array('uid' => $uid,
 							   'name' => $name,
@@ -1941,11 +1940,10 @@ class xarPrivilege extends xarMask
 							   'uname' => $uname,
 							   'email' => $email,
 							   'pass' => $pass,
-							   'url' => $url,
 							   'auth_module' => $auth_module,
 							   'parentid' => 0));
 			$result->MoveNext();
-			array_push($roles, $role);
+			$roles[] = $role;
 		}
 // done
 		return $roles;

@@ -27,7 +27,6 @@ function roles_xartables()
         'uname'          => $roles . '.xar_uname',
         'email'          => $roles . '.xar_email',
         'pass'           => $roles . '.xar_pass',
-        'url'            => $roles . '.xar_url',
         'date_reg'       => $roles . '.xar_date_reg',
         'valcode'        => $roles . '.xar_valcode',
         'state'          => $roles . '.xar_state',
