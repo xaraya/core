@@ -89,8 +89,14 @@ define('XARDBG_INACTIVE'         ,16);
 /*
  * xarInclude flags
  */
-define ('XAR_INCLUDE_ONCE', 1);
-define ('XAR_INCLUDE_MAY_NOT_EXIST', 2);
+define('XAR_INCLUDE_ONCE'         , 1);
+define('XAR_INCLUDE_MAY_NOT_EXIST', 2);
+
+/* 
+ * Miscelaneous
+ */
+define('XARCORE_CONFIG_FILE', 'config.system.php');
+
 
 /**
  * Initializes the core engine
@@ -123,18 +129,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     /*
-     * Required subsystems
-     *
-     * These are always needed, think twice before changing the loading order.
-     * By definition the core required subsystems should not be included in the ML
-     * system.
-     *
+     * Start the different subsystems
      */
-    // FIXME: due to core calling xarVarIsCached this needs to be here
-    // I think we should put the var*cached functions in core and alias them in xarvar
-    // the request caching of vars is so important, we need that in core itself, not in 
-    // a subsystem, so ALL dependencies can be eliminated
-    include 'includes/xarVar.php';
     
     /*
      * If there happens something we want to be able to log it
@@ -197,9 +193,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'databaseType' => xarCore_getSystemVar('DB.Type'),
                             'databaseName' => xarCore_getSystemVar('DB.Name'),
                             'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
-                            // uncomment this and remove the next line when we can store
-                            // site vars that are pre DB
-                            //'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
                             'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
@@ -234,7 +227,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
-        // Start Variables utilities        
+        // Start Variables utilities  
+        include 'includes/xarVar.php';
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
@@ -488,11 +482,11 @@ function xarCore_getSystemVar($name, $returnNull = false)
 {
     static $systemVars = NULL;
 
-    if (xarVarIsCached('Core.getSystemVar', $name)) {
-        return xarVarGetCached('Core.getSystemVar', $name);
+    if (xarCore_IsCached('Core.getSystemVar', $name)) {
+        return xarCore_GetCached('Core.getSystemVar', $name);
     }
     if (!isset($systemVars)) {
-        $fileName = xarCoreGetVarDirPath() . '/config.system.php';
+        $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
         if (!file_exists($fileName)) {
             xarCore_die("xarCore_getSystemVar: Configuration file not present: ".$fileName);
         }
@@ -514,8 +508,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
         }
     }
 
-    // Dependency
-    xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
+    xarCore_SetCached('Core.getSystemVar', $name, $systemVars[$name]);
 
     return $systemVars[$name];
 }
@@ -527,14 +520,13 @@ function xarCore_getSystemVar($name, $returnNull = false)
  * @static array siteVars
  * @param string name name of core site variable to get
  * @return mixed variable value
- * @todo investigate the dependency to xarVar
  */
 function xarCore_getSiteVar($name)
 {
     static $siteVars = NULL;
 
-    if (xarVarIsCached('Core.getSiteVar', $name)) {
-        return xarVarGetCached('Core.getSiteVar', $name);
+    if (xarCore_IsCached('Core.getSiteVar', $name)) {
+        return xarCore_GetCached('Core.getSiteVar', $name);
     }
 
     if (!isset($siteVars)) {
@@ -552,8 +544,7 @@ function xarCore_getSiteVar($name)
         xarCore_die("xarCore_getSiteVar: Unknown site variable: ".$name);
     }
 
-    // Dependency
-    xarVarSetCached('Core.getSiteVar', $name, $siteVars[$name]);
+    xarCore_SetCached('Core.getSiteVar', $name, $siteVars[$name]);
 
     return $siteVars[$name];
 
@@ -672,6 +663,87 @@ function xarCoreIsApiAllowed($apiType)
     // If no API type restrictions are given, return true
     if (empty($allowed) || count($allowed) == 0) return true;
     return in_array($apiType,$allowed);
+}
+
+/**
+* Get the value of a cached variable
+ *
+ * @access protected
+ * @global xarCore_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @return mixed value of the variable, or void if variable isn't cached
+ */
+function xarCore_IsCached($cacheKey, $name)
+{
+    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
+        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
+        return false;
+    }
+    return isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
+}
+
+/**
+* Get the value of a cached variable
+ *
+ * @access protected
+ * @global xarCore_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @return mixed value of the variable, or void if variable isn't cached
+ */
+function xarCore_GetCached($cacheKey, $name)
+{
+    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
+        return;
+    }
+    return $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name];
+}
+
+/**
+* Set the value of a cached variable
+ *
+ * @access protected
+ * @global xarCore_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @param value string the new value for that variable
+ * @return void
+ */
+function xarCore_SetCached($cacheKey, $name, $value)
+{
+    $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name] = $value;
+}
+
+/**
+* Delete a cached variable
+ *
+ * @access protected
+ * @global xarCore_cacheCollection array
+ * @param key the key identifying the particular cache you want to access
+ * @param name the name of the variable in that particular cache
+ */
+function xarCore_DelCached($cacheKey, $name)
+{
+    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
+    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
+        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
+    }
+}
+
+/**
+* Flush a particular cache (e.g. for session initialization)
+ *
+ * @access protected
+ * @global xarCore_cacheCollection array
+ * @param cacheKey the key identifying the particular cache you want to wipe out
+ */
+function xarCore_FlushCached($cacheKey)
+{
+    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
+    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
+        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey]);
+    }
 }
 
 ?>

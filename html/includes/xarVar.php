@@ -365,83 +365,57 @@ function xarVarValidate($validation, &$subject, $supress = false)
 
 /**
  * Check if the value of a variable is available in cache or not
+ * See the documentation of protected xarCore_IsCached for details
  *
  * @access public
- * @global xarVar_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return true bool if the variable is available in cache, false if not
  */
 function xarVarIsCached($cacheKey, $name)
 {
-    if (!isset($GLOBALS['xarVar_cacheCollection'][$cacheKey])) {
-        $GLOBALS['xarVar_cacheCollection'][$cacheKey] = array();
-        return false;
-    }
-    return isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name]);
+    return xarCore_IsCached($cacheKey, $name);
 }
 
 /**
  * Get the value of a cached variable
+ * See the documentation of protected xarCore_GetCached for details
  *
  * @access public
- * @global xarVar_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return mixed value of the variable, or void if variable isn't cached
  */
 function xarVarGetCached($cacheKey, $name)
 {
-    if (!isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name])) {
-        return;
-    }
-    return $GLOBALS['xarVar_cacheCollection'][$cacheKey][$name];
+    return xarCore_GetCached($cacheKey, $name);
 }
 
 /**
  * Set the value of a cached variable
+ * See the documentation of protected xarCore_SetCached for details
  *
  * @access public
- * @global xarVar_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @param value string the new value for that variable
- * @return void
  */
 function xarVarSetCached($cacheKey, $name, $value)
 {
-    $GLOBALS['xarVar_cacheCollection'][$cacheKey][$name] = $value;
+    return xarCore_SetCached($cacheKey, $name, $value);
 }
 
 /**
  * Delete a cached variable
+ * See the documentation of protected xarCore_DelCached for details
  *
  * @access public
- * @global xarVar_cacheCollection array
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
  */
 function xarVarDelCached($cacheKey, $name)
 {
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name])) {
-        unset($GLOBALS['xarVar_cacheCollection'][$cacheKey][$name]);
-    }
+    return xarCore_DelCached($cacheKey, $name);
 }
 
 /**
  * Flush a particular cache (e.g. for session initialization)
+ * See the documentation of protected xarCore_FlushCached for details
  *
  * @access public
- * @global xarVar_cacheCollection array
- * @param cacheKey the key identifying the particular cache you want to wipe out
  */
 function xarVarFlushCached($cacheKey)
 {
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarVar_cacheCollection'][$cacheKey])) {
-        unset($GLOBALS['xarVar_cacheCollection'][$cacheKey]);
-    }
+    return xarCore_FlushCached($cacheKey);
 }
 
 

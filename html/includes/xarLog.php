@@ -72,7 +72,7 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
         if (file_exists($logFile) && is_writeable($logFile)) {
             $xarLogConfig[] = array('type' => 'simple',
                                                      'config' =>array('fileName' => $logFile,
-                                                                                  'logLevel'  => (2 * XARLOG_LEVEL_WARNING - 1)));
+                                                                                  'logLevel'  => XARLOG_LEVEL_DEBUG));
         }
     }
 
@@ -123,7 +123,7 @@ function xarLog__shutdown_handler()
 
 function xarLog__add_logger($type, $config_args)
 {
-    if (!include_once ('./includes/log/loggers/'.xarVarPrepForOS($type).'.php')) {
+    if (!include_once ('./includes/log/loggers/'.$type.'.php')) {
         xarCore_die('xarLog_init: Unable to load driver for logging: '.$type);
     }
 
@@ -155,7 +155,7 @@ function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 
     //Lazy load these functions... With php5 this will be easier.
     //Encapsulate core libraries in classes and let __call work lazy loading
-    include_once('var/log/functions/dumpvariable.php');
+    include_once('includes/log/functions/dumpvariable.php');
     xarLogMessage(xarLog__dumpVariable($args),$level);
 }
 

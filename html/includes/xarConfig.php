@@ -72,7 +72,6 @@ function xarConfigGetVar($name, $prep = NULL)
  
 
     if ($name == 'Site.DB.TablePrefix') {
-        //return xarCore_getSiteVar('DB.TablePrefix');
         return xarCore_getSystemVar('DB.TablePrefix');
     } elseif ($name == 'System.Core.VersionNumber') {
         return XARCORE_VERSION_NUM;
@@ -129,8 +128,7 @@ function xarConfig_loadVars()
     while (!$result->EOF) {
         list($name,$value) = $result->fields;
         $newval = unserialize($value);
-        // Dependency
-        xarVarSetCached($cacheCollection, $name, $newval);
+        xarCore_SetCached($cacheCollection, $name, $newval);
         $result->MoveNext();
     }
     $result->Close();
