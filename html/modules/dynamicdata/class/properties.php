@@ -297,13 +297,13 @@ class Dynamic_Property
 {
     var $id = null;
     var $name = null;
-    var $label;
+    var $label = null;
     var $type = 1;
     var $default = '';
     var $source = 'dynamic_data';
     var $status = 1;
-    var $order;
-    var $validation;
+    var $order = 0;
+    var $validation = null;
 
     var $datastore = ''; // name of the data store where this property comes from
 
