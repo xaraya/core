@@ -11,9 +11,11 @@
       Copyright 2003 Xaraya Development Group All rights reserved.
       Author: Gregor J. Rothfuss gregor@xaraya.com
       Author: Marcel R. van der Boom marcel@xaraya.com
+      Author: Marty Vance dracos@xaraya.com
     </xs:documentation>
   </xs:annotation>
 
+  <!-- while tag -->
   <xs:element name="while">
     <xs:complexType>
       <xs:sequence>
@@ -27,6 +29,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- var tag -->
   <xs:element name="var">
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
@@ -35,6 +38,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- template tag -->
   <xs:element name="template">
     <xs:complexType>
       <xs:attribute name="compile" type="xs:string" use="optional" default="true"/>
@@ -44,6 +48,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- set tag -->
   <xs:element name="set">
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
@@ -51,6 +56,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- sec tag -->
   <xs:element name="sec">
     <xs:complexType>
       <xs:attribute name="level" type="xs:string" use="required"/>
@@ -61,6 +67,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- module tage -->
   <xs:element name="module">
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
@@ -68,24 +75,28 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- mlvar tage -->
   <xs:element name="mlvar">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!-- mlstring tag -->
   <xs:element name="mlstring">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!-- mlkey tag -->
   <xs:element name="mlkey">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!-- ml tag -->
   <xs:element name="ml">
     <xs:complexType mixed="true">
       <xs:sequence>
@@ -99,6 +110,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- loop tag -->
   <xs:element name="loop">
     <xs:complexType>
       <xs:sequence>
@@ -112,6 +124,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- if tag -->
   <xs:element name="if">
     <xs:complexType mixed="true">
       <xs:sequence>
@@ -126,6 +139,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- foreach tag -->
   <xs:element name="foreach">
     <xs:complexType>
       <xs:sequence>
@@ -140,6 +154,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- for tag -->
   <xs:element name="for">
     <xs:complexType>
       <xs:sequence>
@@ -155,6 +170,7 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- elseif tage -->
   <xs:element name="elseif">
     <xs:complexType>
       <xs:attribute name="condition" type="xs:string" use="required"/>
@@ -162,24 +178,28 @@
     </xs:complexType>
   </xs:element>
 
+  <!-- else tag -->
   <xs:element name="else">
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!-- continue tag -->
   <xs:element name="continue"/>
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!-- break tag -->
   <xs:element name="break"/>
     <xs:complexType>
       <xs:attribute name="id" type="xs:ID" use="optional"/>
     </xs:complexType>
   </xs:element>
 
+  <!--  blockgroup tag -->
   <xs:element name="blockgroup">
     <xs:complexType>
       <xs:attribute name="template" type="xs:string" use="optional"/>
