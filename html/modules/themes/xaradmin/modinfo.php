@@ -40,9 +40,9 @@ function themes_admin_modinfo(){
     $data['modver']             = xarVarPrepForDisplay($modinfo['version']);
     $data['modauthor']          = preg_replace('/,/', '<br />', xarVarPrepForDisplay($modinfo['author']));
     if(!empty($modinfo['dependency'])){
-        $dependency             = xarMLByKey('Working on it...');
+        $dependency             = xarML('Working on it...');
     } else {
-        $dependency             = xarMLByKey('None');
+        $dependency             = xarML('None');
     }
     $data['moddependency']      = xarVarPrepForDisplay($dependency);
     
