@@ -1,15 +1,11 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 
 <select name="#$name#" id="#$id#" #$tabindex# >
-
-
     <xar:foreach in="$coptions" value="$coption" >
-        <xar:if condition="($coption['id'])" >
-            <xar:if condition="$value eq $coption['name']" >
-                <option value="#$coption['name']#" selected="selected">#$coption['name']#</option>
-            <xar:else />
-                <option value="#$coption['name']#">#$coption['name']#</option>
-            </xar:if>
+        <xar:if condition="$value eq $coption['name']" >
+            <option value="#$coption['name']#" selected="selected">#$coption['name']#</option>
+        <xar:else />
+            <option value="#$coption['name']#">#$coption['name']#</option>
         </xar:if>
     </xar:foreach>
 </select>
