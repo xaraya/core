@@ -8,3 +8,32 @@
         </td>
     </tr>
 </table>
+
+<xar:if id="title_condition" condition="!empty($base_statusmsg)">
+<div align="center"><h2><xar:var scope="session" name="$base_statusmsg" /></h2><br />
+</xar:if>
+
+<div align="center"><h2><xar:mlstring>Blocks Module Overview</xar:mlstring></h2></div><br />
+<table border="0" width="100%">
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>What is it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of each "block" on your website.  The Blocks module is a standard module within Xaraya, and cannot be removed.</xar:mlstring>
+        </td>
+    </tr>
+    <tr>
+        <td align="right" valign="top" width="100px">
+            <b><xar:mlstring>How to use it?</xar:mlstring></b>
+        </td>
+        <td align="left" valign="top">
+            <xar:mlstring>
+			From the menu, you have six choices. 
+			</xar:mlstring>
+
+			
+			<xar:mlstring>TODO -- Finish overview.</xar:mlstring>
+        </td>
+    </tr>
+</table>

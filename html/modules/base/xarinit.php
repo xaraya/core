@@ -66,16 +66,9 @@ function base_init()
 
     $query = xarDBCreateTable($sessionInfoTable,$fields);
 
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        // we can't do this here !!!!!
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     /*********************************************************************
     * Here we install the configuration table and set some default
     * configuration variables
@@ -97,38 +90,22 @@ function base_init()
     'xar_value' => array('type'=>'text','size'=>'long')
     );
 
-    $query = xarDBCreateTable($configVarsTable,$fields);
-    $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // FIXME: should be unique or not?
     $index = array('name'   => 'xar_name',
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($configVarsTable,$index);
 
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     $config_id = $dbconn->GenId($configVarsTable);
     $query = "INSERT INTO $configVarsTable VALUES ($config_id,'Site.Core.AllowableHTML','a:25:{s:3:\"!--\";s:1:\"2\";s:1:\"a\";s:1:\"2\";s:1:\"b\";s:1:\"2\";s:10:\"blockquote\";s:1:\"2\";s:2:\"br\";s:1:\"2\";s:6:\"center\";s:1:\"2\";s:3:\"div\";s:1:\"2\";s:2:\"em\";s:1:\"2\";s:4:\"font\";i:0;s:2:\"hr\";s:1:\"2\";s:1:\"i\";s:1:\"2\";s:3:\"img\";i:0;s:2:\"li\";s:1:\"2\";s:7:\"marquee\";i:0;s:2:\"ol\";s:1:\"2\";s:1:\"p\";s:1:\"2\";s:3:\"pre\";s:1:\"2\";s:4:\"span\";i:0;s:6:\"strong\";s:1:\"2\";s:2:\"tt\";s:1:\"2\";s:2:\"ul\";s:1:\"2\";s:5:\"table\";s:1:\"2\";s:2:\"td\";s:1:\"2\";s:2:\"th\";s:1:\"2\";s:2:\"tr\";s:1:\"2\";}')";
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     // PRE-SETUP so that xarCoreInit will work 
     xarInstallConfigSetVar('Site.BL.DefaultTheme','installer');
@@ -192,27 +169,17 @@ function base_init()
     );
 
     $query = xarDBCreateTable($configVarsTable,$fields);
-    $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // FIXME: should be unique or not?
     $index = array('name'   => 'i_xar_name',
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($configVarsTable,$index);
 
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Insert Allowed Vars
     $htmltags = array('!--',
@@ -302,12 +269,8 @@ function base_init()
     foreach ($htmltags as $htmltag) {
         $id_configvar = $dbconn->GenId($configVarsTable);
         $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$htmltag','html')";
-        $dbconn->Execute($query);
-        if ($dbconn->ErrorNo() != 0) {
-            $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return NULL;
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
         }
     }
 
@@ -323,13 +286,8 @@ function base_init()
     foreach ($censoredWords as $censoredWord) {
         $id_configVar = $dbconn->GenId($configVarsTable);
         $query = "INSERT INTO $configVarsTable VALUES ($id_configVar,'$censoredWords','censored')";
-        $dbconn->Execute($query);
-        if ($dbconn->ErrorNo() != 0) {
-            $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return NULL;
-        }
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
     }
 
 
@@ -355,15 +313,8 @@ function base_init()
 
     $query = xarDBCreateTable($templateTagsTable,$fields);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     // Load in installer API
     if (!xarInstallAPILoad('installer','admin')) {
@@ -385,27 +336,17 @@ function base_init()
     $id_anonymous = $dbconn->GenId($usersTable);
     $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','')";
 
-    $dbconn->Execute($query);
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
     $id_admin = $dbconn->GenId($usersTable);
     $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','authsystem')";
 
-    $dbconn->Execute($query);
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     $id_admin = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
     /***************************************************************
@@ -422,54 +363,27 @@ function base_init()
     $groupsTable = $systemPrefix . '_groups';
     $group_users = $dbconn->GenId($groupsTable);
     $query = "INSERT INTO $groupsTable (xar_gid, xar_name) VALUES ($group_users, 'Users');";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $group_users = $dbconn->PO_Insert_ID($groupsTable,'xar_gid');
 
     $group_admin = $dbconn->GenId($groupsTable);
     $query = "INSERT INTO $groupsTable (xar_gid, xar_name) VALUES ($group_admin, 'Admins');";
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     $group_admin = $dbconn->PO_Insert_ID($groupsTable,'xar_gid');
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-
     $groupMembershipTable = $systemPrefix . '_group_membership';
 
     $query = "INSERT INTO $groupMembershipTable (xar_gid, xar_uid) VALUES ($group_users, $id_anonymous);";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $query = "INSERT INTO $groupMembershipTable (xar_gid, xar_uid) VALUES ($group_admin, $id_admin);";
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     /**************************************************************
     * Install permissions module and setup default permissions
     **************************************************************/
@@ -487,38 +401,20 @@ function base_init()
              (xar_pid, xar_gid, xar_sequence, xar_realm, xar_component, xar_instance, xar_level, xar_bond)
               VALUES ($id, $group_admin, 1, 0, '.*', '.*', 800, 0);";
 
-    $dbconn->Execute($query);
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $userPermsTable = $systemPrefix . '_user_perms';
 
     $id = $dbconn->GenId($userPermsTable);
     $query = "INSERT INTO $userPermsTable VALUES ($id,-1,1,0,'.*','.*',200,0)";
-    $dbconn->Execute($query);
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $id = $dbconn->GenId($userPermsTable);
     $query = "INSERT INTO $userPermsTable VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
-    $dbconn->Execute($query);
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     /**************************************************************
     * Install the blocks module
@@ -546,29 +442,15 @@ function base_init()
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
      ) VALUES ($seqId, 'modules', 1, 'modules', '2.02', 1, 'Core Admin', 'Global', 1, 0)";
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Set Modules Module to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
               ) VALUES (1, 3)";
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Install authsystem module
     $seqId = $dbconn->GenId($modulesTable);
@@ -576,29 +458,15 @@ function base_init()
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
      ) VALUES ($seqId, 'authsystem', 42, 'authsystem', '0.91', 1, 'Core Utility', 'Global', 0, 0)";
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Set authsystem to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
               ) VALUES (42, 3)";
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Install installer module
     $seqId = $dbconn->GenId($modulesTable);
@@ -606,29 +474,16 @@ function base_init()
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
      ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0', 1, 'Core Utility', 'Global', 0, 0)";
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Set installer to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
               ) VALUES (200, 3)";
 
-    $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
     // Fill language list(?)
 
     // Initialisation successful
