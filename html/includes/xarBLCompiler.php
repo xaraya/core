@@ -2971,6 +2971,12 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return;
         }
         
+        // Allow php expressions for the attibute
+        $file = xarTpl__ExpressionTransformer::transformPHPExpression($file);
+        if (!isset($file)) {
+            return;
+        }
+
         switch($type) {
         case 'theme':
             return "xarTpl_includeThemeTemplate('$file', $subdata)";
