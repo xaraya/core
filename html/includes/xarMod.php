@@ -554,14 +554,14 @@ function xarModGetInfo($modRegId, $type = 'module')
         case 'module':
             default:
             $modState = xarMod_getState($modInfo['regid'], $modInfo['mode']);
-            if (!isset($modState)) $modState = XARMOD_STATE_MISSING; //return; // throw back
+            if (!isset($modState)) $modState = XARMOD_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
             $modInfo['state'] = $modState;
 
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
             break;
         case 'theme':
             $modState = xarMod_getState($modInfo['regid'], $modInfo['mode'], $type = 'theme');
-            if (!isset($modState)) $modState = XARTHEME_STATE_MISSING; //return; // throw back
+            if (!isset($modState)) $modState = XARTHEME_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
             $modInfo['state'] = $modState;
 
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
