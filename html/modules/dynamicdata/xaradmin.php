@@ -369,16 +369,6 @@ function dynamicdata_admin_modify($args)
     $data['fields'] = array(); // we'll let the form handle it
     $data['where'] = $where; // our selection criteria
     $data['authid'] = xarSecGenAuthKey();
-    // show a link to edit properties if we're dealing with a Dynamic Object
-    if ($objectid == 1) {
-        $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                      array('itemid' => $itemid));
-        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
-                                      array('itemid' => $itemid));
-    } else {
-        $data['proplink'] = '';
-        $data['viewlink'] = '';
-    }
 
     return $data;
 }
@@ -464,16 +454,6 @@ function dynamicdata_admin_update($args)
         $data['authid'] = xarSecGenAuthKey();
     //    $data['where'] = $where; // our selection criteria
         $data['preview'] = $preview;
-        // show a link to edit properties if we're dealing with a Dynamic Object
-        if ($objectid == 1) {
-            $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                          array('itemid' => $itemid));
-            $data['viewlink'] = xarModURL('dynamicdata','admin','view',
-                                          array('itemid' => $itemid));
-        } else {
-            $data['proplink'] = '';
-            $data['viewlink'] = '';
-        }
 
         return xarTplModule('dynamicdata','admin','modify', $data);
     }
@@ -485,6 +465,23 @@ function dynamicdata_admin_update($args)
                                   'fields' => $fields));
 
     if (!isset($itemid)) return; // throw back
+
+    // check if we need to set a module alias (or remove it) for short URLs
+    if ($objectid == 1) {
+        $name = $fields['name']['value'];
+        $alias = xarModGetAlias($name);
+        if (!empty($fields['isalias']['value'])) {
+            // no alias defined yet, so we create one
+            if ($alias == $name) {
+                xarModSetAlias($name,'dynamicdata');
+            }
+        } else {
+            // this was a defined alias, so we remove it
+            if ($alias == 'dynamicdata') {
+                xarModDelAlias($name,'dynamicdata');
+            }
+        }
+    }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                   array('itemid' => $objectid)));
@@ -560,9 +557,9 @@ function dynamicdata_admin_modifyprop()
     } else {
         $data['objectid'] = $object['id']['value'];
         if (!empty($itemtype)) {
-            $data['label'] = xarML('for #(1) (module #(2) - item type #(3))', $object['label']['value'], $modinfo['displayname'], $itemtype);
+            $data['label'] = xarML('for #(1)', $object['label']['value']);
         } else {
-            $data['label'] = xarML('for #(1) (module #(2))', $object['label']['value'], $modinfo['displayname']);
+            $data['label'] = xarML('for #(1)', $object['label']['value']);
         }
     }
 
@@ -586,6 +583,7 @@ function dynamicdata_admin_modifyprop()
                             'type' => xarML('Property Type'),
                             'default' => xarML('Default'),
                             'source' => xarML('Data Source'),
+                            'status' => xarML('Status'),
                             'validation' => xarML('Validation'),
                             'new' => xarML('New'),
                       );
@@ -651,6 +649,7 @@ function dynamicdata_admin_updateprop()
          $dd_type,
          $dd_default,
          $dd_source,
+         $dd_status,
          $dd_validation) = xarVarCleanFromInput('objectid',
                                                'modid',
                                                'itemtype',
@@ -658,6 +657,7 @@ function dynamicdata_admin_updateprop()
                                                'dd_type',
                                                'dd_default',
                                                'dd_source',
+                                               'dd_status',
                                                'dd_validation');
 
     // Confirm authorisation code.  This checks that the form had a valid
@@ -742,6 +742,7 @@ function dynamicdata_admin_updateprop()
                                     'type' => $dd_type[$id],
                                     'default' => $dd_default[$id],
                                     'source' => $dd_source[$id],
+                                    'status' => $dd_status[$id],
                                     'validation' => $dd_validation[$id]))) {
                 return;
             }
@@ -823,6 +824,264 @@ function dynamicdata_admin_importprops()
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                   array('modid' => $modid,
                                         'itemtype' => $itemtype)));
+}
+
+/**
+ * Export an object definition or an object item to XML
+ */
+function dynamicdata_admin_export($args)
+{
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid) = xarVarCleanFromInput('objectid',
+                                         'modid',
+                                         'itemtype',
+                                         'itemid');
+
+    extract($args);
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    $data = dynamicdata_admin_menu();
+
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (!isset($object)) {
+        $data['label'] = xarML('Unknown Object');
+        $data['xml'] = '';
+        return $data;
+    }
+
+    $objectid = $object['id']['value'];
+    $modid = $object['moduleid']['value'];
+    $itemtype = $object['itemtype']['value'];
+    $label =  $object['label']['value'];
+
+    // export object definition
+    if (empty($itemid)) {
+        $data['label'] = xarML('Export Object Definition for #(1)', $label);
+
+        $xml = "<object>\n";
+        foreach ($object as $key => $values) {
+            $xml .= "  <$key>" . xarVarPrepForDisplay($values['value']) . "</$key>\n";
+        }
+        $xml .= "  <properties>\n";
+        $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype));
+        if (!isset($fields)) {
+            $data['xml'] = xarML('Unknown Properties');
+            return $data;
+        }
+        $i = 1;
+        foreach ($fields as $name => $field) {
+            $xml .= "    <property id=\"$i\">\n";
+            foreach ($field as $key => $value) {
+                $xml .= "      <$key>" . xarVarPrepForDisplay($value) . "</$key>\n";
+            }
+            $xml .= "    </property>\n";
+            $i++;
+        }
+        $xml .= "  </properties>\n";
+        $xml .= "</object>\n";
+
+    // export specific item
+    } else {
+        $data['label'] = xarML('Export Data for #(1) # #(2)', $label, $itemid);
+
+        $objectname = $object['name']['value'];
+        $xml = "<$objectname id=\"$itemid\">\n";
+        $fields = xarModAPIFunc('dynamicdata','user','getitem',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype,
+                                      'itemid' => $itemid));
+        if (!isset($fields)) {
+            $data['xml'] = xarML('Unknown Item');
+            return $data;
+        }
+        foreach ($fields as $fieldname => $field) {
+            $xml .= "  <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n";
+        }
+        $xml .= "</$objectname>\n";
+    }
+
+    $data['xml'] = xarVarPrepForDisplay($xml);
+
+    return $data;
+}
+
+/**
+ * Import an object definition or an object item from XML (not referenced in GUI for now)
+ */
+function dynamicdata_admin_import($args)
+{
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    $import = xarVarCleanFromInput('import');
+
+    extract($args);
+
+    $data = dynamicdata_admin_menu();
+    $data['warning'] = '';
+    $data['options'] = array();
+    $data['authid'] = xarSecGenAuthKey();
+
+    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
+
+    $basedir = 'modules/dynamicdata';
+    $filetype = 'xml';
+    $files = xarModAPIFunc('dynamicdata','admin','browse',
+                           array('basedir' => $basedir,
+                                 'filetype' => $filetype));
+    if (!isset($files) || count($files) < 1) {
+        $data['warning'] = xarML('There are currently no XML files available for import in "#(1)"',$basedir);
+        return $data;
+    }
+
+    if (!empty($import)) {
+        if (!xarSecConfirmAuthKey()) {
+            $msg = xarML('Invalid authorization key for importing #(1) configuration',
+                        'DynamicData');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                           new SystemException($msg));
+            return;
+        }
+        $found = '';
+        foreach ($files as $file) {
+            if ($file == $import) {
+                $found = $file;
+                break;
+            }
+        }
+        if (empty($found) || !file_exists($basedir . '/' . $file)) {
+            $msg = xarML('File not found');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg));
+            return;
+        }
+        $lines = @file($basedir . '/' . $file);
+        if (empty($lines) || count($lines) < 1) {
+            $msg = xarML('File is empty');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg));
+            return;
+        }
+        $object = array();
+        $properties = array();
+        $what = '';
+        foreach ($lines as $line) {
+            if (empty($what)) {
+                if (preg_match('#<object>#',$line)) {
+                    $what = 'object';
+                }
+            } elseif ($what == 'object') {
+                if (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
+                    $key = $matches[1];
+                    $value = $matches[2];
+                    if (isset($object[$key])) {
+                        $msg = xarML('Duplicate definition for key #(1)',xarVarPrepForDisplay($key));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        return;
+                    }
+                    $object[$key] = $value;
+                } elseif (preg_match('#<properties>#',$line)) {
+                    $what = 'property';
+                }
+            } elseif ($what == 'property') {
+                if (preg_match('#<property #',$line)) {
+                    $property = array();
+                } elseif (preg_match('#</property>#',$line)) {
+                    $properties[] = $property;
+                } elseif (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
+                    $key = $matches[1];
+                    $value = $matches[2];
+                    if (isset($property[$key])) {
+                        $msg = xarML('Duplicate definition for key #(1)',xarVarPrepForDisplay($key));
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                        new SystemException($msg));
+                        return;
+                    }
+                    $property[$key] = $value;
+                }
+            }
+        }
+        if (empty($object['name']) || empty($object['moduleid'])) {
+            $msg = xarML('Missing keys in object definition');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+            return;
+        }
+
+        // make sure we drop the object id, because it might already exist here
+        unset($object['id']);
+// TODO: make sure itemtype is unique when we're dealing with fully dynamic objects
+//       (= objects that have the moduleid of dynamicdata itself)
+
+        if (!xarModAPILoad('dynamicdata','admin')) return;
+        $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+                                  $object);
+        if (!isset($objectid)) return;
+
+        foreach ($properties as $property) {
+            $property['objectid'] = $objectid;
+            $property['moduleid'] = $object['moduleid'];
+            $property['itemtype'] = $object['itemtype'];
+            // make sure we drop the property id, because it might already exist here
+            unset($property['id']);
+            $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
+                                     $property);
+            if (!isset($prop_id)) return;
+        }
+        $data['warning'] = xarML('Object #(1) was created successfully',xarVarPrepForDisplay($object['label']));
+        return $data;
+    }
+
+    natsort($files);
+    array_unshift($files,'');
+    foreach ($files as $file) {
+         $data['options'][] = array('id' => $file,
+                                    'name' => $file);
+    }
+
+/*
+    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (!isset($object)) {
+        $data['label'] = xarML('Unknown Object');
+        $data['xml'] = '';
+        return $data;
+    }
+
+    $objectid = $object['id']['value'];
+    $modid = $object['moduleid']['value'];
+    $itemtype = $object['itemtype']['value'];
+    $label =  $object['label']['value'];
+*/
+
+    return $data;
 }
 
 /**

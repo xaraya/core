@@ -145,8 +145,8 @@ function dynamicdata_adminapi_create($args)
                 $join = ', ';
             }
             $query .= " )";
-            $result = $dbconn->Execute($query);
-            if (!isset($result)) return;
+            $result = & $dbconn->Execute($query);
+            if (empty($result)) return;
 
             // get the real next id from ADODB for this table now
             $itemid = $dbconn->PO_Insert_ID($table, $fieldname);
@@ -587,6 +587,8 @@ function dynamicdata_adminapi_createobject($args)
 {
     extract($args);
 
+    if (!xarModAPILoad('dynamicdata','user')) return;
+
     // get the properties of the 'objects' object
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
                             array('objectid' => 1)); // the objects
@@ -605,6 +607,7 @@ function dynamicdata_adminapi_createobject($args)
             $fields[$name]['value'] = $args[$name];
         }
     }
+
     $objectid = xarModAPIFunc('dynamicdata', 'admin', 'create',
                               array('modid'    => $moduleid,
                                     'itemtype' => $itemtype,
@@ -819,6 +822,7 @@ function dynamicdata_adminapi_importproperties($args)
  * @param $args['type'] type of the field to update
  * @param $args['default'] default of the field to update (optional)
  * @param $args['source'] data source of the field to update (optional)
+ * @param $args['status'] status of the field to update (optional)
  * @param $args['validation'] validation of the field to update (optional)
  * @returns bool
  * @return true on success, false on failure
@@ -887,8 +891,11 @@ function dynamicdata_adminapi_updateprop($args)
     if (isset($itemtype) && is_numeric($itemtype)) {
         $sql .= ", xar_prop_itemtype = " . xarVarPrepForStore($itemtype);
     }
-    if (isset($name) && is_numeric($name)) {
-        $sql .= ", xar_prop_name = " . xarVarPrepForStore($name);
+    if (isset($name) && is_string($name)) {
+        $sql .= ", xar_prop_name = '" . xarVarPrepForStore($name) . "'";
+    }
+    if (isset($status) && is_numeric($status)) {
+        $sql .= ", xar_prop_status = " . xarVarPrepForStore($status);
     }
 
     $sql .= " WHERE xar_prop_id = " . xarVarPrepForStore($prop_id);
@@ -2770,7 +2777,9 @@ function dynamicdata_adminapi_browse($args)
             while(($file = @readdir($dir)) !== false) {
                 $curfile = $curdir . '/' . $file;
                 if (preg_match("/\.$filetype$/",$file) && is_file($curfile)) {
-                    $curfile = preg_replace("#$basedir/#",'',$curfile);
+                    // ugly fix for Windows boxes
+                    $tmpdir = strtr($basedir,array('\\' => '\\\\'));
+                    $curfile = preg_replace("#$tmpdir/#",'',$curfile);
                     $filelist[] = $curfile;
                 } elseif ($file != '.' && $file != '..' && is_dir($curfile)) {
                     array_push($todo, $curfile);

@@ -1,0 +1,15 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+</table>
+<br />
+
+<h2>#$label# </h2>
+
+<form>
+<textarea name="xml" rows="30" cols="80">
+#$xml#
+</textarea>
+</form>
+

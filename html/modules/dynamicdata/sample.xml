@@ -1,0 +1,58 @@
+<object>
+  <id>3</id>
+  <name>sample</name>
+  <label>Sample Object</label>
+  <moduleid>182</moduleid>
+  <itemtype>2</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>3</maxid>
+  <config>nothing much...</config>
+  <isalias>1</isalias>
+  <properties>
+    <property id="1">
+      <name>id</name>
+      <label>Id</label>
+      <type>21</type>
+      <id>22</id>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>1</order>
+      <validation>integer</validation>
+    </property>
+    <property id="2">
+      <name>name</name>
+      <label>Name</label>
+      <type>2</type>
+      <id>23</id>
+      <default>please enter your name...</default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>2</order>
+      <validation>varchar (30)</validation>
+    </property>
+    <property id="3">
+      <name>age</name>
+      <label>Age</label>
+      <type>15</type>
+      <id>24</id>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>3</order>
+      <validation>integer</validation>
+    </property>
+    <property id="4">
+      <name>location</name>
+      <label>Location</label>
+      <type>12</type>
+      <id>25</id>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>
+

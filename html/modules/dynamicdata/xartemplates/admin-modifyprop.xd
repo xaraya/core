@@ -10,11 +10,18 @@
 <br />
 
 <xar:if condition="!empty($objectid)">
-    <!-- show some basic info about this dynamic object -->
-    <xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <tr>
+        <td align="left"><a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#"><xar:mlstring>Modify Object Definition</xar:mlstring></a></td>
+        <!-- show some basic info about this dynamic object -->
+        <td align="center"><xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" /></td>
+        <td align="right"><a href="#xarModURL('dynamicdata','admin','export',array('modid' => $modid, 'itemtype' => $itemtype))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
+    </tr>
+</table>
+<br />
 </xar:if>
 
-<br /><br />
+<br />
 Tip : empty label -> delete field for all items
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
@@ -39,14 +46,15 @@ Tip : empty label -> delete field for all items
        <td><strong>&xar-var-labels.default;</strong></td>
        <td><strong>&xar-var-labels.source;</strong></td>
        <td><strong>&xar-var-labels.validation;</strong></td>
+       <td><strong>&xar-var-labels.status;</strong></td>
     </tr>
 
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>#$id#</td>
-        <td><input type="text" name="dd_label[#$id#]" size="15" value="#$label#" /></td>
+        <td><input type="text" name="dd_label[#$id#]" size="10" value="#$label#" /></td>
         <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
-        <td><input type="text" name="dd_default[#$id#]" size="15" value="#$default#" /></td>
+        <td><input type="text" name="dd_default[#$id#]" size="10" value="#$default#" /></td>
         <td>
             <select name="dd_source[#$id#]">
             <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
@@ -59,15 +67,16 @@ Tip : empty label -> delete field for all items
             </xar:foreach>
             </select>
         </td>
-        <td><input type="text" name="dd_validation[#$id#]" size="15" value="#$validation#" /></td>
+        <td><input type="text" name="dd_validation[#$id#]" size="10" value="#$validation#" /></td>
+        <td><xar:data-input type="fieldstatus" name="dd_status['.$id.']" size="15" value="$status" /></td>
     </tr>
 </xar:loop>
 
     <tr align="left" valign="middle">
         <td>&xar-var-labels.new;</td>
-        <td><input type="text" name="dd_label[0]" size="15" /></td>
+        <td><input type="text" name="dd_label[0]" size="10" /></td>
         <td><xar:data-input type="fieldtype" name="dd_type[0]" value="" /></td>
-        <td><input type="text" name="dd_default[0]" size="15" /></td>
+        <td><input type="text" name="dd_default[0]" size="10" /></td>
         <td>
             <select name="dd_source[0]">
             <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
@@ -76,7 +85,8 @@ Tip : empty label -> delete field for all items
             </xar:foreach>
             </select>
         </td>
-        <td><input type="text" name="dd_validation[0]" size="15" /></td>
+        <td><input type="text" name="dd_validation[0]" size="10" /></td>
+        <td><xar:data-input type="fieldstatus" name="dd_status[0]" value="1" /></td>
     </tr>
 
     <tr>

@@ -70,6 +70,11 @@ function dynamicdata_init()
                                                   'default'     => '0'),
                 /* any configuration settings for this object (future) */
                     'xar_object_config'   => array('type'=>'text'),
+                /* use the name of this object as alias for short URLs */
+                    'xar_object_isalias'  => array('type'        => 'integer',
+                                                  'size'        => 'tiny',
+                                                  'null'        => false,
+                                                  'default'     => '1'),
               );
 
     // Create the Table - the function will return the SQL is successful or
@@ -108,13 +113,13 @@ function dynamicdata_init()
 
     // create default objects for dynamic data
     $objects = array(
-                     "(1,'objects','Dynamic Objects',$modid,0,'itemid',0,'')",
-                     "(2,'properties','Dynamic Properties',$modid,1,'itemid',0,'')",
-                     "(3,'sample','Sample Object',$modid,2,'itemid',3,'nothing much...')",
+                     "(1,'objects','Dynamic Objects',$modid,0,'itemid',0,'',0)",
+                     "(2,'properties','Dynamic Properties',$modid,1,'itemid',0,'',0)",
+                     "(3,'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',1)",
                     );
     foreach ($objects as $object) {
         $query = "INSERT INTO $dynamic_objects
-                         (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config) 
+                         (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config, xar_object_isalias) 
                   VALUES $object";
         $result = $dbconn->Execute($query);
         if (!isset($result)) return;
@@ -229,24 +234,25 @@ function dynamicdata_init()
         "(6,'urlparam','URL Param',1,182,0,2,'','" . $dynamic_objects . ".xar_object_urlparam',1,6,'varchar (30)')",
         "(7,'maxid','Max Id',1,182,0,15,'','" . $dynamic_objects . ".xar_object_maxid',2,7,'integer')",
         "(8,'config','Config',1,182,0,4,'','" . $dynamic_objects . ".xar_object_config',2,8,'text')",
+        "(9,'isalias','Alias in short URLs',1,182,0,14,'1','" . $dynamic_objects . ".xar_object_isalias',2,9,'integer (tiny)')",
 
-        "(9,'id','Id',2,182,1,21,'','" . $dynamic_properties . ".xar_prop_id',1,1,'integer')",
-        "(10,'name','Name',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_name',2,2,'varchar (30)')",
-        "(11,'label','Label',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_label',1,3,'varchar (254)')",
-        "(12,'objectid','Object',2,182,1,24,'','" . $dynamic_properties . ".xar_prop_objectid',1,4,'integer')",
-        "(13,'moduleid','Module',2,182,1,19,'','" . $dynamic_properties . ".xar_prop_moduleid',2,5,'integer')",
-        "(14,'itemtype','Item Type',2,182,1,20,'','" . $dynamic_properties . ".xar_prop_itemtype',2,6,'integer')",
-        "(15,'type','Property Type',2,182,1,22,'','" . $dynamic_properties . ".xar_prop_type',1,7,'integer')",
-        "(16,'default','Default',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_default',1,8,'varchar (254)')",
-        "(17,'source','Source',2,182,1,23,'dynamic_data','" . $dynamic_properties . ".xar_prop_source',1,9,'varchar (254)')",
-        "(18,'status','Status',2,182,1,25,'1','" . $dynamic_properties . ".xar_prop_status',1,10,'integer (tiny)')",
-        "(19,'order','Order',2,182,1,15,'','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)')",
-        "(20,'validation','Validation',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_validation',2,12,'varchar (254)')",
+        "(10,'id','Id',2,182,1,21,'','" . $dynamic_properties . ".xar_prop_id',1,1,'integer')",
+        "(11,'name','Name',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_name',2,2,'varchar (30)')",
+        "(12,'label','Label',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_label',1,3,'varchar (254)')",
+        "(13,'objectid','Object',2,182,1,24,'','" . $dynamic_properties . ".xar_prop_objectid',1,4,'integer')",
+        "(14,'moduleid','Module',2,182,1,19,'','" . $dynamic_properties . ".xar_prop_moduleid',2,5,'integer')",
+        "(15,'itemtype','Item Type',2,182,1,20,'','" . $dynamic_properties . ".xar_prop_itemtype',2,6,'integer')",
+        "(16,'type','Property Type',2,182,1,22,'','" . $dynamic_properties . ".xar_prop_type',1,7,'integer')",
+        "(17,'default','Default',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_default',1,8,'varchar (254)')",
+        "(18,'source','Source',2,182,1,23,'dynamic_data','" . $dynamic_properties . ".xar_prop_source',1,9,'varchar (254)')",
+        "(19,'status','Status',2,182,1,25,'1','" . $dynamic_properties . ".xar_prop_status',1,10,'integer (tiny)')",
+        "(20,'order','Order',2,182,1,15,'','" . $dynamic_properties . ".xar_prop_order',2,11,'integer (tiny)')",
+        "(21,'validation','Validation',2,182,1,2,'','" . $dynamic_properties . ".xar_prop_validation',2,12,'varchar (254)')",
 
-        "(21,'id','Id',3,182,2,21,'','dynamic_data',2,1,'integer')",
-        "(22,'name','Name',3,182,2,2,'please enter your name...','dynamic_data',1,2,'varchar (30)')",
-        "(23,'age','Age',3,182,2,15,'','dynamic_data',1,3,'integer')",
-        "(24,'location','Location',3,182,2,12,'','dynamic_data',2,4,'')",
+        "(22,'id','Id',3,182,2,21,'','dynamic_data',2,1,'integer')",
+        "(23,'name','Name',3,182,2,2,'please enter your name...','dynamic_data',1,2,'varchar (30)')",
+        "(24,'age','Age',3,182,2,15,'','dynamic_data',1,3,'integer')",
+        "(25,'location','Location',3,182,2,12,'','dynamic_data',2,4,'')",
         );
     foreach ($properties as $property) {
         $query = "INSERT INTO $dynamic_properties
@@ -317,20 +323,20 @@ function dynamicdata_init()
 
     // create some sample data for the sample object
     $dataentries = array(
-        "(1,21,1,'1')",
-        "(2,22,1,'Johnny')",
-        "(3,23,1,'32')",
-        "(4,24,1,'http://mikespub.net/xaraya/images/cuernos1.jpg')",
+        "(1,22,1,'1')",
+        "(2,23,1,'Johnny')",
+        "(3,24,1,'32')",
+        "(4,25,1,'http://mikespub.net/xaraya/images/cuernos1.jpg')",
 
-        "(5,21,2,'2')",
-        "(6,22,2,'Nancy')",
-        "(7,23,2,'29')",
-        "(8,24,2,'http://mikespub.net/xaraya/images/agra1.jpg')",
+        "(5,22,2,'2')",
+        "(6,23,2,'Nancy')",
+        "(7,24,2,'29')",
+        "(8,25,2,'http://mikespub.net/xaraya/images/agra1.jpg')",
 
-        "(9,21,3,'3')",
-        "(10,22,3,'Baby')",
-        "(11,23,3,'1')",
-        "(12,24,3,'http://mikespub.net/xaraya/images/sydney1.jpg')",
+        "(9,22,3,'3')",
+        "(10,23,3,'Baby')",
+        "(11,24,3,'1')",
+        "(12,25,3,'http://mikespub.net/xaraya/images/sydney1.jpg')",
         );
     foreach ($dataentries as $dataentry) {
         $query = "INSERT INTO $dynamic_data
@@ -364,7 +370,7 @@ function dynamicdata_init()
     /**
      * Set module variables
      */
-    xarModSetVar('dynamicdata', 'SupportShortURLs', 0);
+    xarModSetVar('dynamicdata', 'SupportShortURLs', 1);
 
     /**
      * Register blocks

@@ -2807,11 +2807,11 @@ function dynamicdata_userapi_showview($args)
         foreach ($items as $itemid => $item) {
         // TODO: improve this + security
             $options = array();
-            $options[] = array('otitle' => $linklabel,
-                               'olink'  => xarModURL($modname,'user',$linkfunc,
-                                                     array($param => $itemid,
-                                                           'itemtype' => $itemtype)),
-                               'ojoin'  => '');
+            $options['display'] = array('otitle' => $linklabel,
+                                        'olink'  => xarModURL($modname,'user',$linkfunc,
+                                                              array($param => $itemid,
+                                                                   'itemtype' => $itemtype)),
+                                        'ojoin'  => '');
             $items[$itemid]['options'] = $options;
         }
     }
@@ -2936,6 +2936,187 @@ function dynamicdata_userapi_countitems()
 
     // Return the number of items
     return $numitems;
+}
+
+// ----------------------------------------------------------------------
+// Short URL Support
+// ----------------------------------------------------------------------
+
+/**
+ * return the path for a short URL to xarModURL for this module
+ * @param $args the function and arguments passed to xarModURL
+ * @returns string
+ * @return path to be added to index.php for a short URL, or empty if failed
+ */
+function dynamicdata_userapi_encode_shorturl($args)
+{
+    static $objectcache = array();
+
+    if (count($objectcache) == 0) {
+        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        foreach ($objects as $object) {
+            $objectcache[$object['fields']['moduleid']['value'].':'.$object['fields']['itemtype']['value']] = $object['fields']['name']['value'];
+        }
+    }
+
+    // Get arguments from argument array
+    extract($args);
+
+    // check if we have something to work with
+    if (!isset($func)) {
+        return;
+    }
+
+    // fill in default values
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    // make sure you don't pass the following variables as arguments too
+
+    // default path is empty -> no short URL
+    $path = '';
+    // if we want to add some common arguments as URL parameters below
+    $join = '?';
+    // we can't rely on xarModGetName() here !
+    $module = 'dynamicdata';
+
+    // specify some short URLs relevant to your module
+    if ($func == 'main') {
+        $path = '/' . $module . '/';
+    } elseif ($func == 'view') {
+        if (!empty($objectcache[$modid.':'.$itemtype])) {
+            $name = $objectcache[$modid.':'.$itemtype];
+            $alias = xarModGetAlias($name);
+            if ($module == $alias) {
+                // OK, we can use a 'fake' module name here
+                $path = '/' . $name . '/';
+            } else {
+                $path = '/' . $module . '/' . $name . '/';
+            }
+        } else {
+            // we don't know this one...
+        }
+    } elseif ($func == 'display' && isset($itemid)) {
+        if (!empty($objectcache[$modid.':'.$itemtype])) {
+            $name = $objectcache[$modid.':'.$itemtype];
+            $alias = xarModGetAlias($name);
+            if ($module == $alias) {
+                // OK, we can use a 'fake' module name here
+                $path = '/' . $name . '/' . $itemid;
+            } else {
+                $path = '/' . $module . '/' . $name . '/' . $itemid;
+            }
+        } else {
+            // we don't know this one...
+        }
+    }
+    // anything else does not have a short URL equivalent
+
+// TODO: add *any* extra args we didn't use yet here
+    // add some other module arguments as standard URL parameters
+    if (!empty($path)) {
+        // search
+        if (isset($q)) {
+            $path .= $join . 'q=' . urlencode($q);
+            $join = '&';
+        }
+        // sort
+        if (isset($sort)) {
+            $path .= $join . 'sort=' . $sort;
+            $join = '&';
+        }
+        // pager
+        if (isset($startnum) && $startnum != 1) {
+            $path .= $join . 'startnum=' . $startnum;
+            $join = '&';
+        }
+        // multi-page articles
+        if (isset($page)) {
+            $path .= $join . 'page=' . $page;
+            $join = '&';
+        }
+    }
+
+    return $path;
+}
+
+/**
+ * extract function and arguments from short URLs for this module, and pass
+ * them back to xarGetRequestInfo()
+ * @param $params array containing the elements of PATH_INFO
+ * @returns array
+ * @return array containing func the function to be called and args the query
+ *         string arguments, or empty if it failed
+ */
+function dynamicdata_userapi_decode_shorturl($params)
+{
+    static $objectcache = array();
+
+    if (count($objectcache) == 0) {
+        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        foreach ($objects as $object) {
+            $objectcache[$object['fields']['name']['value']] = array('modid'    => $object['fields']['moduleid']['value'],
+                                                                     'itemtype' => $object['fields']['itemtype']['value']);
+        }
+    }
+
+    $args = array();
+
+    $module = 'dynamicdata';
+
+    // Check if we're dealing with an alias here
+    if ($params[0] != $module) {
+        $alias = xarModGetAlias($params[0]);
+        // yup, looks like it
+        if ($module == $alias) {
+            if (isset($objectcache[$params[0]])) {
+                $args['modid'] = $objectcache[$params[0]]['modid'];
+                $args['itemtype'] = $objectcache[$params[0]]['itemtype'];
+            } else {
+                // we don't know this one...
+                return;
+            }
+        } else {
+            // we don't know this one...
+            return;
+        }
+    }
+
+    if (empty($params[1]) || preg_match('/^index/i',$params[1])) {
+        if (count($args) > 0) {
+            return array('view', $args);
+        } else {
+            return array('main', $args);
+        }
+
+    } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
+        $itemid = $matches[1];
+        $args['itemid'] = $itemid;
+        return array('display', $args);
+
+    } elseif (isset($objectcache[$params[1]])) {
+        $args['modid'] = $objectcache[$params[1]]['modid'];
+        $args['itemtype'] = $objectcache[$params[1]]['itemtype'];
+        if (empty($params[2]) || preg_match('/^index/i',$params[2])) {
+            return array('view', $args);
+        } elseif (preg_match('/^(\d+)/',$params[2],$matches)) {
+            $itemid = $matches[1];
+            $args['itemid'] = $itemid;
+            return array('display', $args);
+        } else {
+            // we don't know this one...
+        }
+
+    } else {
+        // we don't know this one...
+    }
+
+    // default : return nothing -> no short URL
+
 }
 
 ?>

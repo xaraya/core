@@ -5,17 +5,14 @@
 </table>
 <br />
 
-<h2><xar:mlstring>Modify</xar:mlstring> #$label#</h2>
+<h2><xar:mlstring>Modify</xar:mlstring> #$label# ## #$itemid#</h2>
 
-<xar:if condition="!empty($proplink) or !empty($viewlink)">
+<xar:if condition="!empty($objectid) and $objectid eq 1">
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
-    <tr align="center" valign="middle">
-    <xar:if condition="!empty($viewlink)">
-        <td><a href="#$viewlink#"><xar:mlstring>View Items</xar:mlstring></a></td>
-    </xar:if>
-    <xar:if condition="!empty($proplink)">
-        <td><a href="#$proplink#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
-    </xar:if>
+    <tr>
+        <td align="left" width="33%"><a href="#xarModURL('dynamicdata','admin','view',array('itemid' => $itemid))#"><xar:mlstring>View Items</xar:mlstring></a></td>
+        <td align="center"><a href="#xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $itemid))#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a></td>
+        <td align="right"><a href="#xarModURL('dynamicdata','admin','export',array('objectid' => $itemid))#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a></td>
     </tr>
 </table>
 <br />
@@ -53,6 +50,7 @@
 
         <!-- this does most of the hard work :) -->
         <xar:data-form module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+
 
         <tr>
             <td colspan="2" align="center">
