@@ -7,19 +7,7 @@
     <base href="&xar-baseurl;index.php" />
 <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css); </style> #$tpl:additionalStyles#
 <!--- Head JavaScript --->
-<!--- This will replace the loop that follows, providing the tag is registered.
-<xar:base-render-javascript position="head"/>
---->
-<xar:foreach in="$tpl:JavaScript.head" value="$jshead">
-    <xar:if condition="$jshead['type'] == 'code'">
-        <script language="Javascript" type="text/javascript">
-        #$jshead['data']#
-        </script>
-    </xar:if>
-    <xar:if condition="$jshead['type'] == 'src'">
-        <script language="Javascript" type="text/javascript" src="#$jshead['data']#"></script>
-    </xar:if>
-</xar:foreach>
+<xar:base-render-javascript position="head" />
 </head>
 <body>
 <div style="background-image:url(#xarTplGetThemeDir()#/images/header_fill.gif);width: 100%;height: 52px; background-repeat: repeat-x;">
@@ -76,18 +64,6 @@
     #xarModGetVar('themes', 'SiteFooter')#
 </div>
 <!--- Body JavaScript --->
-<!--- This will replace the loop that follows, providing the tag is registered.
-<xar:base-render-javascript position="body"/>
---->
-<xar:foreach in="$tpl:JavaScript.body" value="$jsbody">
-    <xar:if condition="$jsbody['type'] == 'code'">
-        <script language="Javascript" type="text/javascript">
-        #$jsbody['data']#
-        </script>
-    </xar:if>
-    <xar:if condition="$jsbody['type'] == 'src'">
-        <script language="Javascript" type="text/javascript" src="#$jsbody['data']#"></script>
-    </xar:if>
-</xar:foreach>
+<xar:base-render-javascript position="body" />
 </body>
 </html>
