@@ -20,11 +20,6 @@ function themes_admin_regenerate()
     $regenerated = xarModAPIFunc('themes', 'admin', 'regenerate');
 
     if (!isset($regenerated)) return;
-
-    //Success
-    xarSessionSetVar('themes_statusmsg', xarML('Theme list regenerated from filesystem',
-                                        'themes'));
-
     // Redirect
     xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
 

@@ -17,16 +17,7 @@ function themes_admin_upgrade()
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
-    $id = xarVarCleanFromInput('id');
-    if (empty($id)) {
-        $msg = xarML('No theme id specified',
-                    'themes');
-        xarExceptionSet(XAR_USER_EXCEPTION,
-                    'MISSING_DATA',
-                     new DefaultUserException($msg));
-        return;
-    }
-
+    if (!xarVarFetch('id', 'int:1:', $id)) return; 
     // Upgrade theme
     $upgraded = xarModAPIFunc('themes',
                              'admin',
@@ -34,10 +25,6 @@ function themes_admin_upgrade()
                              array('regid' => $id));
     //throw back
     if(!isset($upgraded)) return;
-
-    // Success
-    xarSessionSetVar('themes_statusmsg', xarML('Theme Upgraded',
-                                        'themes'));
 
     xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
 

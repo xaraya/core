@@ -1,13 +1,16 @@
 <?php 
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marcel van der Boom
-// Purpose of file:  Table information for themes module
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Themes administration
+ *
+ * @package modules
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage themes
+ * @author Marty Vance
+*/
 
 function themes_xartables()
 {
@@ -20,12 +23,12 @@ function themes_xartables()
 
     // Set the table name
     // FIXME: quick hack to make it work, this is NOT right <mrb>
-    $xartable['themes'] = $systemPrefix . '_themes';
-    $xartable['system/theme_states'] = $systemPrefix . '_theme_states';
-    $xartable['site/theme_states'] = $sitePrefix . '_theme_states';
-    $xartable['site/theme_vars'] = $sitePrefix . '_theme_vars';
-    $xartable['system/theme_vars'] = $systemPrefix . '_theme_vars';
-    $xartable['theme_vars'] = $systemPrefix . '_theme_vars';
+    $xartable['themes']                 = $systemPrefix . '_themes';
+    $xartable['system/theme_states']    = $systemPrefix . '_theme_states';
+    $xartable['site/theme_states']      = $sitePrefix . '_theme_states';
+    $xartable['site/theme_vars']        = $sitePrefix . '_theme_vars';
+    $xartable['system/theme_vars']      = $systemPrefix . '_theme_vars';
+    $xartable['theme_vars']             = $systemPrefix . '_theme_vars';
 
     // Return the table information
     return $xartable;

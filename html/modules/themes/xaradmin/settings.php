@@ -9,17 +9,11 @@ function themes_admin_settings()
 {
     // Security Check
 	if(!xarSecurityCheck('AdminTheme')) return;
-
     // form parameters
-    $regen      = xarVarCleanFromInput('regen');
-    $selstyle   = xarVarCleanFromInput('selstyle');
-    $selfilter  = xarVarCleanFromInput('selfilter');
-    $selsort    = xarVarCleanFromInput('selsort');
-
-    // make sure we dont miss empty variables (which were not passed thru)
-    if(empty($selstyle)) $selstyle                  = 'plain';
-    if(empty($selfilter)) $selfilter                = XARTHEME_STATE_ANY;
-    if(empty($selsort)) $selsort                    = 'namedesc';
+    if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('selsort', 'str:1:', $selsort, 'namedesc', XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
 
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);

@@ -10,16 +10,16 @@ function themes_admin_list()
 	if(!xarSecurityCheck('AdminTheme')) return;
 
     // form parameters
-    $startnum   = xarVarCleanFromInput('startnum'); // do we use this yet?
-    $regen      = xarVarCleanFromInput('regen');
+    if (!xarVarFetch('startnum', 'str:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
 
     $data['items'] = array();
 
-    $data['infolabel']      = xarVarPrepForDisplay(xarML('Info'));
-    $data['actionlabel']    = xarVarPrepForDisplay(xarML('Action'));
-    $data['optionslabel']   = xarVarPrepForDisplay(xarML('Options'));
-    $data['reloadlabel']   = xarVarPrepForDisplay(xarML('Refresh'));
-    $data['pager'] = '';
+    $data['infolabel']                              = xarVarPrepForDisplay(xarML('Info'));
+    $data['actionlabel']                            = xarVarPrepForDisplay(xarML('Action'));
+    $data['optionslabel']                           = xarVarPrepForDisplay(xarML('Options'));
+    $data['reloadlabel']                            = xarVarPrepForDisplay(xarML('Refresh'));
+    $data['pager']                                  = '';
     $authid = xarSecGenAuthKey();
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
