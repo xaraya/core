@@ -38,7 +38,7 @@
                         <xar:else />
                             <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" style="vertical-align: middle;" />
                         </xar:if>
-                        <label for="hooked_#$name#[#$typeid#]">#$itemtype#</label><br />
+                        <label for="hooked_#$name#[#$typeid#]">#$itemtype['label']#</label><br />
                     </xar:foreach>
                     </div>
                 </xar:loop>

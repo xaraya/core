@@ -18,7 +18,7 @@
                 <th><xar:mlstring>Enable hooks from module</xar:mlstring></th>
                 <th><xar:mlstring>All</xar:mlstring></th>
             <xar:foreach in="$itemtypes" value="$itemtype">
-                <th>#$itemtype#</th>
+                <th>#$itemtype['label']#</th>
             </xar:foreach>
             </tr>
             <xar:loop name="$hooklist">
