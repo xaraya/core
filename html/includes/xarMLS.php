@@ -147,10 +147,20 @@ function xarMLSLoadLocaleData($locale = NULL)
     
     // check for locale availability
     $siteLocales = xarMLSListSiteLocales();
-    
+   
+// TODO: figure out why we go through this function for xarModIsAvailable
+//       (this one breaks on upper/lower-case issues, BTW) 
     if (!in_array($locale, $siteLocales)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-        return;
+        if (preg_match('/ISO/',$locale)) {
+            $locale = preg_replace('/ISO/','iso',$locale);
+            if (!in_array($locale, $siteLocales)) {
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+                return;
+            }
+        } else {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+            return;
+        }
     }
     
     if (!isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
