@@ -264,3 +264,4 @@
             <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
         </div>
     </xar:if>
+</div>
