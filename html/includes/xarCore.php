@@ -377,8 +377,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
  */
 function xarCore__shutdown_handler()
 {
-    // Default shutdownhandler for core
-    // i think we could do something here with the
+    // Default shutdownhandlers, nothing here yet,
+    // but i think we should do something here with the
     // connection_aborted() function, signalling that
     // the user prematurely aborted. (by hitting stop or closing browser)
     // Also, the other subsystems can use this for example to clean up
@@ -389,8 +389,6 @@ function xarCore__shutdown_handler()
     // This handler is guaranteed to be registered as the last one, which
     // means that is also guaranteed to run last in the sequence of shutdown
     // handlers, the last statement is guaranteed to be the last statement of Xaraya ;-)
-
-    xarCore_disposeDebugger();
 }
 
 /**
