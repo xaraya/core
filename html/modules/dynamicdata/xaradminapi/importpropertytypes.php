@@ -59,7 +59,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 $propertyfilepath = $PropertiesDir . $propertyfile;
                 
                 // Only Process files, not directories
-                if(!is_file($propertyfilepath) continue;
+                if(!is_file($propertyfilepath)) continue;
                    
                 // Get the name of each file, assumed to be the name of the property
                 // FIXME: <mrb> decouple the classname from the filename someday
