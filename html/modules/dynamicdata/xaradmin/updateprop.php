@@ -9,15 +9,15 @@ function dynamicdata_admin_updateprop()
     // function should be obtained from xarVarCleanFromInput(), getting them
     // from other places such as the environment is not allowed, as that makes
     // assumptions that will not hold in future versions of PostNuke
-    if(!xarVarFetch('objectid',      'isset', $objectid,       , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',         'isset', $modid,          , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype',      'isset', $itemtype,       , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_label',      'isset', $dd_label,       , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_type',       'isset', $dd_type,        , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_default',    'isset', $dd_default,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_source',     'isset', $dd_source,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_status',     'isset', $dd_status,      , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('dd_validation', 'isset', $dd_validation,  , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid',      'isset', $objectid,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',         'isset', $modid,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',      'isset', $itemtype,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_label',      'isset', $dd_label,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_type',       'isset', $dd_type,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_default',    'isset', $dd_default,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_source',     'isset', $dd_source,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_status',     'isset', $dd_status,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_validation', 'isset', $dd_validation,  NULL, XARVAR_DONT_SET)) {return;}
 
 
     // Confirm authorisation code.  This checks that the form had a valid

@@ -14,17 +14,13 @@ function dynamicdata_admin_modifyprop()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    if(!xarVarFetch('itemid',   'isset', $itemid,    , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  , XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('details',  'isset', $details,   , XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'isset', $modid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype', 'isset', $itemtype, 0,    XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
 
-
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
 
 /*
     if (!empty($itemid)) {
