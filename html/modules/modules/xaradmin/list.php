@@ -89,6 +89,7 @@ function modules_admin_list()
     // get other images
     $data['infoimg']    = xarTplGetImage('set1/info.png');
     $data['editimg']    = xarTplGetImage('set1/hooks.png');
+    $data['propimg']    = xarTplGetImage('set1/hooks.png');
 
     $data['listrowsitems'] = array();
     $listrows = array();
@@ -100,6 +101,7 @@ function modules_admin_list()
 
         // we're going to use the module regid in many places
         $thismodid = $mod['regid'];
+        $listrows[$i]['modid'] = $thismodid;
         // if this module has been classified as 'Core'
         // we will disable certain actions
         $modinfo = xarModGetInfo($thismodid);
@@ -154,6 +156,10 @@ function modules_admin_list()
                                     'admin',
                                     'modify',
                                      array( 'id'        => $thismodid));
+        $listrows[$i]['propurl']    = xarModURL('modules',
+                                    'admin',
+                                    'modifyproperties',
+                                     array( 'id'        => $thismodid));
         $listrows[$i]['infourl']    = xarModURL('modules',
                                     'admin',
                                     'modinfo',
@@ -172,6 +178,7 @@ function modules_admin_list()
         $listrows[$i]['displayname']    = $mod['name'];
         $listrows[$i]['version']        = $mod['version'];
         $listrows[$i]['edit']           = xarML('On/Off');
+        $listrows[$i]['prop']           = xarML('Set');
 
         // conditional data
         if($mod['state'] == XARMOD_STATE_UNINITIALISED){

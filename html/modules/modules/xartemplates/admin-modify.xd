@@ -19,6 +19,7 @@
         <xar:else />
             <p><xar:mlstring>Available hooks for </xar:mlstring> #$displayname#&nbsp;&nbsp;
             [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]</p>
+	        <br />
             <table border="1" cellpadding="5" cellspacing="0">
             <tr>
                 <th><xar:mlstring>Enable hooks from module</xar:mlstring></th>
