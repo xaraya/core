@@ -78,11 +78,11 @@ function adminpanels_admin_updateconfig()
     
             // obtain db connection
             list($dbconn) = xarDBGetConn();
-            // $xartable = xarDBGetTables();
-    
+            $xartable = xarDBGetTables();
+            $blockgroupinstancetable= $xartable['block_group_instances'];
             if($menuposition == 'l'){
                 // we want block to show on the left, let's update xar_block_group_instances
-                $query = "UPDATE xar_block_group_instances
+                $query = "UPDATE $blockgroupinstancetable
                         SET xar_group_id ='".xarVarPrepForStore(1)."'
                         WHERE xar_id = ".xarVarPrepForStore(1);
                 $result =& $dbconn->Execute($query);
@@ -90,7 +90,7 @@ function adminpanels_admin_updateconfig()
     
             }elseif($menuposition == 'r'){
                 // we want block to show on the right, let's to update xar_block_group_instances
-                $query = "UPDATE xar_block_group_instances
+                $query = "UPDATE $blockgroupinstancetable
                         SET xar_group_id ='".xarVarPrepForStore(2)."'
                         WHERE xar_id = ".xarVarPrepForStore(1);
                 $result =& $dbconn->Execute($query);
