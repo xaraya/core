@@ -56,7 +56,7 @@ function base_contentblock_info()
 function base_contentblock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "content:$blockinfo[title]:All")) {return;}
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "content:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {

@@ -45,7 +45,7 @@ function base_fincludeblock_info()
 function base_fincludeblock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:All")) {return;}
+    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     if (!is_array($blockinfo['content'])) {
         $blockinfo['content'] = unserialize($blockinfo['content']);

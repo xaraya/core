@@ -42,7 +42,7 @@ function base_phpblock_info()
 function base_phpblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"php:$blockinfo[title]:All")) return;
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"php:$blockinfo[title]:$blockinfo[bid]")) return;
 
     ob_start();
     print eval($blockinfo['content']);

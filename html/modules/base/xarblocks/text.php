@@ -48,7 +48,7 @@ function base_textblock_info()
 function base_textblock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "text:$blockinfo[title]:All")) {return;}
+    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', "text:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {
@@ -133,7 +133,7 @@ function base_textblock_update($blockinfo)
         $now = time();
         $vars['expire'] = $expire + $now;
     }
-    
+
     if (!isset($vars['expire'])) {
         $vars['expire'] = 0;
     }
