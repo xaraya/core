@@ -187,19 +187,18 @@ function adminpanels_init()
         return false;
     }
 
-    /* FIXME: you need to use a real module name here, not some dummy waitingcontent
     // when a module item is deleted (set extrainfo to the module name ?)
     if (!xarModRegisterHook('item', 'delete', 'API',
-                           'adminpanels', 'admin', 'delete')) {
+                           'adminpanels', 'admin', 'deletewc')) {
         return false;
     }
     // when a whole module is removed, e.g. via the modules admin screen
     // (set object ID to the module name !)
     if (!xarModRegisterHook('module', 'remove', 'API',
-                           'adminpanels', 'admin', 'deleteall')) {
+                           'adminpanels', 'admin', 'deletewc')) {
         return false;
     }
-*/
+
     // Initialisation successful
     return true;
 }
