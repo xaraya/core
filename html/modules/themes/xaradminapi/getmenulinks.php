@@ -35,18 +35,6 @@ function themes_adminapi_getmenulinks()
                               'title' => xarML('View the registered template tags.'),
                               'label' => xarML('Template Tags'));
 	}
-	
-	if (xarSecurityCheck('AdminTheme',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('themes',
-                                                  'admin',
-                                                  'release'),
-                              'title' => xarML('View recent release information for certified themes within the last week.'),
-                              'label' => xarML('Certified Releases'));
-    }
-    
-    
-// Security Check
 	if (xarSecurityCheck('AdminTheme',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('themes',

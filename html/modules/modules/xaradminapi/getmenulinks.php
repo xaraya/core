@@ -35,13 +35,6 @@ function modules_adminapi_getmenulinks()
 /*                              'label' => xarML('Toolbox')); */
     }
 
-	if (xarSecurityCheck('EditModules',0)) {
-        // others can see these links
-        $menulinks[] = Array('url'   => xarModURL('modules','admin','release'),
-                             'title' => xarML('View recent release information for certified modules within the last week.'),
-                             'label' => xarML('Certified Releases'));
-    }
-    
     if (empty($menulinks)){
         $menulinks = '';
     }

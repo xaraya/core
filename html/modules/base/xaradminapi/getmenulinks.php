@@ -14,6 +14,9 @@ function base_adminapi_getmenulinks()
         $menuLinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
                              'title' => xarML('View Your PHP Configuration'),
                              'label' => xarML('System'));
+        $menuLinks[] = array('url'   => xarModURL('base','admin','release'),
+                             'title' => xarML('View recent released extensions'),
+                             'label' => xarML('Extension Releases'));
         $menuLinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
                              'title' => xarML('Modify Base Configuration Values'),
                              'label' => xarML('Modify Config'));

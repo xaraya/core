@@ -1,0 +1,25 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><div align="left">
+<h2><xar:mlstring>Recent Extension Releases</xar:mlstring></h2>
+<xar:if condition="empty($warning)">
+	<xar:if condition="!empty($feedcontent)">
+	<ul>
+		<xar:foreach in="$feedcontent" value="$release">
+		<li>
+			<xar:if condition="!empty($release['link'])">
+				<a href="#$release['link']#" target="_BLANK"> #$release['title']# </a>:
+			<xar:else />
+				<b>#$release['title']#</b>:
+			</xar:if>
+			<xar:if condition="!empty($release['description'])">
+				#$release['description']#
+			</xar:if>
+		</li>
+		</xar:foreach>
+	</ul>
+	</xar:if>
+<xar:else />
+	#$warning#
+</xar:if>
+</div>
+</div>
