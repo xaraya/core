@@ -117,8 +117,8 @@ function xarUserLogIn($userName, $password, $rememberMe)
             return;
         } elseif ($userId != XARUSER_AUTH_FAILED) {
             // Someone authenticated us
-    	    break;
-    	}
+            break;
+        }
         // $userId is XARUSER_AUTH_FAILED, try with next auth module
     }
     if ($userId == XARUSER_AUTH_FAILED) {
@@ -249,7 +249,12 @@ function xarUserGetNavigationThemeName()
             }
             $themeName = xarTplGetThemeName();
         }
-        xarSessionSetVar('navigationThemeName', $themeName);
+
+        //Hack to make the install work...
+        //Marco: can you fix this later? Thanks...
+        if ($themeName != 'installer') {
+            xarSessionSetVar('navigationThemeName', $themeName);
+        }
     }
     return $themeName;
 }
