@@ -47,3 +47,4 @@ function news_adminapi_buildCalendarMenu($args) //$automated, &$year, &$day, &$m
 
     return $out;
 }
+?>

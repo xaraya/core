@@ -21,7 +21,7 @@
               <xar:else />
                 <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" /> 
               </xar:if>
-	      <label for="dd_check_#$field['id']#">#$field['label']#</label><br/>
+              <label for="dd_check_#$field['id']#">#$field['label']#</label><br/>
             </xar:foreach>
           </xar:if>
         </td>
