@@ -1,6 +1,6 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-    <xar:categories-navigation layout="trails" showchildren="1" module="$modname" itemtype="$itemtype" catid="$catid" />
+    <xar:template file="catnavigation"/>
 </xar:if>
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table border="0" cellspacing="0" cellpadding="4">
