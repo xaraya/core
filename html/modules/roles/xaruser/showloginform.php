@@ -16,9 +16,22 @@
  */
 function roles_user_showloginform()
 {
-    // Security check
-    if (!xarSecurityCheck('ViewRoles')) return;
-    $data['loginlabel'] = xarML('Log In');
-    return $data;
+    #redirecturl
+    extract($args);
+    if (!isset($redirecturl)) $redirecturl = 'index.php';
+
+    xarVarFetch('redirecturl', 'str', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
+
+
+    if (!xarUserIsLoggedIn()) {
+      // Security check
+      if (!xarSecurityCheck('ViewRoles')) return;
+      $data['loginlabel'] = xarML('Log In');
+
+
+      return $data;
+    } else {
+      xarResponseRedirect($data['redirecturl']);
+    }// if
 }
 ?>

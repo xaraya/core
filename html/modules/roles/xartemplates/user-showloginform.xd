@@ -13,7 +13,7 @@
             <input type="text" name="uname" id="username" maxlength="255" size="20" />
         </td>
         <td>
-		&nbsp;&nbsp;
+    &nbsp;&nbsp;
         </td>
     </tr>
     <tr>
@@ -24,7 +24,7 @@
              <input type="password" name="pass" id="password" maxlength="64" size="20" />
         </td>
         <td>
-			<a href="#xarModURL('roles', 'user', 'lostpassword')#"><xar:mlstring>Forget your password?</xar:mlstring></a>
+      <a href="#xarModURL('roles', 'user', 'lostpassword')#"><xar:mlstring>Forget your password?</xar:mlstring></a>
         </td>
     </tr>
     <tr>
@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">
-			<input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
+      <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#" />
             <input type="submit" value="#$loginlabel#" />
         </td>
     </tr>
