@@ -73,6 +73,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             }
             $value = strtotime($value);
         }
+        if (!isset($dateformat)) {
+            $dateformat = '%Y-%m-%d %H:%M:%S';
+        }
 
         // include calendar javascript
         xarModAPIFunc('base','javascript','modulefile',
@@ -84,13 +87,14 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output .= '<br />';
 */
         $output = '';
-        $timeval = xarLocaleFormatDate('%Y-%m-%d %H:%M:%S', $value);
+        $timeval = xarLocaleFormatDate($dateformat, $value);
+        $jsID = str_replace(array('[', ']'), '_', $id);
         $output .= '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.$timeval.'" size="20" maxlength="19" />
-<a href="javascript:'.$id.'_cal.popup();"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date" /></a>
+<a href="javascript:'.$jsID.'_cal.popup();"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date" /></a>
 <script language="JavaScript">
-var '.$id.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input"), "'.xarServerGetBaseURI().'");
-'.$id.'_cal.year_scroll = true;
-'.$id.'_cal.time_comp = true;
+var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input"), "'.xarServerGetBaseURI().'");
+'.$jsID.'_cal.year_scroll = true;
+'.$jsID.'_cal.time_comp = true;
 </script>';
         if (!empty($this->invalid)) {
             $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
@@ -114,7 +118,10 @@ var '.$id.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input")
             }
             $value = strtotime($value);
         }
-        return xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $value);
+        if (!isset($dateformat)) {
+            $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
+        }
+        return xarLocaleFormatDate($dateformat, $value);
     }
 
 }

@@ -14,12 +14,17 @@
 function dynamicdata_userapi_handleOutputTag($args)
 {
     if (!empty($args['property'])) {
-        if (isset($args['value'])) {
-            if (is_numeric($args['value']) || substr($args['value'],0,1) == '$') {
-                return 'echo '.$args['property'].'->showOutput('.$args['value'].'); ';
-            } else {
-                return 'echo '.$args['property'].'->showOutput("'.$args['value'].'"); ';
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'property') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
             }
+            return 'echo '.$args['property'].'->showOutput(array('.join(', ',$parts).')); ';
         } else {
             return 'echo '.$args['property'].'->showOutput(); ';
         }
