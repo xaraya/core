@@ -6,8 +6,6 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @TODO: provide admin functions for this block - not site global settings
- * @TODO: this script seems to be the same code repeated over and over - let's remove that duplication
  * 
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
@@ -111,8 +109,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 
     // Set up like it is, means we are forced to use global menu style settings site-wide.
     switch(strtolower($vars['menustyle'])){
-        case 'byname':
-            // display by name
+        case 'byname': // display by name
             foreach($mods as $mod) {
                 $modname = $mod['name'];
                 $labelDisplay = $mod['displayname'];
@@ -144,7 +141,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                     // scan array and prepare the links
                     if (!empty($menulinks)) {
                         foreach($menulinks as $menulink) {
-                            // please note how we place the marker against active function link
                             $adminmods[$modname]['indlinks'][] = array(
                                 'adminlink'     => $menulink['url'],
                                 'adminlabel'    => $menulink['label'],
@@ -152,10 +148,7 @@ function adminpanels_adminmenublock_display($blockinfo)
                                 'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
-                    } else {
-                        // not sure if we need this
-                        $indlinks = array();
-                    }
+                    } 
                 } // if
             } // foreach
             
@@ -164,8 +157,7 @@ function adminpanels_adminmenublock_display($blockinfo)
             break;
 
         default:
-        case 'bycat':
-            // sort by categories
+        case 'bycat': // sort by categories
 
             // check if we need to update the table, return error if check has failed
             if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')) {return;}
@@ -214,9 +206,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                                     'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                                 );
                             }
-                        }else{
-                            // not sure if we need this
-                            $indlinks= array();
                         }
                     } else {
                        // Why is this needed?
@@ -225,10 +214,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                 } //inner foreach
             } // outer foreach
                 
-            if (empty($indlinks)){
-                $indlinks = '';
-            }
-
             $template = 'verticallistbycats';
             $data = array(
                 'catmods'       => $catmods
