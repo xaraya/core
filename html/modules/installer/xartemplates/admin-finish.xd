@@ -8,6 +8,10 @@
       <br /><br />
 	    <strong>Security Hint:</strong> You are strongly advised to remove write access to html/var/config.system.php once the install has completed. This can be done on UNIX using the command "<code>chmod 444 config.system.php</code>" from within the html/var directory.
       <br /><br />
+            If you are feeling even more security conscious you could remove read access from those who don't need it: (substitute "apache" for the group your webserver runs as, probably one of apache, web, www or www-data) <br/>
+		<code>chgrp apache config.system.php</code><br/>
+                <code>chmod 440 config.system.php</code>
+      <br /><br />
 	    <a href=index.php>Launch the site!</a>
     </span>
   </div><br /><br />
