@@ -27,7 +27,7 @@
 			</tr>
             <tr>
                 <td colspan="2" style="text-align: center;"><br />
-                    <input type="submit" value="#$confirm#" align="middle" />
+                    <input type="submit" value="#$confirm#" />
                 </td>
             </tr>
 		</table>
