@@ -49,6 +49,13 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $loopName ='$loop_'.$loopCounter;
         $idpart ='';
         if(isset($id)) {
+            // If id is set, it must match the name production from xml spec, check that here
+            // <mrb> I have a complete class for this locally, which checks agains the xml spec, 
+            // lets do it simple for now, just make sure it doesnt start with a number. (bug 4050)
+            if(is_numeric(substr($id,0,1))) {
+                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'The id attribute must start with a letter',$this);
+                return;
+            }
             // Make the id property point to the same loop so loop:id:index etc. works too
             $idpart = $loopName.'->'.$id.'='.$loopName.'; $loop->'.$id.'=& '.$loopName.'->'.$id.';';
         }
