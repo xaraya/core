@@ -5,9 +5,6 @@
         </th>
     </tr>
 </table>
-        </td>
-    </tr>
-</table>
 
 <xar:if id="title_condition" condition="!empty($base_statusmsg)">
 <div align="center"><h2><xar:var scope="session" name="$base_statusmsg" /></h2><br />
