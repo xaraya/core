@@ -12,8 +12,16 @@
 
 <table border="0" width="100%" cellpadding="2">
     <tr>
-        <td  colspan="6">
+        <td  colspan="1">
 			&nbsp;
+		</td>
+        <td  colspan="5" align="right">
+            <b>
+            <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">#$pname#</a>
+			</b> 
+			&nbsp;&nbsp;
+			<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"
+			 title="Show this User's Privileges"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 		</td>
     </tr>
 </table>
