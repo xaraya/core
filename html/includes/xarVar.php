@@ -185,8 +185,18 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
 
+    if ($flags & XARVAR_DONT_SET) {
+        if (isset($value)) {
+            $oldValue = $value;
+        } else {
+            $oldValue = null;
+        }
+    }
+
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
+
+// FIXME: this flag doesn't seem to work !?
     //The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $value = xarRequestGetVar($name, $allowOnlyMethod);
@@ -202,26 +212,37 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     if (xarCurrentErrorType()) {return;} //Throw back
 
-    // Check prep of $value
-    if ($prep & XARVAR_PREP_FOR_DISPLAY) {
-       $value = xarVarPrepForDisplay($value);
-    }
+    if (!$result) {
+    // CHECKME:  even for the XARVAR_DONT_SET flag !?
+        // if you set a non-null default value, assume you want to use it here
+        if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
+            $value = $defaultValue;
 
-    if ($prep & XARVAR_PREP_FOR_HTML) {
-        $value = xarVarPrepHTMLDisplay($value);
-    }
+        // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
+        } elseif (($flags & XARVAR_DONT_SET) && isset($oldValue) && xarVarValidate($validation, $oldValue, $supress)) {
+            $value = $oldValue;
 
-    if ($prep & XARVAR_PREP_FOR_STORE) {
-        $value = xarVarPrepForStore($value);
-    }
+        // make sure we don't pass any invalid values back
+        } else {
+            $value = null;
+        }
+    } else {
+        // Check prep of $value
+        if ($prep & XARVAR_PREP_FOR_DISPLAY) {
+            $value = xarVarPrepForDisplay($value);
+        }
 
-    if ($prep & XARVAR_PREP_TRIM) {
-        $value = trim($value);
-    }
+        if ($prep & XARVAR_PREP_FOR_HTML) {
+            $value = xarVarPrepHTMLDisplay($value);
+        }
 
-    if ((!$result) &&
-        (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue))) {
-        $value = $defaultValue;
+        if ($prep & XARVAR_PREP_FOR_STORE) {
+            $value = xarVarPrepForStore($value);
+        }
+
+        if ($prep & XARVAR_PREP_TRIM) {
+            $value = trim($value);
+        }
     }
 
     return true;
