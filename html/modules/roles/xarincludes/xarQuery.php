@@ -365,6 +365,14 @@ class xarQuery
                                   'op' => 'like');
         return $key;
     }
+    function in($field1,$field2)
+    {
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'in');
+        return $key;
+    }
     function regex($field1,$field2)
     {
         $key = $this->_addcondition();
@@ -523,6 +531,7 @@ class xarQuery
             $sqlfield = $condition['field2'];
             $condition['op'] = $condition['op'] == 'join' ? '=' : $condition['op'];
         }
+        if ($condition['op'] == 'in') $sqlfield = '(' . $sqlfield . ')';
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
 
@@ -719,6 +728,20 @@ class xarQuery
     {
         $this->fields = array();
     }
+    function clearfield($x)
+    {
+        $count = count($this->fields);
+        for ($i=0;$i<$count;$i++) {
+            if (($this->fields[$i]['name'] == $x)) unset($this->fields[$i]);
+            elseif (isset($this->fields[$i]['alias']) && ($this->fields[$i]['alias'] == $x))
+            unset($this->fields[$i]);
+
+        }
+    }
+    function clearconditions()
+    {
+        $this->conditions = array();
+    }
     function result()
     {
         return $this->result;
@@ -779,6 +802,10 @@ class xarQuery
             $this->sorts = array();
             $this->addorder($x,$y);
         }
+    }
+    function settype($x = 'SELECT')
+    {
+        $this->type = $x;
     }
     function setstartat($x = 0)
     {

@@ -71,10 +71,10 @@ $schemas = array();
  * @param   string name
  * @return  bool
  */
-function xarMakeGroup($name)
+function xarMakeGroup($name,$uname='')
 {
     $roles = new xarRoles();
-    return $roles->makeGroup($name);
+    return $roles->makeGroup($name,$uname);
 }
 
 /**

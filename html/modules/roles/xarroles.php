@@ -380,25 +380,24 @@ class xarRoles
      * @param string $
      * @return boolean
      * @throws none
-     * @todo create exception handling for bad input
      */
-    function makeGroup($name)
+    function makeGroup($name,$uname='')
     {
+        if ($uname == '') $uname = $name;
+
         // Confirm that this group or user does not already exist
-        $query = "SELECT COUNT(*) FROM $this->rolestable
-                  WHERE xar_name = '$name'";
+        $q = new xarQuery('SELECT',$this->rolestable,'COUNT(*)');
+        $q->eq('xar_name',$name);
+        $q->ne('xar_state',ROLES_STATE_DELETED);
+        if (!$q->run()) return;
 
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
-
-        list($count) = $result->fields;
-        if ($count == 1) {
+        $row = $q->row();
+        if ($row['COUNT(*)'] == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
             xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             return false;
         }
         // create an ID for the group
@@ -407,10 +406,11 @@ class xarRoles
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
+        $unameprep = xarVarPrepForStore($uname);
         $dateprep = xarVarPrepForStore($createdate);
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES ($nextIdprep, '$nameprep', 1, '$nameprep', '$dateprep')";
+                  VALUES ($nextIdprep, '$nameprep', 1, '$unameprep', '$dateprep')";
         if (!$this->dbconn->Execute($query)) return;
         // done
         return true;
@@ -611,10 +611,20 @@ class xarRole
     {
         // bail if the purported parent is not a group.
         if ($this->isUser()) return false;
+
+        $q = new xarQuery('SELECT',$this->rolememberstable);
+        $q->eq('xar_uid',$member->getID());
+        $q->eq('xar_parentid',$this->getID());
+        if (!$q->run()) return;
+        // This relationship already exists. Move on
+        if ($q->row() != array()) return true;
+
         // add the necessary entry to the rolemembers table
-        $query = "INSERT INTO $this->rolememberstable
-                VALUES (" . $member->getID() . "," . $this->getID() . ")";
-        if (!$this->dbconn->Execute($query)) return;
+        $q = new xarQuery('INSERT',$this->rolememberstable);
+        $q->addfield('xar_uid',$member->getID);
+        $q->addfield('xar_parentid',$this->getID);
+        if (!$q->run()) return;
+
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
@@ -678,14 +688,11 @@ class xarRole
     function update()
     {
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $tablefields = array(
-            array('name' => 'xar_name',     'value' => $this->name),
-            array('name' => 'xar_type',     'value' => $this->type),
-            array('name' => 'xar_uname',    'value' => $this->uname),
-            array('name' => 'xar_email',    'value' => $this->email),
-            array('name' => 'xar_state',    'value' => $this->state)
-        );
-        $q->addfields($tablefields);
+        $q->addfield('xar_name',$this->name);
+        $q->addfield('xar_type',$this->type);
+        $q->addfield('xar_uname',$this->uname);
+        $q->addfield('xar_email',$this->email);
+        $q->addfield('xar_state',$this->state);
         if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
         $q->eq('xar_uid',$this->getID());
 
@@ -735,7 +742,7 @@ class xarRole
 
         $deleted = xarML('deleted');
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . xarLocaleGetFormattedDate());
+        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . mktime());
         $q->addfield('xar_state',ROLES_STATE_DELETED);
         $q->eq('xar_uid',$this->getID());
 
