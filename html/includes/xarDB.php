@@ -132,8 +132,7 @@ function xarDBLoadTableMaintenanceAPI()
  * Get the database host
  *
  * @access public
- * @global xarDb_systemArgs array
- * @return xarDB_systemArgs['databaseHost'] string 
+ * @return string 
  */
 function xarDBGetHost()
 {
@@ -144,8 +143,7 @@ function xarDBGetHost()
  * Get the database type
  *
  * @access public
- * @global xarDB_systemArgs
- * @return xarDB_systemArgs['databaseType'] string
+ * @return string
  */
 function xarDBGetType()
 {
@@ -156,8 +154,7 @@ function xarDBGetType()
  * Get the database name
  *
  * @access public
- * @global xarDB_systemArgs
- * @return xarDB_systemArgs['databaseName'] string 
+ * @return string 
  */
 function xarDBGetName()
 {
@@ -168,8 +165,7 @@ function xarDBGetName()
  * Get the system table prefix
  *
  * @access public
- * @global xarDB_systemArgs
- * @return xarDB_systemArgs['systemTablePrefix'] string database name
+ * @return string
  */
 function xarDBGetSystemTablePrefix()
 {
@@ -180,8 +176,7 @@ function xarDBGetSystemTablePrefix()
  * Get the site table prefix
  *
  * @access public
- * @global xarDB_systemArgs
- * @return string xarDB_systemArgs['siteTablePrefix']database name
+ * @return string
  */
 function xarDBGetSiteTablePrefix()
 {

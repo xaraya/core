@@ -11,7 +11,7 @@
  * @author Marco Canini m.canini@libero.it
  */
 
-/*
+/**
  * Variables package defines
  */
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);
@@ -780,5 +780,4 @@ function xarVar__getAllowedTags($level)
     }
     return array();
 }
-
 ?>
