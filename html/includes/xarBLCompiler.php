@@ -125,7 +125,7 @@ class xarTpl__Compiler extends xarTpl__CompilerError
     {
         static $instance = NULL;
         if(!isset($instance)) {
-            return new xarTpl__Compiler();
+            $instance = new xarTpl__Compiler();
         }
         return $instance;
         
