@@ -123,7 +123,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
 	//The FLAG here, stops xarVarFetch from reusing the variable if already present
-    if (!isset($value) || ($flag & XARVAR_DONT_REUSE)) {
+    if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
 
         if ($inputValue === NULL) {
