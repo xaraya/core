@@ -45,7 +45,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     {
         if (!isset($value)) {
             $value = $this->value;
-        } elseif(is_array($value)) {
+        } elseif (is_array($value)) {
             $value = serialize($value);
         }
         if (!empty($value) && strlen($value) > $this->maxlength) {
@@ -68,7 +68,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     {
         extract($args);
         $data = array();
-
+        
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
@@ -81,23 +81,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-        if( isset($value) )
-        {
-            $data['value'] = xarVarPrepForDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepForDisplay($this->value);
-        }
-        
-        //Desc: Allows the creation of links to submitting pubtypes, where the default value is passed in via the link
-        //TODO: This functionality should be pushed farther up the work flow into DD itself
-        if (empty($data['value'])) {
-            if (xarVarFetch($this->name, 'str',  $fromFetch, "", XARVAR_NOT_REQUIRED))
-            {
-                $data['value'] = $fromFetch;
-            }
-        }
-
-        
 /*        return '<input type="text"'.
                ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
@@ -108,15 +91,16 @@ class Dynamic_TextBox_Property extends Dynamic_Property
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
 */
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"'  : '';
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
+            $data['name']     = $name;
+            $data['id']       = $id;
+            $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+            $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
+            $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+            $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+            $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="textbox";
-        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+      $template="textbox";
+      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
     }
 
     function showOutput($args = array())

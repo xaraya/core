@@ -107,6 +107,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         extract($args);
         $data=array();
 
+        if (!isset($value)) {
+            $data['value'] = $this->value;
+        } else {
+            $data['value'] = $value;
+        }
+        if (!isset($options) || count($options) == 0) {
+            $data['options'] = $this->options;
+        } else {
+            $data['options'] = $options;
+        }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
         } else {
@@ -117,26 +127,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         } else {
             $data['id']= $id;
         }
-        
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-        
-        //Desc: Allows the creation of links to submitting pubtypes, where the default value is passed in via the link
-        //TODO: This functionality should be pushed farther up the work flow into DD itself
-        if (empty($data['value'])) {
-            if (xarVarFetch($data['name'], 'str',  $fromFetch, "", XARVAR_NOT_REQUIRED))
-            {
-                $data['value'] = $fromFetch;
-            }
-        }
-        
-        if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->options;
-        }
-
         /*$out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
@@ -160,8 +150,8 @@ class Dynamic_Select_Property extends Dynamic_Property
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         */
 
-        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
+        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
 
         $template="dropdown";
@@ -171,7 +161,7 @@ class Dynamic_Select_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
