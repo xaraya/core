@@ -167,6 +167,9 @@ function roles_init()
 
 function roles_activate()
 {
+    // only go through this once
+    if (xarModGetVar('roles','rolesperpage')) return true;
+
 	// Set up an initial value for module variables.
     xarModSetVar('roles', 'rolesperpage', 20);
     xarModSetVar('roles', 'allowregistration', 1);
@@ -375,7 +378,7 @@ Password : %%pass%%
  * @returns bool
  * @raise DATABASE_ERROR
  */
-function roless_upgrade($oldVersion)
+function roles_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch ($oldVersion) {
