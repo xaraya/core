@@ -13,7 +13,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * Javascript logger
@@ -52,12 +52,15 @@ class xarLogger_javascript extends xarLogger
 
     function notify($message, $level)
     {
-        static $first = true;
+        // Abort early if the level of priority is above the maximum logging level.
+        if (!$this->doLogLevel($level)) return false;
 
-        if ($first) {
+      static $first = true;
+
+      if ($first) {
             xarTplAddJavaScript('head', 'code', $this->getCommonCode());
             $first = false;
-        }
+      }
 
         $code = "if (debugWindow) {\n".
                 "    debugWindow.document.write(\"".$this->getTime().

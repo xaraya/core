@@ -14,7 +14,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/simple.php');
+include_once ('./includes/log/loggers/simple.php');
 
 /**
  * HTMLLoggger

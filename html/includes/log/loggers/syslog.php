@@ -16,7 +16,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * The Log_syslog class is a concrete implementation of the Log::
@@ -128,10 +128,7 @@ class xarLogger_syslog extends xarLogger
      */
     function notify($message, $level)
     {
-        /* Abort early if the priority is above the maximum logging level. */
-        if ($level > $this->_maxLevel) {
-            return false;
-        }
+        if (!$this->doLogLevel($level)) return false;
 
         if (!$this->_opened) {
             $this->open();

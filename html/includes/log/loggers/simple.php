@@ -52,7 +52,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * Simple logging class
@@ -170,9 +170,7 @@ class xarLogger_simple extends xarLogger
     function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
-        if ($level > $this->_maxLevel) {
-            return false;
-        }
+        if (!$this->doLogLevel($level)) return false;
 
         // Add to loglines array
         $this->_buffer .= $this->_formatMessage($message, $level);
@@ -208,6 +206,8 @@ class xarLogger_simple extends xarLogger
             fwrite($this->_fp, $this->_buffer);
             $this->_buffer = '';
         }
+        
+        if (!$this->_closeLogfile()) return false;
     }
 
     /**

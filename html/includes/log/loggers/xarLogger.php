@@ -16,12 +16,11 @@ class xarLogger
 {
 
     /**
-    * The maximum level of logging.
+    * The level of logging.
     *
-    * This will be changed to a fixed level later on
-    * look at xarVar.php defines, they define the level of logging here.
+    * The level of the messages which will be logged.
     */
-    var $_maxLevel;
+    var $_logLevel;
 
     /**
     * Identity of the logger.
@@ -48,7 +47,7 @@ class xarLogger
      */
     function setConfig(&$conf) 
     {
-        $this->_maxLevel = $this->stringToLevel($conf['maxLevel']);
+        $this->_logLevel = $conf['logLevel'];
 
         /* If no identity is given yet to this page view, then create it */
         if (!isset($GLOBALS['_xar_logging_ident'])) {
@@ -65,10 +64,24 @@ class xarLogger
     }
 
     /**
+     * Returns if the logger should log the given level or not.
+     *
+     * @param int $level        A XARLOG_LEVEL_* integer constant mix.
+     * @return boolean         Should it be logger or not
+     */
+    function doLogLevel($level)
+    {
+        if ($level & $this->_logLevel) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the string representation of a XARLOG_LEVEL_* integer constant.
      *
      * @param int $level        A XARLOG_LEVEL_* integer constant.
-     *
      * @return string           The string representation of $level.
      */
     function levelToString($level)
@@ -87,29 +100,6 @@ class xarLogger
         return $levels[$level];
     }
 
-    /**
-     * Returns the defined integer representation of a string from the configuration.
-     *
-     * @param string $string   One of the priority level strings.
-     *
-     * @return string           The string representation of $level.
-     */
-    function stringToLevel($string)
-    {
-        static $strings = array (
-            'EMERGENCY' => XARLOG_LEVEL_EMERGENCY,
-            'ALERT'     => XARLOG_LEVEL_ALERT,
-            'CRITICAL'  => XARLOG_LEVEL_CRITICAL,
-            'ERROR'     => XARLOG_LEVEL_ERROR,
-            'WARNING'   => XARLOG_LEVEL_WARNING,
-            'NOTICE'    => XARLOG_LEVEL_NOTICE,
-            'INFO'      => XARLOG_LEVEL_INFO,
-            'DEBUG'     => XARLOG_LEVEL_DEBUG
-        );
-
-        return $strings[$string];
-    }
-    
     function getTime()
     {
         $microtime = microtime();

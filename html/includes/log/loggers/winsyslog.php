@@ -14,7 +14,7 @@
  * Include the base class
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * Class to handle winsys logggin

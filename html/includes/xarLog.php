@@ -20,9 +20,7 @@
 /**
  * Logging package defines
  */
-//<nuncanada>These defines are useless if logging is not set up
-// Didnt take them out, because it would be 'ugly' to make
-// function xarLogMessage($message, $level = 255) 
+
 define('XARLOG_LEVEL_EMERGENCY', 1);
 define('XARLOG_LEVEL_ALERT',     2);
 define('XARLOG_LEVEL_CRITICAL',  4);
@@ -37,37 +35,51 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
 
     $GLOBALS['xarLog_loggers'] = array();
 
-    //<nuncanada>Can we change the config file to accomodate multiple loggers?
+    $logConfigFile = xarCoreGetVarDirPath() . '/cache/config.log.php';
 
-    $loggerName = $args['loggerName'];
-    $loggerArgs = $args['loggerArgs'];
+    $xarLogConfig = array();
 
-    //This makes the level sensitivity an option of the logger
-    //So later we will be able to add a logger for everything in a place
-    //And set up a mailer logger for some kind of bigger problems, alerting devs...
-    //That would could be even default, giving us back info for fixing bugs on time :)
-    // We could have our own Talkback feature :)
-    if (!isset($loggerArgs['maxLevel'])) {
-        $loggerArgs['maxLevel'] = $args['level'];
-    }
-
-    // If someone doesnt want logging, then dont event load any code.
-    if ($loggerName != 'dummy') {
-
-        if (!include_once ('./includes/loggers/'.xarVarPrepForOS($loggerName).'.php')) {
-            xarCore_die('xarLog_init: Unable to load driver for logging: '.$loggerName);
+    if (file_exists($logConfigFile)) {
+        if (!include_once ($logConfigFile)) {
+            xarCore_die('xarLog_init: Log configuration file is invalid!');
         }
 
-        $loggerName = 'xarLogger_'.$loggerName;
+    //FIXME: This fallback should disappear some time after the logconfig module is consolidated 
+    } elseif (isset($args['loggerName']) && ($args['loggerName'] != NULL)) {
+        //Fallback for the older configuration within the config.php
+        
+        // If someone doesnt want logging, then dont event load any code.
+        if ($args['loggerName'] == 'dummy') {
+            //Do nothing
+        } else {
+            if (!isset($args['loggerArgs']['maxLevel'])) {
+                $args['loggerArgs']['maxLevel'] = $args['level'];
+            }
+            
+            //Lazy load these functions... With php5 this will be easier.
+            //Encapsulate core libraries in classes and let __call work lazy loading
+            include_once('includes/log/functions/stringtolevel.php');
+            $args['loggerArgs']['logLevel'] = 2 * (xarLog__stringToLevel($args['loggerArgs']['maxLevel'])) - 1;
 
-        if (!$observer = new $loggerName()) {
-            xarCore_die('xarLog_init: Unable to load driver class for logging: '.$loggerName);
+            $xarLogConfig[] = array('type'    => $args['loggerName'],
+                                                      'config' => $args['loggerArgs']);
         }
-
-        $observer->setConfig($loggerArgs);
-
-        $GLOBALS['xarLog_loggers'][] = &$observer;
+    } else {
+        //Fallback mechanism to allow some logging in important cases when
+        //the user might now have logging yet installed, or for some reason we
+        //should be able to have a way to get error messages back => installation?!
+        $logFile = xarCoreGetVarDirPath() . '/logs/log.html';
+        if (file_exists($logFile)) {
+            $xarLogConfig[] = array('type' => 'html',
+                                                     'config' =>array('fileName' => $logFile,
+                                                                                  'logLevel'  => (2 * XARLOG_LEVEL_DEBUG -1)));
+        }
     }
+
+    // If none of these => do nothing.
+     foreach ($xarLogConfig as $logger) {
+         xarLog__add_logger($logger['type'], $logger['config']);
+     }
 
     // Subsystem initialized, register a shutdown function
     register_shutdown_function('xarLog__shutdown_handler');
@@ -82,6 +94,8 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
  */
 function xarLog__shutdown_handler()
 {
+     xarLogMessage("xarLog shutdown handler.");
+    
     // If the debugger was active, we can dispose it now.
     if($GLOBALS['xarDebug'] & XARDBG_SQL) {
         xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
@@ -93,6 +107,23 @@ function xarLog__shutdown_handler()
         $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
         xarLogMessage("Response was served in $totalTime seconds.");
     }
+}
+
+function xarLog__add_logger($type, $config_args)
+{
+    if (!include_once ('./includes/log/loggers/'.xarVarPrepForOS($type).'.php')) {
+        xarCore_die('xarLog_init: Unable to load driver for logging: '.$type);
+    }
+
+    $type = 'xarLogger_'.$type;
+
+     if (!$observer = new $type()) {
+        xarCore_die('xarLog_init: Unable to instanciate class for logging: '.$type);
+     }
+
+      $observer->setConfig($config_args);
+
+      $GLOBALS['xarLog_loggers'][] = &$observer;
 }
 
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) 
@@ -109,109 +140,11 @@ function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
+
+    //Lazy load these functions... With php5 this will be easier.
+    //Encapsulate core libraries in classes and let __call work lazy loading
+    include_once('var/log/functions/dumpvariable.php');
     xarLogMessage(xarLog__dumpVariable($args),$level);
-}
-
-
-/**
- *  Helper function for variable logging
- *
- * @todo This function came from logger api in base module, which is
- *       a no go in this subsystem, as the module subsystem may not exist
- *       I copied the literal function in here.
- * FIXME: this needs to be done by the logger classes in the loggers subdirectory
- *
- */
-function xarLog__dumpVariable ($array)
-{
-
-    static $depth = 0;
-
-    // $var, $name, $classname and $format
-    extract($array);
-
-    if ($depth > 32) {
-        return 'Recursive Depth Exceeded';
-    }
-    
-    if ($depth == 0) {
-        $blank = '';
-    } else {
-        $blank = str_repeat(' ', $depth);
-    }
-    $depth += 1;
-    
-    $TYPE_COLOR = "#FF0000";
-    $NAME_COLOR = "#0000FF";
-    $VALUE_COLOR = "#999900";
-    
-    $str = '';
-    
-    if (isset($name)) {
-        if ($format == 'html') {
-            $str = "<span style=\"color: $NAME_COLOR;\">".$blank.'Variable name: <b>'.
-                htmlspecialchars($name).'</b></span><br/>';
-        } else {
-            $str = $blank."Variable name: $name\n";
-        }
-    }
-    
-    $type = gettype($var);
-    if (is_object($var)) {
-        $args = array('name'=>$name, 'var'=>get_object_vars($var), 'classname'=>get_class($var), 'format'=>$format);
-        // RECURSIVE CALL
-        $str = xarLog__dumpVariable($args);
-    } elseif (is_array($var)) {
-        
-        if (isset($classname)) {
-            $type = 'class';
-        } else {
-            $type = 'array';
-        }
-        
-        if ($format == 'html') {
-            $str .= "<span style=\"color: $TYPE_COLOR;\">".$blank."Variable type: $type</span><br/>";
-        } else {
-            $str .= $blank."Variable type: $type\n";
-        }
-        
-        if ($format == 'html') {
-            $str .= '{<br/><ul>';
-        } else {
-            $str .= $blank."{\n";
-        }
-        
-        foreach($var as $key => $val) {
-            $args = array('name'=>$key, 'var'=>$val, 'format'=>$format);
-            // RECURSIVE CALL
-            $str .= xarLog__dumpVariable($args);
-        }
-        
-        if ($format == 'html') {
-            $str .= '</ul>}<br/><br/>';
-        } else {
-            $str .= $blank."}\n\n";
-        }
-    } else {
-        if ($var === NULL) {
-            $var = 'NULL';
-        } else if ($var === false) {
-            $var = 'false';
-        } else if ($var === true) {
-            $var = 'true';
-        }
-        if ($format == 'html') {
-            $str .= "<span style=\"color: $TYPE_COLOR;\">".$blank."Variable type: $type</span><br/>";
-            $str .= "<span style=\"color: $VALUE_COLOR;\">".$blank.'Variable value: "'.
-                htmlspecialchars($var).'"</span><br/><br/>';
-        } else {
-            $str .= $blank."Variable type: $type\n";
-            $str .= $blank."Variable value: \"$var\"\n\n";
-        }
-    }
-    
-    $depth -= 1;
-    return $str;
 }
 
 ?>

@@ -16,7 +16,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * The error_log class is an implementation of the xarLoggger
@@ -93,10 +93,7 @@ class xarLogger_error_log extends xarLogger
      */
     function notify($message, $level)
     {
-        /* Abort early if the priority is above the maximum logging level. */
-        if ($level > $this->_maxLevel) {
-            return false;
-        }
+        if (!$this->doLogLevel($level)) return false;
 
         $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
             $this->_ident, $this->levelToString($level), $message);

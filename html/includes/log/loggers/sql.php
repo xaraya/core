@@ -14,7 +14,7 @@
  * Include the base class
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 // Modified from the original by the Xaraya Team
 
 /**
@@ -87,8 +87,7 @@ class xarLogger_sql extends xarLogger
      */
     function notify($message, $priority)
     {
-        /* Abort early if the priority is above the maximum logging level. */
-        if ($priority > $this->_maxLevel) return;
+        if (!$this->doLogLevel($level)) return false;
 
         /* Build the SQL query for this log entry insertion. */
         $id = $this->_dbconn->GenId('log_id');

@@ -13,7 +13,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * MozJSConsoleLogger
@@ -49,6 +49,8 @@ class xarLogger_mozilla extends xarLogger
     */
     function notify($message, $level)
     {
+        if (!$this->doLogLevel($level)) return false;
+
         static $commoncodeinserted = false;
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
         // it should be done with a signed script eventually, but this is rather complex

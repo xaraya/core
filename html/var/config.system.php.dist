@@ -19,15 +19,7 @@ $systemConfiguration['DB.TablePrefix'] = 'xar';
 // 1 = encoded
 $systemConfiguration['DB.Encoded'] = '0';
  
-/* Logger Options
- * The following setup will enable automatic logging:
- * $systemConfiguration['Log.LogLevel'] = 'DEBUG';
- * $systemConfiguration['Log.LoggerName'] = 'simple';
- * $systemConfiguration['Log.LoggerArgs'] = array('fileName' => 'var/logs/log.txt');
- */
-$systemConfiguration['Log.LogLevel'] = 'DEBUG';
-$systemConfiguration['Log.LoggerName'] = 'dummy';
-$systemConfiguration['Log.LoggerArgs'] = array();
+/* For Logging: Use the logconfig module */
 
 /*
  * if you set this to true the core will be able to

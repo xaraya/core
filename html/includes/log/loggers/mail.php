@@ -24,7 +24,7 @@
  * Include the base file
  *
  */
-include_once ('./includes/loggers/xarLogger.php');
+include_once ('./includes/log/loggers/xarLogger.php');
 
 /**
  * Mail logger
@@ -152,10 +152,7 @@ class xarLog_mail extends xarLogger
      */
     function notify($message, $level)
     {
-        /* Abort early if the priority is above the maximum logging level. */
-        if ($level > $this->_maxLevel) {
-            return false;
-        }
+        if (!$this->doLogLevel($level)) return false;
 
         if (!$this->_opened) {
             $this->open();
