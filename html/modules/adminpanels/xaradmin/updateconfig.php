@@ -45,44 +45,35 @@ function adminpanels_admin_updateconfig()
     // enable or disable overviews
     if(!xarVarFetch('overview', 'isset', $overview, NULL, XARVAR_DONT_SET)) {return;}
 
-    // which form is this data coming from (we have more than one) - lets find out
-    if(!xarVarFetch('formname', 'isset', $formname, NULL, XARVAR_DONT_SET)) {return;}
-
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
 
-    if($formname == 'adminmenu'){
-        if(!$showmarker){
-            xarModSetVar('adminpanels', 'showmarker', 0);
-        }else{
-            xarModSetVar('adminpanels', 'showmarker', 1);
-        }
-    
-        xarModSetVar('adminpanels', 'menustyle', $menustyle);
-    
-        xarModSetVar('adminpanels', 'marker', $marker);
+    if(!$showmarker){
+        xarModSetVar('adminpanels', 'showmarker', 0);
+    }else{
+        xarModSetVar('adminpanels', 'showmarker', 1);
+    }
 
-        if(!$showlogout){
-            xarModSetVar('adminpanels', 'showlogout', 0);
-        }else{
-            xarModSetVar('adminpanels', 'showlogout', 1);
-        }
-        
-        if(!$showhelp){
-            xarModSetVar('adminpanels', 'showhelp', 0);
-        }else{
-            xarModSetVar('adminpanels', 'showhelp', 1);
-        }
-    } elseif ($formname == 'overviews'){
-        // update data from second form
-        if ($overview !== null) {
-            xarModSetVar('adminpanels', 'overview', 1);
-        } else {
-            xarModSetVar('adminpanels', 'overview', 0);
-        }
+    xarModSetVar('adminpanels', 'menustyle', $menustyle);
+
+    xarModSetVar('adminpanels', 'marker', $marker);
+
+    if(!$showlogout){
+        xarModSetVar('adminpanels', 'showlogout', 0);
+    }else{
+        xarModSetVar('adminpanels', 'showlogout', 1);
+    }
+    
+    if(!$showhelp){
+        xarModSetVar('adminpanels', 'showhelp', 0);
+    }else{
+        xarModSetVar('adminpanels', 'showhelp', 1);
+    }
+
+    if ($overview !== null) {
+        xarModSetVar('adminpanels', 'overview', 1);
     } else {
-        // something bad, bail out
-        return;
+        xarModSetVar('adminpanels', 'overview', 0);
     }
     
     // lets update status and display updated configuration
