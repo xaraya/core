@@ -142,11 +142,16 @@ if(xarMod_getState(746) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
  */
 function installer_intranet_configuration_load($args)
 {
-// disable caching of module state in xarMod.php
+    // disable caching of module state in xarMod.php
     $GLOBALS['xarMod_noCacheState'] = true;
 
-// load the modules chosen
+    // load the modules chosen
     xarModAPIFunc('modules','admin','regenerate');
+
+    if (!isset($args)) {
+        $args = array();
+    }
+
     if(in_array('m11',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
         xarModAPIFunc('modules','admin','activate',array('regid'=>11));

@@ -37,10 +37,10 @@ $configuration_options = $options;
  */
 function installer_core_configuration_load($args)
 {
-// disable caching of module state in xarMod.php
+    // disable caching of module state in xarMod.php
     $GLOBALS['xarMod_noCacheState'] = true;
 
-// load the modules chosen
+    // load the modules chosen
     xarModAPIFunc('modules','admin','regenerate');
 
     $content['marker'] = '[x]';                                           // create the user menu
@@ -87,7 +87,12 @@ function installer_core_configuration_load($args)
                                                            'content' => serialize($content),
                                                            'state' => 2));
 
-// load the privileges chosen
+    // load the privileges chosen
+
+    if (!isset($args)) {
+        $args = array();
+    }
+
 
     if(in_array(1,$args)) {
         installer_core_readaccess();

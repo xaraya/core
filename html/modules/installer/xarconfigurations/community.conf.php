@@ -155,10 +155,13 @@ $configuration_options = $options;
  */
 function installer_community_configuration_load($args)
 {
-// disable caching of module state in xarMod.php
+    // disable caching of module state in xarMod.php
     $GLOBALS['xarMod_noCacheState'] = true;
 
-// load the modules chosen
+    if (!isset($args)) {
+        $args = array();
+    }
+    // load the modules chosen
     xarModAPIFunc('modules','admin','regenerate');
     if(in_array('m11',$args)) {
         xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
