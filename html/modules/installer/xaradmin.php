@@ -549,11 +549,19 @@ function installer_admin_choose_configuration()
         return $data;
     }
 
-    $names = array();
-    foreach ($files as $file) {
-        include $basedir . '/' . $file;
-        $names[] = array('value' => $basedir . '/' . $file,
-                        'display' => $configuration_name);
+    //quick hack to determine what to display
+    if (!file_exists('modules/articles/xaruser.php')){
+        $names = array();
+        include 'modules/installer/xarconfigurations/core.conf.php';
+        $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',
+                         'display'  => 'Core Xaraya install (aka minimal)');
+    } else {
+        $names = array();
+        foreach ($files as $file) {
+            include $basedir . '/' . $file;
+            $names[] = array('value' => $basedir . '/' . $file,
+                            'display' => $configuration_name);
+        }
     }
     $data['names'] = $names;
 
