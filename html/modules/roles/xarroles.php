@@ -741,6 +741,16 @@ class xarRole
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
         // done
+
+// get all the privileges that were assigned to this role
+        $privileges = $this->getAssignedPrivileges();
+// remove the privilege assignments for this role
+        foreach ($privileges as $priv) {
+            $this->removePrivilege($priv);
+        }
+
+// CHECKME: re-assign all privileges to the child roles ? (probably not)
+
         return true;
     }
 

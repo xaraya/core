@@ -2161,6 +2161,27 @@ class xarPrivilege extends xarMask
             }
             $result->MoveNext();
         }
+
+// remove this child from the root privilege too
+        $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=0";
+        if (!$this->dbconn->Execute($query,array($this->pid))) return;
+
+// get all the roles this privilege was assigned to
+        $roles = $this->getRoles();
+// remove the role assignments for this privilege
+        foreach ($roles as $role) {
+            $this->removeRole($role);
+        }
+
+// get all the child privileges
+        $children = $this->getChildren();
+// remove the child privileges from this parent
+        foreach ($children as $childperm) {
+            $this->removeMember($childperm);
+        }
+
+// CHECKME: re-assign all child privileges to the roles that the parent was assigned to ?
+
         return true;
     }
 
