@@ -47,47 +47,47 @@ $MLSData = array(
                 'core' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
                           'dir' => '',
-                          'label' => xarML('Common')
+                          'label' => 'Common'
                          ),
                 'templates' => array(
                           'type' => XARMLS_CTXTYPE_TEMPLATE,
                           'dir' => 'templates',
-                          'label' => xarML('Templates')
+                          'label' => 'Templates'
                          ),
                 'blocks' => array(
                           'type' => XARMLS_CTXTYPE_BLOCK,
                           'dir' => 'blocks',
-                          'label' => xarML('Blocks')
+                          'label' => 'Blocks'
                          ),
                 'templateincludes' => array(
                           'type' => XARMLS_CTXTYPE_INCLTEMPL,
                           'dir' => 'templates/includes',
-                          'label' => xarML('Included Templates')
+                          'label' => 'Included Templates'
                          ),
                 'templateblocks' => array(
                           'type' => XARMLS_CTXTYPE_BLKTEMPL,
                           'dir' => 'templates/blocks',
-                          'label' => xarML('Block Templates')
+                          'label' => 'Block Templates'
                          ),
                 'admin' => array(
                           'type' => XARMLS_CTXTYPE_ADMIN,
                           'dir' => 'admin',
-                          'label' => xarML('Admin')
+                          'label' => 'Admin'
                          ),
                 'adminapi' => array(
                           'type' => XARMLS_CTXTYPE_ADMINAPI,
                           'dir' => 'adminapi',
-                          'label' => xarML('AdminAPI')
+                          'label' => 'AdminAPI'
                          ),
                 'user' => array(
                           'type' => XARMLS_CTXTYPE_USER,
                           'dir' => 'user',
-                          'label' => xarML('User')
+                          'label' => 'User'
                          ),
                 'userapi' => array(
                           'type' => XARMLS_CTXTYPE_USERAPI,
                           'dir' => 'userapi',
-                          'label' => xarML('UserAPI')
+                          'label' => 'UserAPI'
                          )
 );
 
