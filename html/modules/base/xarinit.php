@@ -287,6 +287,26 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Install base module
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
+              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
+     ) VALUES ('".$seqId."', 'base', 68, 'base', '0.1.0', 1, 'Core Admin', 'Global', 1, 1)";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($systemModuleStatesTable);
+
+    // Set installer to active
+    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 68, 3)";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // Install installer module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable

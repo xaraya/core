@@ -26,8 +26,8 @@ function modules_admin_list()
     if (!xarVarFetch('regen',    'isset', $regen,    NULL, XARVAR_DONT_SET)) {return;}
 
     // Specify labels for display (most are done in template now)
-    $data['infolabel']      = xarVarPrepForDisplay(xarML('Info'));
-    $data['reloadlabel']    = xarVarPrepForDisplay(xarML('Reload'));
+    $data['infolabel']      = xarML('Info');
+    $data['reloadlabel']    = xarML('Reload');
 
     $authid                 = xarSecGenAuthKey();
 

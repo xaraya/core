@@ -298,7 +298,7 @@ class xarRoles
         $query = "INSERT INTO $this->rolememberstable
                 VALUES (?,0)";
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($queryarray($uid))) return;
+        if (!$this->dbconn->Execute($query, array($uid))) return;
         // done
         return true;
     }
