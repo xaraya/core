@@ -7,6 +7,8 @@ $inputLocale = "ru_RU.utf-8";
 set_time_limit(360);
 function searchDir($path)
 {
+    global $inputLocale;
+
     $fileModules = array();
     $dh = opendir($path);
     while ($entry = readdir($dh)) {

@@ -11,6 +11,8 @@ set_time_limit(360);
 
 function searchDir($path)
 {
+    global $inputLocale, $outputLocale, $inputEncoding, $outputEncoding;
+
     $fileModules = array();
     $dh = opendir($path);
     while ($entry = readdir($dh)) {
