@@ -1923,7 +1923,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarSecNode extends xarTpl__TplTagNode
@@ -1932,38 +1932,37 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
     {
         extract($this->attributes);
 
-        if (!isset($realm)) {
+        if (!isset($mask)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'realm\' attribute in <xar:sec> tag.', $this));
+                           new xarTpl__ParserError('Missing \'mask\' attribute in <xar:sec> tag.', $this));
             return;
         }
 
+        if (!isset($catch)) {
+            $catch = 1;
+        } else {
+            if ($catch == 'true') {
+                $catch = 1;
+            } elseif ($catch == 'false') {
+                $catch = 0;
+            } else {
+                xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
+                new xarTpl__ParserError('Invalid \'catch\' attribute in <xar:sec> tag.'.
+                                        ' \'catch\' must be boolean (true or false).', $this));
+                return;
+            }
+        }
+
+
         if (!isset($component)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'component\' attribute in <xar:sec> tag.', $this));
-            return;
+            $component = '';
         }
 
         if (!isset($instance)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'instance\' attribute in <xar:sec> tag.', $this));
-            return;
+            $instance = '';
         }
 
-        $levelNames = array('NONE', 'OVERVIEW', 'READ', 'COMMENT', 'MODERATE',
-                            'EDIT', 'ADD', 'DELETE', 'ADMIN');
-        if (!isset($level)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'level\' attribute in <xar:sec> tag.', $this));
-            return;
-        }
-        if (!in_array($level, $levelNames)) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError("Invalid value '$level' for 'level' attribute in <xar:sec> tag.", $this));
-            return;
-        }
-
-        return "if (xarSecAuthAction($realm, '$component', '$instance', ACCESS_$level)) { ";
+        return "if (xarSecurityCheck('$mask', $catch, '$component','$instance')) { ";
     }
 
     function renderEndTag()
@@ -1994,7 +1993,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
@@ -3125,7 +3124,7 @@ class xarTpl__WidgetModlink extends xarTpl__TplWidgetNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__WidgetPostfield extends xarTpl__TplWidgetNode
