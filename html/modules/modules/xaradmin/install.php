@@ -67,14 +67,9 @@ function modules_admin_install()
         //Installs with dependencies, first initialise the necessary dependecies
         //then the module itself
         if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
-            //Call exception
+            // Don't return yet - the stack is rendered here.
             //return;
-        } // Else
-
-        // Bug 1222: give exceptions raised during the install a chance to be displayed.
-        //if (xarCurrentErrorType()) {
-        //    return;
-        //}
+        }
     }
 
     // Send the full error stack to the install template for rendering.

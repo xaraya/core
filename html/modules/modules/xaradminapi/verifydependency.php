@@ -81,7 +81,10 @@ function modules_adminapi_verifydependency($args)
 
             //Required module inexistent
             if (!isset($dbMods[$module_id])) {
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Required module missing');
+                xarExceptionSet(
+                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                    new SystemException(xarML('Required module missing (ID #(1))', $module_id))
+                );
                 //Need to add some info for the user
                 return false;
             }
@@ -108,7 +111,10 @@ function modules_adminapi_verifydependency($args)
         } else {
             //Required module inexistent
             if (!isset($dbMods[$conditions])) {
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Required module missing');
+                xarExceptionSet(
+                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+                    new SystemException(xarML('Required module missing (ID #(1))', $conditions))
+                );
                 //Need to add some info for the user
                 return false;
             }

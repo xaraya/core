@@ -1,0 +1,12 @@
+<xar:if condition="!empty($errorstack)">
+    <xar:loop name="$errorstack">
+        <xar:if condition="$loop:item.major gt 0">
+            <h3>#$loop:item.title#</h3>
+            <div>#$loop:item.short#</div>
+            <div>#$loop:item.long#</div>
+            <xar:if condition="!empty($loop:item.stack)">
+                <pre>#$loop:item.stack#</pre>
+            </xar:if>
+        </xar:if>
+    </xar:loop>
+</xar:if>

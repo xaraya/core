@@ -25,6 +25,8 @@
  */
 function modules_admin_upgrade()
 {
+    $success = true;
+
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
@@ -35,33 +37,57 @@ function modules_admin_upgrade()
         return;
     }
 
+    // TODO: give the user the opportunity to upgrade the dependancies automatically.
+
     if (!xarModAPIFunc('modules', 'admin', 'verifydependency', array('regid'=>$id))) {
-        // Bail out if the dependancy check fails.
-        return;
+        // Flag a failure.
+        $success = false;
     }
 
-    $minfo=xarModGetInfo($id);
-    //Bail if we've lost our module
-    if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {
-        // Upgrade module
-        $upgraded = xarModAPIFunc('modules',
-                                 'admin',
-                                 'upgrade',
-                                 array('regid' => $id));
-        //throw back
-        // Bug 1222: check for exceptions in the exception stack.
-        // If there are any, then return NULL to display them (even if
-        // the upgrade worked).
-        if(!isset($upgraded) || xarCurrentErrorType()) {return;}
+    if ($success) {
+        $minfo=xarModGetInfo($id);
+        //Bail if we've lost our module
+        if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {
+            // Upgrade module
+            $upgraded = xarModAPIFunc(
+                'modules', 'admin', 'upgrade',
+                array('regid' => $id)
+            );
 
-        // Bug 1669
-        // Also check if module upgrade returned false
-        if (!$upgraded) {
-            $msg = xarML('Module failed to upgrade');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR',
-                            new SystemException($msg));
-            return;
+            // Don't throw back - handle it here.
+            // Bug 1222: check for exceptions in the exception stack.
+            // If there are any, then return NULL to display them (even if
+            // the upgrade worked).
+            if(!isset($upgraded) || xarCurrentErrorType()) {
+                // Flag a failure.
+                $success = false;
+            }
+
+            // Bug 1669
+            // Also check if module upgrade returned false
+            if (!$upgraded) {
+                $msg = xarML('Module failed to upgrade');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR',
+                                new SystemException($msg));
+                // Flag a failure.
+                $success = false;
+            }
         }
+    }
+
+    if (!$success) {
+        // Something failed above.
+        // Render the error stack so we can see what went wrong.
+            if (xarCurrentErrorType()) {
+                // Get the error stack
+                $errorstack = xarErrorget();
+                // Free up the error stack since we are handling it locally.
+                xarErrorFree();
+                // Return the stack for rendering.
+                return array('errorstack' => $errorstack);
+            } else {
+                return;
+            }
     }
 
     // set the target location (anchor) to go to within the page

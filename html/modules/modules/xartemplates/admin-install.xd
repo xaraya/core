@@ -74,19 +74,8 @@
     </xar:if>
 
     <xar:comment>This section deals with install errors.</xar:comment>
-    <xar:if condition="!empty($errorstack)">
-        <h2><xar:mlstring>Module Installation Failed</xar:mlstring></h2>
-        <xar:loop name="$errorstack">
-            <xar:if condition="$loop:item.major gt 0">
-                <h3>#$loop:item.title#</h3>
-                <div>#$loop:item.short#</div>
-                <div>#$loop:item.long#</div>
-                <xar:if condition="!empty($loop:item.stack)">
-                    <pre>#$loop:item.stack#</pre>
-                </xar:if>
-            </xar:if>
-        </xar:loop>
-    </xar:if>
+    <h2><xar:mlstring>Module Installation Failed</xar:mlstring></h2>
+    <xar:template file="install-errors" type="module" />
 
     <p><a href="#xarModURL('modules','admin','list')#"><xar:mlstring>Go back to the modules list</xar:mlstring></a></p>
 </div>
