@@ -243,6 +243,7 @@ class xarMasks
                 elseif ($priv2->implies($priv1,true)) $privs1[$key1] = $priv2;
                 else {
                     $privs1[] = $priv2;
+                    array_splice($privs2,$key2);
                 }
             }
         }
@@ -267,9 +268,6 @@ class xarMasks
 
     function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='')
     {
-
-    // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
-    //        because they request the current module too at the moment - unnecessary ?
 
 // get the masks pertaining to the current module and the component requested
         if ($module == '') list($module) = xarRequestGetInfo();
