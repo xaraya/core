@@ -142,16 +142,92 @@ function installer_admin_phase5()
         return NULL;
     }
 
-    // Initialize *minimal* tableset
-
-    // log user in
-    $res = pnInstallAPIFunc('installer','admin','bootstrap');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return NULL;
-    }
+    return array();
 }
 
+/*function installer_admin_phase6
+{
 
+
+    return array();
+}*/
+
+/**
+ * Bootstrap Xaraya
+ *
+ * @param none
+ * @returns bool
+ */
+function installer_admin_bootstrap()
+{
+
+
+    // log in admin user
+    $res = pnUserLogIn('admin', 'password', 0);
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    // Activate modules
+    $res = pnModAPILoad('installer',
+                        'admin'.
+                        'initialise',
+                        array('directory' => 'installer',
+                              'initfunc' => 'activate'));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
+
+    return array();
+}
+
+/**
+ * Create default administrator
+ *
+ * @access public
+ * @param none
+ * @returns bool
+ */
+function installer_admin_create_administrator()
+{
+    if (!pnSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));return;
+    }
+
+    if (!pnVarCleanFromInput('create')) {
+        return array();
+    }
+
+    list ($username,
+          $name,
+          $password,
+          $email,
+          $url) = pnVarCleanFromInput('install_admin_username',
+                                       'install_admin_name',
+                                       'install_admin_password',
+                                       'install_admin_email',
+                                       'install_admin_url');
+
+    $res = pnModAPILoad('users', 'admin');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
+                                                          'name'  => $name,
+                                                          'uname' => $username,
+                                                          'email' => $email,
+                                                          'pass'  => $password,
+                                                          'url'   => $url));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    pnResponseRedirect(pnModURL('installer', 'admin', 'finish'));
+}
 
 
 

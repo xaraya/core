@@ -94,8 +94,8 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     }
 
     // Make sure we should still be here
-    if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
-        $funcName = 'bootstrap';
+    if ($phase >= PNINSTALL_PHASE_SETTINGS_COLLECTION) {
+        pnReponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
     // Run installer function
     $mainModuleOutput = pnInstallFunc($modName, $modType, $funcName);
