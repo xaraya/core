@@ -88,8 +88,7 @@ xarTpl_init($systemArgs, $whatToLoad);
 $systemArgs = array('translationsBackend' => 'php',
                     'MLSMode' => 'SINGLE',
                     'defaultLocale' => 'en_US.iso-8859-1',
-                    'allowedLocales' => 'en_US.iso-8859-1',
-                    'MLSData' => $MLSData);
+                    'allowedLocales' => 'en_US.iso-8859-1');
 xarMLS_init($systemArgs, $whatToLoad);
 
 // Install Phases
