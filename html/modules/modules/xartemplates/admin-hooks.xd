@@ -18,6 +18,7 @@
                 </ul>
             </xar:if>
             <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
+               <div>
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
                 <xar:foreach in="$hookedmodules" value="$hookedmod">
@@ -49,6 +50,7 @@
                 </xar:foreach>
                 <br />
                 <input type="submit" value="#$savechangeslabel#" />
+                </div>
             </form>
         </xar:if>
     </xar:foreach>
