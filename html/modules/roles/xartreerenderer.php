@@ -16,6 +16,9 @@ include_once 'modules/roles/xarroles.php';
 class xarTreeRenderer {
     var $roles;
     var $tree;
+    var $treenode;
+    var $treeitems;
+    var $drawchildren;
     // some variables we'll need to hold drawing info
     var $html;
     var $nodeindex;
@@ -41,6 +44,11 @@ class xarTreeRenderer {
     function xarTreeRenderer()
     {
         $this->roles = new xarRoles();
+        $this->setitem(1, "deleteitem");
+        $this->setitem(2, "leafitem");
+        $this->setitem(3, "emailitem");
+        $this->setitem(4, "privilegesitem");
+        $this->setitem(5, "testitem");
     }
 
     /**
@@ -55,7 +63,7 @@ class xarTreeRenderer {
      * @throws none
      * @todo none
      */
-    function maketree($topuid ='')
+    function maketree($topuid='')
     {
         if ($topuid == '') $topuid = xarModGetVar('roles', 'everybody');
         $this->tree = $this->addbranches(array('parent' => $this->roles->getgroup($topuid)));
@@ -145,12 +153,13 @@ class xarTreeRenderer {
         $this->level = $this->level + 1;
         $this->nodeindex = $this->nodeindex + 1;
         $object = $node['parent'];
+        $this->treenode = $object;
         // check if we've aleady processed this entry
         if (in_array($object['uid'], $this->alreadydone)) {
-            $drawchildren = false;
+            $this->drawchildren = false;
             $node['children'] = array();
         } else {
-            $drawchildren = true;
+            $this->drawchildren = true;
             $this->alreadydone[] = $object['uid'];
         }
         // is this a branch?
@@ -158,67 +167,19 @@ class xarTreeRenderer {
         // now begin adding rows to the string
         $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">';
 
+        for ($i=1;$i<=count($this->treeitems);$i++) {
+            $func = $this->treeitems[$i];
+            $this->html .= $this->{$func}();
+        }
         // this next table holds the Delete, Users and Privileges links
         // don't allow deletion of certain roles
-        if (!xarSecurityCheck('DeleteRole',0,'Roles',$object['name']) || ($object['users'] > 0) || (!$drawchildren)) {
-            $this->html .= $this->bigblank;
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'deleterole',
-                array('uid' => $object['uid'])) . '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
-        }
-        /*
         // offer to modify the group
-        $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'modifyrole',
-                array('uid' => $object['uid'])) .'" title="Modify this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" /></a>';
-        */
         //offer to show users of a group if there are some
-        if ($object['users'] == 0 || (!$drawchildren)) {
-            $this->html .= $this->bigblank;
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'showusers',
-                array('uid' => $object['uid'])) . '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
-        }
         // link to group email
-        if ($object['users'] == 0 || (!$drawchildren)) {
-            $this->html .= $this->bigblank;
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'createmail',
-                array('uid' => $object['uid'])) . '" title="Email the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>';
-        }
         // offer to show the privileges of this group
-        if (!$drawchildren) {
-            $this->html .= $this->bigblank;
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'showprivileges',
-                array('uid' => $object['uid'])) . '" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
-        }
         // offer to test the privileges of this group
-        if (!$drawchildren) {
-            $this->html .= $this->bigblank;
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'testprivileges',
-                array('uid' => $object['uid'])) . '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
-        }
         $this->html .= $this->smallblank;
-        // this table hold the index, the tree drawing gifs and the info about the role
+        // this table holds the index, the tree drawing gifs and the info about the role
         $this->html .= $this->drawindent();
         if ($isbranch) {
             if ($this->nodeindex != 1) {
@@ -237,7 +198,7 @@ class xarTreeRenderer {
         }
         $this->html .= '<span style="padding-left: 1em">';
         // if we've already done this entry skip the links and just tell the user
-        if (!$drawchildren) {
+        if (!$this->drawchildren) {
             $this->html .= '<b>' . $object['name'] . '</b>: ';
             $this->html .= ' see the entry above';
         } else {
@@ -294,6 +255,88 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
+
+    function leafitem()
+    {
+        if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
+            $html = $this->bigblank;
+        } else {
+            $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'showusers',
+                array('uid' => $this->treenode['uid'])) . '" title="Show the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/users.gif" style="vertical-align: middle;" /></a>';
+        }
+        return $html;
+    }
+    function deleteitem()
+    {
+        if (!xarSecurityCheck('DeleteRole',0,'Roles',$this->treenode['name']) || ($this->treenode['users'] > 0) || (!$this->drawchildren)) {
+            $html = $this->bigblank;
+        } else {
+            $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'deleterole',
+                array('uid' => $this->treenode['uid'])) . '" title="Delete this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+        }
+        return $html;
+    }
+    function emailitem()
+    {
+        if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
+            $html = $this->bigblank;
+        } else {
+            $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'createmail',
+                array('uid' => $this->treenode['uid'])) . '" title="Email the Users in this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/email.gif" style="vertical-align: middle;" /></a>';
+        }
+        return $html;
+    }
+    function privilegesitem()
+    {
+        if (!$this->drawchildren) {
+            $html = $this->bigblank;
+        } else {
+            $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'showprivileges',
+                array('uid' => $this->treenode['uid'])) . '" title="Show the Privileges assigned to this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>';
+        }
+        return $html;
+    }
+    function testitem()
+    {
+        if (!$this->drawchildren) {
+            $html = $this->bigblank;
+        } else {
+            $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'testprivileges',
+                array('uid' => $this->treenode['uid'])) . '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
+        }
+        return $html;
+    }
+    function branchitem()
+    {
+        $html = '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'modifyrole',
+                array('uid' => $this->treenode['uid'])) .'" title="Modify this Group" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;" /></a>';
+        return $html;
+    }
+
+    function setitem($pos=1,$item ='')
+    {
+        $this->treeitems[$pos] =& $item;
+    }
+
 }
 
 ?>
