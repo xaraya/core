@@ -468,7 +468,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $xarToken = $this->getNextToken(3);
                             if ($nextToken . $xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
                                 // <xar: tag
-                                if(!$this->canbeChild($parent) return;
+                                if(!$this->canbeChild($parent)) return;
                                       
                                 // Situation: [...text...]<xar:...
                                 $trimmer='xmltrim'; 
@@ -666,7 +666,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Check for xar entity
                     $nextToken = $this->getNextToken(4);
                     if ($nextToken == 'xar-') {
-                        if(!$this->canbeChild($parent) return;
+                        if(!$this->canbeChild($parent)) return;
 
                         // Add text to parent
                         // Situation: [...text...]&xar-...
@@ -717,7 +717,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $this->getNextToken(); // eat the matching #
                         $instruction = $between;
                     
-                        if(!$this->canbeChild($parent) return;
+                        if(!$this->canbeChild($parent)) return;
 
                         // Add text to parent, if applicable
                         // Situation: [...text...]#$....# or [...text...]#xarFunction()#
