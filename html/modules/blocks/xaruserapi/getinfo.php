@@ -92,6 +92,10 @@ function blocks_userapi_getinfo($args)
         }
     }
 
+    // No block details.
+    // Perhaps the instance or module/type is invalid.
+    if (empty($blockinfo)) {return;}
+
     // Do standard overrides.
     if (!is_null($title)) {$blockinfo['title'] = $title;}
     if (!is_null($state)) {$blockinfo['state'] = $state;}
@@ -107,7 +111,7 @@ function blocks_userapi_getinfo($args)
     // a string of serialised data. We will make a guess that is starts
     // 'a:[number]:{' and ends '}'.
     $serialize_flag = false;
-    if (is_string($blockinfo['content']) && preg_match('/^a:[0-9]+:\{.*\}$/', $blockinfo['content'])) {
+    if (is_string($blockinfo['content']) && preg_match('/^[at]:[0-9]+:\{.*\}$/', $blockinfo['content'])) {
         // We think this is serialized data - try expanding it.
         $content2 = @unserialize($blockinfo['content']);
         if (!is_null($content2)) {
@@ -156,7 +160,7 @@ function blocks_userapi_getinfo($args)
         if ($serialize_flag) {
             // We need to serialize the content again.
             // TODO: when all blocks support serialized content data,
-            // remove this re-serialization.
+            // remove this re-serialization. It is just for legacy support.
             $blockinfo['content'] = @serialize($blockinfo['content']);
         }
     }
@@ -171,7 +175,6 @@ function blocks_userapi_getinfo($args)
         $blockinfo['_bl_box_template'] = $template[0];
         $blockinfo['_bl_block_template'] = $template[1];
     }
-    //$blockinfo['template'] = $template;
 
     // Legacy support.
     $instance['id'] = $blockinfo['bid'];

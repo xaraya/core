@@ -101,26 +101,26 @@ function modules_adminapi_remove($args)
               WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'
                  OR xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
-    // Collect the block types and remove them
-    $query = "SELECT xar_id
-              FROM $tables[block_types]
-              WHERE xar_module = '" . xarVarPrepForStore($modinfo['name']) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-    while (!$result->EOF) {
-        list($typeid) = $result->fields;
-        $query = "DELETE FROM $tables[block_instances]
-                  WHERE xar_type_id = " . $typeid;
-        $result1 =& $dbconn->Execute($query);
-        if (!$result1) return;
-        $result->MoveNext();
+    //
+    // Delete block details for this module.
+    //
+
+    // Get block types.
+    $blocktypes = xarModAPIfunc(
+        'blocks', 'user', 'getallblocktypes',
+        array('module' => $modinfo['name'])
+    );
+
+    // Delete block types.
+    if (is_array($blocktypes) && !empty($blocktypes)) {
+        foreach($blocktypes as $blocktype) {
+            $result = xarModAPIfunc(
+                'blocks', 'admin', 'delete_type', $blocktype
+            );
+        }
     }
-    $query = "DELETE FROM $tables[block_types]
-              WHERE xar_module = '" . xarVarPrepForStore($modinfo['name']) . "'";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     // Check whether the module was the default module
     $defaultmod = xarConfigGetVar('Site.Core.DefaultModuleName');
