@@ -691,6 +691,21 @@ class Dynamic_Property
         }
     }
 
+    /**
+     * Show the label for this property
+     *
+     * @param $label label of the property (default is the current label)
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showLabel($label = null)
+    {
+        if (isset($label)) {
+            return xarVarPrepForDisplay($label);
+        } else {
+            return xarVarPrepForDisplay($this->label);
+        }
+    }
 }
 
 

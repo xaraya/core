@@ -157,7 +157,7 @@ Tip : empty label -> delete field for all items
                <input type="hidden" name="modid" id="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                <input type="hidden" name="table" id="table" value="#$tname#" />
-               <input type="submit" value="Import table #$tname#">
+               <input type="submit" value="#xarML('Import table')# #$tname#">
            </form>
        </xar:loop>
        </td>

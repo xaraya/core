@@ -439,34 +439,52 @@ function dynamicdata_init()
      */
 // TODO: move this to some common place in Xaraya ?
     // Register BL user tags
+    // output this property
     xarTplRegisterTag('dynamicdata', 'data-output',
                       array(),
                       'dynamicdata_userapi_handleOutputTag');
+    // display this item
     xarTplRegisterTag('dynamicdata', 'data-display',
                       array(),
                       'dynamicdata_userapi_handleDisplayTag');
+    // view a list of these items
     xarTplRegisterTag('dynamicdata', 'data-view',
                       array(),
                       'dynamicdata_userapi_handleViewTag');
 
     // Register BL admin tags
+    // input field for this property
     xarTplRegisterTag('dynamicdata', 'data-input',
                       array(),
                       'dynamicdata_adminapi_handleInputTag');
+    // input form for this item
     xarTplRegisterTag('dynamicdata', 'data-form',
                       array(),
                       'dynamicdata_adminapi_handleFormTag');
+    // admin list for these items
     xarTplRegisterTag('dynamicdata', 'data-list',
                       array(),
                       'dynamicdata_adminapi_handleListTag');
 
-    // Register BL utility tags to avoid OO problems with the BL compiler
-    xarTplRegisterTag('dynamicdata', 'data-object',
+    // Register BL item tags to get properties and values directly in the template
+    // get properties for this item
+    xarTplRegisterTag('dynamicdata', 'data-getitem',
                       array(),
-                      'dynamicdata_userapi_handleObjectTag');
+                      'dynamicdata_userapi_handleGetItemTag');
+    // get properties and item values for these items
+    xarTplRegisterTag('dynamicdata', 'data-getitems',
+                      array(),
+                      'dynamicdata_userapi_handleGetItemsTag');
+
+    // Register BL utility tags to avoid OO problems with the BL compiler
+    // get label for this object or property
     xarTplRegisterTag('dynamicdata', 'data-label',
                       array(),
                       'dynamicdata_userapi_handleLabelTag');
+    // get value or invoke method for this object or property
+    xarTplRegisterTag('dynamicdata', 'data-object',
+                      array(),
+                      'dynamicdata_userapi_handleObjectTag');
 
     // Initialisation successful
     return true;
@@ -482,6 +500,16 @@ function dynamicdata_upgrade($oldversion)
     switch($oldversion) {
         case 1.0:
             // Code to upgrade from version 1.0 goes here
+
+            // Register BL item tags to get properties and values directly in the template
+            // get properties for this item
+            xarTplRegisterTag('dynamicdata', 'data-getitem',
+                              array(),
+                              'dynamicdata_userapi_handleGetItemTag');
+            // get properties and item values for these items
+            xarTplRegisterTag('dynamicdata', 'data-getitems',
+                              array(),
+                              'dynamicdata_userapi_handleGetItemsTag');
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here
@@ -536,10 +564,6 @@ function dynamicdata_delete()
     /**
      * Delete module variables
      */
-    /* some old stuff we don't need anymore :) */
-    xarModDelVar('dynamicdata', 'itemsperpage');
-    xarModDelVar('dynamicdata', 'bold');
-
     xarModDelVar('dynamicdata', 'SupportShortURLs');
 
     /**
@@ -603,11 +627,16 @@ function dynamicdata_delete()
     xarTplUnregisterTag('data-input');
     xarTplUnregisterTag('data-output');
     xarTplUnregisterTag('data-form');
+
     xarTplUnregisterTag('data-display');
     xarTplUnregisterTag('data-list');
     xarTplUnregisterTag('data-view');
-    xarTplUnregisterTag('data-object');
+
+    xarTplUnregisterTag('data-getitem');
+    xarTplUnregisterTag('data-getitems');
+
     xarTplUnregisterTag('data-label');
+    xarTplUnregisterTag('data-object');
 
     // Deletion successful
     return true;

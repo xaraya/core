@@ -32,9 +32,9 @@
         <xar:data-form object="$object" />
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" name="preview" value="Preview" />
+                <input type="submit" name="preview" value="#xarML('Preview')#" />
                 &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="Create" />
+                <input type="submit" value="#xarML('Create')#" />
             </td>
         </tr>
     </table>

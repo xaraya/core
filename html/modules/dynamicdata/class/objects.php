@@ -187,6 +187,25 @@ class Dynamic_Object_Master
         return $this->datastores;
     }
 
+    function &getProperties($args = array())
+    {
+        if (empty($args['fieldlist'])) {
+            $args['fieldlist'] = $this->fieldlist;
+        }
+        if (count($args['fieldlist']) > 0) {
+            $properties = array();
+            foreach ($args['fieldlist'] as $name) {
+                if (isset($this->properties[$name])) {
+                    $properties[$name] = & $this->properties[$name];
+                }
+            }
+        } else {
+            $properties = & $this->properties;
+        }
+
+        return $properties;
+    }
+
     /**
      * Add a data store for this object
      *
@@ -490,6 +509,31 @@ class Dynamic_Object extends Dynamic_Object_Master
                             array('properties' => $properties,
                                   'layout'     => $args['layout']),
                             $args['template']);
+    }
+
+    /**
+     * Get the labels and values to include in some output display for this item
+     */
+    function getDisplayValues($args = array())
+    {
+        if (empty($args['fieldlist'])) {
+            $args['fieldlist'] = $this->fieldlist;
+        }
+        $displayvalues = array();
+        if (count($args['fieldlist']) > 0) {
+            foreach ($args['fieldlist'] as $name) {
+                if (isset($this->properties[$name])) {
+                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                    $displayvalues[$label] = $this->properties[$name]->showOutput();
+                }
+            }
+        } else {
+            foreach (array_keys($this->properties) as $name) {
+                $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                $displayvalues[$label] = $this->properties[$name]->showOutput();
+            }
+        }
+        return $displayvalues;
     }
 
     function createItem($args = array())
@@ -1067,6 +1111,36 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         return xarTplModule('dynamicdata','user','objectview',
                             $args,
                             $args['template']);
+    }
+
+    /**
+     * Get the labels and values to include in some output view for these items
+     */
+    function &getViewValues($args = array())
+    {
+        if (empty($args['fieldlist'])) {
+            $args['fieldlist'] = $this->fieldlist;
+        }
+        if (count($args['fieldlist']) == 0) {
+            $args['fieldlist'] = array_keys($this->properties);
+        }
+
+        $viewvalues = array();
+        foreach ($this->itemids as $itemid) {
+            $viewvalues[$itemid] = array();
+            foreach ($args['fieldlist'] as $name) {
+                if (isset($this->properties[$name])) {
+                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                    if (isset($this->items[$itemid][$name])) {
+                        $value = $this->properties[$name]->showOutput($this->items[$itemid][$name]);
+                    } else {
+                        $value = '';
+                    }
+                    $viewvalues[$itemid][$label] = $value;
+                }
+            }
+        }
+        return $viewvalues;
     }
 
     function getPager()

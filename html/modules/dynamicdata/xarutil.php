@@ -19,6 +19,24 @@ require_once 'modules/dynamicdata/class/objects.php';
 // ----------------------------------------------------------------------
 
 /**
+ * Main menu for utility functions
+ */
+function dynamicdata_util_main()
+{
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    $data = array();
+    $data['menutitle'] = xarML('Dynamic Data Utilities');
+
+    xarTplSetPageTemplateName('admin');
+
+    return $data;
+}
+
+/**
  * Export an object definition or an object item to XML
  */
 function dynamicdata_util_export($args)
@@ -369,6 +387,11 @@ function dynamicdata_util_relations($args)
  */
 function dynamicdata_util_importprops()
 {
+    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
     list($objectid,
          $modid,
          $itemtype,

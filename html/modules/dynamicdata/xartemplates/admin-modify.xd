@@ -53,9 +53,9 @@
 
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" name="preview" value="Preview" />
+                <input type="submit" name="preview" value="#xarML('Preview')#" />
                 &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="Update" />
+                <input type="submit" value="#xarML('Update')#" />
             </td>
         </tr>
     </table>

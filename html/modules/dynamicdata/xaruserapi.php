@@ -30,11 +30,12 @@ require_once 'modules/dynamicdata/class/objects.php';
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
+ * @param $args['getobject'] flag indicating if you want to get the whole object back
  * @returns array
  * @return array of (name => value), or false on failure
  * @raise BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_getitem($args)
+function &dynamicdata_userapi_getitem($args)
 {
     extract($args);
 
@@ -93,6 +94,10 @@ function dynamicdata_userapi_getitem($args)
     if (!isset($object)) return;
     $object->getItem();
 
+    if (!empty($getobject)) {
+        return $object;
+    }
+
     if (count($object->fieldlist) > 0) {
         $fieldlist = $object->fieldlist;
     } else {
@@ -133,11 +138,12 @@ function dynamicdata_userapi_getall($args)
  * @param $args['numitems'] number of items to retrieve
  * @param $args['startnum'] start number
  * @param $args['where'] WHERE clause to be used as part of the selection
+ * @param $args['getobject'] flag indicating if you want to get the whole object back
  * @returns array
  * @return array of (itemid => array of (name => value)), or false on failure
  * @raise BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_getitems($args)
+function &dynamicdata_userapi_getitems($args)
 {
     extract($args);
 
@@ -224,7 +230,12 @@ function dynamicdata_userapi_getitems($args)
     if (!isset($object)) return;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
 
-    return $object->getItems();
+    if (!empty($getobject)) {
+        $object->getItems();
+        return $object;
+    } else {
+        return $object->getItems();
+    }
 }
 
 /**
@@ -765,6 +776,73 @@ function dynamicdata_userapi_showdisplay($args)
 
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
+ * Handle <xar:data-getitem ...> getitem tags
+ * Format : <xar:data-getitem name="$properties" module="123" itemtype="0" itemid="$id" fieldlist="$fieldlist" .../>
+ *       or <xar:data-getitem name="$properties" object="$object" ... />
+ * 
+ * @param $args array containing the module and item that you want to display, or fields
+ * @returns string
+ * @return the PHP code needed to invoke getitemtag() in the BL template and return an array of properties
+ */
+function dynamicdata_userapi_handleGetItemTag($args)
+{
+    // if we already have an object, we simply invoke its showView() method
+    if (!empty($args['object'])) {
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object' || $key == 'name') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return $args['object'].'->getItem(array('.join(', ',$parts).')); ' .
+                   $args['name'] . ' =& '.$args['object'].'->getProperties(); ';
+        } else {
+            return $args['object'].'->getItem(); ' .
+                   $args['name'] . ' =& '.$args['object'].'->getProperties(); ';
+        }
+    }
+
+    // if we don't have an object yet, we'll make one below
+    $out = 'list('.$args['name']. ") = xarModAPIFunc('dynamicdata',
+                   'user',
+                   'getitemfordisplay',\n";
+    // PHP >= 4.2.0 only
+    //$out .= var_export($args);
+    $out .= "                   array(\n";
+    foreach ($args as $key => $val) {
+        if ($key == 'name') continue;
+        if (is_numeric($val) || substr($val,0,1) == '$') {
+            $out .= "                         '$key' => $val,\n";
+        } else {
+            $out .= "                         '$key' => '$val',\n";
+        }
+    }
+    $out .= "                         ));";
+    return $out;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * return the properties for an item
+ * 
+ * @param $args array containing the items or fields to show
+ * @returns array
+ * @return array containing a reference to the properties of the item
+ */
+function dynamicdata_userapi_getitemfordisplay($args)
+{
+    $args['getobject'] = 1;
+    $object = & xarModAPIFunc('dynamicdata','user','getitem',$args);
+    $properties = & $object->getProperties();
+    return array(& $properties);
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
  * Handle <xar:data-view ...> view tags
  * Format : <xar:data-view module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-view items="$items" labels="$labels" ... />
@@ -923,11 +1001,6 @@ function dynamicdata_userapi_showview($args)
         $static = false;
     }
 
-    // check the URL parameter for the item id used by the module (e.g. exid, aid, ...)
-    if (empty($param)) {
-        $param = '';
-    }
-
     $object = new Dynamic_Object_List(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
                                            'itemids' => $itemids,
@@ -941,8 +1014,101 @@ function dynamicdata_userapi_showview($args)
 
     $object->getItems();
 
-    return $object->showView(array('layout'   => $layout,
-                                   'template' => $template));
+    // label to use for the display link (if you don't use linkfield)
+    if (empty($linklabel)) {
+        $linklabel = '';
+    }
+    // function to use in the display link
+    if (empty($linkfunc)) {
+        $linkfunc = '';
+    }
+    // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
+    if (empty($param)) {
+        $param = '';
+    }
+    // field to add the display link to (otherwise it'll be in a separate column)
+    if (empty($linkfield)) {
+        $linkfield = '';
+    }
+
+    return $object->showView(array('layout'    => $layout,
+                                   'template'  => $template,
+                                   'linklabel' => $linklabel,
+                                   'linkfunc'  => $linkfunc,
+                                   'param'     => $param,
+                                   'linkfield' => $linkfield));
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * Handle <xar:data-getitems ...> getitems tags
+ * Format : <xar:data-getitems name="$properties" value="$values" module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" .../>
+ *       or <xar:data-getitems name="$properties" value="$values" object="$object" ... />
+ * 
+ * @param $args array containing the items that you want to display, or fields
+ * @returns string
+ * @return the PHP code needed to invoke getitemstag() in the BL template and return an array of properties and items
+ */
+function dynamicdata_userapi_handleGetItemsTag($args)
+{
+    // if we already have an object, we simply invoke its showView() method
+    if (!empty($args['object'])) {
+        if (count($args) > 1) {
+            $parts = array();
+            foreach ($args as $key => $val) {
+                if ($key == 'object' || $key == 'name' || $key == 'value') continue;
+                if (is_numeric($val) || substr($val,0,1) == '$') {
+                    $parts[] = "'$key' => ".$val;
+                } else {
+                    $parts[] = "'$key' => '".$val."'";
+                }
+            }
+            return $args['value'] . ' =& '.$args['object'].'->getItems(array('.join(', ',$parts).')); ' .
+                   $args['name'] . ' =& '.$args['object'].'->getProperties(); ';
+        } else {
+            return $args['value'] . ' =& '.$args['object'].'->getItems(); ' .
+                   $args['name'] . ' =& '.$args['object'].'->getProperties(); ';
+        }
+    }
+
+    // if we don't have an object yet, we'll make one below
+    $out = 'list('.$args['name'].','.$args['value'] . ") = xarModAPIFunc('dynamicdata',
+                   'user',
+                   'getitemsforview',\n";
+    // PHP >= 4.2.0 only
+    //$out .= var_export($args);
+    $out .= "                   array(\n";
+    foreach ($args as $key => $val) {
+        if ($key == 'name' || $key == 'value') continue;
+        if (is_numeric($val) || substr($val,0,1) == '$') {
+            $out .= "                         '$key' => $val,\n";
+        } else {
+            $out .= "                         '$key' => '$val',\n";
+        }
+    }
+    $out .= "                         ));";
+    return $out;
+}
+
+/**
+// TODO: move this to some common place in Xaraya (base module ?)
+ * return the properties and items
+ * 
+ * @param $args array containing the items or fields to show
+ * @returns array
+ * @return array containing a reference to the properties and a reference to the items
+ */
+function dynamicdata_userapi_getitemsforview($args)
+{
+    if (empty($args['fieldlist']) && empty($args['status'])) {
+        // get the Active properties only (not those for Display Only)
+        $args['status'] = 1;
+    }
+    $args['getobject'] = 1;
+    $object = & xarModAPIFunc('dynamicdata','user','getitems',$args);
+    $properties = & $object->getProperties();
+    $items = & $object->items;
+    return array(& $properties, & $items);
 }
 
 /**

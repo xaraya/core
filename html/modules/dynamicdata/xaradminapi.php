@@ -1384,6 +1384,8 @@ function dynamicdata_adminapi_browse($args)
 function dynamicdata_adminapi_getmenulinks()
 {
 
+    $menulinks = array();
+
     if (xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
@@ -1401,8 +1403,12 @@ function dynamicdata_adminapi_getmenulinks()
                               'label' => xarML('Property Types'));
     }
 
-    if (empty($menulinks)){
-        $menulinks = '';
+    if (xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        $menulinks[] = Array('url'   => xarModURL('dynamicdata',
+                                                  'util',
+                                                  'main'),
+                              'title' => xarML('Import/export and other utilities'),
+                              'label' => xarML('Utilities'));
     }
 
     return $menulinks;

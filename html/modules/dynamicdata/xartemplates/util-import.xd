@@ -21,7 +21,7 @@
 </xar:loop>
 </select>
 <br /><br />
-<input type="submit" value="Import Definition" />
+<input type="submit" value="#xarML('Import Definition')#" />
 </form>
 </xar:if>
 

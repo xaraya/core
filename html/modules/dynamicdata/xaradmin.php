@@ -27,6 +27,12 @@ function dynamicdata_admin_main()
 
     $data = dynamicdata_admin_menu();
 
+    $data['help'] = '';
+// TODO: ML-ise
+    if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
+        $data['help'] = join('',@file('modules/dynamicdata/xardocs/help.txt'));
+    }
+
     // Return the template variables defined in this function
     return $data;
 }
@@ -795,7 +801,7 @@ function dynamicdata_admin_updateprop()
                                       'type' => $dd_type[0],
                                       'default' => $dd_default[0],
                                       'source' => $dd_source[0],
-                                      'status' => 1,
+                                      'status' => $dd_status[0],
                                       'order' => $i,
                                       'validation' => $dd_validation[0]));
         if (empty($prop_id)) {

@@ -8,27 +8,5 @@
 <h2><xar:mlstring>Dynamic Data Overview</xar:mlstring></h2>
 <br />
 
-<table border="0" width="100%">
-    <tr>
-        <td align="right" valign="top" width="100px">
-            <b>What is it?</b>        </td>
-        <td align="left" valign="top">
-
-<pre>
-[Temporary help file :-)]
-TODO: move this php block into the module code
-<?php
-if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
-    $help = @file('modules/dynamicdata/xardocs/help.txt');
-    foreach ($help as $line) {
-        echo xarVarPrepForDisplay($line);
-    }
-    $help = '';
-}
-?>
-</pre>
-
-        </td>
-    </tr>
-</table>
+#$help#
 
