@@ -12,7 +12,8 @@ function searchDir($path)
     while ($entry = readdir($dh)) {
         if (is_dir("$path/$entry")) {
             if (($entry != '.') &&
-                ($entry != '..')) {
+                ($entry != '..') &&
+                ($entry != 'SCCS')) {
                 //Recurse
                 $outpath = str_replace($inputLocale.'/xml', $inputLocale.'/php', "$path/$entry" );
                 if (!file_exists($outpath)) {

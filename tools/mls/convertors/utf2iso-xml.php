@@ -15,7 +15,8 @@ function searchDir($path)
     while ($entry = readdir($dh)) {
         if (is_dir("$path/$entry")) {
             if (($entry != '.') &&
-                ($entry != '..')) {
+                ($entry != '..') &&
+                ($entry != 'SCCS')) {
                 //Recurse
                 $outpath = str_replace($inputLocale,    $outputLocale,    "$path/$entry" );
                 if (!file_exists($outpath)) {
@@ -37,7 +38,7 @@ function searchDir($path)
                 $outpath = str_replace($inputLocale, $outputLocale,    $path );
                 if (!file_exists($outpath)) {
                         mkdir($outpath);
-	}
+                }
                 $fp = fopen ( "$outpath/$entry", "w+" );
                 fwrite($fp, $new_file_contents2);
                 fclose($fp);
