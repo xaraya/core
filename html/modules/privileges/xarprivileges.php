@@ -378,17 +378,26 @@ if ($instance != '') $mask->setInstance($instance);
 
 // check each privilege from the irreducible set
         $pass = false;
+        $score = 0;
         foreach ($irreducibleset as $chiave) {
-           if($chiave->matches($mask)){
-                if ($chiave->implies($mask,false)) {$pass = $chiave; break;}
-                else {$pass = false; break;}
+//           if($chiave->matches($mask)){
+//                if ($chiave->implies($mask,false)) {$pass = $chiave; break;}
+//                else {$pass = false; break;}
+//            }
+
+            if ($chiave->implies($mask,false)) {
+                $thisscore = $chiave->tally($mask);
+                if($thisscore > $score) {
+                    $pass = $chiave;
+                }
+                else if ($thisscore == $score) {
+                    if (!$pass) $pass = $chiave;
+                    else if ($chiave->getLevel() > $pass->getLevel()) $pass = $chiave;
+                }
             }
 
-            if ($chiave->implies($mask,false)) $pass = $chiave;
-
-//          echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false);
+//         { echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask,false) . " score: " . $thisscore . " level: " . $chiave->getLevel();}
         }
-
 
 // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
@@ -1561,6 +1570,42 @@ function drawindent() {
             && (strtolower($this->component) == strtolower($mask->component))
             && (strtolower($this->instance) == strtolower($mask->instance))
             );
+    }
+
+/**
+ * tally: count the instance score of a privilege against a mask
+ *
+ * The instance score is a measure of the number of exact matches between
+ * a privilege and a mask
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   mask object
+ * @return  integer
+ * @throws  none
+ * @todo    none
+*/
+
+    function tally($mask)
+    {
+            $tally = 0;
+
+            $instance1 = explode(':',$this->getInstance());
+            $instance2 = explode(':',$mask->getInstance());
+            if ($this->getInstance() == "All") {
+                $instance1 = array();
+                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
+            }
+            elseif ($mask->getInstance() == "All") {
+                $instance2 = array();
+                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
+            }
+
+            for ($i=0;$i<count($instance1);$i++) {
+                if (strtolower($instance1[$i]) == strtolower($instance2[$i])) $tally += 1;
+//                echo "i: " . $i . " " . $instance1[$i] . " " . $instance2[$i] . " tally: " . $tally . " | ";
+            }
+            return $tally;
     }
 
 /**
