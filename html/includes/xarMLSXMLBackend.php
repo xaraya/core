@@ -79,7 +79,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $this->curData = '';
 
         if (!isset($this->locale)) {
-            $this->locale = xarMLSGetCurrentLocale();
+            $locale = xarMLSGetCurrentLocale();
         }
 
         // Patch from Camille Perinel
@@ -102,14 +102,17 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             return;
         }
 
+        $currentcharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
+
+//        echo $this->locale . " " . $charset ."<br />";
+//        echo xarMLSGetCurrentLocale() . " " . $currentcharset."<br />";exit;
+
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
-            if ($charset == 'utf-8') {
-//                $data = utf8_encode($data);
-            } else {
-                $data = utf8_decode($data);
-            }
+                if ($charset != 'utf-8' && $currentcharset == 'utf-8') {
+                    $data = utf8_encode($data);
+                }
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
