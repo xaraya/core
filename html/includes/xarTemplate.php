@@ -482,9 +482,19 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
     // Sanity check on arguments.
     if ($itemsPerPage < 1) {$itemsPerPage = 10;}
     if ($startNum < 1) {$startNum = 1;}
+    if ($startNum > $total) {$startNum = $total;}
 
     // Number of pages in a page block.
     if ($pageBlockSize < 1) {$pageBlockSize = 10;}
+
+    // If this request was the same as the last one, then return the cached pager details.
+    $request = ($startNum . ':' . $total . ':' . $itemsPerPage . ':' . $pageBlockSize);
+    if (xarVarGetCached('Pager.core', 'request') == $request) {
+        return xarVarGetCached('Pager.core', 'details');
+    }
+
+    // Record the values in this request.
+    xarVarSetCached('Pager.core', 'request', $request);
 
     // Max number of items in a block of pages.
     $itemsPerBlock = ($pageBlockSize * $itemsPerPage);
@@ -511,16 +521,16 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
 
     $data['currentitem'] = $startNum;
     $data['totalitems'] = $total;
-    $data['totalpages'] = (int)ceil($total / $itemsPerPage);
-    $data['totalblocks'] = (int)ceil($total / $itemsPerBlock);
-
-    $data['currentpage'] = (int)ceil($startNum / $itemsPerPage);
-    $data['itemsperblock'] = $itemsPerBlock;
     $data['itemsperpage'] = $itemsPerPage;
+    $data['itemsperblock'] = $itemsPerBlock;
 
+    $data['currentblock'] = (int)ceil($startNum / $itemsPerBlock);
+    $data['totalblocks'] = (int)ceil($total / $itemsPerBlock);
     $data['blockfirstitem'] = $blockStart;
     $data['blocklastitem'] = $blockEnd;
 
+    $data['currentpage'] = (int)ceil($startNum / $itemsPerPage);
+    $data['totalpages'] = (int)ceil($total / $itemsPerPage);
     $data['pagefirstitem'] = $pageStart;
     $data['pagelastitem'] = $pageEnd;
 
@@ -562,6 +572,9 @@ function xarTplPagerInfo($startNum, $total, $itemsPerPage = 10, $pageBlockSize =
     } else {
         $data['nextblockpages'] = 0;
     }
+
+    // Cache all the pager details for use anywhere.
+    xarVarSetCached('Pager.core', 'details', $data);
 
     return $data;
 }
@@ -626,9 +639,6 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
         $data['nextblockurl'] = str_replace('%%', $data['nextblock'], $urltemplate);
         xarVarSetCached('Pager.last', 'rightarrow', $data['lasturl']);
     }
-
-    // Cache all the pager details for use elsewhere.
-    //xarVarSetCached('Pager.full', 'details', $data);
 
     return trim(xarTplModule('base', 'user', 'pager', $data));
 }
