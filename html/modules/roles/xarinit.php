@@ -129,6 +129,18 @@ function roles_init()
                                            'default'     => '0')));
     if (!$dbconn->Execute($query)) return;
 
+    $index = array('name'      => 'xar_uid',
+                   'fields'    => array('xar_uid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['rolemembers'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'xar_parentid',
+                   'fields'    => array('xar_parentid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['rolemembers'],$index);
+    if (!$dbconn->Execute($query)) return;
+
     /*********************************************************************
     * prefix_user_data
     *********************************************************************/

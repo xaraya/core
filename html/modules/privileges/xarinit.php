@@ -141,15 +141,25 @@ function privileges_init()
     $query = xarDBCreateTable($tables['privmembers'],
              array('xar_pid'       => array('type'       => 'integer',
                                            'null'        => false,
-                                           'default'     => '0',
-                                           'key'         => true),
+                                           'default'     => '0'),
                    'xar_parentid'      => array('type'   => 'integer',
                                            'null'        => false,
-                                           'default'     => '0',
-                                           'key'         => true)));
+                                           'default'     => '0')));
     if (!$dbconn->Execute($query)) return;
 
     xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
+
+    $index = array('name'      => 'xar_pid',
+                   'fields'    => array('xar_parentid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['privmembers'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'xar_parentid',
+                   'fields'    => array('xar_parentid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['privmembers'],$index);
+    if (!$dbconn->Execute($query)) return;
 
     // prefix_security_acl
     /*********************************************************************
