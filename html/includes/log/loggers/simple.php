@@ -147,7 +147,7 @@ class xarLogger_simple extends xarLogger
         $this->_isFileWriteable = false;
         $this->_fileheader      = '';
         
-        $this->_filename        = $conf['fileName'];
+        $this->_filename        = realpath($conf['fileName']);
         $this->_ensureFileWriteable();
 
         /* register the destructor */
@@ -277,7 +277,6 @@ class xarLogger_simple extends xarLogger
         	fwrite($this->_fp, $this->_fileheader);
         }
 
-	    $this->_filename = realpath($this->_filename);
         $this->_isFileOpen = true;
         return true;
     }
@@ -289,6 +288,9 @@ class xarLogger_simple extends xarLogger
     */
     function _closeLogfile()
     {
+        if (!$this->_isFileOpen) {
+            return true;
+        }
         if (!fclose($this->_fp)) {
             return false;
         }
