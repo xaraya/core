@@ -409,23 +409,17 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     case 'xml':
                         // <?xml header tag
-                        // Wind forward and copy to output if we have seen the root tag, otherwise, just wind forward
-
-                        $foundEndXmlHeader=false; $copy = ''; $peek = '';
-                        while(!$foundEndXmlHeader && $peek!=XAR_TOKEN_TAG_END) {
-                            $peek = $this->getNextToken();
-                            if($peek == XAR_TOKEN_PI_DELIM) {
-                                $end = $this->getNextToken();
-                                if($end == XAR_TOKEN_TAG_END) $foundEndXmlHeader = true;
-                            } else {
-                                $copy .= $peek;
-                            }
-                        }
-                        if($peek == XAR_TOKEN_TAG_END && !$foundEndXmlHeader) {
+                        // Wind forward to first > and copy to output if we have seen the root tag, otherwise, just wind forward
+                        $between = $this->windTo(XAR_TOKEN_TAG_END);
+                        if(!isset($between)) return; // throw back
+                            
+                        if(substr($between,-1) == XAR_TOKEN_PI_DELIM) { // ?
+                            $token .= $nextToken . $target . $between . $this->getNextToken();
+                        } else {
                             // Template error, found a > before the end
                             $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
                             return;
-                        }
+                        }    
 
                         // We do the exception check after parsing it, so we get usefull info in the error
                         if($this->line != 1 && !$this->tagRootSeen) {
@@ -437,10 +431,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if($this->tagRootSeen) {
                             $short_open_allowed = ini_get('short_open_tag');
                             if($short_open_allowed) {
-                                $token = "<?php echo '<?xml " . trim($copy) . "?>\n';?>";
-                            } else {
-                                $token = "<?xml " . $copy . "?>\n";
+                                $token = "<?php echo $token; ?>";
                             }
+                            $token .= "\n";
                         } else {
                             // We havent seen the root tag yet, the header is for the template, not for the output
                             $token = '';
@@ -1077,31 +1070,31 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     }
     
     // move the pointer to the position of the needle
-    // returns the number of tokens winded forward if found, on not found
-    // returns zero and the pointer hasn't moved
+    // returns the content wound over if successfull
+    // returns '' if not found, pointer not changed
     // returns null when $token is null
     // FIXME: this is a temporary quick implementation for bug #3111
     // FIXME: this does a literal search on the needle, no smart finding of end tags
     function windTo($needle)
     {
         assert('strlen($needle) > 0; /* The search needle in parser->windTo has zero length */');
-        $wound = 0;
+        $wound = '';
         $buffer = $this->getNextToken(strlen($needle));
         if(!isset($buffer)) return; // throw back
-        $wound = strlen($buffer);
+        $wound = $buffer;
         while($buffer!= $needle) {
             $next = $this->getNextToken();
             if(!isset($next)) {
-                $this->stepBack($wound);
+                $this->stepBack(strlen($wound));
                 return; // throw back
             }
             $buffer = substr($buffer, 1) . $next;
-            $wound++;
+            $wound.= $next;
         }
         // We found the needle and we are are at the end of it
-        // place the pointer before it
+        // place the pointer right before it
         $this->stepBack(strlen($needle));
-        $wound-=strlen($needle);
+        $wound = substr($wound,0,-1*strlen($needle));
         return $wound;
     }
 
