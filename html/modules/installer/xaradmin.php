@@ -409,6 +409,16 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
+    // save the uids of the default roles for later
+    $role = xarFindRole('Everybody');
+    xarModSetVar('roles', 'everybody', $role->getID());
+    $role = xarFindRole('Anonymous');
+    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+    // set the current session information to the right anonymous uid
+    xarSession_setUserInfo($role->getID(), 0);
+    $role = xarFindRole('Admin');
+    xarModSetVar('roles', 'admin', $role->getID());
+
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
@@ -432,13 +442,6 @@ function installer_admin_create_administrator()
     $data['language'] = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
-
-    $role = xarFindRole('Everybody');
-    xarModSetVar('roles', 'everybody', $role->getID());
-    $role = xarFindRole('Anonymous');
-    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
-    $role = xarFindRole('Admin');
-    xarModSetVar('roles', 'admin', $role->getID());
 
     include_once 'modules/roles/xarroles.php';
     $role = xarFindRole('Admin');

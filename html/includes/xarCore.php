@@ -290,8 +290,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     $anonuid = xarConfigGetVar('Site.User.AnonymousUID');
-    // FIXME: <mrb> what's this 1 doing here ?
-    $anonuid = !empty($anonuid) ? $anonuid : 1;
+    // fall back to default uid 2 during installation (cfr. bootstrap function)
+    $anonuid = !empty($anonuid) ? $anonuid : 2;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
