@@ -1121,7 +1121,7 @@ function xarVarCleanUntrusted($var)
                     '|</?\s*LINK[^>]*>|si',
                     '|</?\s*IFRAME[^>]*>|si',
                     '|STYLE\s*=\s*"[^"]*"|si');
-    // <?
+    // short open tag <  followed by ? (we do it like this otherwise our qa tests go bonkers)
     $replace = array('');
     // Clean var
     $var = preg_replace($search, $replace, $var);

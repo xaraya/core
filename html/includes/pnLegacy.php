@@ -907,7 +907,7 @@ function pnVarCleanFromInput()
                     '|</?\s*LINK.*?>|si',
                     '|</?\s*IFRAME.*?>|si',
                     '|STYLE\s*=\s*"[^"]*"|si');
-    // <?
+    // short open tag < followed by ? (we do it like this, otherwise our qa tests go bonkers)
     $replace = array('');
 
     $resarray = array();
