@@ -21,7 +21,10 @@
 					</th>
 
 					<th align="left">
-						#$statelabel# | #$actionlabel#
+						#$statelabel#
+					</th>	
+					<th align="left">	
+						#$actionlabel#
 					</th>
 					<th align="left">
 						#$optionslabel#
@@ -39,7 +42,6 @@
                         <xar:if condition="$state eq 4">
                             #$state4label#
                         </xar:if>
-
                         <xar:if condition="$state eq 3">
                             #$state3label#
                         </xar:if>
@@ -52,23 +54,27 @@
                         <xar:if condition="$state eq 5">
                             #$state5label#
                         </xar:if>
+                    </td>
+                    <td nowrap>
                         <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-                            | <a href="#$removeurl#">#$remove#</a>
+                            <a href="#$removeurl#">#$remove#</a>
+                        <xar:elseif  condition="($state eq 3)"/>(none allowed)   
                         </xar:if>
                         <xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-                            | <a href="#$deactivateurl#">#$deactivate#</a>
+                            <a href="#$deactivateurl#">#$deactivate#</a>
                         </xar:if>
                         <xar:if condition="$state eq 2">
-                            | <a href="#$activateurl#">#$activate#</a>
+                            <a href="#$activateurl#">#$activate#</a>
                             <xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                                 | <a href="#$removeurl#">#$remove#</a>
+                            
                             </xar:if>
                         </xar:if>
                         <xar:if condition="$state eq 1">
-                            | <a href="#$initialiseurl#">#$initialise#</a>
+                            <a href="#$initialiseurl#">#$initialise#</a>
                         </xar:if>
                         <xar:if condition="$state eq 5">
-                            | <a href="#$upgradeurl#">#$upgrade#</a>
+                            <a href="#$upgradeurl#">#$upgrade#</a>
                         </xar:if>
 					</td>
 					<td nowrap>
