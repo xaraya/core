@@ -100,6 +100,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             case XARMLS_CTXTYPE_BLOCK:
             $fileName = "blocks/$ctxName";
             break;
+            case XARMLS_CTXTYPE_INCLTEMPL:
+            $fileName = "templates/includes/$ctxName";
+            break;
         }
         $fileName .= '.xml';
         if (!file_exists($this->baseDir.$fileName)) return false;
@@ -152,6 +155,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             break;
             case XARMLS_CTXTYPE_BLOCK:
             $dirName .= 'blocks';
+            break;
+            case XARMLS_CTXTYPE_INCLTEMPL:
+            $dirName .= 'templates/includes';
             break;
         }
         $ctxNames = array();
