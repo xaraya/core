@@ -183,7 +183,7 @@
 		</div>
 		<div class="xar-norm-outline xar-accent" style="text-align: center;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
 			<xar:mlstring>
-				You can make your theme loading as default by selecting it in Themes - Modify Config panel 
+				You can make your theme load as default by selecting it in Themes - Modify Config panel 
 			</xar:mlstring>
 			<xar:if condition="$selstyle eq 'icons'">
 				<br />

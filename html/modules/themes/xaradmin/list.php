@@ -63,7 +63,7 @@ function themes_admin_list() {
     $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('Installed');
     $data['filter'][XARTHEME_STATE_ACTIVE]                      = xarML('Active');
     $data['filter'][XARTHEME_STATE_INACTIVE]                    = xarML('Inactive');
-    $data['filter'][XARTHEME_STATE_UNINITIALISED]               = xarML('Uninitialised');
+    $data['filter'][XARTHEME_STATE_UNINITIALISED]               = xarML('Uninitialized');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UNINITIALISED]  = xarML('Missing (Not Inited)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_INACTIVE]       = xarML('Missing (Inactive)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
@@ -174,10 +174,10 @@ function themes_admin_list() {
         // conditional data
         if($theme['state'] == 1){
             // this theme is 'Uninitialised'   - set labels and links
-            $statelabel = xarML('Uninitialised');
+            $statelabel = xarML('Uninitialized');
             $listrows[$i]['state'] = 1;
             
-            $listrows[$i]['actionlabel']        = xarML('Initialise');
+            $listrows[$i]['actionlabel']        = xarML('Initialize');
             $listrows[$i]['actionurl']          = $initialiseurl;
             $listrows[$i]['removeurl']          = '';
             
