@@ -560,23 +560,15 @@ function xarCore_getSiteVar($name)
  * @access public
  * @param  string $fileName name of the file to load
  * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
- * @return bool   true if file was loaded successfully, false on error (with exception set)
- * @todo   Two out of three xarErrorSet calls in core are in this function, maybe it should be in a subsystem or not except at all?
+ * @return bool   true if file was loaded successfully, false on error (NO exception)
  */
 function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) 
 {
+    // If the file isn't there return according to the flags
+    if (!file_exists($fileName)) 
+        return ($flags & XAR_INCLUDE_MAY_NOT_EXIST);
 
-    if (!file_exists($fileName)) {
-        if ($flags & XAR_INCLUDE_MAY_NOT_EXIST) {
-            return true;
-        } else {
-            $msg = "Could not load file: " . $fileName;
-            // Dependency!
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
-            return false;
-        }
-    }
-
+    // Catch output, if any
     ob_start();
 
     if ($flags & XAR_INCLUDE_ONCE) {
@@ -587,11 +579,8 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 
     $error_msg = strip_tags(ob_get_contents());
     ob_end_clean();
-
+    
     if (empty($r) || !$r) {
-        $msg = "Could not load file: [" . $fileName . "]\n\n Error Caught:\n " . $error_msg;
-        // Dependency
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
         return false;
     }
 
