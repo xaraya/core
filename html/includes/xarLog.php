@@ -93,6 +93,6 @@ function xarLogException($level = XARLOG_LEVEL_DEBUG)
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     //This seems of dubial usefulness
-    xarLogMessage("logVariable($name, ".print_r($var, TRUE).')', $level);
+    xarLogMessage("logVariable($name, ".var_export($var,TRUE).')', $level);
 }
 ?>
