@@ -53,3 +53,6 @@ $datadict =& xarDBNewDataDict($dbconn);
         <input type="submit" value="Insert Rows">
     </p>
 </form>
+<?php
+    // For BitKeeper QA check
+?>
