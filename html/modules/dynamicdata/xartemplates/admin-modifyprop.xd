@@ -69,6 +69,10 @@
                             #$field['id']# 
                         </a>
                         <strong>
+                            #$labels['name']# 
+                        </strong>
+                        : #$field['name']# 
+                        <strong>
                             #$labels['source']# 
                         </strong>
                         : #$field['source']# 
