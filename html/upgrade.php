@@ -1289,34 +1289,36 @@ Password : %%password%%
     } // End bug 1798
 
     // Bug 630, let's throw the reminder back up after upgrade.
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name' => 'reminder'))) {
+        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+        $varshtml['expire'] = time() + 7*24*60*60; // 7 days
 
-    if (!xarModAPIFunc('blocks', 'user', 'getall', array('name' => 'reminder'))) {
-
-        $now = time();
-
-        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
-        $varshtml['expire'] = $now + 24000;
-        $msg = serialize($varshtml);
-
-        $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                       array('module'  => 'base',
-                                             'type'    => 'html'));
+        $htmlBlockType = xarModAPIFunc(
+            'blocks', 'user', 'getblocktype',
+            array('module' => 'base', 'type' => 'html')
+        );
 
         if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             return;
         }
 
-        $htmlBlockTypeId = $htmlBlockType['tid'];
+        // Get the first available group ID, and assume that will be 
+        // visible to the administrator.
+        $allgroups = xarModAPIFunc(
+            'blocks', 'user', 'getallgroups', 
+            array('order' => 'id')
+        );
+        $topgroup = array_shift($allgroups);
 
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Reminder',
-                                 'name'     => 'reminder',
-                                 'content'  => $msg,
-                                 'type'     => $htmlBlockTypeId,
-                                 'groups'   => array(array('gid'      => 1,
-                                                           'template' => '')),
-                                 'template' => '',
-                                 'state'    => 2))) {
+        if (!xarModAPIFunc(
+            'blocks', 'admin', 'create_instance',
+            array(
+                'title'    => 'Reminder',
+                'name'     => 'reminder',
+                'content'  => $varshtml,
+                'type'     => $htmlBlockType['tid'],
+                'groups'   => array(array('gid' => $topgroup['gid'])),
+                'state'    => 2))) {
             return;
         }
     } // End bug 630
