@@ -349,19 +349,20 @@ class xarCSS
         switch($this->method)
         {
             case "link":
-                return linkCSSTag::render();
+                $tag = new linkCSSTag($this);
                 break;
             case "import":
-                return importCSSTag::render();
+                $tag = new importCSSTag($this);
                 break;
             case "style":
-                return styleCSSTag::render();
+                $tag = new styleCSSTag($this);
                 break;
             default:
                 // unrecognised
                 return '';
                 break;
         }
+        return $tag->render();
     }
 
     // PROTECTED HELPERS
