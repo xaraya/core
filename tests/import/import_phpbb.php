@@ -118,7 +118,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $result->Close();
     $query = 'SELECT user_id, username, username, user_email, user_password, user_website, user_regdate,
                      user_timezone, user_avatar, user_icq, user_aim, user_yim, user_msnm,
-                     user_from, user_occ, user_interests, user_sig
+                     user_from, user_occ, user_interests, user_sig, user_sig_bbcode_uid
               FROM ' . $oldprefix . '_users 
               WHERE user_id > 2
               ORDER BY user_id ASC';
@@ -185,7 +185,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     while (!$result->EOF) {
         list($uid,$name,$uname,$email,$pass,$url,$date,
              $timezone,$avatar,$icq,$aim,$yim,$msnm,
-             $location,$occupation,$interests,$signature) = $result->fields;
+             $location,$occupation,$interests,$signature,$bbcode) = $result->fields;
         $extra_info = '';
         if (empty($name)) {
             $name = $uname;
@@ -242,6 +242,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 
         if ($url === 'http://') {
             $url = '';
+        }
+        if (!empty($bbcode) && !empty($signature) && preg_match("/:$bbcode\]/",$signature)) {
+            $signature = preg_replace("/:$bbcode\]/",']',$signature);
         }
         // fill in the dynamic properties - cfr. users.xml !
         $dynamicvalues = array(
@@ -486,7 +489,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $count = $result->fields[0];
     $result->Close();
     $regid = xarModGetIDFromName('articles');
-    $query = 'SELECT t.topic_id,t.forum_id,topic_title,topic_poster,topic_time,topic_views,topic_replies,topic_status,topic_vote,topic_type,topic_first_post_id,topic_last_post_id,topic_moved_id,post_username,post_subject,post_text
+    $query = 'SELECT t.topic_id,t.forum_id,topic_title,topic_poster,topic_time,topic_views,topic_replies,topic_status,topic_vote,topic_type,topic_first_post_id,topic_last_post_id,topic_moved_id,post_username,post_subject,post_text,bbcode_uid
               FROM ' . $oldprefix . '_topics as t
               LEFT JOIN ' . $oldprefix . '_posts as p
                   ON t.topic_first_post_id=p.post_id
@@ -507,13 +510,16 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $num = 1;
     while (!$result->EOF) {
-        list($tid, $fid, $title, $authorid, $time, $views, $replies, $status, $vote, $type, $firstid, $lastid, $movedid, $uname, $subject, $text) = $result->fields;
+        list($tid, $fid, $title, $authorid, $time, $views, $replies, $status, $vote, $type, $firstid, $lastid, $movedid, $uname, $subject, $text, $bbcode) = $result->fields;
         if (empty($title)) {
             if (!empty($subject)) {
                 $title = $subject;
             } else {
                 $title = xarML('[none]');
             }
+        }
+        if (!empty($bbcode) && !empty($text) && preg_match("/:$bbcode\]/",$text)) {
+            $text = preg_replace("/:$bbcode\]/",']',$text);
         }
         if (empty($uname)) {
             $uname = '';
@@ -619,11 +625,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT p.post_id, topic_id, post_time, post_username, poster_id,
-              poster_ip, post_subject, post_text 
+    $query = 'SELECT p.post_id, p.topic_id, post_time, post_username, poster_id,
+              poster_ip, post_subject, post_text, bbcode_uid, topic_title
               FROM ' . $oldprefix . '_posts as p
               LEFT JOIN ' . $oldprefix . '_posts_text as pt
               ON p.post_id = pt.post_id
+              LEFT JOIN ' . $oldprefix . '_topics as t
+              ON t.topic_id = p.topic_id
               ORDER BY p.post_id ASC';
     $numitems = 1500;
     if (!isset($startnum)) {
@@ -640,7 +648,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $num = 1;
     while (!$result->EOF) {
-        list($tid,$sid,$date,$uname,$uid,$hostname,$subject,$comment) = $result->fields;
+        list($tid,$sid,$date,$uname,$uid,$hostname,$subject,$comment,$bbcode,$title) = $result->fields;
 
         if (isset($postid[$tid])) {
         // we've seen this one before as a topic
@@ -654,6 +662,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             continue;
         }
 
+        if (empty($subject) && !empty($title)) {
+            $subject = xarML('Re: ') . $title;
+        }
+        if (!empty($bbcode) && !empty($comment) && preg_match("/:$bbcode\]/",$comment)) {
+            $comment = preg_replace("/:$bbcode\]/",']',$comment);
+        }
 // no threading in phpBB !?
         $pid = 0;
 
