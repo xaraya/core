@@ -1,0 +1,11 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+
+<xar:if condition="!empty($link) and !empty($title)">
+    <a href="#$link#">#$title#</a>
+<xar:elseif condition="empty($link) and !empty($title)"/>
+    #$title#
+<xar:elseif condition="empty($title) and !empty($link)" />
+    <a href="#$link#">#$link#</a>
+</xar:if>
+
+

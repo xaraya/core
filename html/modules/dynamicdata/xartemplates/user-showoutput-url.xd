@@ -1,0 +1,3 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:set name="title"><xar:mlstring>$value</xar:mlstring></xar:set>
+<a href="#$value#">#$title#</a> 
