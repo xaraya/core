@@ -56,6 +56,60 @@ class Dynamic_DataStore_Master
         }
         return $datastore;
     }
+
+    function &getDataStores()
+    {
+    }
+
+    /**
+     * Get possible data sources (// TODO: for a module ?)
+     */
+    function &getDataSources($args = array())
+    {
+        list($dbconn) = xarDBGetConn();
+        $xartable = xarDBGetTables();
+
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $metaTable = $systemPrefix . '_tables';
+
+    // TODO: remove Xaraya system tables from the list of available sources ?
+        $query = "SELECT xar_table,
+                         xar_field,
+                         xar_type,
+                         xar_size
+                  FROM $metaTable
+                  ORDER BY xar_table ASC, xar_field ASC";
+
+        $result =& $dbconn->Execute($query);
+
+        if (!$result) return;
+
+        $sources = array();
+
+        // default data source is dynamic data
+        $sources[] = 'dynamic_data';
+
+    // TODO: re-evaluate this once we're further along
+        // hook modules manage their own data
+        $sources[] = 'hook module';
+
+        // user functions manage their own data
+        $sources[] = 'user function';
+
+        // add the list of table + field
+        while (!$result->EOF) {
+            list($table, $field, $type, $size) = $result->fields;
+        // TODO: what kind of security checks do we want/need here ?
+            //if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
+            //}
+            $sources[] = "$table.$field";
+            $result->MoveNext();
+        }
+
+        $result->Close();
+
+        return $sources;
+    }
 }
 
 /**
@@ -1046,7 +1100,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
     function getFieldName(&$property)
     {
         // check if this is a known module, based on the name of the property type
-        $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+        $proptypes = Dynamic_Property_Master::getPropertyTypes();
         $curtype = $property->type;
         if (!empty($proptypes[$curtype]['name'])) {
             return $proptypes[$curtype]['name'];
@@ -1066,9 +1120,8 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
         $modname = $args['modname'];
 
         foreach (array_keys($this->fields) as $hook) {
-            if (xarModIsAvailable($hook) && xarModAPILoad($hook,'user')) {
-                // FIXME: If one of the above fails, an exception will be set!
-                // TODO: find some more consistent way to do this !
+            if (xarModIsAvailable($hook)) {
+            // TODO: find some more consistent way to do this !
                 $value = xarModAPIFunc($hook,'user','get',
                                        array('modname' => $modname,
                                              'modid' => $modid,
@@ -1078,6 +1131,9 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$hook]->setValue($value);
+                } elseif (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                    // ignore any exceptions on retrieval for now
+                    xarExceptionFree();
                 }
             }
         }
@@ -1124,11 +1180,6 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
             // see if we're dealing with an API function or a GUI one
             if (preg_match('/api$/',$ftype)) {
                 $ftype = preg_replace('/api$/','',$ftype);
-                // try to load the module API
-                if (!xarModAPILoad($fmod,$ftype)) {
-                    // FIXME: clear the exception?
-                    continue;
-                }
                 // try to invoke the function with some common parameters
             // TODO: standardize this, or allow the admin to specify the arguments
                 $value = xarModAPIFunc($fmod,$ftype,$ffunc,
@@ -1140,10 +1191,18 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
+                } elseif (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                    // ignore any exceptions on retrieval for now
+                    xarExceptionFree();
                 }
             } else {
+            // TODO: don't we want auto-loading for xarModFunc too ???
                 // try to load the module GUI
                 if (!xarModLoad($fmod,$ftype)) {
+                    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                        // ignore any exceptions on retrieval for now
+                        xarExceptionFree();
+                    }
                     continue;
                 }
                 // try to invoke the function with some common parameters
@@ -1157,6 +1216,9 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
+                } elseif (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                    // ignore any exceptions on retrieval for now
+                    xarExceptionFree();
                 }
             }
         }

@@ -78,7 +78,12 @@ class Dynamic_Object_Master
             $this->itemtype = 0;
         }
         if (empty($this->name)) {
-            $this->getObjectInfo($args);
+            $info = Dynamic_Object_Master::getObjectInfo($args);
+            if (isset($info) && count($info) > 0) {
+                foreach ($info as $key => $val) {
+                    $this->$key = $val;
+                }
+            }
         }
         // get the properties defined for this object
         if (count($this->properties) == 0 &&
@@ -214,7 +219,15 @@ class Dynamic_Object_Master
         return $object;
     }
 
-// TODO: clean up this object mess
+    /**
+     * Class method to retrieve information about a Dynamic Object
+     *
+     * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['moduleid'] module id of the object you're looking for +
+     * @param $args['itemtype'] item type of the object you're looking for
+     * @returns array
+     * @return array containing the name => value pairs for the object
+     */
     function getObjectInfo($args)
     {
         list($dbconn) = xarDBGetConn();
@@ -232,28 +245,35 @@ class Dynamic_Object_Master
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
-        if (isset($this->objectid)) {
-            $query .= " WHERE xar_object_id = " . xarVarPrepForStore($this->objectid);
+        if (!empty($args['objectid'])) {
+            $query .= " WHERE xar_object_id = " . xarVarPrepForStore($args['objectid']);
         } else {
-            $query .= " WHERE xar_object_moduleid = " . xarVarPrepForStore($this->moduleid) . "
-                          AND xar_object_itemtype = " . xarVarPrepForStore($this->itemtype);
+            if (empty($args['moduleid'])) {
+                $args['moduleid'] = xarModGetIDFromName(xarModGetName());
+            }
+            if (empty($args['itemtype'])) {
+                $args['itemtype'] = 0;
+            }
+            $query .= " WHERE xar_object_moduleid = " . xarVarPrepForStore($args['moduleid']) . "
+                          AND xar_object_itemtype = " . xarVarPrepForStore($args['itemtype']);
         }
-
         $result =& $dbconn->Execute($query);
 
         if (!$result || $result->EOF) return;
 
-        list($this->objectid,
-             $this->name,
-             $this->label,
-             $this->moduleid,
-             $this->itemtype,
-             $this->urlparam,
-             $this->maxid,
-             $this->config,
-             $this->isalias) = $result->fields;
+        $info = array();
+        list($info['objectid'],
+             $info['name'],
+             $info['label'],
+             $info['moduleid'],
+             $info['itemtype'],
+             $info['urlparam'],
+             $info['maxid'],
+             $info['config'],
+             $info['isalias']) = $result->fields;
 
         $result->Close();
+        return $info;
     }
 
     /**
@@ -308,7 +328,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         // get the object type information from our parent class
         $this->Dynamic_Object_Master($args);
 
-        // set the specific item id
+        // set the specific item id (or 0)
         if (isset($args['itemid'])) {
             $this->itemid = $args['itemid'];
         }
@@ -324,10 +344,10 @@ class Dynamic_Object extends Dynamic_Object_Master
     /**
      * Retrieve the values for this item
      */
-    function getItem($itemid = null)
+    function getItem($args = array())
     {
-        if (isset($itemid)) {
-            $this->itemid = $itemid;
+        if (!empty($args['itemid'])) {
+            $this->itemid = $args['itemid'];
         }
         if (empty($this->itemid)) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
@@ -345,11 +365,11 @@ class Dynamic_Object extends Dynamic_Object_Master
     /**
      * Check the different input values for this item
      */
-    function checkInput($itemid = null)
+    function checkInput($args = array())
     {
-        if (isset($itemid) && $itemid != $this->itemid) {
-            $this->itemid = $itemid;
-            $this->getItem($itemid);
+        if (!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
+            $this->itemid = $args['itemid'];
+            $this->getItem($args);
         }
         $isvalid = true;
         foreach (array_keys($this->properties) as $name) {
@@ -510,6 +530,11 @@ class Dynamic_Object extends Dynamic_Object_Master
             }
         }
 
+        if (empty($this->itemid)) {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+            return;
+        }
+
         $modinfo = xarModGetInfo($this->moduleid);
 
     // TODO: this won't work for objects with several static tables !
@@ -530,6 +555,11 @@ class Dynamic_Object extends Dynamic_Object_Master
     {
         if (!empty($args['itemid'])) {
             $this->itemid = $args['itemid'];
+        }
+
+        if (empty($this->itemid)) {
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+            return;
         }
 
         $modinfo = xarModGetInfo($this->moduleid);
@@ -555,7 +585,7 @@ class Dynamic_Object extends Dynamic_Object_Master
      * @returns integer
      * @return value of the next item type
      */
-    function getNextItemtype($args)
+    function getNextItemtype($args = array())
     {
         if (empty($args['moduleid'])) {
             $args['moduleid'] = $this->moduleid;
