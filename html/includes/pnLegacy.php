@@ -56,6 +56,7 @@
 * pnConfigDelVar -> xarConfigDelVar
 *
 * SECURITY FUNCTIONS
+* pnSecAuthAction -> xarSecurityCheck
 * pnSecConfirmAuthKey -> xarSecConfirmAuthKey
 * pnSecGenAuthKey -> xarSecGenAuthKey
 *
@@ -527,9 +528,9 @@ function pnVarValidate($var, $type, $args = NULL)
  */
 function pnModGetUserMods()
 {
-    return xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+    return xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('UserCapable' => 1)));
 }
 
@@ -541,9 +542,9 @@ function pnModGetUserMods()
  */
 function pnModGetAdminMods()
 {
-    return xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+    return xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('AdminCapable' => 1)));
 }
 
@@ -729,7 +730,7 @@ function pnSecAddSchema($component, $schema)
 }
 
 define("ACCESS_NONE","ACCESS_NONE");
-define("ACCESS_OVERVIW","ACCESS_OVERVIW");
+define("ACCESS_OVERVIEW","ACCESS_OVERVIEW");
 define("ACCESS_READ","ACCESS_READ");
 define("ACCESS_COMMENT","ACCESS_COMMENT");
 define("ACCESS_MODERATE","ACCESS_MODERATE");
@@ -740,7 +741,11 @@ define("ACCESS_ADMIN","ACCESS_ADMIN");
 
 function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel)
 {
-    return xarSecurityCheck("pnLegacyMask",0,$testComponent, $testInstance,'','',$testRealm,$testLevel);
+    $temp = explode('::',$testComponent);
+    $testModule = $temp[0];
+    $testComponent = isset($temp[1]) ? $temp[1] : 'All';
+    $masks = new xarMasks();
+    return xarSecurityCheck("pnLegacyMask",0,$testComponent, $testInstance,'','',$testRealm,$masks->xarSecLevel($testLevel));
 }
 
 function pnSecConfirmAuthKey()

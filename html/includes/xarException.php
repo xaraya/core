@@ -412,6 +412,7 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
                                               'exceptionId' => $exceptionId,
                                               'value' => $value,
                                               'stack' => $stack);
+//echo $value->toString()."\n";
 
     // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
     // This can be useful in debugging since EHS is not so perfect as a native
@@ -566,10 +567,18 @@ function xarExceptionRender($format)
                   $message = "One or more PHP errors were encountered. <BR /><BR />";
                   foreach($collection as $collecteditem) {
                       $message .= $collecteditem['id'] . "<BR />";
-                      $message .= $collecteditem['value']->msg . "<BR />";
+                      $message .= xarVarPrepForDisplay($collecteditem['value']->msg) . "<BR />";
                   }
                   $exception['exceptionId'] = "PHP_ERROR";
                   $exception['value']->setMsg($message);
+               $thisexception = $exception['value'];
+               $thisexception->load($exception['exceptionId']);
+               $data['short'] = $thisexception->getShort();
+              }
+              else {
+               $thisexception = $exception['value'];
+               $thisexception->load($exception['exceptionId']);
+               $data['short'] = xarVarPrepForDisplay($thisexception->getShort());
               }
                 $stack = $exception['stack'];
                 $text = "";
@@ -591,6 +600,10 @@ function xarExceptionRender($format)
                     }
                 }
             }
+           $data['title'] = xarVarPrepForDisplay($thisexception->getTitle());
+           $data['long'] = xarVarPrepForDisplay($thisexception->getLong());
+           $data['hint'] = xarVarPrepForDisplay($thisexception->getHint());
+           $data['stack'] = $text;
         } else {
             if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
               if (method_exists($exception['value'],"foobar")) {
@@ -624,14 +637,14 @@ function xarExceptionRender($format)
                 }
             }
 
+           $thisexception = $exception['value'];
+           $thisexception->load($exception['exceptionId']);
+           $data['title'] = $thisexception->getTitle();
+           $data['short'] = $thisexception->getShort();
+           $data['long'] = $thisexception->getLong();
+           $data['hint'] = $thisexception->getHint();
+           $data['stack'] = $text;
         }
-       $thisexception = $exception['value'];
-       $thisexception->load($exception['exceptionId']);
-       $data['title'] = xarVarPrepForDisplay($thisexception->getTitle());
-       $data['short'] = xarVarPrepForDisplay($thisexception->getShort());
-       $data['long'] = xarVarPrepForDisplay($thisexception->getLong());
-       $data['hint'] = xarVarPrepForDisplay($thisexception->getHint());
-       $data['stack'] = xarVarPrepForDisplay($text);
     }
 
    return  xarTplModule('base',$template, 'exception', $data);

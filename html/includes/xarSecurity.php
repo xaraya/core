@@ -413,7 +413,7 @@ function xarMaskExists($name,$module="All")
  * @param  string role
  * @return bool
  */
-function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='')
+function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
     $installing = xarVarGetCached('installer','installing');
 
@@ -421,7 +421,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        return true;
     } else {
        $masks = new xarMasks();
-       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role);
+       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
@@ -496,7 +496,7 @@ function xarRemoveMasks($module)
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
-    return xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
+    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
     $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
                  $testRealm, $testComponent, $testInstance, $testLevel);
     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',

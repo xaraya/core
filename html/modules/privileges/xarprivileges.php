@@ -331,9 +331,13 @@ class xarMasks
  * @todo    none
 */
 
-    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='',$pnrealm='',$pnlevel='')
+    function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         $mask =  $this->getMask($mask);
+//        if($mask->getName() == "pnLegacyMask") {
+//            echo "realm: " . $pnrealm . "\n" . "level: " . $pnlevel;exit;
+//        }
+//        else return 1;
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
             // error reporting only. If you want to override masks with this someday, move
