@@ -22,4 +22,4 @@ pager:
 hours: 
 homepage: http://www.xaraya.com
 bkweb:  http://www.xaraya.com/index.php?module=bkview&func=display&repoid=1
-           
+partial_check:yes           
