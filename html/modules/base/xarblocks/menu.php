@@ -123,8 +123,11 @@ function base_menublock_display($blockinfo)
                             {
                                 case '[': // module link
                                 {
+                                    // Credit to Elek Márton for further expansion
                                     $url = explode(':', substr($url, 1,  - 1));
-                                    $url = xarModUrl($url[0], 'user', 'main');
+                                    if (empty($url[1])) $url[1]="user";
+                                    if (empty($url[2])) $url[2]="main";
+                                    $url = xarModUrl($url[0],$url[1],$url[2]);
                                     break;
                                 }
                                 case '{': // article link
