@@ -510,7 +510,14 @@ class xarMasks
                 $pass = $privilege;
                 $matched = true;
                 if(XARDBG_TEST) {
-                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Privilege includes mask. Privilege level greater or equal.<BR />";
+                }
+                break;
+            }
+            elseif ($privilege->includes($mask)) {
+                $matched = true;
+                if(XARDBG_TEST) {
+                    echo $mask->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Privilege includes mask. Privilege level lesser.<BR />";
                 }
                 break;
             }
@@ -519,19 +526,20 @@ class xarMasks
                     $pass = $privilege;
                     $matched = true;
                     if(XARDBG_TEST) {
-                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />Mask includes privilege. Privilege level greater or equal.<BR />";
+                    }
+                    break;
+                }
+                else {
+                    if(XARDBG_TEST) {
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<BR />Mask includes privilege. Privilege level lesser.<BR />";
                     }
                 }
             }
-            elseif ($privilege->includes($mask)) {
-                $matched = true;
+            else {
                 if(XARDBG_TEST) {
-                    echo $privilege->getName() . " <font color='blue'>wins</font>. Breaking .. <BR />";
+                    echo "<font color='red'>no match</font>. Continuing...<BR />";
                 }
-                break;
-            }
-            if(XARDBG_TEST) {
-                echo "<font color='red'>no match</font>. Continuing...<BR />";
             }
         }
         foreach ($privilegeset['privileges'] as $privilege) {
