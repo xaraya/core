@@ -54,29 +54,41 @@ function xarWebservicesMain() {
     switch($type) {
     case  'xmlrpc':
         // xmlrpc server does automatic processing directly
-        $server = xarModAPIFunc('webservices','user','initXMLRPCServer');
+        $server=false;
+        if (xarModIsAvialable('xmlrpcserver')) {
+            $server = xarModAPIFunc('webservices','user','initxmlrpcserver');
+        }
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
+            // Why do we need to die here?
             die('Could not load XML-RPC server');
         } else {
             xarLogMessage("Created XMLRPC server");
         }
+        
         break;
     case 'soap' :
-        $server = xarModAPIFunc('webservices','user','initSOAPServer');
-        if (!$server) {
-            $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
-            // TODO: check this
-            echo $fault->serialize();
+        $server=false;
+        if(xarModIsAvailable('soapserver')) {
+            $server = xarModAPIFunc('webservices','user','initsoapserver');
+        
+            if (!$server) {
+                $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
+                // TODO: check this
+                echo $fault->serialize();
+            }
+            // Try to process the request
+            if ($server) {
+                global $HTTP_RAW_POST_DATA;
+                $server->service($HTTP_RAW_POST_DATA);
+            }
         }
-        // Try to process the request
-        if ($server) {
-            global $HTTP_RAW_POST_DATA;
-            $server->service($HTTP_RAW_POST_DATA);
-        }
+        break;
     default:
         if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
-            header('Location: ' . xarServerGetBaseURL() . 'modules/webservices/xaraya.wsdl');
+            // FIXME: for now wsdl description is in soapserver module
+            // consider making the webservices module a container for wsdl files (multiple?)
+            header('Location: ' . xarServerGetBaseURL() . 'modules/soapserver/xaraya.wsdl');
         } else {
             // TODO: show something nice(r) ?
             echo '<a href="ws.php?wsdl">WSDL</a><br />
