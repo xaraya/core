@@ -83,7 +83,7 @@
 		<xar:loop name="$users">
 			<tr>
 				<td width="150">
-					<xar:if condition="$uid gt 4">
+					<xar:if condition="$uid ge xarModGetVar('roles','frozenroles')">
 						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">				
 						#$name#
 						</a>

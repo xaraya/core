@@ -178,7 +178,7 @@ function roles_activate()
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
-    xarModSetVar('roles', 'frozenroles', 5);
+    xarModSetVar('roles', 'frozenroles', 3);
     xarModSetVar('privileges', 'frozenprivileges', 1);
 
     // Unfortunately, crappy format here, and not to PEAR Standardards

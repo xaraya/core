@@ -29,7 +29,7 @@ document.forms["modifyrole"].submit();}
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 		<table border="0" cellpadding="5">
-			<xar:if condition="$uid lt 5">
+			<xar:if condition="$uid lt xarModGetVar('roles','frozenroles')">
 			<tr>
 				<td>
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
