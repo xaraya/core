@@ -41,8 +41,6 @@ function adminpanels_admin_modifyconfig()
     //$data['sortorder']['bygroup']   = xarML('By Group');
 
     $data['menustyle']              = xarModGetVar('adminpanels', 'menustyle');
-
-    $data['showlogout']             = xarModGetVar('adminpanels', 'showlogout');
     $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
 /*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */
 

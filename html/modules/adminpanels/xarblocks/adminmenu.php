@@ -63,6 +63,13 @@ function adminpanels_adminmenublock_display($blockinfo)
     // Security Check
     if (!xarSecurityCheck('AdminPanel', 0, 'adminmenu', "$blockinfo[title]:All:All")) {return;}
 
+    // Get variables from content block
+    if (!is_array($blockinfo['content'])) {
+        $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
+    
     // due to shortcomings of modules module, we need this workaround
     // if our module deactivated intentionally or by accident
     // we just switch to the block mode that is not dependent on the module's api
@@ -95,7 +102,13 @@ function adminpanels_adminmenublock_display($blockinfo)
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
-    // TODO: prep for display in the template, not here.
+    // TODO: rather use a boolean to flag whether the logout is need and xar:mlstring
+    //       the label inside a xar:if construct, i.e. dont set the text at all here.
+    $showlogout = false;
+    if(isset($vars['showlogout']) && $vars['showlogout']) {
+        $showlogout = true;
+    }
+    
     $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
 
@@ -299,6 +312,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     $blockinfo['_bl_template_base'] = $template;
 
     // Populate block info and pass to BlockLayout.
+    $data['showlogout'] = $showlogout;
     $blockinfo['content'] = $data;
     return $blockinfo;
 }
