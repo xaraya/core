@@ -585,6 +585,10 @@ function xarDB__mysqlCreateTable($tableName, $fields)
         }
     }
 
+    // judgej: I would question this; the function should only be
+    // creating DDL to return, not executing it.
+    // There are instances when we don't want to drop the table, but
+    // look for the exception to know the table has been created.
     list($dbconn) = xarDBGetConn();
     $query = 'DROP TABLE IF EXISTS ' . $tableName;
     $result =& $dbconn->Execute($query);    
