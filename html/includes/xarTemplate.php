@@ -942,6 +942,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
+            $commentBlock = "<?php\n/*"
+                          . "\n * Source:     " . $sourceFileName
+                          . "\n * Theme:      " . xarTplGetThemeName()
+                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
+                          . "\n */\n?>\n";
+            fwrite($fd, $commentBlock);            
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
