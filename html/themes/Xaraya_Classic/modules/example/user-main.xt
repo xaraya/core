@@ -29,5 +29,5 @@
 
 <!-- some variable filled in by the function using this template -->
 
-<div style="text-align: center;"> #$welcome# </b></div>
+<div style="text-align: center;"><b> #$welcome# </b></div>
 
