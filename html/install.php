@@ -105,7 +105,7 @@ if(is_dir($locale_dir)) {
         }
         closedir($dh);
     }
- }
+}
 array_unique($allowedLocales);
 sort($allowedLocales);
 
@@ -132,39 +132,17 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
  * @return bool true on success, false on failure
  * @todo <johnny> use non caching templates until they are set to yes
  */
-function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
+function xarInstallMain()
 {
-
     // let the system know that we are in the process of installing
     xarVarSetCached('installer','installing',1);
 
     // Make sure we can render a page
-    xarTplSetPageTitle('Xaraya installer');
-    if (!xarTplSetThemeName('Xaraya_Classic')) {
-        xarCore_die('You need the Xaraya_Classic theme if you want to install Xaraya.');
-    }
-
+    xarTplSetPageTitle(xarML('Xaraya installer'));
+    xarTplSetThemeName('Xaraya_Classic') or  xarCore_die('You need the Xaraya_Classic theme if you want to install Xaraya.');
+   
     // Handle installation phase designation
-    $phase = (int) xarRequestGetVar('install_phase', 'POST');
-
-    // if we can't find the phase in the POST variables, check
-    // the GET cuz we might have been redirected
-    if (!$phase) {
-        $phase = (int) xarRequestGetVar('install_phase', 'GET');
-    }
-
-
-    if ($phase == 0) {
-        $phase = 1;
-    }
-
-    // Make sure we should still be here
-    if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
-        xarLogMessage("We will now hand over control to Xaraya");
-        // CHECKME: is this ever reached? If it is, it is likely that it will NOT work, as the locale will
-        // not be set properly.
-        xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
-    }
+    xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);
 
     // Hardcode module name and type
     $modName = 'installer';
@@ -225,11 +203,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     return true;
 }
 
-if (!isset($phase)) {
-    $phase = XARINSTALL_PHASE_WELCOME;
-}
-
-if (!xarInstallMain($phase)) {
+if (!xarInstallMain()) {
 
     // If we're here there must be surely an uncaught exception
     $text = xarExceptionRender('template');
