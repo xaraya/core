@@ -58,7 +58,8 @@ function roles_admin_sendmail()
         while (list($key, $user) = each($descendants)) {
             $users[$user->getID()] = array('uid' => $user->getID(),
                 'name' => $user->getName(),
-                'email' => $user->getEmail()
+                'email' => $user->getEmail(),
+                'username' => $user->getUser()
                 );
         }
     }
