@@ -392,9 +392,9 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
         $localeData =& xarMLSLoadLocaleData();
     }
 
-    $currency = xarLocaleParseNumber($currency, $localeData, true);
     $currencySym = $localeData['/monetary/currencySymbol'];
     $currency = str_replace($currencySym,'',$currency);
+    $currency = xarLocaleParseNumber($currency, $localeData, true);
     return trim($currency);
 }
 
