@@ -1056,12 +1056,13 @@ class Dynamic_Property
     /**
      * Show some default output for this property
      *
-     * @param $value value of the property (default is the current value)
+     * @param $args['value'] value of the property (default is the current value)
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showOutput($value = null)
+    function showOutput($args = array())
     {
+        extract($args);
         if (isset($value)) {
             return xarVarPrepForDisplay($value);
         } else {

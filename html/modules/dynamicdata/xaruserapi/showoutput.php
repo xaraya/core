@@ -11,7 +11,7 @@
 function dynamicdata_userapi_showoutput($args)
 {
     $property = & Dynamic_Property_Master::getProperty($args);
-    return $property->showOutput($args['value']);
+    return $property->showOutput($args);
 
     // TODO: output from some common hook/utility modules
 }

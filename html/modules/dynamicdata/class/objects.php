@@ -1665,7 +1665,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 if (isset($this->properties[$name])) {
                     $label = xarVarPrepForDisplay($this->properties[$name]->label);
                     if (isset($this->items[$itemid][$name])) {
-                        $value = $this->properties[$name]->showOutput($this->items[$itemid][$name]);
+                        $value = $this->properties[$name]->showOutput(array('value' => $this->items[$itemid][$name]));
                     } else {
                         $value = '';
                     }
