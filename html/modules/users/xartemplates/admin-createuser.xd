@@ -6,14 +6,14 @@
     </tr>
 </table>
 
-<div align="center">
+<center>
 	<p>
-		<xar:if condition="$uid eq -1">
+		<xar:if condition="$pid eq -1">
             <xar:mlstring>Passwords don't match.</xar:mlstring>
-		<xar:elseif condition="$uid eq 0" />
+		<xar:elseif condition="$pid eq 0" />
 			<xar:mlstring>User could not be created. Most likely the username exists already</xar:mlstring>.
 		<xar:else />
-			<xar:mlstring>User successfully created with UID</xar:mlstring> #$uid#	
+			<xar:mlstring>User successfully created with PID</xar:mlstring> #$pid#	
 		</xar:if>
 	</p>
-</div>
+</center>

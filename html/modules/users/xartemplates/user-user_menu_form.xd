@@ -1,7 +1,7 @@
 <h2>#$name# <xar:mlstring>Basic Information</xar:mlstring></h2> 
 <form action="#xarModURL('users', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="authid" id="authid" value="#$authid#" />	
-<input type="hidden" name="uid" id="uid" value="#$uid#" />
+<input type="hidden" name="pid" id="pid" value="#$pid#" />
 <input type="hidden" name="phase" id="phase" value="updatebasic" />
 <div class="xar-accent">
 <table border="0" width="100%" cellspacing="1" cellpadding="4">
@@ -31,14 +31,6 @@
 	</tr>
 	<tr>
 		<td>
-			<b><xar:mlstring>URL</xar:mlstring>:</b>
-		</td>
-		<td>
-			<input type="text" name="url" id="url" value="#$url#" size="30" maxlength="60" tabindex="1" />
-		</td>
-	</tr>
-	<tr>
-		<td>
 			<b><xar:mlstring>Password</xar:mlstring></b>
 		</td>
 		<td>
@@ -57,5 +49,5 @@
 </table>
 </div>
 <br /><br />
-<input type="submit" value="Modify Account Information" align="middle" tabindex="2" />
+<input type="submit" value="<xar:mlstring>Modify Account Information</xar:mlstring>" align="middle" tabindex="2" />
 </form>
