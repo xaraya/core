@@ -289,6 +289,54 @@ function xarModDelVar($modName, $name)
     return true;
 }
 
+/**
+ * Delete all module variables
+ *
+ * @access public
+ * @param modName The name of the module
+ * @returns bool
+ * @return true on success
+ * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo Add caching for user variables?
+ */
+function xarModDelAllVars($modName) 
+{
+    if(empty($modName)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        return;
+    }
+    
+    $modBaseInfo = xarMod_getBaseInfo($modName);
+    //if (!isset($modBaseInfo)) return; // throw back
+
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    // Takes the right table basing on module mode
+    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+        $module_varstable = $tables['system/module_vars'];
+        $module_uservarstable = $tables['system/module_uservars'];
+    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+        $module_varstable = $tables['site/module_vars'];
+        $module_uservarstable = $tables['site/module_uservars'];
+    }
+    
+    // Delete the user variables first
+    $query = "DELETE FROM $module_uservarstable, $module_varstable
+              WHERE $module_uservarstable.xar_mvid = $module_varstable.xar_modid AND
+                    $module_varstable.xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
+    
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
+
+    // Now delete the module vars
+    $query = "DELETE FROM $module_varstable
+              WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    
+    return true;
+}
 
 /**
  * Get a user variable for a module
