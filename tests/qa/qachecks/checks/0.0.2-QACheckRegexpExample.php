@@ -23,6 +23,7 @@ class QACheckRegexpExample extends QACheckRegexp
     var $score = 2;
     var $filetype = 'all';
     var $enabled = true;
+    var $checkcomments = false;
     var $regexps = array('/Xaraya/');
 }
 

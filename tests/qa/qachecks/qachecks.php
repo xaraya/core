@@ -8,6 +8,7 @@
  *
  * Options:
  *   --checks=x,y,z   comma separated list of checker ids to run
+ *   --working=path   path to where the script is being run from
  *
  * @package qachecks
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -24,9 +25,11 @@ $regexpchecks = array(); /* array of QACheckRegexp instances   */
 $run = 0;                /* number of tests run on single file */
 $passed = 0;
 $failed = 0;
+$fatal = 0;
 $totalrun = 0;           /* number of tests run on all files   */
 $totalpassed = 0;
 $totalfailed = 0;
+$totalfatal = 0;
 $basedir = dirname(__FILE__); /* base path of qachecks source  */
 
 /* required classes */
@@ -39,6 +42,8 @@ $requested = array();
 foreach($_SERVER['argv'] as $index => $arg) {
     if (substr($arg, 0, 9) == '--checks=') {
         $requested = split(',', substr($arg, 9));
+    } else if (substr($arg, 0, 10) == '--working=') {
+        chdir(substr($arg, 10));
     } else if ($index != 0){
         $filenames[] = $arg;
     }
@@ -107,6 +112,7 @@ Checking $filename...
     $run = 0;
     $passed = 0;
     $failed = 0;
+    $fatal = 0;
     foreach ($checks as $index => $check) {
 
         /* regexp checks are handled differently */
@@ -122,7 +128,7 @@ Checking $filename...
             $check->filename = $filename;
             if (!$check->execute()) {
                 $failed++;
-                echo "  Check ".$check->id." (".$check->name.") FAILED.";
+                echo "  FAILED Check ".$check->id." (".$check->name.").";
                 $checks->success = false;
                 if ($check->fatal) {
                     echo " (FATAL)";
@@ -131,7 +137,7 @@ Checking $filename...
                 echo "\n";
             } else {
                 $passed++;
-                echo "  Check ".$check->id." (".$check->name.") passed.\n";
+                echo "  Passed Check ".$check->id." (".$check->name.").\n";
                 $check->success = true;
             }
         } /* run check? */
@@ -140,8 +146,55 @@ Checking $filename...
     /* now run the regexp checks */
     if (!empty($regexpchecks)) {
 
+        /* create a version without the comments */
+        $file = fopen($filename, 'r');
+        $nocomments = fread($file, filesize($filename));
+        fclose($file);
+
+        if ($filetype == 'php') {
+
+            /* line comments are easy */
+            $nocomments = preg_replace(':^[ \011]*#.*$:m', "", $nocomments);
+            $nocomments = preg_replace(':^[ \011]*//.*$:m', "", $nocomments);
+
+            /*
+             * For multiline comments we need to know how many blank lines to
+             * insert. We do this with a callback function.
+             */
+            function blank_comments($matches)
+            {
+                /* remove everything except newlines from match */
+                return preg_replace(':[^\n]:', '', $matches[0]);
+            }
+            $nocomments = preg_replace_callback(':/\*.*?\*/:s',
+                    "blank_comments", $nocomments);
+
+        } else if ($filetype == 'template') {
+
+            /* TODO: strip comments from template */
+            $nocomments = $text;
+        }
+        
+        /* create array from uncommented version */
+        $nocommentlines = split("\n", $nocomments);
+
+        /* split always leaves an extra empty line */
+        unset($nocommentlines[count($nocommentlines) - 1]);
+
         /* read line by line */
         $lines = file($filename);
+
+        /* debugging 
+        var_export($lines);
+        var_export($nocommentlines);
+        */
+
+        if (count($lines) != count($nocommentlines)) {
+            echo "\nERROR: line count difference after removing comments. ".
+                 "\n(lines = ".count($lines).", but nocommentlines = ".
+                 count($nocommentlines). ". This is a bug, please report at".
+                 "\nhttp://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core&component=QA\n\n";
+        }
         foreach ($lines as $number => $line) {
 
             /* iterate over each check */
@@ -153,18 +206,29 @@ Checking $filename...
 
                     /* iterate each regexp in the check */
                     foreach ($check->regexps as $regexp) {
-                        if (preg_match($regexp, $line)) {
+
+                        /* do we check commented lines? */
+                        if ($check->checkcomments == true) {
+                            $fail = preg_match($regexp, $line);
+                        } else {
+                            $fail = preg_match($regexp,
+                                    $nocommentlines[$number]);
+                        }
+                        if ($fail) {
 
                             /* check failed */
-                            $regexpchecks[$index]->success = false;
                             $regexpchecks[$index]->failedlines[] = $number;
-                            echo "  Check ".$check->id." (".$check->name.") ".
-                                    "FAILED";
-                            if ($check->fatal) {
-                                echo " (FATAL)";
-                                $fatal = true;
+                            if ($regexpchecks[$index]->success) {
+                                $regexpchecks[$index]->success = false;
+                                echo "  FAILED Check ".$check->id." (".
+                                        $check->name.") ";
+                                if ($check->fatal) {
+                                    echo " (FATAL)";
+                                    $fatal = true;
+                                }
+                                echo "\n";
                             }
-                            echo "\n    ".($number + 1).":  $line\n";
+                            echo "    ".sprintf("%4d", $number + 1).":  $line";
                         }
                     } /* each regexp */
                 } /* run check? */
@@ -180,8 +244,11 @@ Checking $filename...
                 $run++;
                 if (!$check->success) {
                     $failed++;
+                    if ($check->fatal) {
+                        $fatal++;
+                    }
                 } else {
-                    echo "  Check ".$check->id." (".$check->name.") passed.\n";
+                    echo "  Passed Check ".$check->id." (".$check->name.").\n";
                     $passed++;
                 }
             }
@@ -189,16 +256,20 @@ Checking $filename...
     } /* regexpchecks */
 
     /* report on file */
-    echo "\nFinished checking $filename\n";
-    echo "Checks passed: $passed\nChecks failed: $failed\nChecks run: $run\n";
+    echo "\nFinished checking $filename";
+    echo "
+Checks passed: $passed
+Checks failed: $failed ($fatal fatal)
+Checks run: $run\n";
     $totalpassed += $passed;
     $totalfailed += $failed;
+    $totalfatal += $fatal;
     $totalrun += $run;
 } /* each file */
 
 /* check for fatal errors */
 echo "\nTotal checks passed: $totalpassed\n";
-echo "Total checks failed: $totalfailed\n";
+echo "Total checks failed: $totalfailed ($totalfatal fatal)\n";
 echo "Total checks run: $totalrun\n";
 if ($fatal) {
     echo "\nOne or more fatal errors occurred.\n\n";
