@@ -18,14 +18,14 @@
  */
 class Exception
 {
-    var $msg;
-    var $id;
-    var $major;
+    var $msg = '';
+    var $id = 0;
+    var $major = 0;
     var $defaults;
-    var $title;
-    var $short;
-    var $long;
-    var $hint;
+    var $title = '';
+    var $short = '';
+    var $long = '';
+    var $hint= '';
     var $stack;
 
     function Exception() {
