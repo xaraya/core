@@ -28,7 +28,7 @@ function adminpanels_admin_updateconfig()
 
     // obsolete, need to comment out or delete after upgrade..
     // but for now we just re-use it to indicate if we want a marker against active module
-    if(!xarVarFetch('showold', 'isset', $showold, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('showmarker', 'isset', $showmarker, NULL, XARVAR_DONT_SET)) {return;}
 
     // true if we want to always display adminmenu on top
     if(!xarVarFetch('showontop', 'isset', $showontop, NULL, XARVAR_DONT_SET)) {return;}
@@ -62,10 +62,10 @@ function adminpanels_admin_updateconfig()
             xarModSetVar('adminpanels', 'showontop', 1);
         }
     
-        if(!$showold){
-            xarModSetVar('adminpanels', 'showold', 0);
+        if(!$showmarker){
+            xarModSetVar('adminpanels', 'showmarker', 0);
         }else{
-            xarModSetVar('adminpanels', 'showold', 1);
+            xarModSetVar('adminpanels', 'showmarker', 1);
         }
     
         xarModSetVar('adminpanels', 'menustyle', $menustyle);

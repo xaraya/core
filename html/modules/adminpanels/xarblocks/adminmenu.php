@@ -79,7 +79,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     $marker = xarModGetVar('adminpanels', 'marker');
     $dec = '';
     // dont show marker unless specified
-    if(!xarModGetVar('adminpanels', 'showold')){
+    if(!xarModGetVar('adminpanels', 'showmarker')){
         $marker = '';
     } elseif ($marker === 'x09' || $marker === '900' || $marker === '0900') {
         // TODO: remove after beta testing's done

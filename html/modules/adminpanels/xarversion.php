@@ -13,9 +13,9 @@
  * @author Andy Varganov <andyv@xaraya.com>
 */
 $modversion['name'] = 'Administration';
-$modversion['description'] = 'Displays the Adminstration Block';
+$modversion['description'] = 'Taking care of the admin navigation';
 $modversion['id'] = '9';
-$modversion['version'] = '1.2.0';
+$modversion['version'] = '1.2.1';
 $modversion['official'] = 1;
 $modversion['author'] = 'Andy Varganov';
 $modversion['contact'] = 'andyv@xaraya.com';

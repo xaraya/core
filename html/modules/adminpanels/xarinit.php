@@ -144,13 +144,16 @@ function adminpanels_init()
 
 
     // Set module variables
-    xarModSetVar('adminpanels','showold', 1);
     xarModSetVar('adminpanels','menuposition', 'l');
     xarModSetVar('adminpanels','menustyle', 'bycat');
     xarModSetVar('adminpanels','showontop', 1);
     xarModSetVar('adminpanels','showhelp', 1);
     xarModSetVar('adminpanels','marker', '[x]');
-
+    
+    // after version 1.2.0
+    xarModSetVar('adminpanels','showlogout', 1);
+    xarModSetVar('adminpanels','showmarker', 0);
+    
     // Initialisation successful
     return true;
 }
@@ -160,47 +163,26 @@ function adminpanels_init()
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   $oldVersion
+ * @param   $oldversion
  * @return  true on success or false on failure
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_upgrade($oldVersion)
-{
+function adminpanels_upgrade($oldversion){
+        
     // Upgrade dependent on old version number
-    switch($oldVersion) {
-        case 1.0:
-            // Code to upgrade from version 1.0 goes here
-            break;
-        // TODO : remove for release version
-        case 2.0:
-            // Code to upgrade from version 2.0 goes here
-            break;
-        case 2.1:
-//            if (!xarModRegisterHook('item', 'search', 'GUI',
-//                                   'articles', 'user', 'search')) {
-//                return false;
-//            }
-            break;
-        case 2.2:
-            // Code to upgrade from version 2.2 goes here
-
-            break;
-        case 2.3:
-            // Register BL tags
-//            xarTplRegisterTag('articles', 'articles-field',
-//                              //array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
-//                              array(),
-//                              'articles_userapi_handleFieldTag');
-            break;
-        case 2.4:
-            // Code to upgrade from version 2.4 goes here
-
-            break;
-        case 2.5:
-            // Code to upgrade from version 2.5 goes here
-
-            break;
+    switch($oldversion) {
+        case '1.0': // first ever version as string
+        case  1.0:  // first ever version as float
+        case '1.2.0':
+            // sort out modvars, remove unused and add new ones
+            if(!xarModGetVar('adminpanels','showlogout')){
+                xarModSetVar('adminpanels','showlogout', 1);
+            }
+            if(xarModGetVar('adminpanels','showold')){
+                xarModDelVar('adminpanels','showold');
+                xarModSetVar('adminpanels','showmarker', 0);
+            }
     }
     return true;
 }
@@ -216,47 +198,8 @@ function adminpanels_upgrade($oldVersion)
 */
 function adminpanels_delete()
 {
-  //this module cannot be removed
+  //this module cannot be removed via gui
   return false;
-
-    // temporary workaround to enable deactivate and upgrade
-    // TODO: remove prior to xarays 1.0 release
-
-    // removal of module stuff from version 1.0
-/*     xarModDelVar('adminpanels', 'showold'); */
-/*     xarModDelVar('adminpanels', 'menuposition'); */
-/*     xarModDelVar('adminpanels', 'menustyle'); */
-/*     xarModDelVar('adminpanels', 'showontop'); */
-/*     xarModDelVar('adminpanels', 'showhelp'); */
-/*     xarModDelVar('adminpanels', 'marker'); */
-
-    // need to drop the module tables too
-    // Get database information
-/*     list($dbconn) = xarDBGetConn(); */
-/*     $xartable = xarDBGetTables(); */
-
-    //Load Table Maintainance API
-/*     xarDBLoadTableMaintenanceAPI(); */
-
-    // Generate the SQL to drop the table using the API
-/*     $query = xarDBDropTable($xartable['admin_menu']); */
-/*     if (empty($query)) return;  */
-
-    // Drop the table and send exception if returns false.
-/*     $result =& $dbconn->Execute($query); */
-/*     if (!$result) return; */
-
-    // unregister our blocks.. maybe not
-    // xarBlockTypeUnregister('adminpanels', 'adminmenu');
-    // xarBlockTypeUnregister('articles', 'waitingcontent');
-
-    // Remove Masks and Instances
-/*     xarRemoveMasks('adminpanels'); */
-/*     xarRemoveInstances('adminpanels'); */
-
-    // we are done with removing stuff from version 1.0
-
-/*     return true; */
 }
 
 ?>

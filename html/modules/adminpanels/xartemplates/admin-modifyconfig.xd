@@ -1,9 +1,8 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<style>.adminpanels-rednote {color: #CC0000;}</style>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Administration - Adminpanels 
+            Administration - Adminpanels
         </xar:mlstring>
     </span>
 </div>
@@ -45,12 +44,12 @@
                         &nbsp; 
                     </td>
                     <td>
-                        <xar:if condition="$showold eq 1">
-                            <input type="checkbox" name="showold" id="showold" value="1" checked="checked" />
+                        <xar:if condition="$showmarker eq 1">
+                            <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
                             <xar:else />
-                            <input type="checkbox" name="showold" id="showold" value="1" />
+                            <input type="checkbox" name="showmarker" id="showmarker" value="1" />
                         </xar:if>
-                        <label for="showold">
+                        <label for="showmarker">
                             <xar:mlstring>
                                 Mark active item 
                             </xar:mlstring>
@@ -58,7 +57,7 @@
                     </td>
                     <td class="adminpanels-rednote">
                         <xar:mlstring>
-                            if unchecked, no marker displayed 
+                            when unchecked, marker is not displayed 
                         </xar:mlstring>
                     </td>
                 </tr>
@@ -71,7 +70,6 @@
                         </label>
                     </td>
                     <td>
-<!-- feature request 707 - 10 is the maximum number of characters accepted for html entities -->
                         <input type="text" name="marker" id="marker" size="10" maxlength="10" value="#$marker#" />
                     </td>
                     <td class="adminpanels-rednote">
@@ -217,7 +215,8 @@
                         </xar:mlstring>
                     </td>
                 </tr>
--->                <tr>
+-->
+                <tr>
                     <td align="right">
                         &nbsp; 
                     </td>

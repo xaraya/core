@@ -8,8 +8,7 @@
         <ul class="xar-menu-item">
             <xar:foreach in="$adminmods" value="$mod" key="$modname">
                 <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
-                    <li class="xar-menu-item-current">
-                        <a name="activeitem" title="#$modname#">#$modname#</a>
+                    <li class="xar-menu-item-current"><a name="activeitem" title="#$modname#">#$modname#</a>
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -24,8 +23,7 @@
                         </xar:if>
                     </li>
                 <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
-                    <li class="xar-menu-item-current">
-                        <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
+                    <li class="xar-menu-item-current"><a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -40,8 +38,7 @@
                         </xar:if>
                     </li>
                 <xar:else />
-                    <li class="xar-menu-item">
-                        <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
+                    <li class="xar-menu-item"><a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
                                 <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -60,3 +57,9 @@
         </ul>
     </li>
 </ul>
+<xar:comment>
+    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels -> upgrade transparently via modules module
+</xar:comment>
+<xar:if condition="xarModGetUserVar('adminpanels', 'showlogout')">
+	[<a title="#xarML('Logout as administrator')#" href="#$logouturl#">#$logoutlabel#</a>]
+</xar:if>

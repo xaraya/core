@@ -72,6 +72,12 @@
         </ul>
 	</xar:if>
 </xar:foreach>
+<xar:comment>
+    the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels -> upgrade transparently via modules module
+</xar:comment>
+<xar:if condition="xarModGetUserVar('adminpanels', 'showlogout')">
+	[<a title="#xarML('Logout as administrator')#" href="#$logouturl#">#$logoutlabel#</a>]
+</xar:if>
 
 <xar:comment> DO NOT UNCOMMENT - EXAMPLE!
     

@@ -24,15 +24,15 @@
 */
 function adminpanels_admin_modifyconfig()
 {
-// Security Check
+	// Security Check
     if(!xarSecurityCheck('AdminPanel')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
-    // everything else happens in Template for now
+
     // prepare labels and values for display by the template
     $data['showontop']              = xarModGetVar('adminpanels', 'showontop');
-    $data['showold']                = xarModGetVar('adminpanels', 'showold');
+    $data['showmarker']             = xarModGetVar('adminpanels', 'showmarker');
     $data['marker']                 = xarModGetVar('adminpanels', 'marker');
 
     $data['sortorder'] = array();
