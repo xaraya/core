@@ -113,7 +113,7 @@ function base_menublock_display($blockinfo)
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
                             $usermods[] = array('label' => $label, 'link' => '', 'desc' => '', 'marker' => $marker);
-/*
+
                             // Load API for individual links. 
                             if (!xarModAPILoad($label, 'user')) return; // throw back
 
@@ -126,12 +126,11 @@ function base_menublock_display($blockinfo)
                             if (!empty($menulinks)) {
                                 $indlinks = array();
                                 foreach($menulinks as $menulink){
-                                    $indlinks[] = array('userlink' => $menulink['userlink'], 'userlabel' => $menulink['userlabel'], 'usertitle' => $menulink['usertitle']);
+                                    $indlinks[] = array('userlink' => $menulink['url'], 'userlabel' => $menulink['label'], 'usertitle' => $menulink['title']);
                                 } 
                             } else {
                                 $indlinks= '';
                             }
-*/
                         }else{
                             $modid = xarModGetIDFromName($mod['name']);
                             $modinfo = xarModGetInfo($modid);
@@ -148,7 +147,7 @@ function base_menublock_display($blockinfo)
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
                 $data = xarTplBlock('base','sidemenu', array('usermods'     => $usermods, 
-                                                             'menustyle'     => $menustyle,
+                                                             'indlinks'     => $indlinks,
                                                              'logouturl'     => $logouturl,
                                                              'logoutlabel'   => $logoutlabel,
                                                              'loggedin'      => $loggedin,

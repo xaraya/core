@@ -26,13 +26,12 @@
 		</xar:if>
 		<xar:if condition="!empty($marker)">
 			&xar-var-marker;
-<!-- 			<xar:if condition="!empty($indlinks)">
+			<xar:if condition="!empty($indlinks)">
 				<br />
 				<xar:loop name="$indlinks">
-					<a href="&xar-var-userlink;" title="&xar-var-usertitle;">&xar-var-userlabel;</a>
+					&nbsp;&nbsp;<strong>&middot;</strong>&nbsp;&nbsp;<a href="&xar-var-userlink;" title="&xar-var-usertitle;">&xar-var-userlabel;</a><br>
 				</xar:loop>
-				<br />
-			</xar:if> -->
+			</xar:if>
 		</xar:if>
 		<br />
 	</xar:loop>
