@@ -546,7 +546,6 @@ function xarModGetInfo($modRegId, $type = 'module')
     $modInfo['regid'] = $modRegId;
     $modInfo['mode'] = (int) $mode;
     $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-    $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
 
     // Shortcut for os prepared directory
     $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
@@ -991,7 +990,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if (!isset($generateXMLURL)) {
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
-	
+
     // Check the global short URL setting before trying to load the URL encoding function
     // for the module.
     // Don't try and process short URLs if a custom entry point has been defined.
@@ -1000,34 +999,34 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // Note: if a module declares itself as suppoting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
         if (xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') && xarModAPILoad($modName, 'user')) {
-			$encoderArgs = $args;
-			$encoderArgs['func'] = $funcName;
+            $encoderArgs = $args;
+            $encoderArgs['func'] = $funcName;
 
             // Don't throw exception on missing file or function anymore.
             // FIXME: why do we want to hide errors here? The encode_shorturl function *must*
             // be available if 'SupportShortURLs' is set for the module, so we are only hiding
             // parsing errors, which we want to know about. Also, if the file is missing, we
             // want to know.
-			$path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
-			if (!empty($path)) {
-				// The following allows you to modify the BaseURL from the config file
-				// it can be used to configure Xaraya for mod_rewrite by
-				// setting BaseModURL = '' in config.php
-				$BaseModURL =  xarCore_getSystemVar('BaseModURL', true);
-				if (!isset($BaseModURL))
-				{
-					// Use xaraya default if BaseModURL not provided in config.php
-					$path = 'index.php' . $path;
-				} else {
-					// Build Base URL from Config.
-					// Remove the trailing / from the BaseModURL path.
+            $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
+            if (!empty($path)) {
+                // The following allows you to modify the BaseURL from the config file
+                // it can be used to configure Xaraya for mod_rewrite by
+                // setting BaseModURL = '' in config.php
+                $BaseModURL =  xarCore_getSystemVar('BaseModURL', true);
+                if (!isset($BaseModURL))
+                {
+                    // Use xaraya default if BaseModURL not provided in config.php
+                    $path = 'index.php' . $path;
+                } else {
+                    // Build Base URL from Config.
+                    // Remove the trailing / from the BaseModURL path.
                     // FIXME: is the trailing '/' necessary to start with?
-					$path = preg_replace('/\/^/', '', $BaseModURL) . $path;
-				}
+                    $path = preg_replace('/\/^/', '', $BaseModURL) . $path;
+                }
 
                 // We now have short form of the URL.
                 // Further custom manipulation of the URL can be added here.
-			}
+            }
         }
     }
 
@@ -1107,13 +1106,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  */
 function xarModGetDisplayableName($modName)
 {
-    // The module display name is language sensitive, so it's fetched through xarMLByKey
-    //$modInfo = xarMod_getFileInfo($modName);
-    //return xarML($modInfo['name']);
-
-    return xarML($modName);
-
-    //return xarMLByKey($modName);
+    $modInfo = xarMod_getFileInfo($modName);
+    return xarML($modInfo['name']);
 }
 
 /**
@@ -1496,7 +1490,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         $modversion = array();
     }
     $version = array_merge($themeinfo, $modversion);
-    
+
     // name and id are required, assert them, otherwise the module is invalid
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];

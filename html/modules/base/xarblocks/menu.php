@@ -81,9 +81,9 @@ function base_menublock_display($blockinfo)
 
     // are there any user modules, then get their names
     // checking as early as possible :)
-    $mods = xarModAPIFunc('modules', 
-                          'admin', 
-                          'GetList', 
+    $mods = xarModAPIFunc('modules',
+                          'admin',
+                          'GetList',
                           array('filter'     => array('UserCapable' => 1)));
     if(empty($mods)) {
     // there aren't any admin modules, dont display adminmenu
@@ -131,7 +131,7 @@ function base_menublock_display($blockinfo)
                         $url = explode(':', substr($url, 1,  - 1));
                         if (empty($url[1])) $url[1]="user";
                         if (empty($url[2])) $url[2]="main";
-                        // if the current module is active, then we are here 
+                        // if the current module is active, then we are here
                         if ($url[0] == $thismodname) {
                             $here = 'true';
                         }
@@ -191,7 +191,7 @@ function base_menublock_display($blockinfo)
             $title = $parts[1];
             $comment = $parts[2];
             $child = isset($parts[3]) ? $parts[3] : '';
-            
+
             // Security Check
             //FIX: Should contain a check for the particular menu item
             //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
@@ -210,10 +210,10 @@ function base_menublock_display($blockinfo)
     if (!empty($vars['displaymodules'])) {
         if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
             foreach($mods as $mod){
-                $label = $mod['name'];
+                $label = xarModGetDisplayableName($mod['name']);
                 $link = xarModURL($mod['name'] ,'user', 'main', array());
                 // depending on which module is currently loaded we display accordingly
-                if($label == $thismodname && $thismodtype == 'user'){
+                if($mod['name'] == $thismodname && $thismodtype == 'user'){
 
                     // Get list of links for modules
                     $labelDisplay = ucwords($label);
@@ -224,11 +224,11 @@ function base_menublock_display($blockinfo)
                     // Lets check to see if the function exists and just skip it if it doesn't
                     // with the new api load, it causes some problems.  We need to load the api
                     // in order to do it right.
-                    xarModAPILoad($label, 'user');
+                    xarModAPILoad($mod['name'], 'user');
                     if (function_exists($label.'_userapi_getmenulinks') ||
                         file_exists("modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
                         // The user API function is called.
-                        $menulinks = xarModAPIFunc($label,
+                        $menulinks = xarModAPIFunc($mod['name'],
                                                    'user',
                                                    'getmenulinks');
 
@@ -279,7 +279,7 @@ function base_menublock_display($blockinfo)
             if($modinfo){
                 $desc = $modinfo['description'];
             }
-            $usermods[] = array('label' => 'roles',
+            $usermods[] = array('label' => xarModGetDisplayableName('roles'),
                 'link' => xarModUrl('roles', 'user', 'main'),
                 'desc' => $desc,
                 'modactive' => 0);
@@ -381,7 +381,7 @@ function base_menublock_modify($blockinfo)
         $vars['contentlines'] = array();
         foreach ($contentlines as $contentline) {
             $link = explode('|', $contentline);
-            $vars['contentlines'][] = $link; 
+            $vars['contentlines'][] = $link;
             $c++;
         }
     }
