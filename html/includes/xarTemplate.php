@@ -270,7 +270,7 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder
 	if (!empty($modName)){
 		$info = xarMod_getBaseInfo($modName);
 		if (!isset($info)) return;		
-		$modulePath = 'modules/' . $info['directory'] . '/xarstyles/' . $styleName.$fileExt;
+		$modulePath = 'modules/' . $info['directory'] . '/xarstyles/' . "$styleName.$fileExt";
 	}
 
 	$themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
