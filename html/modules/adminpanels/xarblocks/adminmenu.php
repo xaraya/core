@@ -263,6 +263,7 @@ function adminpanels_adminmenublock_display($blockinfo){
             }
             // prepare the data for template(s)
             $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
+                        
             if (empty($indlinks)){
                 $indlinks = '';
             }

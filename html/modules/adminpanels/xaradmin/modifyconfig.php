@@ -50,8 +50,8 @@ function adminpanels_admin_modifyconfig()
     $data['menuselect']['r']        = xarML('Right');
     $data['menuposition']           = xarModGetVar('adminpanels', 'menuposition');
     //TODO: need a better routine for building select in template
-
-/*     $data['showhelplabel']          = xarML('Show module "Help" in the menu:'); */
+	
+	$data['showlogout']             = xarModGetVar('adminpanels', 'showlogout');
     $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
 /*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */
 

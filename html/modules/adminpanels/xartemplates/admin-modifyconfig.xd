@@ -9,7 +9,7 @@
 <div class="xar-mod-body">
     <h2>
         <xar:mlstring>
-            Configure Adminmenu
+            Configure Administrator's Menus (built-in solutions)
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
@@ -21,7 +21,7 @@
                     <td align="right" width="180">
                         &nbsp; 
                     </td>
-                    <td>
+                    <td colspan="2">
                         <xar:if condition="$showontop eq 1">
                             <input type="checkbox" name="showontop" id="showontop" value="1" checked="checked" />
                             <xar:else />
@@ -29,21 +29,16 @@
                         </xar:if>
                         <label for="showontop">
                             <xar:mlstring>
-                                Always on top 
+                                Always on top (position the menu in blockgroup)
                             </xar:mlstring>
                         </label>
-                    </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            set position of the menu in blockgroup 
-                        </xar:mlstring>
                     </td>
                 </tr>
                 <tr>
                     <td align="right">
                         &nbsp; 
                     </td>
-                    <td>
+                    <td colspan="2">
                         <xar:if condition="$showmarker eq 1">
                             <input type="checkbox" name="showmarker" id="showmarker" value="1" checked="checked" />
                             <xar:else />
@@ -51,14 +46,9 @@
                         </xar:if>
                         <label for="showmarker">
                             <xar:mlstring>
-                                Mark active item 
+                                Mark active item (when unchecked, marker is not displayed) 
                             </xar:mlstring>
                         </label>
-                    </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            when unchecked, marker is not displayed 
-                        </xar:mlstring>
                     </td>
                 </tr>
                 <tr>
@@ -74,7 +64,7 @@
                     </td>
                     <td class="adminpanels-rednote">
                         <xar:mlstring>
-                            it will be displayed next to active menu item.. 
+                            (to be displayed next to active menu item)
                         </xar:mlstring>
                     </td>
                 </tr>
@@ -103,68 +93,11 @@
                     </td>
                     <td class="adminpanels-rednote">
                         <xar:mlstring>
-                            only name and category implemented 
-                        </xar:mlstring>
-                    </td>
-                </tr>
-<!--                <tr>
-                    <td align="right">
-                        <xar:mlstring>
-                            Sort order "By Weight" configuration: 
-                        </xar:mlstring>
-                    </td>
-                    <td>
-                        <a href="&xar-modurl-adminpanels-admin-config_byweight;">
-                            <xar:mlstring>
-                                Configure weights 
-                            </xar:mlstring>
-                        </a>
-                    </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            not implemented 
+                            (only name and category implemented) 
                         </xar:mlstring>
                     </td>
                 </tr>
                 <tr>
-                    <td align="right">
-                        <xar:mlstring>
-                            Sort order "By Group" configuration: 
-                        </xar:mlstring>
-                    </td>
-                    <td>
-                        <a href="&xar-modurl-adminpanels-admin-config_bygroup;">
-                            <xar:mlstring>
-                                Configure groups 
-                            </xar:mlstring>
-                        </a>
-                    </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            not implemented 
-                        </xar:mlstring>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
-                        <xar:mlstring>
-                            Groups configuration: 
-                        </xar:mlstring>
-                    </td>
-                    <td>
-                        <a href="&xar-modurl-adminpanels-admin-config_modgroups;">
-                            <xar:mlstring>
-                                Add/Delete/Modify 
-                            </xar:mlstring>
-                        </a>
-                    </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            not implemented 
-                        </xar:mlstring>
-                    </td>
-                </tr>
--->                <tr>
                     <td align="right">
                         <label for="menuposition">
                             <xar:mlstring>
@@ -189,33 +122,44 @@
                     </td>
                     <td class="adminpanels-rednote">
                         <xar:mlstring>
-                            center blockgroup not implemented 
+                            (center blockgroup not implemented)
                         </xar:mlstring>
                     </td>
                 </tr>
-<!--                <tr>
+                <tr>
                     <td align="right">
                         &nbsp; 
                     </td>
-                    <td>
-                        <xar:if condition="$showhelp eq 1">
-                            <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" />
+                    <td colspan="2">
+                        <xar:if condition="$showlogout eq 1">
+                            <input type="checkbox" name="showlogout" id="showlogout" value="1" checked="checked" />
                             <xar:else />
-                            <input type="checkbox" name="showhelp" id="showhelp" value="1" />
+                            <input type="checkbox" name="showlogout" id="showlogout" value="1" />
                         </xar:if>
-                        <label for="showhelp">
+                        <label for="showlogout">
                             <xar:mlstring>
-                                Display "Help" link 
+                                Display "Logout" link in the menus
                             </xar:mlstring>
                         </label>
                     </td>
-                    <td class="adminpanels-rednote">
-                        <xar:mlstring>
-                            not implemented 
-                        </xar:mlstring>
-                    </td>
                 </tr>
--->
+<!--                 <tr> -->
+<!--                     <td align="right"> -->
+<!--                         &nbsp;  -->
+<!--                     </td> -->
+<!--                     <td colspan="2"> -->
+<!--                         <xar:if condition="$showhelp eq 1"> -->
+<!--                             <input type="checkbox" name="showhelp" id="showhelp" value="1" checked="checked" /> -->
+<!--                             <xar:else /> -->
+<!--                             <input type="checkbox" name="showhelp" id="showhelp" value="1" /> -->
+<!--                         </xar:if> -->
+<!--                         <label for="showhelp"> -->
+<!--                             <xar:mlstring> -->
+<!--                                 Display "Help" link in the menus -->
+<!--                             </xar:mlstring> -->
+<!--                         </label> -->
+<!--                     </td> -->
+<!--                 </tr> -->
                 <tr>
                     <td align="right">
                         &nbsp; 

@@ -42,6 +42,9 @@ function adminpanels_admin_updateconfig()
     // left, centre or right.. hmm we definately dont want it upside down, do we?
     if(!xarVarFetch('menuposition', 'isset', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
 
+    // show or hide a link in adminmenu to administrators logout
+    if(!xarVarFetch('showlogout', 'isset', $showlogout, NULL, XARVAR_DONT_SET)) {return;}
+    
     // show or hide a link in adminmenu to a contectual on-line help for the active module
     if(!xarVarFetch('showhelp', 'isset', $showhelp, NULL, XARVAR_DONT_SET)) {return;}
 
@@ -75,6 +78,12 @@ function adminpanels_admin_updateconfig()
         $whatwasbefore = xarModGetVar('adminpanels', 'menuposition');
         xarModSetVar('adminpanels', 'menuposition', $menuposition);
     
+        if(!$showlogout){
+            xarModSetVar('adminpanels', 'showlogout', 0);
+        }else{
+            xarModSetVar('adminpanels', 'showlogout', 1);
+        }
+        
         if(!$showhelp){
             xarModSetVar('adminpanels', 'showhelp', 0);
         }else{
