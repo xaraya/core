@@ -919,17 +919,6 @@ function installer_admin_finish()
         return false;
     }
 
-    $data['phase'] = 6;
-    $data['phase_label'] = xarML('Step Six');
-    $data['finalurl'] = xarModURL('installer', 'admin', 'cleanup');
-
-    return $data;
-}
-
-
-function installer_admin_cleanup()
-{
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
@@ -967,15 +956,17 @@ function installer_admin_cleanup()
 
     $loginBlockTypeId = $loginBlockType['tid'];
 
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Login',
-                             'name'     => 'login',
-                             'type'     => $loginBlockTypeId,
-                             'groups'    => array(array('gid'      => $rightBlockGroup,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    => 2))) {
-        return;
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                           array('title'    => 'Login',
+                                 'name'     => 'login',
+                                 'type'     => $loginBlockTypeId,
+                                 'groups'    => array(array('gid'      => $rightBlockGroup,
+                                                           'template' => '')),
+                                 'template' => '',
+                                 'state'    => 2))) {
+            return;
+        }
     }
 
     $query = "SELECT    xar_id as id
@@ -1006,19 +997,31 @@ function installer_admin_cleanup()
 
     $metaBlockTypeId = $metaBlockType['tid'];
 
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Meta',
-                             'name'     => 'meta',
-                             'type'     => $metaBlockTypeId,
-                             'groups'    => array(array('gid'      => $headerBlockGroup,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    => 2))) {
-        return;
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'meta'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                           array('title'    => 'Meta',
+                                 'name'     => 'meta',
+                                 'type'     => $metaBlockTypeId,
+                                 'groups'    => array(array('gid'      => $headerBlockGroup,
+                                                           'template' => '')),
+                                 'template' => '',
+                                 'state'    => 2))) {
+            return;
+        }
     }
 
+    $data['phase'] = 6;
+    $data['phase_label'] = xarML('Step Six');
+    $data['finalurl'] = xarModURL('installer', 'admin', 'finish');
+
+    return $data;
+}
+
+
+function installer_admin_finish()
+{
+    xarVarFetch('install_language','str::',$install_language, 'en_US.iso-8859-1', XARVAR_NOT_REQUIRED);
     xarResponseRedirect('index.php');
     return true;
 }
 
-?>
