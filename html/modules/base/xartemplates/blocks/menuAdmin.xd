@@ -12,32 +12,6 @@
 		</span>
 		</div>
 
-		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#"><label for="displayprint"><xar:mlstring>Display Print Link</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<xar:if condition="!empty($displayprint)">
-				<input type="checkbox" value="1" name="displayprint" checked="checked" />
-			<xar:else />
-				<input type="checkbox" value="1" name="displayprint" />
-			</xar:if>
-		</span>
-		</div>
-
-		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Select if you would like Xaraya to generate a link to you RSS at the bottom of the menu.')#"><label for="displayrss"><xar:mlstring>Display RSS Link</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<xar:if condition="!empty($displayrss)">
-				<input type="checkbox" value="1" name="displayrss" checked="checked" />
-			<xar:else />
-				<input type="checkbox" value="1" name="displayrss" />
-			</xar:if>
-		</span>
-		</div>
-
 		<xar:if condition="!empty($displaymodules)">
 		<div style="clear: both; padding-top: 10px;">
 		<span style="float: left; width: 20%; text-align: right;">
