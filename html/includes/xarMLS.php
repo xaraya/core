@@ -262,7 +262,7 @@ function xarMLByKey($key/*, ...*/)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
         return;
     }
-    
+
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
@@ -490,12 +490,12 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
     if(!isset($timestamp)) {
         // get UTC timestamp
         //TODO : Take into account System.Core.TimeZone
-        $timestamp = time(); 
+        $timestamp = time();
     }
-    
+
     // apply the offset for later manipulation
     $timestamp -= xarMLS_userOffset() * 3600;
-    
+
     // pass this to the regular function
     return xarLocaleGetFormattedDate($length,$timestamp);
 }
@@ -527,7 +527,7 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('d','%d',$locale_format);
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
-    
+
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
@@ -540,12 +540,12 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
     if(!isset($timestamp)) {
         // get UTC timestamp
         //TODO : Take into account System.Core.TimeZone
-        $timestamp = time(); 
+        $timestamp = time();
     }
-    
+
     // apply the offset for later manipulation
     $timestamp -= xarMLS_userOffset() * 3600;
-    
+
     // pass this to the regualr function
     return xarLocaleGetFormattedTime($length,$timestamp);
 }
@@ -580,7 +580,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     $locale_format = str_replace('h',sprintf('%1d',xarLocaleFormatDate('%I',$timestamp)),$locale_format);
     $locale_format = str_replace('m',sprintf('%1d',xarLocaleFormatDate('%M',$timestamp)),$locale_format);
     $locale_format = str_replace('s',sprintf('%1d',xarLocaleFormatDate('%S',$timestamp)),$locale_format);
-    
+
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
@@ -628,7 +628,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null)
         // adjust for the user's timezone offset
         $timestamp += xarMLS_userOffset() * 3600;
     }
-    
+
 // TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
 //       let this be handled by the xarMLS_strftime function?
     //if (empty($format)) {
@@ -648,7 +648,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null)
  *  @access protected
  *  @return int unix timestamp.
  */
-function xarMLS_userTime($time=null) 
+function xarMLS_userTime($time=null)
 {
     // get the current UTC time
     if (!isset($time)) {
@@ -672,12 +672,12 @@ function xarMLS_userOffset()
     if (xarUserIsLoggedIn()) {
         // TODO: cfr. dynamicdata for roles
         $offset = xarUserGetVar('timezone');
-    } 
+    }
     //TODO: Get site's timezone setting?
     if (!isset($offset)) {
         $offset = 0;
     }
-    
+
     return $offset;
 }
 /**
@@ -691,7 +691,7 @@ function xarMLS_userOffset()
  *  @param string $format valid format params from strftime() function\
  *  @param int $timestamp optional unix timestamp to translate
  *  @return string datetime string with locale translations
- *   
+ *
  *  // supported strftime() format rules
  *  %a - abbreviated weekday name according to the current locale
  *  %A - full weekday name according to the current locale
@@ -717,7 +717,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
     }
-    
+
     // we need to get the correct timestamp format if we do not have one
     if(!isset($format)) {
         // check for user defined format
@@ -725,7 +725,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
         if($user_defined) {
             $format =& $user_defined;
         } elseif ($admin_defined) {
-            $format =& $admin_defined;  
+            $format =& $admin_defined;
         } else {
         */
             $format = '%a, %d %B %Y %H:%M %Z';
@@ -733,16 +733,16 @@ function xarMLS_strftime($format=null,$timestamp=null)
         }
         */
     }
-    
+
     // load the locale date
     $localeData = xarMLSLoadLocaleData();
-    
+
     // TODO
     // if no $format is provided we need to use the default for the locale
-    
+
     // parse the format string
     preg_match_all('/%[a-z]/i',$format,$modifiers);
-    
+
     // replace supported format rules
     foreach($modifiers[0] as $modifier) {
         switch($modifier) {
@@ -756,7 +756,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 // clean up
                 unset($w);
                 break;
-              
+
             case '%A' :
                 // figure out what weekday it is
                 $w = (int) gmstrftime('%w',$timestamp);
@@ -766,8 +766,8 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 $format = str_replace($modifier,$localeData["/dateSymbols/weekdays/$w/full"],$format);
                 // clean up
                 unset($w);
-                break; 
-            
+                break;
+
             case '%b' :
             case '%h' :
                 // figure out what month it is
@@ -777,7 +777,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 // clean up
                 unset($m);
                 break;
-                
+
             case '%B' :
                 // figure out what month it is
                 $m = (int) gmstrftime('%m',$timestamp);
@@ -786,19 +786,19 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 // clean up
                 unset($m);
                 break;
-            
+
             case '%c' :
                 // TODO: we want to display the user or site's timezone not the servers
                 $fdate = xarLocaleGetFormattedUTCDate('short',$timestamp);
                 $ftime = xarLocaleGetFormattedUTCTime('short',$timestamp);
                 $format = str_replace($modifier,$fdate.' '.$ftime,$format);
                 break;
-            
+
             case '%D' :
             case '%x' :
                 $format = str_replace($modifier,xarLocaleGetFormattedUTCDate('short',$timestamp),$format);
                 break;
-            
+
             case '%e' :
                 // implement %e for windows - grab the day number and remove the preceding zero
                 $e = sprintf('%1d',gmstrftime('%d',$timestamp));
@@ -808,33 +808,33 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 }
                 $format = str_replace($modifier,$e,$format);
                 break;
-            
+
             case '%r' :
                 // recursively call the xarMLS_strftime function
                 $format = str_replace($modifier,xarMLS_strftime('%I:%M %p',$timestamp),$format);
                 break;
-                
+
             case '%R' :
                 // 24 hour time for windows compatibility
                 $format = str_replace($modifier,gmstrftime('%H:%M',$timestamp),$format);
                 break;
-            
+
             case '%T' :
                 // current time for windows compatibility
                 $format = str_replace($modifier,gmstrftime('%H:%M:%S',$timestamp),$format);
                 break;
-                
+
             case '%X' :
                 // TODO: we want to display the user or site's timezone not the servers
                 $format = str_replace($modifier,xarLocaleGetFormattedUTCTime('short',$timestamp),$format);
                 break;
-                
+
             case '%Z' :
 // TODO: we want to display the user or site's timezone not the servers
 // TODO: we'll just push empty text for now
                 $format = str_replace($modifier,'',$format);
                 break;
-            
+
             case '%p' :
                 // figure out if it's am or pm
                 $h = gmstrftime('%H',$timestamp);
@@ -844,7 +844,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 } else {
                     // replace with AM string
                     $format = str_replace($modifier,$localeData["/dateSymbols/am"],$format);
-                }  
+                }
                 break;
         }
     }
@@ -890,7 +890,7 @@ function xarMLS_setCurrentLocale($locale)
     $curCharset = xarMLSGetCharsetFromLocale($locale);
     if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
         assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
-        // To be able to continue, we set the mode to BOXED 
+        // To be able to continue, we set the mode to BOXED
         if ($curCharset != "utf-8") {
             xarLogMessage("Resetting MLS mode to BOXED");
             xarConfigSetVar('Site.MLS.MLSMode','BOXED');
@@ -1442,7 +1442,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
     }
 
     function loadContext($ctxType, $ctxName)
-    {    	 
+    {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;

@@ -447,14 +447,8 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    $installing = xarVarGetCached('installer','installing');
-
-    if(isset($installing) && ($installing == true)) {
-        return true;
-    } else {
         $masks = new xarMasks();
         return $masks->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
-    }
 }
 
 /**

@@ -86,7 +86,6 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     if (xarUserIsLoggedIn()) {
         return true;
     }
-
     if (empty($userName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
         return;
@@ -121,7 +120,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // but free exceptions set by previous auth module
         xarErrorFree();
     }
-    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) 
+    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED)
         return false;
 
     // Catch common variations (0, false, '', ...)
