@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Initialise a module
+ * Installs a module
  *
  * Loads module admin API and calls the initialise
  * function to actually perform the initialisation,
@@ -13,7 +13,7 @@
  * @returns
  * @return
  */
-function modules_admin_initialise()
+function modules_admin_install()
 {
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
@@ -56,7 +56,7 @@ function modules_admin_initialise()
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
 
-    xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
+    xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
 }
