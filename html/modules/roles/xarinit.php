@@ -111,7 +111,6 @@ function roles_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-*/
 
     // prefix_rolemembers
     /*********************************************************************
@@ -273,9 +272,11 @@ IP Address of the person creating that account: %%ipaddr%%
 User Name:  %%username%%
 Password:  %%password%%
 
+Validation Code to activate your account:  %%valcode%%
+
 If you did not create this account, then do nothing.  The account will be deemed inactive after a period of time and deleted from our records.  You will recieve no further emails from us.
 
-Thank you,
+Thank you, 
 
 %%siteadmin%%';
 
@@ -313,7 +314,7 @@ president@whitehouse.gov';
     return true;
 }
 /**
- * Upgrade the roles module from an old version
+ * Upgrade the users module from an old version
  *
  * @access public
  * @param oldVersion
@@ -381,4 +382,3 @@ function roles_delete()
     return true;
 }
 
-?>

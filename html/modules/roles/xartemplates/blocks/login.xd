@@ -21,7 +21,7 @@
             <tr>
                 <td colspan="2">
                     <input type="checkbox" name="rememberme" id="rememberme" value="1" /><xar:mlstring>Remember me</xar:mlstring>
-                </td>
+				</td>
             </tr>
         </xar:if>
         <tr>

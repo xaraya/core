@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id: s.xarMod.php 1.123 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
- * 
+ *
  * Module handling subsystem
  *
  * @package modules
@@ -917,12 +917,12 @@ function xarModLoad($modName, $modType = 'user')
 function xarModAPILoad($modName, $modType = 'user')
 {
     static $loadedAPICache = array();
-    
+
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
-    
+
     if (!xarCoreIsAPIAllowed($modType)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
@@ -935,7 +935,7 @@ function xarModAPILoad($modName, $modType = 'user')
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
-        
+
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
         return;
@@ -1182,11 +1182,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if ($generateXMLURL) {
         $url = htmlspecialchars($url);
     }
-    
+
     if ($target != NULL) {
         $url = "$url#$target";
     }
-    
     // The URL
     return xarServerGetBaseURL() . $url;
 }
@@ -1561,7 +1560,7 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['author']         = isset($modversion['author']) ? $modversion['author'] : false;
     $modFileInfo['contact']        = isset($modversion['contact']) ? $modversion['contact'] : false;
     $modFileInfo['dependency']     = isset($modversion['dependency']) ? $modversion['dependency'] : false;
-    
+
     return $modFileInfo;
 }
 
@@ -1598,7 +1597,7 @@ function xarMod_getBaseInfo($modName)
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     if ($result->EOF) {
         $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', $modName);
@@ -1616,7 +1615,7 @@ function xarMod_getBaseInfo($modName)
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = $modBaseInfo['directory'];
-    
+
     $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
     if (!isset($modState)) return; // throw back
     $modBaseInfo['state'] = $modState;
@@ -1798,7 +1797,7 @@ function xarMod__getState($modRegId, $modMode)
     //assert(!$result->EOF);
     // the module is not in the table
     // set state to XARMOD_STATE_UNINITIALISED
-    // FIXME: CHECK whether this has no side-effects, 
+    // FIXME: CHECK whether this has no side-effects,
     // it was only put in to get the installer running.
     if (!$result->EOF) {
         list($modState) = $result->fields;

@@ -265,7 +265,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
     xarTpl_init($systemArgs, $whatToLoad);
 
-    if ($whatToLoad & XARCORE_SYSTEM_USER) {
+// TODO (marcinmilan): review what pasts of the old user system need to be retained
+		if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
         include_once 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}

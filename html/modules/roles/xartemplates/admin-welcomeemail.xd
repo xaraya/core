@@ -15,7 +15,7 @@
 	<table border="0" width="100%">
 		<tr>
 			<td>
-				<table border="1" width="75%">
+				<table border="1" width="80%">
 					<tr align="left" valign="middle">
 						<td>
 							%%link%%
@@ -26,15 +26,15 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							%%ipaddr%%
+							%%name%%
 						</td>
 						<td>
-							<xar:mlstring>the IP address of the person registering</xar:mlstring>
+							<xar:mlstring>Name given during registration</xar:mlstring>
 						</td>
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							%%name%%
+							%%username%%
 						</td>
 						<td>
 							<xar:mlstring>Username given during registration</xar:mlstring>
@@ -50,20 +50,25 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							%%password%%
-						</td>
-						<td>
-							<xar:mlstring>The password given during registration</xar:mlstring>
-						</td>
-					</tr>
-					<tr align="left" valign="middle">
-						<td>
 							%%siteadmin%%
 						</td>
 						<td>
 							<xar:mlstring>Your name</xar:mlstring>
 						</td>
 					</tr>
+				   <xar:if condition="isset($properties)">
+				   <xar:foreach in="$properties" key="$name">
+					<tr align="left" valign="middle">
+						<td>
+							%%#$name#%%
+						</td>
+						<td>
+							(<xar:mlstring>dynamic property</xar:mlstring>)
+							<xar:data-label property="$properties[$name]" />
+						</td>
+					</tr>
+				   </xar:foreach>
+				   </xar:if>
 				</table>
 			</td>
 		</tr>

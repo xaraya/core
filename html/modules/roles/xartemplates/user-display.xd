@@ -1,7 +1,9 @@
-<div class="xar-mod-head"><span class="xar-mod-title">#$name#</span></div>
-<div class="xar-mod-body" align="center"><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Memberslist</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2>#$name#</h2>
 
-<table border="0" width="30%" cellspacing="1" cellpadding="2">
+<table border="0" width="50%" cellspacing="1" cellpadding="2">
 	<tr class="xar-norm" valign="top">
 		<td>
 			<xar:mlstring>Real Name</xar:mlstring>: 
@@ -26,6 +28,10 @@
 			#$url#
 		</td>
 	</tr>
+	<tr>
+		<td>
+			#$hooks#
+		</td>
+	</tr>
 </table>
 
-#$hooks#

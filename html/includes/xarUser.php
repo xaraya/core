@@ -184,29 +184,13 @@ function xarUserIsLoggedIn()
  */
 function xarUserGetNavigationThemeName()
 {
-    $themeName = xarSessionGetVar('navigationThemeName');
-    if (!isset($themeName)) {
-        if (xarUserIsLoggedIn()) {
-            $themeName = xarUserGetVar('ThemeName');
-        }
-        if (!isset($themeName)) {
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-                // Here we can't raise an exception
-                // so what we can do here is only to log the exception
-                // and call xarExceptionFree
-                xarLogException(XARLOG_LEVEL_ERROR);
-                xarExceptionFree();
-                return;
-            }
-            $themeName = xarTplGetThemeName();
-        }
+    $themeName = xarTplGetThemeName();
 
-        //Hack to make the install work...
-        //Marco: can you fix this later? Thanks...
-        //if ($themeName != 'installer') {
-            xarSessionSetVar('navigationThemeName', $themeName);
-        //}
+    if (xarUserIsLoggedIn()){
+        $uid = xarUserGetVar('uid');
+        $themeName = xarModGetUserVar('themes', 'default', $uid);
     }
+
     return $themeName;
 }
 
@@ -219,7 +203,8 @@ function xarUserGetNavigationThemeName()
 function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
-    xarSessionSetVar('navigationThemeName', $themeName);
+    xarModSetVar('themes', 'default', $themeName);
+
 }
 
 /**

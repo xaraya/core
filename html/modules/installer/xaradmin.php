@@ -8,7 +8,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- *
+ * 
  * @subpackage module name
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
@@ -24,7 +24,9 @@
  */
 function installer_admin_main()
 {
-    return array();
+    $data['phase'] = 0;
+    $data['phase_label'] = xarML('Welcome to Xaraya');
+    return $data;
 }
 
 /**
@@ -39,7 +41,8 @@ function installer_admin_phase1()
     //$locales = xarMLSListSiteLocales();
 
     $data['languages'] = array('eng' => 'English');
-
+    $data['phase'] = 1;
+    $data['phase_label'] = xarML('Step One');
 
     return $data;
 }
@@ -53,10 +56,12 @@ function installer_admin_phase1()
  * @todo <johnny> accept locale and run the rest of the install using that locale if the locale exists.
  */
 function installer_admin_phase2()
-{
+{   
     // TODO: fix installer ML
     $data['language'] = 'English';
-
+    $data['phase'] = 2;
+    $data['phase_label'] = xarML('Step Two');
+    
     return $data;
 }
 
@@ -77,28 +82,30 @@ function installer_admin_phase3()
         // didn't agree to license, don't install
         xarResponseRedirect('install.php');
     }
-
+    
     //Defaults
     $systemConfigIsWritable   = false;
     $siteConfigIsWritable     = true;
     $cacheTemplatesIsWritable = true;
-
+    
     $systemVarDir             = xarCoreGetVarDirPath();
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
     $siteConfigFile           = $systemVarDir . '/config.site.xml';
-
+    
     if (is_writable($systemConfigFile)) {
         $systemConfigIsWritable = true;
     }
-
+    
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
     $data['systemConfigFile'] = $systemConfigFile;
     $data['siteConfigFile']   = $siteConfigFile;
     $data['siteConfigIsWritable'] = $siteConfigIsWritable;
     $data['systemConfigIsWritable'] = $systemConfigIsWritable;
-
+    
     $data['language'] = 'English';
+    $data['phase'] = 3;
+    $data['phase_label'] = xarML('Step Three');
 
     return $data;
 }
@@ -118,13 +125,15 @@ function installer_admin_phase4()
     $data['database_password']   = xarCore_getSystemvar('DB.Password');
     $data['database_name']       = xarCore_getSystemvar('DB.Name');
     $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
-
+    
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => 'MySQL',
                                          'oci8'     => 'Oracle',
                                          'postgres' => 'Postgres');
-
+                                         
     $data['language'] = 'English';
+    $data['phase'] = 4;
+    $data['phase_label'] = xarML('Step Four');
 
     return $data;
 }
@@ -151,7 +160,7 @@ function installer_admin_phase5()
     $createDb = false;
     $intranetMode = false;
     $dbPass = '';
-
+    
     // Get arguments
     list($dbHost,
          $dbName,
@@ -174,6 +183,7 @@ function installer_admin_phase5()
        $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3)) or dbPrefix (#(4)) or dbType (#(5)).'
               , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType);
        xarCore_die($msg);
+       return;
     }
 
     // Save config data
@@ -187,11 +197,12 @@ function installer_admin_phase5()
         return;
     }
 
-
     // Create the database if necessary
     if ($createDb) {
         if (!xarInstallAPIFunc('installer', 'admin', 'createdb')) {
-           return;
+            $msg = xarML('Could not create database (#(1)).', $dbName);
+            xarCore_die($msg);
+            return;
         }
     }
 
@@ -212,12 +223,13 @@ function installer_admin_phase5()
         return;
     }
 
-
-    //session_start();
+    //session_start(); 
     //session_destroy();
 
     $data['language'] = 'English';
-
+    $data['phase'] = 5;
+    $data['phase_label'] = xarML('Step Five');
+    
     return $data;
 }
 
@@ -242,7 +254,8 @@ function installer_admin_bootstrap()
                        new SystemException($msg));
 			return false;
     }
-   // Activate modules
+
+    // Activate modules
     if (!xarModAPIFunc('installer',
                         'admin',
                         'initialise',
@@ -265,11 +278,14 @@ function installer_admin_create_administrator()
 {
 	xarTplSetThemeName('installer');
     $data['language'] = 'English';
+    $data['phase'] = 6;
+    $data['phase_label'] = xarML('Create Administrator');
 
 // Security Check
 	if(!securitycheck('Admin')) return;
 
     include_once 'modules/roles/xarroles.php';
+     
     if (!xarVarCleanFromInput('create')) {
 // create a role from the data
     	$roles = new xarRoles();
@@ -281,7 +297,7 @@ function installer_admin_create_administrator()
     	$data['install_admin_email'] = $role->getEmail();
         return $data;
     }
-
+    
     list ($username,
           $name,
           $pass,
@@ -291,7 +307,7 @@ function installer_admin_create_administrator()
                                        'install_admin_password',
                                        'install_admin_email',
                                        'install_admin_url');
-
+    
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 
@@ -459,10 +475,11 @@ function installer_admin_finish()
         xarVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
     }
 
-    return array();
+    $data['phase'] = 6;
+    $data['phase_label'] = xarML('Step Six');
+    return $data;
 }
 
 
 function installer_admin_modifyconfig(){}
 
-?>

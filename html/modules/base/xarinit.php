@@ -221,7 +221,7 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     // Insert Allowed Vars
     $htmltags = array('!--',
                       'a',
@@ -332,6 +332,7 @@ function base_init()
         $result =& $dbconn->Execute($query);
         if (!$result) return;
     }
+
 
 
     $templateTagsTable = $systemPrefix . '_template_tags';
@@ -457,6 +458,20 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Install themes module
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
+              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
+     ) VALUES ('".$seqId."', 'themes', 70, 'themes', '1.2', 1, 'Core Utility', 'Global', 1, 0)";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Set themes to active
+    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
+              ) VALUES (70,3)";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+    
     /**************************************************************
     * Install the blocks module
     **************************************************************/
@@ -465,7 +480,12 @@ function base_init()
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
 	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
 	    return;
-	}
+	}  
+
+    if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
+	                       array('directory'=>'themes', 'initfunc'=>'init'))) {
+	    return;
+	}  
 
 //     /**************************************************************
 //     * Install the sniffer module
@@ -503,8 +523,9 @@ function base_activate()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) {
         return NULL;
     }
-// Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','sniffer');
+
+    // Set the state and activate the following modules
+    $modlist=array('roles','privileges','blocks','sniffer', 'themes');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
@@ -522,7 +543,7 @@ function base_activate()
     }
 
     // Initialise and activate adminpanels, mail, themes
-    $modlist = array('adminpanels','mail', 'themes');
+    $modlist = array('adminpanels','mail');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -578,6 +599,11 @@ function base_activate()
                                                                 'template' => 'header'))) {
         return NULL;
     }
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) {
+        return NULL;
+    }
+
     return true;
 }
 /**

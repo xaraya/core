@@ -943,14 +943,18 @@ function dynamicdata_adminapi_handleInputTag($args)
         if (count($args) > 1) {
             $parts = array();
             foreach ($args as $key => $val) {
-                if ($key == 'property') continue;
+                if ($key == 'property' || $key == 'hidden') continue;
                 if (is_numeric($val) || substr($val,0,1) == '$') {
                     $parts[] = "'$key' => ".$val;
                 } else {
                     $parts[] = "'$key' => '".$val."'";
                 }
             }
-            return 'echo '.$args['property'].'->showInput(array('.join(', ',$parts).')); ';
+            if (!empty($args['hidden'])) {
+                return 'echo '.$args['property'].'->showHidden(array('.join(', ',$parts).')); ';
+            } else {
+                return 'echo '.$args['property'].'->showInput(array('.join(', ',$parts).')); ';
+            }
         } else {
             return 'echo '.$args['property'].'->showInput(); ';
         }
@@ -988,7 +992,11 @@ function dynamicdata_adminapi_handleInputTag($args)
 function dynamicdata_adminapi_showinput($args)
 {
     $property = & Dynamic_Property_Master::getProperty($args);
-    return $property->showInput($args);
+    if (!empty($args['hidden'])) {
+        return $property->showHidden($args);
+    } else {
+        return $property->showInput($args);
+    }
 
     // TODO: input for some common hook/utility modules
 }

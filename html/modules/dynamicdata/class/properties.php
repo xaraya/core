@@ -1,7 +1,7 @@
 <?php
 /**
  * File: $Id$
- *
+ * 
  * Dynamic Property Classes
  *
  * @package Xaraya eXtensible Management System
@@ -202,6 +202,33 @@ class Dynamic_Property_Master
                 break;
             case 25: // (fieldstatus) Field Status
                 $property = new Dynamic_FieldStatus_Property($args);
+                break;
+            case 26: // (email) E-Mail
+                $property = new Dynamic_Email_Property($args);
+                break;
+            case 27: // (urlicon) URL Icon
+                $property = new Dynamic_URLIcon_Property($args);
+                break;
+            case 28: // (icq) ICQ Number
+                $property = new Dynamic_ICQ_Property($args);
+                break;
+            case 29: // (aim) AIM Address
+                $property = new Dynamic_AIM_Property($args);
+                break;
+            case 30: // (msn) MSN Messenger
+                $property = new Dynamic_MSN_Property($args);
+                break;
+            case 31: // (yahoo) Yahoo Messenger
+                $property = new Dynamic_Yahoo_Property($args);
+                break;
+            case 32: // (timezone) Time Zone
+                $property = new Dynamic_TimeZone_Property($args);
+                break;
+            case 33: // (dateformat) Date Format
+                $property = new Dynamic_DateFormat_Property($args);
+                break;
+            case 34: // (radio) Radio Buttons
+                $property = new Dynamic_RadioButtons_Property($args);
                 break;
             default:
                 $property = new Dynamic_Property($args);
@@ -447,6 +474,81 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
+
+        $proptypes[26] = array(
+                              'id'         => 26,
+                              'name'       => 'email',
+                              'label'      => 'E-Mail',
+                              'format'     => '26',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[27] = array(
+                              'id'         => 27,
+                              'name'       => 'urlicon',
+                              'label'      => 'URL Icon',
+                              'format'     => '27',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[28] = array(
+                              'id'         => 28,
+                              'name'       => 'icq',
+                              'label'      => 'ICQ Number',
+                              'format'     => '28',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[29] = array(
+                              'id'         => 29,
+                              'name'       => 'aim',
+                              'label'      => 'AIM Address',
+                              'format'     => '29',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[30] = array(
+                              'id'         => 30,
+                              'name'       => 'msn',
+                              'label'      => 'MSN Messenger',
+                              'format'     => '30',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[31] = array(
+                              'id'         => 31,
+                              'name'       => 'yahoo',
+                              'label'      => 'Yahoo Messenger',
+                              'format'     => '31',
+                              'validation' => '',
+                              // ...
+                             );
+
+        $proptypes[32] = array(
+                              'id'         => 32,
+                              'name'       => 'timezone',
+                              'label'      => 'Time Zone',
+                              'format'     => '32',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[33] = array(
+                              'id'         => 33,
+                              'name'       => 'dateformat',
+                              'label'      => 'Date Format',
+                              'format'     => '33',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[34] = array(
+                              'id'         => 34,
+                              'name'       => 'radio',
+                              'label'      => 'Radio Buttons',
+                              'format'     => '34',
+                              'validation' => '',
+                              // ...
+                             );
+    // TODO: add multiple select and multiple checkboxes
 
         // add some property types supported by utility modules
         if (xarModIsAvailable('categories')) {
@@ -708,6 +810,25 @@ class Dynamic_Property
             return xarVarPrepForDisplay($this->label);
         }
     }
+
+    /**
+     * Show a hidden field for this property
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['value'] value of the field (default is the current value)
+     * @param $args['id'] id of the field
+     * @returns string
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showHidden($args = array())
+    {
+        extract($args);
+        return '<input type="hidden"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' />' .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
 }
 
 
@@ -886,6 +1007,36 @@ class Dynamic_Select_Property extends Dynamic_Property
         if (!isset($this->options)) {
             $this->options = array();
         }
+        if (count($this->options) == 0 && !empty($this->validation)) {
+
+            // if the validation field starts with xarModAPIFunc, we'll assume that this is
+            // a function call that returns an array of names, or an array of id => name
+            if (preg_match('/^xarModAPIFunc/',$this->validation)) {
+                eval('$options = ' . $this->validation .';');
+                if (isset($options) && count($options) > 0) {
+                    foreach ($options as $id => $name) {
+                        array_push($this->options, array('id' => $id, 'name' => $name));
+                    }
+                }
+
+            // or if it contains a ; we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
+            } elseif (strchr($this->validation, ';')) {
+                $options = explode(';', $this->validation);
+                foreach ($options as $option) {
+                    if (strchr($option, ',')) {
+                        // if the option contains a , we'll assume it's an id,name combination
+                        list($id,$name) = explode(',', $this->validation);
+                        array_push($this->options, array('id' => $id, 'name' => $name));
+                    } else {
+                        // otherwise we'll use the option for both id and name
+                        array_push($this->options, array('id' => $option, 'name' => $option));
+                    }
+                }
+
+            // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList below)
+            } else {
+            }
+        }
     }
 
     function validateValue($value = null)
@@ -921,7 +1072,7 @@ class Dynamic_Select_Property extends Dynamic_Property
                '>';
         foreach ($options as $option) {
             $out .= '<option';
-            if ($option['id'] != $option['name']) {
+            if (empty($option['id']) || $option['id'] != $option['name']) {
                 $out .= ' value="'.$option['id'].'"';
             }
             if ($option['id'] == $value) {
@@ -1885,6 +2036,524 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                                  array('id' => 2, 'name' => xarML('Display Only')),
                              );
         }
+    }
+
+    // default methods from Dynamic_Select_Property
+}
+
+/**
+ * Dynamic E-Mail Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_Email_Property extends Dynamic_TextBox_Property
+{
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            // cfr. pnVarValidate in pnLegacy.php
+            $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui';
+            if (preg_match($regexp,$value)) {
+                $this->value = $value;
+            } else {
+                $this->invalid = xarML('E-Mail');
+                $this->value = null;
+                return false;
+            }
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (empty($value)) {
+            $value = 'http://';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: use redirect function here ?
+        if (!empty($value)) {
+            $value = xarVarPrepForDisplay($value);
+            return '<a href="mailto:'.$value.'">'.$value.'</a>';
+        }
+        return '';
+    }
+
+}
+
+/**
+ * Dynamic URL Icon Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
+{
+    var $icon;
+
+    function Dynamic_URLIcon_Property($args)
+    {
+        $this->Dynamic_Property($args);
+        // check validation field for icon to use !
+        if (!empty($this->validation)) {
+           $this->icon = $this->validation;
+        } else {
+           $this->icon = xarML('Please specify the icon to use in the validation field');
+        }
+    }
+
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $this->value = $value;
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = $value;
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: use redirect function here ?
+        if (!empty($value)) {
+            $link = $value;
+            if (!empty($this->icon)) {
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+            }
+        }
+        return '';
+    }
+}
+
+/**
+ * Dynamic ICQ Number Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
+{
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            if (is_numeric($value)) {
+                $this->value = $value;
+            } else {
+                $this->invalid = xarML('ICQ Number');
+                $this->value = null;
+                return false;
+            }
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = 'http://wwp.icq.com/scripts/search.dll?to=' . $value;
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: use redirect function here ?
+        if (!empty($value) && !empty($this->icon)) {
+// TODO: check this ICQ stuff
+            $link = '<script language="JavaScript" type="text/javascript"><!--
+if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
+    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a>\');
+else
+    document.write(\'<table cellspacing="0" cellpadding="0" border="0"><tr><td nowrap="nowrap"><div style="position:relative;height:18px"><div style="position:absolute"><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></div><div style="position:absolute;left:3px;top:-1px"><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&img=5" width="18" height="18" border="0" /></a></div></div></td></tr></table>\');
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>
+';
+            return $link;
+        }
+        return '';
+    }
+}
+
+/**
+ * Dynamic AIM Address Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
+{
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            if (is_string($value)) {
+                $this->value = $value;
+            } else {
+                $this->invalid = xarML('AIM Address');
+                $this->value = null;
+                return false;
+            }
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+    // TODO: use redirect function here ?
+        if (!empty($value)) {
+            $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
+            if (!empty($this->icon)) {
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+            }
+        }
+        return '';
+    }
+}
+
+/**
+ * Dynamic MSN Messenger Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
+{
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            // cfr. pnVarValidate in pnLegacy.php
+            $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui'; // TODO: verify this !
+            if (preg_match($regexp,$value)) {
+                $this->value = $value;
+            } else {
+                $this->invalid = xarML('MSN Messenger');
+                $this->value = null;
+                return false;
+            }
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+// TODO: what's the link to use for MSN Messenger ??
+            $link = "TODO: what's the link for MSN ?".$value;
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+// TODO: what's the link to use for MSN Messenger ??
+            $link = "TODO: what's the link for MSN ?".$value;
+            if (!empty($this->icon)) {
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+            }
+        }
+        return '';
+    }
+}
+
+/**
+ * Dynamic Yahoo Messenger Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
+{
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            if (preg_match('/^[a-z0-9_-]+$/i',$value)) { // TODO: refine this !?
+                $this->value = $value;
+            } else {
+                $this->invalid = xarML('Yahoo Messenger');
+                $this->value = null;
+                return false;
+            }
+        } else {
+            $this->value = '';
+        }
+        return true;
+    }
+
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
+        } else {
+            $link = '';
+        }
+        return '<input type="text"'.
+               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
+               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
+               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
+               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
+               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
+               ' />' .
+               (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
+               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+    }
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!empty($value)) {
+            $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
+            if (!empty($this->icon)) {
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+            }
+        }
+        return '';
+    }
+}
+
+/**
+ * Dynamic Time Zone Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_TimeZone_Property extends Dynamic_Select_Property
+{
+    function Dynamic_TimeZone_Property($args)
+    {
+        $this->Dynamic_Select_Property($args);
+        if (count($this->options) == 0) {
+            $this->options = array(
+                                 array('id' => -12, 'name' => xarML('GMT #(1)','- 12:00')),
+                                 array('id' => -11, 'name' => xarML('GMT #(1)','- 11:00')),
+                                 array('id' => -10, 'name' => xarML('GMT #(1)','- 10:00')),
+                                 array('id' => -9, 'name' => xarML('GMT #(1)','- 9:00')),
+                                 array('id' => -8, 'name' => xarML('GMT #(1)','- 8:00')),
+                                 array('id' => -7, 'name' => xarML('GMT #(1)','- 7:00')),
+                                 array('id' => -6, 'name' => xarML('GMT #(1)','- 6:00')),
+                                 array('id' => -5, 'name' => xarML('GMT #(1)','- 5:00')),
+                                 array('id' => -4, 'name' => xarML('GMT #(1)','- 4:00')),
+                                 array('id' => -3.5, 'name' => xarML('GMT #(1)','- 3:30')),
+                                 array('id' => -3, 'name' => xarML('GMT #(1)','- 3:00')),
+                                 array('id' => -2, 'name' => xarML('GMT #(1)','- 2:00')),
+                                 array('id' => -1, 'name' => xarML('GMT #(1)','- 1:00')),
+                                 array('id' => '0', 'name' => xarML('GMT')),
+                                 array('id' => 1, 'name' => xarML('GMT #(1)','+ 1:00')),
+                                 array('id' => 2, 'name' => xarML('GMT #(1)','+ 2:00')),
+                                 array('id' => 3, 'name' => xarML('GMT #(1)','+ 3:00')),
+                                 array('id' => 3.5, 'name' => xarML('GMT #(1)','+ 3:30')),
+                                 array('id' => 4, 'name' => xarML('GMT #(1)','+ 4:00')),
+                                 array('id' => 4.5, 'name' => xarML('GMT #(1)','+ 4:30')),
+                                 array('id' => 5, 'name' => xarML('GMT #(1)','+ 5:00')),
+                                 array('id' => 5.5, 'name' => xarML('GMT #(1)','+ 5:30')),
+                                 array('id' => 6, 'name' => xarML('GMT #(1)','+ 6:00')),
+                                 array('id' => 6.5, 'name' => xarML('GMT #(1)','+ 6:30')),
+                                 array('id' => 7, 'name' => xarML('GMT #(1)','+ 7:00')),
+                                 array('id' => 8, 'name' => xarML('GMT #(1)','+ 8:00')),
+                                 array('id' => 9, 'name' => xarML('GMT #(1)','+ 9:00')),
+                                 array('id' => 9.5, 'name' => xarML('GMT #(1)','+ 9:30')),
+                                 array('id' => 10, 'name' => xarML('GMT #(1)','+ 10:00')),
+                                 array('id' => 11, 'name' => xarML('GMT #(1)','+ 11:00')),
+                                 array('id' => 12, 'name' => xarML('GMT #(1)','+ 12:00')),
+                                 array('id' => 13, 'name' => xarML('GMT #(1)','+ 13:00')),
+                             );
+        }
+    }
+
+    // default methods from Dynamic_Select_Property
+}
+
+/**
+ * Dynamic Date Format Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_DateFormat_Property extends Dynamic_Select_Property
+{
+    function Dynamic_DateFormat_Property($args)
+    {
+        $this->Dynamic_Select_Property($args);
+        if (count($this->options) == 0) {
+            $this->options = array(
+                                 array('id' => 0, 'name' => xarML('d M Y H:i')),
+                                 array('id' => 1, 'name' => xarML('TODO')),
+                             );
+        }
+    }
+
+    // default methods from Dynamic_Select_Property
+}
+
+/**
+ * Dynamic Radio Buttons Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
+{
+    function showInput($args = array())
+    {
+        extract($args);
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!isset($options) || count($options) == 0) {
+            $options = $this->options;
+        }
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        $out = '';
+        foreach ($options as $option) {
+            $out .= '<input type="radio" name="'.$name.'" value="'.$option['id'].'"';
+            if ($option['id'] == $value) {
+                $out .= ' checked> '.$option['name'].' </input>';
+            } else {
+                $out .= '> '.$option['name'].' </input>';
+            }
+        }
+        $out .= (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        return $out;
     }
 
     // default methods from Dynamic_Select_Property

@@ -42,6 +42,18 @@
 			</td>
 		</tr>
     </xar:if>
+    <xar:if condition="isset($properties)" >
+	<xar:foreach in="$properties" key="$name">
+	<tr>
+		<td>
+			<xar:data-label property="$properties[$name]" />
+		</td>
+		<td>
+			<xar:data-output property="$properties[$name]" />
+		</td>
+	</tr>
+	</xar:foreach>
+    </xar:if>
 	<tr>
 		<td>
 			<br /><br />
@@ -52,6 +64,11 @@
 			<input type="hidden" name="email" id="email" value="#$email#" />
 			<input type="hidden" name="pass" id="pass" value="#$pass#" />
 			<input type="hidden" name="ip" id="ip" value="#$ip#" />
+		    <xar:if condition="isset($properties)" >
+			<xar:foreach in="$properties" key="$name">
+				<xar:data-input property="$properties[$name]" hidden="true" />
+			</xar:foreach>
+		    </xar:if>
 			<input type="submit" value="Create Account" />
 		</td>
 	</tr>

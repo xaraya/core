@@ -23,7 +23,7 @@
  * @param args['defaultModuleName'] string
  * @param args['defaultModuleName'] string
  * @param args['defaultModuleName'] string
- * @param whatElseIsGoingLoaded integer 
+ * @param whatElseIsGoingLoaded integer
  * @return bool true
  */
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
@@ -201,7 +201,7 @@ function xarServerGetCurrentURL($args = array())
 
     // get current URI
     $request = xarServerGetVar('REQUEST_URI');
-    
+
     if (empty($request)) {
         // adapted patch from Chris van de Steeg for IIS
     // TODO: please test this :)
@@ -319,7 +319,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 }
 
 /**
- * Gets request info for current page. 
+ * Gets request info for current page.
  *
  * Example of short URL support :
  *
@@ -344,7 +344,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  * @return array requested module, type and func
  * @todo <marco> Do we want to use xarVarCleanUntrusted here?
  * @todo <mikespub> Allow user select start page
- * @todo <marco> Do we need to do a preg_match on $params[1] here? 
+ * @todo <marco> Do we need to do a preg_match on $params[1] here?
  * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
  * @todo <marco> Investigate this aliases thing before to integrate and promote it!
  */
@@ -479,7 +479,7 @@ function xarRequest__resolveModuleAlias($aliasModName)
  * Carry out a redirect
  *
  * @access public
- * @global xarResponse_redirectCalled bool 
+ * @global xarResponse_redirectCalled bool
  * @param redirectURL string the URL to redirect to
  * @returns bool
  */
@@ -520,11 +520,11 @@ function xarResponseRedirect($redirectURL)
     }
 
     header($header, headers_sent());
-    
+
     // As this is a redirect we can stop processing
     // It gave some errors on some installations if we just returned true here.
     exit();
-    
+
     // return true;
 }
 
