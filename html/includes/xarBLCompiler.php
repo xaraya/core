@@ -342,6 +342,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     var $tagNamesStack;
     var $tagIds;
+    var $tagRootSeen;
 
     function xarTpl__Parser()
     {
@@ -364,7 +365,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
         // Initializing parse trace variables
         $this->line = 1; $this->column = 1; $this->pos = 0; $this->lineText = '';
-        $this->tagNamesStack = array();  $this->tagIds = array();
+        $this->tagNamesStack = array();  $this->tagIds = array(); $this->tagRootSeen=false;
 
         $this->tplVars =& new xarTpl__TemplateVariables();
 
@@ -420,7 +421,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     case 'xml':
                         // <?xml header tag
-                        // Wind forward and copy to output
+                        // Wind forward and copy to output if we have seen the root tag, otherwise, just wind forward
 
                         $foundEndXmlHeader=false; $copy = ''; $peek = '';
                         while(!$foundEndXmlHeader && $peek!=XAR_TOKEN_TAG_END) {
@@ -439,17 +440,22 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
 
                         // We do the exception check after parsing it, so we get usefull info in the error
-                        if($this->line != 1) {
+                        if($this->line != 1 && !$this->tagRootSeen) {
                             $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML header can only be on the first line of the document',$this);
                             return;
                         }
 
                         // Copy the header to the output
-                        $short_open_allowed = ini_get('short_open_tag');
-                        if($short_open_allowed) {
-                            $token = "<?php echo '<?xml " . trim($copy) . "?>\n';?>";
+                        if($this->tagRootSeen) {
+                            $short_open_allowed = ini_get('short_open_tag');
+                            if($short_open_allowed) {
+                                $token = "<?php echo '<?xml " . trim($copy) . "?>\n';?>";
+                            } else {
+                                $token = "<?xml " . $copy . "?>\n";
+                            }
                         } else {
-                            $token = "<?xml " . $copy . "?>\n";
+                            // We havent seen the root tag yet, the header is for the template, not for the output
+                            $token = '';
                         }
                         break;
                     case 'php':
@@ -3198,6 +3204,10 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
+    function xarTpl__XarBlocklayoutNode()
+    {
+        $this->tagRootSeen = true; // Ladies and gentlemen, we got him!
+    }
 
     function hasChildren()
     {
@@ -3208,6 +3218,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     {
         return true;
     }
+
 
     function renderBeginTag()
     {        
@@ -3228,7 +3239,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 
     function renderEndTag()
     {
-        return "'<!-- Rendered end for xar:blocklayout tag -->';\n";
+        return '';
     }
 
     function isAssignable()
