@@ -270,7 +270,7 @@ Validation Code to activate your account:  %%valcode%%
 
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%';
+%%siteadmin%%';
     xarModSetVar('roles', 'validationemail', $validationemail);
     xarModSetVar('roles', 'validationtitle', $validationtitle);
 
@@ -284,7 +284,7 @@ Your account was deactivated by the administrator.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email as soon as your account is activated again.
 
-%%siteadmin%%%';
+%%siteadmin%%';
     xarModSetVar('roles', 'deactivationemail', $deactivationemail);
     xarModSetVar('roles', 'deactivationtitle', $deactivationtitle);
 
@@ -300,7 +300,7 @@ again.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%';
+%%siteadmin%%';
     xarModSetVar('roles', 'pendingemail', $pendingemail);
     xarModSetVar('roles', 'pendingtitle', $pendingtitle);
 
