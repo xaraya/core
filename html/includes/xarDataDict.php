@@ -762,18 +762,24 @@ class xarMetaData {
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none 
+     * @param   object $dbconn database connection (optional)
      * @return  none
      * @throws  none
      * @todo    none
     */
-    function xarMetaData() 
+    function xarMetaData($dbconn = false) 
     {
-        // Get database connection
-        list($this->dbconn) = xarDBGetConn();
+        // Check if we passed in a database connection.
+        // TODO: check heritage of the object to be sure it is a DB connection.
+        if (empty($dbconn) || !is_object($dbconn)) {
+            // Get current default database connection
+            list($dbconn) = xarDBGetConn();
+        }
+
+        list($this->dbconn) =& $dbconn;
     }
-
-
+   
+    
     /**
      * getDatabases
      *
