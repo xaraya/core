@@ -37,7 +37,7 @@ function first_replace ( $matches )
 
     $bindvars = "\$bindvars = array(". $variables_list .");";
 
-    $matches[5] = preg_replace("/\\\$query/m", "\\\$query, \\\$bindvars", $matches[5] );
+    $matches[5] = preg_replace("/\\\$sql/m", "\\\$sql, \\\$bindvars", $matches[5] );
 
     $result_string = $matches[1] . implode('', $exploded) . $matches[3] .
         $matches[4] . $bindvars . $matches[4] . $matches[5];
@@ -79,7 +79,7 @@ function replace_outside_quotes ( $matches ) {
     return '?';
 /*
     $file_contents = preg_replace_callback(
-      "//m", 'replace_query', $match );
+      "//m", 'replace_sql', $match );
 */
 }
 
@@ -109,7 +109,7 @@ function searchDir($path) {
                 $GLOBALS['variables_found'] = array();
 
                 $new_file_contents = preg_replace_callback(
-                     "/(\\\$query[ ]*=[ ]*\")([^;]*)(\";)([^;]*)(\\\$result[^-]*-\\>Execute[ ]*\\([ ]*\\\$query[ ]*\\)[ ]*;)/m", 'first_replace', $file_contents );
+                     "/(\\\$sql[ ]*=[ ]*\")([^;]*)(\";)([^;]*)(\\\$result[^-]*-\\>Execute[ ]*\\([ ]*\\\$sql[ ]*\\)[ ]*;)/m", 'first_replace', $file_contents );
 
                 if ($GLOBALS['called']) {
                     echo "Changing file $path/$entry\r\n";
