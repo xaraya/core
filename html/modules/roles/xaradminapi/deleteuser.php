@@ -23,36 +23,28 @@ function roles_adminapi_deleteuser($args)
 
     if((!isset($gid)) && (!isset($uid))) {
         $msg = xarML('roles_adminapi_deleteuser');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
-// Security Check
 	if(!xarSecurityCheck('DeleteRole')) return;
 
     $roles = new xarRoles();
     $group = $roles->getRole($gid);
     if($group->isUser()) {
         $msg = xarML('Did not find a group');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
     $user = $roles->getRole($uid);
-
-    if(count($user->getParents() == 1)) {
+    // Fix to bug 2889 credit to Ben Page
+    if(count($user->getParents()) == 1) {
         $msg = xarML('The user only has one parent group - cannot remove');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
     return $group->removeMember($user);
 }
-
 ?>
