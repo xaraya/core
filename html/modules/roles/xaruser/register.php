@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File: $Id$
  *
@@ -420,4 +421,5 @@ function roles_user_register()
     }
     return $data;
 }
+
 ?>
