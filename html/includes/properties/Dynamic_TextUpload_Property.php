@@ -83,7 +83,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                '<input type="file"'.
                ' name="'.$upname.'"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
+               (!empty($id) ? ' id="'.$id.'_upload"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
