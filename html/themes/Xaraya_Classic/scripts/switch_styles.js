@@ -1,56 +1,40 @@
 /* modified version of a script once published in ALA http://www.alistapart.com/articles/alternate/ */
 
-function setActiveStyleSheetTxt(title) {
+function setActiveStyleSheetProperty(title,property) {
   var i, a, main;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classictext") != -1) {
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf(property) != -1) {
       	a.disabled = true;
       	if(a.getAttribute("title") == title) a.disabled = false;
     }
   }
+  return true;
 }
 
-function setActiveStyleSheetCol(title) {
-  var i, a, main;
-  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classiccolors") != -1) {
-      a.disabled = true;
-      if(a.getAttribute("title") == title) a.disabled = false;
-    }
-  }
-}
+function setActiveStyleSheetTxt(title) {  return setActiveStyleSheetProperty(title,"classictext"); }
+function setActiveStyleSheetCol(title) {  return setActiveStyleSheetProperty(title,"classiccolors"); }
 
-function getActiveStyleSheetTxt() {
+function getActiveStyleSheetProperty(property) {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf("classictext") != -1) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf(property) != -1) return a.getAttribute("title");
   }
   return null;
 }
 
-function getActiveStyleSheetCol() {
-  var i, a;
-  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title").indexOf("classiccolors") != -1 && !a.disabled) return a.getAttribute("title");
-  }
-  return null;
-}
+function getActiveStyleSheetTxt() { return getActiveStyleSheetProperty("classictext"); }
+function getActiveStyleSheetCol() { return getActiveStyleSheetProperty("classiccolors"); }
 
-function getPreferredStyleSheetTxt() {
+function getPreferredStyleSheetProperty(property) {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classictext")  != -1) return a.getAttribute("title");
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title") && a.getAttribute("title").indexOf(property)  != -1) return a.getAttribute("title");
   }
   return null;
 }
-
-function getPreferredStyleSheetCol() {
-  var i, a;
-  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title") && a.getAttribute("title").indexOf("classiccolors")  != -1) return a.getAttribute("title");
-  }
-  return null;
-}
+  
+function getPreferredStyleSheetTxt() { return getPreferredStyleSheetProperty("classictext"); }
+function getPreferredStyleSheetCol() { return getPreferredStyleSheetProperty("classiccolors"); }
 
 
 function createCookie(name,value,days) {
@@ -61,6 +45,7 @@ function createCookie(name,value,days) {
   }
   else expires = "";
   document.cookie = name+"="+value+expires+"; path=/";
+  return true;
 }
 
 function readCookie(name) {
@@ -81,6 +66,7 @@ window.onload = function(e) {
   var cookie2 = readCookie("xarayaclassic_colscheme");
   var title2 = cookie2 ? cookie2 : getPreferredStyleSheetCol();
   setActiveStyleSheetCol(title2);
+  return true;
 }
 
 /* window.onunload = function(e) { */
