@@ -4,12 +4,10 @@
  *
  * ADODB Database Abstraction Layer API
  *
- * @package Xaraya eXtensible Management System
+ * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage DB
- * @link xarDB.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
  */
 
@@ -29,6 +27,9 @@
  * @param args[password] database password
  * @param args[systemTablePrefix] system table prefix
  * @param args[siteTablePrefix] site table prefix
+ * @param whatElseIsGoingLoaded 
+ * @todo <marco> Can we get rid of global $prefix? $xartable should become $xarDB_tables
+ * @todo <marco> move template tag table definition somewhere else?
  * @return bool true
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
@@ -81,6 +82,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
  *
  * @author Jim McDonald
  * @access public
+ * @global dbconn object database connection 
  * @return array array of database connections
  */
 function xarDBGetConn()
@@ -92,8 +94,9 @@ function xarDBGetConn()
  * Gets an array of database table names
  *
  * @access public
- * @param none
+ * @global xartable array of database tables
  * @return array array of database tables
+ * @todo <marco>replace xartable with xarDB_tables
  */
 function xarDBGetTables()
 {
@@ -103,8 +106,12 @@ function xarDBGetTables()
 /**
  * Load the Table Maintenance API
  *
+ * Include 'includes/xarTableDDL.php'using include_once()
+ * and return true
+ *
  * @access public
  * @return true
+ * @todo <johnny> change to protected or private?
  */
 function xarDBLoadTableMaintenanceAPI()
 {
@@ -118,8 +125,8 @@ function xarDBLoadTableMaintenanceAPI()
  * Get the database host
  *
  * @access public
- * @returns string
- * @return database host
+ * @global xarDb_systemArgs array
+ * @return xarDB_systemArgs['databaseHost'] string 
  */
 function xarDBGetHost()
 {
@@ -130,7 +137,8 @@ function xarDBGetHost()
  * Get the database type
  *
  * @access public
- * @return string database type
+ * @global xarDB_systemArgs
+ * @return xarDB_systemArgs['databaseType'] string
  */
 function xarDBGetType()
 {
@@ -141,7 +149,8 @@ function xarDBGetType()
  * Get the database name
  *
  * @access public
- * @return string database name
+ * @global xarDB_systemArgs
+ * @return xarDB_systemArgs['databaseName'] string 
  */
 function xarDBGetName()
 {
@@ -152,7 +161,8 @@ function xarDBGetName()
  * Get the system table prefix
  *
  * @access public
- * @return string database name
+ * @global xarDB_systemArgs
+ * @return xarDB_systemArgs['systemTablePrefix'] string database name
  */
 function xarDBGetSystemTablePrefix()
 {
@@ -163,7 +173,8 @@ function xarDBGetSystemTablePrefix()
  * Get the site table prefix
  *
  * @access public
- * @return string database name
+ * @global xarDB_systemArgs
+ * @return string xarDB_systemArgs['siteTablePrefix']database name
  */
 function xarDBGetSiteTablePrefix()
 {
@@ -175,8 +186,9 @@ function xarDBGetSiteTablePrefix()
 /**
  * Import module tables in the array of known tables
  *
- * @access private
- * @return array
+ * @access protected
+ * @global xartable array
+ * @todo $xartable should become $xarDB_tables
  */
 function xarDB_importTables($tables)
 {
@@ -185,8 +197,19 @@ function xarDB_importTables($tables)
     $xarDB_tables = array_merge($xarDB_tables, $tables);
 }
 
-// PRIVATE FUNCTIONS
-
+/**
+ * ADODB error handler bridge
+ *
+ * @access private
+ * @param dbms string
+ * @param fn string
+ * @param errno integer
+ * @param errmsg string
+ * @param p1 bool
+ * @param p2 bool
+ * @raise DATABASE_ERROR
+ * @todo <marco> complete it
+ */
 function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1=false, $param2=false)
 {
     if ($funcName == 'EXECUTE') {

@@ -1,13 +1,15 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Legacy functions
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Legacy Functions
+ *
+ * @package legacy
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
+ * @author Marco Canini
+*/
 
 /***********************************************************************
 * This file is for legacy functions needed to make it

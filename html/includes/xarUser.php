@@ -4,34 +4,25 @@
  *
  * User System
  *
- * @package Xaraya eXtensible Management System
+ * @package user
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage User
- * @link xarUser.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Jan Schrage, Gregor Rothfuss
  */
 
 // TODO: <marco> user status field
 
-/*
- *
- * Defines
- *
- */
-
-/*
+/**
  * Dynamic User Data types for User Properties
  */
-
 define('XARUSER_DUD_TYPE_CORE', 0); // indicates a core field
 define('XARUSER_DUD_TYPE_STRING', 1);
 define('XARUSER_DUD_TYPE_TEXT', 2);
 define('XARUSER_DUD_TYPE_DOUBLE', 4);
 define('XARUSER_DUD_TYPE_INTEGER', 8);
 
-/*
+/**
  * Authentication modules capabilities
  */
 define('XARUSER_AUTH_AUTHENTICATION', 1);
@@ -973,6 +964,11 @@ function xarUser__validationApply($validation, $valueToCheck)
 }
 
 // Simple data structure used by validation stuff
+/**
+ *
+ * 
+ * @package user
+ */
 class xarUser__ValEntry
 {
     var $negation = false;

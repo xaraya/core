@@ -4,16 +4,16 @@
  *
  * Blocks Support
  *
- * @package Xaraya eXtensible Management System
+ * @package blocks
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Block
- * @link xarBlocks.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  */
 
 /*
+ * FIXME: <marco> Paul do you wanna move xarBlockTypeExists, Register and Unregister out of this file?
+ * And why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
  * FIXME: <marco> Paul, why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
  */
 
@@ -22,6 +22,8 @@
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
+ * @param args 
+ * @param whatElseIsGoingLoaded integer
  * @return bool true
  */
 function xarBlock_init($args, $whatElseIsGoingLoaded)
@@ -36,6 +38,8 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
                     'block_types' => $systemPrefix . '_block_types');
 
     xarDB_importTables($tables);
+    
+    return true;
 }
 
 /**
@@ -175,7 +179,6 @@ function xarBlockGroupGetInfo($blockGroupId)
     return $group;
 }
 
-    $result =& $dbconn->Execute($query);
 // PROTECTED FUNCTIONS
 
 /**

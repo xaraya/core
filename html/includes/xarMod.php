@@ -4,17 +4,12 @@
  *
  * Modules Support
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Mod
- * @link xarMod.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- */
-
-/* TODO:
- * Use serialize in module variables
+ * @todo Use serialize in module variables?
  */
 
 /*
@@ -23,10 +18,8 @@
 define('XARMOD_STATE_UNINITIALISED', 1);
 define('XARMOD_STATE_INACTIVE', 2);
 define('XARMOD_STATE_ACTIVE', 3);
-// FIXME: <marco> What're these two for?
 define('XARMOD_STATE_MISSING', 4);
 define('XARMOD_STATE_UPGRADED', 5);
-
 // This isn't a module state, but only a convenient definition to indicates,
 // where it's used, that we don't care about state, any state is good
 define('XARMOD_STATE_ANY', 0);
@@ -49,10 +42,15 @@ define('XARMOD_MODE_PER_SITE', 2);
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
+ * @global xarMod_generateShortURLs bool
+ * @global xarMod_generateXMLURLs bool
+ * @param args['generateShortURLs'] bool
+ * @param args['generateXMLURLs'] bool
  * @return bool true
  */
 function xarMod_init($args, $whatElseIsGoingLoaded)
 {
+    // generateShortURLs
     $GLOBALS['xarMod_generateShortURLs'] = $args['enableShortURLsSupport'];
     $GLOBALS['xarMod_generateXMLURLs'] = $args['generateXMLURLs'];
 

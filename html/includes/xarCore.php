@@ -4,17 +4,19 @@
  *
  * Xaraya
  *
- * @package Xaraya eXtensible Management System
+ * @package core
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @link xarCore.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
  */
 
 /*
- * Core version informations - should be upgraded on each release for
+ * Core version informations 
+ *
+ * should be upgraded on each release for
  * better control on config settings
+ *
  */
 define('XARCORE_VERSION_NUM', '0.8');
 define('XARCORE_VERSION_ID',  'Xaraya');
@@ -77,8 +79,9 @@ define('XARDBG_SHOW_PARAMS_IN_BT', 8);
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access public
- * @param whatToLoad integer which optional systems to load
+ * @param whatToLoad integer What optional systems to load.
  * @return bool true
+ * @todo <johnny> remove LC_TIME code if we don't need it anymore
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
@@ -222,7 +225,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Modules Support
         // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
         // or XHTML site compliance. For now just pass false.
-        $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
+        $systemArgs = array('generateShortURLs' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
     }
@@ -277,6 +280,9 @@ function xarCoreGetVarDirPath()
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access public
+ * @global xarDebug integer
+ * @global xarDebug_sqlCalls integer
+ * @global xarDebug_startTime string ?
  * @param flags integer bit mask for the debugger flags
  * @return void
  */
@@ -308,6 +314,7 @@ function xarCoreActivateDebugger($flags)
  * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @return bool true if the debugger is active, false otherwise
+ * @global xarDebug integer
  */
 function xarCoreIsDebuggerActive()
 {
@@ -327,15 +334,15 @@ function xarCoreIsDebugFlagSet($flag)
     return ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) && ($GLOBALS['xarDebug'] & $flag);
 }
 
-// PROTECTED FUNCTIONS
-
 /**
  * Gets a core system variable
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @param name string name of core system variable to get
+ * @static systemVars array
  * @return mixed variable value
+ * @todo <marco> remove config file loader code if we're not going to use it
  */
 function xarCore_getSystemVar($name)
 {
@@ -362,6 +369,7 @@ function xarCore_getSystemVar($name)
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
+ * @static siteVars array
  * @param name string name of core site variable to get
  * @return mixed variable value
  */
@@ -390,6 +398,9 @@ function xarCore_getSiteVar($name)
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
+ * @global xarDebug integer
+ * @global xarDebug_sqlCalls integer
+ * @global xarDebug_startTime string?
  * @return void
  */
 function xarCore_disposeDebugger()
@@ -409,6 +420,8 @@ function xarCore_disposeDebugger()
  * Dies
  *
  * @author Marco Canini <m.canini@libero.it>
+ * @access proctected
+ * @param msg string message to print as an error
  */
 function xarCore_die($msg)
 {
@@ -451,6 +464,8 @@ EOM;
 /**
  * This class loads a configuration file and returns its content
  * in the form of a configuration array
+ *
+ * @package core
  */
 class xarCore__ConfigFileLoader
 {

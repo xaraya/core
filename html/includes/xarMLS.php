@@ -4,24 +4,22 @@
  *
  * Multi Language System
  *
- * @package Xaraya eXtensible Management System
+ * @package multilanguage
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage MLS
- * @link xarMLS.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
+ * @todo Dynamic Translations
+ *       Timezone and DST support
+ *       Write standard core translations
+ *       Complete changes as described in version 0.9 of MLS RFC
+ *       Implements the request(ed) locale APIs for backend interactions
+ *       See how utf-8 works for xml backend
  */
 
-/* TODO:
- * Dynamic Translations
- * Timezone and DST support
- * Write standard core translations
- * Complete changes as described in version 0.9 of MLS RFC
- * Implements the request(ed) locale APIs for backend interactions
- * See how utf-8 works for xml backend
+/**
+ * Multilange package defines
  */
-
 define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
 define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 2);
 define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
@@ -669,6 +667,8 @@ function xarMLS__getSingleByteCharset($langISO2Code) {
 /**
  * This class loads a valid locale descriptor XML file and returns its content
  * in the form of a locale data array
+ * 
+ * @package multilanguage
  */
 class xarMLS__LocaleDataLoader
 {
@@ -841,6 +841,8 @@ class xarMLS__LocaleDataLoader
  * must inherit.
  * It defines a simple interface used by the Multi Language System to fetch both
  * string and key based translations.
+ *
+ * @package multilanguage
  */
 class xarMLS__TranslationsBackend
 {
@@ -881,12 +883,14 @@ class xarMLS__TranslationsBackend
     { die('abstract'); }
 }
 
-/*
+/**
  * This abstract class inherits from xarMLS__TranslationsBackend and provides
  * a powerful access to metadata associated to every translation entry.
  * A translation entry is an array that contains not only the translation,
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
+ *
+ * @package multilanguage
  */
 class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 {
@@ -926,6 +930,8 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 /**
  * This is the default translations backend and should be used for production sites.
  * Note that it does not support the xarMLS__ReferencesBackend interface.
+ * 
+ * @package multilanguage
  */
 class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 {

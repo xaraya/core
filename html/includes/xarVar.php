@@ -1,14 +1,19 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Marco Canini
-// Purpose of file: Variables utilities
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ * 
+ * Variable utilities
+ * 
+ * @package variables
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
+ * @author Marco Canini <m.canini@libero.it>
+*/
 
+/*
+ * Variables package defines
+ */
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);
 define('XARVAR_ALLOW', 2);
 
@@ -22,10 +27,16 @@ define('XARVAR_NOT_REQUIRED', 64);
  *
  * Sets up allowable html and htmlentities options
  *
- * @param args[allowableHTML] a serialized array of allowed html tags
- * @param args[htmlentities]  fix html entities
- * @returns
- * @returns
+ * @access protected
+ * @global xarVar_allowableHTML array
+ * @global xarVar_fixHTMLEntities bool
+ * @global xarVar_enableCensoringWords bool
+ * @global xarVar_censoredWords array
+ * @global xarVar_censoredWordsReplacers array
+ * @param args array 
+ * @param whatElseIsGoingLoaded integer
+ * @return bool
+ * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  */
 function xarVar_init($args, $whatElseIsGoingLoaded)
 {
@@ -102,6 +113,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
 
 /**
  * Fetches the $name variable from input variables and validates it by applying the $validation rules.
+ *
  * See xarVarValidate for details about nature of $validation.
  * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
  * according to the validation applied.
@@ -117,13 +129,13 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * that if the variable is not present or doesn't validate correctly an exception will be raised.
  * 
  * @author Marco Canini
- * @param name the variable name
- * @param validation the validation to be performed
- * @param value contains the converted value of fetched variable
- * @param defaultValue the default value
- * @param flags bitmask which modify the behaviour of function
- * @returns bool
- * @return true
+ * @access public
+ * @param name mixed the variable name
+ * @param validation string the validation to be performed
+ * @param value mixed contains the converted value of fetched variable
+ * @param defaultValue mixed the default value
+ * @param flags integer bitmask which modify the behaviour of function
+ * @return mixed
  * @raise BAD_PARAM
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST)
@@ -150,6 +162,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
 /**
  * Validates a variable performing the $validation test type on $subject.
+ *
  * The $validation parameter could be a string, in this case the
  * supported validation types are very basilar, they are the following:
  * 'id' matches a positive integer (0 excluded)
@@ -175,11 +188,11 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * interface.
  *
  * @author Marco Canini
- * @param validation the validation to be performed
- * @param subject the subject on which the validation must be performed
+ * @access public
+ * @param validation mixed the validation to be performed
+ * @param subject string the subject on which the validation must be performed
  * @param convValue contains the converted value of $subject
- * @returns bool
- * @return true if the $subject validates correctly, false otherwise
+ * @return bool true if the $subject validates correctly, false otherwise
  */
 function xarVarValidate($validation, $subject, &$convValue)
 {
@@ -284,6 +297,11 @@ function xarVarValidate($validation, $subject, &$convValue)
     return true;
 }
 
+/**
+ *
+ * 
+ * @package variables
+ */
 class xarVarValidator
 {
     function validate($subject, &$convValue)
@@ -291,6 +309,11 @@ class xarVarValidator
     }
 }
 
+/**
+ *
+ * 
+ * @package variables
+ */
 class xarVarGroupValidator extends xarVarValidator
 {
     var $validations;
@@ -312,14 +335,14 @@ class xarVarGroupValidator extends xarVarValidator
 
 /**
  * Cleans a variable.
+ *
  * Cleaning it up to try to ensure that hack attacks
  * don't work. Typically used for cleaning variables
  * coming from user input.
  *
  * @access public
  * @param var variable to clean
- * @returns string
- * @return prepared variable
+ * @return string prepared variable
  */
 function xarVarCleanUntrusted($var)
 {
@@ -340,18 +363,15 @@ function xarVarCleanUntrusted($var)
 }
 
 /**
- * clean user input
+ * Clean user input
  *
  * Gets a global variable, cleaning it up to try to ensure that
  * hack attacks don't work. Can have as many parameters as needed.
  *
  * @access public
- * @param var name of variable to get
- * @returns mixed
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
+ * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
+ * @todo <marco> FIXME: This function will not work if the security system is not loaded!
  */
-// FIXME: <marco> This function will not work if the security system is not loaded!
 function xarVarCleanFromInput()
 {
     $search = array('|</?\s*SCRIPT.*?>|si',
@@ -396,13 +416,12 @@ function xarVarCleanFromInput()
 }
 
 /**
- * ready user output
+ * Ready user output
  *
  * Gets a variable, cleaning it up such that the text is
  * shown exactly as expected. Can have as many parameters as desired.
  *
  * @access public
- * @param var variable to prepare
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
@@ -439,14 +458,13 @@ function xarVarPrepForDisplay()
 }
 
 /**
- * ready HTML output
+ * Ready HTML output
  *
  * Gets a variable, cleaning it up such that the text is
  * shown exactly as expected, except for allowed HTML tags which
  * are allowed through. Can have as many parameters as desired.
  *
  * @access public
- * @param var variable to prepare
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  * @raise DATABASE_ERROR, BAD_PARAM
@@ -524,13 +542,12 @@ function xarVarPrepHTMLDisplay()
 }
 
 /**
- * ready database output
+ * Ready database output
  *
  * Gets a variable, cleaning it up such that the text is
  * stored in a database exactly as expected. Can have as many parameters as desired.
  *
  * @access public
- * @param var variable to prepare
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
@@ -557,14 +574,13 @@ function xarVarPrepForStore()
 }
 
 /**
- * ready operating system output
+ * Ready operating system output
  *
  * Gets a variable, cleaning it up such that any attempts
  * to access files outside of the scope of the Xaraya
  * system is not allowed. Can have as many parameters as desired.
  *
  * @access public
- * @param var variable to prepare
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
@@ -604,13 +620,12 @@ function xarVarPrepForOS()
 }
 
 /**
- * remove censored words.
+ * Remove censored words.
  *
  * Removes all censored words from the variables handed to the function.
  * Can have as many parameters as desired.
  *
  * @access public
- * @param var variable to prepare
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  * @raise DATABASE_ERROR, BAD_PARAM
@@ -673,8 +688,8 @@ function xarVarCensor()
 
 
 
-/**
- * functions providing variable caching (within a single page request)
+/*
+ * Functions providing variable caching (within a single page request)
  *
  * Example :
  *
@@ -691,19 +706,19 @@ function xarVarCensor()
  *
  */
 
-/**
+/*
  * Initialise the variable cache
  */
 $GLOBALS['xarVar_cacheCollection'] = array();
 
 /**
- * check if the value of a variable is available in cache or not
+ * Check if the value of a variable is available in cache or not
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
- * @returns bool
- * @return true if the variable is available in cache, false if not
+ * @global xarVar_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @return true bool if the variable is available in cache, false if not
  */
 function xarVarIsCached($cacheKey, $name)
 {
@@ -716,13 +731,13 @@ function xarVarIsCached($cacheKey, $name)
 }
 
 /**
- * get the value of a cached variable
+ * Get the value of a cached variable
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
- * @returns mixed
- * @return value of the variable, or void if variable isn't cached
+ * @global xarVar_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @return mixed value of the variable, or void if variable isn't cached
  */
 function xarVarGetCached($cacheKey, $name)
 {
@@ -734,12 +749,13 @@ function xarVarGetCached($cacheKey, $name)
 }
 
 /**
- * set the value of a cached variable
+ * Set the value of a cached variable
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
- * @param value the new value for that variable
+ * @global xarVar_cacheCollection array
+ * @param key string the key identifying the particular cache you want to access
+ * @param name string the name of the variable in that particular cache
+ * @param value string the new value for that variable
  * @returns void
  */
 function xarVarSetCached($cacheKey, $name, $value)
@@ -749,12 +765,12 @@ function xarVarSetCached($cacheKey, $name, $value)
 }
 
 /**
- * delete a cached variable
+ * Delete a cached variable
  *
  * @access public
+ * @global xarVar_cacheCollection array
  * @param key the key identifying the particular cache you want to access
  * @param name the name of the variable in that particular cache
- * @returns void
  */
 function xarVarDelCached($cacheKey, $name)
 {
@@ -766,11 +782,11 @@ function xarVarDelCached($cacheKey, $name)
 }
 
 /**
- * flush a particular cache (e.g. for session initialization)
+ * Flush a particular cache (e.g. for session initialization)
  *
  * @access public
- * @param key the key identifying the particular cache you want to wipe out
- * @returns void
+ * @global xarVar_cacheCollection array
+ * @param cacheKey the key identifying the particular cache you want to wipe out
  */
 function xarVarFlushCached($cacheKey)
 {
@@ -781,15 +797,14 @@ function xarVarFlushCached($cacheKey)
     }
 }
 
-// PROTECTED FUNCTIONS
 
 /**
- * stripslashes on multidimensional arrays.
+ * Stripslashes on multidimensional arrays.
  *
  * Used in conjunction with xarVarCleanFromInput
  *
  * @access protected
- * @param any variables or arrays to be stripslashed
+ * @param &var any variables or arrays to be stripslashed
  */
 function xarVar_stripSlashes(&$var)
 {
@@ -805,7 +820,16 @@ function xarVar_addSlashes($var)
     return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
 }
 
-// PRIVATE FUNCTIONS
+/**
+ * Get allowed tags based on $level
+ *
+ * @access private
+ * @static restricted array
+ * @static basic array
+ * @static enhanced array
+ * @param level string
+ * @return array
+ */
 
 function xarVar__getAllowedTags($level)
 {

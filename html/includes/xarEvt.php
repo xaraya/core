@@ -4,20 +4,15 @@
  *
  * Event Messagging System
  *
- * @package Xaraya eXtensible Management System
+ * @package events
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Evt
- * @link xarEvt.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
- */
-
-/* TODO:
- * Document EMS
- * Document functions
- */
-/* An event is a string composed by two part:
+ * @todo Document EMS
+ *       Document functions
+ *
+ * An event is a string composed by two part:
  * event := owner + '_' + name
  * where owner is a system short identifier and name is the proper event name
  */

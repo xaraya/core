@@ -2,17 +2,29 @@
 /**
  * File: $Id$
  *
- * BlockLayout Template Engine
+ * BlockLayout Template Engine Compiler
  *
- * @package Xaraya eXtensible Management System
+ * @package blocklayout
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage BLCompiler
- * @link xarBLCompiler.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>, Paul Rosania
- */
+*/
 
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ *
+ * @package blocklayout
+ */
 class xarTpl__CompilerError extends DefaultUserException
 {
     function xarTpl__CompilerError($msg)
@@ -21,6 +33,11 @@ class xarTpl__CompilerError extends DefaultUserException
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__ParserError extends DefaultUserException
 {
     function xarTpl__ParserError($msg, $posInfo)
@@ -38,6 +55,11 @@ class xarTpl__ParserError extends DefaultUserException
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__PositionInfo
 {
     var $fileName = '';
@@ -46,6 +68,11 @@ class xarTpl__PositionInfo
     var $lineText = '';
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__Compiler
 {
     var $parser;
@@ -80,6 +107,11 @@ class xarTpl__Compiler
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__CodeGenerator
 {
     var $isPHPBlock = false;
@@ -136,7 +168,7 @@ class xarTpl__CodeGenerator
     function generateNode($node)
     {
         //xarLogMessage('generateNode '.$node->tagName, XARLOG_LEVEL_ERROR);
-//        if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
+        //if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
         if ($node->hasChildren() && isset($node->children) /*|| $node->hasText()*/) {
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
                 $code .= "<?php ";
@@ -223,6 +255,11 @@ class xarTpl__CodeGenerator
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
     var $nodesFactory;
@@ -954,6 +991,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__NodesFactory
 {
 
@@ -1164,6 +1206,11 @@ class xarTpl__NodesFactory
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__SpecialVariableNamesResolver
 {
     var $varsMapping = array();
@@ -1200,6 +1247,11 @@ class xarTpl__SpecialVariableNamesResolver
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__TemplateVariables
 {
     var $tplVars = array();
@@ -1226,6 +1278,11 @@ class xarTpl__TemplateVariables
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__ExpressionTransformer
 {
     /*
@@ -1285,8 +1342,11 @@ class xarTpl__ExpressionTransformer
     }
 }
 
-/*
+/**
  * xarTpl__Node
+ *
+ * 
+ * @package blocklayout
  * hasChildren -> false
  * hasText -> false
  * isAssignable -> true
@@ -1295,7 +1355,6 @@ class xarTpl__ExpressionTransformer
  * needParameter -> false
  * needExceptionsControl -> false
  */
-
 class xarTpl__Node extends xarTpl__PositionInfo
 {
     var $tagName;
@@ -1351,8 +1410,11 @@ class xarTpl__Node extends xarTpl__PositionInfo
     }
 }
 
-/*
+/**
  * xarTpl__DocumentNode
+ *
+ *
+ * @package blocklayout
  * hasChildren -> true
  * hasText -> true
  * isAssignable -> false
@@ -1392,7 +1454,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
     }
 }
 
-/*
+/**
  * xarTpl__TextNode
  * hasChildren -> false
  * hasText -> false
@@ -1401,6 +1463,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * needAssignment -> false
  * needParameter -> false
  * needExceptionsControl -> false
+ * @package blocklayout
  */
 class xarTpl__TextNode extends xarTpl__Node
 {
@@ -1417,7 +1480,7 @@ class xarTpl__TextNode extends xarTpl__Node
     }
 }
 
-/*
+/**
  * xarTpl__EntityNode
  * hasChildren -> false
  * hasText -> false
@@ -1426,6 +1489,7 @@ class xarTpl__TextNode extends xarTpl__Node
  * needAssignment -> false
  * needParameter -> false
  * needExceptionsControl -> false
+ * @package blocklayout
  */
 class xarTpl__EntityNode extends xarTpl__Node
 {
@@ -1438,7 +1502,7 @@ class xarTpl__EntityNode extends xarTpl__Node
     }
 }
 
-/*
+/**
  * xarTpl__InstructionNode
  * hasChildren -> false
  * hasText -> false
@@ -1447,6 +1511,7 @@ class xarTpl__EntityNode extends xarTpl__Node
  * needAssignment -> false
  * needParameter -> false
  * needExceptionsControl -> false
+ * @package blocklayout
  */
 class xarTpl__InstructionNode extends xarTpl__Node
 {
@@ -1458,6 +1523,11 @@ class xarTpl__InstructionNode extends xarTpl__Node
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
 {
     function render()
@@ -1475,6 +1545,11 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
 {
     function render()
@@ -1491,6 +1566,11 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1509,6 +1589,11 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1528,6 +1613,11 @@ class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarModEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1548,6 +1638,11 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1562,6 +1657,11 @@ class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1578,6 +1678,11 @@ class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1613,6 +1718,11 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
 {
     function render()
@@ -1621,7 +1731,7 @@ class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
     }
 }
 
-/*
+/**
  * xarTpl__TplTagNode
  * hasChildren -> false
  * hasText -> false
@@ -1630,6 +1740,7 @@ class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
  * needAssignment -> false
  * needParameter -> false
  * needExceptionsControl -> false
+ * @package blocklayout
  */
 class xarTpl__TplTagNode extends xarTpl__Node
 {
@@ -1643,6 +1754,11 @@ class xarTpl__TplTagNode extends xarTpl__Node
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarVarNode extends xarTpl__TplTagNode
 {
     function render()
@@ -1693,6 +1809,11 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
     function loopCounter($operator = NULL)
@@ -1789,6 +1910,11 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarSecNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -1855,6 +1981,11 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -1897,6 +2028,11 @@ class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarIfNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -1938,6 +2074,11 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 {
     function render()
@@ -1964,6 +2105,11 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarElseNode extends xarTpl__TplTagNode
 {
     function render()
@@ -1995,6 +2141,11 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarWhileNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2036,6 +2187,11 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarForNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2097,54 +2253,69 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
         extract($this->attributes);
 
-        if (!isset($var)) {
+        if (!isset($in)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'var\' attribute in <xar:foreach> tag.', $this));
+                           new xarTpl__ParserError('Missing \'in\' attribute in <xar:foreach> tag.', $this));
             return;
         }
 
-        if (!array($var)) {
+        if (!array($in)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
-                           new xarTpl__ParserError('Invalid \'var\' attribute in <xar:foreach> tag. \'var\' must be an array', $this));
+                           new xarTpl__ParserError('Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this));
             return;
         }
 
-        if (!isset($as)) {
+        if (!isset($value)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
-                           new xarTpl__ParserError('Missing \'as\' attribute in <xar:foreach> tag.', $this));
+                           new xarTpl__ParserError('Missing \'value\' attribute in <xar:foreach> tag.', $this));
             return;
         }
         
-        return "foreach ($var as $as) { ";
+        if (isset($key)) {
+            return "foreach ($in as $key => $value) { ";
+        }
+        
+        return "foreach ($in as $value) { ";
     }
     
     function renderEndTag()
     {
         return "} ";
     }
-
+    
     function hasChildren()
     {
         return true;
     }
-
+    
     function hasText()
     {
         return true;
     }
-
+    
     function isAssignable()
     {
         return false;
     }
+
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2216,6 +2387,12 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ *
+ */
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2272,6 +2449,11 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarMlNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2329,6 +2511,11 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2373,6 +2560,11 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2417,6 +2609,11 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2471,6 +2668,11 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
@@ -2505,6 +2707,11 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarModuleNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2521,6 +2728,11 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarEventNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2542,6 +2754,11 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2555,6 +2772,11 @@ class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2600,6 +2822,11 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2632,7 +2859,12 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     }
 }
 
-// FIXME: check if this is how you want to support module-registered tags
+/**
+ *
+ * 
+ * @package blocklayout
+ * @todo FIXME: check if this is how we want to support module-registered tags
+ */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
     function render()
@@ -2642,8 +2874,12 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
             return;
         }
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
+        // FIXME: we need the type somewhere in tag registration too
         xarModAPILoad($that->_module);
         $func = $that->_handler;
+        if (!function_exists($func)) {
+            xarModAPILoad($that->_module,'admin');
+        }
         return $func($this->attributes);
     }
 
@@ -2659,7 +2895,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 }
 
 
-/*
+/**
  * xarTpl__TplWidgetNode
  * hasChildren -> true
  * hasText -> false
@@ -2668,6 +2904,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  * needAssignment -> false
  * needParameter -> false
  * needExceptionsControl -> false
+ * @package blocklayout
  */
 class xarTpl__TplWidgetNode extends xarTpl__TplTagNode
 {
@@ -2760,6 +2997,11 @@ class xarTpl__TplWidgetNode extends xarTpl__TplTagNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__WidgetAttribute extends xarTpl__TplWidgetNode
 {
     function getValue()
@@ -2795,6 +3037,11 @@ class xarTpl__WidgetAttribute extends xarTpl__TplWidgetNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__WidgetModlink extends xarTpl__TplWidgetNode
 {
     function getAttributesInfo()
@@ -2836,6 +3083,11 @@ class xarTpl__WidgetModlink extends xarTpl__TplWidgetNode
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTpl__WidgetPostfield extends xarTpl__TplWidgetNode
 {
     function getAttributesInfo()

@@ -4,16 +4,14 @@
  *
  * Security Access Mechanism
  *
- * @package Xaraya eXtensible Management System
+ * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Sec
- * @link xarSec.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  */
 
-/*
+/**
  * Notes on security system
  *
  * Special UID and GIDS:

@@ -4,23 +4,21 @@
  *
  * Logging Facilities
  *
- * @package Xaraya eXtensible Management System
+ * @package logging
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Log
- * @link xarLog.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
+ * @todo  Document functions
+ *        Add options to simple & html logger
+ *        When calendar & xarLocaleFormatDate is done complete simple logger
+ *        and html logger
+ *        When xarMail is done do email logger
  */
 
-/* TODO:
- * Document functions
- * Add options to simple & html logger
- * When calendar & xarLocaleFormatDate is done complete simple logger
- * and html logger
- * When xarMail is done do email logger
+/**
+ * Logging package defines
  */
-
 define('XARLOG_LEVEL_DEBUG', 1);
 define('XARLOG_LEVEL_NOTICE', 2);
 define('XARLOG_LEVEL_WARNING', 4);
@@ -181,6 +179,11 @@ function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
     }
 }
 
+/**
+ *
+ * 
+ * @package logging
+ */
 class xarLog__Logger
 {
     // private
@@ -327,7 +330,13 @@ class xarLog__Logger
 
 }
 
-// Implements a concrete logger, the most simple text based file logger.
+/**
+ * Simple logging mechanism
+ *
+ * Implements a simple logger to a text file
+ * 
+ * @package logging
+ */
 class xarLog__SimpleLogger extends xarLog__Logger
 {
     var $fileName;
@@ -367,6 +376,13 @@ class xarLog__SimpleLogger extends xarLog__Logger
     }
 }
 
+/**
+ * HTMLLoggger
+ *
+ * Implements a logger to a HTML file
+ * 
+ * @package logging
+ */
 class xarLog__HTMLLogger extends xarLog__Logger
 {
     var $fileName;
@@ -397,6 +413,14 @@ class xarLog__HTMLLogger extends xarLog__Logger
 
 }
 
+/**
+ * JavaScriptLogger
+ *
+ * Implements a javascript logger in a separate HTML window
+ *
+ * 
+ * @package logging
+ */
 class xarLog__JavaScriptLogger extends xarLog__Logger
 {
     var $buffer = '';
@@ -451,6 +475,13 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
 
 }
 
+/**
+ * MozJSConsoleLogger
+ *
+ * Uses Mozillas Javascript Console to log messages
+ * 
+ * @package logging
+ */
 class xarLog__MozJSConsoleLogger extends xarLog__Logger
 {
     var $buffer = '';
@@ -499,6 +530,14 @@ class xarLog__MozJSConsoleLogger extends xarLog__Logger
     }
  }
 
+/**
+ * EmailLogger
+ * 
+ * Uses email to log messages
+ *
+ * @package logging
+ * @todo implement it
+ */
 class xarLog__EmailLogger extends xarLog__Logger
 {
     function xarLog__EmailLogger($args)

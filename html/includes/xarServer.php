@@ -4,12 +4,10 @@
  *
  * HTTP Protocol Server/Request/Response utilities
  *
- * @package Xaraya eXtensible Management System
+ * @package server
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage SerReqRes
- * @link xarServer.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
  */
 
@@ -18,6 +16,14 @@
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
+ * @global xarRequest_allowShortURLs bool
+ * @global xarRequest_defaultModule array
+ * @global xarRequest_shortURLVariables array
+ * @param args['generateShortURLs'] bool
+ * @param args['defaultModuleName'] string
+ * @param args['defaultModuleName'] string
+ * @param args['defaultModuleName'] string
+ * @param whatElseIsGoingLoaded integer 
  * @return bool true
  */
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
@@ -48,7 +54,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
  *
  * @author Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
- * @param name the name of the variable
+ * @param name string the name of the variable
  * @return mixed value of the variable
  */
 function xarServerGetVar($name)
@@ -74,20 +80,21 @@ function xarServerGetVar($name)
 }
 
 /**
- * get base URI for Xaraya
+ * Get base URI for Xaraya
  *
  * @access public
- * @returns string
- * @return base URI for Xaraya
+ * @return string base URI for Xaraya
+ * @todo remove whatever may come after the PHP script - TO BE CHECKED !
+ * @todo See code comments.
  */
 function xarServerGetBaseURI()
 {
     // Get the name of this URI
     $path = xarServerGetVar('REQUEST_URI');
 
-//    if ((empty($path)) ||
-//        (substr($path, -1, 1) == '/')) {
-// what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
+    //if ((empty($path)) ||
+    //    (substr($path, -1, 1) == '/')) {
+    //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
     if (empty($path)) {
         // REQUEST_URI was empty or pointed to a path
         // Try looking at PATH_INFO
@@ -100,7 +107,7 @@ function xarServerGetBaseURI()
     }
 
     $path = preg_replace('/[#\?].*/', '', $path);
-// TODO: remove whatever may come after the PHP script - TO BE CHECKED !
+
     $path = preg_replace('/\.php\/.*$/', '', $path);
     if (substr($path, -1, 1) == '/') {
         $path .= 'dummy';
@@ -170,12 +177,12 @@ function xarServerGetBaseURL()
 }
 
 /**
- * get current URL
+ * Get current URL
  *
- * @param $args additional parameters to be added to the URL (e.g. theme, ...)
  * @access public
- * @returns string
- * @return current URL
+ * @param args array additional parameters to be added to the URL (e.g. theme, ...)
+ * @return string current URL
+ * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
  */
 function xarServerGetCurrentURL($args = array())
 {
@@ -185,6 +192,7 @@ function xarServerGetCurrentURL($args = array())
 
     // get current URI
     $request = xarServerGetVar('REQUEST_URI');
+    
     if (empty($request)) {
         $request = xarServerGetVar('SCRIPT_NAME');
         if (!empty($request)) {
@@ -217,6 +225,17 @@ function xarServerGetCurrentURL($args = array())
 
 // REQUEST FUNCTIONS
 
+/**
+ * Get request variable
+ *
+ * @access public
+ * @global xarRequest_shortURLVariables array
+ * @global xarRequest_allowshortURLs bool
+ * @param name string
+ * @param allowOnlyMethod string
+ * @return mixed
+ * @todo change order (POST normally overrides GET)
+ */
 function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
     if ($allowOnlyMethod == 'GET') {
@@ -247,6 +266,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
         }
         $method = $allowOnlyMethod;
     } else {
+
         // Short URLs variables override GET and POST variables
         if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
             $value = $GLOBALS['xarRequest_shortURLVariables'][$name];
@@ -303,8 +323,14 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  *
  * @author Marco Canini, Michel Dalle
  * @access public
- * @returns array
- * @return requested module, type and func
+ * @global xarRequest_allowShortURLs bool
+ * @global xarRequest_defaultModule array
+ * @return array requested module, type and func
+ * @todo <marco> Do we want to use xarVarCleanUntrusted here?
+ * @todo <mikespub> Allow user select start page
+ * @todo <marco> Do we need to do a preg_match on $params[1] here? 
+ * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
+ * @todo <marco> Investigate this aliases thing before to integrate and promote it!
  */
 function xarRequestGetInfo()
 {
@@ -380,11 +406,10 @@ function xarRequestGetInfo()
 }
 
 /**
- * check to see if this is a local referral
+ * Check to see if this is a local referral
  *
  * @access public
- * @returns bool
- * @return true if locally referred, false if not
+ * @return bool true if locally referred, false if not
  */
 function xarRequestIsLocalReferer()
 {
@@ -398,8 +423,14 @@ function xarRequestIsLocalReferer()
     }
 }
 
-// REQUEST PRIVATE FUNCTIONS
 
+/**
+ * Set Short URL Variables
+ *
+ * @access public
+ * @global xarRequest_shortURLVariables array
+ * @param vars array
+ */
 function xarRequest__setShortURLVars($vars)
 {
     $GLOBALS['xarRequest_shortURLVariables'] = $vars;
@@ -432,7 +463,8 @@ function xarRequest__resolveModuleAlias($aliasModName)
  * Carry out a redirect
  *
  * @access public
- * @param the URL to redirect to
+ * @global xarResponse_redirectCalled bool 
+ * @param redirectURL string the URL to redirect to
  * @returns bool
  */
 function xarResponseRedirect($redirectURL)
@@ -471,8 +503,9 @@ function xarResponseRedirect($redirectURL)
 /**
  * Checks if a redirection header has already been sent.
  *
- * @access public
  * @author Marco Canini
+ * @access public
+ * @global xarResponse_redirectCalled bool
  * @returns bool
  */
 function xarResponseIsRedirected()

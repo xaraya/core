@@ -3,13 +3,11 @@
  * File: $Id$
  *
  * BlockLayout Template Engine
- *
- * @package Xaraya eXtensible Management System
+ * 
+ * @package blocklayout
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage MLS
- * @link xarMLS.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  */
 
@@ -17,6 +15,17 @@
  * Initializes the BlockLayout Template Engine
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @access protected
+ * @global xarTpl_cacheTemplates bool
+ * @global xarTpl_themesBaseDir string
+ * @global xarTpl_defaultThemeName string
+ * @global xarTpl_additionalStyles string
+ * @global xarTpl_headJavaScript string
+ * @global xarTpl_bodyJavaScript string 
+ * @param args['themesBaseDir'] string
+ * @param args['defaultThemeName'] string
+ * @param args['enableTemplateCaching'] bool
+ * @param whatElseIsGoingLoaded int 
  * @return bool true
  */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
@@ -30,12 +39,14 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     if (!xarTplSetPageTemplateName('default')) {
         xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
-    if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
-        xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
-                   xarCoreGetVarDirPath().'/cache/templates'.
-                   "'. Control directory permissions.");
+    
+    if ($xarTpl_cacheTemplates) {
+        if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
+            xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
+                       xarCoreGetVarDirPath().'/cache/templates'.
+                       "'. Change directory permissions.");
+        }
     }
-
     $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
@@ -45,11 +56,28 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     return true;
 }
 
+/**
+ * Get theme name
+ * 
+ * @access public
+ * @global xarTpl_themeName string
+ * @returns xarTpl_themeName string
+ */
 function xarTplGetThemeName()
 {
     return $GLOBALS['xarTpl_themeName'];
 }
 
+/**
+ * Set theme name
+ * 
+ * @access public
+ * @global xarTpl_themesBaseDir string
+ * @global xarTpl_themeName string
+ * @global xarTpl_themeDir string
+ * @param themeName string
+ * @returns bool
+ */
 function xarTplSetThemeName($themeName)
 {
     global $xarTpl_themesBaseDir;
@@ -64,11 +92,27 @@ function xarTplSetThemeName($themeName)
     return true;
 }
 
+/**
+ * Get page template name
+ *
+ * @access public
+ * @global xarTpl_pageTemplateName string
+ * @returns xarTpl_pageTemplateName string
+ */
 function xarTplGetPageTemplateName()
 {
-	return $GLOBALS['xarTpl_pageTemplateName'];
+    return $GLOBALS['xarTpl_pageTemplateName'];
 }
 
+/**
+ * Set page template name
+ * 
+ * @access public
+ * @global xarTpl_pageTemplateName string
+ * @global xarTpl_themeDir string
+ * @param templateName string
+ * @returns bool
+ */
 function xarTplSetPageTemplateName($templateName)
 {
     if (empty($templateName)) return false;
@@ -80,12 +124,29 @@ function xarTplSetPageTemplateName($templateName)
     return true;
 }
 
+/**
+ * Set page title
+ *
+ * @access public
+ * @global xarTpl_pageTitle string
+ * @param title string
+ * @returns bool
+ */
 function xarTplSetPageTitle($title)
 {
     $GLOBALS['xarTpl_pageTitle'] = $title;
     return true;
 }
 
+/**
+ * Add stylesheet link for a module
+ * 
+ * @access public
+ * @global xarTpl_additionalStyles string
+ * @param modName string
+ * @param styleName string
+ * @returns bool
+ */ 
 function xarTplAddStyleLink($modName, $styleName)
 {
     $info = xarMod_getBaseInfo($modName);
@@ -99,6 +160,17 @@ function xarTplAddStyleLink($modName, $styleName)
     return true;
 }
 
+/**
+ * Add JavaScript code to template output
+ * 
+ * @access public
+ * @global xarTpl_headJavaScript string
+ * @global xarTpl_bodyJavaScript string
+ * @param position string
+ * @param owner string
+ * @param code string
+ * @returns bool
+ */ 
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
     switch ($position) {
@@ -119,14 +191,14 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName the module name
- * @param modType user|admin
- * @param funcName module function to template
- * @param tplData arguments for the template
- * @param templateName the specific template to call
- * @returns string
- * @return output of the template
- **/
+ * @global xarTpl_themeDir string
+ * @param modName string the module name
+ * @param modType string user|admin
+ * @param funcName string module function to template
+ * @param tplData array arguments for the template
+ * @param templateName string the specific template to call
+ * @returns string xarTpl__executeFromFile($sourceFileName, $tplData)
+ */
 function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
     if (!empty($templateName)) {
@@ -159,13 +231,13 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName the module name
- * @param blockName the block name
- * @param tplData arguments for the template
- * @param templateName the specific template to call
- * @returns string
- * @return output of the template
- **/
+ * @global xarTpl_themeDir string
+ * @param modName string the module name
+ * @param blockName string the block name
+ * @param tplData array arguments for the template
+ * @param templateName string the specific template to call
+ * @returns string xarTpl__executeFromFile($sourceFileName, $tplData)
+ */
 function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = NULL)
 {
     if (!empty($templateName)) {
@@ -186,36 +258,63 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
+/**
+ * TODO: add this description
+ *
+ * @access public
+ * @param templateCode string
+ * @param tplData string
+ * @returns 
+ */
 function xarTplString($templateCode, $tplData)
 {
     return xarTpl__execute($templateCode, $tplData);
 }
 
+/**
+ * TODO: add this description
+ *
+ * @access public
+ * @param templateCode string
+ * @param tplData string
+ * @returns 
+ */
 function xarTplFile($fileName, $tplData)
 {
     return xarTpl__executeFromFile($fileName, $tplData);
 }
 
+/**
+ * TODO: add this description
+ *
+ * @access public
+ * @param templateSource string
+ * @returns 
+ */
 function xarTplCompileString($templateSource)
 {
     $blCompiler = xarTpl__getCompilerInstance();
     return $blCompiler->compile($templateSource);
 }
 
-
-// PROTECTED FUNCTIONS
-
 /**
- * Rendes a page template.
+ * Renders a page template.
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
- * @param mainModuleOutput the module output
- * @param otherModulesOutput TODO
- * @param page the theme's page to use
+ * @global xarTpl_themeDir string
+ * @global xarTpl_pageTemplateName string
+ * @global xarTpl_pageTitle string
+ * @global xarTpl_additionalStyles string
+ * @global xarTpl_headJavaScript string
+ * @global xarTpl_bodyJavaScript string
+ * @param mainModuleOutput stringthe module output
+ * @param otherModulesOutput string
+ * @param templateName string the template page to use
  * @returns string
- * @return page output
- **/
+ *
+ * @todo finish otherModulesOuptput
+ */
 function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
 {
     global $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
@@ -243,6 +342,15 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
+/**
+ * Render a block box
+ * 
+ * @access protected
+ * @global xarTpl_themeDir string
+ * @param blockInfo string
+ * @param templateName string
+ * @returns bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
+ */
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
     global $xarTpl_themeDir;
@@ -260,6 +368,15 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
+/**
+ * Render a widget
+ * 
+ * @access protected
+ * @global xarTpl_themeDir string
+ * @param widgetName string
+ * @param tplData string
+ * @returns xarTpl__executeFromFile($sourceFileName, $tplData)
+ */
 function xarTpl_renderWidget($widgetName, $tplData)
 {
     global $xarTpl_themeDir;
@@ -294,6 +411,14 @@ function xarTpl__getCompilerInstance()
     return new xarTpl__Compiler();
 }
 
+/**
+ * Execute Template ?
+ * 
+ * @access private
+ * @param templateCode string
+ * @param tplData array
+ * @returns string output
+ */
 function xarTpl__execute($templateCode, $tplData)
 {
     // $tplData should be an array (-even-if- it only has one value in it) 
@@ -317,6 +442,15 @@ function xarTpl__execute($templateCode, $tplData)
     return $output;
 }
 
+/**
+ * Execute template from  file?
+ * 
+ * @access private
+ * @global xarTpl_cacheTemplates bool
+ * @param sourceFileName string
+ * @param tplData array
+ * @returns mixed
+ */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     global $xarTpl_cacheTemplates;
@@ -390,6 +524,11 @@ define ('XAR_TPL_INTEGER', 256);
 define ('XAR_TPL_FLOAT', 512);
 define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
 
+/**
+ * 
+ * 
+ * @package blocklayout
+ */
 class xarTemplateAttribute {
     var $_name;     // Attribute name
     var $_flags;    // Attribute flags (datatype, required/optional, etc.)
@@ -450,6 +589,11 @@ class xarTemplateAttribute {
     }
 }
 
+/**
+ *
+ * 
+ * @package blocklayout
+ */
 class xarTemplateTag {
     var $_name;
     var $_attributes;
@@ -575,7 +719,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  **/
 function xarTplUnregisterTag($tag_name)
 {
-    if (!eregi('^[a-z][a-z\-_]*$', $tag_name)) {
+    if (!eregi('^[a-z][-_a-z0-9]*$', $tag_name)) {
         // throw exception
         return false;
     }

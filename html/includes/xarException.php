@@ -3,13 +3,11 @@
  * File: $Id$
  *
  * Exception Handling System
- *
- * @package Xaraya eXtensible Management System
+ * 
+ * @package exceptions
  * @copyright (C) 2002 by the Xaraya Development Team.
- * @link http://www.xaraya.com
- *
- * @subpackage Exception
- * @link xarException.php
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
  */
 
@@ -28,8 +26,11 @@ define('XAR_SYSTEM_EXCEPTION', 2);
 
 /* Xaraya System Exceptions */
 
-// SystemException class
-
+/**
+ * SystemException 
+ * 
+ * @package exceptions
+ */
 class SystemException
 {
     var $msg;
@@ -98,6 +99,11 @@ class SystemException
 // {ML_add_key 'TEMPLATE_NOT_EXIST'}
 // class PHP_ERROR extends SystemException {}
 
+/**
+ *
+ * 
+ * @package exceptions
+ */
 class DefaultUserException
 {
     var $msg;
@@ -125,11 +131,14 @@ class DefaultUserException
 
 }
 
-// ErrorCollection exception
-// it has to be raised as user exception
-// it's a container of error/exceptions
-// for now it's used only by the PHP error handler bridge
-
+/**
+ * ErrorCollection
+ * 
+ * it has to be raised as user exception
+ * it's a container of error/exceptions
+ * for now it's used only by the PHP error handler bridge
+ * @package exceptions
+ */
 class ErrorCollection
 {
     var $exceptions = array();

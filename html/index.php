@@ -1,11 +1,18 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ * 
+ * Xaraya Index
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.org
+*/
 
+/**
+ * Index Function 
+*/
 include 'includes/xarCore.php';
 
 function xarMain()
@@ -87,7 +94,7 @@ function xarMain()
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
+r() != XAR_NO_EXCEPTION) return; // throw back
 
     echo $pageOutput;
 
@@ -141,4 +148,6 @@ if (!xarMain()) {
 // Kill the debugger
 xarCore_disposeDebugger();
 
+?>L
 ?>
+
