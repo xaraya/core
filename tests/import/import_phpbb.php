@@ -99,6 +99,9 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (!xarModAPILoad('dynamicdata','util')) {
         die("Unable to load the dynamicdata util API");
     }
+    if (xarModIsAvailable('polls') && !xarModAPILoad('polls','admin')) {
+        die("Unable to load the polls admin API");
+    }
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
     }
@@ -187,9 +190,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         if (empty($name)) {
             $name = $uname;
         }
-        if (empty($pass)) {
-            $pass = '';
-        }
         if (empty($date)) {
             $date = time();
         }
@@ -198,6 +198,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                       'realname'   => $name,
                       'email'      => $email,
                       'cryptpass'  => $pass,
+                      'pass'       => '', // in case $pass is empty
                       'date'       => $date,
                       'valcode'    => 'createdbyadmin',
                       'authmodule' => 'authsystem',
@@ -220,7 +221,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         // same player, shoot again :)
             $user['uname'] .= $uid;
             echo "trying again with username " . $user['uname'] . " : ";
-            // this will *not* fill in the dynamic properties now
             $newuid = xarModAPIFunc('roles',
                                     'admin',
                                     'create',
@@ -240,11 +240,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         }
         $userid[$uid] = $newuid;
 
+        if ($url === 'http://') {
+            $url = '';
+        }
         // fill in the dynamic properties - cfr. users.xml !
         $dynamicvalues = array(
                                'itemid'     => $newuid,
                                'website'    => empty($url) ? null : $url,
-                               'timezone'   => $timezone,
+                               'timezone'   => $timezone == 0 ? null : $timezone, // GMT default
                                'avatar'     => empty($avatar) ? null : $avatar,
                                'icq'        => empty($icq) ? null : $icq,
                                'aim'        => empty($aim)  ? null : $aim,
@@ -276,7 +279,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarExceptionHandled();
     }
     xarModSetVar('installer','userid',serialize($userid));
-    echo "<strong>TODO : import user_data</strong><br><br>\n";
+    echo "<strong>TODO : import groups and ranks</strong><br><br>\n";
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         $startnum += $numitems;
@@ -385,7 +388,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             xarModSetVar('articles', 'number_of_categories.'.$ptid, 0);
             xarModSetVar('articles', 'mastercids.'.$ptid, '');
             xarModSetAlias('forums','articles');
-            echo "Publication type 'forums' created...<br>\n";
+            echo "Publication type 'forums' created...<br /><br />\n";
         }
     }
     if (!empty($ptid)) {
@@ -439,7 +442,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         $result->MoveNext();
     }
     $result->Close();
-    echo "<strong>TODO : copy the topic images to modules/categories/pnimages or elsewhere someday</strong><br><br>\n";
     xarModSetVar('installer','categories',$categories);
     xarModSetVar('installer','catid',serialize($catid));
     xarModSetVar('installer','forumid',serialize($forumid));
@@ -516,12 +518,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         if (empty($uname)) {
             $uname = '';
         }
-        if ($authorid < 2) {
-            $authorid = _XAR_ID_UNREGISTERED;
-        }
         if (isset($userid[$authorid])) {
             $authorid = $userid[$authorid];
         } // else we're lost :)
+        if (empty($authorid) || $authorid < 2) {
+            $authorid = _XAR_ID_UNREGISTERED;
+        }
         $cids = array();
         if (isset($forumid[$fid])) {
             $cids[] = $forumid[$fid];
@@ -655,12 +657,12 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 // no threading in phpBB !?
         $pid = 0;
 
-        if (empty($uid) || $uid < 2) {
-            $uid = _XAR_ID_UNREGISTERED;
-        }
         if (isset($userid[$uid])) {
             $uid = $userid[$uid];
         } // else we're lost :)
+        if (empty($uid) || $uid < 2) {
+            $uid = _XAR_ID_UNREGISTERED;
+        }
         $data['modid'] = $regid;
         $data['objectid'] = $topicid[$sid];
         if (!empty($pid) && !empty($pid2cid[$pid])) {
@@ -691,7 +693,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
 
-    echo "<strong>TODO : import other comments</strong><br><br>\n";
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
@@ -704,14 +705,140 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
     }
 
-
-// TODO: add the rest (private messages, votes, groups, ranks, ...) :-)
+    if ($step == 5 && !xarModIsAvailable('polls')) {
+        $step++;
+    }
 
     if ($step == 5) {
+    $topics = xarModGetVar('installer','topicid');
+    if (!isset($topics)) {
+        $topicid = array();
+    } else {
+        $topicid = unserialize($topics);
+    }
+    $ptid = xarModGetVar('installer','ptid');
 
-    echo "<strong>5. Cleaning up</strong><br>\n";
+    $regid = xarModGetIDFromName('articles');
+    echo "<strong>5. Importing votes</strong><br>\n";
 
-    echo "<strong>TODO : import the rest (private messages, votes, groups, ranks, ...)</strong><br><br>\n";
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_vote_desc';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, count votes failed : " . $dbconn->ErrorMsg());
+    }
+    $count = $result->fields[0];
+    $result->Close();
+
+    $query = 'SELECT vdesc.vote_id,topic_id,vote_text,vote_start,SUM(vote_result)
+              FROM ' . $oldprefix . '_vote_desc as vdesc
+              LEFT JOIN ' . $oldprefix . '_vote_results as vresults
+                  ON vdesc.vote_id = vresults.vote_id
+              GROUP BY vresults.vote_id
+              ORDER BY vdesc.vote_id ASC';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, select votes failed : " . $dbconn->ErrorMsg());
+    }
+    $pollid = array();
+    $num = 1;
+    while (!$result->EOF) {
+        list($pid,$tid,$title,$time,$votes) = $result->fields;
+        if (empty($title)) {
+            $title = xarML('[none]');
+        }
+        if (!isset($topicid[$tid])) {
+            echo "Unknown topic id $tid for vote $pid $title<br />\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        }
+        $newpid = xarModAPIFunc('polls','admin','create',
+                                array('title' => $title,
+                                      'polltype' => 'single', // does phpBB support any other kind ?
+                                      'private' => 0,
+                                      'time' => $time,
+                                      'module' => 'articles',
+                                      'itemtype' => $ptid,
+                                      'itemid' => $topicid[$tid],
+                                      'votes' => $votes));
+        if (empty($newpid)) {
+            echo "Insert vote ($pid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+        } elseif ($count < 200) {
+            echo "Inserted vote ($pid) $title<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted vote $num<br>\n";
+            flush();
+        }
+
+        if (!empty($newpid)) {
+            $pollid[$pid] = $newpid;
+        }
+        $num++;
+        $result->MoveNext();
+    }
+    $result->Close();
+
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_vote_results';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, count vote results failed : " . $dbconn->ErrorMsg());
+    }
+    $count = $result->fields[0];
+    $result->Close();
+
+    $query = 'SELECT vote_id, vote_option_text, vote_result, vote_option_id
+              FROM ' . $oldprefix . '_vote_results
+              ORDER BY vote_id ASC, vote_option_id ASC';
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        die("Oops, select vote results failed : " . $dbconn->ErrorMsg());
+    }
+    $num = 1;
+    while (!$result->EOF) {
+        list($pid,$text,$count,$vid) = $result->fields;
+        if ($text === '') {
+            $num++;
+            $result->MoveNext();
+            continue;
+        } elseif (!isset($pollid[$pid])) {
+            echo "Unknown vote id $pid for option $text<br />\n";
+            $num++;
+            $result->MoveNext();
+            continue;
+        }
+        $newvid = xarModAPIFunc('polls','admin','createopt',
+                                array('pid' => $pollid[$pid],
+                                      'option' => $text,
+                                      'votes' => $count));
+        if (empty($newvid)) {
+            echo "Insert vote result ($pid $vid) $text failed : " . xarExceptionRender('text') . "<br>\n";
+        } elseif ($count < 100) {
+            echo "Inserted vote result ($pid $vid) $text<br>\n";
+        } elseif ($num % 100 == 0) {
+            echo "Inserted vote result $num<br>\n";
+            flush();
+        }
+        $num++;
+        $result->MoveNext();
+    }
+    $result->Close();
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['polls_info']);
+    echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
+    echo '<a href="import_phpbb.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+
+    // Enable polls hooks for 'forums' pubtype of articles
+    xarModAPIFunc('modules','admin','enablehooks',
+                  array('callerModName' => 'articles', 'callerItemType' => $ptid, 'hookModName' => 'polls'));
+    }
+
+// TODO: add the rest (private messages, groups, ranks, ...) :-)
+
+    if ($step == 6) {
+
+    echo "<strong>6. Cleaning up</strong><br>\n";
+
+    echo "<strong>TODO : import the rest (private messages, groups, ranks, ...)</strong><br><br>\n";
     //xarModDelVar('installer','userobjectid');
     xarModDelVar('installer','oldprefix');
     xarModDelVar('installer','userid');
@@ -723,6 +850,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $ptid = xarModGetVar('installer','ptid');
     $url = xarModURL('articles','user','view',
                      array('ptid' => $ptid));
+    // Enable bbcode hooks for 'forums' pubtype of articles
+    if (xarModIsAvailable('bbcode')) {
+        xarModAPIFunc('modules','admin','enablehooks',
+                      array('callerModName' => 'articles', 'callerItemType' => $ptid, 'hookModName' => 'bbcode'));
+    }
     xarModDelVar('installer','ptid');
     echo '<a href="import_phpbb.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="'.$url.'">Go to your imported forums</a><br>';
