@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>&pnt-config-sitename; :: &pnt-config-slogan;</title>
-        <base href="&pnt-baseurl;index.php">
+        <title>&xar-config-sitename; :: &xar-config-slogan;</title>
+        <base href="&xar-baseurl;index.php">
         <link rel="StyleSheet" href="themes/print/style/styleNN.css" type="text/css">
-        <style type="text/css">@import url(&pnt-baseurl;themes/print/style/style.css); </style>
+        <style type="text/css">@import url(&xar-baseurl;themes/print/style/style.css); </style>
     </head>
     <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-<pnt:module main="true" />
+<xar:module main="true" />
 
 </body>
 </html>

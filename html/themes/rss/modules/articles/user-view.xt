@@ -1,7 +1,7 @@
-<pnt:if condition="$number gt 0">
-    <pnt:loop name="columns">
-        <pnt:loop name="colitems">
-            &pnt-var-colitem;
-        </pnt:loop>
-    </pnt:loop>
-</pnt:if>
+<xar:if condition="$number gt 0">
+    <xar:loop name="columns">
+        <xar:loop name="colitems">
+            &xar-var-colitem;
+        </xar:loop>
+    </xar:loop>
+</xar:if>

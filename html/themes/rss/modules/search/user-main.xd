@@ -1,7 +1,7 @@
-<pnt:if condition="!empty($query)">
+<xar:if condition="!empty($query)">
 <item>
-<title>Search term : &pnt-var-query;</title>
-<author>&pnt-var-name;</author>
-<description>&pnt-var-output;</description>
+<title>Search term : &xar-var-query;</title>
+<author>&xar-var-name;</author>
+<description>&xar-var-output;</description>
 </item>
-</pnt:if>
+</xar:if>

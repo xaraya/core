@@ -5,15 +5,15 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
 <rss version="2.0">
 <channel>
-<title>&pnt-config-sitename;</title>
+<title>&xar-config-sitename;</title>
 <link><?php echo pnVarPrepForDisplay(pnGetBaseURL()) ?></link>
-<description>&pnt-config-backend_title;</description>
-<language>&pnt-config-locale;</language>
-<copyright>&pnt-config-copyright;</copyright>
-<managingEditor>&pnt-config-manemail;</managingEditor>
-<webMaster>&pnt-config-adminmail;</webMaster>
+<description>&xar-config-backend_title;</description>
+<language>&xar-config-locale;</language>
+<copyright>&xar-config-copyright;</copyright>
+<managingEditor>&xar-config-manemail;</managingEditor>
+<webMaster>&xar-config-adminmail;</webMaster>
 <generator>Xaraya 1.0</generator>
 <docs>http://backend.userland.com/rss</docs>
-<pnt:module id="modulespace" main="true" />
+<xar:module id="modulespace" main="true" />
 </channel>
 </rss>

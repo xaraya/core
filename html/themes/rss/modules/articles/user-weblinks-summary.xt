@@ -1,8 +1,8 @@
 <item>
-<title>&pnt-var-title;</title>
-<link>&pnt-var-notes;</link>
-<description>&pnt-var-summary;</description>
-<author>&pnt-var-author;</author>
-<pubDate>&pnt-var-date;</pubDate>
-<comments>&pnt-modurl-comments-user-view;</comments>
+<title>&xar-var-title;</title>
+<link>&xar-var-notes;</link>
+<description>&xar-var-summary;</description>
+<author>&xar-var-author;</author>
+<pubDate>&xar-var-date;</pubDate>
+<comments>&xar-modurl-comments-user-view;</comments>
 </item>

@@ -2,20 +2,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-        <meta name="Generator" content="#pnConfigGetVar('System.Core.VersionNum')# :: #pnConfigGetVar('System.Core.VersionID')#" />
-        <meta name="Keywords" content="#pnConfigGetVar('Site.Core.MetaKeywords')#" />
-        <meta name="Description" content="#pnConfigGetVar('Site.Core.MetaDescription')#" />
-        <title> #pnConfigGetVar('Site.Core.SiteName')# :: #pnConfigGetVar('Site.Core.Slogan')#</title>
-        <base href="&pnt-baseurl;index.php" />
-        <link rel="StyleSheet" href="&pnt-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
-        <style type="text/css">@import url(&pnt-baseurl;themes/Xaraya_Classic/style/style.css); </style>
+        <meta name="Generator" content="#xarConfigGetVar('System.Core.VersionNum')# :: #xarConfigGetVar('System.Core.VersionID')#" />
+        <meta name="Keywords" content="#xarConfigGetVar('Site.Core.MetaKeywords')#" />
+        <meta name="Description" content="#xarConfigGetVar('Site.Core.MetaDescription')#" />
+        <title> #xarConfigGetVar('Site.Core.SiteName')# :: #xarConfigGetVar('Site.Core.Slogan')#</title>
+        <base href="&xart-baseurl;index.php" />
+        <link rel="StyleSheet" href="&xart-baseurl;themes/Xaraya_Classic/style/styleNN.css" type="text/css" />
+        <style type="text/css">@import url(&xart-baseurl;themes/Xaraya_Classic/style/style.css); </style>
     </head>
     <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
     <tr>
         <td align="left" background="themes/Xaraya_Classic/images/header_fill.gif">
             <a href="http://www.xaraya.com" target=_top>
-            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#pnConfigGetVar('Site.Core.SiteName')#" width="187" height="52" border="0" align="top">
+            <img src="themes/Xaraya_Classic/images/header_logo1.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="187" height="52" border="0" align="top">
             </a>
         </td>
         <td width="100%" background="themes/Xaraya_Classic/images/header_fill.gif">
@@ -23,14 +23,14 @@
         </td>
         <td align="right" background="themes/Xaraya_Classic/images/header_fill.gif">
             <a href="http://www.xaraya.com" target=_top>
-            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#pnConfigGetVar('Site.Core.SiteName')#" width="259" height="52" border="0" align="top">
+            <img src="themes/Xaraya_Classic/images/header_logo2.gif" alt="#xarConfigGetVar('Site.Core.SiteName')#" width="259" height="52" border="0" align="top">
             </a>
         </td>
     </tr>
 <!--
     <tr>
         <td align="center" colspan="3">-->
-            <!--pnt:blockgroup name="top" id="top" /-->
+            <!--xart:blockgroup name="top" id="top" /-->
         <!--</td>
     </tr>
 -->
@@ -45,7 +45,7 @@
             <table width="100%" border=0 cellpadding=0 cellspacing=0>
                 <tr>
                     <td bgcolor="##f0f0f0">
-                        <pnt:blockgroup name="left" id="left" />
+                        <xart:blockgroup name="left" id="left" />
                     </td>
                 </tr>
                 <tr height=200>
@@ -57,28 +57,28 @@
         <td width="1%" background="themes/Xaraya_Classic/images/vline.gif">   
         </td>
         <td width="60%" class=main_copy valign=top>
-            <pnt:blockgroup name="center" id="center" />
-            <pnt:module id="modulespace" main="true" />
+            <xart:blockgroup name="center" id="center" />
+            <xart:module id="modulespace" main="true" />
         </td>
         <td width="1%">   
         </td>
         <td width="20%" align=left valign=top background="themes/Xaraya_Classic/images/side_all.gif">
-            <pnt:blockgroup name="right" id="right" />
+            <xart:blockgroup name="right" id="right" />
         </td>
     </tr>
 </table>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
     <tr>
         <td align=right bgcolor="##f0f0f0">
-            <b>#pnConfigGetVar('Site.Core.Slogan')#</b>
+            <b>#xarConfigGetVar('Site.Core.Slogan')#</b>
         </td>
     </tr>
 </table>
 <center>
-<b>#pnConfigGetVar('Site.Core.CopyRight')#</b>
+<b>#xarConfigGetVar('Site.Core.CopyRight')#</b>
 <br />
 <br />
-#pnConfigGetVar('Site.Core.Footer')#
+#xarConfigGetVar('Site.Core.Footer')#
 </center>
 </body>
 </html>
