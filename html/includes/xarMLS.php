@@ -90,7 +90,11 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
  */
 function xarMLSGetMode()
 {
-    return $GLOBALS['xarMLS_mode'];
+    if (isset($GLOBALS['xarMLS_mode'])){ 
+        return $GLOBALS['xarMLS_mode'];
+    } else {
+        return 'BOXED';
+    }
 }
 
 /**
