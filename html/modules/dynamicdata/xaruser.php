@@ -123,30 +123,23 @@ function dynamicdata_user_main()
 
     $data = dynamicdata_user_menu();
 
-/*
     if (!xarModAPILoad('dynamicdata','user')) return;
 
-    // get items from the objects table (= itemtype 0 of the dynamicdata module)
+    // get items from the objects table
     $objects = xarModAPIFunc('dynamicdata','user','getobjects');
 
-    $itemtypes = array();
+    $data['items'] = array();
     foreach ($objects as $itemid => $object) {
+        if ($itemid < 3) continue;
         $modid = $object['fields']['moduleid']['value'];
         $itemtype = $object['fields']['itemtype']['value'];
-        $descr = $object['fields']['label']['value'];
-        $itemtypes[] = array(
-                             'modid'    => $modid,
-                             'itemtype' => $itemtype,
-                             'link'     => xarModURL('dynamicdata','user','view',
-                                                     array('modid' => $modid,'itemtype' => $itemtype)),
-                             'description' => $descr
-                             // ...
-                            );
+        $label = $object['fields']['label']['value'];
+        $data['items'][] = array(
+                                 'link'     => xarModURL('dynamicdata','user','view',
+                                                         array('modid' => $modid,'itemtype' => $itemtype)),
+                                 'label'    => $label
+                                );
     }
-
-    $data['itemtypes'] = $itemtypes;
-    $data['objects'] = $objects;
-*/
 
     return $data;
 }
@@ -165,36 +158,38 @@ function dynamicdata_user_view()
                                            'modid',
                                            'itemtype',
                                            'startnum');
-    if (!empty($objectid)) {
-        if (!xarModAPILoad('dynamicdata','user')) return;
-        $object = xarModAPIFunc('dynamicdata','user','getobject',
-                                array('objectid' => $objectid));
-        if (isset($object)) {
-            $modid = $object['moduleid']['value'];
-            $itemtype = $object['itemtype']['value'];
-            $label = $object['label']['value'];
-        }
-    } else {
-        $objectid = 0;
-    }
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
     }
     if (empty($itemtype)) {
         $itemtype = 0;
     }
+    if (!xarModAPILoad('dynamicdata','user')) return;
+    $object = xarModAPIFunc('dynamicdata','user','getobject',
+                            array('objectid' => $objectid,
+                                  'moduleid' => $modid,
+                                  'itemtype' => $itemtype));
+    if (isset($object)) {
+        $objectid = $object['id']['value'];
+        $modid = $object['moduleid']['value'];
+        $itemtype = $object['itemtype']['value'];
+        $label = $object['label']['value'];
+        $param = $object['urlparam']['value'];
+    } else {
+        $objectid = 0;
+        $label = xarML('Dynamic Data Objects');
+        $param = '';
+    }
     if (!xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:", ACCESS_OVERVIEW)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
-    }
-    if (empty($label)) {
-        $label = xarML('Dynamic Data Objects');
     }
 
     $data = dynamicdata_user_menu();
     $data['objectid'] = $objectid;
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
+    $data['param'] = $param;
     $data['startnum'] = $startnum;
     $data['label'] = xarML('View #(1)',$label);
 

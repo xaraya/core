@@ -2,42 +2,23 @@
     <tr>
         <th align="center">#$menutitle#</th>
     </tr>
-    <tr><td>
-        <table border="0" width="100%" cellspacing="1" cellpadding="8">
-        <tr align="center" valign="middle">
-
-        <td>
-            <xar:if condition="!empty($objectid) and $objectid eq 1">
-                <strong><xar:mlstring>View Dynamic Objects</xar:mlstring></strong>
-            <xar:else />
-                <a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a>
-            </xar:if>
-        </td>
-        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
-
-        </tr>
-        </table>
-    </td></tr>
 </table>
 <br />
 
 <h2><xar:mlstring>View</xar:mlstring> #$label#</h2>
 
 <!-- this does all the hard work :) -->
-<xar:data-list module="$modid" itemtype="$itemtype" param="$param" />
-
-<!-- to hide objects and properties use :  where="id gt 2"  (but only when we have objectid=0) -->
+<xar:data-list module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" />
 
 
-<xar:if condition="!empty($objectid) and $objectid eq 1">
-
+<xar:if condition="!empty($modlist) and count($modlist) gt 0">
 <!-- when we're viewing the Dynamic Objects themselves, show other modules -->
 <h2><xar:mlstring>Other Modules</xar:mlstring></h2>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <th>&xar-var-modidlabel;</th>
-        <th>&xar-var-optionslabel;</th>
+        <th><xar:mlstring>Module</xar:mlstring></th>
+        <th><xar:mlstring>Options</xar:mlstring></th>
     </tr>
     <xar:loop name="$modlist">
     <xar:if condition="!empty($header)">
@@ -46,12 +27,12 @@
     </tr>
     </xar:if>
     <tr>
-        <td>&xar-var-name;</td>
+        <td>#$name#</td>
         <td>
            <xar:if condition="empty($link)">
-               &xar-var-edittitle;
+               <xar:mlstring>Not applicable</xar:mlstring>
                <xar:else />
-                   <a href="&xar-var-link;"><xar:mlstring>View Properties</xar:mlstring></a>
+                   <a href="#$link#"><xar:mlstring>View Properties</xar:mlstring></a>
            </xar:if>
         </td>
     </tr>

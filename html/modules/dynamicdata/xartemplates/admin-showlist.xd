@@ -29,6 +29,24 @@
     </tr>
     </xar:if>
     </table>
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <br />
+        <div align="center">
+            <xar:if condition="!empty($prevurl)">
+                 <a href="#$prevurl#">&lt;&lt; </a>
+            <xar:else />
+                 ---
+            </xar:if>
+            &nbsp;&nbsp;&nbsp;
+            <xar:if condition="!empty($nexturl)">
+                 <a href="#$nexturl#"> &gt;&gt;</a>
+            <xar:else />
+                 ---
+            </xar:if>
+        </div>
+    </xar:if>
+
 <xar:elseif condition="$layout eq 'cells'" />
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
@@ -52,6 +70,23 @@
     </tr>
     </xar:if>
     </table>
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <div align="center">
+            <xar:if condition="!empty($prevurl)">
+                 <a href="#$prevurl#">&lt;&lt; </a>
+            <xar:else />
+                 ---
+            </xar:if>
+            &nbsp;&nbsp;&nbsp;
+            <xar:if condition="!empty($nexturl)">
+                 <a href="#$nexturl#"> &gt;&gt;</a>
+            <xar:else />
+                 ---
+            </xar:if>
+        </div>
+    </xar:if>
+
 <!-- TODO: multi-column output -->
 <xar:else />
     <xar:mlstring>Specify your own layout here...</xar:mlstring>

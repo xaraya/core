@@ -1,9 +1,7 @@
 <h2>#$label#</h2>
 
-<xar:if condition="!empty($objectid)">
-    <xar:data-view object="$objectid" numitems="20" layout="list" />
-<xar:elseif condition="!empty($itemtype)" />
-    <xar:data-view module="$modid" itemtype="$itemtype" numitems="20" layout="list" />
+<xar:if condition="!empty($modid)">
+    <xar:data-view module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" /> <!--  layout="list" -->
 <xar:else />
     <center>
         <xar:mlstring>Please select one of the</xar:mlstring>

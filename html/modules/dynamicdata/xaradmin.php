@@ -37,10 +37,10 @@ function dynamicdata_admin_main()
  */
 function dynamicdata_admin_view($args)
 {
-    list($objectid,
+    list($itemid,
          $modid,
          $itemtype,
-         $startnum) = xarVarCleanFromInput('objectid',
+         $startnum) = xarVarCleanFromInput('itemid',
                                            'modid',
                                            'itemtype',
                                            'startnum');
@@ -57,7 +57,7 @@ function dynamicdata_admin_view($args)
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
+                            array('objectid' => $itemid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
@@ -77,19 +77,11 @@ function dynamicdata_admin_view($args)
 
     $data = dynamicdata_admin_menu();
 
-    $data['items'] = array();
-
-    // Specify some labels for display
-    $data['modidlabel'] = xarVarPrepForDisplay(xarML('Module'));
-    $data['itemtypelabel'] = xarVarPrepForDisplay(xarML('Item Type'));
-    $data['numitemslabel'] = xarVarPrepForDisplay(xarML('# of Properties'));
-    $data['optionslabel'] = xarVarPrepForDisplay(xarML('Options'));
-    $data['pager'] = '';
-
     $data['objectid'] = $objectid;
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
     $data['param'] = $param;
+    $data['startnum'] = $startnum;
     $data['label'] = $label;
 
     // Security check - important to do this as early as possible to avoid
@@ -99,66 +91,36 @@ function dynamicdata_admin_view($args)
         return;
     }
 
-// not really used anymore - replaced by dynamic objects...
-    $items = xarModAPIFunc('dynamicdata',
-                          'user',
-                          'getmodules',
-                          array('startnum' => $startnum,
-                                'numitems' => xarModGetVar('dynamicdata',
-                                                          'itemsperpage')));
-    // Check for exceptions
-    if (!isset($items) && xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-
-    // Check individual permissions for Edit / Delete
-    // Note : we could use a foreach ($items as $item) here as well, as
-    // shown in xaruser.php, but as an example, we'll adapt the $items array
-    // 'in place', and *then* pass the complete items array to $data
-    $seenmod = array();
-    for ($i = 0; $i < count($items); $i++) {
-        $item = $items[$i];
-        $modinfo = xarModGetInfo($item['modid']);
-        $items[$i]['name'] = $modinfo['displayname'];
-        $seenmod[$modinfo['name']] = 1;
-        if (xarSecAuthAction(0, 'DynamicData::Item', "$item[modid]:$item[itemtype]:", ACCESS_ADMIN)) {
-            $items[$i]['editurl'] = xarModURL('dynamicdata',
-                                              'admin',
-                                              'modifyprop',
-                                              array('modid' => $item['modid'],
-                                                    'itemtype' => $item['itemtype'],));
-        } else {
-            $items[$i]['editurl'] = '';
-        }
-        $items[$i]['edittitle'] = xarML('Edit');
-    }
-
-    // Add the array of items to the template variables
-    $data['items'] = $items;
-
     // show other modules
     $data['modlist'] = array();
-    $modList = xarModGetList(array(),NULL,NULL,'category/name');
-    $oldcat = '';
-    for ($i = 0; $i < count($modList); $i++) {
-        if (!empty($seenmod[$modList[$i]['name']])) {
-            continue;
+    if ($objectid == 1) {
+        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        $seenmod = array();
+        foreach ($objects as $object) {
+            $seenmod[$object['fields']['moduleid']['value']] = 1;
         }
-        if ($oldcat != $modList[$i]['category']) {
-            $modList[$i]['header'] = $modList[$i]['category'];
-            $oldcat = $modList[$i]['category'];
-        } else {
-            $modList[$i]['header'] = '';
-        }
-        if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
-            $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
-                                              array('modid' => $modList[$i]['regid']));
-        } else {
-            $modList[$i]['link'] = '';
-        }
-        $data['modlist'][] = $modList[$i];
-    }
 
-// TODO : add a pager (once it exists in BL)
-    $data['pager'] = '';
+        $modList = xarModGetList(array(),NULL,NULL,'category/name');
+        $oldcat = '';
+        for ($i = 0; $i < count($modList); $i++) {
+            if (!empty($seenmod[$modList[$i]['regid']])) {
+                continue;
+            }
+            if ($oldcat != $modList[$i]['category']) {
+                $modList[$i]['header'] = $modList[$i]['category'];
+                $oldcat = $modList[$i]['category'];
+            } else {
+                $modList[$i]['header'] = '';
+            }
+            if (xarSecAuthAction(0, 'DynamicData::Item', $modList[$i]['regid']."::", ACCESS_ADMIN)) {
+                $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
+                                                  array('modid' => $modList[$i]['regid']));
+            } else {
+                $modList[$i]['link'] = '';
+            }
+            $data['modlist'][] = $modList[$i];
+        }
+    }
 
     // Return the template variables defined in this function
     return $data;
@@ -336,7 +298,7 @@ function dynamicdata_admin_create($args)
     if (!isset($itemid)) return; // throw back
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('objectid' => $objectid)));
+                                  array('itemid' => $objectid)));
 
     // Return
     return true;
@@ -410,9 +372,9 @@ function dynamicdata_admin_modify($args)
     // show a link to edit properties if we're dealing with a Dynamic Object
     if ($objectid == 1) {
         $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                      array('objectid' => $itemid));
+                                      array('itemid' => $itemid));
         $data['viewlink'] = xarModURL('dynamicdata','admin','view',
-                                      array('objectid' => $itemid));
+                                      array('itemid' => $itemid));
     } else {
         $data['proplink'] = '';
         $data['viewlink'] = '';
@@ -505,9 +467,9 @@ function dynamicdata_admin_update($args)
         // show a link to edit properties if we're dealing with a Dynamic Object
         if ($objectid == 1) {
             $data['proplink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                          array('objectid' => $itemid));
+                                          array('itemid' => $itemid));
             $data['viewlink'] = xarModURL('dynamicdata','admin','view',
-                                          array('objectid' => $itemid));
+                                          array('itemid' => $itemid));
         } else {
             $data['proplink'] = '';
             $data['viewlink'] = '';
@@ -525,7 +487,7 @@ function dynamicdata_admin_update($args)
     if (!isset($itemid)) return; // throw back
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('objectid' => $objectid)));
+                                  array('itemid' => $objectid)));
 
     // Return
     return true;
@@ -553,9 +515,9 @@ function dynamicdata_admin_modifyprop()
         return;
     }
 
-    list($objectid,
+    list($itemid,
          $modid,
-         $itemtype) = xarVarCleanFromInput('objectid',
+         $itemtype) = xarVarCleanFromInput('itemid',
                                            'modid',
                                            'itemtype');
 
@@ -565,7 +527,7 @@ function dynamicdata_admin_modifyprop()
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
+                            array('objectid' => $itemid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
@@ -598,9 +560,9 @@ function dynamicdata_admin_modifyprop()
     } else {
         $data['objectid'] = $object['id']['value'];
         if (!empty($itemtype)) {
-            $data['label'] = xarML('for object #(1) (module #(2) - item type #(3))', $object['label']['value'], $modinfo['displayname'], $itemtype);
+            $data['label'] = xarML('for #(1) (module #(2) - item type #(3))', $object['label']['value'], $modinfo['displayname'], $itemtype);
         } else {
-            $data['label'] = xarML('for object #(1) (module #(2))', $object['label']['value'], $modinfo['displayname']);
+            $data['label'] = xarML('for #(1) (module #(2))', $object['label']['value'], $modinfo['displayname']);
         }
     }
 
@@ -667,7 +629,7 @@ function dynamicdata_admin_modifyprop()
     $data['labels']['linkfrom'] = xarML('From');
     $data['labels']['linkto'] = xarML('To');
 
-    $data['where'] = "moduleid eq $modid and itemtype eq $itemtype";
+//    $data['where'] = "moduleid eq $modid and itemtype eq $itemtype";
 
     // Return the template variables defined in this function
     return $data;
@@ -789,13 +751,19 @@ function dynamicdata_admin_updateprop()
     // insert new field
     if (!empty($dd_label[0]) && !empty($dd_type[0])) {
         // create new property in xaradminapi.php
-        $prop_id = xarModAPIFunc('dynamicdata','admin','createprop',
-                                array('modid' => $modid,
-                                      'itemtype' => $itemtype,
+        $name = strtolower($dd_label[0]);
+        $name = preg_replace('/\s+/','_',$name);
+        $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
+                                array('name' => $name,
                                       'label' => $dd_label[0],
+                                      'objectid' => $objectid,
+                                      'moduleid' => $modid,
+                                      'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
                                       'default' => $dd_default[0],
                                       'source' => $dd_source[0],
+                                      'status' => 1,
+                                      'order' => 0,
                                       'validation' => $dd_validation[0]));
         if (empty($prop_id)) {
             return;

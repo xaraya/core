@@ -2,16 +2,6 @@
     <tr>
         <th align="center">#$menutitle#</th>
     </tr>
-    <tr><td>
-        <table border="0" width="100%" cellspacing="1" cellpadding="8">
-        <tr align="center" valign="middle">
-
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Dynamic Objects</xar:mlstring></a></td>
-        <td><a href="&xar-modurl-dynamicdata-admin-modifyconfig;"><xar:mlstring>Configure Property Types</xar:mlstring></a></td>
-
-        </tr>
-        </table>
-    </td></tr>
 </table>
 <br />
 
@@ -24,7 +14,6 @@
     <xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
 </xar:if>
 
-// TODO: very much under construction, obviously :-)
 <br /><br />
 Tip : empty label -> delete field for all items
 <br />
@@ -171,7 +160,7 @@ Tip : empty label -> delete field for all items
         <tr align="left" valign="middle">
             <td>#$module#</td>
             <td>#$type#</td>
-            <td>#$source#</td>
+            <td>#$from#</td>
             <td>#$to#</td>
         </tr>
         </xar:loop>

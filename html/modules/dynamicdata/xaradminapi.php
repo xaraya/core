@@ -564,9 +564,25 @@ function dynamicdata_adminapi_getnextid($args)
 }
 
 // ----------------------------------------------------------------------
-// Specific APIs for objects (= objectid 1)
+// Specific APIs for dynamic objects (= objectid 1)
 // ----------------------------------------------------------------------
 
+/**
+ * create a new dynamic object
+ *
+ * @author the DynamicData module development team
+ * @param $args['name'] name of the object to create
+ * @param $args['label'] label of the object to create
+ * @param $args['moduleid'] module id of the object to create
+ * @param $args['itemtype'] item type of the object to create
+ * @param $args['urlparam'] URL parameter to use for the item (itemid, exid, aid, ...)
+ * @param $args['config'] some configuration for the object (free to define and use)
+ * @param $args['objectid'] object id of the object to create (for import only)
+ * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
+ * @returns int
+ * @return object ID on success, null on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
 function dynamicdata_adminapi_createobject($args)
 {
     extract($args);
@@ -575,7 +591,8 @@ function dynamicdata_adminapi_createobject($args)
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
                             array('objectid' => 1)); // the objects
     if (empty($moduleid)) {
-        $moduleid = xarModGetIDFromName('dynamicdata');
+        // defaults to the current module
+        $moduleid = xarModGetIDFromName(xarModGetName());
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -599,9 +616,28 @@ function dynamicdata_adminapi_createobject($args)
 }
 
 // ----------------------------------------------------------------------
-// Specific APIs for properties (= objectid 2)
+// Specific APIs for dynamic properties (= objectid 2)
 // ----------------------------------------------------------------------
 
+/**
+ * create a new property field for an object
+ *
+ * @author the DynamicData module development team
+ * @param $args['name'] name of the property to create
+ * @param $args['label'] label of the property to create
+ * @param $args['objectid'] object id of the property to create
+ * @param $args['moduleid'] module id of the property to create
+ * @param $args['itemtype'] item type of the property to create
+ * @param $args['type'] type of the property to create
+ * @param $args['default'] default of the property to create
+ * @param $args['source'] data source for the property (dynamic_data table or other)
+ * @param $args['status'] status of the property to create (disabled/active/...)
+ * @param $args['order'] order of the property to create
+ * @param $args['validation'] validation of the property to create
+ * @returns int
+ * @return property ID on success, null on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
 function dynamicdata_adminapi_createproperty($args)
 {
     extract($args);
@@ -630,7 +666,8 @@ function dynamicdata_adminapi_createproperty($args)
     }
 
     if (empty($moduleid)) {
-        $moduleid = xarModGetIDFromName('dynamicdata');
+        // defaults to the current module
+        $moduleid = xarModGetIDFromName(xarModGetName());
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -654,6 +691,15 @@ function dynamicdata_adminapi_createproperty($args)
             $fields[$name]['value'] = $args[$name];
         }
     }
+/* this is already done via the table definition of xar_dynamic_properties
+    // fill in some defaults if necessary
+    if (empty($fields['source']['value'])) {
+        $fields['source']['value'] = 'dynamic_data';
+    }
+    if (empty($fields['validation']['value'])) {
+        $fields['validation']['value'] = '';
+    }
+*/
 
     $propid = xarModAPIFunc('dynamicdata', 'admin', 'create',
                             array('modid'    => $moduleid,
@@ -707,7 +753,7 @@ function dynamicdata_adminapi_importproperties($args)
 
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
-    // search for an object, or create one ?
+    // search for an object, or create one
     if (empty($objectid)) {
         $object = xarModAPIFunc('dynamicdata','user','getobject',
                                 array('modid' => $modid,
@@ -746,7 +792,7 @@ function dynamicdata_adminapi_importproperties($args)
                                       'type' => $field['type'],
                                       'default' => $field['default'],
                                       'source' => $field['source'],
-                                      'active' => $field['active'],
+                                      'status' => $field['status'],
                                       'order' => $field['order'],
                                       'validation' => $field['validation']));
         if (empty($prop_id)) {
@@ -760,126 +806,6 @@ function dynamicdata_adminapi_importproperties($args)
 // ----------------------------------------------------------------------
 // Older Properties APIs (being replace by the above)
 // ----------------------------------------------------------------------
-
-/**
- * create a new property field
- *
- * @author the DynamicData module development team
- * @param $args['modid'] module id of the item field to create
- * @param $args['itemtype'] item type of the item field to create
- * @param $args['label'] name of the field to create
- * @param $args['type'] type of the field to create
- * @param $args['default'] default of the field to create
- * @param $args['source'] data source for the field (dynamic_data table or other)
- * @param $args['validation'] validation of the field to create
- * @returns int
- * @return dynamicdata prop ID on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_adminapi_createprop($args)
-{
-    extract($args);
-
-    // Required arguments
-    $invalid = array();
-    if (!isset($modid) || !is_numeric($modid)) {
-        $invalid[] = 'module id';
-    }
-    if (!isset($label) || !is_string($label)) {
-        $invalid[] = 'label';
-    }
-    if (!isset($type) || !is_numeric($type)) {
-        $invalid[] = 'type';
-    }
-    if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'createprop', 'DynamicData');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
-
-    // Optional arguments
-    if (!isset($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = 0;
-    }
-    if (!isset($default) || !is_string($default)) {
-        $default = '';
-    }
-// TODO: verify that the data source exists
-    if (!isset($source) || !is_string($source)) {
-        $source = 'dynamic_data';
-    }
-    if (!isset($validation) || !is_string($validation)) {
-        $validation = '';
-    }
-
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Field', "$label:$type:", ACCESS_ADD)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
-    // return arrays but we handle them differently.  For xarDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For xarDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
-
-    // It's good practice to name the table and column definitions you
-    // are getting - $table and $column don't cut it in more complex
-    // modules
-    $dynamicprop = $xartable['dynamic_properties'];
-
-    // Get next ID in table - this is required prior to any insert that
-    // uses a unique ID, and ensures that the ID generation is carried
-    // out in a database-portable fashion
-    $nextId = $dbconn->GenId($dynamicprop);
-
-    // Add item - the formatting here is not mandatory, but it does make
-    // the SQL statement relatively easy to read.  Also, separating out
-    // the sql statement from the Execute() command allows for simpler
-    // debug operation if it is ever needed
-    $sql = "INSERT INTO $dynamicprop (
-              xar_prop_id,
-              xar_prop_moduleid,
-              xar_prop_itemtype,
-              xar_prop_label,
-              xar_prop_type,
-              xar_prop_default,
-              xar_prop_source,
-              xar_prop_validation)
-            VALUES (
-              $nextId,
-              " . xarVarPrepForStore($modid) . ",
-              " . xarVarPrepForStore($itemtype) . ",
-              '" . xarVarPrepForStore($label) . "',
-              " . xarVarPrepForStore($type) . ",
-              '" . xarVarPrepForStore($default) . "',
-              '" . xarVarPrepForStore($source) . "',
-              '" . xarVarPrepForStore($validation) . "')";
-    $dbconn->Execute($sql);
-
-    // Check for an error with the database code, and if so raise an
-    // appropriate exception
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    // Get the ID of the item that we inserted.  It is possible, depending
-    // on your database, that this is different from $nextId as obtained
-    // above, so it is better to be safe than sorry in this situation
-    $prop_id = $dbconn->PO_Insert_ID($dynamicprop, 'xar_prop_id');
-
-    // Return the id of the newly created item to the calling process
-    return $prop_id;
-}
 
 /**
  * update a property field
@@ -1613,14 +1539,28 @@ function dynamicdata_adminapi_checkinput($args)
             case 'url':
                 if (!empty($value)) {
             // TODO: add some URL validation routine !
+                    if (preg_match('/[<>"]/',$value)) {
+                        $fields[$name]['value'] = '';
+                        $fields[$name]['invalid'] = 'image URL';
+                    } else {
+                        $fields[$name]['value'] = $value;
+                    }
+                } else {
+                    $fields[$name]['value'] = '';
                 }
-                $fields[$name]['value'] = $value;
                 break;
             case 'image':
                 if (!empty($value)) {
             // TODO: add some image validation routine !
+                    if (preg_match('/[<>"]/',$value)) {
+                        $fields[$name]['value'] = '';
+                        $fields[$name]['invalid'] = 'image URL';
+                    } else {
+                        $fields[$name]['value'] = $value;
+                    }
+                } else {
+                    $fields[$name]['value'] = '';
                 }
-                $fields[$name]['value'] = $value;
                 break;
             case 'static':
                 // TODO: check if we can leave this "as is"
@@ -1788,6 +1728,29 @@ function dynamicdata_adminapi_checkinput($args)
                     $fields[$name]['invalid'] = 'object';
                 }
                 break;
+            case 'fieldstatus':
+                if (!isset($options) || !is_array($options)) {
+                    $options = array(
+                                     array('id' => 0, 'name' => xarML('Disabled')),
+                                     array('id' => 1, 'name' => xarML('Active')),
+                                     array('id' => 2, 'name' => xarML('Display Only')),
+                               );
+                }
+                if (!isset($value)) {
+                    $value = 1;
+                }
+                $found = 0;
+                foreach ($options as $option) {
+                    if ($option['id'] == $value) {
+                        $found = 1;
+                        $fields[$name]['value'] = $option['id'];
+                        break;
+                    }
+                }
+                if (empty($found)) {
+                    $fields[$name]['invalid'] = 'field status';
+                }
+                break;
 
 // TODO: add categories, hitcount, ratings, ...
 
@@ -1900,6 +1863,7 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 50;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             break;
         case 'textarea':
@@ -1921,6 +1885,7 @@ function dynamicdata_adminapi_showinput($args)
                     $rows = 8;
                 }
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<textarea name="'.$name.'" wrap="'.$wrap.'" rows="'.$rows.'" cols="'.$cols.'"'.$id.$tabindex.'>'.$value.'</textarea>';
             break;
     // TEST ONLY
@@ -1997,6 +1962,7 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 50;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             if (!empty($value)) {
                 $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('check').'</a> ]';
@@ -2006,6 +1972,7 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 50;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             if (!empty($value)) {
                 $output .= ' [ <a href="'.$value.'" target="preview">'.xarML('show').'</a> ]';
@@ -2013,9 +1980,11 @@ function dynamicdata_adminapi_showinput($args)
             $output .= '<br />// TODO: add image picker ?';
             break;
         case 'static':
+            $value = xarVarPrepHTMLDisplay($value);
             $output .= $value;
             break;
         case 'hidden':
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="hidden" name="'.$name.'" value="'.$value.'"'.$id.$tabindex.' />';
             break;
         case 'username':
@@ -2111,6 +2080,7 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 10;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             break;
         case 'integerlist':
@@ -2144,6 +2114,7 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 10;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             break;
         case 'module':
@@ -2166,10 +2137,12 @@ function dynamicdata_adminapi_showinput($args)
             if (empty($size)) {
                 $size = 10;
             }
+            $value = xarVarPrepForDisplay($value);
             $output .= '<input type="text" name="'.$name.'" value="'.$value.'" size="'.$size.'"'.$id.$tabindex.' />';
             break;
         case 'itemid':
         // TODO: evaluate if we want some other output here
+            $value = xarVarPrepForDisplay($value);
             $output .= $value;
             break;
         case 'fieldtype':
@@ -2205,6 +2178,24 @@ function dynamicdata_adminapi_showinput($args)
                     $output .= '<option value="'.$objectid.'">';
                 }
                 $output .= $object['fields']['name']['value'] . '</option>';
+            }
+            $output .= '</select>';
+            break;
+        case 'fieldstatus':
+            $output .= '<select name="'.$name.'"'.$id.$tabindex.'>';
+            if (!isset($options) || !is_array($options)) {
+                $options = array(
+                                 array('id' => 0, 'name' => xarML('Disabled')),
+                                 array('id' => 1, 'name' => xarML('Active')),
+                                 array('id' => 2, 'name' => xarML('Display Only')),
+                           );
+            }
+            foreach ($options as $option) {
+                $output .= '<option value="'.$option['id'].'"';
+                if ($option['id'] == $value) {
+                    $output .= ' selected';
+                }
+                $output .= '>'.$option['name'].'</option>';
             }
             $output .= '</select>';
             break;
@@ -2567,8 +2558,11 @@ function dynamicdata_adminapi_showlist($args)
         } elseif (is_array($fieldlist)) {
             $myfieldlist = $fieldlist;
         }
+        $status = null;
     } else {
         $myfieldlist = null;
+        // get active properties only (+ not the display only ones)
+        $status = 1;
     }
 
     // include the static properties (= module tables) too ?
@@ -2588,6 +2582,7 @@ function dynamicdata_adminapi_showlist($args)
                             array('modid' => $modid,
                                   'itemtype' => $itemtype,
                                   'fieldlist' => $myfieldlist,
+                                  'status' => $status,
                                   'static' => $static));
 
     if (!isset($fields) || count($fields) == 0) {
@@ -2628,15 +2623,78 @@ function dynamicdata_adminapi_showlist($args)
                                  'startnum' => $startnum,
                                  'where' => $where,
                                  'fieldlist' => $myfieldlist,
+                                 'status' => $status,
                                  'static' => $static));
     if (!isset($items)) return xarML('No items found');
+
+    $nexturl = '';
+    $prevurl = '';
+    if (!empty($numitems) && (count($items) == $numitems || $startnum > 1)) {
+        // Get current URL
+        $currenturl = xarServerGetCurrentURL();
+        if (empty($startnum)) {
+            $startnum = 1;
+        }
+
+// TODO: count items
+        if (preg_match('/startnum=\d+/',$currenturl)) {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = preg_replace('/startnum=\d+/',"startnum=$next",$currenturl);
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
+            }
+        } elseif (preg_match('/\?/',$currenturl)) {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = $currenturl . '&startnum=' . $next;
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = $currenturl . '&startnum=' . $prev;
+            }
+        } else {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = $currenturl . '?startnum=' . $next;
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = $currenturl . '?startnum=' . $prev;
+            }
+        }
+
+/*
+        $count = xarModAPIFunc('dynamicdata','user','countitems',
+                               array('modid' => $modid,
+                                     'itemtype' => $itemtype,
+                                     'itemids' => $itemids,
+                                     'sort' => $sort,
+                                     'numitems' => $numitems,
+                                     'startnum' => $startnum,
+                                     'where' => $where,
+                                     'fieldlist' => $myfieldlist,
+                                     'static' => $static));
+*/
+    }
+
+    // override for viewing dynamic objects
+    if ($modname == 'dynamicdata' && $itemtype == 0) {
+        $viewtype = 'admin';
+        $viewfunc = 'view';
+    } else {
+        $viewtype = 'user';
+        $viewfunc = 'display';
+    }
 
     foreach ($items as $itemid => $item) {
     // TODO: improve this + SECURITY !!!
         $options = array();
         if (xarSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_READ)) {
             $options[] = array('title' => xarML('View'),
-                               'link'  => xarModURL($modname,'user','display',
+                               'link'  => xarModURL($modname,$viewtype,$viewfunc,
                                           array($param => $itemid,
                                                 'itemtype' => $itemtype)),
                                'join'  => '');
@@ -2670,6 +2728,8 @@ function dynamicdata_adminapi_showlist($args)
                         array('items' => $items,
                               'labels' => $labels,
                               'newlink' => $newlink,
+                              'nexturl' => $nexturl,
+                              'prevurl' => $prevurl,
                               'layout' => $layout),
                         $template);
 }

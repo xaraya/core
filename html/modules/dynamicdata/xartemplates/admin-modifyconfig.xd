@@ -2,16 +2,6 @@
     <tr>
         <th align="center">#$menutitle#</th>
     </tr>
-    <tr><td>
-        <table border="0" width="100%" cellspacing="1" cellpadding="8">
-        <tr align="center" valign="middle">
-
-        <td><a href="&xar-modurl-dynamicdata-admin-view;"><xar:mlstring>View Module Objects</xar:mlstring></a></td>
-        <td><strong><xar:mlstring>Configure Property Types</xar:mlstring></strong></a></td>
-
-        </tr>
-        </table>
-    </td></tr>
 </table>
 <br />
 

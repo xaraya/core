@@ -1,6 +1,8 @@
 <h2><xar:mlstring>Welcome to Dynamic Data</xar:mlstring></h2>
 
-<!-- this displays the available dynamic data objects in bullet format -->
-<xar:data-view module="dynamicdata" itemtype="0" layout="bullet" fieldlist="label" linkfunc="view" linkfield="label" param="objectid" />
-<!-- linklabel="View"  -->
+<ul>
+<xar:foreach in="$items" value="$item">
+    <li><a href="#$item['link']#">#$item['label']#</a> </li>
+</xar:foreach>
+</ul>
 

@@ -2,8 +2,6 @@
     <tr>
         <td align="center" colspan="5">
             <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="&xar-var-link;" target="hook">&xar-var-labels.config;</a> ]
-<br />
-// TODO: well, just about everything :-)
         </td>
     </tr>
 <xar:if condition="!empty($fields)">

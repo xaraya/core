@@ -26,6 +26,7 @@
  * @param $args['itemtype'] item type of the item fields to get
  * @param $args['itemid'] item id of the item fields to get
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns array
  * @return array of fields, or false on failure
@@ -72,6 +73,11 @@ function dynamicdata_userapi_getitem($args)
         $fieldlist = null;
     }
 
+    // limit to property fields of a certain status (e.g. active)
+    if (!isset($status)) {
+        $status = null;
+    }
+
     // include the static properties (= module tables) too ?
     if (empty($static)) {
         $static = false;
@@ -83,6 +89,7 @@ function dynamicdata_userapi_getitem($args)
                            array('modid' => $modid,
                                  'itemtype' => $itemtype,
                                  'fieldlist' => $fieldlist,
+                                 'status' => $status,
                                  'static' => $static));
     if (empty($fields) || count($fields) == 0) {
         return array();
@@ -280,6 +287,7 @@ function dynamicdata_userapi_getall($args)
  * @param $args['itemtype'] item type of the item fields to get
  * @param $args['itemids'] array of item ids to return
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @param $args['sort'] sort field(s)
  * @param $args['numitems'] number of items to retrieve
@@ -340,6 +348,11 @@ function dynamicdata_userapi_getitems($args)
         $fieldlist = null;
     }
 
+    // limit to property fields of a certain status (e.g. active)
+    if (!isset($status)) {
+        $status = null;
+    }
+
     // include the static properties (= module tables) too ?
     if (empty($static)) {
         $static = false;
@@ -381,6 +394,7 @@ function dynamicdata_userapi_getitems($args)
                            array('modid' => $modid,
                                  'itemtype' => $itemtype,
                                  'fieldlist' => $fieldlist,
+                                 'status' => $status,
                                  'static' => $static));
     if (empty($fields) || count($fields) == 0) {
         return array();
@@ -1056,6 +1070,7 @@ function dynamicdata_userapi_splitfields($args)
  * @param $args['modid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns mixed
  * @return value of the field, or false on failure
@@ -1088,6 +1103,11 @@ function dynamicdata_userapi_getprop($args)
         $fieldlist = null;
     }
 
+    // limit to property fields of a certain status (e.g. active)
+    if (!isset($status)) {
+        $status = null;
+    }
+
     // include the static properties (= module tables) too ?
     if (empty($static)) {
         $static = false;
@@ -1109,9 +1129,7 @@ function dynamicdata_userapi_getprop($args)
     }
 
     if (empty($static) && isset($propertybag["$modid:$itemtype"])) {
-        if (empty($fieldlist)) {
-            return $propertybag["$modid:$itemtype"];
-        } else {
+        if (!empty($fieldlist)) {
             $myfields = array();
             foreach ($fieldlist as $name) {
                 if (isset($propertybag["$modid:$itemtype"][$name])) {
@@ -1119,6 +1137,16 @@ function dynamicdata_userapi_getprop($args)
                 }
             }
             return $myfields;
+        } elseif (isset($status)) {
+            $myfields = array();
+            foreach ($propertybag["$modid:$itemtype"] as $name => $field) {
+                if ($field['status'] == $status) {
+                    $myfields[$name] = $propertybag["$modid:$itemtype"][$name];
+                }
+            }
+            return $myfields;
+        } else {
+            return $propertybag["$modid:$itemtype"];
         }
     }
 
@@ -1133,6 +1161,8 @@ function dynamicdata_userapi_getprop($args)
                    xar_prop_id,
                    xar_prop_default,
                    xar_prop_source,
+                   xar_prop_status,
+                   xar_prop_order,
                    xar_prop_validation
             FROM $dynamicprop
             WHERE xar_prop_moduleid = " . xarVarPrepForStore($modid) . "
@@ -1151,7 +1181,7 @@ function dynamicdata_userapi_getprop($args)
     $fields = array();
 
     while (!$result->EOF) {
-        list($name, $label, $type, $id, $default, $source, $validation) = $result->fields;
+        list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
         if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
             $fields[$name] = array('name' => $name,
                                    'label' => $label,
@@ -1159,6 +1189,8 @@ function dynamicdata_userapi_getprop($args)
                                    'id' => $id,
                                    'default' => $default,
                                    'source' => $source,
+                                   'status' => $fieldstatus,
+                                   'order' => $order,
                                    'validation' => $validation);
         }
         $result->MoveNext();
@@ -1178,9 +1210,7 @@ function dynamicdata_userapi_getprop($args)
     if (empty($static)) {
         $propertybag["$modid:$itemtype"] = $fields;
     }
-    if (empty($fieldlist)) {
-            return $fields;
-    } else {
+    if (!empty($fieldlist)) {
         $myfields = array();
         // this should return the fields in the right order, normally
         foreach ($fieldlist as $name) {
@@ -1189,6 +1219,16 @@ function dynamicdata_userapi_getprop($args)
             }
         }
         return $myfields;
+    } elseif (isset($status)) {
+        $myfields = array();
+        foreach ($fields as $name => $field) {
+            if ($field['status'] == $status) {
+                $myfields[$name] = $field;
+            }
+        }
+        return $myfields;
+    } else {
+        return $fields;
     }
 }
 
@@ -1543,7 +1583,7 @@ function dynamicdata_userapi_getstatic($args)
                                'id' => $id,
                                'default' => $default,
                                'source' => $table . '.' . $field,
-                               'active' => 1,
+                               'status' => 1,
                                'order' => $order,
                                'validation' => $validation);
         $order++;
@@ -1889,6 +1929,14 @@ function dynamicdata_userapi_getproptypes($args)
                           'validation' => '',
                           // ...
                          );
+    $proptypes[25] = array(
+                          'id'         => 25,
+                          'name'       => 'fieldstatus',
+                          'label'      => 'Field Status',
+                          'format'     => '25',
+                          'validation' => '',
+                          // ...
+                         );
 
     // add some property types supported by utility modules
     if (xarModIsAvailable('categories') && xarModAPILoad('categories','user')) {
@@ -2090,8 +2138,9 @@ function dynamicdata_userapi_showoutput($args)
                 file_exists($value) &&
                 is_file($value)) {
                 $output .= join('', file($value));
+            } else {
+                $output .= xarVarPrepForDisplay($value);
             }
-                    $output .= xarVarPrepForDisplay($value);
             break;
         case 'status':
             if (!isset($options) || !is_array($options)) {
@@ -2136,14 +2185,14 @@ function dynamicdata_userapi_showoutput($args)
         case 'url':
         // TODO: use redirect function here ?
             if (!empty($value)) {
-                $value = xarVarPrepHTMLDisplay($value);
+                $value = xarVarPrepForDisplay($value);
         // TODO: add alt/title here ?
                 $output .= '<a href="'.$value.'">'.$value.'</a>';
             }
             break;
         case 'image':
             if (!empty($value)) {
-                $value = xarVarPrepHTMLDisplay($value);
+                $value = xarVarPrepForDisplay($value);
         // TODO: add size/alt here ?
                 $output .= '<img src="' . $value . '">';
             }
@@ -2187,13 +2236,14 @@ function dynamicdata_userapi_showoutput($args)
             }
             break;
         case 'integerbox':
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'integerlist':
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'floatbox':
         // TODO: allow precision etc.
+            $value = xarVarPrepForDisplay($value);
             if (isset($precision) && is_numeric($precision)) {
                 $output .= sprintf("%.".$precision."f",$value);
             } else {
@@ -2206,15 +2256,15 @@ function dynamicdata_userapi_showoutput($args)
                 $modinfo = xarModGetInfo($value);
                 $value = $modinfo['displayname'];
             }
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'itemtype':
         // TODO: evaluate if we want some other output here
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'itemid':
         // TODO: evaluate if we want some other output here
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'fieldtype':
             if (!empty($value) && !empty($proptypes[$value]['label'])) {
@@ -2223,7 +2273,7 @@ function dynamicdata_userapi_showoutput($args)
             break;
         case 'datasource':
         // TODO: evaluate if we want some other output here
-            $output .= $value;
+            $output .= xarVarPrepForDisplay($value);
             break;
         case 'object':
         // TODO: evaluate if we want some other output here
@@ -2231,7 +2281,25 @@ function dynamicdata_userapi_showoutput($args)
             if (!empty($value) && !empty($objects[$value])) {
                 $output .= $objects[$value]['fields']['name']['value'];
             } else {
-                $output .= $value;
+                $output .= xarVarPrepForDisplay($value);
+            }
+            break;
+        case 'fieldstatus':
+            if (!isset($options) || !is_array($options)) {
+                $options = array(
+                                 array('id' => 0, 'name' => xarML('Disabled')),
+                                 array('id' => 1, 'name' => xarML('Active')),
+                                 array('id' => 2, 'name' => xarML('Display Only')),
+                           );
+            }
+            if (!isset($value)) {
+                $value = 1;
+            }
+            foreach ($options as $option) {
+                if ($option['id'] == $value) {
+                    $output .= xarVarPrepForDisplay($option['name']);
+                    break;
+                }
             }
             break;
 
@@ -2606,8 +2674,11 @@ function dynamicdata_userapi_showview($args)
         } elseif (is_array($fieldlist)) {
             $myfieldlist = $fieldlist;
         }
+        $status = null;
     } else {
         $myfieldlist = null;
+        // get active properties only (+ not the display only ones)
+        $status = 1;
     }
 
     // include the static properties (= module tables) too ?
@@ -2625,6 +2696,7 @@ function dynamicdata_userapi_showview($args)
                             array('modid' => $modid,
                                   'itemtype' => $itemtype,
                                   'fieldlist' => $myfieldlist,
+                                  'status' => $status,
                                   'static' => $static));
     // create the label list + (try to) find the field containing the item id (if any)
     $labels = array();
@@ -2660,7 +2732,63 @@ function dynamicdata_userapi_showview($args)
                                  'startnum' => $startnum,
                                  'where' => $where,
                                  'fieldlist' => $myfieldlist,
+                                 'status' => $status,
                                  'static' => $static));
+
+    if (!isset($items)) return xarML('No items found');
+
+    $nexturl = '';
+    $prevurl = '';
+    if (!empty($numitems) && (count($items) == $numitems || $startnum > 1)) {
+        // Get current URL
+        $currenturl = xarServerGetCurrentURL();
+        if (empty($startnum)) {
+            $startnum = 1;
+        }
+
+// TODO: count items
+        if (preg_match('/startnum=\d+/',$currenturl)) {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = preg_replace('/startnum=\d+/',"startnum=$next",$currenturl);
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
+            }
+        } elseif (preg_match('/\?/',$currenturl)) {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = $currenturl . '&startnum=' . $next;
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = $currenturl . '&startnum=' . $prev;
+            }
+        } else {
+            if (count($items) == $numitems) {
+                $next = $startnum + $numitems;
+                $nexturl = $currenturl . '?startnum=' . $next;
+            }
+            if ($startnum > 1) {
+                $prev = $startnum - $numitems;
+                $prevurl = $currenturl . '?startnum=' . $prev;
+            }
+        }
+
+/*
+        $count = xarModAPIFunc('dynamicdata','user','countitems',
+                               array('modid' => $modid,
+                                     'itemtype' => $itemtype,
+                                     'itemids' => $itemids,
+                                     'sort' => $sort,
+                                     'numitems' => $numitems,
+                                     'startnum' => $startnum,
+                                     'where' => $where,
+                                     'fieldlist' => $myfieldlist,
+                                     'static' => $static));
+*/
+    }
 
     // add link to display the item
     if (empty($linkfunc)) {
@@ -2691,6 +2819,8 @@ function dynamicdata_userapi_showview($args)
     return xarTplModule('dynamicdata','user','showview',
                         array('items' => $items,
                               'labels' => $labels,
+                              'nexturl' => $nexturl,
+                              'prevurl' => $prevurl,
                               'layout' => $layout),
                         $template);
 }
@@ -2718,13 +2848,23 @@ function dynamicdata_userapi_getmenulinks()
         if (!isset($objects)) {
             return $menulinks;
         }
+        $mymodid = xarModGetIDFromName('dynamicdata');
         foreach ($objects as $object) {
             $itemid = $object['fields']['id']['value'];
             // skip the internal objects
             if ($itemid < 3) continue;
+            $modid = $object['fields']['moduleid']['value'];
+            if ($modid == $mymodid) {
+                $modid = null;
+            }
+            $itemtype = $object['fields']['itemtype']['value'];
+            if ($itemtype == 0) {
+                $itemtype = null;
+            }
             $label = $object['fields']['label']['value'];
             $menulinks[] = Array('url'   => xarModURL('dynamicdata','user','view',
-                                                      array('objectid' => $itemid)),
+                                                      array('modid' => $modid,
+                                                            'itemtype' => $itemtype)),
                                  'title' => xarML('View #(1)', $label),
                                  'label' => $label);
         }
