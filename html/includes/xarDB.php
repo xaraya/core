@@ -48,7 +48,9 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     include_once 'xaradodb/adodb.inc.php';
 
 	// ADODB-to-Xaraya error-to-exception bridge
-	define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
+    if (!defined('ADODB_ERROR_HANDLER')) {
+        define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
+    }
 
     // Start connection
     $dbconn = ADONewConnection($dbtype);

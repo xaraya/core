@@ -1026,6 +1026,10 @@ class xarTpl__NodesFactory
             case 'set':
                 $node = new xarTpl__XarSetNode();
                 break;
+            default:
+                // FIXME: check if this is how you want to support module-registered tags
+                $node = new xarTpl__XarOtherNode();
+                break;
         }
         if (isset($node)) {
             $node->tagName = $tagName;
@@ -2576,6 +2580,33 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         return true;
     }
 }
+
+// FIXME: check if this is how you want to support module-registered tags
+class xarTpl__XarOtherNode extends xarTpl__TplTagNode
+{
+    function render()
+    {
+        $that = xarTplGetTagObjectFromName($this->tagName);
+        if (!isset($that)) {
+            return;
+        }
+        if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
+        xarModAPILoad($that->_module);
+        $func = $that->_handler;
+        return $func($this->attributes);
+    }
+
+    function isAssignable()
+    {
+        return false;
+    }
+
+    function isPHPCode()
+    {
+        return true;
+    }
+}
+
 
 /*
  * xarTpl__TplWidgetNode
