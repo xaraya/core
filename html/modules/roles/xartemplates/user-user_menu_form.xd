@@ -4,7 +4,7 @@
 <input type="hidden" name="uid" id="uid" value="#$uid#" />
 <input type="hidden" name="phase" id="phase" value="updatebasic" />
 	<p><b><xar:mlstring>User Name</xar:mlstring>:</b>&nbsp;&nbsp; #$uname#</p>
-	<p><b><xar:mlstring>Email</xar:mlstring>:</b>&nbsp;&nbsp; #$email#	
+	<p><b><xar:mlstring>Email</xar:mlstring>:</b>&nbsp;&nbsp; #$email#</p>	
 	<p><b><label for="name"><xar:mlstring>Display Name</xar:mlstring></label>:</b> &nbsp;&nbsp;	<input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" /></p>
 	<p><b><label for="pass1"><xar:mlstring>Password</xar:mlstring></label></b> &nbsp;&nbsp;<input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" /> </p>
 	<p><b><label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label></b>&nbsp;&nbsp; <input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" /></p>
