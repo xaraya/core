@@ -10,7 +10,8 @@
  * @link http://www.xaraya.org
  * @author Marco Canini <m.canini@libero.it>
  * @todo Document EMS
- *       Document functions
+ * @todo Document functions
+ * @todo Implement discovery functions for modules
  *
  * An event is a string composed by two part:
  * event := owner + '_' + name
@@ -20,9 +21,13 @@
 /**
  * Intializes Event Messaging System
  *
+ * Initialisation of the event messaging system, basically set the 
+ * subscription arrays to empty.
+ *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @param args['loadLevel']
+ * @param whatElseIsGoingLoaded
  * @return bool true
  */
 function xarEvt_init($args, $whatElseIsGoingLoaded)
@@ -127,7 +132,13 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
+    // FIXME: This won't work without explicit API loading, either
+    // use explicit loading or use xarModAPIFunc
+    xarModAPILoad($modName,$modType);
+    // FIXME: is $value an array? check for it.
+    // xarModAPIFunc($modName,$modType,evt_On$eventName,$value)
 
+    // Try to find the specific handler for this event
     $funcName = "{$modName}_{$modType}evt_On$eventName";
     if (function_exists($funcName)) {
         $funcName($value);
@@ -177,8 +188,8 @@ function xarEvt__checkEvent($eventName)
     Current list is:
     ModLoad
     ModAPILoad
-    BodyStart
-    BodyEnd
+    StartBodyTag
+    EndBodyTag
     MLSMissingTranslationString
     MLSMissingTranslationKey
     MLSMissingTranslationDomain
