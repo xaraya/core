@@ -728,7 +728,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $trimmer='noop'; 
                         // FIXME: The above is wrong, should be xmltrim, 
                         // but otherwise the export of DD objects will look really ugly 
-                        $natives = array('set','ml');
+                        $natives = array('set','ml','mlvar');
                         if(in_array($parent->tagName,$natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if(!$this->canHaveText($parent) && trim($text) != '') return;
