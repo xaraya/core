@@ -22,7 +22,7 @@
 		<xar:if condition="empty($link)">
 			<b>&xar-var-label;</b>
 		<xar:else />
-			<a href="&xar-var-link;" title="&xar-var-label;">&xar-var-label;</a>
+			<a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a>
 		</xar:if>
 		<xar:if condition="!empty($marker)">
 			&xar-var-marker;

@@ -112,7 +112,7 @@ function base_menublock_display($blockinfo)
                         // depending on which module is currently loaded we display accordingly
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
-                            $usermods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+                            $usermods[] = array('label' => $label, 'link' => '', 'desc' => '', 'marker' => $marker);
 /*
                             // Load API for individual links. 
                             if (!xarModAPILoad($label, 'user')) return; // throw back
@@ -133,7 +133,12 @@ function base_menublock_display($blockinfo)
                             }
 */
                         }else{
-                            $usermods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+                            $modid = xarModGetIDFromName($mod['name']);
+                            $modinfo = xarModGetInfo($modid);
+                            if($modinfo){
+                                $desc = $modinfo['description'];
+                            }
+                            $usermods[] = array('label' => $label, 'link' => $link, 'desc' => $desc, 'marker' => '');
                         }
                     }
                 } else {
@@ -175,19 +180,6 @@ function base_menublock_modify($blockinfo)
     if (empty($vars['style'])) {
         $vars['style'] = 1;
     }
-
-    // What style of menu
-    $output = '<tr><td class="xar-title">'.xarML('Menu Format').'</td><td></td></tr>';
-
-    $output .= '<tr><td class="xar-normal">'.xarML('Menu as List').':</td><td><input type="radio" name="style" value="1"';
-    if ($vars['style'] == 1) {
-        $output .= ' checked';
-    }
-    $output .= '></td></tr><tr><td class="xar-normal">'.xarML('Menu as Dropdown').':</td><td><input type="radio" name="style" value="2"';
-    if ($vars['style'] == 2) {
-        $output .= ' checked';
-    }
-    $output .= ' /></td></tr>';
 
     // What to display
     $output .= '<tr><td class="xar-title">'.xarML('Display').'</td><td></td></tr>';
@@ -231,10 +223,8 @@ function base_menublock_modify($blockinfo)
 function base_menublock_insert($blockinfo)
 {
     list($vars['displaymodules'],
-         $vars['displaywaiting'],
-         $vars['style']) = xarVarCleanFromInput('displaymodules',
-					       'displaywaiting',
-					       'style');
+         $vars['displaywaiting']) = xarVarCleanFromInput('displaymodules',
+					                                     'displaywaiting');
 
     // Defaults
     if (empty($vars['displaymodules'])) {
@@ -242,9 +232,6 @@ function base_menublock_insert($blockinfo)
     }
     if (empty($vars['displaywaiting'])) {
         $vars['displaywaiting'] = 0;
-    }
-    if (empty($vars['style'])) {
-        $vars['style'] = 1;
     }
 
     // User links

@@ -1291,6 +1291,7 @@ function xarMod_getFileInfo($modOsDir)
 
     $modFileInfo['id']             = $modversion['id'];
     $modFileInfo['version']        = $modversion['version'];
+    $modFileInfo['description']    = isset($modversion['description']) ? $modversion['description'] : false;
     // FIXME: <marco> admin or admin capable?
     $modFileInfo['admin']          = isset($modversion['admin']) ? $modversion['admin'] : false;
     $modFileInfo['admin_capable']  = isset($modversion['admin']) ? $modversion['admin'] : false;
