@@ -2,10 +2,11 @@
 <!--- we are getting rid of formatting tables in this template, and hopefully elsewhere in the future, so we need some custom styles --->
 <style>
     .adminpanels-float-wrapper {float: left; width: 68%; min-height:28px; color: ##5D5D5D; background-color: ##f5f5f5;line-height: 140%;vertical-align:middle;}
-    .adminpanels-checkbox-and-label {float: right; width: 49%;font-weight: bold;}
-    .adminpanels-leftlabel {margin-right: 51%;text-align:right;font-weight: bold;}
-    .adminpanels-other {float: right; width: 49%;line-height: 1.5em;}
+    .adminpanels-checkbox-and-label {float: right; width: 59%;font-weight: bold;}
+    .adminpanels-leftlabel {margin-right: 61%;text-align:right;font-weight: bold;}
+    .adminpanels-other {float: right; width: 59%;line-height: 1.5em;}
     .adminpanels-note {margin-left: 70%;color: ##CC0000;}
+    .adminpanels-submit {text-align:right;line-height: 1.5em;background-color: ##ffffff;padding:5px;border-top:3px solid ##e1e1e1;}
     .adminpanels-clearfooter {clear: both;height:1px;}
     .adminpanels-heightspacer {float: left;height:32px;display:inline;}
 </style> 
@@ -23,7 +24,8 @@
 </h2> 
 <div class="xar-mod-body">
 	<form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
-		<input type="hidden" name="authid" id="authid" value="#$authid#" /> 
+		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="formname" id="formname" value="adminmenu" />
 <!-- menu position -->
 		<div class="adminpanels-float-wrapper">
 			<div class="adminpanels-heightspacer">
@@ -275,7 +277,7 @@
 			<div class="adminpanels-heightspacer">
 				&nbsp;
 			</div>
-			<div class="adminpanels-other">
+			<div class="adminpanels-submit">
 				<input type="submit" value="Submit" align="middle" /> 
 			</div>
 			<div class="adminpanels-leftlabel">
@@ -286,4 +288,53 @@
 			&nbsp;
 		</div>
 	</form>
+
+<!--- moved here from config overview template --->
+    <h2 style="display:block;"> 
+        <xar:mlstring>
+            Configure Overviews 
+        </xar:mlstring>
+    </h2>
+    <form method=post action="&xar-modurl-adminpanels-admin-updateconfig;">
+        <input type=hidden name="authid" id="authid" value="#$authid#" />
+        <input type="hidden" name="formname" id="formname" value="overviews" />
+        <!-- Disable overviews -->
+        <div class="adminpanels-float-wrapper">
+			<div class="adminpanels-heightspacer">
+				&nbsp;
+			</div>
+			<div class="adminpanels-checkbox-and-label">
+				<xar:if condition="$showoverviews eq 1">
+                    <input type=checkbox name="overview" id="overview" value=1 checked=checked />
+                    <xar:else />
+                    <input type=checkbox name="overview" id="overview" value=1 />
+                </xar:if>
+				<label for=overview>
+                    <xar:mlstring>
+                        Disable Module Overviews
+                    </xar:mlstring>
+                </label> 
+			</div>
+		</div>
+        <div class="adminpanels-note">
+			<xar:mlstring>
+				allows to bypass the overviews and go directly to the modules configuration
+			</xar:mlstring>
+		</div>
+		<div class="adminpanels-clearfooter">
+			&nbsp;
+		</div>
+    <!-- submit button -->
+        <div class="adminpanels-float-wrapper">
+            <div class="adminpanels-heightspacer">
+                &nbsp;
+            </div>
+            <div class="adminpanels-submit">
+                <input type="submit" value="Submit" align="middle" /> 
+            </div>
+        </div>
+        <div class="adminpanels-clearfooter">
+			&nbsp;
+		</div>
+    </form>
 </div>
