@@ -180,14 +180,14 @@ function base_init()
     ******************************************************************/
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
-    xarConfigSetVar('Site.Core.FixHTMLEntities',false);
+    xarConfigSetVar('Site.Core.FixHTMLEntities',true);
     xarConfigSetVar('Site.Core.TimeZone', 'US/New York');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
     xarConfigSetVar('Site.Core.EnableSecureServer', false);
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
-    xarConfigSetVar('Site.Core.LoadLegacy', true);
+    xarConfigSetVar('Site.Core.LoadLegacy', false);
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
