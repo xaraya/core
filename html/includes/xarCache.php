@@ -153,7 +153,6 @@ function xarPageIsCached($cacheKey, $name = '')
            $xarPage_cacheTime,
            $xarOutput_cacheTheme,
            $xarPage_cacheDisplay,
-           $xarPage_cacheExpireHeader,
            $xarPage_cacheCode,
            $xarPage_cacheGroups;
 
@@ -195,40 +194,7 @@ function xarPageIsCached($cacheKey, $name = '')
          filemtime($cache_file) > time() - $xarPage_cacheTime) &&
         xarPage_checkUserCaching()) {
 
-        // start 304 test
-        $mod = filemtime($cache_file);
-        // doesn't seem to be taken into account ?
-        $etag = $xarPage_cacheCode . $mod;
-        header("ETag: $etag");
-        $match = xarServerGetVar('HTTP_IF_NONE_MATCH');
-        if (!empty($match) && $match == $etag) {
-            header('HTTP/1.0 304');
-            exit;
-        } else {
-            $since = xarServerGetVar('HTTP_IF_MODIFIED_SINCE');
-            if (!empty($since) && strtotime($since) >= $mod) {
-                header('HTTP/1.0 304');
-                exit;
-            }
-        }
-        if (!empty($xarPage_cacheExpireHeader)) {
-            // this tells clients and proxies that this file is good until local
-            // cache file is due to expire
-            header("Expires: " .
-                   gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
-                   " GMT");
-        }
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
-        // we can't use this after session_start()
-        //session_cache_limiter('public');
-        header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
-        // PHP doesn't set the Pragma header when sending back a cookie
-        if (isset($_COOKIE['XARAYASID'])) {
-            header("Pragma: public");
-        } else {
-            header("Pragma:");
-        }
-        // end 304 test
+        xarPage_httpCacheHeaders($cache_file);
 
         return true;
     } else {
@@ -770,6 +736,46 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
             @fclose($fp);
         }
    }
+}
+
+function xarPage_httpCacheHeaders($cache_file)
+{
+	global $xarPage_cacheCode,
+	        $xarPage_cacheExpireHeader,
+	        $xarPage_cacheTime;
+
+	$mod = filemtime($cache_file);
+    // doesn't seem to be taken into account ?
+    $etag = $xarPage_cacheCode . $mod;
+    header("ETag: $etag");
+    $match = xarServerGetVar('HTTP_IF_NONE_MATCH');
+    if (!empty($match) && $match == $etag) {
+        header('HTTP/1.0 304');
+        exit;
+    } else {
+        $since = xarServerGetVar('HTTP_IF_MODIFIED_SINCE');
+        if (!empty($since) && strtotime($since) >= $mod) {
+            header('HTTP/1.0 304');
+            exit;
+        }
+    }
+    if (!empty($xarPage_cacheExpireHeader)) {
+        // this tells clients and proxies that this file is good until local
+        // cache file is due to expire
+        header("Expires: " .
+               gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
+               " GMT");
+    }
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
+    // we can't use this after session_start()
+    //session_cache_limiter('public');
+    header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
+    // PHP doesn't set the Pragma header when sending back a cookie
+    if (isset($_COOKIE['XARAYASID'])) {
+        header("Pragma: public");
+    } else {
+        header("Pragma:");
+    }
 }
 
 ?>
