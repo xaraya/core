@@ -6,7 +6,7 @@ and that you cannot use UNBOXED mode of the MultiLanguage system unless you have
 with the mbstring extension compiled in.</xar:mlstring></p>
 
 <p><xar:mlstring>Legacy Testers Note: The Load Legacy allows the usage of pnHTML and and other legacy PostNuke functions.
-Xaraya itself is completely legacy free, but other modules may still yet use them.</p></xar:mlstring>
+Xaraya itself is completely legacy free, but other modules may still yet use them.</xar:mlstring></p>
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
