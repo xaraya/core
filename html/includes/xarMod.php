@@ -1059,7 +1059,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 // Append any encoderArgs that weren't handled by the module specific short-url encoder
                 $unencodedArgs = xarModURLGetUnencodedArgs($encoderArgs, $path);
                 $path = xarModURLAppendParams( $unencodedArgs, $path );
-
+            
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
             }
@@ -1146,11 +1146,11 @@ function xarModURLGetUnencodedArgs ( $args, $path )
     // ideally this code should be refactored from here and from xarServer.php so that
     // the two sets of code don't get out of sink
     
-    
     $modName = NULL;
     $modType = 'user';
     $funcName = 'main';        
-    preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
+
+    preg_match_all('|/([^/]+)|i', $path, $matches);
     $params = $matches[1];
     if (count($params) > 0) 
     {

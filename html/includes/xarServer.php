@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File: $Id$
+ * File: $Id: s.xarServer.php 1.77 04/10/25 14:11:56+02:00 marcel@hsdev.com $
  *
  * HTTP Protocol Server/Request/Response utilities
  *
@@ -431,8 +431,20 @@ function xarRequestGetInfo()
     if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
-    // Note: we need to match anything that might be used as module params here too ! (without compromising security)
+        /*
+        Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
+        
+        The original regular expression prevents the use of titles, even when properly encoded, 
+        as parts of a short-url path -- because it wouldn't not permit many characters that would
+        in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
+        done to normal URL params, I've changed this to a more flexable regex at the other extreme.
+        
+        TODO: The security of doing this should be examined by someone more familiar with why this works
+        as a security check in the first place.
+        */
+        preg_match_all('|/([^/]+)|i', $path, $matches);
+        
         $params = $matches[1];
         if (count($params) > 0) {
             $modName = $params[0];
