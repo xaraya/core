@@ -115,7 +115,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         }
         return '';
     }
-}
+
 
 	/**
      * Get the base information for this property.
@@ -136,5 +136,5 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 						   );
 		return $baseInfo;
 	 }
-
+}
 ?>
