@@ -42,6 +42,8 @@ define('XARMLS_CTXTYPE_BLKTEMPL',5);
  */
 function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
+    // <mrb> Why do we have two formats here?
+    // FIXME: use constants also for the configvars
     switch ($args['MLSMode']) {
     case 'SINGLE':
         $GLOBALS['xarMLS_mode'] = XARMLS_SINGLE_LANGUAGE_MODE;
@@ -57,6 +59,7 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         }
         break;
     default:
+        // FIXME: Do we have to die ?
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
@@ -861,13 +864,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
 function xarMLS_setCurrentLocale($locale)
 {
     static $called = 0;
-    // Erm asserting a static variable is not such a good idea i think
-    // What are you trying to do here, make sure this function is called only once?
-    // that's not really the proper use of assert is it?
+
     // FIXME: What is the purpose of it?
-    //        If to ensure only called once, make a singleton design patter for it
-    ///       and fail gracefully.
-        //assert('$called == 0');
+    assert('$called == 0; // Can only be called once during a page request');
     $called++;
 
     $mode = xarMLSGetMode();
@@ -882,6 +881,7 @@ function xarMLS_setCurrentLocale($locale)
         if (!in_array($locale, $siteLocales)) {
             // Locale not available, use the default
             $locale = xarMLSGetSiteLocale();
+            xarLogMessage("WARNING: falling back to default locale: $locale");
         }
     }
     // Set current locale
@@ -889,10 +889,17 @@ function xarMLS_setCurrentLocale($locale)
 
     $curCharset = xarMLSGetCharsetFromLocale($locale);
     if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
-        assert('$curCharset == "utf-8"');
-        ini_set('mbstring.func_overload', 7);
-        mb_internal_encoding($curCharset);
+        assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
+        // To be able to continue, we set the mode to BOXED 
+        if ($curCharset != "utf-8") {
+            xarLogMessage("Resetting MLS mode to BOXED");
+            xarConfigSetVar('Site.MLS.MLSMode','BOXED');
+        } else {
+            ini_set('mbstring.func_overload', 7);
+            mb_internal_encoding($curCharset);
+        }
     }
+
     //if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
     //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
     //$curCharset != 'windows-1251') {
