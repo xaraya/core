@@ -88,9 +88,18 @@ function themes_metablock_modify($blockinfo)
     // Get current content
     $vars = @unserialize($blockinfo['content']);
 
- //   $content = xarTplBlock('base', 'htmlAdmin', $vars);
+    // Defaults
+    if (empty($vars['metakeywords'])) {
+        $vars['metakeywords'] = '';
+    }
+    // Defaults
+    if (empty($vars['metadescription'])) {
+        $vars['metadescription'] = '';
+    }
+    
+    $content = xarTplBlock('themes', 'metaAdmin', $vars);
 
-    return $blockinfo;
+    return $content;
 }
 
 /**
@@ -99,9 +108,20 @@ function themes_metablock_modify($blockinfo)
  */
 function themes_metablock_update($blockinfo)
 {
-    list($vars['expire'],
-         $vars['html_content']) = xarVarCleanFromInput('expire',
-                                                       'html_content');
+    list($vars['metakeywords'],
+         $vars['metadescription']) = xarVarCleanFromInput('metakeywords',
+                                                          'metadescription');
+    // Defaults
+    if (empty($vars['metakeywords'])) {
+        $vars['metakeywords'] = '';
+    }
+    
+    if (empty($vars['metadescription'])) {
+        $vars['metadescription'] = '';
+    }
+
+    $blockinfo['content'] = serialize($vars);
+
     return $blockinfo;
 }
 
