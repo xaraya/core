@@ -187,7 +187,8 @@ function blocks_init()
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
-    $cacheblockstable = $xartable['cache_blocks'];
+    // Cache blocks table is not in xartables
+    $cacheblockstable =  xarDBGetSystemTablePrefix() . '_cache_blocks';
 
     // Get a data dictionary object with item create methods.
     $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
