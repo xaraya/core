@@ -111,13 +111,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeUser($name,$uname,$email,$pass='',$datereg=$now,$valcode='',$state=3,$authmodule='') {
+	function xarMakeUser($name,$uname,$email,$pass='',$datereg='',$valcode='',$state=3,$authmodule='') {
 			$roles = new xarRoles();
 			return $roles->makeUser($name,$uname,$email,$pass,$datereg,$valcode,$state,$authmodule);
 	}
 
 /**
- * xaMakeRoleRoot: defines an entry in the database as the root of a role tree
+ * xarMakeRoleRoot: defines an entry in the database as the root of a role tree
  *
  * This is a wrapper function
  *
@@ -129,7 +129,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function xaMakeRoleRoot($name) {
+	function xarMakeRoleRoot($name) {
 			$roles = new xarRoles();
 			return $roles->isRoot($name);
 	}

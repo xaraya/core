@@ -617,7 +617,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exception handling for bad input
 */
-   function makeUser($name,$uname,$email,$pass='xaraya',$datereg=$now,$valcode='',$state=3,$authmodule=''){
+   function makeUser($name,$uname,$email,$pass='xaraya',$datereg='',$valcode='',$state=3,$authmodule=''){
 
 //TODO: validate the email address
 		if(empty($name) && empty($uname) || empty($email)) {
