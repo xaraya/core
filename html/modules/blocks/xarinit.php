@@ -34,29 +34,15 @@ function blocks_init()
                                                              'size'        => 255,
                                                              'null'        => false,
                                                              'default'     => '')));
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_groups',
                              array('name'   => 'xar_name_index',
                                    'fields' => array('xar_name'),
                                    'unique' => 'true'));
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // *_block_instances
     $query = xarDBCreateTable($prefix . '_block_instances',
@@ -88,15 +74,8 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0')));
 
-     $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // *_block_types
     $query = xarDBCreateTable($prefix . '_block_types',
@@ -113,44 +92,23 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '')));
 
-     $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'xar_type_index',
                                    'fields' => array('xar_type'),
                                    'unique' => false));
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 /*
     TODO: Find a fix for this - Postgres will not allow partial indexes
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'xar_typemodule_index',
                                    'fields' => array('xar_type(50)', 'xar_module(50)'),
                                    'unique' => true));
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 */    
     // *_block_group_instances
     $query = xarDBCreateTable($prefix . '_block_group_instances',
@@ -168,15 +126,8 @@ function blocks_init()
                                                              'null'        => false,
                                                              'default'     => '0')));
     
-     $dbconn->Execute($query);
-        
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     // *_userblocks
     $query = xarDBCreateTable($prefix . '_userblocks',
@@ -194,29 +145,15 @@ function blocks_init()
                                    'xar_last_update' => array('type'    => 'timestamp',
                                                              'null'    => false)));
     
-     $dbconn->Execute($query);
-        
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     $query = xarDBCreateIndex($prefix . '_userblocks',
                              array('name'   => 'xar_uidbid_index',
                                    'fields' => array('xar_uid', 'xar_bid'),
                                    'unique' => true));
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Register BL tags
     xarTplRegisterTag('blocks', 'blocks-stateicon',

@@ -72,15 +72,9 @@ function modules_init()
     );
 
     $query = xarDBCreateTable($tables['modules'],$fields);
-    $dbconn->Execute($query);
 
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
     // prefix_module_states
     /********************************************************************
@@ -97,15 +91,8 @@ function modules_init()
 
     $query = xarDBCreateTable($tables['module_states'],$fields);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
     // prefix_module_vars
     /********************************************************************
@@ -126,15 +113,8 @@ function modules_init()
 
     $query = xarDBCreateTable($tables['module_vars'],$fields);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
     // prefix_hooks
     /********************************************************************
@@ -165,15 +145,8 @@ function modules_init()
      
     $query = xarDBCreateTable($tables['hooks'],$fields);
 
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
     // Initialisation successful
     return true;
