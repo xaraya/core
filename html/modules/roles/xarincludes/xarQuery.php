@@ -12,7 +12,7 @@
 class xarQuery
 {
 
-    var $version = "1.2";
+    var $version = "1.3";
     var $id;
     var $type;
     var $tables;
@@ -113,12 +113,14 @@ class xarQuery
                             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
                             return;
                         }
-                        $this->fields[$i]['name'] = strtolower($o->name);
+                        $this->fields[$o->name]['name'] = strtolower($o->name);
                     }
                 }
                 while (!$result->EOF) {
-                    for ($i=0;$i<$numfields;$i++) {
-                        $line[$this->fields[$i]['name']] = $result->fields[$i];
+                    $i=0;
+                    foreach ($this->fields as $key => $value ) {
+                        $line[$key] = $result->fields[$i];
+                        $i++;
                     }
                     $this->output[] = $line;
                     $result->MoveNext();
@@ -251,15 +253,7 @@ class xarQuery
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
-        $done = false;
-        for ($i=0;$i<count($this->fields);$i++) {
-            if ($this->fields[$i]['name'] == $argsarray['name']) {
-                $this->fields[$i] = $argsarray;
-                $done = true;
-                break;
-            }
-        }
-        if (!$done) $this->fields[] = $argsarray;
+        $this->fields[$argsarray['name']] = $argsarray;
     }
 
     function addfields($fields)
@@ -602,27 +596,30 @@ class xarQuery
             $st .= $this->assembledfields("SELECT");
             $st .= " FROM ";
             $st .= $this->assembledtables();
+            $st .= $this->assembledconditions();
+            $st .= $this->assembledsorts();
             break;
         case "INSERT" :
             $st .= " INTO ";
             $st .= $this->assembledtables();
             $st .= $this->assembledfields("INSERT");
+            $st .= $this->assembledconditions();
             break;
         case "UPDATE" :
             $st .= $this->assembledtables();
             $st .= " SET ";
             $st .= $this->assembledfields("UPDATE");
+            $st .= $this->assembledconditions();
             break;
         case "DELETE" :
             $st .= " FROM ";
             $st .= $this->assembledtables();
+            $st .= $this->assembledconditions();
             break;
         case "CREATE" :
         case "DROP" :
         default :
         }
-        $st .= $this->assembledconditions();
-        $st .= $this->assembledsorts();
         return $st;
     }
 
@@ -746,16 +743,18 @@ class xarQuery
     function assembledsorts()
     {
         $s = "";
-        if (count($this->sorts)>0) $s = " ORDER BY ";
-        foreach ($this->sorts as $sort) {
-            if (is_array($sort)) {
-                $s .= $sort['name'] . " " . $sort['order']  . ", ";
+        if (count($this->sorts)>0 && count($this->fields) > 1 && !isset($this->fields['COUNT(*)'])) {
+            $s = " ORDER BY ";
+            foreach ($this->sorts as $sort) {
+                if (is_array($sort)) {
+                    $s .= $sort['name'] . " " . $sort['order']  . ", ";
+                }
+                else {
+                    // error msg
+                }
             }
-            else {
-                // error msg
-            }
+            if ($s != "") $s = substr($s,0,strlen($s)-2);
         }
-        if ($s != "") $s = substr($s,0,strlen($s)-2);
         return $s;
     }
 
@@ -781,6 +780,10 @@ class xarQuery
     function clearconditions()
     {
         $this->conditions = array();
+    }
+    function clearsorts()
+    {
+        $this->sorts = array();
     }
     function result()
     {
@@ -810,13 +813,16 @@ class xarQuery
     function getrows()
     {
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
-            $temp = $this->fields;
+            $temp1 = $this->fields;
             $this->clearfields();
+            $temp2 = $this->sorts;
+            $this->clearsorts();
             $this->addfield('COUNT(*)');
             $this->setstatement();
             $result = $this->dbconn->Execute($this->statement);
             list($this->rows) = $result->fields;
-            $this->fields = $temp;
+            $this->fields = $temp1;
+            $this->sorts = $temp2;
             $this->setstatement();
         }
         return $this->rows;
