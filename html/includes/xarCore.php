@@ -120,12 +120,19 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
     //xarCoreActivateDebugger(0);
 
-    // Basic systems alway loaded
+    /*
+     * Required subsystems
+     *
+     * These are always needed, think twice before changing the loading order.
+     * By definition the core required subsystems should not be included in the ML
+     * system.
+     *
+     */
     // {ML_dont_parse 'includes/xarLog.php'}
     include 'includes/xarLog.php';
     // {ML_dont_parse 'includes/xarEvt.php'}
     include 'includes/xarEvt.php';
-
+    // {ML_dont_parse 'includes/xarException.php'}
     include 'includes/xarException.php';
     // {ML_dont_parse 'includes/xarVar.php'}
     include 'includes/xarVar.php';
@@ -136,17 +143,39 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // {ML_dont_parse 'includes/xarTemplate.php'}
     include 'includes/xarTemplate.php';
 
-    // Start Exception Handling System
+    /*
+     * Start Exception Handling System
+     *
+     * Before we do anything make sure we can except out of code in a predictable matter
+     * 
+     */
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
     xarException_init($systemArgs, $whatToLoad);
 
-    // Start Logging Facilities
+    /*
+     * If there happens something we want to be able to log it
+     *
+     */
     $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
                         'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
                         'level' => xarCore_getSystemVar('Log.LogLevel'));
     xarLog_init($systemArgs, $whatToLoad);
 
-    // Start Database Connection Handling System
+
+    /**
+     * At this point we should be able to catch all low level errors
+     *
+     */
+
+
+    /*
+     * Start Database Connection Handling System
+     *
+     * Most of the stuff, except for logging, exception and system related things,
+     * we want to do in the database, so initialize that as early as possible.
+     * It think this is the earliest we can do
+     *
+     */
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
         include 'includes/xarDB.php';
@@ -173,11 +202,25 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_ADODB;
     }
 
-    // Start Event Messaging System
+    /*
+     * Start Event Messaging System
+     *
+     * The event messaging system can be initialized only after the db, but should
+     * be as early as possible in place. This system is for *core* events
+     *
+     */
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 
-    // Start Configuration System
+
+    /*
+     * Start Configuration System
+     *
+     * Ok, we can  except, we can log our actions, we can access the db and we can 
+     * send events out of the core. It's time we start the configuration system, so we 
+     * can start configuring the framework
+     *
+     */
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
         // {ML_dont_parse 'includes/xarConfig.php'}
         include 'includes/xarConfig.php';
@@ -191,7 +234,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
 
-    // Legacy systems
+    /**
+     * Legacy systems
+     *
+     * Before anything fancy is loaded, let's start the legacy systems
+     *
+     * @todo <mrb> check if this is on/off by default. 
+     */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
         // {ML_dont_parse 'includes/pnHTML.php'}
         include 'includes/pnHTML.php';
@@ -199,7 +248,16 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         include 'includes/pnLegacy.php';
     }
 
-    // Start HTTP Protocol Server/Request/Response utilities
+    /*
+     * At this point we haven't made any assumptions about architecture
+     * except that we use a database as storage container.
+     *
+     */
+
+    /*
+     * Bringer HTTP Protocol Server/Request/Response utilities into the story
+     *
+     */
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                         'defaultModuleName' => xarConfigGetVar('Site.Core.DefaultModuleName'),
                         'defaultModuleType' => xarConfigGetVar('Site.Core.DefaultModuleType'),
@@ -207,27 +265,32 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'generateXMLURLs' => false);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
-    // Start Multi Language System
+
+    /*
+     * Bring Multi Language System online
+     *
+     */
     $systemArgs = array('translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
                         'MLSMode' => xarConfigGetVar('Site.MLS.MLSMode'),
                         'defaultLocale' => xarConfigGetVar('Site.MLS.DefaultLocale'),
                         'allowedLocales' => xarConfigGetVar('Site.MLS.AllowedLocales'));
     xarMLS_init($systemArgs, $whatToLoad);
 
+
+
+    /*
+     * We deal with users through the sessions subsystem
+     *
+     */
     $anonuid = xarConfigGetVar('Site.User.AnonymousUID');
+    // FIXME: <mrb> what's this 1 doing here ? 
     $anonuid = !empty($anonuid) ? $anonuid : 1;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
-    // Start Sessions Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
-        // {ML_dont_parse 'includes/xarSession2.php'}
-        // FIXME: LOOK AT xarSession2 code it has a catch22 situation!!
-        // It wants to store sessions into the database, which is good,
-        // but during the installation procedure there is no database
-        //include 'includes/xarSession2.php';
+        // {ML_dont_parse 'includes/xarSession.php'}
         include 'includes/xarSession.php';
 
-        // Start Session Support
         $systemArgs = array('securityLevel' => xarConfigGetVar('Site.Session.SecurityLevel'),
                             'duration' => xarConfigGetVar('Site.Session.Duration'),
                             'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'));
@@ -236,7 +299,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 
-    // Start Blocks Subsystem
+    /**
+     * Block subsystem
+     *
+     */
+    // FIXME: This is wrong, should be part of templating
+    //        it's a legacy thought, we don't need it anymore
+
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
         // {ML_dont_parse 'includes/xarBlocks.php'}
         include 'includes/xarBlocks.php';
@@ -247,14 +316,17 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 
-    // Start Modules Subsystem
+
+    /**
+     * Start Modules Subsystem
+     *
+     * @todo <mrb> why is this optional?
+     * @todo <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request or XHTML site compliance. For now just pass false.
+     * @todo <mrb> i thought it was configurable
+     */
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         // {ML_dont_parse 'includes/xarMod.php'}
         include 'includes/xarMod.php';
-
-        // Start Modules Support
-        // TODO: <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request
-        // or XHTML site compliance. For now just pass false.
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
@@ -262,18 +334,28 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     }
 
-    // Start BlockLayout Template Engine
+    /** 
+     * We've got basically all we want, start the interface
+     * Start BlockLayout Template Engine
+     *
+     */
     $systemArgs = array('enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
                         'themesBaseDirectory' => xarConfigGetVar('Site.BL.ThemesDirectory'),
                         'defaultThemeDir' => xarModGetVar('themes','default'));
     xarTpl_init($systemArgs, $whatToLoad);
-        // TODO (marcinmilan): review what pasts of the old user system need to be retained
-        if ($whatToLoad & XARCORE_SYSTEM_USER) {
+
+
+    /**
+     * At last, we can give people access to the system.
+     *
+     * @todo <marcinmilan> review what pasts of the old user system need to be retained
+     */
+    if ($whatToLoad & XARCORE_SYSTEM_USER) {
         // {ML_dont_parse 'includes/xarUser.php'}
         include 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include 'includes/xarSecurity.php';
-
+        
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);

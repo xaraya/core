@@ -63,6 +63,9 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarTpl_additionalStyles'] = '';
     $GLOBALS['xarTpl_headJavaScript'] = '';
     $GLOBALS['xarTpl_bodyJavaScript'] = '';
+   
+    // This is wrong here as well, but it's better at least than in xarMod
+    include "includes/xarTheme.php";
 
     return true;
 }
