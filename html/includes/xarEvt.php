@@ -152,15 +152,21 @@ function xarEvt__notify($modName, $eventName, $value)
     $xarapifile="modules/{$modName}/xareventapi.php";
     $xartabfile="modules/{$modName}/xartables.php";    
 
-    // Determine what function we need to call
-    $funcToRun = '';
-    if(function_exists($funcSpecific))       $funcToRun = $funcSpecific;
-    else {
-        xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
-        if(function_exists($funcSpecific ))  $funcToRun = $funcSpecific;
-        if(function_exists($funcGeneral  ))  $funcToRun = $funcGeneral;
-    } 
-    if($funcToRun != '') {
+    static $loaded = array();
+
+    //If not loaded, try to
+    if (!isset($loaded[$xarapifile])) {
+        $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
+        if (function_exists($funcGeneral))  $funcToRun = $funcGeneral;
+    }
+    
+    //Nothing to do if the API file isnt there
+    if (isset($loaded[$xarapifile]) && $loaded[$xarapifile] == false) return;
+
+    //$loaded ==true!
+    if (function_exists($funcSpecific))  $funcToRun = $funcSpecific;
+    
+    if(isset($funcToRun)) {
         //LAZY LOAD!
         // We may need the tables
         xarInclude($xartabfile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
