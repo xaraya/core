@@ -5882,6 +5882,8 @@ marco@jabawack.canini.org|html/modules/translations/xartemplates/includes/opbar.
 marco@jabawack.canini.org|html/modules/translations/xartemplates/includes/toplink.xd|20021222154709|31909|f7abe55a666c6d77
 marco@jabawack.canini.org|html/modules/translations/xartemplates/includes/trabar.xd|20021222154709|37216|25db9e9a51efe4b
 marco@jabawack.canini.org|html/modules/translations/xarversion.php|20021222154004|14870|7919f4a0a5eb5b94
+mcortez@ariel2.fullcoll.edu|html/includes/properties/Dynamic_CountryAbbrList_Property.php|20040429202033|43752|b7dcb4e4
+mcortez@ariel2.fullcoll.edu|html/includes/properties/Dynamic_StateProvinceList_Property.php|20040429202033|26713|b7e6a91e
 mcortez@ariel2.fullcoll.edu|html/modules/uploads/xaradmin/confirmdelete.php|20030709234902|13245|58962a71
 mcortez@ariel2.fullcoll.edu|html/modules/uploads/xartemplates/admin-reject.xd|20030709234903|53040|58ab1fba
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-config-table.xsl|20030622120902|49068|80645711b5fb8659
