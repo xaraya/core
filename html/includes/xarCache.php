@@ -177,8 +177,8 @@ function xarBlockIsCached($args)
     
     extract($args);
 
-    if (xarVarIsCached('Blocks.Caching', 'settings')) {
-        $blocks = xarVarGetCached('Blocks.Caching', 'settings');
+    if (xarCore_IsCached('Blocks.Caching', 'settings')) {
+        $blocks = xarCore_GetCached('Blocks.Caching', 'settings');
     } else {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
@@ -202,7 +202,7 @@ function xarBlockIsCached($args)
             $result->MoveNext();
         }
         $result->Close();
-        xarVarSetCached('Blocks.Caching', 'settings', $blocks);
+        xarCore_SetCached('Blocks.Caching', 'settings', $blocks);
     }
     if (isset($blocks[$blockid])) {
         $noCache = $blocks[$blockid]['nocache'];
@@ -326,7 +326,7 @@ function xarPageSetCached($cacheKey, $name, $value)
     
     $xarTpl_themeDir = xarTplGetThemeDir();
     
-    if (xarVarIsCached('Page.Caching', 'nocache')) { return; }
+    if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
 
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
@@ -548,8 +548,8 @@ function xarPage_checkUserCaching()
 function xarCache_getParents()
 {
     $currentuid = xarSessionGetVar('uid');
-    if (xarVarIsCached('User.Variables.'.$currentuid, 'parentlist')) {
-        return xarVarGetCached('User.Variables.'.$currentuid, 'parentlist');
+    if (xarCore_IsCached('User.Variables.'.$currentuid, 'parentlist')) {
+        return xarCore_GetCached('User.Variables.'.$currentuid, 'parentlist');
     }
     $systemPrefix = xarDBGetSystemTablePrefix();
     $rolemembers = $systemPrefix . '_rolemembers';
@@ -564,7 +564,7 @@ function xarCache_getParents()
         $result->MoveNext();
     }
     $result->Close();
-    xarVarSetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
+    xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
 }
 
