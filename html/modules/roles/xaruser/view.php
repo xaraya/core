@@ -44,12 +44,12 @@ function roles_user_view()
                                           'numitems' => xarModGetVar('roles',
                                                                      'itemsperpage')));
 
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Users')));
+
             if ($items == false){
                 $data['message'] = xarML('There are no registered users online');
                 return $data;
             }
-
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Users')));
 
             break;
 

@@ -46,8 +46,9 @@ function roles_user_register()
 
         case 'choices':
         default:
-
-            $data = xarTplModule('roles','user', 'choices');
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Log In')));
+            $loginlabel = xarML('Sign In');
+            $data = xarTplModule('roles','user', 'choices', array('loginlabel' => $loginlabel));
             break;
 
         case 'checkage':
