@@ -1,7 +1,6 @@
 <?php
-
 /**
- * File: $Id$
+ * File: $Id: s.xaruser.php 1.16 03/04/07 04:30:01-04:00 johnny@falling.local.lan $
  *
  * Tests for base API function versions/compare
  *
@@ -36,6 +35,8 @@ $test_array = array(
    array('ver1'=>' .-1.2.sdf.3.  f6', 'ver2'=>'0.1.2.0.3.7', 'levels'=>5, 'strict'=>null, 'result'=>0, 'sep'=>null,
       'notes'=>'" .-1.2.sdf.3.  f6" is cleaned up to become 0.1.2.0.3.6'),
    array('ver1'=>'1.2', 'ver2'=>'1.3', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>null),
+   array('ver1'=>'1/2', 'ver2'=>'1/3', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>'/',
+      'notes' => 'Use special preg character as the separator.'),
    array('ver1'=>'1.3', 'ver2'=>'1.2', 'levels'=>null, 'strict'=>null, 'result'=>-1, 'sep'=>null),
    array('ver1'=>'1.2', 'ver2'=>'1.2', 'levels'=>null, 'strict'=>null, 'result'=>0, 'sep'=>null),
    array('ver1'=>'1.2.1', 'ver2'=>'1.3.2', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>null),
@@ -64,8 +65,8 @@ $test_array = array(
    array('ver1'=>'4-5-6-7', 'ver2'=>'5-6-7-8-9-0', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>'-'),
    array('ver1'=>'5-6-7', 'ver2'=>'4-5-6-7-8-9-0', 'levels'=>null, 'strict'=>null, 'result'=>-1, 'sep'=>'-',
        'notes'=>'As a version 5.6.7 is greater than 4.5.6...'),
-   array('ver1'=>'5-6-7', 'ver2'=>'4-5-6-7-8-9-0', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>'x',
-       'notes'=>'As a number 4567890 is greater than 567'),
+   array('ver1'=>'5-6-7', 'ver2'=>'4-5-6-7-8-9-0', 'levels'=>null, 'strict'=>true, 'result'=>-1, 'sep'=>'x',
+       'notes'=>'The separate numbers will be treated as separate tokens, even though the separator is wrong. It will not make new numbers by joining digits together that are not already single numbers.'),
    array('ver1'=>'5-6-7', 'ver2'=>'4-5-6-7-8-9-0', 'levels'=>null, 'strict'=>false, 'result'=>-1, 'sep'=>'x',
       'notes' => 'As a string "5-6-7" is alpha-numerically greater than "4-5-6..."')
 );

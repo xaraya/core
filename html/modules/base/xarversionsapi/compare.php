@@ -25,6 +25,7 @@
  * @param $args['levels'] maxiumum levels to compare (default: all levels)
  * @param $args['strict'] indicates strict numeric-only comparisons (default: true)
  * @param $args['sep'] level separator character (default: .)
+ * @param $args['reverse'] reverse the comparison order if true (default: false)
  * @returns number
  * @return number indicating which parameter is the latest version
  */
@@ -36,7 +37,7 @@ function base_versionsapi_compare($args)
     // Versions can be strings ('1.2.3') or arrays (array(1, 2, 3)).
     // See test script for examples: tests/base/version_compare.php
 
-    // Extract the arguments. Allow for positional parameters.
+    // Extract the arguments. Prefix unnamed parameters with 'p_'.
     extract($args, EXTR_PREFIX_INVALID, 'p');
 
     // Set this flag if checking should be strictly numeric.
@@ -48,7 +49,12 @@ function base_versionsapi_compare($args)
         $strict = true;
     }
 
-    // Default either version to '0' if not pass in at all.
+    if (!isset($reverse)) {
+        $reverse = false;
+    }
+
+    // Default the version numbers to either a positional
+    // parameters or to '0' if nothing passed in at all.
     if (!isset($ver1)) {
         $ver1 = (isset($p_0) ? $p_0 : '0');
     }
@@ -62,7 +68,7 @@ function base_versionsapi_compare($args)
         $sep = '.';
     }
 
-    // Quote the separator for use in the preg cleanup.
+    // Quote the separator for use in the cleanup preg.
     $sep2 = preg_quote($sep);
 
     // Get the number of levels to check.
@@ -80,15 +86,27 @@ function base_versionsapi_compare($args)
     }
 
     // Clean up the input strings.
+    // JDJ: I would like to move these pregs out to a support function as it is useful
+    // in its own right to normalise version numbers for display.
     list($ver1, $ver2) = preg_replace(
         array(
-           '/(\s'. ($strict ? '|[^\d'.$sep2.']' : '') .')*/',
-           '/^'.$sep2.'/',
-           '/'.$sep2.'$/',
-           '/'.$sep2.$sep2.'/',
-           '/^$/'
+           ($strict ? '/(?<=\d)[^\d'.$sep2.']+(?=\d)/' : '//'), // '1x2' => '1.2' if strict
+           ($strict ? '/[^\d'.$sep2.']*/' : '//'),              // 'x' => '' if strict
+           '/(\s)+/',                                           // ' ' => ''
+           '/^'.$sep2.'/',                                      // '.1' => '0.1'
+           '/'.$sep2.'$/',                                      // '1.' => '1.0'
+           '/'.$sep2.$sep2.'/',                                 // '1..2' => '1.0.2'
+           '/^$/'                                               // '' => '0'
         ),
-        array('', '0'.$sep, $sep.'0', $sep.'0'.$sep, '0'),
+        array(
+            ($strict ? $sep : ''),
+            '',
+            '',
+            '0'.$sep,
+            $sep.'0',
+            $sep.'0'.$sep,
+            '0'
+        ),
         array($ver1, $ver2)
     );
 
@@ -105,13 +123,8 @@ function base_versionsapi_compare($args)
     }
 
     // Pad out version arrays where necessary.
-    while (count($ver1) < $limitlevels) {
-        array_push($ver1, '0');
-    }
-
-    while (count($ver2) < $limitlevels) {
-        array_push($ver2, '0');
-    }
+    $ver1 = array_pad($ver1, $limitlevels, '0');
+    $ver2 = array_pad($ver2, $limitlevels, '0');
 
     $latest = 0;
 
@@ -122,10 +135,10 @@ function base_versionsapi_compare($args)
         // to be numeric, then PHP will do a numeric comparison.
         // PHP's behaviour saves us some work type-casting.
         if ($ver1[$i] > $ver2[$i]) {$latest = (-1); break;}
-        if ($ver2[$i] > $ver1[$i]) {$latest = (+1); break;}
+        if ($ver1[$i] < $ver2[$i]) {$latest = (+1); break;}
     }
     
-    return $latest;
+    return $reverse ? $latest * (-1) : $latest;
 }
 
 ?>
