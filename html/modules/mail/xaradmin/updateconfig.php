@@ -31,7 +31,6 @@ function mail_admin_updateconfig()
     if (!xarVarFetch('replytoname', 'str:1:', $replytoname, 'Your Alt Reply To Name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, 'Your Alt Reply To Email', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('html', 'checkbox', $html, false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('htmlsendaltbody', 'checkbox', $htmlsendaltbody, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmluseheadfoot', 'checkbox', $htmluseheadfoot, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('htmlfooter', 'str:1:', $htmlfooter, '', XARVAR_NOT_REQUIRED)) return;
@@ -59,7 +58,6 @@ function mail_admin_updateconfig()
     xarModSetVar('mail', 'replytoname', $replytoname);
     xarModSetVar('mail', 'replytoemail', $replytoemail);
     xarModSetVar('mail', 'html', $html);
-    xarModSetVar('mail', 'htmlsendaltbody', $htmlsendaltbody);
     xarModSetVar('mail', 'htmluseheadfoot', $htmluseheadfoot);
     xarModSetVar('mail', 'htmlheader', $htmlheader);
     xarModSetVar('mail', 'htmlfooter', $htmlfooter);

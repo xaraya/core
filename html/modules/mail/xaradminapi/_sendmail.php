@@ -30,6 +30,7 @@
  * @param  $ 'attachName' is the name of an attachment to a message
  * @param  $ 'attachPath' is the path of the attachment
  * @param  $ 'htmlmail' is set to true for an html email
+ * @param  $ 'usetemplates' set to true to use templates in xartemplates
  * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
  */
@@ -37,20 +38,29 @@ function mail_adminapi__sendmail($args)
 {
     // Get arguments from argument array
     extract($args);
+
     // Argument check
     $invalid = array();
 
-    if (!isset($info) && !isset($recipients))
+    if (!isset($info) && !isset($recipients)) {
         $invalid[] = 'info/recipients';
-    if (!isset($subject))
+    }
+    if (!isset($subject)) {
         $invalid[] = 'subject';
-    if (!isset($message))
+    }
+    if (!isset($message)) {
         $invalid[] = 'message';
+    }
 
     if (count($invalid) > 0) {
         $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', '_sendmail', 'Mail');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
+    }
+
+    // Check if using xartemplates for email
+    if (!isset($usetemplates)) {
+        $usetemplates = true;
     }
 
     if (!empty($when) && $when > time() && xarModIsAvailable('scheduler')) {
@@ -60,11 +70,12 @@ function mail_adminapi__sendmail($args)
         }
     }
 
+    // If htmlmessage is empty, then set to message
     if (empty($htmlmessage)) {
-        $htmlmessage = '';
+        $htmlmessage = $message;
     }
 
-    // global search and replace.
+    // Global search and replace %%text%%
     $replace = xarModAPIFunc('mail',
                              'admin',
                              'replace',
@@ -113,29 +124,33 @@ function mail_adminapi__sendmail($args)
 
     $serverType = xarModGetVar('mail', 'server');
 
-    if ($serverType == 'smtp') {
-        $mail->IsSMTP(); // telling the class to use SMTP
-        $mail->Host = xarModGetVar('mail', 'smtpHost'); // SMTP server
-        $mail->Port = xarModGetVar('mail', 'smtpPort'); // SMTP Port default 25.
-        $mail->Helo = xarServerGetVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
+    switch($serverType) {
+        case 'smtp':
+            $mail->IsSMTP(); // telling the class to use SMTP
+            $mail->Host = xarModGetVar('mail', 'smtpHost'); // SMTP server
+            $mail->Port = xarModGetVar('mail', 'smtpPort'); // SMTP Port default 25.
+            $mail->Helo = xarServerGetVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
-        // the smtp server might require authentication
-        if (xarModGetVar('mail', 'smtpAuth')) {
-            $mail->SMTPAuth = true; // turn on SMTP authentication
-            $mail->Username = xarModGetVar('mail', 'smtpUserName'); // SMTP username
-            $mail->Password = xarModGetVar('mail', 'smtpPassword'); // SMTP password
-        }
-    }
+            // the smtp server might require authentication
+            if (xarModGetVar('mail', 'smtpAuth')) {
+                $mail->SMTPAuth = true; // turn on SMTP authentication
+                $mail->Username = xarModGetVar('mail', 'smtpUserName'); // SMTP username
+                $mail->Password = xarModGetVar('mail', 'smtpPassword'); // SMTP password
+            }
+            break;
 
-    if ($serverType == 'sendmail') {
-        $mail->IsSendmail();
-        $mail->Sendmail = xarModGetVar('mail', 'sendmailpath'); // Use the correct path to sendmail
-    }
-    if ($serverType == 'qmail') {
-        $mail->IsQmail();
-    }
-    if ($serverType == 'mail') {
-        $mail->IsMail();
+        case 'sendmail':
+            $mail->IsSendmail();
+            $mail->Sendmail = xarModGetVar('mail', 'sendmailpath'); // Use the correct path to sendmail
+            break;
+
+        case 'qmail':
+            $mail->IsQmail();
+            break;
+
+        case 'mail':
+            $mail->IsMail();
+            break;
     }
 
     $mail->WordWrap = $wordwrap;
@@ -173,41 +188,62 @@ function mail_adminapi__sendmail($args)
         }
     } else {
         if (!empty($name)) {
-            $mail->AddAddress("$info", "$name");
+            $mail->AddAddress($info, $name);
         } else {
-            $mail->AddAddress("$info");
+            $mail->AddAddress($info);
         }
     }// if
 
-    $mail->Subject = "$subject";
+    // Set subject
+    $mail->Subject = $subject;
+
     // Set IsHTML - this is true for HTML mail
     $mail->IsHTML($htmlmail);
 
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
-        // Alternate message body if it is set
-        if (!empty($message) && xarModGetVar('mail', 'htmlsendaltbody')) {
-            $mail->AltBody = xarTplModule('mail', 'admin', 'sendmail',
-                                          array('message'=>$message),
-                                          'text');
+        // Sets the text-only body of the message. 
+        // This automatically sets the email to multipart/alternative. 
+        // This body can be read by mail clients that do not have HTML email 
+        // capability such as mutt. Clients that can read HTML will view the normal Body.
+        if (!empty($message)) {
+            if ($usetemplates) {
+                $mail->AltBody = xarTplModule('mail', 
+                                              'admin', 
+                                              'sendmail',
+                                              array('message'=>$message),
+                                              'text');
+            } else {
+                $mail->AltBody = $message;
+            }
         }
         // HTML message body
-        $mail->Body = xarTplModule('mail', 'admin', 'sendmail',
-                                   array('htmlmessage'=>$htmlmessage),
-                                   'html');
-
+        if ($usetemplates) {
+            $mail->Body = xarTplModule('mail', 
+                                       'admin', 
+                                       'sendmail',
+                                       array('htmlmessage'=>$htmlmessage),
+                                       'html');
+        } else {
+            $mail->Body = $htmlmessage;
+        }
     } else {
-        $mail->Body = xarTplModule('mail', 'admin', 'sendmail',
-                                   array('message'=>$message),
-                                   'text');
+        if ($usetemplates) {
+            $mail->Body = xarTplModule('mail', 
+                                       'admin', 
+                                       'sendmail',
+                                       array('message'=>$message),
+                                       'text');
+        } else {
+            $mail->Body = $message;
+        }
     }
 
-    /* We are now setting up the advance options that can be used by the modules
-        * Add Attachment will look to see if there is a var passed called
-        * attachName and attachPath and attach it to the message
-    */
+    // We are now setting up the advance options that can be used by the modules
+    // Add Attachment will look to see if there is a var passed called
+    // attachName and attachPath and attach it to the message
     if ((!empty($attachName)) || (!empty($attachPath))) {
-        $mail->AddAttachment("$attachPath", "$attachName");
+        $mail->AddAttachment($attachPath, $attachName);
     }
     // Send the mail, or send an exception.
     if (!$mail->Send()) {

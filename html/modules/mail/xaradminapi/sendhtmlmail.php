@@ -29,6 +29,7 @@
  * @param  $ 'fromname' is the name of the person the email is from
  * @param  $ 'attachName' is the name of an attachment to a message
  * @param  $ 'attachPath' is the path of the attachment
+ * @param  $ 'usetemplates' set to true to use templates in xartemplates
  * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
  */
@@ -39,21 +40,15 @@ function mail_adminapi_sendhtmlmail($args)
 
     // Check for required arguments
     $invalid = array();
-    if (!isset($info) && !isset($recipients))
+    if (!isset($info) && !isset($recipients)) {
         $invalid[] = 'info/recipients';
-    if (!isset($subject))
+    }
+    if (!isset($subject)) {
         $invalid[] = 'subject';
-    if (!isset($message))
+    }
+    if (!isset($message)) {
         $invalid[] = 'message';
-
-    // Patch from Federico Luciani
-    if(!isset($recipients)) $recipients='';
-    if(!isset($name)) $name='';
-    if(!isset($from)) $from='';
-    if(!isset($fromname)) $fromname='';
-    if(!isset($priority)) $priority='';
-    if(!isset($encoding)) $encoding='';
-    if(!isset($wordwrap)) $wordwrap='';
+    }
 
     if (count($invalid) > 0) {
         $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', 'sendhtmlmail', 'Mail');
@@ -62,6 +57,13 @@ function mail_adminapi_sendhtmlmail($args)
     }
 
     // Set variables if they don't exist
+    if(!isset($name)) $name='';
+    if(!isset($from)) $from='';
+    if(!isset($fromname)) $fromname='';
+
+    if (!isset($info)){
+        $info = '';
+    }
     if (!isset($recipients)){
         $recipients = '';
     }
@@ -77,6 +79,9 @@ function mail_adminapi_sendhtmlmail($args)
             $encoding = '8bit';
             xarModSetVar('mail', 'encoding', $encoding);
         }
+    }
+    if (!isset($usetemplates)) {
+        $usetemplates = true;
     }
 
     $parsedmessage = '';
@@ -121,6 +126,7 @@ function mail_adminapi_sendhtmlmail($args)
             'wordwrap'      => $wordwrap,
             'from'          => $from,
             'fromname'      => $fromname,
+            'usetemplates'  => $usetemplates,
             'htmlmail'      => true));
 }
 

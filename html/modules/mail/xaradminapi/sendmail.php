@@ -29,6 +29,7 @@
  * @param  $ 'fromname' is the name of the person the email is from
  * @param  $ 'attachName' is the name of an attachment to a message
  * @param  $ 'attachPath' is the path of the attachment
+ * @param  $ 'usetemplates' set to true to use templates in xartemplates
  * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
  */
