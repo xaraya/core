@@ -9,3 +9,5 @@
 <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
 
 </xar:if>
+
+#$hooks#

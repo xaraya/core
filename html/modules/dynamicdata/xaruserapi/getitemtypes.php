@@ -19,10 +19,10 @@ function dynamicdata_userapi_getitemtypes($args)
         if ($modid != $object['moduleid']) continue;
         // skip the "internal" DD objects
         if ($object['objectid'] < 3) continue;
-        $itemtypes[$id] = array('label' => xarVarPrepForDisplay($object['label']),
-                                'title' => xarVarPrepForDisplay(xarML('View #(1)',$object['label'])),
-                                'url'   => xarModURL('dynamicdata','user','view',array('itemtype' => $object['itemtype']))
-                               );
+        $itemtypes[$object['itemtype']] = array('label' => xarVarPrepForDisplay($object['label']),
+                                                'title' => xarVarPrepForDisplay(xarML('View #(1)',$object['label'])),
+                                                'url'   => xarModURL('dynamicdata','user','view',array('itemtype' => $object['itemtype']))
+                                               );
     }
     return $itemtypes;
 }

@@ -71,6 +71,8 @@ function dynamicdata_admin_updateprop()
 
     if (!xarModAPILoad('dynamicdata', 'admin')) return;
 
+    $isprimary = 0;
+
     $i = 0;
     // update old fields
     foreach ($fields as $name => $field) {
@@ -103,6 +105,9 @@ function dynamicdata_admin_updateprop()
                                     'validation' => $dd_validation[$id]))) {
                 return;
             }
+            if ($dd_type[$id] == 21) { // item id
+                $isprimary = 1;
+            }
         }
     }
 
@@ -127,6 +132,16 @@ function dynamicdata_admin_updateprop()
         if (empty($prop_id)) {
             return;
         }
+        if ($dd_type[0] == 21) { // item id
+            $isprimary = 1;
+        }
+    }
+
+    if ($isprimary) {
+        $modinfo = xarModGetInfo($modid);
+        xarModCallHooks('module','updateconfig',$modinfo['name'],
+                        array('module' => $modinfo['name'],
+                              'itemtype' => $itemtype));
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',

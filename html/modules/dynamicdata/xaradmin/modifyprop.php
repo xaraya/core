@@ -95,6 +95,28 @@ function dynamicdata_admin_modifyprop()
         $data['sources'] = array();
     }
 
+    $isprimary = 0;
+    foreach (array_keys($data['fields']) as $field) {
+        if ($data['fields'][$field]['type'] == 21) { // item id
+            $isprimary = 1;
+            break;
+        }
+    }
+    if ($isprimary) {
+        $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
+                                 array('module' => $modinfo['name'],
+                                       'itemtype' => $itemtype));
+        if (empty($hooks)) {
+            $data['hooks'] = '';
+        } elseif (is_array($hooks)) {
+            $data['hooks'] = join('',$hooks);
+        } else {
+            $data['hooks'] = $hooks;
+        }
+    } else {
+        $data['hooks'] = '';
+    }
+
     $data['labels'] = array(
                             'id' => xarML('ID'),
                             'name' => xarML('Name'),

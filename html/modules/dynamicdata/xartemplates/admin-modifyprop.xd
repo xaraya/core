@@ -79,6 +79,14 @@ Tip : empty label -> delete field for all items
     </tr>
 </xar:if>
 
+<xar:if condition="!empty($hooks)">
+    <tr>
+        <td colspan="7" align="left">
+        #$hooks#
+        </td>
+    </tr>
+</xar:if>
+
     <tr>
         <td colspan="7" align="center">
            <input type="submit" value="#$updatebutton#" />

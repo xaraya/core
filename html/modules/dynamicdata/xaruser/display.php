@@ -31,8 +31,24 @@ function dynamicdata_user_display($args)
     if (!isset($myobject)) return;
     $myobject->getItem();
 
+    $data = array();
+    $data['object'] =& $myobject;
+
+    $modinfo = xarModGetInfo($myobject->moduleid);
+    $item = array();
+    $item['module'] = $modinfo['name'];
+    $item['itemtype'] = $itemtype;
+    $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
+    if (empty($hooks)) {
+        $data['hooks'] = '';
+    } elseif (is_array($hooks)) {
+        $data['hooks'] = join('',$hooks);
+    } else {
+        $data['hooks'] = $hooks;
+    }
+
     // Return the template variables defined in this function
-    return array('object' => & $myobject);
+    return $data;
 }
 
 
