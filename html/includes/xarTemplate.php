@@ -924,80 +924,47 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // $tplData should be an array (-even-if- it only has one value in it)
     assert('is_array($tplData)');
 
-    // If the source file does not exist we have no business here.
-    if (!file_exists($sourceFileName)) {
-        //xarLogMessage("Source doesn't exist, cannot execute from file");
+    $needCompilation = true;
+
+    if ($GLOBALS['xarTpl_cacheTemplates']) {
+        $varDir = xarCoreGetVarDirPath();
+        $cacheKey = md5($sourceFileName);
+        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
+        if (file_exists($cachedFileName)
+            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
+            $needCompilation = false;
+        }
+    }
+
+    if (!file_exists($sourceFileName) && $needCompilation == true) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
 
-    // Set some things we are going to need further on
-    $cacheDir = xarCoreGetVarDirPath() . '/cache/templates/';
-    $cacheKey = md5($sourceFileName);
-    $cachedFileName = $cacheDir . $cacheKey . '.php';
-
-    $needCompilation = true;  // assume compilation
-    $got_a_lock = false;      // initially we do not own the lock on the file
-    $just_created = false; // most of the time the template will not be created
-    // Determine whether we need to compile the sourcefile into a template
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        // If the cached file doesn't exist create a lock immediately so we make sure we compile it only once
-        clearstatcache(); // paranoid probably
-        if(!file_exists($cachedFileName)) {
-            //xarLogMessage("Creating $cachedFileName");
-            $cf = fopen($cachedFileName, 'w'); // create a write open, we need to produce the template eventually
-            $got_a_lock = flock($cf, LOCK_EX);
-            $just_created = true;
-        } else {
-            // File already exist, wait till we can get a lock on it, so we can reliably check it
-            $cf = fopen($cachedFileName, 'r');
-            while(!$got_a_lock) {
-                //xarLogMessage("Waiting for lock on $cachedFileName (1) ");
-                $got_a_lock = flock($cf, LOCK_EX);
-            }
-        }
-        assert('$got_a_lock == true'); // we need to make sure we're the only one.
-        
-        // Now we can reliably check it
-        clearstatcache(); // not so paranoid probably
-        if (!$just_created && (filemtime($sourceFileName) < filemtime($cachedFileName))) {
-            //xarLogMessage("Decided that compilation isn't necessary");
-            $needCompilation = false;
-        } 
-    }
-
-    // By now we should have determined reliably whether compilation is needed, still holding the lock
+    //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
-        xarLogMessage("Compiling $sourceFileName");
         $templateCode = $blCompiler->compileFile($sourceFileName);
         if (!isset($templateCode)) {
-            //xarLogMessage("Templatecode was not set");
-            flock($cf, LOCK_UN);  fclose($cf);
             return; // exception! throw back
         }
-
-        // If we're caching, save the compiled stuff in the cache file
         if ($GLOBALS['xarTpl_cacheTemplates']) {
-            // We actually want to write to the cached filename
-            if(xarTpl_outputPHPCommentBlockInTemplates()) {
+            $fd = fopen($cachedFileName, 'w');
+			if(xarTpl_outputPHPCommentBlockInTemplates()) {
                 $commentBlock = "<?php\n/*"
                               . "\n * Source:     " . $sourceFileName
                               . "\n * Theme:      " . xarTplGetThemeName()
                               . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
                               . "\n */\n?>\n";
-                fwrite($cf, $commentBlock);
+                fwrite($fd, $commentBlock);
             }
-            fwrite($cf, $templateCode);
-            // Add an entry into CACHEKEYS, as we try to make sure we only compile once, append should
-            // be appropriate and there is no need to lock the file?
-            // CHECKME: How about when different requests are made at the same time?, This quickly becomes mind boggling
-            // CHECKME: Does it matter?
-            $ck = fopen($cacheDir . 'CACHEKEYS', 'a');
-            fwrite($ck, $cacheKey. ': '.$sourceFileName . "\n");
-            fclose($ck);
-            // And finally close the cached file
-            flock($cf, LOCK_UN); fclose($cf);
+            fwrite($fd, $templateCode);
+            fclose($fd);
+            // Add an entry into CACHEKEYS
+            $varDir = xarCoreGetVarDirPath();
+            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
+            fclose($fd);
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
@@ -1010,8 +977,16 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
     // $__tplData should be an array (-even-if- it only has one value in it),
-    // We do an assert at the beginning of this function, so we dont need to test that here
-    extract($tplData, EXTR_OVERWRITE);
+    // if it's not throw an exception.
+    if (is_array($tplData)) {
+        extract($tplData, EXTR_OVERWRITE);
+    } else {
+        // This should actually never be reached.
+        $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
 
     // Load cached template file
     ob_start();
