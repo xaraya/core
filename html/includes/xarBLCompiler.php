@@ -3025,9 +3025,17 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
             break;
         case 'module':
-            // FIXME: $_bl_module_name is unknown in the compiled template if
-            // the include is from an include.
-            return "xarTpl_includeModuleTemplate(\$_bl_module_name, \"$file\", $subdata)";
+            // The module which needs to be passed in needs to come from the location of the
+            // template which holds the tag, not the active module although they will be the same 
+            // in most cases. If the active module would be passed in, this would break when
+            // calling API functions from other modules which in turn use a template (rare, but possible,
+            // like generating xml with blocklayout). By passing in the modulename which holds the
+            // template, we make sure that the include resolves to the right file.
+            $patharray = explode('/',dirname($this->fileName));
+            // We need the value after 'modules' always, whether the container is overridden or not.
+            $modName = $patharray[array_search ('modules',$patharray)+1];
+            
+            return "xarTpl_includeModuleTemplate(\"$modName\", \"$file\", $subdata)";
             break;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
