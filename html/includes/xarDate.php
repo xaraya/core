@@ -51,13 +51,19 @@ class xarDate {
     }
 
     function DBtoTS($dbts) {
-        $this->year =   substr($dbts,1,4);
-        $this->month =  trim(substr($dbts,6,2),"0");
-        $this->day =    trim(substr($dbts,9,2),"0");
-        $this->hour =   trim(substr($dbts,12,2),"0");
-        $this->minute = trim(substr($dbts,15,2),"0");
-        $this->second = trim(substr($dbts,18,2),"0");
-        $this->regenerate();
+        if (preg_match('/^\d{4}/',$dbts)) {
+            $this->year =   substr($dbts,1,4);
+            $this->month =  trim(substr($dbts,6,2),"0");
+            $this->day =    trim(substr($dbts,9,2),"0");
+            $this->hour =   trim(substr($dbts,12,2),"0");
+            $this->minute = trim(substr($dbts,15,2),"0");
+            $this->second = trim(substr($dbts,18,2),"0");
+            $this->regenerate();
+        } else {
+            $guess = strtotime($dbts);
+            if ($guess < 0) $guess = 0;
+            $this->setTimestamp($guess);
+        }
     }
 
     function display($format) { return date($format,$this->timestamp); }
