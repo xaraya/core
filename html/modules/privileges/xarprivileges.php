@@ -92,20 +92,20 @@ class xarMasks
 
 		if ($module == '' || $module == 'All') {
 			if ($component == '' || $component == 'All') {
-				$query = "SELECT * FROM $this->maskstable ORDER BY xar_component, xar_name";
+				$query = "SELECT * FROM $this->maskstable ORDER BY xar_module, xar_component, xar_name";
 			}
 			else {
 				$query = "SELECT * FROM $this->maskstable
 						WHERE (xar_component = '$component')
 						OR (xar_component = 'All')
 						OR (xar_component = 'None')
-						ORDER BY xar_component, xar_namexar_name";
+						ORDER BY xar_module, xar_component, xar_name";
 			}
 		}
 		else {
 			if ($component == '' || $component == 'All') {
 				$query = "SELECT * FROM $this->maskstable
-						WHERE xar_module = '$module' ORDER BY xar_component, xar_name";
+						WHERE xar_module = '$module' ORDER BY xar_module, xar_component, xar_name";
 			}
 			else {
 			$query = "SELECT *
@@ -113,7 +113,7 @@ class xarMasks
 					AND ((xar_component = '$component')
 					OR (xar_component = 'All')
 					OR (xar_component = 'None'))
-					ORDER BY xar_component, xar_name";
+					ORDER BY xar_module, xar_component, xar_name";
 			}
 		}
 		$result = $this->dbconn->Execute($query);

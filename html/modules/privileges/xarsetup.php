@@ -50,7 +50,7 @@ function initializeSetup() {
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarRegisterPrivilege('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
+    xarRegisterPrivilege('NoAccess','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
     xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
     xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
@@ -58,7 +58,7 @@ function initializeSetup() {
     xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
 
-    xarRegisterPrivilege('Viewing','All','All','All','All',ACCESS_OVERVIEW,'The base privilege granting view access');
+    xarRegisterPrivilege('Login','All','All','Loginblock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
     xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
@@ -74,14 +74,14 @@ function initializeSetup() {
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	makePrivilegeRoot('NoPrivileges');
+	makePrivilegeRoot('NoAccess');
 	makePrivilegeRoot('Administration');
 	makePrivilegeRoot('Oversight');
 	makePrivilegeRoot('DenyRolesPrivileges');
 	makePrivilegeRoot('DenyRoles');
 	makePrivilegeRoot('DenyPrivileges');
 	makePrivilegeRoot('Editing');
-	makePrivilegeRoot('Viewing');
+	makePrivilegeRoot('Login');
 	makePrivilegeMember('DenyRoles','DenyRolesPrivileges');
 	makePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
 	makePrivilegeMember('DenyRolesPrivileges','Oversight');
@@ -103,11 +103,10 @@ function initializeSetup() {
     * assign(Privilege,Role)
     *********************************************************************/
 
-	xarAssignPrivilege('NoPrivileges','Everybody');
+	xarAssignPrivilege('NoAccess','Everybody');
 	xarAssignPrivilege('Administration','Administrators');
 	xarAssignPrivilege('Oversight','Oversight');
-	xarAssignPrivilege('Viewing','Anonymous');
-//	xarAssignPrivilege('AdminRole','Anonymous');
+	xarAssignPrivilege('Login','Anonymous');
 
     /*********************************************************************
     * Define instances for the core modules
@@ -179,8 +178,6 @@ function initializeSetup() {
     xarRegisterMask('DeletePanel','All','adminpanels','All','All',ACCESS_DELETE);
     xarRegisterMask('AdminPanel','All','adminpanels','All','All',ACCESS_ADMIN);
 
-   	xarRegisterMask('ReadLogin','All','roles','LoginBlock','All',ACCESS_READ);
-
    	xarRegisterMask('ViewRoles','All','roles','All','All',ACCESS_OVERVIEW);
    	xarRegisterMask('ReadRole','All','roles','All','All',ACCESS_READ);
    	xarRegisterMask('EditRole','All','roles','All','All',ACCESS_EDIT);
@@ -208,7 +205,7 @@ function initializeSetup() {
     xarRegisterMask('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
     xarRegisterMask('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
 
-    xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
+//    xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
 
    	xarRegisterMask('EditModules','All','modules','All','All',ACCESS_EDIT);
    	xarRegisterMask('AdminModules','All','modules','All','All',ACCESS_ADMIN);
