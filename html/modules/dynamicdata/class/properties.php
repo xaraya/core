@@ -323,6 +323,10 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_StateList_Property.php";
                 $property = new Dynamic_StateList_Property($args);
                 break;
+            case 44: // (tcolorpicker) Tigra Color Picker
+                require_once "includes/properties/Dynamic_TColorPicker_Property.php";
+                $property = new Dynamic_TColorPicker_Property($args);
+                break;
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
@@ -755,6 +759,15 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
+        $proptypes[44] = array(
+                              'id'         => 44,
+                              'name'       => 'tcolorpicker',
+                              'label'      => 'Tigra Color Picker',
+                              'format'     => '44',
+                              'validation' => '',
+                              // ...
+                             );
+
     // TODO: add multiple select and multiple checkboxes
 
         // add some property types supported by utility modules
