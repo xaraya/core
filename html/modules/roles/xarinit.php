@@ -179,7 +179,7 @@ function roles_activate()
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
     xarModSetVar('roles', 'frozenroles', 5);
-    xarModSetVar('privileges', 'frozenprivileges', 7);
+    xarModSetVar('privileges', 'frozenprivileges', 1);
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
