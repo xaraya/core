@@ -104,13 +104,22 @@ function xarMain()
 
         // Note : the page template may be set to something else in the module function
         if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
-            xarTplSetPageTemplateName('user-'.$modName);
+            // NOTE: we should fallback to the way we were handling this before
+            // (ie: use pages/$modName.xt if pages/user-$modName is not found)
+            // instead of just switching to the new way without a deprecation period
+            // so as to prevent breaking anyone's sites. <rabbitt>
+            if (!xarTplSetPageTemplateName('user-'.$modName)) {
+                xarTplSetPageTemplateName($modName);
+            }
         }
 
         // Set page template
         if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
-            // Use the admin.xt page if available when $modType is admin
-            xarTplSetPageTemplateName('admin-'.$modName);
+            // Use the admin-$modName.xt page if available when $modType is admin
+            // falling back on admin.xt if the former isn't available
+            if (!xarTplSetPageTemplateName('admin-'.$modName)) {
+                xarTplSetPageTemplateName('admin');
+            }
         }
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
