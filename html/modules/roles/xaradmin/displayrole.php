@@ -20,6 +20,7 @@ function roles_admin_displayrole()
 
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
+
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
@@ -27,6 +28,8 @@ function roles_admin_displayrole()
         $parents[] = array('parentid' => $parent->getID(),
             'parentname' => $parent->getName());
     }
+    $data['parents'] = $parents;
+
     $name = $role->getName();
 // Security Check
     if(!xarSecurityCheck('EditRole',0,'Roles',$name)) return;

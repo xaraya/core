@@ -5,12 +5,25 @@
 <div class="xar-mod-body"><h2>
 <xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
 <xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>: #$pname#</h2>
+  <div id="tabnav">
+		<div class="help" title="These are the groups that #$pname# is a member of"><xar:mlstring>Parent Groups</xar:mlstring> :</div>
+		<xar:set name="$prevgroup">""</xar:set>
+		<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+			<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+				<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $parents[$i]['parentid']))#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a></div>
+			</xar:if>
+			<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+		</xar:for>
+  </div>
 <div id="tabnav">
 	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
 	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
 	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#" class="active"><xar:mlstring>Modify</xar:mlstring></a></div>	
 	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
 	<div><a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $uid))#"><xar:mlstring>Privileges</xar:mlstring></a></div>	
+	<xar:if condition="$ptype eq 1">
+		<div><a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $uid))#"><xar:mlstring>Users</xar:mlstring></a></div>	
+	</xar:if>
 </div>
 <div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
 <br />

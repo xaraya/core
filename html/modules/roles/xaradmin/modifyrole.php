@@ -28,20 +28,27 @@ function roles_admin_modifyrole()
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
+
     // get the array of parents of this role
     // need to display this in the template
+    // we also use this loop to fille the names array with groups that this group shouldn't be added to
     $parents = array();
+    $names = array();
     foreach ($role->getParents() as $parent) {
         $parents[] = array('parentid' => $parent->getID(),
             'parentname' => $parent->getName());
+        $names[] = $parent->getName();
     }
+    $data['parents'] = $parents;
+
     // remove duplicate entries from the list of groups
     // get the array of all roles, minus the current one
     // need to display this in the template
     $groups = array();
-    $names = array();
     foreach($roles->getgroups() as $temp) {
         $nam = $temp['name'];
+// TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
+        if(!xarSecurityCheck('EditRole',0,'Roles',$nam)) continue;
         if (!in_array($nam, $names) && $temp['uid'] != $uid) {
             $names[] = $nam;
             $groups[] = array('duid' => $temp['uid'],

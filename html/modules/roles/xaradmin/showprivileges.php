@@ -25,6 +25,16 @@ function roles_admin_showprivileges()
     // Call the Roles class and get the role
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
+
+    // get the array of parents of this role
+    // need to display this in the template
+    $parents = array();
+    foreach ($role->getParents() as $parent) {
+        $parents[] = array('parentid' => $parent->getID(),
+            'parentname' => $parent->getName());
+    }
+    $data['parents'] = $parents;
+
     // Call the Privileges class
     $privileges = new xarPrivileges();
 
