@@ -262,12 +262,17 @@ document.forms['privilegeform'].submit();}
 <xar:loop name="$parents">
     <tr>
         <td width="150">
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['parentid']#">                
-                #$loop:item['parentname']#
-                </a>
+            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['parentid']#">#$loop:item['parentname']#</a>
         </td>
         <td width="50" style="text-align: center;">
-                <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$pname# from #$loop:item['parentname']#" style="vertical-align: middle;" /></a>
+            <xar:set name="$tmptitle">
+                <xar:ml>
+                    <xar:mlstring>Remove #(1) from #(2)</xar:mlstring>
+                    <xar:mlvar>#$pname#</xar:mlvar>
+                    <xar:mlvar>#$loop:item['parentname']#</xar:mlvar>
+                </xar:ml>
+            </xar:set>
+            <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/remove.gif" title="#$tmptitle#" style="vertical-align: middle;" /></a>
         </td>
     </tr>
 </xar:loop>
