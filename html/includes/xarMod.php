@@ -989,7 +989,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
         $encoderArgs = $args;
         $encoderArgs['func'] = $funcName;
-        $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs);
+        // don't throw exception on missing file or function anymore
+        $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
         if (!empty($path)) {
             if ($generateXMLURL) {
                 $path = htmlspecialchars($path);
@@ -1014,6 +1015,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // exceptions may be pending. As xarModUrl is used very often, and we want the exceptions
         // I commented it out (MrB). Not sure how to solve this in a better way.
         //xarExceptionFree();
+
+        // <mikespub> see above :)
     }
 
     // The arguments

@@ -414,8 +414,9 @@ function xarRequestGetInfo()
             // Call the appropriate decode_shorturl function
             if (xarModIsAvailable($modName) && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
                 $loopHole = array($modName,$modType,$funcName);
-                $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
-                if (is_array($res)) {
+            // don't throw exception on missing file or function anymore
+                $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
+                if (isset($res) && is_array($res)) {
                     list($funcName, $args) = $res;
                     if (!empty($funcName)) { // bingo
                         // Forward decoded args to xarRequestGetVar
@@ -445,6 +446,8 @@ function xarRequestGetInfo()
                 // but i haven't been able to trace exception hiding back to this line. If it behaves
                 // wrong, and is still needed uncomment it (MrB)
                 //xarExceptionFree();
+
+                // <mikespub> see above :)
             }
         }
     }
