@@ -133,7 +133,8 @@ function base_menublock_display($blockinfo)
                     case '[': // module link
                     {
                         // Credit to Elek Márton for further expansion
-                        $url = explode(':', substr($url, 1,  - 1));
+                        $sections = explode(']',substr($url,1));
+                        $url = explode(':', $sections[0]);
                         // if the current module is active, then we are here
                         if ($url[0] == $thismodname &&
                             (!isset($url[1]) || $url[1] == $thismodtype) &&
@@ -143,6 +144,9 @@ function base_menublock_display($blockinfo)
                         if (empty($url[1])) $url[1]="user";
                         if (empty($url[2])) $url[2]="main";
                         $url = xarModUrl($url[0],$url[1],$url[2]);
+                        if(isset($sections[1])) {
+                            $url .= xarVarPrepForDisplay($sections[1]);
+                        }
                         break;
                     }
                     case '{': // article link
@@ -437,7 +441,7 @@ function base_menublock_insert($blockinfo)
         if (!xarVarFetch('linkinsert', 'list:checkbox', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
 
         foreach ($linkname as $v) {
-            if (!isset($linkdelete[$c])) {
+            if (!isset($linkdelete[$c]) || $linkdelete[$c] == false) {
                 // FIXME: MrB, i added the @ to avoid testing whether all fields contains something useful
                 @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }

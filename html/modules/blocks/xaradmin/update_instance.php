@@ -66,7 +66,7 @@ function blocks_admin_update_instance()
     $groups = array();
     foreach($block_groups as $gid => $block_group) {
         // Set the block group so long as the 'remove' checkbox is not set.
-        if (!isset($block_remove_groups[$gid])) {
+        if (!isset($block_remove_groups[$gid]) || $block_remove_groups[$gid] == false) {
             $groups[] = array(
                 'gid' => $gid,
                 'template' => $group_templates[$gid]
