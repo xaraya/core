@@ -86,8 +86,7 @@ function xarCache_init($args)
             ($xarPage_cacheTime == 0 ||
              filemtime($cache_file) > time() - $xarPage_cacheTime)) {
 
-        // TODO: send some headers too
-        // TODO: check ETag here too
+            xarPage_httpCacheHeaders($cache_file);
 
             if (file_exists('var/cache/output/autocache.start')) {
                 xarPage_autoCacheLogStatus('HIT');
@@ -410,6 +409,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         xarPage_checkUserCaching()) {
         
         xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
+
         xarPage_httpCacheHeaders($cache_file);
 
     }
@@ -820,29 +820,38 @@ function xarPage_httpCacheHeaders($cache_file)
     $mod = filemtime($cache_file);
     // doesn't seem to be taken into account ?
     $etag = $xarPage_cacheCode.$mod;
-    header("ETag: $etag");
-    $match = xarServerGetVar('HTTP_IF_NONE_MATCH');
+    $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
+        $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
     if (!empty($match) && $match == $etag) {
+        // jsb:  for some reason, Mozilla based browsers
+        // do not re-send an ETag after getting a 304
+        // so this only works once per cached page
         header('HTTP/1.0 304');
         exit;
     } else {
-        $since = xarServerGetVar('HTTP_IF_MODIFIED_SINCE');
+        $since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
+            $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
         if (!empty($since) && strtotime($since) >= $mod) {   
             header('HTTP/1.0 304');
             exit;
+            // jsb: according to RFC 2616, if $match isn't empty but is
+            // not equal to the ETag we should send a 412 response
+            // But browser behavior seems inconsistant with the doc and
+            // often results in more data being sent than is necessary.
         }
     }
     if (!empty($xarPage_cacheExpireHeader)) {
         // this tells clients and proxies that this file is good until local
-        // cache file is due to expire
+        // cache file is due to expire, and can be reused w/out revalidating
         header("Expires: " .
                gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
                " GMT");
         header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
     } else {
         header("Expires: 0");
-        header("Cache-Control: must-revalidate");
+        header("Cache-Control: public, must-revalidate");
     }
+    header("ETag: $etag");
     header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
     // we can't use this after session_start()
     //session_cache_limiter('public');
