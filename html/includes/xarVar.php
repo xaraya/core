@@ -170,6 +170,13 @@ function xarVarValidate($validation, $subject, &$convValue) {
     $valParams = explode(':', $validation);
     $valType = xarVarPrepForOS(strtolower(array_shift($valParams)));
     
+    if (empty($valType)) {
+        // Raise an exception
+        $msg = xarML('No validation type present.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg)); return;
+    }
+
     $function_file = 'modules/variable/validations/'.$valType.'.php';
     $function_name = 'variable_validations_'.$valType;
 
