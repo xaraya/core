@@ -21,6 +21,7 @@ function roles_adminapi_getmessagestrings($args)
     extract($args);
     if (!isset($template)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_DATA', new SystemException('No template name was given.'));
+        return;
     }
 
 //FIXME: the default is always roles
@@ -31,6 +32,7 @@ function roles_adminapi_getmessagestrings($args)
     $messaginghome = "var/messaging/" . $module;
     if (!file_exists($messaginghome . "/" . $template . "-subject.xd")) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The subject template was not found.'));
+        return;
     }
     $string = '';
     $fd = fopen($messaginghome . "/" . $template . "-subject.xd", 'r');
@@ -43,6 +45,7 @@ function roles_adminapi_getmessagestrings($args)
 
     if (!file_exists($messaginghome . "/" . $template . "-message.xd")) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The message template was not found.'));
+        return;
     }
     $string = '';
     $fd = fopen($messaginghome . "/" . $template . "-message.xd", 'r');

@@ -28,10 +28,13 @@ function roles_admin_modifyemail($args)
     $messaginghome = "var/messaging/roles";
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
+        return;
     }
     $dd = opendir($messaginghome);
-    $templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
-    while ($filename = readdir($dd)) {
+// FIXME: what's the blank template supposed to do ?
+    //$templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
+    $templates = array();
+    while (($filename = readdir($dd)) !== false) {
         if (!is_dir($messaginghome . "/" . $filename)) {
             $pos = strpos($filename,'-message.xd');
             if (!($pos === false)) {
