@@ -477,6 +477,69 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 }
 
 /**
+ *  Grab the formated date by the user's current locale settings
+ *
+ *  @access public
+ *  @param string $length what date locale we want (short|medium|long)
+ *  @param int $timestamp optional unix timestamp in UTC to format
+ */
+function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
+{
+    $length = strtolower($length);
+    $validLengths = array('short','medium','long');
+    if(!in_array($length,$validLengths)) {
+        return '';
+    }
+    // load the locale date
+    $localeData = xarMLSLoadLocaleData();
+    // grab the right set of locale data
+    $locale_format = $localeData["/dateFormats/$length"];
+    // replace the locale formatting style with valid strftime() style
+    $locale_format = str_replace('MMMM','%B',$locale_format);
+    $locale_format = str_replace('MMM','%b',$locale_format);
+    $locale_format = str_replace('M','%m',$locale_format);
+    $locale_format = str_replace('dddd','%A',$locale_format);
+    $locale_format = str_replace('ddd','%a',$locale_format);
+    $locale_format = str_replace('d','%d',$locale_format);
+    $locale_format = str_replace('yyyy','%Y',$locale_format);
+    $locale_format = str_replace('yy','%y',$locale_format);
+    return xarMLS_strftime($locale_format,$timestamp);
+}
+
+/**
+ *  Grab the formated time by the user's current locale settings
+ *
+ *  @access public
+ *  @param string $length what time locale we want (short|medium|long)
+ *  @param int $timestamp optional unix timestamp in UTC to format
+ */
+function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
+{
+    $length = strtolower($length);
+    $validLengths = array('short','medium','long');
+    if(!in_array($length,$validLengths)) {
+        return '';
+    }
+    // load the locale date
+    $localeData = xarMLSLoadLocaleData();
+    // grab the right set of locale data
+    $locale_format = $localeData["/timeFormats/$length"];
+    // replace the locale formatting style with valid strftime() style
+    $locale_format = str_replace('hh','%I',$locale_format);
+    $locale_format = str_replace('h','%I',$locale_format);
+    $locale_format = str_replace('HH','%H',$locale_format);
+    $locale_format = str_replace('H','%H',$locale_format);
+    $locale_format = str_replace('mm','%M',$locale_format);
+    $locale_format = str_replace('m','%M',$locale_format);
+    $locale_format = str_replace('ss','%S',$locale_format);
+    $locale_format = str_replace('s','%S',$locale_format);
+    $locale_format = str_replace('a','%p',$locale_format);
+    $locale_format = str_replace('z','%Z',$locale_format);
+        
+    return xarMLS_strftime($locale_format,$timestamp);
+}
+
+/**
  * Format a date/time according to the current locale (and/or user's preferences)
  *
  * @access public
@@ -576,20 +639,18 @@ function xarMLS_userOffset()
  *  %A - full weekday name according to the current locale
  *  %b - abbreviated month name according to the current locale
  *  %B - full month name according to the current locale
+ *  %c - preferred date and time representation for the current locale
  *  %D - same as %m/%d/%y (abbreviated date according to locale)
  *  %h - same as %b
  *  %p - either `am' or `pm' according to the given time value, or the corresponding strings for the current locale
  *  %r - time in a.m. and p.m. notation
  *  %R - time in 24 hour notation (for windows compatibility)
  *  %T - current time, equal to %H:%M:%S (for windows compatibility)
- *
- *  // TODO: formats not supported on windows
- *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
+ *  %x - preferred date representation for the current locale without the time (same at %D)
+ *  %X - preferred time representation for the current locale without the date
  *
  *  // TODO: unsupported strftime() format rules
- *  %c - preferred date and time representation for the current locale
- *  %x - preferred date representation for the current locale without the time
- *  %X - preferred time representation for the current locale without the date
+ *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
  *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
  */
 function xarMLS_strftime($format=null,$timestamp=null)
@@ -652,19 +713,16 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 unset($m);
                 break;
             
+            case '%c' :
+                // TODO: we want to display the user or site's timezone not the servers
+                $fdate = xarLocaleGetFormattedDate('short',$timestamp);
+                $ftime = xarLocaleGetFormattedTime('short',$timestamp);
+                $format = str_replace($modifier,$fdate.' '.$ftime,$format);
+                break;
+            
             case '%D' :
-                // just use the abbreviated formating string that %D represents
-                $locale_format = $localeData['/dateFormats/short'];
-                // replace the locale formatting style with valid strftime() style
-                $locale_format = str_replace('MMMM','%B',$locale_format);
-                $locale_format = str_replace('MMM','%b',$locale_format);
-                $locale_format = str_replace('M','%m',$locale_format);
-                $locale_format = str_replace('dddd','%A',$locale_format);
-                $locale_format = str_replace('ddd','%a',$locale_format);
-                $locale_format = str_replace('d','%d',$locale_format);
-                $locale_format = str_replace('yyyy','%Y',$locale_format);
-                $locale_format = str_replace('yy','%y',$locale_format);
-                $format = str_replace($modifier,xarMLS_strftime($locale_format,$timestamp),$format);
+            case '%x' :
+                $format = str_replace($modifier,xarLocaleGetFormattedDate('short',$timestamp),$format);
                 break;
             
             /*
@@ -693,9 +751,15 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 $format = str_replace($modifier,gmstrftime('%H:%M:%S',$timestamp),$format);
                 break;
                 
-            case '%Z' :
+            case '%X' :
                 // TODO: we want to display the user or site's timezone not the servers
-                $format = str_replace($modifier,'N/A',$format);
+                $format = str_replace($modifier,xarLocaleGetFormattedTime('short',$timestamp),$format);
+                break;
+                
+            case '%Z' :
+// TODO: we want to display the user or site's timezone not the servers
+// TODO: we'll just push empty text for now
+                $format = str_replace($modifier,'',$format);
                 break;
             
             case '%p' :
