@@ -225,6 +225,7 @@ function xarServerGetCurrentURL($args = array())
     }
 
 // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
+// Mike can we change these now, so we can work on validation a bit?
 
     // add optional parameters
     if (count($args) > 0) {
