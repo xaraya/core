@@ -57,6 +57,19 @@
 	</xar:if>
 	<p><xar:mlstring>Session Iactivity Time Out</xar:mlstring>:&nbsp;&nbsp;
     <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3"></p>
+	<h4><xar:mlstring>Language Options</xar:mlstring></h4>
+	<p><xar:mlstring>Default Locale</xar:mlstring>:&nbsp;&nbsp;
+	<select name="defaultlocale" id="defaultlocale" size="1">
+
+	</select></p>
+	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
+	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
+	<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
+		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
+	</xar:if></p>
+
 	<p><input type="submit" value="<xar:mlstring>Update Base Configuration</xar:mlstring>" align="middle" /></p>
 </form>
 </div>
