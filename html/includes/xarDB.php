@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * ADODB Database Abstraction Layer API
- *
+ * File: $Id: s.xarDB.php 1.26 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * 
+ * ADODB Database Abstraction Layer API Helpers
+ * 
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Marco Canini <m.canini@libero.it>
- */
+ * @author Marco Canini
+*/
 
 /**
  * Initializes the database connection.
@@ -17,20 +17,25 @@
  * This function loads up ADODB  and starts the database
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
- *
- * @author Marco Canini <m.canini@libero.it>
- * @access private
- * @param args[databaseType] database type to use
- * @param args[databaseHost] database hostname
- * @param args[databaseName] database name
- * @param args[userName] database username
- * @param args[password] database password
- * @param args[systemTablePrefix] system table prefix
- * @param args[siteTablePrefix] site table prefix
+ * <br>
+ * @access protected
+ * @global xarDB_systemArgs array
+ * @global dbconn object database connection object
+ * @global ADODB_FETCH_MODE integer array fectching by associative or numeric keyed arrays
+ * @global xarTable array database tables used by Xaraya
+ * @global prefix array  database tables used by Xaraya
+ * @param args[databaseType] string database type to use
+ * @param args[databaseHost] string database hostname
+ * @param args[databaseName] string database name
+ * @param args[userName] string database username
+ * @param args[password] string database password
+ * @param args[systemTablePrefix] string system table prefix
+ * @param args[siteTablePrefix] string site table prefix
  * @param whatElseIsGoingLoaded 
+ * @return bool true on success, false on failure
  * @todo <marco> Can we get rid of global $prefix? $xartable should become $xarDB_tables
  * @todo <marco> move template tag table definition somewhere else?
- * @return bool true
+ * @todo <marcel> do we want to check to make sure ADODB_DIR is defined as xaradodb?
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
 {
@@ -52,7 +57,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     include_once 'xaradodb/adodb.inc.php';
 
-	// ADODB-to-Xaraya error-to-exception bridge
+    // ADODB-to-Xaraya error-to-exception bridge
     if (!defined('ADODB_ERROR_HANDLER')) {
         define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
     }
@@ -66,7 +71,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     // force oracle to a consistent date format for comparison methods later on
     if (strcmp($dbtype, 'oci8') == 0) {
-        $dbconn->Execute("alter session set NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
+        $dbconn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
 
     $GLOBALS['xarDB_connections'] = array($dbconn);
@@ -76,18 +81,17 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $sitePrefix   = $args['siteTablePrefix'];
 
     // BlockLayout Template Engine Tables
-    $xartable['template_tags']         = $systemPrefix . '_template_tags';
+    $GLOBALS['xarDB_tables']['template_tags']         = $systemPrefix . '_template_tags';
 
     return true;
 }
 
 /**
- * Gets an array of database connections
+ * Get a list of database connections
  *
- * @author Jim McDonald
  * @access public
- * @global dbconn object database connection 
- * @return array array of database connections
+ * @global xarDB_connections array of database connection objects
+ * @return array array of database connection objects
  */
 function xarDBGetConn()
 {
@@ -95,12 +99,11 @@ function xarDBGetConn()
 }
 
 /**
- * Gets an array of database table names
+ * Get an array of database tables
  *
  * @access public
- * @global xartable array of database tables
+ * @global xarDB_tables array of database tables
  * @return array array of database tables
- * @todo <marco>replace xartable with xarDB_tables
  */
 function xarDBGetTables()
 {
@@ -185,14 +188,11 @@ function xarDBGetSiteTablePrefix()
     return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
 }
 
-// PROTECTED FUNCTIONS
-
 /**
  * Import module tables in the array of known tables
  *
  * @access protected
  * @global xartable array
- * @todo $xartable should become $xarDB_tables
  */
 function xarDB_importTables($tables)
 {
@@ -205,16 +205,16 @@ function xarDB_importTables($tables)
  * ADODB error handler bridge
  *
  * @access private
- * @param dbms string
- * @param fn string
- * @param errno integer
- * @param errmsg string
- * @param p1 bool
- * @param p2 bool
+ * @param databaseName string
+ * @param funcName string
+ * @param errNo integer
+ * @param errMsg string
+ * @param param1 bool
+ * @param param2 bool
  * @raise DATABASE_ERROR
  * @todo <marco> complete it
  */
-function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1=false, $param2=false)
+function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
 {
     if ($funcName == 'EXECUTE') {
         $msg = xarMLByKey('DATABASE_ERROR_QUERY', $param1, $errMsg);
@@ -223,3 +223,4 @@ function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $pa
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
     }
 }
+?>

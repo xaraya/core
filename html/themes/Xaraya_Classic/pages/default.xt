@@ -58,13 +58,13 @@
             </table>
         <td width="1%" background="themes/Xaraya_Classic/images/vline.gif">
         </td>
-        <td width="60%" class="main_copy" valign="top">
+        <td  class="main_copy" valign="top">
             <xar:blockgroup name="center" id="center" />
             <xar:module id="modulespace" main="true" />
         </td>
         <td width="1%">
         </td>
-        <td width="20%" align="left" valign="top" background="themes/Xaraya_Classic/images/side_all.gif">
+        <td style="max-width: 20%;" align="left" valign="top" background="themes/Xaraya_Classic/images/side_all.gif">
             <xar:blockgroup name="right" id="right" />
         </td>
     </tr>

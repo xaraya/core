@@ -1,8 +1,8 @@
 <?php
 /**
- * File: $Id$
- *
- * Modules Support
+ * File: $Id: s.xarMod.php 1.123 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * 
+ * Module handling subsystem
  *
  * @package modules
  * @copyright (C) 2002 by the Xaraya Development Team.
@@ -38,9 +38,8 @@ define('XARMOD_MODE_PER_SITE', 2);
  */
 
 /**
- * Initializes the Modules Support
+ * Start the module subsystem
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @global xarMod_generateShortURLs bool
  * @global xarMod_generateXMLURLs bool
@@ -84,9 +83,8 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
- * Gets a module variable
+ * Get a module variable
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
  * @param modName The name of the module
  * @param name The name of the variable
@@ -158,9 +156,8 @@ function xarModGetVar($modName, $name)
 }
 
 /**
- * Sets a module variable
+ * Set a module variable
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
  * @param modName The name of the module
  * @param name The name of the variable
@@ -226,9 +223,8 @@ function xarModSetVar($modName, $name, $value)
 
 
 /**
- * Deletes a module variable
+ * Delete a module variable
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
  * @param modName The name of the module
  * @param name The name of the variable
@@ -272,13 +268,11 @@ function xarModDelVar($modName, $name)
 }
 
 /**
- * Gets module registry ID given its name
+ * Get module registry ID by name
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName The name of the module
- * @returns string
- * @return The module registry ID.
+ * @param modName string The name of the module
+ * @return string The module registry ID.
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarModGetIDFromName($modName)
@@ -294,12 +288,10 @@ function xarModGetIDFromName($modName)
 }
 
 /**
- * Gets information on module
+ * Get information on module
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Johnny Robeson
  * @access public
- * @param modRegId module id
- * @returns array
+ * @param modRegId string module id
  * @return array of module information
  * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
@@ -363,7 +355,8 @@ function xarModGetInfo($modRegId)
 }
 
 /**
- * Gets a list of modules that matches required criteria.
+ * Get a list of modules that matches required criteria.
+ *
  * Supported criteria are Mode, UserCapable, AdminCapable, Class, Category,
  * State.
  * Permitted values for Mode are XARMOD_MODE_SHARED and XARMOD_MODE_PER_SITE.
@@ -394,10 +387,9 @@ function xarModGetInfo($modRegId)
  * @author Marco Canini <m.canini@libero.it>
  * @param filter array of criteria used to filter the entire list of installed
  *        modules.
- * @param startNum the start offset in the list
- * @param numItems the length of the list
- * @param orderBy the order type of the list
- * @returns array
+ * @param startNum integer the start offset in the list
+ * @param numItems integer the length of the list
+ * @param orderBy string the order type of the list
  * @return array of module information arrays
  * @raise DATABASE_ERROR, BAD_PARAM
  */
@@ -533,14 +525,12 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 }
 
 /**
- * Loads the modType of module identified by modName.
+ * Load the modType of module identified by modName.
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName - name of module to load
- * @param modType - type of functions to load
- * @returns string
- * @return true
+ * @param modName string - name of module to load
+ * @param modType string - type of functions to load
+ * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
 function xarModLoad($modName, $modType = 'user')
@@ -605,14 +595,12 @@ function xarModLoad($modName, $modType = 'user')
 }
 
 /**
- * Loads the modType API for module identified by modName.
+ * Load the modType API for module identified by modName.
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName registered name of the module
- * @param modType type of functions to load
- * @returns bool
- * @return true on success
+ * @param modName string registered name of the module
+ * @param modType string type of functions to load
+ * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
 function xarModAPILoad($modName, $modType = 'user')
@@ -675,9 +663,8 @@ function xarModAPILoad($modName, $modType = 'user')
 }
 
 /**
- * load database definition for a module
+ * Load database definition for a module
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @param modName name of module to load database definition for
  * @param modDir directory that module is in (if known)
  * @returns bool
@@ -707,16 +694,14 @@ function xarModDBInfoLoad($modName, $modDir = NULL)
 }
 
 /**
- * Calls a module function.
+ * Call a module GUI function.
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Paul Rosania
  * @access public
- * @param modName registered name of module
- * @param modType type of function to run
- * @param funcName specific function to run
- * @param args argument array
- * @returns mixed
- * @return The output of the function, or false on failure
+ * @param modName string registered name of module
+ * @param modType string type of function to run
+ * @param funcName string specific function to run
+ * @param args array
+ * @return mixed The output of the function, or raise an exception
  * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
@@ -757,9 +742,8 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 }
 
 /**
- * Calls a module API function.
+ * Call a module API function.
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * Using the modules name, type, func, and optional arguments
  * builds a function name by joining them together
  * and using the optional arguments as parameters
@@ -767,12 +751,11 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  * Ex: modName_modTypeapi_modFunc($args);
  *
  * @access public
- * @param modName registered name of module
- * @param modType type of function to run
- * @param funcName specific function to run
- * @param args arguments to pass to the function
- * @returns mixed
- * @return The output of the function, or false on failure
+ * @param modName string registered name of module
+ * @param modType string type of function to run
+ * @param funcName string specific function to run
+ * @param args array arguments to pass to the function
+ * @return mixed The output of the function, or false on failure
  * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
@@ -803,14 +786,14 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 /**
  * Generates an URL that reference to a module function.
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
  * @access public
- * @param modName registered name of module
- * @param modType type of function
- * @param funcName module function
+ * @global xarMod_generateShortURLs bool
+ * @global xarMod_generateXMLURLs bool
+ * @param modName string registered name of module
+ * @param modType string type of function
+ * @param funcName string module function
  * @param args array of arguments to put on the URL
- * @returns string
- * @return absolute URL for call, or false on failure
+ * @return mixed absolute URL for call, or false on failure
  */
 function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL)
 {
@@ -883,14 +866,13 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 }
 
 /**
- * Gets the displayable name for the passed modName.
- * The displayble name is sensible to user language.
+ * Get the displayable name for modName
  *
- * @author Marco Canini <m.canini@libero.it>
+ * The displayable name is sensible to user language.
+ *
  * @access public
- * @param modName registered name of module
- * @returns string
- * @return the displayable name
+ * @param modName string registered name of module
+ * @return string the displayable name
  */
 function xarModGetDisplayableName($modName)
 {
@@ -899,13 +881,12 @@ function xarModGetDisplayableName($modName)
 }
 
 /**
- * checks if a module is installed and its state is XARMOD_STATE_ACTIVE
+ * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access public
- * @param modName registered name of module
- * @returns bool
- * @return true if the module is available, false if not
+ * @static modAvailableCache array
+ * @param modName string registered name of module
+ * @return mixed true if the module is available
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarModIsAvailable($modName)
@@ -940,18 +921,19 @@ function xarModIsAvailable($modName)
 }
 
 /**
- * carry out hook operations for module
+ * Carry out hook operations for module
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access public
- * @param hookObject the object the hook is called for - either 'item' or 'category'
- * @param hookAction the action the hook is called for - one of 'create', 'delete', 'transform', or 'display'
- * @param hookId the id of the object the hook is called for (module-specific)
- * @param extraInfo extra information for the hook, dependent on hookAction
- * @param callerModName for what module are we calling this (used by modules admin)
- * @returns mixed
- * @return output from hooks, or null if there are no hooks
+ * @param hookObject string the object the hook is called for - either 'item' or 'category'
+ * @param hookAction string the action the hook is called for - one of 'create', 'delete', 'transform', or 'display'
+ * @param hookId integer the id of the object the hook is called for (module-specific)
+ * @param extraInfo mixed extra information for the hook, dependent on hookAction
+ * @param callerModName string for what module are we calling this (used by modules admin)
+ * @return mixed output from hooks, or null if there are no hooks
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @todo <marco> #1 add BAD_PARAM exception
+ * @todo <marco> #2 check way of hanlding exception
+ * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
  */
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL)
 {
@@ -973,7 +955,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 
     $hooklist = xarModGetHookList($modName, $hookObject, $hookAction);
 
-    // TODO : check that this is the right way !
+    // TODO: #2
     if (!isset($hooklist) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
@@ -981,7 +963,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     $output = '';
     $isGUI = false;
 
-// TODO: re-evaluate how GUI / API hooks are handled
+    // TODO: #3
 
     // Call each hook
     foreach ($hooklist as $hook) {
@@ -1017,14 +999,12 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
 }
 
 /**
- * get list of available hooks for a particular module, object and action
+ * Get list of available hooks for a particular module, object and action
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @access private
- * @param callerModName name of the calling module
- * @param object the hook object
- * @param action the hook action
- * @returns array
+ * @param callerModName string name of the calling module
+ * @param object string the hook object
+ * @param action string the hook action
  * @return array of hook information arrays, or null if database error
  * @raise DATABASE_ERROR
  */
@@ -1093,12 +1073,12 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
 /**
  * Get info from xarversion.php
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @param modDir the module's directory
  * @returns array
  * @return an array of module file information
  * @raise MODULE_FILE_NOT_EXIST
+ * @todo <marco> #1 FIXME: admin or admin capable?
  */
 function xarMod_getFileInfo($modDir)
 {
@@ -1121,7 +1101,7 @@ function xarMod_getFileInfo($modDir)
     $modFileInfo['id']             = $modversion['id'];
     $modFileInfo['version']        = $modversion['version'];
     $modFileInfo['description']    = isset($modversion['description']) ? $modversion['description'] : false;
-    // FIXME: <marco> admin or admin capable?
+    // TODO: 1
     $modFileInfo['admin']          = isset($modversion['admin']) ? $modversion['admin'] : false;
     $modFileInfo['admin_capable']  = isset($modversion['admin']) ? $modversion['admin'] : false;
     $modFileInfo['user']           = isset($modversion['user']) ? $modversion['user'] : false;
@@ -1138,11 +1118,9 @@ function xarMod_getFileInfo($modDir)
 /**
  * Load a module's base information
  *
- * @author Marco Canini <m.canini@libero.it>
  * @access protected
- * @param modName the module's name
- * @returns array
- * @return an array of base module info
+ * @param modName stromg the module's name
+ * @return mixed an array of base module info on success
  * @raise DATABASE_ERROR, MODULE_NOT_EXIST
  */
 function xarMod_getBaseInfo($modName)
@@ -1202,8 +1180,8 @@ function xarMod_getBaseInfo($modName)
  *
  * @author Michel Dalle
  * @access protected
- * @returns bool
- * @return true on success
+ * @param modName string
+ * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarMod_getVarsByModule($modName)
@@ -1251,9 +1229,10 @@ function xarMod_getVarsByModule($modName)
  *
  * @author Michel Dalle
  * @access protected
- * @returns bool
- * @return true on success
+ * @param name string
+ * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo <marco> #1 fetch from site table too ?
  */
 function xarMod_getVarsByName($name)
 {
@@ -1287,16 +1266,13 @@ function xarMod_getVarsByName($name)
     return true;
 }
 
-// PRIVATE FUNCTIONS
-
 /**
  * Load database definition for a module
  *
- * @author Marco Canini <m.canini@libero.it>
- * @param modName name of module to load database definition for
- * @param modDir directory that module is in
- * @returns bool
- * @return true on success
+ * @access private
+ * @param modName string name of module to load database definition for
+ * @param modOsDir string directory that module is in
+ * @return mixed true on success
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarMod__loadDbInfo($modName, $modDir)
@@ -1337,11 +1313,10 @@ function xarMod__loadDbInfo($modName, $modDir)
 /**
  * Get the module's current state
  *
- * @author Marco Canini <m.canini@libero.it>
- * @param modRegId the module's registered id
- * @param modMode the module's site mode
- * @returns int
- * @return the module's current state
+ * @access private
+ * @param modRegId integer the module's registered id
+ * @param modMode integer the module's site mode
+ * @return mixed the module's current state
  * @raise DATABASE_ERROR, MODULE_NOT_EXIST
  */
 function xarMod__getState($modRegId, $modMode)

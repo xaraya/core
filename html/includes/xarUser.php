@@ -1,7 +1,7 @@
 <?php
 /**
- * File: $Id$
- *
+ * File: $Id: s.xarUser.php 1.95 03/01/21 04:15:07+01:00 marcel@hsdev.com $
+ * 
  * User System
  * 
  * @package user
@@ -147,7 +147,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
 /**
  * Log the user out
  *
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ * @access public
  * @return bool true if the user successfully logged out
  * @raise DATABASE_ERROR
  */
@@ -171,11 +171,10 @@ function xarUserLogOut()
 }
 
 /**
- * Checks if the user logged in.
+ * Check if the user logged in
  *
- * @author Jim McDonald
- * @returns bool
- * @return true if the user is logged in, false if they are not
+ * @access public
+ * @return bool true if the user is logged in, false if they are not
  */
 function xarUserIsLoggedIn()
 {
@@ -216,19 +215,22 @@ function xarUserGetNavigationThemeName()
 }
 
 /**
- * Sets the user navigation theme name
+ * Set the user navigation theme name
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @param themeName string
  */
 function xarUserSetNavigationThemeName($themeName)
 {
+    assert('$themeName != ""');
     xarSessionSetVar('navigationThemeName', $themeName);
 }
 
 /**
- * Gets the user navigation locale
+ * Get the user navigation locale
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @return locale string
  */
 function xarUserGetNavigationLocale()
 {
@@ -253,9 +255,10 @@ function xarUserGetNavigationLocale()
 }
 
 /**
- * Sets the user navigation locale
+ * Set the user navigation locale
  *
- * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @param locale string
  */
 function xarUserSetNavigationLocale($locale)
 {
@@ -270,7 +273,7 @@ function xarUserSetNavigationLocale($locale)
  */
 
 /**
- * get a user variable
+ * Get a user variable
  *
  * @author Marco Canini
  * @access public
@@ -613,7 +616,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 
 // PRIVATE FUNCTIONS
 
-/*
+/**
  * Get user's authentication module
  *
  * @access private
@@ -1058,3 +1061,4 @@ function xarUser__validationParse($validationString)
     }
     return $val_stack;
 }
+?>

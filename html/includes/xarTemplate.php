@@ -539,7 +539,11 @@ class xarTemplateAttribute {
         
     function xarTemplateAttribute($name, $flags = NULL)
     {
-        if (!eregi('^[a-z][a-z0-9\-_]*$', $name)) {
+        // FIXME: It seems that the expr ^[a-z][a-z0-9\-_]*$ doesn *NOT* match the string 'bid'
+        // and the expr ^[a-z][-_a-z0-9]*$ *DOES* 
+        // this was on the server on xaraya
+        // FIXME: Move this expression out of the class and define() it.
+        if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
             $msg = xarML("Illegal attribute name ('#(1)'): Tag name may contain letters, numbers, _ and -, and must start with a letter.", $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
@@ -606,6 +610,7 @@ class xarTemplateTag {
 
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL)
     {
+        // FIXME: See note at attribute class
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',

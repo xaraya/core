@@ -1,30 +1,30 @@
 <?php
 /**
- * File: $Id$
- *
+ * File: $Id: s.xarBlocks.php 1.76 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * 
  * Blocks Support
  *
  * @package blocks
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania
  */
 
-/*
- * FIXME: <marco> Paul do you wanna move xarBlockTypeExists, Register and Unregister out of this file?
- * And why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
- * FIXME: <marco> Paul, why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
- */
 
 /**
- * Initializes the Blocks Support
+ * Initialize blocks subsystem
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access protected
  * @param args 
  * @param whatElseIsGoingLoaded integer
  * @return bool true
+ * @todo    FIXME: <marco> Paul do you wanna move xarBlockTypeExists, 
+ *          Register and Unregister out of this file?
+ * @todo    And why are you using $blockType instead of $blockName, 
+ *          when I said you to change I meant use $blockName everywhere, 
+ *          in the end it's the block name, not the block type, don't you think?
  */
 function xarBlock_init($args, $whatElseIsGoingLoaded)
 {
@@ -43,13 +43,12 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
 }
 
 /**
- * Gets block information
+ * Get block information
  *
- * @author Paul Rosania
  * @access public
- * @param blockId id the block id
- * @return array block information
- * @throw DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @param blockId integer the block id
+ * @return resarray array block information
+ * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarBlockGetInfo($blockId)
 {
@@ -92,6 +91,8 @@ function xarBlockGetInfo($blockId)
         $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST', $blockId);
 	    return;
+                       new SystemException($msg));
+	    return NULL;
     }
 
     $block_info = $result->GetRowAssoc(false);
@@ -104,13 +105,12 @@ function xarBlockGetInfo($blockId)
 }
 
 /**
- * Gets block group information
+ * Get block group information
  *
- * @author Paul Rosania
  * @access public
- * @param blockGroupID id the block group id
- * @return array block group information
- * @throw DATABASE_ERROR, BAD_PARAM, UNKNOWN
+ * @param blockGroupID integer the block group id
+ * @returns resarray array of block information
+ * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarBlockGroupGetInfo($blockGroupId)
 {
@@ -182,7 +182,7 @@ function xarBlockGroupGetInfo($blockGroupId)
 // PROTECTED FUNCTIONS
 
 /**
- * Loads a block
+ * Load a block
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
@@ -234,7 +234,7 @@ function xarBlock_load($modName, $blockName)
 }
 
 /**
- * Loads all blocks
+ * Load all blocks
  *
  * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
@@ -420,3 +420,4 @@ function xarBlock_renderGroup($groupName)
     return $output;
 }
 
+?>
