@@ -1,16 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<xar:if id="title_condition" condition="!empty($base_statusmsg)">
-<div align="center"><h2><xar:var scope="session" name="$base_statusmsg" /></h2><br />
-</xar:if>
-
-<div align="center"><h2><xar:mlstring>Blocks Module Overview</xar:mlstring></h2></div><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Delete Group</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <table border="0" width="100%">
     <tr>
         <td align="right" valign="top" width="100px">
@@ -34,3 +24,5 @@
         </td>
     </tr>
 </table>
+</div>
+</div>

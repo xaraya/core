@@ -1,19 +1,13 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<div align="center"><h2>New Block Group</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>New Group</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-create_group;">
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
     <table border="0" width="300">
         <tr>
             <td>
-                Name:
+                <xar:mlstring>Name</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="group_name" id="group_name" value="" length="40" maxlength="255" style="width:150px;" />
@@ -21,7 +15,7 @@
         </tr>
         <tr>
             <td>
-                Default template (optional):
+                <xar:mlstring>Default template (optional)</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="group_template" id="group_template" value="" length="40" maxlength="255" style="width:150px;" />
@@ -35,4 +29,5 @@
         </tr>
     </table>
 </form>
-</center>
+</div>
+</div>

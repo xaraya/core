@@ -1,31 +1,25 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<div align="center"><h2>View block instances</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>View Instances</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <table border="1" width="100%" cellpadding="2" cellspacing="0">
     <tr align="center">
         <th>
-            Group
+            <xar:mlstring>Group</xar:mlstring>
         </th>
         <th>
-            Title
+            <xar:mlstring>Title</xar:mlstring>
         </th>
         <th>
-            Type
+            <xar:mlstring>Type</xar:mlstring>
         </th>
         <th>
-            Template
+            <xar:mlstring>Template</xar:mlstring>
         </th>
         <th>
-            State
+            <xar:mlstring>State</xar:mlstring>
         </th>
         <th>
-            Operations
+            <xar:mlstring>Operations</xar:mlstring>
         </th>
     </tr>
     <xar:loop name="$blocks">
@@ -50,9 +44,11 @@
             <xar:var name="$state_desc" />
         </td>
         <td>
-            <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$id#">Edit</a> |
-            <a href="&xar-modurl-blocks-admin-delete_instance;&amp;bid=#$id#">Delete</a>
+            <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$id#"><xar:mlstring>Edit</xar:mlstring></a> |
+            <a href="&xar-modurl-blocks-admin-delete_instance;&amp;bid=#$id#"><xar:mlstring>Delete</xar:mlstring></a>
         </td>
     </tr>
     </xar:loop>
 </table>
+</div>
+</div>

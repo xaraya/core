@@ -1,19 +1,13 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<div align="center"><h2>New block instance</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>New Instance</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
     <table border="0" width="300" cellpadding="2" cellspacing="0">
         <tr>
             <td>
-                Title:
+                <xar:mlstring>Title</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="block_title" id="block_title" value="" length="40" maxlength="255" style="width:150px;" />
@@ -21,7 +15,7 @@
         </tr>
         <tr>
             <td>
-                Type:
+                <xar:mlstring>Type</xar:mlstring>:
             </td>
             <td>
                 <select name="block_type" id="block_type" style="width:150px;">
@@ -35,7 +29,7 @@
         </tr>
         <tr>
             <td>
-                Group:
+                <xar:mlstring>Group</xar:mlstring>:
             </td>
             <td>
                 <select name="block_group" id="block_group" style="width:150px;">
@@ -49,7 +43,7 @@
         </tr>
         <tr>
             <td>
-                Template (optional):
+                <xar:mlstring>Template (optional)</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="block_template" id="block_template" value="" length="40" maxlength="255" style="width:150px;" />
@@ -57,22 +51,22 @@
         </tr>
         <tr>
             <td>
-                Default state:
+                <xar:mlstring>Default state</xar:mlstring>:
             </td>
             <td>
                 <select name="block_state" id="block_state" style="width:150px;">
-                    <option value="0">Hidden</option>
-                    <option value="1">Minimized</option>
-                    <option value="2" selected="selected">Maximized</option>
+                    <option value="0"><xar:mlstring>Hidden</xar:mlstring></option>
+                    <option value="1"><xar:mlstring>Minimized</xar:mlstring></option>
+                    <option value="2" selected="selected"><xar:mlstring>Maximized</xar:mlstring></option>
                 </select>
             </td>
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
             </td>
         </tr>
     </table>
 </form>
+</div>
 </div>

@@ -1,14 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            <xar:mlstring>Xaraya Mail Administration</xar:mlstring>            
-        </th>
-    </tr>
-</table>
-<xar:if id="title_condition" condition="!empty($mail_statusmsg)">
-<div align="center"><h2><xar:var scope="session" name="$mail_statusmsg" /></h2><br />
-</xar:if>
-<div align="center"><h2><xar:mlstring>Mail Module Overview</xar:mlstring></h2></div><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <table border="0" width="100%">
     <tr>
         <td align="right" valign="top" width="100px">
@@ -25,9 +17,8 @@
         <td align="left" valign="top">
             <xar:mlstring>
 			From the menu, you have one choice.  "Modify Site Configuration".  From this menu option, you can update the necessary configuration options, such as the email address that you want to send from, reply to address, type of mail system to use, etc.
-			<br />
-			<br />
-			TODO:  Finish Overview
         </td>
     </tr>
 </table>
+</div>
+</div>

@@ -1,12 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<div align="center"><h2>Modify Block Group</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <script language="javascript">
 function moveBlock(f, dir) {
 	var el = f.elements["group_instances"]
@@ -44,7 +38,7 @@ function saveBlockOrder(f) {
     <table border="0" width="300">
         <tr>
             <td>
-                Name:
+                <xar:mlstring>Name</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="group_name" id="group_name" value="#$group['name']#" maxlength="255" style="width:150px;" />
@@ -52,7 +46,7 @@ function saveBlockOrder(f) {
         </tr>
         <tr>
             <td>
-                Members:
+                <xar:mlstring>Members</xar:mlstring>:
             </td>
             <td>
                 <table>
@@ -78,7 +72,7 @@ function saveBlockOrder(f) {
         </tr>
         <tr>
             <td>
-                Template:
+                <xar:mlstring>Template</xar:mlstring>:
             </td>
             <td>
                 <input type="text" name="group_template" id="group_template" value="#$group['template']#" length="40" maxlength="255" style="width:150px;" />
@@ -87,9 +81,9 @@ function saveBlockOrder(f) {
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
             </td>
         </tr>
     </table>
 </form>
+</div>
 </div>

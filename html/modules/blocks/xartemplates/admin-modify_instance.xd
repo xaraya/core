@@ -1,12 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">
-            Blocks Administration
-        </th>
-    </tr>
-</table>
-
-<div align="center"><h2>Modify Block Instance</h2><br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Instance</xar:mlstring></h2><br />
+<div style="margin: auto;">
 <form method="post" action="&xar-modurl-blocks-admin-update_instance;">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="bid" id="bid" value="#$bid#" />
@@ -14,7 +8,7 @@
     <table border="0" width="75%">
         <tr>
             <td align="left">
-                Title:
+                <xar:mlstring>Title</xar:mlstring>:
             </td>
             <td align="left">
                 <input type="text" name="block_title" id="block_title" value="#$instance['title']#" length="40" maxlength="255" style="width:150px;" />
@@ -22,7 +16,7 @@
         </tr>
         <tr>
             <td align="left">
-                Type:
+                <xar:mlstring>Type</xar:mlstring>:
             </td>
             <td align="left">
                 #$instance['module']#\#$instance['type']#
@@ -30,7 +24,7 @@
         </tr>
         <tr>
             <td align="left">
-                Group:
+                <xar:mlstring>Group</xar:mlstring>:
             </td>
             <td align="left">
                 <select name="block_group" id="block_group" style="width:150px;">
@@ -48,7 +42,7 @@
         </tr>
         <tr>
             <td align="left">
-                Template (optional):
+                <xar:mlstring>Template (optional)</xar:mlstring>:
             </td>
             <td align="left">
                 <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
@@ -57,7 +51,7 @@
         <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
          <tr>
             <td align="left">
-                Refresh:
+                <xar:mlstring>Refresh</xar:mlstring>:
             </td>
             <td align="left">
                 <select name="block_refresh" id="block_refresh" style="width:150px;">
@@ -77,7 +71,7 @@
         <tr>
         <tr>
             <td align="left">
-                Default state:
+                <xar:mlstring>Default state</xar:mlstring>:
             </td>
             <td align="left">
                 <select name="block_state" id="block_state" style="width:150px;">
@@ -86,26 +80,26 @@
                     <xar:else />
                         <option value="0">
                     </xar:if>
-                    Hidden</option>
+                    <xar:mlstring>Hidden</xar:mlstring></option>
                     <xar:if condition="$instance['state'] eq 1">
                         <option value="1" selected="selected">
                     <xar:else />
                         <option value="1">
                     </xar:if>
-                    Minimized</option>
+                    <xar:mlstring>Minimized</xar:mlstring></option>
                     <xar:if condition="$instance['state'] eq 2">
                         <option value="2" selected="selected">
                     <xar:else />
                         <option value="2">
                     </xar:if>
-                    Maximized</option>
+                    <xar:mlstring>Maximized</xar:mlstring></option>
                 </select>
             </td>
         </tr>
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
         <tr>
             <td colspan="2" align="left">
-                Content:
+                <xar:mlstring>Content</xar:mlstring>:
             </td>
         </tr>
         <tr>
@@ -118,9 +112,9 @@
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
             </td>
         </tr>
     </table>
 </form>
-</center>
+</div>
+</div>
