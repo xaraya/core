@@ -173,13 +173,16 @@ function base_init()
     xarConfigSetVar('System.Core.VersionId', 'Xaraya');
     xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
     xarConfigSetVar('System.Core.LoadLegacy', true);
+    $allowedAPITypes = array();
+    xarConfigSetVar('System.Core.AllowedAPITypes',$allowedAPITypes);
     /*****************************************************************
     * Set site configuration variables
     ******************************************************************/
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
-    xarConfigSetVar('Site.BL.CacheTemplates','true');
+    xarConfigSetVar('Site.BL.CacheTemplates',true);
+    xarConfigSetVar('Site.Core.FixHTMLEntities',false);
     xarConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
-    xarConfigSetVar('Site.Core.EnableShortURLsSupport', 'false');
+    xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
     xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
     xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
     xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
@@ -190,8 +193,11 @@ function base_init()
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
     xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
-    xarConfigSetVar('Site.MLS.AllowedLocales','en_US.iso-8858-1');
-    xarConfigSetVar('Site.User.AuthenticationModules','authsystem');
+    $allowedLocales = array('en_US.iso-8858-1');
+    xarConfigSetVar('Site.MLS.AllowedLocales',$allowedLocales);
+
+    $authModules = array('authsystem');
+    xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
 
     // Dummy logger
     // THESE VARIABLES AREN"T USED ANYWHERE YET.. DON"T BE FOOLED! :)

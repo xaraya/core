@@ -275,7 +275,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         include 'includes/xarSecurity.php';
 
         // Start User System
-        $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
+        $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_USER;
     }
