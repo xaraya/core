@@ -21,6 +21,8 @@
  *                (a-z, A-Z, 0-9, _, -, starting a-z or A-Z)
  *                Note: this token is not a file or path name in itself, but is more to
  *                be used as an item name that happens to be linked to template filenames
+ * vtoken       - convert to a token suitable for use as a variable name. Similar to ftoken,
+ *                but enforced to lower case, and must start with a letter or underscore
  * passthru:... - pass the remainder of the parameters on to further validation, which could
  * alias: val:... be any string validation type (e-mail, strings with min/max lengths, etc).
  *                Alias for passthru is 'val'.
@@ -44,7 +46,7 @@
 /**
  * Strings Validation Class
  */
-function variable_validations_pre (&$subject, $parameters, $supress_soft_exc) 
+function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
 {
     // Start by forcing the subject into a string.
     if (!is_string($subject)) {
@@ -98,6 +100,21 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
             case 'alnum' :
                 $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
                 break;
+            case 'vtoken' :
+                // Variable-name compatible token.
+                $subject = preg_replace(
+                    array('/[ _]+/', '/[^a-z0-9_]+/i'),
+                    array('_', ''),
+                    trim(strtolower($subject))
+                );
+                // The token must start with a letter or underscore.
+                // Raise an error if not.
+                if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
+                    $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                    $result = false;
+                }
+                break;
             case 'ftoken' :
                 // Filename-compatible token. Use in conjunction with
                 // 'lower' if case preservation is required too.
@@ -108,6 +125,10 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 );
                 break;
             case 'field' :
+                // TODO: decide, should this be a separate validation type?
+                // i.e. a validation type designed to provide a more
+                // user-friendly error message (linked to the form item
+                // label), based on any type of subsequent validation.
                 if (!empty($parameters)) {
                     $fieldname = array_shift($parameters);
                 }
@@ -130,16 +151,6 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     // Roll up the remaining parameters.
                     $validation = implode(':', $parameters);
                     $return = xarVarValidate($validation, $subject, $supress_soft_exc);
-                    if (!$return && !empty($fieldname)) {
-                        // Add another error message, naming the field.
-                        // Combine it with the 'short' details of the last message logged,
-                        // with the assumption that it will contain some useful details.
-                        $errorstack = xarErrorGet();
-                        $error = array_shift($errorstack);
-                        $msg = xarML('#(1) is invalid. [#(2)]', $fieldname, $error['short']);
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                        //return $return;
-                    }
                 }
                 // Break out of the switch *and* the parameter loop.
                 // Once we hit the passthru, we have nothing more to process here.
@@ -147,6 +158,16 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         }
     }
     
+    if (!$return && !empty($fieldname) && !$supress_soft_exc) {
+        // Add another error message, naming the field.
+        // Combine it with the 'short' details of the last message logged,
+        // with the assumption that it will contain some useful details.
+        $errorstack = xarErrorGet();
+        $error = array_shift($errorstack);
+        $msg = xarML('#(1) is invalid. [#(2)]', $fieldname, $error['short']);
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+    }
+
     // Single point of exit.
     return $return;
 }
