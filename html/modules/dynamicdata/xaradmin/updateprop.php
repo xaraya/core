@@ -120,7 +120,8 @@ function dynamicdata_admin_updateprop()
     if (!empty($dd_label[0]) && !empty($dd_type[0])) {
         // create new property in xaradminapi.php
         $name = strtolower($dd_label[0]);
-        $name = preg_replace('/\s+/','_',$name);
+        $name = preg_replace('/[^a-z0-9_]+/','_',$name);
+        $name = preg_replace('/_$/','',$name);
         $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],
