@@ -138,6 +138,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         if (empty($itemid)) {
             // get the next id (or dummy) from ADODB for this table
             $itemid = $dbconn->GenId($table);
+            $checkid = true;
+        } else {
+            $checkid = false;
         }
         $this->fields[$itemidfield]->setValue($itemid);
 
@@ -173,7 +176,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         if (!$result) return;
 
         // get the real next id from ADODB for this table now
-        $itemid = $dbconn->PO_Insert_ID($table, $itemidfield);
+        if ($checkid) {
+            $itemid = $dbconn->PO_Insert_ID($table, $itemidfield);
+        }
 
         if (empty($itemid)) {
             $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',

@@ -27,6 +27,7 @@ function dynamicdata_util_export($args)
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('convert',  'isset', $convert,  NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -71,6 +72,17 @@ function dynamicdata_util_export($args)
                                       array('objectid' => $myobject->objectid,
                                             'itemid'   => 'all',
                                             'tofile'   => 1));
+
+        if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
+            $data['convertlink'] = xarModURL('dynamicdata','util','export',
+                                             array('objectid' => $myobject->objectid,
+                                                   'convert'  => 1));
+            if (!empty($convert)) {
+                if (!xarModAPIFunc('dynamicdata','util','maketable',
+                                   array('objectref' => &$myobject))) return;
+
+            }
+        }
 
     // export specific item
     } elseif (is_numeric($itemid)) {

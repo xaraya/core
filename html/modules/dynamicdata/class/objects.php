@@ -1172,9 +1172,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // call create hooks for this item
-        // Added: check if module is articles to prevent recursive hook calls if using an external table for articles
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles
-        if (!empty($this->primary) && ($modinfo['name'] != 'articles') ) {
+        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        if (!empty($this->primary) && ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')) {
             $item = array();
             foreach (array_keys($this->properties) as $name) {
                 $item[$name] = $this->properties[$name]->value;
@@ -1222,9 +1222,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // call update hooks for this item
-        // Added: check if module is articles to prevent recursive hook calls if using an external table for articles
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles
-        if (!empty($this->primary) && ($modinfo['name'] != 'articles') ) {
+        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        if (!empty($this->primary) && ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')) {
             $item = array();
             foreach (array_keys($this->properties) as $name) {
                 $item[$name] = $this->properties[$name]->value;
@@ -1266,9 +1266,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // call delete hooks for this item
-        // Added: check if module is articles to prevent recursive hook calls if using an external table for articles
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles
-        if (!empty($this->primary) && ($modinfo['name'] != 'articles') ) {
+        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        if (!empty($this->primary) && ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')) {
             $item = array();
             foreach (array_keys($this->properties) as $name) {
                 $item[$name] = $this->properties[$name]->value;
