@@ -17,6 +17,9 @@ V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights rese
 
 class ADODB_sqlite extends ADOConnection {
 	var $databaseType = "sqlite";
+    // XARAYA MODIFICATION
+    var $dataProvider = 'sqlite';
+    // END XARAYA MODIFICATION
 	var $replaceQuote = "''"; // string to use to replace quotes
 	var $concat_operator='||';
 	var $_errorNo = 0;
@@ -129,7 +132,11 @@ class ADODB_sqlite extends ADOConnection {
 	{
 		if (!function_exists('sqlite_open')) return false;
 		
-		$this->_connectionID = sqlite_open($argHostname);
+        // XARAYA MODIFICATION
+        // It makes more sense to interpret host=directory and dbname=file
+        // $this->_connectionID = sqlite_open($argHostname);
+        $this->_connectionID = sqlite_open($argHostname . "/" . $argDatabasename);
+        // END XARYA MODIFICATION
 		if ($this->_connectionID === false) return false;
 		$this->_createFunctions();
 		return true;
@@ -140,7 +147,11 @@ class ADODB_sqlite extends ADOConnection {
 	{
 		if (!function_exists('sqlite_open')) return false;
 		
-		$this->_connectionID = sqlite_popen($argHostname);
+        // XARAYA MODIFICATION
+        // It makes more sense to interpre host=directory and dbname=file
+        // $this->_connectionID = sqlite_popen($argHostname);
+        $this->_connectionID = sqlite_popen($argHostname . "/" . $argDatabasename);
+        // END XARAYA MODIFICATION
 		if ($this->_connectionID === false) return false;
 		$this->_createFunctions();
 		return true;
@@ -156,6 +167,14 @@ class ADODB_sqlite extends ADOConnection {
 		
 		return $rez;
 	}
+    
+    // XARAYA MODIFICATION
+    // returns true or false
+    function SelectDB($dbName)
+    {
+        return file_exists($this->host . '/' . $this->database);
+    }
+    // END XARAYA MODIFICATION
 	
 	function &SelectLimit($sql,$nrows=-1,$offset=-1,$inputarr=false,$secs2cache=0) 
 	{
@@ -179,6 +198,10 @@ class ADODB_sqlite extends ADOConnection {
 	
 	function GenID($seq='adodbseq',$start=1)
 	{	
+        // XARAYA MODIFICATION
+        // If using bindvars, this is perfectly sufficient (and we should use bindvars ;-) )
+        return null;
+        // END XARAYA MODIFICATION
 		// if you have to modify the parameter below, your database is overloaded,
 		// or you need to implement generation of id's yourself!
 		$MAXLOOPS = 100;

@@ -68,7 +68,7 @@ function base_init()
     // xar_decimals,
 
     $query = xarDBCreateTable($tablesTable,$fields);
-
+    
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -161,11 +161,6 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    $config_id = $dbconn->GenId($configVarsTable);
-    $query = "INSERT INTO $configVarsTable VALUES ($config_id,'Site.Core.AllowableHTML','a:25:{s:3:\"!--\";s:1:\"2\";s:1:\"a\";s:1:\"2\";s:1:\"b\";s:1:\"2\";s:10:\"blockquote\";s:1:\"2\";s:2:\"br\";s:1:\"2\";s:6:\"center\";s:1:\"2\";s:3:\"div\";s:1:\"2\";s:2:\"em\";s:1:\"2\";s:4:\"font\";i:0;s:2:\"hr\";s:1:\"2\";s:1:\"i\";s:1:\"2\";s:3:\"img\";i:0;s:2:\"li\";s:1:\"2\";s:7:\"marquee\";i:0;s:2:\"ol\";s:1:\"2\";s:1:\"p\";s:1:\"2\";s:3:\"pre\";s:1:\"2\";s:4:\"span\";i:0;s:6:\"strong\";s:1:\"2\";s:2:\"tt\";s:1:\"2\";s:2:\"ul\";s:1:\"2\";s:5:\"table\";s:1:\"2\";s:2:\"td\";s:1:\"2\";s:2:\"th\";s:1:\"2\";s:2:\"tr\";s:1:\"2\";}')";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
     include_once 'includes/xarConfig.php';
 
     // Start Configuration Unit
@@ -176,6 +171,7 @@ function base_init()
     // Start Variable Utils
     xarVar_init($systemArgs, $whatToLoad);
 
+    xarConfigSetVar('Site.Core.AllowableHTML','a:25:{s:3:\"!--\";s:1:\"2\";s:1:\"a\";s:1:\"2\";s:1:\"b\";s:1:\"2\";s:10:\"blockquote\";s:1:\"2\";s:2:\"br\";s:1:\"2\";s:6:\"center\";s:1:\"2\";s:3:\"div\";s:1:\"2\";s:2:\"em\";s:1:\"2\";s:4:\"font\";i:0;s:2:\"hr\";s:1:\"2\";s:1:\"i\";s:1:\"2\";s:3:\"img\";i:0;s:2:\"li\";s:1:\"2\";s:7:\"marquee\";i:0;s:2:\"ol\";s:1:\"2\";s:1:\"p\";s:1:\"2\";s:3:\"pre\";s:1:\"2\";s:4:\"span\";i:0;s:6:\"strong\";s:1:\"2\";s:2:\"tt\";s:1:\"2\";s:2:\"ul\";s:1:\"2\";s:5:\"table\";s:1:\"2\";s:2:\"td\";s:1:\"2\";s:2:\"th\";s:1:\"2\";s:2:\"tr\";s:1:\"2\";}');
     /****************************************************************
     * Set System Configuration Variables
     *****************************************************************/
@@ -281,9 +277,9 @@ function base_init()
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ($seqId, 'authsystem', 42, 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0)";
+     ) VALUES (?, 'authsystem', 42, 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
     
     // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
@@ -292,18 +288,18 @@ function base_init()
 
     // Set authsystem to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (" . $seqId . ", 42, 3)";
+              ) VALUES (?, 42, 3)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Install base module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ('".$seqId."', 'base', 68, 'base', '0.1.0', 1, 'Core Admin', 'Global', 1, 1)";
+     ) VALUES (?, 'base', 68, 'base', '0.1.0', 1, 'Core Admin', 'Global', 1, 1)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
@@ -312,18 +308,18 @@ function base_init()
 
     // Set installer to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (" . $seqId . ", 68, 3)";
+              ) VALUES (?, 68, 3)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Install installer module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0.0', 1, 'Core Utility', 'Global', 0, 0)";
+     ) VALUES (?, 'installer', 200, 'installer', '1.0.0', 1, 'Core Utility', 'Global', 0, 0)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
@@ -332,17 +328,17 @@ function base_init()
 
     // Set installer to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (" . $seqId . ", 200, 3)";
+              ) VALUES (?, 200, 3)";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Install blocks module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ('".$seqId."', 'blocks', 13, 'blocks', '1.0.0', 1, 'Core Utility', 'Global', 1, 0)";
-    $result =& $dbconn->Execute($query);
+     ) VALUES (?, 'blocks', 13, 'blocks', '1.0.0', 1, 'Core Utility', 'Global', 1, 0)";
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
@@ -351,16 +347,16 @@ function base_init()
 
     // Set blocks to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (" . $seqId . ", 13, 3)";
-    $result =& $dbconn->Execute($query);
+              ) VALUES (?, 13, 3)";
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Install themes module
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES ('".$seqId."', 'themes', 70, 'themes', '1.3.0', 1, 'Core Utility', 'Global', 1, 0)";
-    $result =& $dbconn->Execute($query);
+     ) VALUES (?, 'themes', 70, 'themes', '1.3.0', 1, 'Core Utility', 'Global', 1, 0)";
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
@@ -369,8 +365,8 @@ function base_init()
 
     // Set themes to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
-              ) VALUES (" . $seqId . ", 70, 3)";
-    $result =& $dbconn->Execute($query);
+              ) VALUES (?, 70, 3)";
+    $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
     /**************************************************************

@@ -418,44 +418,44 @@ function privileges_init()
 
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 0, 'ACCESS_NONE', 'No Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 200, 'ACCESS_READ', 'Read Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 500, 'ACCESS_EDIT', 'Edit Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 600, 'ACCESS_ADD', 'Add Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 700, 'ACCESS_DELETE', 'Delete Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
     $nextId = $dbconn->GenId($leveltable);
     $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-              VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
-    if (!$dbconn->Execute($query)) return;
+              VALUES (?, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
+    if (!$dbconn->Execute($query,array($nextId))) return;
 
     // prefix_security_privsets
     /*********************************************************************

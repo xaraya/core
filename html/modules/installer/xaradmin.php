@@ -162,7 +162,8 @@ function installer_admin_phase4()
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => 'MySQL',
                                          //'oci8'     => 'Oracle',
-                                         'postgres' => 'Postgres');
+                                         'postgres' => 'Postgres',
+                                         'sqlite'    => 'SQLite');
 
     $data['language'] = $install_language;
     $data['phase'] = 4;
@@ -238,8 +239,15 @@ function installer_admin_phase5()
     }
     include_once ADODB_DIR . '/adodb.inc.php';
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
+    
     $dbconn = ADONewConnection($dbType);
-    $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass);
+    switch($dbType) {
+        case 'sqlite':
+            $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
+            break;
+        default:
+            $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass);
+    }
     if (!$dbConnected) {
         $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.');
         xarCore_die($msg);
@@ -300,7 +308,7 @@ function installer_admin_phase5()
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
     xarDB_init($systemArgs, $whatToLoad);
-
+    
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
@@ -333,7 +341,7 @@ function installer_admin_phase5()
                                  'initfunc'  => 'init'))) {
         return;
     }
-
+  
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
     include_once 'includes/xarConfig.php';

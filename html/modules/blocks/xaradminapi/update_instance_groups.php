@@ -95,36 +95,43 @@ function blocks_adminapi_update_instance_groups($args)
         // If the group is not in the $groups array, and is in the 
         // current instance groups, then it should be deleted.
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
-            $query_arr[] = 'DELETE FROM ' . $block_group_instances_table
-                . ' WHERE xar_id = ' . $current[$gid]['id'];
+            $query = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
+            $bindvars = array((int) $current[$gid]['id']);
+            $result =& $dbconn->Execute($query,$bindvars);
+            if(!$result) return;
             //echo " delete:$gid ";
         }
 
         // If the new group does not exist, then create it.
         if (isset($newgroups[$gid]) && !isset($current[$gid])) {
             $nextId = $dbconn->GenId($block_group_instances_table);
-            $query_arr[] = 'INSERT INTO ' . $block_group_instances_table
-                . ' (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)'
-                . ' VALUES (' . $nextId . ', ' . $gid . ', ' . $bid . ', 0, '
-                . $dbconn->qstr($newgroups[$gid]['template']) . ')';
+            $query = "INSERT INTO $block_group_instances_table
+                        (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)
+                      VALUES (?,?,?,0,?)";
+            $bindvars = array($nextId, $gid, $bid, $newgroups[$gid]['template']);
+            $result =& $dbconn->Execute($query,$bindvars);
+            if(!$result) return;
             //echo " create:$gid with " . $newgroups[$gid]['template'];
         }
 
         // If the new group already exists, then update it.
         if (isset($newgroups[$gid]) && isset($current[$gid])
             && $newgroups[$gid]['template'] != $current[$gid]['template']) {
-            $query_arr[] = 'UPDATE ' . $block_group_instances_table
-                . ' SET xar_template = ' . $dbconn->qstr($newgroups[$gid]['template']) . ''
-                . ' WHERE xar_id = ' . $current[$gid]['id'];
+            $query = "UPDATE $block_group_instances_table
+                            SET xar_template = ?
+                            WHERE xar_id = ?";
+            $bindvars = array($newgroups[$gid]['template'],$current[$gid]['id']);
+            $result =& $dbconn->Execute($query,$bindvars);
+            if(!$result) return;
             //echo " update:$gid with " . $newgroups[$gid]['template'];
         }
     }
 
     // TODO: use ADODB array query function?
     // TODO: error handling?
-    foreach ($query_arr as $query) {
-        $result =& $dbconn->Execute($query);
-    }
+//    foreach ($query_arr as $query) {
+//        $result =& $dbconn->Execute($query);
+//    }
 
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have

@@ -127,8 +127,8 @@ function dynamicdata_init()
         $nextId = $dbconn->GenId($dynamic_objects);
         $query = "INSERT INTO $dynamic_objects
                          (xar_object_id, xar_object_name, xar_object_label, xar_object_moduleid, xar_object_itemtype, xar_object_urlparam, xar_object_maxid, xar_object_config, xar_object_isalias)
-                  VALUES ($nextId,$object)";
-        $result = $dbconn->Execute($query);
+                  VALUES (?, $object)";
+        $result = $dbconn->Execute($query,array($nextId));
         if (!isset($result)) return;
         $idx++;
         $objectid[$idx] = $dbconn->PO_Insert_ID($dynamic_objects,'xar_object_id');
@@ -272,8 +272,8 @@ function dynamicdata_init()
         $nextId = $dbconn->GenId($dynamic_properties);
         $query = "INSERT INTO $dynamic_properties
                          (xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype, xar_prop_type, xar_prop_default, xar_prop_source, xar_prop_status, xar_prop_order, xar_prop_validation)
-                  VALUES ($nextId,$property)";
-        $result = $dbconn->Execute($query);
+                  VALUES (?,$property)";
+        $result = $dbconn->Execute($query,array($nextId));
         if (!isset($result)) return;
         $idx++;
         $propid[$idx] = $dbconn->PO_Insert_ID($dynamic_properties,'xar_prop_id');
@@ -359,8 +359,8 @@ function dynamicdata_init()
         $nextId = $dbconn->GenId($dynamic_data);
         $query = "INSERT INTO $dynamic_data
                          (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
-                  VALUES ($nextId,$dataentry)";
-        $result = $dbconn->Execute($query);
+                  VALUES (?,$dataentry)";
+        $result = $dbconn->Execute($query,array($nextId));
         if (!isset($result)) return;
     }
 

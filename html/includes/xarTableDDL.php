@@ -65,13 +65,15 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
 
     switch($databaseType) {
         case 'mysql':
+        case 'oci8':
             $sql = 'CREATE DATABASE '.$databaseName;
             break;
         case 'postgres':
             $sql = 'CREATE DATABASE "'.$databaseName .'"';
             break;
-        case 'oci8':
-            $sql = 'CREATE DATABASE '.$databaseName;
+         case 'sqlite':
+            // No such thing, its created automatically when it doesnt exist
+            $sql ='';
             break;
         // Other DBs go here
         default:
@@ -157,6 +159,9 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         case 'oci8':
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
+        case 'sqlite':
+            $sql = xarDB__sqliteAlterTable($tableName, $args);
+            break;
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
@@ -233,6 +238,9 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
         case 'oci8':
             $sql = xarDB__oracleCreateTable($tableName, $fields);
             break;
+        case 'sqlite':
+            $sql = xarDB__sqliteCreateTable($tableName, $fields);
+            break;
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
@@ -277,6 +285,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'mysql':
         case 'postgres':
         case 'oci8':
+        case 'sqlite':
             $sql = 'DROP TABLE '.$tableName;
             break;
         // Other DBs go here
@@ -335,6 +344,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'postgres':
         case 'oci8':
+        case 'sqlite':
             if ($index['unique'] == true) {
                 $sql = 'CREATE UNIQUE INDEX '.$index['name'].' ON '.$tableName;
             } else {
@@ -388,6 +398,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'postgres':
         case 'oci8':
+        case 'sqlite':
             $sql = 'DROP INDEX '.$index['name'];
             break;
         // Other DBs go here
@@ -568,6 +579,11 @@ function xarDB__oracleAlterTable($tableName, $args)
             return;
     }
     return $sql;
+}
+
+function xarDB__sqliteAlterTable($tableName, $args) 
+{
+    die("Implement xarDB__sqliteAlterTable for $tableName");
 }
 
 /**
@@ -1395,6 +1411,240 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
     if (isset($parameters['primary_key']) && $parameters['primary_key'] == true) {
         $this_field['primary_key'] = 'PRIMARY KEY';
     }
+
+    return $this_field;
+}
+
+/**
+* Generate the SQLite specific SQL to create a table
+ *
+ * @access private
+ * @param tableName the physical table name
+ * @param fields an array containing the fields to create
+ * @return string|false the generated SQL statement, or false on failure
+ */
+function xarDB__sqliteCreateTable($tableName, $fields)
+{
+    $sql_fields = array();
+    $primary_key = array();
+    $increment_start = false;
+    
+    while (list($field_name, $parameters) = each($fields)) {
+        $parameters['command'] = 'create';
+        $this_field = xarDB__sqliteColumnDefinition($field_name, $parameters);
+        
+        $sql_fields[] = $field_name .' '
+            . $this_field['type'] .' '
+            . $this_field['unsigned'] .' '
+            . $this_field['null'] .' '
+            . $this_field['default'] .' '
+        . $this_field['auto_increment'];
+        
+        if ($this_field['primary_key'] == true) {
+            $primary_key[] = $field_name;
+        }
+        if (empty($this_field['increment_start'])) {
+            $this_field['increment_start'] = false;
+        }
+        if ($this_field['increment_start'] != false) {
+            $increment_start = $this_field['increment_start'];
+        }
+    }
+    
+    // There are instances when we don't want to drop the table, but
+    // look for the exception to know the table has been created.
+    //$dbconn =& xarDBGetConn();
+    //$query = 'DROP TABLE IF EXISTS ' . $tableName;
+    // CHECKME: Do we want to use bind vars here?
+    //$result =& $dbconn->Execute($query);
+    
+    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+                                         
+    if (!empty($primary_key)) {
+        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+    }
+    $sql .= ')';
+
+    return $sql;
+}
+
+function xarDB__sqliteColumnDefinition($field_name, $parameters) 
+{
+    $this_field = array();
+
+    switch($parameters['type']) {
+        case 'integer':
+            if (empty($parameters['size'])) 
+                $parameters['size'] = 'int';
+            $this_field['type'] = 'INTEGER';
+            break;
+
+        case 'char':
+            if (empty($parameters['size'])) {
+                return false;
+            } else {
+                $this_field['type'] = 'CHAR('.$parameters['size'].')';
+            }
+            break;
+
+        case 'varchar':
+            if (empty($parameters['size'])) {
+                return false;
+            } else {
+                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
+            }
+            break;
+
+        case 'text':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'text';
+            }
+            $this_field['type'] = 'TEXT';
+            break;
+
+        case 'blob':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'blob';
+            }
+            $this_field['type'] = 'BLOB';
+            break;
+
+        case 'boolean':
+            $this_field['type'] = "BOOL";
+            break;
+
+        case 'datetime':
+            $this_field['type'] = "DATETIME";
+            if (isset($parameters['default'])) {
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
+                                         '-'.$datetime_defaults['month'].
+                                         '-'.$datetime_defaults['day'].
+                                         ' '.$datetime_defaults['hour'].
+                                         ':'.$datetime_defaults['minute'].
+                                         ':'.$datetime_defaults['second'];
+                }
+            }
+            break;
+
+        case 'date':
+            $this_field['type'] = "DATE";
+            if (isset($parameters['default'])) {
+                // Check if this is an array and convert back to string
+                // array('year'=>2002,'month'=>04,'day'=>17)
+                if (is_array($parameters['default'])) {
+                    $datetime_defaults = $parameters['default'];
+                    $parameters['default'] = $datetime_defaults['year'].
+                                         '-'.$datetime_defaults['month'].
+                                         '-'.$datetime_defaults['day'];
+                }
+            }
+            break;
+
+        case 'float':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'float';
+            }
+            switch ($parameters['size']) {
+                case 'double':
+                    $data_type = 'DOUBLE';
+                    break;
+                case 'decimal':
+                    $data_type = 'DECIMAL';
+                    break;
+                default:
+                    $data_type = 'FLOAT';
+            }
+            if (isset($parameters['width']) && isset($parameters['decimals'])) {
+               $data_type .= '('.$parameters['width'].','.$parameters['decimals'].')';
+            }
+            $this_field['type'] = $data_type;
+            break;
+        // Added Time field via marsel@phatcom.net (David Taylor)
+        case 'time':
+            $this_field['type'] = "TIME";
+            break;
+        case 'timestamp':
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'timestamp';
+            }
+            switch ($parameters['size']) {
+                case 'YY':
+                    $this_field['type'] = 'TIMESTAMP(2)';
+                    break;
+                case 'YYYY':
+                    $this_field['type'] = 'TIMESTAMP(4)';
+                    break;
+                case 'YYYYMM':
+                    $this_field['type'] = 'TIMESTAMP(6)';
+                    break;
+                case 'YYYYMMDD':
+                    $this_field['type'] = 'TIMESTAMP(8)';
+                    break;
+                case 'YYYYMMDDHH':
+                    $this_field['type'] = 'TIMESTAMP(10)';
+                    break;
+                case 'YYYYMMDDHHMM':
+                    $this_field['type'] = 'TIMESTAMP(12)';
+                    break;
+                case 'YYYYMMDDHHMMSS':
+                    $this_field['type'] = 'TIMESTAMP(14)';
+                    break;
+                default:
+                    $this_field['type'] = 'TIMESTAMP';
+            }
+            break;
+
+        // undefined type
+        default:
+            return false;
+    }
+
+    // Test for UNSIGNED
+    $this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
+                            ? 'UNSIGNED'
+                            : '';
+
+    // Test for NO NULLS
+    $this_field['null']    = (isset($parameters['null']) && $parameters['null'] == false)
+                        ? 'NOT NULL'
+                        : '';
+
+    // Test for DEFAULTS
+    $this_field['default'] = (isset($parameters['default']))
+                           ? (($parameters['default'] == 'NULL')
+                                    ? 'DEFAULT NULL'
+                                    : "DEFAULT '".$parameters['default']."'")
+                           : '';
+
+    // Test for AUTO_INCREMENT
+    $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
+                                  ? ''
+                                  : '';
+
+    // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
+//    if (!empty($this_field['auto_increment'])) {
+//        if (isset($parameters['increment_start']))
+//            $this_field['increment_start'] = $parameters['increment_start'];
+//        else {
+//            // FIXME: <mrb> IMO the default auto_increment start = 1, why not use 
+//            //        that and  simplify code a bit?
+//            $this_field['increment_start'] = 0;
+//        }
+//    }
+
+    // Bug #408 - MySQL 4.1 Alpha bug fix reported by matrix9180@deskmod.com (Chad Ingram)
+//    if (!empty($this_field['auto_increment'])) {
+//        $this_field['default'] = '';
+//    }
+
+    // Test for PRIMARY KEY
+    $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
+                               ? true
+                               : false;
 
     return $this_field;
 }
