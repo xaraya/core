@@ -25,7 +25,7 @@ function roles_admin_sendmail()
     $subject = xarVarPrepForDisplay($subject);
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSecConfirmAuthKey()) return;
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
@@ -35,7 +35,7 @@ function roles_admin_sendmail()
 
     // only need the uid, name and email fields
     $q->clearfields();
-    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_email'));
+    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email'));
 
     // Open a connection and run the query
     $q->open();
@@ -43,8 +43,9 @@ function roles_admin_sendmail()
 
     foreach ($q->output() as $user) {
         $users[$user['r.xar_uid']] = array('uid' => $user['r.xar_uid'],
-            'name' => $user['r.xar_name'],
-            'email' => $user['r.xar_email']
+                                            'name' => $user['r.xar_name'],
+                                            'email' => $user['r.xar_email'],
+                                            'username' => $user['r.xar_uname']
         );
     }
 
@@ -65,13 +66,29 @@ function roles_admin_sendmail()
     }
 
 
+// Get the template that defines the substitution vars
+    $messaginghome = "var/messaging/roles";
+    if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
+    }
+    $string = '';
+    $fd = fopen($messaginghome . "/includes/message-vars.xd", 'r');
+    while(!feof($fd)) {
+        $line = fgets($fd, 1024);
+        $string .= $line;
+    }
+    $subject  = xarTplCompileString($string . $subject);
+    $message  = xarTplCompileString($string . $message);
+
 // now send the mails
     foreach ($users as $user) {
         //Get the common search and replace values
-        $search = array('/%%recipientname%%/','/%%recipientuid%%/');
-        $replace = array($user['name'],$user['uid']);
-        $message = preg_replace($search, $replace, $message);
-        $subject = preg_replace($search, $replace, $subject);
+        $data{'recipientuid'} = $user['uid'];
+        $data{'recipientname'} = $user['name'];
+        $data{'recipientusername'} = $user['username'];
+        $data{'recipientemail'} = $user['email'];
+        $subject = xarTplString($subject, $data);
+        $message = xarTplString($message, $data);
         if (!xarModAPIFunc('mail',
             'admin',
             'sendmail',

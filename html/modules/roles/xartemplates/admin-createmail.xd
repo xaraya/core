@@ -168,69 +168,17 @@
 			</xar:if>
 			<td style="text-align: center; vertical-align: middle;">
 				<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
-				<xar:if condition="$mailtype eq 'blank'">
-					<option value="blank" selected="selected">
-						<xar:mlstring>Empty</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="blank">
-						<xar:mlstring>Empty</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'validation'">
-					<option value="validation" selected="selected">
-						<xar:mlstring>Validation</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="validation">
-						<xar:mlstring>Validation</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'confirmation'">
-					<option value="confirmation" selected="selected">
-						<xar:mlstring>Confirmation</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="confirmation">
-						<xar:mlstring>Confirmation</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'welcome'">
-					<option value="welcome" selected="selected">
-						<xar:mlstring>Welcome</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="welcome">
-						<xar:mlstring>Welcome</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'reminder'">
-					<option value="reminder" selected="selected">
-						<xar:mlstring>Reminder</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="reminder">
-						<xar:mlstring>Reminder</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'pending'">
-					<option value="pending" selected="selected">
-						<xar:mlstring>Pending</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="pending">
-						<xar:mlstring>Pending</xar:mlstring>
-					</option>
-				</xar:if>
-				<xar:if condition="$mailtype eq 'deactivation'">
-					<option value="deactivation" selected="selected">
-						<xar:mlstring>Deactivation</xar:mlstring>
-					</option>
-				<xar:else/>
-					<option value="deactivation">
-						<xar:mlstring>Deactivation</xar:mlstring>
-					</option>
-				</xar:if>
+				<xar:loop name="$templates">
+					<xar:if condition="$mailtype eq $loop:item['key']">
+						<option value="#$loop:item['key']#" selected="selected">
+							#$loop:item['value']#
+						</option>
+					<xar:else/>
+						<option value="#$loop:item['key']#">
+							#$loop:item['value']#
+						</option>
+					</xar:if>
+				</xar:loop>
 				</select>
 			</td>
 			<td style="text-align: right;vertical-align: middle;">

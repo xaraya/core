@@ -1,0 +1,9 @@
+#$recipientname#,
+
+Your account is pending.
+You'll have to wait for the explicit approval of the administrator to log
+again.
+If you want to know the reason, contact #$adminmail#.
+You will receive an email has soon as your account is activated again.
+
+--#$siteadmin#

@@ -1,0 +1,17 @@
+Your account has been created for #$sitename# and needs to be activated.
+You can either do this now, or on the first time that you log in.
+If you prefer to do it now, then you will need to follow this link :
+#$validationlink#
+Here are the details that were provided.
+
+IP Address of the person creating that account: #$ipaddress#
+User Name:  #$username#
+Password:  #$password#
+
+Validation Code to activate your account:  #$valcode#
+
+If you did not create this account, then do nothing.  The account will be deemed
+inactive after a period of time and deleted from our records.  You will recieve
+no further emails from us.Thank you,
+
+#$siteadmin#
