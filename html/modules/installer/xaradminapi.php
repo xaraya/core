@@ -49,7 +49,7 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'Exception.EnablePHPErrorHandler\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Exception.EnablePHPErrorHandler'] = $enablePHPErrorHandler;", $config_php);
 
 
-    $fp = fopen ($systemConfigFile, 'w+');
+    $fp = fopen ($systemConfigFile, 'wb');
     fwrite ($fp, $config_php);
     fclose ($fp);
 
