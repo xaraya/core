@@ -693,11 +693,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $nextToken = $this->getNextToken(1);
 
                 // Break out of processing if # is escaped as ##
-//                 // TODO <Dracos>:  Rip this out when all the templates are stripped of ##
-//                 <MrB> commented it out on 20-09-2003, let's see if we get weird stuff.
-//                 if ($nextToken == '#') {
-//                     break;
-//                 }
+                if ($nextToken == '#') {
+                    break;
+                }
                 // Break out of processing if nextToken is (, because #(.) is used by MLS
                 if ($nextToken == '(') {
                     $token .= '(';
