@@ -1,5 +1,5 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Delete</xar:mlstring> <xar:data-label object="$object" /></h2><br />
+<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring><xar:mlvar>#$object->itemid#</xar:mlvar><xar:mlvar>#$object->label#</xar:mlvar></xar:ml></h2><br />
 <div style="margin: auto;">
 
 <div align="center"><b><xar:mlstring>Confirm deleting this item ?</xar:mlstring></b></div><br />
@@ -19,6 +19,8 @@
     <input type="hidden" name="objectid" id="objectid" value="#$object->objectid#" />
     <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="join" id="join" value="#$object->join#" />
+    <input type="hidden" name="table" id="table" value="#$object->table#" />
     <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
     <input type="submit" name="confirm" value=" #xarML('Yes')# " />

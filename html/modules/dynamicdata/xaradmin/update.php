@@ -17,6 +17,8 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -33,6 +35,8 @@ function dynamicdata_admin_update($args)
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
+                                         'join'     => $join,
+                                         'table'    => $table,
                                          'itemid'   => $itemid));
     $myobject->getItem();
 
@@ -108,6 +112,9 @@ function dynamicdata_admin_update($args)
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $myobject->properties['objectid']->value)));
+    } elseif (!empty($table)) {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('table' => $table)));
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('itemid' => $myobject->objectid)));

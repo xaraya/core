@@ -1,11 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-</table>
-<br />
-
-<div align="center"><h2><xar:mlstring>Create New</xar:mlstring> #$object->label#</h2></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Create New Item in #(1)</xar:mlstring><xar:mlvar>#$object->label#</xar:mlvar></xar:ml></h2><br />
+<div style="margin: auto;">
 
 <xar:if condition="!empty($preview)">
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
@@ -32,6 +27,8 @@
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="join" id="join" value="#$object->join#" />
+    <input type="hidden" name="table" id="table" value="#$object->table#" />
     <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
@@ -50,4 +47,5 @@
 
 </div>
 </form>
-
+</div>
+</div>

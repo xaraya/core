@@ -2,7 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>View</xar:mlstring> #$label#</h2><br />
 <div style="margin: auto;">
 <!-- this does all the hard work :) -->
-<xar:data-list module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" sort="$sort" />
+<xar:data-list module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" sort="$sort" />
 
 <xar:if condition="!empty($querylink)">
     <p><a href="#$querylink#"><xar:mlstring>Query</xar:mlstring> #$label#</a></p>

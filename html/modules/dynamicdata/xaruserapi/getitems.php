@@ -2,15 +2,17 @@
 
 /**
  * get all dynamic data fields for a list of items
- * (identified by module + item type, and item ids or other search criteria)
+ * (identified by module + item type or table, and item ids or other search criteria)
  *
  * @author the DynamicData module development team
  * @param $args['module'] module name of the item fields to get, or
- * @param $args['modid'] module id of the item fields to get
- * @param $args['itemtype'] item type of the item fields to get
+ * @param $args['modid'] module id of the item fields to get +
+ * @param $args['itemtype'] item type of the item fields to get, or
+ * @param $args['table'] database table to turn into an object
  * @param $args['itemids'] array of item ids to return
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
+ * @param $args['join'] join a module table to the dynamic object (if it extends the table)
  * @param $args['sort'] sort field(s)
  * @param $args['numitems'] number of items to retrieve
  * @param $args['startnum'] start number

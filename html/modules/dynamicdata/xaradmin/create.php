@@ -19,13 +19,17 @@ function dynamicdata_admin_create($args)
     if (!xarVarFetch('itemtype',    'isset', $itemtype,   0,                                  XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid',      'isset', $itemid,     0,                                  XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('preview',     'isset', $preview,    0,                                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('join',        'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('table',       'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
+                                         'join'     => $join,
+                                         'table'    => $table,
                                          'itemid'   => $itemid));
     $isvalid = $myobject->checkInput();
 
@@ -63,6 +67,9 @@ function dynamicdata_admin_create($args)
 
     if (!empty($return_url)) {
         xarResponseRedirect($return_url);
+    } elseif (!empty($table)) {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('table' => $table)));
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('itemid' => $myobject->objectid)));

@@ -14,6 +14,8 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -34,6 +36,8 @@ function dynamicdata_admin_new($args)
     $myobject = new Dynamic_Object(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
+                                         'join'     => $join,
+                                         'table'    => $table,
                                          'itemid'   => $itemid));
 
     $data['object'] =& $myobject;

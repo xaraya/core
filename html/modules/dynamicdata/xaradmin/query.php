@@ -38,7 +38,9 @@ function dynamicdata_admin_query($args)
         $query = '';
         $oldquery = '';
         $newquery = '';
-        $join = '';
+        if (!empty($oldjoin)) {
+            $join = '';
+        }
         $oldjoin = '';
         $reset = true;
     // changed selected table
@@ -347,6 +349,17 @@ function dynamicdata_admin_query($args)
         $data['newquery'] = '';
     }
 
+    if (!empty($table)) {
+        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+                                      array('table' => $table));
+    } elseif (!empty($itemid) && !empty($join)) {
+        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+                                      array('itemid' => $itemid,
+                                            'join' => $join));
+    } elseif (!empty($itemid)) {
+        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+                                      array('itemid' => $itemid));
+    }
     $data['numfields'] = count($data['properties']);
     if (empty($data['numfields'])) {
         $data['numfields'] = 1;

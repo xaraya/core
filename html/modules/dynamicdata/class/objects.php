@@ -78,15 +78,12 @@ class Dynamic_Object_Master
             }
         }
         if (!empty($this->table)) {
-            if (empty($this->name)) {
-                $this->name = $this->table;
-            }
             $meta = xarModAPIFunc('dynamicdata','util','getmeta',
                                   array('table' => $this->table));
             // we throw an exception here because we assume a table should always exist (for now)
             if (!isset($meta) || !isset($meta[$this->table])) {
                 $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
-                             'table',$this->table,$this->name);
+                             'table',$this->table,$this->table);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
@@ -388,6 +385,20 @@ class Dynamic_Object_Master
      */
     function getObjectInfo($args)
     {
+        if (!empty($args['table'])) {
+            $info = array();
+            $info['objectid'] = 0;
+            $info['name'] = $args['table'];
+            $info['label'] = xarML('Table #(1)',$args['table']);
+            $info['moduleid'] = 182;
+            $info['itemtype'] = 0;
+            $info['urlparam'] = 'itemid';
+            $info['maxid'] = 0;
+            $info['config'] = '';
+            $info['isalias'] = 0;
+            return $info;
+        }
+
         list($dbconn) = xarDBGetConn();
         $xartable = xarDBGetTables();
 
@@ -433,6 +444,9 @@ class Dynamic_Object_Master
              $info['isalias']) = $result->fields;
 
         $result->Close();
+        if (!empty($args['join'])) {
+            $info['label'] .= ' + ' . $args['join'];
+        }
         return $info;
     }
 
@@ -1227,7 +1241,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $args['links'] = array();
 
         // override for viewing dynamic objects
-        if ($modname == 'dynamicdata' && $this->itemtype == 0) {
+        if ($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
             $viewtype = 'admin';
             $viewfunc = 'view';
         } else {
@@ -1239,41 +1253,52 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($itemtype)) {
             $itemtype = null; // don't add to URL
         }
+        if (empty($this->table)) {
+            $table = null;
+        } else {
+            $table = $this->table;
+        }
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
             if(xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '');
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($modname,'admin','modify',
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
                 $options[] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($modname,'admin','delete',
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '');
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($modname,'admin','modify',
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 $options[] = array('otitle' => xarML('View'),
                                    'olink'  => xarModURL($modname,$viewtype,$viewfunc,
-                                               array($args['param'] => $itemid,
-                                                     'itemtype'     => $itemtype)),
+                                               array('itemtype'     => $itemtype,
+                                                     'table'        => $table,
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '');
             }
             $args['links'][$itemid] = $options;
@@ -1282,7 +1307,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // TODO: improve this + SECURITY !!!
 		if(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
             $args['newlink'] = xarModURL($modname,'admin','new',
-                                         array('itemtype' => $itemtype));
+                                         array('itemtype' => $itemtype,
+                                               'table'    => $table));
         } else {
             $args['newlink'] = '';
         }

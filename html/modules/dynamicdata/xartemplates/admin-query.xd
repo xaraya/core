@@ -217,12 +217,11 @@
 </tr>
 </table>
 </form>
+<xar:if condition="!empty($viewlink)">
+<p><a href="#$viewlink#"><xar:mlstring>View</xar:mlstring> #$label#</a></p>
+</xar:if>
 <xar:if condition="isset($mylist)">
-  <xar:if condition="!empty($table)">
-    <xar:data-view object="$mylist" layout="list" linkfield="no link to display item here..." />
-  <xar:else/>
-    <xar:data-list object="$mylist" />
-  </xar:if>
+  <xar:data-list object="$mylist" />
 </xar:if>
 <xar:if condition="!empty($sample)">
   <p>Sample Tag : #$sample#</p>

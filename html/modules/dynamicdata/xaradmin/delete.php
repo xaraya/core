@@ -14,9 +14,13 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('itemtype', 'int',   $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemid',   'id',    $itemid                                                           )) {return;}
     if(!xarVarFetch('confirm',  'isset', $confirm,  NULL,                               XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
     $myobject = new Dynamic_Object(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
+                                         'join'     => $join,
+                                         'table'    => $table,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
 
@@ -56,8 +60,13 @@ function dynamicdata_admin_delete($args)
 
     $itemid = $myobject->deleteItem();
 
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('itemid' => $objectid)));
+    if (!empty($table)) {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('table' => $table)));
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('itemid' => $objectid)));
+    }
 
     // Return
     return true;
