@@ -208,7 +208,7 @@ class xarTreeRenderer {
                      'admin',
                      'deleteprivilege',
                      array('pid'=>$object['pid'])) .
-                     '" title="Delete this Privilege" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
+                     '" title="'.xarML('Delete this Privilege').'" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>';
         }
 
     // offer to show the users/groups of this group
@@ -217,7 +217,7 @@ class xarTreeRenderer {
                      'admin',
                      'viewroles',
                      array('pid'=>$object['pid'])) .
-                     '" title="Show the Groups/Users this Privilege is assigned to" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" /></a>'."\n\t\t";
+                     '" title="'.xarML('Show the Groups/Users this Privilege is assigned to').'" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" /></a>'."\n\t\t";
 
         $this->html .= $this->drawindent();
         if (count($node['children']) > 0) {
