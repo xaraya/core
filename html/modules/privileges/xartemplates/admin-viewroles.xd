@@ -57,7 +57,8 @@ document.forms['privilegeform'].submit();}
 					#$role['name']#
 				</td>
 			<td align="right">
-				<a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+			        <xar:set name="$urltitle"><xar:mlstring>Remove this Privilege assignment</xar:mlstring></xar:set>
+				<a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#$urltitle#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 			</td>
 			</tr>
 		</xar:foreach>
@@ -84,7 +85,7 @@ document.forms['privilegeform'].submit();}
              <div>
 		<input type="hidden" name="pid" id="pid" value="#$pid#" />
 	<tr>
-		<td align="left">Show Privileges that are: 
+		<td align="left"><xar:mlstring>Show Privileges that are:</xar:mlstring> 
 			<xar:if condition="$show eq 'assigned'">
 			<input type="radio" name="show" id="show" value="assigned" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewroles;';this.form.submit();"/>
 			<xar:else />

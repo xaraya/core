@@ -28,7 +28,7 @@ document.forms['privilegeform'].submit();}
     <div style="margin: auto;">
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewprivileges;" method="post" enctype="application/x-www-form-urlencoded">
      <div>
-    Show Privileges that are: 
+    <xar:mlstring>Show Privileges that are:</xar:mlstring> 
 	<xar:if condition="$show eq 'assigned'">
         <input type="radio" name="show" id="show_assigned" value="assigned" checked="checked" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-viewprivileges;';this.form.submit();"/>
 	<xar:else />
