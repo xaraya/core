@@ -36,34 +36,6 @@ function mail_adminapi_sendhtmlmail($args)
 {
     // Get arguments from argument array
     extract($args);
-    // Have to do a bit more work as some variables may not have
-    // been passed in and we need to set others before calling
-    // private sendmail()
-    // Set up variables
-    if (empty($wordwrap)) {
-        $wordwrap = xarModGetVar('mail', 'wordwrap');
-    }
-    if (empty($priority)) {
-        $priority = xarModGetVar('mail', 'priority');
-    }
-    if (empty($encoding)) {
-        $encoding = '8bit';
-    }
-    if (empty($from)) {
-        $from = xarModGetVar('mail', 'adminmail');
-    }
-    if (empty($fromname)) {
-        $fromname = xarModGetVar('mail', 'adminname');
-    }
-    if (empty($name)) {
-        $name = '';
-    }
-    if (empty($info)) {
-        $info = '';
-    }
-    if (empty($recipients)) {
-        $recipients = '';
-    }
 
     // Check if HTML mail has been configured by the admin
     $adminhtml = xarModGetVar('mail', 'html');
