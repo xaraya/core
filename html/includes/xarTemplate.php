@@ -258,20 +258,34 @@ function xarTplGetPageTitle()
  * @param modName string
  * @param styleName string
  * @param fileExt string
+ * @param themeFolder string ('' or path no leading or trailing /, )- used to 
+set specific folder within theme directory only
  * @return bool
  */
-function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
-{
-    $info = xarMod_getBaseInfo($modName);
-    if (!isset($info)) return;
-    $fileName = "modules/$info[directory]/xarstyles/$styleName.$fileExt";
-    if (!file_exists($fileName)) {
-        return false;
-    }
-    $url = xarServerGetBaseURL().$fileName;
+function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder='')
+{ 
+	if (empty($styleName) || (empty($modName) && empty($themeFolder))) return;
+    $modulePath = '/$styleName.$fileExt';
+	
+	if (!empty($modName)){
+		$info = xarMod_getBaseInfo($modName);
+		if (!isset($info)) return;		
+		$modulePath = "modules/$info[directory]/xarstyles/$styleName.$fileExt";
+	}
+	
+	$themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
+	
+	if (file_exists($themePath)){
+		$fileName = $themePath;
+	}else{		
+		$fileName = $modulePath;
+		if (!file_exists($fileName)) {		
+			return false;
+		}	
+	}	
+	$url = xarServerGetBaseURL().$fileName;
     $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
-
-    return true;
+	return true;
 }
 
 /**
