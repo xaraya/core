@@ -118,6 +118,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 
             }
         }
+     return '';   
     }
 }
 
