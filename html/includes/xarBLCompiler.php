@@ -2815,9 +2815,9 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         }
 
         if ($type == 'theme') {
-            return "xarTpl_includeThemeTemplate('$name', $subdata)";
+            return "xarTpl_includeThemeTemplate('$file', $subdata)";
         } elseif ($type == 'module') {
-            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$name', $subdata)";
+            return "xarTpl_includeModuleTemplate(\$_bl_module_name, '$file', $subdata)";
         } else {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
                            new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this));
