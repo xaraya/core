@@ -155,7 +155,7 @@ function themes_activate()
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
     xarModSetVar('themes', 'SiteCopyRight', '2003');
-    xarModSetVar('themes', 'SiteFooter', 'Your Footer');
+    xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="themes/Xaraya_Classic/images/xaraya.gif" border="0" /></a>');
 
     // Register blocks
     if (!xarModAPIFunc('blocks',
