@@ -1151,9 +1151,11 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     if (xarCore_getSystemVar('DB.UseADODBCache')){
         $result =& $dbconn->CacheFlush();
     }
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    
+    if (!empty($query)){
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+    }
 
     switch(strtolower($type)) {
         case 'modvar':
