@@ -182,7 +182,7 @@ class xarQuery
             }
         }
         else {
-            $msg = xarML('This function only take 1 or 2 paramters');
+            $msg = xarML('This function only take 1 or 2 parameters');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
@@ -229,7 +229,7 @@ class xarQuery
             }
         }
         else {
-            $msg = xarML('This function only take 1 or 2 paramters');
+            $msg = xarML('This function only take 1 or 2 parameters');
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }

@@ -2673,7 +2673,7 @@ class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
             return;
         }
         
-        return "'$leftspace' . xarML('".str_replace("'","\'",$totranslate)."'";
+        return "'$leftspace' . " . 'xarML(\'' . str_replace("'","\'",$totranslate) . "'";
     }
 
     function renderEndTag()
