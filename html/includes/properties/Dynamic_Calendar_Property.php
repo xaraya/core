@@ -36,6 +36,8 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                 $value .= ' GMT';
             }
             $this->value = strtotime($value);
+            // adjust for the user's timezone offset
+            $this->value -= xarMLS_userOffset() * 3600;
         } else {
             $this->invalid = xarML('date');
             $this->value = null;
@@ -72,69 +74,24 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             $value = strtotime($value);
         }
 
-        $output = '';
-    // TODO: adapt to local/user time !
-        $output .= strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
+        // include calendar javascript
+        xarModAPIFunc('base','javascript','modulefile',
+                      array('module' => 'base',
+                            'filename' => 'calendar.js'));
+
+/*
+        $output = xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $value);
         $output .= '<br />';
-        $localtime = localtime($value,1);
-        $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.
-                   ' id="'.$id.'"' .
-                   (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') . '>';
-        if (empty($minyear)) {
-            $minyear = $localtime['tm_year'] + 1900 - 2;
-        }
-        if (empty($maxyear)) {
-            $maxyear = $localtime['tm_year'] + 1900 + 2;
-        }
-        for ($i = $minyear; $i <= $maxyear; $i++) {
-            if ($i == $localtime['tm_year'] + 1900) {
-                $output .= '<option selected="selected">' . $i;
-            } else {
-                $output .= '<option>' . $i;
-            }
-        }
-        $output .= '</select> - <select name="'.$name.'[mon]">';
-        for ($i = 1; $i <= 12; $i++) {
-            if ($i == $localtime['tm_mon'] + 1) {
-                $output .= '<option selected="selected">' . $i;
-            } else {
-                $output .= '<option>' . $i;
-            }
-        }
-        $output .= '</select> - <select name="'.$name.'[mday]">';
-        for ($i = 1; $i <= 31; $i++) {
-            if ($i == $localtime['tm_mday']) {
-                $output .= '<option selected="selected">' . $i;
-            } else {
-                $output .= '<option>' . $i;
-            }
-        }
-        $output .= '</select> ';
-        $output .= xarML('Time') . ' <select name="'.$name.'[hour]">';
-        for ($i = 0; $i < 24; $i++) {
-            if ($i == $localtime['tm_hour']) {
-                $output .= '<option selected="selected">' . sprintf("%02d",$i);
-            } else {
-                $output .= '<option>' . sprintf("%02d",$i);
-            }
-        }
-        $output .= '</select> : <select name="'.$name.'[min]">';
-        for ($i = 0; $i < 60; $i++) {
-            if ($i == $localtime['tm_min']) {
-                $output .= '<option selected="selected">' . sprintf("%02d",$i);
-            } else {
-                $output .= '<option>' . sprintf("%02d",$i);
-            }
-        }
-        $output .= '</select> : <select name="'.$name.'[sec]">';
-        for ($i = 0; $i < 60; $i++) {
-            if ($i == $localtime['tm_sec']) {
-                $output .= '<option selected="selected">' . sprintf("%02d",$i);
-            } else {
-                $output .= '<option>' . sprintf("%02d",$i);
-            }
-        }
-        $output .= '</select> ';
+*/
+        $output = '';
+        $timeval = xarLocaleFormatDate('%Y-%m-%d %H:%M:%S', $value);
+        $output .= '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.$timeval.'" size="20" maxlength="19" />
+<a href="javascript:'.$id.'_cal.popup();"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date" /></a>
+<script language="JavaScript">
+var '.$id.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input"), "'.xarServerGetBaseURI().'");
+'.$id.'_cal.year_scroll = true;
+'.$id.'_cal.time_comp = true;
+</script>';
         if (!empty($this->invalid)) {
             $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
         }
@@ -157,8 +114,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             }
             $value = strtotime($value);
         }
-    // TODO: adapt to local/user time !
-        return strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
+        return xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $value);
     }
 
 }
