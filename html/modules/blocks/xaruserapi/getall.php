@@ -39,12 +39,12 @@ function blocks_userapi_getall($args)
                      inst.xar_content,
                      inst.xar_refresh,
                      inst.xar_state,
-                     types.xar_id,
-                     types.xar_module,
-                     types.xar_type
+                     btypes.xar_id,
+                     btypes.xar_module,
+                     btypes.xar_type
               FROM   '.$block_instances_table.' as inst
-              LEFT JOIN '.$block_types_table.' as types
-              ON        types.xar_id = inst.xar_type_id';
+              LEFT JOIN '.$block_types_table.' as btypes
+              ON        btypes.xar_id = inst.xar_type_id';
 
     if (!empty($bid)) {
         $query .= ' WHERE inst.xar_id = ' . $bid;
