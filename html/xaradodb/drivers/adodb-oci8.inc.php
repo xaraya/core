@@ -49,9 +49,11 @@ class ADODB_oci8 extends ADOConnection {
 	var $metaColumnsSQL = "select cname,coltype,width, SCALE, PRECISION, NULLS, DEFAULTVAL from col where tname='%s' order by colno"; //changed by smondino@users.sourceforge. net
 	var $_bindInputArray = true;
 	var $hasGenID = true;
-	var $_genIDSQL = "SELECT (%s.nextval) FROM DUAL";
-	var $_genSeqSQL = "CREATE SEQUENCE %s START WITH %s";
-	var $_dropSeqSQL = "DROP SEQUENCE %s";
+    // XARAYA MODIFICATION - START
+	var $_genIDSQL = "SELECT (seq%s.nextval) FROM DUAL";
+	var $_genSeqSQL = "CREATE SEQUENCE seq%s START WITH %s";
+	var $_dropSeqSQL = "DROP SEQUENCE seq%s";
+    // XARAYA MODIFICATION - END
 	var $hasAffectedRows = true;
 	var $upperCase = 'upper';
 	var $noNullStrings = false;

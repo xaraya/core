@@ -1131,18 +1131,47 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 function xarDB__oracleCreateTable($tableName, $fields)
 {
     $sql_fields = array();
-    $seq_sql = '';
+    $primary_key = array();
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
         $this_field = xarDB__oracleColumnDefinition($field_name, $parameters);
-        $sql_fields[] = implode(' ', $this_field);
 
+        $sqlDDL = $field_name;
+        if (array_key_exists("type", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+
+        // Oracle doesn't handle unsigned
+        //if (array_key_exists("unsigned", $this_field))
+        //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
+
+        // Order of default and null clause matter
+        if (array_key_exists("default", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
+
+        if (array_key_exists("null", $this_field))
+            $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
+
+        // Oracle doesn't handle auto_increment - this should be a sequence
+        //if (array_key_exists("auto_increment", $this_field))
+        //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
+
+        $sql_fields[] = $sqlDDL;
+        
+        // Check for primary key
+        if (array_key_exists("primary_key", $this_field)) {
+            if ($this_field['primary_key'] == true) {
+                $primary_key[] = $field_name;
+            }
+        }
     }
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
-    if ($seq_sql != '') {
-        $sql .= '; '.$seq_sql;
+
+    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+    if (!empty($primary_key)) {
+        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
     }
+    $sql .= ')';
+
     return $sql;
 }
 
@@ -1164,19 +1193,19 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (isset($parameters['size'])) {
                 switch ($parameters['size']) {
                     case 'tiny':
-                        $this_field[] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(8)';
                         break;
                     case 'small':
-                        $this_field[] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(8)';
                         break;
                     case 'big':
-                        $this_field[] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(8)';
                         break;
                     default:
-                        $this_field[] = 'NUMBER(8)';
+                        $this_field['type'] = 'NUMBER(8)';
                 }
             } else {
-                $this_field[] = 'NUMBER(8)';
+                $this_field['type'] = 'NUMBER(8)';
             }
             break;
 
@@ -1184,7 +1213,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR('.$parameters['size'].')';
             }
             if (isset($parameters['default'])) {
                 $parameters['default'] = "'".$parameters['default']."'";
@@ -1195,7 +1224,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field[] = 'VARCHAR2('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR2('.$parameters['size'].')';
             }
             if (isset($parameters['default'])) {
                 $parameters['default'] = "'".$parameters['default']."'";
@@ -1203,20 +1232,20 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             break;
 
         case 'text':
-            $this_field[] = 'CLOB';
+            $this_field['type'] = 'CLOB';
             break;
 
         case 'blob':
-            $this_field[] = 'BLOB';
+            $this_field['type'] = 'BLOB';
             break;
 
         case 'boolean':
-            $this_field[] = 'NUMBER(1)';
+            $this_field['type'] = 'NUMBER(1)';
             break;
 
         case 'timestamp':
         case 'datetime':
-            $this_field[] = 'TIMESTAMP';
+            $this_field['type'] = 'TIMESTAMP';
 
             if (isset($parameters['default'])) {
                 $invalidDate = false;
@@ -1255,7 +1284,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             break;
 
         case 'date':
-            $this_field[] = "DATE";
+            $this_field['type'] = "DATE";
 
             if (isset($parameters['default'])) {
                 $invalidDate = false;
@@ -1310,7 +1339,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
                 default:
                     $data_type = 'REAL';
             }
-            $this_field[] = $data_type;
+            $this_field['type'] = $data_type;
             break;
 
         // undefined type
@@ -1321,21 +1350,21 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
     // Test for defaults - must come immediately after datatype for PostgreSQL
     if (isset($parameters['default'])) {
         if ($parameters['default'] == 'NULL') {
-            $this_field[] = 'DEFAULT NULL';
+            $this_field['default'] = 'DEFAULT NULL';
         } else {
-            $this_field[] = "DEFAULT ".$parameters['default']."";
+            $this_field['default'] = "DEFAULT ".$parameters['default']."";
         }
     }
 
     // Test for NO NULLS - oracle does not support No Nulls on an alter table add
     if (isset($parameters['null']) && $parameters['null'] == false) {
         if ($parameters['command'] == 'add') return false;
-        $this_field[] = 'NOT NULL';
+        $this_field['null'] = 'NOT NULL';
     }
 
     // Test for PRIMARY KEY
     if (isset($parameters['primary_key']) && $parameters['primary_key'] == true) {
-        $this_field[] = 'PRIMARY KEY';
+        $this_field['primary_key'] = 'PRIMARY KEY';
     }
 
     return $this_field;
