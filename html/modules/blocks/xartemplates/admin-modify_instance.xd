@@ -81,12 +81,6 @@
                         <option value="0">
                     </xar:if>
                     <xar:mlstring>Hidden</xar:mlstring></option>
-                    <xar:if condition="$instance['state'] eq 1">
-                        <option value="1" selected="selected">
-                    <xar:else />
-                        <option value="1">
-                    </xar:if>
-                    <xar:mlstring>Minimized</xar:mlstring></option>
                     <xar:if condition="$instance['state'] eq 2">
                         <option value="2" selected="selected">
                     <xar:else />
