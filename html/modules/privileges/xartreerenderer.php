@@ -245,8 +245,9 @@ class xarTreeRenderer {
                         xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>: &nbsp;';
-        $this->html .= count($this->privs->getsubprivileges($object['pid'])) . ' components';
+                             array('pid'=>$object['pid'])) .' ">' .$object['name'] . '</a>';
+        $componentcount = count($this->privs->getsubprivileges($object['pid']));
+        $this->html .= $componentcount > 0 ? ": " .$componentcount . ' components' : "";
 
         $this->html .= '<span style="position:absolute;left:35em;">';
         $this->html .= $object['description'];

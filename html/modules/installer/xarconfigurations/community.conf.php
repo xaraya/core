@@ -207,7 +207,7 @@ function installer_community_casualaccess()
 {
     xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'Minimal access to a site');
     xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'View the Login block');
-    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'View blocks of the Base modules');
+    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'View some Dynamic Data items');
     xarMakePrivilegeRoot('CasualAccess');
     xarMakePrivilegeRoot('ViewLogin');

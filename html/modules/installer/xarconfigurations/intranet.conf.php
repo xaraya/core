@@ -213,7 +213,7 @@ function installer_intranet_configuration_load($args)
 
 function installer_intranet_oversightprivilege()
 {
-    xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
+    xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privilege container for the Oversight group');
     xarMakePrivilegeRoot('Oversight');
 }
 
@@ -227,10 +227,10 @@ function installer_intranet_oversightrole()
 
 function installer_intranet_casualaccess()
 {
-    xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
+    xarRegisterPrivilege('CasualAccess','All','themes','Block','All',ACCESS_OVERVIEW,'Minimal access to a site');
+    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'View the Login block');
+    xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'View blocks of the Base module');
+    xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All',ACCESS_OVERVIEW,'View some Dynamic Data items');
     xarMakePrivilegeRoot('CasualAccess');
     xarMakePrivilegeRoot('ViewLogin');
     xarMakePrivilegeRoot('ViewBlocks');
@@ -242,14 +242,14 @@ function installer_intranet_casualaccess()
 
 function installer_intranet_readnoncore()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Exclude access to the core modules');
-    xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-    xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
-    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Exclude access to the Blocks module');
-    xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Exclude access to the Mail module');
-    xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Exclude access to the Modules module');
-    xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Exclude access to the Themes module');
-    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
+    xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Read access only to none-core modules');
+    xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Deny access to the Privileges module');
+    xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Deny access to the AdminPanels module');
+    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Deny access to the Blocks module');
+    xarRegisterPrivilege('DenyMail','All','mail','All','All',ACCESS_NONE,'Deny access to the Mail module');
+    xarRegisterPrivilege('DenyModules','All','modules','All','All',ACCESS_NONE,'Deny access to the Modules module');
+    xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Deny access to the Themes module');
+//    xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
     xarMakePrivilegeRoot('ReadNonCore');
     xarMakePrivilegeRoot('DenyPrivileges');
     xarMakePrivilegeRoot('DenyAdminPanels');
@@ -257,7 +257,7 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeRoot('DenyMail');
     xarMakePrivilegeRoot('DenyModules');
     xarMakePrivilegeRoot('DenyThemes');
-    xarMakePrivilegeRoot('DenyDynamicData');
+//    xarMakePrivilegeRoot('DenyDynamicData');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
@@ -265,6 +265,6 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
+//    xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
 }
 ?>
