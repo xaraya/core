@@ -838,6 +838,9 @@ if (empty($step)) {
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
+                       array('name'    =>  'showrealms',
+                             'module'  =>  'privileges',
+                             'set'     =>  0),
                           );
 
     foreach($modvars as $modvar){
@@ -1007,7 +1010,7 @@ if (empty($step)) {
 
     $upgrade['priv_masks'] = xarMaskExists('AssignPrivilege',$module='privileges');
     if (!$upgrade['priv_masks']) {
-        echo "Priviliges Masks do not exist, attempting to create... done! <br />";
+        echo "Some Privileges Masks do not exist, attempting to create... done! <br />";
 
         // create a couple of new masks
         xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
@@ -1053,6 +1056,16 @@ if (empty($step)) {
 
     } else {
         echo "Privileges Locks have been created previously, moving to next check. <br />";
+    }
+
+    $upgrade['priv_masks'] = xarMaskExists('AdminPrivilege',$module='privileges');
+    if (!$upgrade['priv_masks']) {
+        echo "Some Privileges Masks do not exist, attempting to create... done! <br />";
+
+        // create a couple of new masks
+        xarRegisterMask('AdminPrivilege','All','privileges','All','All','ACCESS_ADMIN');
+    } else {
+        echo "0.9.11 Privileges Masks have been created previously, moving to next check. <br />";
     }
 
     //Move this mask from privileges module
