@@ -312,12 +312,6 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
 
     static $size = 0;
     
-    // use probability to skip the cache size calculation an average of 
-    // four out of every 5 page requests
-    if (mt_rand(1,5) > 1) {
-        $size = 1;
-    }
-    
     if (empty($size)) {
         $size = xarCacheGetDirSize($dir);
     }
