@@ -1,22 +1,38 @@
-<h2>#$name# <xar:mlstring>Basic Information</xar:mlstring></h2> 
+<h2>#$name# <xar:mlstring>Information</xar:mlstring></h2> 
 <form action="#xarModURL('roles', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="authid" id="authid" value="#$authid#" />	
 <input type="hidden" name="uid" id="uid" value="#$uid#" />
 <input type="hidden" name="phase" id="phase" value="updatebasic" />
-	<p><b><xar:mlstring>User Name</xar:mlstring>:</b>&nbsp;&nbsp; #$uname#</p>
-	<p><b><xar:mlstring>Email</xar:mlstring>:</b>&nbsp;&nbsp; #$email#</p>	
-	<p><b><label for="name"><xar:mlstring>Display Name</xar:mlstring></label>:</b> &nbsp;&nbsp;	<input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" /></p>
-	<p><b><label for="pass1"><xar:mlstring>Password</xar:mlstring></label></b> &nbsp;&nbsp;<input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" /> </p>
-	<p><b><label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label></b>&nbsp;&nbsp; <input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" /></p>
-    <xar:if condition="xarModIsAvailable('dynamicdata')">
-
+	<table>
+		<tr>
+			<td><b><xar:mlstring>User Name</xar:mlstring>:</b></td>
+			<td>#$uname#</td>
+		</tr>
+		<tr>
+			<td><b><xar:mlstring>Email</xar:mlstring>:</b></td>
+			<td>#$email#</td>
+		</tr>
+		<tr>
+			<td><b><label for="name"><xar:mlstring>Display Name</xar:mlstring></label>:</b></td>
+			<td><input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" /></td>
+		</tr>
+		<tr>
+			<td><b><label for="pass1"><xar:mlstring>Password</xar:mlstring></label></b></td>
+			<td><input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" /></td>
+		</tr>
+		<tr>
+			<td><b><label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label></b></td>
+			<td><input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" /></td>
+		</tr>
 	<xar:data-getitem name="$properties" module="roles" itemid="$uid" />
-
 	<xar:if condition="isset($properties) and count($properties) gt 0">
 	    <xar:foreach in="$properties" key="$name">
-			<p><b><label for="$properties[$name]"><xar:data-label property="$properties[$name]" /></label>:</b>&nbsp;&nbsp;<xar:data-input property="$properties[$name]" /></p>
+			<tr>
+				<td><b><label for="$properties[$name]"><xar:data-label property="$properties[$name]" /></label>:</b></td>
+				<td><xar:data-input property="$properties[$name]" /></td>
+			</tr>
 	    </xar:foreach>
 	</xar:if>
-    </xar:if>
+	</table>
 <p><input type="submit" value="#$submitlabel#" align="middle" />
 </form>
