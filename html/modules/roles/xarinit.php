@@ -298,12 +298,12 @@ president@whitehouse.gov';
     xarBlockTypeRegister('roles', 'language');
 
     if (!xarModRegisterHook('item', 'search', 'GUI',
-                           'users', 'user', 'search')) {
+                           'roles', 'user', 'search')) {
         return false;
     }
 
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-                           'users', 'user', 'usermenu')) {
+                           'roles', 'user', 'usermenu')) {
         return false;
     }
 
