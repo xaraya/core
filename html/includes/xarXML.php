@@ -172,6 +172,7 @@ class xarXmlParser
         // Activate the parser with resolve base the base path of the file
         $resolve_base = dirname($fileName);
         $this->__activate($resolve_base);
+        $this->handler->fileName=$fileName;
         while ($xmldata = fread($fp, XARXML_BLOCKREAD_SIZE)) {
             if(!xml_parse($this->parser, $xmldata, feof($fp))) {
                 $error = xml_get_error_code($this->parser);
@@ -302,6 +303,7 @@ class xarXmlHandler
     var $_nsregister=array();
     var $_state = XARXML_HSTATE_INITIAL;
     var $_dtd_data ='';
+    var $fileName;
     /** 
      * We need a base for resolving entities when they are not 
      * specified relatively. On creation of the handler this can have a number of values
@@ -321,14 +323,19 @@ class xarXmlHandler
     {
         if(!trim($data)) return true; // nothing to do here
         
+        // If we've never been here before add the initial doc node
+        if($this->_state == XARXML_HSTATE_INITIAL) {
+            $this->_tree[0]['type'] = XML_DOCUMENT_NODE;
+            $this->_tree[0]['name'] = '#document';
+            $this->_state = XARXML_HSTATE_NORMAL;
+        }            
+
         // Subminiparser to extract the DOCTYPE
         //echo "$data\n";
         switch($this->_state) {
-        case XARXML_STATE_INITIAL:
-            // First thing we should get is <?xml, if not still add the doc node
-            $this->_tree[0]['type'] = XML_DOCUMENT_NODE;
-            $this->_tree[0]['name'] = '#document';
-            if(substr($data,0,5) == '<?xml') {
+        case XARXML_HSTATE_NORMAL:
+            // If we have the <?xml decl, add the attributes to the document node
+            if(substr(trim($data),0,5) == '<?xml') {
                 // get the attributes
                 preg_match_all('/ (\w+=".+")/U', $data, $matches);
                 foreach($matches[1] as $match) {
@@ -337,13 +344,8 @@ class xarXmlHandler
                     $this->_tree[0]['attributes'][$attribute_name] = $attribute_value;
                 }
             }
-            //echo "Got xml declaration!\n";
-            //print_r($this->_tree);
-            $this->_state= XARXML_HSTATE_NORMAL;
-            break;
-        case XARXML_HSTATE_NORMAL:
+
             if(trim($data) == '<!DOCTYPE') {
-                //echo "Got doctype !\n";
                 // We expect the next time a name for the doctype
                 $this->_state = XARXML_HSTATE_DTDNAME_EXPECTED;
             }
