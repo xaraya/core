@@ -170,8 +170,7 @@
 	/**
 	 * Helper class for FetchFields -- holds info on a column
 	 */
-	class ADOFieldObject
-        { 
+	class ADOFieldObject { 
 		var $name = '';
 		var $max_length=0;
 		var $type="";
@@ -205,8 +204,7 @@
 	/**
 	 * Connection object. For connecting to databases, and executing queries.
 	 */ 
-	class ADOConnection
-        {
+	class ADOConnection {
 	//
 	// PUBLIC VARS 
 	//
@@ -1830,8 +1828,7 @@
 	 *
 	 * @return true if succeeded or false if database does not support transactions
 	 */
-	function BeginTrans()
-        {return false;}
+	function BeginTrans() {return false;}
 	
 	
 	/**
@@ -2280,8 +2277,7 @@
 	/**
 	* Internal placeholder for record objects. Used by ADORecordSet->FetchObj().
 	*/
-	class ADOFetchObj
-        {
+	class ADOFetchObj {
 	};
 	
 	//==============================================================================================	
@@ -2299,18 +2295,12 @@
 		var $_numOfRows = 0;
 		var $fields = false;
 		var $connection = false;
-		function RowCount()
-                {return 0;}
-		function RecordCount()
-                {return 0;}
-		function PO_RecordCount()
-                {return 0;}
-		function Close()
-                {return true;}
-		function FetchRow()
-                {return false;}
-		function FieldCount()
-                { return 0;}
+		function RowCount() {return 0;}
+		function RecordCount() {return 0;}
+		function PO_RecordCount(){return 0;}
+		function Close(){return true;}
+		function FetchRow() {return false;}
+		function FieldCount(){ return 0;}
 	}
 	
 	//==============================================================================================	
@@ -2330,8 +2320,7 @@
 	 * No prefetching of data is done, so the RecordCount() can return -1 ( which
 	 * means recordcount not known).
 	 */
-	class ADORecordSet extends ADODB_BASE_RS
-        {
+	class ADORecordSet extends ADODB_BASE_RS {
 	/*
 	 * public variables	
 	 */
@@ -2543,8 +2532,7 @@
 	 * @return an associative array indexed by the first column of the array, 
 	 * 	or false if the  data has less than 2 cols.
 	 */
-	function &GetAssoc($force_array = false, $first2cols = false)
-        {
+	function &GetAssoc($force_array = false, $first2cols = false) {
 		$cols = $this->_numOfFields;
 		if ($cols < 2) {
 			return false;
@@ -2890,8 +2878,7 @@
 	 *
 	 * @return the number of rows or -1 if this is not supported
 	 */
-	function RecordCount()
-        {return $this->_numOfRows;}
+	function RecordCount() {return $this->_numOfRows;}
 	
 	
 	/*
@@ -2908,8 +2895,7 @@
 	 *
 	 * @return the number of rows or -1 if this is not supported
 	 */
-	function RowCount()
-        {return $this->_numOfRows;} 
+	function RowCount() {return $this->_numOfRows;} 
 	
 
 	 /**
@@ -2920,8 +2906,7 @@
 	 * But aware possible problems in multiuser environments. For better speed the table
 	 * must be indexed by the condition. Heavy test this before deploying.
 	 */ 
-	function PO_RecordCount($table="", $condition="")
-        {
+	function PO_RecordCount($table="", $condition="") {
 		
 		$lnumrows = $this->_numOfRows;
 		// the database doesn't support native recordcount, so we do a workaround
@@ -2938,23 +2923,20 @@
 	/**
 	 * @return the current row in the recordset. If at EOF, will return the last row. 0-based.
 	 */
-	function CurrentRow()
-        {return $this->_currentRow;}
+	function CurrentRow() {return $this->_currentRow;}
 	
 	/**
 	 * synonym for CurrentRow -- for ADO compat
 	 *
 	 * @return the current row in the recordset. If at EOF, will return the last row. 0-based.
 	 */
-	function AbsolutePosition()
-        {return $this->_currentRow;}
+	function AbsolutePosition() {return $this->_currentRow;}
 	
 	/**
 	 * @return the number of columns in the recordset. Some databases will set this to 0
 	 * if no records are returned, others will return the number of columns in the query.
 	 */
-	function FieldCount()
-        {return $this->_numOfFields;}   
+	function FieldCount() {return $this->_numOfFields;}   
 
 
 	/**
@@ -3217,8 +3199,7 @@
 		}
 	}
 	
-	function _close()
-        {}
+	function _close() {}
 	
 	/**
 	 * set/returns the current recordset page when paginating
