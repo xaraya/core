@@ -33,8 +33,9 @@ function base_init()
     $pntable = pnDBGetTables();
     $prefix = pnConfigGetVar('prefix');
 
+    pnDBLoadTableMaintenanceAPI();
     // Create tables
-    
+
     // *_hooks
     $query = pnDBCreateTable($prefix . '_hooks',
                              array('pn_id'      => array('type'        => 'integer',
@@ -74,7 +75,7 @@ function base_init()
                                                          'null'     => false,
                                                          'default'  => '')));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -82,7 +83,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_module_vars
     $query = pnDBCreateTable($prefix . '_module_vars',
                              array('pn_id'      => array('type'        => 'integer',
@@ -101,7 +102,7 @@ function base_init()
                                    'pn_value'   => array('type'    => 'text',
                                                          'size'    => 'long')));
     $dbconn->Execute($query);
-       
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -109,7 +110,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_session_info
     $query = pnDBCreateTable($prefix . '_session_info',
                              array('pn_sessid'    => array('type'        => 'varchar',
@@ -169,7 +170,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_modules
     $query = pnDBCreateTable($prefix. '_modules',
                              array('pn_id'            => array('type'        => 'integer',
@@ -179,17 +180,6 @@ function base_init()
                                                                'primary_key' => true),
                                    'pn_name'          => array('type'    => 'varchar',
                                                                'size'    => 64,
-                                                               'null'    => false,
-                                                               'default' => ''),
-                                   'pn_type'          => array('type'     => 'integer',
-                                                               'null'     => false,
-                                                               'default'  => '0'),
-                                   'pn_displayname'   => array('type'    => 'varchar',
-                                                               'size'    => 64,
-                                                               'null'    => false,
-                                                               'default' => ''),
-                                   'pn_description'   => array('type'    => 'varchar',
-                                                               'size'    => 255,
                                                                'null'    => false,
                                                                'default' => ''),
                                    'pn_regid'         => array('type'    => 'integer',
@@ -204,15 +194,22 @@ function base_init()
                                                                'size'    => 10,
                                                                'null'    => false,
                                                                'default' => '0'),
+                                   'pn_mode'          => array('type'     => 'integer',
+                                                               'null'     => false,
+                                                               'default'  => '0'),
+                                   'pn_class'         => array('type'    => 'varchar',
+                                                               'size'    => 64,
+                                                               'null'    => false,
+                                                               'default' => ''),
+                                   'pn_category'      => array('type'    => 'varchar',
+                                                               'size'    => 64,
+                                                               'null'    => false,
+                                                               'default' => ''),
                                    'pn_admin_capable' => array('type'     => 'integer',
                                                                'size'     => 'tiny',
                                                                'null'     => false,
                                                                'default'  => '0'),
                                    'pn_user_capable'  => array('type'     => 'integer',
-                                                               'size'     => 'tiny',
-                                                               'null'     => false,
-                                                               'default'  => '0'),
-                                   'pn_state'         => array('type'     => 'integer',
                                                                'size'     => 'tiny',
                                                                'null'     => false,
                                                                'default'  => '0')));
@@ -226,6 +223,26 @@ function base_init()
         return NULL;
     }
     
+
+    // *_module_states
+    $query = pnDBCreateTable($prefix . '_module_states',
+                             array('pn_regid'   => array('type'        => 'integer',
+                                                          'null'        => false,
+                                                          'default'     => '0',
+                                                          'primary_key' => true),
+                                   'pn_state'   => array('type'    => 'integer',
+                                                         'null'    => false,
+                                                         'default' => '0')));
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
     // *_groups
     $query = pnDBCreateTable($prefix . '_groups',
                              array('pn_gid'      => array('type'        => 'integer',
@@ -238,7 +255,7 @@ function base_init()
                                                          'null'    => false,
                                                          'default' => '')));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -246,7 +263,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_group_membership
     $query = pnDBCreateTable($prefix . '_group_membership',
                              array('pn_gid' => array('type'    => 'integer',
@@ -256,7 +273,7 @@ function base_init()
                                                      'null'    => false,
                                                      'default' => '0')));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -264,13 +281,13 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     $query = pnDBCreateIndex($prefix . '_group_membership',
                              array('name'   => 'pn_uid_gid_index',
                                    'fields' => array('pn_uid', 'pn_gid'),
                                    'unique' => 'true'));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -278,7 +295,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_group_perms
     $query = pnDBCreateTable($prefix . '_group_perms',
                              array('pn_pid'      => array('type'        => 'integer',
@@ -303,7 +320,7 @@ function base_init()
                                    'pn_instance' => array('type'    => 'varchar',
                                                           'size'    => 255,
                                                           'null'    => false,
-                                                          'default' => ''),                                                     
+                                                          'default' => ''),
                                    'pn_level'     => array('type'    => 'integer',
                                                            'size' => 'small',
                                                            'null'    => false,
@@ -312,7 +329,7 @@ function base_init()
                                                            'null'    => false,
                                                            'default' => '0')));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -320,7 +337,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_realms
     $query = pnDBCreateTable($prefix . '_realms',
                              array('pn_rid'  => array('type'        => 'integer',
@@ -333,7 +350,7 @@ function base_init()
                                                       'null'    => false,
                                                       'default' => '')));
     $dbconn->Execute($query);
-    
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -341,7 +358,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_user_perms
     $query = pnDBCreateTable($prefix . '_user_perms',
                              array('pn_pid'       => array('type'        => 'integer',
@@ -373,7 +390,7 @@ function base_init()
                                                            'null'        => false,
                                                            'default'     => '0')));
     $dbconn->Execute($query);
-        
+
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
@@ -381,21 +398,23 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
+
     // *_languages (?)
-    
+    // Start Configuration system
+    pnCoreInit(PNCORE_SYSTEM_CONFIGURATION);
+    die('here');
     // Set config vars
     pnConfigSetVar('sitename', 'Your Site Name');
     pnConfigSetVar('slogan', 'Your slogan here');
-    
+
     pnConfigSetVar('seclevel', 'Medium');
     pnConfigSetVar('secmeddays', 7);
     pnConfigSetVar('secinactivemins', 90);
-    
+
     pnConfigSetVar('Version_Num', '0.80-pre');
     pnConfigSetVar('Version_ID', 'PostNuke');
     pnConfigSetVar('Version_Sub', 'adam_baum');
-    
+
     pnConfigSetVar('Default_Theme', 'SeaBreeze');
 
     pnConfigSetVar('Site.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
@@ -438,7 +457,7 @@ function base_init()
         return NULL;
     }
 
-    include 'includes/pnMod.php';
+
     include 'includes/pnBlocks.php';
     
     // coverups for missing funcs at this point (hack!)

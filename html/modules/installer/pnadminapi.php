@@ -46,7 +46,7 @@ function installer_adminapi_phase4()
     return array('database_host' => 'localhost',
                  'database_username' => 'root',
                  'database_password' => '',
-                 'database_name' => 'adam_baum',
+                 'database_name' => 'Xaraya2',
                  'database_prefix' => 'pn',
                  'database_types' => array('mysql'    => 'MySQL',
                                            'postgres' => 'Postgres'));
@@ -71,11 +71,11 @@ function installer_adminapi_phase5()
             mysql_connect($dbhost,$dbuser,$dbpass);
             break;
         } 
-       
+
         //TODO: add error checking and replace with pnDBCreateDB
         mysql_create_db($dbname);
     }
-    
+
     if (isset($HTTP_POST_VARS['install_intranet'])) {
         $intranet = true;
     } else {
@@ -86,8 +86,8 @@ function installer_adminapi_phase5()
     installer_adminapi_modifyconfig($dbhost, $dbuser, $dbpass, $dbname, $prefix, $dbtype);
     
     // Kick it
-    pnInit(_PNINIT_LOAD_DATABASE);
-    
+    pnCoreInit(PNCORE_SYSTEM_ADODB);
+ 
     // Initialize *minimal* tableset
     // Load the installer module, the hard way - file check too
     $base_init_file = 'modules/base/pninit.php';
@@ -99,7 +99,7 @@ function installer_adminapi_phase5()
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module file $base_init_file doesn't exist."));return;
     }
-    
+
     // Run the function, check for existence
     $mod_func = 'base_init';
 
@@ -129,27 +129,27 @@ function installer_adminapi_phase5()
 // TODO: EXCEPTIONS!!
 function installer_adminapi_modifyconfig($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
 {
-    $config_php = join('', file('config.php'));
-    
+    $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php';
+    $config_php = join('', file($systemConfigFile));
     if (isset($HTTP_ENV_VARS['OS']) && strstr($HTTP_ENV_VARS['OS'], 'Win')) {
         $system = 1;
     } else {
         $system = 0;
     }
-    
-    $dbuname = base64_encode($dbuname);
-    $dbpass = base64_encode($dbpass);
 
-    $config_php = preg_replace('/\[\'dbtype\'\]\s*=\s*(\'|\")(.*)\\1;/', "['dbtype'] = '$dbtype';", $config_php);
-    $config_php = preg_replace('/\[\'dbhost\'\]\s*=\s*(\'|\")(.*)\\1;/', "['dbhost'] = '$dbhost';", $config_php);
-    $config_php = preg_replace('/\[\'dbuname\'\]\s*=\s*(\'|\")(.*)\\1;/', "['dbuname'] = '$dbuname';", $config_php);
-    $config_php = preg_replace('/\[\'dbpass\'\]\s*=\s*(\'|\")(.*)\\1;/', "['dbpass'] = '$dbpass';", $config_php);
-    $config_php = preg_replace('/\[\'dbname\'\]\s*=\s*(\'|\")(.*)\\1;/', "['dbname'] = '$dbname';", $config_php);
-    $config_php = preg_replace('/\[\'prefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['prefix'] = '$prefix';", $config_php);
-    $config_php = preg_replace('/\[\'system\'\]\s*=\s*(\'|\")(.*)\\1;/', "['system'] = '$system';", $config_php);
-    $config_php = preg_replace('/\[\'encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['encoded'] = '1';", $config_php);
+    //$dbuname = base64_encode($dbuname);
+    //$dbpass = base64_encode($dbpass);
+
+    $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbtype';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbhost';", $config_php);
+    $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbuname';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbpass';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbname';", $config_php);
+    $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$prefix';", $config_php);
+   // $config_php = preg_replace('/\[\'system\'\]\s*=\s*(\'|\")(.*)\\1;/', "['system'] = '$system';", $config_php);
+   // $config_php = preg_replace('/\[\'encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['encoded'] = '1';", $config_php);
     
-    $fp = fopen ('config.php', 'w+');
+    $fp = fopen ($systemConfigFile, 'w+');
     fwrite ($fp, $config_php);
     fclose ($fp);
 }

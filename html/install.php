@@ -24,8 +24,8 @@
 // Purpose of this file: Entry point for PostNuke installer
 // ----------------------------------------------------------------------
 
-include 'includes/pnCore.php';
-
+// INSTALLER THEME
+define('PNINSTALL_THEME','SeaBreeze');
 
 
 // 1. select language
@@ -41,6 +41,13 @@ include 'includes/pnCore.php';
 // 6. pick optional components
 // ---call optional components' init funcs, disable non-reusable areas of install module
 // 7. finished!
+
+// Include pnCore
+include 'includes/pnCore.php';
+// Include extra functions
+include 'modules/installer/pnfunctions.php';
+
+// Install Phases
 define ('PNINSTALL_PHASE_WELCOME',             '1');
 define ('PNINSTALL_PHASE_LANGUAGE_SELECT',     '2');
 define ('PNINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
@@ -62,9 +69,9 @@ define ('PNINSTALL_PHASE_FINISHED',            '8');
  * @returns bool
  * @return true on success, false on failure
  */
-function pnInstall_Init($phase = PNINSTALL_PHASE_WELCOME)
+function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 {
-    pnCoreInit(0); // Does not initialise any optional system
+    pnCoreInit(PNCORE_SYSTEM_NONE); // Does not initialise any optional system
 
     // Handle installation phase designation
     $phase = (int) pnRequestGetVar('install_phase', 'POST');
@@ -101,17 +108,11 @@ function pnInstall_Init($phase = PNINSTALL_PHASE_WELCOME)
             return;
         }
 
-        $return = pnModTemplate('installer', 'admin', 'phase'.$phase, $data);
+        $return = pnTplInstall('installer', 'admin', 'phase'.$phase, $data);
     } else {
         // exception time!
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
-    }
-
-    // DEBUG: regenerate flag should be removed prior to release
-    $regenerate = pnVarCleanFromInput('regenerate');
-    if (!isset($regenerate)) {
-        $regenerate = false;
     }
 
     // Render page
@@ -125,18 +126,15 @@ function pnInstall_Init($phase = PNINSTALL_PHASE_WELCOME)
         return;
     }
 
+    //echo $pageOutput;
+    
     return true;
 }
 
-function pnUserGetTheme()
-{
-    return 'themes/SeaBreeze';
-}
+$res = pnInstallMain($phase);
 
-
-
-$res = pnInstall_Init($phase);
 if (!isset($res)) {
+
     // If we're here there must be surely an uncaught exception
     $text = pnML('Caught exception');
     $text .= '<br />';
@@ -145,21 +143,30 @@ if (!isset($res)) {
     pnLogException(PNLOG_LEVEL_ERROR);
 
     // TODO: <marco> Do fallback if raised exception is coming from template engine
-    if (pnExceptionId() == 'PAGE_TEMPLATE_NOT_FOUND') {
-        echo "<html><head><title>Error</title><body>$text</body></html>";
+    if (pnExceptionId() == 'TEMPLATE_NOT_EXIST') {
+        echo '<html><head><title>Error</title><body>' . $text . '</body></html>';
     } else {
-        // It's important here to free exception before caling pnTplPrintPage
+        // It's important here to free exception before caling pnTpl_renderPage
         pnExceptionFree();
-        if (!pnTplPrintPage($text, pnUserGetTheme())) {
+        // Render page
+        $pageOutput = pnTpl_renderPage($text);
+        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
             // Fallback to raw html
-            $text = pnML('The current page is shown because the Block Layout Template Engine failed to render the right page, the cause is:');
-            $text .= '<br />';
-            $text .= pnExceptionRender('html');
-            echo "<html><head><title>Error</title><body>$text</body></html>";
+            $msg = '<font color="red">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</font>';
+            $msg .= '<br /><br />';
+            $msg .= pnExceptionRender('html');
+            $msg .= '<br />';
+            $msg .= '<font color="red">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</font>';
+            $msg .= '<br /><br />';
+            $msg .= $text;
+            echo "<html><head><title>Error</title><body>$msg</body></html>";
+        } else {
+            echo $pageOutput;
         }
     }
 }
 
+// Kill the debugger
 pnCore_disposeDebugger();
 
 ?>
