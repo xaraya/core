@@ -1,6 +1,6 @@
 <?PHP
 
-// V4.05 13 Dec 2003
+// V4.20 22 Feb 2004
 
 error_reporting(E_ALL);
 

@@ -1,6 +1,6 @@
 <?php
 /*
- V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -69,8 +69,17 @@ class ADODB_postgres64 extends ADOConnection{
 		FROM pg_class c, pg_attribute a,pg_type t 
 		WHERE relkind = 'r' AND (c.relname='%s' or c.relname = lower('%s')) and a.attname not like '....%%'
 AND a.attnum > 0 AND a.atttypid = t.oid AND a.attrelid = c.oid ORDER BY a.attnum";
+
+	var $metaColumnsSQL1 = "SELECT a.attname, t.typname, a.attlen, a.atttypmod, a.attnotnull, a.atthasdef, a.attnum 
+FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n 
+WHERE relkind = 'r' AND (c.relname='%s' or c.relname = lower('%s'))
+ and c.relnamespace=n.oid and n.nspname='%s' 
+	and a.attname not like '....%%' AND a.attnum > 0 
+	AND a.atttypid = t.oid AND a.attrelid = c.oid ORDER BY a.attnum";
+	
 	// get primary key etc -- from Freek Dijkstra
-	var $metaKeySQL = "SELECT ic.relname AS index_name, a.attname AS column_name,i.indisunique AS unique_key, i.indisprimary AS primary_key FROM pg_class bc, pg_class ic, pg_index i, pg_attribute a WHERE bc.oid = i.indrelid AND ic.oid = i.indexrelid AND (i.indkey[0] = a.attnum OR i.indkey[1] = a.attnum OR i.indkey[2] = a.attnum OR i.indkey[3] = a.attnum OR i.indkey[4] = a.attnum OR i.indkey[5] = a.attnum OR i.indkey[6] = a.attnum OR i.indkey[7] = a.attnum) AND a.attrelid = bc.oid AND bc.relname = '%s'";
+	var $metaKeySQL = "SELECT ic.relname AS index_name, a.attname AS column_name,i.indisunique AS unique_key, i.indisprimary AS primary_key 
+	FROM pg_class bc, pg_class ic, pg_index i, pg_attribute a WHERE bc.oid = i.indrelid AND ic.oid = i.indexrelid AND (i.indkey[0] = a.attnum OR i.indkey[1] = a.attnum OR i.indkey[2] = a.attnum OR i.indkey[3] = a.attnum OR i.indkey[4] = a.attnum OR i.indkey[5] = a.attnum OR i.indkey[6] = a.attnum OR i.indkey[7] = a.attnum) AND a.attrelid = bc.oid AND bc.relname = '%s'";
 	
 	var $hasAffectedRows = true;
 	var $hasLimit = false;	// set to true for pgsql 7 only. support pgsql/mysql SELECT * FROM TABLE LIMIT 10
@@ -94,6 +103,8 @@ AND a.attnum > 0 AND a.atttypid = t.oid AND a.attrelid = c.oid ORDER BY a.attnum
 	var $random = 'random()';		/// random function
 	var $autoRollback = true; // apparently pgsql does not autorollback properly before 4.3.4
 							// http://bugs.php.net/bug.php?id=25404
+	
+	var $_bindInputArray = false; // requires postgresql 7.3+ and ability to modify database
 	
 	// The last (fmtTimeStamp is not entirely correct: 
 	// PostgreSQL also has support for time zones, 
@@ -359,6 +370,8 @@ select viewname,'V' from pg_views where viewname like $mask";
 	function BlobEncode($blob)
 	{
 		if (ADODB_PHPVER >= 0x4200) return pg_escape_bytea($blob);
+		
+		/*92=backslash, 0=null, 39=single-quote*/
 		$badch = array(chr(92),chr(0),chr(39)); # \  null  '
 		$fixch = array('\\\\134','\\\\000','\\\\047');
 		return adodb_str_replace($badch,$fixch,$blob);
@@ -368,8 +381,8 @@ select viewname,'V' from pg_views where viewname like $mask";
 	
 	function UpdateBlob($table,$column,$val,$where,$blobtype='BLOB')
 	{
-		return $this->Execute("UPDATE $table SET $column=? WHERE $where",
-			array($this->BlobEncode($val))) != false;
+		// do not use bind params which uses qstr(), as blobencode() already quotes data
+		return $this->Execute("UPDATE $table SET $column='".$this->BlobEncode($val)."'::bytea WHERE $where");
 	}
 	
 	function OffsetDate($dayFraction,$date=false)
@@ -379,19 +392,23 @@ select viewname,'V' from pg_views where viewname like $mask";
 	}
 	
 
-	// converts field names to lowercase 
-	function &MetaColumns($table) 
+	// for schema support, pass in the $table param "$schema.$tabname".
+	// converts field names to lowercase, $upper is ignored
+	function &MetaColumns($table,$upper=true) 
 	{
 	global $ADODB_FETCH_MODE;
 	
-		//if (strncmp(PHP_OS,'WIN',3) === 0);
+		$schema = false;
+		$this->_findschema($table,$schema);
+		
 		$table = strtolower($table);
 	
-		if (!empty($this->metaColumnsSQL)) { 
 			$save = $ADODB_FETCH_MODE;
 			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 			if ($this->fetchMode !== false) $savem = $this->SetFetchMode(false);
-			$rs = $this->Execute(sprintf($this->metaColumnsSQL,$table,$table));
+		
+		if ($schema) $rs =& $this->Execute(sprintf($this->metaColumnsSQL1,$table,$table,$schema));
+		else $rs =& $this->Execute(sprintf($this->metaColumnsSQL,$table,$table));
 			if (isset($savem)) $this->SetFetchMode($savem);
 			$ADODB_FETCH_MODE = $save;
 			
@@ -473,26 +490,38 @@ select viewname,'V' from pg_views where viewname like $mask";
 				}
 				
 				if ($ADODB_FETCH_MODE == ADODB_FETCH_NUM) $retarr[] = $fld;	
-				else $retarr[strtoupper($fld->name)] = $fld;
+			else $retarr[($upper) ? strtoupper($fld->name) : $fld->name] = $fld;
 				
 				$rs->MoveNext();
 			}
 			$rs->Close();
 			return $retarr;	
-		}
-		return false;
+		
 	}
 
 	  function &MetaIndexes ($table, $primary = FALSE)
         {
                 global $ADODB_FETCH_MODE;
                 
+				$schema = false;
+				$this->_findschema($table,$schema);
+				
+				if ($schema) { // requires pgsql 7.3+ - pg_namespace used.
+					$sql = '
+SELECT c.relname as "Name", i.indisunique as "Unique", i.indkey as "Columns" 
+FROM pg_catalog.pg_class c 
+JOIN pg_catalog.pg_index i ON i.indexrelid=c.oid 
+JOIN pg_catalog.pg_class c2 ON c2.oid=i.indrelid
+	,pg_namespace n 
+WHERE c2.relname=\'%s\' and c.relnamespace=c2.relnamespace and c.relnamespace=n.oid and n.nspname=\'%s\' AND i.indisprimary=false';
+				} else {
                 $sql = '
 SELECT c.relname as "Name", i.indisunique as "Unique", i.indkey as "Columns"
 FROM pg_catalog.pg_class c
 JOIN pg_catalog.pg_index i ON i.indexrelid=c.oid
 JOIN pg_catalog.pg_class c2 ON c2.oid=i.indrelid
 WHERE c2.relname=\'%s\'';
+    			}
                 
                 if ($primary == FALSE) {
                         $sql .= ' AND i.indisprimary=false;';
@@ -504,7 +533,7 @@ WHERE c2.relname=\'%s\'';
                         $savem = $this->SetFetchMode(FALSE);
                 }
                 
-                $rs = $this->Execute(sprintf($sql,$table));
+                $rs = $this->Execute(sprintf($sql,$table,$schema));
                 
                 if (isset($savem)) {
                         $this->SetFetchMode($savem);
@@ -600,15 +629,43 @@ WHERE c2.relname=\'%s\'';
 		return $this->_connect($str,$user,$pwd,$db,1);
 	}
 
+
 	// returns queryID or false
 	function _query($sql,$inputarr)
 	{
+		
+		if ($inputarr) {
 		/*
-		if (is_array($sql)) {
-			if (!$sql[1]) {
+			It appears that PREPARE/EXECUTE is slower for many queries.
 			
-				$sqltxt = $sql[0];
-				$plan = $sql[1] = 'P'.md5($sqltxt);
+			For query executed 1000 times:
+			"select id,firstname,lastname from adoxyz 
+				where firstname not like ? and lastname not like ? and id = ?"
+				
+			with plan = 1.51861286163 secs
+			no plan =   1.26903700829 secs
+
+			
+
+		*/
+			$plan = 'P'.md5($sql);
+				
+			$execp = '';
+			foreach($inputarr as $v) {
+				if ($execp) $execp .= ',';
+				if (is_string($v)) {
+					if (strncmp($v,"'",1) !== 0) $execp .= $this->qstr($v);
+				} else {
+					$execp .= $v;
+				}
+			}
+			
+			if ($execp) $exsql = "EXECUTE $plan ($execp)";
+			else $exsql = "EXECUTE $plan";
+			
+			$rez = @pg_exec($this->_connectionID,$exsql);
+			if (!$rez) {
+			# Perhaps plan does not exist? Prepare/compile plan.
 				$params = '';
 				foreach($inputarr as $v) {
 					if ($params) $params .= ',';
@@ -620,40 +677,26 @@ WHERE c2.relname=\'%s\'';
 						$params .= "REAL";
 					}
 				}
-				$sqlarr = explode('?',$sqltxt);
-				$sqltxt = '';
+				$sqlarr = explode('?',$sql);
+				//print_r($sqlarr);
+				$sql = '';
 				$i = 1;
 				foreach($sqlarr as $v) {
-					$sqltxt .= $v.'$'.$i;
+					$sql .= $v.' $'.$i;
 					$i++;
 				}
-				$s = "PREPARE $plan ($params) AS ".substr($sqltxt,0,strlen($sqltxt)-2);		
-				adodb_pr($s);
+				$s = "PREPARE $plan ($params) AS ".substr($sql,0,strlen($sql)-2);		
+				//adodb_pr($s);
 				pg_exec($this->_connectionID,$s);
 				echo $this->ErrorMsg();
-			} else {
-				$plan = $sql[1];
 			}
-			$params = '';
-			foreach($inputarr as $v) {
-				if ($params) $params .= ',';
-				if (is_string($v)) {
-					if (strncmp($v,"'",1) !== 0) $params .= $this->qstr($v.'TEST');
-				} else {
-					$params .= $v;
-				}
-			}
-			
-			if ($params) $sql = "EXECUTE $plan ($params)";
-			else $sql = "EXECUTE $plan";
-			
-			adodb_pr(">>>>>".$sql);
-			pg_exec($this->_connectionID,$s);
-		}*/
 		
+			$rez = pg_exec($this->_connectionID,$exsql);
+		} else {
 		$this->_errorMsg = false;
-		
+			//adodb_backtrace();
 		$rez = pg_exec($this->_connectionID,$sql);
+		}
 		// check if no data returned, then no need to create real recordset
 		if ($rez && pg_numfields($rez) <= 0) {
 			if (is_resource($this->_resultid) && get_resource_type($this->_resultid) === 'pgsql result') {
@@ -832,9 +875,8 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 			$this->_currentRow++;
 			if ($this->_numOfRows < 0 || $this->_numOfRows > $this->_currentRow) {
 				$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
-			
-				if (is_array($this->fields)) {
-					if (isset($this->_blobArr)) $this->_fixblobs();
+				if (is_array($this->fields) && $this->fields) {
+					if ($this->fields && isset($this->_blobArr)) $this->_fixblobs();
 					return true;
 				}
 			}
@@ -846,11 +888,13 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 	
 	function _fetch()
 	{
+				
 		if ($this->_currentRow >= $this->_numOfRows && $this->_numOfRows >= 0)
         	return false;
 
 		$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
-		if (isset($this->_blobArr)) $this->_fixblobs();
+		
+	if ($this->fields && isset($this->_blobArr)) $this->_fixblobs();
 			
 		return (is_array($this->fields));
 	}

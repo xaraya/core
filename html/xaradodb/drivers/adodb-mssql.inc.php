@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -100,6 +100,7 @@ class ADODB_mssql extends ADOConnection {
 	var $identitySQL = 'select @@IDENTITY'; // 'select SCOPE_IDENTITY'; # for mssql 2000
 	var $uniqueOrderBy = true;
 	var $_bindInputArray = true;
+	
 	
 	function ADODB_mssql() 
 	{		
@@ -517,7 +518,9 @@ order by constraint_name, referenced_table_name, keyno";
 			}
 		
 		if  ($this->debug) {
-			ADOConnection::outp( "Parameter(\$stmt, \$php_var='$var', \$name='$name'); (type=$type)");
+			$prefix = ($isOutput) ? 'Out' : 'In';
+			$ztype = (empty($type)) ? 'false' : $type;
+			ADOConnection::outp( "{$prefix}Parameter(\$stmt, \$php_var='$var', \$name='$name', \$maxLen=$maxLen, \$type=$ztype);");
 		}
 		/*
 			See http://phplens.com/lens/lensforum/msgs.php?id=7231
@@ -571,7 +574,14 @@ order by constraint_name, referenced_table_name, keyno";
 				if (is_string($v)) {
 					$len = strlen($v);
 					if ($len == 0) $len = 1;
+					
+					if ($len > 4000 ) {
+						// NVARCHAR is max 4000 chars. Let's use NTEXT
+						$decl .= "@P$i NTEXT";
+					} else {
 					$decl .= "@P$i NVARCHAR($len)";
+					}
+
 					$params .= "@P$i=N". (strncmp($v,"'",1)==0? $v : $this->qstr($v));
 				} else if (is_integer($v)) {
 					$decl .= "@P$i INT";

@@ -547,7 +547,7 @@ class ADORecordSet_ado extends ADORecordSet {
 			switch($t) {
 			case 135: // timestamp
 				if (!strlen((string)$f->value)) $this->fields[] = false;
-				else $this->fields[] = adodb_date('Y-m-d H:i:s',(integer)$f->value);
+				else $this->fields[] = adodb_date('Y-m-d H:i:s',(float)$f->value);
 				break;			
 			case 133:// A date value (yyyymmdd) 
 				if ($val = $f->value) {
@@ -557,7 +557,7 @@ class ADORecordSet_ado extends ADORecordSet {
 				break;
 			case 7: // adDate
 				if (!strlen((string)$f->value)) $this->fields[] = false;
-				else $this->fields[] = adodb_date('Y-m-d',(integer)$f->value);
+				else $this->fields[] = adodb_date('Y-m-d',(float)$f->value);
 				break;
 			case 1: // null
 				$this->fields[] = false;

@@ -4,7 +4,7 @@ global $ADODB_INCLUDED_LIB;
 $ADODB_INCLUDED_LIB = 1;
 
 /* 
-V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -51,17 +51,13 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 				$uSet .= ",$k=$v";
 		}
 		 
-		$first = true;
+		$where = false;
 		foreach ($keyCol as $v) {
-			if ($first) {
-				$first = false;
-				$where = "$v=$fieldArray[$v]";
-			} else {
-				$where .= " and $v=$fieldArray[$v]";
-			}
+			if ($where) $where .= " and $v=$fieldArray[$v]";
+			else $where = "$v=$fieldArray[$v]";
 		}
 		
-		if ($uSet) {
+		if ($uSet && $where) {
 			$update = "UPDATE $table SET $uSet WHERE $where";
 		
 			$rs = $zthis->Execute($update);
@@ -81,7 +77,6 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 				} else
 					 if (($zthis->Affected_Rows()>0)) return 1;
 			}
-				
 		}
 	//	print "<p>Error=".$this->ErrorNo().'<p>';
 		$first = true;
@@ -417,7 +412,12 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 							break;
 						default:
 							$val = $arrFields[$upperfname];
-							if (!is_numeric($val)) $val = (float) $val;
+							/*if (!is_numeric($val)) {
+								if (strncmp($val,'=',1) == 0) $val = substr($val,1);
+								else $val = (float) $val;
+							}*/
+							if (empty($val)) $val = '0';
+
 							$updateSQL .= $field->name . " = " . $val  . ", ";
 							break;
 					};
@@ -477,6 +477,7 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 	$values = '';
 	$fields = '';
 	$arrFields = _array_change_key_case($arrFields);
+	
 	if (!$rs) {
 			printf(ADODB_BAD_RS,'GetInsertSQL');
 			return false;
@@ -484,7 +485,6 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 
 		$fieldInsertedCount = 0;
 	
-		
 		// Loop through all of the fields in the recordset
 		for ($i=0, $max=$rs->FieldCount(); $i < $max; $i++) {
 
@@ -526,7 +526,11 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 						break;
 					default:
 						$val = $arrFields[$upperfname];
-						if (!is_numeric($val)) $val = (float) $val;
+					/*if (!is_numeric($val)) {
+						if (strncmp($val,'=',1) == 0) $val = substr($val,1);
+						else $val = (float) $val;
+					}*/
+					if (empty($val)) $val = '0';
 						$values .= $val . ", ";
 						break;
 				};
@@ -534,7 +538,8 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 	  	};
 
 		// If there were any inserted fields then build the rest of the insert query.
-		if ($fieldInsertedCount > 0) {
+	if ($fieldInsertedCount <= 0)  return false;
+	
 			// Get the table name from the existing query.
 			preg_match("/FROM\s+".ADODB_TABLE_REGEX."/is", $rs->sql, $tableName);
 
@@ -547,9 +552,7 @@ function _adodb_getinsertsql(&$zthis,&$rs,$arrFields,$magicq=false)
 			$insertSQL = "INSERT INTO " . $tableName[1] . " ( $fields ) VALUES ( $values )";
 
 			return $insertSQL;
-
-		} else {
-			return false;
-   		};
 }
+
+
 ?>

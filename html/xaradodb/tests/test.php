@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -14,7 +14,7 @@ $ADODB_FLUSH = true;
 
 define('ADODB_ASSOC_CASE',0);
 
-include_once('../adodb-pear.inc.php');
+if (PHP_VERSION < 5) include_once('../adodb-pear.inc.php');
 //--------------------------------------------------------------------------------------
 //define('ADODB_ASSOC_CASE',1);
 //
@@ -128,6 +128,9 @@ FROM `nuke_stories` `t1`, `nuke_authors` `t2`, `nuke_stories_cat` `t3`, `nuke_to
 	 $dd = $db->UnixDate('1999-02-20');
 	print "<br>unixdate</i> 1999-02-20 = ".date('Y-m-d',$dd)."<p>";
 	print "<br><i>ts4</i> =".($db->UnixTimeStamp("19700101000101")+8*3600);
+	print "<br><i>ts5</i> =".$db->DBTimeStamp($db->UnixTimeStamp("20040110092123"));
+	print "<br><i>ts6</i> =".$db->UserTimeStamp("20040110092123");
+	print "<br><i>ts6</i> =".$db->DBTimeStamp("20040110092123");
 	flush();
 	// mssql too slow in failing bad connection
 	if (false && $db->databaseType != 'mssql') {
@@ -170,9 +173,17 @@ FROM `nuke_stories` `t1`, `nuke_authors` `t2`, `nuke_stories_cat` `t3`, `nuke_to
 		$rs->Close();
 	} else print "err=".$db->ErrorMsg();
 
-	print "<p>Test select on empty table</p>";
-	$rs = &$db->Execute("select * from ADOXYZ where id=9999");
+	print "<p>Test select on empty table, FetchField when EOF, and GetInsertSQL</p>";
+	$rs = &$db->Execute("select id,firstname from ADOXYZ where id=9999");
 	if ($rs && !$rs->EOF) print "<b>Error: </b>RecordSet returned by Execute(select...') on empty table should show EOF</p>";
+	if ($rs->EOF && ($o = $rs->FetchField(0))) {
+		$record['id'] = 99;
+		$record['firstname'] = 'John';
+		$sql =  $db->GetInsertSQL($rs, $record);
+		if ($sql != "INSERT INTO ADOXYZ ( id, firstname ) VALUES ( 99, 'John' )") Err("GetInsertSQL does not work on empty table");
+	} else {
+		Err("FetchField does not work on empty recordset, meaning GetInsertSQL will fail...");
+	}
 	if ($rs) $rs->Close();
 	flush();
 	//$db->debug=true;	
@@ -341,8 +352,8 @@ GO
 		$yr = '1998';
 		
 		$stmt = $db->PrepareSP('SalesByCategory');
-		$db->Parameter($stmt,$cat,'CategoryName');
-		$db->Parameter($stmt,$yr,'OrdYear');
+		$db->InParameter($stmt,$cat,'CategoryName');
+		$db->InParameter($stmt,$yr,'OrdYear');
 		$rs = $db->Execute($stmt);
 		rs2html($rs);
 		
@@ -350,8 +361,8 @@ GO
 		$yr = 1998;
 		
 		$stmt = $db->PrepareSP('SalesByCategory');
-		$db->Parameter($stmt,$cat,'CategoryName');
-		$db->Parameter($stmt,$yr,'OrdYear');
+		$db->InParameter($stmt,$cat,'CategoryName');
+		$db->InParameter($stmt,$yr,'OrdYear');
 		$rs = $db->Execute($stmt);
 		rs2html($rs);
 		
@@ -374,9 +385,9 @@ GO
 		$days = 10;
 		$begin_date = '';
 		$end_date = '';
-		$db->Parameter($stmt,$days,'days', false, 4, SQLINT4); 
-		$db->Parameter($stmt,$begin_date,'start', 1, 20, SQLVARCHAR ); 
-		$db->Parameter($stmt,$end_date,'end', 1, 20, SQLVARCHAR ); 
+		$db->InParameter($stmt,$days,'days', 4, SQLINT4); 
+		$db->OutParameter($stmt,$begin_date,'start', 20, SQLVARCHAR ); 
+		$db->OutParameter($stmt,$end_date,'end', 20, SQLVARCHAR ); 
 		$db->Execute($stmt);
 		if (empty($begin_date) or empty($end_date)) {
 			Err("MSSQL SP Test for OUT Failed");
@@ -400,6 +411,7 @@ GO
 CREATE OR REPLACE PACKAGE adodb AS
 TYPE TabType IS REF CURSOR RETURN tab%ROWTYPE;
 PROCEDURE open_tab (tabcursor IN OUT TabType,tablenames in varchar);
+PROCEDURE data_out(input IN varchar, output OUT varchar); 
 END adodb;
 /
 
@@ -408,13 +420,15 @@ PROCEDURE open_tab (tabcursor IN OUT TabType,tablenames in varchar) IS
 	BEGIN
 		OPEN tabcursor FOR SELECT * FROM tab where tname like tablenames;
 	END open_tab;
+	
+PROCEDURE data_out(input IN varchar, output OUT varchar) IS
+	BEGIN
+		output := 'Cinta Hati '||input;
+	END;
 END adodb;
-
 /
-*/		
-		$stmt = $db->Prepare("BEGIN adodb.open_tab(:RS,'A%'); END;");
-		$db->Parameter($stmt, $cur, 'RS', false, -1, OCI_B_CURSOR);
-		$rs = $db->Execute($stmt);
+*/
+		$rs = $db->ExecuteCursor("BEGIN adodb.open_tab(:RS,'A%'); END;");
 	
 		if ($rs && !$rs->EOF) {
 			print "Test 1 RowCount: ".$rs->RecordCount()."<p>";
@@ -422,15 +436,22 @@ END adodb;
 			print "<b>Error in using Cursor Variables 1</b><p>";
 		}
 		
-		$rs = $db->ExecuteCursor("BEGIN adodb.open_tab(:RS2,:TAB); END;",'RS2',array('TAB'=>'A%'));
-		if ($rs && !$rs->EOF) {
-			print "Test 2 RowCount: ".$rs->RecordCount()."<p>";
-		} else {
-			print "<b>Error in using Cursor Variables 2</b><p>";
-		}
 		
 		print "<h4>Testing Stored Procedures for oci8</h4>";
-
+		
+		$stmt = $db->PrepareSP("BEGIN adodb.data_out(:a1, :a2); END;");
+		$a1 = 'Malaysia';
+		//$a2 = ''; # a2 doesn't even need to be defined!
+		$db->InParameter($stmt,$a1,'a1');
+		$db->OutParameter($stmt,$a2,'a2');
+		$rs = $db->Execute($stmt);
+		if ($rs) {
+			if ($a2 !== 'Cinta Hati Malaysia') print "<b>Stored Procedure Error: a2 = $a2</b><p>";
+			else echo  "OK: a2=$a2<p>";
+		} else {
+			print "<b>Error in using Stored Procedure IN/Out Variables</b><p>";
+		}
+		
 		
 		$tname = 'A%';
 		
@@ -453,7 +474,7 @@ END adodb;
 	$db->debug=1;
 	print "<p>Testing Bulk Insert of 3 rows</p>";
 
-	$sql = "insert into ADOXYZ (id,firstname,lastname) values (?,?,?)";
+	$sql = "insert into ADOXYZ (id,firstname,lastname) values (".$db->Param('0').",".$db->Param('1').",".$db->Param('2').")";
 	$db->StartTrans();
 	$db->Execute($sql,$arr);
 	$db->CompleteTrans();
@@ -517,7 +538,7 @@ END adodb;
 	case 'oci805':
 		$arr = array('first'=>'Caroline','last'=>'Miranda');
 		$amt = rand() % 100;
-		$sql = "insert into ADOXYZ (id,firstname,lastname,created,amount) values ($i*10+0,:first,:last,$time,$amt)";		
+		$sql = "insert into ADOXYZ (id,firstname,lastname,created) values ($i*10+0,:first,:last,$time)";		
 		break;
 	}
 	if ($i & 1) {
@@ -568,23 +589,24 @@ END adodb;
 		print "<p><b>Error on RecordCount. Should be 0. Was ".$rs->RecordCount()."</b></p>"; 
 		print_r($rs->fields);
 	}
-	$rs = &$db->Execute("select id,firstname,lastname,created,".$db->random." from ADOXYZ order by id");
-	if ($rs) {
-		if ($rs->RecordCount() != 50) {
-			print "<p><b>RecordCount returns ".$rs->RecordCount()."</b></p>";
-			$poc = $rs->PO_RecordCount('ADOXYZ');
-			if ($poc == 50) print "<p> &nbsp; &nbsp; PO_RecordCount passed</p>";
-			else print "<p><b>PO_RecordCount returns wrong value: $poc</b></p>";
-		} else print "<p>RecordCount() passed</p>";
-		if (isset($rs->fields['firstname'])) print '<p>The fields columns can be indexed by column name.</p>';
-		else {
-			Err( '<p>The fields columns <i>cannot</i> be indexed by column name.</p>');
-			print_r($rs->fields);
+	if ($db->databaseType !== 'odbc') {
+		$rs = &$db->Execute("select id,firstname,lastname,created,".$db->random." from ADOXYZ order by id");
+		if ($rs) {
+			if ($rs->RecordCount() != 50) {
+				print "<p><b>RecordCount returns ".$rs->RecordCount()."</b></p>";
+				$poc = $rs->PO_RecordCount('ADOXYZ');
+				if ($poc == 50) print "<p> &nbsp; &nbsp; PO_RecordCount passed</p>";
+				else print "<p><b>PO_RecordCount returns wrong value: $poc</b></p>";
+			} else print "<p>RecordCount() passed</p>";
+			if (isset($rs->fields['firstname'])) print '<p>The fields columns can be indexed by column name.</p>';
+			else {
+				Err( '<p>The fields columns <i>cannot</i> be indexed by column name.</p>');
+				print_r($rs->fields);
+			}
+			if (empty($HTTP_GET_VARS['hide'])) rs2html($rs);
 		}
-		if (empty($HTTP_GET_VARS['hide'])) rs2html($rs);
+		else print "<b>Error in Execute of SELECT with random</b></p>";
 	}
-	else print "<b>Error in Execute of SELECT</b></p>";
-	
 	$val = $db->GetOne("select count(*) from ADOXYZ");
 	 if ($val == 50) print "<p>GetOne returns ok</p>";
 	 else print "<p><b>Fail: GetOne returns $val</b></p>";
@@ -1089,6 +1111,7 @@ END adodb;
 		err('**** RSFilter failed');
 		print_r($rs->fields);
 	}
+	
 	rs2html($rs);
 		
 	$db->debug=1;
@@ -1151,7 +1174,10 @@ END adodb;
 		'firstname',	# row fields
 		'lastname',		# column fields 
 		false,			# join
-		'ID' 			# sum
+		'ID', 			# sum
+		'Sum ',			# label for sum
+		'sum',			# aggregate function
+		true
 	);
 	$rs = $db->Execute($sql);
 	if ($rs) rs2html($rs);
@@ -1367,17 +1393,25 @@ include("../adodb.inc.php");
 include("../rsfilter.inc.php");
 
 /* White Space Check */
+
+if (isset($_SERVER['argv'][1])) {
+	//print_r($_SERVER['argv']);
+	$HTTP_GET_VARS[$_SERVER['argv'][1]] = 1;
+}
+
 if (@$HTTP_SERVER_VARS['COMPUTERNAME'] == 'TIGRESS') {
 	CheckWS('mysqlt');
 	CheckWS('postgres');
 	CheckWS('oci8po');
+	
 	CheckWS('firebird');
 	CheckWS('sybase');
 	CheckWS('informix');
+
 	CheckWS('ado_mssql');
 	CheckWS('ado_access');
 	CheckWS('mssql');
-	//
+	
 	CheckWS('vfp');
 	CheckWS('sqlanywhere');
 	CheckWS('db2');
@@ -1424,8 +1458,6 @@ include('./testdatabases.inc.php');
 include_once('../adodb-time.inc.php');
 adodb_date_test();
 ?>
-<p><i>ADODB Database Library  (c) 2000-2003 John Lim. All rights reserved. Released under BSD and LGPL.</i></p>
+<p><i>ADODB Database Library  (c) 2000-2004 John Lim. All rights reserved. Released under BSD and LGPL.</i></p>
 </body>
 </html>
-<?php
-?>

@@ -34,7 +34,7 @@ function blocks_adminapi_delete_type($args)
     if (!empty($blockType)) {$type = $blockType;}
 
     $count = xarModAPIFunc(
-        'blocks', 'admin', 'countblocktypes',
+        'blocks', 'user', 'countblocktypes',
         array('module' => $module, 'type' => $type)
     );
 

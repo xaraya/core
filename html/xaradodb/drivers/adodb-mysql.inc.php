@@ -1,6 +1,6 @@
 <?php
 /*
-V4.05 13 Dec 2003  (c) 2000-2003 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.20 22 Feb 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -39,6 +39,7 @@ class ADODB_mysql extends ADOConnection {
 	var $clientFlags = 0;
 	var $dbxDriver = 1;
 	var $substr = "substring";
+	var $nameQuote = '`';		/// string to use to quote identifiers and names
 	
 	function ADODB_mysql() 
 	{			
@@ -46,10 +47,7 @@ class ADODB_mysql extends ADOConnection {
 	
 	function ServerInfo()
 	{
-// XARAYA MODIFICATION - START
-		//$arr['description'] = $this->GetOne("select version()");
         $arr['description'] = ADOConnection::GetOne("select version()");
-// XARAYA MODIFICATION - END
 		$arr['version'] = ADOConnection::_findvers($arr['description']);
 		return $arr;
 	}
@@ -74,6 +72,7 @@ class ADODB_mysql extends ADOConnection {
 		return $ret;
 	}
 	
+	
 	function &MetaIndexes ($table, $primary = FALSE, $owner=false)
 	{
 	        // save old fetch mode
@@ -86,7 +85,7 @@ class ADODB_mysql extends ADOConnection {
 	        }
 	        
 	        // get index details
-	        $rs = $this->Execute(sprintf('SHOW INDEXES FROM %s',$table));
+        $rs = $this->Execute(sprintf('SHOW INDEX FROM %s',$table));
 	        
 	        // restore fetchmode
 	        if (isset($savem)) {
@@ -188,11 +187,10 @@ class ADODB_mysql extends ADOConnection {
 
 	function GenID($seqname='adodbseq',$startID=1)
 	{
-        // XARAYA MODIFICATION - START
-		// // post-nuke sets hasGenID to false
-		//if (!$this->hasGenID) return false;
-        if (!$this->hasGenID) return 0;
-        // XARAYA MODIFICATION - END
+		// post-nuke sets hasGenID to false
+// XARAYA MODIFICATION - START
+		if (!$this->hasGenID) return 0;
+// XARAYA MODIFICATION - END
 		
 		$savelog = $this->_logsql;
 		$this->_logsql = false;

@@ -1,7 +1,7 @@
 <?php
 /*
 
-  version V4.05 13 Dec 2003 (c) 2000-2003 John Lim. All rights reserved.
+  version V4.20 22 Feb 2004 (c) 2000-2004 John Lim. All rights reserved.
 
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
@@ -33,9 +33,8 @@ year entries allows you to become year-2000 compliant. For example:
 NLS_DATE_FORMAT='RR-MM-DD'
 
 You can also modify the date format using the ALTER SESSION command. 
-
-
 */
+
 class ADODB_oci8 extends ADOConnection {
 	var $databaseType = 'oci8';
 	var $dataProvider = 'oci8';
@@ -224,7 +223,7 @@ NATSOFT.DOMAIN =
 	
 	function _affectedrows()
 	{
-		if (is_resource($this->_stmt)) return OCIRowCount($this->_stmt);
+		if (is_resource($this->_stmt)) return @OCIRowCount($this->_stmt);
 		return 0;
 	}
 	
@@ -600,18 +599,18 @@ NATSOFT.DOMAIN =
 		
 		$stmt = $this->Prepare('insert into emp (empno, ename) values (:empno, :ename)');
 	*/
-	function Prepare($sql)
+	function Prepare($sql,$cursor=false)
 	{
 	static $BINDNUM = 0;
 	
 		$stmt = OCIParse($this->_connectionID,$sql);
 
-		if (!$stmt) return $sql; // error in statement, let Execute() handle the error
+		if (!$stmt) return false;
 		
 		$BINDNUM += 1;
 		
 		if (@OCIStatementType($stmt) == 'BEGIN') {
-			return array($sql,$stmt,0,$BINDNUM,OCINewCursor($this->_connectionID));
+			return array($sql,$stmt,0,$BINDNUM, ($cursor) ? OCINewCursor($this->_connectionID) : false);
 		} 
 		
 		return array($sql,$stmt,0,$BINDNUM);
@@ -634,7 +633,7 @@ NATSOFT.DOMAIN =
 	*/
 	function &ExecuteCursor($sql,$cursorName='rs',$params=false)
 	{
-		$stmt = ADODB_oci8::Prepare($sql);
+		$stmt = ADODB_oci8::Prepare($sql,true); # true to allocate OCINewCursor
 			
 		if (is_array($stmt) && sizeof($stmt) >= 5) {
 			$this->Parameter($stmt, $ignoreCur, $cursorName, false, -1, OCI_B_CURSOR);
@@ -721,7 +720,9 @@ NATSOFT.DOMAIN =
 	function Parameter(&$stmt,&$var,$name,$isOutput=false,$maxLen=4000,$type=false)
 	{
 			if  ($this->debug) {
-				ADOConnection::outp( "Parameter(\$stmt, \$php_var='$var', \$name='$name');");
+				$prefix = ($isOutput) ? 'Out' : 'In';
+				$ztype = (empty($type)) ? 'false' : $type;
+				ADOConnection::outp( "{$prefix}Parameter(\$stmt, \$php_var='$var', \$name='$name', \$maxLen=$maxLen, \$type=$ztype);");
 			}
 			return $this->Bind($stmt,$var,$maxLen,$type,$name);
 	}
@@ -803,10 +804,10 @@ NATSOFT.DOMAIN =
 					return $stmt;
 					
                 case "BEGIN":
-                    if (is_array($sql) && isset($sql[4])) {
+                    if (is_array($sql) && !empty($sql[4])) {
 						$cursor = $sql[4];
 						if (is_resource($cursor)) {
-							OCIExecute($cursor);						
+							$ok = OCIExecute($cursor);	
 	                        return $cursor;
 						}
 						return $stmt;
@@ -1115,7 +1116,7 @@ class ADORecordset_oci8 extends ADORecordSet {
 
 	function _fetch() 
 	{
-		return OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode);
+		return @OCIfetchinto($this->_queryID,$this->fields,$this->fetchMode);
 	}
 
 	/*		close() only needs to be called if you are worried about using too much memory while your script
@@ -1150,7 +1151,7 @@ class ADORecordset_oci8 extends ADORecordSet {
 		case 'NCLOB':
 		case 'LONG':
 		case 'LONG VARCHAR':
-		case 'CLOB';
+		case 'CLOB':
 		return 'X';
 		
 		case 'LONG RAW':

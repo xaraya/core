@@ -14,7 +14,7 @@
 /**
 	\mainpage 	
 	
-	 @version V4.05 13 Dec 2003 (c) 2000-2003 John Lim (jlim\@natsoft.com.my). All rights reserved.
+	 @version V4.20 22 Feb 2004 (c) 2000-2004 John Lim (jlim\@natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. You can choose which license
 	you prefer.
@@ -68,8 +68,8 @@
 		
 		define('ADODB_BAD_RS','<p>Bad $rs in %s. Connection or SQL invalid. Try using $connection->debug=true;</p>');
 	
-	// allow [ ] @ ` and . in table names
-		define('ADODB_TABLE_REGEX','([]0-9a-z_\`\.\@\[-]*)');
+	// allow [ ] @ ` " and . in table names
+		define('ADODB_TABLE_REGEX','([]0-9a-z_\"\`\.\@\[-]*)');
 	
 	// prefetching used by oracle
 		if (!defined('ADODB_PREFETCH_ROWS')) define('ADODB_PREFETCH_ROWS',10);
@@ -147,7 +147,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V4.05 13 Dec 2003 (c) 2000-2003 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V4.20 22 Feb 2004 (c) 2000-2004 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -226,6 +226,7 @@
 	var $true = '1'; 			/// string that represents TRUE for a database
 	var $false = '0'; 			/// string that represents FALSE for a database
 	var $replaceQuote = "\\'"; 	/// string to use to replace quotes
+	var $nameQuote = '"';		/// string to use to quote identifiers and names
 	var $charSet=false; 		/// character set to use - only for interbase
 	var $metaDatabasesSQL = '';
 	var $metaTablesSQL = '';
@@ -473,9 +474,9 @@
 	 * 			if the database does not support prepare.
 	 *
 	 */	
-	function PrepareSP($sql)
+	function PrepareSP($sql,$param=false)
 	{
-		return $this->Prepare($sql);
+		return $this->Prepare($sql,$param);
 	}
 	
 	/**
@@ -591,15 +592,35 @@
 	}
 	
 	/*
-		 returns placeholder for parameter, eg.
+		 Returns placeholder for parameter, eg.
 		 $DB->Param('a')
 		 
 		 will return ':a' for Oracle, and '?' for most other databases...
+		 
+		 For databases that require positioned params, eg $1, $2, $3 for postgresql,
+		 	pass in Param(false) before setting the first parameter.
 	*/
 	function Param($name)
 	{
 		return '?';
 	}
+	
+	/*
+		InParameter and OutParameter are self-documenting versions of Parameter().
+	*/
+	function InParameter(&$stmt,&$var,$name,$maxLen=4000,$type=false)
+	{
+		return $this->Parameter($stmt,$var,$name,false,$maxLen,$type);
+	}
+	
+	/*
+	*/
+	function OutParameter(&$stmt,&$var,$name,$maxLen=4000,$type=false)
+	{
+		return $this->Parameter($stmt,$var,$name,true,$maxLen,$type);
+	
+	}
+	
 	/* 
 	Usage in oracle
 		$stmt = $db->Prepare('select * from table where id =:myid and group=:group');
@@ -664,7 +685,10 @@
 		
 		$this->transOff = 0;
 		if ($this->_transOK && $autoComplete) {
-			$this->CommitTrans();
+			if (!$this->CommitTrans()) {
+				$this->_transOK = false;
+				if ($this->debug) ADOConnection::outp("Smart Commit failed");
+			} else
 			if ($this->debug) ADOConnection::outp("Smart Commit occurred");
 		} else {
 			$this->RollbackTrans();
@@ -919,8 +943,10 @@
         $this->raiseErrorFn = $errorfn;
         // XARAYA MODIFICATION - END - TURN OFF/ON ERROR HANDLER
 
+		$holdtransOK = $this->_transOK;
+		$rs = @$this->Execute($getnext);
 		if (!$rs) {
-			if ($holdtransOK) $this->_transOK = true; //if the status was ok before reset
+			$this->_transOK = $holdtransOK; //if the status was ok before reset
 			$createseq = $this->Execute(sprintf($this->_genSeqSQL,$seqname,$startID));
 			$rs = $this->Execute($getnext);
 		}
@@ -969,7 +995,6 @@
 	 {
 		  if ($this->hasAffectedRows) {
 		  		if ($this->fnExecute === 'adodb_log_sql') {
-				
 					if ($this->_logsql && $this->_affected !== false) return $this->_affected;
 				}
 				$val = $this->_affectedrows();
@@ -1026,6 +1051,8 @@
 			}
 		}
 		if (sizeof($p)) return $p;
+		if (function_exists('ADODB_VIEW_PRIMARYKEYS'))
+			return ADODB_VIEW_PRIMARYKEYS($this->databaseType, $this->database, $table, $owner);
 		return false;
 	}
 	
@@ -1128,6 +1155,19 @@
 		return $rs;
 	}
 	
+	/**
+	* Create serializable recordset. Breaks rs link to connection.
+	*
+	* @param rs			the recordset to serialize
+	*/
+	function &SerializableRS(&$rs)
+	{
+		$rs2 =& $this->_rs2rs($rs);
+		$ignore = false;
+		$rs2->connection =& $ignore;
+		
+		return $rs2;
+	}
 	
 	/**
 	* Convert database recordset to an array recordset
@@ -1425,7 +1465,7 @@
 			if ($sql === false) $sql = -1;
 			if ($offset == -1) $offset = false;
 									  // sql,	nrows, offset,inputarr
-			$rs =& $this->SelectLimit($secs2cache,$sql,$nrows,$offset,$inputarr,$this->cacheSecs);
+			$rs =& $this->SelectLimit($secs2cache,$sql,$nrows,$offset,$this->cacheSecs);
 		} else {
 			if ($sql === false) ADOConnection::outp( "Warning: \$sql missing from CacheSelectLimit()");
 			$rs =& $this->SelectLimit($sql,$nrows,$offset,$inputarr,$secs2cache);
@@ -1771,23 +1811,6 @@
 		}
 	}
 
-	/*
-	* Maximum size of C field
-	*
-	function CharMax()
-	{
-		return 255; // make it conservative if not defined
-	}
-	
-	
-	/*
-	* Maximum size of X field
-	*
-	function TextMax()
-	{
-		return 4000; // make it conservative if not defined
-	}
-	*/
 	
 	/**
 	 * Close Connection
@@ -1908,12 +1931,21 @@
 	}
 	
 	
+	function _findschema(&$table,&$schema)
+	{
+		if (!$schema && ($at = strpos($table,'.')) !== false) {
+			$schema = substr($table,0,$at);
+			$table = substr($table,$at+1);
+		}
+	}
+	
 	/**
 	 * List columns in a database as an array of ADOFieldObjects. 
 	 * See top of file for definition of object.
 	 *
 	 * @param table	table name to query
 	 * @param upper	uppercase table name (required by some databases)
+	 * @schema is optional database schema to use - not supported by all databases.
 	 *
 	 * @return  array of ADOFieldObjects for current table.
 	 */ 
@@ -1922,6 +1954,10 @@
 	global $ADODB_FETCH_MODE;
 
 		if (!empty($this->metaColumnsSQL)) {
+		
+			$schema = false;
+			$this->_findschema($table,$schema);
+		
 			$save = $ADODB_FETCH_MODE;
 			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 			if ($this->fetchMode !== false) $savem = $this->SetFetchMode(false);
@@ -2031,12 +2067,14 @@
 	{
 		if (empty($ts) && $ts !== 0) return 'null';
 
-		if (is_string($ts) && !is_numeric($ts)) {
+		# strlen(14) allows YYYYMMDDHHMMSS format
+		if (!is_string($ts) || (is_numeric($ts) && strlen($ts)<14)) 
+			return adodb_date($this->fmtTimeStamp,$ts);
+		
 			if ($ts === 'null') return $ts;
-			if ($this->isoDates) return "'$ts'";
-			else $ts = ADOConnection::UnixTimeStamp($ts);
-		}
+		if ($this->isoDates && strlen($ts) !== 14) return "'$ts'";
 			
+		$ts = ADOConnection::UnixTimeStamp($ts);
 		return adodb_date($this->fmtTimeStamp,$ts);
 	}
 	
@@ -2109,7 +2147,8 @@
 	 */
 	function UserTimeStamp($v,$fmt='Y-m-d H:i:s')
 	{
-		if (is_numeric($v)) return adodb_date($fmt,$v);
+		# strlen(14) allows YYYYMMDDHHMMSS format
+		if (is_numeric($v) && strlen($v)<14) return adodb_date($fmt,$v);
 		$tt = $this->UnixTimeStamp($v);
 		// $tt == -1 if pre TIMESTAMP_FIRST_YEAR
 		if (($tt === false || $tt == -1) && $v != false) return $v;
@@ -2117,6 +2156,31 @@
 		return adodb_date($fmt,$tt);
 	}
 	
+	/**
+	* Quotes a string, without prefixing nor appending quotes. 
+	*/
+	function addq($s,$magicq=false)
+	{
+		if (!$magic_quotes) {
+		
+			if ($this->replaceQuote[0] == '\\'){
+				// only since php 4.0.5
+				$s = adodb_str_replace(array('\\',"\0"),array('\\\\',"\\\0"),$s);
+				//$s = str_replace("\0","\\\0", str_replace('\\','\\\\',$s));
+			}
+			return  str_replace("'",$this->replaceQuote,$s);
+		}
+		
+		// undo magic quotes for "
+		$s = str_replace('\\"','"',$s);
+		
+		if ($this->replaceQuote == "\\'")  // ' already quoted, no need to change anything
+			return $s;
+		else {// change \' to '' for sybase/mssql
+			$s = str_replace('\\\\','\\',$s);
+			return str_replace("\\'",$this->replaceQuote,$s);
+		}
+	}
 	
 	/**
 	 * Correctly quotes a string so that all strings are escaped. We prefix and append
@@ -2265,7 +2329,7 @@
 	var $dataProvider = "native";
 	var $fields = false; 	/// holds the current row data
 	var $blobSize = 100; 	/// any varchar/char field this size or greater is treated as a blob
-							/// in other words, we use a text area for editting.
+							/// in other words, we use a text area for editing.
 	var $canSeek = false; 	/// indicates that seek is supported
 	var $sql; 				/// sql text
 	var $EOF = false;		/// Indicates that the current record position is after the last record in a Recordset object. 
@@ -2295,7 +2359,7 @@
 	var $_atLastPage = false;	/** Added by Iván Oliva to implement recordset pagination */
 	var $_lastPageNo = -1; 
 	var $_maxRecordCount = 0;
-	var $dateHasTime = false;
+	var $datetime = false;
 	
 	/**
 	 * Constructor
@@ -2521,7 +2585,7 @@
 	 */
 	function UserTimeStamp($v,$fmt='Y-m-d H:i:s')
 	{
-		if (is_numeric($v)) return adodb_date($fmt,$v);
+		if (is_numeric($v) && strlen($v)<14) return adodb_date($fmt,$v);
 		$tt = $this->UnixTimeStamp($v);
 		// $tt == -1 if pre TIMESTAMP_FIRST_YEAR
 		if (($tt === false || $tt == -1) && $v != false) return $v;
@@ -3052,6 +3116,7 @@
 		'TIMESTAMPTZ' => 'T',
 		'T' => 'T',
 		##
+		'BOOL' => 'L',
 		'BOOLEAN' => 'L', 
 		'BIT' => 'L',
 		'L' => 'L',
@@ -3127,7 +3192,7 @@
 			return 'B';
 		
 		case 'D':
-			if (!empty($this->dateHasTime)) return 'T';
+			if (!empty($this->datetime)) return 'T';
 			return 'D';
 			
 		default: 
@@ -3170,6 +3235,7 @@
 		if ($status != false) $this->_atLastPage = $status;
 		return $this->_atLastPage;
 	}
+	
 } // end class ADORecordSet
 	
 	//==============================================================================================	
@@ -3230,8 +3296,10 @@
 			if ($colnames) {
 				$this->_skiprow1 = false;
 				$this->_colnames = $colnames;
-			} else $this->_colnames = $array[0];
-			
+			} else  {
+				$this->_skiprow1 = true;
+				$this->_colnames = $array[0];
+			}
 			$this->Init();
 		}
 		/**
@@ -3301,7 +3369,9 @@
 			
 		function _seek($row)
 		{
-			if (sizeof($this->_array) && $row < $this->_numOfRows) {
+			if (sizeof($this->_array) && 0 <= $row && $row < $this->_numOfRows) {
+				$this->_currentRow = $row;
+				if ($this->_skiprow1) $row += 1;
 				$this->fields = $this->_array[$row];
 				return true;
 			}
@@ -3314,11 +3384,11 @@
 				$this->_currentRow++;
 				
 				$pos = $this->_currentRow;
-				if ($this->_skiprow1) $pos += 1;
 				
 				if ($this->_numOfRows <= $pos) {
 					if (!$this->compat) $this->fields = false;
 				} else {
+					if ($this->_skiprow1) $pos += 1;
 					$this->fields = $this->_array[$pos];
 					return true;
 				}		
@@ -3331,13 +3401,12 @@
 		function _fetch()
 		{
 			$pos = $this->_currentRow;
-			if ($this->_skiprow1) $pos += 1;
 			
 			if ($this->_numOfRows <= $pos) {
 				if (!$this->compat) $this->fields = false;
 				return false;
 			}
-
+			if ($this->_skiprow1) $pos += 1;
 			$this->fields = $this->_array[$pos];
 			return true;
 		}
@@ -3377,9 +3446,16 @@
 			case 'postgres':
 			case 'pgsql': $db = 'postgres7'; break;
 		}
-		$ok = @include_once(ADODB_DIR."/drivers/adodb-".$db.".inc.php");
+		@include_once(ADODB_DIR."/drivers/adodb-".$db.".inc.php");
 		$ADODB_LASTDB = $db;
-		return ($ok) ? $db : false;
+		
+		$ok = class_exists("ADODB_" . $db);
+		if ($ok) return $db;
+		
+		$file = ADODB_DIR."/drivers/adodb-".$db.".inc.php";
+		if (file_exists($file)) ADOConnection::outp("Missing file: $file");
+		else ADOConnection::outp("Syntax error in file: $file");
+		return false;
 	}
 
 	/**
@@ -3460,7 +3536,7 @@
 						if ($perf) $drivername = '';
 						break;
 			case 'db2':	
-						if ($perf) break;
+						break;
 			default:
 				$drivername = 'generic';
 				break;
@@ -3501,6 +3577,7 @@
 		$dict->dataProvider = $conn->dataProvider;
 		$dict->connection = &$conn;
 		$dict->upperName = strtoupper($drivername);
+		$dict->quote = $conn->nameQuote;
 		if (is_resource($conn->_connectionID))
 			$dict->serverInfo = $conn->ServerInfo();
 		
@@ -3527,8 +3604,6 @@
 		if (strncmp(PHP_OS,'WIN',3) === 0) {
 			// skip the decimal place
 			$mtime = substr(str_replace(' ','_',microtime()),2); 
-			// unlink will let some latencies develop, so uniqid() is more random
-			@unlink($filename);
 			// getmypid() actually returns 0 on Win98 - never mind!
 			$tmpname = $filename.uniqid($mtime).getmypid();
 			if (!($fd = fopen($tmpname,'a'))) return false;
@@ -3536,6 +3611,8 @@
 			if (!fwrite($fd,$contents)) $ok = false;
 			fclose($fd);
 			chmod($tmpname,0644);
+			// the tricky moment
+			@unlink($filename);
 			if (!@rename($tmpname,$filename)) {
 				unlink($tmpname);
 				$ok = false;
@@ -3564,7 +3641,10 @@
 	*/
 	function adodb_pr($var)
 	{
+		if (isset($_SERVER['HTTP_USER_AGENT'])) { 
 		echo " <pre>\n";print_r($var);echo "</pre>\n";
+		} else
+			print_r($var);
 	}
 	
 	/*
@@ -3576,11 +3656,14 @@
 	function adodb_backtrace($printOrArr=true,$levels=9999)
 	{
 		$s = '';
-		if (PHPVERSION() >= 4.3) {
+		if (PHPVERSION() < 4.3) return;
+		 
+		$html =  (isset($_SERVER['HTTP_USER_AGENT']));
+		$fmt =  ($html) ? "</font><font color=#808080 size=-1> %% line %4d, file: <a href=\"file:/%s\">%s</a></font>" : "%% line %4d, file: %s";
 		
 			$MAXSTRLEN = 64;
 		
-			$s = '<pre align=left>';
+		$s = ($html) ? '<pre align=left>' : '';
 			
 			if (is_array($printOrArr)) $traceArr = $printOrArr;
 			else $traceArr = debug_backtrace();
@@ -3592,9 +3675,9 @@
 				if ($levels < 0) break;
 				
 				$args = array();
-				for ($i=0; $i < $tabs; $i++) $s .= ' &nbsp; ';
+			for ($i=0; $i < $tabs; $i++) $s .=  ($html) ? ' &nbsp; ' : "\t";
 				$tabs -= 1;
-				$s .= '<font face="Courier New,Courier">';
+			if ($html) $s .= '<font face="Courier New,Courier">';
 				if (isset($arr['class'])) $s .= $arr['class'].'.';
 				if (isset($arr['args']))
 				 foreach($arr['args'] as $v) {
@@ -3610,16 +3693,17 @@
 					}
 				}
 				$s .= $arr['function'].'('.implode(', ',$args).')';
-				$s .= @sprintf("</font><font color=#808080 size=-1> %% line %4d, file: <a href=\"file:/%s\">%s</a></font>",
-					$arr['line'],$arr['file'],$arr['file']);
+			
+			
+			$s .= @sprintf($fmt, $arr['line'],$arr['file'],basename($arr['file']));
+				
 				$s .= "\n";
 			}	
-			$s .= '</pre>';
+		if ($html) $s .= '</pre>';
 			if ($printOrArr) print $s;
-		}
+		
 		return $s;
 	}
-
 	
 } // defined
 ?>
