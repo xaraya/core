@@ -166,14 +166,10 @@ function xarVarValidate($validation, $subject, &$convValue) {
 
     global $_xarValidationList;
 
-    if (!isset($_xarValidationList)) {
-        $xarValidationList = array();
-    }
-
     $valParams = explode(':', $validation);
     $valType = array_shift($valParams);
 
-    if (isset($_xarValidationList[$valType])) {
+    if (isset($_xarValidationList) && isset($_xarValidationList[$valType])) {
         $_xarValidationList[$valType]->setSubject($subject);
         $_xarValidationList[$valType]->setParameters($valParams);
         return $_xarValidationList[$valType]->validate($convValue);
@@ -204,7 +200,7 @@ function xarVarRegisterValidation ($validation_name, $object_name) {
     global $_xarValidationList;
 
     if (!isset($_xarValidationList)) {
-        $xarValidationList = array();
+        $_xarValidationList = array();
     }
 
     if (empty($validation_name)) {
