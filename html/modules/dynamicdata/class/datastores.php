@@ -160,6 +160,8 @@ class Dynamic_DataStore
     var $join;
     var $itemids;  // reference to itemids in Dynamic_Object_List
 
+    var $cache = 0;
+
     function Dynamic_DataStore($name)
     {
         $this->name = $name;

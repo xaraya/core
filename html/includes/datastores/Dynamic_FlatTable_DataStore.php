@@ -25,7 +25,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
      */
     function getFieldName(&$property)
     {
-        if (preg_match('/^(\w+)\.(\w+)$/', $property->source, $matches)) {
+        // support [database.]table.field syntax
+        if (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {
             $table = $matches[1];
             $field = $matches[2];
             return $field;
@@ -268,12 +269,17 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+        // check if it's set here - could be 0 (= empty) too
+        if (isset($args['cache'])) {
+            $this->cache = $args['cache'];
+        }
 
         $table = $this->name;
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
+// CHECKME: test working without the item id field
             return;
         }
 
@@ -326,6 +332,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
+/*
+// CHECKME: test working without the item id field
+if (empty($itemidfield)) {
+    $isgrouped = 1;
+}
+*/
         $dbconn =& xarDBGetConn();
 
         if ($isgrouped) {
@@ -388,9 +400,17 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         if ($numitems > 0) {
-            $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
+            } else {
+                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+            }
         } else {
-            $result =& $dbconn->Execute($query,$bindvars);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache, $query, $bindvars);
+            } else {
+                $result =& $dbconn->Execute($query,$bindvars);
+            }
         }
         if (!$result) return;
 
@@ -437,6 +457,10 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+        // check if it's set here - could be 0 (= empty) too
+        if (isset($args['cache'])) {
+            $this->cache = $args['cache'];
+        }
 
         $table = $this->name;
         $itemidfield = $this->primary;
@@ -470,7 +494,11 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
 
-        $result =& $dbconn->Execute($query,$bindvars);
+        if (!empty($this->cache)) {
+            $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
+        } else {
+            $result =& $dbconn->Execute($query,$bindvars);
+        }
         if (!$result || $result->EOF) return;
 
         $numitems = $result->fields[0];

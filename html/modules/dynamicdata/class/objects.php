@@ -262,8 +262,8 @@ class Dynamic_Object_Master
             $storename = '_dynamic_data_';
             $storetype = 'data';
 
-        // data field coming from some static table
-        } elseif (preg_match('/^(\w+)\.(\w+)$/', $property->source, $matches)) {
+        // data field coming from some static table : [database.]table.field
+        } elseif (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {
             $table = $matches[1];
             $field = $matches[2];
             $storename = $table;
@@ -1407,7 +1407,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         // Note: they can be empty here, which means overriding any previous criteria
-        if (isset($args['sort']) || isset($args['where']) || isset($args['groupby'])) {
+        if (isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache'])) {
             foreach (array_keys($this->datastores) as $name) {
                 // make sure we don't have some left-over sort criteria
                 if (isset($args['sort'])) {
@@ -1420,6 +1420,10 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 // make sure we don't have some left-over group by fields
                 if (isset($args['groupby'])) {
                     $this->datastores[$name]->cleanGroupBy();
+                }
+                // pass the cache value to the datastores
+                if (isset($args['cache'])) {
+                    $this->datastores[$name]->cache = $args['cache'];
                 }
             }
         }

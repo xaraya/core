@@ -225,6 +225,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+        // check if it's set here - could be 0 (= empty) too
+        if (isset($args['cache'])) {
+            $this->cache = $args['cache'];
+        }
 
         $propids = array_keys($this->fields);
         if (count($propids) < 1) {
@@ -253,7 +257,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= " AND xar_dd_itemid = ?";
                 $bindvars[] = (int)$itemids[0];
             }
-            $result =& $dbconn->Execute($query,$bindvars);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
+            } else {
+                $result =& $dbconn->Execute($query,$bindvars);
+            }
 
             if (!$result) return;
 
@@ -368,9 +376,17 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 } else {
                     $startrow = 1;
                 }
-                $result =& $dbconn->SelectLimit($query, $numrows, $startrow-1);
+                if (!empty($this->cache)) {
+                    $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numrows, $startrow-1);
+                } else {
+                    $result =& $dbconn->SelectLimit($query, $numrows, $startrow-1);
+                }
             } else {
-                $result =& $dbconn->Execute($query);
+                if (!empty($this->cache)) {
+                    $result =& $dbconn->CacheExecute($this->cache, $query);
+                } else {
+                    $result =& $dbconn->Execute($query);
+                }
             }
 
             if (!$result) return;
@@ -429,9 +445,17 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             }
 
             if ($numitems > 0) {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+                if (!empty($this->cache)) {
+                    $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1);
+                } else {
+                    $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+                }
             } else {
-                $result =& $dbconn->Execute($query);
+                if (!empty($this->cache)) {
+                    $result =& $dbconn->CacheExecute($this->cache, $query);
+                } else {
+                    $result =& $dbconn->Execute($query);
+                }
             }
 
             if (!$result) return;
@@ -464,7 +488,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers)";
 
-            $result =& $dbconn->Execute($query,$propids);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache,$query,$propids);
+            } else {
+                $result =& $dbconn->Execute($query,$propids);
+            }
 
             if (!$result) return;
 
@@ -494,6 +522,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+        // check if it's set here - could be 0 (= empty) too
+        if (isset($args['cache'])) {
+            $this->cache = $args['cache'];
+        }
 
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -520,7 +552,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars[] = (int)$itemids[0];
             }
 
-            $result =& $dbconn->Execute($query,$bindvars);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
+            } else {
+                $result =& $dbconn->Execute($query,$bindvars);
+            }
 
             if (!$result || $result->EOF) return;
 
@@ -543,7 +579,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }
 
-            $result =& $dbconn->Execute($query);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache, $query);
+            } else {
+                $result =& $dbconn->Execute($query);
+            }
 
             if (!$result || $result->EOF) return;
 
@@ -560,7 +600,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers) ";
 
-            $result =& $dbconn->Execute($query,$propids);
+            if (!empty($this->cache)) {
+                $result =& $dbconn->CacheExecute($this->cache,$query,$propids);
+            } else {
+                $result =& $dbconn->Execute($query,$propids);
+            }
 
             if (!$result || $result->EOF) return;
 
