@@ -1,20 +1,17 @@
 <div class="xar-mod-body"><h2>#$name#</h2><br />
 <div style="margin: auto;">
 
-<table border="0" width="50%" cellspacing="1" cellpadding="2">
-	<tr class="xar-norm" valign="top">
-		<td>
-			<xar:mlstring>Display Name</xar:mlstring>: 
-		</td>
-		<td>
-			#$name#
-		</td>
-	</tr>
-	<tr>
-		<td>
-			#$hooks#
-		</td>
-	</tr>
-</table>
-</div>
-</div>
+<p><b><xar:mlstring>Display Name</xar:mlstring></b>: &nbsp;&nbsp; #$name#
+<xar:if condition="xarModIsAvailable('dynamicdata')">
+
+<xar:data-getitem name="$properties" module="roles" itemid="$uid" />
+
+<xar:if condition="isset($properties) and count($properties) gt 0">
+	<xar:foreach in="$properties" key="$name">
+
+		<p><b><xar:data-label property="$properties[$name]" /></b> : &nbsp;&nbsp; <xar:data-output property="$properties[$name]" />
+	    </xar:foreach>
+	</xar:if>
+    </xar:if>
+
+#$hooks#

@@ -1,6 +1,6 @@
 <xar:mlstring>Your Basic Details</xar:mlstring>:<br /><br />
 <a href="#xarModURL('roles', 'user', 'usermenu', array('phase' => 'formbasic'))#"><img src="#$iconbasic#" border="0" /></a>
 <br /><br />
-<xar:mlstring>Your Enhanced Details</xar:mlstring>:<br /><br />
-<a href="#xarModURL('roles', 'user', 'usermenu', array('phase' => 'formenhanced'))#"><img src="#$iconenhanced#" border="0" /></a>
+<xar:mlstring>Logout</xar:mlstring>:<br /><br />
+<a href="#xarModURL('roles', 'user', 'logout')#"><img src="#$iconenhanced#" border="0" /></a>
 <br /><br />
