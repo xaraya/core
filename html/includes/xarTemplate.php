@@ -36,6 +36,20 @@ define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FL
 define ('XAR_TPL_ATTRIBUTE_REGEX','^[a-z][-_a-z0-9]*$');
 define ('XAR_TPL_TAGNAME_REGEX',  '^[a-z][-_a-z0-9]*$');
 
+/**
+ * Defines for tag properties
+ *
+ */
+define('XAR_TPL_TAG_HASCHILDREN'               ,1);
+define('XAR_TPL_TAG_HASTEXT'                   ,2);
+define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
+define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
+define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
+define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
+define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
+
+
+
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -222,6 +236,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
         $order      = xarModGetVar('themes', 'SiteTitleOrder');
         $separator  = xarModGetVar('themes', 'SiteTitleSeparator');
         if (empty($module)) {
+            // FIXME: the ucwords is layout stuff which doesn't belong here
             $module = ucwords(xarModGetName());
         }
         switch(strtolower($order)) {
@@ -541,6 +556,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
         } else {
             $urlItemMatch = '%%';
         }
+        $urlItemMatchEnc = rawurlencode($urlItemMatch);
     }
 
     // Default values.
@@ -595,7 +611,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     $pageNum = (int)ceil(($blockFirstItem - $firstItem + 1) / $itemsPerPage) + $firstPage - 1;
     for ($i = $blockFirstItem; $i <= $blockLastItem; $i += $itemsPerPage) {
         if (!empty($urltemplate)) {
-            $data['middleurls'][$pageNum] = str_replace($urlItemMatch, $i, $urltemplate);
+            $data['middleurls'][$pageNum] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $i, $urltemplate);
         }
         $data['middleitems'][$pageNum] = $i;
         $data['middleitemsfrom'][$pageNum] = $i;
@@ -631,8 +647,8 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
 
     if (!empty($urltemplate)) {
         // These two links are for first and last pages.
-        $data['firsturl'] = str_replace($urlItemMatch, $data['firstpage'], $urltemplate);
-        $data['lasturl'] = str_replace($urlItemMatch, $data['lastpage'], $urltemplate);
+        $data['firsturl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['firstpage'], $urltemplate);
+        $data['lasturl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['lastpage'], $urltemplate);
     }
 
     $data['firstpagenum'] = $firstPage;
@@ -643,7 +659,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
         $data['prevpageitems'] = $itemsPerPage;
         $data['prevpage'] = ($pageFirstItem - $itemsPerPage);
         if (!empty($urltemplate)) {
-            $data['prevpageurl'] = str_replace($urlItemMatch, $data['prevpage'], $urltemplate);
+            $data['prevpageurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['prevpage'], $urltemplate);
         }
     } else {
         $data['prevpageitems'] = 0;
@@ -656,7 +672,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
         $data['nextpageitems'] = ($nextPageLastItem - $pageLastItem);
         $data['nextpage'] = ($pageLastItem + 1);
         if (!empty($urltemplate)) {
-            $data['nextpageurl'] = str_replace($urlItemMatch, $data['nextpage'], $urltemplate);
+            $data['nextpageurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['nextpage'], $urltemplate);
         }
     } else {
         $data['nextpageitems'] = 0;
@@ -667,7 +683,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
         $data['prevblockpages'] = $blockSize;
         $data['prevblock'] = ($blockFirstItem - $itemsPerBlock);
         if (!empty($urltemplate)) {
-            $data['prevblockurl'] = str_replace($urlItemMatch, $data['prevblock'], $urltemplate);
+            $data['prevblockurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['prevblock'], $urltemplate);
         }
     } else {
         $data['prevblockpages'] = 0;
@@ -680,7 +696,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
         $data['nextblockpages'] = ceil(($nextBlockLastItem - $blockLastItem) / $itemsPerPage);
         $data['nextblock'] = ($blockLastItem + 1);
         if (!empty($urltemplate)) {
-            $data['nextblockurl'] = str_replace($urlItemMatch, $data['nextblock'], $urltemplate);
+            $data['nextblockurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['nextblock'], $urltemplate);
         }
     } else {
         $data['nextblockpages'] = 0;
@@ -1323,7 +1339,7 @@ class xarTemplateAttribute
 
     function xarTemplateAttribute($name, $flags = NULL)
     {
-        // See define at top of file
+        // See defines at top of file
         if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
             $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
@@ -1386,47 +1402,106 @@ class xarTemplateAttribute
  * @access  protected
  * 
  * @todo Make this more general
- * @todo See FIXMEs
+ * @todo _module, _type and _func and _handler introduce unneeded redundancy
+ * @todo pass handler check at template registration someday (<mrb>what does this mean?)
  */
 class xarTemplateTag 
 {
-    var $_name;
-    var $_attributes;
-    var $_handler;
-    var $_module;
+    var $_name = NULL;          // Name of the tag
+    var $_attributes = array(); // Array with the supported attributes
+    var $_handler = NULL;       // Name of the handler function
+    var $_module;               // Modulename
+    var $_type;                 // Type of the handler (user/admin etc.)
+    var $_func;                 // Function name
+    // properties for registering what kind of tag we have here
+    var $_hasChildren = false;
+    var $_hasText = false;
+    var $_isAssignable = false;
+    var $_isPHPCode = true;
+    var $_needAssignment = false;
+    var $_needParameter = false;
+    var $_needExceptionsControl = false;
 
-    function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL)
+
+    function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            $this->_name = NULL;
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
             return;
         }
 
-        $this->_name = $name;
-        $this->_handler = $handler;
-        $this->_module = $module;
-
-        // FIXME: pass this along at template registration someday
         if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
             $this->_type = $matches[2];
             $this->_func = $matches[3];
         } else {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            $this->_name = NULL;
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
             return;
         }
 
-        $this->_attributes = array();
+        if (!is_integer($flags)) {
+            $msg = xarML("Illegal tag registration flags ('#(1)'): flags must be of integer type.", $flags);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
+            return;
+        }
+        
+        // Everything seems to be in order, set the properties
+        $this->_name = $name;
+        $this->_handler = $handler;
+        $this->_module = $module;
 
         if (is_array($attributes)) {
             $this->_attributes = $attributes;
         }
+        $this->_setflags($flags);
+    }
+
+    function _setflags($flags)
+    {
+        $this->_hasChildren    = ($flags & XAR_TPL_TAG_HASCHILDREN)    == XAR_TPL_TAG_HASCHILDREN;
+        $this->_hasText        = ($flags & XAR_TPL_TAG_HASTEXT)        == XAR_TPL_TAG_HASTEXT;
+        $this->_isAssignable   = ($flags & XAR_TPL_TAG_ISASSIGNABLE)   == XAR_TPL_TAG_ISASSIGNABLE;
+        $this->_isPHPCode      = ($flags & XAR_TPL_TAG_ISPHPCODE)      == XAR_TPL_TAG_ISPHPCODE;
+        $this->_needAssignment = ($flags & XAR_TPL_TAG_NEEDASSIGNMENT) == XAR_TPL_TAG_NEEDASSIGNMENT;
+        $this->_needParameter  = ($flags & XAR_TPL_TAG_NEEDPARAMETER)  == XAR_TPL_TAG_NEEDPARAMETER;
+        $this->_needExceptionsControl = ($flags & XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL)   == XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL;
+    }
+
+    function hasChildren()
+    {
+        return $this->_hasChildren;
+    }
+
+    function hasText()
+    {
+        return $this->_hasText;
+    }
+
+    function isAssignable()
+    {
+        return $this->_isAssignable;
+    }
+
+    function isPHPCode()
+    {
+        return $this->_isPHPCode;
+    }
+
+    function needAssignement()
+    {
+        return $this->_needAssignment;
+    }
+
+    function needParameter()
+    {
+        return $this->_needParameter;
+    }
+
+    function needExceptionsControl()
+    {
+        return $this->_needExceptionsControl;
     }
 
     function getAttributes()
@@ -1462,6 +1537,7 @@ class xarTemplateTag
                 $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                                new SystemException($msg));
+                // FIXME: why is this needed?
                 $this->_name = NULL;
                 return;
             }
@@ -1478,16 +1554,18 @@ class xarTemplateTag
  * Registers a tag to the theme system
  *
  * @access public
- * @param string $tag_module  parent module of tag to register
- * @param string $tag_name    tag to register with the system
- * @param array  $tag_attrs   array of attributes associated with tag (xarTemplateAttribute objects)
- * @param string $tag_handler Which function is the handler?
+ * @param string  $tag_module  parent module of tag to register
+ * @param string  $tag_name    tag to register with the system
+ * @param array   $tag_attrs   array of attributes associated with tag (xarTemplateAttribute objects)
+ * @param string  $tag_handler Which function is the handler?
+ * @param integer $flags       Bitfield which contains the flags to turn on for the tag registration.
  * @return bool
  *
  * @todo Make this more generic, now only 'childless' tags are supported (only one handler)
  * @todo Consider using handler-array (define 'events' like in SAX)
+ * @todo wrap the registration into constructor, either it succeeds creating the object or not, not having an object without succeeding sql.
  **/
-function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_handler = NULL)
+function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
 {
     // Check to make sure tag does not exist first
     if (xarTplGetTagObjectFromName($tag_name) != NULL) {
@@ -1499,7 +1577,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     }
 
     // Validity of tagname is checked in class.
-    $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler);
+    $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler, $flags);
     if(!$tag->getName()) return; // tagname was not set, exception pending
 
     list($tag_name,
@@ -1544,6 +1622,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  * @access public
  * @param  string $tag      tag to remove
  * @return bool
+ * @todo   wrap in unregister method of tag class? (kinda compicates things, as now no object is needed)
  **/
 function xarTplUnregisterTag($tag_name)
 {
@@ -1575,11 +1654,11 @@ function xarTplUnregisterTag($tag_name)
  * @return  bool
  *
  * @todo Rename the function to reflect that it is a protected function
+ * @todo wrap in method of tag or attribute class (or both)
 */
 function xarTplCheckTagAttributes($name, $args)
 {
     $tag_ref = xarTplGetTagObjectFromName($name);
-
     if ($tag_ref == NULL) {
         $msg = xarML('<xar:#(1)> tag is not defined.', $name);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',

@@ -80,11 +80,11 @@ define('XARCORE_BIT_MODULES', 32);
 /*
  * Debug flags
  */
-define('XARDBG_ACTIVE', 1);
-define('XARDBG_SQL', 2);
-define('XARDBG_EXCEPTIONS', 4);
+define('XARDBG_ACTIVE'           , 1);
+define('XARDBG_SQL'              , 2);
+define('XARDBG_EXCEPTIONS'       , 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
-
+define('XARDBG_INACTIVE'         ,16);
 /*
  * xarInclude flags
  */
@@ -120,11 +120,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // that we've already loaded
         $whatToLoad ^= $current_load_level;
     }
-
-    //Comment this line to disable debugging
-    //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
-    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
-    //xarCoreActivateDebugger(0);
 
     /*
      * Required subsystems
@@ -164,9 +159,19 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarError_init($systemArgs, $whatToLoad);
 
     /**
-     * At this point we should be able to catch all low level errors
+     * At this point we should be able to catch all low level errors, so we can start the debugger
      *
+     * FLAGS:
+     *
+     * XARDBG_INACTIVE          disable  the debugger
+     * XARDBG_ACTIVE            enable   the debugger
+     * XARDBG_EXCEPTIONS        debug exceptions
+     * XARDBG_SQL               debug SQL statements
+     * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
+     * 
+     * Flags can be OR-ed together
      */
+    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
 
 
     /*
@@ -334,6 +339,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Pre-load themes module variables
         // CHECKME: see if this doesn't hurt install before activating :-)
         xarMod_getVarsByModule('themes');
+        xarMod_getVarsByName('SupportShortURLs');
     }
 
     /**
@@ -427,7 +433,12 @@ function xarCoreGetVarDirPath()
 function xarCoreActivateDebugger($flags)
 {
     $GLOBALS['xarDebug'] = $flags;
-    if ($flags & XARDBG_ACTIVE) {
+    if ($flags & XARDBG_INACTIVE) {
+        // Turn off error reporting
+        error_reporting(0);
+        // Turn off assertion evaluation
+        assert_options(ASSERT_ACTIVE, 0);
+    } elseif ($flags & XARDBG_ACTIVE) {
         // Proper error reporting
         error_reporting(E_ALL);
         // Activate assertions
@@ -435,33 +446,12 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_WARNING, 1);   // Issue a php warning
         assert_options(ASSERT_BAIL, 0);      // Stop processing?
         assert_options(ASSERT_QUIET_EVAL,0); // Quiet evaluation of assert condition?
-        assert_options(ASSERT_CALLBACK,'xarCore__asserthandler'); // Call this function when the assert fails
+        assert_options(ASSERT_CALLBACK,'xarException__assertErrorHandler'); // Call this function when the assert fails
         $GLOBALS['xarDebug_sqlCalls'] = 0;
         $lmtime = explode(' ', microtime());
         $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];
-    } else {
-        // Turn off error reporting
-        error_reporting(0);
-        // Turn off assertion evaluation
-        assert_options(ASSERT_ACTIVE, 0);
     }
 }
-
-/**
- * Temp simplistic handler to let assert at least report
- * to the log, otherwise they are just hidden
- *
- */
-function xarCore__assertHandler($script,$line,$code)
-{
-    // Redirect the assertion to a system exception
-    $msg = "ASSERTION FAILED: $script [$line] : $code";
-    // MrB: check this, this is core exceptions are a tiny bit higher
-    // Maybe the assert handler should be in the exception subsystem?
-    xarErrorSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
-
-}
-
 
 /**
  * Check if the debugger is active

@@ -224,12 +224,12 @@ function installer_admin_phase5()
     include_once ADODB_DIR . '/adodb.inc.php';
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
     $dbconn = ADONewConnection($dbType);
-    $dbExists = $dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
-        if (!$createDB && !$dbExists) {
-            $msg = xarML('Database connection to database #(1) failed. Either the information supplied was erroneous, such as a bad or missing password, or there is no database available. If you cannot create a database notify your system administrator.', $dbName);
-            xarCore_die($msg);
-            return;
-        }
+    $dbExists = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
+    if (!$createDB && !$dbExists) {
+        $msg = xarML('Database connection to database #(1) failed. Either the information supplied was erroneous, such as a bad or missing password, or there is no database available. If you cannot create a database notify your system administrator.', $dbName);
+        xarCore_die($msg);
+        return;
+    }
 
     $data['confirmDB']  = $confirmDB;
     if ($dbExists && !$confirmDB) {
