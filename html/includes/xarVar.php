@@ -23,7 +23,7 @@ define('XARVAR_GET_ONLY', 2);
 define('XARVAR_POST_ONLY', 4);
 
 define('XARVAR_NOT_REQUIRED', 64);
-define('XARVAR_DONT_SET', 96);
+define('XARVAR_DONT_SET', 128);
 
 /**
  * Initialise the variable handling options
