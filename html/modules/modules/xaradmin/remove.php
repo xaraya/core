@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Remove a module
@@ -31,10 +31,15 @@ function modules_admin_remove ()
      // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id)) return;
 
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
+
+    $minfo=xarModGetInfo($id);
+
+    // set the target location (anchor) to go to within the page
+    $target=$minfo['name'];
 
     if(!$command) {
         // not been thru gui yet, first check the modules dependencies
@@ -55,26 +60,21 @@ function modules_admin_remove ()
             return $data;
         }
     }
-   	
+
     // User has seen the GUI
-   	// Removes with dependents, first remove the necessary dependents then the module itself
-	if (!xarModAPIFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
-		//Call exception
+    // Removes with dependents, first remove the necessary dependents then the module itself
+    if (!xarModAPIFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
+        //Call exception
         xarLogMessage('Missing module since last generation!');
-		return;	
-	} // Else
-
-    $minfo=xarModGetInfo($id);
-
-    // set the target location (anchor) to go to within the page 
-    $target=$minfo['name'];
+        return;
+    } // Else
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
     //    xarResponseRedirect(xarModURL('modules', 'admin', "list#$target"));
     xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
     // Never reached
-	return true;
+    return true;
 }
 
 ?>

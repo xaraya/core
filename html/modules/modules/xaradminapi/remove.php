@@ -9,7 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
  * Remove a module
@@ -81,6 +81,8 @@ function modules_adminapi_remove($args)
                                   'state' => XARMOD_STATE_UNINITIALISED));
     }
 
+    // Delete any masks still around
+    xarRemoveMasks($modinfo['name']);
     // Call any 'category' delete hooks assigned for that module
     // (notice we're using the module name as object id, and adding an
     // extra parameter telling xarModCallHooks for *which* module we're
