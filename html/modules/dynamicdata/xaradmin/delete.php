@@ -9,26 +9,11 @@ function dynamicdata_admin_delete($args)
 {
    extract($args);
  
-    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('confirm',  'isset', $confirm,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-
-    if (empty($itemid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'item id', 'admin', 'modify', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
+    if(!xarVarFetch('objectid', 'isset', $objectid, NULL,                               XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',    'id',    $modid,    xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype', 'int',   $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid',   'id',    $itemid                                                           )) {return;}
+    if(!xarVarFetch('confirm',  'isset', $confirm,  NULL,                               XARVAR_NOT_REQUIRED)) {return;}
 
     $myobject = new Dynamic_Object(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
@@ -39,7 +24,7 @@ function dynamicdata_admin_delete($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     if (empty($confirm)) {
         $data = xarModAPIFunc('dynamicdata','admin','menu');

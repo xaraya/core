@@ -9,6 +9,8 @@
 function dynamicdata_admin_create($args)
 {
 
+    extract($args);
+
     if (!xarVarFetch('objectid',    'id',      $objectid,   null,   XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('modid',       'id',      $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemtype',    'int',     $itemtype,   0,      XARVAR_NOT_REQUIRED)) return;
@@ -19,7 +21,6 @@ function dynamicdata_admin_create($args)
                                array('itemid' => $myobject->objectid)), XARVAR_NOT_REQUIRED)) return;
 
 
-    extract($args);
 
     if (!xarSecConfirmAuthKey()) return;
 
