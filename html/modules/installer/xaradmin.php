@@ -138,7 +138,7 @@ function installer_admin_phase4()
 
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => 'MySQL',
-                                         'oci8'     => 'Oracle',
+                                         //'oci8'     => 'Oracle',
                                          'postgres' => 'Postgres');
 
     $data['language'] = 'English';
@@ -266,12 +266,13 @@ function installer_admin_bootstrap()
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules','admin','setstate',
+                                array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) return;
 
-        if (!xarModAPIFunc('modules','admin','setstate',
-                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) return;
-
-        // Activate the module
-        if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
+            // Activate the module
+            if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
+        }
     }
 
     // load themes into *_themes table
@@ -284,17 +285,18 @@ function installer_admin_bootstrap()
     foreach ($themelist as $theme) {
         // Set state to inactive
         $regid=xarThemeGetIDFromName($theme);
-
-        if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,
+        if (isset($regid)) {
+            if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,
                                                                'state'=> XARTHEME_STATE_INACTIVE)))
             {
                 return;
             }
-        // Activate the module
-        if (!xarModAPIFunc('themes','admin','activate', array('regid'=> $regid)))
+            // Activate the module
+            if (!xarModAPIFunc('themes','admin','activate', array('regid'=> $regid)))
             {
                 return;
             }
+        }
     }
 
     // Initialise and activate adminpanels, mail, dynamic data
@@ -302,9 +304,11 @@ function installer_admin_bootstrap()
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-        // Activate the module
-        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+            // Activate the module
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+        }
     }
 
     //initialise and activate base module by setting the states
@@ -315,27 +319,6 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'setstate',
                        array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
-    // Register Block types
-    $blocks = array('finclude','html','menu','php','text');
-
-    foreach ($blocks as $block) {
-        if (!xarBlockTypeRegister('base', $block)) return;
-    }
-
-    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
-        xarVarDelCached('Mod.BaseInfos', 'blocks');
-    }
-
-    // Create default block groups/instances
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                                'template' => 'right'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
-                                                                'template' => 'header'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
 	xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 }
 
@@ -407,6 +390,29 @@ function installer_admin_create_administrator()
 
 function installer_admin_finish()
 {
+
+    // Register Block types
+    $blocks = array('finclude','html','menu','php','text');
+
+    foreach ($blocks as $block) {
+        if (!xarBlockTypeRegister('base', $block)) return;
+    }
+
+    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
+        xarVarDelCached('Mod.BaseInfos', 'blocks');
+    }
+
+    // Create default block groups/instances
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
+                                                                'template' => 'right'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
+                                                                'template' => 'header'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
+
     // Load up database
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
