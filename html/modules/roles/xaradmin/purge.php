@@ -191,6 +191,11 @@ function roles_admin_purge($args)
                 $q->addfield('xar_state',$state);
                 $q->eq('xar_uid',$uid);
                 $q->run();
+// --- Let any hooks know that we have purged this user.
+                $item['module'] = 'roles';
+                $item['itemid'] = $uid;
+                $item['method'] = 'purge';
+                xarModCallHooks('item', 'delete', $uid, $item);
             }
         }
 
