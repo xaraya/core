@@ -465,8 +465,9 @@ function xarCoreIsDebugFlagSet($flag)
  * @access protected
  * @static systemVars array
  * @param string name name of core system variable to get
+ * @param boolean returnNull if System variable doesn't exist return null
  */
-function xarCore_getSystemVar($name)
+function xarCore_getSystemVar($name, $returnNull = false)
 {
     static $systemVars = NULL;
 
@@ -483,13 +484,18 @@ function xarCore_getSystemVar($name)
     }
 
     if (!isset($systemVars[$name])) {
-        // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
-        if ($name == 'DB.UseADODBCache') {
-            $systemVars[$name] = false;
-        } else {
-            xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
-        }
-    }
+		if($returnNull)
+		{
+			return null;
+		} else {
+	        // FIXME: remove if/when there's some way to upgrade config.system.php or equivalent
+	        if ($name == 'DB.UseADODBCache') {
+	            $systemVars[$name] = false;
+	        } else {
+	            xarCore_die("xarCore_getSystemVar: Unknown system variable: ".$name);
+	        }
+	    }
+	}
 
     xarVarSetCached('Core.getSystemVar', $name, $systemVars[$name]);
 
