@@ -121,7 +121,12 @@ class xarQuery
                 while (!$result->EOF) {
                     $i=0;
                     foreach ($this->fields as $key => $value ) {
-                        $line[$key] = $result->fields[$i];
+                        if(!empty($value['alias']))
+                            $line[$value['alias']] = $result->fields[$i];
+                        elseif(!empty($value['name']))
+                            $line[$value['name']] = $result->fields[$i];
+                        else
+                            $line[] = $result->fields[$i];
                         $i++;
                     }
                     $this->output[] = $line;
@@ -238,7 +243,15 @@ class xarQuery
                 }
                 else {
                     if ($this->type == 'SELECT') {
-                        $argsarray = array('name' => trim($field), 'value' => '', 'alias' => '');
+                        $newfield = explode(' as ',strtolower($field));
+                        if (count($newfield) > 1) {
+                            $field0 = substr($field,0,strlen($newfield[0]));
+                            $field1 = substr($field,strlen($newfield[0]) + 4);
+                            $argsarray = array('name' => trim($field0), 'value' => '', 'alias' => trim($field1));
+                        }
+                        else {
+                            $argsarray = array('name' => trim($newfield[0]), 'value' => '', 'alias' => '');
+                        }
                     }
                     else {
                         $newfield = explode('=',$field);
@@ -935,6 +948,14 @@ class xarQuery
             $bound .= $sqlfield . $pieces[$i];
         }
         $this->statement = $bound;
+    }
+    function nextid($table="", $id="")
+    {
+        return $this->dbconn->PO_Insert_ID();
+    }
+    function lastid($table="", $id="")
+    {
+        return $this->dbconn->GetOne("SELECT MAX($id) FROM $table");
     }
 }
 ?>
