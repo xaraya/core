@@ -472,7 +472,7 @@ $errPage = <<<EOM
     <p>If this is the first time you see this message try to <a href="$url">click here to continue.</a><br/>
     If you see this message every time you tried to access to this service, it is probable that our server
     is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
-    If you see this message fordays, we ask you to report the unavailablity of service to our webmaster. Thanks.
+    If you see this message for days, we ask you to report the unavailablity of service to our webmaster. Thanks.
     </p>
     $debug
   </body>
