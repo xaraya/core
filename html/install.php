@@ -111,7 +111,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
 
     // let the system know that we are in the process of installing
-    xarVarSetCached('installer','installed',1);
+    xarVarSetCached('installer','installing',1);
 
     // Make sure we can render a page
     xarTplSetPageTitle('Xaraya installer');
