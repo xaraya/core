@@ -58,6 +58,11 @@ function dynamicdata_utilapi_getmeta($args)
                 $name = $name . '_' . $i;
                 $label = $label . '_' . $i;
             }
+            $status = 1;
+
+            // assign some default validation for now
+            $validation = $datatype;
+            $validation .= (empty($size) || $size < 0) ? '' : ' (' . $size . ')';
 
             // (try to) assign some default property type for now
             // = obviously limited to basic data types in this case
@@ -68,6 +73,9 @@ function dynamicdata_utilapi_getmeta($args)
                 case 'char':
                 case 'varchar':
                     $proptype = 2; // Text Box
+                    if (!empty($size) && $size > 0) {
+                        $validation = "0:$size";
+                    }
                     break;
                 case 'int':
                 case 'integer':
@@ -95,12 +103,15 @@ function dynamicdata_utilapi_getmeta($args)
                     break;
                 case 'text':
                     $proptype = 4; // Medium Text Area
+                    $status = 2;
                     break;
                 case 'longtext':
                     $proptype = 5; // Large Text Area
+                    $status = 2;
                     break;
                 case 'blob':       // caution, could be binary too !
                     $proptype = 4; // Medium Text Area
+                    $status = 2;
                     break;
                 case 'enum':
                     $proptype = 6; // Dropdown
@@ -109,10 +120,6 @@ function dynamicdata_utilapi_getmeta($args)
                     $proptype = 1; // Static Text
                     break;
             }
-
-            // assign some default validation for now
-            $validation = $datatype;
-            $validation .= (empty($size) || $size < 0) ? '' : ' (' . $size . ')';
 
             // try to figure out if it's the item id
             if (!empty($keys) && in_array($fieldname,$keys)) {
@@ -126,7 +133,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'id' => $id,
                                    'default' => '', // unknown here
                                    'source' => $table . '.' . $fieldname,
-                                   'status' => 1,
+                                   'status' => $status,
                                    'order' => $id,
                                    'validation' => $validation);
             $id++;

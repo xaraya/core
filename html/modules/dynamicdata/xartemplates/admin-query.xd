@@ -10,11 +10,30 @@
   <td colspan="#$numfields#">
     <input type="hidden" name="olditemid" value="#$olditemid#"/>
     <select name="itemid" id="itemid" onchange="submit()">
+      <option value=""></option>
     <xar:foreach in="$objects" value="$item">
       <xar:if condition="!empty($itemid) and $itemid eq $item['objectid']">
         <option value="#$item['objectid']#" selected="selected">#$item['label']#</option>
       <xar:else/>
         <option value="#$item['objectid']#">#$item['label']#</option>
+      </xar:if>
+    </xar:foreach>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>
+    <label for="table"><xar:mlstring>Table:</xar:mlstring></label>
+  </td>
+  <td colspan="#$numfields#">
+    <input type="hidden" name="oldtable" value="#$oldtable#"/>
+    <select name="table" id="table" onchange="submit()">
+      <option value=""></option>
+    <xar:foreach in="$tables" value="$item">
+      <xar:if condition="!empty($table) and $table eq $item">
+        <option value="#$item#" selected="selected">#$item#</option>
+      <xar:else/>
+        <option value="#$item#">#$item#</option>
       </xar:if>
     </xar:foreach>
     </select>
@@ -99,7 +118,11 @@
 </table>
 </form>
 <xar:if condition="isset($mylist)">
-<xar:data-list object="$mylist" />
+  <xar:if condition="!empty($table)">
+    <xar:data-view object="$mylist" layout="list" linkfield="no link to display item here..." />
+  <xar:else/>
+    <xar:data-list object="$mylist" />
+  </xar:if>
 </xar:if>
 </div>
 </div>

@@ -118,12 +118,22 @@ function dynamicdata_utilapi_getstatic($args)
             $label = $label . '_' . $i;
         }
 
+        $status = 1;
+
+        // assign some default validation for now
+// TODO: improve this based on property type validations
+        $validation = $datatype;
+        $validation .= empty($size) ? '' : ' (' . $size . ')';
+
         // (try to) assign some default property type for now
         // = obviously limited to basic data types in this case
         switch ($datatype) {
             case 'char':
             case 'varchar':
                 $proptype = 2; // Text Box
+                if (!empty($size)) {
+                    $validation = "0:$size";
+                }
                 break;
             case 'integer':
                 $proptype = 15; // Number Box
@@ -141,19 +151,16 @@ function dynamicdata_utilapi_getstatic($args)
                 break;
             case 'text':
                 $proptype = 4; // Medium Text Area
+                $status = 2;
                 break;
             case 'blob':       // caution, could be binary too !
                 $proptype = 4; // Medium Text Area
+                $status = 2;
                 break;
             default:
                 $proptype = 1; // Static Text
                 break;
         }
-
-        // assign some default validation for now
-// TODO: improve this based on property type validations
-        $validation = $datatype;
-        $validation .= empty($size) ? '' : ' (' . $size . ')';
 
         // try to figure out if it's the item id
 // TODO: let modules define this
@@ -168,7 +175,7 @@ function dynamicdata_utilapi_getstatic($args)
                                'id' => $id,
                                'default' => $default,
                                'source' => $table . '.' . $field,
-                               'status' => 1,
+                               'status' => $status,
                                'order' => $order,
                                'validation' => $validation);
         $order++;

@@ -10,8 +10,11 @@ function dynamicdata_admin_query($args)
 
     extract($args);
 
-    if(!xarVarFetch('itemid', 'isset', $itemid, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('olditemid', 'isset', $olditemid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table', 'str', $table, '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('oldtable', 'str', $oldtable, '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemid', 'int', $itemid, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('olditemid', 'int', $olditemid, 0, XARVAR_NOT_REQUIRED)) {return;}
+
     if(!xarVarFetch('field', 'isset', $field, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('where', 'isset', $where, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('value', 'isset', $value, NULL, XARVAR_DONT_SET)) {return;}
@@ -19,10 +22,17 @@ function dynamicdata_admin_query($args)
     if(!xarVarFetch('numitems', 'isset', $numitems, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'isset', $startnum, NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($itemid)) {
+    if ($itemid != $olditemid) {
+        $table = '';
+        $oldtable = '';
+        $field = array();
+        $where = array();
+        $value = array();
+        $sort = array();
+        $numitems = 20;
+    } elseif ($table != $oldtable) {
         $itemid = 0;
-    }
-    if (empty($olditemid) || $itemid != $olditemid) {
+        $olditemid = 0;
         $field = array();
         $where = array();
         $value = array();
@@ -31,7 +41,14 @@ function dynamicdata_admin_query($args)
     }
 
     $data = array();
+    $data['itemid'] = $itemid;
+    $data['olditemid'] = $itemid;
     $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
+
+    list($dbconn) = xarDBGetConn();
+    $data['table'] = $table;
+    $data['oldtable'] = $table;
+    $data['tables'] = $dbconn->MetaTables();
 
     if (!empty($itemid)) {
         $data['object'] =& xarModAPIFunc('dynamicdata','user','getobject',
@@ -43,7 +60,22 @@ function dynamicdata_admin_query($args)
         } else {
             return;
         }
+    } elseif (!empty($table)) {
+        $meta = xarModAPIFunc('dynamicdata','util','getmeta',
+                              array('table' => $table));
+        if (!isset($meta) || !isset($meta[$table])) {
+           return xarML('Invalid table');
+        }
+        $data['object'] =& xarModAPIFunc('dynamicdata','user','getobject',
+                                         array('objectid' => -1, // dummy object
+                                               'name' => $table));
+        foreach ($meta[$table] as $name => $propinfo) {
+            $data['object']->addProperty($propinfo);
+        }
+        $data['label'] = xarML('Table #(1)',$table);
+        $data['properties'] =& $data['object']->properties;
     } else {
+        $data['label'] = xarML('Dynamic Objects or Database Tables');
         $data['properties'] = array();
     }
 
@@ -122,10 +154,23 @@ function dynamicdata_admin_query($args)
                                                 'numitems' => $numitems));
         $mylist->getItems();
         $data['mylist'] = & $mylist;
+    } elseif (!empty($table) && $table == $oldtable) {
+    // TODO: clean up generation of dummy object
+        $mylist = new Dynamic_Object_List(array('objectid' => -1, // dummy object
+                                                'moduleid' => 182, // needed for showlist check
+                                                'name' => $table,
+                                                'numitems' => $numitems));
+        foreach ($meta[$table] as $name => $propinfo) {
+            $mylist->addProperty($propinfo);
+            $mylist->properties[$name]->items = & $mylist->items;
+        }
+        $mylist->fieldlist = $fieldlist;
+        $mylist->getDataStores();
+        $mylist->getItems(array('where' => $whereclause,
+                                'sort' => $sortlist));
+        $data['mylist'] = & $mylist;
     }
 
-    $data['itemid'] = $itemid;
-    $data['olditemid'] = $itemid;
     $data['numfields'] = count($data['properties']);
     if (empty($data['numfields'])) {
         $data['numfields'] = 1;
