@@ -45,6 +45,8 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     {
         if (!isset($value)) {
             $value = $this->value;
+        } elseif(is_array($value)) {
+            $value = serialize($value);
         }
         if (!empty($value) && strlen($value) > $this->maxlength) {
             $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
@@ -66,7 +68,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     {
         extract($args);
         $data = array();
-        
+
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
