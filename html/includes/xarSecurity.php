@@ -170,7 +170,7 @@ $schemas = array();
 
 	function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
 			$privileges = new xarPrivileges();
-			return $privileges->register($name,$realm,$module,$component,$instance,$level,$description='');
+			return $privileges->register($name,$realm,$module,$component,$instance,$level,$description);
 	}
 
 /**
