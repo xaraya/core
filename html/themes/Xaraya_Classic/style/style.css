@@ -278,6 +278,10 @@ TD.xar-alt {}
    color: #003366;
 }
 
+.xar-error {
+   color: #FF0000;
+}
+
 .xar-block-head-left {}
 .xar-block-title-left {}
 .xar-block-body-left {}

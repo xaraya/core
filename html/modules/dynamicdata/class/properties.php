@@ -849,7 +849,7 @@ class Dynamic_Property
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 }
 
@@ -877,7 +877,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
     {
         extract($args);
         return (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     // default showOutput() from Dynamic_Property
@@ -950,7 +950,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -998,7 +998,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                '>' . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '</textarea>' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -1104,7 +1104,7 @@ class Dynamic_Select_Property extends Dynamic_Property
             }
         }
         $out .= '</select>' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         return $out;
     }
 
@@ -1179,7 +1179,7 @@ class Dynamic_Username_Property extends Dynamic_Property
                     . '" target="preview">'.xarML('profile').'</a> ]';
         }
         if (!empty($this->invalid)) {
-            $output .= ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
+            $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
         }
         return $output;
     }
@@ -1335,7 +1335,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         }
         $output .= '</select> ';
         if (!empty($this->invalid)) {
-            $output .= ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
+            $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
         }
         return $output;
     }
@@ -1409,7 +1409,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -1493,7 +1493,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($value) && $value != 'http://' ? ' [ <a href="'.$value.'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -1559,7 +1559,7 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($value) && $value != 'http://' ? ' [ <a href="'.$value.'" target="preview">'.xarML('show').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -1672,7 +1672,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                (!empty($value) ? ' checked' : '') .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -1917,7 +1917,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2128,7 +2128,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
                (!empty($id) ? ' id="'.$id.'"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2200,7 +2200,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2266,7 +2266,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2337,7 +2337,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2406,7 +2406,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2472,7 +2472,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
     function showOutput($value = null)
@@ -2593,7 +2593,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
                 $out .= '> '.$option['name'].' </input>';
             }
         }
-        $out .= (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        $out .= (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         return $out;
     }
 
