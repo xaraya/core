@@ -15,5 +15,8 @@ $systemConfiguration['DB.Type'] = 'mysql';
 // Database TablePrefix: a string that will be prefixed to every database tables that are part of the core.
 //                       Those tables are shared across multi-sites.
 $systemConfiguration['DB.TablePrefix'] = 'pn';
-
+// Database username and password encoding
+// 0 = not encoded
+// 1 = encoded
+$systemConfiguration['DB.Encoded'] = 0;
 ?>

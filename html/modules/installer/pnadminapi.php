@@ -26,8 +26,22 @@
 
 // Update database information in config.php
 // TODO: EXCEPTIONS!!
-function installer_adminapi_modifyconfig($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+/**
+ * Modify the system configuration file
+ *
+ * @param args['dbHost']
+ * @param args['dbName']
+ * @param args['dbUname']
+ * @param args['dbPass']
+ * @param args['prefix']
+ * @param args['dbType']
+ * @returns bool
+ * @return 
+ */
+function installer_adminapi_modifyconfig($args)
 {
+    extract($args);
+
     $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php';
     $config_php = join('', file($systemConfigFile));
     if (isset($HTTP_ENV_VARS['OS']) && strstr($HTTP_ENV_VARS['OS'], 'Win')) {
@@ -36,21 +50,23 @@ function installer_adminapi_modifyconfig($dbhost, $dbuname, $dbpass, $dbname, $p
         $system = 0;
     }
 
-    //$dbuname = base64_encode($dbuname);
-    //$dbpass = base64_encode($dbpass);
+    $dbUname = base64_encode($dbUname);
+    $dPpass = base64_encode($dbPass);
 
-    $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbtype';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbhost';", $config_php);
-    $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbuname';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbpass';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbname';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbType';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbHost';", $config_php);
+    $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbUname';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbPass';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$prefix';", $config_php);
    // $config_php = preg_replace('/\[\'system\'\]\s*=\s*(\'|\")(.*)\\1;/', "['system'] = '$system';", $config_php);
-   // $config_php = preg_replace('/\[\'encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['encoded'] = '1';", $config_php);
-    
+    $config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
+
     $fp = fopen ($systemConfigFile, 'w+');
     fwrite ($fp, $config_php);
     fclose ($fp);
+    
+    return true;
 }
 
 ?>

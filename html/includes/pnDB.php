@@ -52,7 +52,12 @@ function pnDB_init($args)
     $dbname = $args['databaseName'];
     $dbuname = $args['userName'];
     $dbpass = $args['password'];
-
+    
+    // Decode username and password if necessary
+    if (1 == pnCore_getSystemVar('DB.Encoded')) {
+        $dbuname = base64_decode($dbuname);
+        $dbpass  = base64_decode($dbpass);
+    }
     // ADODB configuration
     if (!defined('ADODB_DIR')) {
         define('ADODB_DIR', 'pnadodb');
