@@ -20,10 +20,12 @@
                 <xar:else />
                     <input type="checkbox" name="hooks_#$modname#" id="hooks_#$modname#" value="#$checked#" tabindex="2" />
                 </xar:if>
+                <label for="hooks_#$modname#">
                 <xar:ml>
                     <xar:mlstring>Enable hooks from #(1)</xar:mlstring>
                     <xar:mlvar>#$modname#</xar:mlvar>
                 </xar:ml>   
+                </label>
                 <br /><br />
                 <xar:if condition="$details eq 1">
                     <div style="padding-left: 2em;">
