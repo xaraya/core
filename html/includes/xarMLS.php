@@ -477,6 +477,26 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 }
 
 /**
+ *  Wrapper to xarLocalGetFormattedDate
+ *
+ */
+function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
+{
+    $offset = xarMLS_userOffset() * 3600;
+    if(!isset($timestamp)) {
+        // get UTC timestamp
+        //TODO : Take into account System.Core.TimeZone
+        $timestamp = time(); 
+    }
+    
+    // apply the offset for later manipulation
+    $timestamp -= xarMLS_userOffset() * 3600;
+    
+    // pass this to the regular function
+    return xarLocaleGetFormattedDate($length,$timestamp);
+}
+
+/**
  *  Grab the formated date by the user's current locale settings
  *
  *  @access public
@@ -504,7 +524,26 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
     $locale_format = str_replace('yyyy','%Y',$locale_format);
     $locale_format = str_replace('yy','%y',$locale_format);
     
-    return xarMLS_strftime($locale_format,$timestamp);
+    return xarLocaleFormatDate($locale_format,$timestamp);
+}
+
+/**
+ *  Wrapper to xarLocaleGetFormattedTime
+ *
+ */
+function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
+{
+    if(!isset($timestamp)) {
+        // get UTC timestamp
+        //TODO : Take into account System.Core.TimeZone
+        $timestamp = time(); 
+    }
+    
+    // apply the offset for later manipulation
+    $timestamp -= xarMLS_userOffset() * 3600;
+    
+    // pass this to the regualr function
+    return xarLocaleGetFormattedTime($length,$timestamp);
 }
 
 /**
@@ -533,12 +572,22 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     $locale_format = str_replace('a','%p',$locale_format);
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
-    $locale_format = str_replace('H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
-    $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
-    $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
-    $locale_format = str_replace('s',sprintf('%1d',gmstrftime('%S',$timestamp)),$locale_format);
+    $locale_format = str_replace('H',sprintf('%1d',xarLocaleFormatDate('%H',$timestamp)),$locale_format);
+    $locale_format = str_replace('h',sprintf('%1d',xarLocaleFormatDate('%I',$timestamp)),$locale_format);
+    $locale_format = str_replace('m',sprintf('%1d',xarLocaleFormatDate('%M',$timestamp)),$locale_format);
+    $locale_format = str_replace('s',sprintf('%1d',xarLocaleFormatDate('%S',$timestamp)),$locale_format);
     
-    return xarMLS_strftime($locale_format,$timestamp);
+    return xarLocaleFormatDate($locale_format,$timestamp);
+}
+
+
+function xarLocaleFormatUTCDate($format = null, $time = null)
+{
+    if(!isset($time)) {
+        $time = time();
+    }
+    $time -= xarMLS_userOffset() * 3600;
+    return xarLocaleFormatDate($format,$time);
 }
 
 /**
@@ -551,26 +600,26 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
  * @return date string
  *
  */
-function xarLocaleFormatDate($format = null, $time = null)
+function xarLocaleFormatDate($format = null, $timestamp = null)
 {
-    if (empty($time)) { // yes, null or 0 or whatever :)
+    if (empty($timestamp)) { // yes, null or 0 or whatever :)
 //TODO: we should really get the user/site time based on timezone settings
 //TODO: this will require UTC timestamps to be generated and then modified
-        $time = xarMLS_userTime();
-    } elseif (!is_numeric($time)) {
+        $timestamp = xarMLS_userTime();
+    } elseif (!is_numeric($timestamp)) {
         // strtotime creates a timestamp based on the server's locale settings
-        $time = strtotime($time);
+        $timestamp = strtotime($timestamp);
         // we need to adjust for the server's timezone offset because
         // we'll be using the gmstrftime function later.
         // doing so will allow for the correct time to be displayed
 // TODO: does this work everywhere or just on my machine???
-        $time += date('Z',$time);
-        if ($time < 0) {
+        $timestamp += date('Z',$time);
+        if ($timestamp < 0) {
             return ''; // return empty string here (no exception)
         }
     } else {
         // adjust for the user's timezone offset
-        $time += xarMLS_userOffset() * 3600;
+        $timestamp += xarMLS_userOffset() * 3600;
     }
     
 // TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
@@ -580,7 +629,7 @@ function xarLocaleFormatDate($format = null, $time = null)
         $format = '%a, %d %B %Y %H:%M %Z';
     }
 
-    return xarMLS_strftime($format,$time);
+    return xarMLS_strftime($format,$timestamp);
 }
 
 /**
@@ -717,14 +766,14 @@ function xarMLS_strftime($format=null,$timestamp=null)
             
             case '%c' :
                 // TODO: we want to display the user or site's timezone not the servers
-                $fdate = xarLocaleGetFormattedDate('short',$timestamp);
-                $ftime = xarLocaleGetFormattedTime('short',$timestamp);
+                $fdate = xarLocaleGetFormattedUTCDate('short',$timestamp);
+                $ftime = xarLocaleGetFormattedUTCTime('short',$timestamp);
                 $format = str_replace($modifier,$fdate.' '.$ftime,$format);
                 break;
             
             case '%D' :
             case '%x' :
-                $format = str_replace($modifier,xarLocaleGetFormattedDate('short',$timestamp),$format);
+                $format = str_replace($modifier,xarLocaleGetFormattedUTCDate('short',$timestamp),$format);
                 break;
             
             case '%e' :
@@ -754,7 +803,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 
             case '%X' :
                 // TODO: we want to display the user or site's timezone not the servers
-                $format = str_replace($modifier,xarLocaleGetFormattedTime('short',$timestamp),$format);
+                $format = str_replace($modifier,xarLocaleGetFormattedUTCTime('short',$timestamp),$format);
                 break;
                 
             case '%Z' :
