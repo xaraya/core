@@ -86,17 +86,13 @@ function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {
 function xarLogException($level = XARLOG_LEVEL_DEBUG)
 {
     //This wasnt implemented anywhere, supposedly it exists because of
-    // a bug which cause a infinite loop (?)
+    // a bug which causes a infinite loop (?)
     xarLogMessage("logException()", $level);
 }
 
 function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
-    //This seems of dubial usefulness - indeed :)
-    if (phpversion() < "4.2.0") {
-        xarLogMessage("logVariable($name, (serialized) ".serialized($var).')', $level);
-    } else {
-        xarLogMessage("logVariable($name, ".var_export($var,TRUE).')', $level);
-    }
+    $args = array('name'=>$name, 'var'=>$var, 'format'=>'html');
+    xarLogMessage(xarModAPIFunc('logger','admin','dumpVariable', $args), $level);
 }
 ?>
