@@ -18,7 +18,7 @@
     <div class="xar-mod-body">
         <table border="0" cellspacing="1" cellpadding="4" align="left">
             <tr>
-                <td align="right" width="220">
+                <td align="right" width="180">
                     &nbsp; 
                 </td>
                 <td>
@@ -230,7 +230,7 @@
         </table>
     </div>
 </form>
-<br clear="both" />
+<br />
 <h2> 
     <xar:mlstring>
         Configure Overviews 
@@ -242,7 +242,7 @@
 <!-- Disable overviews -->
         <table border="0" cellspacing="1" cellpadding="4" align="left">
             <tr>
-                <td align="right" width="220">
+                <td align="right" width="180">
                     &nbsp; 
                 </td>
                 <td>
