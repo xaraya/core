@@ -135,7 +135,7 @@ function xarModSetVar($modName, $name, $value)
         return;
     }
 
-    return xarVar__SetVarByAlias($modName, $name, $value, $uid = NULL, $type = 'modvar');
+    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar');
 }
 
 
@@ -292,7 +292,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
     // MrB: should we raise an exception here?
     if ($uid==_XAR_ID_UNREGISTERED) return false;
 
-    return xarVar__SetVarByAlias($modName, $name, $value, $uid, $type = 'moduservar');
+    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moduservar');
 }
 
 /**

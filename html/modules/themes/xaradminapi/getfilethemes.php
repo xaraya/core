@@ -44,7 +44,7 @@ function themes_adminapi_getfilethemes()
                     $publish_date = $themeFileInfo['publish_date'];
                     $license      = $themeFileInfo['license'];
                     $version      = $themeFileInfo['version'];
-                    $xar_version  = $themeFileInfo['xar_version'];
+                    $xar_version  = isset($themeFileInfo['xar_version']);
                     $bl_version   = $themeFileInfo['bl_version'];
                     $class        = $themeFileInfo['class'];
 

@@ -80,7 +80,7 @@ function xarConfigGetVar($name, $prep = NULL)
  */
 function xarConfigSetVar($name, $value)
 {
-    return xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $uid = NULL, $type = 'configvar');
+    return xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'configvar');
 }
 
 ?>
