@@ -210,8 +210,8 @@ function mail_adminapi__sendmail($args)
     }
     // Send the mail, or send an exception.
     if (!$mail->Send()) {
-        echo "Message was not sent <br/><br/>";
-        echo "Mailer Error: " . $mail->ErrorInfo;
+        $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', new SystemException($msg));
         return;
     }
 
