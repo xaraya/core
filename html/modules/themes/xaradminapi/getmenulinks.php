@@ -22,15 +22,6 @@ function themes_adminapi_getmenulinks()
 
     $data['authid'] = xarSecGenAuthKey();
 
-// Security Check
-	if (xarSecurityCheck('AdminTheme',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('themes',
-                                                   'admin',
-                                                   'modifyconfig'),
-                              'title' => xarML('Modify the configuration of the themes module'),
-                              'label' => xarML('Modify Config'));
-    }
 
     // addition by sw@telemedia.ch (Simon Wunderlin)
     // as per http://bugs.xaraya.com/show_bug.cgi?id=1162
@@ -55,6 +46,15 @@ function themes_adminapi_getmenulinks()
     }
     
     
+// Security Check
+	if (xarSecurityCheck('AdminTheme',0)) {
+
+        $menulinks[] = Array('url'   => xarModURL('themes',
+                                                   'admin',
+                                                   'modifyconfig'),
+                              'title' => xarML('Modify the configuration of the themes module'),
+                              'label' => xarML('Modify Config'));
+    }
 
     if (empty($menulinks)){
         $menulinks = '';
