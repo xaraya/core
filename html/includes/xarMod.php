@@ -807,10 +807,11 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param modName string registered name of module
  * @param modType string type of function
  * @param funcName string module function
+ * @param string target anchor tag target (ie., somesite.com/index.php?foo=bar#target)
  * @param args array of arguments to put on the URL
  * @return mixed absolute URL for call, or false on failure
  */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL)
+function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL )
 {
     if (empty($modName)) {
         return xarServerGetBaseURL() . 'index.php';
@@ -876,6 +877,11 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if ($generateXMLURL) {
         $url = htmlspecialchars($url);
     }
+    
+    if ($target != NULL) {
+        $url = "$url#$target";
+    }
+    
     // The URL
     return xarServerGetBaseURL() . $url;
 }
