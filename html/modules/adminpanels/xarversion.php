@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarversion.php 1.13 03/01/22 23:13:25+00:00 andyv@andyv.plus.com $
  *
  * Administration System
  *
