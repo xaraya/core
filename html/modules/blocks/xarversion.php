@@ -18,7 +18,7 @@
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name'] = 'Blocks administration';
 $modversion['id'] = '13';
 $modversion['displayname'] = xarML('Blocks');

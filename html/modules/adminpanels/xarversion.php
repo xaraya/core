@@ -8,7 +8,7 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
@@ -18,7 +18,7 @@
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name'] = 'Administration';
 $modversion['description'] = 'Taking care of the admin navigation';
 $modversion['displayname'] = xarML('Administration Panel');

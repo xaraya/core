@@ -1,15 +1,15 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Modules System
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 
 /* WARNING
@@ -17,7 +17,7 @@
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name']           = 'Modules Administration';
 $modversion['id']             = '1';
 $modversion['version']        = '2.3.0';
@@ -34,5 +34,5 @@ $modversion['admin']          = 1;
 $modversion['user']           = 0;
 $modversion['securityschema'] = array('Modules::' => '::');
 $modversion['class']          = 'Core Admin';
-$modversion['category']       = 'Global'; 
+$modversion['category']       = 'Global';
 ?>

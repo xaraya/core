@@ -11,13 +11,13 @@
  * @subpackage mail module
  * @author John Cox <admin@dinerminor.com>
  */
- 
+
 /* WARNING
  * Modification of this file is not supported.
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name']           = 'Mail';
 $modversion['id']             = '771';
 $modversion['displayname']    = xarML('Mail');

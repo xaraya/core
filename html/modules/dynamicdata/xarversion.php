@@ -17,7 +17,7 @@
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
- * /
+ */
 $modversion['name'] = 'Dynamic Data';
 $modversion['id'] = '182';
 $modversion['displayname'] = xarML('Dynamic Data');
