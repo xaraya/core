@@ -61,10 +61,12 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // if the uploads module is hooked (to be verified and set by the calling module)
         // any uploaded files will be referenced in the text as #...:NN# for transform hooks
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            list( , $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => null, // we don't keep track of values here
-                                          'multiple' => true, // not relevant here
+                                          'multiple' => FALSE, // not relevant here
+                                          'methods' => $methods,
                                           'format' => 'textupload',
                                           'maxsize' => $this->maxsize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
@@ -133,7 +135,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
-        
+
         $data = array();
 
         if (empty($name)) {
@@ -152,6 +154,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            list(, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
+
             // relevant input fields are handled directly by the uploads module
             //$extensions = xarModGetVar('uploads','allowed_types');
             $data['extensions']= '';
@@ -159,8 +163,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $uploads = xarModAPIFunc('uploads','admin','showinput',
                                      array('id' => $name, // not $this->id
                                            'value' => null, // we don't keep track of values here
-                                           'multiple' => true, // not relevant here
-                                           'format' => 'textupload'));
+                                           'multiple' => FALSE, // not relevant here
+                                           'format' => 'textupload',
+                                           'methods' => $methods));
             if (!empty($uploads)) {
                 $data['uploads_hooked'] = $uploads;
             }

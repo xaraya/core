@@ -116,11 +116,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
         // if the uploads module is hooked in, use it's functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
+            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
             $return = xarModAPIFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
-                                          'multiple' => $this->multiple,
+                                          'multiple' => $multiple,
                                           'format' => 'fileupload',
+                                          'methods' => $methods,
                                           'maxsize' => $this->maxSize));
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
@@ -215,6 +217,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
         if ($this->UploadsModule_isHooked == TRUE) {
+            list($multiple, $methods) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $this->validation);
+
             // user must have hooked the uploads module after uploading files directly
             // CHECKME: remove any left over values - or migrate entries to uploads table ?
             if (!empty($value) && !is_numeric($value) && !stristr($value, ';')) {
@@ -223,8 +227,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             return xarModAPIFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
-                                       'multiple' => $this->multiple,
-                                       'format' => 'fileupload'));
+                                       'multiple' => $multiple,
+                                       'format' => 'fileupload',
+                                       'methods' => $methods));
         }
 
         // user must have unhooked the uploads module
