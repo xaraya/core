@@ -6,7 +6,7 @@ class xarCache_Storage
     var $cachedir = 'var/cache/output';
     var $type = ''; // page, block, template, ...
     var $code = ''; // URL factors et al.
-    var $size = -1;
+    var $size = null;
     var $compressed = false;
 
     /**
@@ -26,20 +26,26 @@ class xarCache_Storage
         $this->cachedir = realpath($this->cachedir);
     }
 
-    function isCached($key = '', $code = '')
+    function setCode($code = '')
     {
-        if (!empty($code)) {
-            $this->code = $code;
-        }
+        $this->code = $code;
+    }
+
+    function isCached($key = '')
+    {
         return false;
     }
 
-    function getCached($key = '', $code = '')
+    function getCached($key = '')
     {
         return '';
     }
 
-    function setCached($key = '', $value = '', $code = '')
+    function setCached($key = '', $value = '', $expire = null)
+    {
+    }
+
+    function delCached($key = '')
     {
     }
 
@@ -53,6 +59,7 @@ class xarCache_Storage
 
     function getCacheSize()
     {
+        return $this->size;
     }
 
     function sizeLimit()
