@@ -713,3 +713,4 @@ function xarVar__getAllowedTags($level)
     }
     return array();
 }
+?>
