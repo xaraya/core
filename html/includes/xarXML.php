@@ -127,7 +127,6 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  * @access public
  * @package xml
  * @todo do not assume the result will be a parse tree, it's non-sax-like
- * @todo move out the dom like functions to the appropriate handler class
  */
 class xarXmlParser 
 {
@@ -275,58 +274,6 @@ class xarXmlParser
         return xml_parser_get_option($this->parser, $option);
     }
 
-    // Just for convenience for now, should go into separate class
-    function getElementsByname($name,$tree=NULL)
-    {
-        $results=array();
-        $query=array('type'  => XARXML_ATTR_NAME,
-                     'match' => $name
-                     );
-        if(!$tree) {
-            // return array of nodes which are of type XML_ELEMENT_NODE and have name = $name
-            // First node of the tree will always be document node
-            $results = $this->__queryTree($this->tree[0],$query, XML_ELEMENT_NODE);
-        } else {
-            $results = $this->__queryTree($tree[0],$query, XML_ELEMENT_NODE);
-        }
-        return $results;
-    }
-
-    function getSubTree($element_id, $tree=NULL)
-    {
-        $results=array();
-        $query =array('type'  => XARXML_ATTR_TAGINDEX,
-                      'match' => $element_id);
-        if(!$tree){
-            $results = $this->__queryTree($this->tree[0],$query, XML_ELEMENT_NODE,true);
-        } else {
-            $results = $this->__queryTree($tree[0],$query, XML_ELEMENT_NODE,true);
-        }
-        return $results;
-    }
-
-    // Just for convenience for now, should go into separate class
-    function __queryTree($subtree, $query, $nodetype,$returnsubtree=false) {
-        $results = array();
-
-        // If the node has children inspect them first, so we have simpler code in the second part (the unset)
-        if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
-            foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
-                 $results = array_merge($results, $this->__queryTree($child,$query,$nodetype,$returnsubtree));
-            }
-        }
-
-        // Inspect this node
-        if((@$subtree[XARXML_ATTR_TYPE] == $nodetype) && ($subtree[$query['type']] === $query['match'])) {
-            // We found a node, add it to the result array
-            if(!$returnsubtree) {
-                unset($subtree[XARXML_ATTR_CHILDREN]);
-            }
-            $results[] = $subtree;
-        }
-        
-        return $results;   
-    }
     
     /** 
      * Private methods
@@ -750,5 +697,66 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
         $this->_resolve_base=NULL;
     }
 }
+
+//
+// TEMPORARY FUNCTIONS
+//
+
+// Just for convenience for now, should go into separate class
+function getElementsByname($name,$tree=NULL)
+{
+    $results=array();
+    $query=array('type'  => XARXML_ATTR_NAME,
+                 'match' => $name
+                 );
+    if(!$tree) return;
+
+    // return array of nodes which are of type XML_ELEMENT_NODE and have name = $name
+    // First node of the tree will always be document node
+    $results = queryTree($tree[0],$query, XML_ELEMENT_NODE);
+    
+    return $results;
+}
+
+function getSubTree($element_id, $tree=NULL)
+{
+    $results=array();
+    $query =array('type'  => XARXML_ATTR_TAGINDEX,
+                  'match' => $element_id);
+    if(!$tree) return;
+    $results = queryTree($tree[0],$query, XML_ELEMENT_NODE,true);
+    
+    return $results;
+}
+
+/**
+ * Just for convenience for now, should go into separate class
+ *
+ * @todo remove the @
+ *
+ */
+function queryTree($subtree, $query, $nodetype,$returnsubtree=false) {
+    $results = array();
+    
+    // If the node has children inspect them first, so we have simpler code in the second part (the unset)
+    if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
+        foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
+            $results = array_merge($results, queryTree($child,$query,$nodetype,$returnsubtree));
+        }
+    }
+    
+    // Inspect this node
+    if((@$subtree[XARXML_ATTR_TYPE] == $nodetype) && ($subtree[$query['type']] === $query['match'])) {
+        // We found a node, add it to the result array
+        if(!$returnsubtree) {
+            unset($subtree[XARXML_ATTR_CHILDREN]);
+        }
+        $results[] = $subtree;
+    }
+    
+    return $results;   
+}
+
+
 
 ?>
