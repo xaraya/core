@@ -12,6 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 
+// Show all errors by default.
+// This may be modified in xarCore.php, but gives us a good default.
+error_reporting(E_ALL);
+
 // initialize the Xaraya core
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
