@@ -2,7 +2,7 @@
 <xar:comment> Legend </xar:comment>
 <div class="xar-accent-outline xar-sub" style="margin-top:5px;margin-bottom:5px;padding:3px;text-align:center;">
     <xar:mlstring>
-        Actions: [E]dit [R]emove [D]efault [H]idden [M]aximized
+        Actions: [D]efault [H]idden/[M]aximized [E]dit [R]emove
     </xar:mlstring>
 </div>
 <xar:comment> two pseudo-columns compact layout (tested in css compliant browser) </xar:comment>
