@@ -40,7 +40,9 @@
        		</div>
        		<br />
        		<div style="text-align:justify;">
-      		  <span class="xar-normal">Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.</span><br /><br />
+      		  <span class="xar-normal">Disabling the first 2 options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.
+      		  <br><br>
+      		  Modules can be installed or removed at any later time in the Modules module.</span><br /><br />
       		</div>
       		<div style="text-align:center;">
       		  <input type="submit" name="create" id="create" value="Continue &gt;" />

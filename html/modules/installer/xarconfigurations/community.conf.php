@@ -14,16 +14,68 @@
 
 $configuration_name = 'Community Site';
 
-    $options  = array(
+$options  = array(
     array(
         'item' => '1',
         'option' => 'true',
-        'comment' => xarML('Registered users have read access to all modules of the site.')),
+        'comment' => xarML('Registered users have read access to all modules of the site.')
+    ),
     array(
         'item' => '2',
         'option' => 'false',
-        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.'))
-    );
+        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
+    ),
+    array(
+        'item' => 'm151',
+        'option' => 'true',
+        'comment' => xarML('Install the Articles module. Categories will also automatically be installed.')
+    ),
+    array(
+        'item' => 'm11',
+        'option' => 'true',
+        'comment' => xarML('Install the Autolinks module.')
+    ),
+    array(
+        'item' => 'm147',
+        'option' => 'true',
+        'comment' => xarML('Install the Categories module.')
+    ),
+    array(
+        'item' => 'm14',
+        'option' => 'true',
+        'comment' => xarML('Install the Comments module.')
+    ),
+    array(
+        'item' => 'm36',
+        'option' => 'true',
+        'comment' => xarML('Install the Example module.')
+    ),
+    array(
+        'item' => 'm177',
+        'option' => 'true',
+        'comment' => xarML('Install the Hitcount module.')
+    ),
+    array(
+        'item' => 'm41',
+        'option' => 'true',
+        'comment' => xarML('Install the Ratings module.')
+    ),
+    array(
+        'item' => 'm32',
+        'option' => 'true',
+        'comment' => xarML('Install the Search module.')
+    ),
+    array(
+        'item' => 'm743',
+        'option' => 'true',
+        'comment' => xarML('Install the Webservices module.')
+    ),
+    array(
+        'item' => 'm28',
+        'option' => 'true',
+        'comment' => xarML('Install the Wiki module.')
+    )
+);
 $configuration_options = $options;
 
 /**
@@ -37,30 +89,52 @@ function installer_community_configuration_load($args)
 // disable caching of module state in xarMod.php
     $GLOBALS['xarMod_noCacheState'] = true;
 
-// the following needs to be done in any case
+// load the modules chosen
     xarModAPIFunc('modules','admin','regenerate');
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
-    xarModAPIFunc('modules','admin','activate',array('regid'=>11));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
-    xarModAPIFunc('modules','admin','activate',array('regid'=>147));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
-    xarModAPIFunc('modules','admin','activate',array('regid'=>14));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
-    xarModAPIFunc('modules','admin','activate',array('regid'=>177));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
-    xarModAPIFunc('modules','admin','activate',array('regid'=>41));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
-    xarModAPIFunc('modules','admin','activate',array('regid'=>32));
-
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
-    xarModAPIFunc('modules','admin','activate',array('regid'=>151));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
-    xarModAPIFunc('modules','admin','activate',array('regid'=>36));
-
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>28));     // wiki
-    xarModAPIFunc('modules','admin','activate',array('regid'=>28));
-    xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
-    xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+    if(in_array('m11',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>11));     // autolinks
+        xarModAPIFunc('modules','admin','activate',array('regid'=>11));
+    }
+    if(in_array('m147',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>147));    // categories
+        xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+    }
+    if(in_array('m14',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>14));     // comments
+        xarModAPIFunc('modules','admin','activate',array('regid'=>14));
+    }
+    if(in_array('m177',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>177));    // hitcount
+        xarModAPIFunc('modules','admin','activate',array('regid'=>177));
+    }
+    if(in_array('m41',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>41));     // ratings
+        xarModAPIFunc('modules','admin','activate',array('regid'=>41));
+    }
+    if(in_array('m32',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>32));     // search
+        xarModAPIFunc('modules','admin','activate',array('regid'=>32));
+    }
+    if(in_array('m151',$args)) {
+        if(!in_array('m147',$args)) {
+            xarModAPIFunc('modules','admin','initialise',array('regid'=>147));
+            xarModAPIFunc('modules','admin','activate',array('regid'=>147));
+        }
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>151));    // articles
+        xarModAPIFunc('modules','admin','activate',array('regid'=>151));
+    }
+    if(in_array('m36',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>36));     // example
+        xarModAPIFunc('modules','admin','activate',array('regid'=>36));
+    }
+    if(in_array('m28',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>28));     // wiki
+        xarModAPIFunc('modules','admin','activate',array('regid'=>28));
+    }
+    if(in_array('m743',$args)) {
+        xarModAPIFunc('modules','admin','initialise',array('regid'=>743));    // webservices
+        xarModAPIFunc('modules','admin','activate',array('regid'=>743));
+    }
 
     $content['marker'] = '[x]';                                           // create the user menu
     $content['displaymodules'] = 1;
@@ -106,7 +180,7 @@ function installer_community_configuration_load($args)
                                                            'content' => serialize($content),
                                                            'state' => 2));
 
-// now do the necessary loading for each item
+// load the privileges chosen
 
     if(in_array(1,$args)) {
         installer_community_readaccess();
