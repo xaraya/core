@@ -15,6 +15,9 @@
 
 define('_PNYES', 1);
 define('_PNNO', 0);
+// Prefix Changes
+define('_XARYES', 1);
+define('_XARNO', 0);
 //'All' and 'unregistered' for user and group permissions
 define('_PNPERMS_ALL', '-1');
 define('_PNPERMS_UNREGISTERED', '0');
@@ -25,6 +28,11 @@ define('_XARPERMS_UNREGISTERED', '0');
 define('_PN_VERSION_NUM', '0.8');
 define('_PN_VERSION_ID',  'PostNuke');
 define('_PN_VERSION_SUB', 'adam_baum');
+// Prefix Changes
+define('_XAR_VERSION_NUM', '0.8');
+define('_XAR_VERSION_ID',  'PostNuke');
+define('_XAR_VERSION_SUB', 'adam_baum');
+
 
 define('_PNMODULE_STATE_UNINITIALISED', 1);
 define('_PNMODULE_STATE_INACTIVE', 2);
@@ -33,10 +41,18 @@ define('_PNMODULE_STATE_ACTIVE', 3);
 define('_PNMODULE_STATE_MISSING', 4);
 define('_PNMODULE_STATE_UPGRADED', 5);
 
+// Prefix Changes
+define('_XARMODULE_STATE_UNINITIALISED', 1);
+define('_XARMODULE_STATE_INACTIVE', 2);
+define('_XARMODULE_STATE_ACTIVE', 3);
+// FIXME: <marco> What're these two for?
+define('_XARMODULE_STATE_MISSING', 4);
+define('_XARMODULE_STATE_UPGRADED', 5);
+
 // This isn't a module state, but only a convenient definition to indicates,
 // where it's used, that we don't care about state, any state is good
 define('_PNMODULE_STATE_ANY', 0);
-
+define('_XARMODULE_STATE_ANY', 0);
  // FIXME: <marco> i think we could remove it, now validation does this job
 define('_UDCONST_MANDATORY',1024); // indicates a cord field that can't be removed'
 
@@ -54,11 +70,19 @@ define('_PNAUTH_USER_CREATEABLE', 32);
 define('_PNAUTH_USER_DELETEABLE', 64);
 define('_PNAUTH_USER_ENUMERABLE', 128);
 
+define('_XARAUTH_AUTHENTICATION', 1);
+define('_XARAUTH_DYNAMIC_USER_DATA_HANDLER', 2);
+define('_XARAUTH_PERMISSIONS_OVERRIDER', 16);
+define('_XARAUTH_USER_CREATEABLE', 32);
+define('_XARAUTH_USER_DELETEABLE', 64);
+define('_XARAUTH_USER_ENUMERABLE', 128);
+
+
 /*
  * Error codes
  */
 define('_PNAUTH_FAILED', -1);
-
+define('_XARAUTH_FAILED', -1);
 
 // LEGACY FUNCTIONS
 
