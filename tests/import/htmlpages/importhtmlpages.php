@@ -119,8 +119,8 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
 
     if ($step == 1) {
-        echo "<strong>1. Create a HTMLPages category</strong><br>\n";
-        echo "Creating root for HTMLpages<br>\n";
+        echo "<strong>1. Create a HTMLPages category</strong><br/>\n";
+        echo "Creating root for HTMLpages<br/>\n";
         $sections = xarModAPIFunc('categories', 'admin', 'create', array(
                              'name' => 'HTMLpages',
                              'description' => 'HTMLpages (.7x style)',
@@ -138,14 +138,14 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('installer','sections',$sections);
     xarModSetVar('installer','sectionid',serialize($sectionid));
     echo '<a href="importhtmlpages.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="importhtmlpages.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="importhtmlpages.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     if ($step == 2) {
         $regid = xarModGetIDFromName('articles');
         $sections = xarModGetVar('installer','sections');
         $sectionid = unserialize(xarModGetVar('installer','sectionid'));
-        echo "<strong>2. Importing HTMLpages</strong><br>\n";
+        echo "<strong>2. Importing HTMLpages</strong><br/>\n";
         $query = 'SELECT pn_pid, pn_title, pn_content
               FROM ' . $oldprefix . '_htmlpages
               ORDER BY pn_pid ASC';
@@ -183,15 +183,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                                      )
                                );
             if (!isset($newaid)) {
-                echo "Insert HTMLpages ($artid) $title failed : " . xarExceptionRender('text') . "<br>\n";
+                echo "Insert HTMLpages ($artid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
             } else {
-                echo "Inserted HTMLpages ($artid) $title<br>\n";
+                echo "Inserted HTMLpages ($artid) $title<br/>\n";
             }
             $result->MoveNext();
         }
         $result->Close();
         echo '<a href="importhtmlpages.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-            <a href="importhtmlpages.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+            <a href="importhtmlpages.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
         $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
         if (!empty($docounter)) {
@@ -202,7 +202,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 // TODO: add the rest :-)
 
     if ($step == 3) {
-        echo "<strong>3. Cleaning up</strong><br>\n";
+        echo "<strong>3. Cleaning up</strong><br/>\n";
 
     //xarModDelVar('installer','userobjectid');
         xarModDelVar('installer','oldprefix');
@@ -217,7 +217,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarModDelVar('installer','sections');
         xarModDelVar('installer','sectionid');
         echo '<a href="importhtmlpages.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="index.php">Go check out your new HTML Pages documents</a><br>';
+          <a href="index.php">Go check out your new HTML Pages documents</a><br/>';
     }
 }
 
