@@ -165,7 +165,7 @@ function xarInstallAPILoad($modName, $modType = 'user')
         return;
     }
 
-    if (isset($loadedAPICache["$modName$modType"])) {
+    if (isset($loadedAPICache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
@@ -199,7 +199,7 @@ function xarInstallAPILoad($modName, $modType = 'user')
 
     // Load the file
     include $osfile;
-    $loadedAPICache["$modName$modType"] = true;
+    $loadedAPICache[strtolower("$modName$modType")] = true;
 
     // Load the API translations files
    /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType.'api');
@@ -239,7 +239,7 @@ function xarInstallLoad($modName, $modType = 'user')
         return;
     }
 
-    if (isset($loadedModuleCache["$modName$modType"])) {
+    if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
@@ -272,7 +272,7 @@ function xarInstallLoad($modName, $modType = 'user')
 
     // Load file
     include $osfile;
-    $loadedModuleCache["$modName$modType"] = true;
+    $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
     /* $res = xarMLS_loadModuleTranslations($modName, $modOsDir, $modType);
