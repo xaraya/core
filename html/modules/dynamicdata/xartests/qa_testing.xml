@@ -508,6 +508,36 @@
       <order>50</order>
       <validation></validation>
     </property>
+    <property name="password_text_box">
+      <id>88</id>
+      <label>Password Text Box</label>
+      <type>password</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>51</order>
+      <validation></validation>
+    </property>
+    <property name="extended_date">
+      <id>89</id>
+      <label>Extended Date</label>
+      <type>extendeddate</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>52</order>
+      <validation></validation>
+    </property>
+    <property name="logging_level">
+      <id>90</id>
+      <label>Logging Level</label>
+      <type>loglevel</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>53</order>
+      <validation></validation>
+    </property>
   </properties>
 </object>
 
