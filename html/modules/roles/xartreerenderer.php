@@ -245,6 +245,10 @@ class xarTreeRenderer {
     }
 
 
+    /**
+     * Functions that define the items in each row of the display
+     */
+
     function leafitem()
     {
         if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
@@ -258,6 +262,7 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
     function deleteitem()
     {
         if (!xarSecurityCheck('DeleteRole',0,'Roles',$this->treenode['name']) || ($this->treenode['users'] > 0) || (!$this->drawchildren)) {
@@ -271,6 +276,7 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
     function emailitem()
     {
         if ($this->treenode['users'] == 0 || (!$this->drawchildren)) {
@@ -284,6 +290,7 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
     function privilegesitem()
     {
         if (!$this->drawchildren) {
@@ -297,6 +304,7 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
     function testitem()
     {
         if (!$this->drawchildren) {
@@ -310,6 +318,7 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
     function branchitem()
     {
         $html = '<a href="' .
@@ -333,23 +342,26 @@ class xarTreeRenderer {
                 'admin',
                 'modifyrole',
                 array('uid' => $this->treenode['uid'])) . ' " title="Modify this Group">' . $this->treenode['name'] . '</a>: &nbsp;';
-            $html .= count($this->roles->getsubgroups($this->treenode['uid'])) .xarML(' subgroups');
-            $html .= ' | ' . $this->treenode['users'] . xarML(' users').'</span>';
+            $numofsubgroups = count($this->roles->getsubgroups($this->treenode['uid']));
+            $subgroups = $numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups');
+            $html .= $numofsubgroups . " " . $subgroups;
+            $users = $this->treenode['users'] == 1 ? xarML('user') : xarML('users');
+            $html .= ' | ' . $this->treenode['users'] . " " . $users . '</span>';
         }
         return $html;
     }
+
     function treeitem()
     {
         $html = $this->smallblank;
-        // this table holds the index, the tree drawing gifs and the info about the role
         $html .= $this->drawindent();
         if ($this->isbranch) {
             if ($this->nodeindex != 1) {
                 $lastindent = array_pop($this->indent);
                 if ($lastindent == $this->el) {
-                    array_push($this->indent, $this->blank . $this->blank);
+                    $this->indent[] = $this->blank . $this->blank;
                 } else {
-                    array_push($this->indent, $this->aye . $this->blank);
+                    $this->indent[] = $this->aye . $this->blank;
                 }
                 $html .= $this->bar;
             }
@@ -362,6 +374,9 @@ class xarTreeRenderer {
         }
         return $html;
     }
+
+//-----------------------------------------------------------------------
+
     function setitem($pos=1,$item ='')
     {
         $this->treeitems[$pos] =& $item;

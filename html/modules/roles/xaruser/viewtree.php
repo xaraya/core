@@ -13,6 +13,9 @@
 function roles_user_viewtree()
 {
 
+    // Security Check
+    if (!xarSecurityCheck('ViewRoles')) return;
+
     // Define at which uid the tree starts
     // If not set the uid becomes that of Everybody
     if(!xarVarFetch('uid',     'int', $uid,    xarModGetVar('roles','everybody'), XARVAR_NOT_REQUIRED)) {return;}
@@ -33,7 +36,8 @@ function roles_user_viewtree()
         {
             $html = '<span style="padding-left: 1em">';
             $html .= $this->treenode['name'];
-            $html .= ' (' . $this->treenode['users'] . xarML(' members').')</span>';
+            $members = $this->treenode['users'] == 1 ? xarML('member') : xarML('members');
+            $html .= ' (' . $this->treenode['users'] . " " . $members .')</span>';
             return $html;
         }
     }
