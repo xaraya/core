@@ -259,9 +259,7 @@
                                 </xar:mlstring>
                             </span>
                         </label>
-                        <textarea name="block_content" id="block_content" style="width:300px;height:150px;">
-                            #$instance['content']# 
-                        </textarea>
+                        <textarea name="block_content" id="block_content" style="width:300px;height:150px;">#$instance['content']#</textarea>
                     </p>
                 </fieldset>
             </xar:if>
