@@ -161,11 +161,11 @@
         'MODULE_FILE_NOT_EXIST' => array(
             'title' => xarML('Module file does not exist'),
             'short' => xarML('An operation requires a module file that cannot be found.'),
-            'long' => xarML('The file may be missing, or its name may have changed.')),
+            'long' => xarML('The file may be missing, or its name may have changed. Note: this error sometimes also occurs when a file cannot be parsed because of PHP errors.')),
         'MODULE_FUNCTION_NOT_EXIST' => array(
             'title' => xarML('Module function does not exist'),
             'short' => xarML('A call has been made to a module function that cannot be found.'),
-            'long' => xarML('The file in which the function was expected may be missing. If not, then the error may have occurred because the actual function has a different name, or does not exist.')),
+            'long' => xarML('The file in which the function was expected may be missing. If not, then the error may have occurred because the actual function has a different name, or does not exist. Note: this error sometimes also occurs when a file cannot be parsed because of PHP errors.')),
         'MODULE_NOT_ACTIVE' => array(
             'title' => xarML('Module is not active'),
             'short' => xarML('A call has been made to a module that is not active.'),
@@ -173,7 +173,7 @@
         'MODULE_NOT_EXIST' => array(
             'title' => xarML('Module does not exist'),
             'short' => xarML('A call has been made to a module that cannot be found'),
-            'long' => xarML('A module was called that has not yet been installed or is not present. Use the activate link in the modules module (Modules->ViewAll) to install modules.')),
+            'long' => xarML('A module was called that has not yet been installed or is not present. Use the activate link in the modules module (Modules->ViewAll) to install modules. Note: this error sometimes also occurs when a file cannot be parsed because of PHP errors.')),
         'NO_PERMISSION' => array(
             'title' => xarML('No Privilege'),
             'short' => xarML('You do not have the privileges for this operation.'),
@@ -215,4 +215,3 @@
             'short' => xarML('The XML parser has encountered an error.'),
             'long' => xarML('The XML parser tried to execute a line that was not well formed.'))
     );
-?>
