@@ -32,25 +32,32 @@ define("CSSMEDIABRAILLE", "braille");
 define("CSSMEDIAHANDHELD", "handheld");
 define("CSSMEDIAPROJECTION", "projection");
 
+define("COMMONCSS", "xarcore-xhtml1-strict");
+define("MODULECSS", "style");
+define("THEMECSS", "style");
+define("CSSEXT", "css");
+
 class xarCSS
 {
     // class vars and their defaults
     var $debug      = false;        // true == debug mode enabled
     var $parse      = false;        // true == parse mode enabled
+    var $suppress   = false;        // true == this css is suppressed
 
     var $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
 
     var $method     = 'link';       // also supported are 'import' and embedded 'style'
 
     // SUPPORTED COMPONENTS ARE MODULE (BLOCK), THEME, CORE (anything else out there?)
-    var $comptype   = 'module';     // component type - 'module, 'theme' or 'core'
-    var $compname   = null;         // component name (e.g. module's name 'base')
+    var $comptype   = 'common';     // component type - 'module, 'theme' or 'common'
+    var $compname   = 'base';       // component name (e.g. module's name 'base')
     var $compcssdir = 'xarstyles';  // component css directory name
 
-    var $filename   = 'style';      // default css file name (without extension)
-    var $fileext    = 'css';        // default css file extension
+    var $filename   = COMMONCSS;    // default css file name (without extension)
+    var $fileext    = CSSEXT;       // default css file extension
 
     var $source     = null;         // empty source should not be included (ideally)
+    var $dynfile;
 
     // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
     var $rel        = CSSRELSTYLESHEET;
@@ -78,6 +85,7 @@ class xarCSS
         // subclass it instead and let the polymorphism to do its job :-) <andyv>
         $msg = xarML("you have illegally instantiated class: ") . get_class (&$this);
         $this->_error($msg);
+//        $this->set_fileext('css'); // assume static methods
     }
 
     // PUBLIC METHODS
@@ -287,6 +295,7 @@ class xarCSS
     // output css inclusion string for various languages
     function get_output()
     {
+//        echo var_dump($this);exit;
         // only (x)html supported ATM
         if($this->language == 'html') {
             $htmlstr = $this->_htmltag();
