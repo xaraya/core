@@ -215,7 +215,7 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
             if (is_string($value)) {
                 // FIXME: creates a loop in install, don't know how to fix properly
                 //$value = new SystemException(xarMLByKey($exceptionId, $value));
-                $value = new SystemException($exceptionId, $value);
+                $value = new SystemException(xarML($value));
             } else {
                 $value = new SystemException(xarMLByKey($exceptionId));
             }
