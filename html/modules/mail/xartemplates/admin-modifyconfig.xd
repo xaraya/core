@@ -16,8 +16,8 @@
 	</xar:if>
 </p>
 <xar:if condition="xarModGetVar('mail', 'replyto')">
-	<p><xar:mlstring>Reply To Name</xar:mlstring>&nbsp;&nbsp;<input type="text" name="replytoname" id="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100" /></p>
-	<p><xar:mlstring>Reply To Address</xar:mlstring>&nbsp;&nbsp;<input type="text" name="replytoemail" id="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100" />
+	<p><label for="replytoname"><xar:mlstring>Reply To Name</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="replytoname" id="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100" /></p>
+	<p><label for="replytoemail"><xar:mlstring>Reply To Address</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="replytoemail" id="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100" />
 </xar:if>
 <p>
 	<label for="html">
@@ -30,47 +30,47 @@
 	</xar:if>
 </p>
 <xar:if condition="xarModGetVar('mail', 'html')">
-	<p><xar:mlstring>HTML Email Header</xar:mlstring>&nbsp;&nbsp;<textarea name="htmlheader" id="htmlheader" rows="20" cols="60">#xarModGetVar('mail', 'htmlheader')#</textarea></p>
-	<p><xar:mlstring>HTML Email Footer</xar:mlstring>&nbsp;&nbsp;<textarea name="htmlfooter" id="htmlfooter" rows="20" cols="60">#xarModGetVar('mail', 'htmlfooter')#</textarea></p>
+	<p><label for="htmlheader"><xar:mlstring>HTML Email Header</xar:mlstring></label>&nbsp;&nbsp;<textarea name="htmlheader" id="htmlheader" rows="20" cols="60">#xarModGetVar('mail', 'htmlheader')#</textarea></p>
+	<p><label for="htmlfooter"><xar:mlstring>HTML Email Footer</xar:mlstring></label>&nbsp;&nbsp;<textarea name="htmlfooter" id="htmlfooter" rows="20" cols="60">#xarModGetVar('mail', 'htmlfooter')#</textarea></p>
 </xar:if>
-<p><xar:mlstring>Default Word Wrap Size</xar:mlstring>&nbsp;&nbsp;<input type="text" name="wordwrap" id="wordwrap" value="#xarModGetVar('mail', 'wordwrap')#" size="5" maxlength="5" /></p>
+<p><label for="wordwrap"><xar:mlstring>Default Word Wrap Size</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="wordwrap" id="wordwrap" value="#xarModGetVar('mail', 'wordwrap')#" size="5" maxlength="5" /></p>
 <p><xar:mlstring>Default Priority to send messages</xar:mlstring>&nbsp;&nbsp;
 	<select name="priority" id="priority" size="1" tabindex="1">
 		<xar:if condition="xarModGetVar('mail', 'priority') eq '1'">
-			<option value="1" selected="selected">High</option>
-			<option value="3">Normal</option>
-			<option value="5">Low</option>
+			<option label="High" value="1" selected="selected">High</option>
+			<option label="Normal" value="3">Normal</option>
+			<option label="Low" value="5">Low</option>
 		<xar:elseif condition="xarModGetVar('mail', 'priority') eq '3'" />
-			<option value="1">High</option>
-			<option value="3" selected="selected">Normal</option>
-			<option value="5">Low</option>
+			<option label="High" value="1">High</option>
+			<option label="Normal" value="3" selected="selected">Normal</option>
+			<option label="Low" value="5">Low</option>
 		<xar:elseif condition="xarModGetVar('mail', 'priority') eq '5'" />
-			<option value="1">High</option>
-			<option value="3">Normal</option>
-			<option value="5" selected="selected">Low</option>
+			<option label="High" value="1">High</option>
+			<option label="Normal" value="3">Normal</option>
+			<option label="Low" value="5" selected="selected">Low</option>
 		</xar:if>									
 	</select>
 </p>
 <p><xar:mlstring>Default method to send mail</xar:mlstring>&nbsp;&nbsp;	
 	<select name="server" id="server" size="1" tabindex="1">
 		<xar:if condition="xarModGetVar('mail', 'server') eq 'smtp'">
-			<option value="smtp" selected="selected">SMTP</option>
-			<option value="sendmail">SendMail</option>
-			<option value="mail">Mail</option>
+			<option label="SMTP" value="smtp" selected="selected">SMTP</option>
+			<option label="SendMail" value="sendmail">SendMail</option>
+			<option label="Mail" value="mail">Mail</option>
 		<xar:elseif condition="xarModGetVar('mail', 'server') eq 'sendmail'" />
-			<option value="smtp">SMTP</option>
-			<option value="sendmail" selected="selected">SendMail</option>
-			<option value="mail">Mail</option>
+			<option label="SMTP" value="smtp">SMTP</option>
+			<option label="SendMail" value="sendmail" selected="selected">SendMail</option>
+			<option label="Mail" value="mail">Mail</option>
 		<xar:elseif condition="xarModGetVar('mail', 'server') eq 'mail'" />
-			<option value="smtp">SMTP</option>
-			<option value="sendmail">SendMail</option>
-			<option value="mail" selected="selected">Mail</option>
+			<option label="SMTP" value="smtp">SMTP</option>
+			<option label="SendMail" value="sendmail">SendMail</option>
+			<option label="Mail" value="mail" selected="selected">Mail</option>
 		</xar:if>									
 	</select>
 </p>
 <xar:if condition="xarModGetVar('mail', 'server') eq 'smtp'">
-	<p><xar:mlstring>SMTP Host</xar:mlstring>&nbsp;&nbsp;<input type="text" name="smtpHost" id="smtpHost" value="#xarModGetVar('mail', 'smtpHost')#" size="30" maxlength="100" /></p>
-	<p><xar:mlstring>SMTP Port</xar:mlstring>&nbsp;&nbsp;<input type="text" name="smtpPort" id="smtpPort" value="#xarModGetVar('mail', 'smtpPort')#" size="5" maxlength="5" /></p>
+	<p><label for="smtphost"><xar:mlstring>SMTP Host</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="smtpHost" id="smtpHost" value="#xarModGetVar('mail', 'smtpHost')#" size="30" maxlength="100" /></p>
+	<p><label for="smtpPort"><xar:mlstring>SMTP Port</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="smtpPort" id="smtpPort" value="#xarModGetVar('mail', 'smtpPort')#" size="5" maxlength="5" /></p>
 	<p>
 		<label for="smtpAuth">
 			<xar:mlstring>SMTP Requires Authentication</xar:mlstring>
@@ -82,8 +82,8 @@
 		</xar:if>
 	</p>
 	<xar:if condition="xarModGetVar('mail', 'smtpAuth')">
-		<p><xar:mlstring>SMTP Username</xar:mlstring>&nbsp;&nbsp;<input type="text" name="smtpUserName" id="smtpUserName" value="#xarModGetVar('mail', 'smtpUserName')#" size="30" maxlength="100" /></p>
-		<p><xar:mlstring>SMTP Password</xar:mlstring>&nbsp;&nbsp;<input type="password" name="smtpPassword" id="smtpPassword" value="#xarModGetVar('mail', 'smtpPassword')#" size="30" maxlength="30" /></p>
+		<p><label for="smtpUserName"><xar:mlstring>SMTP Username</xar:mlstring></label>&nbsp;&nbsp;<input type="text" name="smtpUserName" id="smtpUserName" value="#xarModGetVar('mail', 'smtpUserName')#" size="30" maxlength="100" /></p>
+		<p><label for="smtpPassword"><xar:mlstring>SMTP Password</xar:mlstring></label>&nbsp;&nbsp;<input type="password" name="smtpPassword" id="smtpPassword" value="#xarModGetVar('mail', 'smtpPassword')#" size="30" maxlength="30" /></p>
 	</xar:if>
 </xar:if>
 <input type="submit" value="Update Mail Configuration" align="middle" tabindex="3" />
