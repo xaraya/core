@@ -626,7 +626,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         // CHECKME: <mrb> This introduces a dependency to 2 subsystems
         xarResponseRedirect(xarModURL('base','user','systemexit',
         array('code' => $errorType,
-              'exception' => urlencode($msg),
+              'exception' => $msg,
               'product' => $product,
               'component' => $component)));
     }
