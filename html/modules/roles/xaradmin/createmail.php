@@ -116,4 +116,3 @@ function roles_admin_createmail()
     return $data;
 }
 
-?>
