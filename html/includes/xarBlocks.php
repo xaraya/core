@@ -127,7 +127,7 @@ function xarBlock_renderGroup($groupName)
         $caching = 1;
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $blockGroupInstancesTable = $tables['block_group_instances'];

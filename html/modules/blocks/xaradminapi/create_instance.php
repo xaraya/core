@@ -51,7 +51,7 @@ function blocks_adminapi_create_instance($args)
     }
 
     // Load up database details.
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_instances_table       = $xartable['block_instances'];
     //$block_group_instances_table = $xartable['block_group_instances'];

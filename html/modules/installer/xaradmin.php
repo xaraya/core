@@ -416,7 +416,7 @@ function installer_admin_create_administrator()
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'  => 'topnav',    'template' => 'topnav')))       return;
 
     // Load up database
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $blockGroupsTable = $tables['block_groups'];
@@ -643,7 +643,7 @@ function installer_admin_confirm_configuration()
         /*********************************************************************
         * Empty the privilege tables
         *********************************************************************/
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn();
         $sitePrefix = xarDBGetSiteTablePrefix();
         $query = "DELETE FROM " . $sitePrefix . '_privileges';
         if (!$dbconn->Execute($query)) return;
@@ -734,7 +734,7 @@ function installer_admin_confirm_configuration()
         $content['content'] = '';
 
         // Load up database
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
         $blockGroupsTable = $tables['block_groups'];
@@ -812,7 +812,7 @@ function installer_admin_cleanup()
     $remove = xarModDelVar('installer','modules');
 
     // Load up database
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $blockGroupsTable = $tables['block_groups'];

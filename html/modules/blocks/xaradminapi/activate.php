@@ -33,7 +33,7 @@ function blocks_adminapi_activate($args)
     // Security
 	if(!xarSecurityCheck('EditBlock',1,'Block',"::$bid")) {return;}
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $blockstable = $xartable['blocks'];
 

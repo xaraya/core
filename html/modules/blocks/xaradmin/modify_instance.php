@@ -25,7 +25,7 @@ function blocks_admin_modify_instance()
     if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
 
     // TODO: move all database stuff to the API.
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];

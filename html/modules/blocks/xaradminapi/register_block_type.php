@@ -39,7 +39,7 @@ function blocks_adminapi_register_block_type($args)
         return $origtype['tid'];
     }
 
-    list ($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 

@@ -20,7 +20,7 @@ function blocks_admin_new_instance()
 // Security Check
 	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     // Fetch block type list

@@ -63,7 +63,7 @@ function blocks_adminapi_update_instance($args)
     // TODO: add security on the name as well as (eventually instead of) the title.
 	if(!xarSecurityCheck('EditBlock', 1, 'Block', "$title::$bid")) {return;}
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];

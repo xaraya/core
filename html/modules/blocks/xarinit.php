@@ -19,7 +19,7 @@
 function blocks_init()
 {
     // Get database information
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $prefix = xarDBGetSystemTablePrefix();
 

@@ -78,7 +78,7 @@ if (empty($step)) {
         echo xarML("Upgrading authsystem from version #(1) to version #(2)",$as_dbinfo['version'],$as_fileinfo['version']) . "<br/>";
         // authsystem has no init function, so we can just patch in the new version number in the database.
         $sql = "UPDATE " . $sprefix . "_modules SET xar_version='".  $as_fileinfo['version'] . "' WHERE xar_regid='42'";
-        list($dbconn) = xarDBGetConn();
+        $dbconn =& xarDBGetConn();
         if(!$dbconn->Execute($sql)) {
             echo xarML("FAILED upgrading the authentication system. I cannot continue, I'm sorry.");
             echo "</div></div>";
@@ -143,7 +143,7 @@ if (empty($step)) {
 
           foreach($ddinstances as $ddinstance){
               foreach ($ddinstance as $instance) {
-                  list($dbconn) = xarDBGetConn();
+                  $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'dynamicdata' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
@@ -230,7 +230,7 @@ if (empty($step)) {
 
           foreach($categoriesinstances as $categoriesinstance){
               foreach ($categoriesinstance as $instance) {
-                  list($dbconn) = xarDBGetConn();
+                  $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid,xar_header,xar_query, xar_instancetable2
                             FROM $instancestable
                             WHERE xar_module= 'categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
@@ -254,7 +254,7 @@ if (empty($step)) {
           //now do the last one as a separate instance - to get it to work properly
           $categoryinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON  btypes.xar_id = instances.xar_type_id WHERE xar_module = \'categories\'';
 
-          list($dbconn) = xarDBGetConn();
+          $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'categories' AND xar_component = 'Block' AND xar_header='Category Block Title:'";
@@ -300,7 +300,7 @@ if (empty($step)) {
 
           foreach($hitcountinstances as $hitcountinstance){
               foreach ($hitcountinstance as $instance) {
-                  list($dbconn) = xarDBGetConn();
+                  $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'hitcount' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
@@ -360,7 +360,7 @@ if (empty($step)) {
           foreach($ratinginstances as $ratingsinstance){
               foreach ($ratingsinstance as $instance) {
 
-                  list($dbconn) = xarDBGetConn();
+                  $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header='{$instance['cheader']}'";
@@ -398,7 +398,7 @@ if (empty($step)) {
           $articlesupdate=false;
           $articlesinstance ='SELECT DISTINCT instances.xar_title FROM '.$blockinstancetable.' as instances LEFT JOIN '.$blocktypestable.' as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module=\'articles\'';
 
-           list($dbconn) = xarDBGetConn();
+           $dbconn =& xarDBGetConn();
                   $query = "SELECT xar_iid, xar_header, xar_query
                             FROM $instancestable
                             WHERE xar_module= 'articles' AND xar_component = 'Block' AND xar_header='Article Block Title:'";
@@ -431,7 +431,7 @@ if (empty($step)) {
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
     echo "<h5>Checking Table Structure</h5>";
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     // create and populate the security levels table
     $table_name['security_levels'] = $sitePrefix . '_security_levels';
 
@@ -1099,7 +1099,7 @@ Password : %%password%%
     echo "<h5>Checking Time / Date Structure</h5>";
 
     include 'includes/xarDate.php';
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $sitePrefix = xarDBGetSiteTablePrefix();
     $rolestable = $sitePrefix . '_roles';
 
@@ -1123,7 +1123,7 @@ Password : %%password%%
 
     // Check the installed privs and masks.
     echo "<h5>Update Xaraya Installer theme name</h5>";
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $sitePrefix = xarDBGetSiteTablePrefix();
     $themestable = $sitePrefix . '_themes';
     $query = "SELECT xar_id FROM $themestable WHERE xar_name = 'Xaraya Installer'";
