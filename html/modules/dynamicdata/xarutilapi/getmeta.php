@@ -47,9 +47,10 @@ function dynamicdata_utilapi_getmeta($args)
             $datatype = $field->type;
             $size = $field->max_length;
 
-            // assign some default label for now, by removing everything except the last part (xar_..._)
-            $name = preg_replace('/^.+_/','',$fieldname);
-            $label = ucfirst($name);
+            // assign some default label for now, by removing the first part (xar_)
+            $name = preg_replace('/^.+?_/','',$fieldname);
+            $label = strtr($name,'_',' ');
+            $label = ucwords($label);
             if (isset($columns[$name])) {
                 $i = 1;
                 while (isset($columns[$name . '_' . $i])) {

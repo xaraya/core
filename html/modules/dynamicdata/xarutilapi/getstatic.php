@@ -105,10 +105,11 @@ function dynamicdata_utilapi_getstatic($args)
         //if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
         //}
 
-        // assign some default label for now, by removing everything except the last part (xar_..._)
+        // assign some default label for now, by removing the first part (xar_)
 // TODO: let modules define this
-        $name = preg_replace('/^.+_/','',$field);
-        $label = ucfirst($name);
+        $name = preg_replace('/^.+?_/','',$field);
+        $label = strtr($name,'_',' ');
+        $label = ucwords($label);
         if (isset($static[$name])) {
             $i = 1;
             while (isset($static[$name . '_' . $i])) {

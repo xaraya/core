@@ -294,6 +294,30 @@ function dynamicdata_admin_query($args)
         if (empty($newquery)) {
             $newquery = xarML('Last Query');
         }
+/* TODO: support join and table in data-view and data-list tags
+        if (!empty($table)) {
+            $data['sample'] = '&lt;xar:data-view table="' . $table . '" '; 
+        } else {
+            $modinfo = xarModGetInfo($data['object']->moduleid);
+            $modname = $modinfo['name'];
+            $data['sample'] = '&lt;xar:data-view module="' . $modname . '" itemtype="' . $data['object']->itemtype . '" ';
+            if (!empty($join)) {
+                $data['sample'] .= 'join="' . $join . '" ';
+            }
+        }
+        if (!empty($fieldlist)) {
+            $data['sample'] .= 'fieldlist="' . xarVarPrepForDisplay(join(',',$fieldlist)) . '" ';
+        }
+        if (!empty($whereclause)) {
+            $data['sample'] .= 'where="' . xarVarPrepForDisplay($whereclause) . '" ';
+        }
+        if (!empty($sortlist) && count($sortlist) > 0) {
+            $data['sample'] .= 'sort="' . xarVarPrepForDisplay(join(',',$sortlist)) . '" ';
+        }
+        $data['sample'] .= 'numitems="' . xarVarPrepForDisplay($numitems) . '" ';
+        $data['sample'] .= 'startnum="' . xarVarPrepForDisplay($startnum) . '" ';
+        $data['sample'] .= '/&gt;';
+*/
         xarSessionSetVar('DynamicData.LastQuery',$newquery);
     } else {
         xarSessionSetVar('DynamicData.LastQuery','');

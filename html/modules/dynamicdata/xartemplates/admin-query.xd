@@ -179,5 +179,8 @@
     <xar:data-list object="$mylist" />
   </xar:if>
 </xar:if>
+<xar:if condition="!empty($sample)">
+  <p>Sample Tag : #$sample#</p>
+</xar:if>
 </div>
 </div>
