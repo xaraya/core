@@ -390,7 +390,7 @@ li.xar-menu-item:hover {
 .xar-menu-subitem:hover { background-color: transparent; }
 
 .xar-menu-subitem-current {
-	font-size:95%;
+	font-size: 95%;
 	font-weight: bold;
 	margin: 2px .5em;
 	padding: 0;
@@ -398,6 +398,7 @@ li.xar-menu-item:hover {
 	background-color: #FFFFFF;
 	line-height: 120%;
 }
+
 
 /* .xar-menu-item > a, .xar-menu-subitem > a { display: block; } */
 /* .xar-menu-item-current > .xar-menu-subitem > a { color: #193970; } */
@@ -411,6 +412,7 @@ li.xar-menu-item:hover {
 .xar-error { color: #ff0000; }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
+
 div#header {
 	width:100%;
 	height:70px;
@@ -439,38 +441,63 @@ div#themecontrols span {
 	top:30px;
 }
 
+table#contentarea {
+	width: 100%;
+	margin: 0;
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+} /*
+this table 'holds' our dynamic content in this theme (not ideal, but..)
+-------------------------------------------------------------------------[comment] */
 
 td#leftmenus {
-	width: 180px;
-	vertical-align: top;
 	background-image: url(../images/leftmenus_bg.jpg);
 	background-repeat: repeat-y;
 	background-position: 0 0;
-	border-color: #757F8B;
-	border-width: 1px;
-	border-style: solid;
-}
+} /*
+area occupied by leftblocksgroup 
+-------------------------------------------------------------------------[comment] */
 
 div#leftmenuswrapper {
 	margin:5px;
-}
+} /*
+pixel-perfect positioning for leftblocksgroup 
+-------------------------------------------------------------------------[comment] */
 
 
-td#rightmenus {
-	width: 180px;
-	vertical-align: top;
+td#rightmenus {	
 	background-image: url(../images/rightmenus_bg.jpg);
 	background-repeat: repeat-y;
 	background-position: 0 0;
-	border-color: #757F8B;
-	border-width: 1px;
-	border-style: solid;
-}
+} /*
+area occupied by rightblocksgroup 
+-------------------------------------------------------------------------[comment] */
 
 div#rightmenuswrapper {
 	margin:5px;
-	width:100%
-}
+} /*
+pixel-perfect positioning for rightblocksgroup 
+-------------------------------------------------------------------------[comment] */
+
+/*
+notice that we can avoid using explicit width declaration for the above wrappers,
+all this is done for the sake of cross-browser compatibility and, at the same time,
+to avoid using IE/Win specific hacks for its broken box model 
+------------------------------------------------------------------[important note] */
+
+td#rightmenus, td#leftmenus {
+	vertical-align: top;
+	width: 180px;
+	border-color: #757F8B;
+	border-width: 1px;
+	border-style: solid;
+	
+} /*
+menu areas - shared properties for both rules
+-------------------------------------------------------------------------[comment] */
 
 td#maincontent {
 	width: auto;
@@ -482,17 +509,11 @@ td#maincontent {
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
-}
+} /*
+it is possible to use padding in this case, because width of this container
+should be calculated correctly by all modern (and old) browsers (table cell)
+-------------------------------------------------------------------------[comment] */
 
-table#contentarea {
-	width: 100%;
-	margin: 0;
-	border-collapse: separate;
-	border-spacing: 2px;
-	border-color: #757F8B;
-	border-width: 1px;
-	border-style: solid;
-}
 
 div#footerwrapper {
 	padding: 3px;
@@ -500,7 +521,9 @@ div#footerwrapper {
 	border-color: #757F8B;
 	border-width: 1px;
 	border-style: solid;
-}
+} /*
+positioning and minimal styling of footer 
+-------------------------------------------------------------------------[comment] */
 
 div#footer {
 	position: relative;
@@ -508,7 +531,9 @@ div#footer {
 	text-align: left;
 	background-image: url(../images/footer_bg.jpg);
 	background-repeat: repeat-x;
-}
+} /*
+footer container itself - watch for the explicit height limitations
+-------------------------------------------------------------------------[comment] */
 
 p#footermsg {
 	position: relative;
@@ -517,7 +542,9 @@ p#footermsg {
 	width: 250px;
 	text-align: right;
 	margin:0;
-} 
+} /*
+standard content of the footer, limited by explicit width and height 
+-------------------------------------------------------------------------[comment] */
 
 p#slogan {
 	float: left;
@@ -525,7 +552,9 @@ p#slogan {
 	width:auto;
 	text-align: left;
 	margin:0;
-}
+} /*
+site slogan can 'sit' in the footer for now 
+-------------------------------------------------------------------------[comment] */
 
 p#copyright {
 	float: left;
@@ -533,7 +562,9 @@ p#copyright {
 	width:180px;
 	text-align: center;
 	margin:0;
-}
+} /*
+and so can the copyright info
+-------------------------------------------------------------------------[comment] */
 
 div.validators {
 	float:right;
@@ -541,13 +572,16 @@ div.validators {
 	width:102px;	
 	padding-top:2px;
 	margin-right:3px;
-}
+} /*
+it is a kind of 'modern trend' to display links to w3c validators 
+-------------------------------------------------------------------------[comment] */
 
 div.validators img {
-/* 	padding: 1px 0; */
 	margin: 1px 0;
 	display:block;
-}
+} /*
+not so much a decoration, but rather a high visibility tool for beta-testers 
+-------------------------------------------------------------------------[comment] */
 
 /* MISCELLANEOUS [gen_heading] */
 .txttitle {
