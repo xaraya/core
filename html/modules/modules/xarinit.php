@@ -31,11 +31,11 @@ function modules_init()
     $sitePrefix   = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $tables['modules']          = $systemPrefix . '_modules';
-    $tables['module_states']    = $sitePrefix   . '_module_states';
-    $tables['module_vars']      = $sitePrefix   . '_module_vars';
-    $tables['module_uservars']  = $sitePrefix   . '_module_uservars';
-    $tables['hooks']            = $sitePrefix   . '_hooks';
+    $tables['modules']         = $systemPrefix . '_modules';
+    $tables['module_states']   = $sitePrefix . '_module_states';
+    $tables['module_vars']     = $sitePrefix . '_module_vars';
+    $tables['module_uservars'] = $sitePrefix . '_module_uservars';
+    $tables['hooks']           = $sitePrefix . '_hooks';
     // Create tables
     /*********************************************************************
      * Here we create all the tables for the module system
@@ -80,6 +80,20 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
+    $modInfo = xarMod_getFileInfo('modules');
+    if (!isset($modInfo)) return; // throw back
+    // Use version, since that's the only info likely to change
+    $modVersion = $modInfo['version'];
+
+    // Manually Insert Modules module into modules table
+    $seqId = $dbconn->GenId($tables['modules']);
+    $query = "INSERT INTO " . $tables['modules'] . "
+              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
+     ) VALUES ($seqId, 'modules', 1, 'modules', '$modVersion', 1, 'Core Admin', 'Global', 1, 0)";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     // prefix_module_states
     /********************************************************************
     * CREATE TABLE xar_module_states (
@@ -106,6 +120,12 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
+    // manually set Modules Module to active
+    $query = "INSERT INTO " . $tables['module_states'] . "(xar_regid, xar_state
+              ) VALUES (1, 3)";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     // prefix_module_vars
     /********************************************************************
     * CREATE TABLE xar_module_vars (

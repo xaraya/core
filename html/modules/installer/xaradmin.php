@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: $Id$
  *
@@ -9,7 +8,7 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage module name
+ * @subpackage installer
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
@@ -68,17 +67,18 @@ function installer_admin_phase2()
 }
 
 /**
- * Phase 3: Check system settings and ability to write config
+ * Phase 3: Check system settings
  *
  * @access private
- * @param args[agree] string
- * @returns array
- * @todo <johnny> FIX Installer ML
- * @todo <johnny> decide what to about var dir
+ * @param agree string
+ * @return array
+ * @todo <johnny> FIX Installer MLr
+ * @todo <johnny> make sure php version checking works with
+ *       php versions that contain strings
  */
 function installer_admin_phase3()
 {
-    $agree = xarVarCleanFromInput('agree');
+    if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
@@ -87,26 +87,34 @@ function installer_admin_phase3()
 
     //Defaults
     $systemConfigIsWritable   = false;
-    $siteConfigIsWritable     = true;
-    $cacheTemplatesIsWritable = true;
+    $cacheTemplatesIsWritable = false;
+    $metRequiredPHPVersion    = false;
 
     $systemVarDir             = xarCoreGetVarDirPath();
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
-    $siteConfigFile           = $systemVarDir . '/config.site.xml';
+
+    if (function_exists('version_compare')) {
+        if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
+    }
 
     if (is_writable($systemConfigFile)) {
         $systemConfigIsWritable = true;
     }
 
-    $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
-    $data['systemConfigFile'] = $systemConfigFile;
-    $data['siteConfigFile']   = $siteConfigFile;
-    $data['siteConfigIsWritable'] = $siteConfigIsWritable;
-    $data['systemConfigIsWritable'] = $systemConfigIsWritable;
+    if (is_writable($cacheTemplatesDir)) {
+        $cacheTemplatesIsWritable = true;
+    }
 
-    $data['language'] = 'English';
-    $data['phase'] = 3;
+    $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
+    $data['phpVersion']               = PHP_VERSION;
+    $data['cacheTemplatesDir']        = $cacheTemplatesDir;
+    $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
+    $data['systemConfigFile']         = $systemConfigFile;
+    $data['systemConfigIsWritable']   = $systemConfigIsWritable;
+
+    $data['language']    = 'English';
+    $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
 
     return $data;
@@ -158,35 +166,15 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
-    // Defaults
-    $createDb = false;
-    $intranetMode = false;
-    $dbPass = '';
-
     // Get arguments
-    list($dbHost,
-         $dbName,
-         $dbUname,
-         $dbPass,
-         $dbPrefix,
-         $dbType,
-         $intranetMode,
-         $createDb)    = xarVarCleanFromInput('install_database_host',
-                                             'install_database_name',
-                                             'install_database_username',
-                                             'install_database_password',
-                                             'install_database_prefix',
-                                             'install_database_type',
-                                             'install_intranet',
-                                             'install_create_database');
-
-    // Check necessary arguments
-    if (empty($dbHost) || empty($dbName) || empty($dbUname) || empty($dbPrefix) || empty($dbType)) {
-       $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3)) or dbPrefix (#(4)) or dbType (#(5)).'
-              , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType);
-       xarCore_die($msg);
-       return;
-    }
+    if (!xarVarFetch('install_database_host','str:1:',$dbHost)) return;
+    if (!xarVarFetch('install_database_name','str:1:',$dbName)) return;
+    if (!xarVarFetch('install_database_username','str:1:',$dbUname)) return;
+    if (!xarVarFetch('install_database_password','str::',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_prefix','str:1:',$dbPrefix)) return;
+    if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
+    if (!xarVarFetch('install_intranet','checkbox',$intranetMode,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_create_database','checkbox',$createDb,false,XARVAR_NOT_REQUIRED)) return;
 
     // Save config data
     if (!xarInstallAPIFunc('installer', 'admin', 'modifyconfig',
@@ -201,7 +189,7 @@ function installer_admin_phase5()
 
     // Create the database if necessary
     if ($createDb) {
-        if (!xarInstallAPIFunc('installer', 'admin', 'createdb')) {
+        if (!xarInstallAPIFunc('installer', 'admin', 'createdb', array('dbName' => $dbName, 'dbType' => $dbType))) {
             $msg = xarML('Could not create database (#(1)).', $dbName);
             xarCore_die($msg);
             return;
@@ -209,7 +197,22 @@ function installer_admin_phase5()
     }
 
     // Start the database
-    xarCoreInit(XARCORE_SYSTEM_ADODB);
+    // {ML_dont_parse 'includes/xarDB.php'}
+    include_once 'includes/xarDB.php';
+
+    $systemArgs = array('userName' => $dbUname,
+                        'password' => $dbPass,
+                        'databaseHost' => $dbHost,
+                        'databaseType' => $dbType,
+                        'databaseName' => $dbName,
+                        'systemTablePrefix' => $dbPrefix,
+                        // uncomment this and remove the next line when we can store
+                        // site vars that are pre DB
+                        //'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
+                        'siteTablePrefix' => $dbPrefix);
+    // Connect to database
+    $whatToLoad = XARCORE_SYSTEM_NONE;
+    xarDB_init($systemArgs, $whatToLoad);
 
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
@@ -224,9 +227,6 @@ function installer_admin_phase5()
                                                        'initfunc'  => 'init'))) {
         return;
     }
-
-    //session_start();
-    //session_destroy();
 
     $data['language'] = 'English';
     $data['phase'] = 5;
@@ -246,29 +246,100 @@ function installer_admin_bootstrap()
 
     $installing = false;
 
-// activate the security stuff
-// create the default roles and privileges setup
+    // activate the security stuff
+    // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
-// log in admin user
+    // log in admin user
     if (!xarUserLogIn('Admin', 'password', 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-            return false;
+        return false;
     }
 
-    // Activate modules
-    if (!xarModAPIFunc('installer',
-                        'admin',
-                        'initialise',
-                        array('directory' => 'base',
-                              'initfunc' => 'activate'))) {
-        return;
+    // Set up default user properties, etc.
+
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
+    // Set the state and activate the following modules
+    $modlist=array('roles','privileges','blocks','sniffer', 'themes');
+    foreach ($modlist as $mod) {
+        // Set state to inactive
+        $regid=xarModGetIDFromName($mod);
+
+        if (!xarModAPIFunc('modules','admin','setstate',
+                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) return;
+
+        // Activate the module
+        if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
     }
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
+    // load themes into *_themes table
+    if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
+        return NULL;
+    }
+
+    // Set the state and activate the following themes
+    $themelist=array('print','rss','Xaraya_Classic');
+    foreach ($themelist as $theme) {
+        // Set state to inactive
+        $regid=xarThemeGetIDFromName($theme);
+
+        if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,
+                                                               'state'=> XARTHEME_STATE_INACTIVE)))
+            {
+                return;
+            }
+        // Activate the module
+        if (!xarModAPIFunc('themes','admin','activate', array('regid'=> $regid)))
+            {
+                return;
+            }
+    }
+
+    // Initialise and activate adminpanels, mail, dynamic data
+    $modlist = array('adminpanels','mail', 'dynamicdata');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+        // Activate the module
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+    }
+
+    //initialise and activate base module by setting the states
+    $baseId = xarModGetIDFromName('base');
+    if (!xarModAPIFunc('modules', 'admin', 'setstate',
+                       array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
+    // Set module state to active
+    if (!xarModAPIFunc('modules', 'admin', 'setstate',
+                       array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
+
+    // Register Block types
+    $blocks = array('finclude','html','menu','php','text');
+
+    foreach ($blocks as $block) {
+        if (!xarBlockTypeRegister('base', $block)) return;
+    }
+
+    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) {
+        xarVarDelCached('Mod.BaseInfos', 'blocks');
+    }
+
+    // Create default block groups/instances
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
+                                                                'template' => 'right'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
+                                                                'template' => 'header'))) return;
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'admin'))) return;
+	xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 }
 
 /**
@@ -277,6 +348,9 @@ function installer_admin_bootstrap()
  * @access public
  * @param create
  * @return bool
+ * @todo make confirm password work
+ * @todo remove URL field from users table
+ * @todo normalize user's table
  */
 function installer_admin_create_administrator()
 {
@@ -285,57 +359,51 @@ function installer_admin_create_administrator()
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;
 
     include_once 'modules/roles/xarroles.php';
 
     if (!xarVarCleanFromInput('create')) {
-// create a role from the data
+        // create a role from the data
         $roles = new xarRoles();
         $role = $roles->getRole(3);
 
-// assemble the template data
+        // assemble the template data
         $data['install_admin_username'] = $role->getUser();
-        $data['install_admin_name'] = $role->getName();
-        $data['install_admin_email'] = $role->getEmail();
+        $data['install_admin_name']     = $role->getName();
+        $data['install_admin_email']    = $role->getEmail();
         return $data;
     }
 
-    list ($username,
-          $name,
-          $pass,
-          $email,
-          $url) = xarVarCleanFromInput('install_admin_username',
-                                       'install_admin_name',
-                                       'install_admin_password',
-                                       'install_admin_email',
-                                       'install_admin_url');
+    if (!xarVarFetch('install_admin_username','str:1:100',$userName)) return;
+    if (!xarVarFetch('install_admin_name','str:1:100',$name)) return;
+    if (!xarVarFetch('install_admin_password','str:4:100',$pass)) return;
+    //if (!xarVarFetch('install_confirm_password','str:4:100',$pass)) return;
+    if (!xarVarFetch('install_admin_email','str:1:100',$email)) return;
 
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 
 
-// assemble the args into an array for the role constructor
+    // assemble the args into an array for the role constructor
     $password = md5($pass);
-    $pargs = array('uid'=>3,
-                    'name'=>$name,
-                    'type'=>0,
-                    'uname'=>$username,
-                    'email'=>$email,
-                    'pass'=>$password,
-                    'url'=>$url,
-                    'state'=>3);
+    $pargs = array('uid'   => 3,
+                   'name'  => $name,
+                   'type'  => 0,
+                   'uname' => $userName,
+                   'email' => $email,
+                   'pass'  => $password,
+                   'state' => 3);
 
-// create a role from the data
+    // create a role from the data
     $role = new xarRole($pargs);
 
-//Try to update the role to the repository and bail if an error was thrown
+    //Try to update the role to the repository and bail if an error was thrown
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'finish', array('theme' => 'installer')));
-
 }
 
 
@@ -501,6 +569,5 @@ function installer_admin_finish()
 }
 
 
-function installer_admin_modifyconfig(){}
-
+function installer_admin_modifyconfig() {}
 ?>
