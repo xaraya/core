@@ -233,6 +233,9 @@ class Dynamic_Property_Master
             case 35: // (imagelist) Image List
                 $property = new Dynamic_ImageList_Property($args);
                 break;
+            case 36: // (language) Language List
+                $property = new Dynamic_LanguageList_Property($args);
+                break;
             default:
                 $property = new Dynamic_Property($args);
                 break;
@@ -556,6 +559,14 @@ class Dynamic_Property_Master
                               'name'       => 'imagelist',
                               'label'      => 'Image List',
                               'format'     => '35',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[36] = array(
+                              'id'         => 36,
+                              'name'       => 'language',
+                              'label'      => 'Language List',
+                              'format'     => '36',
                               'validation' => '',
                               // ...
                              );
@@ -1151,15 +1162,26 @@ class Dynamic_Username_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
-        return '<input type="text"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               (!empty($id) ? ' id="'.$id.'"' : '') .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($this->invalid) ? ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (empty($value)) {
+            $value = xarUserGetVar('uid');
+        }
+        $user = xarUserGetVar('name', $value);
+        if (empty($user)) {
+            $user = xarUserGetVar('uname', $value);
+        }
+        $output = xarVarPrepForDisplay($user);
+        if ($value > 1) {
+            $output .= ' [ <a href="'.xarModURL('roles','user','display',
+                                         array('uid' => $value))
+                    . '" target="preview">'.xarML('profile').'</a> ]';
+        }
+        if (!empty($this->invalid)) {
+            $output .= ' <span style="color: red">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
+        }
+        return $output;
     }
 
     function showOutput($value = null)
@@ -2639,6 +2661,34 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         }
     }
 
+}
+
+/**
+ * Dynamic Language List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_LanguageList_Property extends Dynamic_Select_Property
+{
+    function Dynamic_LanguageList_Property($args)
+    {
+        $this->Dynamic_Select_Property($args);
+        if (count($this->options) == 0) {
+        /*  // TODO: get language list
+            $list = ...;
+            foreach ($list as $code => $language) {
+                $this->options[] = array('id' => $code,
+                                         'name' => $language);
+            }
+        */
+            $this->options[] = array('id' => 'eng',
+                                     'name' => 'English');
+
+        }
+    }
+
+    // default methods from Dynamic_Select_Property
 }
 
 ?>
