@@ -73,9 +73,6 @@ function xarMain()
     // We're all done, one ServerRequest made
     xarEvt_trigger('ServerRequest');
 
-    // Close the session
-    xarSession_close();
-
     if (xarResponseIsRedirected()) return true;
     // Here we check for exceptions even if $res isn't empty
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
@@ -145,6 +142,9 @@ if (!xarMain()) {
         }
     }
 }
+
+// Close the session
+xarSession_close();
 
 // Kill the debugger
 xarCore_disposeDebugger();
