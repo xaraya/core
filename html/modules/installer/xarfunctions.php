@@ -54,13 +54,8 @@ function xarInstallConfigSetVar($name, $value)
                    WHERE xar_name='" . xarVarPrepForStore($name) . "'";
     }*/
 
-    $dbconn->Execute($query);
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     //Update configuration variables
     //xarVarSetCached('Config.Variables', $name, $value);

@@ -157,13 +157,8 @@ function installer_adminapi_createdb($args)
 
     $query = xarDBCreateDatabase($dbName,$dbType);
 
-    $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
-       $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-       xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                      new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-       return NULL;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
