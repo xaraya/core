@@ -193,7 +193,7 @@ document.forms['privilegeform'].submit();}
 								<input type="text" name="pinstance#$loop:index#" id="pinstance#$loop:index#" size="20" />
 							<xar:else />
 								<select name="pinstance#$loop:index#" size="1">
-									<xar:loop name="$dropdown">
+									<xar:loop name="$loop:item['dropdown']">
 										<option value="#$loop:item['name']#">#$loop:item['name']#</option>
 									</xar:loop>
 								</select>
