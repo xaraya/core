@@ -1,4 +1,4 @@
-			<xar:blockgroup name="syndicate" id="syndicate" />
+<xar:blockgroup name="syndicate" id="syndicate" />
 			<xar:module id="modulespace" main="true" />
 	</channel>
 </rss>
