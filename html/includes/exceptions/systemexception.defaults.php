@@ -215,3 +215,4 @@
             'short' => xarML('The XML parser has encountered an error.'),
             'long' => xarML('The XML parser tried to execute a line that was not well formed.'))
     );
+?>
