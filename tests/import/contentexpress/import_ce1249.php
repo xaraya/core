@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.import8.php 1.29 03/04/20 15:12:41+02:00 BRUMDall@brumdall2m.bru.fsc.net $
+ * File: $Id$
  *
  * Importing of ContentExpress content (based on import8.php)
  * Updated for ContentExpress 1.2.4.9 (will not work with older versions!)
@@ -119,10 +119,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     // Copy menutree into categories
 
     if ($step == 1) {
-    echo "<strong>1. Importing menus into categories</strong><br>\n";
+    echo "<strong>1. Importing menus into categories</strong><br/>\n";
 
     $regid = xarModGetIDFromName('articles');
-    echo "Creating root for old ContentExpress<br>\n";
+    echo "Creating root for old ContentExpress<br/>\n";
     $contentexpress = xarModAPIFunc('categories', 'admin', 'create', array(
                                'name' => 'ContentExpress',
                                'description' => 'ContentExpress Articles',
@@ -149,7 +149,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('installer','ce_menus', serialize($ce_menus));
 
     echo '<a href="import_ce1249.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="import_ce1249.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+          <a href="import_ce1249.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     }
 
     // STEP 2 
@@ -161,7 +161,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $contentexpress = xarModGetVar('installer','contentexpress');
     $ce_menus = unserialize(xarModGetVar('installer','ce_menus'));
 
-    echo "<strong>2. Importing articles</strong><br>\n";
+    echo "<strong>2. Importing articles</strong><br/>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_ce_contentitems';
     $result =& $dbconn->Execute($query);
     if (!$result) {
@@ -174,11 +174,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     // Copy articles tree structure
     walk_ce_articletree(-1,0,"");
     
-    echo "<strong>TODO : add comments, ratings.</strong><br><br>\n";
+    echo "<strong>TODO : add comments, ratings.</strong><br/><br/>\n";
     echo '<a href="import_ce1249.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     
-    echo '<a href="index.php">Go to your imported site</a><br>';
-    //echo '<a href="import_ce1249.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    echo '<a href="index.php">Go to your imported site</a><br/>';
+    //echo '<a href="import_ce1249.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br/>';
     }
     
     // STEP next
@@ -198,7 +198,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         $pid2cid = unserialize($pids);
         $pids = '';
     }
-    echo "<strong>9. Importing comments</strong><br>\n";
+    echo "<strong>9. Importing comments</strong><br/>\n";
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_comments';
     $result =& $dbconn->Execute($query);
     if (!$result) {
@@ -254,11 +254,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 
         $cid = xarModAPIFunc('comments','user','add',$data);
         if (empty($cid)) {
-            echo "Failed inserting comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br>\n";
+            echo "Failed inserting comment ($sid $pid) $uname - $subject : ".$dbconn->ErrorMsg()."<br/>\n";
         } elseif ($count < 200) {
-            echo "Inserted comment ($sid $pid) $uname - $subject<br>\n";
+            echo "Inserted comment ($sid $pid) $uname - $subject<br/>\n";
         } elseif ($num % 100 == 0) {
-            echo "Inserted comment " . ($num + $startnum) . "<br>\n";
+            echo "Inserted comment " . ($num + $startnum) . "<br/>\n";
             flush();
         }
         $pid2cid[$tid] = $cid;
@@ -267,15 +267,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $result->Close();
 
-    echo "<strong>TODO : import other comments</strong><br><br>\n";
+    echo "<strong>TODO : import other comments</strong><br/><br/>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
         xarModSetVar('installer','commentid',serialize($pid2cid));
         $startnum += $numitems;
-        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br>';
+        echo '<a href="import8.php?step=' . $step . '&startnum=' . $startnum . '">Go to step ' . $step . ' - comments ' . $startnum . '+ of ' . $count . '</a><br/>';
     } else {
         xarModDelVar('installer','commentid');
-        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+        echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br/>';
     }
     }
 
@@ -283,7 +283,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 // TODO: add the rest :-)
 
     if ($step == 12) {
-    echo "<strong>12. Optimizing database tables</strong><br>\n";
+    echo "<strong>12. Optimizing database tables</strong><br/>\n";
     $result =& $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
     if (!$result) {
         echo $dbconn->ErrorMsg();
@@ -296,7 +296,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     }
     $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
 
-    echo "<strong>TODO : import the rest...</strong><br><br>\n";
+    echo "<strong>TODO : import the rest...</strong><br/><br/>\n";
     //xarModDelVar('installer','userobjectid');
     xarModDelVar('installer','oldprefix');
     xarModDelVar('installer','userid');
@@ -304,7 +304,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModDelVar('installer','ce_menus');
     xarModDelVar('installer','subarticles');
     echo '<a href="import_ce1249.php">Return to start</a>&nbsp;&nbsp;&nbsp;
-          <a href="index.php">Go to your imported site</a><br>';
+          <a href="index.php">Go to your imported site</a><br/>';
     }
 }
 
@@ -377,7 +377,7 @@ function walk_ce_menutree($parent_id, $categ_parent = 0) {
             // does not need to create a new level!)
             $ce_menus[$id] = $categ_parent;
 
-            echo "No new category for leaf item ($id) $title - Parent: $parent_id<br>\n";
+            echo "No new category for leaf item ($id) $title - Parent: $parent_id<br/>\n";
         } else {
             // Has childs, create as normal category and find its childs
             $ce_menus[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
@@ -386,7 +386,7 @@ function walk_ce_menutree($parent_id, $categ_parent = 0) {
                       'image' => "",
                       'parent_id' => $categ_parent));
 
-            echo "Creating item ($id) $title - Parent: $parent_id<br>\n";
+            echo "Creating item ($id) $title - Parent: $parent_id<br/>\n";
             walk_ce_menutree($id, $ce_menus[$id]);
         }
         $result->MoveNext();
@@ -487,7 +487,7 @@ function walk_ce_articletree ($parent, $latest_ok_category, $cat_string) {
                     $store_now = 1;
                 } else {
                     // Not root yet, add article and continue
-                    $cat_string .= "<br clear=\"all\"><h1>$title</h1>$text";
+                    $cat_string .= "<br clear=\"all\"/><h1>$title</h1>$text";
                     $store_now = 0;
                 }
             }
@@ -523,11 +523,11 @@ function walk_ce_articletree ($parent, $latest_ok_category, $cat_string) {
 
             // Print status or error
             if (!isset($newaid)) {
-                echo "Insert article ($id) $title failed : " . xarExceptionRender('text') . "<br>\n";
+                echo "Insert article ($id) $title failed : " . xarExceptionRender('text') . "<br/>\n";
             } elseif ($count < 200) {
-                echo "Inserted article ($id) $title into $cids[0]<br>\n";
+                echo "Inserted article ($id) $title into $cids[0]<br/>\n";
             } elseif ($num % 100 == 0) {
-                echo "Inserted article " . ($num + $startnum) . "<br>\n";
+                echo "Inserted article " . ($num + $startnum) . "<br/>\n";
                 flush();
             }
             $num++;
