@@ -11,21 +11,29 @@ function roles_admin_addrole()
 { 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) return; 
+
     // get some vars for both groups and users
-    if (!xarVarFetch('pname', 'str:1:', $pname)) return;
-    if (!xarVarFetch('ptype', 'str:1', $ptype)) return;
-    if (!xarVarFetch('pparentid', 'str:1:', $pparentid)) return; 
+    xarVarFetch('pname', 'str:1:', $pname, NULL, XARVAR_NOT_REQUIRED);
+    xarVarFetch('ptype', 'str:1', $ptype, NULL, XARVAR_NOT_REQUIRED);
+    xarVarFetch('pparentid', 'str:1:', $pparentid, NULL, XARVAR_NOT_REQUIRED);
     // get the rest for users only
     // TODO: need to see what to do with auth_module
     if ($ptype == 0) {
-        if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
-        if (!xarVarFetch('pemail', 'str:1:', $pemail)) return;
-        if (!xarVarFetch('ppass1', 'str:1:', $ppass1)) return;
-        if (!xarVarFetch('ppass2', 'str:1:', $ppass2)) return;
-        if (!xarVarFetch('pstate', 'str:1:', $pstate)) return;
+        xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
     } 
     // checks specific only to users
     if ($ptype == 0) {
+        // check for valid username
+        if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
+            $msg = xarML('There is an error in username');
+            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            return;
+        }
+
         // check for duplicate username
         $user = xarModAPIFunc('roles',
             'user',
@@ -34,12 +42,6 @@ function roles_admin_addrole()
 
         if ($user != false) {
             $msg = xarML('That username is already taken.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        } 
-        // check for valid username
-        if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in username');
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         } 
