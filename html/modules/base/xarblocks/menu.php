@@ -158,7 +158,7 @@ function base_menublock_display($blockinfo)
 
                 // Added list of modules if selected.
                 if (!empty($vars['displaymodules'])) {
-                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"All:$blockinfo[title]:All")) {
+                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:All")) {
                         foreach($mods as $mod){
                             $label = $mod['name'];
                             $link = xarModURL($mod['name'] ,'user', 'main', array());
