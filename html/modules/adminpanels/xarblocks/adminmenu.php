@@ -90,7 +90,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                         $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
 
                         // Load API for individual links. 
-                        if (!xarModAPILoad($label, 'admin')) return; // throw back
+                        xarModAPILoad($label, 'admin'); // throw back
 
                         // The user API function is called.
                         $menulinks = xarModAPIFunc($label,
@@ -142,7 +142,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                         $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
 
                         // Load API for individual links. 
-                        if (!xarModAPILoad($label, 'admin')) return; // throw back
+                        xarModAPILoad($label, 'admin'); // throw back
 
                         // The user API function is called.
                         $menulinks = xarModAPIFunc($label,

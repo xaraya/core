@@ -115,7 +115,7 @@ function base_menublock_display($blockinfo)
                             $usermods[] = array('label' => $labelDisplay, 'link' => '', 'desc' => '', 'marker' => $marker);
 
                             // Load API for individual links. 
-                            if (!xarModAPILoad($label, 'user')) return; // throw back
+                            xarModAPILoad($label, 'user');
 
 
                             // The user API function is called.
