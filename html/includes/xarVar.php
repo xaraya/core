@@ -1211,8 +1211,37 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     $tables = xarDBGetTables();
 
     switch(strtolower($type)) {
-        case 'moduservar':
+        case 'modvar':
             default:
+            // Delete all the user variables first
+            $modvarid = xarModGetVarId($modName, $name);
+            if($modvarid) {
+                // Takes the right table basing on module mode
+                if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                    $module_uservarstable = $tables['system/module_uservars'];
+                } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                    $module_uservarstable = $tables['site/module_uservars'];
+                }
+
+                // MrB: we could use xarModDelUserVar in a loop here, but this is
+                //      much faster.
+                $query = "DELETE FROM $module_uservarstable
+                          WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
+                $result =& $dbconn->Execute($query);
+                if(!$result) return;
+            }
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_varstable = $tables['system/module_vars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_varstable = $tables['site/module_vars'];
+            }
+            // Now delete the module var itself
+            $query = "DELETE FROM $module_varstable
+                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
+                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+            break;
+        case 'moduservar':
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
                 $module_uservarstable = $tables['system/module_uservars'];
@@ -1220,29 +1249,13 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
                 $module_uservarstable = $tables['site/module_uservars'];
             }
 
-            // Delete the user variables first
+            // We need the variable id
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
 
-            // MrB: we could use xarModDelUserVar in a loop here, but this is
-            //      much faster.
             $query = "DELETE FROM $module_uservarstable
-                      WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
-            $result =& $dbconn->Execute($query);
-            if(!$result) return;
-
-            continue;
-        case 'modvar':
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_varstable = $tables['system/module_vars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_varstable = $tables['site/module_vars'];
-            }
-            // Now delete the module var
-            $query = "DELETE FROM $module_varstable
-                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
-                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+                      WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
+                        AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
             break;
         case 'themevar':
             // Takes the right table basing on theme mode
