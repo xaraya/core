@@ -68,7 +68,16 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
  */
 function xarTplGetThemeName()
 {
-    return $GLOBALS['xarTpl_themeName'];
+    if (function_exists('xarModGetVar')){
+        $defaultTheme = xarModGetVar('themes', 'default');
+        if (!empty($defaultTheme)){
+            return $defaultTheme;
+        } else {
+            return $GLOBALS['xarTpl_themeName'];
+        }
+    } else {
+        return $GLOBALS['xarTpl_themeName'];
+    }
 }
 
 /**
