@@ -81,7 +81,7 @@ function roles_user_usermenu()
                     $pass = $pass1;
                 } else {
                     $msg = xarML('The passwords do not match');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                     return;
                 }
                 $email = xarUserGetVar('email');
