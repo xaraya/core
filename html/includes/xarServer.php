@@ -362,13 +362,19 @@ function xarRequestGetInfo()
     // Get Default Module Type -- Defined in Base Config or from config.site.xml
         if (function_exists('xarConfigGetVar')){
             $modType = xarConfigGetVar('Site.Core.DefaultModuleType');
-        } elseif (!isset($modType)) {
+            if (!isset($modType)){
+            if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
+            }
+        } else {
             if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
         }
         // Get Default Module Type -- Defined in Base Config or from config.site.xml
         if (function_exists('xarConfigGetVar')){
-            if (isset($xarRequest_defaultModule['func'])) $funcName = xarConfigGetVar('Site.Core.DefaultModuleFunction');
-        } elseif (!isset($funcName)) {
+            $funcName = xarConfigGetVar('Site.Core.DefaultModuleFunction');
+            if (empty($funcName)){
+            if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
+            }
+        } else {
             if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
         }
     }
