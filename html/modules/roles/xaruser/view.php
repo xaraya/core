@@ -8,9 +8,10 @@ function roles_user_view()
     // Get parameters
     if(!xarVarFetch('startnum', 'isset',    $startnum, NULL,     XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED)) {return;}
     //This $filter variables isnt being used for anything...
     //It is set later on.
-//    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
 
     $data['items'] = array();
 
@@ -41,6 +42,7 @@ function roles_user_view()
                                     array('startnum' => $startnum,
                                           'filter'   => $filter,
                                           'include_anonymous' => false,
+                                          'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
                                                                      'itemsperpage')));
 
@@ -62,6 +64,8 @@ function roles_user_view()
                                    'getall',
                                     array('startnum' => $startnum,
                                           'state'   => 3,
+                                          'include_anonymous' => false,
+                                          'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
                                                                      'itemsperpage')));
 
@@ -142,7 +146,9 @@ function roles_user_view()
         $data['pager'] .= '<a href="' . xarModURL('roles','user','view',array('phase' => $phase, 'startnum' => $startnum + $perpage)) . '">';
         $data['pager'] .= xarML('next') . ' &gt;&gt;</a>';
     }
-    $data['refreshlabel'] = xarML('Refresh');
+    $data['searchlabel'] = xarML('Go');
+    $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
+                            "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
 
     return $data;
 }

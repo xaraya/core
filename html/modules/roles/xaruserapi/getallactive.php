@@ -51,6 +51,10 @@ function roles_userapi_getallactive($args)
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
         $query .= " AND xar_uid != $anon[uid]";
     }
+    if (!$include_myself) {
+        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
+        $query .= " AND xar_uid != $thisrole[uid]";
+    }
 
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;

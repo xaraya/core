@@ -36,9 +36,7 @@ function roles_userapi_getall($args)
                        xar_state,
                xar_date_reg
         FROM $rolestable
-                WHERE xar_state = " . xarVarPrepForStore($state) ."
-                AND xar_type = 0
-                ORDER BY xar_uname";
+                WHERE xar_state = " . xarVarPrepForStore($state);
     } else {
         $query = "SELECT xar_uid,
                        xar_uname,
@@ -47,10 +45,22 @@ function roles_userapi_getall($args)
                        xar_state,
                xar_date_reg
         FROM $rolestable
-                WHERE xar_state != 0
-                AND xar_type = 0
-                ORDER BY xar_uname";
+                WHERE xar_state != 0 ";
     }
+    // if we aren't including anonymous in the query,
+    // then find the anonymous user's uid and add
+    // a where clause to the query
+    if (!$include_anonymous) {
+        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
+        $query .= " AND xar_uid != $thisrole[uid]";
+    }
+    if (!$include_myself) {
+        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
+        $query .= " AND xar_uid != $thisrole[uid]";
+    }
+
+    $query .= " AND xar_type = 0 ORDER BY xar_uname";
+
 
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;
