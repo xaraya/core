@@ -520,7 +520,7 @@ class xarRole {
         if (empty($pass)) $pass = '';
         if (empty($state)) $state = 1;
         // FIXME: why is date_reg a varchar in the database and not a date field?
-        if (empty($date_reg)) $date_reg = time();
+        if (empty($date_reg)) $date_reg = mktime();
         if (empty($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (empty($auth_module)) $auth_module = '';

@@ -1,8 +1,19 @@
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-
-<div class="xar-mod-body"><h2><xar:mlstring>Modify Role</xar:mlstring></h2>
-  <div style="text-align: center; margin: auto;">
-	  <form name="modifyrole" action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
+<div class="xar-mod-body"><h2>
+<xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
+<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
+: #$pname#</h2>
+<div id="tabnav">
+	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $uid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid))#" class="active"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+</div>
+<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+<br />
+	  <form action="#xarModURL('roles', 'admin', 'updaterole')#" method="post" enctype="application/x-www-form-urlencoded">
       <div>
 		    <input type="hidden" name="uid" id="uid" value="#$uid#" />
 		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -35,8 +46,6 @@
 				      </td>
 				      <td>
 					      <input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
-					      <input type="hidden" name="uid" id="uid" value="#$uid#" />
-					      <input type="hidden" name="authid" id="authid" value="#$authid#" />
 				      </td>
 				    </tr>
 				    <tr>
@@ -60,7 +69,7 @@
 			      </tr>
 			      <xar:if condition="$ptype eq 0">
 				      <tr>
-					      <td colspan="2" align="center">
+					      <td colspan="2" style="text-align:center;">
 						      <xar:mlstring>The fields below only apply for Users</xar:mlstring>
 					      </td>
 				      </tr>
@@ -135,8 +144,8 @@
             </xar:if>
 
 			      <tr>
-				      <td align="center" colspan="2"><br />
-					      <input type="submit" value="#$updatelabel#" align="middle" tabindex="8" />
+				      <td  style="text-align:center;" colspan="2"><br />
+					      <input type="submit" value="#$updatelabel#" tabindex="8" />
 				      </td>
 			      </tr>
 			    </xar:if>
@@ -144,7 +153,6 @@
       </div>
     </div>
   </form>
-</div>
 
 <h2><xar:mlstring>Add</xar:mlstring> 
 				<xar:if condition="$ptype eq 0">
@@ -156,8 +164,8 @@
 <xar:if condition="$uid gt 4">
 	<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
              <div>
-		<input type="hidden" name="uid" id="uid" value="#$uid#" />
-		<input type="hidden" name="authid" id="authid" value="#$authid#" />
+		<input type="hidden" name="uid" id="adduid" value="#$uid#" />
+		<input type="hidden" name="authid" id="addauthid" value="#$authid#" />
 		<table border="0" cellpadding="2" cellspacing="0">
 			<tr>
 				<td>
@@ -173,7 +181,7 @@
 			</tr>
             <tr>
                 <td colspan="2" style="text-align: center;"><br />
-                    <input type="submit" value="#$addlabel#" align="middle" tabindex="10" />
+                    <input type="submit" value="#$addlabel#" tabindex="10" />
                 </td>
 			</tr>
 		</table>
@@ -192,7 +200,7 @@
     </tr>
 	<xar:loop name="$parents">
 		<tr>
-			<td width="150">
+			<td>
 				<xar:if condition="$loop:item['parentid'] gt 4">
 					<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['parentid']#">
 					#$loop:item['parentname']#
@@ -201,7 +209,7 @@
 					<b>#$loop:item['parentname']#</b>
 				</xar:if>
 			</td>
-			<td width="50" style="text-align: center;">
+			<td style="text-align: center;">
 				<xar:if condition="count($parents) ne 1">
 					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 				<xar:else />
