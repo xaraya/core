@@ -477,12 +477,16 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
     if (!error_reporting() || $errorType > E_ALL) {
+        // Log the message so it is not lost.
+        // TODO: make this message available to calling functions that suppress
+        // errors through '@'.
+        $msg = "PHP error code $errorType at line $line of $file: $errorString";
+        xarLogMessage($msg);
         return;
     }
 
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
-
     $msg = "At: " . $file." (Line: " . $line.")\n". $errorString ;
 
     // Trap for errors that are on the so-called "safe path" for rendering

@@ -235,7 +235,18 @@ function installer_admin_phase5()
     include_once ADODB_DIR . '/adodb.inc.php';
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
     
-    $dbconn = ADONewConnection($dbType);
+    // {ML_dont_parse 'includes/xarDB.php'}
+    include_once 'includes/xarDB.php';
+
+    // Check if there is a xar- version of the driver, and use it.
+    // Note the driver we load does not affect the database type.
+    if (xarDBdriverExists('xar' . $dbType, 'adodb')) {
+        $dbDriver = 'xar' . $dbType;
+    } else {
+        $dbDriver = $dbType;
+    }
+
+    $dbconn = ADONewConnection($dbDriver);
     switch($dbType) {
         case 'sqlite':
             $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
@@ -290,9 +301,6 @@ function installer_admin_phase5()
     }
 
     // Start the database
-    // {ML_dont_parse 'includes/xarDB.php'}
-    include_once 'includes/xarDB.php';
-
     $systemArgs = array('userName' => $dbUname,
                         'password' => $dbPass,
                         'databaseHost' => $dbHost,
