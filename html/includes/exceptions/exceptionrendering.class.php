@@ -88,7 +88,11 @@ class ExceptionRendering
             $admins = "Administrators";
             $admingroup = $roles->findRole("Administrators");
             $me = $roles->getRole(xarSessionGetVar('uid'));
-            return $me->isParent($admingroup);
+            if (!empty($admingroup) && isset($me)) {
+                return $me->isParent($admingroup);
+            } else {
+                return false;
+            }
         }
         else return true;
     }
