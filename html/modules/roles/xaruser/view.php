@@ -15,6 +15,7 @@ function roles_user_view()
 
     if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET)) {return;}
 
     $data['items'] = array();
 
@@ -30,16 +31,20 @@ function roles_user_view()
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
-    if ($letter) $selection = " AND xar_name LIKE '" . $letter . "%'";
+    if ($letter) {
+        $selection = " AND xar_name LIKE '" . $letter . "%'";
+        $data['msg'] = "Members starting with '" . $letter . "'";
+    }
     elseif ($search) {
         $selection = " AND (";
         $selection .= "(xar_name LIKE '%" . $search . "%')";
         $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
         $selection .= " OR (xar_email LIKE '%" . $search . "%')";
         $selection .= ")";
+        $data['msg'] = "Members containing '" . $search . "'";
     }
     else {
-        $selection = "";
+        $data['msg'] = "";
     }
 
     $data['searchlabel'] = xarML('Go');
