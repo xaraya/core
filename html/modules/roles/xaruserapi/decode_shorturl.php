@@ -74,6 +74,16 @@ function roles_userapi_decode_shorturl($params)
         // Note : make sure your encoding/decoding is consistent ! :-)
         return array('account', $args);
 
+    } elseif (preg_match('/^terms/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        return array('terms', $args);
+
+    } elseif (preg_match('/^privacy/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        return array('privacy', $args);
+
     } elseif (preg_match('/^logout/i',$params[1])) {
         // something that starts with 'list' is probably for the view function
         // Note : make sure your encoding/decoding is consistent ! :-)
