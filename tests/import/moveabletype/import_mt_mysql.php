@@ -354,6 +354,7 @@
                                 foreach ($article['comments'] as $cid => $comment) {
                                     echo "<br />Attaching comment to article: $new_aid from user: $comment[author] with uid: $comment[uid]";
                                     $comment['modid']    = xarModGetIDFromName('articles');
+                                    $comment['itemtype'] = $pubid;
                                     $comment['objectid'] = $new_aid;
                                     $comment['comment']  = $comment['body'];
                                     unset($comment['cid']);

@@ -109,6 +109,7 @@
             $uid = _XAR_ID_UNREGISTERED;
         }
         $data['modid'] = $regid;
+        $data['itemtype'] = $ptid; // whatever the pubtype for forums is
         $data['objectid'] = $topicid[$sid];
         if (!empty($pid) && !empty($pid2cid[$pid])) {
             $pid = $pid2cid[$pid];

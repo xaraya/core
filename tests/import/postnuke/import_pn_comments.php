@@ -84,6 +84,7 @@
         }
         $data = array();
         $data['modid'] = $regid;
+        $data['itemtype'] = 1; // news articles
         $data['objectid'] = $sid;
         if (!empty($pid) && !empty($pid2cid[$pid])) {
             $pid = $pid2cid[$pid];

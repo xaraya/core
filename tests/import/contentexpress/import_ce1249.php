@@ -239,6 +239,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
             $uid = $userid[$uid];
         } // else we're lost :)
         $data['modid'] = $regid;
+        $data['itemtype'] = 2; // documents
         $data['objectid'] = $sid;
         if (!empty($pid) && !empty($pid2cid[$pid])) {
             $pid = $pid2cid[$pid];
