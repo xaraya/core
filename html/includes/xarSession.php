@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id: s.xarSession.php 1.54 03/01/25 16:38:25-05:00 John.Cox@mcnabb. $
- * 
+ *
  * Session Support
- * 
+ *
  * @package sessions
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -131,7 +131,7 @@ function xarSessionGetVar($name)
  */
 function xarSessionSetVar($name, $value)
 {
-    if ($name == 'uid') {
+    if ($name == 'pid') {
         return false;
     }
 
@@ -159,7 +159,7 @@ function xarSessionSetVar($name, $value)
  */
 function xarSessionDelVar($name)
 {
-    if ($name == 'uid') {
+    if ($name == 'pid') {
         return false;
     }
 
@@ -172,7 +172,7 @@ function xarSessionDelVar($name)
     }
 
     $var = 'XARSV' . $name;
-    
+
     // forget about $_SESSION for now - doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
     //    if (isset($HTTP_SESSION_VARS[$var])) {
@@ -203,17 +203,17 @@ function xarSession_setUserInfo($userId, $rememberSession)
 
     $sessioninfoTable = $xartable['session_info'];
     $query = "UPDATE $sessioninfoTable
-              SET xar_uid = " . xarVarPrepForStore($userId) . ",
+              SET xar_pid = " . xarVarPrepForStore($userId) . ",
                   xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
               WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-        global $XARSVuid;
-        $XARSVuid = $userId;
+        global $XARSVpid;
+        $XARSVpid = $userId;
     } else {
-        $_SESSION['uid'] = $userId;
+        $_SESSION['pid'] = $userId;
     }
     return true;
 }
@@ -359,7 +359,7 @@ function xarSession__new($sessionId, $ipAddress)
     $query = "INSERT INTO $sessioninfoTable
                  (xar_sessid,
                   xar_ipaddr,
-                  xar_uid,
+                  xar_pid,
                   xar_firstused,
                   xar_lastused)
               VALUES
@@ -406,7 +406,7 @@ function xarSession__phpRead($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "SELECT xar_uid,
+    $query = "SELECT xar_pid,
                      xar_ipaddr,
                      xar_vars
               FROM $sessioninfoTable
@@ -417,19 +417,19 @@ function xarSession__phpRead($sessionId)
     if (!$result->EOF) {
         $GLOBALS['xarSession_isNewSession'] = false;
         if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-            global $XARSVuid;
+            global $XARSVpid;
         }
-        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
+        list($XARSVpid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
     } else {
         $GLOBALS['xarSession_isNewSession'] = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
-        // the session_info table, we use a little hack: $XARSVuid will appear to be
+        // the session_info table, we use a little hack: $XARSVpid will appear to be
         // a session variable even if it's not registered as so!
         if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-            global $XARSVuid;
-            $XARSVuid = 0;
+            global $XARSVpid;
+            $XARSVpid = 0;
         } else {
-            $_SESSION['uid'] = 0;
+            $_SESSION['pid'] = 0;
         }
         $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';
@@ -513,7 +513,7 @@ function xarSession__phpGC($maxlifetime)
     $query = "DELETE FROM $sessioninfoTable $where";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     return true;
 }
 
