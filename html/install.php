@@ -31,8 +31,21 @@
  * 7. finished!
 */
 
+/**
+ * Defines for the phases 
+ *
+ */
+define ('XARINSTALL_PHASE_WELCOME',             '1');
+define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
+define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
+define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
+define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
+define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
+
+// Include the core
 include 'includes/xarCore.php';
-// Include extra functions
+// Include some extra functions, as the installer is somewhat special
+// for loading gui and api functions
 include 'modules/installer/xarfunctions.php';
 
 // Enable debugging always for the installer
@@ -53,42 +66,48 @@ include_once 'includes/xarMLS.php';
 // {ML_dont_parse 'includes/xarTemplate.php'}
 include_once 'includes/xarTemplate.php';
 
+// Besides what we explicitly load, we dont want to load
+// anything extra for maximum control
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
-// Start Logging Facilities
+// Start Logging Facilities as soon as possible
 $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
                     'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
                     'level'      => xarCore_getSystemVar('Log.LogLevel'));
 xarLog_init($systemArgs, $whatToLoad);
 
-// Start Exception Handling System
+// Start Exception Handling System very early too
 $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
 xarError_init($systemArgs, $whatToLoad);
 
 // Start Event Messaging System
+// <mrb> Is this needed? the events are dispatched to modules, which arent here yet.
 $systemArgs = array('loadLevel' => $whatToLoad);
 xarEvt_init($systemArgs, $whatToLoad);
 
 // Start HTTP Protocol Server/Request/Response utilities
 $systemArgs = array('enableShortURLsSupport' =>false,
-                    'defaultModuleName' => 'installer',
-                    'defaultModuleType' => 'admin',
-                    'defaultModuleFunction' => 'main',
-                    'generateXMLURLs' => false);
+                    'defaultModuleName'      => 'installer',
+                    'defaultModuleType'      => 'admin',
+                    'defaultModuleFunction'  => 'main',
+                    'generateXMLURLs'        => false);
 xarSerReqRes_init($systemArgs, $whatToLoad);
 
 // Start BlockLayout Template Engine
+// This is probably the trickiest part, but we want the installer 
+// templateable too obviously
 $systemArgs = array('enableTemplatesCaching' => false,
-                    'themesBaseDirectory' => 'themes',
-                    'defaultThemeDir' => 'Xaraya_Classic');
+                    'themesBaseDirectory'    => 'themes',
+                    'defaultThemeDir'        => 'Xaraya_Classic');
 xarTpl_init($systemArgs, $whatToLoad);
 
 
-// Get the install language everytime
-// We need the var to init MLS, but we need MLS for this, DOH
-// Make sure we set a utf locale intially, otherwise the combo box wont be filled correctly
-// for language name which include utf characters in their name
-$GLOBALS['xarMLS_mode'] = 'SINGLE'; // set temporary
+// Get the install language everytime we request install.php
+// We need the var to be able to initialize MLS, but we need MLS to get the var
+// So we need something temporarily set, so we can continue
+// We set a utf locale intially, otherwise the combo box wont be filled correctly
+// for language names which include utf characters 
+$GLOBALS['xarMLS_mode'] = 'SINGLE';
 xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
 // Construct an array of the available locale folders
@@ -97,6 +116,8 @@ $allowedLocales = array($install_language);
 if(is_dir($locale_dir)) {
     if ($dh = opendir($locale_dir)) {
         while (($file = readdir($dh)) !== false) {
+            // Exclude the current, previous and the Bitkeeper folder 
+            // (just for us to be able to test, wont affect users who use a build)
             if($file == '.' || $file == '..' || $file == 'SCCS' || filetype($locale_dir . $file) == 'file' ) continue;
             if(filetype(realpath($locale_dir . $file)) == 'dir') {
                 $allowedLocales[] = $file;
@@ -105,23 +126,17 @@ if(is_dir($locale_dir)) {
         closedir($dh);
     }
 }
+// This is needed, otherwise the en_US.utf-8 is shown twice
 array_unique($allowedLocales);
+// A sorted combobox is better
 sort($allowedLocales);
 
 // Start Multi Language System
 $systemArgs = array('translationsBackend' => 'xml',
-                    'MLSMode' => 'BOXED',
-                    'defaultLocale' => $install_language,
-                    'allowedLocales' => $allowedLocales);
+                    'MLSMode'             => 'BOXED',
+                    'defaultLocale'       => $install_language,
+                    'allowedLocales'      => $allowedLocales);
 xarMLS_init($systemArgs, $whatToLoad);
-
-// Install Phases
-define ('XARINSTALL_PHASE_WELCOME',             '1');
-define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
-define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
-define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
-define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
-define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 /**
  * Entry function for the installer
@@ -143,10 +158,6 @@ function xarInstallMain()
     // Handle installation phase designation
     xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);
 
-    // Hardcode module name and type
-    $modName = 'installer';
-    $modType = 'admin';
-
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
@@ -156,7 +167,7 @@ function xarInstallMain()
     }
 
     // Set the default page title before calling the module function
-    xarTplSetPageTitle("Installing Xaraya");
+    xarTplSetPageTitle(xarML("Installing Xaraya"));
 
     // Run installer function
     $mainModuleOutput = xarInstallFunc($funcName);
@@ -189,12 +200,9 @@ function xarInstallMain()
     $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
 
     // Handle exceptions
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
-    }
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
 
     echo $pageOutput;
-
     return true;
 }
 
@@ -227,8 +235,4 @@ if (!xarInstallMain()) {
         }
     }
 }
-
-// Kill the debugger
-xarCore_disposeDebugger();
-
 ?>

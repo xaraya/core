@@ -101,11 +101,11 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  */
 function xarInstallAPILoad()
 {
+    static $loadedAPICache = array();
+
     $modName    = 'installer';
     $modOsDir   = 'installer';
     $modType  = 'admin';
-
-    static $loadedAPICache = array();
 
     if (isset($loadedAPICache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
@@ -140,9 +140,10 @@ function xarInstallAPILoad()
  */
 function xarInstallLoad()
 {
+    static $loadedModuleCache = array();
+
     $modName = 'installer';
     $modType = 'admin';
-    static $loadedModuleCache = array();
 
     if (empty($modName)) {
         $msg = xarML('Empty modname.');
@@ -158,7 +159,6 @@ function xarInstallLoad()
    
     // Load the module files
     $modOsType = xarVarPrepForOS($modType);
-    //$modOsDir = $modBaseInfo['osdirectory'];
     $modOsDir = 'installer';
 
     $osfile = "modules/$modOsDir/xar$modOsType.php";
@@ -176,9 +176,7 @@ function xarInstallLoad()
 
     // Load the module translations files
     $res = xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
+    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back exception
  
     return true;
 }
