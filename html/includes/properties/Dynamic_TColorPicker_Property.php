@@ -55,14 +55,14 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
             $value = $this->value;
         }
 
-        // Include colour picker javascript options.
+        // Include color picker javascript options.
         // Allows the options to be over-ridden in a theme.
         xarModAPIFunc(
             'base', 'javascript', 'modulecode',
-            array('module' => 'base', 'filename' => 'tcolourpickeroptions.js')
+            array('module' => 'base', 'filename' => 'tcolorpickeroptions.js')
         );
 
-        // Include colour picker javascript.
+        // Include color picker javascript.
         xarModAPIFunc(
             'base','javascript','modulefile',
             array('module' => 'base', 'filename' => 'tcolorpicker.js')
@@ -71,7 +71,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         // Create the tags.
         $output = '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.xarVarPrepForDisplay($value).'" size="' . $this->size . '" maxlength="' . $this->maxlength . '" />'
             . '<a href="javascript:TCP.popup(document.getElementById(\''.$id.'_input\'), 1)">'
-            . '<img src="' . xarTplGetImage('tccolourpicker.gif', 'base') . '" width="15" height="13" border="0" alt="' . xarML('Click Here to select a colour') . '" />'
+            . '<img src="' . xarTplGetImage('tcolorpicker.gif', 'base') . '" width="15" height="13" border="0" alt="' . xarML('Click Here to select a color') . '" />'
             . '</a>';
 
         if (!empty($this->invalid)) {
