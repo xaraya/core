@@ -323,7 +323,21 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($where) > 0) {
                 $query .= " )";
             }
-            $result =& $dbconn->Execute($query);
+
+            // TODO: combine with sort someday ? Not sure if that's possible in this way...
+            if ($numitems > 0) {
+                $query .= ' ORDER BY xar_dd_itemid, xar_dd_propid';
+                // Note : this assumes that every property of the items is stored in the table
+                $numrows = $numitems * count($propids);
+                if ($startnum > 1) {
+                    $startrow = ($startnum - 1) * count($propids) + 1;
+                } else {
+                    $startrow = 1;
+                }
+                $result =& $dbconn->SelectLimit($query, $numrows, $startrow-1);
+            } else {
+                $result =& $dbconn->Execute($query);
+            }
 
             if (!$result) return;
 
