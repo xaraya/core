@@ -125,7 +125,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
         // TODO: make sure basedir and baseurl match
-            return '<img src="'.$basedir.'/'.$value.'" />';
+            return '<img src="'.$basedir.'/'.$value.'" alt="" />';
         } else {
             return '';
         }
