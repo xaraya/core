@@ -26,7 +26,7 @@
 					<label for="uname"><xar:mlstring>User Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="uname" id="uname" value="" size="25" maxlength="25" tabindex="1" />
+					<input type="text" name="uname" id="uname" value="" size="25" maxlength="255" tabindex="1" />
 				</td>
 			</tr>
 			<tr>
@@ -34,7 +34,7 @@
 					<label for="realname"><xar:mlstring>Real Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="realname" id="realname" value="" size="25" maxlength="60" tabindex="2" />
+					<input type="text" name="realname" id="realname" value="" size="25" maxlength="255" tabindex="2" />
 				</td>
 			</tr>
 			<tr>
@@ -42,7 +42,7 @@
 					<label for="email"><xar:mlstring>E-Mail</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="email" id="email" value="" size="25" maxlength="100" tabindex="3" />
+					<input type="text" name="email" id="email" value="" size="25" maxlength="255" tabindex="3" />
 				</td>
 			</tr>
                        <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >

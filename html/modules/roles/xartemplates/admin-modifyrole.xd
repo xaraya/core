@@ -35,7 +35,7 @@ document.forms[0].submit();}
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
 				</td>
 			</tr>
 				<tr>
@@ -55,7 +55,7 @@ document.forms[0].submit();}
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
+					<input type="text" name="pname" id="pname" value="#$pname#" size="255" maxlength="20" tabindex="1" />
 					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
@@ -91,7 +91,7 @@ document.forms[0].submit();}
 						<label for="puname"><xar:mlstring>User Name</xar:mlstring></label>
 					</td>
 					<td>
-						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="20" tabindex="3" />
+						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="3" />
 					</td>
 					<td width="20">
 						&nbsp;
@@ -100,7 +100,7 @@ document.forms[0].submit();}
 						<label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
 					</td>
 					<td>
-						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="40" tabindex="4" />
+						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="255" tabindex="4" />
 					</td>
 				</tr>
 				<tr>

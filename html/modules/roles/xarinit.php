@@ -35,20 +35,20 @@ function roles_init()
 
     // prefix_roles
     /*********************************************************************
-	* CREATE TABLE xar_roles (
-	*   xar_uid int(11) NOT NULL auto_increment,
-	*   xar_name varchar(100) NOT NULL default '',
-	*   xar_type int(11) NOT NULL default '0',
-	*   xar_users int(11) NOT NULL default '0',
-	*   xar_uname varchar(100) NOT NULL default '',
-	*   xar_email varchar(100) NOT NULL default '',
-	*   xar_pass varchar(100) NOT NULL default '',
-	*   xar_date_reg( varchar25) NOT NULL default '',
-	*   xar_valcode varchar(35) NOT NULL default '',
-	*   xar_state int(3) NOT NULL default '0',
-	*   xar_auth_module varchar(100) NOT NULL default '',
-	*   PRIMARY KEY  (xar_uid)
-	* )
+    * CREATE TABLE xar_roles (
+    *   xar_uid int(11) NOT NULL auto_increment,
+    *   xar_name varchar(100) NOT NULL default '',
+    *   xar_type int(11) NOT NULL default '0',
+    *   xar_users int(11) NOT NULL default '0',
+    *   xar_uname varchar(100) NOT NULL default '',
+    *   xar_email varchar(100) NOT NULL default '',
+    *   xar_pass varchar(100) NOT NULL default '',
+    *   xar_date_reg( varchar25) NOT NULL default '',
+    *   xar_valcode varchar(35) NOT NULL default '',
+    *   xar_state int(3) NOT NULL default '0',
+    *   xar_auth_module varchar(100) NOT NULL default '',
+    *   PRIMARY KEY  (xar_uid)
+    * )
     *********************************************************************/
 
     $query = xarDBCreateTable($tables['roles'],
@@ -58,7 +58,7 @@ function roles_init()
                                       'increment'   => true,
                                       'primary_key' => true),
                    'xar_name' => array('type'       => 'varchar',
-                                      'size'        => 100,
+                                      'size'        => 255,
                                       'null'        => false,
                                       'default'     => ''),
                    'xar_type' => array('type'       => 'integer',
@@ -68,11 +68,11 @@ function roles_init()
                                       'null'        => false,
                                       'default'     => '0'),
                    'xar_uname' => array('type'      => 'varchar',
-                                      'size'        => 100,
+                                      'size'        => 255,
                                       'null'        => false,
                                       'default'     => ''),
                    'xar_email' => array('type'      => 'varchar',
-                                      'size'        => 100,
+                                      'size'        => 255,
                                       'null'        => false,
                                       'default'     => ''),
                    'xar_pass' => array('type'        => 'varchar',
@@ -281,7 +281,7 @@ function roless_upgrade($oldVersion)
     // Upgrade dependent on old version number
     switch($oldVersion) {
         case 1.01:
-            
+
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here

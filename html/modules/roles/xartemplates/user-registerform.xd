@@ -1,17 +1,17 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
-<p><xar:mlstring>Username</xar:mlstring>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" value="#$values['uname']#" size="25" maxlength="25" />
+<p><xar:mlstring>Username</xar:mlstring>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" value="#$values['uname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['uname'])">
 				<span style="color: red">#$invalid['uname']#</span>
 			</xar:if>
 <br />
-<xar:mlstring>Display Name</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="60" />
+<xar:mlstring>Display Name</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="realname" id="realname" value="#$values['realname']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['realname'])">
 				<span style="color: red">#$invalid['realname']#</span>
 			</xar:if>
 <br />
-<xar:mlstring>E-mail Address</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="60" />
+<xar:mlstring>E-mail Address</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="email" id="email" value="#$values['email']#" size="25" maxlength="255" />
 			<xar:if condition="!empty($invalid['email'])">
 				<span style="color: red">#$invalid['email']#</span>
 			</xar:if>
