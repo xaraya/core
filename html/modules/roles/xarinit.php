@@ -99,7 +99,7 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
-    $index = array(
+/*    $index = array(
     'name'      => 'i_xar_roles_1',
     'fields'    => array('xar_uname'),
     'unique'    => true
@@ -109,7 +109,7 @@ function roles_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+*/
     // prefix_rolemembers
     /*********************************************************************
     * CREATE TABLE xar_rolemembers (
@@ -121,8 +121,7 @@ function roles_init()
     $query = xarDBCreateTable($tables['rolemembers'],
              array('xar_uid'       => array('type'       => 'integer',
                                            'null'        => false,
-                                           'default'     => '0',
-										   'primary_key' => true),
+                                           'default'     => '0'),
                    'xar_parentid'      => array('type'   => 'integer',
                                            'null'        => false,
                                            'default'     => '0')));
@@ -206,6 +205,8 @@ function roles_activate()
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
+    xarModSetVar('roles', 'frozenroles', 5);
+    xarModSetVar('privileges', 'frozenprivileges', 7);
 
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.

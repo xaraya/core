@@ -57,7 +57,7 @@ function initializeSetup()
     //xarRegisterPrivilege('DenyPrivileges','All','Privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     //xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Roles and Privileges modules');
     //xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-    //xarRegisterPrivilege('Reading','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
+    xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
 
     xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
@@ -85,7 +85,7 @@ function initializeSetup()
     //xarMakePrivilegeRoot('DenyRoles');
     //xarMakePrivilegeRoot('DenyPrivileges');
     //xarMakePrivilegeRoot('Editing');
-    //xarMakePrivilegeRoot('Reading');
+    xarMakePrivilegeRoot('ReadAccess');
     xarMakePrivilegeRoot('CasualAccess');
     xarMakePrivilegeRoot('ViewLogin');
     xarMakePrivilegeRoot('ViewBlocks');
@@ -110,7 +110,7 @@ function initializeSetup()
     xarAssignPrivilege('Administration','Administrators');
     //xarAssignPrivilege('Oversight','Oversight');
     xarAssignPrivilege('CasualAccess','Anonymous');
-    //xarAssignPrivilege('Reading','Users');
+    xarAssignPrivilege('ReadAccess','Users');
 
     /*********************************************************************
     * Define instances for the core modules

@@ -48,7 +48,10 @@ define('ACCESS_ADMIN', 800);
                     'privileges' => xarDBGetSiteTablePrefix() . '_privileges',
                     'privmembers' => xarDBGetSiteTablePrefix() . '_privmembers',
                     'security_realms' => xarDBGetSiteTablePrefix() . '_security_realms',
-                    'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances');
+                    'security_instances' => xarDBGetSiteTablePrefix() . '_security_instances',
+                    'modules' => xarDBGetSiteTablePrefix() . '_modules',
+                    'module_states' => xarDBGetSiteTablePrefix() . '_module_states'
+                    );
 
     xarDB_importTables($tables);
 

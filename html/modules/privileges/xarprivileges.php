@@ -29,6 +29,7 @@ class xarMasks
 	var $privmemberstable;
 	var $maskstable;
 	var $modulestable;
+	var $modulestatestable;
 	var $realmstable;
 	var $acltable;
 	var $allmasks;
@@ -55,6 +56,7 @@ class xarMasks
 		$this->privmemberstable = $xartable['privmembers'];
 		$this->maskstable = $xartable['security_masks'];
 		$this->modulestable = $xartable['modules'];
+		$this->modulestatestable = $xartable['module_states'];
 		$this->realmstable = $xartable['security_realms'];
 		$this->acltable = $xartable['security_acl'];
 		$this->instancestable = $xartable['security_instances'];
@@ -820,7 +822,7 @@ class xarPrivileges extends xarMasks
 	if ((!isset($allmodules)) || count($allmodules)==0) {
 			$query = "SELECT modules.xar_id,
 						modules.xar_name
-						FROM xar_modules AS modules LEFT JOIN xar_module_states AS states
+						FROM $this->modulestable AS modules LEFT JOIN $this->modulestatestable AS states
 						ON modules.xar_regid = states.xar_regid
 						WHERE states.xar_state = 3
 						ORDER BY modules.xar_name";
@@ -1176,7 +1178,7 @@ function drawbranch($node){
 	}
 
 // don't allow deletion of certain privileges
-	if($object['pid'] < 3) {
+	if($object['pid'] <= xarModGetVar('privileges','frozenprivileges')) {
 		$this->html .= $this->bigblank;
 	}
 	else {

@@ -108,7 +108,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Password</xar:mlstring>
 					</td>
 					<td>
-						<input type="password" name="ppass" id="ppass" value="" size="20" maxlength="20" tabindex="5" />
+						<input type="password" name="ppass" id="ppass" value="" size="20" maxlength="100" tabindex="5" />
 					</td>
 					<td width="20">
 						&nbsp;
@@ -117,7 +117,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Pwd. Again</xar:mlstring>
 					</td>
 					<td>
-						<input type="password" name="ppass2" id="ppass2" value="" size="20" maxlength="20" tabindex="6" />
+						<input type="password" name="ppass2" id="ppass2" value="" size="20" maxlength="100" tabindex="6" />
 					</td>
 				</tr>
 				<tr>

@@ -32,6 +32,8 @@ function privileges_xartables()
     $acl         = xarDBGetSiteTablePrefix() . '_security_acl';
     $masks       = xarDBGetSiteTablePrefix() . '_security_masks';
     $instances   = xarDBGetSiteTablePrefix() . '_instances';
+    $modules   = xarDBGetSiteTablePrefix() . '_modules';
+    $module_states   = xarDBGetSiteTablePrefix() . '_module_states';
 
     // Set the table names
     $tables['privileges']     = $privileges;
@@ -41,6 +43,8 @@ function privileges_xartables()
     $tables['security_acl']   = $acl;
     $tables['security_masks'] = $masks;
     $tables['instances']      = $instances;
+    $tables['modules']      = $modules;
+    $tables['module_states']      = $module_states;
 
 	// Return the table information
     return $tables;
