@@ -45,7 +45,7 @@ function modules_admin_installall()
         if (count($dependencies['unsatisfiable']) > 0) {
             continue;
         } else {
-       	    if (xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$info['regid']))) {
+               if (xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$info['regid']))) {
                 foreach ($dependencies['satisfiable'] as $key => $modInfo) {
                     $dbModules[$modInfo['name']]['state'] = XARMOD_STATE_INSTALLED;
                 }

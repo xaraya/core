@@ -19,7 +19,7 @@ function blocks_admin_main()
 {
 
 // Security Check
-	if(!xarSecurityCheck('EditBlock')) return;
+    if(!xarSecurityCheck('EditBlock')) return;
 
     if (xarModGetVar('adminpanels', 'overview') == 0){
         // Return the output

@@ -55,7 +55,7 @@ class SMTP
      * @return void
      */
     function SMTP() 
-	{
+    {
         $this->smtp_conn = 0;
         $this->error = null;
         $this->helo_rply = null;

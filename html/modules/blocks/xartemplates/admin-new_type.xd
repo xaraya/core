@@ -2,19 +2,19 @@
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script language="JavaScript">
 <!--
-	// Enter name of mandatory fields
-	//var blocks_fieldRequired = Array("modulename", "blockname");
-	// Enter field description to appear in the dialog box
-	//var blocks_fieldDescription = Array("Module Name", "Block Name");
+    // Enter name of mandatory fields
+    //var blocks_fieldRequired = Array("modulename", "blockname");
+    // Enter field description to appear in the dialog box
+    //var blocks_fieldDescription = Array("Module Name", "Block Name");
 //-->
 </script>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Register Block (Add Block Type)</xar:mlstring></h2>
-	<div style="margin: auto;">
-	<form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+    <div style="margin: auto;">
+    <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" >
               <div>
-		<div style="clear: both; padding-top: 10px;">
+        <div style="clear: both; padding-top: 10px;">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="confirm" id="confirm" value="true" />
             <span style="float: left; width: 20%; text-align: right;">
@@ -31,9 +31,9 @@
                     </xar:loop>
                 </select>
             </span>
-		</div>
+        </div>
 
-		<div style="clear: both; padding-top: 10px;">
+        <div style="clear: both; padding-top: 10px;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('This is the exact name of the block.  It must be case specific, otherwise the block will not function correctly.')#"><label for="blockname"><xar:mlstring>Block name:</xar:mlstring></label></span>
             </span>
@@ -56,6 +56,6 @@
             </div>
             <p style="clear: both;"><input type="submit" name="submit" value="#xarML('Submit')#" /></p>
         </div>
-	</form>
-	</div>
+    </form>
+    </div>
 </div>

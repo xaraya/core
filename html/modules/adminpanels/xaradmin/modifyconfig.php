@@ -24,7 +24,7 @@
 */
 function adminpanels_admin_modifyconfig()
 {
-	// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminPanel')) return;
 
     // Generate a one-time authorisation code for this operation
@@ -50,8 +50,8 @@ function adminpanels_admin_modifyconfig()
     $data['menuselect']['r']        = xarML('Right');
     $data['menuposition']           = xarModGetVar('adminpanels', 'menuposition');
     //TODO: need a better routine for building select in template
-	
-	$data['showlogout']             = xarModGetVar('adminpanels', 'showlogout');
+    
+    $data['showlogout']             = xarModGetVar('adminpanels', 'showlogout');
     $data['showhelp']               = xarModGetVar('adminpanels', 'showhelp');
 /*     $data['submitlabel']            = xarML('Click "Submit" to change configuration:'); */
 

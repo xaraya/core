@@ -49,7 +49,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
 // TODO: check based on other arguments too
-	if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$prop_id")) return;
+    if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$prop_id")) return;
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

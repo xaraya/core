@@ -15,7 +15,7 @@
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>The Themes Module controls the display of your website.  Certain display variables are set from this module to allow you to control the site name, footer information, etc.</xar:mlstring></p>
-		</div>
+        </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <p><xar:mlstring>How to use it?</xar:mlstring></p>
         </div>
@@ -33,10 +33,10 @@
             <p><xar:mlstring>Included Blocks</xar:mlstring></p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-			<p><xar:mlstring>Metablock</xar:mlstring></p>
-			<ul>
-				<li><xar:mlstring>The meta block allows you to configure at one time the meta values for your site.  This template can be overridden from your theme directory.</xar:mlstring></li>
-			</ul>
+            <p><xar:mlstring>Metablock</xar:mlstring></p>
+            <ul>
+                <li><xar:mlstring>The meta block allows you to configure at one time the meta values for your site.  This template can be overridden from your theme directory.</xar:mlstring></li>
+            </ul>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <p><xar:mlstring>Included Hooks</xar:mlstring></p>

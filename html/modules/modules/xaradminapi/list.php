@@ -25,7 +25,7 @@ function modules_adminapi_list($args)
     extract($args);
 
     // Security Check
-	if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('AdminModules')) return;
 
     // Obtain information
     if (!isset($state)) $state = '';

@@ -7,8 +7,8 @@
 <h3><xar:var scope="session" name="$themes_statusmsg" /></h3>
 <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
     <div>
-	<input type="hidden" name="authid" id="authid" value="#$authid#" />
-	<input type="hidden" name="id" id="id" value="#$id#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="id" id="id" value="#$id#" />
     <table border="0" cellpadding="2" cellspacing="1" width="100%" class="xar-accent">
         <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
@@ -44,7 +44,7 @@
             </td>
         </tr>
     </xar:if>
-	</table><br />
+    </table><br />
     <table border="0" cellpadding="2" cellspacing="1" width="100%" class="xar-accent">
         <tr>
             <th align="center" colspan="4">
@@ -65,11 +65,11 @@
                new
             </td>
         </tr>
-	</table>
+    </table>
                 <p>
                 <input type="checkbox" name="return" id="return" value="1" /> 
                 <label for="return"><xar:mlstring>Update and return to this screen.</xar:mlstring></label></p>
-	<input type="submit" value="#$savebutton#" tabindex="9" />
+    <input type="submit" value="#$savebutton#" tabindex="9" />
   </div>
 </form>
 <div align="left"><h2><xar:mlstring>Credits</xar:mlstring></h2></div>

@@ -11,18 +11,18 @@
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>The Blocks Module controls the configuration, display position and grouping of each "block" on your website.  The Blocks module is a core module within Xaraya, and cannot be removed.</xar:mlstring></p>
-		</div>
+        </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <p><xar:mlstring>How to use it?</xar:mlstring></p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>From the menu, you have four choices. </xar:mlstring></p>
-			<ul>
-				<li><xar:mlstring>View Instances -- View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
-				<li><xar:mlstring>Add instance -- Add a new block instance to be displayed on your site.</xar:mlstring></li>
-				<li><xar:mlstring>Add Group -- Add a new block group for template positioning.</xar:mlstring></li>
-				<li><xar:mlstring>Register Block -- Register a block that was not included in a module's installation.</xar:mlstring></li>
-			</ul>
+            <ul>
+                <li><xar:mlstring>View Instances -- View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
+                <li><xar:mlstring>Add instance -- Add a new block instance to be displayed on your site.</xar:mlstring></li>
+                <li><xar:mlstring>Add Group -- Add a new block group for template positioning.</xar:mlstring></li>
+                <li><xar:mlstring>Register Block -- Register a block that was not included in a module's installation.</xar:mlstring></li>
+            </ul>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <p><xar:mlstring>Included Blocks</xar:mlstring></p>

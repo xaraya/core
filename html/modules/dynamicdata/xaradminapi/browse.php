@@ -25,7 +25,7 @@ function dynamicdata_adminapi_browse($args)
     }
 
     // Security check - we require OVERVIEW rights here for now...
-	if(!xarSecurityCheck('ViewDynamicData')) return;
+    if(!xarSecurityCheck('ViewDynamicData')) return;
 
     // Get arguments from argument array
     extract($args);

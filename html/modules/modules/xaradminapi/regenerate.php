@@ -162,28 +162,28 @@ function modules_adminapi_regenerate()
                         $vercompare == 0 || $is_core)
                     {
 
-						// First we check if this module belongs to class Core or not
-						if(substr($modinfo['class'], 0, 4)  == 'Core')
-						{
-							// Yup, this module either belongs to Core or maskarading as such..
-							
-							// our main objective here, however, is to catch core modules that have been upgraded
-							// then we must try hard to upgrade and activate it transparently
-					
-							// Get module ID
-							$regId = $modinfo['regid'];
+                        // First we check if this module belongs to class Core or not
+                        if(substr($modinfo['class'], 0, 4)  == 'Core')
+                        {
+                            // Yup, this module either belongs to Core or maskarading as such..
+                            
+                            // our main objective here, however, is to catch core modules that have been upgraded
+                            // then we must try hard to upgrade and activate it transparently
+                    
+                            // Get module ID
+                            $regId = $modinfo['regid'];
 
-							$newstate = XARMOD_STATE_INACTIVE;
-							xarModAPIFunc('modules','admin','upgrade',
-											array(	'regid'	=> $regId,
-													'state'	=> $newstate));
-							
-							$newstate = XARMOD_STATE_ACTIVE;
-							xarModAPIFunc('modules','admin','activate',
-											array(	'regid'	=> $regId,
-													'state'	=> $newstate));
-						}
-						
+                            $newstate = XARMOD_STATE_INACTIVE;
+                            xarModAPIFunc('modules','admin','upgrade',
+                                            array(    'regid'    => $regId,
+                                                    'state'    => $newstate));
+                            
+                            $newstate = XARMOD_STATE_ACTIVE;
+                            xarModAPIFunc('modules','admin','activate',
+                                            array(    'regid'    => $regId,
+                                                    'state'    => $newstate));
+                        }
+                        
                         // Update the module version number
                         $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
                         $result = $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));

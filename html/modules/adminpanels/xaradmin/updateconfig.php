@@ -89,7 +89,7 @@ function adminpanels_admin_updateconfig()
         }else{
             xarModSetVar('adminpanels', 'showhelp', 1);
         }
-    	    
+            
         // if necessary set our block position, left, centre or right
         // FIXME: this should be moved either to blocks, or blocks interface should
         // be incorporated here, the hard coding of xar_id will not work, for my database
@@ -126,10 +126,10 @@ function adminpanels_admin_updateconfig()
     } elseif ($formname == 'overviews'){
         // update data from second form
         if ($overview !== null) {
-        	xarModSetVar('adminpanels', 'overview', 1);
-		} else {
-			xarModSetVar('adminpanels', 'overview', 0);
-		}
+            xarModSetVar('adminpanels', 'overview', 1);
+        } else {
+            xarModSetVar('adminpanels', 'overview', 0);
+        }
     } else {
         // something bad, bail out
         return;

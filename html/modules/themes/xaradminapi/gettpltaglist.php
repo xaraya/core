@@ -24,8 +24,8 @@ function themes_adminapi_gettpltaglist($args)
 {
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-		
-		extract($args);
+        
+        extract($args);
 
     $aTplTags = array();
 
@@ -33,15 +33,15 @@ function themes_adminapi_gettpltaglist($args)
     $bindvars = array();
     $sSql = "SELECT xar_id, xar_name, xar_module
               FROM $xartable[template_tags] WHERE 1=1 ";
-		if (isset($module) && trim($module) != '') {
-		    $sSql .= " AND xar_module = ?";
+        if (isset($module) && trim($module) != '') {
+            $sSql .= " AND xar_module = ?";
             $bindvars[] = $module;
-		}
-		if (isset($id) && trim($id) != '') {
-		    $sSql .= " AND xar_id = ? ";
+        }
+        if (isset($id) && trim($id) != '') {
+            $sSql .= " AND xar_id = ? ";
             $bindvars[] = $id;
-		}
-		
+        }
+        
     $oResult = $dbconn->Execute($sSql,$bindvars);
     if (!$oResult) return;
     if (!$oResult) {
@@ -51,12 +51,12 @@ function themes_adminapi_gettpltaglist($args)
     }
 
     while(!$oResult->EOF) {
-		    $aTplTags[] = array(
-				    'id'      => $oResult->fields[0], 
-				    'name'    => $oResult->fields[1], 
-				    'module'  => $oResult->fields[2]
-				);
-		
+            $aTplTags[] = array(
+                    'id'      => $oResult->fields[0], 
+                    'name'    => $oResult->fields[1], 
+                    'module'  => $oResult->fields[2]
+                );
+        
         $oResult->MoveNext();
     }
     $oResult->Close();

@@ -20,7 +20,7 @@
 function themes_admin_main()
 {
     // Security Check
-	if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminTheme')) return;
 
     if (xarModGetVar('adminpanels', 'overview') == 0){
         // Return the output

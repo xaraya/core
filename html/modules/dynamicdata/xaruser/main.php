@@ -19,7 +19,7 @@
 function dynamicdata_user_main()
 {
 // Security Check
-	if(!xarSecurityCheck('ViewDynamicData')) return;
+    if(!xarSecurityCheck('ViewDynamicData')) return;
 
     $data = xarModAPIFunc('dynamicdata','user','menu');
 

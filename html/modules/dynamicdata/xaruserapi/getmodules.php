@@ -41,7 +41,7 @@ function dynamicdata_userapi_getmodules($args)
 
     while (!$result->EOF) {
         list($modid, $itemtype, $count) = $result->fields;
-		if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {
+        if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {
             $modules[] = array('modid' => $modid,
                                'itemtype' => $itemtype,
                                'numitems' => $count);

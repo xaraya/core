@@ -52,7 +52,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AdminDynamicDataField',1,'Field',"$name:$type:All")) return;
+    if(!xarSecurityCheck('AdminDynamicDataField',1,'Field',"$name:$type:All")) return;
 
     if (empty($moduleid)) {
         // defaults to the current module
@@ -65,7 +65,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
+    if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
 
     // get the properties of the 'properties' object
     $fields = xarModAPIFunc('dynamicdata','user','getprop',

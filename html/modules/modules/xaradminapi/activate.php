@@ -21,7 +21,7 @@
  */
 function modules_adminapi_activate ($args)
 {
-	//Shoudlnt we check first if the module is alredy INITIALISED????
+    //Shoudlnt we check first if the module is alredy INITIALISED????
 
     extract($args);
 
@@ -33,15 +33,15 @@ function modules_adminapi_activate ($args)
     }
 
     // Module activate function
-	if (!xarModAPIFunc('modules',
+    if (!xarModAPIFunc('modules',
                            'admin',
                            'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
-		$msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']); 
+        $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']); 
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-		return;
-	}
+        return;
+    }
 
     // Update state of module
     $res = xarModAPIFunc('modules',

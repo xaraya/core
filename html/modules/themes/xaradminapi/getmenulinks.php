@@ -23,7 +23,7 @@ function themes_adminapi_getmenulinks()
 {
 
 // Security Check
-	if (xarSecurityCheck('AdminTheme',0)) {
+    if (xarSecurityCheck('AdminTheme',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('themes',
                                                    'admin',
@@ -46,8 +46,8 @@ function themes_adminapi_getmenulinks()
                                                   'listtpltags'),
                               'title' => xarML('View the registered template tags.'),
                               'label' => xarML('Template Tags'));
-	}
-	if (xarSecurityCheck('AdminTheme',0)) {
+    }
+    if (xarSecurityCheck('AdminTheme',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('themes',
                                                    'admin',

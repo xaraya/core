@@ -19,16 +19,16 @@ var xarTree_config = {
 
 function xarTree_init() {
 
-	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
-		var trees = document.getElementsByName('PrivilegesTree');
-		var i=0;
-		while( i < trees.length ) {
-			if (xarTree_config.is.norm) trees[i].normalize();
-			xarTree_buildTree(trees[i]);
-			var treeID = 'PrivilegesTree' & i;
-//			if (xarTree_config.persistance) xarTree_open(treeID);
-			i++
-		}
+    if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
+        var trees = document.getElementsByName('PrivilegesTree');
+        var i=0;
+        while( i < trees.length ) {
+            if (xarTree_config.is.norm) trees[i].normalize();
+            xarTree_buildTree(trees[i]);
+            var treeID = 'PrivilegesTree' & i;
+//            if (xarTree_config.persistance) xarTree_open(treeID);
+            i++
+        }
     }
 
 function xarTree_open(treeID) {
@@ -57,27 +57,27 @@ function xarTree_buildTree(tree) {
     var i = 0;
     while( i < tree.childNodes.length ) {
         var currNode = tree.childNodes[i];
-		if (currNode.childNodes.length > 0)
+        if (currNode.childNodes.length > 0)
             xarTree_buildTree(currNode);
-		if (currNode.className == xarTree_config.leafname){
-			var titlenode = currNode.parentNode;
-			var j = 0;
-			while(j < titlenode.childNodes.length) {
-					var branch = titlenode.childNodes[j];
-				if (branch.className == xarTree_config.clickname) {
-					xarTree_getParent(branch).setAttribute(xarTree_config.attr, "visible");
-					if (xarTree_config.is.ie) {
-						branch.attachEvent("onclick", xarTree_doEvent);}
-					else if (xarTree_config.is.gecko) {
-						branch.addEventListener("click", xarTree_doEvent, false);}
-					else return;
-					break;
-				}
-				j++;    
-			}
-		}
-	i++;
-	}
+        if (currNode.className == xarTree_config.leafname){
+            var titlenode = currNode.parentNode;
+            var j = 0;
+            while(j < titlenode.childNodes.length) {
+                    var branch = titlenode.childNodes[j];
+                if (branch.className == xarTree_config.clickname) {
+                    xarTree_getParent(branch).setAttribute(xarTree_config.attr, "visible");
+                    if (xarTree_config.is.ie) {
+                        branch.attachEvent("onclick", xarTree_doEvent);}
+                    else if (xarTree_config.is.gecko) {
+                        branch.addEventListener("click", xarTree_doEvent, false);}
+                    else return;
+                    break;
+                }
+                j++;    
+            }
+        }
+    i++;
+    }
 }
 
 function xarTree_toggleDisplay(branch, leaf, clicked) {
@@ -85,12 +85,12 @@ function xarTree_toggleDisplay(branch, leaf, clicked) {
             leaf.style.display = 'block';
             branch.setAttribute(xarTree_config.attr, "visible");
             clicked.src = xarTree_config.img_expanded;
-		}
+        }
         else {
             leaf.style.display = 'none';
             branch.setAttribute(xarTree_config.attr, "hidden");
             clicked.src = xarTree_config.img_collapsed;
-		}
+        }
 }
 
 function xarTree_doEvent(e) {
@@ -111,10 +111,10 @@ function xarTree_getParent(node) {
 }
 
 function xarTree_getChild(branch) {
-	var node = branch[0];
-	while (node.className != xarTree_config.leafname) node = node.nextSibling;
-	return(node);
-}	
+    var node = branch[0];
+    while (node.className != xarTree_config.leafname) node = node.nextSibling;
+    return(node);
+}    
 
 function xarTree_exec(id, op) { 
     xarTree_config.operation = op; 
@@ -139,11 +139,11 @@ function xarTree_commands(thisnode) {
                 case 2 : // Toggle all
                     currNode.click(); break;
                 default: return;
-			}
-		xarTree_config.count++;
-		}
-	i++;
-	}
+            }
+        xarTree_config.count++;
+        }
+    i++;
+    }
 }
 
 /*function xarTree_saveLoad(thisnode) {
@@ -159,13 +159,13 @@ function xarTree_commands(thisnode) {
                 if (getCookie("subtree_" + xarTree_config.count) == 'visible')
                     currNode.click();
             xarTree_config.count++;
-		}
-	i++;
-	}
+        }
+    i++;
+    }
 }*/
 
 function toggleBranch(img, node){
-	if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
+    if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
     if(node.style.display != 'none'){
         node.style.display = 'none';
         img.src = 'modules/privileges/xarimages/k3.gif';

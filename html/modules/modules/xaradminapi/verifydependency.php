@@ -30,7 +30,7 @@ function modules_adminapi_verifydependency($args)
 
     // Argument check
     if (!isset($mainId)) {
-    	$msg = xarML('Missing module regid (#(1)).', $mainId);
+        $msg = xarML('Missing module regid (#(1)).', $mainId);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
     }

@@ -24,7 +24,7 @@
             </select>
             <input type="submit" name="submit" value="#xarML('Refresh')#"/>
         </p>
-	</form>
+    </form>
     <xar:if condition="$selstyle eq 'compact'">
         <xar:template file="compact" type="module" />
     <xar:else />

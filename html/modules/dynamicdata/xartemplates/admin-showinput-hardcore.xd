@@ -7,14 +7,14 @@
 
 
 <table cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td width="90%" height="300" align="left" valign="top">
-			<script>HardCoreWebEditorToolbar();</script>
-			<script>
-			content = '#$content_unencoded#';
-			content_editor = new HardCoreWebEditor('hardcore/webeditor/', 'php', '#$name#', content, '', '', true, '');
-			</script>
-			<script>HardCoreWebEditorDOMInspector('#$name#');</script> 
-		</td>
-	</tr>
+    <tr>
+        <td width="90%" height="300" align="left" valign="top">
+            <script>HardCoreWebEditorToolbar();</script>
+            <script>
+            content = '#$content_unencoded#';
+            content_editor = new HardCoreWebEditor('hardcore/webeditor/', 'php', '#$name#', content, '', '', true, '');
+            </script>
+            <script>HardCoreWebEditorDOMInspector('#$name#');</script> 
+        </td>
+    </tr>
 </table>

@@ -22,20 +22,20 @@
                         <xar:mlstring>none</xar:mlstring>
                     </xar:if>
                     |
-					<xar:if condition="$loop:item['template'] ne NULL">
-						#$loop:item['template']# &nbsp;
-					<xar:else />
-						<xar:if condition="empty($loop:item['group_template'])">
-							<xar:mlstring> D </xar:mlstring>
-						<xar:else />
-							#$loop:item['group_template']# &nbsp;
-						</xar:if>
-					</xar:if> |
-					<xar:if condition="$loop:item['state'] eq '0'">
-						<xar:mlstring> H </xar:mlstring>
-					<xar:else />
-						<xar:mlstring> M </xar:mlstring>
-					</xar:if> |
+                    <xar:if condition="$loop:item['template'] ne NULL">
+                        #$loop:item['template']# &nbsp;
+                    <xar:else />
+                        <xar:if condition="empty($loop:item['group_template'])">
+                            <xar:mlstring> D </xar:mlstring>
+                        <xar:else />
+                            #$loop:item['group_template']# &nbsp;
+                        </xar:if>
+                    </xar:if> |
+                    <xar:if condition="$loop:item['state'] eq '0'">
+                        <xar:mlstring> H </xar:mlstring>
+                    <xar:else />
+                        <xar:mlstring> M </xar:mlstring>
+                    </xar:if> |
                         <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#">
                             <xar:mlstring> E </xar:mlstring>
                         </a>|<a href="#$loop:item['deleteurl']#" onClick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
@@ -43,11 +43,11 @@
                         </a>
                     ] 
                 </div>
-					<xar:if condition="empty($loop:item['title'])">
-						#$loop:item['name']#
-					<xar:else />
+                    <xar:if condition="empty($loop:item['title'])">
+                        #$loop:item['name']#
+                    <xar:else />
                         <span title="#xarVarPrepfordisplay($loop:item['title'])#">#$loop:item['name']#</span>
-					</xar:if>
+                    </xar:if>
             </div>
             <xar:else />
             <div class="xar-accent-outline" style="position:relative;top:-1.5em;left:51%;width:49%;height:1.5em;margin-bottom:-1.3em;border-width:0px 0px 1px 0px;">
@@ -63,20 +63,20 @@
                         <xar:mlstring>none</xar:mlstring>
                     </xar:if>
                     |
-					<xar:if condition="$loop:item['template'] ne NULL">
-						#$loop:item['template']# &nbsp;
-					<xar:else />
-						<xar:if condition="empty($loop:item['group_template'])">
-							<xar:mlstring> D </xar:mlstring>
-						<xar:else />
-							#$loop:item['group_template']# &nbsp;
-						</xar:if>
-					</xar:if> |
-					<xar:if condition="$loop:item['state'] eq '0'">
-						<xar:mlstring> H </xar:mlstring>
-					<xar:else />
-						<xar:mlstring> M </xar:mlstring>
-					</xar:if> |
+                    <xar:if condition="$loop:item['template'] ne NULL">
+                        #$loop:item['template']# &nbsp;
+                    <xar:else />
+                        <xar:if condition="empty($loop:item['group_template'])">
+                            <xar:mlstring> D </xar:mlstring>
+                        <xar:else />
+                            #$loop:item['group_template']# &nbsp;
+                        </xar:if>
+                    </xar:if> |
+                    <xar:if condition="$loop:item['state'] eq '0'">
+                        <xar:mlstring> H </xar:mlstring>
+                    <xar:else />
+                        <xar:mlstring> M </xar:mlstring>
+                    </xar:if> |
                         <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#">
                             <xar:mlstring> E </xar:mlstring>
                         </a>|<a href="#$loop:item['deleteurl']#" onClick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
@@ -84,12 +84,12 @@
                         </a>
                     ] 
                 </div>
-					<xar:if condition="empty($loop:item['title'])">
+                    <xar:if condition="empty($loop:item['title'])">
                         #$loop:item['name']#
-					<xar:else />
+                    <xar:else />
                         <span title="#xarVarPrepfordisplay($loop:item['title'])#">#$loop:item['name']#</span>
-					</xar:if>
+                    </xar:if>
             </div>
-			</xar:if>
+            </xar:if>
     </xar:loop>
 </div>

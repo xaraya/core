@@ -20,7 +20,7 @@ function blocks_admin_modify_group()
     if (!xarVarFetch('gid', 'int:1:', $gid)) {return;}
 
     // Security Check
-	if(!xarSecurityCheck('EditBlock', 0, 'Group')) {return;}
+    if(!xarSecurityCheck('EditBlock', 0, 'Group')) {return;}
 
     // Get details on current group
     $group = xarModAPIFunc(

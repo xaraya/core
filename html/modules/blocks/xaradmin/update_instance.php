@@ -38,7 +38,7 @@ function blocks_admin_update_instance()
     if (!xarSecConfirmAuthKey()) {return;}
 
     // Security Check.
-	if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Get and update block info.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));

@@ -40,7 +40,7 @@ function themes_adminapi_update($args)
     }
 
 // Security Check
-	if (!xarSecurityCheck('AdminTheme',0,'All',"All:All:$regId")) return;
+    if (!xarSecurityCheck('AdminTheme',0,'All',"All:All:$regId")) return;
 
     // Get theme name
     $themeInfo = xarThemeGetInfo($regid);

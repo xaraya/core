@@ -13,8 +13,8 @@
     <div align="center">
         <form action="#xarModURL('themes', 'user', 'usermenu')#" method="post" enctype="application/x-www-form-urlencoded">
         <div>
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />	
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />	
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />    
+            <input type="hidden" name="uid" id="uid" value="#$uid#" />    
             <input type="hidden" name="phase" id="phase" value="update" />
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr align="left" valign="middle">

@@ -3,51 +3,51 @@
         by the page template, in our current setup compiled to late to pull it in here, 
         this is addressed in the tpl_order scenario, no choice but to leave or delete,
         leaving it for now </xar:comment>
-	<meta http-equiv="Content-Type" content="text/html; charset=#$charset#" />
-	<meta name="Generator" content="#$generator#" />
-	<meta name="Keywords" content="#$keywords#" />
-	<meta name="Description" content="#$description#" />
-	<meta name="rating" content="General" />
-	<xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
-	<meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#">
-	</xar:if>
-	<xar:if condition="!empty($latitude)">
-		<meta name="ICBM" content="#$latitude#, #$longitude#" />
-		<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
-	</xar:if>
-	<!-- Linking for Mozilla and related browser site tab -->
-	<xar:if condition="xarThemeIsAvailable('rss')">
-		<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
-	</xar:if>
-	<xar:if condition="xarThemeIsAvailable('atom')">
-		<link rel="alternate" type="application/atom+xml" title="Atom" href="#$activepageatom#" />
-	</xar:if>
-	<xar:if condition="xarThemeIsAvailable('print')">
-		<link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
-	</xar:if>
-	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
-	<link rel="pingback" href="&xar-baseurl;ws.php" />
-	<link rel="Top" type="text/html" href="#$baseurl#" />
-	<link rel="Parent" type="text/html" href="#$baseurl#" />
-	<link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
-	<xar:if condition="!empty($copyrightpage)">
-		<link rel="copyright" type="text/html" href="#$copyrightpage#" />
-	</xar:if>
-	<xar:if condition="!empty($helppage)">
-		<link rel="help" type="text/html" href="#$helppage#" />
-	</xar:if>
-	<xar:if condition="!empty($glossary)">
-		<link rel="glossary" type="text/html" href="#$glossary#" />
-	</xar:if>
-	<xar:if condition="!empty($first)">
-		<link rel="first" type="text/html" href="#$first#" />
-	</xar:if>
-	<xar:if condition="!empty($last)">
-		<link rel="last" type="text/html" href="#$last#" />
-	</xar:if>
-	<xar:if condition="xarModIsAvailable('articles')">
-		<link rel="contents" type="text/html" href="#xarModUrl('articles', 'user', 'viewmap')#" />
-	</xar:if>
-	<xar:if condition="xarModIsAvailable('search')">
-		<link rel="search" type="text/html" href="#xarModUrl('search', 'user', 'main')#" />
-	</xar:if>
+    <meta http-equiv="Content-Type" content="text/html; charset=#$charset#" />
+    <meta name="Generator" content="#$generator#" />
+    <meta name="Keywords" content="#$keywords#" />
+    <meta name="Description" content="#$description#" />
+    <meta name="rating" content="General" />
+    <xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
+    <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#">
+    </xar:if>
+    <xar:if condition="!empty($latitude)">
+        <meta name="ICBM" content="#$latitude#, #$longitude#" />
+        <meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
+    </xar:if>
+    <!-- Linking for Mozilla and related browser site tab -->
+    <xar:if condition="xarThemeIsAvailable('rss')">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
+    </xar:if>
+    <xar:if condition="xarThemeIsAvailable('atom')">
+        <link rel="alternate" type="application/atom+xml" title="Atom" href="#$activepageatom#" />
+    </xar:if>
+    <xar:if condition="xarThemeIsAvailable('print')">
+        <link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
+    </xar:if>
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
+    <link rel="pingback" href="&xar-baseurl;ws.php" />
+    <link rel="Top" type="text/html" href="#$baseurl#" />
+    <link rel="Parent" type="text/html" href="#$baseurl#" />
+    <link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
+    <xar:if condition="!empty($copyrightpage)">
+        <link rel="copyright" type="text/html" href="#$copyrightpage#" />
+    </xar:if>
+    <xar:if condition="!empty($helppage)">
+        <link rel="help" type="text/html" href="#$helppage#" />
+    </xar:if>
+    <xar:if condition="!empty($glossary)">
+        <link rel="glossary" type="text/html" href="#$glossary#" />
+    </xar:if>
+    <xar:if condition="!empty($first)">
+        <link rel="first" type="text/html" href="#$first#" />
+    </xar:if>
+    <xar:if condition="!empty($last)">
+        <link rel="last" type="text/html" href="#$last#" />
+    </xar:if>
+    <xar:if condition="xarModIsAvailable('articles')">
+        <link rel="contents" type="text/html" href="#xarModUrl('articles', 'user', 'viewmap')#" />
+    </xar:if>
+    <xar:if condition="xarModIsAvailable('search')">
+        <link rel="search" type="text/html" href="#xarModUrl('search', 'user', 'main')#" />
+    </xar:if>

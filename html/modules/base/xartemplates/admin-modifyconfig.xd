@@ -4,313 +4,313 @@
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script language="JavaScript">
 <!--
-	// Enter name of mandatory fields
-	var base_fieldRequired = Array("defaultfunction");
-	// Enter field description to appear in the dialog box
-	var base_fieldDescription = Array("Default Module Function");
+    // Enter name of mandatory fields
+    var base_fieldRequired = Array("defaultfunction");
+    // Enter field description to appear in the dialog box
+    var base_fieldDescription = Array("Default Module Function");
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify System Configuration</xar:mlstring></h2><br />
 <div id="tabnav">
-	<div class="help" title="Choose a set of configuration options"><xar:mlstring>Actions</xar:mlstring> :</div>
-	<xar:if condition="$tab eq 'display'">
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#" class="active">
-				<xar:mlstring>Site Display</xar:mlstring>
-			</a>
-		</div>	
-	<xar:else />
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">	
-				<xar:mlstring>Site Display</xar:mlstring>
-			</a>
-		</div>	
-	</xar:if>
-	<xar:if condition="$tab eq 'security'">
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#" class="active">
-				<xar:mlstring>Sessions/Security</xar:mlstring>
-			</a>
-		</div>	
-	<xar:else />
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">	
-				<xar:mlstring>Sessions and Security</xar:mlstring>
-			</a>
-		</div>	
-	</xar:if>
-	<xar:if condition="$tab eq 'locales'">
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#" class="active">
-				<xar:mlstring>Languages and Locales</xar:mlstring>
-			</a>
-		</div>	
-	<xar:else />
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">	
-				<xar:mlstring>Languages and Locales</xar:mlstring>
-			</a>
-		</div>	
-	</xar:if>
-	<xar:if condition="$tab eq 'other'">
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#" class="active">
-				<xar:mlstring>Other</xar:mlstring>
-			</a>
-		</div>	
-	<xar:else />
-		<div>
-			<a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">	
-				<xar:mlstring>Other</xar:mlstring>
-			</a>
-		</div>	
-	</xar:if>
-	</div>
-	<div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
-	
+    <div class="help" title="Choose a set of configuration options"><xar:mlstring>Actions</xar:mlstring> :</div>
+    <xar:if condition="$tab eq 'display'">
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#" class="active">
+                <xar:mlstring>Site Display</xar:mlstring>
+            </a>
+        </div>    
+    <xar:else />
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">    
+                <xar:mlstring>Site Display</xar:mlstring>
+            </a>
+        </div>    
+    </xar:if>
+    <xar:if condition="$tab eq 'security'">
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#" class="active">
+                <xar:mlstring>Sessions/Security</xar:mlstring>
+            </a>
+        </div>    
+    <xar:else />
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">    
+                <xar:mlstring>Sessions and Security</xar:mlstring>
+            </a>
+        </div>    
+    </xar:if>
+    <xar:if condition="$tab eq 'locales'">
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#" class="active">
+                <xar:mlstring>Languages and Locales</xar:mlstring>
+            </a>
+        </div>    
+    <xar:else />
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">    
+                <xar:mlstring>Languages and Locales</xar:mlstring>
+            </a>
+        </div>    
+    </xar:if>
+    <xar:if condition="$tab eq 'other'">
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#" class="active">
+                <xar:mlstring>Other</xar:mlstring>
+            </a>
+        </div>    
+    <xar:else />
+        <div>
+            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">    
+                <xar:mlstring>Other</xar:mlstring>
+            </a>
+        </div>    
+    </xar:if>
+    </div>
+    <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
+    
 <xar:comment> ------------------- Begin Site Display Options --------------------- </xar:comment>
-	<xar:if condition="$tab eq 'display'">
-		<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="tab" id="tab" value="#$tab#" />
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
-			</div>
+    <xar:if condition="$tab eq 'display'">
+        <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="tab" id="tab" value="#$tab#" />
+            <div style="clear: both; padding-top: 10px;">
+                <h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
+            </div>
 
-		<p><xar:mlstring>Please note that the default theme variable has moved to the themes module.</xar:mlstring></p>
+        <p><xar:mlstring>Please note that the default theme variable has moved to the themes module.</xar:mlstring></p>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('The default module to be loaded on your base url.')#"><label for="defaultmodule"><xar:mlstring>Default Module</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="defaultmodule" id="defaultmodule" size="1">
-					<xar:loop name="$mods">
-						<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['displayname']">
-							<option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
-						<xar:else />
-							<option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
-						</xar:if>
-					</xar:loop>
-				</select>
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('The default module to be loaded on your base url.')#"><label for="defaultmodule"><xar:mlstring>Default Module</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="defaultmodule" id="defaultmodule" size="1">
+                    <xar:loop name="$mods">
+                        <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['displayname']">
+                            <option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
+                        <xar:else />
+                            <option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
+                        </xar:if>
+                    </xar:loop>
+                </select>
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('The default type of module to be loaded.')#"><label for="defaulttype"><xar:mlstring>Default Module Type</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="defaulttype" id="defaulttype" size="1">
-					<xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
-						<option value="admin" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
-						<option value="user"><xar:mlstring>User</xar:mlstring></option>
-					<xar:else />
-						<option value="admin"><xar:mlstring>Admin</xar:mlstring></option>
-						<option value="user" selected="selected"><xar:mlstring>User</xar:mlstring></option>
-					</xar:if>
-				</select>
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('The default type of module to be loaded.')#"><label for="defaulttype"><xar:mlstring>Default Module Type</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="defaulttype" id="defaulttype" size="1">
+                    <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
+                        <option value="admin" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
+                        <option value="user"><xar:mlstring>User</xar:mlstring></option>
+                    <xar:else />
+                        <option value="admin"><xar:mlstring>Admin</xar:mlstring></option>
+                        <option value="user" selected="selected"><xar:mlstring>User</xar:mlstring></option>
+                    </xar:if>
+                </select>
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('The default function of module to be loaded.')#"><label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100" />
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('The default function of module to be loaded.')#"><label for="defaultfunction"><xar:mlstring>Default Module Function</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" size="30" maxlength="100" />
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('The default directory for site themes - no trailing slash.')#"><label for="themefir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100" />
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('The default directory for site themes - no trailing slash.')#"><label for="themefir"><xar:mlstring>Default Theme Directory</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" size="30" maxlength="100" />
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Enable short url support throughout Xaraya.')#"><label for="themefir"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
-					<input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
-				<xar:else />
-					<input type="checkbox" name="shorturl" id="shorturl" value="1" />
-				</xar:if>		
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Enable short url support throughout Xaraya.')#"><label for="themefir"><xar:mlstring>Enable Short URL Support</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
+                    <input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="shorturl" id="shorturl" value="1" />
+                </xar:if>        
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Change HTML Entities to readible entities.')#"><label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
-					<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
-				<xar:else />
-					<input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
-				</xar:if>	
-			</span>
-			</div>
-			<br /><br />
-			<input type="submit" value="#$updatelabel#"  />
-		</form>
-	
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Change HTML Entities to readible entities.')#"><label for="htmlenitites"><xar:mlstring>Fix HTML Entities</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
+                    <input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
+                </xar:if>    
+            </span>
+            </div>
+            <br /><br />
+            <input type="submit" value="#$updatelabel#"  />
+        </form>
+    
 <xar:comment> ----------------- Begin Security Options ------------------- </xar:comment>
-	<xar:elseif condition="$tab eq 'security'" />
-		<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="tab" id="tab" value="#$tab#" />
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>Sessions and Security</xar:mlstring></h4>
-			</div>
-			<div style="clear: both; padding-top: 10px;">
-				<span style="float: left; width: 20%; text-align: right;">
-					<span class="help" title="#xarML('Configure to run on a secure server.')#"><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:</span>
-				</span>
-				<span style="float: right; width: 78%; text-align: left;">
-					<xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
-						<input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
-					<xar:else />
-						<input type="checkbox" name="secureserver" id="secureserver" value="1" />
-					</xar:if>
-				</span>
-			</div>
-		<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Security options for sessions')#"><label for="securitylevel"><xar:mlstring>Security Level</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="securitylevel" id="securitylevel" size="1">
-				<xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
-					<option value="High" selected="selected">High</option>
-					<option value="Medium">Medium</option>
-					<option value="Low">Low</option>
-				<xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'" />
-					<option value="High">High</option>
-					<option value="Medium" selected="selected">Medium</option>
-					<option value="Low">Low</option>
-				<xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Low'" />
-					<option value="High">High</option>
-					<option value="Medium">Medium</option>
-					<option value="Low" selected="selected">Low</option>
-				</xar:if>
-				</select>
-			</span>
-			</div>
+    <xar:elseif condition="$tab eq 'security'" />
+        <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="tab" id="tab" value="#$tab#" />
+            <div style="clear: both; padding-top: 10px;">
+                <h4><xar:mlstring>Sessions and Security</xar:mlstring></h4>
+            </div>
+            <div style="clear: both; padding-top: 10px;">
+                <span style="float: left; width: 20%; text-align: right;">
+                    <span class="help" title="#xarML('Configure to run on a secure server.')#"><label for="secureserver"><xar:mlstring>Configure to run on Secure Server</xar:mlstring></label>:</span>
+                </span>
+                <span style="float: right; width: 78%; text-align: left;">
+                    <xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
+                        <input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="secureserver" id="secureserver" value="1" />
+                    </xar:if>
+                </span>
+            </div>
+        <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Security options for sessions')#"><label for="securitylevel"><xar:mlstring>Security Level</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="securitylevel" id="securitylevel" size="1">
+                <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
+                    <option value="High" selected="selected">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'" />
+                    <option value="High">High</option>
+                    <option value="Medium" selected="selected">Medium</option>
+                    <option value="Low">Low</option>
+                <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Low'" />
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low" selected="selected">Low</option>
+                </xar:if>
+                </select>
+            </span>
+            </div>
 
-		<xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('How long to allow the session to last in days')#"><label for="securitylevel"><xar:mlstring>Session Duration (In Days)</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" size="5" maxlength="3" />
-			</span>
-			</div>
-		</xar:if>
+        <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('How long to allow the session to last in days')#"><label for="securitylevel"><xar:mlstring>Session Duration (In Days)</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" size="5" maxlength="3" />
+            </span>
+            </div>
+        </xar:if>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Session times out in minutes')#"><label for="securitylevel"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" />
-			</span>
-			</div>
-			<div style="clear: both; padding-top: 10px;">
-				<input type="submit" value="#$updatelabel#" />
-			</div>
-		</form>
-	
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Session times out in minutes')#"><label for="securitylevel"><xar:mlstring>Session Inactivity Time Out</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" size="5" maxlength="3" />
+            </span>
+            </div>
+            <div style="clear: both; padding-top: 10px;">
+                <input type="submit" value="#$updatelabel#" />
+            </div>
+        </form>
+    
 <xar:comment> ----------------- Begin Locale Options ------------------- </xar:comment>
-	<xar:elseif condition="$tab eq 'locales'" />
+    <xar:elseif condition="$tab eq 'locales'" />
 
-		<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="tab" id="tab" value="#$tab#" />
+        <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="tab" id="tab" value="#$tab#" />
 
                               <xar:template file="modifyconfig-locales" module="base" type="module"/>
 
-			<div style="clear: both; padding-top: 10px;">
-				<input type="submit" value="#$updatelabel#" />
-			</div>
-		</form>
-	
+            <div style="clear: both; padding-top: 10px;">
+                <input type="submit" value="#$updatelabel#" />
+            </div>
+        </form>
+    
 <xar:comment> ----------------- Begin Other Options ------------------- </xar:comment>
-	<xar:elseif condition="$tab eq 'other'" />
-		<form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-			<input type="hidden" name="authid" id="authid" value="#$authid#" />
-			<input type="hidden" name="tab" id="tab" value="#$tab#" />
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
-			</div>
+    <xar:elseif condition="$tab eq 'other'" />
+        <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="tab" id="tab" value="#$tab#" />
+            <div style="clear: both; padding-top: 10px;">
+                <h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#"><label for="defaultlocale"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
-					<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
-				<xar:else />
-					<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
-				</xar:if>
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#"><label for="defaultlocale"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
+                    <input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
+                </xar:if>
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>Proxy Configuration</xar:mlstring></h4>
-				<p><xar:mlstring>If your webserver only allows outgoing network connections (for retrieving headlines, checking links etc.) via a proxy server, specify its hostname and port number here</xar:mlstring></p>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+                <h4><xar:mlstring>Proxy Configuration</xar:mlstring></h4>
+                <p><xar:mlstring>If your webserver only allows outgoing network connections (for retrieving headlines, checking links etc.) via a proxy server, specify its hostname and port number here</xar:mlstring></p>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Proxy server to load')#"><label for="proxyhost"><xar:mlstring>Proxy Server</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="proxyhost" value="#xarModGetVar('base','proxyhost')#" size="30" maxlength="100" />
-			</span>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Proxy server to load')#"><label for="proxyhost"><xar:mlstring>Proxy Server</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="proxyhost" value="#xarModGetVar('base','proxyhost')#" size="30" maxlength="100" />
+            </span>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('Proxy port to load')#"><label for="proxyport"><xar:mlstring>Proxy Port</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<input type="text" name="proxyport" value="#xarModGetVar('base','proxyport')#" size="5" maxlength="10" />
-			</span>
-			</div>
-			
-			<div style="clear: both; padding-top: 10px;">
-				<h4><xar:mlstring>External Editors</xar:mlstring></h4>
-			</div>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('Proxy port to load')#"><label for="proxyport"><xar:mlstring>Proxy Port</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <input type="text" name="proxyport" value="#xarModGetVar('base','proxyport')#" size="5" maxlength="10" />
+            </span>
+            </div>
+            
+            <div style="clear: both; padding-top: 10px;">
+                <h4><xar:mlstring>External Editors</xar:mlstring></h4>
+            </div>
 
-			<div style="clear: both; padding-top: 10px;">
-			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('WYSIWYG Editors')#"><label for="wysiwyg"><xar:mlstring>WYSIWYG Editors</xar:mlstring></label>:</span>
-			</span>
-			<span style="float: right; width: 78%; text-align: left;">
-				<select name="editor" id="editor" size="1">
-					<xar:loop name="$editors">
-						<xar:if condition="$editor eq $loop:item['displayname']">
-							<option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
-						<xar:else />
-							<option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
-						</xar:if>
-					</xar:loop>
-				</select>
-			</span>
-			</div>
-			<div style="clear: both; padding-top: 10px;">
-				<input type="submit" value="#$updatelabel#" />
-			</div>
-		</form>
-	</xar:if>
+            <div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('WYSIWYG Editors')#"><label for="wysiwyg"><xar:mlstring>WYSIWYG Editors</xar:mlstring></label>:</span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="editor" id="editor" size="1">
+                    <xar:loop name="$editors">
+                        <xar:if condition="$editor eq $loop:item['displayname']">
+                            <option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
+                        <xar:else />
+                            <option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
+                        </xar:if>
+                    </xar:loop>
+                </select>
+            </span>
+            </div>
+            <div style="clear: both; padding-top: 10px;">
+                <input type="submit" value="#$updatelabel#" />
+            </div>
+        </form>
+    </xar:if>
 </div>
 </div>

@@ -89,10 +89,10 @@ function roles_user_lostpassword()
             //Update user password
             // check for user and grab uid if exists
             if (!xarModAPIFunc('roles','admin','update',$user)) {
-            	$msg = xarML('Problem updating the user information');
+                $msg = xarML('Problem updating the user information');
                 xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             }
-  			// Send Reminder Email
+              // Send Reminder Email
             if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.   

@@ -68,9 +68,9 @@ function modules_adminapi_initialise($args)
 
 //    die(var_dump($set));
     if (!isset($set)) {
-    	$msg = xarML('Module state change failed');
+        $msg = xarML('Module state change failed');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-   		return;
+           return;
     }
 
     // Success

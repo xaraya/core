@@ -74,7 +74,7 @@ function dynamicdata_admin_view($args)
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('EditDynamicData')) return;
+    if(!xarSecurityCheck('EditDynamicData')) return;
 
     // show other modules
     $data['modlist'] = array();
@@ -100,7 +100,7 @@ function dynamicdata_admin_view($args)
             } else {
                 $modList[$i]['header'] = '';
             }
-			if(xarSecurityCheck('AdminDynamicDataItem',0,'Item',$modList[$i]['regid'].':All:All')) {
+            if(xarSecurityCheck('AdminDynamicDataItem',0,'Item',$modList[$i]['regid'].':All:All')) {
                 $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
                                                   array('modid' => $modList[$i]['regid']));
             } else {

@@ -31,7 +31,7 @@ function blocks_adminapi_delete_group($args)
     }
 
     // Security
-	if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
+    if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

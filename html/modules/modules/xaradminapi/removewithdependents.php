@@ -24,58 +24,58 @@
 function modules_adminapi_removewithdependents ($args)
 {
     xarLogMessage('Removing with dependents');
-	$mainId = $args['regid'];
+    $mainId = $args['regid'];
 
-	// Security Check
-	// need to specify the module because this function is called by the installer module
-	if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
-		return;
+    // Security Check
+    // need to specify the module because this function is called by the installer module
+    if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
+        return;
 
-	// Argument check
-	if (!isset($mainId)) {
-		$msg = xarML('Missing module regid (#(1)).', $mainId);
-		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-		return;
-	}
+    // Argument check
+    if (!isset($mainId)) {
+        $msg = xarML('Missing module regid (#(1)).', $mainId);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
 
-	// See if we have lost any modules since last generation
-	if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    // See if we have lost any modules since last generation
+    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
         xarLogMessage('Missing module since last generation');
-		return;
-	}
+        return;
+    }
 
-	//Get the dependents list
+    //Get the dependents list
     $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$mainId));
     xarLogVariable('dependents',$dependents);
 
-	//Deactivate Actives
-	foreach ($dependents['active'] as $active_dependent) {
-	    if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
-    	    $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
-			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-			return;
-    	}
-	}
-	
-	//Remove the previously active
-	foreach ($dependents['active'] as $active_dependent) {
-	    if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
-    	    $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
-			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-			return;
-    	}
-	}
-	
-	//Remove the initialised
-	foreach ($dependents['initialised'] as $active_dependent) {
-	    if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
-    	    $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
-			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-			return;
-    	}
-	}
-	
-	return true;
+    //Deactivate Actives
+    foreach ($dependents['active'] as $active_dependent) {
+        if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+            $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            return;
+        }
+    }
+    
+    //Remove the previously active
+    foreach ($dependents['active'] as $active_dependent) {
+        if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+            $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            return;
+        }
+    }
+    
+    //Remove the initialised
+    foreach ($dependents['initialised'] as $active_dependent) {
+        if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+            $msg = xarML('Unable to remove module "#(1)".', $active_dependent['displayname']);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            return;
+        }
+    }
+    
+    return true;
 }
 
 ?>

@@ -22,7 +22,7 @@
 function dynamicdata_adminapi_getmenulinks()
 {
     $menulinks = array();
-	if (xarSecurityCheck('AdminDynamicData',0)) {
+    if (xarSecurityCheck('AdminDynamicData',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',
@@ -30,14 +30,14 @@ function dynamicdata_adminapi_getmenulinks()
                               'title' => xarML('View module objects using dynamic data'),
                               'label' => xarML('View Objects'));
     }
-	if (xarSecurityCheck('AdminDynamicData',0)) {
+    if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'admin',
                                                   'modifyconfig'),
                               'title' => xarML('Configure the default property types'),
                               'label' => xarML('Property Types'));
     }
-	if (xarSecurityCheck('AdminDynamicData',0)) {
+    if (xarSecurityCheck('AdminDynamicData',0)) {
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                   'util',
                                                   'main'),

@@ -158,18 +158,18 @@ class Dynamic_Property_Master
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['propertyClass'];
             require_once 'includes/properties/'.$propertyClass.'.php';
-			
+            
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
             {
                 $baseArgs = unserialize($propertyInfo['args']);
                 $args = array_merge($baseArgs, $args);
             }
-			
+            
             $property = new $propertyClass($args);
         } else {
-	    $property = new Dynamic_Property($args);
+        $property = new Dynamic_Property($args);
         }
-		
+        
         return $property;
     }
 
@@ -206,65 +206,65 @@ class Dynamic_Property_Master
      */
     function getPropertyTypes()
     {
-		// Attempt to retreive properties from DB
+        // Attempt to retreive properties from DB
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
         $dynamicproptypes = $xartable['dynamic_properties_def'];
 
         $query = "SELECT 
-					xar_prop_id
-					, xar_prop_name
-					, xar_prop_label
-					, xar_prop_parent
-					, xar_prop_filepath
-					, xar_prop_class
-					, xar_prop_format 
-					, xar_prop_validation
-					, xar_prop_source
-					, xar_prop_reqfiles
-					, xar_prop_reqmodules
-					, xar_prop_args
-					, xar_prop_aliases
+                    xar_prop_id
+                    , xar_prop_name
+                    , xar_prop_label
+                    , xar_prop_parent
+                    , xar_prop_filepath
+                    , xar_prop_class
+                    , xar_prop_format 
+                    , xar_prop_validation
+                    , xar_prop_source
+                    , xar_prop_reqfiles
+                    , xar_prop_reqmodules
+                    , xar_prop_args
+                    , xar_prop_aliases
 
                   FROM $dynamicproptypes
-				  ORDER BY xar_prop_id";
+                  ORDER BY xar_prop_id";
 
         $result =& $dbconn->Execute($query);
 
         if (!$result)
-		{
-			//TODO: Something interesting?  Probably an exception.
-			return;
-		}
+        {
+            //TODO: Something interesting?  Probably an exception.
+            return;
+        }
 
-		// If no properties are found, import them in.
-		if( $result->EOF)
-		{
-			$property_types = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
-		} else {
-			$property_types = array();
-			while (!$result->EOF) 
-			{
-				list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
-	
-				$property['id']             = $id;
-				$property['name']           = $name;
-				$property['label']          = $label;
-				$property['format']         = $format;
-				$property['validation']     = $validation;
-				$property['source']         = $source;
-				$property['dependancies']   = $reqfiles;
-				$property['requiresmodule'] = $reqmodules;
-				$property['args']           = $args;
-				$property['propertyClass']  = $class;
-				$property['aliases']        = $aliases;
+        // If no properties are found, import them in.
+        if( $result->EOF)
+        {
+            $property_types = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
+        } else {
+            $property_types = array();
+            while (!$result->EOF) 
+            {
+                list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
+    
+                $property['id']             = $id;
+                $property['name']           = $name;
+                $property['label']          = $label;
+                $property['format']         = $format;
+                $property['validation']     = $validation;
+                $property['source']         = $source;
+                $property['dependancies']   = $reqfiles;
+                $property['requiresmodule'] = $reqmodules;
+                $property['args']           = $args;
+                $property['propertyClass']  = $class;
+                $property['aliases']        = $aliases;
 
-				$property_types[$id] = $property;
+                $property_types[$id] = $property;
 
-				$result->MoveNext();
-			}
-		}
+                $result->MoveNext();
+            }
+        }
         $result->Close();
 
 /*
@@ -471,29 +471,29 @@ class Dynamic_Property
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
-	
-	/**
+    
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$baseInfo = array(
-							'id'         => 0,
-							'name'       => 'propertyName',
-							'label'      => 'Property Label',
-							'format'     => '0',
-							'validation' => '',
-							'source'     => '',
-							'dependancies' => '',	// semi-colon seperated list of files that must be present for this property to be available (optional)
-							'requiresmodule' => '', // this module must be available before this property is enabled (optional)
-							'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-							'args' => serialize( array() ),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+     **/
+     function getBasePropertyInfo()
+     {
+         $baseInfo = array(
+                            'id'         => 0,
+                            'name'       => 'propertyName',
+                            'label'      => 'Property Label',
+                            'format'     => '0',
+                            'validation' => '',
+                            'source'     => '',
+                            'dependancies' => '',    // semi-colon seperated list of files that must be present for this property to be available (optional)
+                            'requiresmodule' => '', // this module must be available before this property is enabled (optional)
+                            'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+                            'args' => serialize( array() ),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 }
 ?>

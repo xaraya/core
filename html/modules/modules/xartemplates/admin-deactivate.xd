@@ -36,14 +36,14 @@
                 </table>
             </xar:if>
             <p>
-            	<input type="submit" name="command" id="command" value="#xarML('Deactivate All')#" />
+                <input type="submit" name="command" id="command" value="#xarML('Deactivate All')#" />
             </p>
             <p>
-				<a href="#xarModURL('modules','admin','list')#">
-					<xar:mlstring>
-						Go back to the modules list. 
-					</xar:mlstring>
-				</a>
+                <a href="#xarModURL('modules','admin','list')#">
+                    <xar:mlstring>
+                        Go back to the modules list. 
+                    </xar:mlstring>
+                </a>
             </p>
         </div>
     </form>

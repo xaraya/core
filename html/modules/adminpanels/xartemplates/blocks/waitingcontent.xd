@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:if condition="!empty($message)">
-	<p>#$message#</p>
+    <p>#$message#</p>
 <xar:else />
-	<p>#$output#</p>
+    <p>#$output#</p>
 </xar:if>

@@ -22,22 +22,22 @@
  */
 function themes_admin_removetpltag()
 { 
-	// Get parameters
-	if (!xarVarFetch('tagname', 'str:1:', $tagname)) return;
-	
-	// Security Check
-	if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
+    // Get parameters
+    if (!xarVarFetch('tagname', 'str:1:', $tagname)) return;
+    
+    // Security Check
+    if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
 
-	if(!xarTplUnregisterTag($tagname)) {
-		$msg = xarML('Could not unregister (#(1)).', $tagname);
-		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-		                new SystemException($msg));
+    if(!xarTplUnregisterTag($tagname)) {
+        $msg = xarML('Could not unregister (#(1)).', $tagname);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+                        new SystemException($msg));
        return;
-	}
+    }
 
-	xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));
-	
-	return true;
+    xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));
+    
+    return true;
 } 
 
 ?>

@@ -22,7 +22,7 @@
             <tr>
                 <td colspan="2">
                     <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" /><label for="rememberme#$blockid#"><xar:mlstring>Remember me</xar:mlstring></label>
-				</td>
+                </td>
             </tr>
         </xar:if>
         <tr>
@@ -32,13 +32,13 @@
             </td>
         </tr>
     </table>
-	<xar:if condition="xarModGetVar('roles', 'allowregistration')">
-		<p><xar:mlstring>Need an account?</xar:mlstring><br />
-		<xar:if condition="xarModGetVar('roles', 'minage') eq 0">
-			<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>Register here</xar:mlstring></a>.
-		<xar:else />
-			<a href="#xarModURL('roles', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register here</xar:mlstring></a>.
-		</xar:if></p>
-	</xar:if>
+    <xar:if condition="xarModGetVar('roles', 'allowregistration')">
+        <p><xar:mlstring>Need an account?</xar:mlstring><br />
+        <xar:if condition="xarModGetVar('roles', 'minage') eq 0">
+            <a href="#xarModURL('roles', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>Register here</xar:mlstring></a>.
+        <xar:else />
+            <a href="#xarModURL('roles', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register here</xar:mlstring></a>.
+        </xar:if></p>
+    </xar:if>
 </div>
 </form>

@@ -18,7 +18,7 @@
 function dynamicdata_util_relations($args)
 {
 // Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}

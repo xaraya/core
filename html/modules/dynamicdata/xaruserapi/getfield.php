@@ -68,7 +68,7 @@ function dynamicdata_userapi_getfield($args)
     if (!isset($object->properties[$name])) return;
     $property = $object->properties[$name];
 
-	if(!xarSecurityCheck('ReadDynamicDataField',1,'Field',$property->name.':'.$property->type.':'.$property->id)) return;
+    if(!xarSecurityCheck('ReadDynamicDataField',1,'Field',$property->name.':'.$property->type.':'.$property->id)) return;
     if (!isset($property->value)) {
         $value = $property->default;
     } else {

@@ -34,7 +34,7 @@ function blocks_adminapi_update_group($args)
 
     // Security.
     // FIXME: this doesn't seem right - it is a block group, not a block instance here.
-	if (!xarSecurityCheck('EditBlock', 1, 'Block', "$name::$gid")) {return;}
+    if (!xarSecurityCheck('EditBlock', 1, 'Block', "$name::$gid")) {return;}
 
     if (!is_numeric($id)) {return;}
 

@@ -18,32 +18,32 @@
  */
 function themes_admin_listtpltags()
 {
-	// Security Check
-	if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
-	
-	$aData = array();
+    // Security Check
+    if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
+    
+    $aData = array();
 
-	// form parameters
-	if (!xarVarFetch('modname', 'str:1:', $sSelectedModule, '', XARVAR_NOT_REQUIRED)) return;
+    // form parameters
+    if (!xarVarFetch('modname', 'str:1:', $sSelectedModule, '', XARVAR_NOT_REQUIRED)) return;
 
-	// get the tags as an array
-	$aTplTags = xarModAPIFunc('themes', 
-	                          'admin', 
-	                          'gettpltaglist', 
-	                          array('module'=>$sSelectedModule));
+    // get the tags as an array
+    $aTplTags = xarModAPIFunc('themes', 
+                              'admin', 
+                              'gettpltaglist', 
+                              array('module'=>$sSelectedModule));
 
 
-	// add delete / edit urls to the array
-	for($i=0; $i<sizeOf($aTplTags); $i++) {
-		$aTplTags[$i]['editurl']   = xarModUrl('themes', 'admin', 'modifytpltag', array('tagname'=>$aTplTags[$i]['name']));
-		$aTplTags[$i]['deleteurl'] = xarModUrl('themes', 'admin', 'removetpltag', array('tagname'=>$aTplTags[$i]['name']));
-	}
-	
-	$aData['tags'] = $aTplTags;
-	$aData['addurl'] = xarModUrl('themes', 'admin', 'modifytpltag', array('tagname'=>''));
-	
-	return $aData;
-	
+    // add delete / edit urls to the array
+    for($i=0; $i<sizeOf($aTplTags); $i++) {
+        $aTplTags[$i]['editurl']   = xarModUrl('themes', 'admin', 'modifytpltag', array('tagname'=>$aTplTags[$i]['name']));
+        $aTplTags[$i]['deleteurl'] = xarModUrl('themes', 'admin', 'removetpltag', array('tagname'=>$aTplTags[$i]['name']));
+    }
+    
+    $aData['tags'] = $aTplTags;
+    $aData['addurl'] = xarModUrl('themes', 'admin', 'modifytpltag', array('tagname'=>''));
+    
+    return $aData;
+    
 }
 
 ?>

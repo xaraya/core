@@ -18,7 +18,7 @@
 function dynamicdata_util_main()
 {
 // Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');

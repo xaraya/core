@@ -1,18 +1,18 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-body"><div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <h2>
-		<a href="#xarModURL('roles', 'admin', 'createmail')#">
-		    <xar:mlstring>Messaging system</xar:mlstring>
-		</a>&nbsp;&gt;&nbsp;
-		<xar:mlstring>Modify notification options</xar:mlstring>
+        <a href="#xarModURL('roles', 'admin', 'createmail')#">
+            <xar:mlstring>Messaging system</xar:mlstring>
+        </a>&nbsp;&gt;&nbsp;
+        <xar:mlstring>Modify notification options</xar:mlstring>
 </h2>
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
 <div id="tabnav">
         <xar:set name="$tmptitle"><xar:mlstring>Send mail to groups, configure automatic notification or edit notification templates</xar:mlstring></xar:set>
-	<div class="help" title="#$tmptitle#"><xar:mlstring>Actions</xar:mlstring></div>
-	<div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
-	<div><a href="#xarModURL('roles', 'admin', 'modifyemail')#"><xar:mlstring>Templates</xar:mlstring></a></div>
-	<div><a href="#xarModURL('roles', 'admin', 'modifynotice')#" class="active"><xar:mlstring>Configure</xar:mlstring></a></div>
+    <div class="help" title="#$tmptitle#"><xar:mlstring>Actions</xar:mlstring></div>
+    <div><a href="#xarModURL('roles', 'admin', 'createmail')#"><xar:mlstring>Send mail</xar:mlstring></a></div>
+    <div><a href="#xarModURL('roles', 'admin', 'modifyemail')#"><xar:mlstring>Templates</xar:mlstring></a></div>
+    <div><a href="#xarModURL('roles', 'admin', 'modifynotice')#" class="active"><xar:mlstring>Configure</xar:mlstring></a></div>
 </div>
 </xar:if>
 <div style="border: 1px solid #ccc; border-top : none;padding: 10px;">
@@ -21,63 +21,63 @@
   <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="phase" id="phase" value="update" />
-	<h4><xar:mlstring>Notification email :</xar:mlstring></h4>
+    <h4><xar:mlstring>Notification email :</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
             <td><label for="ask"><xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to</xar:mlstring> :</label></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askpendingemail')">
-				<input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" checked="checked" />
-			<xar:else />
-				<input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" />
-			</xar:if>
+                <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="askpendingemail" id="askpendingemail" value="1" />
+            </xar:if>
             <label for="askpendingemail">"<xar:mlstring>pending</xar:mlstring>"</label></td>
         </tr>
        <tr>
             <td></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askwelcomeemail')">
-				<input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" checked="checked" />
-			<xar:else />
-				<input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" />
-			</xar:if>
+                <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" value="1" />
+            </xar:if>
             <label for="askwelcomeemail">"<xar:mlstring>active</xar:mlstring>"</label></td>
         </tr>
         <tr>
             <td></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askdeactivationemail')">
-				<input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" checked="checked" />
-			<xar:else />
-				<input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" />
-			</xar:if>
+                <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" value="1" />
+            </xar:if>
             <label for="askdeactivationemail">"<xar:mlstring>inactive</xar:mlstring>"</label></td>
         </tr>
          <tr>
             <td></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askvalidationemail')">
-				<input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" checked="checked" />
-			<xar:else />
-				<input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" />
-			</xar:if>
+                <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="askvalidationemail" id="askvalidationemail" value="1" />
+            </xar:if>
             <label for="askvalidationemail">"<xar:mlstring>Not validated</xar:mlstring>"</label></td>
         </tr>
         <tr>
             <td><label for="askpasswordemail"><xar:mlstring>Ask about sending a notification when an administrator changes the password of a user</xar:mlstring> :</label></td>
             <td style="text-align: left">
             <xar:if condition="xarModGetVar('roles', 'askpasswordemail')">
-				<input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />
-			<xar:else />
-				<input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" />
-			</xar:if>
+                <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="askpasswordemail" id="askpasswordemail" value="1" />
+            </xar:if>
             </td>
         </tr>
         
     </table>
-		#$hooks#
-	<br /><br />
-	<input type="submit" value="#$updatelabel#"  />
+        #$hooks#
+    <br /><br />
+    <input type="submit" value="#$updatelabel#"  />
     </div>
 </form>
 </div>

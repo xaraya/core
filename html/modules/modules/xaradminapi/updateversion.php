@@ -31,7 +31,7 @@ function modules_adminapi_updateversion($args)
     }
 
     // Security Check
-	if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;
+    if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;
 
     //  Get database connection and tables
     $dbconn =& xarDBGetConn();

@@ -23,16 +23,16 @@
 */
 function mail_admin_main()
 {
-	// Security Check
-	if (!xarSecurityCheck('EditMail')) return;
+    // Security Check
+    if (!xarSecurityCheck('EditMail')) return;
 
-	if (xarModGetVar('adminpanels', 'overview') == 0) {
-		// Return the output
-		return array();
-	} else {
-		xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
-	} 
-	// success
-	return true;
+    if (xarModGetVar('adminpanels', 'overview') == 0) {
+        // Return the output
+        return array();
+    } else {
+        xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
+    } 
+    // success
+    return true;
 } 
 ?>

@@ -50,58 +50,58 @@ function modules_adminapi_checkversion()
             // our main objective here, however, is to catch core modules that have been upgraded
             // then we must try hard to upgrade and activate it transparently
             if (!empty($fileModules[$name]) && $modInfo['version'] != $fileModules[$name]['version']) {
-	
-				// Get module ID
-				$regId = $modInfo['regid'];
-				switch ($modInfo['state']) {
-					case XARMOD_STATE_UNINITIALISED:
-						break;
-					case XARMOD_STATE_INACTIVE || XARMOD_STATE_ACTIVE || XARMOD_STATE_UPGRADED:
-						$newstate = XARMOD_STATE_INACTIVE;
-						xarModAPIFunc('modules','admin','upgrade',
-										array(	'regid'	=> $regId,
-												'state'	=> $newstate));
-						
-						$newstate = XARMOD_STATE_ACTIVE;
-						xarModAPIFunc('modules','admin','activate',
-										array(	'regid'	=> $regId,
-												'state'	=> $newstate));
-						break;
-				}
-			}
+    
+                // Get module ID
+                $regId = $modInfo['regid'];
+                switch ($modInfo['state']) {
+                    case XARMOD_STATE_UNINITIALISED:
+                        break;
+                    case XARMOD_STATE_INACTIVE || XARMOD_STATE_ACTIVE || XARMOD_STATE_UPGRADED:
+                        $newstate = XARMOD_STATE_INACTIVE;
+                        xarModAPIFunc('modules','admin','upgrade',
+                                        array(    'regid'    => $regId,
+                                                'state'    => $newstate));
+                        
+                        $newstate = XARMOD_STATE_ACTIVE;
+                        xarModAPIFunc('modules','admin','activate',
+                                        array(    'regid'    => $regId,
+                                                'state'    => $newstate));
+                        break;
+                }
+            }
             
             // We are going to upgrade and activate it transparently
             
         } else {
-        	// It is and ordinary mortal module, no special treatment for it
+            // It is and ordinary mortal module, no special treatment for it
         
-			//TODO: Add check for any module that might depend on this one
-			// If found, change its state to something inoperative too
-			// New state? XAR_MODULE_DEPENDENCY_MISSING?
-	
-			if (!empty($fileModules[$name]) && $modInfo['version'] != $fileModules[$name]['version']) {
-	
-				// Get module ID
-				$regId = $modInfo['regid'];
-				switch ($modInfo['state']) {
-					case XARMOD_STATE_UNINITIALISED:
-						break;
-					case XARMOD_STATE_INACTIVE:
-						$newstate = XARMOD_STATE_UPGRADED;
-						break;
-					case XARMOD_STATE_ACTIVE:
-						$newstate = XARMOD_STATE_UPGRADED;
-						break;
-					case XARMOD_STATE_UPGRADED:
-						$newstate = XARMOD_STATE_UPGRADED;
-						break;
-				}
-				if (isset($newstate)) {
-					$set = xarModAPIFunc('modules','admin','setstate',
-										array(	'regid'	=> $regId,
-												'state'	=> $newstate));
-				}
-			}
+            //TODO: Add check for any module that might depend on this one
+            // If found, change its state to something inoperative too
+            // New state? XAR_MODULE_DEPENDENCY_MISSING?
+    
+            if (!empty($fileModules[$name]) && $modInfo['version'] != $fileModules[$name]['version']) {
+    
+                // Get module ID
+                $regId = $modInfo['regid'];
+                switch ($modInfo['state']) {
+                    case XARMOD_STATE_UNINITIALISED:
+                        break;
+                    case XARMOD_STATE_INACTIVE:
+                        $newstate = XARMOD_STATE_UPGRADED;
+                        break;
+                    case XARMOD_STATE_ACTIVE:
+                        $newstate = XARMOD_STATE_UPGRADED;
+                        break;
+                    case XARMOD_STATE_UPGRADED:
+                        $newstate = XARMOD_STATE_UPGRADED;
+                        break;
+                }
+                if (isset($newstate)) {
+                    $set = xarModAPIFunc('modules','admin','setstate',
+                                        array(    'regid'    => $regId,
+                                                'state'    => $newstate));
+                }
+            }
         }
     }
 

@@ -34,22 +34,22 @@ function xar_base_getElement(id, d) {
  */
 
 function xar_base_collapse_select(src, dest) {
-	var ord = ""; 
-	var srcobj = xar_base_getElement(src);
-	if (!srcobj) {
+    var ord = ""; 
+    var srcobj = xar_base_getElement(src);
+    if (!srcobj) {
         alert ("Missing form select item '" + src + "'");
         return false;
     }
-	if (!dest) {dest = src + "result";}
-	var destobj = xar_base_getElement(dest);
-	if (!destobj) {
+    if (!dest) {dest = src + "result";}
+    var destobj = xar_base_getElement(dest);
+    if (!destobj) {
         alert ("Missing form text item '" + dest + "'");
         return false;
     }
-	for (var i = 0; i < srcobj.options.length; i++) {
-		ord += ";" + srcobj.options[i].value;
+    for (var i = 0; i < srcobj.options.length; i++) {
+        ord += ";" + srcobj.options[i].value;
     }
-	destobj.value = ord.substring(1, ord.length);
+    destobj.value = ord.substring(1, ord.length);
 }
 
 /*

@@ -18,7 +18,7 @@
 function blocks_admin_view_types()
 {
     // Security Check
-	if (!xarSecurityCheck('EditBlock')) {return;}
+    if (!xarSecurityCheck('EditBlock')) {return;}
 
     // Parameter to indicate a block type for which to get further details.
     if (!xarVarFetch('tid', 'id', $tid, 0, XARVAR_NOT_REQUIRED)) {return;}

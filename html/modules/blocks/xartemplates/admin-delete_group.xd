@@ -32,12 +32,12 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-				<input type="submit" value="OK"  />
+                <input type="submit" value="OK"  />
             </td>
         </tr>
     </table>
-	<br /><br />
-	<a href="#xarModURL('blocks', 'admin', 'view_groups')#"><xar:mlstring>Cancel deletion of Block Group</xar:mlstring></a>
+    <br /><br />
+    <a href="#xarModURL('blocks', 'admin', 'view_groups')#"><xar:mlstring>Cancel deletion of Block Group</xar:mlstring></a>
     </div>
 </form>
 </div>

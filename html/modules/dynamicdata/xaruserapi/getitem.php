@@ -73,7 +73,7 @@ function &dynamicdata_userapi_getitem($args)
         return;
     }
 
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     // check the optional field list
     if (empty($fieldlist)) {

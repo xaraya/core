@@ -22,7 +22,7 @@
 function modules_adminapi_gethooklist($args)
 {
 // Security Check
-	if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('AdminModules')) return;
 
     // Get arguments from argument array
     extract($args);

@@ -21,7 +21,7 @@
 function modules_adminapi_getmenulinks()
 {
     // Security Check
-	if (xarSecurityCheck('AdminModules',0)) {
+    if (xarSecurityCheck('AdminModules',0)) {
         // these links will only be shown to those who can admin the modules
         if(xarModGetUserVar('modules', 'expertlist')){
             $menulinks[] = Array('url'  => xarModURL('modules','admin','expertlist'),

@@ -5,27 +5,27 @@
 <form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
-	<tr>
-		<td><xar:mlstring>Preferred Username</xar:mlstring>:</td>
-		<td>#$username#</td>
-	</tr>
-	<tr>
-		<td><xar:mlstring>Display Name</xar:mlstring>:</td>
-		<td>#$realname#</td>
-	</tr>
-	<tr>
-		<td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
-		<td>#$email#</td>
-	</tr>
+    <tr>
+        <td><xar:mlstring>Preferred Username</xar:mlstring>:</td>
+        <td>#$username#</td>
+    </tr>
+    <tr>
+        <td><xar:mlstring>Display Name</xar:mlstring>:</td>
+        <td>#$realname#</td>
+    </tr>
+    <tr>
+        <td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
+        <td>#$email#</td>
+    </tr>
 <xar:if condition="xarModGetVar('roles', 'showdynamic')" >
-	<xar:if condition="isset($properties)" >
-		<xar:foreach in="$properties" key="$name">
-			<tr>
-				<td><xar:data-label property="$properties[$name]" />:</td>
-				<td><xar:data-output property="$properties[$name]" /></td>
-			</tr>
-		</xar:foreach>
-	</xar:if>
+    <xar:if condition="isset($properties)" >
+        <xar:foreach in="$properties" key="$name">
+            <tr>
+                <td><xar:data-label property="$properties[$name]" />:</td>
+                <td><xar:data-output property="$properties[$name]" /></td>
+            </tr>
+        </xar:foreach>
+    </xar:if>
 </xar:if>
     <tr>
         <td colspan="2" style="text-align: center;"><br />
@@ -42,7 +42,7 @@
 <input type="hidden" name="ip" id="ip" value="#$ip#" />
 <xar:if condition="isset($properties)" >
 <xar:foreach in="$properties" key="$name">
-	<xar:data-input property="$properties[$name]" hidden="true" />
+    <xar:data-input property="$properties[$name]" hidden="true" />
 </xar:foreach>
 </xar:if>
 

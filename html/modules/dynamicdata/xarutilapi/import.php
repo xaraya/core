@@ -26,7 +26,7 @@ function dynamicdata_utilapi_import($args)
 {
     // restricted to DD Admins
 // Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);
 

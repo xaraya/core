@@ -27,7 +27,7 @@ function dynamicdata_admin_modifyconfig()
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
 // Security Check
-	if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();

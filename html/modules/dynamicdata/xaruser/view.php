@@ -59,7 +59,7 @@ function dynamicdata_user_view($args)
         $label = xarML('Dynamic Data Objects');
         $param = '';
     }
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','user','menu');
     $data['objectid'] = $objectid;

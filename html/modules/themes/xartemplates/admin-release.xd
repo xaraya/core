@@ -3,22 +3,22 @@
 <div class="xar-mod-body"><div align="left">
 <h2><xar:mlstring>Recent Theme Extensions</xar:mlstring></h2>
 <xar:if condition="empty($warning)">
-	<xar:if condition="!empty($feedcontent)">
-		<xar:loop name="$feedcontent">
-		<p>
-			<xar:if condition="!empty($loop:item['link'])">
-				&bull;<a href = "#$loop:item['link']#" target = "_BLANK"> #$loop:item['title']# </a>:
-			<xar:else />
-				&bull; <b>#$loop:item['title']#</b>:
-			</xar:if>
-			<xar:if condition="!empty($loop:item['description'])">
-				#$loop:item['description']#
-			</xar:if>
-		</p>
-		</xar:loop>
-	</xar:if>
+    <xar:if condition="!empty($feedcontent)">
+        <xar:loop name="$feedcontent">
+        <p>
+            <xar:if condition="!empty($loop:item['link'])">
+                &bull;<a href = "#$loop:item['link']#" target = "_BLANK"> #$loop:item['title']# </a>:
+            <xar:else />
+                &bull; <b>#$loop:item['title']#</b>:
+            </xar:if>
+            <xar:if condition="!empty($loop:item['description'])">
+                #$loop:item['description']#
+            </xar:if>
+        </p>
+        </xar:loop>
+    </xar:if>
 <xar:else />
-	#$warning#
+    #$warning#
 </xar:if>
 </div>
 </div>

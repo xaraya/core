@@ -18,7 +18,7 @@
 function blocks_admin_view_instances()
 {
 // Security Check
-	if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
     // Get all block instances (whether they have group membership or not.

@@ -25,20 +25,20 @@ function dynamicdata_admin_updateconfig( $args )
     // Security Check
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
-	// TODO: Check authid
-	
-	if ( isset($flushPropertyCache) && ($flushPropertyCache == true) )
-	{
-		$args['flush'] = 'true';
-		$success = xarModAPIFunc('dynamicdata','admin','importpropertytypes', $args);
-		
-		if( $success )
-		{
-		    return 'Property Definitions Cache has been cleared and reloaded.';
-		} else {
-		    return 'Unknown error while clearing and reloading Property Definition Cache.';
-		}
-	}
+    // TODO: Check authid
+    
+    if ( isset($flushPropertyCache) && ($flushPropertyCache == true) )
+    {
+        $args['flush'] = 'true';
+        $success = xarModAPIFunc('dynamicdata','admin','importpropertytypes', $args);
+        
+        if( $success )
+        {
+            return 'Property Definitions Cache has been cleared and reloaded.';
+        } else {
+            return 'Unknown error while clearing and reloading Property Definition Cache.';
+        }
+    }
 
     return 'insert update code for property types here ?';
 }

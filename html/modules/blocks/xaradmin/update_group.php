@@ -28,7 +28,7 @@ function blocks_admin_update_group()
     if (!xarSecConfirmAuthKey()) {return;}
 
     // Security Check
-	if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
+    if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // Explode the instance order from id1;id2;etc to an array
     if (!empty($group_instance_order)) {

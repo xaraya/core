@@ -67,7 +67,7 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-	if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {

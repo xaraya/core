@@ -31,121 +31,121 @@ document.forms['privilegeform'].submit();}
 
 <xar:if condition="count($parents) ne 0">
   <div id="tabnav">
-		<div class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :</div>
-		<xar:set name="$prevgroup">""</xar:set>
-		<xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-			<xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-				<div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
-			</xar:if>
-			<xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
-		</xar:for>
+        <div class="help" title="These are the privileges that contain #$pname# as a component"><xar:mlstring>Used in</xar:mlstring> :</div>
+        <xar:set name="$prevgroup">""</xar:set>
+        <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+            <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                <div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a></div>
+            </xar:if>
+            <xar:set name="$prevgroup">#$parents[$i]['parentname']#</xar:set>
+        </xar:for>
   </div>
 </xar:if>
 <div id="tabnav">
-	<div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
-	<div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $ppid))#" class="active"><xar:mlstring>Display</xar:mlstring></a></div>	
-	<div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $ppid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
-	<div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $ppid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
-	<div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a></div>	
+    <div class="help" title="#xarML('Choose an action to perform on this privilege')#"><xar:mlstring>Actions</xar:mlstring> :</div>
+    <div><a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $ppid))#" class="active"><xar:mlstring>Display</xar:mlstring></a></div>    
+    <div><a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $ppid))#"><xar:mlstring>Modify</xar:mlstring></a></div>    
+    <div><a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $ppid))#"><xar:mlstring>Delete</xar:mlstring></a></div>    
+    <div><a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $ppid))#"><xar:mlstring>Groups/Users</xar:mlstring></a></div>    
 </div>
 <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top : none; padding-left: 5px;">
 <br />
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
     <div>
-		<table width="100%">
-			<tr>
-				<td>
-					<input type="hidden" name="pid" id="pid" value="#$ppid#" />
-					<div style="text-align: left">
-					<table border="0" cellpadding="2" cellspacing="0">
-						<tr>
-							<td>
-								<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
-							</td>
-							<td>
-								#$pname#
-							</td>
-						</tr>
-						<xar:if condition="$ptype eq 'empty'">
-							<tr>
-								<td colspan="2">
-										<xar:mlstring>This is an empty container for other privileges</xar:mlstring>
-								</td>
-							</tr>
-						</xar:if>
-						<tr>
-							<td colspan="2">
-								&nbsp;
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<xar:mlstring>Realm</xar:mlstring>
-							</td>
-							<td>
-								#$prealm#
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<xar:mlstring>Module</xar:mlstring>
-							</td>
-							<td>
-								#$pmodule#
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<xar:mlstring>Component</xar:mlstring>
-							</td>
-							<td>
-								#$pcomponent#
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<xar:mlstring>Level</xar:mlstring>
-							</td>
-							<td>
-									<xar:if condition="$plevel eq 0">
-										<xar:mlstring>None</xar:mlstring>
-									<xar:elseif condition="$plevel eq 100" />
-										<xar:mlstring>Overview</xar:mlstring>
-									<xar:elseif condition="$plevel eq 200" />
-										<xar:mlstring>Read</xar:mlstring>
-									<xar:elseif condition="$plevel eq 300" />
-										<xar:mlstring>Comment</xar:mlstring>
-									<xar:elseif condition="$plevel eq 400" />
-										<xar:mlstring>Moderate</xar:mlstring>
-									<xar:elseif condition="$plevel eq 500" />
-										<xar:mlstring>Edit</xar:mlstring>
-									<xar:elseif condition="$plevel eq 600" />
-										<xar:mlstring>Add</xar:mlstring>
-									<xar:elseif condition="$plevel eq 700" />
-										<xar:mlstring>Delete</xar:mlstring>
-									<xar:elseif condition="$plevel eq 800" />
-										<xar:mlstring>Admin</xar:mlstring>
-									</xar:if>                       
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<xar:mlstring>Instances</xar:mlstring>
-							</td>
-							<td>
-								#$instance#
-							</td>
-						</tr>
-					</table>
-				</td>
-				<td valign="top">
-					<h3><xar:mlstring>The Components of</xar:mlstring>&nbsp;'#$pname#':</h3>
-					#$tree#
-				</td>
-			</tr>
-		</table>
-	</div>          
+        <table width="100%">
+            <tr>
+                <td>
+                    <input type="hidden" name="pid" id="pid" value="#$ppid#" />
+                    <div style="text-align: left">
+                    <table border="0" cellpadding="2" cellspacing="0">
+                        <tr>
+                            <td>
+                                <label for="pname"><xar:mlstring>Name</xar:mlstring></label>
+                            </td>
+                            <td>
+                                #$pname#
+                            </td>
+                        </tr>
+                        <xar:if condition="$ptype eq 'empty'">
+                            <tr>
+                                <td colspan="2">
+                                        <xar:mlstring>This is an empty container for other privileges</xar:mlstring>
+                                </td>
+                            </tr>
+                        </xar:if>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xar:mlstring>Realm</xar:mlstring>
+                            </td>
+                            <td>
+                                #$prealm#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xar:mlstring>Module</xar:mlstring>
+                            </td>
+                            <td>
+                                #$pmodule#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xar:mlstring>Component</xar:mlstring>
+                            </td>
+                            <td>
+                                #$pcomponent#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xar:mlstring>Level</xar:mlstring>
+                            </td>
+                            <td>
+                                    <xar:if condition="$plevel eq 0">
+                                        <xar:mlstring>None</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 100" />
+                                        <xar:mlstring>Overview</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 200" />
+                                        <xar:mlstring>Read</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 300" />
+                                        <xar:mlstring>Comment</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 400" />
+                                        <xar:mlstring>Moderate</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 500" />
+                                        <xar:mlstring>Edit</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 600" />
+                                        <xar:mlstring>Add</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 700" />
+                                        <xar:mlstring>Delete</xar:mlstring>
+                                    <xar:elseif condition="$plevel eq 800" />
+                                        <xar:mlstring>Admin</xar:mlstring>
+                                    </xar:if>                       
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xar:mlstring>Instances</xar:mlstring>
+                            </td>
+                            <td>
+                                #$instance#
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="top">
+                    <h3><xar:mlstring>The Components of</xar:mlstring>&nbsp;'#$pname#':</h3>
+                    #$tree#
+                </td>
+            </tr>
+        </table>
+    </div>          
 </div>
 </div>
 </div>

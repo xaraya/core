@@ -94,33 +94,33 @@
             #$themedependency# 
         </p>
 <!-- Theme Preview -->
-		<form action="../">
-			<p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
-				<span style="float: left; text-align: left;display:inline;">
-					<xar:mlstring>
-						Quick Preview 
-					</xar:mlstring>
-					: 
-				</span>
-				<select onchange="window.open(this.options[this.selectedIndex].value,'_blank')" >
-					<option value="#">Choose a page to preview..</option>
-					<option value="#xarModURL()#?theme=#$themename#"><xar:mlstring>Default Front Page</xar:mlstring></option>
-					<option value="#xarModURL('adminpanels','admin')#&amp;theme=#$themename#"><xar:mlstring>Adminpanels (admin)</xar:mlstring></option>
-					<option value="#xarModURL('base','admin')#&amp;theme=#$themename#"><xar:mlstring>Base (admin)</xar:mlstring></option>
-					<option value="#xarModURL('base','user')#&amp;theme=#$themename#"><xar:mlstring>Base (user)</xar:mlstring></option>
-					<option value="#xarModURL('blocks','admin')#&amp;theme=#$themename#"><xar:mlstring>Blocks (admin)</xar:mlstring></option>
-					<option value="#xarModURL('modules','admin')#&amp;theme=#$themename#"><xar:mlstring>Modules (admin)</xar:mlstring></option>
-					<option value="#xarModURL('themes','admin')#&amp;theme=#$themename#"><xar:mlstring>Themes (admin)</xar:mlstring></option>
-					<option value="#xarModURL('dynamicdata','admin')#&amp;theme=#$themename#"><xar:mlstring>Dynamicdata (admin)</xar:mlstring></option>
-					<option value="#xarModURL('privileges','admin')#&amp;theme=#$themename#"><xar:mlstring>Privileges (admin)</xar:mlstring></option>
-					<option value="#xarModURL('roles','admin')#&amp;theme=#$themename#"><xar:mlstring>Roles (admin)</xar:mlstring></option>
-					<option value="#xarModURL('themes','admin','themesinfo')#&amp;theme=#$themename#&amp;id=#$themeid#"><xar:mlstring>This Page</xar:mlstring></option>					
-				</select>
-				<noscript>
-					<input type="submit" value="Go" />
-				</noscript>
-			</p>
-		</form>
+        <form action="../">
+            <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
+                <span style="float: left; text-align: left;display:inline;">
+                    <xar:mlstring>
+                        Quick Preview 
+                    </xar:mlstring>
+                    : 
+                </span>
+                <select onchange="window.open(this.options[this.selectedIndex].value,'_blank')" >
+                    <option value="#">Choose a page to preview..</option>
+                    <option value="#xarModURL()#?theme=#$themename#"><xar:mlstring>Default Front Page</xar:mlstring></option>
+                    <option value="#xarModURL('adminpanels','admin')#&amp;theme=#$themename#"><xar:mlstring>Adminpanels (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('base','admin')#&amp;theme=#$themename#"><xar:mlstring>Base (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('base','user')#&amp;theme=#$themename#"><xar:mlstring>Base (user)</xar:mlstring></option>
+                    <option value="#xarModURL('blocks','admin')#&amp;theme=#$themename#"><xar:mlstring>Blocks (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('modules','admin')#&amp;theme=#$themename#"><xar:mlstring>Modules (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('themes','admin')#&amp;theme=#$themename#"><xar:mlstring>Themes (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('dynamicdata','admin')#&amp;theme=#$themename#"><xar:mlstring>Dynamicdata (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('privileges','admin')#&amp;theme=#$themename#"><xar:mlstring>Privileges (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('roles','admin')#&amp;theme=#$themename#"><xar:mlstring>Roles (admin)</xar:mlstring></option>
+                    <option value="#xarModURL('themes','admin','themesinfo')#&amp;theme=#$themename#&amp;id=#$themeid#"><xar:mlstring>This Page</xar:mlstring></option>                    
+                </select>
+                <noscript>
+                    <input type="submit" value="Go" />
+                </noscript>
+            </p>
+        </form>
 <!-- Theme Navigation -->
         <p class="xar-norm-outline" style="width:90%; border-width: 1px 0px 0px 0px;border-style: solid; text-align:right; margin: .7em auto; padding-top: .7em;">
             <span style="float: left; text-align: left;display:inline;">

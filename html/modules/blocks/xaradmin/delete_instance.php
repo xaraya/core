@@ -22,7 +22,7 @@ function blocks_admin_delete_instance()
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Security Check
-	if (!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
 
     // Check for confirmation
     if (empty($confirm)) {

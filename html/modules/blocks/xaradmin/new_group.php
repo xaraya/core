@@ -18,7 +18,7 @@
 function blocks_admin_new_group()
 {
     // Security Check
-	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+    if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     return array(
         'createlabel' => xarML('Create Group'),

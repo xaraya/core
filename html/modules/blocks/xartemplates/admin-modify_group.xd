@@ -9,8 +9,8 @@
 
 <div class="xar-mod-body">
     <h2><xar:mlstring>Modify Group</xar:mlstring></h2>
-	<div style="margin: auto;">
-	    <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
+    <div style="margin: auto;">
+        <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
             <div>
                 <div style="clear: both; padding-top: 10px;">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

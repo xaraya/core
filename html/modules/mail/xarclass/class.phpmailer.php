@@ -233,7 +233,7 @@ class PHPMailer
      * @return void
      */
     function IsHTML($bool) 
-	{
+    {
         if($bool == true)
             $this->ContentType = "text/html";
         else

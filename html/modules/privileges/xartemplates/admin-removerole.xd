@@ -5,20 +5,20 @@
 <form method="post" action="&xar-modurl-privileges-admin-removerole;" method="post" enctype="application/x-www-form-urlencoded" >
    <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	<input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-	<input type="hidden" name="pid" id="pid" value="#$pid#" />
-	<input type="hidden" name="confirmation" id="confirmation" value="1" />
+    <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
+    <input type="hidden" name="pid" id="pid" value="#$pid#" />
+    <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-	<p><span class="xar-title"><xar:mlstring>Confirm the removal of Privilege</xar:mlstring>  '#$privname#' <xar:mlstring>from</xar:mlstring>
-	<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-	<xar:else /><xar:mlstring>User</xar:mlstring>
-	</xar:if>
-	'#$rolename#'</span></p>
-	<br />
+    <p><span class="xar-title"><xar:mlstring>Confirm the removal of Privilege</xar:mlstring>  '#$privname#' <xar:mlstring>from</xar:mlstring>
+    <xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
+    <xar:else /><xar:mlstring>User</xar:mlstring>
+    </xar:if>
+    '#$rolename#'</span></p>
+    <br />
 
-	<input type="submit" value="Confirm"  tabindex="1" /><br />
-	
-	<p><a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a></p>
+    <input type="submit" value="Confirm"  tabindex="1" /><br />
+    
+    <p><a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Cancel the removal</xar:mlstring></a></p>
 </div>
 </form>        
 </div>

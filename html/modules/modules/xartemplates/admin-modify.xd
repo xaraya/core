@@ -41,7 +41,7 @@
                     </xar:foreach><br />
                     </div>
                 </xar:if>
-				</td>
+                </td>
                 <td style="text-align: center;">
                 <xar:if condition="!empty($hookmod['checked'][0])">
                     <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#[0]" value="1" checked="checked" />

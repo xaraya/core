@@ -25,7 +25,7 @@ function blocks_admin_create_group()
     if (!xarSecConfirmAuthKey()) {return;}
 
     // Security Check
-	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+    if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Check the group name has not already been used.
     $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));

@@ -23,7 +23,7 @@ function base_admin_sysinfo()
 {
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
-	// Security Check
+    // Security Check
     if(!xarSecurityCheck('AdminBase')) return;
     // FIXME: dirty dirty
     ob_start();

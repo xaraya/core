@@ -191,8 +191,8 @@ function themes_upgrade($oldversion)
         case 1.1:
 
             if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-				array('modName' => 'themes', 'blockType' => 'meta'))) return; 
-		case 1.2:
+                array('modName' => 'themes', 'blockType' => 'meta'))) return; 
+        case 1.2:
 
     } 
     // Update successful

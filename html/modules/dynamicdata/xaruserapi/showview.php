@@ -73,7 +73,7 @@ function dynamicdata_userapi_showview($args)
     }
 
 // TODO: what kind of security checks do we want/need here ?
-	if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {

@@ -35,7 +35,7 @@ function themes_adminapi_setstate($args)
     }
 
 // Security Check
-	if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminTheme')) return;
 
     // Clear cache to make sure we get newest values
     if (xarVarIsCached('Theme.Infos', $regid)) {

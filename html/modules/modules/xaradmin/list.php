@@ -69,9 +69,9 @@ function modules_admin_list()
     $data['sort']['namedesc']                       = xarML('Name [z-a]');
 
 
-	// reset session-based message var
-	xarSessionDelVar('statusmsg');
-	
+    // reset session-based message var
+    xarSessionDelVar('statusmsg');
+    
     // obtain list of modules based on filtering criteria
     // think we need to always check the filesystem
     xarModAPIFunc('modules', 'admin', 'regenerate');

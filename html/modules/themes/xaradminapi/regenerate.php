@@ -23,7 +23,7 @@
 function themes_adminapi_regenerate()
 {
 // Security Check
-	if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminTheme')) return;
 
     //Finds and updates missing modules
     if (!xarModAPIFunc('themes','admin','checkmissing')) {return;}

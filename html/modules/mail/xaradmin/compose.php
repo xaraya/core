@@ -24,10 +24,10 @@
 */
 function mail_admin_compose()
 {
-	// Security Check
-	if (!xarSecurityCheck('AdminMail')) return; 
-	// Generate a one-time authorisation code for this operation
-	$data['authid']         = xarSecGenAuthKey(); 
+    // Security Check
+    if (!xarSecurityCheck('AdminMail')) return; 
+    // Generate a one-time authorisation code for this operation
+    $data['authid']         = xarSecGenAuthKey(); 
     $data['createlabel']    = xarML('Submit');
 
     // Include 'formcheck' JavaScript.
@@ -41,7 +41,7 @@ function mail_admin_compose()
     $data['email']  = xarModGetVar('mail', 'adminmail');
     $data['name']   = xarModGetVar('mail', 'adminname');
      
-	// everything else happens in Template for now
-	return $data;
+    // everything else happens in Template for now
+    return $data;
 } 
 ?>

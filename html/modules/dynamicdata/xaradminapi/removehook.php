@@ -50,7 +50,7 @@ function dynamicdata_adminapi_removehook($args)
         return $extrainfo;
     }
 
-	if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$modid:All:All")) {
+    if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$modid:All:All")) {
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
         return $extrainfo;

@@ -27,7 +27,7 @@ function roles_adminapi_deleteuser($args)
         return false;
     }
 
-	if(!xarSecurityCheck('DeleteRole')) return;
+    if(!xarSecurityCheck('DeleteRole')) return;
 
     $roles = new xarRoles();
     $group = $roles->getRole($gid);

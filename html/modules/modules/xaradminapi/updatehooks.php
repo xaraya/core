@@ -32,7 +32,7 @@ function modules_adminapi_updatehooks($args)
     }
 
 // Security Check
-	if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
+    if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Get database connection and table names
     $dbconn =& xarDBGetConn();

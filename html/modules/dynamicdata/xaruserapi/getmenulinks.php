@@ -23,7 +23,7 @@ function dynamicdata_userapi_getmenulinks()
 {
     $menulinks = array();
 
-	if(xarSecurityCheck('ViewDynamicDataItems')) {
+    if(xarSecurityCheck('ViewDynamicDataItems')) {
 
         // get items from the objects table
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');

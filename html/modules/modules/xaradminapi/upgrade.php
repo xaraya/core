@@ -90,14 +90,14 @@ function modules_adminapi_upgrade($args)
 
     // Message to display in the module list view (only for core modules atm)
     if(!xarSessionGetVar('statusmsg')){
-    	if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
-    		xarSessionSetVar('statusmsg', $modInfo['name']);
-    	}
-	} else {
-		if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
-    		xarSessionSetVar('statusmsg', xarSessionGetVar('statusmsg') . ', '. $modInfo['name']);
-    	}
-	}
+        if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
+            xarSessionSetVar('statusmsg', $modInfo['name']);
+        }
+    } else {
+        if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
+            xarSessionSetVar('statusmsg', xarSessionGetVar('statusmsg') . ', '. $modInfo['name']);
+        }
+    }
     // Success
     return true;
 }

@@ -35,12 +35,12 @@
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
-				<input type="submit" value="#$deletelabel#"  />
+                <input type="submit" value="#$deletelabel#"  />
             </td>
         </tr>
     </table>
-	<br /><br />
-	<a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel</xar:mlstring></a>
+    <br /><br />
+    <a href="#xarModURL('blocks', 'admin', 'view_instances')#"><xar:mlstring>Cancel</xar:mlstring></a>
     </div>
 </form>
 </div>

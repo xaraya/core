@@ -24,10 +24,10 @@
 */
 function mail_admin_modifyconfig()
 {
-	// Security Check
-	if (!xarSecurityCheck('AdminMail')) return; 
-	// Generate a one-time authorisation code for this operation
-	$data['authid'] = xarSecGenAuthKey(); 
+    // Security Check
+    if (!xarSecurityCheck('AdminMail')) return; 
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey(); 
     // Quick Check for E_ALL
     $searchstrings = xarModGetVar('mail', 'searchstrings');
     $replacestrings = xarModGetVar('mail', 'replacestrings');

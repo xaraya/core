@@ -20,7 +20,7 @@
 function blocks_admin_new_instance()
 {
     // Security Check
-	if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Can specify block types for a single module.
     xarVarFetch('formodule', 'str:1', $module, NULL, XARVAR_NOT_REQUIRED);

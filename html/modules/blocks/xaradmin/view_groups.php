@@ -18,7 +18,7 @@
 function blocks_admin_view_groups()
 {
     // Security Check
-	if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
     $block_groups = xarModAPIfunc(

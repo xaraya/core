@@ -41,7 +41,7 @@ function dynamicdata_utilapi_importproperties($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-	if(!xarSecurityCheck('AddDynamicDataField')) return;
+    if(!xarSecurityCheck('AddDynamicDataField')) return;
 
     if (empty($itemtype)) {
         $itemtype = 0;

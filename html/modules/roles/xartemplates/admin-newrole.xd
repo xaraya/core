@@ -6,136 +6,136 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Add Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
-	<p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
-	<form name="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
+    <p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
+    <form name="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
         <div style="text-align: left;">
-		<table border="0" cellpadding="2" cellspacing="2">
-			<tr>
-				<td>
-					<label for="pname"><xar:mlstring>Display Name</xar:mlstring></label>
-				</td>
-				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
-					<input type="hidden" name="authid" id="authid" value="#$authid#" />
-				</td>
+        <table border="0" cellpadding="2" cellspacing="2">
+            <tr>
+                <td>
+                    <label for="pname"><xar:mlstring>Display Name</xar:mlstring></label>
+                </td>
+                <td>
+                    <input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                </td>
             </tr>
-			<tr>
-				<td>
-					<label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
-				</td>
-        		<td>
-        			<select name="ptype" id="ptype"  tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-roles-admin-newrole;';this.form.submit();">
-							<xar:if condition="$ptype eq 1">
-		                    	<option value="1" selected="selected">Group</option>
-							<xar:else />
-		                    	<option value="1">Group</option>
-							</xar:if>
-							<xar:if condition="$ptype eq 0">
-		                    	<option value="0" selected="selected">User</option>
-							<xar:else />
-		                    	<option value="0">User</option>
-							</xar:if>
-					</select>
-            	</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="pparentid"><xar:mlstring>Member of</xar:mlstring></label>
-				</td>
-				<td>
-					<select name="pparentid" id="pparentid" tabindex="3">
-					<xar:loop name="$groups">
-						<xar:if condition="$loop:item['uid'] eq $pparentid">
-								<option value="#$loop:item['uid']#" selected="selected">#$loop:item['name']#</option>
-						<xar:else />
-								<option value="#$loop:item['uid']#">#$loop:item['name']#</option>
-						</xar:if>
-					</xar:loop>
-					</select>
-				</td>
-			</tr>
-			<xar:if condition="$ptype eq 0">
-				<tr>
-					<td colspan="2" align="center">
-						<xar:mlstring>The following fields only apply to Users</xar:mlstring>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="puname"><xar:mlstring>User Name</xar:mlstring></label>
-					</td>
-					<td>
-						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="4" />
-					</td>
-			</tr>
-			<tr>
-					<td>
-						<label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
-					</td>
-					<td>
-						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="255" tabindex="5" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="pstate"><xar:mlstring>State</xar:mlstring></label>
-					</td>
-					<td>
-					<select name="pstate" id="pstate" size="1" tabindex="6">				
-						<xar:if condition="$pstate eq $stateinactive">
-							<option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
-						<xar:else />
-							<option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
-						</xar:if>						
-						<xar:if condition="$pstate eq $statenotvalidated">
-							<option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
-						<xar:else />
-							<option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
-						</xar:if>						
-						<xar:if condition="$pstate eq $stateactive">
-							<option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
-						<xar:else />
-							<option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
-						</xar:if>						
-						<xar:if condition="$pstate eq $statepending">
-							<option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
-						<xar:else />
-							<option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
-						</xar:if>						
-					</select>
-					</td>
-			</tr>
-			<tr>
-					<td>
-						<label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
-					</td>
-					<td>
-						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="7" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
-					</td>
-					<td>
-						<input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="8" />
-					</td>
-				</tr>
-			</xar:if>
-			<xar:if condition="!empty($hooks) and count($hooks) gt 0">
-				<xar:foreach in="$hooks" key="$hookmodule">
+            <tr>
+                <td>
+                    <label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
+                </td>
+                <td>
+                    <select name="ptype" id="ptype"  tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-roles-admin-newrole;';this.form.submit();">
+                            <xar:if condition="$ptype eq 1">
+                                <option value="1" selected="selected">Group</option>
+                            <xar:else />
+                                <option value="1">Group</option>
+                            </xar:if>
+                            <xar:if condition="$ptype eq 0">
+                                <option value="0" selected="selected">User</option>
+                            <xar:else />
+                                <option value="0">User</option>
+                            </xar:if>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="pparentid"><xar:mlstring>Member of</xar:mlstring></label>
+                </td>
+                <td>
+                    <select name="pparentid" id="pparentid" tabindex="3">
+                    <xar:loop name="$groups">
+                        <xar:if condition="$loop:item['uid'] eq $pparentid">
+                                <option value="#$loop:item['uid']#" selected="selected">#$loop:item['name']#</option>
+                        <xar:else />
+                                <option value="#$loop:item['uid']#">#$loop:item['name']#</option>
+                        </xar:if>
+                    </xar:loop>
+                    </select>
+                </td>
+            </tr>
+            <xar:if condition="$ptype eq 0">
+                <tr>
+                    <td colspan="2" align="center">
+                        <xar:mlstring>The following fields only apply to Users</xar:mlstring>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="puname"><xar:mlstring>User Name</xar:mlstring></label>
+                    </td>
+                    <td>
+                        <input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="255" tabindex="4" />
+                    </td>
+            </tr>
+            <tr>
+                    <td>
+                        <label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
+                    </td>
+                    <td>
+                        <input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="255" tabindex="5" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="pstate"><xar:mlstring>State</xar:mlstring></label>
+                    </td>
+                    <td>
+                    <select name="pstate" id="pstate" size="1" tabindex="6">                
+                        <xar:if condition="$pstate eq $stateinactive">
+                            <option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+                        <xar:else />
+                            <option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
+                        </xar:if>                        
+                        <xar:if condition="$pstate eq $statenotvalidated">
+                            <option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+                        <xar:else />
+                            <option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
+                        </xar:if>                        
+                        <xar:if condition="$pstate eq $stateactive">
+                            <option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+                        <xar:else />
+                            <option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
+                        </xar:if>                        
+                        <xar:if condition="$pstate eq $statepending">
+                            <option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+                        <xar:else />
+                            <option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
+                        </xar:if>                        
+                    </select>
+                    </td>
+            </tr>
+            <tr>
+                    <td>
+                        <label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
+                    </td>
+                    <td>
+                        <input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="7" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
+                    </td>
+                    <td>
+                        <input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="8" />
+                    </td>
+                </tr>
+            </xar:if>
+            <xar:if condition="!empty($hooks) and count($hooks) gt 0">
+                <xar:foreach in="$hooks" key="$hookmodule">
           <tr><td colspan="2">
-					#$hooks[$hookmodule]#
+                    #$hooks[$hookmodule]#
           </td></tr>
-				</xar:foreach>
-			</xar:if>
-			<tr>
-					<td colspan="2" style="text-align: center"><br />
+                </xar:foreach>
+            </xar:if>
+            <tr>
+                    <td colspan="2" style="text-align: center"><br />
                         <input type="submit" value="#$addlabel#" tabindex="9" />
-					</td>
-				</tr>
-		</table>			
-		</div>
-	</form>
+                    </td>
+                </tr>
+        </table>            
+        </div>
+    </form>
 </div>
 </div>
