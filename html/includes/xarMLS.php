@@ -224,6 +224,9 @@ function xarML($string/*, ...*/)
     // if an empty string is passed in, just return an empty string. it's
     // the most sensible thing to do
     if(empty($string)) return '';
+    
+    // Make sure string is sane
+    $string=preg_replace('[\x0d]','',$string);
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
@@ -1480,9 +1483,6 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
 
     function translate($string, $type = 0)
     {
-        //FIXME stub for CR - voll - I'm crazy!!!
-        $string=preg_replace('[\x0d]','',$string);
-
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
         else {
