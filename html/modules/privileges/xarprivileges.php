@@ -236,7 +236,7 @@ class xarMasks
 
         foreach ($privs1 as $key1 => $priv1) {
             foreach ($privs2 as $key2 => $priv2) {
-//                echo "Trumping: ";
+//                echo "Winnowing: ";
 //                echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $priv1->implies($priv2,true);
 //                echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $priv2->implies($priv1,true);
                 if ($priv1->implies($priv2,true)) array_splice($privs2,$key2);
@@ -285,6 +285,9 @@ class xarMasks
                            new DefaultUserException($msg));
             return;
         }
+
+// insert any instance overrides
+if ($instance != '') $mask->setInstance($instance);
 
 // get the Roles class
         include_once 'modules/roles/xarroles.php';
