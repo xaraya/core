@@ -36,9 +36,7 @@ function roles_user_register()
                                        array('uid' => xarUserGetVar('uid'))));
        return true;
     }
-
     $allowregistration = xarModGetVar('roles', 'allowregistration');
-
     if ($allowregistration != true) {
         $msg = xarML('Registration has been suspended');
         xarExceptionSet(XAR_USER_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
@@ -46,12 +44,7 @@ function roles_user_register()
     }
 
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('New Account')));
-
-    $phase = xarVarCleanFromInput('phase');
-
-    if (empty($phase)){
-        $phase = 'choices';
-    }
+    if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     switch(strtolower($phase)) {
 
@@ -110,11 +103,11 @@ function roles_user_register()
 
         case 'checkregistration':
 
-            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('pass1','str:4:100',$pass1,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('pass2','str:4:100',$pass2,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('pass1','str:4:100',$pass1,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('pass2','str:4:100',$pass2,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
             if (!xarVarFetch('agreetoterms','checkbox',$agreetoterms,false,XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
@@ -250,22 +243,27 @@ function roles_user_register()
             if (empty($pass)){
                 $pass = '';
             }
+            $checkdynamic = xarModGetVar('roles', 'showdynamic');
+            if ($checkdynamic){
+                // dynamic properties (if any)
+                $properties = null;
+                $isvalid = true;
+                if (xarModIsAvailable('dynamicdata')) {
+                    // get the Dynamic Object defined for this module (and itemtype, if relevant)
+                    $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                                              array('module' => 'roles'));
+                    if (isset($object) && !empty($object->objectid)) {
 
-            // dynamic properties (if any)
-            $properties = null;
-            $isvalid = true;
-            if (xarModIsAvailable('dynamicdata')) {
-                // get the Dynamic Object defined for this module (and itemtype, if relevant)
-                $object =& xarModAPIFunc('dynamicdata','user','getobject',
-                                          array('module' => 'roles'));
-                if (isset($object) && !empty($object->objectid)) {
+                        // check the input values for this object !
+                        $isvalid = $object->checkInput();
 
-                    // check the input values for this object !
-                    $isvalid = $object->checkInput();
-
-                    // get the Dynamic Properties of this object
-                    $properties =& $object->getProperties();
+                        // get the Dynamic Properties of this object
+                        $properties =& $object->getProperties();
+                    }
                 }
+            } else {
+                $properties = array();
+                $isvalid = true;
             }
 
             // new authorisation code
@@ -294,11 +292,11 @@ function roles_user_register()
 
             break;
         case 'createuser':
-            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('pass','str:4:100',$pass,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('username','str:1:100',$username,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('realname','str:1:100',$realname,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('pass','str:4:100',$pass,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('ip','str:4:100',$ip,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
@@ -388,23 +386,7 @@ function roles_user_register()
 
                 // Check for user creation failure
                 if ($uid == 0) return;
-                //send an email to the admin
-                if (xarModGetVar('roles', 'sendnotice')){
 
-                    $adminname = xarModGetVar('mail', 'adminname');
-                    $adminemail = xarModGetVar('mail', 'adminmail');
-                    $message = "".xarML('A new user has registered.  Here are the details')." \n\n";
-                    $message .= "".xarML('Username')." = $username\n";
-                    $message .= "".xarML('Email Address')." = $email";
-
-                    $messagetitle = "".xarML('A New User Has Registered')."";
-
-                    if (!xarModAPIFunc('mail', 'admin', 'sendmail',
-                                        array('info' => $adminemail,
-                                              'name' => $adminname,
-                                              'subject' => $messagetitle,
-                                              'message' => $message))) return;
-                }
                 //Insert the user into the default users role
                 $userRole = xarModGetVar('roles', 'defaultgroup');
 
@@ -431,12 +413,7 @@ function roles_user_register()
                 $data = xarTplModule('roles','user', 'waitingconfirm');
             }
             break;
-
-        case 'validate':
-            break;
     }
-
     return $data;
 }
-
 ?>
