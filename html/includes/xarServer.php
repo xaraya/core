@@ -244,7 +244,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  * get request info for current page 
  *
  * @author Marco Canini, Michel Dalle
- * @access private
+ * @access public
  * @returns array
  * @return requested module, type and func
  */
