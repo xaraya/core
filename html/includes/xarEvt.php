@@ -185,12 +185,12 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     // are always loaded, which is a bit too much, so we should try it another way
 
     // First issue it to the specific event handler
-    // Function naming: module_userapievt_OnEventName
-    $funcSpecific = "{$modName}_{$modType}apievt_On$eventName";
-//    $funcGeneral  = "{$modName}_{$modType}apievt_OnEvent";
+    // Function naming: module_eventapi_OnEventName
+    $funcSpecific = "{$modName}_eventapi_On$eventName";
+//    $funcGeneral  = "{$modName}_eventapi_OnEvent";
 
     // set which file to load for looking up the event handler
-    $xarapifile="modules/{$modName}/xar{$modType}api.php";
+    $xarapifile="modules/{$modName}/xareventapi.php";
     $xartabfile="modules/{$modName}/xartables.php";
     // $xarapifile="modules/{$modName}/xar{$modType}evt.php";    
 
