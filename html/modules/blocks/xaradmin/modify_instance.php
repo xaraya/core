@@ -23,14 +23,7 @@ function blocks_admin_modify_instance()
     if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
 
     // Security Check
-    if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
-
-    // TODO: move all database stuff to the API.
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $block_instances_table =& $xartable['block_instances'];
-    $block_group_instances_table =& $xartable['block_group_instances'];
-    $block_types_table =& $xartable['block_types'];
+    if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // Get the instance details.
     $instance = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $bid));
@@ -94,25 +87,15 @@ function blocks_admin_modify_instance()
     );
 
     // Fetch complete block group list.
-    // TODO: move to API.
-    $block_groups_table = $xartable['block_groups'];
-    $query = 'SELECT xar_id as id, xar_name as name FROM ' . $block_groups_table;
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
-
-    $block_groups = array();
-    while(!$result->EOF) {
-        $group = $result->GetRowAssoc(false);
-        $block_groups[$group['id']] = $group;
-        $result->MoveNext();
-    }
+    $block_groups = xarModAPIfunc('blocks', 'user', 'getallgroups');
     
     // In the modify form, we want to provide an array of checkboxes: one for each group.
     // Also a field for the overriding template name for each group instance.
     foreach ($block_groups as $key => $block_group) {
-        if (isset($instance['groups'][$key])) {
+        $gid = $block_group['gid'];
+        if (isset($instance['groups'][$gid])) {
             $block_groups[$key]['selected'] = true;
-            $block_groups[$key]['template'] = $instance['groups'][$key]['group_inst_template'];
+            $block_groups[$key]['template'] = $instance['groups'][$gid]['group_inst_template'];
         } else {
             $block_groups[$key]['selected'] = false;
             $block_groups[$key]['template'] = '';
@@ -120,7 +103,7 @@ function blocks_admin_modify_instance()
     }
 
     $hooks = xarModCallHooks('item', 'modify', $bid, '');
-    //error_log("hooked to blocks = " . serialize($hooks));
+
     if (empty($hooks)) {
         $hooks = '';
     } elseif (is_array($hooks)) {
@@ -129,14 +112,21 @@ function blocks_admin_modify_instance()
         $hooks = $hooks;
     }
 
-    return array('authid'         => xarSecGenAuthKey(),
-                 'bid'            => $bid,
-                 'block_groups'   => $block_groups,
-                 'instance'       => $instance,
-                 'extra_fields'   => $extra,
-                 'block_settings' => $block_info,
-                 'hooks'          => $hooks,
-                 'refresh_times'  => $refreshtimes);
+    return array(
+        'authid'         => xarSecGenAuthKey(),
+        'bid'            => $bid,
+        'block_groups'   => $block_groups,
+        'instance'       => $instance,
+        'extra_fields'   => $extra,
+        'block_settings' => $block_info,
+        'hooks'          => $hooks,
+        'refresh_times'  => $refreshtimes,
+        // Set 'group_method' to 'min' for a compact group list,
+        // only showing those groups that have been selected.
+        // Set to 'max' to show all possible groups that the
+        // block could belong to.
+        'group_method'   => 'min' // 'max'
+    );
 }
 
 ?>

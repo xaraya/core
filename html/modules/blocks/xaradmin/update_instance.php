@@ -20,6 +20,8 @@ function blocks_admin_update_instance()
     // Get parameters
     if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
     if (!xarVarFetch('block_groups', 'keylist:id;checkbox', $block_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_new_group', 'id', $block_new_group, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_remove_groups', 'keylist:id;checkbox', $block_remove_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:100', $name)) {return;}
     if (!xarVarFetch('block_title', 'str:1:255', $title, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_state', 'int:0:4', $state)) {return;}
@@ -63,9 +65,19 @@ function blocks_admin_update_instance()
     // Pick up the block instance groups and templates.
     $groups = array();
     foreach($block_groups as $gid => $block_group) {
+        // Set the block group so long as the 'remove' checkbox is not set.
+        if (!isset($block_remove_groups[$gid])) {
+            $groups[] = array(
+                'gid' => $gid,
+                'template' => $group_templates[$gid]
+            );
+        }
+    }
+    // The block was added to a new block group using the drop-down.
+    if (!empty($block_new_group)) {
         $groups[] = array(
-            'gid' => $gid,
-            'template' => $group_templates[$gid]
+            'gid' => $block_new_group,
+            'template' => ''
         );
     }
     $blockinfo['groups'] = $groups;

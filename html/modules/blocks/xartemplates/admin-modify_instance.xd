@@ -49,6 +49,33 @@
             </span>
         </p>
 
+        <xar:if condition="$group_method eq 'min'">
+            <p style="float: left; width: 100%;">
+                <xar:comment>Provide a 'new group' drop-down list.</xar:comment>
+                <span style="float: left; width: 20%; text-align: right;">
+                    <span class="help" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#">
+                        <label for="block_template">
+                            <xar:mlstring>Add to group:</xar:mlstring>
+                        </label>
+                    </span>
+                </span>
+                <span style="float: right; width: 78%; text-align: left;">
+                    <select name="block_new_group" id="block_new_group">
+                        <option value="" selected="selected">
+                            <xar:mlstring>-- no new group --</xar:mlstring>
+                        </option>
+                        <xar:loop name="$block_groups">
+                            <xar:if condition="empty($loop:item['selected'])">
+                                <option value="#$loop:item['gid']#">
+                                    #xarVarPrepForDisplay($loop:item['name'])#
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </span>
+            </p>
+        </xar:if>
+
         <p style="float: left; width: 100%;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('Select the groups you want this block instance to belong to. Templates for use with each group can be optionally specified.')#">
@@ -59,15 +86,30 @@
             </span>
             <span style="float: right; width: 78%; text-align: left;">
                 <xar:loop name="$block_groups">
-                    <xar:if condition="!empty($loop:item['selected'])">
-                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked"/>
-                    <xar:else />
-                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
+                    <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+                        <xar:if condition="$group_method eq 'max'">
+                            <xar:if condition="!empty($loop:item['selected'])">
+                                <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+                            </xar:if>
+                        <xar:else/>
+                            <input type="hidden" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+                        </xar:if>
+                        <label for="block_groups_#$loop:item.gid#">
+                            <span style="width: 6em;">#xarVarPrepForDisplay($loop:item['name'])#</span>
+                            <input type="text" name="group_templates[#$loop:item.gid#]" id="group_templates_#$loop:item.gid#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
+                        </label>
+                        <xar:if condition="$group_method eq 'min'">
+                            <xar:if condition="!empty($loop:item['selected'])">
+                                <input type="checkbox" name="block_remove_groups[#$loop:item.gid#]" id="block_remove_groups_#$loop:item.gid#" value="on" />
+                                <label for="block_remove_groups_#$loop:item.gid#">
+                                    <xar:mlstring>Remove</xar:mlstring>
+                                </label>
+                            </xar:if>
+                        </xar:if>
+                        <br />
                     </xar:if>
-                    <label for="block_groups_#$loop:item.id#">
-                        <span style="width: 6em;">#xarVarPrepForDisplay($loop:item['name'])#</span>
-                        <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" size="20" maxlength="100" />
-                    </label><br />
                 </xar:loop>
             </span>
         </p>
@@ -76,7 +118,7 @@
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#">
                     <label for="block_template">
-                        <xar:mlstring>Template:</xar:mlstring>
+                        <xar:mlstring>Instance template:</xar:mlstring>
                     </label>
                 </span>
             </span>
