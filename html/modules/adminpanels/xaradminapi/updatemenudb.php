@@ -76,14 +76,10 @@ function adminpanels_adminapi_updatemenudb($args)
                 }
 
                 $query = "INSERT INTO $menutable (
-                          xar_amid,
-                          xar_name,
-                          xar_category)
-                          VALUES (
-                          " . xarVarPrepForStore($dbconn->GenId($menutable)) . ",
-                          '" .xarVarPrepForStore($mod['name']) . "',
-                          '" .$modcat."')";
-                $result =& $dbconn->Execute($query);
+                          xar_amid, xar_name, xar_category)
+                          VALUES (?,?,?)";
+                $bindvars = array($dbconn->GenId($menutable),$mod['name'],$modcat);
+                $result =& $dbconn->Execute($query,$bindvars);
                 if (!$result) return;
             }
         }

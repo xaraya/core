@@ -91,7 +91,9 @@ function adminpanels_admin_updateconfig()
         }
     	    
         // if necessary set our block position, left, centre or right
-        // Note: maybe we should call a Blocks module function to do it, but for now lets proceed with care
+        // FIXME: this should be moved either to blocks, or blocks interface should
+        // be incorporated here, the hard coding of xar_id will not work, for my database
+        // the xar_id is 7 for example, so this code doesn't even work for me.
         // BAD - TODO: adminapi function should deal with db, at least
         if($whatwasbefore != $menuposition){
     
@@ -99,32 +101,26 @@ function adminpanels_admin_updateconfig()
             $dbconn =& xarDBGetConn();
             $xartable =& xarDBGetTables();
             $blockgroupinstancetable= $xartable['block_group_instances'];
-            if($menuposition == 'l'){
-                // we want block to show on the left, let's update xar_block_group_instances
+            $group_id = 0;
+            switch($menuposition) {
+                case 'l':
+                    $group_id = 1;
+                    break;
+                case 'r':
+                    $group_id = 2;
+                    break;
+                case 'c':
+                    break;
+                default:
+                    // Weird, return
+                    return;
+            }
+            if($group_id != 0) {
                 $query = "UPDATE $blockgroupinstancetable
-                        SET xar_group_id ='".xarVarPrepForStore(1)."'
-                        WHERE xar_id = ".xarVarPrepForStore(1);
-                $result =& $dbconn->Execute($query);
+                            SET xar_group_id = ?
+                            WHERE xar_id = 1";
+                $result =& $dbconn->Execute($query,array($group_id));
                 if (!$result) return;
-    
-            }elseif($menuposition == 'r'){
-                // we want block to show on the right, let's to update xar_block_group_instances
-                $query = "UPDATE $blockgroupinstancetable
-                        SET xar_group_id ='".xarVarPrepForStore(2)."'
-                        WHERE xar_id = ".xarVarPrepForStore(1);
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
-    
-                $statusmsg = '';
-    
-            }elseif($menuposition == 'c'){
-    
-                //not implemented
-    
-            }else{
-    
-                // something bad
-                return;
             }
         }
     } elseif ($formname == 'overviews'){
