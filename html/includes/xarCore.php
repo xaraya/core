@@ -179,7 +179,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         include 'includes/xarDB.php';
-        include 'includes/xarDataDict.php';
 
         // Decode encoded DB parameters
         $userName = xarCore_getSystemVar('DB.UserName');
