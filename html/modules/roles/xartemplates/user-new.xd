@@ -69,7 +69,7 @@
 		<br /><br />
 
 
-		<input type="submit" value="Create User" align="middle" tabindex="6" />
+		<input type="submit" value="Create User" tabindex="6" />
         <input type="hidden" name="phase" id="phase" value="createuser" />
         </div>
 	</form>

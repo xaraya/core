@@ -59,7 +59,7 @@
 		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
 		<p><label for="message"><xar:mlstring>Message</xar:mlstring></label>:</p>
 		<p><textarea name="message" id="message" rows="20" cols="50"></textarea></p>
-		<p><input type="submit" value="Submit" align="middle" /></p>
+		<p><input type="submit" value="Submit" /></p>
              </div>
 	</form>
 </div>

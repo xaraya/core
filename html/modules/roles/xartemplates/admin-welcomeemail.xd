@@ -21,7 +21,7 @@
 		</table>
 		<textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
 		<br /><br />
-		<input type="submit" value="#$submitlabel#" align="middle" tabindex="2" />
+		<input type="submit" value="#$submitlabel#" tabindex="2" />
             </div>
 	</form>
 	<xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>

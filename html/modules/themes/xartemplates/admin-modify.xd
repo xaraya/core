@@ -67,7 +67,7 @@
 	</table>
                 <input type="checkbox" name="return" id="return" value="1" /> 
                 <label for="return"><xar:mlstring>Update and return to this screen.</xar:mlstring></label><br /><br />
-	<input type="submit" value="#$savebutton#" align="middle" tabindex="9" />
+	<input type="submit" value="#$savebutton#" tabindex="9" />
   </div>
 </form>
 <div align="left"><h2><xar:mlstring>Credits</xar:mlstring></h2></div>

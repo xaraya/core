@@ -208,7 +208,7 @@ document.forms['privilegeform'].submit();}
 			</xar:if>
 		</xar:if>
                 <xar:set name="$tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
-		<input type="submit" value="#$tmpaddvalue#" align="middle" tabindex="2" />
+		<input type="submit" value="#$tmpaddvalue#" tabindex="2" />
             </div>
 	</form>
 </div>

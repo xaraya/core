@@ -182,7 +182,7 @@
 			</tr>
             <tr>
 				<td colspan="2" style="text-align: center"><br />
-                    <input type="submit" value="#$addlabel#" align="middle" tabindex="2" />
+                    <input type="submit" value="#$addlabel#" tabindex="2" />
 				</td>
 		</table>			
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />

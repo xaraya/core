@@ -126,7 +126,7 @@
 			</xar:if>
 			<tr>
 					<td colspan="2" style="text-align: center"><br />
-                        <input type="submit" value="#$addlabel#" align="middle" tabindex="9" />
+                        <input type="submit" value="#$addlabel#" tabindex="9" />
 					</td>
 				</tr>
 		</table>			

@@ -158,7 +158,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	<p><label for="proxyport"><xar:mlstring>Proxy Port</xar:mlstring></label>:
 	<input type="text" name="proxyport" value="#xarModGetVar('base','proxyport')#" size="5" maxlength="10" /></p>
 
-	<p><input type="submit" value="#$updatelabel#" align="middle" /></p>
+	<p><input type="submit" value="#$updatelabel#" /></p>
 </form>
 </div>
 </div>

@@ -59,7 +59,7 @@
             </table>
             <br /><br />
         </xar:if>
-        <input type="submit" value="#$savechangeslabel#" align="middle" tabindex="9" />
+        <input type="submit" value="#$savechangeslabel#" tabindex="9" />
         </div>
     </form>
 </div>

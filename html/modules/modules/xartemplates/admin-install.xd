@@ -63,7 +63,7 @@
 			</table>
         	<br />
 		<xar:else />
-	        <input type="submit" name="command" id="command" value="#xarML('Install All')#" align="middle" tabindex="9" />
+	        <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
 	        <br />
         </xar:if>
 

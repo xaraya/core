@@ -34,7 +34,7 @@
 			</tr>
 			<tr>
 					<td colspan="2" style="text-align: center"><br />
-                        <input type="submit" value="Send Notification(s)" align="middle" tabindex="9" />
+                        <input type="submit" value="Send Notification(s)" tabindex="9" />
 					</td>
 				</tr>
 		</table>			

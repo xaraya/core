@@ -28,7 +28,7 @@
 	</tr>
 </table>
 <br />
-<input type="submit" value="Modify Default Theme" align="middle" tabindex="2" />
+<input type="submit" value="Modify Default Theme" tabindex="2" />
 </div>
 </form>
 </div>
