@@ -23,24 +23,24 @@
  */
 function mail_init()
 {
-	xarModSetVar('mail', 'server', 'mail');
-	xarModSetVar('mail', 'replyto', '0');
-	xarModSetVar('mail', 'wordwrap', '50');
-	xarModSetVar('mail', 'priority', '3');
-	xarModSetVar('mail', 'smtpPort', '25');
-	xarModSetVar('mail', 'smtpHost', 'Your SMTP Host'); 
-	// when a module item is created
-	if (!xarModRegisterHook('item', 'create', 'API',
-			'mail', 'admin', 'hookmailcreate')) {
-		return false;
-	} 
-	// when a module item is deleted
-	if (!xarModRegisterHook('item', 'delete', 'API',
-			'mail', 'admin', 'hookmaildelete')) {
-		return false;
-	} 
+    xarModSetVar('mail', 'server', 'mail');
+    xarModSetVar('mail', 'replyto', '0');
+    xarModSetVar('mail', 'wordwrap', '50');
+    xarModSetVar('mail', 'priority', '3');
+    xarModSetVar('mail', 'smtpPort', '25');
+    xarModSetVar('mail', 'smtpHost', 'Your SMTP Host'); 
+    // when a module item is created
+    if (!xarModRegisterHook('item', 'create', 'API',
+            'mail', 'admin', 'hookmailcreate')) {
+        return false;
+    } 
+    // when a module item is deleted
+    if (!xarModRegisterHook('item', 'delete', 'API',
+            'mail', 'admin', 'hookmaildelete')) {
+        return false;
+    } 
 
-	return true;
+    return true;
 } 
 
 /**
@@ -53,7 +53,7 @@ function mail_init()
  */
 function mail_activate()
 {
-	return true;
+    return true;
 } 
 
 /**
@@ -68,7 +68,7 @@ function mail_activate()
  */
 function mail_upgrade($oldversion)
 {
-	return false;
+    return false;
 } 
 
 /**
@@ -82,19 +82,19 @@ function mail_upgrade($oldversion)
  */
 function mail_delete()
 {
-	xarModDelVar('mail', 'server');
-	xarModDelVar('mail', 'adminname');
-	xarModDelVar('mail', 'adminmail');
-	xarModDelVar('mail', 'wordwrap');
-	xarModDelVar('mail', 'priority');
-	xarModDelVar('mail', 'replyto');
-	xarModDelVar('mail', 'replytoname');
-	xarModDelVar('mail', 'replytoemail'); 
-	// Remove Masks and Instances
-	xarRemoveMasks('mail');
-	xarRemoveInstances('mail');
+    xarModDelVar('mail', 'server');
+    xarModDelVar('mail', 'adminname');
+    xarModDelVar('mail', 'adminmail');
+    xarModDelVar('mail', 'wordwrap');
+    xarModDelVar('mail', 'priority');
+    xarModDelVar('mail', 'replyto');
+    xarModDelVar('mail', 'replytoname');
+    xarModDelVar('mail', 'replytoemail'); 
+    // Remove Masks and Instances
+    xarRemoveMasks('mail');
+    xarRemoveInstances('mail');
 
-	return true;
+    return true;
 } 
 
 ?>
