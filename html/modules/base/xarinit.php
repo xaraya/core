@@ -204,40 +204,6 @@ function base_init()
     xarConfigSetVar('Site.Log.LoggerArgs', '');
     xarConfigSetVar('Site.Log.LogLevel', 1 /*XARLOG_LEVEL_DEBUG*/);
 
-    /*********************************************************************
-    * Here we install the allowed vars table and fill it with some
-    * standard config values.
-    *********************************************************************/
-    $allowedVarsTable  = $systemPrefix . '_allowed_vars';
-    /*********************************************************************
-    * CREATE TABLE xar_allowed_vars (
-    *  xar_id int(11) unsigned NOT NULL auto_increment,
-    *  xar_name varchar(64) NOT NULL default '',
-    *  xar_type varchar(64) NOT NULL default '',
-    *  PRIMARY KEY  (xar_id),
-    *  KEY xar_name (xar_name)
-    * )
-    *********************************************************************/
-
-    $fields = array(
-    'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-    'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
-    'xar_type' => array('type'=>'varchar','size'=>64,'null'=>false)
-    );
-
-    $query = xarDBCreateTable($allowedVarsTable,$fields);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    // FIXME: should be unique or not?
-    $index = array('name'   => 'i_xar_name',
-                   'fields' => array('xar_name'));
-
-    $query = xarDBCreateIndex($allowedVarsTable,$index);
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
     * CREATE TABLE xar_template_tags (
@@ -418,4 +384,3 @@ function base_delete()
   return false;
 }
 
-?>
