@@ -216,6 +216,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableTemplatesCaching' => xarCore_getSiteVar('BL.CacheTemplates'),
                         'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
                         'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
+	include_once 'includes/xarTheme.php';
     xarTpl_init($systemArgs, $whatToLoad);
 
     if ($whatToLoad & XARCORE_SYSTEM_USER) {

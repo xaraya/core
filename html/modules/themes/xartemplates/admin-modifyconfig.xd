@@ -1,0 +1,59 @@
+<!-- admin menu configuration template -->
+<!-- Formatting table to center the menu -->
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center" valign="top">
+            <!-- Menu title -->
+            &xar-var-title;
+        </th>
+    </tr>
+    <tr>
+        <td align="center" valign="top">
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-list;"><xar:mlstring>View Installed Themes</xar:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-regenerate;&authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Themes</xar:mlstring></a>
+        </td>
+        <td align="center">
+            <b><xar:mlstring>Themes Configuration</xar:mlstring></b>
+        </td>
+    </tr>
+</table>
+        </td>
+    </tr>
+</table>
+<div align="center"><h2><xar:mlstring>Configure Themes</xar:mlstring></h2><br />
+<form method="post" action="&xar-modurl-themes-admin-updateconfig;">
+<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+            <table border="0" width="450" cellpadding="2" cellspacing="0">
+                <tr align="left" valign="top">
+                    <td>
+                        &xar-var-defaultthemelabel; #$defaulttheme#
+                    </td>
+                    <td>
+                        <select name="defaulttheme" id="defaulttheme" size="1">
+                        <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
+                            <xar:loop name="$themes">
+                            <xar:if condition="$name == $defaulttheme">
+                                <option value="&xar-var-regid;" selected>#$name#</option>
+                            <xar:else />
+                                <option value="&xar-var-regid;">#$name#</option>
+                            </xar:if>
+                            </xar:loop>
+                        </select>
+                    </td>
+                </tr>
+                <tr align="left" valign="top">
+                    <td><br>
+                        &xar-var-submitlabel;
+                    </td>
+                    <td><br>
+                        <!-- submit button -->
+                        <input type="submit" value="Submit" align="middle" />
+                    </td>
+                </tr>
+            </table>
+</form>

@@ -1,0 +1,105 @@
+<xar:var scope="session" name="$errormsg" />
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">
+            <xar:mlstring>Themes Administration</xar:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td align="center">
+            <b><xar:mlstring>View Installed Themes</xar:mlstring></b>
+        </td>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-regenerate;&authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Themes</xar:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-modifyconfig;"><xar:mlstring>Themes Configuration</xar:mlstring></a>
+        </td>
+    </tr>
+</table>
+        </td>
+    </tr>
+</table>
+<div align="center"><h2><xar:mlstring>Xaraya Themes List</xar:mlstring></h2><br />
+<b><xar:var scope="session" name="$themes_statusmsg" /></b>
+
+			<table border="1" width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<th>
+						&xar-var-themenamelabel;
+					</th>
+					<th>
+						&xar-var-disnamelabel;
+					</th>
+					<th>
+						&xar-var-themedirlabel;
+					</th>
+					<th>
+						&xar-var-statelabel;
+					</th>
+					<th>
+						&xar-var-actionslabel;
+					</th>
+				</tr>
+				<xar:loop name="$items">
+				<tr align="CENTER" valign="middle">
+					<td>
+						&xar-var-name;
+					</td>
+					<td>
+						&xar-var-displayname;
+					</td>
+					<td align="left">
+						themes/&xar-var-directory;
+					</td>
+					<td>
+						<xar:if condition="$state eq 4">
+							&xar-var-state4label;
+						</xar:if>
+						<xar:if condition="$state eq 3">
+							&xar-var-state3label;
+						</xar:if>
+						<xar:if condition="$state eq 2">
+							&xar-var-state2label;
+						</xar:if>
+						<xar:if condition="$state eq 1">
+							&xar-var-state1label;
+						</xar:if>
+						<xar:if condition="$state eq 0">
+							&xar-var-state0label;
+						</xar:if>
+
+					</td>
+					<td>
+						<xar:if condition="$state eq 4">
+							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+							|
+							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+						</xar:if>
+						<xar:if condition="$state eq 3">
+							<a href="&xar-var-deactivateurl;">&xar-var-deactivate;</a>
+							|
+							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+						</xar:if>
+						<xar:if condition="$state eq 2">
+							<a href="&xar-var-activateurl;">&xar-var-activate;</a>
+							|
+							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+							|
+							<a href="&xar-var-editurl;">&xar-var-edit;</a>
+						</xar:if>
+						<xar:if condition="$state eq 1">
+							<a href="&xar-var-initialiseurl;">&xar-var-initialise;</a>
+							|
+							<a href="&xar-var-removeurl;">&xar-var-remove;</a>
+						</xar:if>
+						<xar:if condition="$state eq 0">
+							<a href="&xar-var-upgradeurl;">&xar-var-upgrade;</a>
+						</xar:if>
+					</td>
+				</tr>
+				</xar:loop>
+			</table>

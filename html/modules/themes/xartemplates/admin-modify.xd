@@ -1,0 +1,116 @@
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">
+            <xar:mlstring>Themes Administration</xar:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-list;"><xar:mlstring>View Installed Themes</xar:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-regenerate;&authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Themes</xar:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&xar-modurl-themes-admin-modifyconfig;"><xar:mlstring>Themes Configuration</xar:mlstring></a>
+        </td>
+    </tr>
+</table>
+        </td>
+    </tr>
+</table>
+<div align="center"><h2><xar:mlstring>Edit Theme</xar:mlstring>: #$name#</h2><br />
+<form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
+	<input type="hidden" name="id" id="id" value="&xar-var-id;" />
+    <table border="1" cellpadding="2" cellspacing="0" width="100%">
+        <tr>
+            <th><xar:mlstring>Name</xar:mlstring></th>
+            <th><xar:mlstring>Value</xar:mlstring></th>
+            <th><xar:mlstring>Description</xar:mlstring></th>
+            <th><xar:mlstring>Actions</xar:mlstring></th>
+    <xar:if condition="count($themevars) gt 0">
+        <xar:loop name="$themevars">
+        <tr>
+            <td>
+               #$name#
+               <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if>
+            </td>
+            <td>
+               <input type="text" name="&xar-var-name;" id="&xar-var-name;" value="&xar-var-value;">
+            </td>
+            <td>
+               #$description#
+            </td>
+            <td align="center">
+               <xar:if condition="$prime eq 1">
+                   none
+               <xar:else />
+                   <input type="checkbox" name="&xar-var-name;-del" value="delete"> Delete
+               </xar:if>
+            </td>
+        </tr>
+        </xar:loop>
+    <xar:else />
+        <tr>
+            <td align="center" colspan="4">
+                <b><xar:mlstring>Theme has no editable variables</xar:mlstring></b>
+            </td>
+        </tr>
+    </xar:if>
+        <tr>
+            <th align="center" colspan="4">
+                <xar:mlstring>Add new theme variable</xar:mlstring>
+            </th>
+        </tr>
+        <tr>
+            <td>
+               <input type="text" name="newvarname" id="newvarname" value="" maxlength="64">
+            </td>
+            <td>
+               <input type="text" name="newvarvalue" id="newvarvalue" value="">
+            </td>
+            <td>
+               <input type="text" name="newvardescription" id="newvardescription" size="35" value="" maxlength="255">
+            </td>
+            <td align="center">
+               new
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="4">
+                <input type="checkbox" name="return" value="1"> 
+                <xar:mlstring>Update and return to this screen.</xar:mlstring>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" align="center">
+		<br />
+	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
+            </td>
+        </tr>
+
+    </table>
+<div align="center"><h2><xar:mlstring>Credits</xar:mlstring></h2><br />
+    <table border="1" cellpadding="2" cellspacing="0" width="60%">
+        <xar:loop name="$themeInfo">
+        <tr>
+            <td>
+               #$name#
+            </td>
+            <td>
+               #$value#
+            </td>
+        </tr>
+        </xar:loop>
+        <tr>
+            <td colspan="2" align="center">
+		<br />
+	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
+            </td>
+        </tr>
+    </table>
+

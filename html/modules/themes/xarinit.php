@@ -1,0 +1,179 @@
+<?php
+// File: $Id$
+// ----------------------------------------------------------------------
+// Xaraya eXtensible Management System
+// Copyright (C) 2002 by the Xaraya Development Team.
+// http://www.xaraya.org
+// ----------------------------------------------------------------------
+// Original Author of file: Johnny Robeson
+// Purpose of file:  Initialisation functions for themes module
+// ----------------------------------------------------------------------
+
+// Load Table Maintainance API
+xarDBLoadTableMaintenanceAPI();
+
+/**
+ * Initialise the themes module
+ *
+ * @param none
+ * @returns bool
+ * @raise DATABASE_ERROR
+ */
+function themes_init()
+{
+    // Get database information
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    $sitePrefix   = xarDBGetSiteTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
+
+    $tables['themes']       = $systemPrefix . '_themes';
+    $tables['theme_states'] = $sitePrefix . '_theme_states';
+    $tables['theme_vars']   = $sitePrefix . '_theme_vars';
+    // Create tables
+    /*********************************************************************
+     * Here we create all the tables for the theme system
+     *
+     * prefix_themes       - basic theme info
+     * prefix_theme_states - table to hold states for unshared themes
+     * prefix_theme_vars   - theme variables table
+     ********************************************************************/
+
+    // prefix_themes
+    /*********************************************************************
+    * CREATE TABLE xar_themes (
+    *  xar_id int(11) NOT NULL auto_increment,
+    *  xar_name varchar(64) NOT NULL default '',
+    *  xar_regid int(10) unsigned NOT NULL default '0',
+    *  xar_directory varchar(64) NOT NULL default '',
+    *  xar_mode smallint(6) NOT NULL default '1',
+    *  xar_author varchar(64) NOT NULL default '',
+    *  xar_homepage varchar(64) NOT NULL default '',
+    *  xar_email varchar(64) NOT NULL default '',
+    *  xar_description varchar(255) NOT NULL default '',
+    *  xar_contactinfo varchar(255) NOT NULL default '',
+    *  xar_publishdate varchar(32) NOT NULL default '',
+    *  xar_license varchar(255) NOT NULL default '',
+    *  xar_version varchar(10) NOT NULL default '',
+    *  xar_xaraya_version varchar(10) NOT NULL default '',
+    *  xar_bl_version varchar(10) NOT NULL default '',
+    *  xar_class int(10) unsigned NOT NULL default '0',
+    *  PRIMARY KEY  (xar_id)
+    * )TYPE=MyISAM;
+    *********************************************************************/
+    $fields = array(
+    'xar_id'             => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'xar_name'           => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_regid'          => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+    'xar_directory'      => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_mode'          => array('type'=>'integer','null'=>false,'default'=>'1'),
+    'xar_author'         => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_homepage'       => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_email'          => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_description'    => array('type'=>'varchar','size'=>255,'null'=>false),
+    'xar_contactinfo'    => array('type'=>'varchar','size'=>255,'null'=>false),
+    'xar_publishdate'    => array('type'=>'varchar','size'=>32,'null'=>false),
+    'xar_license'        => array('type'=>'varchar','size'=>255,'null'=>false),
+    'xar_version'        => array('type'=>'varchar','size'=>10,'null'=>false),
+    'xar_xaraya_version' => array('type'=>'varchar','size'=>10,'null'=>false),
+    'xar_bl_version'     => array('type'=>'varchar','size'=>10,'null'=>false),
+    'xar_class'          => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0')
+    );
+
+    $query = xarDBCreateTable($tables['themes'],$fields);
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    // prefix_theme_states
+    /********************************************************************
+    * CREATE TABLE xar_theme_states (
+    *  xar_regid int(10) unsigned NOT NULL default '0',
+    *  xar_state int(11) NOT NULL default '1'
+    *) TYPE=MyISAM;
+
+    ********************************************************************/
+    $fields = array(
+    'xar_regid' => array('type'=>'integer','null'=>false,'unsigned'=>true,'primary_key'=>false),
+    'xar_state' => array('type'=>'integer','null'=>false,'default'=>'0')
+    );
+
+    $query = xarDBCreateTable($tables['theme_states'],$fields);
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    // prefix_theme_vars
+    /********************************************************************
+    * CREATE TABLE xar_theme_vars (
+    *  xar_id int(11) NOT NULL auto_increment,
+    *  xar_themeName varchar(64) NOT NULL default '',
+    *  xar_name varchar(64) NOT NULL default '',
+    *  xar_prime int(1) NOT NULL default 1,
+    *  xar_description varchar(255) NOT NULL default '',
+    *  xar_value longtext,
+    *  PRIMARY KEY  (xar_id)
+    * ) TYPE=MyISAM;
+    ********************************************************************/
+    $fields = array(
+    'xar_id'          => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'xar_themeName'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_name'        => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_prime'       => array('type'=>'integer','null'=>false, 'default'=>1),
+    'xar_description' => array('type'=>'varchar','size'=>255,'null'=>false),
+    'xar_value'       => array('type'=>'text','size'=>'longtext')
+    );
+
+    $query = xarDBCreateTable($tables['theme_vars'],$fields);
+
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    if(file_exists('themes/Xaraya_Classic/xartheme.php')){
+        xarModSetVar('themes', 'default', 'Xaraya_Classic');
+    }
+    // Initialisation successful
+    return true;
+}
+
+/**
+ * Upgrade the themes theme from an old version
+ *
+ * @param oldversion the old version to upgrade from
+ * @returns bool
+ */
+function themes_upgrade($oldversion)
+{
+    return false;
+}
+
+/**
+ * Delete the themes theme
+ *
+ * @param none
+ * @returns bool
+ */
+function themes_delete()
+{
+    return false;
+}
