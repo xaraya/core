@@ -720,6 +720,8 @@ function xarException__formatBacktrace ($vardump,$key=false,$level=0)
 {
     if (version_compare("4.3.0", phpversion(), "<=")) return print_r($vardump, true);
     //else
+    //Getting afraid some of the arrays might reference itself... Dont know what will happen
+    if ($level == 16) return '';
 
     $tabsize = 4;
     
