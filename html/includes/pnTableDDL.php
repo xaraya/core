@@ -701,18 +701,22 @@ function pnDB__postgresColumnDefinition($field_name, $parameters)
 
     switch($parameters['type']) {
         case 'integer':
-            switch ($parameters['size']) {
-                case 'tiny':
-                    $this_field[] = 'SMALLINT';
-                    break;
-                case 'small':
-                    $this_field[] = 'SMALLINT';
-                    break;
-                case 'big':
-                    $this_field[] = 'BIGINT';
-                    break;
-                default:
-                    $this_field[] = 'INTEGER';
+            if (isset($parameters['size'])) {
+                switch ($parameters['size']) {
+                    case 'tiny':
+                        $this_field[] = 'SMALLINT';
+                        break;
+                    case 'small':
+                        $this_field[] = 'SMALLINT';
+                        break;
+                    case 'big':
+                        $this_field[] = 'BIGINT';
+                        break;
+                    default:
+                        $this_field[] = 'INTEGER';
+                }
+            } else {
+                $this_field[] = 'INTEGER';
             }
             break;
 
@@ -722,6 +726,9 @@ function pnDB__postgresColumnDefinition($field_name, $parameters)
             } else {
                 $this_field[] = 'CHAR('.$parameters['size'].')';
             }
+            if (isset($parameters['default'])) {
+                $parameters['default'] = "'".$parameters['default']."'";
+            }
             break;
 
         case 'varchar':
@@ -729,6 +736,9 @@ function pnDB__postgresColumnDefinition($field_name, $parameters)
                 return false;
             } else {
                 $this_field[] = 'VARCHAR('.$parameters['size'].')';
+            }
+            if (isset($parameters['default'])) {
+                $parameters['default'] = "'".$parameters['default']."'";
             }
             break;
 
