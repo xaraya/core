@@ -1214,21 +1214,20 @@ class xarTpl__ExpressionTransformer
 
     function transformPHPExpression($phpExpression)
     {
-        // This regular expression  must match the variables $foo:bar construct
+        // This regular expression  must match the variables in the BLExpression grammar above
         // pass it to the resolver, check for exceptions, and replace it with the resolved
         // var name.
         // Let's dissect the expression so it's a bit more clear:
-        //  1. /..../i      => we're matching in a case - insensitive  way what's betwteen the /-es
-        //  2. \\\$         => matches \$ which is and escaped $ in the string to match
+        //  1. /..../i      => we're matching in a case - insensitive  way what's between the /-es (FIXME: KEEP AN EYE ON THIS) 
+        //  2. \\\$         => matches \$ which is an escaped $ in the string to match
         //  3. (            => this starts a captured subpattern - results in $matches[1]
         //  4.  [a-z_]      => matches a letter or underscore
         //  5.  [0-9a-z_]*  => matches a number, letter of underscore, zero or more occurrences
-        //  6.  (?:         => starts a non-captured subpattern
+        //  6.  (?:         => start property access non-captured subpattern
         //  7.   :          => matches the colon
         //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
         //  9.  )           => matches right brace
-        // 10.  {0,2}       => the whole previous subpattern may  appear min. 0 and max 2 times (FIXME: NOT NECESSARY ANYMORE)
-        //                     0 is for a normal variable, 1 and 2 times is a BL variable
+        // 10.  *           => match zero or more occurences of the property access notation (colon notation)
         // 11.  (?:         => start array key non-captured subpattern
         // 12.   \\.        => each array key is separated by a dot, escaped for preg_match and the
         //                     escaping '\' escaped for the double-quoted string
@@ -1236,7 +1235,7 @@ class xarTpl__ExpressionTransformer
         // 14.  )           => end array key subpattern
         // 15.  *           => match zero or more occurances of the array key subpattern
         // 16. )            => ends the current pattern
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){0,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
+        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+)*(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
             // Resolve BL expresions inside the php Expression
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
@@ -1248,8 +1247,8 @@ class xarTpl__ExpressionTransformer
         }
 
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
-
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
 
         return $phpExpression;
@@ -1288,10 +1287,10 @@ class xarTpl__Node extends xarTpl__PositionInfo
     
     function constructor(&$parser, $nodeName)
     {
-        $this->tagName = $nodeName;
+        $this->tagName  = $nodeName;
         $this->fileName = $parser->fileName;
-        $this->line = $parser->line;
-        $this->column = $parser->column;
+        $this->line     = $parser->line;
+        $this->column   = $parser->column;
         $this->lineText = $parser->lineText;
     }
     
@@ -1843,8 +1842,10 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $previousLoop = $loopCounter - 1;
             $output .= '$loop_'.$previousLoop.'=$loop;';
         } 
-        // Save the name is a unique variable, if a loop:item from the parentloop
-        // is used as a loop array
+        // Save the name is a unique variable, if a loop:item from the parentloop is used as a loop array
+        // FIXME: keep an ey on this code it does the following 'weird' things:
+        // - using $loop in both outer part, definition part and inner part of the loop
+        // - adding $loop by reference to a property ( dont even try a var_dump on it )
         $output .= '$loop_'.$loopCounter.'_name='.$name.'; ';
         $output .= '$loop->index=-1; $loop->number='.$loopCounter.'; ';
         $output .= '$loop->item=$loop_'.$loopCounter.'_name;';
@@ -2923,7 +2924,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
          *  Register the variable in the bl_data array so it's passed to included templates
          *  see the xar:template tag how this will work and bug 1120 for all the details
          */
-        // FIXME: add some checking whether $name already is a template variable, or consider
+        // FIXME: add some checking whether $name already is a template variable
         return ' $_bl_data[\''.$this->_name.'\'] = '. XAR_TOKEN_VAR_START . $this->_name.';';
     }
 
