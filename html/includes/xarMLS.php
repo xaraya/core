@@ -581,6 +581,9 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
     return xarLocaleFormatDate($locale_format,$timestamp);
 }
 
+//function xarMLS_getLocaleFormat($locale_format) {
+//
+//}
 
 function xarLocaleFormatUTCDate($format = null, $time = null)
 {
@@ -625,10 +628,10 @@ function xarLocaleFormatDate($format = null, $timestamp = null)
     
 // TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
 //       let this be handled by the xarMLS_strftime function?
-    if (empty($format)) {
+    //if (empty($format)) {
     //    $format = '%a, %d %B %Y %H:%M:%S %Z';
-        $format = '%a, %d %B %Y %H:%M %Z';
-    }
+    //    $format = '%a, %d %B %Y %H:%M %Z';
+    //}
 
     return xarMLS_strftime($format,$timestamp);
 }
@@ -710,6 +713,22 @@ function xarMLS_strftime($format=null,$timestamp=null)
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
+    }
+    
+    // we need to get the correct timestamp format if we do not have one
+    if(!isset($format)) {
+        // check for user defined format
+        /*
+        if($user_defined) {
+            $format =& $user_defined;
+        } elseif ($admin_defined) {
+            $format =& $admin_defined;  
+        } else {
+        */
+            $format = '%a, %d %B %Y %H:%M %Z';
+        /*
+        }
+        */
     }
     
     // load the locale date
