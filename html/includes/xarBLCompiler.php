@@ -1113,22 +1113,12 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     {
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
             include_once(XAR_NODES_LOCATION . 'instructions/var.php');
-            $node =& new xarTpl__XarVarInstructionNode($parser, 'InstructionNode');
+            $node =& new xarTpl__XarVarInstructionNode($parser, 'InstructionNode', $instruction);
         } else {
             include_once(XAR_NODES_LOCATION . 'instructions/api.php');
-            $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode');
+            $node =& new xarTpl__XarApiInstructionNode($parser, 'InstructionNode', $instruction);
         }
-
-        // FIXME: this is not a good test and will never happen (the lines above will err out when the class doesnt exist)
-        if (isset($node)) {
-            // FIXME: this needs to be in the construction
-            $node->instruction = $instruction;
-            return $node;
-        }
-
-        $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent or invalid instruction '". XAR_TOKEN_CI_DELIM .
-                          "$instruction" . XAR_TOKEN_CI_DELIM . "'.", $parser);
-        return;
+        return $node;
     }
 
     function createTextNode($content, &$parser)
@@ -1437,6 +1427,12 @@ class xarTpl__EntityNode extends xarTpl__Node
 class xarTpl__InstructionNode extends xarTpl__Node
 {
     var $instruction;
+    
+    function xarTpl__InstructionNode(&$parser, $tagName, $instruction)
+    {
+        parent::constructor($parser,$tagName);
+        $this->instruction = $instruction;
+    }
     
     function isPHPCode()
    {
