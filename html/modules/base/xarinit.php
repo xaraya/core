@@ -76,7 +76,6 @@ function base_init()
     * Here we create non module associated tables
     *
     * prefix_config_vars   - system configuration variables
-    * prefix_allowed_vars  - Allowed system variable (IE HTML, dirty words)
     * prefix_session_info  - Session table
     * prefix_template_tags - module template tag registry
     *********************************************************************/
@@ -384,3 +383,4 @@ function base_delete()
   return false;
 }
 
+?>

@@ -101,8 +101,8 @@ END OF TERMS AND CONDITIONS
         <p class="xar-normal">
       <input type="hidden" name="install_language" id="install_language" value="#$language#" />
       <input type="hidden" name="install_phase" id="install_phase" value="3" />
-      <input type="radio" name="agree" value="agree" />I have read and agree to abide by the Terms and Conditions as stated above<br />
-      <input type="radio" name="agree" value="disagree" checked="checked" />I have read and do <b>NOT</b> agree to abide by the Terms and Conditions as stated above<br /><br />
+      <input type="radio" name="agree" id="agree" value="agree" /><label for="agree">I have read and agree to abide by the Terms and Conditions as stated above</label><br />
+      <input type="radio" name="agree" id="disagree" value="disagree" checked="checked" /><label for="disagree">I have read and do <b>NOT</b> agree to abide by the Terms and Conditions as stated above<br /></label><br />
         </p>
     <div style="text-align:center;"><input type="submit" value="Next Step &gt;" /></div>
     </form>
