@@ -436,7 +436,15 @@ function dynamicdata_init()
 				/* the default args for this property -- serialized array */
 					'xar_prop_args'    => array('type'        => 'text', 
 											  'size'        => 'medium',
-											  'null'        => 'false')
+											  'null'        => 'false'),
+											  
+				/*  */
+					'xar_prop_aliases'   => array('type'        => 'varchar',
+											  'size'        => 254,
+											  'default'     => NULL),
+				/*  */
+					'xar_prop_format'   => array('type'        => 'integer',
+											  'default'     => '0'),
 			  );
 
 	// Create the Table - the function will return the SQL is successful or

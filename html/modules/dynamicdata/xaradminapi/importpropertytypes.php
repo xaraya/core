@@ -27,6 +27,14 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 {
 	extract( $args );
 	
+	$dbconn =& xarDBGetConn();
+	$xartable =& xarDBGetTables();
+
+	$dynamicproptypes = $xartable['dynamic_properties_def'];
+
+	$insert = "DELETE FROM $dynamicproptypes";
+	$result =& $dbconn->Execute($insert);
+	
 
 	// Get list of properties in properties directory.
 	$PropertiesDir = 'includes/properties/';
@@ -66,6 +74,23 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 					// Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
 					$baseInfo = $property->getBasePropertyInfo();
 					
+					// Insure that the base properties are all present.
+					if( !isset($baseInfo['dependancies']) )
+					{
+						$baseInfo['dependancies'] = '';
+					}
+					if( !isset($baseInfo['requiresmodule']) )
+					{
+						$baseInfo['requiresmodule'] = '';
+					}
+					if( !isset($baseInfo['aliases']) )
+					{
+						$baseInfo['aliases'] = '';
+					}
+					if( !isset($baseInfo['args']) )
+					{
+						$baseInfo['args'] = '';
+					}
 
 					// Check if there is any reason why we shouldn't include this property in the property list					
 					$skipProperty = false;
@@ -106,9 +131,15 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 						// Save the name of the property
 						$baseInfo['propertyClass'] = $propertyClass;
 						
+						// Update database entry for this property
+						updateDB( $baseInfo, '', $propertyfilepath );
+						
 						// Check for aliases
 						if( !isset($baseInfo['aliases']) || ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) )
 						{
+							// Make sure that this is always available
+							$baseInfo['aliases'] = '';
+						
 							// Add the property to the property type list
 							$proptypes[$baseInfo['id']] = $baseInfo;
 							
@@ -119,10 +150,16 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 							{
 								// Save the name of the property, for the alias
 								$aliasInfo['propertyClass'] = $propertyClass;
+								$aliasInfo['aliases']       = '';
+								
 								
 								// Add the alias to the property type list
 								$proptypes[$aliasInfo['id']] = $aliasInfo;
 								$aliasList .= $aliasInfo['id'].',';
+								
+								// Update Database
+								updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
+								
 							}
 							
 							// Store a list of reference ID's from the base property it's aliases
@@ -146,4 +183,46 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 	return $proptypes;
 }
 
+function updateDB( $proptype, $parent, $filepath )
+{
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+
+        $dynamicproptypes = $xartable['dynamic_properties_def'];
+
+		$insert = "INSERT INTO $dynamicproptypes
+				  (
+					xar_prop_id
+					, xar_prop_name
+					, xar_prop_label
+					, xar_prop_parent
+					, xar_prop_filepath
+					, xar_prop_class
+					, xar_prop_format 
+					, xar_prop_validation
+					, xar_prop_source
+					, xar_prop_reqfiles
+					, xar_prop_reqmodules
+					, xar_prop_args
+					, xar_prop_aliases
+                  )
+				  VALUES
+				  (
+					".$proptype['id']."
+					, '".$proptype['name']."'
+					, '".$proptype['label']."'
+					, '".$parent."'
+					, '".$filepath."'
+					, '".$proptype['propertyClass']."'
+					, '".$proptype['format']."'
+					, '".$proptype['validation']."'
+					, '".$proptype['source']."'
+					, '".$proptype['dependancies']."'
+					, '".$proptype['requiresmodule']."'
+					, ''
+					, '".$proptype['aliases']."'
+				  )";
+
+	$result =& $dbconn->Execute($insert);
+}
 ?>

@@ -206,35 +206,78 @@ class Dynamic_Property_Master
      */
     function getPropertyTypes()
     {
-        $proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
-		
-    // TODO: yes :)
-    /*
+		// Attempt to retreive properties from DB
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
-        $dynamicproptypes = $xartable['dynamic_property_types'];
+        $dynamicproptypes = $xartable['dynamic_properties_def'];
 
-        $query = "SELECT ...
-                  FROM $dynamicproptypes";
+        $query = "SELECT 
+					xar_prop_id
+					, xar_prop_name
+					, xar_prop_label
+					, xar_prop_parent
+					, xar_prop_filepath
+					, xar_prop_class
+					, xar_prop_format 
+					, xar_prop_validation
+					, xar_prop_source
+					, xar_prop_reqfiles
+					, xar_prop_reqmodules
+					, xar_prop_args
+					, xar_prop_aliases
+
+                  FROM $dynamicproptypes
+				  ORDER BY xar_prop_id";
 
         $result =& $dbconn->Execute($query);
-        if (!$result) return;
 
-        while (!$result->EOF) {
-            list(...) = $result->fields;
+        if (!$result)
+		{
+			//TODO: Something interesting?  Probably an exception.
+			return;
+		}
+
+		// If no properties are found, import them in.
+		if( $result->EOF)
+		{
+			$property_types = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
+		} else {
+			$property_types = array();
+			while (!$result->EOF) 
+			{
+				list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
+	
+				$property['id']             = $id;
+				$property['name']           = $name;
+				$property['label']          = $label;
+				$property['format']         = $format;
+				$property['validation']     = $validation;
+				$property['source']         = $source;
+				$property['dependancies']   = $reqfiles;
+				$property['requiresmodule'] = $reqmodules;
+				$property['args']           = $args;
+				$property['propertyClass']  = $class;
+				$property['aliases']        = $aliases;
+
+				$property_types[$id] = $property;
+
+				$result->MoveNext();
+			}
+		}
+        $result->Close();
+
+/*
 
 // Security Check
         if (xarSecurityCheck('ViewDynamicData',0)) {
                 $proptypes[] = array(...);
             }
-            $result->MoveNext();
         }
-
-        $result->Close();
     */
 
-        return $proptypes;
+
+        return $property_types;
     }
 
 }
