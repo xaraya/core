@@ -97,7 +97,7 @@ function roles_admin_modifyconfig()
             $data['names'] = unserialize(xarModGetVar('roles', 'disallowednames'));
             $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
             $data['authid'] = xarSecGenAuthKey();
-            $data['updatelabel'] = xarML('Update Users Configuration');
+            $data['updatelabel'] = xarML('Update Roles Configuration');
 
             // Item type 0 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
