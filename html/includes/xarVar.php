@@ -141,17 +141,31 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  *
  * The $validation parameter could be a string, in this case the
  * supported validation types are very basilar, they are the following:
+ *
  * 'id' matches a positive integer (0 excluded)
+ *
  * 'int:<min val>:<max val>' matches an integer between <min val> and <max val> (included), if <min val>
  *                           is not present no lower bound check is performed, the same applies to <max val>
+ *
  * 'float:<min val>:<max val>' matches a floating point number between <min val> and <max val> (included), if <min val>
  *                             is not present no lower bound check is performed, the same applies to <max val>
+ *
  * 'bool' matches a string that can be 'true' or 'false'
+ *
  * 'str:<min len>:<max len>' matches a string which has a lenght between <min len> and <max len>, if <min len>
  *                           is omitted no control is done on mininum lenght, the same applies to <max len>
+ *
  * 'html:<level>' validates the subject by searching unallowed html tags, allowed tags are defined by specifying <level>
  *                that could be one of restricted, basic, enhanced, admin. This last level is not configurable and allows
  *                every tag
+ *
+ * 'array' validates if the subject is an array
+ * 'array: *other validation*' validates if the subject is an array, and if every element of the array
+ *                             validate in the *other validation*
+ *                          Example: xarVarValidate('array:str:1:20', $strings_array, $strings_array);
+ *
+ * 'enum' validates if the subject is any of the parameters
+ *                  Example: xarVarValidate('enum:apple:orange:strawberry', $options, $options);
  *
  * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
  * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
