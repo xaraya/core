@@ -90,9 +90,26 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
     <p><label for="mlsmode"><xar:mlstring>Default Locale</xar:mlstring></label>:&nbsp;&nbsp;
 	<select name="defaultlocale" id="defaultlocale" size="1">
          <xar:foreach in="$locales" value="$locale">
+         <xar:if condition="xarMLSGetCurrentLocale() eq $locale">
+             <option value="#$locale#" selected="selected">#$locale#</option>
+         <xar:else />
              <option value="#$locale#">#$locale#</option>
+         </xar:if>
          </xar:foreach>
     </select></p>
+    <p><label for="mlsmode"><xar:mlstring>Available Locales</xar:mlstring></label>:&nbsp;&nbsp;
+         <input type="text" name="localeslist" value="#$localeslist#" size="40" maxlength="100">
+    </p>
+	<p><xar:mlstring>Translations Backend</xar:mlstring>:
+	<select name="translationsbackend" id="translationsbackend" size="1">
+		<xar:if condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'xml'">
+			<option value="xml" selected="selected">XML</option>
+			<option value="php">PHP</option>
+		<xar:elseif condition="xarConfigGetVar('Site.MLS.TranslationsBackend') eq 'php'" />
+			<option value="xml">XML</option>
+			<option value="php" selected="selected">PHP</option>
+		</xar:if>
+	</select></p>
 
 	<h4><xar:mlstring>Legacy Configuration</xar:mlstring></h4>
 	<p><label for="loadlegacy"><xar:mlstring>Load Legacy Support</xar:mlstring></label>:
