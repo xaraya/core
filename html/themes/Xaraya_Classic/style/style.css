@@ -436,6 +436,10 @@ ul li.xar-menu-section {
 	f\loat:none;
 }
 
+* html  li.xar-menu-section {
+	display: inline;
+}
+
 * html .xar-menu-section a {
 	width:170px;
 	w\idth:160px;

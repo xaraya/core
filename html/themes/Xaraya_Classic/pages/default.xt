@@ -1,7 +1,7 @@
 <!---
     Default theme - main template [rev2]
     
-    .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience, imnsho
+    .. processing the page data BEFORE we actually START delivering page LAYOUT can only improve user exprerience
    
     1) get data for the default blockgroups
 _____________________________________________________________________________________________________________[comment]--->
@@ -13,16 +13,22 @@ ________________________________________________________________________________
     2) set some multilingual text that we intend to use in titles and alt attributes
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$changetexttosmall"><xar:mlstring>Change text to small (default)</xar:mlstring></xar:set>
-<xar:set name="$changetexttomedium"><xar:mlstring>Change text to midium</xar:mlstring></xar:set>
+<xar:set name="$changetexttomedium"><xar:mlstring>Change text to medium</xar:mlstring></xar:set>
 <xar:set name="$changetexttolarge"><xar:mlstring>Change text to large</xar:mlstring></xar:set>
 <xar:set name="$changecoltocontrast"><xar:mlstring>Change to high contrast</xar:mlstring></xar:set>
-<xar:set name="$changecoltoblue"><xar:mlstring>Change to blue</xar:mlstring></xar:set>
+<xar:set name="$changecoltoblue"><xar:mlstring>Change to blue (default)</xar:mlstring></xar:set>
 <xar:set name="$changecoltogreen"><xar:mlstring>Change to green</xar:mlstring></xar:set>
 <xar:set name="$changecoltoorange"><xar:mlstring>Change to orange</xar:mlstring></xar:set>
+<xar:set name="$validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
+<xar:set name="$validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
 <!---
     3) prepare some common variables once, then use them as many times as required
 _____________________________________________________________________________________________________________[comment]--->
 <xar:set name="$classicthemedir">#xarTplGetThemeDir()#</xar:set>
+<xar:set name="$sitename">#xarModGetVar('themes', 'SiteName')#</xar:set>
+<xar:set name="$sitefooter">#xarModGetVar('themes', 'SiteFooter')#</xar:set>
+<xar:set name="$siteslogan">#xarModGetVar('themes', 'SiteSlogan')#</xar:set>
+<xar:set name="$sitecopyright">#xarModGetVar('themes', 'SiteCopyRight')#</xar:set>
 <!---
     and finally, start building a beautiful layout by inserting the data into a carefully crafted markup :-)
 _____________________________________________________________________________________________________________[comment]--->
@@ -33,7 +39,7 @@ ________________________________________________________________________________
         <title>#$tpl:pageTitle#</title> 
         <base href="&xar-baseurl;index.php" />
         <!--- Main CSS rules --->
-        <style type="text/css" media="screen">@import url(&xar-baseurl;#$classicthemedir#/style/style.css); </style>
+        <style type="text/css" media="screen">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style>
         <!--- Styleswitcher CSS rules --->
         <link rel="stylesheet" type="text/css" href="#$classicthemedir#/style/style_textsmall.css" title="Small classictext" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="#$classicthemedir#/style/style_textmedium.css" title="Medium classictext" media="screen" />
@@ -73,9 +79,9 @@ ________________________________________________________________________________
 					<img src="#$classicthemedir#/images/blue.gif" id="butbl" alt="#$changecoltoblue#" />
 				</a>
 			</div>
-            <a href="&xar-baseurl;">
+            <a href="&amp;xar-baseurl;" rel="" title="#$sitename#">
                 <!-- in this theme we just use a transparent gif to overlay the logo -->
-                <img src="#$classicthemedir#/images/transparent_pix.gif" alt="#xarModGetVar('themes', 'SiteName')#" />
+                <img src="#$classicthemedir#/images/transparent_pix.gif" alt="#$sitename#" />
             </a>
         </div>
         <xar:if condition="!empty($topnavblocksgroup)">
@@ -147,21 +153,21 @@ ________________________________________________________________________________
         <div id="footerwrapper">
             <div id="classicfooter">
                 <div class="validators">
-                    <a href="http://validator.w3.org:8001/check?uri=referer" title="Validate XHTML 1.0 Strict">
-                        <img src="#$classicthemedir#/images/xhtml.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
+                    <a href="http://validator.w3.org:8001/check?uri=referer" title="#$validatexhtml#">
+                        <img src="#$classicthemedir#/images/xhtml.jpg" alt="#$validatexhtml#" />
                     </a>
-                    <a href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php&amp;warning=1&amp;profile=css2&amp;usermedium=all" title="Validate CSS">
-                        <img src="#$classicthemedir#/images/css.jpg" alt="#xarModGetVar('themes', 'SiteName')#" />
+                    <a href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php&amp;warning=1&amp;profile=css2&amp;usermedium=all" title="#$validatecss#">
+                        <img src="#$classicthemedir#/images/css.jpg" alt="#$validatecss#" />
                     </a>
                 </div>
                 <p id="footermsg">
-                    #xarModGetVar('themes', 'SiteFooter')#
+                    #$sitefooter#
                 </p>
                 <p id="copyright">
-                    #xarModGetVar('themes', 'SiteCopyRight')#
+                    #$sitecopyright#
                 </p>
                 <p id="slogan">
-                    #xarModGetVar('themes', 'SiteSlogan')#
+                    #$siteslogan#
                 </p>
             </div>
         </div>
