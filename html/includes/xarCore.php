@@ -20,7 +20,7 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', 'snap20050101');
+define('XARCORE_VERSION_NUM', 'snap20050115');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
