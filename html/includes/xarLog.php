@@ -23,15 +23,15 @@
  */
 //<nuncanada>These defines are useless if logging is not set up
 // Didnt take them out, because it would be 'ugly' to make
-// function xarLogMessage($message, $priority = 7) {
-define('PEAR_LOG_EMERG',    0);
-define('PEAR_LOG_ALERT',    1);
-define('PEAR_LOG_CRIT',     2);
-define('PEAR_LOG_ERR',      3);
-define('PEAR_LOG_WARNING',  4);
-define('PEAR_LOG_NOTICE',   5);
-define('PEAR_LOG_INFO',     6);
-define('PEAR_LOG_DEBUG',    7);
+// function xarLogMessage($message, $level = 255) {
+define('XARLOG_LEVEL_EMERGENCY', 1);
+define('XARLOG_LEVEL_ALERT',     2);
+define('XARLOG_LEVEL_CRITICAL',  4);
+define('XARLOG_LEVEL_ERROR',     8);
+define('XARLOG_LEVEL_WARNING',   16);
+define('XARLOG_LEVEL_NOTICE',    32);
+define('XARLOG_LEVEL_INFO',      64);
+define('XARLOG_LEVEL_DEBUG',     128);
 
 function xarLog_init($args, $whatElseIsGoingLoaded) {
 
@@ -74,25 +74,25 @@ function xarLog_init($args, $whatElseIsGoingLoaded) {
     return true;
 }
 
-function xarLogMessage($message, $priority = PEAR_LOG_DEBUG) {
+function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {
     global $_xarLoggers;
     
-    if (($priority == PEAR_LOG_DEBUG) && !xarCoreIsDebuggerActive()) return;
+    if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
     foreach ($_xarLoggers as $logger) {
-       $logger->notify($message, $priority);
+       $logger->notify($message, $level);
     }
 }
 
-function xarLogException($priority = PEAR_LOG_DEBUG)
+function xarLogException($level = XARLOG_LEVEL_DEBUG)
 {
     //This wasnt implemented anywhere, supposedly it exists because of
     // a bug which cause a infinite loop (?)
-    xarLogMessage("logException()", $priority);
+    xarLogMessage("logException()", $level);
 }
 
-function xarLogVariable($name, $var, $priority = PEAR_LOG_DEBUG)
+function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     //This seems of dubial usefulness
-    xarLogMessage("logVariable($name, ".print_r($var, TRUE).')', $priority);
+    xarLogMessage("logVariable($name, ".print_r($var, TRUE).')', $level);
 }
 ?>
