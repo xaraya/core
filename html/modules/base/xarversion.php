@@ -1,5 +1,18 @@
-<?php 
-// $Id$
+<?php
+/**
+ * File: $Id$
+ *
+ * Base system
+ *
+ * @package authentication
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @link http://www.xaraya.com
+ *
+ * @subpackage base
+ * @author John Robeson
+ * @author Greg Allan
+*/
 $modversion['name'] = 'Base';
 $modversion['id'] = '68';
 $modversion['version'] = '0.1.0';
