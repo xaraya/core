@@ -143,6 +143,7 @@ function mail_adminapi__sendmail($args)
     $mail->Encoding = $encoding;
     $mail->CharSet = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
     $mail->From = $from;
+    $mail->Sender = $from;
     $mail->FromName = $fromname;
 
     if (xarModGetVar('mail', 'replyto')) {
