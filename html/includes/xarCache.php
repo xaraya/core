@@ -95,7 +95,6 @@ function xarPageIsCached($cacheKey, $name = '')
 
     if (strpos($cacheKey, '-user-') &&
         !strpos($cacheKey, '-search') &&
-        !strpos($cacheKey, '-register') &&
         ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -314,13 +313,14 @@ function xarPageSetCached($cacheKey, $name, $value)
     global $xarOutput_cacheCollection, $xarPage_cacheTime, $xarOutput_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheShowTime, $xarOutput_cacheSizeLimit, $xarPage_cacheCode;
     
     $xarTpl_themeDir = xarTplGetThemeDir();
+    
+    if (xarVarIsCached('Page.Caching', 'nocache')) { return; }
 
     // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
     if (strpos($cacheKey, '-user-') &&
         !strpos($cacheKey, '-search') &&
-        !strpos($cacheKey, '-register') &&
         ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (empty($xarOutput_cacheTheme) || strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&

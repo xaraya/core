@@ -568,6 +568,9 @@ function xarSecGenAuthKey($modName = NULL)
 
     // Encrypt key
     $authid = md5($key);
+    
+    // Tell xarCache not to cache this page
+    xarVarSetCached('Page.Caching', 'nocache', TRUE);
 
     // Return encrypted key
     return $authid;
