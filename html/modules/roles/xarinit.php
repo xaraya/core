@@ -1,14 +1,14 @@
 <?php
 /**
  * File: $Id: s.xarinit.php 1.27 03/01/17 15:18:04-08:00 rcave@lxwdev-1.schwabfoundation.org $
- * 
+ *
  * Short description of purpose of file
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * @subpackage Roles Module
- * @author Jan Schrage, John Cox, Gregor Rothfuss 
+ * @author Jan Schrage, John Cox, Gregor Rothfuss
  * @todo need the dynamic users menu
  * @todo needs dyanamic data interface
  * @todo ensure all mod vars are set
@@ -16,21 +16,21 @@
 
 /**
  * Initialise the users module
- * 
- * @access public 
- * @param none $ 
+ *
+ * @access public
+ * @param none $
  * @returns bool
  * @raise DATABASE_ERROR
  */
 function roles_init()
-{ 
+{
     // Get database setup
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['roles'] = $sitePrefix . '_roles';
-    $tables['rolemembers'] = $sitePrefix . '_rolemembers'; 
+    $tables['rolemembers'] = $sitePrefix . '_rolemembers';
     // prefix_roles
     /**
      * CREATE TABLE xar_roles (
@@ -95,17 +95,18 @@ function roles_init()
 
     if (!$dbconn->Execute($query)) return;
 
-    $everybodyuid = _XAR_ID_UNREGISTERED - 1;
-    $query = "ALTER TABLE " . $tables['roles'] . " AUTO_INCREMENT = $everybodyuid";
-    $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+//    $everybodyuid = _XAR_ID_UNREGISTERED - 1;
+//    $query = "ALTER TABLE " . $tables['roles'] . " AUTO_INCREMENT = $everybodyuid";
+//    $result = &$dbconn->Execute($query);
+//    if (!$result) return;
+
     // role type is used in all group look-ups (e.g. security checks)
     $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
         'fields' => array('xar_type')
         );
     $query = xarDBCreateIndex($tables['roles'], $index);
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // username must be unique (for login) + don't allow groupname to be the same either
     $index = array('name' => 'i_' . $sitePrefix . '_roles_uname',
         'fields' => array('xar_uname'),
@@ -113,7 +114,7 @@ function roles_init()
         );
     $query = xarDBCreateIndex($tables['roles'], $index);
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // allow identical "real names" here
     $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
         'fields' => array('xar_name'),
@@ -121,7 +122,7 @@ function roles_init()
         );
     $query = xarDBCreateIndex($tables['roles'], $index);
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // allow identical e-mail here (???) + is empty for groups !
     $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
         'fields' => array('xar_email'),
@@ -129,7 +130,7 @@ function roles_init()
         );
     $query = xarDBCreateIndex($tables['roles'], $index);
     $result = &$dbconn->Execute($query);
-    if (!$result) return; 
+    if (!$result) return;
     // prefix_rolemembers
     /**
      * CREATE TABLE xar_rolemembers (
@@ -157,13 +158,13 @@ function roles_init()
         'fields' => array('xar_parentid'),
         'unique' => false);
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
-    if (!$dbconn->Execute($query)) return; 
+    if (!$dbconn->Execute($query)) return;
     // Initialisation successful
     return true;
-} 
+}
 
 function roles_activate()
-{ 
+{
     // Set up an initial value for module variables.
     xarModSetVar('roles', 'welcomeemail', 'Your account is now active.  Thank you, and welcome to our community.');
     xarModSetVar('roles', 'itemsperpage', 20);
@@ -172,7 +173,7 @@ function roles_activate()
     xarModSetVar('roles', 'confirmationtitle', 'Confirmation Email for %%username%%');
     xarModSetVar('roles', 'welcometitle', 'Welcome to %%sitename%%');
     xarModSetVar('roles', 'frozenroles', _XAR_ID_UNREGISTERED + 1);
-    xarModSetVar('privileges', 'frozenprivileges', 1); 
+    xarModSetVar('privileges', 'frozenprivileges', 1);
     // Unfortunately, crappy format here, and not to PEAR Standardards
     // But I need the line break to come into play without the tab.
     $confirmationemail = 'Your account has been created for %%sitename%% and needs to be activated.  You can either do this now, or on the first time that you log in.  If you perfer to do it now, then you will need to follow this link:
@@ -210,7 +211,7 @@ president@whitehouse.gov';
     $disallowedips = serialize($ips);
     xarModSetVar('roles', 'disallowedips', $disallowedips);
 
-    xarModSetVar('roles', 'minage', 13); 
+    xarModSetVar('roles', 'minage', 13);
     // Register blocks
     if (!xarModAPIFunc('blocks',
             'admin',
@@ -234,17 +235,17 @@ president@whitehouse.gov';
             'admin',
             'register_block_type',
             array('modName' => 'roles',
-                'blockType' => 'language'))) return; 
+                'blockType' => 'language'))) return;
     // Register Hooks
     if (!xarModRegisterHook('item', 'search', 'GUI',
             'roles', 'user', 'search')) {
         return false;
-    } 
+    }
 
     if (!xarModRegisterHook('item', 'usermenu', 'GUI',
             'roles', 'user', 'usermenu')) {
         return false;
-    } 
+    }
 
     xarModAPIFunc('modules', 'admin', 'enablehooks',
         array('callerModName' => 'roles', 'hookModName' => 'roles'));
@@ -253,47 +254,47 @@ president@whitehouse.gov';
     // xarModAPIFunc('modules','admin','enablehooks',
     // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     return true;
-} 
+}
 
 /**
  * Upgrade the users module from an old version
- * 
- * @access public 
- * @param oldVersion $ 
+ *
+ * @access public
+ * @param oldVersion $
  * @returns bool
  * @raise DATABASE_ERROR
  */
 function roless_upgrade($oldVersion)
-{ 
+{
     // Upgrade dependent on old version number
     switch ($oldVersion) {
         case 1.01:
 
             break;
-        case 2.0: 
+        case 2.0:
             // Code to upgrade from version 2.0 goes here
             break;
-    } 
+    }
     // Update successful
     return true;
-} 
+}
 
 /**
  * Delete the roles module
- * 
- * @access public 
- * @param none $ 
+ *
+ * @access public
+ * @param none $
  * @returns bool
  * @raise DATABASE_ERROR
  */
 function roles_delete()
-{ 
+{
     // this module cannot be removed
     return false;
 
     /**
      * Drop the tables
-     */ 
+     */
     // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -304,7 +305,7 @@ function roles_delete()
 
     $query = xarDBDropTable($tables['rolemembers']);
     if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return; 
+    if (!$dbconn->Execute($query)) return;
     // Delete any module variables
     xarModDelVar('roles', 'tacs');
     xarModDelVar('roles', 'showtacs');
@@ -314,12 +315,12 @@ function roles_delete()
 
     /**
      * Remove instances and masks
-     */ 
+     */
     // Remove Masks and Instances
     xarRemoveMasks('roles');
-    xarRemoveInstances('roles'); 
+    xarRemoveInstances('roles');
     // Deletion successful
     return true;
-} 
+}
 
 ?>
