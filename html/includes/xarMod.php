@@ -424,9 +424,6 @@ function xarModGetVarId($modName, $name)
 
     if(!$result) return;
 
-    if ($result->EOF) {
-        return;
-    }
     list($modvarid) = $result->fields;
     $result->Close();
 
@@ -677,7 +674,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     if (file_exists($fileName)) {
         xarInclude($fileName);
 
-        // Make sure we access the case with lower case key
+        // Make sure we access the cache with lower case key
         $loadedModuleCache[strtolower($modBaseInfo['name'] . $modType)] = true;
     } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
         // this is OK too - do nothing
@@ -930,6 +927,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     $funcName = strtolower($funcName);
     $modName = strtolower($modName); // Bug 2870
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
+
     $found = true;
     $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
@@ -939,7 +937,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         if (!function_exists($modAPIFunc)) {
             // good thing this information is cached :)
             $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) return; // throw back
+            if (!isset($modBaseInfo)) {return;} // throw back
 
             $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.$funcName.'.php';
             if (!file_exists($funcFile)) {
@@ -964,7 +962,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         if ($found) {
             // Load the translations file.
             // Load only if we have loaded the API function for the first time here.
-            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
+            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) {return;}
         }
     }
 
@@ -1150,20 +1148,28 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
 
+    // If an entry point has been set, then modify the URL entry point and modType.
+    if (!empty($entrypoint)) {
+        if (is_array($entrypoint)) {
+            $modType = $entrypoint['action'];
+            $entrypoint = $entrypoint['entry'];
+        }
+        $BaseModURL = $entrypoint;
+    }
+
     // Check the global short URL setting before trying to load the URL encoding function
-    // for the module.
-    // Don't try and process short URLs if a custom entry point has been defined.
-    if ($GLOBALS['xarMod_generateShortURLs'] && empty($entrypoint)) {
+    // for the module. This also applies to custom entry points.
+    if ($GLOBALS['xarMod_generateShortURLs']) {
         // The encode_shorturl will be in userapi.
-        // Note: if a module declares itself as suppoting short URLs, then the encoding
+        // Note: if a module declares itself as supporting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
-        if (xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') && xarModAPILoad($modName, 'user')) {
+        if ($modType == 'user' && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
             $encoderArgs = $args;
             $encoderArgs['func'] = $funcName;
 
             // Execute the short URL function.
             // It must exist if the SupportShortURLs variable is set for the module.
-            $short = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs);
+            $short = xarModAPIFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
             if (!empty($short)) {
                 if (is_array($short)) {
                     // An array of path and args has been returned (both optional) - new style.
@@ -1213,34 +1219,22 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             // e.g. ws.php?type=xmlrpc&args=foo
             // * Can also pass in the 'action' to $modType, and the entry point as
             // a string. It makes sense using existing parameters that way.
-            if (is_array($entrypoint)) {
-                $modType = $entrypoint['action'];
-                $entrypoint = $entrypoint['entry'];
-            }
-            $path = $entrypoint . $pini . 'type=' . $modType;
+            $args = array('type' => $modType) + $args;
         }  else {
             // Standard entry point - index.php or BaseModURL if provided in config.system.php
-            $pathArgs[] = "module=$modName";
-            if ((!empty($modType)) && ($modType != 'user')) {
-                $pathArgs[] = 'type=' . $modType;
-            }
-            if ((!empty($funcName)) && ($funcName != 'main')) {
-                $pathArgs[] = 'func=' . $funcName;
-            }
-
-            $path = $BaseModURL . $pini . join($psep, $pathArgs);
+            $args = array('module' => $modName, 'type' => $modType, 'func' => $funcName) + $args;
         }
 
-        // Add further parameters to the path, ensuring each value is encoded correctly.
-        $path = xarMod__URLaddParametersToPath($args, $path, $pini, $psep);
+        // Add GET parameters to the path, ensuring each value is encoded correctly.
+        $path = xarMod__URLaddParametersToPath($args, $BaseModURL, $pini, $psep);
 
         // We have the long form of the URL here.
         // Again, some form of hook may be useful.
     }
 
-    // FIXME: check if this works with all modules supporting short and long URLs.
+    // Add the fragment if required.
     if (isset($fragment)) {
-        $path = $path . '#' . xarMod__URLencode($fragment, 'getvalue');
+        $path = $path . '#' . urlencode($fragment);
     }
 
     // Encode the URL if an XML-compatible format is required.
@@ -1813,8 +1807,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
         . ' mods.xar_id, modstates.xar_state, mods.xar_name'
-        . ' FROM '.$modulestable.' mods'
-        . ' LEFT JOIN '.$modules_statesTable.' modstates'
+        . ' FROM '.$modulestable.' AS mods'
+        . ' LEFT JOIN '.$modules_statesTable.' AS modstates'
         . ' ON modstates.xar_regid = mods.xar_regid'
         . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
     $bindvars = array($modName, $modName);
@@ -1983,7 +1977,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
         $module_table = $tables['modules'];
 
         $query = "SELECT mods.xar_name, vars.xar_value
-                      FROM $module_table mods , $module_varstable vars
+                      FROM $module_table as mods , $module_varstable as vars
                       WHERE mods.xar_id = vars.xar_modid AND
                             vars.xar_name = ?";
         break;
