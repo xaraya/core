@@ -97,6 +97,12 @@ function blocks_userapi_getinfo($args)
     if (!is_null($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.
+    // TODO: until ALL blocks accept a non-serialized content array, we will
+    // need a hack here to unserialize (IFF it starts serialized) update the
+    // fields then reserialize (IFF it started serialized). The problem is,
+    // until ALL blocks can accept arrays as content, then passing arrays
+    // from here will cause blocks to fail.
+
     // The content at this point will be either completely empty or
     // an array - don't try and set array elements for anything else.
     if (empty($blockinfo['content']) || is_array($blockinfo['content'])) {
