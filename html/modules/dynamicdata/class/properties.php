@@ -327,17 +327,17 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_TColorPicker_Property.php";
                 $property = new Dynamic_TColorPicker_Property($args);
                 break;
-            case 45: // (send_to_friend) Send To A Friend
-                require_once "includes/properties/Dynamic_SendToFriend_Property.php";
-                $property = new Dynamic_SendToFriend_Property($args);
-                break;
-
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
                 $property = new Dynamic_Upload_Property($args);
                 break;
-				
+
+            case 106: // (send_to_friend) Send To A Friend
+                require_once "includes/properties/Dynamic_SendToFriend_Property.php";
+                $property = new Dynamic_SendToFriend_Property($args);
+                break;
+
 			// Using 200 range for experimental
             case 201: // (htmlarea_small) Small GUI Editor
                 $args['rows'] = 2;
@@ -772,16 +772,7 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
-        if (xarModIsAvailable('recommend')) {
-        $proptypes[45] = array(
-                              'id'         => 45,
-                              'name'       => 'sendtofriend',
-                              'label'      => 'Send To A Friend',
-                              'format'     => '45',
-                              'validation' => '',
-                              // ...
-                             );
-        }
+
     // TODO: add multiple select and multiple checkboxes
 
         // add some property types supported by utility modules
@@ -853,6 +844,17 @@ class Dynamic_Property_Master
                                     'source'     => 'hook module',
                                     // ...
                                    );
+        }
+
+        if (xarModIsAvailable('recommend')) {
+        $proptypes[106] = array(
+                              'id'         => 106,
+                              'name'       => 'sendtofriend',
+                              'label'      => 'Send To A Friend',
+                              'format'     => '106',
+                              'validation' => '',
+                              // ...
+                             );
         }
 
 	// Integrate WYSIWYG Editor, if available
