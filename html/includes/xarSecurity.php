@@ -211,7 +211,7 @@ $schemas = array();
 	}
 
 /**
- * assignPrivilege: assign a privilege to a role
+ * xarAssignPrivilege: assign a privilege to a role
  *
  * This is a wrapper function
  *
@@ -224,13 +224,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function assignPrivilege($privilege,$role) {
+	function xarAssignPrivilege($privilege,$role) {
 			$privileges = new xarPrivileges();
 			return $privileges->assign($privilege,$role);
 	}
 
 /**
- * defineInstance: creates an instance definition in the database
+ * xarDefineInstance: creates an instance definition in the database
  *
  * This is a wrapper function
  *
@@ -242,7 +242,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function defineInstance($module,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
+	function xarDefineInstance($module,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
 			$privileges = new xarPrivileges();
 			return $privileges->defineInstance($module,$table1,$valuefield,$displayfield,$propagate,$table2,$childID,$parentID,$description);
 	}
@@ -295,7 +295,7 @@ $schemas = array();
 		}
 		else {
 			$masks = new xarMasks();
-			return $masks->register($name,$realm,$module,$component,$instance,$level,$description='');
+			return $masks->register($name,$realm,$module,$component,$instance,$level,$description);
 		}
 	}
 

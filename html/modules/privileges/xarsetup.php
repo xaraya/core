@@ -89,10 +89,10 @@ function initializeSetup() {
     * assign(Privilege,Role)
     *********************************************************************/
 
-	assignPrivilege('NoPrivileges','Everybody');
-	assignPrivilege('FullPrivileges','Administrators');
-	assignPrivilege('AdminPrivilege','Anonymous');
-	assignPrivilege('AdminRole','Anonymous');
+	xarAssignPrivilege('NoPrivileges','Everybody');
+	xarAssignPrivilege('Administration','Administrators');
+	xarAssignPrivilege('AdminPrivilege','Anonymous');
+	xarAssignPrivilege('AdminRole','Anonymous');
 
     /*********************************************************************
     * Define instances for some modules
@@ -100,12 +100,12 @@ function initializeSetup() {
     * setInstance(Module,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    defineInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    defineInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+    xarDefineInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    xarDefineInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
 
-    defineInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
-    defineInstance('articles','xar_articles','xar_aid','xar_title',0);
-    defineInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
+    xarDefineInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
+    xarDefineInstance('articles','xar_articles','xar_aid','xar_title',0);
+    xarDefineInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
 
 
     /*********************************************************************
