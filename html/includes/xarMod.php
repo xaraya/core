@@ -1977,7 +1977,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
         $module_table = $tables['modules'];
 
         $query = "SELECT mods.xar_name, vars.xar_value
-                      FROM $module_table mods , $module_varstable as vars
+                      FROM $module_table mods , $module_varstable vars
                       WHERE mods.xar_id = vars.xar_modid AND
                             vars.xar_name = ?";
         break;
