@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * File: $Id$
  *
  * Utility function to pass individual menu items to the main menu
@@ -21,7 +21,7 @@
  */
 function blocks_adminapi_getmenulinks()
 {
-	if (xarSecurityCheck('EditBlock',0)) {
+    if (xarSecurityCheck('EditBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
@@ -29,7 +29,7 @@ function blocks_adminapi_getmenulinks()
                               'title' => xarML('View or edit all block instances'),
                               'label' => xarML('View Instances'));
     }
-	if (xarSecurityCheck('AddBlock',0)) {
+    if (xarSecurityCheck('AddBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
@@ -37,7 +37,16 @@ function blocks_adminapi_getmenulinks()
                               'title' => xarML('Add a new block instance'),
                               'label' => xarML('Add Instance'));
     }
-	if (xarSecurityCheck('AddBlock',0)) {
+    if (xarSecurityCheck('AddBlock',0)) {
+
+        $menulinks[] = Array('url'   => xarModURL('blocks',
+                                                   'admin',
+                                                   'view_groups'),
+                              'title' => xarML('View the existing block groups'),
+                              'label' => xarML('View Groups'));
+    }
+
+    if (xarSecurityCheck('AddBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
@@ -46,7 +55,7 @@ function blocks_adminapi_getmenulinks()
                               'label' => xarML('Add Group'));
     }
 
-	if (xarSecurityCheck('AdminBlock',0)) {
+    if (xarSecurityCheck('AdminBlock',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                   'admin',
