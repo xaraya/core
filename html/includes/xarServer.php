@@ -494,6 +494,14 @@ function xarResponseRedirect($redirectURL)
     }
     $GLOBALS['xarResponse_redirectCalled'] = true;
 
+    // Remove &amp; entites to prevent redirect breakage
+    // according to besfred's php.net research str_replace is faster
+    // if it was preg_replace it should have been
+    // $redirectURL = preg_replace('!&amp;!', '&', $redirectURL);
+    // to be able to work properly
+    // for now we use str_replace tho, end of discussion :-)
+    $redirectURL = str_replace('&amp;', '&', $redirectURL);
+
     if (substr($redirectURL, 0, 4) == 'http') {
         // Absolute URL - simple redirect
         $header = "Location: $redirectURL";
@@ -501,13 +509,6 @@ function xarResponseRedirect($redirectURL)
         // Removing leading slashes from redirect url
         $redirectURL = preg_replace('!^/*!', '', $redirectURL);
 
-        // Remove &amp; entites to prevent redirect breakage
-        // according to besfred's php.net research str_replace is faster
-        // if it was preg_replace it should have been
-        // $redirectURL = preg_replace('!&amp;!', '&', $redirectURL);
-        // to be able to work properly
-        // for now we use str_replace tho, end of discussion :-)
-        $redirectURL = str_replace('&amp;', '&', $redirectURL);
 
         // Get base URL
         $baseurl = xarServerGetBaseURL();
