@@ -170,7 +170,7 @@ function pnDBCreateTable($tableName, $fields, $databaseType="")
         case 'mysql':
             $sql = pnDB__mysqlCreateTable($tableName, $fields);
             break;
-        case 'postgresql':
+        case 'postgres':
             $sql = pnDB__postgresqlCreateTable($tableName, $fields);        
             break;       
         // Other DBs go here
