@@ -1,8 +1,8 @@
-<?php 
+<?php
 // $Id: s.xarversion.php 1.7 02/08/09 19:00:48-00:00 johnny $
 $modversion['name'] = 'roles';
 $modversion['id']             = '27';
-$modversion['version']        = '1.01';
+$modversion['version']        = '1.1.0';
 $modversion['description']    = 'User and Group registration and handling';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';

@@ -2,7 +2,7 @@
 // $Id: s.xarversion.php 1.8 02/11/28 18:19:02-05:00 John.Cox@mcnabb. $
 $modversion['name'] = 'Privileges Adminstration';
 $modversion['id'] = '1098';
-$modversion['version'] = '0.1';
+$modversion['version'] = '0.1.0';
 $modversion['description'] = 'Modify privileges security';
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
