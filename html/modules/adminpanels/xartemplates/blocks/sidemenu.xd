@@ -3,7 +3,11 @@
 </xar:if>
 <br />
 <xar:loop name="$adminmods">
-    <strong>&middot;</strong>
+    <xar:if condition="$marker eq '' and $link eq ''">
+        <strong>&nbsp;</strong>
+    <xar:else />
+        <strong>&middot;</strong>
+    </xar:if>
     <xar:if condition="empty($link)">
         <b>&xar-var-label;</b>
     <xar:else />

@@ -52,13 +52,13 @@ function adminpanels_adminmenublock_display($blockinfo){
     // checking as early as possible :)
     $mods = xarModGetList(array('AdminCapable' => 1));
 	if(empty($mods)) {
-	// there aren't any admin modules, dont display admin menus
+	// there aren't any admin modules, dont display adminmenu
 	    return;
 	}
     
     // TODO: display content sensitive link to the manual-online_help
     
-    // are we marking currently loaded module? why not..
+    // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
     if(!isset($marker)){
         xarModSetVar('adminpanels' ,'marker', '[x]');
@@ -78,7 +78,6 @@ function adminpanels_adminmenublock_display($blockinfo){
     $menustyle = xarModGetVar('adminpanels','menustyle');
     if($menustyle == 'byname'){
         // sort by name
-//        $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyname'); // obsolete
         foreach($mods as $mod){
             $label = $mod['name'];
             $link = xarModURL($mod['name'] ,'admin', 'main', array());
@@ -92,18 +91,56 @@ function adminpanels_adminmenublock_display($blockinfo){
         // prepare the data for template(s)
         $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
         $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+        // this should do for now
+        
     }else if ($menustyle == 'bycat'){
         // sort by categories
         xarModAPILoad('adminpanels', 'admin');
-        $data = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
+        // check if we need to update the table
+        xarModAPIFunc('adminpanels', 'admin', 'updatemenudb');
+        
+        $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
+        foreach($catmods as $mod){
+            $label = $mod;
+            $link = xarModURL($mod ,'admin', 'main', array());
+            // depending on which module is currently loaded we display accordingly
+            // also we are treating category lables in ML fasion
+            if($label == $modName){
+                $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+            }elseif($label == 'Global'){
+                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+            }elseif($label == 'Content'){
+                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+            }elseif($label == 'Users & Groups'){
+                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+            }elseif($label == 'Miscellaneous'){
+                $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+            }else{
+                $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
+            }
+        }
+        // prepare the data for template(s)
+        $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
+        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+        
     }else if ($menustyle == 'byweight'){
         // sort by weight
         xarModAPILoad('adminpanels', 'admin');
         $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
+        
+        $adminmods = 'not implemented';
+        // prepare the data for template(s)
+        $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
+        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
     }else if ($menustyle == 'bygroup'){
         // sort by group
         xarModAPILoad('adminpanels', 'admin');
         $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
+        
+        $adminmods = 'not implemented';
+        // prepare the data for template(s)
+        $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
+        $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
     } else {
         // default view by categories
         $data = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
