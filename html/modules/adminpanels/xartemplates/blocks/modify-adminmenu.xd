@@ -1,7 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <p class="param">
     <label for="showlogout#$blockid#">
-        <span class="help" title="#xarML('By checking this box the active menu will be indicated by a marker (if any) in this adminmenu instance.')#">
+        <span class="help" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
             <xar:mlstring>Show a logout link in this admin menu</xar:mlstring>:
         </span>
     </label>
@@ -13,8 +13,8 @@
 </p>
 
 <p class="param">
-    <label for="showmarker#$blockid#">
-        <span class="help" title="#xarML('By checking this box the active menu will be indicated by a marker (if any) in this adminmenu instance.')#">
+    <label for="menustyle">
+        <span class="help" title="#xarML('How should the meny items be ordered?')#">
             <xar:mlstring>Sort admin menu items</xar:mlstring>:
         </span>
     </label>

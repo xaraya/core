@@ -29,6 +29,7 @@ function adminpanels_adminapi_buildmenu($args)
 
     // categories according RFC11 & RFC13
     // TODO: store our categories in module variable to be able add/remove them via interface
+    // TODO: better yet, link them up to categories module
     switch($menustyle) {
         default:
         case 'bycat':

@@ -106,6 +106,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     $currenturl = xarServerGetCurrentURL();
 
     // Admin types
+    // FIXME: this is quite ad-hoc here
     $admintypes = array('admin', 'util');
 
     // Set up like it is, means we are forced to use global menu style settings site-wide.
@@ -158,14 +159,8 @@ function adminpanels_adminmenublock_display($blockinfo)
                 } // if
             } // foreach
             
-            // TODO: move prep to template
-            $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-
             $template = 'verticallistbyname';
-            $data = array(
-                'adminmods'     => $adminmods
-            );
-            // this should do for now
+            $data = array('adminmods'     => $adminmods);
             break;
 
         default:
@@ -181,10 +176,9 @@ function adminpanels_adminmenublock_display($blockinfo)
             // scan the array and set labels and states
             foreach ($catmods as $cat => $mods) { 
                 // display label for each category
-                // TODO: make them ML
                 $label = $cat;
                 
-                foreach ($mods as $modname=>$mod){
+                foreach ($mods as $modname=>$mod) {
                     // get URL to module's main function
                     $link = xarModURL($modname, 'admin', 'main', array());
                     $labelDisplay = $mod['displayname'];
@@ -213,7 +207,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                         // scan array and prepare the links
                         if (!empty($menulinks)) {
                             foreach($menulinks as $menulink) {
-                                // please note how we place the marker against active function link
                                 $catmods[$cat][$modname]['indlinks'][] = array(
                                     'adminlink'     => $menulink['url'],
                                     'adminlabel'    => $menulink['label'],
@@ -232,10 +225,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                 } //inner foreach
             } // outer foreach
                 
-            // prepare the data for template(s)
-            // TODO: move prepare to template.
-            $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
-
             if (empty($indlinks)){
                 $indlinks = '';
             }
@@ -245,41 +234,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                 'catmods'       => $catmods
             );
             break;
-
-        case 'byweight':
-                // sort by weight
-                // $data = xarModAPIFunc('adminpanels', 'admin', 'buildmenu', array('menustyle' => 'byweight');
-
-                $adminmods = xarML('not implemented');
-
-                // prepare the data for template(s)
-                // TODO: move prep to template
-                $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
-
-                $template = 'sidemenu';
-                $data = array(
-                    'adminmods'     => $adminmods = array(),
-                    'indlinks'      => $indlinks =''
-                );
-                break;
-
-        case 'bygroup':
-                // sort by group
-                //$data = xarModAPIFunc('adminpanels', 'admin', 'buildmenu', array('menustyle' => 'bygroup'));
-
-                $adminmods = xarML('not implemented');
-
-                // prepare the data for template(s)
-                // TODO: move prep to template
-                $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
-
-                $template = 'sidemenu';
-                $data = array(
-                    'adminmods'     => $adminmods = array(),
-                    'indlinks'      => $indlinks =''
-                );
-                break;
-
     }
 
     // Set template base.
