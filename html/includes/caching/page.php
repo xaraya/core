@@ -249,22 +249,24 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
 
         // cfr. xarCache_init()
         global $xarPage_autoCachePeriod;
+        global $xarOutput_cacheCollection;
+        global $xarVarDir;
 
         if (!empty($xarPage_autoCachePeriod) &&
-            filemtime('var/cache/output/autocache.start') < time() - $xarPage_autoCachePeriod) {
-            @touch('var/cache/output/autocache.start');
+            filemtime($xarOutput_cacheCollection.'/autocache.start') < time() - $xarPage_autoCachePeriod) {
+            @touch($xarOutput_cacheCollection.'/autocache.start');
 
             // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
-            $cachingConfigFile = 'var/cache/config.caching.php';
+            $cachingConfigFile = $xarVarDir.'/cache/config.caching.php';
             if (file_exists($cachingConfigFile) &&
                 is_writable($cachingConfigFile)) {
 
                 include $cachingConfigFile;
                 if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
-                    file_exists('var/cache/output/autocache.log') &&
-                    filesize('var/cache/output/autocache.log') > 0) {
+                    file_exists($xarOutput_cacheCollection.'/autocache.log') &&
+                    filesize($xarOutput_cacheCollection.'/autocache.log') > 0) {
 
-                    $logs = @file('var/cache/output/autocache.log');
+                    $logs = @file($xarOutput_cacheCollection.'/autocache.log');
                     $autocacheproposed = array();
                     if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
                         $autocachestats = array();
@@ -329,10 +331,10 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                     }
                     // save cache statistics
                     if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
-                        if (file_exists('var/cache/output/autocache.stats') &&
-                            filesize('var/cache/output/autocache.stats') > 0) {
+                        if (file_exists($xarOutput_cacheCollection.'/autocache.stats') &&
+                            filesize($xarOutput_cacheCollection.'/autocache.stats') > 0) {
 
-                            $stats = @file('var/cache/output/autocache.stats');
+                            $stats = @file($xarOutput_cacheCollection.'/autocache.stats');
                             foreach ($stats as $entry) {
                                 if (empty($entry)) continue;
                                 list($url,$hit,$miss,$first,$last) = explode(' ',$entry);
@@ -350,7 +352,7 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                             }
                             unset($stats);
                         }
-                        $fp = @fopen('var/cache/output/autocache.stats', 'w');
+                        $fp = @fopen($xarOutput_cacheCollection.'/autocache.stats', 'w');
                         if ($fp) {
                             foreach ($autocachestats as $url => $stats) {
                                 @fwrite($fp, $url . ' ' . $stats['HIT'] . ' ' . $stats['MISS'] . ' ' . $autocachefirstseen[$url] . ' ' . $autocachelastseen[$url] . "\n");
@@ -364,9 +366,9 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                 }
             }
 
-            $fp = @fopen('var/cache/output/autocache.log', 'w');
+            $fp = @fopen($xarOutput_cacheCollection.'/autocache.log', 'w');
         } else {
-            $fp = @fopen('var/cache/output/autocache.log', 'a');
+            $fp = @fopen($xarOutput_cacheCollection.'/autocache.log', 'a');
         }
         if ($fp) {
             @fwrite($fp, "$time $status $addr $url\n");
@@ -462,7 +464,7 @@ function xarPage_sessionLess()
 
             xarPage_httpCacheHeaders($cache_file);
 
-            if (file_exists('var/cache/output/autocache.start')) {
+            if (file_exists($xarOutput_cacheCollection.'/autocache.start')) {
                 xarPage_autoCacheLogStatus('HIT');
             }
 

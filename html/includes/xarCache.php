@@ -18,12 +18,15 @@
  * @returns true on success, false if trouble is encountered
  * @todo    consider the use of a shutdownhandler for cache maintenance
  */
-function xarCache_init($args)
+function xarCache_init($args = false)
 {
-    extract($args);
+    if (!empty($args)) {
+        extract($args);
+    }
 
 // TODO: clean up all these globals and put them e.g. into a single array
 
+    global $xarVarDir;
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
@@ -37,7 +40,13 @@ function xarCache_init($args)
     global $xarPage_autoCachePeriod;
     global $xarPage_sessionLess;
 
-    if (!include_once('var/cache/config.caching.php')) {
+    $xarVarDir = xarCache_getVarDirPath();
+    
+    if (!isset($cacheDir)) {
+        $cacheDir = $xarVarDir . '/cache/output';
+    }
+    
+    if (!include_once($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
         return FALSE;
@@ -417,6 +426,27 @@ function xarCache_getParents()
     $result->Close();
     xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
+}
+
+/**
+ * Returns the path name for the var directory
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return string the var directory path name
+ * @todo   keep this in sync with xarCoreGetVarDirPath() until there is a pre-core way to retrieve this
+ */
+function xarCache_getVarDirPath()
+{
+    static $varpath = null;
+    if (isset($varpath)) return $varpath;
+    if (file_exists('./var/.key.php')) {
+        include './var/.key.php';
+        $varpath = './var/'.$protectionKey;
+    } else {
+        $varpath = './var';
+    }
+    return $varpath;
 }
 
 ?>

@@ -21,7 +21,7 @@
 if (file_exists('var/cache/output/cache.touch')) {
     include_once('includes/xarCache.php');
     // Note : we may already exit here if session-less page caching is enabled
-    if (xarCache_init(array('cacheDir' => 'var/cache/output'))) {
+    if (xarCache_init()) {
         define('XARCACHE_IS_ENABLED',1);
     }
 }
