@@ -61,8 +61,13 @@ class xarDate {
             $this->second = trim(substr($dbts,18,2),"0");
             $this->regenerate();
         } else {
-            $guess = strtotime($dbts);
-            if ($guess < 0) $guess = 0;
+            if ($dbts != "") {
+                $guess = strtotime($dbts);
+                if ($guess < 0) $guess = 0;
+                }
+            else {
+                $guess = 0;
+            }
             $this->setTimestamp($guess);
         }
     }

@@ -353,7 +353,7 @@ function xarML($string/*, ...*/)
     if(empty($string)) return '';
 
     if (isset($GLOBALS['xarMLS_backend'])) {
-        $trans = $GLOBALS['xarMLS_backend']->translate($string);
+        $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
     } else {
         // This happen in rare cases when xarML is called before xarMLS_init has been called
         $trans = $string;
@@ -1537,18 +1537,18 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
         $this->backendtype = "php";
     }
 
-    function translate($string)
+    function translate($string, $type = 0)
     {
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
-        else return $string;
+        elseif ($type == 1) return $string;
     }
 
-    function translateByKey($key)
+    function translateByKey($key, $type = 0)
     {
         if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
             return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
-        else return $key;
+        elseif ($type == 1) return $key;
     }
 
     function clear()
