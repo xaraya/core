@@ -149,15 +149,6 @@ function themes_init()
         return NULL;
     }
 
-    /*********************************************************************
-    * Register the module components that are privileges objects
-    * Format is
-    * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
-    *********************************************************************/
-
-    xarRegisterMask('ViewThemes','All','themes','All','All',ACCESS_OVERVIEW);
-    xarRegisterMask('AdminTheme','All','themes','All','All',ACCESS_ADMIN);
-
     // Initialisation successful
     return true;
 }

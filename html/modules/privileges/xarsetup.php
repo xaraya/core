@@ -355,6 +355,9 @@ function initializeSetup() {
    	xarRegisterMask('EditModules','All','modules','All','All',ACCESS_EDIT);
    	xarRegisterMask('AdminModules','All','modules','All','All',ACCESS_ADMIN);
 
+    xarRegisterMask('ViewThemes','All','themes','All','All',ACCESS_OVERVIEW);
+    xarRegisterMask('AdminTheme','All','themes','All','All',ACCESS_ADMIN);
+
     // Initialisation successful
     return true;
 }
