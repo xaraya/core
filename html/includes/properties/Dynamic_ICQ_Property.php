@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic ICQ Number Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic ICQ Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -55,6 +62,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         if (empty($id)) {
             $id = $name;
         }
+        /*
         return '<input type="text"'.
                ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
@@ -65,27 +73,51 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+        $data['link']     = $link;
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+        $data['size']     = !empty($size) ? $size : $this->size;
+ 
+        $template="icq";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
-    // TODO: use redirect function here ?
+        // TODO: use redirect function here ?
         if (!empty($value) && !empty($this->icon)) {
-// TODO: check this ICQ stuff
-            $link = '<script language="JavaScript" type="text/javascript"><!--
+        // TODO: check this ICQ stuff
+        //<jojodee> Passing the whole lot to the template !
+        //The data is there for anyone that wants to use the vars themselves in the template.
+        $link = '<script language="JavaScript" type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
     document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
     document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
-//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>
-';
-            return $link;
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>';
+
+        } else {
+            $link ='';
         }
-        return '';
+
+        $data['value']= $this->value;
+        $data['icon'] = xarVarPrepForDisplay($this->icon);
+        $data['name'] = $this->name;
+        $data['id']   = $this->id;
+        $data['link'] = $link;
+
+        $template="icq";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 }
 

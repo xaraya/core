@@ -1,10 +1,17 @@
 <?php
 /**
+ * File: $Id$
+ *
  * Dynamic Time Zone Property
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -65,6 +72,8 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -77,12 +86,19 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
+        
+        $data['value']   = $value;
+        $data['name']    = $name;
+        $data['id']      = $id;
+        $data['options'] = $options;
+        $now=time();
+        /*
         $out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
                '>';
-        $now = time();
+
         foreach ($options as $option) {
             $out .= '<option';
             if (empty($option['id']) || $option['id'] != $option['name']) {
@@ -97,7 +113,16 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+
+        */
+
+        $data['now']=$now;
+        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="timezone";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+        //return $out;
     }
 
 }

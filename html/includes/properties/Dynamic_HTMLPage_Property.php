@@ -1,11 +1,17 @@
 <?php
 /**
- * Dynamic HTML Page Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * Dynamic HTML Page (webpage) Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * Include the base class
  *
@@ -58,6 +64,8 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -85,7 +93,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
-        $out = '<select' .
+        /*$out = '<select' .
                ' name="' . $name . '"' .
                ' id="'. $id . '"' .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
@@ -104,11 +112,24 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
         return $out;
+        */
+        $data['name']    = $name;
+        $data['value']    = $value;        
+        $data['id']      = $id;
+        $data['options'] = $options;
+        $data['tabindex']= !empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid'] = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="webpage";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -119,11 +140,21 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
-            return join('', @file($basedir.'/'.$value));
+            $srcpath = join('', @file($basedir.'/'.$value));
+
         } else {
         //    return xarVarPrepForDisplay($value);
-            return '';
+            $srcpath='';
+            //return '';
         }
+        $data['value']=$value;
+        $data['basedir']=$basedir;
+        $data['filetype']=$filetype;
+        $data['srcpath']=$srcpath;
+
+        $template="webpage";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
     }
 
 }

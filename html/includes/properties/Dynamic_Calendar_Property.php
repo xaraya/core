@@ -54,6 +54,8 @@ class Dynamic_Calendar_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
@@ -86,9 +88,10 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $output = xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $value);
         $output .= '<br />';
 */
-        $output = '';
+        //$output = '';
         $timeval = xarLocaleFormatDate($dateformat, $value);
         $jsID = str_replace(array('[', ']'), '_', $id);
+        /*
         $output .= '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.$timeval.'" size="20" maxlength="19" />
 <a href="javascript:'.$jsID.'_cal.popup();"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date" /></a>
 <script language="JavaScript">
@@ -99,12 +102,28 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         if (!empty($this->invalid)) {
             $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
         }
-        return $output;
+         */
+        $data['baseuri']   =xarServerGetBaseURI();
+        $data['dateformat']= $dateformat;
+        $data['jsID']     = $jsID;
+        $data['timeval']  = $timeval;
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+      $template="calendar";
+      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
+        //return $output;
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        
+        $data=array();
+        
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -122,7 +141,14 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         if (!isset($dateformat)) {
             $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
         }
-        return xarLocaleFormatDate($dateformat, $value);
+        //return xarLocaleFormatDate($dateformat, $value);
+
+        $data['dateformat']=$dateformat;
+        $data['value'] = $value;
+        $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
+
+        $template="calendar";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
 }

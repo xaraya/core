@@ -1,0 +1,5 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:set name="iconalt"><xar:mlstring>Icon</xar:mlstring></xar:set>
+<xar:if condition="!empty($link)">
+    #$link#
+</xar:if>

@@ -1,0 +1,7 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+
+    <input type="hidden" name="#$name#" value="#$value#"/>
+
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
