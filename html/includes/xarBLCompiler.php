@@ -128,7 +128,17 @@ class xarTpl__Compiler extends xarTpl__CompilerError
             $this->raiseError("Cannot open template file '$fileName'.");
             return;
         }
-        $templateSource = fread($fp, filesize($fileName));
+        
+        if ($fsize = filesize($fileName)) {
+            $templateSource = fread($fp, $fsize);
+        } else {
+            $templateSource = '';
+            while (!feof($fp)) {
+                $templateSource .= fread($fp, 4096);
+            }
+        }
+        
+        fclose($fp);
 
         $this->parser->setFileName($fileName);
         return $this->compile($templateSource);
