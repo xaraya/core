@@ -25,7 +25,7 @@ xarDBLoadTableMaintenanceAPI();
 function themes_init()
 { 
     // Get database information
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();

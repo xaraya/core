@@ -1541,7 +1541,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                                          $tag->getHandler(),
                                          serialize($tag));
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn   =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     // FIXME: temp fix, installer doesn't know about it
@@ -1586,7 +1586,7 @@ function xarTplUnregisterTag($tag_name)
         return false;
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn   =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
@@ -1656,7 +1656,7 @@ function xarTplGetTagObjectFromName($tag_name)
         return $tag_objects[$tag_name];
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn   =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     // FIXME: during installer the template_tag table wasn't there, didn't investigate

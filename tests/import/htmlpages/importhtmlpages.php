@@ -95,7 +95,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarModSetVar('installer','imgurl',$imgurl);
     }
 
-    list($dbconn) = xarDBGetConn();
+    $dbconn =& xarDBGetConn();
 
     if (!xarModAPILoad('roles','admin')) {
         die("Unable to load the users admin API");
