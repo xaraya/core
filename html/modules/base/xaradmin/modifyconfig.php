@@ -36,7 +36,7 @@ function base_admin_modifyconfig()
                           array('filter'     => array('UserCapable' => 1)));
     }
 
-    $localehome = "var/locales";
+    $localehome = xarCoreGetVarDirPath() . "/locales";
     if (!file_exists($localehome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException('The locale directory was not found.'));
     }

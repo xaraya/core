@@ -28,7 +28,7 @@ function roles_adminapi_getmessageincludestring($args)
     }
 
 // Get the template that defines the substitution vars
-    $messaginghome = "var/messaging/" . $module;
+    $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
     if (!file_exists($messaginghome . "/includes/" . $template . ".xd")) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
     }

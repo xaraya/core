@@ -140,7 +140,7 @@ function roles_admin_createmail()
     }
 
     // Get the list of available templates
-    $messaginghome = "var/messaging/roles";
+    $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
     }

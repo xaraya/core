@@ -25,7 +25,7 @@ function roles_admin_modifyemail($args)
     else $data['mailtype'] = $mailtype;
 
 // Get the list of available templates
-    $messaginghome = "var/messaging/roles";
+    $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
         return;
@@ -78,7 +78,7 @@ function roles_admin_modifyemail($args)
 //            xarModSetVar('roles', $data['mailtype'].'email', $message);
 //            xarModSetVar('roles', $data['mailtype'].'title', $subject);
 
-            $messaginghome = "var/messaging/roles";
+            $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
             $filebase = $messaginghome . "/" . $data['mailtype'] . "-";
 
             $filename = $filebase . 'subject.xd';

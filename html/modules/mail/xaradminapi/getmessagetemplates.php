@@ -23,7 +23,7 @@ function mail_adminapi_getmessagetemplates($args)
         list($module) = xarRequestGetInfo();
     }
 
-    $messaginghome = "var/messaging/" . $module;
+    $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
         return;

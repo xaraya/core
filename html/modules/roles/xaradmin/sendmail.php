@@ -64,7 +64,7 @@ function roles_admin_sendmail()
     }
 
     // Get the template that defines the substitution vars
-    $messaginghome = "var/messaging/roles";
+    $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
     if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
     }
