@@ -19,6 +19,8 @@ function variable_validations_bool (&$subject, $parameters=null) {
     } elseif ($subject == 'false') {
         $subject = false;
     } else {
+        $msg = xarML('Variable "#(1)" is not boolean', $subject);
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', $msg);
         return false;
     }
 
