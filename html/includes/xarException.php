@@ -109,7 +109,7 @@ class SystemException extends Exception
             'EXCEPTION_FAILURE' => array(
                 'title' => xarML('Unknown system error'),
                 'short' => xarML('An unknown system error was encountered.'),
-                'long' => xarML('The error encountered is coming from the error system itself. Please help us correct this by filing a bug at <a href="http://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core">bugs.xaraya.com</a>.') ),
+                'long' => xarML('The error system has encountered an error it cannot identify. Please help us correct this by filing a bug at <a href="http://bugs.xaraya.com/enter_bug.cgi?product=App%20-%20Core">bugs.xaraya.com</a>.') ),
             'FUNCTION_FAILED' => array(
                 'title' => xarML('Function failed'),
                 'short' => xarML('A call to a function returned a bad result.'),
