@@ -1544,7 +1544,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 }
 
 /**
- * Check if a particular hook module is hooked to the current module
+ * Check if a particular hook module is hooked to the current module (+ itemtype)
  *
  * @access public
  * @static modHookedCache array
@@ -1566,41 +1566,64 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         list($callerModName) = xarRequestGetInfo();
     }
 
-    if (!isset($modHookedCache[$callerModName.$callerItemType])) {
+    // Get all hook modules for the caller module once
+    if (!isset($modHookedCache[$callerModName])) {
         // Get database info
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
         $hookstable = $xartable['hooks'];
 
         // Get applicable hooks
-        $query = "SELECT DISTINCT xar_tmodule FROM $hookstable WHERE xar_smodule = ?";
+        $query = "SELECT DISTINCT xar_tmodule, xar_stype FROM $hookstable WHERE xar_smodule = ?";
         $bindvars = array($callerModName);
-        if (empty($callerItemType)) {
-            // Itemtype is not specified, get only the generic hooks
-            $query .= " AND xar_stype = ''";
-        } else {
-            // FIXME: if itemtype is specified, i think we should not return the generic hook
-            // hooks can be enabled for all or for a particular item type <-- this logic is strange
-            $query .= " AND (xar_stype = '' OR xar_stype = ?)";
-            $bindvars[] = $callerItemType;
-        }
 
         $result =& $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
-        $modHookedCache[$callerModName.$callerItemType] = array();
+        $modHookedCache[$callerModName] = array();
         while(!$result->EOF) {
-            list($modname) = $result->fields;
-            $modHookedCache[$callerModName.$callerItemType][$modname] = 1;
+            list($modname,$itemtype) = $result->fields;
+            if (!isset($modHookedCache[$callerModName][$itemtype])) {
+                $modHookedCache[$callerModName][$itemtype] = array();
+            }
+            $modHookedCache[$callerModName][$itemtype][$modname] = 1;
             $result->MoveNext();
         }
         $result->Close();
     }
-    if (isset($modHookedCache[$callerModName.$callerItemType][$hookModName])) {
-        return true;
-    } else {
-        return false;
+
+    if (empty($callerItemType)) {
+        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
+            // generic hook is enabled
+            return true;
+        } else {
+            return false;
+        }
+    } elseif (is_numeric($callerItemType)) {
+        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
+            // generic hook is enabled
+            return true;
+        } elseif (isset($modHookedCache[$callerModName][$callerItemType][$hookModName])) {
+            // or itemtype-specific hook is enabled
+            return true;
+        } else {
+            return false;
+        }
+    } elseif (is_array($callerItemType) && count($callerItemType) > 0) {
+        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
+            // generic hook is enabled
+            return true;
+        } else {
+            foreach ($callerItemType as $itemtype) {
+                if (!is_numeric($itemtype)) continue;
+                if (isset($modHookedCache[$callerModName][$itemtype][$hookModName])) {
+                    // or at least one of the itemtype-specific hooks is enabled
+                    return true;
+                }
+            }
+        }
     }
+    return false;
 }
 
 /**
