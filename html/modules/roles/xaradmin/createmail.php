@@ -49,7 +49,12 @@ function roles_admin_createmail()
         // Create a query to send to sendmail
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
-        $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
+        $q->addfields(array('r.xar_uid AS uid',
+                            'r.xar_name AS name',
+                            'r.xar_uname AS uname',
+                            'r.xar_email AS email',
+                            'r.xar_state AS state',
+                            'r.xar_date_reg AS date_reg'));
         $q->eq('r.xar_uid',$uid);
         xarSessionSetVar('rolesquery', serialize($q));
     }
@@ -64,7 +69,12 @@ function roles_admin_createmail()
         else {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
-            $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
+            $q->addfields(array('r.xar_uid AS uid',
+                                'r.xar_name AS name',
+                                'r.xar_uname AS uname',
+                                'r.xar_email AS email',
+                                'r.xar_state AS state',
+                                'r.xar_date_reg AS date_reg'));
             $q->eq('xar_type',0);
         }
         // Set the paging and order stuff for this particular page
@@ -99,13 +109,13 @@ function roles_admin_createmail()
         $q->run();
 
         foreach($q->output() as $role) {
-            $data['users'][$role['r.xar_uid']] = array('uid' => $role['r.xar_uid'],
-                'name' => $role['r.xar_name'],
-                'uname' => $role['r.xar_uname'],
-                'email' => $role['r.xar_email'],
-                'status' => $role['r.xar_state'],
-                'date_reg' => $role['r.xar_date_reg'],
-                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$role['r.xar_name'])
+            $data['users'][$role['uid']] = array('uid' => $role['uid'],
+                'name' => $role['name'],
+                'uname' => $role['uname'],
+                'email' => $role['email'],
+                'status' => $role['state'],
+                'date_reg' => $role['date_reg'],
+                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$role['name'])
                 );
         }
 

@@ -396,6 +396,12 @@ class xarQuery
                                   'op' => 'in');
         return $key;
     }
+    function notin($field1,$field2,$active=1)
+    {
+        return $this->addcondition(array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'NOT IN'),$active);
+    }
     function regex($field1,$field2)
     {
         $key = $this->_addcondition();
