@@ -1,10 +1,11 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
-
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
     <xar:comment>This section deals with dependancies.</xar:comment>
     <xar:if condition="!empty($dependencies)">
-        <h2><xar:mlstring>Module Installation with unsatisfied Dependencies</xar:mlstring></h2>
+        <h2><xar:mlstring>Module Installation: Unsatisfied Dependencies</xar:mlstring></h2>
         <!-- The form for editting the module settings and hooks -->
         <form action="&xar-modurl-modules-admin-install;" method="post" enctype="application/x-www-form-urlencoded">
            <div>
@@ -12,78 +13,68 @@
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
             <xar:if condition="count($dependencies['satisfied']) ne 0">
-                <br />
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <tr>
-                        <th><xar:mlstring>Dependencies already satisfied</xar:mlstring></th>
-                    </tr>
-        
+                <h3>
+                    <xar:mlstring>Dependencies already satisfied:</xar:mlstring>
+                </h3>
+
+                <ul>        
                     <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
-                        <tr>
-                            <td>#xarML($modInfo['displayname'])#</td>
-                        </tr>
+                        <li>#xarML($modInfo['displayname'])#</li>
                     </xar:foreach>
-                </table>
-                <br />
+                </ul>
             </xar:if>
 
             <xar:if condition="count($dependencies['satisfiable']) ne 0">
-                <br />
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <tr>
-                        <th><xar:mlstring>Dependencies which can be satisfied</xar:mlstring></th>
-                    </tr>
+                <h3>
+                    <xar:mlstring>Dependencies which can be satisfied:</xar:mlstring>
+                </h3>
         
+                <ul>
                     <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
-                        <tr>
-                            <td>#xarML($modInfo['displayname'])#</td>
-                        </tr>
+                        <li>#xarML($modInfo['displayname'])#</li>
                     </xar:foreach>
-                </table>
-                <br />
+                </ul>
             </xar:if>
 
             <xar:if condition="count($dependencies['unsatisfiable']) ne 0">
-                <br />
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <tr>
-                        <th><xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring></th>
-                    </tr>
+                <h3>
+                    <xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring>
+                </h3>
         
+                <ul>
                     <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
-                        <tr><td>
+                        <li>
                             <xar:if condition="is_array($modInfo) and $modInfo['displayname'] ne xarML('Unknown')">
                                 #$modInfo['displayname']#
                             <xar:elseif condition="is_array($modInfo) and $modInfo['displayname'] eq xarML('Unknown')" />
-                                <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">
+                                <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">1 
                                     <xar:ml>
                                         <xar:mlstring>Missing a module with ID #(1). Click this line to get information.</xar:mlstring>
                                         <xar:mlvar>#$modInfo['regid']#</xar:mlvar>
                                     </xar:ml>
-                                    <br />
-                                    <xar:mlstring>Install that module first, then try this installation again.</xar:mlstring>
                                 </a>
+                                <br />
+                                <xar:mlstring>Install this module first, then try this installation again.</xar:mlstring>
                             <xar:elseif condition="is_numeric($modInfo)" />
-                                <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">2 
                                     <xar:ml>
                                         <xar:mlstring>Missing a module with ID #(1). Click this line to get information.</xar:mlstring>
                                         <xar:mlvar>#$modInfo#</xar:mlvar>
                                     </xar:ml>
-                                    <br />
-                                    <xar:mlstring>Install that module first, then try this installation again.</xar:mlstring>
                                 </a>
+                                <br />
+                                <xar:mlstring>Install this module first, then try this installation again.</xar:mlstring>
                             <xar:else />
-                                <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
+                                <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">3 
                                     <xar:ml>
                                         <xar:mlstring>Get Information for the missing PHP extension #(1)</xar:mlstring>
                                         <xar:mlvar>#$modInfo#</xar:mlvar>
                                     </xar:ml>
                                 </a>
                             </xar:if>
-                        </td></tr>
+                        </li>
                     </xar:foreach>
-                </table>
-                <br />
+                </ul>
             <xar:else />
                 <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
             </xar:if>
@@ -92,7 +83,9 @@
     </xar:if>
 
     <xar:comment>This section deals with install errors.</xar:comment>
-    <h2><xar:mlstring>Module Installation Failed</xar:mlstring></h2>
+    <p>
+        <xar:mlstring>Module Installation Failed</xar:mlstring>
+    </p>
     <xar:template file="install-errors" type="module" />
 
     <p><a href="&xar-modurl-modules-admin-list;"><xar:mlstring>Go back to the modules list</xar:mlstring></a></p>

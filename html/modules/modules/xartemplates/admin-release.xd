@@ -1,24 +1,28 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
-<div class="xar-mod-body"><div align="left">
-<h2><xar:mlstring>Recent Extension Releases</xar:mlstring></h2>
-<xar:if condition="empty($warning)">
-    <xar:if condition="!empty($feedcontent)">
-        <xar:foreach in="$feedcontent" value="$release">
-        <p>
-            <xar:if condition="!empty($release['link'])">
-                &bull;<a href="#$release['link']#" target="_BLANK"> #$release['title']# </a>:
-            <xar:else />
-                &bull; <b>#$release['title']#</b>:
-            </xar:if>
-            <xar:if condition="!empty($release['description'])">
-                #$release['description']#
-            </xar:if>
-        </p>
-        </xar:foreach>
-    </xar:if>
-<xar:else />
-    #$warning#
-</xar:if>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
 </div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>Recent Extension Releases</xar:mlstring>
+    </h2>
+
+    <xar:if condition="empty($warning)">
+        <xar:if condition="!empty($feedcontent)">
+            <xar:foreach in="$feedcontent" value="$release">
+                <xar:if condition="!empty($release['link'])">
+                    <h3><a href="#$release['link']#" onclick="window.open(this.getAttribute('href'));return false;">#$release['title']#</a></h3>
+                <xar:else />
+                    <h3>#$release['title']#</h3>
+                </xar:if>
+                <xar:if condition="!empty($release['description'])">
+                    <p>
+                        #$release['description']#
+                    </p>
+                </xar:if>
+            </xar:foreach>
+        </xar:if>
+    <xar:else />
+        #$warning#
+    </xar:if>
 </div>

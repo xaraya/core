@@ -1,55 +1,30 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-
-<script type="text/javascript">
-
-function toggleDisplay(id)
-{
-    elem = document.getElementById(id);
-    if(elem.style.display == 'none') {
-        elem.style.display = 'block';
-    } else {
-        elem.style.display ='none';
-    }
-}
-
-function setDisplayOn(id) 
-{
-    document.getElementById(id).style.display = 'block';
-}
-
-function setDisplayOff(id)
-{
-    document.getElementById(id).style.display = 'none';
-}
-</script>
-
+<xar:base-include-javascript module="base" filename="toggle.js" />
 <xar:if condition="empty($return_url)">
     <xar:comment>
-      When this template is not included somewhere else, build some header
-      stuff
+    When this template is not included somewhere else, build some header
+    stuff
     </xar:comment>
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    </div>
     <div class="xar-mod-body">
-        <h2><xar:mlstring>Module Hooks Configuration</xar:mlstring></h2>
+        <h2>
+            <xar:mlstring>Configure Hooks</xar:mlstring>
+        </h2>
+
         <p>
-          <xar:mlstring>
-            Extend the functionality of your modules via one of the 
-            following available hooks :
-          </xar:mlstring>
+            <xar:mlstring>Extend the functionality of your modules via one of the following available hooks:</xar:mlstring>
         </p>
         <p>
-          <xar:mlstring>
-            Select the hook module providing the extra functionality and then 
-            check the boxes of the modules you would like to enable that 
-            functionality in. (e.g. select "comments" and then check "articles" 
-            to enable comments in the articles module)
-          </xar:mlstring>
+            <xar:mlstring>Select the hook module providing the extra functionality and then check the boxes of the modules you would like to enable that functionality in. (e.g. select "comments" and then check "articles" to enable comments in the articles module)</xar:mlstring>
         </p>
+
         <xar:template file="hooks-mainpart" module="modules" />
     </div>
 <xar:else/>
     <xar:comment>
-        Just show the list
+    Just show the list
     </xar:comment>
     <xar:template file="hooks-mainpart" module="modules" />
 </xar:if>

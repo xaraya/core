@@ -1,49 +1,44 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Module Removal with dependents still not removed</xar:mlstring></h2>
+    <h2>
+        <xar:mlstring>Module Removal with dependents still not removed</xar:mlstring>
+    </h2>
+
+    <xar:if condition="count($dependencies['active']) ne 0">
+        <h3>
+            <xar:mlstring>Dependents still Active</xar:mlstring>
+        </h3>
+
+        <ul>
+            <xar:foreach in="$dependencies['active']" value="$modInfo">
+                <li>#xarML($modInfo['displayname'])#</li>
+            </xar:foreach>
+        </ul>
+    </xar:if>
+
+    <xar:if condition="count($dependencies['initialised']) ne 0">
+        <h3>
+            <xar:mlstring>Dependents still Initialized (Inactive)</xar:mlstring>
+        </h3>
+
+        <ul>
+            <xar:foreach in="$dependencies['initialised']" value="$modInfo">
+                <li>#xarML($modInfo['displayname'])#</li>
+            </xar:foreach>
+        </ul>
+    </xar:if>
+
+
     <!-- The form for editting the module settings and hooks -->
     <form action="&xar-modurl-modules-admin-remove;" method="post" enctype="application/x-www-form-urlencoded">
-<div>
-        <input type="hidden" name="id" id="id" value="#$id#" />
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-
-        <xar:if condition="count($dependencies['active']) ne 0">
-            <br />
-            <table border="1" cellpadding="5" cellspacing="0">
-                <tr>
-                    <th><xar:mlstring>Dependents still Active</xar:mlstring></th>
-                </tr>
-    
-                <xar:foreach in="$dependencies['active']" value="$modInfo">
-                    <tr>
-                        <td>#xarML($modInfo['displayname'])#</td>
-                    </tr>
-                </xar:foreach>
-            </table>
-            <br />
-        </xar:if>
-
-        <xar:if condition="count($dependencies['initialised']) ne 0">
-            <br />
-            <table border="1" cellpadding="5" cellspacing="0">
-                <tr>
-                    <th><xar:mlstring>Dependents still Initialized (Inactive)</xar:mlstring></th>
-                </tr>
-
-                <xar:foreach in="$dependencies['initialised']" value="$modInfo">
-                    <tr>
-                        <td>#xarML($modInfo['displayname'])#</td>
-                    </tr>
-                </xar:foreach>
-            </table>
-            <br />
-        </xar:if>
-
-        <input type="submit" name="command" id="command" value="#xarML('Remove All')#" tabindex="9" />
-        <br />
-
-        <a href="&xar-modurl-modules-admin-list;">#xarML('Go back to the modules list.')#</a>
-</div>
+        <div class="xar-align-center">
+            <input type="hidden" name="id" id="id" value="#$id#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="submit" name="command" id="command" value="#xarML('Remove All')#" class="xar-margin-thickright" />
+            <input type="button" name="return" id="return" onclick="document.location='&xar-modurl-modules-admin-list;';" value="#xarML('Go back to the modules list')#" class="xar-margin-thickleft" />
+        </div>
     </form>
 </div>

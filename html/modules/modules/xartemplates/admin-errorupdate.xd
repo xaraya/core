@@ -1,51 +1,69 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Module Error Information</xar:mlstring></h2>
-    <div class="xar-norm-outline" style="padding: 4px;margin: auto;text-align: left;">
-        <!-- Error Information -->
-        <div class="xar-error" style="text-align: left;">
-            <p><xar:mlstring>An error has been detected in the module versions!</xar:mlstring></p>
+    <h2>
+        <xar:mlstring>Module Error Information</xar:mlstring>
+    </h2>
+    <!-- Error Information -->
+
+    <h3>
+        <xar:mlstring>An error has been detected in the module versions!</xar:mlstring>
+    </h3>
+
+    <p>
+        <xar:mlstring>There is a discrepancy between the module version stored in the database and the module version found in the file system.  If you continue to run with an older version of the module files, you can severely corrupt your data.</xar:mlstring>
+    </p>
+
+    <div style="text-align: left;margin: auto;">
+        <div style="float: left; width: 30%; text-align: left; display: inline;">
+            <label class="xar-title"><xar:mlstring>Module</xar:mlstring></label>
         </div>
-        <div style="text-align: left;margin: auto;">
-            <p><xar:mlstring>There is a discrepancy between the module version stored in the database and the module version found in the file system.  If you continue to run with an older version of the module files, you can severely corrupt your data.</xar:mlstring></p>
+        <div style="float: left; width: 30%; text-align: center; display: inline;">
+            <label class="xar-title"><xar:mlstring>Database Version</xar:mlstring></label>
         </div>
-        <br/><br/>
-        <div style="text-align: left;margin: auto;">
-            <div style="float: left; width: 30%; text-align: left; display: inline;">
-                <label class="xar-title"><xar:mlstring>Module</xar:mlstring></label>
-            </div>
-            <div style="float: left; width: 30%; text-align: center; display: inline;">
-                <label class="xar-title"><xar:mlstring>Database Version</xar:mlstring></label>
-            </div>
-            <div style="float: left; width: 30%; text-align: right; display: inline;">
-                <label class="xar-title"><xar:mlstring>Filesystem Version</xar:mlstring></label>
-            </div>
-            <div style="float: left; width: 30%; text-align: left; display: inline;">
-                <span class="xar-norm">#$modname#</span>
-            </div>
-            <div style="float: left; width: 30%; text-align: center; display: inline;">
-                <span class="xar-norm">#$dbversion#</span>
-            </div>
-            <div style="float: left; width: 30%; text-align: right; display: inline;">
-                    <span class="xar-norm">#$fileversion#</span>
-            </div>
+        <div style="float: left; width: 30%; text-align: right; display: inline;">
+            <label class="xar-title"><xar:mlstring>Filesystem Version</xar:mlstring></label>
         </div>
-        <br/><br/><br/><br/>
-        <div style="text-align: left;margin: auto;">
-            <p><xar:mlstring>The module has been marked inactive until this discrepancy is corrected.</xar:mlstring></p>
-            <p><xar:mlstring>You have two choices:</xar:mlstring></p>
-            <ul>
-                <li><label class="xar-menu-item"><xar:mlstring>Update the modules files.</xar:mlstring></label></li>
-                <label class="xar-menu-subitem">
-                    <p><xar:mlstring>Download the latest version of module</xar:mlstring>&nbsp;#$modname#&nbsp;<xar:mlstring>from</xar:mlstring>&nbsp;<a href="http://www.xaraya.com">www.xaraya.com</a>&nbsp;<xar:mlstring>and update your file system.</xar:mlstring></p>
-                </label>
-                <li><label class="xar-menu-item"><xar:mlstring>Update the module version in the database.</xar:mlstring></label></li>
-                <label class="xar-menu-subitem">
-                    <p><xar:mlstring>If modules files are up to date, you can update the database to the current version.  Only do this if you are absolutely certain the module files are up to date.</xar:mlstring></p>
-                    <p><a href="&xar-modurl-modules-admin-updateversion;&amp;id=#$regId#">Click here to update the module version in the database.</a></p>
-                </label>
-            </ul>
+        <div style="float: left; width: 30%; text-align: left; display: inline;">
+            <span class="xar-norm">#$modname#</span>
+        </div>
+        <div style="float: left; width: 30%; text-align: center; display: inline;">
+            <span class="xar-norm">#$dbversion#</span>
+        </div>
+        <div style="float: left; width: 30%; text-align: right; display: inline;">
+                <span class="xar-norm">#$fileversion#</span>
         </div>
     </div>
+
+    <p>
+        <xar:mlstring>The module has been marked inactive until this discrepancy is corrected.</xar:mlstring>
+    </p>
+
+    <h3>
+        <xar:mlstring>You have two choices:</xar:mlstring>
+    </h3>
+
+    <ul>
+        <li>
+            <strong>
+                <xar:mlstring>Update the modules files.</xar:mlstring> 
+            </strong>
+            <xar:mlstring>Download the latest version of module</xar:mlstring>&nbsp;#$modname#&nbsp;<xar:mlstring>from</xar:mlstring>&nbsp;<a href="http://www.xaraya.com">www.xaraya.com</a>&nbsp;<xar:mlstring>and update your file system.</xar:mlstring>
+        </li>
+        <li>
+            <strong>
+                <xar:mlstring>Update the module version in the database.</xar:mlstring> 
+            </strong>
+        </li>
+    </ul>
+
+    <p>
+        <xar:mlstring>If modules files are up to date, you can update the database to the current version.  Only do this if you are absolutely certain the module files are up to date.</xar:mlstring>
+    </p>
+    <p>
+        <a href="&xar-modurl-modules-admin-updateversion;&amp;id=#$regId#">Click here to update the module version in the database.</a>
+    </p>
+
 </div>
