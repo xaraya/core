@@ -65,7 +65,7 @@ class xarMasks
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
-        $this->privsetstable = $xartable['security_privsets'];
+//        $this->privsetstable = $xartable['security_privsets'];
 
 // hack this for display purposes
 // probably should be defined elsewhere
