@@ -71,7 +71,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     xarEvt_registerEvent('UserLogout');
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarUser__shutdown_handler');
+    //register_shutdown_function ('xarUser__shutdown_handler');
     return true;
 }
 
@@ -267,6 +267,8 @@ function xarUserGetNavigationLocale()
 {
     $locale = xarSessionGetVar('navigationLocale');
     if (!isset($locale)) {
+    // CHECKME: use dynamicdata for roles, module user variable and/or session variable
+    //          (see also 'timezone' in xarMLS_userOffset())
         if (xarUserIsLoggedIn()) {
             $locale = xarUserGetVar('locale');
         }
@@ -381,9 +383,12 @@ function xarUserGetVar($name, $userId = NULL)
 
         } elseif (!xarUser__isVarDefined($name)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
-            // Here we can't raise an exception (why was that again ?)
-            $msg = xarML('User variable #(1) was not correctly registered', $name);
-            xarLogMessage($msg, XARLOG_LEVEL_ERROR);
+            // Here we can't raise an exception because they're all optional
+            if ($name != 'locale' && $name != 'timezone') {
+                // log unknown user variables to inform the site admin
+                $msg = xarML('User variable #(1) was not correctly registered', $name);
+                xarLogMessage($msg, XARLOG_LEVEL_ERROR);
+            }
             return;
 
         } else {
