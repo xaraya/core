@@ -681,6 +681,9 @@ function xarCore_GetCached($cacheKey, $name)
  */
 function xarCore_SetCached($cacheKey, $name, $value)
 {
+    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
+        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
+    }
     $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name] = $value;
 }
 
