@@ -6,7 +6,7 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="4">
             <xar:foreach in="$fields" key="$name" value="$value">
             <tr>
-                <td align="right" valign="top" width="15%"><xar:data-label property="$properties[$name]" /> :</b></td>
+                <td align="right" valign="top" width="15%"><b><xar:data-label property="$properties[$name]" /> :</b></td>
                 <xar:if condition="!empty($linkfield) and $linkfield eq $name">
                     <td><a href="#$links[$itemid]['display']['olink']#"><xar:data-output property="$properties[$name]" value="$value" /></a></td>
                 <xar:else />
