@@ -81,10 +81,10 @@ document.forms['privilegeform'].submit();}
                         <td>
                             <select name="prealm" id="prealm" size="1" tabindex="3">
                                 <xar:loop name="$realms">
-                                    <xar:if condition="$name eq $prealm">
-                                        <option value="#$name#" selected="selected">#$name#</option>
+                                    <xar:if condition="$loop:item['name'] eq $prealm">
+                                        <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
                                     <xar:else />
-                                        <option value="#$name#">#$name#</option>
+                                        <option value="#$loop:item['name']#">#$loop:item['name']#</option>
                                     </xar:if>
                                 </xar:loop>
                             </select>
@@ -97,10 +97,10 @@ document.forms['privilegeform'].submit();}
                         <td>
                             <select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:this.form.action = '&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
                                 <xar:loop name="$modules">
-                                    <xar:if condition="strtolower($name) eq strtolower($pmodule)">
-                                        <option value="#$name#" selected="selected">#$name#</option>
+                                    <xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
+                                        <option value="#$loop:item['name']#" selected="selected">#$loop:item['name#']</option>
                                     <xar:else />
-                                        <option value="#$name#">#$name#</option>
+                                        <option value="#$loop:item['name']#">#$loop:item['name']#</option>
                                     </xar:if>
                                 </xar:loop>
                             </select>
@@ -113,10 +113,10 @@ document.forms['privilegeform'].submit();}
                         <td>
                             <select name="pcomponent" id="pcomponent" size="1" tabindex="5"onChange="javascript:this.form.action = '&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
                                 <xar:loop name="$components">
-                                    <xar:if condition="strtolower($name) eq strtolower($pcomponent)">
-                                        <option value="#$name#" selected="selected">#$name#</option>
+                                    <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
+                                        <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
                                     <xar:else />
-                                        <option value="#$name#">#$name#</option>
+                                        <option value="#$loop:item['name#']">#$loop:item['name']#</option>
                                     </xar:if>
                                 </xar:loop>
                             </select>
@@ -186,17 +186,17 @@ document.forms['privilegeform'].submit();}
                 <table border="0" cellpadding="2" cellspacing="0">
                     <xar:loop name="$instances">
                         <tr>
-                            <td>#$header#</td>
+                            <td>#$loop:item['header']#</td>
                             <td>
-                                <xar:if condition="$type eq 'manual'">
-                                    <input type="text" name="pinstance#$_bl_loop_index1#" value="#$default#" size="20" />
+                                <xar:if condition="$loop:item['type'] eq 'manual'">
+                                    <input type="text" name="pinstance#$loop:index#" value="#$loop:item['default']#" size="20" />
                                 <xar:else />
-                                    <select name="pinstance#$_bl_loop_index1#" size="1" tabindex="5">
-                                        <xar:loop name="$dropdown">
-                                            <xar:if condition="$name eq $default">
-                                                <option value="#$name#" selected="selected">#$name#</option>
+                                    <select name="pinstance#$loop:index#" size="1" tabindex="5">
+                                        <xar:loop name="$loop:item['dropdown']">
+                                            <xar:if condition="$loop:item['name'] eq $loop:item['default']">
+                                                <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
                                             <xar:else />
-                                                <option value="#$name#">#$name#</option>
+                                                <option value="#$loop:item['name']#">#$loop:item['name']#</option>
                                             </xar:if>
                                         </xar:loop>
                                     </select>
@@ -236,7 +236,7 @@ document.forms['privilegeform'].submit();}
         <td>
             <select name="privid" id="privid">
                 <xar:loop name="$privileges">
-                    <option value="#$pid#">#$name#</option>
+                    <option value="#$loop:item['pid']#">#$loop:item['name']#</option>
                 </xar:loop>
             </select>
         </td>
@@ -257,12 +257,12 @@ document.forms['privilegeform'].submit();}
 <xar:loop name="$parents">
     <tr>
         <td width="150">
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parentid#">                
-                #$parentname#
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['parentid']#">                
+                #$loop:item['parentname']#
                 </a>
         </td>
         <td width="50" style="text-align: center;">
-                <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$pname# from #$parentname#" style="vertical-align: middle;" /></a>
+                <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$loop:item['ppid']#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$loop:item['authid']#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$loop:item['pname']# from #$loop:item['parentname']#" style="vertical-align: middle;" /></a>
         </td>
     </tr>
 </xar:loop>

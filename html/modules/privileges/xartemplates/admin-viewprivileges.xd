@@ -46,7 +46,7 @@ document.forms['privilegeform'].submit();}
 </form>
 
 <xar:loop name="$trees">
-	&xar-var-tree;
+	#$loop:item['tree']#
 </xar:loop>
 </div>
 </div>

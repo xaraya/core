@@ -47,17 +47,17 @@ document.forms['privilegeform'].submit();}
 		<xar:loop name="$roles">
 			<tr>
 				<td width="150">
-					<xar:if condition="$type eq 0">
+					<xar:if condition="$loop:item['type'] eq 0">
 						User
 					<xar:else />
 						Group
 					</xar:if>
 				</td>
 				<td width="150">
-					&xar-var-name;
+					$loop:item['name']
 				</td>
 			<td align="right">
-				<a href="&xar-var-removeurl;&roleid=&xar-var-roleid;" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+				<a href="$loop:item['removeurl']&roleid=$loop:item['roleid']" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 			</td>
 			</tr>
 		</xar:loop>
@@ -105,7 +105,7 @@ document.forms['privilegeform'].submit();}
 	</tr>
 </table>			
 	<xar:loop name="$trees">
-		#$tree#
+		#$loop:item['tree']#
 	</xar:loop>
 </div>
 </div>

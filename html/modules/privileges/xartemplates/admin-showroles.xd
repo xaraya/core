@@ -42,17 +42,17 @@
 		<xar:loop name="$roles">
 			<tr>
 				<td width="150">
-					<xar:if condition="$type eq 0">
+					<xar:if condition="$loop:item['type'] eq 0">
 						User
 					<xar:else />
 						Group
 					</xar:if>
 				</td>
 				<td width="150">
-					#$name#
+					#$loop:item['name']#
 				</td>
 			<td align="right">
-				<a href="#$removeurl#&amp;roleid=#$roleid#"
+				<a href="#$loop:item['removeurl']#&amp;roleid=#$loop:item['roleid']#"
 				title="Remove this Privilege assignment">				
 					Remove    
 				</a>
@@ -85,6 +85,6 @@
 	</tr>
 </table>			
 	<xar:loop name="$trees">
-		#$tree#
+		#$loop:item['tree']#
 	</xar:loop>
 </div>

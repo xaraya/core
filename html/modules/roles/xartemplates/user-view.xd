@@ -41,9 +41,9 @@
 		    </xar:if>
 		</tr>
 		<xar:loop name="$items">
-			<xar:if condition="(($_bl_loop_index1 + 1) % 2)">
+			<xar:if condition="(($loop:index + 1) % 2)">
 				<tr>
-					<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+					<xar:if ="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
 						<td class="xar-norm">
 							<a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$loop:item['uid#']">#$loop:item['name']#</a>
 						</td>
