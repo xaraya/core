@@ -377,9 +377,19 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     }
 
     if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
-    xarResponseRedirect(xarModURL('base','user','systemexit',
+    if (!function_exists('xarModURL')) {
+        $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered. <br /><br />";
+        $rawmsg .= "The last registered error message is: <br /><br />";
+        $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
+        $rawmsg .= $msg;
+        echo $rawmsg;
+        exit;
+    }
+    else {
+        xarResponseRedirect(xarModURL('base','user','systemexit',
         array('code' => $errorType,
               'exception' => urlencode($msg))));
+    }
 }
 
 /**
