@@ -1,0 +1,69 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <pnt:mlstring>Users Administration</pnt:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-new;"><pnt:mlstring>Add User</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-view;"><pnt:mlstring>View Users</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifyconfig;"><pnt:mlstring>Modify Users Configuration</pnt:mlstring></a>
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+			Extra Link TaC Removed
+        </td>
+        <td align="center">
+            <b><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></b>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifywelcomeemail;"><pnt:mlstring>Modify Welcome Email</pnt:mlstring></a>
+        </td>
+    </tr>
+</table>
+
+<center>
+	<br /><br />
+	<pnt:mlstring>Send an email to a user or group of users</pnt:mlstring>
+	<br /><br />
+	<br /><br />
+	<form action="&pnt-modurl-users-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="authid" id="authid" value="&pnt-var-authid;" />
+		<table>
+			<tr>
+				<td align=left>
+					<pnt:mlstring>Username</pnt:mlstring>
+				</td>
+				<td align=left>
+					<input type="text" name="name" id="name" value="" size="32" maxlength="32" tabindex="1" />
+				</td>
+			</tr>
+			<tr align="left" valign="middle">
+				<td align=left>
+					<pnt:mlstring>User Number</pnt:mlstring>
+				</td>
+				<td align=left>
+					<input type="text" name="number" id="number" value="" size="5" maxlength="5" tabindex="2" />
+				</td>
+			</tr>
+		</table>
+		<pnt:mlstring>Message</pnt:mlstring>
+		<br/>
+		<textarea name="confirmationemail" id="confirmationemail" wrap="soft" rows="20" cols="50" tabindex="1"></textarea>
+		<br /> 
+		<br />
+		<input type="submit" value="Submit new confirmation email" align="middle" tabindex="2" />
+	</form>
+</center>
