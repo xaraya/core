@@ -55,7 +55,7 @@ function xar_dynamicdata_formpreview()
                 </xar:if>
                 </td>
                 <td align="right">
-                    <a href="&xar-modurl-dynamicdata-util&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
+                    <a href="&xar-modurl-dynamicdata-util;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
                         <xar:mlstring>
                             Export Object Definition to XML 
                         </xar:mlstring>
