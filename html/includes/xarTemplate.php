@@ -34,6 +34,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarTpl_themesBaseDir'] = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeName'] = $args['defaultThemeName'];
+    $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
     if (!xarTplSetThemeName($args['defaultThemeName'])) {
         xarCore_die("xarTpl_init: Unexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
@@ -49,7 +50,6 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
                        "'. Change directory permissions.");
         }
     }
-    $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
     $GLOBALS['xarTpl_headJavaScript'] = '';
