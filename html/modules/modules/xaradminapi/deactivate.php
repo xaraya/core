@@ -9,10 +9,10 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage modules module
- * @author Xaraya Team 
+ * @author Xaraya Team
  */
 /**
- * Deactivate a module if it has an deactive function, otherwise just set the state to deactive
+ * Deactivate a module if it has a deactive function, otherwise just set the state to deactive
  *
  * @access public
  * @param regid module's registered id
@@ -41,13 +41,16 @@ function modules_adminapi_deactivate ($args)
 //  if ($modInfo['state'] != XARMOD_STATE_ACTIVE)
 
     // Module activate function
-    if (!xarModAPIFunc('modules',
-                       'admin',
-                       'executeinitfunction',
-                       array('regid'    => $regid,
-                             'function' => 'deactivate'))) {
-        //Raise an Exception
-        return;
+    // only run if the module is actually there. It may have been removed
+    if ($modInfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
+        if (!xarModAPIFunc('modules',
+                           'admin',
+                           'executeinitfunction',
+                           array('regid'    => $regid,
+                                 'function' => 'deactivate'))) {
+            //Raise an Exception
+            return;
+        }
     }
     // Update state of module
     $res = xarModAPIFunc('modules',
