@@ -2,7 +2,8 @@
 
 set_time_limit(360);
 
-function searchDir($path) {
+function searchDir($path)
+{
 
     $fileModules = array();
     $dh = opendir($path);
@@ -21,13 +22,13 @@ function searchDir($path) {
             if (substr($entry, strlen($entry)-4) == '.php') {
                 echo "Reading file $path/$entry\r\n";
                 $file = file ("$path/$entry");
-                
+
                 foreach ($file as $line) {
                     if (strpos($line, "xarVarFetch") !== false) {
                         echo  "->  $line";
                     }
                 }
-                
+
                 echo "\r\n";
             }
         }

@@ -4,7 +4,8 @@ $GLOBALS['called'] = false;
 
 set_time_limit(360);
 
-function replace( $matches ) {
+function replace( $matches )
+{
     $GLOBALS['called'] = true;
     $list1 = explode(',', $matches[1]);
     $list2 = explode(',', $matches[2]);
@@ -37,7 +38,8 @@ function replace( $matches ) {
 //    return array ($matches[0] => $text);
 }
 
-function searchDir($path) {
+function searchDir($path)
+{
 
     $fileModules = array();
     $dh = opendir($path);

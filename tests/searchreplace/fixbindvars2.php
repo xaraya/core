@@ -5,7 +5,8 @@ $GLOBALS['called'] = false;
 
 set_time_limit(900);
 
-function first_replace ( $matches ) {
+function first_replace ( $matches )
+{
     $match = $matches[2];
 
     $exploded = explode('"', $match);
@@ -53,7 +54,8 @@ function first_replace ( $matches ) {
     return $result_string;
 }
 
-function replace_inside_quotes ( $matches ) {
+function replace_inside_quotes ( $matches )
+{
     $GLOBALS['variables_found'][] = $matches[count($matches)-1];
 
 //     echo "<br />";
@@ -67,7 +69,8 @@ function replace_inside_quotes ( $matches ) {
     }
 }
 
-function replace_outside_quotes ( $matches ) {
+function replace_outside_quotes ( $matches )
+{
     $string = preg_replace('/xarVarPrepForStore\\((.*)\\)/i', "$1", $matches[1]);
 
 //     print_r($matches);
@@ -82,7 +85,8 @@ function replace_outside_quotes ( $matches ) {
 */
 }
 
-function searchDir($path) {
+function searchDir($path)
+{
 
     $fileModules = array();
     $dh = opendir($path);

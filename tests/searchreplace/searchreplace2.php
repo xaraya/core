@@ -2,7 +2,8 @@
 
 set_time_limit(360);
 
-function searchDir($path) {
+function searchDir($path)
+{
 
     $fileModules = array();
     $dh = opendir($path);
@@ -23,7 +24,7 @@ function searchDir($path) {
                 $file = file ("$path/$entry");
 
                 $file_contents = implode ('', $file);
-                
+
                 $new_file_contents = preg_replace( "|([ ]*if[ ]*\([ ]*![ ]*xarVarFetch[ ]*\([^,]*,[ ]*'isset'[ ]*,[^,]*,[ ]*NULL[ ]*,[ ]*)(XARVAR_NOT_REQUIRED)([ ]*\)[ ]*\))|mU", "\$1XARVAR_DONT_SET\$3", $file_contents );
 
                 if ($new_file_contents != $file_contents) {
