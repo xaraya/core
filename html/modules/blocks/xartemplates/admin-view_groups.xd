@@ -1,51 +1,47 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:base-include-javascript module="base" filename="confirmlink.js" position="head" />
+
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Groups</xar:mlstring></h2>
-	<div style="margin: auto;">
-		<div class="xar-norm-outline" style="margin: 0px 3px 6px 3px;padding: 10px;text-align: left;">
-			<div class="xar-accent" style="padding-top: 10px; padding-bottom: 10px;">
-				<span style="float: left; text-align: center; width: 22%; font-weight: bold;">
-					<span class="help" title="#xarML('The group name as it is called in your theme.')#"><xar:mlstring>Group Name</xar:mlstring></span>
-				</span>
-				<span style="float: left; text-align: center; width: 22%; font-weight: bold;">
-					<span class="help" title="#xarML('The individual instances which belong in this group in order as they appear.')#"><xar:mlstring>Group Members</xar:mlstring></span>
-				</span>
-				<span style="float: left; text-align: center; width: 22%; font-weight: bold;">
-					<span class="help" title="#xarML('The template that is loaded for this block group.  The templates are defined in themes/themename/blocks.')#"><xar:mlstring>Template</xar:mlstring></span>
-				</span>
-				<span style="float: right; text-align: center; width: 22%; font-weight: bold;">
-					<span class="help" title="#xarML('This is the specific action that you can take with the block.  Either edit or delete the block group.')#"><xar:mlstring>Operations</xar:mlstring></span>
-				</span>
-				<br />
-			</div>
-			<xar:loop name="$block_groups">
-			<div class="xar-norm" style="padding-top: 10px; padding-bottom: 10px;">
-				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
-					#$loop:item['name']#
-				</span>
-				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
-					<xar:if condition="$loop:item['membercount'] gt 0">
-						<xar:loop name="$loop:item['instances']">
-							[ <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">#$loop:item['title']#</a> ]
-						</xar:loop>
-					<xar:else />
-						[&nbsp;<xar:mlstring>none</xar:mlstring>&nbsp;]
-					</xar:if>
-				</span>
-				<span style="float: left; text-align: center; width: 22%; font-weight: normal;">
-						<xar:if condition="empty($loop:item['group_template'])">
-							[ <xar:mlstring> default </xar:mlstring> ]
-						<xar:else />
-							#$loop:item['template']#
-						</xar:if>
-				</span>
-				<span style="float: right; text-align: center; width: 22%; font-weight: normal;">
-					<a href="#xarModUrl('blocks', 'admin', 'modify_group', array('gid' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>  |
-					<a href="#$loop:item['deleteurl']#" onClick="#$loop:item['javascript']#">Delete</a>
-				</span>
-			</div>
-			<br />
-			</xar:loop>
-		</div>
-	</div>
+
+<table cellpadding="4px">
+    <tr>
+        <th><span class="help" title="#xarML('The group name as it is called in your theme.')#"><xar:mlstring>Group Name</xar:mlstring></span></th>
+        <th><span class="help" title="#xarML('The individual instances which belong in this group in order as they appear.')#"><xar:mlstring>Group Members</xar:mlstring></span></th>
+        <th><span class="help" title="#xarML('The template that is loaded for this block group.  The templates are defined in themes/themename/blocks.')#"><xar:mlstring>Template</xar:mlstring></span></th>
+        <th><span class="help" title="#xarML('This is the specific action that you can take with the block.  Either edit or delete the block group.')#"><xar:mlstring>Operations</xar:mlstring></span></th>
+    </tr>
+
+    <xar:loop name="$block_groups">
+        <tr>
+            <td>#$loop:item['name']#</td>
+            <td>
+                <xar:if condition="$loop:item['membercount'] gt 0">
+                    <xar:loop name="$loop:item['instances']">
+                        <xar:if condition="$loop:index gt 0"> | </xar:if>
+                        <xar:if condition="!empty($loop:item['title'])">
+                            <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#" title="#xarVarPrepForDisplay($loop:item['title'])#">#$loop:item['name']#</a>
+                        <xar:else />
+                            <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">#$loop:item['name']#</a>
+                        </xar:if>
+                    </xar:loop>
+                <xar:else />
+                    <xar:mlstring>none</xar:mlstring>
+                </xar:if>
+            </td>
+            <td>
+                <xar:if condition="empty($loop:item['group_template'])">
+                    <xar:mlstring>default</xar:mlstring>
+                <xar:else />
+                    #$loop:item['template']#
+                </xar:if>
+            </td>
+            <td>
+                <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('gid' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>
+                | <a href="#$loop:item['deleteurl']#" onClick="return xar_base_confirmLink(this, '#$loop:item['deleteconfirm']#')"><xar:mlstring>Delete</xar:mlstring></a>
+            </td>
+        </tr>
+    </xar:loop>
+</table>
+
 </div>

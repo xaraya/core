@@ -24,28 +24,29 @@ function blocks_adminapi_delete_instance($args)
     extract($args);
 
     // Argument check
-    if (!isset($bid)) {
-        xarSessionSetVar('errormsg', _MODARGSERROR);
+    if (!isset($bid) || !is_numeric($bid)) {
+        $msg = xarML('Invalid parameter');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
     // Security
-	if(!xarSecurityCheck('DeleteBlock',1,'Block',"::$bid")) return;
+	if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
-    $query = "DELETE FROM $block_instances_table
-              WHERE xar_id=" . xarVarPrepForStore($bid);
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
     $query = "DELETE FROM $block_group_instances_table
-              WHERE xar_instance_id=" . xarVarPrepForStore($bid);
+              WHERE xar_instance_id = " . $bid;
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
+
+    $query = "DELETE FROM $block_instances_table
+              WHERE xar_id = " . $bid;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {return;}
 
     xarModAPIFunc('blocks', 'admin', 'resequence');
 

@@ -18,8 +18,9 @@
 function blocks_admin_view_groups()
 {
     // Security Check
-	if(!xarSecurityCheck('AdminBlock',0,'Instance')) return;
+	if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
+
     // Load up database
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -32,30 +33,24 @@ function blocks_admin_view_groups()
               ORDER BY  xar_name ASC";
 
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (!$result) {return;}
 
     // Load up groups array
     $block_groups = array();
     while(!$result->EOF) {
         $group = $result->GetRowAssoc(false);
         // Get details on current group
-        $group = xarModAPIFunc('blocks', 
-                               'admin', 
-                               'groupgetinfo', array('blockGroupId' => $group['id']));
+        $group = xarModAPIFunc(
+            'blocks', 'admin', 'groupgetinfo',
+            array('blockGroupId' => $group['id'])
+        );
         $group['membercount'] = count($group['instances']);
-        $group['javascript'] = "return xar_base_confirmLink(this, '" . xarML('Delete group') ." : $group[name] ?')";
+        $group['deleteconfirm'] = xarML('Delete group #(1)?', $group['name']);
         $group['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('gid' => $group['id'], 'authid' => $authid));
         $block_groups[] = $group;
 
         $result->MoveNext();
     }
-
-    // Include 'confirmlink' JavaScript.
-    // TODO: move this to a template widget when available.
-    xarModAPIfunc(
-        'base', 'javascript', 'modulefile',
-        array('module'=>'base', 'filename'=>'confirmlink.js')
-    );
 
     return array('block_groups' => $block_groups);
 }

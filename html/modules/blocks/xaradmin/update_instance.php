@@ -20,7 +20,7 @@ function blocks_admin_update_instance()
     // Get parameters
     if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
     if (!xarVarFetch('block_groups', 'keylist:id;checkbox', $block_groups, array(), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_name', 'pre:lower:ftoken:passthru:str:1:', $name)) {return;}
+    if (!xarVarFetch('block_name', 'pre:lower:ftoken:field:Name:passthru:str:1:', $name)) {return;}
     if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_state', 'str:1:', $state)) {return;}
     if (!xarVarFetch('block_template', 'str:1:', $block_template, '', XARVAR_NOT_REQUIRED)) {return;}
