@@ -3,29 +3,36 @@
 	<meta name="Keywords" content="#$keywords#" />
 	<meta name="Description" content="#$description#" />
 	<meta name="rating" content="General" />
-
 	<xar:if condition="!empty($latitude)">
-	<meta name="ICBM" content="#$latitude#, #$longitude#">
-	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#">
+		<meta name="ICBM" content="#$latitude#, #$longitude#" />
+		<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#" />
 	</xar:if>
-
+	<!-- Linking for Mozilla and related browser site tab -->
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepage#&amp;theme=rss" />
+	<link rel="alternate" type="application/rss+xml" title="Print" href="#$activepage#&amp;theme=print" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
 	<link rel="pingback" href="&xar-baseurl;ws.php" />
-
-	<!-- Linking for Mozilla and related browser site tab -->
 	<link rel="Top" href="#$baseurl#" />
 	<link rel="Parent" href="#$baseurl#" />
 	<link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
-	<link rel="copyright" href="#$copyrightpage#" />
-	<link rel="help" href="#$helppage#" />
-	<link rel="glossary" href="#$glossary#" />
+	<xar:if condition="!empty($copyrightpage)">
+		<link rel="copyright" href="#$copyrightpage#" />
+	</xar:if>
+	<xar:if condition="!empty($helppage)">
+		<link rel="help" href="#$helppage#" />
+	</xar:if>
+	<xar:if condition="!empty($glossary)">
+		<link rel="glossary" href="#$glossary#" />
+	</xar:if>
+	<xar:if condition="!empty($first)">
+		<link rel="first" href="#$first#" />
+	</xar:if>
+	<xar:if condition="!empty($last)">
+		<link rel="last" href="#$last#" />
+	</xar:if>
 	<xar:if condition="xarModIsAvailable('articles')">
-	<link rel="contents" href="#xarModUrl('articles', 'user', 'viewmap')#" />
+		<link rel="contents" href="#xarModUrl('articles', 'user', 'viewmap')#" />
 	</xar:if>
 	<xar:if condition="xarModIsAvailable('search')">
-	<link rel="search" href="#xarModUrl('search', 'user', 'main')#" />
+		<link rel="search" href="#xarModUrl('search', 'user', 'main')#" />
 	</xar:if>
-
-
-

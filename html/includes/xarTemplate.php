@@ -455,6 +455,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
     // Show startnum link
     if ($startnum != 1) {
         $url = preg_replace('/%%/', 1, $urltemplate);
+        xarVarSetCached('Pager.first','leftarrow',$url);
         $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => $url));
     } else {
         $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => ''));
@@ -479,6 +480,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
     }
     if (($curnum >= $perpage+1) && ($startnum < $curnum-$perpage)) {
         $url = preg_replace('/%%/', $curnum-$perpage, $urltemplate);
+        xarVarSetCached('Pager.last','rightarrow',$url);
         $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => $url));
     } else {
         $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => ''));

@@ -110,6 +110,9 @@ function themes_metablock_display($blockinfo)
     } else {
         $meta['glossary'] = '';
     }
+    //Pager Buttons
+    $meta['first'] = xarVarGetCached('Pager.first','leftarrow');
+    $meta['last']  = xarVarGetCached('Pager.last','rightarrow');
 
     $blockinfo['content'] = $meta;
     return $blockinfo;
