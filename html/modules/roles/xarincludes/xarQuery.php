@@ -23,6 +23,7 @@ class xarQuery
     var $startat;
     var $output;
     var $row;
+    var $dbconn;
 
 //---------------------------------------------------------
 // Constructor
@@ -45,6 +46,7 @@ class xarQuery
         $this->result = array();
         $this->output = array();
         $this->row = array();
+        $this->dbconn =& xarDBGetConn();
     }
 
 
@@ -60,11 +62,10 @@ class xarQuery
                 return $this->result;
             }
         }
-        $dbconn =& xarDBGetConn();
-        $result =& $dbconn->Execute($st);
+        $result =& $this->dbconn->Execute($st);
         $this->rows = $result->_numOfRows;
         if($this->startat != 0 && $this->rowstodo != 0) {
-            $result =& $dbconn->SelectLimit($st, $this->rowstodo, $this->startat-1);
+            $result =& $this->dbconn->SelectLimit($st, $this->rowstodo, $this->startat-1);
         }
         if (!$result) return;
         $this->output = array();
@@ -75,7 +76,7 @@ class xarQuery
             if ($this->fields == array() && $numfields > 0) {
                 $colnames = array();
                 foreach ($this->tables as $table) {
-                    $colnames += $dbconn->MetaColumnNames($table);
+                    $colnames += $this->dbconn->MetaColumnNames($table);
                 }
                 if (count($colnames) == $numfields) {
                     for ($i=0;$i<$numfields;$i++) {
@@ -316,12 +317,11 @@ class xarQuery
     }
     function getconditions()
     {
-        $dbconn =& xarDBGetConn();
         $c = "";
         foreach ($this->conditions as $condition) {
             if (is_array($condition)) {
                 if (gettype($condition['field2']) == 'string') {
-                    $sqlfield = $dbconn->qstr($condition['field2']);
+                    $sqlfield = $this->dbconn->qstr($condition['field2']);
                 }
                 else {
                     $sqlfield = $condition['field2'];
@@ -398,7 +398,6 @@ class xarQuery
             if ($f != "") $f = trim($f," ,");
             break;
         case "INSERT" :
-            $dbconn =& xarDBGetConn();
             $f .= " (";
             $names = '';
             $values = '';
@@ -406,7 +405,7 @@ class xarQuery
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
                         if (gettype($field['value']) == 'string') {
-                            $sqlfield = $dbconn->qstr($field['value']);
+                            $sqlfield = $this->dbconn->qstr($field['value']);
                         }
                         else {
                             $sqlfield = $field['value'];
@@ -425,7 +424,6 @@ class xarQuery
             $f .= ")";
             break;
         case "UPDATE" :
-            $dbconn =& xarDBGetConn();
             if($this->fields == array('*')) {
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage(xarML('Your query has no fields.')));
                 return;
@@ -434,7 +432,7 @@ class xarQuery
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value']))
                         if (gettype($field['value']) == 'string') {
-                            $sqlfield = $dbconn->qstr($field['value']);
+                            $sqlfield = $this->dbconn->qstr($field['value']);
                         }
                         else {
                             $sqlfield = $field['value'];
@@ -522,6 +520,11 @@ class xarQuery
         function setrowstodo($x = 0)
         {
             $this->rowstodo = $x;
+        }
+        function setconnection($x = '')
+        {
+            if ($x == '') $this->dbconn =& xarDBGetConn();
+            else $this->dbconn = $x;
         }
 }
 ?>
