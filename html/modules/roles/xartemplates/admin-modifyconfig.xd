@@ -44,7 +44,7 @@
 	<h4><xar:mlstring>Designated Site Administrator</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td><label for="siteadmin"><xar:mlstring>The designated site admin cannot be deleted</xar:mlstring>:</label></td>
+            <td><label for="siteadmin"><xar:mlstring>The designated site admin that cannot be deleted</xar:mlstring>:</label></td>
             <td>
 				<select name="siteadmin" id="siteadmin">
 				<xar:loop name="$siteadmins">
@@ -61,7 +61,7 @@
 	<h4><xar:mlstring>User Registration Options</xar:mlstring></h4>
     <table border="0" cellpadding="2" cellspacing="0">
 	    <tr>
-            <td><label for="defaultgroup"><xar:mlstring>Default Group for New Users</xar:mlstring>:</label></td>
+            <td><label for="defaultgroup"><xar:mlstring>Default Group for new users</xar:mlstring>:</label></td>
             <td>
 				<select name="defaultgroup" id="defaultgroup">
 				<xar:loop name="$groups">
