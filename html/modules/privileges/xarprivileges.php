@@ -216,6 +216,7 @@ class xarMasks
 		foreach ($perms1 as $perm1) {
 			$isimplied = false;
 			foreach ($perms2 as $key=>$perm2) {
+//		echo "hi".$perm1->getName() . $perm2->getName()."ho";
 				if ($perm2->isEqual($perm1)) {
 					$isimplied = true;
 					break;
@@ -384,9 +385,14 @@ class xarMasks
 		}
 
 // get the assigned privileges and winnow them
-			$roleprivileges = $role->getAssignedPrivileges();
-
-			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
+		$roleprivs = $role->getAssignedPrivileges();
+		$roleprivileges = array();
+// for each one winnow the  assigned privileges and then the inherited
+		foreach ($roleprivs as $priv) {
+			$roleprivileges = $this->winnow(array($priv),$roleprivileges);
+			$roleprivileges = $this->winnow($priv->getDescendants(),$roleprivileges);
+		}
+//			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
 
@@ -395,7 +401,7 @@ class xarMasks
 		foreach ($irreducibleset as $chiave) {
 
 // check the mask
-//			if ($mask->getName() == "AddBlock") {echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);exit;}
+//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
 			if ($chiave->implies($mask)) {
 
 // found a privilege that admits: return the privilege
@@ -1486,7 +1492,7 @@ function drawindent() {
 
 		if (
 			($this->getComponent() == $mask->getComponent()) ||
-//			($mask->getComponent() == 'All') ||
+			($mask->getComponent() == 'All') ||
 			($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
 		)
 		{$xComponent = true;}
@@ -2024,7 +2030,7 @@ class xarPrivilege extends xarMask
 
 //done
 		$descendants = array();
-		$children = $masks->winnow($descendants,$children);
+		$descendants = $masks->winnow($descendants,$children);
 		return $descendants;
     }
 
