@@ -195,7 +195,7 @@ function base_init()
         return NULL;
     }
     // FIXME: should be unique or not?
-    $index = array('name'   => 'xar_name',
+    $index = array('name'   => 'i_xar_name',
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($configVarsTable,$index);
@@ -210,7 +210,6 @@ function base_init()
     }
 
     // Insert Allowed Vars
-    $id_configvar = $dbconn->GenId($configVarsTable);
     $htmltags = array('!--',
                   'a',
                   'abbr',
@@ -296,6 +295,7 @@ function base_init()
 		          'var');
     
     foreach ($htmltags as $htmltag) {
+        $id_configvar = $dbconn->GenId($configVarsTable);
         $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$htmltag','html')";
         $dbconn->Execute($query);
         if ($dbconn->ErrorNo() != 0) {
@@ -316,6 +316,7 @@ function base_init()
                   'cum');
     
     foreach ($censortags as $censortag) {
+        $id_configvar = $dbconn->GenId($configVarsTable);
         $query = "INSERT INTO $configVarsTable VALUES ($id_configvar,'$censortag','censored')";
         $dbconn->Execute($query);
         if ($dbconn->ErrorNo() != 0) {
