@@ -982,7 +982,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param args array the array to be expanded as a GET parameter
  * @param prefix string the prefix for the GET parameter
  * @return string the expanded GET parameter(s)
- */
+ **/
 function xarMod__URLnested($args, $prefix)
 {
     $path = '';
@@ -995,6 +995,53 @@ function xarMod__URLnested($args, $prefix)
     }
     return $path;
 }
+
+/**
+ * Add further parameters to the path, ensuring each value is encoded correctly.
+ *
+ * @access private
+ * @param args array the array to be encoded
+ * @param path string the current path to append parameters to
+ * @param psep string the path seperator to use
+ * @return string the path with encoded parameters
+ */
+function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
+{
+    if( count($args) > 0 )
+    {
+        $params = '';
+    
+        foreach ($args as $k=>$v) {
+            if (is_array($v)) {
+                // Recursively walk the array tree to as many levels as necessary
+                // e.g. ...&foo[bar][dee][doo]=value&...
+                $params .= xarMod__URLnested($v, $psep . $k);
+            } elseif (isset($v)) {
+                $params .= $psep . $k . '=' . rawurlencode($v);
+            }
+        }
+        // Decode a few 'safe' characters as rawurlencode() goes too far.
+        $params = str_replace(
+            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D'),
+            array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
+            $params
+        );
+    
+    
+        // Check for Join character
+        if( strpos($path,$pini) === FALSE )
+        {
+            // Path does not already have any params, remove leading seperator
+            $params = ltrim($params, $psep);
+            
+            $path .= $pini . $params;
+        } else {
+            $path .= $params;
+        }
+    }    
+    return $path;
+}
+
 
 /**
  * Generates an URL that reference to a module function.
@@ -1063,9 +1110,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 $path = preg_replace('/^\//', '', $path);
 
                 // Append any encoderArgs that weren't handled by the module specific short-url encoder
-                $unencodedArgs = xarModURLGetUnencodedArgs($encoderArgs, $path);
-                $path = xarModURLAppendParams( $unencodedArgs, $path );
-
+                $unencodedArgs = xarMod__URLGetUnencodedArgs($encoderArgs, $path);
+                $path = xarMod__URLaddParametersToPath($unencodedArgs, $path, $pini, $psep);
+            
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
             }
@@ -1104,23 +1151,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             $path = $BaseModURL . $pini . join($psep, $pathArgs);
         }
 
-        // Add further parameters to the path, ensuring each value is encoded correctly.
-        foreach ($args as $k=>$v) {
-            if (is_array($v)) {
-                // Recursively walk the array tree to as many levels as necessary
-                // e.g. ...&foo[bar][dee][doo]=value&...
-                $path .= xarMod__URLnested($v, $psep . $k);
-            } elseif (isset($v)) {
-                $path .= $psep . $k . '=' . rawurlencode($v);
-            }
-        }
-        // Decode a few 'safe' characters as rawurlencode() goes too far.
-        $path = str_replace(
-            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D'),
-            array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
-            $path
-        );
 
+        // Add further parameters to the path, ensuring each value is encoded correctly.
+        $path = xarMod__URLaddParametersToPath($args, $path, $pini, $psep);
+        
         // We have the long form of the URL here.
     }
 
@@ -1146,31 +1180,31 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @param path string of path to decode looking for args
  * @return array of unencoded arguments
  */
-function xarModURLGetUnencodedArgs ( $args, $path )
+function xarMod__URLGetUnencodedArgs ( $args, $path )
 {
     // This first part is ripped from xarServer.php lines 413 through 434
     // ideally this code should be refactored from here and from xarServer.php so that
     // the two sets of code don't get out of sink
-
+    
     $modName = NULL;
     $modType = 'user';
-    $funcName = 'main';
+    $funcName = 'main';        
 
     preg_match_all('|/([^/]+)|i', $path, $matches);
     $params = $matches[1];
-    if (count($params) > 0)
+    if (count($params) > 0) 
     {
         $modName = $params[0];
         // if the second part is not admin, it's user by default
         if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
         else $modType = 'user';
         // Check if this is an alias for some other module
-        $modName = xarRequest__resolveModuleAlias($modName);
+        $modName = xarRequest__resolveModuleAlias($modName);        
         // Call the appropriate decode_shorturl function
-        if (   xarModIsAvailable($modName)
-            && xarModGetVar($modName, 'SupportShortURLs')
+        if (   xarModIsAvailable($modName) 
+            && xarModGetVar($modName, 'SupportShortURLs') 
             && xarModAPILoad($modName, $modType)
-            )
+            ) 
         {
             $loopHole = array($modName,$modType,$funcName);
         // don't throw exception on missing file or function anymore
@@ -1185,65 +1219,11 @@ function xarModURLGetUnencodedArgs ( $args, $path )
     } else {
         $resolvedParams = array();
     }
+//    echo "resolved params\n";
+//    print_r($resolvedParams);
 
     return array_diff($args, $resolvedParams);
 }
-
-/**
- * Helper function for xarModURL() to append arguments on to a given path
- *
- * @access private
- * @param args array of arguments to add
- * @param path string of path to add to
- * @return string of complete path
- */
-function xarModURLAppendParams( $args, $path )
-{
-    $join = '?';
-    $psep = '&';
-
-    // If we have more arguments, then they need to be joined onto the end of the path
-    if( count($args) > 0 )
-    {
-        $params = '';
-
-        // Select parameters to add to the path, ensuring each value is encoded correctly.
-        foreach ($args as $k=>$v) {
-            if (is_array($v)) {
-                // TODO: walk the array tree to as many levels as necessary:
-                // ...&foo[bar][dee][doo]=value&...
-                foreach($v as $l=>$w) {
-                    if (isset($w)) {
-                        $params .= $psep . $k . "[$l]=" . rawurlencode($w);
-                    }
-                }
-            } elseif (isset($v)) {
-                $params .= $psep . $k . '=' . rawurlencode($v);
-            }
-        }
-        // Decode a few 'safe' characters as rawurlencode() goes too far.
-        $params = str_replace(
-            array('%2C', '%24', '%21', '%2A', '%27', '%28', '%29', '%5B', '%5D'),
-            array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
-            $params
-        );
-
-        // Check for Join character
-        if( strpos($path,$join) === FALSE )
-        {
-            // Path does not already have any params, remove leading seperator
-            $params = ltrim($params, $psep);
-
-            $path .= $join . $params;
-        } else {
-            $path .= $params;
-        }
-
-
-    }
-    return $path;
-}
-
 
 
 /**
