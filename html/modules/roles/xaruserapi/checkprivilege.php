@@ -20,7 +20,7 @@ function roles_userapi_checkprivilege($args)
 {
     extract($args);
 
-    if((!isset($privilege)))) {
+    if(!isset($privilege)) {
         $msg = xarML('roles_userapi_checkprivilege');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
