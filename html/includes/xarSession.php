@@ -163,6 +163,10 @@ function xarSessionDelVar($name)
             return false;
         }
         unset($_SESSION[$var]);
+        // still needed here too
+        if (ini_get('register_globals')) {
+            session_unregister($var);
+        }
         return true;
     }
 
