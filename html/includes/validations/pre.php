@@ -171,6 +171,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
             case 'num' :
             case 'vtoken' :
             case 'ftoken' :
+            case 'field' :
                 break;
 
             case 'field' :
@@ -215,4 +216,5 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
     // Single point of exit.
     return $return;
 }
+
 ?>
