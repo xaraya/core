@@ -356,7 +356,7 @@ function xarLocaleGetString($localeInfo)
  * @access public
  * @return array locale list
  */
-function xarLocaleGetList($filter)
+function xarLocaleGetList($filter=array())
 {
     $list = array();
     $locales = xarMLSListSiteLocales();
