@@ -12,7 +12,10 @@
     <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
     <div>
         <dl class="xar-tabs">
-            <dt class="help" title="These are the groups that #xarVarPrepForDisplay($name)# is a member of">
+            <xar:set name="pgtitle">
+                xarML('These are the groups that #(1) is a member of', xarVarPrepForDisplay($name))
+            </xar:set>
+            <dt class="help" title="#$pgtitle#">
                 <xar:mlstring>
                     Parent Groups
                 </xar:mlstring>
