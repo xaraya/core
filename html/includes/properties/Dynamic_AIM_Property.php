@@ -1,10 +1,17 @@
 <?php
-/**
- * Dynamic AIM Address Property
+/*
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Data AIM Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -44,6 +51,8 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (!isset($value)) {
             $value = $this->value;
         }
+        $data=array();
+
         if (!empty($value)) {
             $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
         } else {
@@ -55,7 +64,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (empty($id)) {
             $id = $name;
         }
-        return '<input type="text"'.
+/*        return '<input type="text"'.
                ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
@@ -65,19 +74,43 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                ' />' .
                (!empty($link) ? ' [ <a href="'.xarVarPrepForDisplay($link).'" target="preview">'.xarML('check').'</a> ]' : '') .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+*/
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+        $data['size']     = !empty($size) ? $size : $this->size;
+        $data['link']     = xarVarPrepForDisplay($link);
+        
+        $template="aim";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
-    // TODO: use redirect function here ?
+
+        $data=array();
+
+        // TODO: use redirect function here ?
         if (!empty($value)) {
             $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
+            $data['link'] = xarVarPrepForDisplay($link);
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('AIM').'"/></a>';
+                $data['value']= $this->value;
+                $data['icon'] = $this->icon;
+                $data['name'] = $this->name;
+                $data['id']   = $this->id;
+                $data['image']= xarVarPrepForDisplay($this->icon);
+//                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('AIM').'"/></a>';
+                $template="aim";
+                return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
             }
         }
         return '';
