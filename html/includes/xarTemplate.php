@@ -596,7 +596,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10, $pageBlo
     if ($pageBlockSize < 1) {$pageBlockSize = 10;}
 
     // Get the pager information.
-    $data = xarTplPagerInfo($startnum, $total, $perpage, 2 /*$pageBlockSize*/);
+    $data = xarTplPagerInfo($startnum, $total, $perpage, $pageBlockSize);
 
     if (empty($data)) {return '';}
 
