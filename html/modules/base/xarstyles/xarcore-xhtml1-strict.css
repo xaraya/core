@@ -1,0 +1,178 @@
+/* explicit removal of default or inherited borders */
+.xar-noborder { border: 0 none; }
+
+/* we use this class when positioning tables inside generic box, so that ie-win can calculate the widths correctly */
+.xar-fullwidth { width: 100%; }
+
+/* good for generic static container-boxes */
+.xar-standard-box-padding { padding: 0 1em 1em 1em; }
+
+/* generic alignments */
+.xar-align-center { text-align: center; }
+.xar-align-left { text-align: left; }
+.xar-align-right { text-align: right; }
+
+/* inline boxes alignments */
+.xar-valign-top { vertical-align: top; }
+.xar-valign-middle { vertical-align: middle; }
+.xar-valign-bottom { vertical-align: bottom; }
+.xar-valign-baseline { vertical-align: baseline; }
+.xar-valign-texttop { vertical-align: text-top; }
+.xar-valign-textbottom { vertical-align: text-bottom; }
+.xar-valign-sub { vertical-align: sub; }
+.xar-valign-super { vertical-align: super; }
+
+/* EXPERIMENTAL RULES - keep them near the bottom!! the following rules arent used anywhere yet, when actually deployed, move near the top */
+.xar-halfwidth { width: 49%; }
+.xar-thirdwidth { width: 33%; }
+.xar-twothirdwidth { width: 66%; }
+.xar-quarterwidth { width: 24%; }
+.xar-threequarterswidth { width: 75%; }
+
+.xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth, .xar-threequarterswidth {
+    padding: 0;
+    margin: auto 0;
+}
+
+/* generic positioning */
+.xar-left { text-align: left; }
+.xar-right { text-align: right; }
+.xar-center { text-align: center; }
+.xar-top { vertical-align: top; }
+.xar-middle { vertical-align: middle; }
+.xar-bottom { vertical-align: bottom; }
+
+/* box elements display */
+.xar-block { display: block; }
+.xar-inline { display: inline; }
+.xar-list { display: list-item; }
+
+/* this class may be deprecated in future in favour of more specific rules */
+.xar-none { display: none; }
+
+/* floated box elements positioning */
+.xar-floatleft { float: left; }
+.xar-floatright { float: right; }
+
+/* floater height clearing - use with caution, see Hint (3) above */
+.xar-clearleft { clear: left; }
+.xar-clearright { clear: right; }
+.xar-clearboth { clear: both; }
+
+/* this class may be deprecated in future in favour of more specific rules */
+.xar-clearnone { clear: none; }
+
+/* common form elements */
+.xar-textshort { width: 5em; }
+.xar-textmedium { width: 10em; }
+.xar-textlong { width: 15em; }
+.xar-textxlong { width: 20em; }
+.xar-textxxlong { width: 25em; }
+
+.xar-textareasmall {
+    height: 6ex;
+    width: 90%;
+}
+
+.xar-textareamedium {
+    height: 10ex;
+    width: 90%;
+}
+
+.xar-textarealarge {
+    height: 20ex;
+    width: 90%;
+}
+
+.xar-textareaxlarge {
+    height: 40ex;
+    width: 90%;
+}
+
+/* minimal formatting - relative padding */
+.xar-padding-thin { padding: 1px; }
+.xar-padding-medium { padding: 2px; }
+.xar-padding-thick { padding: 4px; }
+.xar-padding-thintop { padding: 1px 0 0 0; }
+.xar-padding-thinleft { padding: 0 1px 0 0; }
+.xar-padding-thinbottom { padding: 0 0 1px 0; }
+.xar-padding-thinright { padding: 0 0 0 1px; }
+.xar-padding-thinsides { padding: 0 1px; }
+.xar-padding-thinends { padding: 1px 0; }
+.xar-padding-mediumtop { padding: 2px 0 0 0; }
+.xar-padding-mediumleft { padding: 0 2px 0 0; }
+.xar-padding-mediumbottom { padding: 0 0 2px 0; }
+.xar-padding-mediumright { padding: 0 0 0 2px; }
+.xar-padding-mediumsides { padding: 0 2px; }
+.xar-padding-mediumends { padding: 2px 0; }
+.xar-padding-thicktop { padding: 4px 0 0 0; }
+.xar-padding-thickleft { padding: 0 4px 0 0; }
+.xar-padding-thickbottom { padding: 0 0 4px 0; }
+.xar-padding-thickright { padding: 0 0 0 4px; }
+.xar-padding-thicksides { padding: 0 4px; }
+.xar-padding-thickends { padding: 4px 0; }
+
+/* minimal formatting - relative margin */
+.xar-margin-thin { margin: 1px; }
+.xar-margin-medium { margin: 2px; }
+.xar-margin-thick { margin: 4px; }
+.xar-margin-thintop { margin: 1px 0 0 0; }
+.xar-margin-thinleft { margin: 0 1px 0 0; }
+.xar-margin-thinbottom { margin: 0 0 1px 0; }
+.xar-margin-thinright { margin: 0 0 0 1px; }
+.xar-margin-thinsides { margin: 0 1px; }
+.xar-margin-thinends { margin: 1px 0; }
+.xar-margin-mediumtop { margin: 2px 0 0 0; }
+.xar-margin-mediumleft { margin: 0 2px 0 0; }
+.xar-margin-mediumbottom { margin: 0 0 2px 0; }
+.xar-margin-mediumright { margin: 0 0 0 2px; }
+.xar-margin-mediumsides { margin: 0 2px; }
+.xar-margin-mediumends { margin: 2px 0; }
+.xar-margin-thicktop { margin: 4px 0 0 0; }
+.xar-margin-thickleft { margin: 0 4px 0 0; }
+.xar-margin-thickbottom { margin: 0 0 4px 0; }
+.xar-margin-thickright { margin: 0 0 0 4px; }
+.xar-margin-thicksides { margin: 0 4px; }
+.xar-margin-thickends { margin: 4px 0; }
+
+/* minimal formatting - border control */
+.xar-border-thin { border-width: 1px; }
+.xar-border-medium { border-width: 2px; }
+.xar-border-thick { border-width: 4px; }
+.xar-border-thintop { border-width: 1px 0 0 0; }
+.xar-border-thinleft { border-width: 0 1px 0 0; }
+.xar-border-thinbottom { border-width: 0 0 1px 0; }
+.xar-border-thinright { border-width: 0 0 0 1px; }
+.xar-border-thinsides { border-width: 0 1px; }
+.xar-border-thinends { border-width: 1px 0; }
+.xar-border-mediumtop { border-width: 2px 0 0 0; }
+.xar-border-mediumleft { border-width: 0 2px 0 0; }
+.xar-border-mediumbottom { border-width: 0 0 2px 0; }
+.xar-border-mediumright { border-width: 0 0 0 2px; }
+.xar-border-mediumsides { border-width: 0 2px; }
+.xar-border-mediumends { border-width: 2px 0; }
+.xar-border-thicktop { border-width: 4px 0 0 0; }
+.xar-border-thickleft { border-width: 0 4px 0 0; }
+.xar-border-thickbottom { border-width: 0 0 4px 0; }
+.xar-border-thickright { border-width: 0 0 0 4px; }
+.xar-border-thicksides { border-width: 0 4px; }
+.xar-border-thickends { border-width: 4px 0; }
+
+/* relative positioning of specific block elements */
+div.xar-center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* lists and related elements */
+.xar-navlist {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+/* relative positioning of specific inline and block elements */
+label.xar-minpadding span {
+    padding-left: 2px;
+    padding-right: 2px;
+}

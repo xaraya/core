@@ -41,8 +41,11 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         // Literally copy the content type, charset is determined by MLS
         // FIXME: this explicitly limits to one locale per page, do we want that?
         $docTypeString = DTDIdentifiers::get($dtd);
+        // set dtd in globals to load correct core css, among other things
+        xarTplSetDoctype($dtd);
         $headercode = '
-            $_bl_locale  = xarMLSGetCurrentLocale();
+        xarTplSetDoctype(\''.$dtd.'\');
+        $_bl_locale  = xarMLSGetCurrentLocale();
         $_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);
         header("Content-Type: ' . $content . '; charset=$_bl_charset");
         echo \''.$docTypeString."\n';";

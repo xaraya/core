@@ -65,6 +65,7 @@ define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_defaultThemeName
  * @global string xarTpl_additionalStyles
+ * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
  * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
@@ -76,6 +77,8 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     $GLOBALS['xarTpl_cacheTemplates']  = $args['enableTemplatesCaching'];
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
+    // set when page template root tag is compiled (dtd attribute value)
+    $GLOBALS['xarTpl_doctype'] = '';
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
@@ -97,7 +100,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         }
     }
 
-    $GLOBALS['xarTpl_additionalStyles'] = '';
+    $GLOBALS['xarTpl_additionalStyles'] = array();
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -178,6 +181,7 @@ function xarTplSetThemeDir($themeDir)
  *
  * @access private
  * @param  string $name Name of the theme 
+ * @todo theme name and dir are not required to be identical
  * @return void
  */
 function xarTpl__SetThemeNameAndDir($name)
@@ -226,6 +230,33 @@ function xarTplSetPageTemplateName($templateName)
         return false;
     }
     $GLOBALS['xarTpl_pageTemplateName'] = $templateName;
+    return true;
+}
+
+/**
+ * Get doctype declared by page template
+ *
+ * @access public
+ * @global string xarTpl_doctype
+ * @return string doctype identifier
+ */
+function xarTplGetDoctype()
+{
+    return $GLOBALS['xarTpl_doctype'];
+}
+
+/**
+ * Set doctype declared by page template
+ *
+ * @access public
+ * @global string xarTpl_doctype
+ * @param  string $doctypeName Identifier string of the doctype
+ * @return bool
+ */
+function xarTplSetDoctype($doctypeName)
+{
+    assert('is_string($doctypeName); /* doctype should always be a string */');
+    $GLOBALS['xarTpl_doctype'] = $doctypeName;
     return true;
 }
 
@@ -290,7 +321,7 @@ function xarTplGetPageTitle()
  * Add stylesheet link for a module
  *
  * @access public
- * @global string xarTpl_additionalStyles string
+ * @global array xarTpl_additionalStyles string
  * @param  string $modName
  * @param  string $styleName
  * @param  string $fileExt
@@ -322,9 +353,51 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder
     }    
     $url = xarServerGetBaseURL().$fileName;
     // FIXME: this doesn't belong here, it's hardcoded and not output agnostic
-    $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
+    $GLOBALS['xarTpl_additionalStyles'][$modName.':'.$styleName.':'.$fileExt] = $url;
     return true;
 }
+
+/**
+ * Get CSS urls requested by modules
+ *
+ * @access public
+ * @global array  xarTpl_additionalStyles
+ * @param  bool $getCoreCSS
+ * @todo   lots to abstract here
+ * @return string
+ */
+function xarTplGetStyles($getCoreCSS = true)
+{
+    assert('is_array($GLOBALS[\'xarTpl_additionalStyles\'])');
+    $styles = '';
+    // todo: decide how to present CSS, based on doctype 
+    foreach($GLOBALS['xarTpl_additionalStyles'] as $key => $style){
+        list($modName, $styleName, $fileExt) = explode(':', $key, 3);
+        $styles .= '<link rel="stylesheet" href="' . $style . '" type="text/'.$fileExt.'" />'."\n";
+    }
+
+    // load dtd-based core css last, if dtd has been set and $getCoreCSS is true
+    if (empty($GLOBALS['xarTpl_doctype']) || !$getCoreCSS) return $styles;
+    
+    $modulePath = 'modules/base/xarstyles/xarcore-' .xarTplGetDoctype().'.css';
+
+    $themePath = xarTplGetThemeDir().'/modules/base/xarstyles/xarcore-'.xarTplGetDoctype().'.css';
+
+    if (file_exists($themePath)) {
+        $fileName = $themePath;
+    } else {
+        $fileName = $modulePath;
+        if (!file_exists($fileName)) {
+            return $styles;
+        }    
+    }    
+    $styles .= '<link rel="stylesheet" href="'.xarServerGetBaseURL().$fileName.'" type="text/css" />'."\n";
+
+
+
+    return $styles;
+}
+
 
 /**
  * Add JavaScript code to template output **deprecated**
