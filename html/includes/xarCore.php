@@ -229,7 +229,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarConfig_init($systemArgs, $whatToLoad);
 
         // Pre-load site config variables
-    // CHECKME: see if this doesn't hurt install before activating :-)
+        // CHECKME: see if this doesn't hurt install before activating :-)
         xarConfig_loadVars();
 
         // Start Variables utilities
@@ -256,7 +256,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
 
     /*
-     * Bringer HTTP Protocol Server/Request/Response utilities into the story
+     * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
      */
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
@@ -332,7 +332,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_MODULES;
 
         // Pre-load themes module variables
-    // CHECKME: see if this doesn't hurt install before activating :-)
+        // CHECKME: see if this doesn't hurt install before activating :-)
         xarMod_getVarsByModule('themes');
     }
 
@@ -377,18 +377,20 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
  */
 function xarCore__shutdown_handler()
 {
-    // Default shutdownhandlers, nothing here yet,
-    // but i think we should do something here with the
+    // Default shutdownhandler, nothing here yet,
+    // but i think we could do something here with the
     // connection_aborted() function, signalling that
     // the user prematurely aborted. (by hitting stop or closing browser)
-    // Also, the other subsystems can use this for example to clean up
+    // Also, the other subsystems can use a similar handler, for example to clean up
     // session tables or removing online status flags etc.
     // A carefully constructed combo with ignore_user_abort() and
     // a check afterward will get all requests atomic which might save
     // some headaches. 
+
     // This handler is guaranteed to be registered as the last one, which
     // means that is also guaranteed to run last in the sequence of shutdown
-    // handlers, the last statement is guaranteed to be the last statement of Xaraya ;-)
+    // handlers, the last statement in this function 
+    // is guaranteed to be the last statement of Xaraya ;-)
 }
 
 /**
@@ -397,6 +399,7 @@ function xarCore__shutdown_handler()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the var directory path name
+ * @todo   move the hardcoded stuff to something configurable
  */
 function xarCoreGetVarDirPath()
 {
@@ -454,7 +457,8 @@ function xarCore__assertHandler($script,$line,$code)
     // Redirect the assertion to a system exception
     $msg = "ASSERTION FAILED: $script [$line] : $code";
     // MrB: check this, this is core exceptions are a tiny bit higher
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
+    // Maybe the assert handler should be in the exception subsystem?
+    xarErrorSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
 
 }
 
@@ -537,6 +541,7 @@ function xarCore_getSystemVar($name, $returnNull = false)
  * @static array siteVars
  * @param string name name of core site variable to get
  * @return mixed variable value
+ * @todo investigate the dependency to xarVar
  */
 function xarCore_getSiteVar($name)
 {
@@ -573,6 +578,7 @@ function xarCore_getSiteVar($name)
  * @param  string $fileName name of the file to load
  * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
  * @return bool   true if file was loaded successfully, false on error (with exception set)
+ * @todo   Two out of three xarErrorSet calls in core are in this function, maybe it should be in a subsystem or not except at all?
  */
 function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) 
 {
@@ -582,7 +588,7 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
             return true;
         } else {
             $msg = xarML("Could not load file: [#(1)].", $fileName);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
             return false;
         }
     }
@@ -600,33 +606,11 @@ function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
 
     if (empty($r) || !$r) {
         $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
         return false;
     }
 
     return true;
-}
-
-/**
- * Dispose the debugger
- *
- * @access protected
- * @global integer xarDebug
- * @global intger xarDebug_sqlCalls
- * @global string xarDebug_startTime
- * @return void
- */
-function xarCore_disposeDebugger()
-{
-    if ($GLOBALS['xarDebug'] & XARDBG_SQL) {
-        xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
-    }
-    if ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) {
-        $lmtime = explode(' ', microtime());
-        $endTime = $lmtime[1] + $lmtime[0];
-        $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
-        xarLogMessage("Response was served in $totalTime seconds.");
-    }
 }
 
 /**
@@ -645,10 +629,8 @@ function xarCore_die($msg)
     if($dying) return;
     $dying = true;
 
-    // Sorry, this is a no go here: The core died!
-    //$url = xarServerGetBaseURL() . 'index.php';
-
     // This is allowed, in core itself
+    // NOTE that this will never be translated
     if (xarCoreIsDebuggerActive()) {
         $msg = nl2br($msg);
 $debug = <<<EOD
@@ -679,7 +661,7 @@ $errPage = <<<EOM
 </html>
 EOM;
     echo $errPage;
-    // CHECK: do we still want the shutdown functions to run here?
+    // Sorry, this is the end, nothing can be trusted anymore.
     die();
 }
 
@@ -704,6 +686,7 @@ function xarCoreIsApiAllowed($apiType)
     if (empty($apiType)) return false;
     if (preg_match ("/api$/i", $apiType)) return false;
 
+    // <mrb> Where do we config this again?
     $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
 
     // If no API type restrictions are given, return true
@@ -718,6 +701,7 @@ function xarCoreIsApiAllowed($apiType)
  * in the form of a configuration array
  *
  * @package core
+ * @todo park this class somewhere, it is not used, but usefull
  */
 class xarCore__ConfigFileLoader
 {

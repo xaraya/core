@@ -1,52 +1,56 @@
+<xar:set name="active_step">
+	5 
+</xar:set>
 <xar:if condition="$confirmDB">
-  <meta http-equiv="refresh" content="1;URL=&xar-modurl-installer-admin-bootstrap;&install_language=#$language#" />
-  <div id="install">
-    <div style="padding:10px;">
-      <div style="text-align:center;">
-        <span class="xar-pagetitle">
-          <xar:mlstring>
-            Beginning Initialization 
-          </xar:mlstring>
-        </span>
-      </div>
-      <br />
-      <div style="text-align:center;">
-        <form action="install.php" method="post">
-          <div style="text-align:center;">
-            <input type="hidden" name="install_phase" id="install_phase" value="6" />
-            <xar:mlstring>
-              This may take a moment. Thank you for your patience.
-            </xar:mlstring> 
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <xar:else />
+	<meta http-equiv="refresh" content="1;URL=&xar-modurl-installer-admin-bootstrap;&install_language=#$language#" />
 	<div id="install">
-		<div style="padding:10px;">
-			<div style="text-align:center;">
-				<span class="xar-pagetitle">
-					<xar:mlstring>
-						Database Found 
-					</xar:mlstring>
-				</span>
-			</div>
-			<div>
-				<br /><xar:mlstring>You already have an installed database.</xar:mlstring>
-        <br /><xar:mlstring>If you continue your previous data will be overwritten.</xar:mlstring>
-				<br /><br />
-				<table width="100%">
-          <tr>
-            <td style="text-align:center;">
-              <form action="install.php" method="post">
-                <input type="hidden" name="install_phase" id="install_phase" value="4" />
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                <xar:set name="buttonprevious"><xar:mlstring> &lt;&nbsp;Back</xar:mlstring></xar:set>
-                <input type="submit" value="#$buttonprevious#" />
+		<xar:template file="status" />
+		<h1>
+			<xar:mlstring>
+				Beginning Initialization 
+			</xar:mlstring>
+		</h1>
+		<form action="install.php" method="post">
+			<h4>
+				<input type="hidden" name="install_phase" id="install_phase" value="6" />
+				<xar:mlstring>
+					This may take a moment. Thank you for your patience. 
+				</xar:mlstring>
+			</h4>
+		</form>
+	</div>
+	<xar:else />
+	<div id="install">
+		<xar:template file="status" />
+		<h1>
+			<xar:mlstring>
+				Database Found 
+			</xar:mlstring>
+		</h1>
+		<div>
+			<h4>
+				<xar:mlstring>
+					You already have an installed database. 
+				</xar:mlstring>
+			</h4>
+			<h4>
+				<xar:mlstring>
+					If you continue your previous data will be overwritten. 
+				</xar:mlstring>
+			</h4>
+			<div style="float:left;width:230px; text-align:center; margin-top:2em;">
+				<form action="install.php" method="post">
+					<input type="hidden" name="install_phase" id="install_phase" value="4" />
+					<input type="hidden" name="install_language" id="install_language" value="#$language#" />
+					<xar:set name="buttonprevious">
+						<xar:mlstring>
+							&lt;&nbsp;Back 
+						</xar:mlstring>
+					</xar:set>
+					<input type="submit" value="#$buttonprevious#" />
 				</form>
-				</td>
-				<td style="text-align:center;">
+			</div>
+			<div style="float:left;width:230px; text-align:center; margin-top:2em;">
 				<form action="install.php" method="post">
 					<input type="hidden" name="install_phase" id="install_phase" value="5" />
 					<input type="hidden" name="install_database_host" id="dbHost" value="#$dbHost#" />
@@ -56,17 +60,16 @@
 					<input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#" />
 					<input type="hidden" name="install_database_type" id="dbType" value="#$dbType#" />
 					<input type="hidden" name="confirmDB" id="confirmDB" value="true" />
-					<input type="hidden" name="install_create_database" id="newDB" value="#$install_create_database#" />
+					<input type="hidden" name="newDB" id="newDB" value="#$newDB#" />
 					<input type="hidden" name="install_language" id="install_language" value="#$language#" />
-          			<xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
+					<xar:set name="buttonnext">
+						<xar:mlstring>
+							Continue &gt; 
+						</xar:mlstring>
+					</xar:set>
 					<input type="submit" value="#$buttonnext#" />
 				</form>
-				</td>
-				</tr>
-				</table>
 			</div>
 		</div>
 	</div>
-</xar:if>
-<xar:set name="active_step">5</xar:set>
-<xar:template file="status"/>
+

@@ -41,7 +41,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
         xarInstallLoad();
         if(!function_exists($modFunc)) {
             $msg = xarML('Module function #(1) does not exist.', $modFunc);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                             new SystemException($msg));
             return;
         }
@@ -77,7 +77,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
         // let's check for the function again to be sure
         if (!function_exists($modAPIFunc)) {
             $msg = xarML('Module API function #(1) does not exist.', $modAPIFunc);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                             new SystemException($msg));
             return;
         }
@@ -118,7 +118,7 @@ function xarInstallAPILoad()
     if (!file_exists($osfile)) {
         // File does not exist
         $msg = xarML('Module file #(1) does not exist.', $osfile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }
@@ -147,7 +147,7 @@ function xarInstallLoad()
 
     if (empty($modName)) {
         $msg = xarML('Empty modname.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -165,7 +165,7 @@ function xarInstallLoad()
     if (!file_exists($osfile)) {
         // File does not exist
         $msg = xarML('Module file #(1) does not exist.', $osfile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }

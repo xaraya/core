@@ -197,7 +197,7 @@ function installer_admin_phase5()
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
              new SystemException("No database was specified"));
         return;
     }
@@ -465,7 +465,7 @@ function installer_admin_create_administrator()
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -533,7 +533,7 @@ function installer_admin_create_administrator()
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
         $msg = xarML("Group 'left' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -628,7 +628,7 @@ function installer_admin_choose_configuration()
 
     if (count($awol) != 0) {
         $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }
@@ -826,7 +826,7 @@ function installer_admin_confirm_configuration()
                         }
                         $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
                         $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
-                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
                         return;
                    }
                    xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
@@ -863,7 +863,7 @@ function installer_admin_confirm_configuration()
         // Freak if we don't get one and only one result
         if ($result->PO_RecordCount() != 1) {
             $msg = xarML("Group 'left' not found.");
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
         }
@@ -910,7 +910,7 @@ function installer_admin_cleanup()
     $pass = xarModGetVar('roles','adminpass');
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return false;
     }
@@ -935,7 +935,7 @@ function installer_admin_cleanup()
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
         $msg = xarML("Group 'right' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -976,7 +976,7 @@ function installer_admin_cleanup()
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
         $msg = xarML("Group 'header' not found.");
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -1005,6 +1005,8 @@ function installer_admin_cleanup()
             return;
         }
     }
+
+    xarModAPIFunc('adminpanels', 'admin', 'updatemenudb',array('force' => true));
 
     $data['language']    = $install_language;
     $data['phase'] = 6;
