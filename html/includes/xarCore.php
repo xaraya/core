@@ -65,6 +65,12 @@ define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
 
+define('XARCORE_BIT_ADODB', 1);
+define('XARCORE_BIT_SESSION', 2);
+define('XARCORE_BIT_USER', 4 );
+define('XARCORE_BIT_CONFIGURATION', 8);
+define('XARCORE_BIT_BLOCKS', 16);
+define('XARCORE_BIT_MODULES', 32);
 /*
  * Debug flags
  */
@@ -85,6 +91,25 @@ define('XARDBG_SHOW_PARAMS_IN_BT', 8);
  */
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
+    static $current_load_level = XARCORE_SYSTEM_NONE;
+    static $first_load = true;
+    $new_load_level = $whatToLoad;
+    
+    // Make sure it only loads the current load level (or less than the current
+    // load level) once.
+    if ($whatToLoad <= $current_load_level) {
+        if (!$first_load) {
+            return true;
+        } else {
+            $first_load = false;
+        }
+    } else {
+        // if we are loading a load level higher than the
+        // current one, make sure to XOR out everything 
+        // that we've already loaded
+        $whatToLoad ^= $current_load_level;
+    }
+    
     // FIXME: <marco> Shouldn't we use include instead of include_once?
     // Since xarCoreInit is supposed to be called once per request there's
     // no need to get this more overhead from include_once
@@ -158,6 +183,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_ADODB;
     }
 
 
@@ -202,6 +228,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'),
                             'useOldPHPSessions' => false);
         xarSession_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 
     // Start Multi Language System
@@ -220,6 +247,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarConfig_init($systemArgs, $whatToLoad);
 
         xarVar_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
 
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
@@ -232,6 +260,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         xarMod_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_MODULES;
+
     }
 
     // Start BlockLayout Template Engine
@@ -249,6 +279,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start User System
         $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_USER;
     }
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
@@ -258,8 +289,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Blocks Support Sytem
         $systemArgs = array();
         xarBlock_init($systemArgs, $whatToLoad);
+        $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
-
+    
+    // Make the current load level == the new load level
+    $current_load_level = $new_load_level;
     return true;
 }
 

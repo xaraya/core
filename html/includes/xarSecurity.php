@@ -1,15 +1,15 @@
 <?php
 /**
- * File: $Id$
- *
- * Security Access Mechanism
- *
+ * File: $Id: s.xarSecurity.php 1.33 03/01/18 11:53:04+01:00 marcel@hsdev.com $
+ * 
+ * Low-level security access mechanism 
+ * 
  * @package security
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Jim McDonald, Marco Canini <m.canini@libero.it>
- */
+ * @author Jim McDonald
+*/
 
 /**
  * Notes on security system
@@ -182,7 +182,7 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
 //    }
     if ((md5($partkey)) == $authid) {
         // Match - generate new random number for next key and leave happy
-        srand((double) microtime() * 1000000);
+        srand((double)microtime()*1000000);
         xarSessionSetVar('rand', rand());
 
         return true;
@@ -240,6 +240,13 @@ function xarSec__getAuthInfo($userId)
     $userIds[] = -1;
     // Set userId infos
     $userIds[] = $userId;
+    
+    // if the userId is empty or zero, then the user must
+    // be the anonymous user so, set the id == -1
+    if (empty($userId)) {
+        $userId = (int) -1;
+    }
+    
     // FIXME: <marco> This still be an undocumented feature.
     $vars['Active User'] = $userId;
     $userIds = implode(',', $userIds);
@@ -477,3 +484,4 @@ function xarSec__getModulesInstanceSchemaInfo()
     closedir($moddir);
 }
 
+?>

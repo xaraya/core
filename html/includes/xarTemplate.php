@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarTemplate.php 1.83 03/01/26 11:36:03+00:00 mikespub@sasquatch.pulpcontent.com $
  *
  * BlockLayout Template Engine
  * 
@@ -14,7 +14,6 @@
 /**
  * Initializes the BlockLayout Template Engine
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
  * @global xarTpl_cacheTemplates bool
  * @global xarTpl_themesBaseDir string
@@ -26,7 +25,7 @@
  * @param args['defaultThemeName'] string
  * @param args['enableTemplateCaching'] bool
  * @param whatElseIsGoingLoaded int 
- * @return bool true
+ * @returns bool 
  */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
@@ -189,7 +188,6 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
 /**
  * Turns module output into a template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
  * @global xarTpl_themeDir string
  * @param modName string the module name
@@ -233,7 +231,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Turns block output into a template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access public
  * @global xarTpl_themeDir string
  * @param modName string the module name
@@ -304,7 +301,6 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
  * @access protected
  * @global xarTpl_themeDir string
  * @global xarTpl_pageTemplateName string
@@ -409,6 +405,12 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 
 // PRIVATE FUNCTIONS
 
+/**
+ * Get BL compiler instance
+ * 
+ * @access private
+ * @returns object xarTpl__Compiler()
+ */
 function xarTpl__getCompilerInstance()
 {
     include_once 'includes/xarBLCompiler.php';
@@ -874,3 +876,4 @@ function xarTplPrintWidget($module, $widget_sourcefile, $args = array())
     return xarTplPrint($widget_sourcefile, $args);
 }
 
+?>

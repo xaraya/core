@@ -93,6 +93,16 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     // Run installer function
     $mainModuleOutput = xarInstallFunc($modName, $modType, $funcName);
 
+    // Make sure we've got the installer theme selected
+    // FIXME: <rabbitt> this is just a hack to make it so 
+    // that the theme doesn't go to Xaraya_Classic. Somewhere
+    // within the the above xarInstallFunc() something is 
+    // switching the theme to Xaraya_Classic and I can't find where...
+    if (xarTplGetThemeName() != 'installer') {
+        xarTplSetThemeName('installer');
+    }
+
+
     if (xarCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {
             $rawOutput = ob_get_contents();
