@@ -371,6 +371,57 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $documentTree;
     }
 
+    function parseProcessingInstruction($target)
+    {
+        $result = '';
+        switch($target) {
+            case 'xar': // <?xar processing instruction
+                $variables = $this->parseHeaderTag();
+                if (!isset($variables))  return; // throw back
+                    
+                // Register the attributes of <?xar as template variables
+                // FIXME: this is awkward syntax juggling
+                foreach ($variables as $name => $value) $this->tplVars->set($name, $value);
+                break;
+            case 'xml': // <?xml header tag
+                // Wind forward to first > and copy to output if we have seen the root tag, otherwise, just wind forward
+                $between = $this->windTo(XAR_TOKEN_TAG_END);
+                if(!isset($between)) return; // throw back
+                    
+                if(substr($between,-1) == XAR_TOKEN_PI_DELIM) { // ?
+                    $output = XAR_TOKEN_TAG_START . XAR_TOKEN_PI_DELIM . $target . $between . $this->getNextToken();
+                } else {
+                    // Template error, found a > before the end
+                    $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
+                    return;
+                }    
+                        
+                // We do the exception check after parsing it, so we get usefull info in the error
+                if($this->line != 1 && !$this->tagRootSeen) {
+                    $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML header can only be on the first line of the document',$this);
+                    return;
+                }
+                        
+                // Copy the header to the output
+                if($this->tagRootSeen) {
+                    if(ini_get('short_open_tag')) {
+                        $result = "<?php echo $output; ?>";
+                    }
+                    $result .= "\n";
+                }
+                break;
+            case 'php':
+                // Do a specific error for php processing instruction
+                $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax ", $this);
+                return;
+            default:
+                // Anything else leads to an error, that includes the short form of the php tag (empty target)
+                $this->raiseError(XAR_BL_INVALID_TAG,"Unknown processing instruction '<?$target' found",$this);
+                return;
+        }
+        return $result;
+    }
+        
     function parseNode(&$parent)
     {
         // Start of parsing a node, initialize our result variables
@@ -392,58 +443,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // other -> rest
                     $nextToken = $this->getNextToken();
                     if ($nextToken == XAR_TOKEN_PI_DELIM) { // <?
-                        $target = $this->getNextToken(3);
-                        switch ($target) {
-                            case 'xar': // <?xar processing instruction
-                                $variables = $this->parseHeaderTag();
-                                if (!isset($variables))  return; // throw back
-
-                                // Register the attributes or <?xar at template variables
-                                // FIXME: this is awkward syntax juggling
-                                foreach ($variables as $name => $value) $this->tplVars->set($name, $value);
-
-                                // Here we set token to an empty string so that $text .= $token will result in $text
-                                $token = '';
-                                break;
-                            case 'xml': // <?xml header tag
-                                // Wind forward to first > and copy to output if we have seen the root tag, otherwise, just wind forward
-                                $between = $this->windTo(XAR_TOKEN_TAG_END);
-                                if(!isset($between)) return; // throw back
-                            
-                                if(substr($between,-1) == XAR_TOKEN_PI_DELIM) { // ?
-                                    $token .= $nextToken . $target . $between . $this->getNextToken();
-                                } else {
-                                    // Template error, found a > before the end
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
-                                    return;
-                                }    
-
-                                // We do the exception check after parsing it, so we get usefull info in the error
-                                if($this->line != 1 && !$this->tagRootSeen) {
-                                    $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML header can only be on the first line of the document',$this);
-                                    return;
-                                }
-
-                                // Copy the header to the output
-                                if($this->tagRootSeen) {
-                                    if(ini_get('short_open_tag')) {
-                                        $token = "<?php echo $token; ?>";
-                                    }
-                                    $token .= "\n";
-                                } else {
-                                    // We havent seen the root tag yet, the header is for the template, not for the output
-                                    $token = '';
-                                }
-                                break;
-                            case 'php':
-                                // Do a specific error for php processing instruction
-                                $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax ", $this);
-                                return;
-                            default:
-                                // Anything else leads to an error, that includes the short form of the php tag (empty target)
-                                $this->raiseError(XAR_BL_INVALID_TAG,"Unknown processing instruction '<?$target' found",$this);
-                                return;
-                        }
+                        // TODO: why the specific 3 characters?, could easily scan to first whitespace
+                        $res = $this->parseProcessingInstruction($this->getNextToken(3));
+                        if(!isset($res)) return; //throw back
+                        $token = $res;
                         // If we get here, we have handled the processing instruction and we can break the outer switch
                         break;
                     } elseif ($nextToken == 'x') {
