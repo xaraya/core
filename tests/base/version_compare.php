@@ -89,7 +89,7 @@ $test_array = array(
       <th>Pass/Fail</th>
       <th>Notes</th>
    </tr>
-   <?
+   <?php
       foreach($test_array as $test) {
          $params = array('ver1'=>$test['ver1'], 'ver2'=>$test['ver2'], 'normalize'=>'numeric', 'order'=>1);
          if (isset($test['levels'])) {$params['levels'] = $test['levels'];}
@@ -103,17 +103,17 @@ $test_array = array(
          else {ob_start(); var_dump($test['ver2']); $ver2 = ob_get_contents(); ob_end_clean();}
    ?>
       <tr>
-      <td><?echo $ver1;?></td>
-      <td><?echo $ver2;?></td>
-      <td><?echo $test['levels'];?></td>
-      <td><?echo $params['normalize'];?></td>
-      <td><?echo $test['sep'];?></td>
-      <td><?echo $test['result'];?></td>
-      <td><?echo $actual;?></td>
-      <td><?echo $status;?></td>
-      <td><?echo $test['notes'];?></td>
+      <td><?php echo $ver1;?></td>
+      <td><?php echo $ver2;?></td>
+      <td><?php echo $test['levels'];?></td>
+      <td><?php echo $params['normalize'];?></td>
+      <td><?php echo $test['sep'];?></td>
+      <td><?php echo $test['result'];?></td>
+      <td><?php echo $actual;?></td>
+      <td><?php echo $status;?></td>
+      <td><?php echo $test['notes'];?></td>
       </tr>
-   <?
+   <?php
        }
    ?>
 </table>
