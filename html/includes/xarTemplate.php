@@ -661,6 +661,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
+            $varDir = xarCoreGetVarDirPath();
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
