@@ -50,7 +50,7 @@ function roles_user_register()
     $minage = xarModGetVar('roles', 'minage');
     if ($minage == 0){
         if ($phase = 'checkage'){
-            $phase = 'checkregistration';
+            $phase = 'registerform';
         }
     }
 
