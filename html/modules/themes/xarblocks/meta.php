@@ -87,7 +87,7 @@ function themes_metablock_display($blockinfo)
 
     // Description
     $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
-    
+
     if (!empty($incomingdesc) and $vars['usedk'] >= 1) {
         // Strip -all- html
         $htmlless = strip_tags($incomingdesc);
@@ -107,7 +107,7 @@ function themes_metablock_display($blockinfo)
         // Keywords generated from keywords module
         $meta['keywords'] = $incomingkeys;
     } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 3)){
-        $meta['keywords'] = $incomingkeys.','.$incomingkey;       
+        $meta['keywords'] = $incomingkeys.','.$incomingkey;
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }
@@ -245,7 +245,7 @@ function themes_metablock_update($blockinfo)
     if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        '', XARVAR_NOT_REQUIRED)) return;
 
     // Merge the submitted block info content into the existing block info.
-    $blockinfo['content'] = array_merge($blockinfo['content'], $vars);
+    $blockinfo['content'] = $vars; //array_merge($blockinfo['content'], $vars);
 
     return $blockinfo;
 }
