@@ -31,8 +31,9 @@ NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
  * @global xarTpl_themesBaseDir string
  * @global xarTpl_defaultThemeName string
  * @global xarTpl_additionalStyles string
- * @global xarTpl_headJavaScript string
- * @global xarTpl_bodyJavaScript string
+ * @global xarTpl_JavaScript string
+ * @global xarTpl_headJavaScript string (deprecated)
+ * @global xarTpl_bodyJavaScript string (deprecated)
  * @param args['themesBaseDir'] string
  * @param args['defaultThemeName'] string
  * @param args['enableTemplateCaching'] bool
@@ -64,6 +65,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     
     // Bug 1109: xarTpl_JavaScript deprecates xarTpl_{head|body}JavaScript
     $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
+    // Bug 1109: (deprecated) next 2 lines to be removed soon.
     $GLOBALS['xarTpl_headJavaScript'] = '';
     $GLOBALS['xarTpl_bodyJavaScript'] = '';
    
@@ -247,12 +249,12 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
  * Add JavaScript code to template output
  * 
  * @access public
- * @global xarTpl_headJavaScript string
- * @global xarTpl_bodyJavaScript string
+ * @global xarTpl_headJavaScript string (deprecated)
+ * @global xarTpl_bodyJavaScript string (deprecated)
  * @param position string
  * @param owner string
  * @param code string
- * @deprec ?
+ * @deprec true
  * @return bool
  */
 function xarTplAddJavaScriptCode($position, $owner, $code)
@@ -266,10 +268,10 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
  *
  * @access public
  * @global xarTpl_JavaScript array
- * @param position string
- * @param type string
- * @param data string
- * @param index string optional
+ * @param position string ('head' or 'body')
+ * @param type string ('src' or 'code')
+ * @param data string (pathname or raw JavaScript)
+ * @param index string optional (unique key and/or ordering)
  * @return bool
  */ 
 function xarTplAddJavaScript($position, $type, $data, $index = '')
@@ -283,6 +285,7 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 
     // Legacy support allows unconverted themes to work as before - remove this
     // with xarTplAddJavaScriptCode().
+    // Bug 1109: next 6 lines deprecated. Remove them soon.
     if ($position == 'head' && $type == 'code') {
         $GLOBALS['xarTpl_headJavaScript'] .= $data . "\n";
     }
@@ -295,13 +298,13 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 }
 
 /**
- * Get JavaScript code or links queued for template output
+ * Get JavaScript code or links cached for template output
  * 
  * @access public
  * @global xarTpl_JavaScript array
  * @param position string optional
  * @param index string optional
- * @return array
+ * @return array or NULL
  */ 
 function xarTplGetJavaScript($position = '', $index = '')
 {
@@ -747,8 +750,8 @@ function xarTplCompileString($templateSource)
  * @global xarTpl_pageTemplateName string
  * @global xarTpl_pageTitle string
  * @global xarTpl_additionalStyles string
- * @global xarTpl_headJavaScript string
- * @global xarTpl_bodyJavaScript string
+ * @global xarTpl_headJavaScript string (deprecated)
+ * @global xarTpl_bodyJavaScript string (deprecated)
  * @param mainModuleOutput stringthe module output
  * @param otherModulesOutput string
  * @param templateName string the template page to use
@@ -765,6 +768,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = $GLOBALS['xarTpl_themeDir']."/pages/$templateName.xt";
 
+    // Bug 1109: next 8 lines to be removed soon.
     if ($GLOBALS['xarTpl_headJavaScript'] !='') {
         $GLOBALS['xarTpl_headJavaScript'] = "\n<script type=\"text/javascript\">\n{$GLOBALS['xarTpl_headJavaScript']}\n</script>";
     }
@@ -776,8 +780,9 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         '_bl_mainModuleOutput'     => $mainModuleOutput,
         '_bl_page_title'           => $GLOBALS['xarTpl_pageTitle'],
         '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
-        // Bug 1109: _bl_javascript replaces _bl_{head|body}_javascript eventually.
+        // Bug 1109: _bl_javascript replaces _bl_{head|body}_javascript.
         '_bl_javascript'           => $GLOBALS['xarTpl_JavaScript'],
+        // Bug 1109: next 2 lines to be removed soon.
         '_bl_head_javascript'      => $GLOBALS['xarTpl_headJavaScript'],
         '_bl_body_javascript'      => $GLOBALS['xarTpl_bodyJavaScript']
     );
