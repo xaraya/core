@@ -125,7 +125,7 @@ class ExceptionRendering
         if ($this->exception->getMajor() != XAR_USER_EXCEPTION && $this->isadmin()) {
             $stack = $this->exception->getStack();
             $text = "";
-            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
+            for ($i = 2, $j = 1, $max = count($stack); $i < $max; $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
                 $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';

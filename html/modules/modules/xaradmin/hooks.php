@@ -46,7 +46,7 @@ function modules_admin_hooks()
         if (!isset($modList)) return;
 
         $oldcat = '';
-        for ($i = 0; $i < count($modList); $i++) {
+        for ($i = 0, $max = count($modList); $i < $max; $i++) {
             $modList[$i]['checked'] = '';
             if ($oldcat != $modList[$i]['category']) {
                 $modList[$i]['header'] = $modList[$i]['category'];

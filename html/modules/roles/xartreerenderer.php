@@ -202,7 +202,7 @@ class xarTreeRenderer {
             '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">' :
             '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >';
 
-        for ($i=1;$i<=count($this->treeitems);$i++) {
+        for ($i=1,$max = count($this->treeitems); $i <= $max; $i++) {
             $func = $this->treeitems[$i];
             $this->html .= $this->{$func}();
         }

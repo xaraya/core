@@ -31,17 +31,18 @@ function roles_admin_sitelock($args)
     // Get parameters from input
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
         $roles = unserialize($serialroles);
+        $rolesCount = count($roles);
         if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
         if(!isset($notify)) $notify = array();
-        for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
+        for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
 
         if ($cmd == 'delete') {
             if (!xarVarFetch('uid', 'int', $uid, NULL, XARVAR_DONT_SET)) return;
             if (isset($uid)) {
-                for($i=0;$i<count($roles);$i++) {
+                for($i=0; $i < $rolesCount; $i++) {
                     if ($roles[$i]['uid'] == $uid) {
                         array_splice($roles,$i,1);
                         break;
@@ -98,7 +99,7 @@ function roles_admin_sitelock($args)
             // First get the roles
             $rolesarray = array();
             $rolemaker = new xarRoles();
-            for($i=0;$i<count($roles);$i++) {
+            for($i=0; $i < $rolesCount; $i++) {
                 if($roles[$i]['notify'] == 1) {
                     $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
                 }
@@ -119,7 +120,7 @@ function roles_admin_sitelock($args)
 
             // Clear the active sessions
                 $spared = array();
-                for($i=0;$i<count($roles);$i++) $spared[] = $roles[$i]['uid'];
+                for($i=0; $i < $rolesCount; $i++) $spared[] = $roles[$i]['uid'];
                 if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION,

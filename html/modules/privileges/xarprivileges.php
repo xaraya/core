@@ -1615,8 +1615,12 @@ class xarPrivileges extends xarMasks
     {
         list($p1,$p2) = $this->canonical($mask);
         $match = true;
-        if (count($p1)!=count($p2)) return false;
-        for ($i=1;$i<count($p1);$i++) $match = $match && ($p1[$i]==$p2[$i]);
+        $p1count = count($p1);
+        $p2count = count($p2);
+        if ($p1count != $p2count) return false;
+        for ($i=1; $i < $p1count; $i++) {
+            $match = $match && ($p1[$i]==$p2[$i]);
+        }
 //        echo $this->present() . $mask->present() . $match;exit;
         return $match;
     }

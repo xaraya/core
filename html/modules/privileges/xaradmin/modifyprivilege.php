@@ -89,12 +89,13 @@ function privileges_admin_modifyprivilege()
     else {$data['plevel'] = $priv->getLevel();}
 
     $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
-
-    if(count($instance) >0 ) {$default = $instance;}
+    $numInstances = count($instances); // count the instances to use in later loops
+    
+    if(count($instance) > 0) {$default = $instance;}
     else {
         $default = array();
         $inst = $priv->getInstance();
-        if ($inst == "All") for($i=0;$i<count($instances);$i++) $default[] = "All";
+        if ($inst == "All") for($i=0; $i < $numInstances; $i++) $default[] = "All";
         else $default = explode(':',$priv->getInstance());
     }
 
@@ -107,7 +108,7 @@ function privileges_admin_modifyprivilege()
         $data['curinstance'] = join(':',$default);
         $data['instances'] = array();
     } else {
-        for ($i=0;$i<count($instances);$i++) {
+        for ($i=0; $i < $numInstances; $i++) {
             if($component == ''|| ($component == $oldcomponent)) {
                 $instances[$i]['default'] = $default[$i];}
             else {

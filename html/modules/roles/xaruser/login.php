@@ -176,7 +176,7 @@ function roles_user_login()
                 $rolesarray = array();
                 $rolemaker = new xarRoles();
                 $roles = $lockvars['roles'];
-                for($i=0;$i<count($roles);$i++)
+                for($i=0, $max = count($roles); $i < $max; $i++)
                         $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
                 $letin = array();
                 foreach($rolesarray as $roletoletin) {

@@ -90,7 +90,7 @@ function dynamicdata_admin_view($args)
                           'GetList', 
                           array('orderBy'     => 'category/name'));
         $oldcat = '';
-        for ($i = 0; $i < count($modList); $i++) {
+        for ($i = 0, $max = count($modList); $i < $max; $i++) {
             if (!empty($seenmod[$modList[$i]['regid']])) {
                 continue;
             }

@@ -154,7 +154,7 @@ function roles_user_view($args)
     $data['uidlist'] = array();
 
     // Check individual privileges for Edit / Delete
-    for ($i = 0; $i < count($items); $i++) {
+    for ($i = 0, $max = count($items); $i < $max; $i++) {
         $item = $items[$i];
         $data['uidlist'][] = $item['uid'];
 

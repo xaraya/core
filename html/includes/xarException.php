@@ -429,7 +429,7 @@ function xarException__xdebugBackTrace()
     array_shift($stack); // Drop {main}
     array_pop($stack); // Drop xarException__xdebugBackTrace
     if (xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT)) {
-        for($i = 0; $i < count($stack); $i++) {
+        for($i = 0, $max = count($stack); $i < $max; $i++) {
             $stack[$i]['args'] = $stack[$i]['params'];
         }
     }
