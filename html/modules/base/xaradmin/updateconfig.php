@@ -23,8 +23,9 @@ function base_admin_updateconfig()
     if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
+    if (!xarVarFetch('localeslist','str:1:',$localesList)) return;
+    if (!xarVarFetch('translationsbackend','str:1:',$translationsBackend)) return;
     if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
-
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -55,6 +56,9 @@ function base_admin_updateconfig()
     // MLS variables
     xarConfigSetVar('Site.MLS.MLSMode', $MLSMode);
     xarConfigSetVar('Site.MLS.DefaultLocale', $defaultLocale);
+    $allowedLocales = split(',',$localesList);
+    xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
+    xarConfigSetVar('Site.MLS.TranslationsBackend', $translationsBackend);
 
     //$authModules = array('authsystem');
     //xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
