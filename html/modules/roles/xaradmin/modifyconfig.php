@@ -62,6 +62,7 @@ function roles_admin_modifyconfig()
             if (!xarVarFetch('sendnotice', 'checkbox', $sendnotice, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('requirevalidation', 'checkbox', $requirevalidation, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('showdynamic', 'checkbox', $showdynamic, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('minage', 'str:1:3:', $minage, '13', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('minpasslegnth', 'int:1', $minpasslength, 5, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED)) return;
@@ -84,6 +85,7 @@ function roles_admin_modifyconfig()
             xarModSetVar('roles', 'explicitapproval', $explicitapproval);
             xarModSetVar('roles', 'sendwelcomeemail', $sendwelcomeemail);
             xarModSetVar('roles', 'allowinvisible', $allowinvisible);
+            xarModSetVar('roles', 'showdynamic', $showdynamic);
             xarModSetVar('roles', 'SupportShortURLs', $shorturls);
             xarModSetVar('roles', 'rolesperpage', $rolesperpage);
 

@@ -15,13 +15,15 @@
 		<td><xar:mlstring>E-mail Address</xar:mlstring>:</td>
 		<td>#$email#</td>
 	</tr>
-<xar:if condition="isset($properties)" >
-	<xar:foreach in="$properties" key="$name">
-		<tr>
-			<td><xar:data-label property="$properties[$name]" />:</td>
-			<td><xar:data-output property="$properties[$name]" /></td>
-		</tr>
-	</xar:foreach>
+<xar:if condition="xarModGetVar('roles', 'showdynamic')" >
+	<xar:if condition="isset($properties)" >
+		<xar:foreach in="$properties" key="$name">
+			<tr>
+				<td><xar:data-label property="$properties[$name]" />:</td>
+				<td><xar:data-output property="$properties[$name]" /></td>
+			</tr>
+		</xar:foreach>
+	</xar:if>
 </xar:if>
     <tr>
         <td colspan="2" style="text-align: center;"><br />

@@ -83,13 +83,15 @@
 	<xar:else />
 		<input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
 	</xar:if>
-	<xar:if condition="isset($properties)">
-		<xar:foreach in="$properties" key="$name">
-			<tr>
-				<td><xar:data-label property="$properties[$name]" />:</td>
-				<td><xar:data-input property="$properties[$name]" /></td>
-			</tr>
-		</xar:foreach>
+	<xar:if condition="xarModGetVar('roles', 'showdynamic')" >
+		<xar:if condition="isset($properties)">
+			<xar:foreach in="$properties" key="$name">
+				<tr>
+					<td><xar:data-label property="$properties[$name]" />:</td>
+					<td><xar:data-input property="$properties[$name]" /></td>
+				</tr>
+			</xar:foreach>
+		</xar:if>
 	</xar:if>
     <tr>
         <td colspan="2" style="text-align: center"><br />

@@ -71,7 +71,7 @@
         </tr>
 		</xar:if>
 	    <tr>
-            <td><label for="sendnotice"><xar:mlstring>Send notice to admin when new user registers?</xar:mlstring>:</label></td>
+            <td><label for="sendnotice"><xar:mlstring>Send notice to admin when new user registers</xar:mlstring>:</label></td>
             <td>
 		<xar:if condition="xarModGetVar('roles', 'sendnotice')">
 			<input type="checkbox" name="sendnotice" id="sendnotice" value="1" checked="checked" />
@@ -96,6 +96,16 @@
 			<input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" checked="checked" />
 		<xar:else />
 			<input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" />
+		</xar:if></td>
+        </tr>
+	    <tr>
+	    <tr>
+            <td><label for="showdynamic"><xar:mlstring>Show dynamic properties on registration (if enabled)</xar:mlstring>:</label></td>
+            <td>
+		<xar:if condition="xarModGetVar('roles', 'showdynamic')">
+			<input type="checkbox" name="showdynamic" id="showdynamic" value="1" checked="checked" />
+		<xar:else />
+			<input type="checkbox" name="showdynamic" id="showdynamic" value="1" />
 		</xar:if></td>
         </tr>
 	    <tr>
