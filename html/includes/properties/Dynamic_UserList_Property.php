@@ -163,11 +163,15 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
+        } else {
+            $data['name'] = $name;
         }
 
         if (empty($id)) {
             // TODO: strip out characters that are not allowed in a name.
             $data['id'] = xarVarPrepForDisplay($data['name']);
+        } else {
+            $data['id']= $id;
         }
        //$data['select_options']=$select_options;
         $data['value']=$value;
