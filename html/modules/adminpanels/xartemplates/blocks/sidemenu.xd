@@ -6,7 +6,11 @@
 <xar:loop name="$adminmods">
     <xar:if condition="$modactive">
         <div class="xar-menu-item-current">
-        #$label#
+            <xar:if condition="$link ne ''">
+                <a href="#$link#" title="#$maintitle#">#$label#</a>
+            <xar:else />
+                #$label# #$marker#
+            </xar:if>
         <xar:if condition="$indlinks ne ''">
             <xar:loop name="$indlinks">
                 <xar:if condition="$funcactive">

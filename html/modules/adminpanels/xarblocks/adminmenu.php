@@ -118,13 +118,23 @@ function adminpanels_adminmenublock_display($blockinfo){
                     if($label == $thismodname && $thismodtype == 'admin'){
                         // clarification (to avoid new template bugs)
                         // this module is currently loaded (active), we need to display
-                        // 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // NOTE: it has been changed a bit to satisfy users logic (bug/feature request #472) 
+                        // OLD WAY: 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // NEW WAY: a) as above, when users looking at default main function
+                        // NEW WAY: b) main module link becomes active with alt text when user is looking at another screen of this module
                         // lets also add clear identifier for the template that this module is the active one
                         $labelDisplay = ucwords($label);
-                        $adminmods[] = array(   'label'     => $labelDisplay,
-                                                'link'      => '',
-                                                'modactive' => 1);
-
+                        if ($thisfuncname != 'main'){
+                            $adminmods[] = array(   'label'     => $labelDisplay,
+                                                    'link'      => $link,
+                                                    'modactive' => 1,
+                                                    'maintitle' => xarML('View default screen for module ').$labelDisplay);
+                        } else {
+                            $adminmods[] = array(   'label'     => $labelDisplay,
+                                                    'link'      => '',
+                                                    'modactive' => 1,
+                                                    'maintitle' => '');
+                        }
                         // Little bug fix since we wrapped the load API calls
                         // Lets check to see if the function exists and just skip it if it doesn't
                         // with the new api load, it causes some problems.  We need to load the api
@@ -215,13 +225,23 @@ function adminpanels_adminmenublock_display($blockinfo){
                     if($label == $thismodname && $thismodtype == 'admin'){
                         // clarification (to avoid new template bugs)
                         // this module is currently loaded (active), we need to display
-                        // 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // NOTE: it has been changed a bit to satisfy users logic (bug/feature request #472) 
+                        // OLD WAY: 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // NEW WAY: a) as above, when users looking at default main function
+                        // NEW WAY: b) main module link becomes active with alt text when user is looking at another screen of this module
                         // lets also add clear identifier for the template that this module is the active one
                         $labelDisplay = ucwords($label);
-                        $adminmods[] = array(   'label'     => $labelDisplay,
-                                                'link'      => '',
-                                                'modactive' => 1);
-
+                        if ($thisfuncname != 'main'){
+                            $adminmods[] = array(   'label'     => $labelDisplay,
+                                                    'link'      => $link,
+                                                    'modactive' => 1,
+                                                    'maintitle' => xarML('View default screen for module ').$labelDisplay);
+                        } else {
+                            $adminmods[] = array(   'label'     => $labelDisplay,
+                                                    'link'      => '',
+                                                    'modactive' => 1,
+                                                    'maintitle' => '');
+                        }
                         // For active module we need to display the mod functions links
                         // call the api function to obtain function links
                         $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
