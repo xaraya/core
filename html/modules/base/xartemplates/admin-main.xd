@@ -22,10 +22,11 @@
         </div>
         <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>From the menu, you have one choice. </xar:mlstring>
+            <xar:mlstring>From the menu, you have two choices. </xar:mlstring>
 			<ul>
                 <li><xar:mlstring>View System Information -- Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
-			</ul>
+		<li><xar:mlstring>Modify Config -- Allows you to change some of the settings controlling the core behaviour of the site.</xar:mlstring></li>
+		</ul>
         </div>
         <br />
         <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: #B3B3B3; border-style: none none dotted none;">
