@@ -249,8 +249,9 @@ function initializeSetup()
     xarRegisterMask('MailRoles','All','roles','Mail','All','ACCESS_ADMIN');
 
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
-    xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
+    xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('EditBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('AddBlock','All','blocks','All','All','ACCESS_ADD');
