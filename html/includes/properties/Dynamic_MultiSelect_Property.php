@@ -7,6 +7,12 @@
  */
 
 /**
+ * Include the base class
+ *
+ */
+include_once "includes/properties/Dynamic_Select_Property.php";
+
+/**
  * handle the multiselect property
  *
  * @package dynamicdata
