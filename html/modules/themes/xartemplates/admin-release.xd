@@ -5,13 +5,13 @@
 	<xar:if condition="!empty($feedcontent)">
 		<xar:loop name="$feedcontent">
 		<p>
-			<xar:if condition="!empty($link)">
-				&bull;<a href = "#$link#" target = "_BLANK"> #$title# </a>:
+			<xar:if condition="!empty($loop:item['link'])">
+				&bull;<a href = "#$loop:item['link']#" target = "_BLANK"> #$loop:item['title']# </a>:
 			<xar:else />
-				&bull; <b>#$title#</b>:
+				&bull; <b>#$loop:item['title']#</b>:
 			</xar:if>
-			<xar:if condition="!empty($description)">
-				#$description#
+			<xar:if condition="!empty($loop:item['description'])">
+				#$loop:item['description']#
 			</xar:if>
 		</p>
 		</xar:loop>

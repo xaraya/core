@@ -17,20 +17,20 @@
         <xar:loop name="$themevars">
         <tr>
             <td class="xar-norm">
-               <label for="#$name#">#$name#
-               <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if></label>
+               <label for="#$loop:item['name']#">#$loop:item['name']#
+               <xar:if condition="$loop:item['prime'] eq 1">&nbsp;&nbsp;[primary]</xar:if></label>
             </td>
             <td class="xar-norm">
-               <input type="text" name="#$name#" id="#$name#" value="#$value#" />
+               <input type="text" name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['value']#" />
             </td>
             <td class="xar-norm">
-               #$description#
+               #$loop:item['description']#
             </td>
             <td align="center" class="xar-norm">
-               <xar:if condition="$prime eq 1">
+               <xar:if condition="$loop:item['prime'] eq 1">
                    none
                <xar:else />
-                   <input type="checkbox" name="#$name#-del" id="#$name#-del" value="delete" /> Delete
+                   <input type="checkbox" name="#$loop:item['name']#-del" id="#$loop:item['name']#-del" value="delete" /> Delete
                </xar:if>
             </td>
         </tr>
@@ -73,10 +73,10 @@
         <xar:loop name="$themeInfo">
         <tr>
             <td class="xar-norm">
-               #$name#
+               #$loop:item['name']#
             </td>
             <td class="xar-norm">
-               #$value#
+               #$loop:item['value']#
             </td>
         </tr>
         </xar:loop>

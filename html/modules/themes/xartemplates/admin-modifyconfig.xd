@@ -7,13 +7,13 @@
 	<p>#$defaultthemelabel# 
 		<select name="defaulttheme" id="defaulttheme" size="1">
 			<xar:loop name="$themes">
-				<xar:if condition="$name eq $defaulttheme">
-					<option value="#$regid#" selected="selected">
-						#$name#
+				<xar:if condition="$loop:item['name'] eq $defaulttheme">
+					<option value="#$loop:item['regid']#" selected="selected">
+						#$loop:item['name']#
 					</option>
 					<xar:else />
-					<option value="#$regid#">
-						#$name#
+					<option value="#$loop:item['regid']#">
+						#$loop:item['name']#
 					</option>
 				</xar:if>
 			</xar:loop>
