@@ -10,7 +10,7 @@ function blocks_admin_modify_instance()
     if (!xarVarFetch('bid','int:1:',$bid)) return;
 
     // Security Check
-	if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
+    if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
 
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
@@ -19,7 +19,7 @@ function blocks_admin_modify_instance()
     $block_types_table = $xartable['block_types'];
 
     // Fetch instance data
-    $query = "SELECT inst.xar_id as id,
+    $query = "SELECT inst.xar_id as bid,
                      inst.xar_title as title,
                      inst.xar_template as template,
                      inst.xar_content as content,
