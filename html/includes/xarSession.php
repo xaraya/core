@@ -369,7 +369,7 @@ function xarSession__new($sessionId, $ipAddress)
               VALUES
                  ('" . xarVarPrepForStore($sessionId) . "',
                   '" . xarVarPrepForStore($ipAddress) . "',
-                  0,
+                  " . _XAR_ID_UNREGISTERED . ",
                   " . time() . ",
                   " . time() . ")";
 

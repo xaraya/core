@@ -179,7 +179,10 @@ global $installing;
 
 function xarUserIsLoggedIn()
 {
-    return xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED;
+    // FIXME: restore "clean" code once uid+session issues are resolved
+    //return xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED;
+    return (xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED
+            && xarSessionGetVar('uid') != 0);
 }
 
 /**
