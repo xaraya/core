@@ -55,9 +55,9 @@ function modules_admin_tools(){
 /*     $data['modauthor']          = preg_replace('/,/', '<br />', xarVarPrepForDisplay($modinfo['author'])); */
 /*     $data['modcontact']         = preg_replace('/,/', '<br />',xarVarPrepForDisplay($modinfo['contact'])); */
 /*     if(!empty($modinfo['dependency'])){ */
-/*         $dependency             = xarMLByKey('Working on it...'); */
+/*         $dependency             = xarML('Working on it...'); */
 /*     } else { */
-/*         $dependency             = xarMLByKey('None'); */
+/*         $dependency             = xarML('None'); */
 /*     } */
 /*     $data['moddependency']      = xarVarPrepForDisplay($dependency); */
     
