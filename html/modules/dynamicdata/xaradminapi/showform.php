@@ -108,12 +108,11 @@ function dynamicdata_adminapi_showform($args)
         $object->getItem();
     }
     // if we are in preview mode, we need to check for any preview values
-    //if (!isset($preview)) {
-    //    $preview = xarVarCleanFromInput('preview');
-    //}
-    //if (!empty($preview)) {
-    //    $object->checkInput();
-    //}
+    //$preview = xarVarCleanFromInput('preview');
+    if (!empty($preview)) {
+        $object->checkInput();
+    }
+
     return $object->showForm(array('layout'   => $layout,
                                    'template' => $template));
 }

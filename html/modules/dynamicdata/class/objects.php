@@ -713,6 +713,10 @@ class Dynamic_Object extends Dynamic_Object_Master
                                       'itemid'   => $this->itemid,
                                       'modname'  => $modinfo['name']));
         }
+        // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
+        if (!empty($args['preview'])) {
+            $this->checkInput();
+        }
         return $this->itemid;
     }
 
@@ -758,6 +762,10 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
+        // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
+        if (!empty($args['preview'])) {
+            $this->checkInput();
+        }
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $properties = array();
             foreach ($args['fieldlist'] as $name) {
@@ -788,6 +796,10 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
+        }
+        // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
+        if (!empty($args['preview'])) {
+            $this->checkInput();
         }
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
@@ -1583,8 +1595,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $args['catid'] = null;
         }
 
+        if (isset($args['newlink'])) {
         // TODO: improve this + SECURITY !!!
-		if(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
+        } elseif (xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
             $args['newlink'] = xarModURL($modname,'admin','new',
                                          array('itemtype' => $itemtype,
                                                'table'    => $table));
