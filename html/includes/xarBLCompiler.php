@@ -91,9 +91,7 @@ class xarTpl__ParserError extends SystemException
             ', column '.$posInfo->column.
             ":\n\n".$msg;
         $msg .= "\n\n" . $posInfo->lineText . "\n";
-        if ($posInfo->column - 1 > 0) {
-            $msg .= str_repeat('-', $posInfo->column - 3);
-        }
+        $msg .= str_repeat('-', max(0,$posInfo->column - 1));
         $msg .= '^';
         // FIXME: evaluate whether this needs to be a system exception.
         xarExceptionSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
@@ -149,12 +147,11 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         return $this->compile($templateSource);
     }
 
-    function compile($templateSource)
+    function compile(&$templateSource)
     {
         $documentTree = $this->parser->parse($templateSource);
-        if (!isset($documentTree)) {
-            return; // throw back
-        }
+        if (!isset($documentTree)) return; // throw back
+        
         return $this->codeGenerator->generate($documentTree);
     }
 }
@@ -192,7 +189,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         $this->pendingExceptionsControl = $pendingExceptionsControl;
     }
 
-    function generate($documentTree)
+    function generate(&$documentTree)
     {
         if ($documentTree->variables->get('type') == 'page') {
             $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
@@ -201,15 +198,10 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
             // Bug 1109: tpl:JavaScript is replacing tpl:{head|body}JavaScript
             $resolver->push('tpl:JavaScript', '$_bl_javascript');
-            // These two deprecated.
-            $resolver->push('tpl:headJavaScript', '$_bl_head_javascript');
-            $resolver->push('tpl:bodyJavaScript', '$_bl_body_javascript');
         }
 
         $code = $this->generateNode($documentTree);
-        if (!isset($code)) {
-            return; // throw back
-        }
+        if (!isset($code)) return; // throw back
 
         if (!$this->isPHPBlock()) {
             $code .= "<?php ";
@@ -219,22 +211,19 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $code .= " return true;?>";
             $this->setPHPBlock(false);
         }
-        //xarLogMessage('generate code: '.$code, XARLOG_LEVEL_ERROR);
         return $code;
     }
 
-    function generateNode($node)
+    function generateNode(&$node)
     {
-        //if ($node->hasChildren() && $node->children != NULL /*|| $node->hasText()*/) {
         if ($node->hasChildren() && isset($node->children) /*|| $node->hasText()*/) {
             if ($node->isPHPCode() && !$this->isPHPBlock()) {
                 $code .= "<?php ";
                 $this->setPHPBlock(true);
             }
             $code = $node->renderBeginTag();
-            if (!isset($code)) {
-                return; // throw back
-            }
+            if (!isset($code)) return; // throw back
+            
             $checkNode = $node;
             foreach ($node->children as $child) {
                 if ($child->isPHPCode() && !$this->isPHPBlock()) {
@@ -270,9 +259,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                     $childCode = _compress_space($this->generateNode($child));
                 }
 
-                if (!isset($childCode)) {
-                    return; // throw back
-                }
+                if (!isset($childCode)) return; // throw back
+                
            
                 // Commented out the code that will patch a security hole in xar:set
                 // See also bug #107
@@ -303,9 +291,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 $this->setPHPBlock(true);
             }
             $endCode = $node->renderEndTag();
-            if (!isset($endCode)) {
-                return; // throw back
-            }
+            if (!isset($endCode)) return; // throw back
+            
             $code .= $endCode;
             if (!$node->isAssignable() && ($node->needExceptionsControl() /*&& $this->isPendingExceptionsControl()*/)) {
                 if (!$this->isPHPBlock()) {
@@ -354,7 +341,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->fileName = $fileName;
     }
 
-    function parse($templateSource)
+    function parse(&$templateSource)
     {
         //xarLogVariable('templateSource', $templateSource, XARLOG_LEVEL_ERROR);
         // <garrett> make sure we only have to deal with \n as CR tokens, replace \r\n and \r
@@ -372,16 +359,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $documentTree = $this->nodesFactory->createDocumentNode($this);
 
         $res = $this->parseNode($documentTree);
-        if (!isset($res)) {
-            return; // throw back
-        }
+        if (!isset($res)) return; // throw back
+        
         $documentTree->children = $res;
         $documentTree->variables = $this->tplVars;
 
         return $documentTree;
     }
 
-    function parseNode($parent) 
+    function parseNode(&$parent) 
     {
         // Start of parsing a node, initialize our result variables
         $text = ''; $token=''; $children = array();
@@ -492,9 +478,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                         // Handle Begin Tag
                         $res = $this->parseBeginTag();
-                        if (!isset($res)) {
-                            return; // throw back
-                        }
+                        if (!isset($res)) return; // throw back
+                        
                         list($tagName, $attributes, $closed) = $res;
                         // Check for uniqueness of id attribute
                         if (isset($attributes['id'])) {
@@ -523,16 +508,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
 
                         $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
-                        if (!isset($node)) {
-                            return; // throw back
-                        }
+                        if (!isset($node)) return; // throw back
+                        
                         //xarLogVariable('node', $node, XARLOG_LEVEL_ERROR);
                         if (!$closed) {
                             array_push($this->tagNamesStack, $tagName);
                             $res = $this->parseNode($node);
-                            if (!isset($res)) {
-                                return; // throw back
-                            }
+                            if (!isset($res)) return; // throw back
+                            
                             $node->children = $res;
                         }
                         $children[] = $node;
@@ -557,9 +540,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         // Handle End Tag
                         $tagName = $this->parseEndTag();
-                        if (!isset($tagName)) {
-                            return; // throw back
-                        }
+                        if (!isset($tagName)) return; // throw back
+                        
                         $stackTagName = array_pop($this->tagNamesStack);
                         if ($tagName != $stackTagName) {
                             $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
@@ -693,14 +675,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     // Handle Entity
                     $res = $this->parseEntity();
-                    if (!isset($res)) {
-                        return; // throw back
-                    }
+                    if (!isset($res)) return; // throw back
+                    
                     list($entityType, $parameters) = $res;
                     $node = $this->nodesFactory->createTplEntityNode($entityType, $parameters, $this);
-                    if (!isset($node)) {
-                        return; // throw back
-                    }
+                    if (!isset($node)) return; // throw back
+                    
                     $children[] = $node;
                     $token = '';
                     break;
@@ -783,9 +763,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     }
                     // Instruction is now set to $varname of xFunction(.....)
                     $node = $this->nodesFactory->createTplInstructionNode($instruction, $this);
-                    if (!isset($node)) {
-                        return; // throw back
-                    }
+                    if (!isset($node)) return; // throw back
+                    
                     $children[] = $node;
                     $token = '';
                     break;
@@ -820,9 +799,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $variables = array();
         while (true) {
             $variable = $this->parseTagAttribute();
-            if (!isset($variable)) {
-                return; // throw back
-            }
+            if (!isset($variable)) return; // throw back
+            
             if (is_string($variable)) {
                 $exitToken = $variable;
                 break;
@@ -879,9 +857,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         if ($token == ' ') {
             while (true) {
                 $attribute = $this->parseTagAttribute();
-                if (!isset($attribute)) {
-                    return; // throw back
-                }
+                if (!isset($attribute)) return; // throw back
+                
                 if (is_string($attribute)) {
                     $exitToken = $attribute;
                     break;
@@ -1406,9 +1383,8 @@ class xarTpl__ExpressionTransformer
             // Get xarTpl__SpecialVariableNamesResolver instance
             $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
             $expression = $resolver->resolve($expression, $this);
-            if (!isset($expression)) {
-                return; // throw back
-            }
+            if (!isset($expression)) return; // throw back
+            
         } else {
             $expression = XAR_TOKEN_VAR_START . $expression;
         }
@@ -1448,9 +1424,8 @@ class xarTpl__ExpressionTransformer
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
-                if (!isset($resolvedName)) {
-                    return; // throw back
-                }
+                if (!isset($resolvedName)) return; // throw back
+                
                 $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
             }
         }
@@ -1664,9 +1639,8 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
             return;
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
-        if (!isset($instruction)) {
-            return; // throw back
-        }
+        if (!isset($instruction)) return; // throw back
+        
         return $instruction;
     }
 }
@@ -1687,9 +1661,8 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.', $this);
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
-        if (!isset($instruction)) {
-            return; // throw back
-        }
+        if (!isset($instruction)) return; // throw back
+        
         return $instruction;
     }
 }
@@ -1711,9 +1684,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
             return;
         }
         $name = xarTpl__ExpressionTransformer::transformBLExpression($this->parameters[0]);
-        if (!isset($name)) {
-            return; // throw back
-        }
+        if (!isset($name)) return; // throw back
 
         return $name;
     }
@@ -1940,9 +1911,8 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             return "xarThemeGetVar('".$themeName."', '".$name."')";
         case 'local':
             $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
-            if (!isset($name)) {
-                return; // throw back
-            }
+            if (!isset($name)) return; // throw back
+            
             return $name;
         default:
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.', $this);
@@ -1997,9 +1967,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         }
 
         $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
-        if (!isset($name)) {
-            return; // throw back
-        }
+        if (!isset($name)) return; // throw back
 
         // Increment the loopCounter and retrieve its new value
         $loopCounter = xarTpl__XarLoopNode::loopCounter('++');
@@ -2154,9 +2122,7 @@ class xarTpl__XarTernaryNode extends xarTpl__TplTagNode
         }
 
         $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
-        if (!isset($condition)) {
-            return; // throw back
-        }
+        if (!isset($condition)) return; // throw back
 
         return "($condition) ? ";
     }
@@ -2194,9 +2160,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
         }
 
         $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
-        if (!isset($condition)) {
-            return; // throw back
-        }
+        if (!isset($condition)) return; // throw back
 
         return "if ($condition) { ";
     }
@@ -2242,9 +2206,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
         }
 
         $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
-        if (!isset($condition)) {
-            return; // throw back
-        }
+        if (!isset($condition)) return; // throw back
 
         return "} elseif ($condition) { ";
     }
@@ -2313,9 +2275,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
         }
 
         $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
-        if (!isset($condition)) {
-            return; // throw back
-        }
+        if (!isset($condition)) return; // throw back
 
         return "while ($condition) { ";
     }
@@ -2371,17 +2331,13 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
         }
 
         $start = xarTpl__ExpressionTransformer::transformPHPExpression($start);
-        if (!isset($start)) {
-            return; // throw back
-        }
+        if (!isset($start)) return; // throw back
+
         $test = xarTpl__ExpressionTransformer::transformPHPExpression($test);
-        if (!isset($test)) {
-            return; // throw back
-        }
+        if (!isset($test)) return; // throw back
+        
         $iter = xarTpl__ExpressionTransformer::transformPHPExpression($iter);
-        if (!isset($iter)) {
-            return; // throw back
-        }
+        if (!isset($iter)) return; // throw back
 
         return "for ($start; $test; $iter) { ";
     }
