@@ -12,7 +12,7 @@
  * @author Marc Lutolf
  */
 
-$configuration_name = 'CommunitySite';
+$configuration_name = 'Community Site';
 
     $options  = array(
     array(
