@@ -179,7 +179,7 @@ function adminpanels_init()
     //if (!$result) return;
 
     $query = xarDBCreateIndex($xartable['waitingcontent'],
-                             array('name'   => 'xar_moduleid',
+                             array('name'   => 'i_'.xarDBGetSiteTablePrefix().'_wc_moduleid',
                                    'fields' => array('xar_moduleid'),
                                    'unique' => false));
 
@@ -187,7 +187,7 @@ function adminpanels_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($xartable['waitingcontent'],
-                             array('name'   => 'xar_itemid',
+                             array('name'   => 'i_'.xarDBGetSiteTablePrefix().'_wc_itemid',
                                    'fields' => array('xar_itemid'),
                                    'unique' => false));
 

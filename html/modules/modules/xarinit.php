@@ -112,7 +112,7 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    $index = array('name'   => 'i_xar_regid',
+    $index = array('name'   => 'i_'.$sitePrefix.'_module_states_regid',
                    'fields' => array('xar_regid'));
 
     $query = xarDBCreateIndex($tables['module_states'],$index);
@@ -147,7 +147,7 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    $index = array('name'   => 'i_xar_modid',
+    $index = array('name'   => 'i_'.$sitePrefix.'_module_vars_modid',
                    'fields' => array('xar_modid'));
 
     $query = xarDBCreateIndex($tables['module_vars'],$index);
@@ -155,7 +155,7 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    $index = array('name'   => 'i_modules_xar_name',
+    $index = array('name'   => 'i_'.$sitePrefix.'_module_vars_name',
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($tables['module_vars'],$index);
