@@ -23,8 +23,10 @@ xarRequestGetInfo();
 //Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
-if(!xarSecurityCheck('AdminPanel')) return;
-    //include 'modules/privileges/xarsetup.php';
+if(!xarSecurityCheck('AdminPanel')){
+    echo xarML('You must be logged in with admin permissions to upgrade Xaraya.');
+    return;
+}
 
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
