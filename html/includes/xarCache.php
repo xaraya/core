@@ -78,7 +78,7 @@ function xarPageIsCached($cacheKey, $name = '')
     global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarPage_cacheDisplay, $xarPage_cacheCode;
 
     $xarTpl_themeDir = xarTplGetThemeDir();
-    $page = $xarTpl_themeDir . xarServerGetVar('REQUEST_URI');
+    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir . xarServerGetVar('REQUEST_URI');
     $param = xarServerGetVar('QUERY_STRING');
     if (!empty($param)) {
         $page .= '?' . $param;
