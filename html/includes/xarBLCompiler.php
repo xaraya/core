@@ -218,7 +218,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function xarTpl__Parser()
     {
-        $this->nodesFactory = new xarTpl__NodesFactory(&$this);
+        $this->nodesFactory = new xarTpl__NodesFactory($this);
     }
 
     function setFileName($fileName)
