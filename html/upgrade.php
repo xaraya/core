@@ -254,6 +254,7 @@ if (empty($step)) {
                 xarMakeRoleMemberByName('Myself','Everybody');
 
                 // This creates the new lock privileges and assigns them to the relevant roles
+                /*
                 xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
                 xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
                 xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
@@ -277,6 +278,7 @@ if (empty($step)) {
                 //Make sure we have the correct stuff for Anonymous and Everybody
                 //xarModDelVar('roles', 'Everybody');
                 //xarModDelVar('roles', 'Anonymous');
+                */
                 $role = xarFindRole('Everybody');
                 xarModSetVar('roles', 'everybody', $role->getID());
                 $role = xarFindRole('Anonymous');
