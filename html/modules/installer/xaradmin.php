@@ -268,6 +268,11 @@ function installer_admin_create_administrator()
 	if(!securitycheck('Admin')) return;
 
     if (!xarVarCleanFromInput('create')) {
+//    	data['install_admin_username'] =
+//    	data['install_admin_name'] =
+//    	data['install_admin_password'] =
+//    	data['install_admin_email'] =
+//    	data['install_admin_url'] =
         return $data;
     }
 
