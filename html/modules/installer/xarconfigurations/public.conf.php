@@ -74,6 +74,7 @@ function installer_public_moderateaccess()
 function installer_public_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All','empty','All','All',ACCESS_NONE,'Exclude access to the core modules');
+    xarRegisterPrivilege('ReadAccess','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
     xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All',ACCESS_NONE,'Exclude access to the Blocks module');
@@ -82,6 +83,7 @@ function installer_public_readnoncore()
     xarRegisterPrivilege('DenyThemes','All','themes','All','All',ACCESS_NONE,'Exclude access to the Themes module');
     xarRegisterPrivilege('DenyDynamicData','All','dynamicdata','All','All',ACCESS_NONE,'Exclude access to the AdminPanels module');
     xarMakePrivilegeRoot('ReadNonCore');
+    xarMakePrivilegeRoot('ReadAccess');
     xarMakePrivilegeRoot('DenyPrivileges');
     xarMakePrivilegeRoot('DenyAdminPanels');
     xarMakePrivilegeRoot('DenyBlocks');
