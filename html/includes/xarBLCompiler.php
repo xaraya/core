@@ -448,7 +448,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // / -> end tag
                     // other -> rest
                     $nextToken = $this->getNextToken();
-                    if ($nextToken == XAR_TOKEN_PI_DELIM) { // <?
+                    if ($nextToken == XAR_TOKEN_PI_DELIM) { // < ?
                         // TODO: why the specific 3 characters?, could easily scan to first whitespace
                         $res = $this->parseProcessingInstruction($this->getNextToken(3));
                         if(!isset($res)) return; //throw back
