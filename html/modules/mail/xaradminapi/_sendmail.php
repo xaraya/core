@@ -226,6 +226,19 @@ function mail_adminapi__sendmail($args)
     // Set IsHTML - this is true for HTML mail
     $mail->IsHTML($htmlmail);
 
+    $mailShowTemplates  = xarModGetVar('mail', 'ShowTemplates');
+
+    // If mailShowTemplates is undefined, then the modvar is missing
+    // for some reason, so just go with the value of the theme show templates
+    if (!isset($mailShowTemplates)) {
+        $mailShowTemplates = xarModGetVar('themes', 'ShowTemplates');
+    }
+
+    // go ahead and override the show templates value,  
+    // using the mail modules settings instead :-)
+    $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
+    xarModSetVar('themes', 'ShowTemplates', $mailShowTemplates);
+        
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
         // Sets the text-only body of the message. 
@@ -263,6 +276,11 @@ function mail_adminapi__sendmail($args)
         } else {
             $mail->Body = $message;
         }
+    }
+
+    // Set the showTemplates back to what it was previously
+    if (!$mailShowTemplates) {
+        xarModSetVar('themes', 'ShowTemplates', $oldShowTemplates);
     }
 
     // We are now setting up the advance options that can be used by the modules
