@@ -1598,24 +1598,6 @@ function drawindent() {
 
 // take care of the case that one of the instances may be "All"
 //echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
-        $instance1 = explode(':',$this->getInstance());
-        $instance2 = explode(':',$mask->getInstance());
-        if ($this->getInstance() == "All") {
-            $instance1 = array();
-            for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
-        }
-        elseif ($mask->getInstance() == "All") {
-            $instance2 = array();
-            for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
-        }
-
-        if (count($instance1) != count($instance2)) {
-//echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
-//return false;
-            $msg = xarML('Mask and privilege do not have the same instances');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-        }
 
         if($comparing) {
             $thisrealm = strtolower($this->getRealm());
@@ -1641,6 +1623,25 @@ function drawindent() {
                 ($thiscomponent != 'all') && ($maskcomponent == 'all')
             ))
             {return false;}
+
+            $instance1 = explode(':',$this->getInstance());
+            $instance2 = explode(':',$mask->getInstance());
+            if ($this->getInstance() == "All") {
+                $instance1 = array();
+                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
+            }
+            elseif ($mask->getInstance() == "All") {
+                $instance2 = array();
+                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
+            }
+
+            if (!($thiscomponent != 'all') && ($maskcomponent == 'all')) {
+                if (count($instance1) != count($instance2)) {
+                    $msg = xarML('Mask #(1) and privilege #(2) do not have the same instances',$mask->getName(),$this->getName());
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                   new SystemException($msg));
+                }
+            }
 
             for ($i=0;$i<count($instance1);$i++) {
                 if (!(
@@ -1675,6 +1676,25 @@ function drawindent() {
                 ($thiscomponent == 'all') && ($maskcomponent != 'none')
             ))
             {return false;}
+
+            $instance1 = explode(':',$this->getInstance());
+            $instance2 = explode(':',$mask->getInstance());
+            if ($this->getInstance() == "All") {
+                $instance1 = array();
+                for($i=0;$i<count($instance2);$i++) $instance1[] = "All";
+            }
+            elseif ($mask->getInstance() == "All") {
+                $instance2 = array();
+                for($i=0;$i<count($instance1);$i++) $instance2[] = "All";
+            }
+
+            if (!($thiscomponent != 'all') && ($maskcomponent == 'all')) {
+                if (count($instance1) != count($instance2)) {
+                    $msg = xarML('Mask #(1) and privilege #(2) do not have the same instances',$mask->getName(),$this->getName());
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                   new SystemException($msg));
+                }
+            }
 
             for ($i=0;$i<count($instance1);$i++) {
                 if (!(
