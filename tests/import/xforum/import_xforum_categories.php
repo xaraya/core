@@ -36,7 +36,7 @@
  //  }
 
     $query = 'SELECT type , fid, name, displayorder,fup
-              FROM `'.$oldprefix.'_xforum_forums`
+              FROM `'.$oldprefix.'_XForum_forums`
               WHERE TYPE = \'group\' OR TYPE = \'forum\'';
     $result =& $dbconn->Execute($query);
     if (!$result) {

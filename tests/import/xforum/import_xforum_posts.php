@@ -46,7 +46,7 @@
         $pid2cid = unserialize($pids);
         $pids = '';
     }
-    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_xforum_posts';
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_XForum_posts';
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, count posts failed : " . $dbconn->ErrorMsg());
@@ -54,10 +54,10 @@
     $count = $result->fields[0];
     $result->Close();
     $query = 'SELECT p.fid, p.pid, p.tid, p.author, p.message, p.dateline, p.useip, m.uid, t.subject
-              FROM ' . $oldprefix . '_xforum_posts as p
-              LEFT JOIN ' . $oldprefix . '_xforum_threads as t
+              FROM ' . $oldprefix . '_XForum_posts as p
+              LEFT JOIN ' . $oldprefix . '_XForum_threads as t
               ON t.tid = p.tid
-              LEFT JOIN ' . $oldprefix . '_xforum_members as m
+              LEFT JOIN ' . $oldprefix . '_XForum_members as m
               ON m.username = p.author
               ORDER BY p.pid ASC';
     $numitems = 1500;

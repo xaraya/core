@@ -28,7 +28,7 @@
 
     $catids= unserialize(xarModGetVar('installer', 'catid'));
     $query = 'SELECT fid, name, description, displayorder, posts, threads, fup
-              FROM `'.$oldprefix.'_xforum_forums`
+              FROM `'.$oldprefix.'_XForum_forums`
               WHERE type=\'forum\' OR type=\'sub\'
               ORDER BY fup ASC, fid ASC';
 

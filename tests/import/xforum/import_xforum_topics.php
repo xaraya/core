@@ -41,7 +41,7 @@
     } else {
         $postids = unserialize($posts);
     }
-    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_xforum_threads';
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_XForum_threads';
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, count threads failed : " . $dbconn->ErrorMsg());
@@ -51,10 +51,10 @@
     $result->Close();
     $regid = xarModGetIDFromName('xarbb');
     $query = 'SELECT t.tid, t.fid, t.subject, t.lastpost, t.views, t.replies, t.author, t.message, t.dateline, t.closed, useip,bbcodeoff,m.uid,f.fup
-              FROM ' . $oldprefix . '_xforum_threads as t
-              LEFT JOIN ' . $oldprefix . '_xforum_forums as f
+              FROM ' . $oldprefix . '_XForum_threads as t
+              LEFT JOIN ' . $oldprefix . '_XForum_forums as f
               ON f.fid = t.fid
-              LEFT JOIN ' . $oldprefix . '_xforum_members as m
+              LEFT JOIN ' . $oldprefix . '_XForum_members as m
               ON m.username = t.author
               ORDER BY tid ASC';
 

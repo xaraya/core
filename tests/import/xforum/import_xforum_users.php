@@ -18,7 +18,7 @@
 
     echo "<strong>$step. Importing users</strong><br/>\n";
 
-    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_xforum_members';
+    $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_XForum_members';
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, count users failed : " . $dbconn->ErrorMsg());
@@ -29,7 +29,7 @@
       $query = 'SELECT uid, username, password, regdate, postnum, email, site,
                      aim, status, location, bio, sig, showemail,
                      timeoffset, icq, avatar, yahoo, bday,langfile,lastvisit
-              FROM ' . $oldprefix . '_xforum_members
+              FROM ' . $oldprefix . '_XForum_members
               WHERE uid > 2
               ORDER BY uid ASC';
     $numitems = 1000;
