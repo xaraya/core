@@ -16,7 +16,7 @@
 
     <input type="submit" value="#$submitlabel#" align="middle" /><br /><br />
     
-    <a href="#xarModURL('roles', 'admin', 'view')#"><xar:mlstring>Cancel purge process.</xar:mlstring></a>
+    <a href="#xarModURL('roles', 'admin', 'viewroles')#"><xar:mlstring>Cancel purge process.</xar:mlstring></a>
 </form>        
 </div>
 </div>
