@@ -205,9 +205,14 @@ function blocks_init()
 /**
  * upgrade the blocks module from an old version
  */
-function blocks_upgrade($oldversion)
+function blocks_upgrade($oldVersion)
 {
-    return false;
+    switch($oldVersion) {
+    case '1.0':
+        // compatability upgrade, nothing to be done
+        break;
+    }
+    return true;
 }
 
 /**
