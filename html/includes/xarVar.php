@@ -84,9 +84,6 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
  * to one of XARVAR_GET_ONLY or XARVAR_POST_ONLY.
  *
- * You can force xarVarFetch function to not raise an exception when the variable is not present or invalid by setting
- * the $flag parameter to XARVAR_NOT_REQUIRED.
- *
  * You can force xarVarFetch not to reuse the variable by setting  
  * the $flag parameter to XARVAR_DON_REUSE.
  *
