@@ -195,7 +195,6 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_name','pre:trim:passthru:str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_username','pre:trim:passthru:str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_password2','pre:trim:passthru:str',$dbPass2,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
@@ -206,11 +205,7 @@ function installer_admin_phase5()
         xarCore_die($msg);
         return;
     }
-    if ($dbPass != $dbPass2) {
-        $msg = xarML('The database passwords do not match');
-        xarCore_die($msg);
-        return;
-    }
+
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
         $msg = xarML('Invalid character in table prefix');
