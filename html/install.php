@@ -28,16 +28,9 @@ include 'modules/installer/xarfunctions.php';
 define ('XARINSTALL_PHASE_WELCOME',             '1');
 define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
 define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
-/*
-TODO: rename to XARINSTALL_PHASE_SYSTEM_CHECK unless we want to implement another
-phase for php settings check ..magic quotes, register globals, etc..
-*/
-define ('XARINSTALL_PHASE_PERMISSIONS_CHECK',   '4');
+define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
-// FIXME: <marco> doesn't make more sense to call it DATABASE_CREATION?
-define ('XARINSTALL_PHASE_ADMIN_CREATION',      '6');
-define ('XARINSTALL_PHASE_PLUGIN_INSTALL',      '7');
-define ('XARINSTALL_PHASE_FINISHED',            '8');
+define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 /**
  * Entry function for the installer
@@ -62,7 +55,7 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     }
 
     // Make sure we should still be here
-    if ($phase >= XARINSTALL_PHASE_ADMIN_CREATION) {
+    if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
         xarCoreInit(XARCORE_SYSTEM_ALL);
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }

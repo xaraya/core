@@ -150,7 +150,7 @@ function base_init()
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
-    xarConfigSetVar('Site.Session.EnableIntranetMode', 90);
+    xarConfigSetVar('Site.Session.EnableIntranetMode', false);
     xarConfigSetVar('Site.BL.DefaultTheme', 'installer');
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
