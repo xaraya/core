@@ -9,10 +9,10 @@
 <xar:mlstring>Your account has not yet been activated.  You need to finish these final steps in order to complete your registration.</xar:mlstring> 
 <br /><br />
 <xar:if condition="!empty($valcode)">
-	<xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('users', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
+	<xar:mlstring>To continue, please follow</xar:mlstring> <a href="#xarModURL('roles', 'user', 'getvalidation', array('phase' => 'getvalidate', 'uname' => $uname, 'valcode' => $valcode))#"> &nbsp; <xar:mlstring>this link</xar:mlstring></a>
 <xar:else />
 	<xar:mlstring>Please enter your username and validation code below</xar:mlstring> :
-	<form action="#xarModURL('users', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
+	<form action="#xarModURL('roles', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="phase" id="phase" value="getvalidate" />
 	<table border="0" cellpadding="4" cellspacing="0">
 	<tr>
@@ -37,7 +37,7 @@
 
 	<xar:mlstring>If you did not receive your validation code, we will try to resend it now.</xar:mlstring>
 	<br /><br />
-	<form action="#xarModURL('users', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
+	<form action="#xarModURL('roles', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="phase" id="phase" value="resend" />
 		<xar:mlstring>Username</xar:mlstring> : <input type="text" name="uname" id="uname" value="#$uname#" />
 		<input type="submit" value="Resend Validation Information" />

@@ -4,7 +4,7 @@
 <h2>#$title#</h2>
 <b><xar:mlstring>Sort Options</xar:mlstring>:</b><br />
 
-<form action="#xarModURL('users', 'user', 'view')#" method="post">
+<form action="#xarModURL('roles', 'user', 'view')#" method="post">
 
 <xar:if condition="$phase eq 'active'">
 <input type="radio" name="phase" id="phase" value="active" checked="checked" />
@@ -69,10 +69,10 @@
 			<xar:if condition="(($_bl_loop_index1 + 1) % 2)">
 				<tr>
 					<td class="xar-norm">
-						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 					</td>
 					<td class="xar-norm">
-						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
+						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
 					</td>
 					<td class="xar-norm">
 					   <xar:if condition="empty($emailurl)">
@@ -103,10 +103,10 @@
 			<xar:else />
 				<tr>
 					<td class="xar-accent">
-						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$name#</a>
+						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$name#</a>
 					</td>
 					<td class="xar-accent">
-						<a href="#xarModURL('users', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
+						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $uid))#">#$infoicon#</a>
 					</td>
 					<td class="xar-accent">
 					   <xar:if condition="empty($emailurl)">
