@@ -308,9 +308,9 @@ You will receive an email has soon as your account is activated again.
     $passwordemail = '%%name%%,
 
 Your password has been changed by an administrator.
-You can now login at %%link%% with those information :
+You can now login at %%siteurl%% with those information :
 Login : %%username%%
-Password : %%pass%%
+Password : %%password%%
 
 %%siteadmin%%';
 
@@ -386,7 +386,7 @@ function roless_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch ($oldVersion) {
-        case 1.01:
+        case 1.02:
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here
