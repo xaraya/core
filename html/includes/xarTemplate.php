@@ -380,7 +380,7 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
     // Show startnum link
     if ($startnum != 1) {
         $url = preg_replace('/%%/', 1, $urltemplate);
-        $out .= '<a href="'.$url.'">&lt;&lt;</a>';
+        $out .= '<a href="'.$url.'">&lt;&lt;</a>&nbsp;&nbsp;';
     } else {
         $out .= '&lt;&lt;';
     }
@@ -395,10 +395,10 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
         {
             // Not on this page - show link
             $url = preg_replace('/%%/', $curnum, $urltemplate);
-            $out .= '<a href="'.$url.'"> '.$pagenum.' </a> ';
+            $out .= '<a href="'.$url.'"> '.$pagenum.' </a> &nbsp;';
         } else {
             // On this page - show text
-            $out .= ' '.$pagenum.' ';
+            $out .= ' '.$pagenum.' &nbsp;';
         }
         $pagenum++;
     }
