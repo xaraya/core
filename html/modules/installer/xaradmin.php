@@ -356,7 +356,8 @@ function installer_admin_create_administrator()
     include_once 'modules/roles/xarroles.php';
     $role = xarFindRole('Admin');
 
-    if (!xarVarCleanFromInput('create')) {
+    if (!xarVarFetch('create', 'str', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
+    if (!$create) {
         // create a role from the data
 
         // assemble the template data
@@ -553,13 +554,11 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
-    list($configuration,
-         $confirmed,
-         $chosen,
-         $options) = xarVarCleanFromInput('configuration',
-                                          'confirmed',
-                                          'chosen',
-                                          'options');
+    if(!xarVarFetch('configuration', 'str',   $configuration, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('confirmed',     'bool',  $confirmed, FALSE, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('chosen',        'array', $chosen, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('options',       'bool',  $options, FALSE, XARVAR_NOT_REQUIRED)) {return;}
+
     xarTplSetThemeName('installer');
     $data['language'] = 'English';
     $data['phase'] = 8;
@@ -568,7 +567,7 @@ function installer_admin_confirm_configuration()
     // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;
 
-    if (!isset($confirmed)) {
+    if (!$confirmed) {
         include $configuration;
         $data['options'] = $configuration_options;
         $data['configuration'] = $configuration;

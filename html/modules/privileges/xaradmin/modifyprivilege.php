@@ -70,8 +70,11 @@ function privileges_admin_modifyprivilege()
     if(isset($pid)) {$data['ppid'] = $pid;}
     else {$data['ppid'] = $priv->getID();}
 
-    if(isset($name)) {$data['pname'] = $name;}
-    else {$data['pname'] = $priv->getName();}
+    if(empty($name)) $name = $priv->getName();
+    $data['pname'] = $name;
+
+    // Security Check
+    $data['frozen'] = !xarSecurityCheck('EditPrivilege',0,'Privileges',$name);
 
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
