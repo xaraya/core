@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<script language="javascript">
+<script type="text/javascript">
 
 function toggleDisplay(id)
 {
