@@ -433,7 +433,10 @@ class Dynamic_Object extends Dynamic_Object_Master
             $this->itemid = $args['itemid'];
         }
         if (empty($this->itemid)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
+                         'getItem',$this->objectid,$this->name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
             return;
         }
         $modinfo = xarModGetInfo($this->moduleid);
@@ -640,7 +643,10 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         if (empty($this->itemid)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
+                         'updateItem',$this->objectid,$this->name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
             return;
         }
 
@@ -667,7 +673,10 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         if (empty($this->itemid)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+            $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
+                         'deleteItem',$this->objectid,$this->name);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
             return;
         }
 

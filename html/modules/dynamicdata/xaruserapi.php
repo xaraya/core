@@ -88,7 +88,7 @@ function &dynamicdata_userapi_getitem($args)
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
                                        'status'    => $status));
-    if (!isset($object)) return;
+    if (!isset($object) || empty($object->objectid)) return;
     $object->getItem();
 
     if (!empty($getobject)) {
@@ -844,7 +844,11 @@ function dynamicdata_userapi_getitemfordisplay($args)
 {
     $args['getobject'] = 1;
     $object = & xarModAPIFunc('dynamicdata','user','getitem',$args);
-    $properties = & $object->getProperties();
+    if (isset($object)) {
+        $properties = & $object->getProperties();
+    } else {
+        $properties = array();
+    }
     return array(& $properties);
 }
 
