@@ -187,6 +187,7 @@ function xarException_init($args, $whatElseIsGoingLoaded)
     if ($args['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
         set_error_handler('xarException__phpErrorHandler');
     }
+
     xarExceptionFree();
     return true;
 }
@@ -229,9 +230,7 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
     $value->__stack = $stack;
 
     // Set new status
-    $GLOBALS['xarException_major'] = $major;
-    $GLOBALS['xarException_exceptionId'] = $exceptionId;
-    $GLOBALS['xarException_value'] = $value;
+    $GLOBALS['xarException_stack'][] = array ('major' => $major, 'exceptionId' => $exceptionId, 'value' => $value);
 
     // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
     // This can be useful in debugging since EHS is not so perfect as a native
@@ -256,7 +255,7 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
  */
 function xarExceptionMajor()
 {
-    return $GLOBALS['xarException_major'];
+    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['major'];
 }
 
 /**
@@ -271,7 +270,7 @@ function xarExceptionMajor()
  */
 function xarExceptionId()
 {
-    return $GLOBALS['xarException_exceptionId'];
+    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['exceptionId'];
 }
 
 /**
@@ -286,7 +285,7 @@ function xarExceptionId()
  */
 function xarExceptionValue()
 {
-    return $GLOBALS['xarException_value'];
+    return $GLOBALS['xarException_stack'][count($GLOBALS['xarException_stack'])-1]['value'];
 }
 
 /**
@@ -302,9 +301,8 @@ function xarExceptionValue()
  */
 function xarExceptionFree()
 {
-    $GLOBALS['xarException_major'] = XAR_NO_EXCEPTION;
-    $GLOBALS['xarException_exceptionId'] = NULL;
-    $GLOBALS['xarException_value'] = NULL;
+    $GLOBALS['xarException_stack'] = array ();
+    $GLOBALS['xarException_stack'][] = array ('major' => XAR_NO_EXCEPTION, 'exceptionId' => NULL, 'value' => NULL);
 }
 
 /**
@@ -321,50 +319,58 @@ function xarExceptionFree()
  */
 function xarExceptionRender($format)
 {
+    $text = '';
+    
+    foreach($GLOBALS['xarException_stack'] as $exception) {
 
-    switch ($GLOBALS['xarException_major']) {
-        case XAR_SYSTEM_EXCEPTION:
-            $type = 'SYSTEM Exception';
-            break;
-        case XAR_USER_EXCEPTION:
-            $type = 'USER Exception';
-            break;
-        default:
-            return '';
-    }
-    $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
+        switch ($exception['major']) {
+            case XAR_SYSTEM_EXCEPTION:
+                $type = 'SYSTEM Exception';
+                break;
+            case XAR_USER_EXCEPTION:
+                $type = 'USER Exception';
+                break;
+            default:
+                continue 2;
+        }
+
+        $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
+        
+    //This format thing should be dealt some other way...
+    // BL? depending on output type...
     if ($format == 'html') {
-        $text = '<span style="color: purple">('.$type.')</span> <b>'.$GLOBALS['xarException_exceptionId'].'</b>:<br />';
-        if (method_exists($GLOBALS['xarException_value'], 'toHTML')) {
-            $text .= '<span style="color: red">'.$GLOBALS['xarException_value']->toHTML().'</span>';
-        }
-        $stack = $GLOBALS['xarException_value']->__stack;
-        for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
-            if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-            else $function = '{}';
-            $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
-            $text .= basename($stack[$j]['file']).':';
-            $text .= $stack[$j]['line'].')<br />';
-            if ($showParams) {
-                $text .= htmlspecialchars(join(', ', $stack[$i]['args']));
-                $text .= '<br />';
+            $text .= '<span style="color: purple">('.$type.')</span> <b>'.$exception['exceptionId'].'</b>:<br />';
+            if (method_exists($exception['value'], 'toHTML')) {
+                $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
             }
-        }
-    } else {
-        $text = '('.$type.') '.$GLOBALS['xarException_exceptionId'].":\n";
-        if (method_exists($GLOBALS['xarException_value'], 'toString')) {
-            $text .= $GLOBALS['xarException_value']->toString();
-        }
-        $stack = $GLOBALS['xarException_value']->__stack;
-        for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
-            if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
-            else $function = '{}';
-            $text .= '     at '.$function.'(';
-            $text .= basename($stack[$j]['file']).':';
-            $text .= $stack[$j]['line'].")\n";
-            if ($showParams) {
-                $text .= join(', ', $stack[$i]['args']);
-                $text .= "\n";
+            $stack = $exception['value']->__stack;
+            for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
+                if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
+                else $function = '{}';
+                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
+                $text .= basename($stack[$j]['file']).':';
+                $text .= $stack[$j]['line'].')<br />';
+                if ($showParams) {
+                    $text .= htmlspecialchars(join(', ', $stack[$i]['args']));
+                    $text .= '<br />';
+                }
+            }
+        } else {
+            $text .= '('.$type.') '.$exception['exceptionId'].":\n";
+            if (method_exists($exception['value'], 'toString')) {
+                $text .= $exception['value']->toString();
+            }
+            $stack = $exception['value']->__stack;
+            for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
+                if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
+                else $function = '{}';
+                $text .= '     at '.$function.'(';
+                $text .= basename($stack[$j]['file']).':';
+                $text .= $stack[$j]['line'].")\n";
+                if ($showParams) {
+                    $text .= join(', ', $stack[$i]['args']);
+                    $text .= "\n";
+                }
             }
         }
     }
@@ -383,6 +389,8 @@ function xarExceptionRender($format)
  */
 function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {
+    //Newer php versions have a 5th parameter that will give us back the context
+    //The variable values during the error...
     switch($errorType) {
         case 2: // Warning
         case 8: // Notice
@@ -418,9 +426,9 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             exit;
     }
 
-    // <nuncanada> Dont stop the script from working if @ is preceding the error.
-    // Let´s see if this can work around the SEQUENCE check in ADODB
-    if (error_reporting() == 0) xarExceptionFree();
+    // This will make us log the errors, still not break the script
+    //if they are not supposed to    
+    if (!(error_reporting() & $errorType)) xarExceptionFree();
 }
 
 /**
