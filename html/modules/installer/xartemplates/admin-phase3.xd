@@ -1,44 +1,56 @@
-<img src="themes/installer/images/step3_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Three" /><br />
-<div style="padding:10px;">
-  <span class="xar-pagetitle">Step Three : System Settings Check</span><br /><br /><br />
-  <form action="install.php" method="post">
-	  <div style="text-align:center;">
-    <input type="hidden" name="install_language" value="#$language#" />
-      <div style="text-align:justify;padding:0% 23% 0% 23%;">
-              <span class="xar-normal">For Xaraya to function properly, the installer must write your database information to the #$systemConfigFile# file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</span><br /><br />
-        <span class="xar-title">
-         <xar:if condition="$metRequiredPHPVersion">
-            SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #$phpVersion#.
-          <xar:else />
-            FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.
-          </xar:if>
-          <br /><br />
-          <xar:if condition="$systemConfigIsWritable">
-            SUCCESS: The installer can write to the configuration file.
-          <xar:else />
-            FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.
-          </xar:if>
-          <br /><br />
-          <xar:if condition="$cacheTemplatesIsWritable">
-            SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.
-          <xar:else />
-            FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.
-          </xar:if>
-        </span><br /><br />
-            </div>
-            <div style="text-align:center;">
-        <span class="xar-normal">
-          <xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable">
-            <input type="hidden" name="install_phase" id="install_phase" value="4" />
-            <input type="submit" value="Next Step &gt;" />
-          <xar:else />
-            <input type="hidden" name="install_phase" id="install_phase" value="3" />
-            <input type="hidden" name="agree" id="agree" value="agree" />
-            <input type="submit" value="Check Again &gt;" />
-          </xar:if>
-            </span>
-            </div>
-	  </div>
-  </form>
-</div><br /><br />	
-<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>
+	<div id="install">
+	  <div style="padding:10px;">
+      <div style="text-align:center;"><span class="xar-pagetitle">System Settings Check</span></div><br />
+			<form action="install.php" method="post">
+			  <div style="text-align:center;">
+    		<input type="hidden" name="install_language" value="#$language#" />
+    		  <div style="text-align:justify;">
+            <span class="xar-normal">For Xaraya to function properly, the installer must write your database information to the #$systemConfigFile# file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</span><br /><br />
+       			<span class="xar-title">
+       			  <xar:if condition="$metRequiredPHPVersion">
+         			  SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #$phpVersion#.
+         			<xar:else />
+         			  FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.
+         			</xar:if>
+         			<br /><br />
+         			<xar:if condition="$systemConfigIsWritable">
+         			  SUCCESS: The installer can write to the configuration file.
+         			<xar:else />
+         			  FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.
+         			</xar:if>
+         			<br /><br />
+         			<xar:if condition="$cacheTemplatesIsWritable">
+         			  SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.
+         			<xar:else />
+         			  FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.
+         			</xar:if>
+       			</span>
+						<br /><br />
+          </div>
+          <div style="text-align:center;">
+      		  <span class="xar-normal">
+       			  <xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable">
+         			  <input type="hidden" name="install_phase" id="install_phase" value="4" />
+         				<input type="submit" value="Continue &gt;" />
+         			<xar:else />
+         			  <input type="hidden" name="install_phase" id="install_phase" value="3" />
+           			<input type="hidden" name="agree" id="agree" value="agree" />
+           			<input type="submit" value="Check Again &gt;" />
+         			</xar:if>
+           	</span>
+          </div>
+			  </div>
+			</form>
+		</div>
+	</div>
+	<div id="status">
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Selecting Language</span><br />
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
+	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Checking System Settings</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Collecting Database Settings</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Beginning the Boot Process</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Creating an Administrator</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing a Configuration</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Configuration Options</span><br />
+	</div>
+

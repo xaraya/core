@@ -1,7 +1,6 @@
-<img src="themes/installer/images/complete_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Complete!" /><br />
 <div style="padding:10px;">
   <span class="xar-pagetitle">Installation Complete</span><br /><br />
-	<div style="padding:0% 23% 0% 23%;">
+	<div style="justify;">
 	  <span class="xar-normal">
 		  <b>Congratulations, you have successfully installed #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")!</b>
 			<br /><br />
@@ -10,4 +9,5 @@
 	    <a href=index.php>Launch the site!</a>
     </span>
   </div><br /><br />
+</div>
 <div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>

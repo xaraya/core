@@ -1,48 +1,58 @@
-<img src="themes/installer/images/step6_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Six" /><br />
-<div style="padding:10px;">
-  <span class="xar-pagetitle">Step Six : Administrator Account Creation</span><br /><br /><br />
-  <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
-  <div style="text-align:center;">
-    <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-    <div style="text-align:justify;padding:0% 23% 0% 23%;">
-           <span class="xar-normal">Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the users module.</span>
-    </div>
-      <br /><br />
-      <div style="padding:0% 23% 0% 23%;">
-      <table cellspacing="0" border="0" summary="For creating the site administrator account">
-              <thead>
-              <tr>
-               <th colspan="2">Administrator Information</th>
-              </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                    <td align="left"><span class="xar-normal"><label for="install_admin_username">Administrator Username</label></span></td>
-                    <td align="left"><input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" /></td>
-                  </tr>
-                  <tr>
-                    <td align="left"><span class="xar-normal"><label for="install_admin_name">Administrator Name</label></span></td>
-                    <td align="left"><input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" /></td>
-                  </tr>
-                  <tr>
-                    <td align="left"><span class="xar-normal"><label for="install_admin_password">Administrator Password</label></span></td>
-                    <td align="left"><input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" /></td>
-                   </tr>
-                   <tr>
-                    <td align="left"><span class="xar-normal"><label for="install_admin_email">Administrator Email</label></span></td>
-                    <td align="left"><input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" /></td>
-                  </tr>
-              </tbody>
-          </table>
-        </div>
-        <br />
-        <div style="text-align:justify;padding:0% 23% 0% 23%;">
-        <span class="xar-normal">Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</span><br /><br />
-      </div>
-      <div style="text-align:center;">
-        <input type="submit" name="create" id="create" value="Continue &gt;" />
-      </div>
-    </div>
-  </form>
-</div><br /><br />	
-<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>
+	<div id="install">
+	  <div style="padding:10px;">
+      <div style="text-align:center;"><span class="xar-pagetitle">Administrator Account Creation</span></div><br />
+ 			<form action="&xar-modurl-installer-admin-create_administrator;" method="post">
+			  <div style="text-align:center;">
+  			<input type="hidden" name="install_language" id="install_language" value="#$language#" />
+  			  <div style="text-align:justify;">
+       		  <span class="xar-normal">Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the users module.</span>
+    			</div>
+      		<br />
+      		<div style="text-align:justify;">
+    			  <table cellspacing="0" border="0" summary="For creating the site administrator account">
+         		  <thead>
+         			  <tr>
+         				  <th colspan="2">Administrator Information</th>
+           			</tr>
+           		</thead>
+           		<tbody>
+             	  <tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_username">Administrator Username</label></span></td>
+                 	<td align="left"><input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" /></td>
+               	</tr>
+               	<tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_name">Administrator Name</label></span></td>
+                 	<td align="left"><input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" /></td>
+               	</tr>
+               	<tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_password">Administrator Password</label></span></td>
+                 	<td align="left"><input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" /></td>
+               	</tr>
+               	<tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_email">Administrator Email</label></span></td>
+                 	<td align="left"><input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" /></td>
+               	</tr>
+           		</tbody>
+        		</table>
+       		</div>
+       		<br />
+       		<div style="text-align:justify;">
+       		  <span class="xar-normal">Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</span><br /><br />
+      		</div>
+      		<div style="text-align:center;">
+      		  <input type="submit" name="create" id="create" value="Continue &gt;" />
+      		</div>
+    		</div>
+  		</form>
+		</div>
+	</div>
+	<div id="status">
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Selecting Language</span><br />
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Checking System Settings</span><br />
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Collecting Database Settings</span><br />
+	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Beginning the Boot Process</span><br />
+	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Creating an Administrator</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing a Configuration</span><br />
+	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Configuration Options</span><br />
+	</div>
