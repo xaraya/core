@@ -44,8 +44,7 @@ function modules_admin_tools(){
 /*         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('Only generic icon has been provided')); */
 /*     }else{ */
 /*         $data['modiconurl']     = xarVarPrepForDisplay('modules/modules/xarimages/admin_generic.gif'); */
-/*         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('[Original icon is missing..  */
-/*                                 please ask this module developer to provide one in accordance with MDG]')); */
+/*         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('[Original icon is missing.. please ask this module developer to provide one in accordance with MDG]')); */
 /*     } */
 /*     $data['moddir']             = xarVarPrepForDisplay($modinfo['directory']); */
 /*     $data['modclass']           = xarVarPrepForDisplay($modinfo['class']); */
