@@ -39,6 +39,11 @@ define('XARMLS_CTXTYPE_USER', 8);
 define('XARMLS_CTXTYPE_USERAPI', 9);
 
 $MLSData = array(
+                'file' => array(
+                          'type' => XARMLS_CTXTYPE_FILE,
+                          'dir' => '',
+                          'label' => ''
+                         ),
                 'core' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
                           'dir' => '',
@@ -1495,8 +1500,9 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
     function findContext($ctxType, $ctxName)
     {
         $context = $GLOBALS['MLS']->getContextByType($ctxType);
-        $fileName = $this->getDomainLocation() . "/" . $context->getDir() . "/" .
-        $ctxName . "." . $this->backendtype;
+        $fileName = $this->getDomainLocation() . "/";
+        if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
+        $fileName .= $ctxName . "." . $this->backendtype;
         if (!file_exists($fileName)) {
             die("File does not exist:" . $fileName);
             return false;
@@ -1539,7 +1545,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName)
+    function bindDomain($dnType, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
         if ($dnType == XARMLS_DNTYPE_MODULE) {
