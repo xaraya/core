@@ -268,7 +268,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
                         'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
                         'defaultModuleFunction'  => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
-                        'generateXMLURLs' => false);
+                        'generateXMLURLs' => true);
     xarSerReqRes_init($systemArgs, $whatToLoad);
 
 
@@ -327,13 +327,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start Modules Subsystem
      *
      * @todo <mrb> why is this optional?
-     * @todo <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request or XHTML site compliance. For now just pass false.
+     * @todo <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request or XHTML site compliance. For now just pass true.
      * @todo <mrb> i thought it was configurable
      */
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         include 'includes/xarMod.php';
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
-                            'generateXMLURLs' => false);
+                            'generateXMLURLs' => true);
         xarMod_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_MODULES;
     }
@@ -344,9 +344,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     include 'includes/xarTemplate.php';
-    $systemArgs = array('enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
-                        'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
-                        'defaultThemeDir'        => xarModGetVar('themes','default'));
+    $systemArgs = array(
+        'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
+        'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
+        'defaultThemeDir'        => xarModGetVar('themes','default'),
+        'generateXMLURLs'      => true
+    );
     xarTpl_init($systemArgs, $whatToLoad);
     $whatToLoad ^= XARCORE_BIT_TEMPLATE;
 

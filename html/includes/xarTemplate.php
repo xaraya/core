@@ -75,6 +75,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     $GLOBALS['xarTpl_cacheTemplates']  = $args['enableTemplatesCaching'];
+    $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
@@ -506,6 +507,8 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $templateName = N
  * @return  string $theme    image url if it exists or module image url if not, or NULL if neither found
  *
  * @todo    provide examples, improve description, add functionality
+ * @todo    provide XML URL override flag
+ * @todo    XML encode absolute URIs too?
 */
 function xarTplGetImage($modImage, $modName = NULL)
 {
@@ -539,17 +542,25 @@ function xarTplGetImage($modImage, $modName = NULL)
     // relative url to the replacement image in current theme
     $themeImage = $themedir . '/modules/'.$modOsDir.'/images/'.$modImage;
 
+    $return = NULL;
+
     // check if replacement image exists in the theme
     if (file_exists($themeImage)) {
         // image found, return its path in the theme
-        return $themeImage;
+        $return = $themeImage;
     } elseif (file_exists($moduleImage)) {
         // image found, return it's path in the module
-        return $moduleImage;
+        $return = $moduleImage;
     }
 
-    // all efforts failed, return NULL
-    return;
+    // Return as an XML URL if required.
+    // This will generally have little effect, but is here for
+    // completeness to support alternative types of URL.
+    if (isset($return) && $GLOBALS['xarTpl_generateXMLURLs']) {
+        $return = htmlspecialchars($return);
+    }
+
+    return $return;
 }
 
 /**

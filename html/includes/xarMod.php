@@ -981,9 +981,8 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  * @param args array of arguments to put on the URL
  * @param entrypoint array of arguments for different entrypoint than index.php
  * @return mixed absolute URL for call, or false on failure
- * @FIXME the parameter generateXMLURL here defaults to true, because the system setting $GLOBALS['xarMod_generateXMLURLs'] is false. Change system setting to true?
  */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = true, $target = NULL, $entrypoint = array())
+function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $target = NULL, $entrypoint = array())
 {
     // Parameter separator and initiator.
     $psep = '&';
