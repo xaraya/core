@@ -942,6 +942,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
+            // TODO: make a config var for this, so we can switch it off
             $commentBlock = "<?php\n/*"
                           . "\n * Source:     " . $sourceFileName
                           . "\n * Theme:      " . xarTplGetThemeName()
