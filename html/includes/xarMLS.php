@@ -476,6 +476,54 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
     return $str_num;
 }
 
+/**
+ * Format a date/time according to the current locale (and/or user's preferences)
+ *
+ * @access public
+ * @param time mixed timestamp or date string (default now)
+ * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
+ * @param offset timezone offset (default user timezeone)
+ * @return date string
+ */
+function xarLocaleFormatDate($time = null, $format = null, $offset = null)
+{
+    if (empty($time)) { // yes, null or 0 or whatever :)
+        $time = time();
+    } elseif (!is_numeric($time)) {
+        $time = strtotime($time);
+        if ($time < 0) {
+            return ''; // return empty string here (no exception)
+        }
+    }
+
+// TODO: locale-dependent, and/or configurable by admin, and/or selectable by user ?
+    if (empty($format)) {
+    //    $format = '%a, %d %B %Y %H:%M:%S %Z';
+        $format = '%a, %d %B %Y %H:%M %Z';
+    }
+
+// CHECKME: see how this interacts with user/site locale below
+    if (!isset($offset)) { // could be set to 0 here
+        if (xarUserIsLoggedIn()) {
+            $offset = xarUserGetVar('timezone'); // cfr. dynamicdata for roles
+        }
+        if (!isset($offset)) {
+        // TODO: add default offset configured by admin ?
+            $offset = 0;
+        }
+    }
+
+// TODO: add site offset in case the server time is wrong ?
+    $time += $offset * 3600;
+
+// CHECKME: set locale here !? That doesn't seem right somehow...
+//    setlocale(LC_TIME,xarConfigGetVar('locale'));
+//    setlocale(LC_TIME,xarUserGetNavigationLocale());
+    setlocale(LC_TIME,xarMLSGetCurrentLocale());
+
+    return strftime($format,$time);
+}
+
 // PROTECTED FUNCTIONS
 
 /**
