@@ -33,14 +33,14 @@ function modules_adminapi_regenerate()
     // or if any current modules have been upgraded
     foreach ($fileModules as $name => $modinfo) {
         foreach ($dbModules as $dbmodule) {
-// Bail if 2 modules have the same regid but not the same name
+            // Bail if 2 modules have the same regid but not the same name
             if(($modinfo['regid'] == $dbmodule['regid']) && ($modinfo['name'] != $dbmodule['name'])) {
                 $msg = xarML('The same registered ID (#(1)) was found belonging to a #(2) module in the file system and a registered #(3) module in the database. Please correct this and regenerate the list.', $dbmodule['regid'], $modinfo['name'], $dbmodule['name']);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException($msg));
                 return;
             }
-// Bail if 2 modules have the same name but not the same regid
+            // Bail if 2 modules have the same name but not the same regid
             if(($modinfo['name'] == $dbmodule['name']) && ($modinfo['regid'] != $dbmodule['regid'])) {
                 $msg = xarML('The module #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.', $modinfo['name'], $modinfo['regid'], $dbmodule['regid']);
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -88,7 +88,7 @@ function modules_adminapi_regenerate()
         } else {
 // From here on we have something in the file system or the db
 
-          switch ($dbModules[$name]['state']) {
+            switch ($dbModules[$name]['state']) {
                 case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
                     $newstate = XARMOD_STATE_UNINITIALISED;
                     break;
@@ -109,9 +109,9 @@ function modules_adminapi_regenerate()
                                     'setstate',
                                      array('regid' => $dbModules[$name]['regid'],
                                            'state' => $newstate));
-        // Check if there was a version change and adjust
-        xarModAPIFunc('modules','admin','checkversion');
             }
+            // Check if there was a version change and adjust
+            xarModAPIFunc('modules','admin','checkversion');
         }
     }
 
