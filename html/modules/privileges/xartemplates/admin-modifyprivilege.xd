@@ -364,9 +364,28 @@ document.forms[0].submit();}
 				<xar:mlstring>Add Privilege</xar:mlstring>
 			</a>
 		</td>
+		<td align="right">Show Privileges that are: 
+			<xar:if condition="$show eq 'assigned'">
+			<input type="radio" name="show" id="show" value="assigned" checked="checked" />
+			<xar:else />
+			<input type="radio" name="show" id="show" value="assigned"  />
+			</xar:if><xar:mlstring>Assigned</xar:mlstring>
+
+			<xar:if condition="$show eq 'unassigned'">
+			<input type="radio" name="show" id="show" value="unassigned" checked="checked" />
+			<xar:else />
+			<input type="radio" name="show" id="show" value="unassigned"  />
+			</xar:if><xar:mlstring>Unassigned</xar:mlstring>
+
+			<xar:if condition="$show eq 'all'">
+			<input type="radio" name="show" id="show" value="all" checked="checked" />
+			<xar:else />
+			<input type="radio" name="show" id="show" value="all"  />
+			</xar:if><xar:mlstring>All</xar:mlstring>
+		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="2">
 			<hr>
 		</td>
 	</tr>
