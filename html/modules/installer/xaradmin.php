@@ -205,8 +205,8 @@ function installer_admin_phase5()
         return;
     }
 
-    session_start(); 
-    session_destroy();
+    //session_start(); 
+    //session_destroy();
 
     $data['language'] = 'English';
     

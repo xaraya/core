@@ -787,7 +787,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 		xarModAPILoad($modName,$modType);
 		// let's check for that function again to be sure
 		if (!function_exists($modAPIFunc)) {
-            die("api load went fine");
+            //die("api load went fine");
 			$msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
 			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
 							new SystemException($msg));
