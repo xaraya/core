@@ -537,13 +537,16 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
 {
+    static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
     // load the locale date
-    $localeData = xarMLSLoadLocaleData();
+    if(!isset($localeData)) {
+        $localeData = xarMLSLoadLocaleData();
+    }
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -587,13 +590,16 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null)
 {
+    static $localeData;
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
         return '';
     }
     // load the locale date
-    $localeData = xarMLSLoadLocaleData();
+    if(!isset($localeData)) {
+        $localeData = xarMLSLoadLocaleData();
+    }
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -696,16 +702,18 @@ function xarMLS_userTime($time=null)
  */
 function xarMLS_userOffset()
 {
-    // get the correct timezone offset for this user
-    if (xarUserIsLoggedIn()) {
-        // TODO: cfr. dynamicdata for roles
-        $offset = xarUserGetVar('timezone');
+    static $offset;
+    if(!isset($offset)) {
+        // get the correct timezone offset for this user
+        if (xarUserIsLoggedIn()) {
+            // TODO: cfr. dynamicdata for roles
+            $offset = xarUserGetVar('timezone');
+        }
+        //TODO: Get site's timezone setting?
+        if (!isset($offset)) {
+            $offset = 0;
+        }
     }
-    //TODO: Get site's timezone setting?
-    if (!isset($offset)) {
-        $offset = 0;
-    }
-
     return $offset;
 }
 /**
@@ -741,6 +749,7 @@ function xarMLS_userOffset()
  */
 function xarMLS_strftime($format=null,$timestamp=null)
 {
+    static $localeDate;
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
         $timestamp = xarMLS_userTime();
@@ -764,7 +773,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
 
     // load the locale date
     // FIXME: <mrb> this can return an empty array silently
-    $localeData = xarMLSLoadLocaleData();
+    if(!isset($localeData)) {
+        $localeData = xarMLSLoadLocaleData();
+    }
 
     // TODO
     // if no $format is provided we need to use the default for the locale
