@@ -23,10 +23,10 @@
 	[ <a href="http://www.doubleclick.net"><xar:mlstring>DoubleClick</xar:mlstring></a> ]<br />
 	[ <a href="http://www.linkshare.com"><xar:mlstring>Linkshare</xar:mlstring></a> ]<br />
 	<h3><xar:mlstring>4. Children.</xar:mlstring></h3>
-	<xar:mlstring>We do not allow persons who are ages thirteen or younger to become members of this site. For more information, please contact</xar:mlstring> <a href="mailto:&xar-config-core.adminmail;"><xar:mlstring>our webmaster</xar:mlstring></a>.
+	<xar:mlstring>We do not allow persons who are ages thirteen or younger to become members of this site. For more information, please contact</xar:mlstring> <a href="mailto:#xarModGetVar('mail', 'adminmail')#"><xar:mlstring>our webmaster</xar:mlstring></a>.
 	<!-- **NOTE: Feel free to provide other information -->
 	<h3><xar:mlstring>5. Editing or Deleting Your Account Information.</xar:mlstring></h3>
-	<xar:mlstring>We provide you with the ability to edit the information in your user account information that you provided to us in registration by using </xar:mlstring><a href="&xar-modurl-roles-user-main;"><xar:mlstring>your personal page configuration area</xar:mlstring></a>. <xar:mlstring>You may request deletion of your user account by contacting </xar:mlstring><a href="mailto:&xar-config-core.adminmail;"><xar:mlstring>our webmaster</xar:mlstring></a>.  
+	<xar:mlstring>We provide you with the ability to edit the information in your user account information that you provided to us in registration by using </xar:mlstring><a href="&xar-modurl-roles-user-main;"><xar:mlstring>your personal page configuration area</xar:mlstring></a>. <xar:mlstring>You may request deletion of your user account by contacting </xar:mlstring><a href="mailto:#xarModGetVar('mail', 'adminmail')#"><xar:mlstring>our webmaster</xar:mlstring></a>.  
 	<!-- **NOTE: Note the following may be suggested for your jurisdiction and there is no harm in including it - begin -->
 	<xar:mlstring>Content or other data that you may have provided to us and that is not contained within your user account, such as posts that may appear within our forums, may continue to remain on our site at our discretion even though your user account is deleted. Please see our </xar:mlstring><a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a><xar:mlstring> for more information.</xar:mlstring>
 	<h3><xar:mlstring>6. Changes to this Privacy Policy.</xar:mlstring></h3>
@@ -34,7 +34,7 @@
 	<h3><xar:mlstring>7. NO GUARANTEES.</xar:mlstring></h3>
 	<xar:mlstring>While this Privacy Policy states our standards for maintenance of Data and we will make efforts to meet them, we are not in a position to guarantee these standards. There may be factors beyond our control that may result in disclosure of data. As a consequence, we disclaim any warranties or representations relating to maintenance or nondisclosure of Data.</xar:mlstring>
 	<h3><xar:mlstring>8. Contact Information.</xar:mlstring></h3>
-	<xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:&xar-config-core.adminmail;"><xar:mlstring>Your webmaster</xar:mlstring></a>.
+	<xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#xarModGetVar('mail', 'adminmail')#"><xar:mlstring>Your webmaster</xar:mlstring></a>.
 
 <xar:else />
 	<xar:mlstring>Privay Policy Not Active</xar:mlstring>
