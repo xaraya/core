@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <!-- User content section -->
 <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">

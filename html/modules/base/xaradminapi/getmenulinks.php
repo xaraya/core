@@ -1,9 +1,21 @@
 <?php
-
+/**
+ * File: $Id
+ *
+ * Pass individual menu items to the admin menu
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage base
+ * @author John Robeson
+ * @author Greg Allan
+ */
 /**
  * Pass individual menu items to the admin menu
  *
- * @author the Example module development team
+ * @author the Base module development team
  * @return array containing the menulinks for the admin menu items.
  */
 function base_adminapi_getmenulinks()

@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <!--- Display first-page link or text if there is more than one page --->
 <xar:if condition="$totalpages gt 1">
     <xar:if condition="$currentpagenum ne $firstpagenum">

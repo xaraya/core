@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <!--- Pager for displaying page links on multi-page documents --->
 
 <!--- Display first-page link if there is more than one page and we are not on that page --->

@@ -1,3 +1,4 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <!--- Process only if there is JavaScript present --->
 <xar:if condition="is_array($javascript)">
     <!--- Loop for each item (could be an array of positions, or an array of items for a position) --->
