@@ -67,7 +67,11 @@
         </td>
       </tr>
       <xar:else/>
+<xar:comment>
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
+</xar:comment>
+        <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+        <input type="hidden" name="#$name#_new" id="#$id#_new" value="1" />
       </xar:if>
 
       <tr>
@@ -85,4 +89,3 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
-  
