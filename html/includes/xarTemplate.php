@@ -984,21 +984,66 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
     }
 
+    // Load cached template file    
+    ob_start();
+    include $cachedFileName;
+    $res = ob_get_clean();
+    
+    // flag used to determine if the header content has been found.
+    static $headerContentFound;
+    if(!isset($headerContentFound))
+        $headerContentFound = false;
+
     // Start output buffering
     ob_start();
+    
+    if($GLOBALS['xarTpl_showTemplateFilenames'])
+    {
+        if($headerContentFound === false)
+        {
+            $outputStartComment = true;
 
-// TODO: check for <?xml> header stuff
-    // optionally show template filenames
-    if ($GLOBALS['xarTpl_showTemplateFilenames']) {
-        echo "<!-- start $sourceFileName -->";
+            // $headerTagsRegexes is an array of string regexes to match tags that could
+            // be sent as part of a header. Important: the order here should be inside out
+            // as the first regex that matches will have a start comment appended.
+            // fixes bugs: #1427, #1190, #603
+            // - Comments that precede <!doctype... cause ie6 not to sniff the doctype 
+            //   correctly.
+            // - xml parsers dont like comments that precede xml output.
+            // At this time attempting to match <!doctype... and <?xml version... tags.
+            $headerTagRegexes = array('<!DOCTYPE[^>].*]>',// eg. <!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">]>
+                                      '<!DOCTYPE[^>]*>',// eg. <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                                      '<\?xml\s+version[^>]*\?>');// eg. <?xml version="1.0"? > // remove space between qmark and gt
+
+            foreach($headerTagRegexes as $headerTagRegex) {
+                if(preg_match("/$headerTagRegex/smix", $res, $matchedHeaderTag)) {
+                    $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
+                    // replace matched tag with an appended start comment tag in the first match
+                    // in the template output $res
+                    $res = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $res, 1);
+                    // set flag that header content has been found so this matching doesnt happen again.
+                    $headerContentFound = true;
+                    // dont want start comment to be sent below as it has already been added.
+                    $outputStartComment = false;
+                    break;
+                }
+            }
+        }
+        else
+            $outputStartComment = true;
+
+        // optionally show template filenames if start comment has not already
+        // been added as part of a header determination.
+        if($outputStartComment === true)
+            echo '<!-- start: ' . $sourceFileName . '-->';
     }
-
-    // Load cached template file
-    $res = include $cachedFileName;
+    
+    // output template
+    echo $res;
 
     // optionally show template filenames
     if ($GLOBALS['xarTpl_showTemplateFilenames']) {
-        echo "<!-- end $sourceFileName -->";
+        echo '<!-- end: ' . $sourceFileName . '-->';
     }
 
     // Fetch output and clean buffer
