@@ -472,7 +472,7 @@ function xarMaskExists($name,$module="All")
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
-    $installing = xarVarGetCached('installer','installing');
+    $installing = xarCore_GetCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
        return true;
@@ -585,7 +585,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
     
     // Tell xarCache not to cache this page
-    xarVarSetCached('Page.Caching', 'nocache', TRUE);
+    xarCore_SetCached('Page.Caching', 'nocache', TRUE);
 
     // Return encrypted key
     return $authid;
