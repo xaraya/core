@@ -182,7 +182,7 @@ function roles_user_usermenu($args)
                 if (!xarModAPIFunc( 'roles',
                 					'admin',
                 					'senduseremail',
-                					array('uid' => array($uid => '1'), 'mailtype' => 'confirmation')) {
+                					array('uid' => array($uid => '1'), 'mailtype' => 'confirmation'))) {
             		$msg = xarML('Problem sending confirmation email');
                 	xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             	}
