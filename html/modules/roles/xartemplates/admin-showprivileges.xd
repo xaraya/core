@@ -43,26 +43,26 @@
 		<xar:loop name="$inherited">
 		<tr>
 			<td width="150">
-				#$name#
+				#$loop:item['name']#
 			</td>
 			<td width="50" style="text-align: center;">
-				#$realm#
+				#$loop:item['realm']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$module#
+				#$loop:item['module']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$component#
+				#$loop:item['component']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$instance#
+				#$loop:item['instance']#
 			</td>
 			<td width="100" style="white-space: nowrap;text-align: center;">
-				#$level#
+				#$loop:item['level']#
 			</td>
 			<td style="text-align: center;">
-				<a href="#$groupurl#&amp;uid=#$groupid#">				
-				#$groupname#
+				<a href="#$loop:item['groupurl']#&amp;uid=#$loop:item['groupid']#">				
+				#$loop:item['groupname']#
 				</a>
 			</td>
 			</tr>
@@ -105,27 +105,27 @@
 		<xar:loop name="$privileges">
 		<tr>
 			<td width="150">
-				#$name#
+				#$loop:item['name']#
 			</td>
 			<td width="50" style="text-align: center;">
-				#$realm#
+				#$loop:item['realm']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$module#
+				#$loop:item['module']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$component#
+				#$loop:item['component']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$instance#
+				#$loop:item['instance']#
 			</td>
 			<td width="100" style="white-space: nowrap;text-align: center;">
-				#$level#
+				#$loop:item['level']#
 			</td>
 			<td style="text-align: center;">
 				<xar:if condition="in_array($privid,$directassigned)">
 					<xar:if condition="!$frozen">
-						<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
+						<a href="#$loop:item['removeurl']#&amp;privid=#$loop:item['privid']#" title="Remove this Privilege assignment">				
 							Remove    
 						</a>
 					<xar:else />
@@ -155,7 +155,7 @@
 				<td>
 					<select name="privid" id="privid">
 						<xar:loop name="$allprivileges">
-							<option value="#$pid#">#$name#
+							<option value="#$loop:item['pid']#">#$loop:item['name']#
 						</xar:loop>
 					</select>
 				</td>

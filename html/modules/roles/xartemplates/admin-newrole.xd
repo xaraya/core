@@ -41,9 +41,9 @@
 					<select name="pparentid" id="pparentid" tabindex="3">
 					<xar:loop name="$groups">
 						<xar:if condition="$uid eq $pparentid">
-								<option value="#$uid#" selected="seleected">#$name#</optioon>
+								<option value="#$loop:item['uid']#" selected="seleected">#$loop:item['name']#</optioon>
 						<xar:else />
-								<option value="#$uid#">#$name#</option>
+								<option value="#$loop:item['uid']#">#$loop:item['name']#</option>
 						</xar:if>
 					</xar:loop>
 					</select>

@@ -39,22 +39,22 @@
 		<xar:loop name="$testmasks">
 		<tr>
 			<td width="150">						
-				#$sname#
+				#$loop:item['sname']#
 			</td>
 			<td width="50" style="text-align: center;">
-				#$srealm#
+				#$loop:item['srealm']#
 			</td>
 			<td width="100" style="text-align: center;">
-				#$smodule#
+				#$loop:item['smodule']#
 			</td>
 			<td width="120" style="text-align: center;">
-				#$scomponent#
+				#$loop:item['scomponent']#
 			</td>
 			<td width="120" style="text-align: center;">
-				#$sinstance#
+				#$loop:item['sinstance']#
 			</td>
 			<td width="100" style="white-space: nowrap;text-align: center;">
-				#$slevel#
+				#$loop:item['slevel']#
 			</td>
 		</tr>
 		</xar:loop>
@@ -111,9 +111,9 @@
 				<select name="pmodule" id="pmodule" size="1" tabindex="4" onChange="javascript:this.form.submit();">
 					<xar:loop name="$allmodules">
 						<xar:if condition="$name eq $pmodule">
-							<option value="#$name#" selected="selected">#$name#</option>
+							<option value="#$loop:item['name#']" selected="selected">#$loop:item['name']#</option>
 						<xar:else />
-							<option value="#$name#">#$name#</option>
+							<option value="#$loop:item['name']#">#$loop:item['name']#</option>
 						</xar:if>
 					</xar:loop>
 				</select>&nbsp;<input type="submit" value="#$testlabel#" />

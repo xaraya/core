@@ -36,34 +36,34 @@
 			<tr>
 				<td width="100">
 					<xar:if condition="!$frozen">
-						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">				
-						#$name#
+						<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['uid']#">				
+						#$loop:item['name']#
 						</a>
 					<xar:else />
-						<b>#$name#</b>
+						<b>#$loop:item['name']#</b>
 					</xar:if>
 				</td>
 				<td width="100">
-					#$uname#
+					#$loop:item['uname']#
 				</td>
 				<td width="200">
-					#$email#
+					#$loop:item['email']#
 				</td>
 				<td width="200">
-					#$date_reg#
+					#$loop:item['date_reg']#
 				</td>
 				<td style="text-align: center">
 					<xar:if condition="!$frozen">
-						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+						<a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$loop:item['uid']#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;
 					</xar:if>
 				</td>
 				<td style="text-align: center">
-					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$loop:item['uid']#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
 				<td style="text-align: center">
-					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$loop:item['uid']#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
 		</xar:loop>

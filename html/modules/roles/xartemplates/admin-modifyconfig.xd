@@ -123,9 +123,9 @@
 		<select name="defaultgroup" id="defaultgroup">
 		<xar:loop name="$groups">
 			<xar:if condition="$name eq $defaultgroup">
-				<option name="#$name#" id="#$name#" value="#$name#" selected="selected">#$name#</option>
+				<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
 			<xar:else />
-				<option name="#$name#" id="#$name#" value="#$name#">#$name#</option>
+				<option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">#$loop:item['name']#</option>
 			</xar:if>
 		</xar:loop>
 		</select></td>

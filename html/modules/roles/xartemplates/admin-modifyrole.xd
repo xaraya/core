@@ -153,7 +153,7 @@
 				<td>
 					<select name="roleid" id="roleid" size="1" tabindex="9">
 						<xar:loop name="$groups">
-							<option value="#$duid#">#$dname#</option>
+							<option value="#$loop:item['duid']#">#$loop:item['dname']#</option>
 						</xar:loop>
 					</select>
 				</td>
@@ -180,16 +180,16 @@
 		<tr>
 			<td width="150">
 				<xar:if condition="$parentid gt 4">
-					<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$parentid#">
-					#$parentname#
+					<a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['parentid']#">
+					#$loop:item['parentname']#
 					</a>
 				<xar:else />
-					<b>#$parentname#</b>
+					<b>#$loop:item['parentname']#</b>
 				</xar:if>
 			</td>
 			<td width="50" style="text-align: center;">
 				<xar:if condition="count($parents) ne 1">
-					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$loop:item['uid']#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$loop:item['authid']#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 				<xar:else />
 					&nbsp;
 				</xar:if>
