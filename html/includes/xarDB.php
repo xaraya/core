@@ -39,13 +39,6 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarDB_systemArgs'] = $args;
 
-    // Get database parameters
-    $dbType  = $args['databaseType'];
-    $dbHost  = $args['databaseHost'];
-    $dbName  = $args['databaseName'];
-    $dbUname = $args['userName'];
-    $dbPass  = $args['password'];
-
     // ADODB configuration
     // FIXME: do we need a check if the constant is defined whether it has the
     //        right value?
@@ -60,24 +53,10 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     include_once ADODB_DIR .'/adodb.inc.php';
 
-    // Start connection
-    $dbconn =& ADONewConnection($dbType); // assign by reference
-    if (!$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
-        // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the insane dependencies
-        //        we can't right now
-        xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $dbconn->ErrorMsg());
-    }
-    $dbconn->SetFetchMode(ADODB_FETCH_NUM);
+    // Start the default connection
+    $GLOBALS['xarDB_connections'] = array();
+    $dbconn =& xarDBNewConn();
 
-    // force oracle to a consistent date format for comparison methods later on
-    // FIXME: <mrb> this doesn't belong here
-    if (strcmp($dbType, 'oci8') == 0) {
-        $dbconn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
-    }
-
-    // iansym : we're only storing the ONE connection now
-    // iansym : have to use $dbconn =& xarDBGetConn() from now on
-    $GLOBALS['xarDB_connections'][0] =& $dbconn; // assign the object to the array by reference
     $GLOBALS['xarDB_tables'] = array();
 
     $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . '/cache/adodb';
@@ -86,6 +65,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $sitePrefix   = $args['siteTablePrefix'];
 
     // BlockLayout Template Engine Tables
+    // FIXME: this doesnt belong here
     $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
 
     // All initialized register the shutdown function
@@ -109,17 +89,54 @@ function xarDB__shutdown_handler()
 }
 
 /**
- * Get a list of database connections
+ * Get a database connection
  *
  * @access public
- * @global array xarDB_connections array of database connection objects
- * @return array array of database connection objects
+ * @global array  xarDB_connections array of database connection objects
+ * @return object database connection object
  */
-function &xarDBGetConn()
+function &xarDBGetConn($index=0)
 {
     // we only want to return the first connection here
     // perhaps we'll add linked list capabilities to this soon
-    return $GLOBALS['xarDB_connections'][0];
+    return $GLOBALS['xarDB_connections'][$index];
+}
+
+/**
+ * Initialise a new db connection
+ *
+ * Create a new connection based on the supplied parameters
+ * 
+ * @access public
+ * @todo   do we need the global?
+ */
+function &xarDBNewConn()
+{
+    $args =  $GLOBALS['xarDB_systemArgs'];
+    // Get database parameters
+    $dbType  = $args['databaseType'];
+    $dbHost  = $args['databaseHost'];
+    $dbName  = $args['databaseName'];
+    $dbUname = $args['userName'];
+    $dbPass  = $args['password'];
+
+    $conn =& ADONewConnection($dbType);
+    if (!$conn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
+        // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the dependencies we can't right now
+        xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $conn->ErrorMsg());
+    }
+    // Set the default settings for this connection
+    $conn->SetFetchMode(ADODB_FETCH_NUM);
+
+    // force oracle to a consistent date format for comparison methods later on
+    // FIXME: <mrb> this doesn't belong here
+    if (strcmp($dbType, 'oci8') == 0) {
+        $conn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
+    }
+
+    $GLOBALS['xarDB_connections'][] =& $conn;
+    xarLogMessage("New connection created, now serving " . count($GLOBALS['xarDB_connections']) . " connections");
+    return $conn;
 }
 
 /**
