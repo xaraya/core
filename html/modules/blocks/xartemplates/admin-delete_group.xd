@@ -11,9 +11,9 @@
 
 <div align="center"><h2>Delete Block Group</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-delete_group;">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="gid" value="<xar:var name="$group['id']" />" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="confirm" id="confirm" value="true" />
+    <input type="hidden" name="gid" id="gid" value="#$group['id']#" />" />
     
     <table border="0" width="300">
         <tr>
@@ -30,7 +30,7 @@
             </td>
             <td>
                 <xar:loop name="$group['instances']">
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&bid=#$id#">#$title#</a><br />
+                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$id#">#$title#</a><br />
                 </xar:loop>
             </td>
         </tr>

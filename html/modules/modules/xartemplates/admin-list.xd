@@ -34,7 +34,7 @@ Click on status label to sort by states.
 				<xar:loop name="$items">
 				<tr class="xar-norm" valign="top">
 					<td>
-						#$displayname#<a name="#$displayname#"/>
+						#$displayname#<a name="#$displayname#" id="#$displayname#" />
 					</td>
 					<td>
 						#$version#
@@ -45,7 +45,7 @@ Click on status label to sort by states.
                     <td nowrap>
                         <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
                             <a href="#$removeurl#">#$remove#</a>
-                        <xar:elseif  condition="($state eq 3) and (($class eq 'Core Admin') or ($class eq 'Core Utility') or ($class eq 'Core Complete') or ($class eq 'Core Other'))"/>
+                        <xar:elseif  condition="($state eq 3) and (($class eq 'Core Admin') or ($class eq 'Core Utility') or ($class eq 'Core Complete') or ($class eq 'Core Other'))" />
                             <xar:mlstring>(none allowed)</xar:mlstring>
                         </xar:if>
                         <xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
@@ -77,6 +77,6 @@ Click on status label to sort by states.
 <!-- </table> -->
 <!-- </div> -->
 </div>
-<br/>
+<br />
 <xar:mlstring>Note: removal of all core modules is currently disabled; you may need to re-classify your module in accordance with</xar:mlstring>
 <a href="http://docs.xaraya.com/docs/rfcs/rfc0013.html"> RFC-13</a>

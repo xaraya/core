@@ -6,7 +6,7 @@
     </tr>
 </table>
 
-<center>
+<div align="center">
 	<br /><br />
 	<xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring>
 	<br /><br />
@@ -78,12 +78,12 @@
 				<xar:mlstring>Welcome Email Title</xar:mlstring>:
 			</td>
 			<td>
-				<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100">
+				<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
 			</td>
 		</tr>
 		</table>
 		<textarea name="welcomeemail" id="welcomeemail" wrap="soft" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
 		<br /><br />
-		<input type="submit" value="<xar:mlstring>Submit new welcome email</xar:mlstring>" align="middle" tabindex="2" />
+		<input type="submit" value="Submit new welcome email" align="middle" tabindex="2" />
 	</form>
-</center>
+</div>

@@ -7,27 +7,27 @@
 
 <h2><xar:mlstring>Delete</xar:mlstring> <xar:data-label object="$object" /></h2>
 
-<center><strong><xar:mlstring>Confirm deleting this item ?</xar:mlstring></strong></center><br />
+<div align="center"><b><xar:mlstring>Confirm deleting this item ?</xar:mlstring></b></div><br />
 
 <xar:data-display object="$object" />
 
 <xar:if condition="!empty($related)">
 <br />
-<strong>#$related#</strong>
+<b>#$related#</b>
 <br /><br />
 </xar:if>
 
-<center>
+<div align="center">
 <form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="objectid" value="#$object->objectid#" />
-    <input type="hidden" name="modid" value="#$object->moduleid#" />
-    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
-    <input type="hidden" name="itemid" value="#$object->itemid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="objectid" id="objectid" value="#$object->objectid#" />
+    <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
-    <input type="submit" name="confirm" value="<xar:mlstring>Yes</xar:mlstring>" />
+    <input type="submit" name="confirm" value="Yes" />
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="submit" name="noconfirm" value="<xar:mlstring>No</xar:mlstring>" />
+    <input type="submit" name="noconfirm" value="No" />
 </form>
-</center>
+</div>
 

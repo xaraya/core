@@ -9,9 +9,9 @@
     <xar:data-view module="$modid" itemtype="$itemtype" param="$param" numitems="30" startnum="$startnum" />
 
 <xar:else />
-    <center>
+    <div align="center">
         <xar:mlstring>Please select one of the</xar:mlstring>
         <a href="#xarModURL('dynamicdata','user','main')#"><xar:mlstring>available objects</xar:mlstring></a>
-    </center>
+    </div>
 </xar:if>
 

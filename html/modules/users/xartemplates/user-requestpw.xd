@@ -15,7 +15,7 @@
 			<xar:mlstring>Username</xar:mlstring>:
 		</td>
 		<td>
-			<input type="text" name="uname" id="uname" size="25" maxlength="25">
+			<input type="text" name="uname" id="uname" size="25" maxlength="25" />
 		</td>
 	</tr>
 	<tr>
@@ -23,15 +23,15 @@
 			<xar:mlstring>E-mail address</xar:mlstring>
 		</td>
 		<td>
-			<input type="text" name="email" id="email" size="25" maxlength="60"/>
+			<input type="text" name="email" id="email" size="25" maxlength="60" />
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<br /><br />
-			<input type="hidden" name="authid" id="authid" value="#$authid#">
-			<input type="hidden" name="phase" id="phase" value="send">
-			<input type="submit" value="<xar:mlstring>E-Mail new password</xar:mlstring>">
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<input type="hidden" name="phase" id="phase" value="send" />
+			<input type="submit" value="E-Mail new password" />
 		</td>
 	</tr>
 </table>

@@ -3,7 +3,7 @@
 <span class="xar-sub">Page 5/6</span><br /><br />
 <span class="xar-title">Administrator Account Creation</span><br /><br />
 <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
-<input type="hidden" name="install_language" value="<?php echo $language; ?>" />
+<input type="hidden" name="install_language" id="install_language" value="#$language#" />
 <table width="50%" align="center">
     <tr>
         <td align="center" style="text-align:justify;" colspan="2">
@@ -20,7 +20,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_username" maxlength="80" value="Admin">
+            <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" />
         </td>
     </tr>
     <tr>
@@ -30,7 +30,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_name" maxlength="80" value="Admin">
+            <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" />
         </td>
     </tr>
     <tr>
@@ -40,7 +40,7 @@
             </span>
         </td>
         <td>
-            <input type="password" name="install_admin_password" maxlength="80" value="">
+            <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
         </td>
     </tr>
     <tr>
@@ -50,7 +50,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_email" maxlength="80" value="">
+            <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="" />
         </td>
     </tr>
     <tr>
@@ -60,7 +60,7 @@
             </span>
         </td>
         <td>
-            <input type="text" name="install_admin_url" maxlength="80" value="<?php echo xarServerGetBaseURI(); ?>">
+            <input type="text" name="install_admin_url" id="install_admin_url" maxlength="80" value="#$xarServerGetBaseURI()#" />
         </td>
     </tr>
     <tr>

@@ -11,7 +11,7 @@
 
 <div align="center"><h2>New Block Group</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-create_group;">
-    <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
+    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
     <table border="0" width="300">
         <tr>
@@ -19,7 +19,7 @@
                 Name:
             </td>
             <td>
-                <input type="text" name="group_name" value="" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_name" id="group_name" value="" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@
                 Default template (optional):
             </td>
             <td>
-                <input type="text" name="group_template" value="" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_template" id="group_template" value="" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>

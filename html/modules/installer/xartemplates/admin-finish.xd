@@ -10,7 +10,7 @@
                 <br /><br />
                 Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
             <br /><br />
-	    <a href=index.php>Launch the site!</a>
+	    <a href="index.php">Launch the site!</a>
             </span>
             <br /><br />
         </td>

@@ -20,7 +20,7 @@
     <tr>
         <th colspan="4" align="center">
             <xar:mlstring>Assignments of Privilege</xar:mlstring>
-            '&xar-var-pname;'
+            '#$pname#'
         </th>
     </tr>
 </table>
@@ -54,10 +54,10 @@
 					</xar:if>
 				</td>
 				<td width="150">
-					&xar-var-name;
+					#$name#
 				</td>
 			<td align="right">
-				<a href="&xar-var-removeurl;&partid=&xar-var-partid;"
+				<a href="#$removeurl#&amp;partid=#$partid#"
 				title="Remove this Privilege assignment">				
 					Remove    
 				</a>
@@ -86,10 +86,10 @@
 	<tr>
 		<td>
 			<xar:loop name="$trees">
-				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
+				<table border="0" cellspacing="2" cellpadding="0" width="100%">
 					<tr>
 						<td>
-							&xar-var-tree;
+							#$tree#
 						</td>
 					</tr>
 				</table>			

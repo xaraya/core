@@ -2,7 +2,7 @@
     <table border="0" cellspacing="0" cellpadding="4">
     <xar:loop name="$fields">
         <tr align="left" valign="middle">
-            <td align="right"><strong>#$label# :</strong></td>
+            <td align="right"><b>#$label# :</b></td>
             <td align="left"><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /> </td>
         </tr>
     </xar:loop>

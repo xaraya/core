@@ -11,8 +11,8 @@
 
 <div align="center"><h2>Modify Block Instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-update_instance;">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="bid" value="#$bid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="bid" id="bid" value="#$bid#" />
     
     <table border="0" width="300">
         <tr>
@@ -20,7 +20,7 @@
                 Title:
             </td>
             <td>
-                <input type="text" name="block_title" value="&xar-var-instance.title;" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="block_title" id="block_title" value="#$instance['title']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@
                 Type:
             </td>
             <td>
-                &xar-var-instance.module;\&xar-var-instance.type;
+                #$instance['module']#\#$instance['type']#
             </td>
         </tr>
         <tr>
@@ -36,7 +36,7 @@
                 Group:
             </td>
             <td>
-                <select name="block_group" style="width:150px;">
+                <select name="block_group" id="block_group" style="width:150px;">
                     <xar:loop name="$block_groups">
                         <xar:if condition="$instance['group_id'] eq $id">
                             <option value="#$id#" selected="selected">
@@ -54,7 +54,7 @@
                 Refresh:
             </td>
             <td>
-                <select name="block_refresh" style="width:150px;">
+                <select name="block_refresh" id="block_refresh" style="width:150px;">
                     <xar:loop name="$refresh_times">
                         <xar:if condition="$instance['refresh'] eq $id">
                             <option value="#$id#" selected="selected">
@@ -72,7 +72,7 @@
                 Template (optional):
             </td>
             <td>
-                <input type="text" name="block_template" value="&xar-var-instance.template;" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -80,7 +80,7 @@
                 Default state:
             </td>
             <td>
-                <select name="block_state" style="width:150px;">
+                <select name="block_state" id="block_state" style="width:150px;">
                     <xar:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
                     <xar:else />
@@ -110,7 +110,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <textarea name="block_content" style="width:300px;height:150px;">&xar-var-instance.content;</textarea>
+                <textarea name="block_content" id="block_content" style="width:300px;height:150px;">#$instance['content']#</textarea>
             </td>
         </tr>
         </xar:if>

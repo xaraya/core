@@ -21,7 +21,7 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center">
-            <strong><xar:mlstring>Preview</xar:mlstring></strong>
+            <b><xar:mlstring>Preview</xar:mlstring></b>
         </td>
     </tr>
     <tr>
@@ -33,17 +33,17 @@
 <br />
 
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'update')#">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="modid" value="#$object->moduleid#" />
-    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
-    <input type="hidden" name="itemid" value="#$object->itemid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
 
         <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
         <tr>
             <td colspan="2" align="center"><br />
-                <br /><strong><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></strong><br />&nbsp;
+                <br /><b><xar:mlstring>Warning ! This is a system object used internally by the Dynamic Data module.<br /><br />Trying to modify this object may break the Dynamic Data module.<br />Proceed with caution...</xar:mlstring></b><br />&nbsp;
             </td>
         </tr>
         </xar:if>
@@ -53,9 +53,9 @@
 
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />
+                <input type="submit" name="preview" value="Preview" />
                 &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="<xar:mlstring>Update</xar:mlstring>" />
+                <input type="submit" value="Update" />
             </td>
         </tr>
     </table>

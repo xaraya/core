@@ -21,7 +21,7 @@
                <xar:if condition="$prime eq 1">&nbsp;&nbsp;[primary]</xar:if></label>
             </td>
             <td class="xar-norm">
-               <input type="text" name="#$name#" id="#$name#" value="#$value#">
+               <input type="text" name="#$name#" id="#$name#" value="#$value#" />
             </td>
             <td class="xar-norm">
                #$description#
@@ -30,7 +30,7 @@
                <xar:if condition="$prime eq 1">
                    none
                <xar:else />
-                   <input type="checkbox" name="#$name#-del" value="delete"> Delete
+                   <input type="checkbox" name="#$name#-del" id="#$name#-del" value="delete" /> Delete
                </xar:if>
             </td>
         </tr>
@@ -51,20 +51,20 @@
         </tr>
         <tr>
             <td class="xar-norm">
-               <input type="text" name="newvarname" id="newvarname" value="" maxlength="64">
+               <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" />
             </td>
             <td class="xar-norm">
-               <input type="text" name="newvarvalue" id="newvarvalue" value="">
+               <input type="text" name="newvarvalue" id="newvarvalue" value="" />
             </td>
             <td class="xar-norm">
-               <input type="text" name="newvardescription" id="newvardescription" size="35" value="" maxlength="255">
+               <input type="text" name="newvardescription" id="newvardescription" size="35" value="" maxlength="255" />
             </td>
             <td align="center" class="xar-norm">
                new
             </td>
         </tr>
 	</table>
-                <input type="checkbox" name="return" id="return" value="1"> 
+                <input type="checkbox" name="return" id="return" value="1" /> 
                 <label for="return"><xar:mlstring>Update and return to this screen.</xar:mlstring></label><br /><br />
 	<input type="submit" value="#$savebutton#" align="middle" tabindex="9" />
 </form>

@@ -1,17 +1,17 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center" colspan="6">
-            <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="#$link#" target="hook">&xar-var-labels.config;</a> ]
+            <b>#$labels['dynamicdata']#</b> [ <a href="#$link#" target="hook">#$labels['config']#</a> ]
         </td>
     </tr>
 <xar:if condition="!empty($fields)">
     <tr>
-       <td><strong>&xar-var-labels.id;</strong></td>
-       <td><strong>&xar-var-labels.label;</strong></td>
-       <td><strong>&xar-var-labels.type;</strong></td>
-       <td><strong>&xar-var-labels.default;</strong></td>
-       <td><strong>&xar-var-labels.source;</strong></td>
-       <td><strong>&xar-var-labels.validation;</strong></td>
+       <td><b>#$labels['id']#</b></td>
+       <td><b>#$labels['label']#</b></td>
+       <td><b>#$labels['type']#</b></td>
+       <td><b>#$labels['default']#</b></td>
+       <td><b>#$labels['source']#</b></td>
+       <td><b>#$labels['validation']#</b></td>
     </tr>
 <xar:loop name="$fields">
     <tr align="left" valign="middle">

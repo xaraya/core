@@ -3,13 +3,13 @@
 		<xar:mlstring>Block Expiration</xar:mlstring>
 	</td>
 	<td>
-	<select name="expire">
-		<option name="expire" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
-		<option name="expire" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
-		<option name="expire" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
-		<option name="expire" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
-		<option name="expire" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
-		<option name="expire" value="0" selected><xar:mlstring>Unlimited</xar:mlstring></option>
+	<select name="expire" id="expire">
+		<option name="expire" id="expire" value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
+		<option name="expire" id="expire" value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
+		<option name="expire" id="expire" value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
+		<option name="expire" id="expire" value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
+		<option name="expire" id="expire" value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
+		<option name="expire" id="expire" value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
     </select>
 	</td>
 </tr>
@@ -30,6 +30,6 @@
 		<xar:mlstring>Text</xar:mlstring>
 	</td>
 	<td colspan="2">
-		<textarea name="text_content" style="width:300px;height:150px;">#$text_content#</textarea>
+		<textarea name="text_content" id="text_content" style="width:300px;height:150px;">#$text_content#</textarea>
     </td>
 </tr>

@@ -11,9 +11,9 @@
 
 <div align="center"><h2>Delete Block Instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="confirm" value="true" />
-    <input type="hidden" name="bid" value="&xar-var-instance.id;" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="confirm" id="confirm" value="true" />
+    <input type="hidden" name="bid" id="bid" value="#$instance['id']#" />
     
     <table border="0" width="300">
         <tr>
@@ -21,7 +21,7 @@
                 Title:
             </td>
             <td>
-                &xar-var-instance.title;
+                #$instance['title']#
             </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 Group:
             </td>
             <td>
-                &xar-var-instance.group_name;
+                #$instance['group_name']#
             </td>
         </tr>
         <tr>
@@ -37,13 +37,13 @@
                 Type:
             </td>
             <td>
-                &xar-var-instance.module;\&xar-var-instance.type;
+                #$instance['module']#\#$instance['type']#
             </td>
         </tr>
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="OK" align="middle" />
-                    <input type="submit" name="cancel" value="Cancel" align="middle" />
+                    <input type="submit" name="cancel" id="cancel" value="Cancel" align="middle" />
             </td>
         </tr>
     </table>

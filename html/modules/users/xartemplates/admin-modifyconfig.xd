@@ -1,10 +1,10 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Users Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2>Modify COnfig</h2><br />
 
-<center>
+<div align="center">
 <form method="post" action="#xarModURL('users', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" />
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="phase" value="update" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="phase" id="phase" value="update" />
 	<table border="0" width="100%">
 		<tr>
 			<td>
@@ -38,7 +38,7 @@
 							<xar:mlstring>Minimum age to be a user</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="minage" id="minage" value="#xarModGetVar('users', 'minage')#" size="3" maxlength="3">
+							<input type="text" name="minage" id="minage" value="#xarModGetVar('users', 'minage')#" size="3" maxlength="3" />
 						</td>
 					</tr>
 					<tr align="left" valign="middle">
@@ -94,13 +94,13 @@
 							<xar:mlstring>Default Group for New Users</xar:mlstring>
 						</td>
 						<td>
-							<select name="defaultgroup">
+							<select name="defaultgroup" id="defaultgroup">
 							<xar:loop name="$groups">
 
 								<xar:if condition="$name eq $defaultgroup">
-									<option name="#$name#" value="#$name#" selected>#$name#</option>
+									<option name="#$name#" id="#$name#" value="#$name#" selected="selected">#$name#</option>
 								<xar:else />
-									<option name="#$name#" value="#$name#">#$name#</option>
+									<option name="#$name#" id="#$name#" value="#$name#">#$name#</option>
 								</xar:if>
 							</xar:loop>
 							</select>
@@ -123,7 +123,7 @@
 							<xar:mlstring>Number of users to view per page</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="usersperpage" id="usersperpage" value="#xarModGetVar('users', 'usersperpage')#" size="3" maxlength="3">
+							<input type="text" name="usersperpage" id="usersperpage" value="#xarModGetVar('users', 'usersperpage')#" size="3" maxlength="3" />
 						</td>
 					</tr>
 					<tr align="left" valign="top">
@@ -160,7 +160,7 @@
 	</table>
 
 	<br /><br />
-	<input type="submit" value="<xar:mlstring>Update Users Configuration</xar:mlstring>" align="middle" tabindex="5" />
+	<input type="submit" value="Update Users Configuration" align="middle" tabindex="5" />
 </form>
-</center>
+</div>
         

@@ -12,16 +12,16 @@
 
 <xar:if condition="count($options) gt 0">
 <form method="post" action="#xarModURL('dynamicdata','admin','import')#">
-<input type="hidden" name="authid" value="#$authid#" />
+<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 <xar:mlstring>File</xar:mlstring> :
-<select name="import">
+<select name="import" id="import">
 <xar:loop name="$options">
     <option value="#$id#">#$name#</option>
 </xar:loop>
 </select>
 <br /><br />
-<input type="submit" value="<xar:mlstring>Import Definition</xar:mlstring>" />
+<input type="submit" value="Import Definition" />
 </form>
 </xar:if>
 

@@ -42,7 +42,7 @@ function news_adminapi_buildCalendarMenu($args) //$automated, &$year, &$day, &$m
         $out .= '<option value="'.$num.'"'.(($month == $cur)?' selected="selected"':'').'>'.xarVarPrepForDisplay($num)."</option>\n";
     }
     $out .= '</select>&nbsp;&nbsp;'
-        ._NEWS_YEAR.': <input type="text" name="year" value="'.date('Y', $args['datestamp']).'" size="5" maxlength="4"><br />'
+        ._NEWS_YEAR.': <input type="text" name="year" id="year" value="'.date('Y', $args['datestamp']).'" size="5" maxlength="4" /><br />'
     ;
 
     return $out;

@@ -16,7 +16,7 @@
 
 <pre>
 [Temporary help file :-)]
-
+TODO: move this php block into the module code
 <?php
 if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
     $help = @file('modules/dynamicdata/xardocs/help.txt');

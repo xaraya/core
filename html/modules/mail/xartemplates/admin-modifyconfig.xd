@@ -7,7 +7,7 @@
 </table>
 <div align="center"><h2><xar:mlstring>Modify Mail Configuration</xar:mlstring></h2><br />
 <form method="post" action="&xar-modurl-mail-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
-    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 	<table border="0" width="100%">
 		<tr>
@@ -18,7 +18,7 @@
 							<xar:mlstring>Admin Name</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="adminname" value="#xarModGetVar('mail', 'adminname')#" size="30" maxlength="100">
+							<input type="text" name="adminname" id="adminname" value="#xarModGetVar('mail', 'adminname')#" size="30" maxlength="100" />
 						</td>
 					</tr>
 					<tr align="left" valign="middle">
@@ -26,7 +26,7 @@
 							<xar:mlstring>Admin Email</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="adminmail" value="#xarModGetVar('mail', 'adminmail')#" size="50" maxlength="100">
+							<input type="text" name="adminmail" id="adminmail" value="#xarModGetVar('mail', 'adminmail')#" size="50" maxlength="100" />
 						</td>
 					</tr>
 					<tr align="left" valign="middle">
@@ -47,7 +47,7 @@
 								<xar:mlstring>Reply To Name</xar:mlstring>
 							</td>
 							<td>
-								<input type="text" name="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100">
+								<input type="text" name="replytoname" id="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100" />
 							</td>
 						</tr>
 						<tr align="left" valign="middle">
@@ -55,7 +55,7 @@
 								<xar:mlstring>Reply To Address</xar:mlstring>
 							</td>
 							<td>
-								<input type="text" name="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100">
+								<input type="text" name="replytoemail" id="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100" />
 							</td>
 						</tr>
 					</xar:if>
@@ -77,7 +77,7 @@
 								<xar:mlstring>HTML Email Header</xar:mlstring>
 							</td>
 							<td>
-								<textarea name="htmlheader" rows="20" cols="60">#xarModGetVar('mail', 'htmlheader')#</textarea>
+								<textarea name="htmlheader" id="htmlheader" rows="20" cols="60">#xarModGetVar('mail', 'htmlheader')#</textarea>
 							</td>
 						</tr>
 						<tr align="left" valign="top">
@@ -85,7 +85,7 @@
 								<xar:mlstring>HTML Email Footer</xar:mlstring>
 							</td>
 							<td>
-								<textarea name="htmlfooter" rows="20" cols="60">#xarModGetVar('mail', 'htmlfooter')#</textarea>
+								<textarea name="htmlfooter" id="htmlfooter" rows="20" cols="60">#xarModGetVar('mail', 'htmlfooter')#</textarea>
 							</td>
 						</tr>
 					</xar:if>
@@ -94,7 +94,7 @@
 							<xar:mlstring>Default Word Wrap Size</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="wordwrap" value="#xarModGetVar('mail', 'wordwrap')#" size="5" maxlength="5">
+							<input type="text" name="wordwrap" id="wordwrap" value="#xarModGetVar('mail', 'wordwrap')#" size="5" maxlength="5" />
 						</td>
 					</tr>
 					<tr align="left" valign="middle">
@@ -148,7 +148,7 @@
 								<xar:mlstring>SMTP Host</xar:mlstring>
 							</td>
 							<td>
-								<input type="text" name="smtpHost" value="#xarModGetVar('mail', 'smtpHost')#" size="30" maxlength="100">
+								<input type="text" name="smtpHost" id="smtpHost" value="#xarModGetVar('mail', 'smtpHost')#" size="30" maxlength="100" />
 							</td>
 						</tr>
 						<tr align="left" valign="middle">
@@ -156,7 +156,7 @@
 								<xar:mlstring>SMTP Port</xar:mlstring>
 							</td>
 							<td>
-								<input type="text" name="smtpPort" value="#xarModGetVar('mail', 'smtpPort')#" size="5" maxlength="5">
+								<input type="text" name="smtpPort" id="smtpPort" value="#xarModGetVar('mail', 'smtpPort')#" size="5" maxlength="5" />
 							</td>
 						</tr>
 						<tr align="left" valign="middle">
@@ -177,7 +177,7 @@
 									<xar:mlstring>SMTP Username</xar:mlstring>
 								</td>
 								<td>
-									<input type="text" name="smtpUserName" value="#xarModGetVar('mail', 'smtpUserName')#" size="30" maxlength="100">
+									<input type="text" name="smtpUserName" id="smtpUserName" value="#xarModGetVar('mail', 'smtpUserName')#" size="30" maxlength="100" />
 								</td>
 							</tr>
 							<tr align="left" valign="middle">
@@ -185,7 +185,7 @@
 									<xar:mlstring>SMTP Password</xar:mlstring>
 								</td>
 								<td>
-									<input type="password" name="smtpPassword" value="#xarModGetVar('mail', 'smtpPassword')#" size="30" maxlength="30">
+									<input type="password" name="smtpPassword" id="smtpPassword" value="#xarModGetVar('mail', 'smtpPassword')#" size="30" maxlength="30" />
 								</td>
 							</tr>
 						</xar:if>
@@ -195,7 +195,7 @@
 		</tr>
 	</table>
 	<br /><br />
-	<input type="submit" value="<xar:mlstring>Update Mail Configuration</xar:mlstring>" align="middle" tabindex="3" />
+	<input type="submit" value="Update Mail Configuration" align="middle" tabindex="3" />
 </form>
 </center>
         

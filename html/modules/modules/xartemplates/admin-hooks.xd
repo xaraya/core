@@ -1,4 +1,4 @@
-<strong><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></strong>
+<b><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></b>
 <p />
 <ul>
 <xar:loop name="$hookmodules">
@@ -16,15 +16,15 @@
         </xar:if>
         <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="curhook" value="#$curhook#" />
+            <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
             <xar:loop name="$hookedmodules">
                 <xar:if condition="!empty($header)">
-                    <br /><strong>#$header#</strong><br />
+                    <br /><b>#$header#</b><br />
                 </xar:if>
-                <input type="checkbox" name="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
+                <input type="checkbox" name="hooked_#$name#" id="hooked_#$name#" value="1"#$checked# />#$name# : #$description#<br />
             </xar:loop>
             <br />
-            <input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" />
+            <input type="submit" value="Save Changes" />
         </form>
     </xar:if>
 </xar:loop>

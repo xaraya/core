@@ -11,7 +11,7 @@
 
 <div align="center"><h2>New block instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
-    <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
+    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
     <table border="0" width="300" cellpadding="2" cellspacing="0">
         <tr>
@@ -19,7 +19,7 @@
                 Title:
             </td>
             <td>
-                <input type="text" name="block_title" value="" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="block_title" id="block_title" value="" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@
                 Type:
             </td>
             <td>
-                <select name="block_type" style="width:150px;">
+                <select name="block_type" id="block_type" style="width:150px;">
                     <xar:loop name="$block_types">
                         <option value="#$id#">
                             #$module#\#$type#
@@ -41,7 +41,7 @@
                 Group:
             </td>
             <td>
-                <select name="block_group" style="width:150px;">
+                <select name="block_group" id="block_group" style="width:150px;">
                     <xar:loop name="$block_groups">
                         <option value="#$id#">
                             #$name#
@@ -55,7 +55,7 @@
                 Template (optional):
             </td>
             <td>
-                <input type="text" name="block_template" value="" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="block_template" id="block_template" value="" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -63,7 +63,7 @@
                 Default state:
             </td>
             <td>
-                <select name="block_state" style="width:150px;">
+                <select name="block_state" id="block_state" style="width:150px;">
                     <option value="0">Hidden</option>
                     <option value="1">Minimized</option>
                     <option value="2" selected="selected">Maximized</option>

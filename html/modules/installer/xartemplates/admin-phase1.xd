@@ -7,13 +7,13 @@
     <tr>
         <td align="center" class="xar-normal">
                 Language:
-                <select name="install_language" class="xar-text">
+                <select name="install_language" id="install_language" class="xar-text">
                     <xar:foreach in="$languages" key="$key" value="$value">
                         <option value="#$key#">#$value#</option>
                     </xar:foreach>
                 </select>
-                <input type="hidden" name="install_phase" value="2" />
-                <input type="submit" value="Continue &gt;">
+                <input type="hidden" name="install_phase" id="install_phase" value="2" />
+                <input type="submit" value="Continue &gt;" />
         </td>
     </tr>
 </table>

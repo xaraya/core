@@ -23,18 +23,18 @@
 </xar:if>
 
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#">
-    <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="modid" value="#$object->moduleid#" />
-    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
-    <input type="hidden" name="itemid" value="#$object->itemid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" id="itemid" value="#$object->itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
         <xar:data-form object="$object" />
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />
+                <input type="submit" name="preview" value="Preview" />
                 &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="<xar:mlstring>Create</xar:mlstring>" />
+                <input type="submit" value="Create" />
             </td>
         </tr>
     </table>

@@ -49,5 +49,5 @@
 </table>
 </div>
 <br /><br />
-<input type="submit" value="<xar:mlstring>Modify Account Information</xar:mlstring>" align="middle" tabindex="2" />
+<input type="submit" value="Modify Account Information" align="middle" tabindex="2" />
 </form>

@@ -25,6 +25,6 @@
 			</tr>
 		</table>
 		<br /><br />
-		<input type="submit" value="<xar:mlstring>Send Email</xar:mlstring>" align="middle" tabindex="2" />
+		<input type="submit" value="Send Email" align="middle" tabindex="2" />
 	</form>
 </center>

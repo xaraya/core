@@ -1,9 +1,9 @@
-<xar:if condition = "xarModisAvailable($search)">
+<xar:if condition="xarModisAvailable($search)">
 	<form action="index.php">
-		<input type="hidden" name="module" value="search" />
+		<input type="hidden" name="module" id="module" value="search" />
 		<a href="&xar-modurl-search-user-main;"><xar:mlstring>Search</xar:mlstring></a> 
-		<input type="text" name="q" size="15" align="middle" />
+		<input type="text" name="q" id="q" size="15" align="middle" />
 	</form>
 </xar:if>
 
-<xar:mlstring>Welcome</xar:mlstring> <strong>#$name#</strong>&nbsp;-&nbsp;<a href="&xar-modurl-users-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>
+<xar:mlstring>Welcome</xar:mlstring> <b>#$name#</b>&nbsp;-&nbsp;<a href="&xar-modurl-users-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>

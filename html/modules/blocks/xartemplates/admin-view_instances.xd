@@ -34,7 +34,7 @@
     <xar:loop name="$blocks">
     <tr align="center">
         <td>
-            <a href="&xar-modurl-blocks-admin-modify_group;&gid=#$group_id#">#$group_name#</a>
+            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$group_id#">#$group_name#</a>
         </td>
         <td>
             <xar:var name="$title" />
@@ -53,8 +53,8 @@
             <xar:var name="$state_desc" />
         </td>
         <td>
-            <a href="&xar-modurl-blocks-admin-modify_instance;&bid=#$id#">Edit</a> |
-            <a href="&xar-modurl-blocks-admin-delete_instance;&bid=#$id#">Delete</a>
+            <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$id#">Edit</a> |
+            <a href="&xar-modurl-blocks-admin-delete_instance;&amp;bid=#$id#">Delete</a>
         </td>
     </tr>
     </xar:loop>

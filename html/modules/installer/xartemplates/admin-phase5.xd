@@ -6,8 +6,8 @@
 <table width="50%" align="center">
     <tr>
         <td align="center" class="xar-normal">
-                <input type="hidden" name="install_phase" value="6" />
-                <input type="submit" value="Continue &gt;">
+                <input type="hidden" name="install_phase" id="install_phase" value="6" />
+                <input type="submit" value="Continue &gt;" />
         </td>
     </tr>
 </table>

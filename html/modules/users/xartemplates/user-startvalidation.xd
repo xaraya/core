@@ -12,8 +12,8 @@
 	<xar:mlstring>If you did not recieve your validation code, we will try to resend it now.</xar:mlstring>
 	<br /><br />
 	<form action="#xarModURL('users', 'user', 'getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="phase" value="resend">
-		<input type="text" name="uname" />
+		<input type="hidden" name="phase" id="phase" value="resend" />
+		<input type="text" name="uname" id="uname" />
 		<input type="submit" value="Resend Validation Information" />
 	</form>
 </xar:if>

@@ -14,7 +14,7 @@
 			<xar:mlstring>Preferred Username</xar:mlstring>:
 		</td>
 		<td>
-			<input type="text" name="uname" id="uname" size="25" maxlength="25">
+			<input type="text" name="uname" id="uname" size="25" maxlength="25" />
 		</td>
 	</tr>
 	<tr>
@@ -22,7 +22,7 @@
 			<xar:mlstring>Real Name</xar:mlstring>
 		</td>
 		<td>
-			<input type="text" name="realname" id="realname" size="25" maxlength="60"/>
+			<input type="text" name="realname" id="realname" size="25" maxlength="60" />
 		</td>
 	</tr>
 	<tr>
@@ -30,7 +30,7 @@
 			<xar:mlstring>E-mail Address</xar:mlstring>:
 		</td>
 		<td>
-			<input type="text" name="email" size="25" maxlength="60">
+			<input type="text" name="email" id="email" size="25" maxlength="60" />
 		</td>
 	</tr>
     <xar:if condition="xarModGetVar('users', 'chooseownpassword')" >
@@ -62,37 +62,37 @@
 	<xar:if condition="xarModGetVar('users','showtac') eq 0 and xarModGetVar('users','showprivacy') eq 1">
 		<tr>
 			<td colspan="2">
-				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 			</td>
 		</tr>
 	<xar:elseif condition="xarModGetVar('users','showprivacy') eq 0 and xarModGetVar('users','showtac') eq 1" />
 		<tr>
 			<td colspan="2">
-				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
 			</td>
 		</tr>
 	<xar:elseif condition="xarModGetVar('users','showprivacy') eq 1 and xarModGetVar('users','showtac') eq 1" />
 		<tr>
 			<td colspan="2">
-				<INPUT TYPE="CHECKBOX" NAME="agreetoterms" VALUE="1">
+				<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('users', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a> and <a href="#xarModURL('users', 'user', 'privacy')#"> <xar:mlstring>Privacy Policy</xar:mlstring> </a>.
 			</td>
 		</tr>
 	<xar:else />
 		<tr>
 			<td colspan="2">
-				<input type="hidden" name="agreetoterms" id="agreetoterms" value="1">
+				<input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
 			</td>
 		</tr>
 	</xar:if>
 	<tr>
 		<td>
 			<br /><br />
-			<input type="hidden" name="authid" id="authid" value="#$authid#">
-			<input type="hidden" name="phase" id="phase" value="checkregistration">
-			<input type="submit" value="<xar:mlstring>New user</xar:mlstring>">
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<input type="hidden" name="phase" id="phase" value="checkregistration" />
+			<input type="submit" value="New user" />
 		</td>
 	</tr>
 </table>

@@ -1,5 +1,5 @@
 <xar:if condition="$stage eq 1">
-  <center>
+  <div align="center">
         <xar:mlstring>Terms and Conditions</xar:mlstring>
 	<br /><br />
         <xar:template file="user-terms" type="module" />
@@ -11,10 +11,10 @@
                                   'authid' => xarSecGenAuthKey()))##">
                             <xar:mlstring>Accept terms and conditions</xar:mlstring></a> --->
         <a href="index.php"><xar:mlstring>Do not accept terms and conditions</xar:mlstring></a>
-
+  </div>
 <xar:elseif condition="$stage eq 2" />
 
-  <center>
+  <div align="center">
         <xar:mlstring>Create User Account</xar:mlstring>
 	<br /><br />
 	<form action="&xar-modurl-users-user-new;" method="post" enctype="application/x-www-form-urlencoded">
@@ -68,9 +68,9 @@
 		<br /><br />
 
 
-		<input type="submit" value="<xar:mlstring>Create User</xar:mlstring>" align="middle" tabindex="6" />
+		<input type="submit" value="Create User" align="middle" tabindex="6" />
 	</form>
-  </center>
+  </div>
 
 <xar:elseif condition="$stage eq 3" /> 
 

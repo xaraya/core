@@ -6,7 +6,7 @@
     </tr>
 </table>
 
-<center>
+<div align="center">
 	<br /><br />
 	<xar:mlstring>Send an email to a user or group of users</xar:mlstring>
 	<br /><br />
@@ -15,27 +15,27 @@
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<table>
 			<tr>
-				<td align=left>
+				<td align="left">
 					<xar:mlstring>Username</xar:mlstring>
 				</td>
-				<td align=left>
+				<td align="left">
 					<input type="text" name="name" id="name" value="" size="32" maxlength="32" tabindex="1" />
 				</td>
 			</tr>
 			<tr align="left" valign="middle">
-				<td align=left>
+				<td align="left">
 					<xar:mlstring>User Number</xar:mlstring>
 				</td>
-				<td align=left>
+				<td align="left">
 					<input type="text" name="number" id="number" value="" size="5" maxlength="5" tabindex="2" />
 				</td>
 			</tr>
 		</table>
 		<xar:mlstring>Message</xar:mlstring>
-		<br/>
+		<br />
 		<textarea name="confirmationemail" id="confirmationemail" wrap="soft" rows="20" cols="50" tabindex="1"></textarea>
 		<br /> 
 		<br />
 		<input type="submit" value="Submit new confirmation email" align="middle" tabindex="2" />
 	</form>
-</center>
+</div>

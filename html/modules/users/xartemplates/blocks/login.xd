@@ -6,7 +6,7 @@
                 <xar:mlstring>Username</xar:mlstring>
             </td>
             <td>
-                <input type="text" name="uname" maxlength="64" size="10" />
+                <input type="text" name="uname" id="uname" maxlength="64" size="10" />
             </td>
         </tr>
         <tr>
@@ -14,13 +14,13 @@
                 <xar:mlstring>Password</xar:mlstring>
             </td>
             <td>
-                <input type="password" name="pass" maxlength="64" size="10" />
+                <input type="password" name="pass" id="pass" maxlength="64" size="10" />
             </td>
         </tr>
         <xar:if condition="xarConfigGetVar('seclevel') ne 'High'">
             <tr>
                 <td colspan="2">
-                    <input type="checkbox" name="rememberme" value="1" /><xar:mlstring>Remember me</xar:mlstring>
+                    <input type="checkbox" name="rememberme" id="rememberme" value="1" /><xar:mlstring>Remember me</xar:mlstring>
                 </td>
             </tr>
         </xar:if>

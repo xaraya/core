@@ -3,6 +3,6 @@
  		<xar:mlstring>File:</xar:mlstring>
  	</td>
  	<td>
- 		<input type="text" name="url" size="30" maxlength="255" value="#$url#" />
+ 		<input type="text" name="url" id="url" size="30" maxlength="255" value="#$url#" />
  	</td>
 </tr>

@@ -14,7 +14,7 @@
 
     <br />
 	<xar:mlstring>Search on</xar:mlstring>: <br />
-<input type="checkbox" name="email" value=1 checked /> <xar:mlstring>Email Address </xar:mlstring><br />
-<input type="checkbox" name="name" value=1 checked /> <xar:mlstring>Real Name</xar:mlstring> <br />
-<input type="checkbox" name="uname" value=1 checked /> <xar:mlstring>Uname</xar:mlstring> <br />
+<input type="checkbox" name="email" id="email" value="1" checked="checked" /> <xar:mlstring>Email Address </xar:mlstring><br />
+<input type="checkbox" name="name" id="name" value="1" checked="checked" /> <xar:mlstring>Real Name</xar:mlstring> <br />
+<input type="checkbox" name="uname" id="uname" value="1" checked="checked" /> <xar:mlstring>Uname</xar:mlstring> <br />
 <br />						

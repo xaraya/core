@@ -1,21 +1,21 @@
 <xar:if condition="$menustyle eq byname">
 	By Name
-	<br>
+	<br />
 	#$data#
 <xar:elseif condition="$menustyle eq bycat" />
 	By Category
-	<br>
+	<br />
 	#$data#
 <xar:elseif condition="$menustyle eq byweight" />
 	By Weight
-	<br>
+	<br />
 	#$data#
 <xar:elseif condition="$menustyle eq bygroup" />
 	By Group
-	<br>
+	<br />
 	#$data#
 <xar:else />
 	By Category
-	<br>
+	<br />
 	#$data#
 </xar:if>

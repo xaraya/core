@@ -14,37 +14,37 @@
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
-    <input type="hidden" name="authid" value="#$authid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
     <tr>
-       <td><strong>&xar-var-labels.id;</strong></td>
-       <td><strong>&xar-var-labels.name;</strong></td>
-       <td><strong>&xar-var-labels.label;</strong></td>
-       <td><strong>&xar-var-labels.informat;</strong></td>
-       <td><strong>&xar-var-labels.outformat;</strong></td>
-       <td><strong>&xar-var-labels.validation;</strong></td>
-       <td><strong>...</strong></td>
+       <td><b>#$labels['id']#</b></td>
+       <td><b>#$labels['name']#</b></td>
+       <td><b>#$labels['label']#</b></td>
+       <td><b>#$labels['informat']#</b></td>
+       <td><b>#$labels['outformat']#</b></td>
+       <td><b>#$labels['validation']#</b></td>
+       <td><b>...</b></td>
     </tr>
 
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>#$id#</td>
-        <td><input type="text" name="name[#$id#]" size="15" value="#$name#" /></td>
-        <td><input type="text" name="label[#$id#]" size="20" value="#$label#" /></td>
+        <td><input type="text" name="name[#$id#]" id="name[#$id#]" size="15" value="#$name#" /></td>
+        <td><input type="text" name="label[#$id#]" id="label[#$id#]" size="20" value="#$label#" /></td>
         <td><xar:data-input type="fieldtype" name="format['.$id.']" value="$format" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[#$id#]" size="20" value="#$validation#" /></td>
+        <td><input type="text" name="validation[#$id#]" id="validation[#$id#]" size="20" value="#$validation#" /></td>
         <td>...</td>
     </tr>
 </xar:loop>
 
     <tr align="left" valign="middle">
-        <td>&xar-var-labels.new;</td>
-        <td><input type="text" name="name[0]" size="15" /></td>
-        <td><input type="text" name="label[0]" size="20" /></td>
+        <td>#$labels['new']#</td>
+        <td><input type="text" name="name[0]" id="name[0]" size="15" /></td>
+        <td><input type="text" name="label[0]" id="label[0]" size="20" /></td>
         <td><xar:data-input type="fieldtype" name="format[0]" value="" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[0]" size="20" value="" /></td>
+        <td><input type="text" name="validation[0]" id="validation[0]" size="20" value="" /></td>
         <td>...</td>
     </tr>
 

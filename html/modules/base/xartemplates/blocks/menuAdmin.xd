@@ -11,9 +11,9 @@
 		</td>
 		<td>
 			<xar:if condition="$style eq 1">
-			<input type="radio" name="style" value="1" checked />
+			<input type="radio" name="style" id="style" value="1" checked="checked" />
 			<xar:else />
-			<input type="radio" name="style" value="1" />
+			<input type="radio" name="style" id="style" value="1" />
 			</xar:if>
 		</td>
 	</tr>
@@ -23,9 +23,9 @@
 		</td>
 		<td>
 			<xar:if condition="$style eq 2">
-			<input type="radio" name="style" value="2" checked />
+			<input type="radio" name="style" id="style" value="2" checked="checked" />
 			<xar:else />
-			<input type="radio" name="style" value="2" />
+			<input type="radio" name="style" id="style" value="2" />
 			</xar:if>
 		</td>
 	</tr>
@@ -42,9 +42,9 @@
 		</td>
 		<td>
 			<xar:if condition="$displaymodules eq 2">
-			<input type="checkbox" value="1" name="displaymodules" checked />
+			<input type="checkbox" value="1" name="displaymodules" id="displaymodules" checked="checked" />
 			<xar:else>
-			<input type="checkbox" value="1" name="displaymodules" checked />
+			<input type="checkbox" value="1" name="displaymodules" id="displaymodules" checked="checked" />
 			</xar:if>
 		</td>
 	</tr>
@@ -54,9 +54,9 @@
 		</td>
 		<td>
 			<xar:if condition="$displaywaiting eq 2">
-			<input type="checkbox" value="1" name="displaywaiting" checked />
+			<input type="checkbox" value="1" name="displaywaiting" id="displaywaiting" checked="checked" />
 			<xar:else>
-			<input type="checkbox" value="1" name="displaywaiting" />
+			<input type="checkbox" value="1" name="displaywaiting" id="displaywaiting" />
 			</xar:if>
 		</td>
 	</tr>
@@ -88,36 +88,36 @@
 				</tr>
 				<tr>
 					<td valign="top">
-						<input type="text" name="linkname[$c]" size="30" maxlength="255" value="&xar-var-$link[1];" class="xar-normal" />
+						<input type="text" name="linkname[$c]" id="linkname[$c]" size="30" maxlength="255" value="#$link[1]#" class="xar-normal" />
 					</td>
 					<td valign="top">
-						<input type="text" name="linkurl[$c]" size="30" maxlength="255" value="&xar-var-$link[0];" class="xar-normal" />
+						<input type="text" name="linkurl[$c]" id="linkurl[$c]" size="30" maxlength="255" value="#$link[0]#" class="xar-normal" />
 					</td>
 					<td valign="top">
-						<input type="text" name="linkdesc[$c]" size="30" maxlength="255" value="&xar-var-$link[2];" class="xar-normal" />
+						<input type="text" name="linkdesc[$c]" id="linkdesc[$c]" size="30" maxlength="255" value="#$link[2]#" class="xar-normal" />
 					</td>
 					<td valign="top">
-						<input type="checkbox" name="linkdelete[$c]" value="1" class="xar-normal" />
+						<input type="checkbox" name="linkdelete[$c]" id="linkdelete[$c]" value="1" class="xar-normal" />
 					</td>
 					<td valign="top">
-						<input type="checkbox" name="linkinsert[$c]" value="1" class="xar-normal" />
+						<input type="checkbox" name="linkinsert[$c]" id="linkinsert[$c]" value="1" class="xar-normal" />
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<input type="text" name="new_linkname" size="30" maxlength="255" class="xar-normal" />
+						<input type="text" name="new_linkname" id="new_linkname" size="30" maxlength="255" class="xar-normal" />
 					</td>
 					<td>
-						<input type="text" name="new_linkurl" size="30" maxlength="255" class="xar-normal" />
+						<input type="text" name="new_linkurl" id="new_linkurl" size="30" maxlength="255" class="xar-normal" />
 					</td>
 					<td class="xar-normal">
-						<input type="text" name="new_linkdesc" size="30" maxlength="255" class="xar-normal" />
+						<input type="text" name="new_linkdesc" id="new_linkdesc" size="30" maxlength="255" class="xar-normal" />
 					</td>
 					<td class="xar-normal">
 						<xar:mlstring>New Line</xar:mlstring>
 					</td>
 					<td class="xar-normal">
-						<input type="checkbox" name="new_linkinsert" value="1" class="xar-normal" />
+						<input type="checkbox" name="new_linkinsert" id="new_linkinsert" value="1" class="xar-normal" />
 					</td>
 				</tr>
 			</table>

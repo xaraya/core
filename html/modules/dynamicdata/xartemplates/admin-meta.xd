@@ -17,9 +17,9 @@
        </th>
        <form>
        <th colspan="3" align="right">
-           <input type="hidden" name="from" value="#$table#">
+           <input type="hidden" name="from" id="from" value="#$table#" />
            <xar:mlstring>add relationship with</xar:mlstring>
-           <select name="with">
+           <select name="with" id="with">
            <xar:foreach in="$tablelist" value="$with">
                <option>#$with#
            </xar:foreach>
@@ -45,7 +45,7 @@
 <xar:else />
 
 <form>
-<textarea name="xml" rows="30" cols="80">
+<textarea name="xml" id="xml" rows="30" cols="80">
 &lt;objects&gt;
 <xar:foreach in="$tables" key="$table" value="$fields">
   &lt;object id="#$table#"&gt;

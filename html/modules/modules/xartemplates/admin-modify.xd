@@ -22,10 +22,10 @@
 		<br /><br />
 		<xar:if condition="$details eq 1">
 		  <xar:loop name="$hooks">
-			  &nbsp;&nbsp;#$hook#<br/>
+			  &nbsp;&nbsp;#$hook#<br />
 			</xar:loop>
 		</xar:if>
 	</xar:loop>
 	<br /><br />
-	<input type="submit" value="<xar:mlstring>Save Changes</xar:mlstring>" align="middle" tabindex="9" />
+	<input type="submit" value="Save Changes" align="middle" tabindex="9" />
 
