@@ -1,6 +1,74 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
-<div style="margin: auto;">
-#$help#
-</div>
+<div class="xar-mod-body" style="display:block;">
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
+    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
+        <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
+            <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="39" height="41" />
+        </div>
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>The Roles module lets you manage <b>users</b> and <b>groups</b> on your site.  Roles are representations of users and the different groups they can belong to.</xar:mlstring>:
+			<ul>
+			<li><xar:mlstring>Roles can be members of other roles, to any degree. You can, for instance, use roles to represent a company's organization chart, or the set of classes at a university. A role can be a member of as many other roles as you like (as long as the parents are groups).</xar:mlstring></li>
+			<li><xar:mlstring>Roles can be assigned <b>privileges</b>. By doing so, you define what a given role may or may not do on the site. You can use the test functionality of the Roles module to see what parts of the site a role with a given set of privileges has access to.</xar:mlstring></li>
+			<li><xar:mlstring>Roles have <b>inheritance</b>. A role inherits all the privileges of all of its parents, but can override them. If you give a group editing privileges, for instance, any other role that is a member of that group inherits the editing privileges. If you want to restrict the privileges of some of the members, simply assign them a different set of privileges (say reading), and the privileges of the parent will be overridden.</xar:mlstring></li>
+			</ul>
+
+		</div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+        <br />
+         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>The roles on your site are arranged in a tree. At the top of the tree is a role called <b>Everybody</b>, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody.</xar:mlstring></p>
+			<p><xar:mlstring>Xaraya also comes preconfigured with a minimal set of roles that are loaded when you run the installer. This configuration is shown below:</xar:mlstring></p>
+			<p><xar:mlstring><pre>
+				Everybody
+				|
+				|---Anonymous
+				|
+				|---Administrators
+				|   |
+				|   |---Admin
+				|
+				|---Users
+			</pre></xar:mlstring></p>
+                <ul>
+                    <li><xar:mlstring><b>Everybody</b>: is the role containing all other roles. This role has no access privileges.</xar:mlstring></li>
+                    <li><xar:mlstring><b>Anonymous</b>: a user that represents any unregistered users on your site. This role is initially configured with privileges only to access the front page of the site and the login block.</xar:mlstring></li>
+                    <li><xar:mlstring><b>Administrators</b>: a group that has administration privileges.</xar:mlstring></li>
+                    <li><xar:mlstring><b>Admin</b>: a member of Administrators. This is the Admin role you create with the Xaraya installer.</xar:mlstring></li>
+                    <li><xar:mlstring><b>Users</b>: a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <i>Its members will not have access to the site until  you assign some privileges.</i></xar:mlstring></li>
+                </ul>
+					<p><xar:mlstring>The preconfigured roles cannot be changed or removed. You can, however, add members to them. You can also define as many more roles in the tree as you wish in whatever configuration you choose.</xar:mlstring></p>
+					<p><xar:mlstring>Always keep in mind: When you create a role, until you've assigned it some privileges, it will only have those privileges it inherits from its parents.</xar:mlstring></p>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			     <ul>
+                    <li><xar:mlstring>Login Block allows users to login</xar:mlstring></li>
+                    <li><xar:mlstring>Online Block shows the number visiting your site right now.</xar:mlstring></li>
+                </ul>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>The roles module allows the use of the User Menu hook which will allow users to set values to further enhance their visit.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+        </div>
+    </div>
 </div>

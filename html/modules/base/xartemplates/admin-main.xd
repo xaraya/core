@@ -1,46 +1,37 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
-<div style="margin: auto;">
-<table border="0" width="100%">
-    <tr>
-        <td align="left" valign="top" width="100px">
-            <b><xar:mlstring>What is it?</xar:mlstring></b>
-        </td>
-        <td align="left" valign="top">
-            <xar:mlstring>The Base Module controls the configuration of your Xaraya Website.  It is in many respects, the "Base" for administration.  From this module, you can set your general site configuration.</xar:mlstring>
-        </td>
-    </tr>
-    <tr>
-        <td align="left" valign="top" width="100px">
-            <b><xar:mlstring>How to use it?</xar:mlstring></b>
-        </td>
-        <td align="left" valign="top">
-            <xar:mlstring>
-            From the menu, you have three choices.  "Modify Site Configuration", "Add Allow Vars", and "View System Information". 
-            </xar:mlstring>
-            <ul>
-                <li><xar:mlstring>Modify Site Configuration -- Allows you to set certain global configuration routines for configuration throughout.  Each routine is explained in the online help.</xar:mlstring></li>
+<div class="xar-mod-body" style="display:block;">
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
+    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>The Base Module controls the behind the scenes processing for your Xaraya installation.</xar:mlstring>
+		</div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>From the menu, you have one choice. </xar:mlstring>
+			<ul>
                 <li><xar:mlstring>View System Information -- Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td align="left" valign="top" width="100px">
-            <b><xar:mlstring>Included Blocks</xar:mlstring></b>
-        </td>
-        <td align="left" valign="top">
-            <b>
-            <xar:mlstring>
-            RSS Block
-            </xar:mlstring>
+			<ul>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			<xar:mlstring>RSS Class</xar:mlstring>
             </b>
-            <br /><br />
-            <xar:mlstring>The RSS Block is using </xar:mlstring><a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914"> <xar:mlstring> PHP feedParser </xar:mlstring> </a><xar:mlstring> as its backend.   The notes for the feedParser by Reverend Jim are as follows</xar:mlstring>:
-            <br />
-            <br />
-            <xar:mlstring>
+			<p><xar:mlstring>The RSS capabilities in Xaraya is using </xar:mlstring><a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914"> <xar:mlstring> PHP feedParser </xar:mlstring> </a><xar:mlstring> as its backend.   The notes for the feedParser by Reverend Jim are as follows</xar:mlstring>:</p>
+            <p><xar:mlstring>
             feedParser was created due to the lack of a good, flexible, class-based RSS feed parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92, RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description, link, and creator. For items it grabs the title, description, link, and date. It also provides a form of the date converted into the local timezone to facilitate cronological sorting of items. The dates are provided in UNIX timestamp format for easy manipulation by other PHP functions. </xar:mlstring>
-            <br /><br />
+			</p>
             <b>
             <xar:mlstring>
             Expire a Block
@@ -50,11 +41,18 @@
             <xar:mlstring>
             Currently, the HTML and Text blocks can both expire content if you wish.  If you have a message that you would like to only have visable for a certain period of time, you can expire the block.  This functionality can be used in conjuction with any placement or block group that you assign the block.
             </xar:mlstring>
-
-            <br /><br />
-            <xar:mlstring>TODO -- Finish overview.</xar:mlstring>
-        </td>
-    </tr>
-</table>
-</div>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>The Base Module has no hooks included at this time.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+        </div>
+    </div>
 </div>

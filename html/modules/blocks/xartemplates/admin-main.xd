@@ -1,28 +1,51 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
-<div style="margin: auto;">
-<table border="0" width="100%">
-    <tr>
-        <td align="right" valign="top" width="100px">
-            <b><xar:mlstring>What is it?</xar:mlstring></b>
-        </td>
-        <td align="left" valign="top">
+<div class="xar-mod-body" style="display:block;">
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
+    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
+        <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
+            <img src="modules/blocks/xarimages/admin.gif" alt="official icon" width="39" height="41" />
+        </div>
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of each "block" on your website.  The Blocks module is a standard module within Xaraya, and cannot be removed.</xar:mlstring>
-        </td>
-    </tr>
-    <tr>
-        <td align="right" valign="top" width="100px">
-            <b><xar:mlstring>How to use it?</xar:mlstring></b>
-        </td>
-        <td align="left" valign="top">
-            <xar:mlstring>
-			From the menu, you have six choices. 
-			</xar:mlstring>
-
-			
-			<xar:mlstring>TODO -- Finish overview.</xar:mlstring>
-        </td>
-    </tr>
-</table>
-</div>
+		</div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>From the menu, you have five choices. </xar:mlstring>
+			<ul>
+				<li><xar:mlstring>View Types -- View the current block types that are installed on your system and what module they are extending</xar:mlstring></li>
+				<li><xar:mlstring>View Instances -- View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
+				<li><xar:mlstring>View Groups -- View the current block groups that you have installed on your system.  A block group is used for positioning in the templates.</xar:mlstring></li>
+				<li><xar:mlstring>Add instance -- Add a new block instance to be displayed on your site.</xar:mlstring></li>
+				<li><xar:mlstring>Add Group -- Add a new block group for template positioning.</xar:mlstring></li>
+			<ul>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			<xar:mlstring>The Blocks Module has no blocks included at this time.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>The Blocks Module has no hooks included at this time.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+        </div>
+    </div>
 </div>

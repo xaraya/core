@@ -1,6 +1,60 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Overview</xar:mlstring></h2><br />
-<div style="margin: auto;">
-#$help#
-</div>
+<div class="xar-mod-body" style="display:block;">
+    <h2><xar:mlstring>Overview</xar:mlstring></h2>
+    <div style="border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 1px;">
+        <div style="float:right;display:block;background-color:##ffffff;padding:10px;">
+            <img src="modules/privileges/xarimages/admin.gif" alt="official icon" width="39" height="41" />
+        </div>
+        <div class="xar-mod-title" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>What is it?</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>The Privileges module lets you manage <b>access rights</b> on your site.  Privileges give roles access to certain resources of your choosing. They are the basic components of the security system.</xar:mlstring></p>
+			<xar:mlstring>Here are some of the things you can do with privileges</xar:mlstring>:
+			<ul>
+			<li><xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring></li>
+			<li><xar:mlstring>You can use privileges as building blocks. Assemble them into compound privileges tailored to any specific role on the site.</xar:mlstring></li>
+			<li><xar:mlstring>You can assign privileges to roles which then pass them on to their children in the roles hierarchy through inheritance.</xar:mlstring></li>
+			<li><xar:mlstring>Using the realms functionality you can subdivide one site into many "virtual" sites sharing the same resources.</xar:mlstring></li>
+			</ul>
+
+		</div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>How to use it?</xar:mlstring>
+        </div>
+        <br />
+         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring></p>
+			<p><xar:mlstring>When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges</xar:mlstring></p>
+			<p><xar:mlstring>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These are</xar:mlstring>:</p>
+                <ul>
+                    <li><xar:mlstring><b>NoAccess</b>: a privileges that represents no access to any resources on the site. This privilege is assigned to the role Everybody by the installer.</xar:mlstring></li>
+                    <li><xar:mlstring><b>Administration</b>: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring></li>
+                    <li><xar:mlstring><b>CasualAccess</b>: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring></li>
+					<xar:mlstring>The preconfigured privileges cannot be changed or removed. You can, however, use them as elements to create compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges you can create or their levels of nesting.</xar:mlstring>
+                </ul>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Blocks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+			<xar:mlstring>There are no included blocks</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-mod-title" style="margin-left: 1em; margin-right: 1em; width: auto; border-width: 1px; border-color: ##B3B3B3; border-style: none none dotted none;">
+            <xar:mlstring>Included Hooks</xar:mlstring>
+        </div>
+        <br />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <xar:mlstring>There are no included hooks.</xar:mlstring>
+        </div>
+        <br />
+        <div class="xar-accent" style="text-align: center; border-width: 1px; border-style: solid; border-color: ##B3B3B3; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+        </div>
+    </div>
 </div>
