@@ -54,19 +54,9 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         $data['value']=$value;
         $data['name']=$name;
         $data['id']=$id;
-
-       /*return '<input type="checkbox"'.
-               ' name="' . $name . '"' .
-               ' value="1"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               (!empty($value) ? ' checked="checked"' : '') .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
-        $data['checked']=!empty($value) ? ' checked="checked"' :'';
-        $data['tabindex']=!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-        $data['invalid'] = !empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['checked']=!empty($value) ? true : false;
+        $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
+        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
         $template="checkbox";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
