@@ -451,30 +451,17 @@ function xarVar_addSlashes($var)
 
 function xarVar__getAllowedTags($level)
 {
-    static $restricted = NULL;
-    static $basic = NULL;
-    static $enhanced = NULL;
-    switch ($level) {
-        case 'restricted':
-            if ($restricted == NULL) {
-                $restricted = unserialize('a:15:{s:3:"!--";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:2:"em";i:1;s:2:"hr";i:1;s:1:"i";i:1;s:2:"li";i:1;s:2:"ol";i:1;s:1:"p";i:2;s:3:"pre";i:1;s:6:"strong";i:1;s:2:"tt";i:1;s:2:"ul";i:1;}');
-            }
-            return $restricted;
-        break;
-        case 'basic':
-            if ($basic == NULL) {
-                $basic = unserialize('a:21:{s:3:"!--";i:2;s:1:"a";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:3:"div";i:1;s:2:"em";i:1;s:2:"hr";i:2;s:1:"i";i:2;s:2:"li";i:2;s:2:"ol";i:2;s:1:"p";i:2;s:3:"pre";i:2;s:6:"strong";i:2;s:2:"tt";i:2;s:2:"ul";i:2;s:5:"table";i:2;s:2:"td";i:2;s:2:"th";i:2;s:2:"tr";i:2;}');
-            }
-            return $basic;
-        break;
-        case 'enhanced':
-            if ($enhanced == NULL) {
-                $enhanced = unserialize('a:21:{s:3:"!--";i:2;s:1:"a";i:2;s:1:"b";i:2;s:10:"blockquote";i:2;s:2:"br";i:1;s:6:"center";i:1;s:3:"div";i:2;s:2:"em";i:1;s:2:"hr";i:2;s:1:"i";i:2;s:2:"li";i:2;s:2:"ol";i:2;s:1:"p";i:2;s:3:"pre";i:2;s:6:"strong";i:2;s:2:"tt";i:2;s:2:"ul";i:2;s:5:"table";i:2;s:2:"td";i:2;s:2:"th";i:2;s:2:"tr";i:2;}');
-            }
-            return $enhanced;
-        break;
+    // Get the allowed HTML from the config var.  At some 
+    // point this will be replaced by retrieving the
+    // allowed HTML from the HTML module.
+    $allowedHTML = array();
+    foreach (xarConfigGetVar('Site.Core.AllowableHTML') as $k=>$v) {
+        if ($v) {
+            $allowedHTML[] = $k;
+        }
     }
-    return array();
+
+    return $allowedHTML;
 }
 
 /**
