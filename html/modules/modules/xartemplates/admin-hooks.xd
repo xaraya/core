@@ -4,47 +4,47 @@
     <p><xar:mlstring>Extend the functionality of your modules via one of the following available hooks :</xar:mlstring></p>
     <p><xar:mlstring>Select the hook module providing the extra functionality and then check the boxes of the modules you would like to enable that functionality in. (e.g. select "comments" and then check "articles" to enable comments in the articles module)</xar:mlstring></p>
     <ul>
-    <xar:loop name="$hookmodules">
-        <li><a href="#$modlink#">#$modname#</a> : #$modtitle#</li>
-        <xar:if condition="$modname eq $curhook">
+    <xar:loop id="hookmodules" name="$hookmodules">
+        <li><a href="#$loop:hookmodules:item['modlink']#">#$loop:hookmodules:item['modname']#</a> : #$loop:hookmodules:item['modtitle']#</li>
+        <xar:if condition="$loop:hookmodules:item['modname'] eq $curhook">
             <xar:mlstring>Use this functionality in the following modules</xar:mlstring>: [ <a href="#$DetailsURL#">#$DetailsLabel#</a> ]<br />
             <xar:if condition="count($hooktypes) gt 0">
                 <br />
                 <xar:mlstring>This module offers the following hooks</xar:mlstring>:<br />
                 <ul>
-                <xar:loop name="$hooktypes">
-                    <li>#$hooktype#</li>
+                <xar:loop id="hooktypes" name="$hooktypes">
+                    <li>#$loop:hooktypes:item['hooktype']#</li>
                 </xar:loop>
                 </ul>
             </xar:if>
             <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
-                <xar:loop name="$hookedmodules">
-                    <xar:if condition="!empty($header)">
-                        <br /><b>#$header#</b><br />
+                <xar:loop id="hookedmodules" name="$hookedmodules">
+                    <xar:if condition="!empty($loop:hookedmodules:item['header'])">
+                        <br /><b>#$loop:hookedmodules:item['header']#</b><br />
                     </xar:if>
-                    <xar:if condition="!empty($checked[0])">
-                        <input type="checkbox" name="hooked_#$name#[0]" id="hooked_#$name#[0]" value="1" checked="checked" style="vertical-align: middle;" />
+                    <xar:if condition="!empty($loop:hookedmodules:item['checked'][0])">
+                        <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[0]" id="hooked_#$loop:hookedmodules:item['name']#[0]" value="1" checked="checked" style="vertical-align: middle;" />
                     <xar:else />
-                        <input type="checkbox" name="hooked_#$name#[0]" id="hooked_#$name#[0]" value="1" style="vertical-align: middle;" />
+                        <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[0]" id="hooked_#$loop:hookedmodules:item['name']#[0]" value="1" style="vertical-align: middle;" />
                     </xar:if>
-                    <xar:if condition="count($itemtypes) gt 0">
-                        <label for="hooked_#$name#[0]"><xar:mlstring>all</xar:mlstring> #$name# : #$description# </label><br />
+                    <xar:if condition="count($loop:hookedmodules:item['itemtypes']) gt 0">
+                        <label for="hooked_#$loop:hookedmodules['name']#[0]"><xar:mlstring>all</xar:mlstring> #$loop:hookedmodules:item['name']# : #$loop:hookedmodules:item['description']# </label><br />
                         <div style="padding-left: 2em;">
                         <xar:mlstring>or for individual item types</xar:mlstring> :<br />
-                        <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
+                        <xar:foreach in="$loop:hookedmodules:item['itemtypes']" key="$loop:hookedmodules:item['typeid']" value="$loop:hookedmodules:item['itemtype']">
                             &nbsp;&nbsp;
-                            <xar:if condition="!empty($checked[$typeid])">
-                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" checked="checked" style="vertical-align: middle;" />
+                            <xar:if condition="!empty($loop:hookedmodules:item['checked'][$loop:hookedmodules:item['typeid']])">
+                                <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" id="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" value="1" checked="checked" style="vertical-align: middle;" />
                             <xar:else />
-                                <input type="checkbox" name="hooked_#$name#[#$typeid#]" id="hooked_#$name#[#$typeid#]" value="1" style="vertical-align: middle;" />
+                                <input type="checkbox" name="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" id="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]" value="1" style="vertical-align: middle;" />
                             </xar:if>
-                            <label for="hooked_#$name#[#$typeid#]">#$itemtype['label']#</label><br />
+                            <label for="hooked_#$loop:hookedmodules:item['name']#[#$loop:hookedmodules:item['typeid']#]">#$loop:hookedmodules:item['itemtype']['label']#</label><br />
                         </xar:foreach>
                         </div>
                     <xar:else />
-                        <label for="hooked_#$name#[0]">#$name# : #$description#</label><br />
+                        <label for="hooked_#$loop:hookedmodules:item['name']#[0]">#$loop:hookedmodules:item['name']# : #$loop:hookedmodules:item['description']#</label><br />
                     </xar:if>
                 </xar:loop>
                 <br />

@@ -24,31 +24,31 @@
             <xar:loop name="$hooklist">
             <tr>
                 <td>
-                <label for="hooks_#$modname#[0]">
-                    #$modname#
+                <label for="hooks_#$loop:item['modname']#[0]">
+                    #$loop:item['modname']#
                 </label>
-                <xar:if condition="$details eq 1">
+                <xar:if condition="$loop:item['details'] eq 1">
                     <br /><br />
                     <div style="padding-left: 2em;">
-                    <xar:foreach in="$hooks" key="$hook">
+                    <xar:foreach in="$loop:item['hooks']" key="$hook">
                         &nbsp;&nbsp;#$hook#<br />
                     </xar:foreach><br />
                     </div>
                 </xar:if>
                 </td>
                 <td style="text-align: center;">
-                <xar:if condition="!empty($checked[0])">
-                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" checked="checked" />
+                <xar:if condition="!empty($loop:item['checked'][0])">
+                    <input type="checkbox" name="hooks_#$loop:item['modname']#[0]" id="hooks_#$loop:item['modname']#[0]" value="1" checked="checked" />
                 <xar:else />
-                    <input type="checkbox" name="hooks_#$modname#[0]" id="hooks_#$modname#[0]" value="1" />
+                    <input type="checkbox" name="hooks_#$loop:item['modname']#[0]" id="hooks_#$loop:item['modname']#[0]" value="1" />
                 </xar:if>
                 </td>
             <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
                 <td style="text-align: center;">
-                <xar:if condition="!empty($checked[$typeid])">
-                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" checked="checked" />
+                <xar:if condition="!empty($loop:item['checked'][$typeid])">
+                    <input type="checkbox" name="hooks_#$loop:item['modname']#[#$typeid#]" id="hooks_#$loop:item['modname']#[#$typeid#]" value="1" checked="checked" />
                 <xar:else />
-                    <input type="checkbox" name="hooks_#$modname#[#$typeid#]" id="hooks_#$modname#[#$typeid#]" value="1" />
+                    <input type="checkbox" name="hooks_#$loop:item['modname']#[#$typeid#]" id="hooks_#$loop:item['modname']#[#$typeid#]" value="1" />
                 </xar:if>
                 </td>
             </xar:foreach>

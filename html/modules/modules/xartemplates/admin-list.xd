@@ -119,22 +119,22 @@
                         </th>
                     </tr>
                     <xar:loop name="$listrowsitems">
-<!--                         <xar:if condition="$coremod and $hidecore"> -->
+<!--                         <xar:if condition="$loop:item['coremod'] and $hidecore"> -->
                             <!--- skip the row --->
 <!--                         <xar:else /> -->
                             <tr>
                                 <td class="xar-norm-outline xar-mod-title" style="vertical-align: middle; text-align: left; padding-left: 10px; margin:auto; height: 20px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                     <!--- just an anchor --->
-                                    <a name="#$displayname#" id="#$displayname#" style="text-decoration:none">&nbsp;</a>
+                                    <a name="#$loop:item['displayname']#" id="#$loop:item['displayname']#" style="text-decoration:none">&nbsp;</a>
                                     <!--- if module is active and configurable (admin type) make its name a link to module main admin function --->
-                                    <xar:if condition="$modconfigurl ne ''">
-                                        <a href="#$modconfigurl#" title="#$adminurltitle##$displayname#">#$displayname#</a>
+                                    <xar:if condition="$loop:item['modconfigurl'] ne ''">
+                                        <a href="#$loop:item['modconfigurl']#" title="#$loop:item['adminurltitle']##$loop:item['displayname']#">#$loop:item['displayname']#</a>
                                     <xar:else />
-                                        #$displayname#
+                                        #$loop:item['displayname']#
                                     </xar:if>
                                 </td>
                                 <td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
-                                    #$version#
+                                    #$loop:item['version']#
                                 </td>
                                 <td class="xar-norm-outline" style="text-align: center;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;">
                                     <xar:mlstring>N/A</xar:mlstring>
@@ -143,20 +143,20 @@
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="info" id="info" value="#$infolabel#" />
                                     <xar:elseif condition="$selstyle eq 'icons'" />
-                                        <a href="#$infourlnew#&theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                        <a href="#$loop:item['infourlnew']#&theme=print" target="_new"><img src="#$loop:item['infoimg']#" alt="#$infolabel#" /></a>
                                         <noscript>
-                                            <a href="#$infourl#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
+                                            <a href="#$loop:item['infourl']#"><img src="#$loop:item['infoimg']#" alt="#$infolabel#" /></a>
                                         </noscript>
                                     <xar:else />
-                                        <a href="#$infourlnew#&theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
+                                        <a href="#$loop:item['infourlnew']#&theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
                                         <noscript>
-                                            <a href="#$infourl#"><xar:mlstring>Info</xar:mlstring></a>
+                                            <a href="#$loop:item['infourl']#"><xar:mlstring>Info</xar:mlstring></a>
                                         </noscript>
                                     </xar:if>
                                 </td>
                                 <td class="xar-norm-outline" style="text-align: right;width: 100px;border-width: 0px 0px 1px 0px;border-style: dotted;vertical-align: middle;">
                                     <div style="padding-right: 10px;">
-                                        #$statelabel#
+                                        #$loop:item['statelabel']#
                                     </div>
                                 </td>
                                 <td class="xar-norm-outline" style="text-align: left;border-width: 0px 0px 1px 0px;border-style: dotted;white-space: nowrap;">
@@ -184,28 +184,28 @@
                                             </noscript>
                                         </xar:if>
                                     <xar:elseif condition="$selstyle eq 'icons'"/>
-                                            <xar:if condition="$actionurl eq ''">
-                                                <img src="#$actionimg1#" alt="#$actionlabel#" />
+                                            <xar:if condition="$loop:item['actionurl'] eq ''">
+                                                <img src="#$actionimg1#" alt="#$loop:item['actionlabel']#" />
                                             <xar:else />
-                                                <a href="#$actionurl#"><img src="#$actionimg1#" alt="#$actionlabel#" /></a>
+                                                <a href="#$loop:item['actionurl']#"><img src="#$loop:item['actionimg1']#" alt="#$loop:item['actionlabel']#" /></a>
                                             </xar:if>
-                                            <xar:if condition="$removeurl eq ''">
-                                                <img src="#$actionimg2#" alt="#$actionlabel#" />
+                                            <xar:if condition="$loop:item['removeurl'] eq ''">
+                                                <img src="#$loop:item['actionimg2']#" alt="#$loop:item['actionlabel']#" />
                                             <xar:else />
-                                                <a href="#$removeurl#"><img src="#$actionimg2#" alt="#$actionlabel2#" /></a>
+                                                <a href="#$loop:item['removeurl']#"><img src="#$loop:item['actionimg2']#" alt="#$loop:item['actionlabel2']#" /></a>
                                             </xar:if>
                                     <xar:else />
                                         <div style="padding-left: 10px;">
                                             <xar:if condition="$coremod">
                                                 <xar:if condition="$state eq 5 or $state eq 2">
-                                                    <a href="#$actionurl#">#$actionlabel#</a>
+                                                    <a href="#$loop:item['actionurl']#">#$loop:item['actionlabel']#</a>
                                                 <xar:else />
-                                                    #$actionlabel#
+                                                    #$loop:item['actionlabel']#
                                                 </xar:if>
                                             <xar:else />
-                                                <a href="#$actionurl#">#$actionlabel#</a>
-                                                <xar:if condition="$state eq 2">
-                                                    | <a href="#$removeurl#">#$removelabel#</a>
+                                                <a href="#$loop:item['actionurl']#">#$loop:item['actionlabel']#</a>
+                                                <xar:if condition="$loop:item['state'] eq 2">
+                                                    | <a href="#$loop:item['removeurl']#">#$loop:item['removelabel']#</a>
                                                 </xar:if>
                                             </xar:if>
                                         </div>
@@ -215,9 +215,9 @@
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="edit" id="edit" value="Edit" />
                                     <xar:elseif condition="$selstyle eq 'icons'"/>
-                                        <a href="#$editurl#"><img src="#$editimg#" alt="#$edit#" /></a>
+                                        <a href="#$loop:item['editurl']#"><img src="#$loop:item['editimg']#" alt="#$loop:item['edit']#" /></a>
                                     <xar:else />
-                                        <a href="#$editurl#">#$edit#</a>
+                                        <a href="#$loop:item['editurl']#">#$loop:item['edit']#</a>
                                     </xar:if>
                                 </td>
                             </tr>
