@@ -247,19 +247,33 @@ function installer_admin_phase5()
     }
 
     $dbconn = ADONewConnection($dbDriver);
-    switch($dbType) {
-        case 'sqlite':
-            $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
-            break;
-        default:
-            $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass);
+    $dbExists = TRUE;
+
+    // Not all Database Servers support selecting the specific db *after* connecting
+    // so let's try connecting with the dbname first, and then without if that fails
+    $dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName);
+
+    if (!$dbConnected) {
+        // Couldn't connect to the specified dbName. Let's try connecting without dbName now
+        // Need to reset dbconn prior to trying just a normal connection or we'll have 
+        // unexpected results
+        unset($dbconn);
+        $dbconn = ADONewConnection($dbDriver);
+
+        if ($dbConnected = @$dbconn->Connect($dbHost, $dbUname, $dbPass)) {
+            $dbExists = FALSE;
+        } else {
+            $dbConnected = FALSE;
+            $dbExists = FALSE;
+        }
     }
+
     if (!$dbConnected) {
         $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.');
         xarCore_die($msg);
         return;
     }
-    $dbExists = @$dbconn->SelectDB($dbName);
+
     if (!$createDB && !$dbExists) {
         $msg = xarML('Database #(1) doesn\'t exist and it wasnt selected to be created.', $dbName);
         xarCore_die($msg);
