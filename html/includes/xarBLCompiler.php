@@ -699,28 +699,19 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $token .= '(';
                     break;
                 }
-                // We expect a variable after the # now or a function   
-                if ($nextToken == XAR_TOKEN_VAR_START || $nextToken == 'x') {
-                    // Check if we have a function in here
-                    if($nextToken == 'x'){
-                        $temptoken = $nextToken . $this->getNextToken(2);
-                        if($temptoken == XAR_FUNCTION_PREFIX){
-                            $tagcounter = 0;
-                            $func = XAR_FUNCTION_PREFIX;
-                            while(1) {
-                                $tagtoken = $this->getNextToken();
-                                $tagcounter++;
-                                if($tagtoken == '(' || $tagtoken == XAR_TOKEN_CI_DELIM){ break; }
-                                $func .= $tagtoken;
-                            }
-                            // Only allow xar* functions
-                            if(!function_exists($func) && substr($func,0,3) != XAR_FUNCTION_PREFIX ){
-                                $this->raiseError(XAR_BL_INVALID_TAG,"Invalid or disallowed API call: $func", $this);
-                                return;
-                            }
-                            $this->stepBack($tagcounter + 2);
-                        }
+                $this->stepBack();
+                
+                // Get what what is between #.....#
+                if ($nextToken == XAR_TOKEN_VAR_START || $nextToken == 'x') { // for href="#" for example
+                    $between = $this->windTo(XAR_TOKEN_CI_DELIM);
+                    if(!isset($between)) {
+                        // set an exception and return
+                        $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
+                        return; // throw back
                     }
+                    $this->getNextToken(); // eat the matching #
+                    $instruction = $between;
+                    
                     if (!$parent->hasChildren()) {
                         $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
                         return;
@@ -731,7 +722,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $trimmer='noop'; 
                     // FIXME: The above is wrong, should be xmltrim, 
                     // but otherwise the export of DD objects will look really ugly 
-                    
                     if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
                     if ($trimmer($text) != '') {
                         if ($parent->hasText()) {
@@ -742,26 +732,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         $text = '';
                     }
-                    $instruction = $nextToken;
-                    $distance = 0;
-                    while (true) {
-                        $nextToken = $this->getNextToken();
-                        $distance++;
-                        if (!isset($token)) {
-                            $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-                            return;
-                        } elseif ($nextToken == XAR_TOKEN_CI_DELIM) {
-                            // We seem to be at the end, stop here.
-                            break;
-                        } elseif ($this->peek() == chr(10)) {
-                            $this->stepBack($distance);
-                            $this->raiseError(XAR_BL_INVALID_TAG,"Misplaced '". XAR_TOKEN_CI_DELIM .
-                                              "' character. To print the literal '".XAR_TOKEN_CI_DELIM.
-                                              "', use '".XAR_TOKEN_CI_DELIM.XAR_TOKEN_CI_DELIM."'.", $this);
-                            return;
-                        }
-                        $instruction .= $nextToken;
-                    }
 
                     // Replace XML entities with their ASCII equivalents.
                     // An XML parser would do this for us automatically.
@@ -770,25 +740,22 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         array('&', '>', '<', '"'),
                         $instruction
                     );
+                    
                     // The following is a bit of a sledge-hammer approach. See bug 1273.
-                    // TODO: allow unparsed entities through without triggering the 'injected PHP' error.
                     // TODO: parse the PHP so the semi-colon can be tested in context.
                     if (strpos($instruction, ';')) {
                         $this->raiseError(XAR_BL_INVALID_TAG, "Injected PHP detected in: $instruction", $this);
                         return;
                     }
+                    
                     // Instruction is now set to $varname or xarFunction(.....)
                     $node = $this->nodesFactory->createTplInstructionNode($instruction, $this);
                     if (!isset($node)) return; // throw back
 
                     $children[] = $node;
                     $token = '';
-                    break;
-                }
-                else {
-                    $this->stepBack();
-                    break;
-                }
+                } 
+                break;
             } // end switch
             // Once we get here, nothing in the switch caught the token, we copy verbatim to output.
             $text .= $token;
@@ -1592,6 +1559,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid variable reference instruction.', $this);
             return;
         }
+        // FIXME: Can we pre-determine here whether a variable exist?
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
         if (!isset($instruction)) return; // throw back
 
@@ -1616,7 +1584,12 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
         }
         $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
         if (!isset($instruction)) return; // throw back
-
+        
+        $funcName = substr($instruction, 0, strpos($instruction, '('));
+        if(!function_exists($funcName)) {
+            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.', $this);
+            return;
+        }
         return $instruction;
     }
 }
