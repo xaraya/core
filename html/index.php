@@ -51,14 +51,6 @@ function xarMain()
         xarTplSetThemeName($themeName);
     }
 
-	// onPageView event would go here
-// 	if (xarModIsAvailable('sniffer')) {
-// 		xarModAPIFunc('sniffer','user','sniff');
-// 		if(xarModIsAvailable('stats')) {
-// 			xarModAPIFunc('stats', 'user', 'count');
-// 		}
-// 	}
-
     // Load the module
     if (!xarModLoad($modName, $modType)) return; // throw back
 
@@ -118,9 +110,12 @@ function xarMain()
     //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
-    // Handle exceptions
+    // We're all done, one ServerRequest made
+    xarEvt_Fire('ServerRequest');
+
+    // Handle exceptions (the bubble at the top handler)
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
-    xarEvt_Fire('StartBodyTag');
+    
     echo $pageOutput;
 
     return true;
