@@ -645,17 +645,7 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
     // <nuncanada> But now we wont know if something was loaded or not!
     // <nuncanada> We need some way to find it out.
     if (file_exists($fileName)) {
-        // Load file
-        ob_start();
-        $r = include_once($fileName);
-        $error_msg = strip_tags(ob_get_contents());
-        ob_end_clean();
-
-        if (empty($r) || !$r) {
-            $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
-            return;
-        }
+        xarInclude($fileName);
 
         // Make sure we access the case with lower case key
         $loadedModuleCache[strtolower("$modName$modType")] = true;
@@ -674,20 +664,14 @@ function xarModPrivateLoad($modName, $modType, $flags = XARMOD_LOAD_ANYSTATE)
     // Load the module translations files
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType) === NULL) return;
 
+    //Try to load PN style translations -- Bridge mechanism -- Should disappear later on
+    //How to find out what language is being used and what is the correspondent in pn style?
+    $fileName = "modules/$modDir/pnlang/eng/$modType.php";
+    if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
+
     // FIXME: <marco> Remove it when the old language packs are gone
     $fileName = "modules/$modDir/xarlang/eng/$modType.php";
-    if (file_exists($fileName)) {
-        ob_start();
-        $r = include_once($fileName);
-        $error_msg = strip_tags(ob_get_contents());
-        ob_end_clean();
-
-        if (empty($r) || !$r) {
-            $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
-            return;
-        }
-    }
+    if (!xarInclude($fileName, XAR_INCLUDE_MAY_NOT_EXIST)) {return;}
 
     // Load database info
     xarMod__loadDbInfo($modName, $modDir);

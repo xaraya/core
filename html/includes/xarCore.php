@@ -85,6 +85,12 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
+/*
+ * xarInclude flags
+ */
+define ('XAR_INCLUDE_ONCE', 1);
+define ('XAR_INCLUDE_MAY_NOT_EXIST', 2);
+
 /**
  * Initializes the core engine
  *
@@ -422,7 +428,7 @@ function xarCoreActivateDebugger($flags)
  * to the log, otherwise they are just hidden
  *
  */
-function xarCore__assertHandler($script,$line,$code) 
+function xarCore__assertHandler($script,$line,$code)
 {
     // Redirect the assertion to a system exception
     $msg = "ASSERTION FAILED: $script [$line] : $code";
@@ -532,20 +538,29 @@ function xarCore_getSiteVar($name)
 
 }
 
-
 /**
  * Load a file and capture any php errors
  *
  * @access public
  * @param  string $fileName name of the file to load
- * @param  bool   $once     can this file only be loaded once, or multiple times?
+ * @param  bool   $flags    can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE and  XAR_INCLUDE_MAY_NOT_EXIST are the possible flags right now, INCLUDE_MAY_NOT_EXISTS makes the function succeed even in te absense of the file
  * @return bool   true if file was loaded successfully, false on error (with exception set)
  */
-function xarInclude($fileName, $once=false) {
+function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE) {
+
+    if (!file_exists($fileName)) {
+        if ($flags & XAR_INCLUDE_MAY_NOT_EXIST) {
+            return true;
+        } else {
+            $msg = xarML("Could not load file: [#(1)].", $fileName);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
+            return false;
+        }
+    }
 
     ob_start();
 
-    if ($once) {
+    if ($flags & XAR_INCLUDE_ONCE) {
         $r = include_once($fileName);
     } else {
         $r = include($fileName);
@@ -555,7 +570,8 @@ function xarInclude($fileName, $once=false) {
     ob_end_clean();
 
     if (empty($r) || !$r) {
-        $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $funcFile, $error_msg);
+        $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD', $msg);
         return false;
     }
 
