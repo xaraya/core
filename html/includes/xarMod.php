@@ -1107,7 +1107,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 function xarModGetDisplayableName($modName)
 {
     $modInfo = xarMod_getFileInfo($modName);
-    return xarML($modInfo['name']);
+    return xarML($modInfo['displayname']);
 }
 
 /**
@@ -1495,6 +1495,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
     $FileInfo['id']             = $version['id'];
+    if (isset($version['displayname'])) $FileInfo['displayname']    = $version['displayname'];
+    else $FileInfo['displayname']    = $version['name'];
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
     $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
