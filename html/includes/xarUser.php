@@ -195,9 +195,6 @@ function xarUserLogOut()
     // get the current userid before logging out
     $userId = xarSessionGetVar('uid');
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
     // Reset user session information
     $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
     if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
