@@ -795,15 +795,16 @@ function dynamicdata_createPropDefTable()
 	//Load Table Maintenance API
 	xarDBLoadTableMaintenanceAPI();
 
-	$propdefs = array('xar_dd_id'   => array('type'        => 'integer',
-											  'null'        => false,
-											  'default'     => '0',
-											  'increment'   => true,
-											  'primary_key' => true),
+
+    $propdefs = array('xar_prop_id'   => array('type'        => 'integer',
+                                               'null'        => false,
+                                               'default'     => '0',
+                                               'increment'   => true,
+                                               'primary_key' => true),
 				/* the name of this property */
 					'xar_prop_name'   => array('type'        => 'varchar',
-											  'size'        => 254,
-											  'default'     => NULL),
+                                               'size'        => 254,
+                                               'default'     => NULL),
 				/* the label of this property */
 					'xar_prop_label'   => array('type'        => 'varchar',
 											  'size'        => 254,
@@ -853,7 +854,7 @@ function dynamicdata_createPropDefTable()
 
 		// Create the Table - the function will return the SQL is successful or
 		// raise an exception if it fails, in this case $query is empty
-		$query = xarDBCreateTable($$dynamic_properties_def,$propdefs);
+		$query = xarDBCreateTable($dynamic_properties_def,$propdefs);
 		if (empty($query)) return false; // throw back
 		$result = $dbconn->Execute($query);
 		if (!isset($result)) return false;
