@@ -232,6 +232,7 @@ function installer_admin_phase5()
         }
     }
     else {
+        $data['confirmDB']  = $confirmDB;
         if(!$confirmDB) {
             $data['dbHost']     = $dbHost;
             $data['dbName']     = $dbName;
@@ -240,7 +241,6 @@ function installer_admin_phase5()
             $data['dbPrefix']   = $dbPrefix;
             $data['dbType']     = $dbType;
             $data['createDb']   = $createDb;
-            $data['confirmDB']  = $confirmDB;
             return $data;
         }
     }
