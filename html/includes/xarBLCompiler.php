@@ -1698,7 +1698,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
                            new xarTpl__ParserError('Missing \'name\' attribute in <xar:loop> tag.', $this));
             return;
         }
-        $name = xarTpl__ExpressionTransformer::transformBLExpression($name);
+        $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
         if (!isset($name)) {
             return; // throw back
         }
