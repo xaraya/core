@@ -171,22 +171,22 @@ textarea {
 }
 
 /* input types and form elements rules can be accurately re-specified for good browsers */
-input[type="text"],
-input[type="password"],
-input[type="file"],
-form * textarea { width: 90%; }
-select[multiple="multiple"] { width: 45%; }
+/* input[type="text"], */
+/* input[type="password"], */
+/* input[type="file"], */
+/* textarea { width: 90%; } */
+/* select[multiple="multiple"] { width: 45%; } */
 
-input[type="submit"] {
-    border-color: #dddddd #aaaaaa #aaaaaa #dddddd;
-    background-color: #eeeeee;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-    width: auto;
-    margin: auto 3px;
-}
+/* input[type="submit"] { */
+/*     border-color: #dddddd #aaaaaa #aaaaaa #dddddd; */
+/*     background-color: #eeeeee; */
+/* } */
+/*  */
+/* input[type="checkbox"], */
+/* input[type="radio"] { */
+/*     width: auto; */
+/*     margin: auto 3px; */
+/* } */
 
 /*
 replaced elements 
@@ -295,7 +295,8 @@ module rendering area and related rules
     font-weight: bold;
 }
 
-.xar-mod-body { padding: .3em .6em; }
+.xar-mod-body { padding: .3em 0;}
+* html .xar-mod-body {width:97%;}
  /* andyv and random are two crazies who want ie5 to work properly */
  * html .xar-mod-body {width:90%;}
  .xar-mod-foot { }
