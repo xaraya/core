@@ -5,9 +5,6 @@
         </th>
     </tr>
 </table>
-        </td>
-    </tr>
-</table>
 
 <div align="center"><h2>Delete Block Group</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-delete_group;">

@@ -5,10 +5,6 @@
         </th>
     </tr>
 </table>
-        </td>
-    </tr>
-</table>
-
 <div align="center"><h2>Delete Block Instance</h2><br />
 <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
