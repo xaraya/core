@@ -33,6 +33,23 @@ function dynamicdata_admin_modify($args)
     $data['itemid'] = $itemid;
     $data['authid'] = xarSecGenAuthKey();
 
+    $modinfo = xarModGetInfo($myobject->moduleid);
+    $item = array();
+    foreach (array_keys($myobject->properties) as $name) {
+        $item[$name] = $myobject->properties[$name]->value;
+    }
+    $item['module'] = $modinfo['name'];
+    $item['itemtype'] = $myobject->itemtype;
+    $item['itemid'] = $myobject->itemid;
+    $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
+    if (empty($hooks)) {
+        $data['hooks'] = '';
+    } elseif (is_array($hooks)) {
+        $data['hooks'] = join('',$hooks);
+    } else {
+        $data['hooks'] = $hooks;
+    }
+
     return $data;
 }
 

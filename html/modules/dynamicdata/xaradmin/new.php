@@ -31,17 +31,25 @@ function dynamicdata_admin_new($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    $data['object'] = new Dynamic_Object(array('objectid' => $objectid,
-                                               'moduleid' => $modid,
-                                               'itemtype' => $itemtype,
-                                               'itemid'   => $itemid));
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+
+    $data['object'] =& $myobject;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
+    $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
-    $item['module'] = 'dynamicdata';
-    $hooks = xarModCallHooks('item','new','',$item);
+    foreach (array_keys($myobject->properties) as $name) {
+        $item[$name] = $myobject->properties[$name]->value;
+    }
+    $item['module'] = $modinfo['name'];
+    $item['itemtype'] = $myobject->itemtype;
+    $item['itemid'] = $myobject->itemid;
+    $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
     if (empty($hooks)) {
         $data['hooks'] = '';
     } elseif (is_array($hooks)) {

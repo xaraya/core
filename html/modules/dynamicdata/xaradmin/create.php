@@ -11,16 +11,15 @@ function dynamicdata_admin_create($args)
 
     extract($args);
 
+// FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
+//        or relies on $myobject or other stuff like that...
+
     if (!xarVarFetch('objectid',    'id',       $objectid,   NULL,                               XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('modid',       'notempty', $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype',    'notempty', $itemtype,   0,                                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid',      'notempty', $itemid,     0,                                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('preview',     'notempty', $preview,    0,                                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url',  'notempty', $return_url,
-                     xarModURL('dynamicdata', 'admin', 'view',
-                               array('itemid' => $myobject->objectid)), XARVAR_NOT_REQUIRED)) return;
-
-
+    if (!xarVarFetch('modid',       'isset', $modid,      xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'isset', $itemtype,   0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid',      'isset', $itemid,     0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('preview',     'isset', $preview,    0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -37,6 +36,24 @@ function dynamicdata_admin_create($args)
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
+
+        $modinfo = xarModGetInfo($myobject->moduleid);
+        $item = array();
+        foreach (array_keys($myobject->properties) as $name) {
+            $item[$name] = $myobject->properties[$name]->value;
+        }
+        $item['module'] = $modinfo['name'];
+        $item['itemtype'] = $myobject->itemtype;
+        $item['itemid'] = $myobject->itemid;
+        $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
+        if (empty($hooks)) {
+            $data['hooks'] = '';
+        } elseif (is_array($hooks)) {
+            $data['hooks'] = join('',$hooks);
+        } else {
+            $data['hooks'] = $hooks;
+        }
+
         return xarTplModule('dynamicdata','admin','new', $data);
     }
 
@@ -44,7 +61,12 @@ function dynamicdata_admin_create($args)
 
     if (empty($itemid)) return; // throw back
 
-    xarResponseRedirect($return_url);
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array('itemid' => $myobject->objectid)));
+    }
 
     // Return
     return true;

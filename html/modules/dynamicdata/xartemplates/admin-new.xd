@@ -35,6 +35,8 @@
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
         <xar:data-form object="$object" />
+
+        #$hooks#
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" name="preview" value="#xarML('Preview')#" />
