@@ -2,7 +2,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2><br />
 <div style="margin: auto;">
 
-<script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"/>
+<script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"></script>
 
 <div align="center">
 <form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
