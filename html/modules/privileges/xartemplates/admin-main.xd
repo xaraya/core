@@ -30,7 +30,7 @@
          <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p><xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring></p>
 			<p><xar:mlstring>When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges</xar:mlstring></p>
-			<p><xar:mlstring>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you choose. Examples are</xar:mlstring>:</p>
+			<p><xar:mlstring>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are</xar:mlstring>:</p>
                 <ul>
                     <li><xar:mlstring><b>Administration</b>: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring></li>
                     <li><xar:mlstring><b>CasualAccess</b>: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring></li>
