@@ -6,7 +6,7 @@
 <xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
-<xar:link-module-stylesheet name="base" file="navtabs" />
+<xar:link-module-stylesheet modname="base" filename="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>

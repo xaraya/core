@@ -2,7 +2,7 @@
 <xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
-<xar:link-module-stylesheet name="base" file="navtabs" />
+<xar:link-module-stylesheet modname="base" filename="navtabs" />
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-body">
     <div class="xar-mod-head">

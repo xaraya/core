@@ -14,7 +14,7 @@
     </h2>
 
     <xar:if condition="!empty($objectid)">
-        <xar:link-module-stylesheet name="base" file="navtabs" />
+        <xar:link-module-stylesheet modname="base" filename="navtabs" />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">

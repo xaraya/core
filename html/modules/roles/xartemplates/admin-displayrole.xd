@@ -1,5 +1,5 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:link-module-stylesheet name="base" file="navtabs" />
+<xar:link-module-stylesheet modname="base" filename="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span>
 </div>
