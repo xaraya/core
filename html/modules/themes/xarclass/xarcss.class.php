@@ -321,17 +321,21 @@ class xarCSS
         require_once "csspath.class.php";
 
         // make sure current module is known in advance
-        if(!isset($this->compname)) $this->compname = xarCSSPath::currentmoddir();
+        if(!isset($this->compname)) {
+            $path = new xarCSSPath($this);
+            $this->compname = $path->currentmoddir();
+        }
 
         // check and return
+        $inspector = new cssFileInspector($this);
         switch($this->comptype)
         {
             case "common":
             case "module":
-                return cssFileInspector::verified_module_csspath();
+                return $inspector->verified_module_csspath();
                 break;
             case "theme":
-                return cssFileInspector::verified_theme_csspath();
+                return $inspector->verified_theme_csspath();
                 break;
             default:
                 // unrecognised
