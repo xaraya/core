@@ -4,16 +4,16 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 ?>
 
 <rss version="2.0">
-<channel>
-<title>&xar-config-sitename;</title>
-<link><?php echo xarVarPrepForDisplay(xarGetBaseURL()) ?></link>
-<description>&xar-config-backend_title;</description>
-<language>&xar-config-locale;</language>
-<copyright>&xar-config-copyright;</copyright>
-<managingEditor>&xar-config-manemail;</managingEditor>
-<webMaster>&xar-config-adminmail;</webMaster>
-<generator>Xaraya 1.0</generator>
-<docs>http://backend.userland.com/rss</docs>
-<xar:module id="modulespace" main="true" />
-</channel>
+	<channel>
+		<title>#xarConfigGetVar('SiteName')#</title>
+		<link>#xarServerGetBaseURL()#</link>
+		<description>#xarConfigGetVar('Site.Core.MetaDescription')#</description>
+
+		<copyright>#xarConfigGetVar('CopyRight')#</copyright>
+		<managingEditor>#xarModGetVar('mail', 'adminname')# , #xarModGetVar('mail', 'adminmail')#</managingEditor>
+		<webMaster>#xarModGetVar('mail', 'adminname')# , #xarModGetVar('mail', 'adminmail')#</webMaster>
+		<generator>Xaraya 1.0</generator>
+		<docs>http://backend.userland.com/rss</docs>
+			<xar:module id="modulespace" main="true" />
+	</channel>
 </rss>
