@@ -19,7 +19,11 @@
         </xar:foreach>
         <td>
             <xar:foreach in="$links[$itemid]" value="$option">
-                #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+                <xar:if condition="!empty($option['olink'])">
+                    #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+                <xar:else/>
+                    #$option['ojoin']# #$option['otitle']#
+                </xar:if>
             </xar:foreach>
         </td>
     </tr>
