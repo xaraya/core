@@ -453,19 +453,19 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
     // Make << and >> do paging properly
     // Display subset of pages if large number
 
-    $out = '';
+    $data = array();
 
     // Show startnum link
     if ($startnum != 1) {
         $url = preg_replace('/%%/', 1, $urltemplate);
         xarVarSetCached('Pager.first','leftarrow',$url);
-        $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => $url));
+        $data['beginurl'] = $url;
     } else {
-        $out .= xarTplModule('base','user', 'pagerbegin', array('arrowurl' => ''));
+        $data['beginurl'] = '';
     }
-    $out .= ' ';
 
     // Show following items
+    $data['middleurls'] = array();
     $pagenum = 1;
 
     for ($curnum = 1; $curnum <= $total; $curnum += $perpage)
@@ -474,22 +474,23 @@ function xarTplGetPager($startnum, $total, $urltemplate, $perpage = 10)
         {
             // Not on this page - show link
             $url = preg_replace('/%%/', $curnum, $urltemplate);
-            $out .= xarTplModule('base','user', 'pagermiddle', array('numberurl' => $url, 'pagenum' => $pagenum));
+            $data['middleurls'][$pagenum] = $url;
         } else {
             // On this page - show text
-            $out .= xarTplModule('base','user', 'pagermiddle', array('pagenum' => $pagenum, 'numberurl' => ''));
+            $data['middleurls'][$pagenum] = '';
         }
         $pagenum++;
     }
+
     if (($curnum >= $perpage+1) && ($startnum < $curnum-$perpage)) {
         $url = preg_replace('/%%/', $curnum-$perpage, $urltemplate);
         xarVarSetCached('Pager.last','rightarrow',$url);
-        $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => $url));
+        $data['endurl'] = $url;
     } else {
-        $out .= xarTplModule('base','user', 'pagerending', array('arrowurl' => ''));
+        $data['endurl'] = '';
     }
 
-    return $out;
+    return xarTplModule('base','user', 'pager', $data);
 }
 
 /**
@@ -795,6 +796,61 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Fetch output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
+
+    // Return output
+    return $output;
+}
+
+/**
+ * Load template from file (e.g. for use with recurring template snippets someday,
+ * using xarTplString() to "fill in" the template afterwards)
+ * 
+ * @access private
+ * @global xarTpl_cacheTemplates bool
+ * @param sourceFileName string
+ * @return mixed
+ */
+function xarTpl__loadFromFile($sourceFileName)
+{
+    $needCompilation = true;
+
+    if ($GLOBALS['xarTpl_cacheTemplates']) {
+        $varDir = xarCoreGetVarDirPath();
+        $cacheKey = md5($sourceFileName);
+        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
+        if (file_exists($cachedFileName)
+            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
+            $needCompilation = false;
+        }
+    }
+
+    if (!file_exists($sourceFileName) && $needCompilation == true) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
+        return;
+    }
+
+    //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
+    if ($needCompilation) {
+        $blCompiler = xarTpl__getCompilerInstance();
+        $templateCode = $blCompiler->compileFile($sourceFileName);
+        if (!isset($templateCode)) {
+            return; // exception! throw back
+        }
+        if ($GLOBALS['xarTpl_cacheTemplates']) {
+            $fd = fopen($cachedFileName, 'w');
+            fwrite($fd, $templateCode);
+            fclose($fd);
+            // Add an entry into CACHEKEYS
+            $varDir = xarCoreGetVarDirPath();
+            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
+            fclose($fd);
+        }
+        return $templateCode;
+    }
+
+    // Load cached template file
+    $output = implode('', file($cachedFileName));
 
     // Return output
     return $output;

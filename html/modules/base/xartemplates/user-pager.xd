@@ -1,0 +1,17 @@
+<xar:if condition="!empty($beginurl)">
+	<a href="#$beginurl#">&lt;&lt;</a>
+<xar:else />
+	&lt;&lt;
+</xar:if>
+<xar:foreach in="$middleurls" key="$pagenum" value="$numberurl">
+<xar:if condition="!empty($numberurl)">
+	&nbsp;<a href="#$numberurl#">#$pagenum#</a>&nbsp;
+<xar:else />
+	&nbsp;#$pagenum#&nbsp;
+</xar:if>
+</xar:foreach>
+<xar:if condition="!empty($endurl)">
+	<a href="#$endurl#">&gt;&gt;</a>
+<xar:else />
+	&gt;&gt;
+</xar:if>
