@@ -83,6 +83,11 @@
 	</tr>
 	<tr>
 		<td>
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<xar:loop name="$trees">
 				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
 					<tr>

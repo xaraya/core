@@ -272,7 +272,7 @@ function drawbranch($node){
 
 // this next table holds the Delete, Users and Privileges links
 // don't allow deletion of certain roles
-	if(($object['pid'] < 5) || ($object['users'] > 0) || (!$drawchildren)) {
+	if(($object['pid'] < 9) || ($object['users'] > 0) || (!$drawchildren)) {
 		$this->html .= $this->bigblank;
 	}
 	else {

@@ -63,10 +63,13 @@
 		<td>
 			&nbsp;            
 		</td>
-		<td width="50">
+		<td width="20">
 			&nbsp;            
 		</td>
-		<td width="50">
+		<td width="20">
+			&nbsp;            
+		</td>
+		<td width="20">
 			&nbsp;            
 		</td>
 	</tr>
@@ -97,20 +100,18 @@
 				<td>
 					&nbsp;
 				</td>
-				<td width="50" align="right">
+				<td>
 					<xar:if condition="$pid gt 4">
-						<a href="&xar-modurl-roles-admin-deleterole;&amp;ppid=#$pid#" title="Delete this User">				
-							&nbsp;Delete&nbsp;    
-						</a>
+						<a href="&xar-modurl-roles-admin-deleterole;&amp;ppid=#$pid#" title="Delete this User"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 					<xar:else />
 						&nbsp;
 					</xar:if>
 				</td>
-				<td width="60" align="right">
+				<td>
 					<a href="&xar-modurl-roles-admin-showprivileges;&amp;ppid=#$pid#"
 					title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
-				<td width="30" align="right">
+				<td>
 					<a href="&xar-modurl-roles-admin-testprivileges;&amp;ppid=#$pid#"
 					 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>

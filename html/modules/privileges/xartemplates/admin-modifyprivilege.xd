@@ -334,6 +334,18 @@ document.forms[0].submit();}
 <table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
+			<a href="&xar-modurl-privileges-admin-newprivilege;">
+				<xar:mlstring>Add Privilege</xar:mlstring>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<xar:loop name="$trees">
 				<table border="0" cellspacing="2" cellpadding ="0" width="100%">
 					<tr>
