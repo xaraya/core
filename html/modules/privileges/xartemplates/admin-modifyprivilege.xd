@@ -33,7 +33,7 @@ document.forms['privilegeform'].submit();}
 		<input type="hidden" name="pid" id="pid" value="#$ppid#" />
 		
 		<table border="0" cellpadding="5">
-			<xar:if condition="$ppid lt 3">
+		<xar:if condition="$ppid le xarModGetVar('privileges','frozenprivileges')">
 				<tr>
 					<td>
 						<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
