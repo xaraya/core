@@ -84,6 +84,11 @@ function adminpanels_init()
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'mail', 'Global', 0, 1);";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $id = $dbconn->GenId($adminMenuTable);
     $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'authsystem', 'Global', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
