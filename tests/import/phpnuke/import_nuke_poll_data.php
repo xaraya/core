@@ -33,7 +33,8 @@
     $num = 1;
     while (!$result->EOF) {
         list($pid,$text,$count,$vid) = $result->fields;
-        if ($text === '') {
+        // Check for both default and CHAR(50) data
+        if ($text === '' || $text === '                                                  ') {
             $num++;
             $result->MoveNext();
             continue;

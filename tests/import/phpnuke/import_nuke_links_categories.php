@@ -31,16 +31,22 @@
     }
     while (!$result->EOF) {
         list($id, $parent, $title, $descr) = $result->fields;
-        if (!isset($weblinks[$parent])) {
-            echo "Oops, missing parent $parent for category ($id) $title<br/>\n";
-            $result->MoveNext();
-            continue;
+    
+        // See if there is parent category associated with this category
+        if (!isset($parent)) {
+            // Set parent category to the weblinks category we just created
+            $parent = $weblinks[0];
+        } else {
+            // TODO:
+            // Find the parent category in xar_categories as it won't
+            // have the same cat_id
         }
+
         $weblinks[$id] = xarModAPIFunc('categories', 'admin', 'create', array(
                                       'name' => $title,
                                       'description' => $descr,
                                  //     'image' => "$imgurl/topics/$image",
-                                      'parent_id' => $weblinks[$parent]));
+                                      'parent_id' => $parent));
         echo "Creating web link category ($id) $title - $descr<br/>\n";
         $result->MoveNext();
     }

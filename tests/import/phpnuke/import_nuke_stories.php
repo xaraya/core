@@ -130,6 +130,16 @@
         $result->MoveNext();
     }
     $result->Close();
+
+    // If we're importing to the PostgreSQL database, then we need
+    // to create a sequence value for seqxar_articles that starts
+    // at the last sid from nuke_stories.  Otherwise the next import
+    // into xar_articles will fail because the aid already exists.
+    // This isn't a problem for MySQL as it has an auto_increment column.
+    if ($dbtype == 'postgres') {
+        $dbconn->GenID($tables['articles'], $aid);
+    }
+
     //echo "<strong>TODO : add comments etc.</strong><br/><br/>\n";
     echo '<a href="import_nuke.php">Return to start</a>&nbsp;&nbsp;&nbsp;';
     if ($count > $numitems && $startnum + $numitems < $count) {
