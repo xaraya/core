@@ -1,26 +1,420 @@
-body                 {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px; BACKGROUND-COLOR: #FFFFFF; COLOR: #000000; MARGIN-TOP: 0; MARGIN-LEFT: 0; MARGIN-RIGHT: 0;}
+/* XARAYA REQUIRED CLASSES */
+A {
+   text-decoration: none;
+   color: #6A5ACD;
+   font-weight: bold;
+}
+A:hover {
+   color: #003366;
+}
+BLOCKQUOTE {
+   color: #191970;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   margin: 2em;
+}
+BODY {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   background-color: #FFFFFF;
+}
+CODE {
+   color: #191970;
+   font-size: 9.5pt;
+   font-family: Courier,fixed-width;
+}
+H1 {
+   color: #191970;
+   font-size: 14pt;
+   font-weight: bolder;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+H2 {
+   color: #191970;
+   font-size: 12.5pt;
+   font-weight: bolder;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: 1px solid #191970;
+   line-height: 170%;
+}
+H3 {
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 100%;
+}
+H4 {
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: 1px solid #191970;
+   line-height: 170%;
+}
+TH {
+   color: #000000;
+   font-size: 11pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-weight: bolder;
+   background-color:#CDD5F8;
+}
+TD {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+TABLE {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+THEAD {}
+TBODY {}
+TFOOT {
+   color: #000000;
+   font-size: 11pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-weight: bolder;
+   background-color:#CDD5F8;
+}
+P {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+PRE {
+   color: #191970;
+   font-size: 9.5pt;
+   font-family: Courier,fixed-width;
+}
+INPUT {
+   background-color: #f0f0f0;
+   border-bottom-width: 1px;
+   border-color: #000000;
+   border-left-width: 1px;
+   border-right-width: 1px;
+   border-top-width: 1px;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   font-weight: normal;
+   text-indent: 2px;
+   color: #191970;
+}
+BUTTON {
+   border: 2px outset #f0f0f0;
+   background-color: #CDD5F8;
+   color: #191970;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
 
-FONT                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-TD                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-P                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-DIV                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-INPUT                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-TEXTAREA             {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-FORM                      {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
-SELECT                     {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 11px;}
+SELECT {
+   background-color: #f0f0f0;
+   border-bottom-width: 1px;
+   border-color: #000000;
+   border-left-width: 1px;
+   border-right-width: 1px;
+   border-top-width: 1px;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   font-weight: normal;
+   color: #191970;
+}
+TEXTAREA {
+   background-color: #f0f0f0;
+   border-bottom-width: 1px;
+   border-color: #000000;
+   border-left-width: 1px;
+   border-right-width: 1px;
+   border-top-width: 1px;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   font-weight: normal;
+   text-indent: 0px;
+   color: #191970;
+}
+IMG {
+   border: 0px;
+}
+LI {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+UL {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+OL {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+SUP {
+   font-size: 6.5pt;
+}
+SUB {
+   font-size: 6.5pt;
+}
 
-A:link               {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; TEXT-DECORATION: underline; BACKGROUND: none;  font-variant : normal;  font-weight : bold;  }
-A:active             {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; TEXT-DECORATION: underline; BACKGROUND: none;  font-variant : normal; font-weight : bold; }
-A:visited            {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; TEXT-DECORATION: underline; BACKGROUND: none;  font-variant : normal; font-weight : bold; }
-A:hover              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #1E90FF; FONT-SIZE: 11px; TEXT-DECORATION: underline; BACKGROUND: none;  font-variant : normal; font-weight : bold; }
-.note            {FONT-FAMILY: "Times New Roman", Times, serif; COLOR: #006699; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none; BACKGROUND: none;}
-.title                      {FONT-FAMILY: Verdana, Geneva, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none; BACKGROUND: none;}
-.storytitle              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #363636; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none; BACKGROUND: none;}
-.boxtitle              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: none; font-variant : normal; BACKGROUND: none;}
-.option              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #6495ED; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none; BACKGROUND: none;}
-.storycat             {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: underline; BACKGROUND: none;}
-.tiny                     {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 10px; FONT-WEIGHT: normal; TEXT-DECORATION: none; BACKGROUND: none;}
-.slogan                     {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #C5DFF0; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: none; BACKGROUND: none;  font : small-caps; }
-.content              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; BACKGROUND: none;}
-.boxcontent              {FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #333333; FONT-SIZE: 11px; BACKGROUND: none;}
 
+/*  THEME SPECIFIC CLASSES */
+H5, H6 {
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+HR {
+   width:100%;
+   color:#C0C0C0;
+}
+FORM {
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+}
+CHECKBOX {
+   background-color: transparent;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   font-weight: normal;
+}
+
+/*  XARAYA REQUIRED INDIVIDUAL CLASSES */
+TD.xar-norm {}
+TD.xar-alt {}
+
+
+/*  XARAYA REQUIRED ANONYMOUS CLASSES  */
+
+/* these defaults apply to the left block group */
+.xar-block-head{
+    border-bottom: 1px solid #191970;
+    color: #191970;
+}
+.xar-block-title {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 11pt;
+}
+.xar-block-body {}
+.xar-block-foot {
+    border-bottom: 2px dotted #dddddd;
+    margin-bottom: 8px;
+}
+
+/* right block group classes */
+.xar-block-head-right{
+    border: 1px solid #E47C55;
+    background-color: #efefef;
+}
+.xar-block-title-right {
+    font-weight: bold;
+    font-size: 11pt;
+}
+.xar-block-body-right {}
+.xar-block-foot-right {
+    border-bottom: 2px solid #cccccc;
+    margin-bottom: 8px;
+}
+
+/* topnav block group classes */
+.xar-block-head-topnav{}
+.xar-block-title-topnav {}
+.xar-block-body-topnav {
+    margin: auto;
+    border: 1px solid #CCE6FF;
+}
+.xar-block-foot-topnav {}
+
+/* center block group classes */
+.xar-block-head-center{
+    background-image: url(../images/sh_line.gif);
+    height: 6px;
+    width: 100%;
+    background-position: center center;
+    background-repeat: repeat-y;
+}
+.xar-block-title-center {
+    color: #E47C55;
+    background-color: inherit;
+    font-weight: bold;
+    font-size: 11pt;
+    text-align: center;
+}
+.xar-block-body-center {
+    background-color: #CCE6FF;
+}
+.xar-block-foot-center {
+    background-image: url(../images/sh_line.gif);
+    height: 3px;
+    width: 100%;
+    background-position: center center;
+    background-repeat: repeat-y;
+    margin-bottom: 4px;
+}
+
+.xar-mod-head {
+   border: 2px solid #a0a0a0;
+   background-color: #CDD5F8;
+   padding: 3px;
+   text-align: center;
+   font-weight: bold;
+   font-size: 11pt;
+}
+.xar-mod-title {
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+.xar-mod-body {}
+.xar-mod-foot {}
+.xar-alt {background-color: #E47C55; }
+.xar-accent {background-color: #CCE6FF; }
+.xar-alt-outline {border: 1px solid #E47C55; }
+.xar-accent-outline {border: 1px solid #CCE6FF; }
+.xar-norm-outline {border: 1px solid #c0c0c0; }
+.xar-norm {background-color: #FFFFFF; }
+.xar-sub {font-size: smaller;}
+.xar-menu-section {
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: thin dotted #a0a0a0;
+   line-height: 170%;
+   width: 100%;
+   margin-top: 4px;
+   margin-bottom: 4px;
+}
+.xar-menu-section-current {
+   background-color: #CCE6FF;
+   color: #191970;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: 1px solid #191970;
+   line-height: 170%;
+}
+.xar-menu-item {
+   font-size: 9.5pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   padding-left: .5em;
+}
+.xar-menu-item-current {
+   background-color: #CCE6FF;
+   font-size: 9.5pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   padding-left: .5em;
+   padding-bottom: .3em;
+}
+.xar-menu-item:hover {
+   background-color: #f0f0f0;
+}
+.xar-menu-subitem {
+   font-size: 9pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   margin-left: 6px;
+   padding-left: 0px;
+}
+.xar-menu-subitem:hover {
+   background-color: #CDD5F8;
+}
+.xar-menu-subitem-current {
+   font-weight: bold;
+   color: #000000;
+   background-color: #f0f0f0;
+   font-size: 9pt;
+   margin-left: 6px;
+   padding-left: 0px;
+}
+.xar-menu-item-current > .xar-menu-subitem > A {
+   color: #193970;
+}
+.xar-menu-item-current > .xar-menu-subitem > A:visited {
+   color: #003366;
+}
+
+.xar-error {
+   color: #FF0000;
+}
+
+/*  THEME SPECIFIC ANONYMOUS CLASSES  */
+.txttitle {
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   color:#336699;
+   text-decoration: none;
+}
+.sidebtns {
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   color:#336699;
+   text-decoration: none;
+}
+.subhead {
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   color:#60A9F0;
+   text-decoration: none;
+}
+.btns {
+   text-decoration: none;
+   background-color:#FFD800;
+   color:#000000;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+}
+.busbtns {
+   text-decoration: none;
+   background-color:#85B8EA;
+   color:#000000;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+}
+.blk {
+   text-decoration: none;
+   color:#000000;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+}
+.LightUp {
+   background-color:#CFE5FA;
+   color:#FFFFFF;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   text-decoration: none;
+}
+.LightDown {
+   background-color:#FFFFFF;
+   color:#336699;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 9.5pt;
+   text-decoration: none;
+}
+.formUp {
+   background-color:#E3F1FF;
+}
+.copyright {
+   font-size: 9pt;
+   line-height: 150%;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}

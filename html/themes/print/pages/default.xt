@@ -1,10 +1,10 @@
+<?xar type="page" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>&xar-config-sitename; :: &xar-config-slogan;</title>
+        <xar:blockgroup name="header" id="header" />
+        <title>#$tpl:pageTitle#</title>
         <base href="&xar-baseurl;index.php">
-        <link rel="StyleSheet" href="themes/print/style/styleNN.css" type="text/css">
         <style type="text/css">@import url(&xar-baseurl;themes/print/style/style.css); </style>
     </head>
     <body>
