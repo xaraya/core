@@ -97,7 +97,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
 
         $data=array();
         // TODO: use redirect function here ?
-        if (!empty($value)) {
+        if (!empty($value) && $value != 'http://') {
             $data['value'] = xarVarPrepForDisplay($value);
             //return '<a href="'.$value.'">'.$value.'</a>';
 

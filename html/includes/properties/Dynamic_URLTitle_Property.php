@@ -198,7 +198,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         }
 
         $data['value']   = $this->value;
-        $data['link']    = (!empty($link)) ? $link : '';
+        $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
         $template="urltitle";

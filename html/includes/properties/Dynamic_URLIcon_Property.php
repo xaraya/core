@@ -102,7 +102,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         $data=array();
 
     // TODO: use redirect function here ?
-        if (!empty($value)) {
+        if (!empty($value) && $value != 'http://') {
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
             if (!empty($this->icon)) {
