@@ -197,8 +197,14 @@ function installer_admin_phase5()
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
 
     if ($dbName == '') {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-             new SystemException("No database was specified"));
+        $msg = xarML('No database was specified');
+        xarCore_die($msg);
+        return;
+    }
+    // allow only a-z 0-9 and _ in table prefix
+    if (!preg_match('/^\w*$/',$dbPrefix)) {
+        $msg = xarML('Invalid character in table prefix');
+        xarCore_die($msg);
         return;
     }
     // Save config data
