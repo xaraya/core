@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic Calendar Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic TColor Picker Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Class for dynamic calendar property
@@ -37,6 +44,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
 
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
@@ -67,7 +75,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
             'base','javascript','modulefile',
             array('module' => 'base', 'filename' => 'tcolorpicker.js')
         );
-
+        /*
         // Create the tags.
         $output = '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.xarVarPrepForDisplay($value).'" size="' . $this->size . '" maxlength="' . $this->maxlength . '" />'
             . '<a href="javascript:TCP.popup(document.getElementById(\''.$id.'_input\'), 1)">'
@@ -77,17 +85,32 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         if (!empty($this->invalid)) {
             $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
         }
-        return $output;
+        */
+        $data['baseuri']   =xarServerGetBaseURI();
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['size']     = $this->size;
+        $data['maxlength']= $this->maxlength;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        $template="tcolorpicker";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+        //return $output;
     }
 
     function showOutput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (isset($value)) {
-            return xarVarPrepHTMLDisplay($value);
+            $data['value'] = xarVarPrepHTMLDisplay($value);
         } else {
-            return xarVarPrepHTMLDisplay($this->value);
+            $data['value'] = xarVarPrepHTMLDisplay($this->value);
         }
+         $template="tcolorpicker";
+         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
 }
