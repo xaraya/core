@@ -51,13 +51,13 @@
                 <xar:loop name="$contentlines">
                 <tr>
                     <td valign="top">
-                        <input type="text" name="linkname[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[1]#" class="xar-norm" />
+                        <input type="text" name="linkname[#$loop:index+1#]" size="30" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" class="xar-norm" />
                     </td>
                     <td valign="top">
-                        <input type="text" name="linkurl[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[0]#" class="xar-norm" />
+                        <input type="text" name="linkurl[#$loop:index+1#]" size="30" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" class="xar-norm" />
                     </td>
                     <td valign="top">
-                        <input type="text" name="linkdesc[#$loop:index+1#]" size="30" maxlength="255" value="#$loop:item[2]#" class="xar-norm" />
+                        <input type="text" name="linkdesc[#$loop:index+1#]" size="30" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" class="xar-norm" />
                     </td>
                     <td valign="top">
                         <input type="checkbox" name="linkdelete[#$loop:index+1#]" value="1" class="xar-norm" />
