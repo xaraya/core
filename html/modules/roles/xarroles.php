@@ -597,7 +597,7 @@ class xarRole {
         }
 
         $nextId = $this->dbconn->genID($this->rolestable);
-        $createdate = $this->dbconn->DBTimeStamp(mktime());
+        $createdate = mktime();
 
         if ($this->type == 1) {
             $nextIdprep = xarVarPrepForStore($nextId);
