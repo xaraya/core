@@ -23,7 +23,7 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-admin-modifytac;"><pnt:mlstring>Modify Terms and Conditions</pnt:mlstring></a>
+			Extra Link TaC Removed
         </td>
         <td align="center">
             <a href="&pnt-modurl-users-admin-modifyconfirmationemail;"><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></a>
