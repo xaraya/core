@@ -61,7 +61,7 @@ function roles_loginblock_display($blockinfo)
     // URL of this page
     $args['return_url'] = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL());
     $args['signinlabel']= xarML('Sign in');
-    $args['blockid'] = $blockinfo['bid'];
+    $args['blockid'] = !empty($blockinfo['bid']) ? $blockinfo['bid'] : $blockinfo['id'];
     if (empty($blockinfo['template'])) {
         $template = 'login';
     } else {
