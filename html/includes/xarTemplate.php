@@ -240,6 +240,16 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
     }
     return true;
 }
+/**
+ * Get page title
+ *
+ * @access public
+ * @return string
+ */
+function xarTplGetPageTitle()
+{
+    return $GLOBALS['xarTpl_pageTitle'];
+}
 
 /**
  * Add stylesheet link for a module
@@ -751,7 +761,6 @@ function xarTplCompileString($templateSource)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @global xarTpl_pageTitle string
  * @global xarTpl_additionalStyles string
  * @param mainModuleOutput stringthe module output
  * @param otherModulesOutput string
@@ -771,7 +780,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $tplData = array(
         '_bl_mainModuleOutput'     => $mainModuleOutput,
-        '_bl_page_title'           => $GLOBALS['xarTpl_pageTitle'],
+        '_bl_page_title'           => xarTplGetPageTitle(),
         '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
         '_bl_javascript'           => $GLOBALS['xarTpl_JavaScript']
     );
