@@ -84,7 +84,7 @@
 
 <!-- a language code, as per [RFC1766] -->
 <define name="LanguageCode.datatype">
-  <data type="language"/>
+  <data type="string"/>
 </define>
 
 <!-- a Uniform Resource Identifier, see [URI] -->
