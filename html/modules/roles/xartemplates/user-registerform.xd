@@ -2,7 +2,11 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Registration</xar:mlstring></h2>
 <div style="margin: auto;">
-<form action="#xarModURL('roles', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<xar:if condition="isset($withupload) AND $withupload">
+    <form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#" enctype="multipart/form-data">
+<xar:else />
+    <form method="post" name="post" id="post" action="#xarModURL('roles', 'user', 'register')#">
+</xar:if>
 <div>
 <table border="0" cellpadding="2" cellspacing="0">
 	<tr>
