@@ -6,11 +6,12 @@
 function roles_user_view()
 {
     // Get parameters
-    list($startnum,
-         $phase,
-         $filter) = xarVarCleanFromInput('startnum',
-                                         'phase',
-                                         'filter');
+    if(!xarVarFetch('startnum', 'int',   $startnum, NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('phase',    'str:1', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
+    //This $filter variables isnt being used for anything...
+    //It is set later on.
+//    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+
     $data['items'] = array();
 
     // Specify some labels for display
@@ -24,11 +25,6 @@ function roles_user_view()
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
-
-    if (empty($phase)){
-        $phase = 'active';
-
-    }
 
     switch(strtolower($phase)) {
 

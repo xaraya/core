@@ -250,6 +250,7 @@ function base_menublock_display($blockinfo)
 
                 $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods,
                                                              'indlinks'         => $indlinks,
+                                                             'blockid'          => $blockinfo['bid'],
                                                              'logouturl'        => $logouturl,
                                                              'logoutlabel'      => $logoutlabel,
                                                              'loggedin'         => $loggedin,

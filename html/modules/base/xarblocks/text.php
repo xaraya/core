@@ -90,6 +90,7 @@ function base_textblock_modify($blockinfo)
         $vars['expirein'] =  round($sooner);
     }
 
+    $vars['blockid'] = $blockinfo['bid'];
     $content = xarTplBlock('base', 'textAdmin', $vars);
 
     return $content;

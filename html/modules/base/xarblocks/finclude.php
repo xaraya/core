@@ -69,12 +69,13 @@ function base_fincludeblock_display($blockinfo)
 function base_fincludeblock_modify($blockinfo)
 {
     if (!empty($blockinfo['url'])) {
-        $url = $blockinfo['url'];
+        $args['url'] = $blockinfo['url'];
     } else {
-        $url = '';
+        $args['url'] = '';
     }
+    $args['blockid'] = $blockinfo['bid'];
 
-    $content = xarTplBlock('base','fincludeAdmin', array('url' => $url));
+    $content = xarTplBlock('base','fincludeAdmin', $args);
 
     return $content;
 }

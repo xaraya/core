@@ -394,40 +394,48 @@ function xarVarPrepHTMLDisplay()
                             ";&#064;&#" .
                             sprintf("%03d", ord("\\2")) . ";";');
 
-    static $allowedHTML = NULL;
+    static $allowedtags = NULL;
 
     if (!isset($allowedHTML)) {
         $allowedHTML = array();
         foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
             if ($k == '!--') {
                 if ($v <> 0) {
-                    $allowedHTML[] = "|<($k.*?--)>|s";
+                    $allowedHTML[] = "$k.*?--";
                 }
             } else {
                 switch($v) {
                     case 0:
                         break;
                     case 1:
-                        $allowedHTML[] = "|<(/?$k)\s*/?>|i";
+                        $allowedHTML[] = "/?$k\s*/?";
                         break;
                     case 2:
-                        $allowedHTML[] = "|<(/?$k(\s+[^>]*)?)/?>|i";
+                        $allowedHTML[] = "/?$k(\s+[^>]*)?/?";
                         break;
                 }
             }
+        }
+        if (count($allowedHTML) > 0) {
+            $allowedtags = '~<(' . join('|',$allowedHTML) . ')>~is';
+        } else {
+            $allowedtags = '';
         }
     }
 
     $resarray = array();
     foreach (func_get_args() as $var) {
         // Preparse var to mark the HTML that we want
-        $var = preg_replace($allowedHTML, "\022\\1\024", $var);
+        if (!empty($allowedtags))
+            $var = preg_replace($allowedtags, "\022\\1\024", $var);
 
         // Prepare var
         $var = htmlspecialchars($var);
         $var = preg_replace($search, $replace, $var);
+//        $var = strtr($var,array('@' => '&#064;'));
 
         // Fix the HTML that we want
+/*
         $var = preg_replace('/\022([^\024]*)\024/e',
                                "'<' . strtr('\\1',
                                             array('&gt;' => '>',
@@ -435,6 +443,10 @@ function xarVarPrepHTMLDisplay()
                                                   '&quot;' => '\"',
                                                   '&amp;' => '&'))
                                . '>';", $var);
+*/
+        $var = preg_replace_callback('/\022([^\024]*)\024/',
+                                     'xarVarPrepHTMLDisplay__callback',
+                                     $var);
 
         // Fix entities if required
         if ($GLOBALS['xarVar_fixHTMLEntities']) {
@@ -451,6 +463,16 @@ function xarVarPrepHTMLDisplay()
     } else {
         return $resarray;
     }
+}
+
+function xarVarPrepHTMLDisplay__callback($matches)
+{
+    return '<' . strtr($matches[1],
+                       array('&gt;' => '>',
+                             '&lt;' => '<',
+                             '&quot;' => '"',
+                             '&amp;' => '&'))
+           . '>';
 }
 
 /**

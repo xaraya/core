@@ -95,17 +95,8 @@ function roles_loginblock_modify($blockinfo)
  */
 function roles_loginblock_update($blockinfo)
 {
-    list($vars['showlogout'],
-         $vars['logouttitle']) = xarVarCleanFromInput('showlogout',
-                                                    'logouttitle');
-
-    // Defaults
-    if (empty($vars['showlogout'])) {
-        $vars['showlogout'] = 0;
-    }
-    if (empty($vars['logouttitle'])) {
-        $vars['logouttitle'] = '';
-    }
+    if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], '', XARVAR_NOT_REQUIRED)) return;
 
     $blockinfo['content'] = serialize($vars);
 

@@ -149,6 +149,7 @@ function themes_metablock_modify($blockinfo)
         $vars['latitude'] = '';
     }
 
+    $vars['blockid'] = $blockinfo['bid'];
     $content = xarTplBlock('themes', 'metaAdmin', $vars);
 
     return $content;

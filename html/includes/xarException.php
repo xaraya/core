@@ -227,10 +227,11 @@ function xarExceptionSet($major, $exceptionId, $value = NULL)
         }
     }
 
-    $value->__stack = $stack;
-
     // Set new status
-    $GLOBALS['xarException_stack'][] = array ('major' => $major, 'exceptionId' => $exceptionId, 'value' => $value);
+    $GLOBALS['xarException_stack'][] = array ('major' => $major,
+                                              'exceptionId' => $exceptionId,
+                                              'value' => $value,
+                                              'stack' => $stack);
 
     // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
     // This can be useful in debugging since EHS is not so perfect as a native
@@ -361,7 +362,7 @@ function xarExceptionRender($format)
             if (method_exists($exception['value'], 'toHTML')) {
                 $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
             }
-            $stack = $exception['value']->__stack;
+            $stack = $exception['stack'];
             for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
@@ -384,7 +385,7 @@ function xarExceptionRender($format)
             if (method_exists($exception['value'], 'toString')) {
                 $text .= $exception['value']->toString();
             }
-            $stack = $exception['value']->__stack;
+            $stack = $exception['stack'];
             for ($i = 2, $j = 1; $i < count($stack); $i++, $j++) {
                 if (isset($stack[$i]['function'])) $function = $stack[$i]['function'];
                 else $function = '{}';
@@ -458,7 +459,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 
     // This will make us log the errors, still not break the script
     //if they are not supposed to    
-    if (!(error_reporting() & $errorType)) xarExceptionFree();
+    if (!(error_reporting() & $errorType)) xarExceptionHandled();
 }
 
 /**
