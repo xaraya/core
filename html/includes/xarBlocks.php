@@ -41,7 +41,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
-    if (defined('XARCACHE_IS_ENABLED') && file_exists($outputCachePath . 'cache.blocklevel')) {
+    if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
         xarCore_SetCached('xarcache', 'blockCaching', true);
     } else {
         xarCore_SetCached('xarcache', 'blockCaching', false);

@@ -59,7 +59,7 @@ function xarMain()
 
     // Check if page caching is enabled
     $pageCaching = 0;
-    if (defined('XARCACHE_IS_ENABLED') && file_exists('var/cache/output/cache.pagelevel')) {
+    if (defined('XARCACHE_PAGE_IS_ENABLED')) {
         $pageCaching = 1;
         $cacheKey = "$modName-$modType-$funcName";
     }

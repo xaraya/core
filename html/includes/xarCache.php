@@ -40,6 +40,16 @@ function xarCache_init($args)
         @unlink($cacheDir . '/cache.touch');
         return FALSE;
     }
+    
+    if (file_exists($cacheDir . '/cache.pagelevel')) {
+        define('XARCACHE_PAGE_IS_ENABLED',1);
+        require_once('includes/caching/page.php');
+    }
+
+    if (file_exists($cacheDir . '/cache.blocklevel')) {
+        define('XARCACHE_BLOCK_IS_ENABLED',1);
+        require_once('includes/caching/block.php');
+    }
 
     $xarOutput_cacheCollection = realpath($cacheDir);
     $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
@@ -64,7 +74,7 @@ function xarCache_init($args)
     // Session-less page caching (TODO: extend and place in separate function)
     if (!empty($cachingConfiguration['Page.SessionLess']) &&
         is_array($cachingConfiguration['Page.SessionLess']) &&
-        file_exists('var/cache/output/cache.pagelevel') &&
+        defined('XARCACHE_PAGE_IS_ENABLED') &&
     // we have no session id in a cookie or URL parameter
         empty($_REQUEST['XARAYASID']) &&
     // we're dealing with a GET request
@@ -138,320 +148,6 @@ function xarCache__shutdown_handler()
  */
 
 /**
- * check if the content of a page is available in cache or not
- *
- * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
- * @returns bool
- * @return true if the page is available in cache, false if not
- */
-function xarPageIsCached($cacheKey, $name = '')
-{
-    global $xarOutput_cacheCollection,
-           $xarPage_cacheTime,
-           $xarOutput_cacheTheme,
-           $xarPage_cacheDisplay,
-           $xarPage_cacheCode,
-           $xarPage_cacheGroups;
-
-    $xarTpl_themeDir = xarTplGetThemeDir();
-
-    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
-            xarUserGetNavigationLocale();
-
-    // add user groups as a factor if necessary
-    // Note : we don't share the cache between groups or with anonymous here
-    if (!empty($xarPage_cacheGroups) && xarUserIsLoggedIn()) {
-        $gidlist = xarCache_getParents();
-        $page .= join(';',$gidlist);
-    }
-
-    $page .= xarServerGetVar('REQUEST_URI');
-    $param = xarServerGetVar('QUERY_STRING');
-    if (!empty($param)) {
-        $page .= '?' . $param;
-    }
-    // use this global instead of $cache_file so we can cache several things
-    // based on different $cacheKey (and $name if necessary) in one page request
-    // - e.g. for module and block caching
-    $xarPage_cacheCode = md5($page);
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
-
-    if (strpos($cacheKey, '-user-') &&
-        !strpos($cacheKey, '-search') &&
-        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) ||
-         ($xarPage_cacheDisplay == 1)) &&
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) ||
-         strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
-        file_exists($cache_file) &&
-        filesize($cache_file) > 0 &&
-        ($xarPage_cacheTime == 0 ||
-         filemtime($cache_file) > time() - $xarPage_cacheTime) &&
-        xarPage_checkUserCaching()) {
-
-        // create another copy for session-less page caching if necessary
-        if (!empty($GLOBALS['xarPage_cacheNoSession'])) {
-            $cacheKey = 'static';
-            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file2 = "$xarOutput_cacheCollection/$cacheKey-$cacheCode.php";
-        // Note that if we get here, the first-time visitor will receive a session cookie,
-        // so he will no longer benefit from this himself ;-)
-            @copy($cache_file, $cache_file2);
-        }
-
-        xarPage_httpCacheHeaders($cache_file);
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Check whether a block is cached
- *
- * @access public
- * @param  array $args($cacheKey,$blockDynamics, $blockPermissions, $name = '')
- * @return bool
- */
-function xarBlockIsCached($args)
-{
-    global $xarOutput_cacheCollection,
-           $xarBlock_cacheCode,
-           $xarBlock_cacheTime,
-           $blockCacheExpireTime,
-           $xarBlock_noCache;
-    
-    $xarTpl_themeDir = xarTplGetThemeDir();
-    
-    extract($args);
-
-    if (xarCore_IsCached('Blocks.Caching', 'settings')) {
-        $blocks = xarCore_GetCached('Blocks.Caching', 'settings');
-    } else {
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $blocksettings = $systemPrefix . '_cache_blocks';
-        $dbconn =& xarDBGetConn();
-        $query = "SELECT xar_bid,
-                         xar_nocache,
-                         xar_page,
-                         xar_user,
-                         xar_expire
-                 FROM $blocksettings";
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-        $blocks = array();
-        while (!$result->EOF) {
-            list ($bid,
-                  $noCache,
-                  $pageShared,
-                  $userShared,
-                  $blockCacheExpireTime) = $result->fields;
-            $blocks[$bid] = array('bid'         => $bid,
-                                  'nocache'     => $noCache,
-                                  'pageshared'  => $pageShared,
-                                  'usershared'  => $userShared,
-                                  'cacheexpire' => $blockCacheExpireTime);
-            $result->MoveNext();
-        }
-        $result->Close();
-        xarCore_SetCached('Blocks.Caching', 'settings', $blocks);
-    }
-    if (isset($blocks[$blockid])) {
-        $noCache = $blocks[$blockid]['nocache'];
-        $pageShared = $blocks[$blockid]['pageshared'];
-        $userShared = $blocks[$blockid]['usershared'];
-        $blockCacheExpireTime = $blocks[$blockid]['cacheexpire'];
-    }
-
-    if (!empty($noCache)) {
-        $xarBlock_noCache = 1;
-        return false;
-    }
-    if (empty($pageShared)) {
-        $pageShared = 0;
-    }
-    if (empty($userShared)) {
-        $userShared = 0;
-    }
-    if (!isset($blockCacheExpireTime)) {
-        $blockCacheExpireTime = $xarBlock_cacheTime;
-    }
-
-    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
-               xarUserGetNavigationLocale();
-
-    if ($pageShared == 0) {
-        $factors .= xarServerGetVar('REQUEST_URI');
-        $param = xarServerGetVar('QUERY_STRING');
-        if (!empty($param)) {
-            $factors .= '?' . $param;
-        }
-    }
-
-    if ($userShared == 2) {
-        $factors .= 0;
-    } elseif ($userShared == 1) {
-        $gidlist = xarCache_getParents();
-        $factors .= join(';',$gidlist);
-    } else {
-        $factors .= xarSessionGetVar('uid');
-    }
-    
-    if (isset($blockinfo)) {
-        $factors .= md5(serialize($blockinfo));
-    }
-
-    $xarBlock_cacheCode = md5($factors);
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
-
-    if (
-        file_exists($cache_file) &&
-        ($blockCacheExpireTime == 0 ||
-         filemtime($cache_file) > time() - $blockCacheExpireTime)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * get the content of a cached page
- *
- * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
- * @returns mixed
- * @return content of the page, or void if page isn't cached
- */
-function xarPageGetCached($cacheKey, $name = '')
-{
-    global $xarOutput_cacheCollection, $xarPage_cacheCode;
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
-    @readfile($cache_file);
-
-    xarOutputCleanCached('Page');
-}
-
-/**
- * Get the output of a cached block
- *
- * @access public
- * @param  string $cacheKey
- * @param  string $name
- */
-function xarBlockGetCached($cacheKey, $name = '')
-{
-    global $xarOutput_cacheCollection, $xarBlock_cacheCode;
-    
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
-    
-    if (function_exists('file_get_contents')) {
-        $blockCachedOutput = file_get_contents($cache_file);
-    } else {
-        $blockCachedOutput = '';
-        $file = @fopen($cache_file, "rb");
-        if ($file) {
-            while (!feof($file)) $blockCachedOutput .= fread($file, 1024);
-            fclose($file);
-        }
-    }
-
-    return $blockCachedOutput;
-}
-
-/**
- * set the content of a cached page
- *
- * @access public
- * @param string $cacheKey the key identifying the particular cache you want to
- *                         access
- * @param string $name     the name of the page in that particular cache
- * @param string $value    value the new content for that page
- * @returns void
- */
-function xarPageSetCached($cacheKey, $name, $value)
-{
-    global $xarOutput_cacheCollection,
-           $xarPage_cacheTime,
-           $xarOutput_cacheTheme,
-           $xarPage_cacheDisplay,
-           $xarOutput_cacheSizeLimit,
-           $xarPage_cacheCode;
-    
-    $xarTpl_themeDir = xarTplGetThemeDir();
-    
-    if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
-
-    if (strpos($cacheKey, '-user-') &&
-        !strpos($cacheKey, '-search') &&
-        ((($xarPage_cacheDisplay != 1) && !strpos($cacheKey, '-display')) ||
-         ($xarPage_cacheDisplay == 1)) &&
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (empty($xarOutput_cacheTheme) ||
-         strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
-        (!file_exists($cache_file) ||
-        ($xarPage_cacheTime != 0 &&
-         filemtime($cache_file) < time() - $xarPage_cacheTime)) &&
-        xarCacheDirSize($xarOutput_cacheCollection, 'Page') <= $xarOutput_cacheSizeLimit &&
-        xarPage_checkUserCaching()) {
-        
-        xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
-
-        xarPage_httpCacheHeaders($cache_file);
-
-    }
-}
-
-/**
- * Set the contents of a block in the cache
- *
- * @access public
- * @param  string $cacheKey
- * @param  string $name
- * @param  string $value
- *
- */
-function xarBlockSetCached($cacheKey, $name, $value)
-{
-    global $xarOutput_cacheCollection,
-           $xarOutput_cacheSizeLimit,
-           $xarBlock_cacheCode,
-           $blockCacheExpireTime,
-           $xarBlock_noCache;
-    
-    if ($xarBlock_noCache == 1) {
-        $xarBlock_noCache = '';
-        return;
-    }
-
-    // CHECKME: use $name for something someday ?
-    $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarBlock_cacheCode.php";
-    if (
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
-        (!file_exists($cache_file) ||
-        ($blockCacheExpireTime != 0 &&
-         filemtime($cache_file) < time() - $blockCacheExpireTime)) &&
-        xarCacheDirSize($xarOutput_cacheCollection, 'Block', $cacheKey) <= $xarOutput_cacheSizeLimit
-        ) {
-
-        xarOutputSetCached($cacheKey, $cache_file, 'Block', $value);
-
-    }
-}
-/**
  * Set the contents of some output in the cache
  *
  * @access public
@@ -522,13 +218,6 @@ function xarOutputDelCached($cacheKey, $name)
         unset($xarOutput_cacheCollection[$cacheKey][$name]);
     }
 }
-/**
- * aliased depricated function
- */
-function xarPageDelCached($cacheKey, $name)
-{
-    xarOutputDelCached($cacheKey, $name);
-}
 
 /**
  * flush a particular cache (e.g. when a new item is created)
@@ -538,26 +227,32 @@ function xarPageDelCached($cacheKey, $name)
  *                           to wipe out
  * @returns void
  */
-function xarOutputFlushCached($cacheKey)
+function xarOutputFlushCached($cacheKey, $dir = false)
 {
     global $xarOutput_cacheCollection;
+    
+    if (empty($dir)) {
+        $dir = $xarOutput_cacheCollection;
+    }
 
-    if ($handle = @opendir($xarOutput_cacheCollection)) {
-        while (($file = readdir($handle)) !== false) {
-            if ((preg_match("#$cacheKey#", $file)) &&
-                (strpos($file, '.php') !== false)) {
-                @unlink($xarOutput_cacheCollection . '/' . $file);
+    if ($dir && is_dir($dir)) {
+        if (substr($dir,-1) != "/") $dir .= "/";
+        if ($dirId = opendir($dir)) {
+            while (($item = readdir($dirId)) !== FALSE) {
+                if ($item[0] != '.') {
+                    if (is_dir($dir . $item)) {
+                        xarOutputFlushCached($cacheKey, $dir . $item);
+                    } else {
+                        if ((preg_match("#$cacheKey#", $item)) &&
+                            (strpos($item, '.php') !== false)) {
+                            @unlink($dir . $item);
+                        }
+                    }
+                }
             }
         }
-        closedir($handle);
+        closedir($dirId);
     }
-}
-/**
- * aliased depricated function
- */
-function xarPageFlushCached($cacheKey)
-{
-    xarOutputFlushCached($cacheKey);
 }
 
 /**
@@ -589,13 +284,12 @@ function xarOutputCleanCached($cacheType, $cacheKey = '')
         error_log('Error from Xaraya::xarCache::xarOutputCleanCached
                   - web process can not touch ' . $touch_file);
     }
-    if ($handle = @opendir($xarOutput_cacheCollection)) {
+    $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' .strtolower($cacheType);
+    if ($handle = @opendir($cacheOutputTypeDir)) {
         while (($file = readdir($handle)) !== false) {
-            $cache_file = $xarOutput_cacheCollection . '/' . $file;
+            $cache_file = $cacheOutputTypeDir . '/' . $file;
             if (filemtime($cache_file) < time() - (${'xar' . $cacheType . '_cacheTime'} + 60) &&
-                (strpos($file, '.php') !== false) &&
-                ($cacheType == 'Block' || 
-                ($cacheType == 'Page' && strpos($file, 'block') === false))) {
+                (strpos($file, '.php') !== false)) {
                 @unlink($cache_file);
             }
         }
@@ -648,37 +342,6 @@ function xarCacheDirSize($dir = FALSE, $cacheType, $cacheKey = '')
 }
 
 /**
- * check if the user can benefit from page caching
- *
- * @access private
- * @return bool
- * @todo avoid DB lookup by passing group via cookies ?
- * @todo Note : don't do this if admins get cached too :)
- */
-function xarPage_checkUserCaching()
-{
-    global $xarPage_cacheGroups;
-
-    if (!xarUserIsLoggedIn()) {
-        // always allow caching for anonymous users
-        return true;
-    } elseif (empty($xarPage_cacheGroups)) {
-        // if no other cache groups are defined
-        return false;
-    }
-
-    $gidlist = xarCache_getParents();
-
-    $groups = explode(';',$xarPage_cacheGroups);
-    foreach ($groups as $groupid) {
-        if (in_array($groupid,$gidlist)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-/**
  * get the parent group ids of the current user (with minimal overhead)
  *
  * @access private
@@ -707,160 +370,6 @@ function xarCache_getParents()
     $result->Close();
     xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
-}
-
-/**
- * Log the HIT / MISS status of URLs requested by first-time visitors
- *
- * @access private
- * @return void
- */
-function xarPage_autoCacheLogStatus($status = 'MISS')
-{
-    if (!empty($_SERVER['REQUEST_METHOD']) &&
-        $_SERVER['REQUEST_METHOD'] == 'GET' &&
-    // the URL is one of the candidates for session-less caching
-    // TODO: make compatible with IIS and https (cfr. xarServer.php)
-        !empty($_SERVER['HTTP_HOST']) &&
-        !empty($_SERVER['REQUEST_URI'])) {
-
-        $time = time();
-        $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        $addr = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-';
-        //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
-
-        // cfr. xarCache_init()
-        global $xarPage_autoCachePeriod;
-
-        if (!empty($xarPage_autoCachePeriod) &&
-            filemtime('var/cache/output/autocache.start') < time() - $xarPage_autoCachePeriod) {
-            @touch('var/cache/output/autocache.start');
-
-            // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
-            $cachingConfigFile = 'var/cache/config.caching.php';
-            if (file_exists($cachingConfigFile) &&
-                is_writable($cachingConfigFile)) {
-
-                include $cachingConfigFile;
-                if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
-                    file_exists('var/cache/output/autocache.log') &&
-                    filesize('var/cache/output/autocache.log') > 0) {
-
-                    $logs = @file('var/cache/output/autocache.log');
-                    $autocacheproposed = array();
-                    foreach ($logs as $entry) {
-                        if (empty($entry)) continue;
-                        list($time,$status,$addr,$url) = explode(' ',$entry);
-                        $url = trim($url);
-                        if (!isset($autocacheproposed[$url])) $autocacheproposed[$url] = 0;
-                        $autocacheproposed[$url]++;
-                    }
-                    unset($logs);
-                    // check that all required URLs are included
-                    if (!empty($cachingConfiguration['AutoCache.Include'])) {
-                        foreach ($cachingConfiguration['AutoCache.Include'] as $url) {
-                            if (!isset($autocacheproposed[$url]) ||
-                                $autocacheproposed[$url] < $cachingConfiguration['AutoCache.Threshold'])
-                                $autocacheproposed[$url] = 99999999;
-                        }
-                    }
-                    // check that all forbidden URLs are excluded
-                    if (!empty($cachingConfiguration['AutoCache.Exclude'])) {
-                        foreach ($cachingConfiguration['AutoCache.Exclude'] as $url) {
-                            if (isset($autocacheproposed[$url])) unset($autocacheproposed[$url]);
-                        }
-                    }
-                    // sort descending by count
-                    arsort($autocacheproposed, SORT_NUMERIC);
-                    // build the list of URLs proposed for session-less caching
-                    $checkurls = array();
-                    foreach ($autocacheproposed as $url => $count) {
-                        if (count($checkurls) >= $cachingConfiguration['AutoCache.MaxPages'] ||
-                            $count < $cachingConfiguration['AutoCache.Threshold']) {
-                            break;
-                        }
-                    // TODO: check against base URL ? (+ how to determine that without core)
-                        $checkurls[] = $url;
-                    }
-                    sort($checkurls);
-                    sort($cachingConfiguration['Page.SessionLess']);
-                    if (count($checkurls) > 0 &&
-                        $checkurls != $cachingConfiguration['Page.SessionLess']) {
-
-                        $sessionlesslist = "'" . join("','",$checkurls) . "'";
-
-                        $cachingConfig = join('', file($cachingConfigFile));
-                        $cachingConfig = preg_replace('/\[\'Page.SessionLess\'\]\s*=\s*array\s*\((.*)\)\s*;/i', "['Page.SessionLess'] = array($sessionlesslist);", $cachingConfig);
-                        $fp = @fopen ($cachingConfigFile, 'wb');
-                        if ($fp) {
-                            @fwrite ($fp, $cachingConfig);
-                            @fclose ($fp);
-                        }
-                    }
-                }
-            }
-
-            $fp = @fopen('var/cache/output/autocache.log', 'w');
-        } else {
-            $fp = @fopen('var/cache/output/autocache.log', 'a');
-        }
-        if ($fp) {
-            @fwrite($fp, "$time $status $addr $url\n");
-            @fclose($fp);
-        }
-   }
-}
-
-function xarPage_httpCacheHeaders($cache_file)
-{
-    global $xarPage_cacheCode,
-           $xarPage_cacheExpireHeader,
-           $xarPage_cacheTime;
-
-    $mod = filemtime($cache_file);
-    // doesn't seem to be taken into account ?
-    $etag = $xarPage_cacheCode.$mod;
-    $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
-        $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
-    if (!empty($match) && $match == $etag) {
-        // jsb:  for some reason, Mozilla based browsers
-        // do not re-send an ETag after getting a 304
-        // so this only works once per cached page
-        header('HTTP/1.0 304');
-        exit;
-    } else {
-        $since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
-            $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
-        if (!empty($since) && strtotime($since) >= $mod) {   
-            header('HTTP/1.0 304');
-            exit;
-            // jsb: according to RFC 2616, if $match isn't empty but is
-            // not equal to the ETag we should send a 412 response
-            // But browser behavior seems inconsistant with the doc and
-            // often results in more data being sent than is necessary.
-        }
-    }
-    if (!empty($xarPage_cacheExpireHeader)) {
-        // this tells clients and proxies that this file is good until local
-        // cache file is due to expire, and can be reused w/out revalidating
-        header("Expires: " .
-               gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
-               " GMT");
-        header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
-    } else {
-        header("Expires: 0");
-        header("Cache-Control: public, must-revalidate");
-    }
-    header("ETag: $etag");
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
-    // we can't use this after session_start()
-    //session_cache_limiter('public');
-    // PHP doesn't set the Pragma header when sending back a cookie
-    if (isset($_COOKIE['XARAYASID'])) {
-        header("Pragma: public");
-    } else {
-        header("Pragma:");
-    }
 }
 
 ?>
