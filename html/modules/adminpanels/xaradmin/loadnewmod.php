@@ -18,12 +18,11 @@
  * @param   no parameters
  * @return  true on success
  * @throws  no exceptions
- * @todo    nothing
+ * @todo    Where is this used and why?
 */
 function adminpanels_admin_loadnewmod()
 {
     // Get vars
-
     if (!xarVarFetch('mname','str:1:',$mname,'adminpanels')) return;
 
     xarResponseRedirect(xarModURL($mname, 'admin', 'main'));

@@ -21,38 +21,15 @@
  */
 function adminpanels_adminapi_getmenulinks()
 {
-
-// redundant link - TODO: remove/replace
-/*     if (xarSecurityCheck('EditPanel',0)) { */
-/*  */
-/*         $menulinks[] = Array('url'   => xarModURL('adminpanels', */
-/*                                                    'admin', */
-/*                                                    'view'), */
-/*                               'title' => xarML('The overview of this module and its functions'), */
-/*                               'label' => xarML('Overview')); */
-/*     } */
-
     // Security Check
+    $menulinks = array();
     if (xarSecurityCheck('AdminPanel',0)) {
-
-// redundant link, function incorporated into modify config - TODO: remove/replace
-/*         $menulinks[] = Array('url'   => xarModURL('adminpanels', */
-/*                                                    'admin', */
-/*                                                    'config_view'), */
-/*                               'title' => xarML('Modify configuration of the Overviews'), */
-/*                               'label' => xarML('Overviews')); */
-
         $menulinks[] = Array('url'   => xarModURL('adminpanels',
                                                    'admin',
                                                    'modifyconfig'),
                               'title' => xarML('Modify configuration for the Admin Panels'),
                               'label' => xarML('Modify config'));
     }
-
-    if (empty($menulinks)){
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 ?>

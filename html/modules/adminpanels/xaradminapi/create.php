@@ -20,7 +20,7 @@
  * @param   none
  * @return  true on success or void on failure
  * @throws  NO_PERMISSION exception
- * @todo    nothing
+ * @todo    What is this for?
 */
 function adminpanels_adminapi_create($args)
 {
