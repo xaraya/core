@@ -40,12 +40,11 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
     xarDB_importTables($tables);
     
     // Decide if we will be using the output caching system
-    global $blockCaching;
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
-	if (file_exists($outputCachePath . 'cache.touch') && file_exists($outputCachePath . 'cache.blocklevel')) {
-    	$blockCaching = 1;
+	if (defined('XARCACHE_IS_ENABLED') && file_exists($outputCachePath . 'cache.blocklevel')) {
+    	xarCore_SetCached('xarcache', 'blockCaching', true);
 	} else {
-		$blockCaching = 0;
+		xarCore_SetCached('xarcache', 'blockCaching', false);
 	}
 
     // Subsystem initialized, register a handler to run when the request is over
@@ -160,12 +159,11 @@ function xarBlock_render($blockinfo)
  */
 function xarBlock_renderGroup($groupname, $template = NULL)
 {
-    global $blockCaching;
-
     if (empty($groupname)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
         return;
     }
+    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -208,12 +206,12 @@ function xarBlock_renderGroup($groupname, $template = NULL)
     while(!$result->EOF) {
         $blockinfo = $result->GetRowAssoc(false);
 
-        if ($blockCaching == 1) {
+        if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
             $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
-        if ($blockCaching == 1 && xarBlockIsCached($args)) {
+        if ($blockCaching && xarBlockIsCached($args)) {
             // output the cached block
             $output .= xarBlockGetCached($cacheKey,'block');
 
@@ -261,7 +259,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             
             $blockoutput = xarBlock_render($blockinfo);
 
-            if ($blockCaching == 1) {
+            if ($blockCaching) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output .= $blockoutput;
@@ -297,12 +295,11 @@ function xarBlock_renderGroup($groupname, $template = NULL)
  * @todo   this function calls a module function, keep an eye on it.
  */
 function xarBlock_renderBlock($args)
-{
-    global $blockCaching;
-    
+{   
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
+    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
     	if ($blockCaching == 1) {
@@ -310,14 +307,14 @@ function xarBlock_renderBlock($args)
             $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
-        if ($blockCaching == 1 && xarBlockIsCached($args)) {
+        if ($blockCaching && xarBlockIsCached($args)) {
             // output the cached block
             $output = xarBlockGetCached($cacheKey,'block');
 
         } else {
         	$blockoutput = xarBlock_render($blockinfo);
         	
-            if ($blockCaching == 1) {
+            if ($blockCaching) {
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output = $blockoutput;
