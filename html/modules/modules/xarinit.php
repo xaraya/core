@@ -115,9 +115,14 @@ function modules_init()
 
     $result = &$dbconn->Execute($query);
     if (!$result) return; 
+    
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($tables['module_states']);
+
     // manually set Modules Module to active
-    $query = "INSERT INTO " . $tables['module_states'] . "(xar_regid, xar_state
-              ) VALUES (1, 3)";
+    $query = "INSERT INTO " . $tables['module_states'] . "(xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 1, 3)";
 
     $result = &$dbconn->Execute($query);
     if (!$result) return;

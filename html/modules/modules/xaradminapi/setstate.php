@@ -62,11 +62,18 @@ function modules_adminapi_setstate($args)
                 $result =& $dbconn->Execute($query);
                 if (!$result) return;
                 if ($result->EOF) {
+                    // Bug #1813 - Have to use GenId to get or create the sequence 
+                    // for xar_id or the sequence for xar_id will not be available
+                    // in PostgreSQL
+                    $seqId = $dbconn->GenId($module_statesTable);
+
                     $query = "INSERT INTO $module_statesTable
-                       (xar_regid,
+                       (xar_id,
+                        xar_regid,
                         xar_state)
                         VALUES
-                        ('" . xarVarPrepForStore($regid) . "',
+                        ($seqId,
+                         '" . xarVarPrepForStore($regid) . "',
                          '" . xarVarPrepForStore($state) . "')";
 
                     $result =& $dbconn->Execute($query);

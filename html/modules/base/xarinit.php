@@ -283,10 +283,14 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+    
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($systemModuleStatesTable);
 
     // Set authsystem to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
-              ) VALUES (42, 3)";
+    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 42, 3)";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -300,9 +304,13 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($systemModuleStatesTable);
+
     // Set installer to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
-              ) VALUES (200, 3)";
+    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 200, 3)";
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -315,9 +323,13 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($systemModuleStatesTable);
+
     // Set blocks to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
-              ) VALUES (13,3)";
+    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 13, 3)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -329,9 +341,13 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // the sequence for xar_id will not be available in PostgreSQL
+    $seqId = $dbconn->GenId($systemModuleStatesTable);
+
     // Set themes to active
-    $query = "INSERT INTO $systemModuleStatesTable (xar_regid, xar_state
-              ) VALUES (70,3)";
+    $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
+              ) VALUES (" . $seqId . ", 70, 3)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
