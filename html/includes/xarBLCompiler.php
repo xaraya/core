@@ -52,7 +52,6 @@ define('XAR_BL_INVALID_SYNTAX','INVALID_SYNTAX');
 define('XAR_BL_INVALID_ENTITY','INVALID_ENTITY');
 define('XAR_BL_INVALID_FILE','INVALID_FILE');
 define('XAR_BL_INVALID_INSTRUCTION','INVALID_INSTRUCTION');
-define('XAR_BL_INVALID_SPECIALVARIABLE','INVALID_SPECIALVARIABLE');
 
 define('XAR_BL_MISSING_ATTRIBUTE','MISSING_ATTRIBUTE');
 define('XAR_BL_MISSING_PARAMETER','MISSING_PARAMETER');
@@ -216,14 +215,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
     function generate(&$documentTree)
     {
-        if ($documentTree->variables->get('type') == 'page') {
-            $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
-            // Register special variables for templates of type page
-            $resolver->push('tpl:pageTitle', '$_bl_page_title');
-            $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
-            $resolver->push('tpl:JavaScript', '$_bl_javascript');
-        }
-
         // Start the code generation
         $this->code = '';
         $this->code = $this->generateNode($documentTree);
@@ -1147,55 +1138,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 }
 
 /**
- * xarTpl__SpecialVariableNameResolver
- *
- * This resolves special variables in the template to their real values
- * a mapping is used to keep this information.
- * This class is a singleton
- *
- * @package blocklayout
- * @access private
- * @todo the push and pop are confusing here, because the access is by hash, not stacklike
- */
-class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
-{
-    var $varsMapping = array();
-
-    function &instance()
-    {
-        static $instance = NULL;
-        if (!isset($instance)) {
-            // This can NOT be assigned by reference
-            $instance = new xarTpl__SpecialVariableNamesResolver();
-        }
-        return $instance;
-    }
-
-    function push($specialVarName, $realVarName)
-    {
-        if (!isset($this->varsMapping[$specialVarName])) {
-            $this->varsMapping[$specialVarName] = array();
-        }
-        array_push($this->varsMapping[$specialVarName], $realVarName);
-    }
-
-    function pop($specialVarName)
-    {
-        array_pop($this->varsMapping[$specialVarName]);
-    }
-
-    // TODO: check whether we can eliminate $posInfo, as the object is derived from it
-    function resolve($specialVarName, $posInfo)
-    {
-        if (!isset($this->varsMapping[$specialVarName])) {
-            $this->raiseError(XAR_BL_INVALID_SPECIALVARIABLE,"Invalid use of '$specialVarName' special variable.", $posInfo);
-            return;
-        }
-        return $this->varsMapping[$specialVarName][count($this->varsMapping[$specialVarName]) - 1];
-    }
-}
-
-/**
  * xarTpl__TemplateVariables
  *
  * Handle template variables
@@ -1243,41 +1185,36 @@ class xarTpl__TemplateVariables
 class xarTpl__ExpressionTransformer
 {
     /*
-     * Replaces special variables and changes the array notation.
+     * Replace the array and object notation.
      * This is the BLExpression grammar:
-     * BLExpression ::= Variable | Variable '.' ArrayKey
-     * Variable ::= Name | SpecialVariable
-     * SpecialVariable ::= Name ':' Name | Name ':' Name ':' Name
-     * ArrayKey ::= KeyName | KeyName '.' ArrayKey
-     * Name ::= [a-zA-Z_] ([0-9a-zA-Z_])*
-     * KeyName ::= ([0-9a-zA-Z_])+
+     * BLExpression ::= Variable | Variable '.' ArrayKey | Variable ':' Property
+     * Variable ::= [a-zA-Z_] ([0-9a-zA-Z_])*
+     * ArrayKey ::= Name | Name '.' ArrayKey | Name ':' Property
+     * Property ::= Name | Name '.' ArrayKey | Name ':' Property
+     * Name     ::= ([0-9a-zA-Z_])+
      */
     function transformBLExpression($blExpression)
     {
-        $chunks = explode('.', $blExpression);
-        $expression = $chunks[0];
-        // Check for special variable
-        if (strpos($expression, ':') !== false) {
-            // Special variable
-
-            // Get xarTpl__SpecialVariableNamesResolver instance
-            $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
-            $expression = $resolver->resolve($expression, $this);
-            if (!isset($expression)) return; // throw back
-
-        } else {
-            $expression = XAR_TOKEN_VAR_START . $expression;
+        // 'resolve' the dot and colon notation
+        $identifiers = preg_split('/[.|:]/',$blExpression);
+        $operators = preg_split('/[^.|^:]/',$blExpression,-1,PREG_SPLIT_NO_EMPTY);
+        
+        $numIdentifiers = count($identifiers);
+        
+        $expression = $identifiers[0];
+        for ($i = 1; $i < $numIdentifiers; $i++) {
+            if($operators[$i - 1] == '.') {
+                $expression .= "['".$identifiers[$i]."']";
+            } elseif($operators[$i - 1] == ':') {
+                $expression .= '->'.$identifiers[$i];
+            }
         }
-        $numChunks = count($chunks);
-        for ($i = 1; $i < $numChunks; $i++) {
-            $expression .= "['".$chunks[$i]."']";
-        }
-        return $expression;
+        return XAR_TOKEN_VAR_START . $expression;
     }
 
     function transformPHPExpression($phpExpression)
     {
-        // This regular expression  must match the special variables $foo:bar construct
+        // This regular expression  must match the variables $foo:bar construct
         // pass it to the resolver, check for exceptions, and replace it with the resolved
         // var name.
         // Let's dissect the expression so it's a bit more clear:
@@ -1290,8 +1227,8 @@ class xarTpl__ExpressionTransformer
         //  7.   :          => matches the colon
         //  8.   [0-9a-z_]+ => matches number,letter or underscore, one or more occurrences
         //  9.  )           => matches right brace
-        // 10.  {0,2}       => the whole previous subpattern may  appear min. 0 and max 2 times
-        //                     0 is for a normal variable, 1 and 2 times is a 'special variable'
+        // 10.  {0,2}       => the whole previous subpattern may  appear min. 0 and max 2 times (FIXME: NOT NECESSARY ANYMORE)
+        //                     0 is for a normal variable, 1 and 2 times is a BL variable
         // 11.  (?:         => start array key non-captured subpattern
         // 12.   \\.        => each array key is separated by a dot, escaped for preg_match and the
         //                     escaping '\' escaped for the double-quoted string
@@ -1300,7 +1237,7 @@ class xarTpl__ExpressionTransformer
         // 15.  *           => match zero or more occurances of the array key subpattern
         // 16. )            => ends the current pattern
         if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(?::[0-9a-z_]+){0,2}(?:\\.[0-9a-z_]+)*)/i", $phpExpression, $matches)) {
-            // Get xarTpl__SpecialVariableNamesResolver instance but via transformBLExpression()
+            // Resolve BL expresions inside the php Expression
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
                 $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
@@ -1867,6 +1804,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
     function loopCounter($operator = NULL)
     {
         static $loopCounter = 0;
+        static $loopStack = array();
         if (isset($operator)) {
             if ($operator == '++') {
                 $loopCounter++;
@@ -1896,50 +1834,38 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         if (!isset($name)) return; // throw back
 
         // Increment the loopCounter and retrieve its new value
+        // NOTE: class method!
         $loopCounter = xarTpl__XarLoopNode::loopCounter('++');
-        // Get xarTpl__SpecialVariableNamesResolver instance
-        $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
-        // Register special variables
-        $resolver->push('loop:item', '$_bl_loop_item'.$loopCounter);
-        $resolver->push('loop:key', '$_bl_loop_key'.$loopCounter);
-        $resolver->push('loop:index', '$_bl_loop_index'.$loopCounter);
-        $resolver->push('loop:number', '$_bl_loop_number'.$loopCounter);
-
-        if (isset($id)) {
-            // If we have an $id, also register the id based specials
-            $resolver->push("loop:$id:item", '$_bl_loop_item'.$loopCounter);
-            $resolver->push("loop:$id:key", '$_bl_loop_key'.$loopCounter);
-            $resolver->push("loop:$id:index", '$_bl_loop_index'.$loopCounter);
-            $resolver->push("loop:$id:number", '$_bl_loop_number'.$loopCounter);
+      
+        $output='';
+        if($loopCounter > 1) {
+            // We are nesting loops without id's, compensate
+            $previousLoop = $loopCounter - 1;
+            $output .= '$loop_'.$previousLoop.'=$loop;';
+        } 
+        // Save the name is a unique variable, if a loop:item from the parentloop
+        // is used as a loop array
+        $output .= '$loop_'.$loopCounter.'_name='.$name.'; ';
+        $output .= '$loop->index=-1; $loop->number='.$loopCounter.'; ';
+        $output .= '$loop->item=$loop_'.$loopCounter.'_name;';
+        $output .= 'foreach ($loop->item as $loop->key => $loop->item ) { ';
+        $output .= '$loop->index++; '; 
+        if(isset($id)) {
+            // Make the id property point to the same loop so loop:id:index etc. works too
+            $output .= '$loop->'.$id.'=&$loop; ';
         }
-
-        $output = '$_bl_loop_index' . $loopCounter . ' = -1; ';
-        $output .= '$_bl_loop_number' . $loopCounter . " = $loopCounter; ";
-        $output .= 'foreach ('.$name.' as $_bl_loop_key'.$loopCounter.' => $_bl_loop_item'.$loopCounter.") { ";
-        // Do the incrementing inside here ASAP, as the loop may be interupted by a xar:continue
-        $output .= '$_bl_loop_index'.$loopCounter."++; ";
-        $prefix = '_bl_loop_' . (!isset($id)) ? $loopCounter: $id;               
-        
-        $output .= 'if (is_array($_bl_loop_item'.$loopCounter.')) extract($_bl_loop_item'.$loopCounter.", EXTR_PREFIX_ALL, '$prefix'); ";
         return $output;
     }
 
     function renderEndTag()
     {
-        // Decrement the loopCounter
-        // $loopCounter is the new value + 1
-        $loopCounter = xarTpl__XarLoopNode::loopCounter('--') + 1;
-
-        // Get xarTpl__SpecialVariableNamesResolver instance
-        $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
-        // Unregister the special variables
-        // FIXME: what about the ID based ones?
-        $resolver->pop('loop:item');
-        $resolver->pop('loop:key');
-        $resolver->pop('loop:index');
-        $resolver->pop('loop:number');
-
-        $output = "} ";
+        // Decrement the loopCounter and retrieve its new value
+        $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
+        $output ='';
+        if($previousLoop >= 1 ) {
+            $output .= '$loop = $loop_'.$previousLoop.'; '; 
+        } 
+        $output .= '} ';
         return $output;
     }
 
@@ -2998,8 +2924,6 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
          *  see the xar:template tag how this will work and bug 1120 for all the details
          */
         // FIXME: add some checking whether $name already is a template variable, or consider
-        //        using tpl: specials for registering.
-
         return ' $_bl_data[\''.$this->_name.'\'] = '. XAR_TOKEN_VAR_START . $this->_name.';';
     }
 

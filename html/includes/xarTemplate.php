@@ -859,10 +859,12 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
 
+    $tpl = (object) null; // Create an object to hold the 'specials'
+    $tpl->pageTitle = xarTplGetPageTitle();
+    $tpl->additionalStyles = $GLOBALS['xarTpl_additionalStyles'];
     $tplData = array(
+        'tpl'                      => $tpl,
         '_bl_mainModuleOutput'     => $mainModuleOutput,
-        '_bl_page_title'           => xarTplGetPageTitle(),
-        '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles']
     );
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
