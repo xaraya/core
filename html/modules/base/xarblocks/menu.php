@@ -112,8 +112,8 @@ function base_menublock_display($blockinfo)
                         // depending on which module is currently loaded we display accordingly
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
-                            $label = ucwords($label);
-                            $usermods[] = array('label' => $label, 'link' => '', 'desc' => '', 'marker' => $marker);
+                            $labelDisplay = ucwords($label);
+                            $usermods[] = array('label' => $labelDisplay, 'link' => '', 'desc' => '', 'marker' => $marker);
 
                             // Load API for individual links. 
                             if (!xarModAPILoad($label, 'user')) return; // throw back
@@ -127,7 +127,7 @@ function base_menublock_display($blockinfo)
                             if (!empty($menulinks)) {
                                 $indlinks = array();
                                 foreach($menulinks as $menulink){
-                                    if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$title:", ACCESS_READ)) {
+                                    if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$blockinfo[title]:", ACCESS_READ)) {
                                         $indlinks[] = array('userlink' => $menulink['url'], 'userlabel' => $menulink['label'], 'usertitle' => $menulink['title']);
                                     }
                                 } 
@@ -140,8 +140,8 @@ function base_menublock_display($blockinfo)
                             if($modinfo){
                                 $desc = $modinfo['description'];
                             }
-                            $label = ucwords($label);
-                            $usermods[] = array('label' => $label, 'link' => $link, 'desc' => $desc, 'marker' => '');
+                            $labelDisplay = ucwords($label);
+                            $usermods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
                         }
                     }
                 } else {
