@@ -385,9 +385,11 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
             }
         }
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
-    } /*else {
-        TODO: <marco> Handle i18n for this case
-    }*/
+    } else {
+        // TODO: <marco> Handle i18n for this case
+        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, $GLOBALS['xarTpl_themeName'], 'themes:modules/'.$modName, $tplName) === NULL) return;
+    }
 
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
