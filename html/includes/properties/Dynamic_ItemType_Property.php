@@ -26,8 +26,259 @@ include_once "includes/properties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
-// TODO: evaluate if we want some other output here
-    // default methods from Dynamic_NumberBox_Property
+    var $module   = ''; // get itemtypes for this module with getitemtypes()
+    var $itemtype = null; // get items for this module+itemtype with getitemlinks()
+    var $func     = null; // specific API call to retrieve a list of items
+    var $options  = array();
+
+    function Dynamic_ItemType_Property($args)
+    {
+        $this->Dynamic_NumberBox_Property($args);
+
+        // options may be set in one of the child classes
+        if (count($this->options) == 0 && !empty($this->validation)) {
+            $this->parseValidation($this->validation);
+        }
+    }
+
+    function validateValue($value = null)
+    {
+        if (empty($this->module)) {
+            // let Dynamic_NumberBox_Property handle the rest
+            return parent::validateValue($value);
+        }
+        if (isset($value)) {
+            $this->value = $value;
+        }
+        // check if this option really exists
+        $isvalid = $this->getOption(true);
+        if (!$isvalid) {
+            $this->invalid = xarML('item type');
+            $this->value = null;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function showInput($args = array())
+    {
+        if (!empty($args)) {
+            $this->setArguments($args);
+        }
+        if (empty($this->module)) {
+            // let Dynamic_NumberBox_Property handle the rest
+            return parent::showInput($args);
+        }
+
+        $data = array();
+        $data['options']  = $this->getOptions();
+        if (empty($data['options'])) {
+            // let Dynamic_NumberBox_Property handle the rest
+            return parent::showInput($args);
+        }
+        $data['value']    = $this->value; // cfr. setArguments()
+        $data['name']     = !empty($this->fieldname) ? $this->fieldname : 'dd_' . $this->id;
+        $data['id']       = !empty($args['id']) ? $args['id'] : $data['name'];
+        $data['tabindex'] = !empty($args['tabindex']) ? $args['tabindex'] : 0;
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+
+        if (empty($args['template'])) {
+            $args['template'] = 'itemtype';
+        }
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $args['template']);
+    }
+
+    function showOutput($args = array())
+    {
+        if (!empty($args)) {
+            $this->setArguments($args);
+        }
+        if (empty($this->module)) {
+            // let Dynamic_NumberBox_Property handle the rest
+            return parent::showOutput($args);
+        }
+
+        $data = array();
+        $data['value'] = $this->value;
+        $data['option'] = array('id' => $this->value,
+                                'name' => $this->getOption());
+
+        if (empty($args['template'])) {
+            $args['template'] = 'itemtype';
+        }
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data , $args['template']);
+    }
+
+    function setArguments($args = array())
+    {
+        if (!empty($args['module']) &&
+            preg_match('/^\w+$/',$args['module']) &&
+            xarModIsAvailable($args['module'])) {
+
+            $this->module = $args['module'];
+            if (isset($args['itemtype']) && is_numeric($args['itemtype'])) {
+                $this->itemtype = $args['itemtype'];
+            }
+            if (isset($args['func']) && is_string($args['func'])) {
+                $this->func = $args['func'];
+            }
+        }
+        if (!empty($args['name'])) {
+            $this->fieldname = $args['name'];
+        }
+        // could be 0 here
+        if (isset($args['value']) && is_numeric($args['value'])) {
+            $this->value = $args['value'];
+        }
+        if (!empty($args['options']) && is_array($args['options'])) {
+            $this->options = $args['options'];
+        }
+    }
+
+    /**
+     * Possible formats
+     *
+     *   module
+     *       show the list of itemtypes for that module via getitemtypes()
+     *       E.g. "articles" = the list of publication types in articles
+     *
+     *   module.itemtype
+     *       show the list of items for that module+itemtype via getitemlinks()
+     *       E.g. "articles.1" = the list of articles in publication type 1 News Articles
+     *
+     *   module.itemtype:xarModAPIFunc(...)
+     *       show some list of "item types" for that module via xarModAPIFunc(...)
+     *       and use itemtype to retrieve individual items via getitemlinks()
+     *       E.g. "articles.1:xarModAPIFunc('articles','user','dropdownlist',array('ptid' => 1, 'where' => ...))"
+     *       = some filtered list of articles in publication type 1 News Articles
+     *
+     *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
+     */
+    function parseValidation($validation = '')
+    {
+        // see if the validation field contains a valid module name
+        if (preg_match('/^\w+$/',$validation) &&
+            xarModIsAvailable($validation)) {
+
+            $this->module = $validation;
+
+        } elseif (preg_match('/^(\w+)\.(\d+)$/',$validation,$matches) &&
+                  xarModIsAvailable($matches[1])) {
+
+            $this->module = $matches[1];
+            $this->itemtype = $matches[2];
+
+        } elseif (preg_match('/^(\w+)\.(\d+):(xarModAPIFunc.*)$/i',$validation,$matches) &&
+                  xarModIsAvailable($matches[1])) {
+
+            $this->module = $matches[1];
+            $this->itemtype = $matches[2];
+            $this->func = $matches[3];
+        }
+    }
+
+    /**
+     * Retrieve the list of options on demand
+     */
+    function getOptions()
+    {
+        if (count($this->options) > 0) {
+            return $this->options;
+        }
+        if (empty($this->module)) {
+            return array();
+        }
+
+        $options = array();
+        if (!isset($this->itemtype)) {
+            // we're interested in the module itemtypes (= default behaviour)
+            $itemtypes = xarModAPIFunc($this->module,'user','getitemtypes',
+                                       // don't throw an exception if this function doesn't exist
+                                       array(), 0);
+            if (!empty($itemtypes)) {
+                foreach ($itemtypes as $typeid => $typeinfo) {
+                    if (isset($typeid) && isset($typeinfo['label'])) {
+                        $options[] = array('id' => $typeid, 'name' => $typeinfo['label']);
+                    }
+                }
+            }
+
+        } elseif (empty($this->func)) {
+            // we're interested in the items for module+itemtype
+            $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
+                                       // don't throw an exception if this function doesn't exist
+                                       array('itemtype' => $this->itemtype,
+                                             'itemids'  => null), 0);
+            if (!empty($itemlinks)) {
+                foreach ($itemlinks as $itemid => $linkinfo) {
+                    if (isset($itemid) && isset($linkinfo['label'])) {
+                        $options[] = array('id' => $itemid, 'name' => $linkinfo['label']);
+                    }
+                }
+            }
+
+        } else {
+            // we have some specific function to retrieve the "item types" here
+            eval('$items = ' . $this->func .';');
+            if (isset($items) && count($items) > 0) {
+                foreach ($items as $id => $name) {
+                    array_push($options, array('id' => $id, 'name' => $name));
+                }
+            }
+        }
+
+        $this->options = $options;
+        return $options;
+    }
+
+    /**
+     * Retrieve or check an individual option on demand
+     */
+    function getOption($check = false)
+    {
+        if (!isset($this->value)) {
+             if ($check) return true;
+             return null;
+        }
+        if (count($this->options) > 0) {
+            foreach ($this->options as $option) {
+                if ($option['id'] == $this->value) {
+                    if ($check) return true;
+                    return $option['name'];
+                }
+            }
+            if ($check) return false;
+        }
+        if (empty($this->module)) {
+            if ($check) return true;
+            return $this->value;
+        }
+        if (!isset($this->itemtype)) {
+            // we're interested in one of the module itemtypes (= default behaviour)
+            $options = $this->getOptions();
+            foreach ($options as $option) {
+                if ($option['id'] == $this->value) {
+                    if ($check) return true;
+                    return $option['name'];
+                }
+            }
+            if ($check) return false;
+            return $this->value;
+        }
+
+        // we're interested in one of the items for module+itemtype
+        $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
+                                   // don't throw an exception if this function doesn't exist
+                                   array('itemtype' => $this->itemtype,
+                                         'itemids' => array($this->value)), 0);
+        if (!empty($itemlinks) && !empty($itemlinks[$this->value])) {
+            if ($check) return true;
+            return $itemlinks[$this->value]['label'];
+        }
+        if ($check) return false;
+        return $this->value;
+    }
 
     /**
      * Get the base information for this property.

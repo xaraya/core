@@ -1,0 +1,8 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:if condition="!empty($option['name']) and $option['name'] ne $option['id']" >
+  [#$option['id']#] #$option['name']#
+<xar:elseif condition="isset($value)"/>
+  [#$value#]
+</xar:if>
+
