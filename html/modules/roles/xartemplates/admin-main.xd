@@ -28,15 +28,15 @@
             <p><xar:mlstring>The roles on your site are arranged in a tree. At the top of the tree is a role called <b>Everybody</b>, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody.</xar:mlstring></p>
 			<p><xar:mlstring>Xaraya also comes preconfigured with a minimal set of roles that are loaded when you run the installer. This configuration is shown below:</xar:mlstring></p>
 			<p><pre>
-				<xar:mlstring>Everybody</xar:mlstring> 
+				Everybody 
 				|
-				|---<xar:mlstring>Anonymous</xar:mlstring> 
+				|---Anonymous 
 				|
-				|---<xar:mlstring>Administrators</xar:mlstring> 
+				|---Administrators 
 				|   |
-				|   |---<xar:mlstring>Admin</xar:mlstring> 
+				|   |---Admin 
 				|
-				|---<xar:mlstring>Users</xar:mlstring> 
+				|---Users 
 			</pre></p>
                 <ul>
                     <li><xar:mlstring><b>Everybody</b>: is the role containing all other roles. This role has no access privileges.</xar:mlstring></li>
@@ -65,7 +65,7 @@
             <p><xar:mlstring>The roles module allows the use of the User Menu hook which will allow users to set values to further enhance their visit.</xar:mlstring></p>
         </div>
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
+            <p><xar:mlstring>Extended information about this module can be found in <a href="http://docs.xaraya.com/docs/rfcs/rfc0030.html">RFC-30</xar:mlstring>.</p>
         </div>
     </div>
 </div>
