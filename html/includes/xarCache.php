@@ -36,7 +36,7 @@ function xarCache_init($args)
     }
 
     // should we set default values, or bail out if something is missing?
-
+    // <MrB> Set defaults where appropriate: For all below a sensible default can be given
     $xarOutput_cacheCollection = $cacheDir;
     $xarOutput_cacheTheme = $cachingConfiguration['Output.DefaultTheme'];
     $xarOutput_cacheSizeLimit = $cachingConfiguration['Output.SizeLimit'];

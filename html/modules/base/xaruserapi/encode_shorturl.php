@@ -3,7 +3,7 @@
 /**
  * return the path for a short URL to xarModURL for this module
  *
- * @author the Example module development team
+ * @author mikespub
  * @param $args the function and arguments passed to xarModURL
  * @returns string
  * @return path to be added to index.php for a short URL, or empty if failed
