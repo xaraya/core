@@ -8,14 +8,14 @@
 
 class ADODB2_sqlite extends ADODB_DataDict 
 {
-	
-	var $databaseType = 'sqlite';
-	var $seqField = false;
-	
- 	
- 	function ActualType($meta)
+    
+    var $databaseType = 'sqlite';
+    var $seqField = false;
+    
+     
+     function ActualType($meta)
    {
-		switch($meta) {
+        switch($meta) {
             case 'B' :
             case 'C' : 
             case 'C2':
@@ -40,22 +40,22 @@ class ADODB2_sqlite extends ADODB_DataDict
             case 'N': return 'DECIMAL';
             default:
                 return $meta;
-		}
+        }
    }
     
-	function AlterColumnSQL($tabname, $flds)
+    function AlterColumnSQL($tabname, $flds)
    {
-		if ($this->debug) ADOConnection::outp("AlterColumnSQL not supported");
-		return array();
+        if ($this->debug) ADOConnection::outp("AlterColumnSQL not supported");
+        return array();
    }
-	
-	
-	function DropColumnSQL($tabname, $flds)
+    
+    
+    function DropColumnSQL($tabname, $flds)
    {
-		if ($this->debug) ADOConnection::outp("DropColumnSQL not supported");
-		return array();
+        if ($this->debug) ADOConnection::outp("DropColumnSQL not supported");
+        return array();
    }
-	
+    
 }
 
 
