@@ -74,7 +74,7 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
         if (file_exists($logFile) && is_writeable($logFile)) {
             $xarLogConfig[] = array('type' => 'simple',
                                                      'config' =>array('fileName' => $logFile,
-                                                                                  'logLevel'  => XARLOG_LEVEL_DEBUG));
+                                                                                  'logLevel'  => (2*XARLOG_LEVEL_DEBUG-1)));
         }
     }
 
