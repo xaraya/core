@@ -483,8 +483,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $token = $res;
                             break 2;
                         case 'x': // <x
-                            $xarToken = $this->getNextToken(3);
-                            if ($nextToken . $xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                            if ($nextToken . $this->peek(3) == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                                $xarToken = $this->getNextToken(3);
+                                if(!isset($xarToken)) return;
                                 // <xar: tag
                                 if(!$this->canbeChild($parent)) return;
                                       
@@ -545,12 +546,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $token = '';
                                 break 2;
                             }
-                            $this->stepBack(3);
                             break;
                         case XAR_TOKEN_ENDTAG_START: 
                             // Check for xar end tag
-                            $xarToken = $this->getNextToken(4,true); // don't except, template could end with non xar tag
-                            if ($xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                            if ($this->peek(4) == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
+                                $xarToken = $this->getNextToken(4);
+                                if(!isset($xarToken)) return;
                                 // Situation: [...text...]</xar:...
                                 $trimmer='xmltrim';
                                 $natives = array('set', 'ml', 'mlvar');
@@ -571,7 +572,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 }
                                 return $children;
                             }
-                            $this->stepBack(4);
                             break;
                         case XAR_TOKEN_NONMARKUP_START:
                             $token .= $nextToken; // <!
@@ -673,8 +673,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     break;
                 case XAR_TOKEN_ENTITY_START:
                     // Check for xar entity
-                    $nextToken = $this->getNextToken(4);
-                    if ($nextToken == 'xar-') {
+                    if ($this->peek(4) == 'xar-') {
+                        $nextToken = $this->getNextToken(4);
+                        if(!isset($nextToken)) return;
                         if(!$this->canbeChild($parent)) return;
 
                         // Situation: [...text...]&xar-...
@@ -695,7 +696,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $token = '';
                         break;
                     }
-                    $this->stepBack(4);
                     break;
                 case XAR_TOKEN_CI_DELIM:
                     $nextToken = $this->getNextToken();
