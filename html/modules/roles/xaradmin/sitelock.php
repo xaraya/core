@@ -22,6 +22,9 @@ function roles_admin_sitelock($args)
         if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
+        if(!isset($notify)) $notify = array();
+        for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
 
         if ($cmd == 'delete') {
             if (!xarVarFetch('uid', 'int', $uid, NULL, XARVAR_DONT_SET)) return;
@@ -32,6 +35,12 @@ function roles_admin_sitelock($args)
                         break;
                     }
                 }
+            // Write the configuration to disk
+            $lockdata = array('roles' => $roles,
+                              'message' => $lockedoutmsg,
+                              'locked' => $toggle,
+                              'notifymsg' => $notifymsg);
+            xarModSetVar('roles', 'lockdata', serialize($lockdata));
             }
         }
 
@@ -49,13 +58,17 @@ function roles_admin_sitelock($args)
                 $newelement = array('uid' => $newuid, 'name' => $newname , 'notify' => TRUE);
                 if ($newuid != 0 && !in_array($newelement,$roles))
                     $roles[] = $newelement;
+
+            // Write the configuration to disk
+            $lockdata = array('roles' => $roles,
+                              'message' => $lockedoutmsg,
+                              'locked' => $toggle,
+                              'notifymsg' => $notifymsg);
+            xarModSetVar('roles', 'lockdata', serialize($lockdata));
             }
         }
 
         elseif ($cmd == 'save') {
-            if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
-            if(!isset($notify)) $notify = array();
-            for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
             $lockdata = array('roles' => $roles,
                               'message' => $lockedoutmsg,
                               'locked' => $toggle,
@@ -114,9 +127,6 @@ function roles_admin_sitelock($args)
             }
 
             // Write the configuration to disk
-            if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
-            if(!isset($notify)) $notify = array();
-            for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
             $lockdata = array('roles' => $roles,
                               'message' => $lockedoutmsg,
                               'locked' => $toggle,
@@ -124,6 +134,7 @@ function roles_admin_sitelock($args)
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
         }
     }
+
 
     $data['roles'] = $roles;
     $data['serialroles'] = xarVarPrepForDisplay(serialize($roles));
