@@ -110,7 +110,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if (!isset($value)) {
         $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
 
-        if ($inputValue == NULL) {
+        if ($inputValue === NULL) {
             if ($flags & XARVAR_DONT_SET) {
                 return true;
             }
@@ -137,6 +137,10 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     //USER_EXCEPTION -> find if there is a defaultValue set.
     if ($result === FALSE) {
+        if ($flags & XARVAR_DONT_SET) {
+            return true;
+        }
+
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             $value = $defaultValue;
             xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
