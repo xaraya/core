@@ -366,6 +366,7 @@ class xarLog__SimpleLogger extends xarLog__Logger
     {
         $break = "\n".str_repeat(' ', $blanklen);
         $rows = explode("\n", $string);
+        $newrows = array();
         foreach($rows as $row) {
             $newrows[] = wordwrap($row, 79 - $blanklen, $break, 1);
         }
