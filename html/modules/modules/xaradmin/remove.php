@@ -33,30 +33,34 @@ function modules_admin_remove ()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
-	//First check the modules dependencies
-    $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
-	if (count($dependents['active'])      > 0   ||
-	    count($dependents['initialised']) > 1 ) {
-    	//Checking if the user has already passed thru the GUI:
-    	xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
-    } else {
-    	//No dependents, jump dependency GUI
-    	$command = true;
-    }
+    //Checking if the user has already passed thru the GUI:
+    xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
-   	if (!$command) {
-  		//Let's make a nice GUI to show the user the options
-   		$data                 = array();
-   		$data['id']           = $id;
-	    $data['authid']       = xarSecGenAuthKey();
-   		$data['dependencies'] = $dependents;
-   		return $data;
-   	}
+    if(!$command) {
+        // not been thru gui yet, first check the modules dependencies
+        // FIXME: double check this line and the line with removeewithdependents below,
+        // they can NOT be called in the same request due to the statics used in there, the logic
+        // needs to be reviewed, it's not solid enough.
+        $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
+        if (!(count($dependents['active']) > 0 || count($dependents['initialised']) > 1 )) {
+            //No dependents, just remove the module
+            if(!xarModAPIFunc('modules','admin','remove',array('regid' => $id)))  return;
+            xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+        } else {
+            // There are dependents, let's build a GUI
+            $data                 = array();
+            $data['id']           = $id;
+            $data['authid']       = xarSecGenAuthKey();
+            $data['dependencies'] = $dependents;
+            return $data;
+        }
+    }
    	
-   	//Installs with dependencies, first initialise the necessary dependecies
-   	//then the module itself
+    // User has seen the GUI
+   	// Removes with dependents, first remove the necessary dependents then the module itself
 	if (!xarModAPIFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
 		//Call exception
+        xarLogMessage('Missing module since last generation!');
 		return;	
 	} // Else
 
@@ -69,7 +73,7 @@ function modules_admin_remove ()
     // it certainly depends on the implementation of xarModUrl
     //    xarResponseRedirect(xarModURL('modules', 'admin', "list#$target"));
     xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-
+    // Never reached
 	return true;
 }
 

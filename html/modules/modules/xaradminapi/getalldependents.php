@@ -49,7 +49,10 @@ function modules_adminapi_getalldependents ($args)
 
 
     // If we have already got the same id in the same request, dont do it again.
-    if(in_array($mainId, $dependent_ids)) return $dependents_array;
+    if(in_array($mainId, $dependent_ids)) {
+        xarLogMessage("We already checked $mainId, not doing it a second time");
+        return $dependents_array;
+    }
     $dependent_ids[] = $mainId;
 
     //Get all modules in the filesystem
@@ -87,7 +90,7 @@ function modules_adminapi_getalldependents ($args)
                 $modId = $conditions;
             }
             
-            //Not depedent, then go to the next dependency!!!
+            //Not dependent, then go to the next dependency!!!
             if ($modId != $mainId) continue;
             
             //If we are here, then it is dependent
