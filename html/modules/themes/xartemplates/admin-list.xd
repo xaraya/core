@@ -162,7 +162,7 @@
 										<xar:if condition="$modinfo['removeurl'] eq ''">
 											<img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
 										<xar:else />
-											<a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel2']#" /></a>
+											<a href="#$modinfo['removeurl']#"><img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" /></a>
 										</xar:if>
 								<xar:else />
 									<div style="padding-left: .5em;">
