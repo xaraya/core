@@ -44,7 +44,7 @@ function roles_userapi_updatestatus($args)
               WHERE xar_uname = ?";
     $bindvars = array($state,$uname);
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
