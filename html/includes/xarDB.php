@@ -54,21 +54,24 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
         define('ADODB_DIR', 'xaradodb');
     }
 
-    include_once ADODB_DIR .'/adodb.inc.php';
-
     // ADODB-to-Xaraya error-to-exception bridge
     if (!defined('ADODB_ERROR_HANDLER')) {
         define('ADODB_ERROR_HANDLER', 'xarDB__adodbErrorHandler');
     }
 
+    include_once ADODB_DIR .'/adodb.inc.php';
+
     // Start connection
     $dbconn = ADONewConnection($dbType);
     if (!$dbconn->Connect($dbHost, $dbUname, $dbPass, $dbName)) {
+        // FIXME: <mrb> theoretically we could raise an exceptions here, but due to the insane dependencies
+        //        we can't right now
         xarCore_die("xarDB_init: Failed to connect to $dbType://$dbUname@$dbHost/$dbName, error message: " . $dbconn->ErrorMsg());
     }
     $GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_NUM;
 
     // force oracle to a consistent date format for comparison methods later on
+    // FIXME: <mrb> this doesn't belong here
     if (strcmp($dbType, 'oci8') == 0) {
         $dbconn->Execute("ALTER session SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     }
