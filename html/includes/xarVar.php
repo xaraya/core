@@ -81,7 +81,7 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  * according to the validation applied.
  *
  * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
- * correctly and the XARVAR_NOT_REQUIRED (see below) flag is set.
+ * correctly.
  *
  * The $flag parameter is a bitmask between the following constants: XARVAR_GET_OR_POST, XARVAR_GET_ONLY,
  * XARVAR_POST_ONLY, XARVAR_NOT_REQUIRED.
