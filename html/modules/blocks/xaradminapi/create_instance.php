@@ -103,7 +103,7 @@ function blocks_adminapi_create_instance($args)
     xarModAPIFunc('blocks','admin','resequence');
 
     $args['module'] = 'blocks';
-    xarModCallHooks('item', 'create', $bid, $args)
+    xarModCallHooks('item', 'create', $bid, $args);
 
     return $bid;
 }
