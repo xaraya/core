@@ -80,9 +80,9 @@ function xarError_init($systemArgs, $whatToLoad)
  * @param value error object
  * @return void
  */
-function xarExceptionSet($major, $errorID, $value = NULL) 
-{ 
-    xarErrorSet($major, $errorID, $value); 
+function xarExceptionSet($major, $errorID, $value = NULL)
+{
+    xarErrorSet($major, $errorID, $value);
 }    // deprecated
 
 function xarErrorSet($major, $errorID, $value = NULL)
@@ -155,9 +155,9 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * @access public
  * @return integer the major value of raised error
  */
-function xarExceptionMajor() 
-{ 
-    return xarCurrentErrorType(); 
+function xarExceptionMajor()
+{
+    return xarCurrentErrorType();
 }    // deprecated
 
 function xarCurrentErrorType()
@@ -178,9 +178,9 @@ function xarCurrentErrorType()
  * @access public
  * @return string the error identifier
  */
-function xarExceptionId() 
-{ 
-    return xarCurrentErrorID(); 
+function xarExceptionId()
+{
+    return xarCurrentErrorID();
 }    // deprecated
 
 function xarCurrentErrorID()
@@ -201,9 +201,9 @@ function xarCurrentErrorID()
  * @access public
  * @return mixed error value object
  */
-function xarExceptionValue() 
-{ 
-    return xarCurrentError(); 
+function xarExceptionValue()
+{
+    return xarCurrentError();
 }    // deprecated
 
 function xarCurrentError()
@@ -224,9 +224,9 @@ function xarCurrentError()
  * @access public
  * @return void
  */
-function xarExceptionFree() 
-{ 
-    xarErrorFree(); 
+function xarExceptionFree()
+{
+    xarErrorFree();
 }    // deprecated
 
 function xarErrorFree()
@@ -244,9 +244,9 @@ function xarErrorFree()
  * @access public
  * @return void
  */
-function xarExceptionHandled() 
-{ 
-    xarErrorHandled(); 
+function xarExceptionHandled()
+{
+    xarErrorHandled();
 }    // deprecated
 
 function xarErrorHandled()
@@ -273,9 +273,9 @@ function xarErrorHandled()
  * @param stacktype string one of CORE or ERROR
  * @return string the string representing the raised error
  */
-function xarExceptionRender($format) 
-{ 
-    return xarErrorRender($format); 
+function xarExceptionRender($format)
+{
+    return xarErrorRender($format);
 }    // deprecated
 
 function xarErrorRender($format,$stacktype = "ERROR")
@@ -471,9 +471,43 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         exit;
     }
     else {
+        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
+            $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
+        // Then check in $_GET
+        } elseif (isset($_GET['module'])) {
+            $module = $_GET['module'];
+        // Try to fallback to $HTTP_GET_VARS for older php versions
+        } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
+            $module = $GLOBALS['HTTP_GET_VARS']['module'];
+        // Nothing found, return void
+        } else {
+            $module = '';
+        }
+        $product = '';
+        $component = '';
+        if ($module != '') {
+            include("includes/exceptions/xarayacomponents.php");
+            foreach ($core as $corecomponent) {
+                if ($corecomponent['name'] == $module) {
+                    $component = $corecomponent['fullname'];
+                    $product = "App - Core";
+                    break;
+                }
+            }
+            if ($component != '') {
+                foreach ($apps as $appscomponent) {
+                    if ($appscomponent['name'] == $module) {
+                        $component = $appscomponent['fullname'];
+                        $product = "App - Modules";
+                    }
+                }
+            }
+        }
         xarResponseRedirect(xarModURL('base','user','systemexit',
         array('code' => $errorType,
-              'exception' => urlencode($msg))));
+              'exception' => urlencode($msg),
+              'product' => $product,
+              'component' => $component)));
     }
 }
 

@@ -35,11 +35,17 @@ function base_user_systemexit()
                 '1024' => "E_USER_NOTICE"
                 );
     if (!xarVarFetch('exception', 'str', $msg, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('product', 'str', $product, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('component', 'str', $component, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('code', 'str', $code, NULL, XARVAR_NOT_REQUIRED)) return;
     if($CoreStack->isempty()) $CoreStack->initialize();
     $exception = new SystemException($msg);
     $exception->setID($errorcodes[$code]);
     $exception->setMajor(XAR_SYSTEM_EXCEPTION);
+    if ($component != '') {
+        $exception->setProduct($product);
+        $exception->setComponent($component);
+    }
     $CoreStack->push($exception);
 
     static $spinning = false;
