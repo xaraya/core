@@ -34,18 +34,39 @@ function roles_user_usermenu($args)
             break;
 
         case 'formbasic':
+            $properties = null;
+            if (xarModIsAvailable('dynamicdata')) {
+                // get the Dynamic Object defined for this module (and itemtype, if relevant)
+                $object =& xarModAPIFunc('dynamicdata','user','getobject',
+                                         array('module' => 'roles'));
+                if (isset($object) && !empty($object->objectid)) {
+                    // get the Dynamic Properties of this object
+                    $properties =& $object->getProperties();
+                }
+                
+                $withupload = (int) FALSE;
+                foreach ($properties as $key => $prop) {
+                    if (isset($prop->upload) && $prop->upload == TRUE) {
+                        $withupload = (int) TRUE;
+                    }
+                }
+            }
+            unset($properties);
+            
             $uname = xarUserGetVar('uname');
             $name = xarUserGetVar('name');
             $uid = xarUserGetVar('uid');
             $email = xarUserGetVar('email');
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
-            $data = xarTplModule('roles','user', 'user_menu_form', array('authid'       => $authid,
-                                                                         'name'         => $name,
-                                                                         'uname'        => $uname,
-                                                                         'emailaddress' => $email,
-                                                                         'submitlabel'  => $submitlabel,
-                                                                         'uid'          => $uid));
+            $data = xarTplModule('roles','user', 'user_menu_form', 
+                                  array('authid'       => $authid,
+                                  'withupload'   => $withupload,
+                                  'name'         => $name,
+                                  'uname'        => $uname,
+                                  'emailaddress' => $email,
+                                  'submitlabel'  => $submitlabel,
+                                  'uid'          => $uid));
             break;
 
         case 'formenhanced':
