@@ -162,10 +162,14 @@ function xarServerGetHost()
  */
 function xarServerGetProtocol()
 {
-    if (xarConfigGetVar('Site.Core.EnableSecureServer') == true){
-        $HTTPS = xarServerGetVar('HTTPS');
-        // IIS seems to set HTTPS = off for some reason
-        return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+    if (function_exists('xarConfigGetVar')){
+        if (xarConfigGetVar('Site.Core.EnableSecureServer') == true){
+            $HTTPS = xarServerGetVar('HTTPS');
+            // IIS seems to set HTTPS = off for some reason
+            return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+        } else {
+            return 'http';
+        }
     } else {
         return 'http';
     }
