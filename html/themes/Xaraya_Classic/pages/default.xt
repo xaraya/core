@@ -8,33 +8,38 @@
    
     1) get data for the default blockgroups and set local variables to hold the data
 _____________________________________________________________________________________________________________[comment]</xar:comment>
-<xar:set name="$rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
-<xar:set name="$leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
-<xar:set name="$centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
-<xar:set name="$topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
+<xar:set name="rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
+<xar:set name="leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
+<xar:set name="centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
+<xar:set name="topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
 <xar:comment>
     2) set local variables to hold some multilingual text that we intend to use in titles and alt attributes
 _____________________________________________________________________________________________________________[comment]</xar:comment>
-<xar:set name="$changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
-<xar:set name="$changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
-<xar:set name="$changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
-<xar:set name="$changecoltocontrast"><xar:mlstring>High contrast</xar:mlstring></xar:set>
-<xar:set name="$changecoltoblue"><xar:mlstring>Blue hues (default)</xar:mlstring></xar:set>
-<xar:set name="$changecoltogreen"><xar:mlstring>Green hues</xar:mlstring></xar:set>
-<xar:set name="$changecoltoorange"><xar:mlstring>Orange hues</xar:mlstring></xar:set>
-<xar:set name="$validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
-<xar:set name="$validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
+<xar:set name="changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
+<xar:set name="changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
+<xar:set name="changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
+<xar:set name="changecoltocontrast"><xar:mlstring>High contrast</xar:mlstring></xar:set>
+<xar:set name="changecoltoblue"><xar:mlstring>Blue hues (default)</xar:mlstring></xar:set>
+<xar:set name="changecoltogreen"><xar:mlstring>Green hues</xar:mlstring></xar:set>
+<xar:set name="changecoltoorange"><xar:mlstring>Orange hues</xar:mlstring></xar:set>
+<xar:set name="validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
+<xar:set name="validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
 <xar:comment>
     3) prepare some common local variables once, then use them as many times as required
 _____________________________________________________________________________________________________________[comment]</xar:comment>
-<xar:set name="$classicthemedir">#xarTplGetThemeDir()#</xar:set>
-<xar:set name="$sitename">#xarModGetVar('themes', 'SiteName')#</xar:set>
-<xar:set name="$sitefooter">#xarModGetVar('themes', 'SiteFooter')#</xar:set>
-<xar:set name="$siteslogan">#xarModGetVar('themes', 'SiteSlogan')#</xar:set>
-<xar:set name="$sitecopyright">#xarModGetVar('themes', 'SiteCopyRight')#</xar:set>
+<xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
+<xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName"/></xar:set>
+<xar:set name="sitefooter"><xar:var scope="module" module="themes" name="SiteFooter"/></xar:set>
+<xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan"/></xar:set>
+<xar:set name="sitecopyright"><xar:var scope="module" module="themes" name="SiteCopyRight"/></xar:set>
 <xar:comment>
     and finally, start building a beautiful layout by inserting the data into a carefully crafted markup :-)
 _____________________________________________________________________________________________________________[comment]</xar:comment>
+<xar:comment>
+    This doctype line is actually wrong, and will cause problems if we are going for xml
+    The doctype here means to xml that the doctype of this document is set, not the doctype of the resulting
+    output. We should consider adding this as an attribute of the xar:blocklayout tag and moving this line out.
+</xar:comment>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
@@ -58,6 +63,11 @@ ________________________________________________________________________________
         <xar:base-render-javascript position="head" />
     </head>
     <body>
+        <xar:comment> Body JavaScript </xar:comment>
+        <xar:base-render-javascript position="body" />
+        <xar:comment> Styleswitcher JavaScript </xar:comment>
+        <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
+
         <div id="classicheader">
 			<div id="classicthemecontrols">
 				<a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
@@ -89,7 +99,7 @@ ________________________________________________________________________________
         </div>
         <xar:if condition="!empty($topnavblocksgroup)">
            <div id="classictopnavigation">
-                #$topnavblocksgroup#
+                <xar:var name="topnavblocksgroup"/>
            </div>
         </xar:if>
         <table id="classiccontentarea">
@@ -98,20 +108,20 @@ ________________________________________________________________________________
                     <td id="leftmenus">
                         <div id="leftmenuswrapper">
                             <div class="iewintablefixer">
-                                #$leftblocksgroup#
+                                <xar:var name="leftblocksgroup"/>
                             </div>
                         </div>
                     </td>
                     <td id="maincontent">
                         <div class="iewintablefixer">
-                            #$centerblocksgroup#
+                            <xar:var name="centerblocksgroup"/>
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                     <td id="rightmenus">
                         <div id="rightmenuswrapper">
                             <div class="iewintablefixer">
-                                #$rightblocksgroup#
+                                <xar:var name="rightblocksgroup"/>
                             </div>
                         </div>
                     </td>
@@ -119,34 +129,34 @@ ________________________________________________________________________________
                     <td id="leftmenus">
                         <div id="leftmenuswrapper">
                             <div class="iewintablefixer">
-                                #$leftblocksgroup#
+                                <xar:var name="leftblocksgroup"/>
                             </div>
                         </div>
                     </td>
                     <td id="maincontent">
                         <div class="iewintablefixer">
-                            #$centerblocksgroup#
+                            <xar:var name="centerblocksgroup"/>
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                 <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
                     <td id="maincontent">
                         <div class="iewintablefixer">
-                            #$centerblocksgroup#
+                            <xar:var name="centerblocksgroup"/>
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                     <td id="rightmenus">
                         <div id="rightmenuswrapper">
                             <div class="iewintablefixer">
-                                #$rightblocksgroup#
+                                <xar:var name="rightblocksgroup"/>
                             </div>
                         </div>
                     </td>
                 <xar:else />
                     <td id="maincontent">
                         <div class="iewintablefixer">
-                            #$centerblocksgroup#
+                            <xar:var name="centerblocksgroup"/>
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
@@ -164,20 +174,16 @@ ________________________________________________________________________________
                     </a>
                 </div>
                 <p id="footermsg">
-                    #$sitefooter#
+                    <xar:var name="sitefooter"/>
                 </p>
                 <p id="copyright">
-                    #$sitecopyright#
+                    <xar:var name="sitecopyright"/>
                 </p>
                 <p id="slogan">
-                    #$siteslogan#
+                    <xar:var name="siteslogan"/>
                 </p>
             </div>
         </div>
-        <xar:comment> Body JavaScript </xar:comment>
-        <xar:base-render-javascript position="body" />
-        <xar:comment> Styleswitcher JavaScript </xar:comment>
-        <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
     </body>
 </html>
 </xar:blocklayout>
