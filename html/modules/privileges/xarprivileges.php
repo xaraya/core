@@ -1401,12 +1401,7 @@ class xarPrivileges extends xarMasks
         $normalform[] = strtolower($this->getRealm());
         $normalform[] = strtolower($this->getModule());
         $normalform[] = strtolower($this->getComponent());
-        if (strtolower($this->getInstance()) == "All") {
-            $normalform[] = strtolower($this->getInstance());
-        }
-        else {
-            $normalform = array_merge($normalform,explode(':',strtolower($this->getInstance())));
-        }
+        $normalform = array_merge($normalform,explode(':',strtolower($this->getInstance())));
         for ($i=0;$i<$adds;$i++) $normalform[] = 'all';
         return $normalform;
     }

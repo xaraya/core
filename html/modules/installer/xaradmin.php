@@ -346,6 +346,7 @@ function installer_admin_create_administrator()
     $data['language'] = 'English';
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
+    $adminuid = _XAR_ID_UNREGISTERED + 1;
 
     // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;
@@ -355,7 +356,7 @@ function installer_admin_create_administrator()
     if (!xarVarCleanFromInput('create')) {
         // create a role from the data
         $roles = new xarRoles();
-        $role = $roles->getRole(3);
+        $role = $roles->getRole($adminuid);
 
         // assemble the template data
         $data['install_admin_username'] = $role->getUser();
@@ -375,7 +376,7 @@ function installer_admin_create_administrator()
 
 
     // assemble the args into an array for the role constructor
-    $pargs = array('uid'   => 3,
+    $pargs = array('uid'   => $adminuid,
                    'name'  => $name,
                    'type'  => 0,
                    'uname' => $userName,

@@ -60,7 +60,8 @@ class xarTreeRenderer {
      * @todo    none
     */
         function maketree() {
-            return $this->addbranches(array('parent'=>$this->roles->getgroup(1)));
+            $everybodyuid = _XAR_ID_UNREGISTERED - 1;
+            return $this->addbranches(array('parent'=>$this->roles->getgroup($everybodyuid)));
         }
 
     /**
