@@ -123,7 +123,7 @@ function xarBlock_renderGroup($groupName)
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $blockInstancesTable      = $tables['block_instances'];
@@ -264,5 +264,4 @@ function xarBlock_renderBlock($args)
 
     return $output;
 }
-
 ?>

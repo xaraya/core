@@ -26,7 +26,7 @@ function blocks_admin_modify_instance()
 
     // TODO: move all database stuff to the API.
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
     $block_types_table = $xartable['block_types'];

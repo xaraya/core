@@ -21,7 +21,7 @@ function blocks_admin_new_instance()
 	if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // Fetch block type list
     // TODO: move to API function.

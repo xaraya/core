@@ -33,7 +33,7 @@ function blocks_adminapi_delete_instance($args)
 	if(!xarSecurityCheck('DeleteBlock',1,'Block',"::$bid")) return;
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 

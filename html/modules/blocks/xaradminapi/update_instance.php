@@ -64,7 +64,7 @@ function blocks_adminapi_update_instance($args)
 	if(!xarSecurityCheck('EditBlock', 1, 'Block', "$title::$bid")) {return;}
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 

@@ -34,7 +34,7 @@ function blocks_adminapi_getinfo($args)
     }
 
     list ($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $blockInstancesTable      = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];
