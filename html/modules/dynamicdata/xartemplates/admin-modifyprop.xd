@@ -167,7 +167,7 @@ each other. You can adapt the property name by clicking on the ID link above.
            </form>
        </xar:foreach>
        </td>
-    <tr>
+    </tr>
 </xar:if>
 </table>
 <br />
