@@ -12,13 +12,21 @@
 //  Find specifications at the following address
 //  http://developer.hostnuke.com/modules.php?op=modload&name=Sections&file=index&req=viewarticle&artid=1&page=1
 
-function xarTpl_init($args)
+function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
-    global $xarTpl_cacheTemplates, $xarTpl_themeDir;
+    global $xarTpl_cacheTemplates, $xarTpl_themesBaseDir, $xarTpl_defaultThemeName;
+    global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
 
-    $xarTpl_themeDir = $args['themeDirectory'];
-    if (!file_exists($xarTpl_themeDir)) {
+    $xarTpl_themesBaseDir = $args['themesBaseDirectory'];
+    $xarTpl_defaultThemeName = $args['defaultThemeName'];
+    
+    if (!xarTplSetThemeName($xarTpl_defaultThemeName)) {
+        global $xarTpl_themeDir;
         xarCore_die("xarTpl_init: Unexistent theme directory '$xarTpl_themeDir'.");
+    }
+    if (!xarTplSetPageTemplateName('default')) {
+        global $xarTpl_themeDir;
+        xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$xarTpl_themeDir'.");
     }
     if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
         xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
@@ -27,6 +35,75 @@ function xarTpl_init($args)
     }
 
     $xarTpl_cacheTemplates = $args['enableTemplatesCaching'];
+    
+    $xarTpl_additionalStyles = '';
+    $xarTpl_headJavaScript = '';
+    $xarTpl_bodyJavaScript = '';
+
+    return true;
+}
+
+function xarTplGetThemeName()
+{
+    global $xarTpl_themeName;
+    return $xarTpl_themeName;
+}
+
+function xarTplSetThemeName($themeName)
+{
+    global $xarTpl_themesBaseDir, $xarTpl_themeName, $xarTpl_themeDir;
+    assert('$themeName != "" && $themeName{0} != "/"');
+    if (!file_exists($xarTpl_themesBaseDir.'/'.$themeName)) {
+        return false;
+    }
+    $xarTpl_themeName = $themeName;
+    $xarTpl_themeDir = $xarTpl_themesBaseDir.'/'.$xarTpl_themeName;
+    return true;
+}
+
+function xarTplSetPageTemplateName($templateName)
+{
+    global $xarTpl_pageTemplateName, $xarTpl_themeDir;
+    assert('$templateName != ""');
+    if (!file_exists("$xarTpl_themeDir/pages/$templateName.xt")) {
+        return false;
+    }
+    $xarTpl_pageTemplateName = $templateName;
+    return true;
+}
+
+function xarTplSetPageTitle($title)
+{
+    global $xarTpl_pageTitle;
+    $xarTpl_pageTitle = $title;
+    return true;
+}
+
+function xarTplAddStyleLink($modName, $styleName)
+{
+    global $xarTpl_additionalStyles;
+    $info = xarMod_getBaseInfo($modName);
+    if (!isset($info)) return;
+    $fileName = "modules/$info[directory]/styles/$styleName.css";
+    if (!file_exists($fileName)) {
+        return false;
+    }
+    $url = xarServerGetBaseURL().$fileName;
+    $xarTpl_additionalStyles .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
+    return true;
+}
+
+function xarTplAddJavaScriptCode($position, $owner, $code)
+{
+    assert('$position == "head" || $position == "body"');
+    if ($position == 'head') {
+        global $xarTpl_headJavaScript;
+        $xarTpl_headJavaScript .= "\n// JavaScript code from {$owner}\n{$code}\n";
+    } else {
+        global $xarTpl_bodyJavaScript;
+        $xarTpl_bodyJavaScript  .= "\n// JavaScript code from {$owner}\n{$code}\n";
+    }
+    return true;
 }
 
 /**
@@ -105,14 +182,18 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
 
 function xarTplString($templateCode, $tplData)
 {
-    $blCompiler = xarTpl__getCompilerInstance();
-    $templateCode = $blCompiler->compileFile($templateCode);
     return xarTpl__execute($templateCode, $tplData);
 }
 
 function xarTplFile($fileName, $tplData)
 {
     return xarTpl__executeFromFile($fileName, $tplData);
+}
+
+function xarTplCompileString($templateSource)
+{
+    $blCompiler = xarTpl__getCompilerInstance();
+    return $blCompiler->compile($templateSource);
 }
 
 
@@ -128,33 +209,30 @@ function xarTplFile($fileName, $tplData)
  * @returns string
  * @return page output
  **/
-function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $pageName = NULL)
+function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
 {
-    global $xarTpl_themeDir;
+    global $xarTpl_themeDir, $xarTpl_pageTemplateName, $xarTpl_pageTitle;
+    global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
 
-    if (empty($pageName)) {
-        $pageName = 'default';
-    }
-    // Grab module Type Whether admin or user. 
-    $modType = xarVarCleanUntrusted(xarRequestGetVar('type')); 
-    if (empty($modType)) {
-        $modType = 'user';
-    }
-    // Override all admin modules types to is pages/admin exist.
-    // TODO --> Allow master admin template.
-    if($modType == 'admin'){
-        $sourceFileName = "$xarTpl_themeDir/pages/$modType.xt";
-        if (!file_exists($sourceFileName)) {
-            // Revert to main theme
-            $pageName = xarVarPrepForOS($pageName);
-            $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xt";
-        }
-    } else {
-        $pageName = xarVarPrepForOS($pageName);
-        $sourceFileName = "$xarTpl_themeDir/pages/$pageName.xt";
+    if (empty($templateName)) {
+        $templateName = $xarTpl_pageTemplateName;
     }
 
-    $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput);
+    $templateName = xarVarPrepForOS($templateName);
+    $sourceFileName = "$xarTpl_themeDir/pages/$templateName.xt";
+
+    if ($xarTpl_headJavaScript != '') {
+        $xarTpl_headJavaScript = "<script type=\"text/javascript\">\n<!--\n{$xarTpl_headJavaScript}\n// -->\n</script>";
+    }
+    if ($xarTpl_bodyJavaScript) {
+        $xarTpl_bodyJavaScript = "<script type=\"text/javascript\">\n<!--\n{$xarTpl_bodyJavaScript}\n// -->\n</script>";
+    }
+    
+    $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput,
+                     '_bl_page_title' => $xarTpl_pageTitle,
+                     '_bl_additional_styles' => $xarTpl_additionalStyles,
+                     '_bl_head_javascript' => $xarTpl_headJavaScript,
+                     '_bl_body_javascript' => $xarTpl_bodyJavaScript);
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }

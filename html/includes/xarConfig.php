@@ -9,7 +9,7 @@
 // Purpose of file: Configuration Unit
 // ----------------------------------------------------------------------
 
-function xarConfig_init($args)
+function xarConfig_init($args, $whatElseIsGoingLoaded)
 {
     // Configuration Unit Tables
     $sitePrefix = xarDBGetSiteTablePrefix();

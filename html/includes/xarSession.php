@@ -14,7 +14,7 @@
  * @returns bool
  * @return true on success
  */
-function xarSession_init($args)
+function xarSession_init($args, $whatElseIsGoingLoaded)
 {
     global $xarSession_systemArgs;
     $xarSession_systemArgs = $args;

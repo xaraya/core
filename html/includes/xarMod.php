@@ -40,7 +40,7 @@ define('XARMOD_MODE_PER_SITE', 2);
  * Mod.BaseInfos
  */
 
-function xarMod_init($args)
+function xarMod_init($args, $whatElseIsGoingLoaded)
 {
     global $xarMod_generateShortURLs, $xarMod_generateXMLURLs;
 

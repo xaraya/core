@@ -9,7 +9,7 @@
 // Purpose of file: HTTP Protocol Server/Request/Response utilities
 // ----------------------------------------------------------------------
 
-function xarSerReqRes_init($args)
+function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
     global $xarRequest_allowShortURLs, $xarRequest_defaultModule,
            $xarRequest_shortURLVariables;

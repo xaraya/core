@@ -25,7 +25,7 @@
  * @param args['loadLevel']
  * returns bool
  */
-function xarEvt_init($args)
+function xarEvt_init($args, $whatElseIsGoingLoaded)
 {
     global $xarEvt_subscribed, $xarEvt_knownEvents;
 

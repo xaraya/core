@@ -131,7 +131,7 @@ class ErrorCollection
 /**
  * Initialise the Exception Handling System
  */
-function xarException_init($args)
+function xarException_init($args, $whatElseIsGoingLoaded)
 {
     global $xarException_useXDebug;
     if (function_exists('xdebug_enable')) {
@@ -272,7 +272,12 @@ function xarExceptionRender($format)
         if ($xarException_useXDebug) {
             $stack = $xarException_value->__stack;
             for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
-                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$stack[$i]['function'].'(';
+                if (isset($stack[$i]['function'])) {
+                    $function = $stack[$i]['function'];
+                } else {
+                    $function = '{}';
+                }
+                $text .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at '.$function.'(';
                 $file = basename($stack[$j]['file']);
                 $text .= $file.':';
                 $text .= $stack[$j]['line'].')<br />';
@@ -286,7 +291,12 @@ function xarExceptionRender($format)
         if ($xarException_useXDebug) {
             $stack = $xarException_value->__stack;
             for ($i = 1, $j = 0; $i < count($stack); $i++, $j++) {
-                $text .= '     at '.$stack[$i]['function'].'(';
+                if (isset($stack[$i]['function'])) {
+                    $function = $stack[$i]['function'];
+                } else {
+                    $function = '{}';
+                }
+                $text .= '     at '.$function.'(';
                 $file = basename($stack[$j]['file']);
                 $text .= $file.':';
                 $text .= $stack[$j]['line'].")\n";

@@ -22,7 +22,7 @@ define('XARLOG_LEVEL_NOTICE', 2);
 define('XARLOG_LEVEL_WARNING', 4);
 define('XARLOG_LEVEL_ERROR', 8);
 
-function xarLog_init($args)
+function xarLog_init($args, $whatElseIsGoingLoaded)
 {
     global $xarLog_logger, $xarLog_level;
 
@@ -390,31 +390,16 @@ class xarLog__HTMLLogger extends xarLog__Logger
 
 }
 
-function xarLog__JavaScriptLogger_OnStartBodyTag($value)
-{
-    // This function is called whenever the <body> tag has being sent to the browser
-    global $xarLog_logger;
-    echo $xarLog_logger->getWindowLoaderScript();
-}
-
-function xarLog__JavaScriptLogger_OnEndBodyTag($value)
-{
-    // This function is called whenever the </body> tag is going to be sent to the browser
-    global $xarLog_logger;
-    echo $xarLog_logger->getBuffer();
-}
-
 class xarLog__JavaScriptLogger extends xarLog__Logger
 {
     var $buffer = '';
 
     function xarLog__JavaScriptLogger($args)
     {
-        // Register proper callback functions at EMS
-        xarEvt_subscribeRawCallback('StartBodyTag', 'xarLog__JavaScriptLogger_OnStartBodyTag');
-        xarEvt_subscribeRawCallback('EndBodyTag', 'xarLog__JavaScriptLogger_OnEndBodyTag');
         // Set the HTML format
         $this->setFormat('html');
+        
+        xarTplAddJavaScriptCode('body', 'JavaScriptLogger', $this->getWindowLoaderScript());
     }
 
     function getWindowLoaderScript()
@@ -424,19 +409,18 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
                   date("Y-m-d H:i:s").
                   "</font></td></tr></table>";
 
-        $str = "<script language=\"javascript\">\n".
-               "debugWindow = window.open(\"Xaraya Javascript Logger\",\"Xaraya Javascript Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
-               "if (debugWindow) {\n".
-               "    debugWindow.focus();\n".
-               "    debugWindow.document.write(\"".$header."\"+'<p><b>'+window.location.href+'</b></p>');\n".
-               "}\n".
-               "</script>\n";
-        return $str;
+        $code = "debugWindow = window.open(\"Xaraya Javascript Logger\",\"Xaraya Javascript Logger\",\"width=450,height=500,scrollbars=yes,resizable=yes\");\n".
+                "if (debugWindow) {\n".
+                "    debugWindow.focus();\n".
+                "    debugWindow.document.write(\"".$header."\"+'<p><b>'+window.location.href+'</b></p>');\n".
+                "}\n";
+
+        return $code;
     }
 
     function getBuffer()
     {
-        $str = "<script language=\"javascript\">\n".
+        $code = "<script language=\"javascript\">\n".
                "if (debugWindow) {\n".
                $this->buffer.
                "    debugWindow.scrollBy(0,100000);\n".
@@ -447,14 +431,15 @@ class xarLog__JavaScriptLogger extends xarLog__Logger
 
     function logMessage($msg, $callPrepForDisplay = true)
     {
-        $str = "    debugWindow.document.write(\"".$this->getTimestamp().
+        $code = "if (debugWindow) {\n".
+                "    debugWindow.document.write(\"".$this->getTimestamp().
                ' - ('.$this->formatLevel().')<br/>';
         if ($callPrepForDisplay) {
             $msg = xarVarPrepForDisplay($msg);
         }
         $msg = str_replace("\n", '', nl2br(addslashes($msg)));
-        $str .= $msg . "<br/><br/>\");\n";
-        $this->buffer .= $str;
+        $code .= $msg . "<br/><br/>\");\n}\n";
+        xarTplAddJavaScriptCode('body', 'JavaScriptLogger', $code);
     }
 
 }

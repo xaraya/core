@@ -47,7 +47,7 @@ define('XARUSER_AUTH_FAILED', -1);
  * @returns bool
  * @return true on success
  */
-function xarUser_init($args)
+function xarUser_init($args, $whatElseIsGoingLoaded)
 {
     global $xarUser_authenticationModules;
 
@@ -68,6 +68,7 @@ function xarUser_init($args)
     $xarUser_authenticationModules = $args['authenticationModules'];
 
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
+    xarTplSetThemeName(xarUserGetNavigationThemeName());
 
     return true;
 }
@@ -225,6 +226,41 @@ function xarUserGetLang()
     $data = xarMLSLoadLocaleData($locale);
     if (!isset($data)) return; // throw back
     return $data['/language/iso3code'];
+}
+
+/**
+ * Gets the user navigation theme name
+ */
+function xarUserGetNavigationThemeName()
+{
+    $themeName = xarSessionGetVar('navigationThemeName');
+    if (!isset($themeName)) {
+        if (xarUserIsLoggedIn()) {
+            $themeName = xarUserGetVar('ThemeName');
+        }
+        if (!isset($themeName)) {
+            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+                // Here we can't raise an exception
+                // so what we can do here is only to log the exception
+                // and call xarExceptionFree
+                xarLogException(XARLOG_LEVEL_ERROR);
+                xarExceptionFree();
+                return;
+            }
+            $themeName = xarTplGetThemeName();
+        }
+        xarSessionSetVar('navigationThemeName', $themeName);
+    }
+    return $themeName;
+}
+
+/**
+ * Sets the user navigation theme name
+ */
+function xarUserSetNavigationThemeName($themeName)
+{
+    assert('$themeName != ""');
+    xarSessionSetVar('navigationThemeName', $themeName);
 }
 
 /**

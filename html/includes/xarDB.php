@@ -27,7 +27,7 @@
  * @returns bool
  * @return true on success, false on failure
  */
-function xarDB_init($args)
+function xarDB_init($args, $whatElseIsGoingLoaded)
 {
     global $xarDB_systemArgs;
     $xarDB_systemArgs = $args;

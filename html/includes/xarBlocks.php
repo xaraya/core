@@ -14,7 +14,7 @@
  * And why are you using $blockType instead of $blockName, when I said you to change I meant use $blockName everywhere, in the end it's the block name, not the block type, don't you think?
  */
 
-function xarBlock_init($args)
+function xarBlock_init($args, $whatElseIsGoingLoaded)
 {
     // Blocks Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();

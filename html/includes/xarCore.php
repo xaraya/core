@@ -45,32 +45,20 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  */
  
 /*
- * Optional systems defines - below are some 
- * predifined bit combinations taking into account
- * system dependancies. (see system dependancy 
- * diagram above for more info). 
+ * Optional systems defines that can be used as parameter for xarCoreInit
+ * System dependancies are yet present in the define, so you don't
+ * have to care of what for example the SESSION system depends on, if you
+ * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
+ * dependancies will be automatically resolved
  */
 define('XARCORE_SYSTEM_NONE', 0);
 define('XARCORE_SYSTEM_ADODB', 1);
-define('XARCORE_SYSTEM_SESSION', 3);
-define('XARCORE_SYSTEM_USER', 7);
-define('XARCORE_SYSTEM_CONFIGURATION', 9);
-define('XARCORE_SYSTEM_BLOCKS', 25);
-define('XARCORE_SYSTEM_MODULES', 41);
+define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_USER', 4 | XARCORE_SYSTEM_SESSION);
+define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_ADODB);
+define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_ALL', 63); // bit OR of all optional systems
-
- /*
- * In order for the bitwise operations to work, we need
- * the specific bits to test against - below
- * are the bits that will be tested against
- */ 
-define('XARCORE_BIT_NONE', 0x0);           // (00000000)
-define('XARCORE_BIT_ADODB', 0x1);          // (00000001)
-define('XARCORE_BIT_SESSION', 0x2);        // (00000010)
-define('XARCORE_BIT_USER', 0x4);           // (00000100)
-define('XARCORE_BIT_CONFIGURATION', 0x8);  // (00001000)
-define('XARCORE_BIT_BLOCKS', 0x10);        // (00010000)
-define('XARCORE_BIT_MODULES', 0x20);       // (00100000)
 
 /*
  * Debug flags
@@ -130,7 +118,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // Initialise system args array
     //$systemArgs = array();
 
-    if ((int) $whatToLoad & XARCORE_BIT_ADODB) {
+    if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
         include_once 'includes/xarDB.php';
 
@@ -145,12 +133,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
                             'siteTablePrefix' => xarCore_getSiteVar('DB.TablePrefix'));
         // Connect to database
-        xarDB_init($systemArgs);
+        xarDB_init($systemArgs, $whatToLoad);
     }
 
     // Start Event Messaging System
     $systemArgs = array('loadLevel' => $whatToLoad);
-    xarEvt_init($systemArgs);
+    xarEvt_init($systemArgs, $whatToLoad);
 
     xarEvt_registerEvent('StartBodyTag');
     xarEvt_registerEvent('EndBodyTag');
@@ -159,11 +147,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
                         'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
                         'level' => xarCore_getSiteVar('Log.LogLevel'));
-    xarLog_init($systemArgs);
+    xarLog_init($systemArgs, $whatToLoad);
 
     // Start Exception Handling System
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
-    xarException_init($systemArgs);
+    xarException_init($systemArgs, $whatToLoad);
 
     // Start Variables utilities
     // FIXME: <marco> No more sure of this!
@@ -174,16 +162,16 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'censoredWords' => xarCore_getSiteVar('Var.CensoredWords'),
                         'censoredWordsReplacers' => xarCore_getSiteVar('Var.CensoredWordsReplacers'));
     */
-    //xarVar_init($systemArgs);
+    //xarVar_init($systemArgs, $whatToLoad);
 
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                         'defaultModuleName' => xarCore_getSiteVar('Core.DefaultModuleName'),
                         'defaultModuleType' => xarCore_getSiteVar('Core.DefaultModuleType'),
                         'defaultModuleFunction' => xarCore_getSiteVar('Core.DefaultModuleFunction'));
-    xarSerReqRes_init($systemArgs);
+    xarSerReqRes_init($systemArgs, $whatToLoad);
 
-    if ((int)$whatToLoad & XARCORE_BIT_SESSION) {
+    if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
         // {ML_dont_parse 'includes/xarSession.php'}
         include_once 'includes/xarSession.php';
 
@@ -193,7 +181,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
                             'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'),
                             'useOldPHPSessions' => false);
-        xarSession_init($systemArgs);
+        xarSession_init($systemArgs, $whatToLoad);
     }
 
     // Start Multi Language System
@@ -201,30 +189,19 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'MLSMode' => xarCore_getSiteVar('MLS.MLSMode'),
                         'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
                         'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
-    xarMLS_init($systemArgs);
+    xarMLS_init($systemArgs, $whatToLoad);
 
-    // allow theme override in URL first
-    $themeName = xarVarCleanFromInput('theme');
-    if (!empty($themeName)) {
-        $themeName = xarVarPrepForOS($themeName);
-    }
-
-    if ((int)$whatToLoad & XARCORE_BIT_CONFIGURATION) {
+    if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
         include_once 'includes/xarConfig.php';
 
         // Start Configuration Unit
         $systemArgs = array();
-        xarConfig_init($systemArgs);
-
-        xarVar_init(array());
-
-        // Get theme from config FIXME: make sure this is site specific
-        if (empty($themeName)) {
-            $configTheme = xarConfigGetVar('Site.BL.DefaultTheme');
-        }
+        xarConfig_init($systemArgs, $whatToLoad);
     }
 
-    if ((int)$whatToLoad & XARCORE_BIT_MODULES) {
+    xarVar_init($systemArgs, $whatToLoad);
+
+    if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         include_once 'includes/xarMod.php';
 
         // Start Modules Support
@@ -232,43 +209,32 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // or XHTML site compliance. For now just pass false.
         $systemArgs = array('enableShortURLsSupport' => xarCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
-        xarMod_init($systemArgs);
+        xarMod_init($systemArgs, $whatToLoad);
     }
 
-    if ((int)$whatToLoad & XARCORE_BIT_USER) {
+    // Start BlockLayout Template Engine
+    $systemArgs = array('enableTemplatesCaching' => true,
+                        'themesBaseDirectory' => xarCore_getSiteVar('BL.ThemesDirectory'),
+                        'defaultThemeName' => xarCore_getSiteVar('BL.DefaultTheme'));
+    xarTpl_init($systemArgs, $whatToLoad);
+
+    if ($whatToLoad & XARCORE_SYSTEM_USER) {
         include_once 'includes/xarUser.php';
         // {ML_dont_parse 'includes/xarSecurity.php'}
         include_once 'includes/xarSecurity.php';
 
         // Start User System
         $systemArgs = array('authenticationModules' => xarCore_getSiteVar('User.AuthenticationModules'));
-        xarUser_init($systemArgs);
-
-        // Retrive user theme name
-        if (empty($themeName)) {
-            $themeName = xarUser_getThemeName();
-        }
+        xarUser_init($systemArgs, $whatToLoad);
     }
 
-    if ((int)$whatToLoad & XARCORE_BIT_BLOCKS) {
+    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
         include_once 'includes/xarBlocks.php';
+
         // Start Blocks Support Sytem
         $systemArgs = array();
-        xarBlock_init($systemArgs);
+        xarBlock_init($systemArgs, $whatToLoad);
     }
-
-    // Might want to reorganize these theme details
-    if(empty($themeName) && isset($configTheme)) {
-        $themeName = $configTheme;
-    }
-
-    if (empty($themeName)) {
-        // Use the default theme for this site
-        $themeName = xarCore_getSiteVar('BL.DefaultTheme');
-    }
-    $systemArgs = array('enableTemplatesCaching' => true);
-    $systemArgs['themeDirectory'] = xarCore_getSiteVar('BL.ThemesDirectory') . '/' . $themeName;
-    xarTpl_init($systemArgs);
 
     return true;
 }

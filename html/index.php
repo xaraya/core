@@ -16,6 +16,21 @@ function xarMain()
     // Get module parameters
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
+    // Adjust BL settings
+    // ANSWER <marco>: Who's gonna use that?
+    // Allow theme override in URL first
+    $themeName = xarVarCleanFromInput('theme');
+    if (!empty($themeName)) {
+        $themeName = xarVarPrepForOS($themeName);
+        xarTplSetThemeName($themeName);
+    }
+    // Use the admin.xt page if available when $modType is admin
+    if ($modType == 'admin') {
+        xarTplSetPageTemplateName('admin');
+    }
+    // Set the default page title
+    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
+
     // Load the module
     $res = xarModLoad($modName, $modType);
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
@@ -63,6 +78,7 @@ function xarMain()
         return; // throw back
     }
 
+    /*
     // TODO: formalize this and put code in xarTpl_renderPage ?
     // Override default page template
     if (xarVarIsCached('PageSettings','template')) {
@@ -76,10 +92,11 @@ function xarMain()
        // dirty trick :-)
        xarVarSetCached('Config.Variables', 'Site.Core.Slogan', $title);
     }
+    */
 
     // Render page
-    $pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
-    //    $pageOutput = xarTpl_renderPage($mainModuleOutput);
+    //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
+    $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {

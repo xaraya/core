@@ -34,7 +34,7 @@ define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 4);
  * @returns bool
  * @return true on success
  */
-function xarMLS_init($args)
+function xarMLS_init($args, $whatElseIsGoingLoaded)
 {
     global $xarMLS_mode, $xarMLS_backend;
     global $xarMLS_localeDataLoader, $xarMLS_localeDataCache;
@@ -73,12 +73,15 @@ function xarMLS_init($args)
     $xarMLS_localeDataLoader = new xarMLS__LocaleDataLoader();
     $xarMLS_localeDataCache = array();
 
+    $xarMLS_currentLocale = '';
     $xarMLS_defaultLocale = $args['defaultLocale'];
     $xarMLS_allowedLocales = $args['allowedLocales'];
 
-    // TODO: <marco> Choose how to detect current locale!
-
-    //$xarMLS_currentLocale = $xarMLS_defaultLocale;
+    if ($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER != XARCORE_SYSTEM_USER) {
+        // The User System won't be started
+        // MLS will use the default locale
+        xarMLS_setCurrentLocale($xarMLS_defaultLocale);
+    }
 
     // Register MLS events
     xarEvt_registerEvent('MLSMissingTranslationString');
@@ -202,12 +205,7 @@ function xarMLSGetCurrentLocale()
 
 function xarMLSGetCharsetFromLocale($locale)
 {
-    if (empty($locale)) {
-        $msg = xarML('Empty locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    assert('!empty($locale)');
     $parsedLocale = xarMLS__parseLocaleString($locale);
     if (!isset($parsedLocale)) return; // throw back
     return $parsedLocale['charset'];
@@ -232,7 +230,7 @@ function xarML($string)
         // This happen in rare cases when xarML is called before xarMLInit was called
         $trans = $string;
     }
-    if (!isset($trans) || $trans == '') {
+    if (empty($trans)) {
         xarEvt_fire('MLSMissingTranslationString', $string);
         $trans = $string;
     }
@@ -263,7 +261,7 @@ function xarMLByKey($key)
         // This happen in rare cases when xarMLByKey is called before xarMLInit was called
         $trans = $key;
     }
-    if (!isset($trans) || $trans == '') {
+    if (empty($trans)) {
         xarEvt_fire('MLSMissingTranslationKey', $key);
         $trans = $key;
     }
@@ -415,7 +413,7 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Sets current locale
  *
- * @access private
+ * @access protected
  * @param locale site locale
  */
 function xarMLS_setCurrentLocale($locale)
@@ -431,7 +429,7 @@ function xarMLS_setCurrentLocale($locale)
         case XARMLS_BOXED_MULTI_LANGUAGE_MODE:
             // check for locale availability
             $siteLocales = xarMLSListSiteLocales();
-            if (!in_array($locale, $locales)) {
+            if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = xarMLSGetSiteLocale();
             }
@@ -575,7 +573,7 @@ function xarMLS_loadTranslations($type, $name, $baseDir, $subtype, $subname)
                      'subname' => $subname,
                      'locale' => $testLocale);
 //if($subtype == 'template')
-xarLogVariable('ctx', $ctx);
+//xarLogVariable('ctx', $ctx);
         if ($xarMLS_backend->hasContext($ctx, $loadCtx)) {
             if (!$xarMLS_backend->load($loadCtx)) return;
             return true;
@@ -672,9 +670,11 @@ function xarMLS_convertFromInput($var, $method)
         !function_exists('mb_http_input')) {
         return $var;
     }
+    // CHECKME: check this code
+    return $var;
     // Cookies must contain only US-ASCII characters
     $inputCharset = strtolower(mb_http_input($method));
-    $curCharset = xarMLGetCurrentCharset();
+    $curCharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
     if ($inputCharset != $curCharset) {
         $var = mb_convert_encoding($var, $curCharset, $inputCharset);
     }
@@ -707,7 +707,7 @@ function xarMLS__convertFromCharset($var, $charset)
     // FIXME: <marco> Can we trust browsers?
     if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
         !function_exists('mb_convert_encoding')) return $var;
-    $curCharset = xarMLGetCurrentCharset();
+    $curCharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
     $var = mb_convert_encoding($var, $curCharset, $charset);
     return $var;
 }
@@ -739,9 +739,9 @@ function xarMLS__getLocaleAlternatives($locale)
 
     $alternatives = array($locale);
     if (isset($country)) {
-        $alternatives[] = $lang.$country.$charset;
+        $alternatives[] = $lang.'_'.$country.'.'.$charset;
     }
-    $alternatives[] = $lang.$charset;
+    $alternatives[] = $lang.'.'.$charset;
 
     return $alternatives;
 }
@@ -784,7 +784,7 @@ function xarMLS__parseLocaleString($locale)
             $res['charset'] = $word;
 
         $old_sep = $sep;
-        $cur_pos = $cur_pos + $len;
+        $cur_pos = $cur_pos + $len + 1;
     }
 
     if (empty($res['lang'])) {
@@ -794,8 +794,8 @@ function xarMLS__parseLocaleString($locale)
         return;
     }
     if (empty($res['charset'])) {
-        $res['charset'] = '.'.xarMLS__getSingleByteCharset($res['lang']);
-        if ($res['charset'] == '.') $res['charset'] = '.utf-8';
+        $res['charset'] = xarMLS__getSingleByteCharset($res['lang']);
+        if ($res['charset'] == '') $res['charset'] = 'utf-8';
         $locale .= $res['charset'];
     }
     return $res;
