@@ -109,13 +109,11 @@ function xarPageIsCached($cacheKey, $name = '')
         $match = xarServerGetVar('HTTP_IF_NONE_MATCH');
         if (!empty($match) && $match == $etag) {
             header('HTTP/1.0 304');
-            session_write_close();
             exit;
         } else {
             $since = xarServerGetVar('HTTP_IF_MODIFIED_SINCE');
             if (!empty($since) && strtotime($since) >= $mod) {
                 header('HTTP/1.0 304');
-                session_write_close();
                 exit;
             }
         }
@@ -123,6 +121,7 @@ function xarPageIsCached($cacheKey, $name = '')
         header("Expires: " . gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) . " GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
         // Netscape 6.2 doesn't like this one either ?
+        // FIXME: This belongs in session subsystem, what does it do? Does it need to be here?
         session_cache_limiter('public');
         // end 304 test
 
