@@ -248,6 +248,15 @@
 						<input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" value="1" />
 					</xar:if></td>
 					</tr>
+					<tr>
+						<td><label for="uniqueemail"><xar:mlstring>Email address must be unique to each registered user</xar:mlstring>:</label></td>
+						<td>
+					<xar:if condition="xarModGetVar('roles', 'uniqueemail')">
+						<input type="checkbox" name="uniqueemail" id="uniqueemail" value="1" checked="checked" />
+					<xar:else />
+						<input type="checkbox" name="uniqueemail" id="uniqueemail" value="1" />
+					</xar:if></td>
+					</tr>
 			<!-- 					
 					<tr align="left" valign="middle">
 						<td>

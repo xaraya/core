@@ -200,14 +200,16 @@ function roles_user_register()
                     $invalid['email'] = xarML('There is an error in your email address');
                 }
 
-                // check for duplicate email address
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('email' => $email));
-                if ($user != false) {
-                    unset($user);
-                    $invalid['email'] = xarML('That email address is already registered.');
+                if(xarModGetVar('roles','uniqueemail')) {
+                    // check for duplicate email address
+                    $user = xarModAPIFunc('roles',
+                                          'user',
+                                          'get',
+                                           array('email' => $email));
+                    if ($user != false) {
+                        unset($user);
+                        $invalid['email'] = xarML('That email address is already registered.');
+                }
 
                 } else {
                     // check for disallowed email addresses
