@@ -248,7 +248,7 @@ function modules_init()
  * @param oldversion the old version to upgrade from
  * @returns bool
  */
-function base_upgrade($oldversion)
+function modules_upgrade($oldversion)
 {
     return false;
 }
