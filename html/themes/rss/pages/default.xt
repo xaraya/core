@@ -5,13 +5,13 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
 <rss version="2.0">
 	<channel>
-		<title>#xarConfigGetVar('Site.Core.SiteName')#</title>
-		<link>#xarServerGetBaseURL()#</link>
-		<description>#xarConfigGetVar('Site.Core.MetaDescription')#</description>
+		<title><?php echo htmlentities(xarConfigGetVar('Site.Core.SiteName')); ?></title>
+		<link><?php echo htmlentities(xarServerGetBaseURL()); ?></link>
+		<description><?php echo htmlentities(xarConfigGetVar('Site.Core.MetaDescription')); ?></description>
 
-		<copyright>#xarConfigGetVar('CopyRight')#</copyright>
-		<managingEditor>#xarModGetVar('mail', 'adminname')# , #xarModGetVar('mail', 'adminmail')#</managingEditor>
-		<webMaster>#xarModGetVar('mail', 'adminname')# , #xarModGetVar('mail', 'adminmail')#</webMaster>
+		<copyright><?php echo htmlentities(xarConfigGetVar('CopyRight')); ?></copyright>
+		<managingEditor><?php echo htmlentities(xarModGetVar('mail', 'adminname'))." ".htmlentities(xarModGetVar('mail', 'adminmail')); ?></managingEditor>
+		<webMaster><?php echo htmlentities(xarModGetVar('mail', 'adminname'))." ".htmlentities(xarModGetVar('mail', 'adminmail')); ?></webMaster>
 		<generator>Xaraya 1.0</generator>
 		<docs>http://backend.userland.com/rss</docs>
 			<xar:module id="modulespace" main="true" />
