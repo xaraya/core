@@ -187,6 +187,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
             // Bug 1109: tpl:JavaScript is replacing tpl:{head|body}JavaScript
             $resolver->push('tpl:JavaScript', '$_bl_javascript');
+            // These two deprecated.
             $resolver->push('tpl:headJavaScript', '$_bl_head_javascript');
             $resolver->push('tpl:bodyJavaScript', '$_bl_body_javascript');
         }
@@ -1364,7 +1365,7 @@ class xarTpl__ExpressionTransformer
         $expression = $chunks[0];
         // Check for special variable
         if (strpos($expression, ':') !== false) {
-            // Special varriable
+            // Special variable
 
             // Get xarTpl__SpecialVariableNamesResolver instance
             $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
@@ -1398,11 +1399,10 @@ class xarTpl__ExpressionTransformer
         //  9.  )           => matches right brace
         // 10.  {1,2}       => the whole previous subpattern may  appear min. 1 and max 2 times
         // 11. )            => ends the current pattern
-        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*(:[0-9a-z_]+){1,2})/i", $phpExpression, $matches)) {
+        if (preg_match_all("/\\\$([a-z_][0-9a-z_]*([:\.][0-9a-z_]+){1,2})/i", $phpExpression, $matches)) {
             // Get xarTpl__SpecialVariableNamesResolver instance
-            $resolver =& xarTpl__SpecialVariableNamesResolver::instance();
             for ($i = 0; $i < count($matches[0]); $i++) {
-                $resolvedName = $resolver->resolve($matches[1][$i], $this);
+                $resolvedName =& xarTpl__ExpressionTransformer::transformBLExpression($matches[1][$i]);
                 if (!isset($resolvedName)) {
                     return; // throw back
                 }
