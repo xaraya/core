@@ -86,20 +86,25 @@ function roles_userapi_getall($args)
         $bindvars[] = (int) ROLES_STATE_DELETED;
     }
 
-    // Select-clause.
-    $query = '
-        SELECT  DISTINCT roletab.xar_uid,
-                roletab.xar_uname,
-                roletab.xar_name,
-                roletab.xar_email,
-                roletab.xar_state,
-                roletab.xar_date_reg';
-
-    // From-clause for the query.
     if (empty($group_list)) {
         // Simple query.
+        $query = '
+            SELECT  roletab.xar_uid,
+                    roletab.xar_uname,
+                    roletab.xar_name,
+                    roletab.xar_email,
+                    roletab.xar_state,
+                    roletab.xar_date_reg';
         $query .= ' FROM ' . $rolestable . ' AS roletab';
     } else {
+        // Select-clause.
+        $query = '
+            SELECT  DISTINCT roletab.xar_uid,
+                    roletab.xar_uname,
+                    roletab.xar_name,
+                    roletab.xar_email,
+                    roletab.xar_state,
+                    roletab.xar_date_reg';
         // Restrict by group(s) - join to the group_members table.
         $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
         $where_clause[] = 'roletab.xar_uid = rolememb.xar_uid';
