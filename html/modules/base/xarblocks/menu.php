@@ -57,15 +57,14 @@ function base_menublock_display($blockinfo)
 	    return;
 	}
     
-    // TODO this is how we are marking the currently loaded module <-- Borrowing from the admin panels, 
-    // need to break this out to the block update function
-
-    $marker = xarModGetVar('adminpanels', 'marker');
-    if(!isset($marker)){
-        xarModSetVar('adminpanels' ,'marker', '[x]');
-        $marker = '[x]';
+    // Get the marker for the main menu
+    if (empty($vars['marker'])) {
+        $vars['marker'] = '[x]';
     }
     
+    $marker = $vars['marker'];
+
+   
     // which module is loaded atm?
     // we need it's name and type - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype) = xarRequestGetInfo();
@@ -187,19 +186,21 @@ function base_menublock_modify($blockinfo)
         $vars['style'] = 1;
     }
 
-    // What to display
-    $output .= '<tr><td class="xar-title">'.xarML('Display').'</td><td></td></tr>';
+    // Defaults
+    if (empty($vars['marker'])) {
+        $vars['marker'] = '[x]';
+    }
 
-    $output .= '<tr><td class="xar-normal">'.xarML('Display Modules').':</td><td><input type="checkbox" value="1" name="displaymodules"';
+    // What to display
+    $output = '<tr><td class="xar-normal">'.xarML('Display Modules').':</td><td><input type="checkbox" value="1" name="displaymodules"';
     if (!empty($vars['displaymodules'])) {
         $output .= ' checked';
     }
 
-    $output .= ' /></td></tr><tr><td class="xar-normal">'.xarML('Display Waiting Content').':</td><td><input type="checkbox" value="1" name="displaywaiting"';
-    if (!empty($vars['displaywaiting'])) {
-        $output .= ' checked';
-    }
     $output .= ' /></td></tr>';
+
+    // Marker
+    $output .= '<tr><td class="xar-normal">'.xarML('Marker').':</td><td><input type="text" name="marker" value='.$vars['marker'].' size="5"></td></tr>';
 
     // Content
     $c=1;
@@ -229,15 +230,16 @@ function base_menublock_modify($blockinfo)
 function base_menublock_insert($blockinfo)
 {
     list($vars['displaymodules'],
-         $vars['displaywaiting']) = xarVarCleanFromInput('displaymodules',
-					                                     'displaywaiting');
+         $vars['marker']) = xarVarCleanFromInput('displaymodules',
+					                             'marker');
 
     // Defaults
     if (empty($vars['displaymodules'])) {
         $vars['displaymodules'] = 0;
     }
-    if (empty($vars['displaywaiting'])) {
-        $vars['displaywaiting'] = 0;
+
+    if (empty($vars['marker'])) {
+        $vars['marker'] = '[x]';
     }
 
     // User links

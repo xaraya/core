@@ -250,3 +250,5 @@ function adminpanels_adminmenublock_update($blockinfo)
     // Return - nothing to update
     return $blockinfo;
 }
+
+?>

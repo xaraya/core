@@ -180,6 +180,12 @@ function adminpanels_init()
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
+
+    // Register Block types
+    $res = xarBlockTypeRegister('adminpanels', 'waitingcontent');
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
     
     // Set module variables
     xarModSetVar('adminpanels','showold', 1);
