@@ -63,7 +63,7 @@ function themes_metablock_info()
 function themes_metablock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewThemes',0,'metablock',"$blockinfo[title]:All:All",'All')) return;
+    if(!xarSecurityCheck('ViewThemes',0,'Block',"All:" . $blockinfo['title'] . ":All")) return;
     // Get current content
     $vars = @unserialize($blockinfo['content']);
     // Description
@@ -88,12 +88,12 @@ function themes_metablock_display($blockinfo)
     $meta['generator'] = xarConfigGetVar('System.Core.VersionId');
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
-    // Geo Url    
+    // Geo Url
     $meta['longitude'] = $vars['longitude'];
     $meta['latitude'] = $vars['latitude'];
     // Active Page
     $meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
-    
+
     $meta['baseurl'] = xarServerGetBaseUrl();
     if (isset($vars['copyrightpage'])){
         $meta['copyrightpage'] = $vars['copyrightpage'];
