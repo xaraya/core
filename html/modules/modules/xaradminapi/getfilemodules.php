@@ -27,6 +27,7 @@ function modules_adminapi_getfilemodules()
             case 'CVS':
             case 'SCCS':
             case 'PENDING':
+            case 'notinstalled':
                 break;
             default:
                 if (is_dir("modules/$modOsDir")) {
@@ -38,7 +39,7 @@ function modules_adminapi_getfilemodules()
                     }
 
                     // Found a directory
-                    $name         = $modOsDir;
+                    $name         = $modFileInfo['name'];
                     $regId        = $modFileInfo['id'];
                     $version      = $modFileInfo['version'];
                     $mode         = XARMOD_MODE_SHARED;
@@ -47,7 +48,7 @@ function modules_adminapi_getfilemodules()
                     $adminCapable = $modFileInfo['admin_capable'];
                     $userCapable  = $modFileInfo['user_capable'];
                     $dependency   = $modFileInfo['dependency'];
-            
+
                     // TODO: beautify :-)
                     if (!isset($regId)) {
                         xarSessionSetVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
@@ -92,6 +93,20 @@ function modules_adminapi_getfilemodules()
                         $userCapable = 0;
                     }
 
+                    //Check for duplicates
+                    foreach ($fileModules as $module) {
+                    echo $regId ." " .$module['regid']."<br/>";
+                        if($regId == $module['regid']) {
+                            $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.', $regId, $name, $module['name']);
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                           new SystemException($msg));
+                        }
+                        if($name == $module['name']) {
+                            $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $name, $regId, $module['regid']);
+                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                           new SystemException($msg));
+                        }
+                    }
                     $fileModules[$name] = array('directory'     => $modOsDir,
                                                 'name'          => $name,
                                                 'regid'         => $regId,
