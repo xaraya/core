@@ -30,7 +30,7 @@ class SystemException extends Exception
         } else {
             $this->module = '';
         }
-        include("xarayacomponents.php");
+        include("includes/exceptions/xarayacomponents.php");
         foreach ($core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
                 $this->component = $corecomponent['fullname'];
