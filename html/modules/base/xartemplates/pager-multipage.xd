@@ -1,0 +1,53 @@
+<!--- Pager for displaying page links on multi-page documents --->
+
+<!--- Display first-page link if there is more than one page and we are not on that page --->
+<xar:if condition="$currentpage ne $firstpage">
+    &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">#xarML('First')#</a>
+</xar:if>
+
+<!--- Display previous-block link if there is more than one block --->
+<xar:if condition="$currentblock ne $firstblock">
+    <xar:set name="$prevblocklabel"><xar:ml>
+        <xar:mlstring>Previous #(1) pages</xar:mlstring>
+        <xar:mlvar>#$prevblockpages#</xar:mlvar>
+    </xar:ml></xar:set>
+    &nbsp;&nbsp;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
+</xar:if>
+
+<!--- Display previous-page link if we are not on the first page --->
+<xar:if condition="$currentpage ne $firstpage">
+    &nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
+</xar:if>
+
+<xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
+    <xar:if condition="$pagenumber ne $currentpage">
+        <xar:set name="$pageurllabel"><xar:ml>
+            <xar:mlstring>Page #(1)</xar:mlstring>
+            <xar:mlvar>#$pagenumber#</xar:mlvar>
+        </xar:ml></xar:set>
+        &nbsp;&nbsp;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
+    <xar:else />
+        &nbsp;&nbsp;<strong>#$pagenumber#</strong>
+    </xar:if>
+</xar:foreach>
+
+<!--- Display next-page link if we are not on the last page --->
+<xar:if condition="$currentpage ne $lastpage">
+    &nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
+</xar:if>
+
+<!--- Display next-block link if there is more than one block --->
+<xar:if condition="$currentblock ne $lastblock">
+    <xar:set name="$nextblocklabel"><xar:ml>
+        <xar:mlstring>Next #(1) pages</xar:mlstring>
+        <xar:mlvar>#$nextblockpages#</xar:mlvar>
+    </xar:ml></xar:set>
+    &nbsp;&nbsp;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
+</xar:if>
+
+<!--- Display last-page link if we are not on it --->
+<!---
+<xar:if condition="$currentpage ne $lastpage">
+    &nbsp;&nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
+</xar:if>
+--->
