@@ -31,7 +31,7 @@ function roles_admin_showusers()
 
     if (!xarVarFetch('uid', 'int:0:', $uid, $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'int:0:', $data['state'], ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
@@ -86,42 +86,41 @@ function roles_admin_showusers()
     }
 
      if ($uid != 0) {
-        $usrs = $role->getUsers($data['state'], $startnum, $numitems, $data['order'], $selection);
-        $data['totalselect'] = count($role->getUsers($data['state'], 0, 0, 'name', $selection));
-     }
-     else {
-        $usrs = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
-        $data['totalselect']  = count(xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'selection' => $selection)));
+    $usrs = $role->getUsers($data['state'], $startnum, $numitems, $data['order'], $selection);
+    $data['totalselect'] = count($role->getUsers($data['state'], 0, 0, 'name', $selection));
+     } else {
+    $usrs = xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'startnum' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
+    $data['totalselect']  = count(xarModAPIFunc('roles','user','getall', array('state' => $data['state'], 'selection' => $selection)));
      }
      $data['totaldisplay'] = count($usrs);
     // get all children of this role that are users
     switch ($data['state']) {
-        case 0 :
+        case ROLES_STATE_CURRENT :
         default:
             if ($data['totalselect'] == 0) {
                 $data['message'] = xarML('There are no users');
             }
             $data['title'] .= xarML('Users');
             break;
-        case 1:
+        case ROLES_STATE_INACTIVE:
             if ($data['totalselect'] == 0) {
                 $data['message'] = xarML('There are no inactive users');
             }
             $data['title'] .= xarML('Inactive Users');
             break;
-        case 2:
+        case ROLES_STATE_NOTVALIDATED:
             if ($data['totalselect'] == 0) {
                 $data['message'] = xarML('There are no users waiting for validation');
             }
             $data['title'] .= xarML('Users Waiting for Validation');
             break;
-        case 3:
+        case ROLES_STATE_ACTIVE:
             if ($data['totalselect'] == 0) {
                 $data['message'] = xarML('There are no active users');
             }
             $data['title'] .= xarML('Active Users');
             break;
-        case 4:
+        case ROLES_STATE_PENDING:
             if ($data['totalselect'] == 0) {
                 $data['message'] = xarML('There are no pending users');
             }

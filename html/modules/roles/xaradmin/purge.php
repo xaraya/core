@@ -53,7 +53,7 @@ function roles_admin_purge($args)
             $roleslist = new xarRoles();
             if ($data['groupuid'] != 0) $parentgroup = $roleslist->getRole($data['groupuid']);
             foreach ($recalluids as $uid => $val) {
-                $state = $role->getType() ? 3 : $data['recallstate'];
+                $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarModAPIFunc('roles','admin','recall',
                     array('uid' => $uid,
                           'state' => $state));
@@ -62,7 +62,7 @@ function roles_admin_purge($args)
             }
         }
 // --- display roles that can be recalled
-        $selection = " WHERE xar_state=0 AND xar_email != ''";
+        $selection = " WHERE xar_state = " . ROLES_STATE_DELETED . " AND xar_email != ''";
         //Create the selection
         if (!empty($data['recallsearch'])) {
             $selection .= " AND (";
@@ -156,7 +156,7 @@ function roles_admin_purge($args)
             $roleslist = new xarRoles();
             foreach ($purgeuids as $uid => $val) {
                 $role = $roleslist->getRole($uid);
-                $state = 0;
+                $state = ROLES_STATE_DELETED;
                 $uname = $deleted . mktime();
                 $name = '';
                 $pass = '';
@@ -179,19 +179,19 @@ function roles_admin_purge($args)
         if ($data['purgestate'] != -1) {
             $selection .= " AND xar_state = " . $data['purgestate'];
             switch ($data['purgestate']):
-                case 0 :
+                case ROLES_STATE_DELETED :
                     $data['purgestatetext'] = 'deleted';
                     break ;
-                case 1 :
+                case ROLES_STATE_INACTIVE :
                     $data['purgestatetext'] = 'inactive';
                     break ;
-                case 2 :
+                case ROLES_STATE_NOTVALIDATED :
                     $data['purgestatetext'] = 'not validated';
                     break ;
-                case 3 :
+                case ROLES_STATE_ACTIVE :
                     $data['purgestatetext'] = 'active';
                     break ;
-                case 4 :
+                case ROLES_STATE_PENDING :
                     $data['purgestatetext'] = 'pending';
                     break ;
             endswitch ;
@@ -237,19 +237,19 @@ function roles_admin_purge($args)
         for (; !$result->EOF; $result->MoveNext()) {
             list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
             switch ($state):
-                case 0 :
+                case ROLES_STATE_DELETED :
                     $state = 'deleted';
                     break ;
-                case 1 :
+                case ROLES_STATE_INACTIVE :
                     $state = 'inactive';
                     break ;
-                case 2 :
+                case ROLES_STATE_NOTVALIDATED :
                     $state = 'not validated';
                     break ;
-                case 3 :
+                case ROLES_STATE_ACTIVE :
                     $state = 'active';
                     break ;
-                case 4 :
+                case ROLES_STATE_PENDING :
                     $state = 'pending';
                     break ;
             endswitch ;

@@ -12,6 +12,14 @@
 
 include_once 'modules/roles/xarincludes/xarQuery.php';
 
+define('ROLES_STATE_DELETED',0);
+define('ROLES_STATE_INACTIVE',1);
+define('ROLES_STATE_NOTVALIDATED',2);
+define('ROLES_STATE_ACTIVE',3);
+define('ROLES_STATE_PENDING',4);
+define('ROLES_STATE_CURRENT',98);
+define('ROLES_STATE_ALL',99);
+
 /**
  * xarRoles: class for the role repository
  *
@@ -313,7 +321,7 @@ class xarRoles
      * @throws none
      * @todo create exception handling for bad input
      */
-    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = 3, $authmodule = '')
+    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = '')
     {
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
@@ -470,7 +478,7 @@ class xarRole
         if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';
-        if (!isset($state)) $state = 1;
+        if (!isset($state)) $state = ROLES_STATE_INACTIVE;
         // FIXME: why is date_reg a varchar in the database and not a date field?
         if (!isset($date_reg)) $date_reg = mktime();
         if (!isset($val_code)) $val_code = 'createdbyadmin';
@@ -723,13 +731,13 @@ class xarRole
         //Let's not remove the role yet.  Instead, we want to deactivate it
 
         $deleted = xarML('deleted');
-        $query = "UPDATE $this->rolestable
-        SET xar_uname   =  '" . $this->getUser() . "[" . $deleted . "]" . xarLocaleGetFormattedDate() . "',
-            xar_state   = 0
-        WHERE xar_uid   = " . $this->getID();
+        $q = new xarQuery('UPDATE',$this->rolestable);
+        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . xarLocaleGetFormattedDate());
+        $q->addfield('xar_state',ROLES_STATE_DELETED);
+        $q->eq('xar_uid',$this->getID());
 
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query)) return;
+        if (!$q->run()) return;
         // done
         return true;
     }
@@ -889,10 +897,10 @@ class xarRole
      * @throws none
      * @todo none
      */
-    function getUsers($state = 0, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
+    function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
         // set up the query and get the data
-        if ($state == 0) {
+        if ($state == ROLES_STATE_CURRENT) {
             $query = "SELECT r.xar_uid,
                         r.xar_name,
                         r.xar_type,
@@ -906,7 +914,8 @@ class xarRole
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
-                        AND rm.xar_parentid = $this->uid";
+                        AND r.xar_state != " . ROLES_STATE_DELETED .
+                        " AND rm.xar_parentid = $this->uid";
         } else {
             $query = "SELECT r.xar_uid,
                         r.xar_name,
@@ -967,14 +976,15 @@ class xarRole
      * @throws none
      * @todo none
      */
-    function countUsers($state = 0, $selection = NULL)
+    function countUsers($state = ROLES_STATE_CURRENT, $selection = NULL)
     {
         // set up the query and get the data
-        if ($state == 0) {
+        if ($state == ROLES_STATE_CURRENT) {
             $query = "SELECT COUNT(r.xar_uid)
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
+                        AND r.xar_state != ROLES_STATE_CURRENT
                         AND rm.xar_parentid = $this->uid";
         } else {
             $query = "SELECT COUNT(r.xar_uid)
@@ -1103,7 +1113,7 @@ class xarRole
      * @throws none
      * @todo none
      */
-    function getDescendants($state = 0)
+    function getDescendants($state = ROLES_STATE_CURRENT)
     {
         $roles = new xarRoles();
         $role = $roles->getRole($this->uid);
