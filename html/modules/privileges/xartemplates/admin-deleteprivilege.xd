@@ -1,37 +1,37 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="xarTplAddStyleLink('privileges', 'privtree')">
-	<xar:comment>No action needed if successful</xar:comment>
+    <xar:comment>No action needed if successful</xar:comment>
 </xar:if>
 <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-	<xar:comment>No action needed if successful</xar:comment>
+    <xar:comment>No action needed if successful</xar:comment>
 </xar:if>
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:mlstring>Delete Privilege:</xar:mlstring>
-		#$pname#
-	</h2>
+    <h2>
+        <xar:mlstring>Delete Privilege:</xar:mlstring>
+        #$pname#
+    </h2>
 
-	<xar:if condition="count($parents) ne 0">
-	    <div>
-	        <dl class="xar-tabs">
-	            <dt class="help" title="These are the privileges that contain #$pname# as a component">
-	                <xar:mlstring>Used in</xar:mlstring> :
-	            </dt>
-	            <xar:set name="prevgroup">""</xar:set>
-	            <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-	                <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-	                    <dd>
-	                        <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parents[$i]['parentid']#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
-	                    </dd>
-	                </xar:if>
-	                <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-	            </xar:for>
-	        </dl>
-	    </div>
-	</xar:if>
+    <xar:if condition="count($parents) ne 0">
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help" title="These are the privileges that contain #$pname# as a component">
+                    <xar:mlstring>Used in</xar:mlstring> :
+                </dt>
+                <xar:set name="prevgroup">""</xar:set>
+                <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                    <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                        <dd>
+                            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parents[$i]['parentid']#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
+                        </dd>
+                    </xar:if>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+                </xar:for>
+            </dl>
+        </div>
+    </xar:if>
 
     <div>
         <dl class="xar-tabs">
@@ -53,22 +53,22 @@
         </dl>
     </div>
 
-	<form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;" enctype="application/x-www-form-urlencoded" >
+    <form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;" enctype="application/x-www-form-urlencoded" >
 
-	    <h3 class="xar-align-center">
-	    	<xar:mlstring>Confirm deletion of all instances of Privilege</xar:mlstring>
-	    	'#$pname#'
-	    </h3>
+        <h3 class="xar-align-center">
+            <xar:mlstring>Confirm deletion of all instances of Privilege</xar:mlstring>
+            '#$pname#'
+        </h3>
 
-		<div class="xar-align-center">
-		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-		    <input type="hidden" name="pid" id="pid" value="#$pid#" />
-		    <input type="hidden" name="confirm" id="confirm" value="1" />
-		    <input type="hidden" name="confirmation" id="confirmation" value="1" />
-		    <input type="submit" value="#xarML('Delete Privilege')#" class="xar-margin-thickright" />
-		    <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-privileges-admin-newprivilege;';" class="xar-margin-thickleft" />
-		</div>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="pid" id="pid" value="#$pid#" />
+            <input type="hidden" name="confirm" id="confirm" value="1" />
+            <input type="hidden" name="confirmation" id="confirmation" value="1" />
+            <input type="submit" value="#xarML('Delete Privilege')#" class="xar-margin-thickright" />
+            <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-privileges-admin-newprivilege;';" class="xar-margin-thickleft" />
+        </div>
 
-	</form>
+    </form>
 
 </div>
