@@ -1,7 +1,9 @@
 <xar:foreach in="$properties" key="$name" value="$property">
-    <tr align="left" valign="middle">
-        <td><xar:data-label property="$properties[$name]" /> </td>
-        <td><xar:data-input property="$properties[$name]" /> </td>
-    </tr>
+  <div style="margin: 5pt;">
+    <div style="float: left; min-width: 100px;">
+    <span><xar:data-label property="$properties[$name]" /></span>
+    </div>
+    <span><xar:data-input property="$properties[$name]" /></span>
+  </div>
 </xar:foreach>
 

@@ -51,8 +51,9 @@
 
         <!-- this does most of the hard work :) -->
         <xar:data-form object="$object" />
-
+        <tr><td colspan="2">
         #$hooks#
+        </td></tr>
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" name="preview" value="#xarML('Preview')#" />

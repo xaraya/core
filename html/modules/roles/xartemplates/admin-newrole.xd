@@ -119,7 +119,9 @@
 			</xar:if>
 			<xar:if condition="!empty($hooks) and count($hooks) gt 0">
 				<xar:foreach in="$hooks" key="$hookmodule">
+          <tr><td colspan="2">
 					#$hooks[$hookmodule]#
+          </td></tr>
 				</xar:foreach>
 			</xar:if>
 			<tr>
