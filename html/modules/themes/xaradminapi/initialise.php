@@ -37,9 +37,10 @@ function themes_adminapi_initialise($args)
     // Theme activate function
 
     // pnAPI compatibility
-    $xarinitfilename = 'themes/'. $themeInfo['directory'] .'/xartheme.php';
+    // jojodee, fix hard coded themes dir
+    $xarinitfilename = xarConfigGetVar('Site.BL.ThemesDirectory').'/'. $themeInfo['directory'] .'/xartheme.php';
     if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = 'themes/'. $themeInfo['directory'] .'/theme.php';
+        $xarinitfilename = xarConfigGetVar('Site.BL.ThemesDirectory').'/'. $themeInfo['directory'] .'/theme.php';
     }
     @include $xarinitfilename;
 
