@@ -52,13 +52,18 @@
 
         <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-            <span class="help" title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your articles.')#"><label for="usedk#$blockid#"><xar:mlstring>Use Dynamic Keywords</xar:mlstring></label>:</span>
+            <span class="help" title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.')#"><label for="usedk#$blockid#"><xar:mlstring>Use Dynamic Keywords from</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <xar:if condition="!empty($usedk)">
-                <input type="checkbox" name="usedk" id="usedk#$blockid#" value="1" checked="checked" tabindex="1" />
+            <xar:if condition="$usedk eq 1">
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" checked="checked" tabindex="1" /><xar:mlstring>Articles module</xar:mlstring></p>
             <xar:else />
-                <input type="checkbox" name="usedk" id="usedk#$blockid#" value="1" tabindex="1" />
+              <p><input type="radio" name="usedk" id="usedk#$blockid#" value="1" tabindex="1" /><xar:mlstring>Articles module</xar:mlstring></p>
+            </xar:if>
+            <xar:if condition="$usedk eq 2">
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" checked="checked" tabindex="2" /><xar:mlstring>Keywords module</xar:mlstring></p>
+            <xar:else />
+                <p><input type="radio" name="usedk" id="usedk#$blockid#" value="2" tabindex="2" /><xar:mlstring>Keywords module</xar:mlstring></p>
             </xar:if>
         </span>
         </div>
