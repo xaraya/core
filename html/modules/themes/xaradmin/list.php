@@ -7,11 +7,11 @@
 function themes_admin_list()
 {
     // Security Check
-	if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminTheme')) return;
 
     // form parameters
-    if (!xarVarFetch('startnum', 'str:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('startnum', 'str:1:', $startnum, 1,     XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('regen',    'str:1:', $regen,    false, XARVAR_NOT_REQUIRED)) return;
 
     $data['items'] = array();
 
