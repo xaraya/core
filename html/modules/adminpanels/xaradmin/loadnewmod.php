@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id
- *
  * Load admin part of the module in question
  *
  * @package Xaraya eXtensible Management System

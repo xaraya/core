@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id:
- *
  * Confirm logout from administration system
  *
  * @package Xaraya eXtensible Management System

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id
- *
  * Configure sort oder in admin menu by group
  *
  * @package Xaraya eXtensible Management System

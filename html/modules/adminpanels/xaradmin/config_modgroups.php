@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id:
- *
  * Add, delete, modify groups in admin menu
  *
  * @package Xaraya eXtensible Management System

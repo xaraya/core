@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id
- *
  * Configure sort order in admin menu by weight
  *
  * @package Xaraya eXtensible Management System

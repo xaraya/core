@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id
- *
  * The main administration function
  *
  * @package Xaraya eXtensible Management System
