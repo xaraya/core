@@ -55,7 +55,7 @@ document.forms[0].submit();}
 					<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 				</td>
 				<td>
-					<input type="text" name="pname" id="pname" value="#$pname#" size="255" maxlength="20" tabindex="1" />
+					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="255" tabindex="1" />
 					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 				</td>
