@@ -150,9 +150,6 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                                      'import_pn_pollcomments.php'),
 // TODO: add the rest :-)
                          13 => array('import_pn_cleanup.php'),
-                         14 => array('import_pn_tvntopicscat.php'),
-                         15 => array('import_pn_tvnstories.php'),
-
                         );
 
     if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
