@@ -281,7 +281,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         // true at then end, even if we're not in a php block
         $this->code .= $this->setPHPBlock(true);
         $this->code .= " return true;" . $this->setPHPBlock(false);
-        return $this->code;
+        return ltrim($this->code);
     }
 
     function generateNode(&$node)
