@@ -781,9 +781,6 @@ function drawindent() {
     {
 		extract($pargs);
 
-//TODO: check this line
-		if (!xarSecAuthAction(0, 'Roles::', "$name::", ACCESS_ADD)) {return;}
-
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
 		$this->rolestable = $xartable['roles'];
@@ -1089,14 +1086,14 @@ function drawindent() {
 
 	function getAssignedPrivileges(){
 
-		$query = "SELECT xar_privileges.xar_pid,
-					xar_privileges.xar_name,
-					xar_privileges.xar_realm,
-					xar_privileges.xar_module,
-					xar_privileges.xar_component,
-					xar_privileges.xar_instance,
-					xar_privileges.xar_level,
-					xar_privileges.xar_description
+		$query = "SELECT xar_pid,
+					xar_name,
+					xar_realm,
+					xar_module,
+					xar_component,
+					xar_instance,
+					xar_level,
+					xar_description
 					FROM $this->privilegestable INNER JOIN $this->acltable
 					ON xar_privileges.xar_pid = xar_acl.xar_permid
 					WHERE xar_acl.xar_partid = $this->pid";
@@ -1107,7 +1104,8 @@ function drawindent() {
 		include_once 'modules/privileges/xarprivileges.php';
 		$privileges = array();
 		while(!$result->EOF) {
-			list($pid,$name, $realm, $module, $component, $instance, $level, $description) = $result->fields;
+			list($pid,$name, $realm, $module, $component, $instance, $level,
+			$description) = $result->fields;
 			$perm = new xarPrivilege(array('pid' => $pid,
 							   'name' => $name,
 							   'realm' => $realm,

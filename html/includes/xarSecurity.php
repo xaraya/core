@@ -40,6 +40,13 @@ define('ACCESS_DELETE', 700);
 define('ACCESS_ADMIN', 800);
 
 
+	include_once 'modules/privileges/xarprivileges.php';
+    $tables = array('masks' => xar . '_masks',
+    				'acl' => xar. '_acl',
+    				'privileges' => xar. '_privileges');
+
+    xarDB_importTables($tables);
+
 /**
  * Start the security subsystem
  *
@@ -49,15 +56,11 @@ define('ACCESS_ADMIN', 800);
 function xarSecurity_init()
 {
 
-	include_once 'modules/privileges/xarprivileges.php';
 
 //    $systemPrefix = xarDBGetSystemTablePrefix();
 
     // Add tables
 //    $tables = array('masks' => $systemPrefix . '_masks');
-    $tables = array('masks' => xar . '_masks');
-
-    xarDB_importTables($tables);
 
     return true;
 }
@@ -94,7 +97,8 @@ $schemas = array();
 		}
 		else {
 			$masks = new xarMasks();
-			return $masks->securitycheck($component,$showexception,$instancetype,$instance='',$role,$module);
+			return $masks->securitycheck($component,$showexception,$instancetype,
+			$instance,$role,$module);
 		}
 	}
 

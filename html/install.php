@@ -39,6 +39,7 @@ define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
+        global $installing;
 /**
  * Entry function for the installer
  *
@@ -64,7 +65,6 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
     }
 
     // Make sure we should still be here
-    echo $phase;
     if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
         xarCoreInit(XARCORE_SYSTEM_ALL);
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');

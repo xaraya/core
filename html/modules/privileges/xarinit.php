@@ -341,7 +341,7 @@ function privileges_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_acl VALUES (2,2)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_acl VALUES (1,1)";
+	$query = "INSERT INTO xar_acl VALUES (3,1)";
 	if (!$dbconn->Execute($query)) return;
 //	$privileges->assign('AdminPrivilege','Anonymous');
 //	$privileges->assign('AdminRole','Anonymous');
@@ -374,10 +374,10 @@ function privileges_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-	$query = "INSERT INTO xar_masks VALUES (
-	1, 'Admin', 'All', 'installer',
-	'Admin','All',800,'')";
-	if (!$dbconn->Execute($query)) return;
+//	$query = "INSERT INTO xar_masks VALUES (
+//	1, 'Admin', 'All', 'installer',
+//	'Admin','All',800,'')";
+//	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
 	2, 'PrivilegesGateway', 'All', 'Privileges',
 	'All','All',200,'')";
@@ -392,7 +392,7 @@ function privileges_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
 	5, 'AddPrivilege', 'All', 'Privileges',
-	'AddPrivilege','All',600,'')";
+	'Add','All',600,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
 	6, 'DeletePrivilege', 'All', 'Privileges',

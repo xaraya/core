@@ -171,7 +171,7 @@ function roles_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_rolemembers VALUES (3,2)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_rolemembers VALUES (4,1)";
+	$query = "INSERT INTO xar_rolemembers VALUES (4,3)";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_rolemembers VALUES (5,1)";
 	if (!$dbconn->Execute($query)) return;

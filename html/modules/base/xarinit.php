@@ -503,8 +503,7 @@ function base_activate()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) {
         return NULL;
     }
-
-    // Set the state and activate the following modules
+// Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','sniffer');
     foreach ($modlist as $mod) {
         // Set state to inactive

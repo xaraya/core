@@ -212,7 +212,6 @@ function installer_admin_phase5()
         return;
     }
 
-	$installing = false;
 
     //session_start();
     //session_destroy();
@@ -231,10 +230,18 @@ function installer_admin_bootstrap()
 {
      xarTplSetThemeName('installer');
 
-    // log in admin user
+// activate the security stuff
+
+	registerMask('Admin','All','installer','All','All',ACCESS_ADMIN,
+	'Mask to limit access to the installer to Oversight');
+
+   	registerMask('Admin','All','modules','All','All',ACCESS_ADMIN);
+
+// log in admin user
     if (!xarUserLogIn('overseer', 'xaraya', 0)) {
         return;
     }
+
    // Activate modules
     if (!xarModAPIFunc('installer',
                         'admin',
@@ -259,7 +266,7 @@ function installer_admin_create_administrator()
 	xarTplSetThemeName('installer');
     $data['language'] = 'English';
 
-echo "hi";exit;// Security Check
+// Security Check
 	if(!securitycheck('Admin')) return;
 
     if (!xarVarCleanFromInput('create')) {

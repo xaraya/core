@@ -92,11 +92,14 @@ class xarMasks
 
 		if ($module == '' || $module == 'All') {
 			if ($component == '' || $component == 'All') {
-				$query = "SELECT * FROM $this->maskstable ORDER BY xar_component";
+				$query = "SELECT * FROM $this->maskstable ORDER BY xar_component, xar_name";
 			}
 			else {
 				$query = "SELECT * FROM $this->maskstable
-						WHERE xar_component = '$component' ORDER BY xar_name";
+						WHERE (xar_component = '$component')
+						OR (xar_component = 'All')
+						OR (xar_component = 'None')
+						ORDER BY xar_component, xar_namexar_name";
 			}
 		}
 		else {
@@ -106,14 +109,15 @@ class xarMasks
 			}
 			else {
 			$query = "SELECT *
-					FROM $this->maskstable WHERE xar_module = '$module'
-					AND xar_component = '$component'
-					ORDER BY xar_name";
+					FROM $this->maskstable WHERE (xar_module = '$module')
+					AND ((xar_component = '$component')
+					OR (xar_component = 'All')
+					OR (xar_component = 'None'))
+					ORDER BY xar_component, xar_name";
 			}
 		}
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
-
 		$masks = array();
 		while(!$result->EOF) {
 			list($sid, $name, $realm, $module, $component, $instance, $level,
@@ -289,7 +293,7 @@ class xarMasks
  * @todo    none
 */
 
-	function securitycheck($component,$showexception=1,$instance='',$role='',$module='')
+	function securitycheck($component,$showexception=1,$instancetype='', $instance='',$rolename='',$module='')
 	{
 
 // get the masks pertaining to the current module and the component requested
@@ -302,8 +306,6 @@ class xarMasks
 						   new DefaultUserException($msg));
         	return;
 		}
-
-echo $module . " " . $component; exit;
 // get the Roles class
 		include_once 'modules/roles/xarroles.php';
     	$roles = new xarRoles();
@@ -311,22 +313,17 @@ echo $module . " " . $component; exit;
 // get the pid of the user we will check against
 // an empty role means take the current user
 // TODO: what if the id is a group?
-		if ($role == '') {
-	//		define('_XARSEC_UNREGISTERED', '8');
+		if ($rolename == '') {
+			$userID = xarSessionGetVar('pid');
 			if (empty($userID)) {
-				$userID = xarSessionGetVar('uid');
-				if (empty($userId)) {
-	//				$userID = _XARSEC_UNREGISTERED;
-				}
+				$userID = _XARSEC_UNREGISTERED;
 			}
-// default to Anonymous right now
-//			$role = $roles->findRole('Anonymous');
 			$role = $roles->getRole($userID);
-			echo $userID;exit;
 		}
 		else {
 			$role = $roles->findRole($role);
 		}
+
 // get the inherited ancestors of the role
 		$ancestors = $role->getAncestors();
 
@@ -338,7 +335,6 @@ echo $module . " " . $component; exit;
 
 // need to process the last ones first
 			$ancestors = array_reverse($ancestors);
-
 // set up a temporary array to hold results
 			$final = array();
 
@@ -349,12 +345,12 @@ echo $module . " " . $component; exit;
 			foreach ($ancestors as $ancestor) {
 
 // get the ancestors assigned privileges
-				$perms = $ancestor->getAssignedPrivileges();
+				$privs = $ancestor->getAssignedPrivileges();
 				$privileges = array();
 // for each one winnow the  assigned privileges and then the inherited
-				foreach ($perms as $perm) {
-					$privileges = $this->winnow(array($perm),$privileges);
-					$privileges = $this->winnow($perm->getDescendants(),$privileges);
+				foreach ($privs as $priv) {
+					$privileges = $this->winnow(array($priv),$privileges);
+					$privileges = $this->winnow($priv->getDescendants(),$privileges);
 				}
 
 // add some info on the group they belong to and stick it all in an array
@@ -393,7 +389,7 @@ echo $module . " " . $component; exit;
 
 // check against each mask defined for the component
 			foreach ($masks as $mask) {
-//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
+			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
 				if ($chiave->implies($mask)) {
 
 // found a privilege that admits: return the privilege
@@ -1424,9 +1420,6 @@ function drawindent() {
     {
 		extract($pargs);
 
-// Security Check
-	if(!securitycheck('Add')) return;
-
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
 		$this->privilegestable = $xartable['privileges'];
@@ -1560,9 +1553,6 @@ class xarPrivilege extends xarMask
     function xarPrivilege($pargs)
     {
 		extract($pargs);
-
-// Security Check
-	if(!securitycheck('Add')) return;
 
 		list($this->dbconn) = xarDBGetConn();
 		$xartable = xarDBGetTables();
