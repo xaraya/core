@@ -234,12 +234,12 @@ document.forms['privilegeform'].submit();}
                             <table border="0" cellpadding="2" cellspacing="0">
                                 <xar:foreach in="$instances" key="$id" value="$instance">
                                     <tr>
-                                        <td><label for="pinstance['#$id#']">#$instance['header']#</label></td>
+                                        <td><label for="pinstance#$id#">#$instance['header']#</label></td>
                                         <td>
                                             <xar:if condition="$instance['type'] eq 'manual'">
-                                                <input type="text" name="pinstance['#$id#']" id="pinstance['#$id#']" value="#$instance['default']#" size="20" />
+                                                <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" />
                                             <xar:else />
-                                                <select name="pinstance['#$id#']" id="pinstance['#$id#']" size="1" tabindex="5">
+                                                <select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="5">
                                                     <xar:foreach in="$instance['dropdown']" value="$option">
                                                         <xar:if condition="$option['name'] eq $instance['default']">
                                                             <option value="#$option['name']#" selected="selected">#$option['name']#</option>
