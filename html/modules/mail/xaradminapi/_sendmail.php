@@ -150,7 +150,7 @@ function mail_adminapi__sendmail($args)
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person recieving email (not required)
-    if (isset($recipients)){
+    if (isset($recipients) && !empty($recipients)){
         if (is_array($recipients)) {
             foreach($recipients as $k=>$v) {
                 if (!is_numeric($k) && !is_numeric($v)) {

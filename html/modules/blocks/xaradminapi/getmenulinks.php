@@ -38,11 +38,6 @@ function blocks_adminapi_getmenulinks()
                               'label' => xarML('Add Instance'));
         $menulinks[] = Array('url'   => xarModURL('blocks',
                                                    'admin',
-                                                   'view_groups'),
-                              'title' => xarML('View the existing block groups'),
-                              'label' => xarML('View Groups'));
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
                                                    'new_group'),
                               'title' => xarML('Add a new group of blocks'),
                               'label' => xarML('Add Group'));
