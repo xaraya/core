@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * testprivileges - test a user or group's privileges against a mask
+ *
+ * Performs a test of all the privileges of a user or group against a security mask.
+ * A security mask defines the hurdle a group/user needs to overcome
+ * to gain entrance to a given module component.
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  none
+ * @throws  none
+ * @todo    none
+ */
+function roles_admin_testprivileges()
+{
+
+    list($uid,$module,$name,$test) = xarVarCleanFromInput('uid','pmodule','name','test');
+
+    // Security Check
+    if(!xarSecurityCheck('ReadRole')) return;
+
+    //Call the Roles class and get the role
+    $roles = new xarRoles();
+    $role = $roles->getRole($uid);
+
+    // Call the Privileges class and
+    // get a list of all modules for dropdown display
+    $privileges = new xarPrivileges();
+    $allmodules = $privileges->getmodules();
+
+    // Call the Masks class
+    $masks = new xarMasks();
+
+    // we want to do test
+    if (isset($test)) {
+
+        // get the mask to test against
+        $mask = $masks->getMask($name);
+        $component = $mask->getComponent();
+
+        // test the mask against the role
+        $testresult = $masks->xarSecurityCheck($name,0,$component,'All',$mask->getModule(),$role->getName());
+
+        // test failed
+        if (!$testresult) {
+            $resultdisplay = "<b>Privilege: none found.</b>";
+        }
+
+        // test returned an object
+        else {
+            $resultdisplay = "";
+            $data['rname'] = $testresult->getName();
+            $data['rrealm'] = $testresult->getRealm();
+            $data['rmodule'] = $testresult->getModule();
+            $data['rcomponent'] = $testresult->getComponent();
+            $data['rinstance'] = $testresult->getInstance();
+            $data['rlevel'] = $masks->levels[$testresult->getLevel()];
+        }
+
+        // rest of the data for template display
+        $data['test'] = $test;
+        $data['testresult'] = $testresult;
+        $data['resultdisplay'] = $resultdisplay;
+        $testmasks = array($mask);
+        $testmaskarray= array();
+        foreach ($testmasks as $testmask) {
+            $thismask = array('sname'=>$testmask->getName(),
+                                    'srealm'=>$testmask->getRealm(),
+                                    'smodule'=>$testmask->getModule(),
+                                    'scomponent'=>$testmask->getComponent(),
+                                    'sinstance'=>$testmask->getInstance(),
+                                    'slevel'=>$masks->levels[$testmask->getLevel()]
+                                    );
+            $testmaskarray[] = $thismask;
+        }
+        $data['testmasks'] = $testmaskarray;
+        $module = $mask->getModule();
+    }
+
+    // no test yet
+    // Load Template
+    $data['pname'] = $role->getName();
+    $data['ptype'] = $role->getType();
+    $data['pmodule'] = $module;
+    $data['uid'] = $uid;
+    $data['allmodules'] = $allmodules;
+    if (!isset($module)) $data['masks'] = array();
+    else $data['masks'] = $masks->getmasks($module);
+    $data['authid'] = xarSecGenAuthKey();
+    return $data;
+
+    // redirect to the next page
+    xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));
+}
+
+?>

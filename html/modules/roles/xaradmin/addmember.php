@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * addMember - assign a user or group to a group
+ *
+ * Make a user or group a member of another group.
+ * This is an action page..
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  none
+ * @throws  none
+ * @todo    none
+ */
+function roles_admin_addmember()
+{
+
+    // Check for authorization code
+    if (!xarSecConfirmAuthKey()) return;
+
+    // get input from any view of this page
+    list($uid,
+        $roleid) = xarVarCleanFromInput('uid',
+                                        'roleid');
+
+    // call the Roles class and get the parent and child objects
+    $roles = new xarRoles();
+    $role = $roles->getRole($roleid);
+    $member = $roles->getRole($uid);
+
+    // check that this assignment hasn't already been made
+    if ($member->isEqual($role)) {
+        $msg = xarML('This assignment is not possible');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new DefaultUserException($msg));
+        return;
+    }
+    // check that this assignment hasn't already been made
+    if ($member->isParent($role)) {
+        $msg = xarML('This assignment already exists');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new DefaultUserException($msg));
+        return;
+    }
+
+    // check that the parent is not already a child of the child
+    if ($role->isAncestor($member)) {
+        $msg = xarML('Cannot make this assignment');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new DefaultUserException($msg));
+        return;
+    }
+
+    // assign the child to the parent and bail if an error was thrown
+    $newrole = $role->addMember($member);
+    if (!$newrole) {return;}
+
+    // redirect to the next page
+    xarResponseRedirect(xarModURL('roles',
+                             'admin',
+                             'modifyrole',
+                             array('uid'=>$uid)));
+}
+
+
+?>
