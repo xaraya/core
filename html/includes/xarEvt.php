@@ -242,7 +242,7 @@ function xarEvt_registerEvent($eventName)
     
     if (empty($eventName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
-        return;
+        return false;
     }
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
