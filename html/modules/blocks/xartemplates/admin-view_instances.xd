@@ -1,7 +1,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View Instances</xar:mlstring></h2>
 <div style="margin: auto;">
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
+<table border="1" cellpadding="10" cellspacing="0">
     <tr align="center">
         <th>
             <xar:mlstring>Group</xar:mlstring>

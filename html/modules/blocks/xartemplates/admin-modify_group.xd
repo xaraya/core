@@ -10,7 +10,7 @@ warningmsg = '#xarML('You must select the block to move.')#';
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
     <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
-    <table border="0" width="300" cellpadding="2" cellspacing="0">
+    <table border="0" cellpadding="5" cellspacing="0">
         <tr>
             <td>
                 <label for="group_name"><xar:mlstring>Name</xar:mlstring></label>:

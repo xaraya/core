@@ -4,7 +4,7 @@
 <form method="post" action="&xar-modurl-blocks-admin-create_instance;">
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
     
-    <table border="0" width="300" cellpadding="2" cellspacing="0">
+    <table border="0" cellpadding="5" cellspacing="0">
         <tr>
             <td>
                 <label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:
