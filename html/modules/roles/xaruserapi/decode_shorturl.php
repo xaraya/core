@@ -97,6 +97,14 @@ function roles_userapi_decode_shorturl($params)
         }
         return array('usermenu', $args);
 
+    } elseif (preg_match('/^register/i',$params[1])) {
+        // something that starts with 'list' is probably for the view function
+        // Note : make sure your encoding/decoding is consistent ! :-)
+        if (!empty($params[2]) && preg_match('/^registration/i',$params[2],$matches)) {
+            $args['phase'] = 'registerform';
+        }
+        return array('register', $args);
+
     } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
         // something that starts with a number must be for the display function
         // Note : make sure your encoding/decoding is consistent ! :-)

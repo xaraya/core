@@ -77,6 +77,12 @@ function roles_userapi_encode_shorturl($args)
         if(!empty($phase) && $phase == 'formbasic') {
             $path = $path . '/form';
         }
+
+   } elseif ($func == 'register') {
+        $path = '/' . $module . '/register';
+      if(!empty($phase) && $phase == 'registerform') {
+            $path = $path . '/registration';
+        }
 /*
     } elseif ($func == 'register') {
         $path = '/' . $module . '/register.html';
