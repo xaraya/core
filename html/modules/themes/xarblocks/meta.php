@@ -89,6 +89,8 @@ function themes_metablock_display($blockinfo)
         $meta['keywords'] = $vars['metakeywords'];
     }
 
+    $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetSiteLocale());
+
     $meta['generator'] = xarConfigGetVar('System.Core.VersionId');
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');

@@ -1,5 +1,5 @@
 
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=#$charset#" />
 	<meta name="Generator" content="#$generator#" />
 	<meta name="Keywords" content="#$keywords#" />
 	<meta name="Description" content="#$description#" />
