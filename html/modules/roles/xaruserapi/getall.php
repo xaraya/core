@@ -71,7 +71,7 @@ function roles_userapi_getall($args)
                 )
             );
             if (isset($group['uid']) && is_numeric($group['uid'])) {
-                $group_list[] = $group['uid'];
+                $group_list[] = (int) $group['uid'];
             }
         }
     }
@@ -80,10 +80,10 @@ function roles_userapi_getall($args)
     $bindvars = array();
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
         $where_clause[] = 'roletab.xar_state = ?';
-        $bindvars[] = $state;
+        $bindvars[] = (int) $state;
     } else {
         $where_clause[] = 'roletab.xar_state <> ?';
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = (int) ROLES_STATE_DELETED;
     }
 
     // Select-clause.
@@ -116,7 +116,7 @@ function roles_userapi_getall($args)
     // Hide pending users from non-admins
     if (!xarSecurityCheck('AdminRole', 0)) {
         $where_clause[] = 'roletab.xar_state <> ?';
-        $bindvars[] = ROLES_STATE_PENDING;
+        $bindvars[] = (int) ROLES_STATE_PENDING;
     }
 
     // If we aren't including anonymous in the query,
@@ -126,13 +126,13 @@ function roles_userapi_getall($args)
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
         $where_clause[] = 'roletab.xar_uid <> ?';
-        $bindvars[] = $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
         $where_clause[] = 'roletab.xar_uid <> ?';
-        $bindvars[] = $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['uid'];
     }
 
     // Return only users (not groups).
@@ -155,10 +155,20 @@ function roles_userapi_getall($args)
         $query .= ' ORDER BY ' . implode(', ', $order_clause);
     }
 
+// cfr. xarcachemanager - this approach might change later
+    $expire = xarModGetVar('roles','cache.userapi.getall');
     if ($startnum == 0) {
-        $result = $dbconn->Execute($query,$bindvars);
+        if (!empty($expire)){
+            $result = $dbconn->CacheExecute($expire,$query,$bindvars);
+        } else {
+            $result = $dbconn->Execute($query,$bindvars);
+        }
     } else {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+        if (!empty($expire)){
+            $result = $dbconn->CacheSelectLimit($expire, $query, $numitems, $startnum-1,$bindvars);
+        } else {
+            $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+        }
     }
     if (!$result) {return;}
 
