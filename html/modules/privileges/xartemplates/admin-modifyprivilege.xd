@@ -262,7 +262,7 @@ document.forms['privilegeform'].submit();}
                 </a>
         </td>
         <td width="50" style="text-align: center;">
-                <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$loop:item['ppid']#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$loop:item['authid']#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$loop:item['pname']# from #$loop:item['parentname']#" style="vertical-align: middle;" /></a>
+                <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/remove.gif" title="Remove #$pname# from #$loop:item['parentname']#" style="vertical-align: middle;" /></a>
         </td>
     </tr>
 </xar:loop>
