@@ -348,7 +348,7 @@ div#classicthemecontrols img {
     height: 21px;
 }
 
-* html div#classicthemecontrols img, * html div#classicheader img {
+* html div#classicthemecontrols img {
     margin: 0 -3px;
     ma\rgin: 0;
 }
