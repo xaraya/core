@@ -261,10 +261,14 @@ function xarOutputCleanCached($cacheType)
     $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' . $sl_cacheType;
     $touch_file = $xarOutput_cacheCollection . '/cache.' . $sl_cacheType . 'level';
 
+    // If the cache type is Block, then the cache is full so we flush the blocks
+    // to make more room
     if ($cacheType == 'Block') {
         xarOutputFlushCached('', $cacheOutputTypeDir);
     }
 
+    // If the cache type has already been cleaned within the expiration time,
+    // don't bother checking again
     if (${'xar' . $cacheType . '_cacheTime'} == 0 ||
         (file_exists($touch_file) &&
          filemtime($touch_file) > time() - ${'xar' . $cacheType . '_cacheTime'})
@@ -305,12 +309,11 @@ function xarOutputCleanCached($cacheType)
 function xarCacheDirSize($dir = FALSE, $cacheType)
 {
     global $xarOutput_cacheSizeLimit;
+
+    static $size = 0;
     
-    if (xarCore_IsCached('Output.Caching', 'size')) {
-        $size = xarCore_GetCached('Output.Caching', 'size');
-    } else {
+    if (empty($size)) {
         $size = xarCacheGetDirSize($dir);
-        xarCore_SetCached('Output.Caching', 'size', $size);
     }
     
     if($size >= $xarOutput_cacheSizeLimit) {
@@ -337,7 +340,6 @@ function xarCacheDirSize($dir = FALSE, $cacheType)
  */
 function xarCacheGetDirSize($dir = FALSE)
 {
-
     static $blksize = 0;
     static $bsknown = FALSE;
     $size = 0;
