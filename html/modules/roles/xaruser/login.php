@@ -19,8 +19,18 @@ function roles_user_login()
 {
     global $xarUser_authenticationModules;
 
-    if (!xarVarFetch('uname','str:1:100',$uname)) return;
-    if (!xarVarFetch('pass','str:1:100',$pass)) return;
+    if (!xarVarFetch('uname','str:1:100',$uname)) {
+        xarExceptionFree();
+        $msg = xarML('You must provide a username.');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        return;
+    }
+    if (!xarVarFetch('pass','str:1:100',$pass)) {
+        xarExceptionFree();
+        $msg = xarML('You must provide a password.');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        return;
+    }
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
 
