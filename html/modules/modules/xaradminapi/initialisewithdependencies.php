@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Initialize moduel with its dependencies.
+ * Initialize module with its dependencies.
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
@@ -55,15 +55,17 @@ function modules_adminapi_initialisewithdependencies($args)
 			$modId = $conditions;
 		}
 
-		if (!xarModAPIFunc('modules', 'admin', 'initialisewithdependents', array('regid'=>$modId))) {
-			$msg = xarML('Unable to activate module with ID (#(1)).', $modId);
-			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+		if (!xarModAPIFunc('modules', 'admin', 'initialisewithdependencies', array('regid'=>$modId))) {
+			$msg = xarML('Unable to initialize dependecy module with ID (#(1)).', $modId);
+			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 			return;
 		}
 	}
 
 	// Finally, now that dependencies are dealt with, initialize the module
 	if (!xarModAPIFunc('modules', 'admin', 'initialize', array('regid' => $mainId))) {
+		$msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;
 	}
 

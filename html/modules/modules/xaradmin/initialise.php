@@ -19,6 +19,22 @@ function modules_admin_initialise()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
+	//First check the modules dependencies
+    if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
+    	//Oops, we got problems...
+    	//Checking if we have already sent a GUI to the user:
+    	xarVarFetch('command', 'enum', $command, 0, XARVAR_NOT_REQUIRED);
+    	
+    	//Let's make a nice GUI to show the user the options
+    	$data = array();
+    	$data['id'] = $id;
+    	$data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
+    	foreach ($data['dependencies'] as $dep) {
+    		if ($dep 
+    	}
+    	return $data;
+    }
+
     // Initialise module
     $initialised = xarModAPIFunc('modules',
                                 'admin',
