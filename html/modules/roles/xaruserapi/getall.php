@@ -51,8 +51,12 @@ function roles_userapi_getall($args)
                        xar_state,
                xar_date_reg
         FROM $rolestable
-                WHERE xar_state != 0 ";
+                WHERE xar_state != 0";
     }
+
+    //suppress display of pending users to non-admins
+    if (!xarSecurityCheck("AdminRole",0)) $query .= " AND xar_state != 4";
+
 
     if (isset($selection)) $query .= $selection;
 
