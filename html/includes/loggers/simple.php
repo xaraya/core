@@ -102,7 +102,7 @@ class xarLogger_simple extends xarLogger
     * the file has already been opened,
     * assumes it wont disapear during a php execution.
     */
-    var $_doFileExists;
+    var $_isFileWriteable;
 
     /**
     * Header to be inserted when creating the file
@@ -128,16 +128,19 @@ class xarLogger_simple extends xarLogger
             $this->_mode = $conf['mode'];
         }
 
-        $this->_filename      = realpath($conf['fileName']);
-        $this->_buffer        = '--------------------------------------------------------------------------------------------------------------------------------------'."\r\n";
-        $this->_writeOut      = true;
-        $this->_isFileOpen    = false;
-        $this->_doFileExists  = false;
-        $this->_fileheader    = '';
-
+        $this->_buffer          = '--------------------------------------------------------------------------------------------------------------------------------------'."\r\n";
+        $this->_writeOut        = true;
+        $this->_isFileOpen      = false;
+        $this->_isFileWriteable = false;
+        $this->_fileheader      = '';
+        
+        $this->_filename        = $conf['fileName'];
+        $this->_ensureFileWriteable();
 
         /* register the destructor */
-        register_shutdown_function(array(&$this, '_destructor'));
+        //Let's see if the destructors can work by themselves
+        //This is not working, find out why later on
+//      register_shutdown_function(array(&$this, '_destructor'));
     }
     
     /**
@@ -148,7 +151,11 @@ class xarLogger_simple extends xarLogger
     */
     function _destructor()
     {
-        if ($this->_writeOut) $this->writeOut();
+		//At this time, we can't send output to the screen,
+		//fwrite doesnt seem to be working, how to know if
+		//the destructor is being called?
+		//Anyone with a nice debugger around?
+        $this->writeOut();
 
         // Close the Log file
         $this->_closeLogfile();
@@ -171,7 +178,9 @@ class xarLogger_simple extends xarLogger
         $this->_buffer .= $this->_formatMessage($message, $level);
         
         //This shouldnt be necessary, fix afterwards
-//        $this->writeOut();
+        //The destructor doesnt seem to be called, or
+        //the script is not able to execute the fwrite(?) during shutdown
+        $this->writeOut();
 
         return true;
     }
@@ -202,6 +211,26 @@ class xarLogger_simple extends xarLogger
     }
 
     /**
+    * Checks if the directory where the log file shoud be exists
+    * then checks if the log file already exists,
+    * if not then creates it.
+    *
+    * Sets $this->_filename to the file path then
+    *
+    * @param file $file Path to the logger file 
+    * @access private
+    */
+	function _ensureFileWriteable() {
+        if (!file_exists($this->_filename) && 
+            !is_writable(dirname($this->_filename))) {
+       		die ('Logger file path given is not writeable: '.$this->_filename);
+        }
+        
+        $this->_isFileWriteable = true;
+        return true;
+	}
+
+    /**
     * Opens the logfile for appending. File should always exist, as
     * constructor will create it if it doesn't.
     *
@@ -213,47 +242,28 @@ class xarLogger_simple extends xarLogger
             return true;
         }   // else {
 
-        if ($this->_doFileExists) {
-            if (($this->_fp = fopen($this->_filename, 'a')) == false) {
-                die('unable to open log file '.$this->_filename);
-                return false;
-            }  // else {
-            
-            $this->_isFileOpen = true;
+		if (!$this->_isFileWriteable) {
+			die('File is not writeable');
+		}
+		
+		$insert_header = false;
+		
+		if (!file_exists($this->_filename)) {
+			$insert_header = true;
+		}
+		
+        if (($this->_fp = fopen($this->_filename, 'a')) == false) {
+	        die('unable to open log file '.$this->_filename);
+            return false;
+        }  // else {
 
-            return true;
+        if ($insert_header) {
+        	fwrite($this->_fp, $this->_fileheader);
         }
 
-        if (file_exists($this->_filename)) {
-            $this->_doFileExists = true;
-            
-            if (($this->_fp = fopen($this->_filename, 'a')) == false) {
-                die('unable to open file');
-                return false;
-            }
-
-            $this->_isFileOpen = true;
-            
-            return true;
-
-        } else {
-
-            touch($this->_filename);
-            chmod($this->_filename, $this->_mode);
-
-            if (($this->_fp = fopen($this->_filename, 'a')) == false) {
-                die('unable to open log file '.$this->_filename);
-                return false;
-            }
-            
-            fwrite($this->_fp, $this->_fileheader);
-
-            $this->_isFileOpen = true;
-            
-            return true;
-        }
-
-        return false;
+	    $this->_filename = realpath($this->_filename);
+        $this->_isFileOpen = true;
+        return true;
     }
     
     /**
