@@ -36,7 +36,7 @@ function authsystem_userapi_set_user_variable($args)
 
     // throw back an exception if the user doesn't exist
     //if (...) {
-    //    $msg = xarML('User identified by uid #(1) doesn\'t exist.', $uid);
+    //    $msg = xarML('User identified by uid #(1) does not exist.', $uid);
     //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
     //                  new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
     //    return;
