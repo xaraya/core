@@ -898,7 +898,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 	    ob_end_clean();
 		ob_start();
         // this outputs the template and deals with start comments accordingly.        
-	    xarTpl_outputTemplate($sourceFileName, $tplOutput);
+	    echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
 	}
 
     // Fetch output and clean buffer
@@ -995,7 +995,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Start output buffering
     ob_start();
     // this outputs the template and deals with start comments accordingly.
-    xarTpl_outputTemplate($sourceFileName, $tplOutput);
+    echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
 
     // Fetch output and clean buffer
     $output = ob_get_contents();
@@ -1019,6 +1019,7 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
     if(!isset($isHeaderContent))
         $isHeaderContent = false;
 
+    $finalTemplate ='';
     if(xarTpl_outputTemplateFilenames()) {
         $outputStartComment = true;
         if($isHeaderContent === false) {
@@ -1028,15 +1029,13 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
         // optionally show template filenames if start comment has not already
         // been added as part of a header determination.
         if($outputStartComment === true)
-            echo '<!-- start: ' . $sourceFileName . '-->';
-        // output template, we're still buffering
-        echo $tplOutput;
-        // optionally show template filenames
-        echo '<!-- end: ' . $sourceFileName . '-->';
+            $finalTemplate .= "\n<!-- start: " . $sourceFileName . "-->\n";
+        $finalTemplate .= $tplOutput;
+        $finalTemplate .= "\n<!-- end: " . $sourceFileName . '-->';
     } else {
-		// output template, we're still buffering
-        echo $tplOutput;
+        $finalTemplate .= $tplOutput;
     }
+    return $finalTemplate
 }
 /**
  * Output php comment block in templates
