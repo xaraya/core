@@ -1,0 +1,137 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <pnt:mlstring>Users Administration</pnt:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-new;"><pnt:mlstring>Add User</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-view;"><pnt:mlstring>View Users</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifyconfig;"><pnt:mlstring>Modify Users Configuration</pnt:mlstring></a>
+        </td>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifytac;"><pnt:mlstring>Modify Terms and Conditions</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifyconfirmationemail;"><pnt:mlstring>Modify Confirmation Email</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-admin-modifywelcomeemail;"><pnt:mlstring>Modify Welcome Email</pnt:mlstring></a>
+        </td>
+    </tr>
+</table>
+
+<center>
+<form method="post" action="&pnt-modurl-autolinks-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
+    <input type="hidden" name="authid" value="&pnt-var-authid;" />
+
+	<table border="0" width="100%">
+		<tr>
+			<td>
+				<table border="0" width="100%">
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Users must agree to terms and conditions before registering</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('users', 'showtacs')">
+								<input type="checkbox" name="showtacs" id="showtacs" value="1" checked="checked" tabindex="1" />
+							<pnt:else />
+								<input type="checkbox" name="showtacs" id="showtacs" value="1" tabindex="1" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Allow users to choose their own password when registering</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('user', 'chooseownpassword')">
+								<input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" checked="checked" tabindex="2" />
+							<pnt:else />
+								<input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" tabindex="2" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Send confirmation email before successful registration of user</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('users', 'sendconfirmationemail')">
+								<input type="checkbox" name="sendconfirmationemail" id="sendconfirmationemail" value="1" checked="checked" tabindex="1" />
+							<pnt:else />
+								<input type="checkbox" name="sendconfirmationemail" id="sendconfirmationemail" value="1" tabindex="1" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Require explicit administrator approval before activating new user</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('user', 'explicitapproval')">
+								<input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" checked="checked" tabindex="2" />
+							<pnt:else />
+								<input type="checkbox" name="explicitapproval" id="explicitapproval" value="1" tabindex="2" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Send welcome email on successful registration of user</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('user', 'sendwelcomemail')">
+								<input type="checkbox" name="sendwelcomemail" id="sendwelcomemail" value="1" checked="checked" tabindex="2" />
+							<pnt:else />
+								<input type="checkbox" name="sendwelcomemail" id="sendwelcomemail" value="1" tabindex="2" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Allow users to be invisible in users list</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('users', 'allowinvisible')">
+								<input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" checked="checked" tabindex="1" />
+							<pnt:else />
+								<input type="checkbox" name="allowinvisible" id="allowinvisible" value="1" tabindex="1" />
+							</pnt:if>
+						</td>
+					</tr>
+					<tr align="left" valign="middle">
+						<td>
+							<pnt:mlstring>Number of users to view per page</pnt:mlstring>
+						</td>
+						<td>
+							<pnt:if condition="pnModGetVar('user', 'usersperpage')">
+								<input type="checkbox" name="usersperpage" id="usersperpage" value="1" checked="checked" tabindex="2" />
+							<pnt:else />
+								<input type="checkbox" name="usersperpage" id="usersperpage" value="1" tabindex="2" />
+							</pnt:if>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br /><br />
+	<input type="submit" value="<pnt:mlstring>Update Users Configuration</pnt:mlstring>" align="middle" tabindex="3" />
+</form>
+</center>
+        
