@@ -1,3 +1,4 @@
+<input type="hidden" name="install_language" id="install_language" value="#$language#" />
 <xar:if condition="$confirmDB">
 <meta http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#" />
 <div id="install">
