@@ -1,10 +1,12 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
-    <xar:loop name="$fields">
+    <table border="0" cellspacing="0" cellpadding="4">
+    <xar:foreach in="$properties" key="$name" value="$property">
         <tr align="left" valign="middle">
-            <td>#$label# </td>
-            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" validation="$validation" /> <xar:if condition="!empty($invalid)"><span style="color: red"><xar:mlstring>Invalid</xar:mlstring> #$invalid#</span></xar:if></td>
+            <td align="right"><strong><xar:data-label property="$properties[$name]" /> :</strong></td>
+            <td align="left"><xar:data-output property="$properties[$name]" /> </td>
         </tr>
-    </xar:loop>
+    </xar:foreach>
+    </table>
 <xar:else />
     <xar:mlstring>Specify your own layout here...</xar:mlstring>
     <br /><br />

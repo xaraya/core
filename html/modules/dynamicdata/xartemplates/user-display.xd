@@ -1,4 +1,11 @@
-<h2>#$label#</h2>
+<xar:if condition="!empty($object)">
+<!-- here we retrieve the complete object in the function, and we only pass a reference of it to the data-display tag -->
+<h2><xar:data-label object="$object" /></h2>
+<xar:data-display object="$object" />
 
+<xar:else />
+<!-- here we only retrieve the parameters in the function, and we let the data-display tag retrieve the complete object -->
+<h2>#$label#</h2>
 <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
 
+</xar:if>

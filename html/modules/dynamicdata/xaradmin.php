@@ -12,6 +12,8 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 
+require_once 'modules/dynamicdata/class/objects.php';
+
 /**
  * the main administration function
  *
@@ -61,11 +63,11 @@ function dynamicdata_admin_view($args)
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label = $object['label']['value'];
-        $param = $object['urlparam']['value'];
+        $objectid = $object['objectid'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
+        $label = $object['label'];
+        $param = $object['urlparam'];
         // override for system objects
         if ($objectid < 3) {
             $param = 'itemid';
@@ -97,7 +99,7 @@ function dynamicdata_admin_view($args)
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
         $seenmod = array();
         foreach ($objects as $object) {
-            $seenmod[$object['fields']['moduleid']['value']] = 1;
+            $seenmod[$object['moduleid']] = 1;
         }
 
         $modList = xarModGetList(array(),NULL,NULL,'category/name');
@@ -154,33 +156,6 @@ function dynamicdata_admin_new($args)
     if (!isset($itemid)) {
         $itemid = 0;
     }
-    if (empty($label)) {
-        $label = xarML('Dynamic Data');
-    }
-
-    if (!xarModAPILoad('dynamicdata','user')) return;
-
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
-
-    $data = dynamicdata_admin_menu();
-
-    $data['objectid'] = $objectid;
-    $data['label'] = $label;
-    $data['modid'] = $modid;
-    $data['itemtype'] = $itemtype;
-    $data['itemid'] = $itemid; // might be coming from another module !
-    $data['fields'] = array(); // we'll let the form handle it
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
@@ -188,6 +163,13 @@ function dynamicdata_admin_new($args)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
+
+    $data = dynamicdata_admin_menu();
+
+    $data['object'] = new Dynamic_Object(array('objectid' => $objectid,
+                                               'moduleid' => $modid,
+                                               'itemtype' => $itemtype,
+                                               'itemid'   => $itemid));
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
@@ -224,7 +206,13 @@ function dynamicdata_admin_create($args)
                                           'preview');
     extract($args);
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for creating new #(1) item',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -239,60 +227,28 @@ function dynamicdata_admin_create($args)
         $preview = 0;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    $isvalid = $myobject->checkInput();
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
-
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                            array('modid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (!isset($fields) || $fields == false) {
-        return; // throw back
-    }
-    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
-
-    // this fills $invalid with an array of errors, or fills $fields with the values
-    $invalid = xarModAPIFunc('dynamicdata','admin','checkinput',
-                             array('fields'      => &$fields, // pass by reference !
-                                   'dd_function' => 'create',
-                                   'extrainfo'   => array()));
-
-//print_r($fields);
-    if (!empty($preview) || count($invalid) > 0) {
+    if (!empty($preview) || !$isvalid) {
         $data = dynamicdata_admin_menu();
-        $data['objectid'] = $objectid;
-        $data['label'] = $label;
-        $data['modid'] = $modid;
-        $data['itemtype'] = $itemtype;
-        $data['itemid'] = $itemid; // might be coming from another module !
-        $data['fields'] = $fields; // we'll handle it ourselves here !
+
+        $data['object'] = & $myobject;
+
         $data['authid'] = xarSecGenAuthKey();
-    //    $data['where'] = $where; // our selection criteria
         $data['preview'] = $preview;
         return xarTplModule('dynamicdata','admin','new', $data);
     }
 
-    $itemid = xarModAPIFunc('dynamicdata','admin','create',
-                            array('modid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'itemid' => 0, // in this case
-                                  'fields' => $fields));
+    $itemid = $myobject->createItem();
 
-    if (!isset($itemid)) return; // throw back
+    if (empty($itemid)) return; // throw back
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                  array('itemid' => $objectid)));
+                                  array('itemid' => $myobject->objectid)));
 
     // Return
     return true;
@@ -337,31 +293,17 @@ function dynamicdata_admin_modify($args)
         return;
     }
 
-    if (!xarModAPILoad('dynamicdata','user')) return;
-
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
-
-    $where = "moduleid eq $modid and itemtype eq $itemtype";
-
     $data = dynamicdata_admin_menu();
-    $data['objectid'] = $objectid;
-    $data['label'] = $label;
-    $data['modid'] = $modid;
-    $data['itemtype'] = $itemtype;
+
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    $myobject->getItem();
+    $data['object'] = & $myobject;
+
+    $data['objectid'] = $myobject->objectid;
     $data['itemid'] = $itemid;
-    $data['fields'] = array(); // we'll let the form handle it
-    $data['where'] = $where; // our selection criteria
     $data['authid'] = xarSecGenAuthKey();
 
     return $data;
@@ -388,7 +330,13 @@ function dynamicdata_admin_update($args)
 
     extract($args);
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for updating #(1) item',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -400,65 +348,36 @@ function dynamicdata_admin_update($args)
         $preview = 0;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    $myobject->getItem();
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
+    $isvalid = $myobject->checkInput();
 
-    $fields = xarModAPIFunc('dynamicdata','user','getitem',
-                            array('modid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'itemid' => $itemid));
-    if (!isset($fields) || $fields == false) {
-        return; // throw back
-    }
-
-    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
-
-    // this fills $invalid with an array of errors, or fills $fields with the values
-    $invalid = xarModAPIFunc('dynamicdata','admin','checkinput',
-                             array('fields'      => &$fields, // pass by reference !
-                                   'dd_function' => 'update',
-                                   'extrainfo'   => array()));
-
-    if (!empty($preview) || count($invalid) > 0) {
+    if (!empty($preview) || !$isvalid) {
         $data = dynamicdata_admin_menu();
-        $data['objectid'] = $objectid;
-        $data['label'] = $label;
-        $data['modid'] = $modid;
-        $data['itemtype'] = $itemtype;
+        $data['object'] = & $myobject;
+
+        $data['objectid'] = $myobject->objectid;
         $data['itemid'] = $itemid;
-        $data['fields'] = $fields; // we'll handle it ourselves here !
         $data['authid'] = xarSecGenAuthKey();
-    //    $data['where'] = $where; // our selection criteria
         $data['preview'] = $preview;
 
         return xarTplModule('dynamicdata','admin','modify', $data);
     }
 
-    $itemid = xarModAPIFunc('dynamicdata','admin','update',
-                            array('modid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'itemid' => $itemid,
-                                  'fields' => $fields));
+    $itemid = $myobject->updateItem();
 
     if (!isset($itemid)) return; // throw back
 
     // check if we need to set a module alias (or remove it) for short URLs
-    if ($objectid == 1) {
-        $name = $fields['name']['value'];
+    if ($myobject->objectid == 1) {
+        $name = $myobject->properties['name']->value;
         $alias = xarModGetAlias($name);
-        if (!empty($fields['isalias']['value'])) {
+        $isalias = $myobject->properties['isalias']->value;
+        if (!empty($isalias)) {
             // no alias defined yet, so we create one
             if ($alias == $name) {
                 xarModSetAlias($name,'dynamicdata');
@@ -472,10 +391,86 @@ function dynamicdata_admin_update($args)
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                  array('itemid' => $myobject->objectid)));
+
+    // Return
+    return true;
+}
+
+
+/**
+ * delete item
+ * @param 'itemid' the id of the item to be deleted
+ * @param 'confirm' confirm that this item can be deleted
+ */
+function dynamicdata_admin_delete($args)
+{
+    list($objectid,
+         $modid,
+         $itemtype,
+         $itemid,
+         $confirm) = xarVarCleanFromInput('objectid',
+                                         'modid',
+                                         'itemtype',
+                                         'itemid',
+                                         'confirm');
+    extract($args);
+
+    if (empty($itemid)) {
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'item id', 'admin', 'modify', 'dynamicdata');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (empty($modid)) {
+        $modid = xarModGetIDFromName('dynamicdata');
+    }
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
+
+    $myobject = new Dynamic_Object(array('moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+    if (empty($myobject)) return;
+
+    $myobject->getItem();
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:$itemid', ACCESS_DELETE)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        return;
+    }
+
+    if (empty($confirm)) {
+        $data = dynamicdata_admin_menu();
+        $data['object'] = & $myobject;
+        $data['authid'] = xarSecGenAuthKey();
+
+        return $data;
+    }
+
+    // If we get here it means that the user has confirmed the action
+
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for deleting #(1) item #(2)',
+                    'DynamicData', xarVarPrepForDisplay($itemid));
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    $itemid = $myobject->deleteItem($itemid);
+
+    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                   array('itemid' => $objectid)));
 
     // Return
     return true;
+
 }
 
 // ----------------------------------------------------------------------
@@ -516,10 +511,10 @@ function dynamicdata_admin_modifyprop()
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
+        $objectid = $object['objectid'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
+        $label =  $object['label'];
     }
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -543,11 +538,11 @@ function dynamicdata_admin_modifyprop()
             $data['label'] = xarML('for module #(1)', $modinfo['displayname']);
         }
     } else {
-        $data['objectid'] = $object['id']['value'];
+        $data['objectid'] = $object['objectid'];
         if (!empty($itemtype)) {
-            $data['label'] = xarML('for #(1)', $object['label']['value']);
+            $data['label'] = xarML('for #(1)', $object['label']);
         } else {
-            $data['label'] = xarML('for #(1)', $object['label']['value']);
+            $data['label'] = xarML('for #(1)', $object['label']);
         }
     }
 
@@ -652,7 +647,13 @@ function dynamicdata_admin_updateprop()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for updating #(1) configuration',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
 
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -665,9 +666,9 @@ function dynamicdata_admin_updateprop()
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
+        $objectid = $object['objectid'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
     } elseif (!empty($modid)) {
         $modinfo = xarModGetInfo($modid);
         if (!empty($modinfo['name'])) {
@@ -698,9 +699,11 @@ function dynamicdata_admin_updateprop()
 
     if (!xarModAPILoad('dynamicdata', 'admin')) return;
 
+    $i = 0;
     // update old fields
     foreach ($fields as $name => $field) {
         $id = $field['id'];
+        $i++;
         if (empty($dd_label[$id])) {
             // delete property (and corresponding data) in xaradminapi.php
             if (!xarModAPIFunc('dynamicdata','admin','deleteprop',
@@ -731,6 +734,7 @@ function dynamicdata_admin_updateprop()
         }
     }
 
+    $i++;
     // insert new field
     if (!empty($dd_label[0]) && !empty($dd_type[0])) {
         // create new property in xaradminapi.php
@@ -746,7 +750,7 @@ function dynamicdata_admin_updateprop()
                                       'default' => $dd_default[0],
                                       'source' => $dd_source[0],
                                       'status' => 1,
-                                      'order' => 0,
+                                      'order' => $i,
                                       'validation' => $dd_validation[0]));
         if (empty($prop_id)) {
             return;
@@ -785,7 +789,13 @@ function dynamicdata_admin_importprops()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        $msg = xarML('Invalid authorization key for importing #(1) configuration',
+                    'DynamicData');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
 
     if (!xarModAPILoad('dynamicdata', 'admin')) return;
 
@@ -831,6 +841,11 @@ function dynamicdata_admin_export($args)
 
     $data = dynamicdata_admin_menu();
 
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid));
+
     if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobject',
@@ -843,18 +858,20 @@ function dynamicdata_admin_export($args)
         return $data;
     }
 
-    $objectid = $object['id']['value'];
-    $modid = $object['moduleid']['value'];
-    $itemtype = $object['itemtype']['value'];
-    $label =  $object['label']['value'];
+    $objectid = $object['objectid'];
+    $modid = $object['moduleid'];
+    $itemtype = $object['itemtype'];
+    $label =  $object['label'];
 
     // export object definition
     if (empty($itemid)) {
         $data['label'] = xarML('Export Object Definition for #(1)', $label);
 
-        $xml = "<object>\n";
-        foreach ($object as $key => $values) {
-            $xml .= "  <$key>" . xarVarPrepForDisplay($values['value']) . "</$key>\n";
+        $xml = '';
+/*
+        $xml .= "<object>\n";
+        foreach ($object as $key => $value) {
+            $xml .= "  <$key>" . xarVarPrepForDisplay($value) . "</$key>\n";
         }
         $xml .= "  <properties>\n";
         $fields = xarModAPIFunc('dynamicdata','user','getprop',
@@ -876,11 +893,60 @@ function dynamicdata_admin_export($args)
         $xml .= "  </properties>\n";
     // TODO: insert items here for some parameter
         $xml .= "</object>\n";
+*/
+
+/*      // this returns a bit too much :-)
+        $xml .= "<object>\n";
+        foreach (get_object_vars($myobject) as $key => $value) {
+            if (is_array($value)) {
+                $xml .= "  <$key>\n";
+                foreach ($value as $subkey => $subvalue) {
+                    if (is_array($subvalue)) {
+                        $xml .= "    <$subkey>\n";
+                        //...
+                        $xml .= "    </$subkey>\n";
+                    } elseif (is_object($subvalue)) {
+                        $xml .= "    <$subkey>\n";
+                        //...
+                        $xml .= "    </$subkey>\n";
+                    } else {
+                        $xml .= "    <$subkey>" . xarVarPrepForDisplay($subvalue) . "</$subkey>\n";
+                    }
+                }
+                $xml .= "  </$key>\n";
+            } else {
+                $xml .= "  <$key>" . xarVarPrepForDisplay($value) . "</$key>\n";
+            }
+        }
+        $xml .= "</object>\n";
+*/
+
+        $xml .= "<object>\n";
+        $dynamicobject = new Dynamic_Object(array('objectid' => 1));
+        foreach (array_keys($dynamicobject->properties) as $name) {
+            if (isset($myobject->$name)) {
+                $xml .= "  <$name>" . xarVarPrepForDisplay($myobject->$name) . "</$name>\n";
+            }
+        }
+        $xml .= "  <properties>\n";
+        $dynamicproperties = new Dynamic_Object(array('objectid' => 2));
+        foreach (array_keys($myobject->properties) as $name) {
+            $xml .= '      <property id="'.$name.'">' . "\n";
+            foreach (array_keys($dynamicproperties->properties) as $key) {
+                if (isset($myobject->properties[$name]->$key)) {
+                    $xml .= "        <$key>".$myobject->properties[$name]->$key."</$key>\n";
+                }
+            }
+            $xml .= "      </property>\n";
+        }
+        $xml .= "  </properties>\n";
+        $xml .= "</object>\n";
 
     // export specific item
     } elseif (is_numeric($itemid)) {
-        $data['label'] = xarML('Export Data for #(1) # #(2)', $label, $itemid);
 
+        $data['label'] = xarML('Export Data for #(1) # #(2)', $label, $itemid);
+/*
         $fields = xarModAPIFunc('dynamicdata','user','getitem',
                                 array('modid' => $modid,
                                       'itemtype' => $itemtype,
@@ -889,55 +955,67 @@ function dynamicdata_admin_export($args)
             $data['xml'] = xarML('Unknown Item');
             return $data;
         }
-        $objectname = $object['name']['value'];
+        $objectname = $object['name'];
         $xml = "<$objectname id=\"$itemid\">\n";
-        foreach ($fields as $fieldname => $field) {
-            $xml .= "  <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n";
+        foreach ($fields as $fieldname => $fieldvalue) {
+            $xml .= "  <$fieldname>" . xarVarPrepForDisplay($fieldvalue) . "</$fieldname>\n";
         }
         $xml .= "</$objectname>\n";
+*/
+        $myobject->getItem();
+
+        $xml = '<'.$myobject->name.' id="'.$itemid.'">'."\n";
+        foreach (array_keys($myobject->properties) as $name) {
+            $xml .= "  <$name>" . xarVarPrepForDisplay($myobject->properties[$name]->value) . "</$name>\n";
+        }
+        $xml .= '</'.$myobject->name.">\n";
 
     // export all items (better save this to file, e.g. in var/cache/...)
     } elseif ($itemid == 'all') {
         $data['label'] = xarML('Export Data for all #(1) Items', $label);
 
-        $items = xarModAPIFunc('dynamicdata','user','getitems',
-                                array('modid' => $modid,
-                                      'itemtype' => $itemtype));
-        if (!isset($items)) {
-            $data['xml'] = xarML('No Items');
-            return $data;
-        }
-        $objectname = $object['name']['value'];
-/**/
+        $mylist = new Dynamic_Object_List(array('objectid' => $objectid,
+                                                'moduleid' => $modid,
+                                                'itemtype' => $itemtype));
+        $mylist->getItems();
+
         $xml = "<items>\n";
-        foreach ($items as $itemid => $item) {
-            $xml .= "  <$objectname id=\"$itemid\">\n";
-            foreach ($item['fields'] as $fieldname => $field) {
-                $xml .= "    <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n";
+        foreach ($mylist->items as $itemid => $item) {
+            $xml .= '  <'.$mylist->name.' id="'.$itemid.'">'."\n";
+            foreach (array_keys($mylist->properties) as $name) {
+                if (isset($item[$name])) {
+                    $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]) . "</$name>\n";
+                } else {
+                    $xml .= "    <$name></$name>\n";
+                }
             }
-            $xml .= "  </$objectname>\n";
+            $xml .= '  </'.$mylist->name.">\n";
         }
         $xml .= "</items>\n";
-/**/
+
 /*
         $varDir = xarCoreGetVarDirPath();
-        $outfile = $varDir . '/cache/templates/' . xarVarPrepForOS($objectname) . '.data.xml';
+        $outfile = $varDir . '/cache/templates/' . xarVarPrepForOS($mylist->name) . '.data.xml';
         $fp = @fopen($outfile,'w');
         if (!$fp) {
             $data['xml'] = xarML('Unable to open file');
             return $data;
         }
         fputs($fp, "<items>\n");
-        foreach ($items as $itemid => $item) {
-            fputs($fp, "  <$objectname id=\"$itemid\">\n");
-            foreach ($item['fields'] as $fieldname => $field) {
-                fputs($fp, "    <$fieldname>" . xarVarPrepForDisplay($field['value']) . "</$fieldname>\n");
+        foreach ($mylist->items as $itemid => $item) {
+            fputs($fp, "  <".$mylist->name." id=\"$itemid\">\n");
+            foreach (array_keys($mylist->properties) as $name) {
+                if (isset($item[$name])) {
+                    fputs($fp, "    <$name>" . xarVarPrepForDisplay($item[$name]) . "</$name>\n");
+                } else {
+                    fputs($fp, "    <$name></$name>\n");
+                }
             }
-            fputs($fp, "  </$objectname>\n");
+            fputs($fp, "  </".$mylist->name.">\n");
         }
         fputs($fp, "</items>\n");
         fclose($fp);
-        $xml = xarML('Data saved to #(1)',$outfile);
+        $xml .= xarML('Data saved to #(1)',$outfile);
 */
 
     } else {
@@ -983,7 +1061,13 @@ function dynamicdata_admin_import($args)
     }
 
     if (!empty($import)) {
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            $msg = xarML('Invalid authorization key for importing #(1) configuration',
+                        'DynamicData');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                           new SystemException($msg));
+            return;
+        }
         $found = '';
         foreach ($files as $file) {
             if ($file == $import) {
@@ -1040,7 +1124,7 @@ function dynamicdata_admin_import($args)
                         return;
                     }
                     // make sure we drop the object id, because it might already exist here
-                    unset($object['id']);
+                    unset($object['objectid']);
                 // TODO: make sure itemtype is unique when we're dealing with fully dynamic objects
                 //       (= objects that have the moduleid of dynamicdata itself)
 
@@ -1055,7 +1139,7 @@ function dynamicdata_admin_import($args)
                     if ($object['itemtype'] < 0) {
                         $objectinfo = xarModAPIFunc('dynamicdata','user','getobject',
                                                     array('objectid' => $objectid));
-                        $object['itemtype'] = $objectinfo['itemtype']['value'];
+                        $object['itemtype'] = $objectinfo['itemtype'];
                     }
 
                     $what = 'property';
@@ -1282,42 +1366,26 @@ function dynamicdata_admin_newhook($args)
         $itemtype = 0;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = xarML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
+    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } elseif (isset($objectid)) {
+        $itemid = $objectid;
+    } else {
+        $itemid = 0;
     }
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-    if (!isset($fields) || $fields == false) {
-        return;
-    } elseif (count($fields) == 0) {
-        return;
-    }
-
-    // prefill the values with defaults (if any)
-    foreach (array_keys($fields) as $name) {
-        $fields[$name]['value'] = $fields[$name]['default'];
-    }
+    $object = new Dynamic_Object(array('moduleid' => $modid,
+                                       'itemtype' => $itemtype,
+                                       'itemid'   => $itemid));
+    if (!isset($object)) return;
 
     // if we are in preview mode, we need to check for any preview values
     $preview = xarVarCleanFromInput('preview');
     if (!empty($preview)) {
-        foreach ($fields as $name => $field) {
-            $id = $field['id'];
-            $value = xarVarCleanFromInput('dd_'.$id);
-            if (isset($value)) {
-                $fields[$name]['value'] = $value;
-            }
-        }
+        $object->checkInput();
     }
 
     return xarTplModule('dynamicdata','admin','newhook',
-                         array('fields' => $fields));
+                         array('properties' => & $object->properties));
 }
 
 /**
@@ -1378,38 +1446,21 @@ function dynamicdata_admin_modifyhook($args)
         $itemid = $objectid;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = xarML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = xarModAPIFunc('dynamicdata','user','getall',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype,
-                                 'itemid' => $itemid));
-    if (!isset($fields) || $fields == false) {
-        return;
-    }
+    $object = new Dynamic_Object(array('moduleid' => $modid,
+                                       'itemtype' => $itemtype,
+                                       'itemid'   => $itemid));
+    if (!isset($object)) return;
+
+    $object->getItem();
 
     // if we are in preview mode, we need to check for any preview values
-    if (is_array($fields) && count($fields) > 0) {
-        $preview = xarVarCleanFromInput('preview');
-        if (!empty($preview)) {
-            foreach ($fields as $name => $field) {
-                $id = $field['id'];
-                $value = xarVarCleanFromInput('dd_'.$id);
-                if (isset($value)) {
-                    $fields[$name]['value'] = $value;
-                }
-            }
-        }
+    $preview = xarVarCleanFromInput('preview');
+    if (!empty($preview)) {
+        $object->checkInput();
     }
 
     return xarTplModule('dynamicdata','admin','modifyhook',
-                         array('fields' => $fields));
+                         array('properties' => & $object->properties));
 }
 
 /**
@@ -1552,106 +1603,5 @@ function dynamicdata_admin_updateconfig()
 {
     return 'insert update code for property types here ?';
 }
-
-
-// ----------------------------------------------------------------------
-// TODO: all of the 'standard' admin functions, if that makes sense someday...
-//
-
-/**
- * delete item
- * @param 'itemid' the id of the item to be deleted
- * @param 'confirm' confirm that this item can be deleted
- */
-function dynamicdata_admin_delete($args)
-{
-    list($objectid,
-         $modid,
-         $itemtype,
-         $itemid,
-         $confirm) = xarVarCleanFromInput('objectid',
-                                         'modid',
-                                         'itemtype',
-                                         'itemid',
-                                         'confirm');
-    extract($args);
-
-    if (empty($itemid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'item id', 'admin', 'modify', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-
-    if (!xarModAPILoad('dynamicdata','user')) return;
-
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label =  $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-    if (!xarSecAuthAction(0, 'DynamicData::Item', '$modid:$itemtype:$itemid', ACCESS_DELETE)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
-
-    if (empty($confirm)) {
-        $data = dynamicdata_admin_menu();
-        $data['objectid'] = $objectid;
-        $data['label'] = $label;
-        $data['modid'] = $modid;
-        $data['itemtype'] = $itemtype;
-        $data['itemid'] = $itemid;
-        $data['authid'] = xarSecGenAuthKey();
-
-        return $data;
-    }
-
-    // If we get here it means that the user has confirmed the action
-
-    if (!xarSecConfirmAuthKey()) return;
-
-    return 'To be continued...';
-
-/*
-    if (!xarModAPILoad('dynamicdata', 'admin')) return; // throw back
-
-    if (!xarModAPIFunc('dynamicdata',
-                     'admin',
-                     'delete',
-                     array('itemid' => $itemid))) {
-        return; // throw back
-    }
-
-    xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
-
-    // Return
-    return true;
-*/
-
-}
-
-//
-// TODO: all of the 'standard' admin functions, if that makes sense someday...
-// ----------------------------------------------------------------------
-
 
 ?>

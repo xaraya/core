@@ -1,8 +1,8 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
-<xar:loop name="$fields">
+<xar:foreach in="$properties" key="$name" value="$property">
     <tr align="left" valign="middle">
-        <td>#$label#</td>
-        <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
+        <td><xar:data-label property="$properties[$name]" /> </td>
+        <td><xar:data-output property="$properties[$name]" /> </td>
     </tr>
-</xar:loop>
+</xar:foreach>
 </table>

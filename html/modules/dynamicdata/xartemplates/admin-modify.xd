@@ -5,7 +5,7 @@
 </table>
 <br />
 
-<h2><xar:mlstring>Modify</xar:mlstring> #$label# ## #$itemid#</h2>
+<h2><xar:mlstring>Modify</xar:mlstring> #$object->label# ## #$object->itemid#</h2>
 
 <xar:if condition="!empty($objectid) and $objectid eq 1">
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
@@ -26,7 +26,7 @@
     </tr>
     <tr>
         <td>
-            <xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+            <xar:data-display object="$object" />
         </td>
     </tr>
 </table>
@@ -34,9 +34,9 @@
 
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'update')#">
     <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="modid" value="#$modid#" />
-    <input type="hidden" name="itemtype" value="#$itemtype#" />
-    <input type="hidden" name="itemid" value="#$itemid#" />
+    <input type="hidden" name="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" value="#$object->itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
 
@@ -49,8 +49,7 @@
         </xar:if>
 
         <!-- this does most of the hard work :) -->
-        <xar:data-form module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
-
+        <xar:data-form object="$object" />
 
         <tr>
             <td colspan="2" align="center">
@@ -62,7 +61,5 @@
     </table>
 
 </form>
-
-<!-- xar:data-list module="dynamicdata" itemtype="1" where="$where" /-->
 
 

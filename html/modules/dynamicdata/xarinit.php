@@ -226,13 +226,13 @@ function dynamicdata_init()
 
     // create default properties for dynamic data objects
     $properties = array(
-        "(1,'id','Id',1,182,0,21,'','" . $dynamic_objects . ".xar_object_id',1,1,'integer')",
+        "(1,'objectid','Id',1,182,0,21,'','" . $dynamic_objects . ".xar_object_id',1,1,'integer')",
         "(2,'name','Name',1,182,0,2,'','" . $dynamic_objects . ".xar_object_name',1,2,'varchar (30)')",
         "(3,'label','Label',1,182,0,2,'','" . $dynamic_objects . ".xar_object_label',1,3,'varchar (254)')",
-        "(4,'moduleid','Module',1,182,0,19,'','" . $dynamic_objects . ".xar_object_moduleid',1,4,'integer')",
-        "(5,'itemtype','Item Type',1,182,0,20,'','" . $dynamic_objects . ".xar_object_itemtype',1,5,'integer')",
-        "(6,'urlparam','URL Param',1,182,0,2,'','" . $dynamic_objects . ".xar_object_urlparam',1,6,'varchar (30)')",
-        "(7,'maxid','Max Id',1,182,0,15,'','" . $dynamic_objects . ".xar_object_maxid',2,7,'integer')",
+        "(4,'moduleid','Module',1,182,0,19,'182','" . $dynamic_objects . ".xar_object_moduleid',1,4,'integer')",
+        "(5,'itemtype','Item Type',1,182,0,20,'0','" . $dynamic_objects . ".xar_object_itemtype',1,5,'integer')",
+        "(6,'urlparam','URL Param',1,182,0,2,'itemid','" . $dynamic_objects . ".xar_object_urlparam',1,6,'varchar (30)')",
+        "(7,'maxid','Max Id',1,182,0,15,'0','" . $dynamic_objects . ".xar_object_maxid',2,7,'integer')",
         "(8,'config','Config',1,182,0,4,'','" . $dynamic_objects . ".xar_object_config',2,8,'text')",
         "(9,'isalias','Alias in short URLs',1,182,0,14,'1','" . $dynamic_objects . ".xar_object_isalias',2,9,'integer (tiny)')",
 
@@ -460,6 +460,14 @@ function dynamicdata_init()
                       array(),
                       'dynamicdata_adminapi_handleListTag');
 
+    // Register BL utility tags to avoid OO problems with the BL compiler
+    xarTplRegisterTag('dynamicdata', 'data-object',
+                      array(),
+                      'dynamicdata_userapi_handleObjectTag');
+    xarTplRegisterTag('dynamicdata', 'data-label',
+                      array(),
+                      'dynamicdata_userapi_handleLabelTag');
+
     // Initialisation successful
     return true;
 }
@@ -598,6 +606,8 @@ function dynamicdata_delete()
     xarTplUnregisterTag('data-display');
     xarTplUnregisterTag('data-list');
     xarTplUnregisterTag('data-view');
+    xarTplUnregisterTag('data-object');
+    xarTplUnregisterTag('data-label');
 
     // Deletion successful
     return true;

@@ -1,0 +1,96 @@
+<xar:if condition="empty($layout) or $layout eq 'default'">
+    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <th align="center"><xar:data-label property="$properties[$name]" /></th>
+        </xar:foreach>
+        <th align="center"><xar:mlstring>Options</xar:mlstring></th>
+    </tr>
+    <xar:foreach in="$items" key="$itemid" value="$fields">
+    <tr>
+    <!-- we don't use xar:data-form or xar:data-input here, because this
+         is typically not an input form -->
+        <xar:foreach in="$fields" key="$name" value="$value">
+            <td><xar:data-output property="$properties[$name]" value="$value" /></td>
+        </xar:foreach>
+        <td>
+            <xar:loop name="$links[$itemid]">
+                #$ojoin# <a href="#$olink#">#$otitle#</a>
+            </xar:loop>
+        </td>
+    </tr>
+    </xar:foreach>
+    <xar:if condition="!empty($newlink)">
+    <tr>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <td>&nbsp;</td>
+        </xar:foreach>
+        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+    </tr>
+    </xar:if>
+    </table>
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <br />
+        <div align="center">
+            <xar:if condition="!empty($prevurl)">
+                 <a href="#$prevurl#">&lt;&lt; </a>
+            <xar:else />
+                 ---
+            </xar:if>
+            &nbsp;&nbsp;&nbsp;
+            <xar:if condition="!empty($nexturl)">
+                 <a href="#$nexturl#"> &gt;&gt;</a>
+            <xar:else />
+                 ---
+            </xar:if>
+        </div>
+    </xar:if>
+
+<xar:elseif condition="$layout eq 'cells'" />
+    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>
+        <xar:loop name="$labels">
+            <th align="center">#$label#</th>
+        </xar:loop>
+    </tr>
+    <xar:loop name="$items">
+    <tr>
+        <xar:loop name="$fields">
+            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" size="15" /></td>
+        </xar:loop>
+    </tr>
+    </xar:loop>
+    <xar:if condition="!empty($newlink)">
+    <tr>
+        <xar:loop name="$labels">
+            <td>&nbsp;</td>
+        </xar:loop>
+        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+    </tr>
+    </xar:if>
+    </table>
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <div align="center">
+            <xar:if condition="!empty($prevurl)">
+                 <a href="#$prevurl#">&lt;&lt; </a>
+            <xar:else />
+                 ---
+            </xar:if>
+            &nbsp;&nbsp;&nbsp;
+            <xar:if condition="!empty($nexturl)">
+                 <a href="#$nexturl#"> &gt;&gt;</a>
+            <xar:else />
+                 ---
+            </xar:if>
+        </div>
+    </xar:if>
+
+<!-- TODO: multi-column output -->
+<xar:else />
+    <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    <br /><br />
+    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+</xar:if>
+

@@ -5,7 +5,7 @@
 </table>
 <br />
 
-<div align="center"><h2><xar:mlstring>Create New</xar:mlstring> #$label#</h2></div>
+<div align="center"><h2><xar:mlstring>Create New</xar:mlstring> #$object->label#</h2></div>
 
 <xar:if condition="!empty($preview)">
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
@@ -16,7 +16,7 @@
     </tr>
     <tr>
         <td align="center">
-            <xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+            <xar:data-display object="$object" />
         </td>
     </tr>
 </table>
@@ -24,12 +24,12 @@
 
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#">
     <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="modid" value="#$modid#" />
-    <input type="hidden" name="itemtype" value="#$itemtype#" />
-    <input type="hidden" name="itemid" value="#$itemid#" />
+    <input type="hidden" name="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" value="#$object->itemid#" />
 
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
-        <xar:data-form module="$modid" itemtype="$itemtype" itemid="$itemid" fields="$fields" />
+        <xar:data-form object="$object" />
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" name="preview" value="<xar:mlstring>Preview</xar:mlstring>" />

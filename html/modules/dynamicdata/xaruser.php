@@ -12,6 +12,8 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 
+require_once 'modules/dynamicdata/class/objects.php';
+
 // ----------------------------------------------------------------------
 // Hook functions (user GUI)
 // ----------------------------------------------------------------------
@@ -84,31 +86,17 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = xarML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = xarModAPIFunc('dynamicdata','user','getitem',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype,
-                                 'itemid' => $itemid));
-    if (!isset($fields) || $fields == false || count($fields) == 0) {
-        return;
-    }
+    $object = new Dynamic_Object(array('moduleid' => $modid,
+                                       'itemtype' => $itemtype,
+                                       'itemid' => $itemid));
+    if (!isset($object)) return;
+    $object->getItem();
 
 // TODO: use custom template per module + itemtype ?
      return xarTplModule('dynamicdata','user','displayhook',
-                         array('fields' => $fields));
+                         array('properties' => & $object->properties));
 
 }
-
-// ----------------------------------------------------------------------
-// TODO: all of the 'standard' user functions, if that makes sense someday...
-//
 
 /**
  * the main user function lists the available objects defined in DD
@@ -131,9 +119,9 @@ function dynamicdata_user_main()
     $data['items'] = array();
     foreach ($objects as $itemid => $object) {
         if ($itemid < 3) continue;
-        $modid = $object['fields']['moduleid']['value'];
-        $itemtype = $object['fields']['itemtype']['value'];
-        $label = $object['fields']['label']['value'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
+        $label = $object['label'];
         $data['items'][] = array(
                                  'link'     => xarModURL('dynamicdata','user','view',
                                                          array('modid' => $modid,'itemtype' => $itemtype)),
@@ -170,11 +158,11 @@ function dynamicdata_user_view()
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
     if (isset($object)) {
-        $objectid = $object['id']['value'];
-        $modid = $object['moduleid']['value'];
-        $itemtype = $object['itemtype']['value'];
-        $label = $object['label']['value'];
-        $param = $object['urlparam']['value'];
+        $objectid = $object['objectid'];
+        $modid = $object['moduleid'];
+        $itemtype = $object['itemtype'];
+        $label = $object['label'];
+        $param = $object['urlparam'];
     } else {
         $objectid = 0;
         $label = xarML('Dynamic Data Objects');
@@ -191,8 +179,19 @@ function dynamicdata_user_view()
     $data['itemtype'] = $itemtype;
     $data['param'] = $param;
     $data['startnum'] = $startnum;
-    $data['label'] = xarML('View #(1)',$label);
+    $data['label'] = $label;
 
+/*  // we could also retrieve the object list here, and pass that along to the template
+    $numitems = 30;
+    $mylist = new Dynamic_Object_List(array('objectid' => $objectid,
+                                            'moduleid' => $modid,
+                                            'itemtype' => $itemtype,
+                                            'status'   => 1));
+    $mylist->getItems(array('numitems' => $numitems,
+                            'startnum' => $startnum));
+
+    $data['object'] = & $mylist;
+*/
     return $data;
 }
 
@@ -214,30 +213,26 @@ function dynamicdata_user_display($args)
                                         'itemid');
     extract($args);
 
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
+/*  // we could also pass along the parameters to the template, and let it retrieve the object
+    // but in this case, we'd need to retrieve the object label anyway
+    return array('objectid' => $objectid,
+                 'modid' => $modid,
+                 'itemtype' => $itemtype,
+                 'itemid' => $itemid);
+*/
 
-    if (!xarModAPILoad('dynamicdata','user')) return;
-    $object = xarModAPIFunc('dynamicdata','user','getobject',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $label = $object['label']['value'];
-    } else {
-        $label = xarML('Dynamic Data Object');
-    }
+    $myobject = new Dynamic_Object(array('objectid' => $objectid,
+                                         'moduleid' => $modid,
+                                         'itemtype' => $itemtype));
+    $myobject->getItem($itemid);
 
     // Return the template variables defined in this function
-    return array('module' => $modid,
-                 'itemtype' => $itemtype,
-                 'itemid' => $itemid,
-                 'label' => $label);
+    return array('object' => & $myobject);
 }
+
+// ----------------------------------------------------------------------
+// TODO: all of the 'standard' user functions, if that makes sense someday...
+//
 
 /**
  * generate the common menu configuration
@@ -292,9 +287,5 @@ function dynamicdata_user_menu()
     // Return the array containing the menu configuration
     return $menu;
 }
-
-//
-// TODO: all of the 'standard' user functions, if that makes sense someday...
-// ----------------------------------------------------------------------
 
 ?>

@@ -5,19 +5,19 @@
 </table>
 <br />
 
-<h2><xar:mlstring>Delete</xar:mlstring> #$label#</h2>
+<h2><xar:mlstring>Delete</xar:mlstring> <xar:data-label object="$object" /></h2>
 
 <center><strong><xar:mlstring>Confirm deleting this item ?</xar:mlstring></strong></center><br />
 
-<xar:data-display module="$modid" itemtype="$itemtype" itemid="$itemid" />
+<xar:data-display object="$object" />
 
 <center>
 <form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
     <input type="hidden" name="authid" value="#$authid#" />
-    <input type="hidden" name="objectid" value="#$objectid#" />
-    <input type="hidden" name="modid" value="#$modid#" />
-    <input type="hidden" name="itemtype" value="#$itemtype#" />
-    <input type="hidden" name="itemid" value="#$itemid#" />
+    <input type="hidden" name="objectid" value="#$object->objectid#" />
+    <input type="hidden" name="modid" value="#$object->moduleid#" />
+    <input type="hidden" name="itemtype" value="#$object->itemtype#" />
+    <input type="hidden" name="itemid" value="#$object->itemid#" />
 
     <input type="submit" name="confirm" value="<xar:mlstring>Yes</xar:mlstring>" />
     &nbsp;&nbsp;&nbsp;&nbsp;
