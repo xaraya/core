@@ -54,6 +54,7 @@
                 <input type="text" name="block_template" id="block_template" value="#$instance['template']#" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
+        <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
          <tr>
             <td align="left">
                 Refresh:
@@ -72,6 +73,7 @@
                 </select>
             </td>
         </tr>
+		</xar:if>
         <tr>
         <tr>
             <td align="left">
