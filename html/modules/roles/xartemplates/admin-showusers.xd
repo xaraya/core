@@ -108,12 +108,10 @@
 					</xar:if>
 				</td>
 				<td>
-					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#"
-					title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" title="Show the Privileges assigned to this User"><img src="modules/roles/xarimages/privileges.gif" style="vertical-align: middle;" /></a>
 				</td>
 				<td>
-					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#"
-					 title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
+					<a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$uid#" title="Test this User's Privileges"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
 		</xar:loop>
