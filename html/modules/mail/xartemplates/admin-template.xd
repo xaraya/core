@@ -4,16 +4,16 @@
 </xar:if>
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:mlstring>Configure Notification Template</xar:mlstring>
-	</h2>
+    <h2>
+        <xar:mlstring>Configure Notification Template</xar:mlstring>
+    </h2>
 
     <xar:if condition="!empty($settings)">
         <p>
-        	<xar:mlstring>The mail module is currently hooked to the following modules :</xar:mlstring>
+            <xar:mlstring>The mail module is currently hooked to the following modules :</xar:mlstring>
         </p>
         <ul>
             <xar:foreach in="$settings" key="$modname" value="$config">
@@ -26,16 +26,16 @@
             </xar:foreach>
         </ul>
     <xar:else/>
-    	<p>
-        	<xar:mlstring>The mail module is currently not hooked to any module</xar:mlstring>
+        <p>
+            <xar:mlstring>The mail module is currently not hooked to any module</xar:mlstring>
         </p>
     </xar:if>
 
     <form method="post" action="&xar-modurl-mail-admin-template;">
-	    <div class="xar-form-input-wrapper">
-	        <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">
-	            <xar:mlstring>Name:</xar:mlstring>
-	        </label>
+        <div class="xar-form-input-wrapper">
+            <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">
+                <xar:mlstring>Name:</xar:mlstring>
+            </label>
             <select name="mailtype" id="mailtype" onchange="this.form.submit()">
             <xar:loop name="$templates">
                 <xar:if condition="$mailtype eq $loop:item['key']">
@@ -49,57 +49,57 @@
                 </xar:if>
             </xar:loop>
             </select>
-	    </div>
+        </div>
 
-		<p>
-	        <xar:if condition="$mailtype eq 'createhook'">
-	            <xar:ml>
-	            	<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is created.</xar:mlstring>
-	            	<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
-	            	<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
-	            </xar:ml>
-	        <xar:elseif condition="$mailtype eq 'changehook'" />
-            	<xar:ml>
-            		<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is updated.</xar:mlstring>
-            		<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
-            		<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
-            	</xar:ml>
-	        <xar:elseif condition="$mailtype eq 'deletehook'" />
-            	<xar:ml>
-            		<xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is deleted.</xar:mlstring>
-            		<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
-            		<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
-            	</xar:ml>
-	        <xar:else/>
-	            <xar:ml>
-	            	<xar:mlstring>This email will be sent to #(1) [ #(2) ].</xar:mlstring>
-	            	<xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
-	            	<xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
-	            </xar:ml>
-	        </xar:if>
-	    </p>
+        <p>
+            <xar:if condition="$mailtype eq 'createhook'">
+                <xar:ml>
+                    <xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is created.</xar:mlstring>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+                </xar:ml>
+            <xar:elseif condition="$mailtype eq 'changehook'" />
+                <xar:ml>
+                    <xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is updated.</xar:mlstring>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+                </xar:ml>
+            <xar:elseif condition="$mailtype eq 'deletehook'" />
+                <xar:ml>
+                    <xar:mlstring>This email will be sent to #(1) [ #(2) ] when a hooked item is deleted.</xar:mlstring>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+                </xar:ml>
+            <xar:else/>
+                <xar:ml>
+                    <xar:mlstring>This email will be sent to #(1) [ #(2) ].</xar:mlstring>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminname')#</xar:mlvar>
+                    <xar:mlvar>#xarModGetVar('mail', 'adminmail')#</xar:mlvar>
+                </xar:ml>
+            </xar:if>
+        </p>
      </form>
 
     <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
 
-	    <div class="xar-form-input-wrapper">
-	        <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
-	            <xar:mlstring>Subject:</xar:mlstring>
-	        </label>
+        <div class="xar-form-input-wrapper">
+            <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
+                <xar:mlstring>Subject:</xar:mlstring>
+            </label>
             <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#"  maxlength="150" class="xar-form-textxlong" />
-	    </div>
+        </div>
 
-	    <div class="xar-form-input-wrapper">
-	        <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
-	            <xar:mlstring>Message:</xar:mlstring>
-	        </label>
+        <div class="xar-form-input-wrapper">
+            <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
+                <xar:mlstring>Message:</xar:mlstring>
+            </label>
             <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
-	    </div>
+        </div>
 
         <div class="xar-clear-both xar-align-center">
-	        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	        <input type="hidden" name="phase" id="phase" value="update" />
-	        <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="phase" id="phase" value="update" />
+            <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
             <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
             <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
         </div>
