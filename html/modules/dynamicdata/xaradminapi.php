@@ -1,4 +1,4 @@
-<?php
+G<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -1018,5 +1018,9 @@ function dynamicdata_adminapi_deleteprop($args)
     return true;
 }
 
+//TODO: function to get a list of defined types
+//TODO: function to create new types?
+//TODO: make sure the constants in the CORE match the types (XARUSER_DUD_TYPE_CORE and friends)
+//TODO: integrate with xarModGetVar, xarModSetVar
 
 ?>
