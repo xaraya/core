@@ -3,23 +3,23 @@
 	<div style="margin: auto;">
 	<form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded" />
 		<div style="clear: both; padding-top: 10px;">
-		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<input type="hidden" name="bid" id="bid" value="#$bid#" />
-		<span style="float: left; width: 20%; text-align: right;">
-			<span class="help" title="#xarML('Enter the new title for the block instance.  If you leave this title blank, you will not have a reference for the block when browsing the blocks adminstration.')#"><label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
+		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+	  	    <input type="hidden" name="bid" id="bid" value="#$bid#" />
+		    <span style="float: left; width: 20%; text-align: right;">
+		        <span class="help" title="#xarML('Enter the new title for the block instance.  If you leave this title blank, you will not have a reference for the block when browsing the blocks adminstration.')#"><label for="block_title"><xar:mlstring>Title</xar:mlstring></label>:</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;">
 			<input type="text" name="block_title" id="block_title" value="#$instance['title']#" size="40" maxlength="255" />
-		</span>
+		    </span>
 		</div>
 
 		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
+		    <span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('This is the type of block that is being modified.')#"><xar:mlstring>Type</xar:mlstring>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;">
 			 #$instance['module']#\#$instance['type']#
-		</span>
+		    </span>
 		</div>
 
 		<div style="clear: both; padding-top: 10px;">
@@ -42,20 +42,20 @@
 		</div>
 
 		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
+	  	    <span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('If you wish to override the block template, this field needs to be filled in to tell the template what template to load for this instance.')#"><label for="block_template"><xar:mlstring>Template (optional)</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;">
 			<input type="text" name="block_template" id="block_template" value="#$instance['template']#" size="40" maxlength="255" />
-		</span>
+		    </span>
 		</div>
 
 		<xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
 		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
+		    <span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#"><label for="block_refresh"><xar:mlstring>Refresh</xar:mlstring>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;">
 			    <select name="block_refresh" id="block_refresh" style="width:150px;">
                     <xar:loop name="$refresh_times">
                         <xar:if condition="$instance['refresh'] eq $loop:item['id']">
@@ -67,15 +67,15 @@
                         </option>
                     </xar:loop>
                 </select>
-		</span>
+		    </span>
 		</div>
 		</xar:if>
 
 		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
+		    <span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#"><label for="block_state"><xar:mlstring>Default state</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
+		     </span>
+		    <span style="float: right; width: 78%; text-align: left;">
 			     <select name="block_state" id="block_state">
                     <xar:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
@@ -90,26 +90,30 @@
                     </xar:if>
                     <xar:mlstring>Maximized</xar:mlstring></option>
                 </select>
-		</span>
+		    </span>
 		</div>
 
         <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
 		<div style="clear: both; padding-top: 10px;">
-		<span style="float: left; width: 20%; text-align: right;">
+		    <span style="float: left; width: 20%; text-align: right;">
 			<span class="help" title="#xarML('Enter the content that is shown in the block instance.')#"><label for="block_content"><xar:mlstring>Content</xar:mlstring></label>:</span>
-		</span>
-		<span style="float: right; width: 78%; text-align: left;">
-			<textarea name="block_content" id="block_content" style="width:300px;height:150px;">#$instance['content']#</textarea>
-		</span>
+		    </span>
+		    <span style="float: right; width: 78%; text-align: left;">
+			    <textarea name="block_content" id="block_content" style="width:300px;height:150px;">#$instance['content']#</textarea>
+		    </span>
 		</div>
         </xar:if>
 
 		<!-- Blocks can send more fields to be shown and configured the extra_fields var shows those values -->
-		<xar:if condition="!empty($extra_fields)">
-			#$extra_fields#
+	<xar:if condition="!empty($extra_fields)">
+				  #$extra_fields#
 		</xar:if>
+		<div style="clear: both; padding-top: 20px;">
+		    <span style="float: left; width:78%; text-align: center;">
 
-		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$updatelabel#" /></span>
+	             <input type="submit" value="#$updatelabel#" />
+	        <span>
+        </div>
 	</form>
 	</div>
 </div>
