@@ -45,7 +45,7 @@ function modules_admin_initialise()
    		return $data;
    	}
    	
-   	//Initialize with dependencies, first initialise the necessary dependecies
+   	//Installs with dependencies, first initialise the necessary dependecies
    	//then the module itself
 	if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
 		//Call exception

@@ -1,17 +1,15 @@
 <?php
 
 /**
- * Activate a module if it has an active function, otherwise just set the state to active
+ * Deactivate a module if it has an deactive function, otherwise just set the state to deactive
  *
  * @access public
  * @param regid module's registered id
  * @returns bool
  * @raise BAD_PARAM
  */
-function modules_adminapi_activate ($args)
+function modules_adminapi_deactivate ($args)
 {
-	//Shoudlnt we check first if the module is alredy INITIALISED????
-
     extract($args);
 
     // Argument check
@@ -27,12 +25,16 @@ function modules_adminapi_activate ($args)
         return NULL;
     }
 
+	//Shouldnt we check first if the module is alredy ACTIVATED????
+	//What should we do with UPGRADED STATE? What is it meant to?
+	if ($modInfo['state'] != XARMOD_STATE_ACTIVE)
+
     // Module activate function
 	if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
-                           array('regid'    => $regid,
-                                 'function' => 'activate'))) {
+	                   'admin',
+					   'executeinitfunction',
+	                   array('regid'    => $regid,
+                             'function' => 'deactivate'))) {
 		//Raise an Exception
 		return;
 	}
@@ -42,7 +44,8 @@ function modules_adminapi_activate ($args)
                         'admin',
                         'setstate',
                         array('regid' => $regid,
-                              'state' => XARMOD_STATE_ACTIVE));
+                              'state' => XARMOD_STATE_INACTIVE));
+
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return NULL;
     }

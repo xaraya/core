@@ -13,7 +13,7 @@
  * @returns
  * @return
  */
-function modules_admin_deactivate()
+function modules_admin_deactivate ()
 {
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
@@ -22,10 +22,10 @@ function modules_admin_deactivate()
 
     // deactivate
     $deactivated = xarModAPIFunc('modules',
-                                'admin',
-                                'setstate',
-                                array('regid' => $id,
-                                      'state' => XARMOD_STATE_INACTIVE));
+                                 'admin',
+                                 'deactivate',
+                                 array('regid' => $id));
+
     //throw back
     if (!isset($deactivated)) return;
     $minfo=xarModGetInfo($id);
