@@ -29,9 +29,6 @@ function roles_userapi_removemember($args)
         return false;
     }
 
-    // Security Check
-    if(!xarSecurityCheck('DeleteRole')) return;
-
     $roles = new xarRoles();
     $group = $roles->getRole($gid);
     if($group->isUser()) {
