@@ -238,11 +238,16 @@ function xarML($string/*, ...*/)
 }
 
 /**
+ * *** DO NOT USE THIS FUNCTION ***
  * Return the translation associated to passed key
+ * *** DO NOT USE THIS FUNCTION ***
+ *
+ * *** IT IS CURRENTLY DEPRECATED, USE xarMLString instead ***
  *
  * @author Marco Canini <m.canini@libero.it>
  * @access public
  * @return string the translation string, or the key if no translation is available
+ * @deprec
  */
 function xarMLByKey($key/*, ...*/)
 {
