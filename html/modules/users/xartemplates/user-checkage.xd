@@ -10,4 +10,6 @@
 <br /><br />
 <a href="#xarModURL('users', 'user', 'register', array('phase' => 'registerform'))#"><xar:mlstring>I am </xar:mlstring> #$minage# <xar:mlstring> or older</xar:mlstring></a>
 <br /><br />
-<a href="index.php"><xar:mlstring>I am <b>not</b> </xar:mlstring> #$minage# <xar:mlstring> or older</xar:mlstring></a>
+(<xar:mlstring>By clicking on the above link you certify that you are either 13 or over, or that you have parental consent to register here</xar:mlstring>.)
+<br /><br />
+<a href="index.php"><xar:mlstring>I am not </xar:mlstring> #$minage# <xar:mlstring> or older</xar:mlstring></a>

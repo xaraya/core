@@ -11,6 +11,6 @@
 <br /><br />
 <a href="#xarModURL('users', 'user', 'showloginform')#"><xar:mlstring>Login</xar:mlstring></a>
 <br /><br />
-<a href="#xarModURL('users', 'user', 'register')#"><xar:mlstring>Register</xar:mlstring></a>
+<a href="#xarModURL('users', 'user', 'register', array('phase' => 'checkage'))#"><xar:mlstring>Register</xar:mlstring></a>
 <br /><br />
 <a href="#xarModURL('users', 'user', 'lostpassword')#"><xar:mlstring>Retrieve lost password</xar:mlstring></a>

@@ -1,0 +1,54 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Confirm Registration</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<br /><br />
+<form action="#xarModURL('users', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<table cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td>
+			<xar:mlstring>Perfered Username</xar:mlstring>:
+		</td>
+		<td>
+			#$uname#
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<xar:mlstring>Real Name</xar:mlstring>
+		</td>
+		<td>
+			#$realname#
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<xar:mlstring>E-mail Address</xar:mlstring>:
+		</td>
+		<td>
+			#$email#
+		</td>
+	</tr>
+    <xar:if condition="xarModGetVar('users', 'chooseownpassword')" >
+		<tr>
+			<td>
+				<xar:mlstring>Password</xar:mlstring>
+			</td>
+			<td>
+				#$pass#
+			</td>
+		</tr>
+    </xar:if>
+	<tr>
+		<td>
+			<br /><br />
+			<input type="hidden" name="authid" id="authid" value="#$authid#">
+			<input type="hidden" name="phase" id="phase" value="createuser">
+			<input type="submit" value="<xar:mlstring>Create Account</xar:mlstring>">
+		</td>
+	</tr>
+</table>
+</form>

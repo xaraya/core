@@ -34,6 +34,14 @@
 		</td>
 	</tr>
     <xar:if condition="xarModGetVar('users', 'chooseownpassword')" >
+<!-- 		<tr align="left" valign="middle">
+			<td>
+				<xar:mlstring>System create password?</xar:mlstring>
+			</td>
+			<td>
+				<input type="checkbox" name="createpassword" id="createpassword" value="1" tabindex="2" />
+			</td>
+		</tr> -->
 		<tr>
 			<td>
 				<xar:mlstring>Password</xar:mlstring>
