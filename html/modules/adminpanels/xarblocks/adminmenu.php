@@ -99,6 +99,9 @@ function adminpanels_adminmenublock_display($blockinfo){
     $menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
+
+    // Get current URL
+    $currenturl = xarServerGetCurrentURL();
     
     switch(strtolower($menustyle)){
         case 'byname':
@@ -127,13 +130,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                             $indlinks = array();
                             foreach($menulinks as $menulink){
                                 // please note how we place the marker against active function link
-                                // a quick hack to enable active function link identification
-                                // <andyv> i think john's method to provide functions links should be changed
-                                // TODO: provide a more robust and core-like method for this
-                                if(!strstr($menulink['url'], 'func='.$thisfuncname)){
-                                    $funcactive = 0;
-                                }else{
+                                if ($menulink['url'] == $currenturl) {
                                     $funcactive = 1;
+                                }else{
+                                    $funcactive = 0;
                                 }
                                 
                                 $indlinks[] = array('adminlink'     => $menulink['url'], 
@@ -220,10 +220,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                             $indlinks = array();
                             foreach($menulinks as $menulink){
                                 // please note how we place the marker against active function link
-                                if(!strstr($menulink['url'], 'func='.$thisfuncname)){
-                                    $funcactive = 0;
-                                }else{
+                                if ($menulink['url'] == $currenturl) {
                                     $funcactive = 1;
+                                }else{
+                                    $funcactive = 0;
                                 }
                                 
                                 $indlinks[] = array('adminlink'     => $menulink['url'], 
