@@ -97,7 +97,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
          </xar:if>
          </xar:foreach>
     </select></p>
-    <p><label for="mlsmode"><xar:mlstring>Available Locales</xar:mlstring></label>:&nbsp;&nbsp;
+    <p><label for="mlsmode"><xar:mlstring>Available Locales (comma-delimited)</xar:mlstring></label>:&nbsp;&nbsp;
          <input type="text" name="localeslist" value="#$localeslist#" size="40" maxlength="100">
     </p>
 	<p><xar:mlstring>Translations Backend</xar:mlstring>:
