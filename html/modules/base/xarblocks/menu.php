@@ -169,11 +169,14 @@ function base_menublock_display($blockinfo)
                         $ancestors = xarModAPIFunc('categories','user','getancestors',
                                                   array('cid' => $catid,
                                                         'return_itself' => true));
-                        if (!empty($ancestors)) {
-                            foreach ($ancestors as $ancestor) {
-                                // if we are on or below this category, then we are here
-                                if (in_array($url[0], $ancestor)) {
-                                    $here = 'true';
+                        if(!empty($ancestors)) {
+                            $ancestorcids = array_keys($ancestors);
+                            if (!empty($ancestors)) {
+                                foreach ($ancestorcids as $ancestorcid) {
+                                    // if we are on or below this category, then we are here
+                                    if ($url[0] == $ancestorcid) {
+                                        $here = 'true';
+                                    }
                                 }
                             }
                         }
