@@ -87,10 +87,10 @@
             <span style="float: right; width: 78%; text-align: left;">
                 <select name="defaultmodule" id="defaultmodule" size="1">
                     <xar:loop name="$mods">
-                        <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['displayname']">
-                            <option value="#$loop:item['displayname']#" selected="selected">#$loop:item['displayname']#</option>
+                        <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['name']">
+                            <option value="#$loop:item['name']#" selected="selected">#$loop:item['displayname']#</option>
                         <xar:else />
-                            <option value="#$loop:item['displayname']#">#$loop:item['displayname']#</option>
+                            <option value="#$loop:item['name']#">#$loop:item['displayname']#</option>
                         </xar:if>
                     </xar:loop>
                 </select>
