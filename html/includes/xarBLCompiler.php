@@ -1086,12 +1086,16 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 class xarTpl__NodesFactory extends xarTpl__ParserError
 {
 
-    function createTplTagNode($tagName, $attributes, $parentTagName, $parser)
+    function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
     {
         // Core tags
         switch ($tagName) {
         case 'blocklayout':
-            $node =& new xarTpl__XarBlocklayoutNode();
+            if($parser->tagRootSeen) {
+                $this->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
+                return;
+            }
+            $node =& new xarTpl__XarBlocklayoutNode($parser);
             break;
         case 'var':
             $node =& new xarTpl__XarVarNode();
@@ -1187,7 +1191,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return;
     }
 
-    function createTplEntityNode($entityType, $parameters, $parser)
+    function createTplEntityNode($entityType, $parameters, &$parser)
     {
         switch ($entityType) {
             case 'var':
@@ -1228,7 +1232,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return;
     }
 
-    function createTplInstructionNode($instruction, $parser)
+    function createTplInstructionNode($instruction, &$parser)
     {
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
             $node =& new xarTpl__XarVarInstructionNode();
@@ -1251,7 +1255,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return;
     }
 
-    function createTextNode($content, $parser)
+    function createTextNode($content, &$parser)
     {
         $node =& new xarTpl__TextNode();
         $node->tagName = 'TextNode';
@@ -1263,7 +1267,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return $node;
     }
 
-    function createDocumentNode($parser)
+    function createDocumentNode(&$parser)
     {
         $node =& new xarTpl__DocumentNode();
         $node->tagName = 'DocumentNode';
@@ -3217,9 +3221,10 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
-    function xarTpl__XarBlocklayoutNode()
+    function xarTpl__XarBlocklayoutNode(&$parser)
     {
-        $this->tagRootSeen = true; // Ladies and gentlemen, we got him!
+        // TODO: check if we are in a page template, and whether we already have the root tag
+        $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
     }
 
     function hasChildren()
