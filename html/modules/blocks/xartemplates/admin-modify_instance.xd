@@ -72,7 +72,7 @@
 		</p>
 		<p style="float: left; width: 100%;">
 			<span style="float: left; width: 20%; text-align: right;">
-				<span class="help" title="#xarML('If you wish to override the block template, this field needs to be filled in to tell the template what template to load for this instance.')#">
+				<span class="help" title="#xarML('If you wish to override the block template, this field needs to be completed to tell the system what template to load for this instance.')#">
 					<label for="block_template">
 						<xar:mlstring>
 							Template (optional) 
