@@ -400,6 +400,9 @@ class xarXmlHandler
     {
         // this handler can be called multiple times, so make sure we're not
         // overwriting ourselves, trust the depth to put things in the right place
+        if (!isset($this->_tree[$this->_depth-1]['content'])) {
+            $this->_tree[$this->_depth-1]['content'] = '';
+        }
         $this->_tree[$this->_depth-1]['content'] .= trim($data);
     }
 
