@@ -8,7 +8,7 @@
             <label for="username"><xar:mlstring>Username</xar:mlstring></label>
         </td>
         <td>
-            <input type="text" name="uname" id="username" maxlength="255" size="20" />
+            <input type="text" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
         </td>
         <td>
             <xar:if condition="xarModGetVar('roles', 'minage') eq 0">
@@ -23,7 +23,7 @@
             <label for="password"><xar:mlstring>Password</xar:mlstring></label>
         </td>
         <td>
-             <input type="password" name="pass" id="password" maxlength="64" size="20" />
+             <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
         </td>
         <td>
 			<a href="#xarModURL('roles', 'user', 'lostpassword')#"><xar:mlstring>Forget your password?</xar:mlstring></a>
@@ -31,13 +31,13 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">
-            <input type="checkbox" name="rememberme" id="remembermeform" value="1" /> <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
+            <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" /> <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
         </td>
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">
 			<input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
-            <input type="submit" value="#$loginlabel#" />
+            <input type="submit" value="#$loginlabel#" tabindex="4" />
         </td>
     </tr>
 </table>
