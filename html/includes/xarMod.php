@@ -1464,6 +1464,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
             if (!file_exists($fileName)) {
                 $fileName = 'modules/' . $modOsDir . '/pnversion.php';
+                $modversion['id'] = time();
             }
             break;
         case 'theme':
@@ -1847,6 +1848,10 @@ function xarMod__loadDbInfo($modName, $modDir)
 
     // Load the database definition if required
     $osxartablefile = "modules/$modDir/xartables.php";
+    if (!file_exists($osxartablefile)) {
+        $osxartablefile = 'modules/' . $modDir . '/pntables.php';
+    }
+
     if (!file_exists($osxartablefile)) {
         return false;
     }
