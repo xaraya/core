@@ -230,6 +230,9 @@ class Dynamic_Property_Master
             case 34: // (radio) Radio Buttons
                 $property = new Dynamic_RadioButtons_Property($args);
                 break;
+            case 35: // (imagelist) Image List
+                $property = new Dynamic_ImageList_Property($args);
+                break;
             default:
                 $property = new Dynamic_Property($args);
                 break;
@@ -545,6 +548,14 @@ class Dynamic_Property_Master
                               'name'       => 'radio',
                               'label'      => 'Radio Buttons',
                               'format'     => '34',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[35] = array(
+                              'id'         => 35,
+                              'name'       => 'imagelist',
+                              'label'      => 'Image List',
+                              'format'     => '35',
                               'validation' => '',
                               // ...
                              );
@@ -1229,7 +1240,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         }
         if (empty($value)) {
             $value = time();
-        } elseif (is_string($value)) {
+        } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
         // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
@@ -1237,12 +1248,15 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             }
             $value = strtotime($value);
         }
+
         $output = '';
     // TODO: adapt to local/user time !
         $output .= strftime('%a, %d %B %Y %H:%M:%S %Z', $value);
         $output .= '<br />';
         $localtime = localtime($value,1);
-        $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.$id.$tabindex.'>';
+        $output .= xarML('Date') . ' <select name="'.$name.'[year]"'.
+                   (!empty($id) ? ' id="'.$id.'"' : '') .
+                   (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') . '>';
         if (empty($minyear)) {
             $minyear = $localtime['tm_year'] + 1900 - 2;
         }
@@ -1312,7 +1326,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // default time is now
         if (empty($value)) {
             $value = time();
-        } elseif (is_string($value)) {
+        } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
         // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
@@ -1534,7 +1548,7 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         if (!empty($value)) {
             $value = xarVarPrepForDisplay($value);
         // TODO: add size/alt here ?
-            return '<img src="'.$value.'">';
+            return '<img src="'.$value.'" />';
         }
         return '';
     }
@@ -1549,15 +1563,20 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
+    var $basedir;
+    var $filetype = 'html?';
+
     function Dynamic_HTMLPage_Property($args)
     {
         $this->Dynamic_Select_Property($args);
-        if (count($this->options) == 0 && !empty($this->validation)) {
-            $basedir = $this->validation;
-            $filetype = 'html?';
+        // specify base directory in validation field
+        if (empty($this->basedir) && !empty($this->validation)) {
+            $this->basedir = $this->validation;
+        }
+        if (count($this->options) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
-                                   array('basedir' => $basedir,
-                                         'filetype' => $filetype));
+                                   array('basedir' => $this->basedir,
+                                         'filetype' => $this->filetype));
             if (!isset($files)) {
                 $files = array();
             }
@@ -1578,10 +1597,10 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $basedir = $this->validation;
-        $filetype = 'html?';
+        $basedir = $this->basedir;
+        $filetype = $this->filetype;
         if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/\\\:.-]+$/',$value) &&
+            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
@@ -2077,7 +2096,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
             $value = $this->value;
         }
         if (empty($value)) {
-            $value = 'http://';
+            $value = '';
         }
         return '<input type="text"'.
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
@@ -2171,7 +2190,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!empty($value)) {
             $link = $value;
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
             }
         }
         return '';
@@ -2240,7 +2259,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
     document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a>\');
 else
-    document.write(\'<table cellspacing="0" cellpadding="0" border="0"><tr><td nowrap="nowrap"><div style="position:relative;height:18px"><div style="position:absolute"><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></div><div style="position:absolute;left:3px;top:-1px"><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&img=5" width="18" height="18" border="0" /></a></div></div></td></tr></table>\');
+    document.write(\'<table cellspacing="0" cellpadding="0" border="0"><tr><td nowrap="nowrap"><div style="position:relative;height:18px"><div style="position:absolute"><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></div><div style="position:absolute;left:3px;top:-1px"><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&amp;img=5" width="18" height="18" border="0" /></a></div></div></td></tr></table>\');
 //--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>
 ';
             return $link;
@@ -2308,7 +2327,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (!empty($value)) {
             $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
             }
         }
         return '';
@@ -2377,7 +2396,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 // TODO: what's the link to use for MSN Messenger ??
             $link = "TODO: what's the link for MSN ?".$value;
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
             }
         }
         return '';
@@ -2442,7 +2461,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         if (!empty($value)) {
             $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'"></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
             }
         }
         return '';
@@ -2557,6 +2576,69 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
     }
 
     // default methods from Dynamic_Select_Property
+}
+
+/**
+ * Dynamic Image List Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+ */
+class Dynamic_ImageList_Property extends Dynamic_Select_Property
+{
+    var $basedir;
+    var $filetype = '(gif|jpg|jpeg|png|bmp)';
+
+    function Dynamic_ImageList_Property($args)
+    {
+        $this->Dynamic_Select_Property($args);
+        // specify base directory in validation field 
+        if (empty($this->basedir) && !empty($this->validation)) {
+            $this->basedir = $this->validation;
+        }
+        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
+        if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
+            $curtheme = xarTplGetThemeDir();
+            $this->basedir = preg_replace('/\{theme\}/',$curtheme,$this->basedir);
+        }
+        if (count($this->options) == 0 && !empty($this->basedir)) {
+            $files = xarModAPIFunc('dynamicdata','admin','browse',
+                                   array('basedir' => $this->basedir,
+                                         'filetype' => $this->filetype));
+            if (!isset($files)) {
+                $files = array();
+            }
+            natsort($files);
+            array_unshift($files,'');
+            foreach ($files as $file) {
+                $this->options[] = array('id' => $file,
+                                         'name' => $file);
+            }
+            unset($files);
+        }
+    }
+
+    // default showInput() from Dynamic_Select_Property
+
+    function showOutput($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        $basedir = $this->basedir;
+        $filetype = $this->filetype;
+        if (!empty($value) &&
+            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
+            preg_match("/$filetype$/",$value) &&
+            file_exists($basedir.'/'.$value) &&
+            is_file($basedir.'/'.$value)) {
+        // TODO: make sure basedir and baseurl match
+            return '<img src="'.$basedir.'/'.$value.'" />';
+        } else {
+            return '';
+        }
+    }
+
 }
 
 ?>

@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarMod.php 1.123 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
- *
+ * File: $Id$
+ * 
  * Module handling subsystem
  *
  * @package modules
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Module handling subsystem
  * @author Jim McDonald, Marco Canini <m.canini@libero.it>
  * @todo Use serialize in module variables?
  */
@@ -305,7 +306,7 @@ function xarModDelVar($modName, $name)
  */
 function xarModGetUserVar($modName, $name, $uid=NULL)
 {
-	// Module name and variable name are necessary
+    // Module name and variable name are necessary
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -314,11 +315,11 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
-	
+    
     // If uid not specified take the current user
     if ($uid == NULL) $uid=xarUserGetVar('uid');
     
-	// Anonymous user always uses the module default setting
+    // Anonymous user always uses the module default setting
     if ($uid==0) return xarModGetVar($modName,$name);
     
     // Retrieve the info for the module to see where we need to retrieve the values
@@ -328,8 +329,8 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
     }
     
     list($dbconn) = xarDBGetConn();
-	$tables = xarDBGetTables();
-	
+    $tables = xarDBGetTables();
+    
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
         $module_uservarstable = $tables['system/module_uservars'];
@@ -339,26 +340,26 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
 
     // We need the id of the module variable
     unset($modvarid); // is this necessary?
-	$modvarid = xarModGetVarId($modName, $name);
-	if (!$modvarid) return;
+    $modvarid = xarModGetVarId($modName, $name);
+    if (!$modvarid) return;
     
-	$query = "SELECT xar_value
+    $query = "SELECT xar_value
               FROM $module_uservarstable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
               AND xar_uid ='" . xarVarPrepForStore($uid). "'";
-	$result =& $dbconn->Execute($query);
-	if (!$result) return;
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
     
     // If there is no such thing, return the global setting.
-	if ($result->EOF) {
-		// return global setting
-		return xarModGetVar($modName, $name);
-	}
-	
-	list($value) = $result->fields;
-	$result->Close();
-	
-	return $value;
+    if ($result->EOF) {
+        // return global setting
+        return xarModGetVar($modName, $name);
+    }
+    
+    list($value) = $result->fields;
+    $result->Close();
+    
+    return $value;
 }
 
 /**
@@ -383,7 +384,7 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
  */
 function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 {
-	// Module name and variable name are necessary
+    // Module name and variable name are necessary
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -393,7 +394,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
         return;
     }
     
-	// If no uid specified assume current user
+    // If no uid specified assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
     
     // For anonymous users no preference can be set
@@ -405,45 +406,46 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
     
-	list($dbconn) = xarDBGetConn();
-	$tables = xarDBGetTables();
-	
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+    
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
         $module_uservarstable = $tables['system/module_uservars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
         $module_uservarstable = $tables['site/module_uservars'];
     }
-	
+    
     // Get the default setting to compare the value against.
-	$modsetting = xarModGetVar($modName, $name);
+    $modsetting = xarModGetVar($modName, $name);
     
     // We need the variable id
     unset($modvarid);
-	$modvarid = xarModGetVarId($modName, $name);
+    $modvarid = xarModGetVarId($modName, $name);
     if(!$modvarid) return;
     
-	// Only store setting if different from global setting
-	if ($value != $modsetting) {
-        // First delete it.
-        // We could first retrieve and then compare the new value to
-        // both oldvalue and the module default, but this leads to 
-        // simpler code and assuming the two queries are equal performing
-        // this looks better. 
-        // FIXME: check this for performance (compare with xarModSetVar
-        //        performance which uses either update or insert statement.
-        xarModDelUserVar($modName,$name,$uid);
-		$query = "INSERT INTO $module_uservarstable
+    // First delete it.
+    // We could first retrieve and then compare the new value to
+    // both oldvalue and the module default, but this leads to 
+    // simpler code and assuming the two queries are equal performing
+    // this looks better. 
+    // FIXME: check this for performance (compare with xarModSetVar
+    //        performance which uses either update or insert statement.
+    xarModDelUserVar($modName,$name,$uid);
+
+    // Only store setting if different from global setting
+    if ($value != $modsetting) {
+        $query = "INSERT INTO $module_uservarstable
                  (xar_mvid, xar_uid, xar_value)
                 VALUES
                  ('" . xarVarPrepForStore($modvarid) . "',
                   '" . xarVarPrepForStore($uid) . "',
                   '" . xarVarPrepForStore($value) . "');";
-		
-		if (! $dbconn->Execute($query)) return;
-	}
-	
-	return true;
+        
+        if (! $dbconn->Execute($query)) return;
+    }
+    
+    return true;
 }
 
 /**
@@ -502,7 +504,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     // We need the variable id
     unset($modvarid); // is this necessary?
     $modvarid = xarModGetVarId($modName, $name);
-    if(!$modVarid) return;
+    if(!$modvarid) return;
  
     $query = "DELETE FROM $module_uservarstable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
@@ -551,23 +553,23 @@ function xarModGetVarId($modName, $name)
         $module_varstable = $tables['site/module_vars'];
     }
 
-	$query = "SELECT xar_id 
+    $query = "SELECT xar_id 
             FROM $module_varstable
             WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
             AND xar_name = '" . xarVarPrepForStore($name) . "'";
-	$result = $dbconn -> Execute($query);
+    $result = $dbconn -> Execute($query);
     
-	if(!$result) return;
+    if(!$result) return;
 
-	// If there was no such thing return 
-	if ($result->EOF) {
+    // If there was no such thing return 
+    if ($result->EOF) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_FOUND', 'modvarid');
         return;
-   	}
+       }
 
-	list($modvarid) = $result->fields;
-	$result->Close();
-	
+    list($modvarid) = $result->fields;
+    $result->Close();
+    
     return $modvarid;
 }
 
@@ -832,16 +834,17 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
     return $modList;
 }
 
+
 /**
  * Load the modType of module identified by modName.
  *
- * @access public
+ * @access private
  * @param modName string - name of module to load
  * @param modType string - type of functions to load
  * @return mixed
  * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
-function xarModLoad($modName, $modType = 'user')
+function xarModPrivateLoad($modName, $modType)
 {
     static $loadedModuleCache = array();
 
@@ -849,10 +852,6 @@ function xarModLoad($modName, $modType = 'user')
 
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-    if (!xarCoreIsApiAllowed($modType)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
 
@@ -874,6 +873,10 @@ function xarModLoad($modName, $modType = 'user')
     $modDir = $modBaseInfo['directory'];
 
     $fileName = "modules/$modDir/xar$modType.php";
+
+    if (!file_exists($fileName)){
+            $fileName = "modules/$modDir/pn$modType.php";
+    }
 
     if (!file_exists($fileName)) {
         // File does not exist
@@ -905,6 +908,27 @@ function xarModLoad($modName, $modType = 'user')
     return true;
 }
 
+
+
+/**
+ * Load the modType of module identified by modName.
+ *
+ * @access public
+ * @param modName string - name of module to load
+ * @param modType string - type of functions to load
+ * @return mixed
+ * @raise XAR_SYSTEM_EXCEPTION
+ */
+function xarModLoad($modName, $modType = 'user')
+{
+    if (!xarCoreIsApiAllowed($modType)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
+        return;
+    }
+
+    return xarModPrivateLoad($modName, $modType);
+}
+
 /**
  * Load the modType API for module identified by modName.
  *
@@ -912,65 +936,16 @@ function xarModLoad($modName, $modType = 'user')
  * @param modName string registered name of the module
  * @param modType string type of functions to load
  * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
+ * @raise XAR_SYSTEM_EXCEPTION
  */
 function xarModAPILoad($modName, $modType = 'user')
 {
-    static $loadedAPICache = array();
-
-    if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-
     if (!xarCoreIsAPIAllowed($modType)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', "modType : $modType for $modName");
         return;
     }
-    // MrB: strtolower fix in main, merged into review
-    if (isset($loadedAPICache[strtolower("$modName$modType")])) {
-        // Already loaded from somewhere else
-        return true;
-    }
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_ACTIVE', $modName);
-        return;
-    }
-
-    $modDir = $modBaseInfo['directory'];
-
-    $fileName = "modules/$modDir/xar{$modType}api.php";
-    if (!file_exists($fileName)) {
-        // File does not exist
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
-        return;
-    }
-
-    // Load the file
-    // MrB: strtolower fix from main
-    include $fileName;
-    $loadedAPICache[strtolower("$modName$modType")] = true;
-
-    // Load the API translations files
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_FILE, $modType.'api') === NULL) return;
-
-    // FIXME: <marco> Remove it when the old language packs are gone
-    $fileName = "modules/$modDir/xarlang/eng/{$modType}api.php";
-    if (file_exists($fileName)) {
-        include $fileName;
-    }
-
-    // Load database info
-    xarMod__loadDbInfo($modName, $modDir);
-
-    // Module API loaded successfully, notify the proper event
-    xarEvt_notify($modName, $modType, 'ModAPILoad', NULL);
-
-    return true;
+    return xarModPrivateLoad($modName, $modType.'api');
 }
 
 /**
@@ -1087,18 +1062,18 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
-	if (!function_exists($modAPIFunc)) {
+    if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
-		xarModAPILoad($modName,$modType);
-		// let's check for that function again to be sure
-		if (!function_exists($modAPIFunc)) {
+        xarModAPILoad($modName,$modType);
+        // let's check for that function again to be sure
+        if (!function_exists($modAPIFunc)) {
             //die("api load went fine");
-			$msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
-			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-							new SystemException($msg));
-			return;
-		}
-	}
+            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                            new SystemException($msg));
+            return;
+        }
+    }
 
     return $modAPIFunc($args);
 }
@@ -1182,10 +1157,11 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if ($generateXMLURL) {
         $url = htmlspecialchars($url);
     }
-
+    
     if ($target != NULL) {
         $url = "$url#$target";
     }
+    
     // The URL
     return xarServerGetBaseURL() . $url;
 }
@@ -1249,10 +1225,23 @@ function xarModIsAvailable($modName)
 
 /**
  * Carry out hook operations for module
+ * Some commonly used hooks are :
+ *   item - display        (user GUI)
+ *   item - transform      (user API)
+ *   item - new            (admin GUI)
+ *   item - create         (admin API)
+ *   item - modify         (admin GUI)
+ *   item - update         (admin API)
+ *   item - delete         (admin API)
+ *   item - search         (user GUI)
+ *   item - usermenu       (user GUI)
+ *   module - modifyconfig (admin GUI)
+ *   module - updateconfig (admin API)
+ *   module - remove       (module API)
  *
  * @access public
- * @param hookObject string the object the hook is called for - either 'item' or 'category'
- * @param hookAction string the action the hook is called for - one of 'create', 'delete', 'transform', or 'display'
+ * @param hookObject string the object the hook is called for - 'item', 'category', 'module', ...
+ * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
  * @param hookId integer the id of the object the hook is called for (module-specific)
  * @param extraInfo mixed extra information for the hook, dependent on hookAction
  * @param callerModName string for what module are we calling this (used by modules admin)
@@ -1261,6 +1250,7 @@ function xarModIsAvailable($modName)
  * @todo <marco> #1 add BAD_PARAM exception
  * @todo <marco> #2 check way of hanlding exception
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
+ * @todo add itemtype (in extrainfo or as additional parameter)
  */
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL)
 {
@@ -1287,7 +1277,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         return;
     }
 
-    $output = '';
+    $output = array();
     $isGUI = false;
 
     // TODO: #3
@@ -1304,7 +1294,9 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
                               array('objectid' => $hookId,
                               'extrainfo' => $extraInfo));
             if (!isset($res)) return;
-            $output .= $res;
+            // Note: hook modules can only register 1 hook per hookObject, hookAction and hookArea
+            //       so using the module name as key here is OK (and easier for designers)
+            $output[$hook['module']] = $res;
         } else {
             if (!xarModAPILoad($hook['module'], $hook['type'])) return;
             $res = xarModAPIFunc($hook['module'],
@@ -1317,6 +1309,11 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         }
     }
 
+// FIXME: this still returns the wrong output for many of the hook calls, whenever there are no hooks enabled
+// Reason : we don't "know" here if the hooks defined by hookObject + hookAction are GUI or API hooks,
+//          if we don't get that information from at least one enabled hook. But this is silly, really,
+//          because there are *no* cases where you can have the same hookObject + hookAction in 2 different
+//          hookAreas (GUI or API).
     if ($isGUI || $hookAction == 'display') {
         return $output;
     } else {
@@ -1395,125 +1392,6 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
     return $resarray;
 }
 
-/**
- * check if a module name is an alias for some other module
- *
- * (only used for short URL support at the moment)
- *
- * @access private
- * @param modName name of the module
- * @returns mixed
- * @return string containing the module name, or null if database error
- * @raise BAD_PARAM
- */
-// function xarModGetAlias($modName)
-// {
-//     if (empty($modName)) {
-//         $msg = xarML('Invalid module name');
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                        new SystemException($msg));
-//         return;
-//     }
-
-//     $aliases = xarConfigGetVar('System.ModuleAliases');
-
-//     if (isset($aliases) && !empty($aliases[$modName])) {
-//         return $aliases[$modName];
-//     } else {
-//         return $modName;
-//     }
-// }
-
-/**
- * Define a module name as an alias for some other module
- *
- * (only used for short URL support at the moment)
- *
- * @access public
- * @param modName string name of the 'fake' module you want to define
- * @param alias string name of the 'real' module you want to assign it to
- * @return mixed true on success
- * @raise BAD_PARAM
- * @todo <marco> <mikespub> #1 what if 2 modules want to use the same aliases ?
- */
-// function xarModSetAlias($modName, $alias)
-// {
-//     if (empty($modName) || empty($alias)) {
-//         $msg = xarML('Invalid module name or alias');
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                        new SystemException($msg));
-//         return false;
-//     }
-
-//     // Check if the module name we want to define is already in use
-//     $modid = xarModGetIDFromName($modName);
-//     if (isset($modid)) {
-//         $msg = xarML('Module name #(1) is already in use',
-//                     xarVarPrepForDisplay($modName));
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                        new SystemException($msg));
-//         return false;
-//     }
-//     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-//         // Ignore exceptions here!
-//         xarExceptionFree();
-//     }
-
-//     // Check if the alias we want to set it to *does* exist
-//     $modid = xarModGetIDFromName($alias);
-//     if (!isset($modid)) {
-//         $msg = xarML('Alias #(1) is unknown',
-//                     xarVarPrepForDisplay($alias));
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                        new SystemException($msg));
-//         return false;
-//     }
-
-//     // Get the list of current aliases
-//     $aliases = xarConfigGetVar('System.ModuleAliases');
-
-//     if (!isset($aliases)) {
-//         $aliases = array();
-//     }
-
-//     // TODO: #1
-//     $aliases[$modName] = $alias;
-//     xarConfigSetVar('System.ModuleAliases', $aliases);
-
-//     return true;
-//}
-
-/**
- * Remove an alias for a module name
- *
- * (only used for short URL support at the moment)
- *
- * @access public
- * @param modName string name of the 'fake' module you want to remove
- * @param alias string name of the 'real' module it was assigned to (= verification)
- * @return mixed true on success
- * @raise BAD_PARAM
- */
-// function xarModDelAlias($modName, $alias)
-// {
-//     if (empty($modName) || empty($alias)) {
-//         $msg = xarML('Invalid module name or alias');
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-//                        new SystemException($msg));
-//         return false;
-//     }
-
-//     $aliases = xarConfigGetVar('System.ModuleAliases');
-
-//     // Make sure we only delete it *if* it was assigned to the right alias
-//     if (isset($aliases) && !empty($aliases[$modName]) &&
-//         $aliases[$modName] == $alias) {
-//         unset($aliases[$modName]);
-//         xarConfigSetVar('System.ModuleAliases',$aliases);
-//     }
-
-//     return true;
-// }
 
 /**
  * Get info from xarversion.php for module specified by modOsDir
@@ -1535,6 +1413,9 @@ function xarMod_getFileInfo($modOsDir)
     $resarray = array();
     // Spliffster, additional mod info from modules/$modDir/xarversion.php
     $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+    if (!file_exists($fileName)) {
+        $fileName = 'modules/' . $modOsDir . '/pnversion.php';
+    }
 
     if (!file_exists($fileName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
@@ -1560,7 +1441,7 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['author']         = isset($modversion['author']) ? $modversion['author'] : false;
     $modFileInfo['contact']        = isset($modversion['contact']) ? $modversion['contact'] : false;
     $modFileInfo['dependency']     = isset($modversion['dependency']) ? $modversion['dependency'] : false;
-
+    
     return $modFileInfo;
 }
 
@@ -1597,7 +1478,7 @@ function xarMod_getBaseInfo($modName)
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     if ($result->EOF) {
         $result->Close();
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', $modName);
@@ -1615,7 +1496,7 @@ function xarMod_getBaseInfo($modName)
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = $modBaseInfo['directory'];
-
+    
     $modState = xarMod__getState($modBaseInfo['regid'], $modBaseInfo['mode']);
     if (!isset($modState)) return; // throw back
     $modBaseInfo['state'] = $modState;
@@ -1797,7 +1678,7 @@ function xarMod__getState($modRegId, $modMode)
     //assert(!$result->EOF);
     // the module is not in the table
     // set state to XARMOD_STATE_UNINITIALISED
-    // FIXME: CHECK whether this has no side-effects,
+    // FIXME: CHECK whether this has no side-effects, 
     // it was only put in to get the installer running.
     if (!$result->EOF) {
         list($modState) = $result->fields;
@@ -1899,5 +1780,44 @@ function xarModUnregisterHook($hookObject,
 
     return true;
 }
+
+
+/**
+ * Resolve a module alias
+ *
+ * This is only a convenience wrapper fot xarRequest function
+ *
+ * @todo evalutate dependency consequences
+*/
+function xarModGetAlias($var)
+{
+    return xarRequest__resolveModuleAlias($var);
+}
+
+/**
+ * Set an alias for a module
+ *
+ * @todo evalutate dependency consequences
+ * 
+*/
+function xarModSetAlias($modName, $alias)
+{
+    if (!xarModAPILoad('modules', 'admin')) return;
+    $args = array('modName'=>$alias, 'aliasModName'=>$modName);
+    return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
+}
+
+/**
+ * Delete an alias for a module
+ * @todo evalutate dependency consequences
+ *
+*/
+function xarModDelAlias($modName, $alias)
+{
+    if (!xarModAPILoad('modules', 'admin')) return;
+    $args = array('aliasModName'=>$modName);
+    return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
+}
+
 
 ?>

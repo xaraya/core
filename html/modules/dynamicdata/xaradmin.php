@@ -176,8 +176,10 @@ function dynamicdata_admin_new($args)
     $item = array();
     $item['module'] = 'dynamicdata';
     $hooks = xarModCallHooks('item','new','',$item);
-    if (empty($hooks) || !is_string($hooks)) {
+    if (empty($hooks)) {
         $data['hooks'] = '';
+    } elseif (is_array($hooks)) {
+        $data['hooks'] = join('',$hooks);
     } else {
         $data['hooks'] = $hooks;
     }

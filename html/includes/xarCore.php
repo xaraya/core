@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarCore.php 1.43 03/01/21 13:54:43+00:00 johnny@falling.local.lan $
+ * File: $Id$
  * 
  * The Core
  * 
  * @package core
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage The Core
  * @author Marco Canini
 */
 
@@ -18,7 +19,7 @@
  * better control on config settings
  *
  */
-define('XARCORE_VERSION_NUM', '0.8');
+define('XARCORE_VERSION_NUM', '1.0');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');
 
@@ -476,9 +477,9 @@ $errPage = <<<EOM
     <p>A fatal error occurred while serving your request.</p>
     <p>We are sorry for this inconvenience.</p>
     <p>If this is the first time you see this message try to <a href="$url">click here to continue.</a><br/>
-    If you see this message all the times you tried to access to this service, it is probable that our server
+    If you see this message every time you tried to access to this service, it is probable that our server
     is experiencing heavy problems, for this reason we ask you to retry in some hours.<br/>
-    If you see this message from days we ask you to report the unavailablity of service to our webmaster. Thanks.
+    If you see this message fordays, we ask you to report the unavailablity of service to our webmaster. Thanks.
     </p>
     $debug
   </body>

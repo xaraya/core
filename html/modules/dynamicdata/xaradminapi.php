@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- *
+ * 
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -236,6 +236,21 @@ function dynamicdata_adminapi_update($args)
 function dynamicdata_adminapi_createobject($args)
 {
     $objectid = Dynamic_Object_Master::createObject($args);
+    return $objectid;
+}
+
+/**
+ * delete a dynamic object and its properties
+ *
+ * @author the DynamicData module development team
+ * @param $args['objectid'] object id of the object to delete
+ * @returns int
+ * @return object ID on success, null on failure
+ * @raise BAD_PARAM, NO_PERMISSION
+ */
+function dynamicdata_adminapi_deleteobject($args)
+{
+    $objectid = Dynamic_Object_Master::deleteObject($args);
     return $objectid;
 }
 
@@ -931,7 +946,7 @@ function dynamicdata_adminapi_checkinput($args)
  * Format : <xar:data-input name="thisname" type="thattype" value="$val" ... />
  *       or <xar:data-input field="$field" /> with $field an array containing the type, name, value, ...
  *       or <xar:data-input property="$property" /> with $property a Dynamic Property object
- *
+ * 
  * @param $args array containing the input field definition or the type, name, value, ...
  * @returns string
  * @return the PHP code needed to invoke showinput() in the BL template
@@ -984,7 +999,7 @@ function dynamicdata_adminapi_handleInputTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * show some predefined form input field in a template
- *
+ * 
  * @param $args array containing the definition of the field (type, name, value, ...)
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -1007,7 +1022,7 @@ function dynamicdata_adminapi_showinput($args)
  * Format : <xar:data-form module="123" itemtype="0" itemid="555" fieldlist="$fieldlist" static="yes" ... />
  *       or <xar:data-form fields="$fields" ... />
  *       or <xar:data-form object="$object" ... />
- *
+ * 
  * @param $args array containing the item for which you want to show a form, or fields
  * @returns string
  * @return the PHP code needed to invoke showform() in the BL template
@@ -1054,7 +1069,7 @@ function dynamicdata_adminapi_handleFormTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * show an input form in a template
- *
+ * 
  * @param $args array containing the item or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
@@ -1162,7 +1177,7 @@ function dynamicdata_adminapi_showform($args)
  * Format : <xar:data-list module="123" itemtype="0" itemids="$idlist" fieldlist="$fieldlist" static="yes" .../>
  *       or <xar:data-list items="$items" labels="$labels" ... />
  *       or <xar:data-list object="$object" ... />
- *
+ * 
  * @param $args array containing the items that you want to list, or fields
  * @returns string
  * @return the PHP code needed to invoke showlist() in the BL template
@@ -1206,7 +1221,7 @@ function dynamicdata_adminapi_handleListTag($args)
 /**
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
- *
+ * 
  * @param $args array containing the items or fields to show
  * @returns string
  * @return string containing the HTML (or other) text to output in the BL template

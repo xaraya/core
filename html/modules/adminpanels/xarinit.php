@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- *
+ * 
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
@@ -27,7 +27,7 @@ function adminpanels_init()
     // Get database information
     list($dbconn) = xarDBGetConn();
     $table = xarDBGetTables();
-
+    
     // Load Table Maintaince API
     xarDBLoadTableMaintenanceAPI();
 
@@ -74,7 +74,7 @@ function adminpanels_init()
                                                              'default'     => '1')));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     // Set config vars
 
     // Fill admin menu
@@ -85,6 +85,16 @@ function adminpanels_init()
 
     $id = $dbconn->GenId($adminMenuTable);
     $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'mail', 'Global', 0, 1);";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'dynamicdata', 'Content', 0, 1);";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'themes', 'Global', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -104,17 +114,22 @@ function adminpanels_init()
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $id = $dbconn->GenId($adminMenuTable);
     $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'privileges', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'roles', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
@@ -129,7 +144,7 @@ function adminpanels_init()
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
-
+    
     // Set module variables
     xarModSetVar('adminpanels','showold', 1);
     xarModSetVar('adminpanels','menuposition', 'l');
@@ -137,7 +152,7 @@ function adminpanels_init()
     xarModSetVar('adminpanels','showontop', 1);
     xarModSetVar('adminpanels','showhelp', 1);
     xarModSetVar('adminpanels','marker', '[x]');
-
+    
     /* Create the table and hooks for the waiting content block */
 
     // Create tables
@@ -242,8 +257,8 @@ function adminpanels_upgrade($oldVersion)
             break;
         case 2.2:
             // Code to upgrade from version 2.2 goes here
-
-            break;
+            
+            break;            
         case 2.3:
             // Register BL tags
 //            xarTplRegisterTag('articles', 'articles-field',
@@ -253,11 +268,11 @@ function adminpanels_upgrade($oldVersion)
             break;
         case 2.4:
             // Code to upgrade from version 2.4 goes here
-
+            
             break;
         case 2.5:
             // Code to upgrade from version 2.5 goes here
-
+            
             break;
     }
     return true;
@@ -276,7 +291,7 @@ function adminpanels_delete()
 {
     // temporary workaround to enable deactivate and upgrade
     // TODO: remove prior to xarays 1.0 release
-
+    
     // removal of module stuff from version 1.0
     xarModDelVar('adminpanels', 'showold');
     xarModDelVar('adminpanels', 'menuposition');
@@ -284,31 +299,31 @@ function adminpanels_delete()
     xarModDelVar('adminpanels', 'showontop');
     xarModDelVar('adminpanels', 'showhelp');
     xarModDelVar('adminpanels', 'marker');
-
+    
     // need to drop the module tables too
     // Get database information
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
-
+    
     //Load Table Maintainance API
     xarDBLoadTableMaintenanceAPI();
-
+    
     // Generate the SQL to drop the table using the API
     $query = xarDBDropTable($xartable['admin_menu']);
     if (empty($query)) return; // throw back
-
+    
     // Drop the table and send exception if returns false.
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
      // Generate the SQL to drop the table using the API
     $query = xarDBDropTable($xartable['waiting_content']);
     if (empty($query)) return; // throw back
-
+    
     // Drop the table and send exception if returns false.
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     // unregister our blocks.. maybe not
     // xarBlockTypeUnregister('adminpanels', 'adminmenu');
     // xarBlockTypeUnregister('articles', 'waitingcontent');
@@ -341,9 +356,9 @@ function adminpanels_delete()
         return false;
     }
 
-
+    
     // we are done with removing stuff from version 1.0
-
+    
     return true;
 }
 

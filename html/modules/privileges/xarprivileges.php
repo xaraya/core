@@ -1058,14 +1058,14 @@ var $indent;
 var $level;
 
 // convenience variables to hold strings referring to pictures
-var $el = '<img src="modules/privileges/xarimages/el.gif" style="vertical-align: middle">';
-var $tee = '<img src="modules/privileges/xarimages/T.gif" style="vertical-align: middle">';
-var $aye = '<img src="modules/privileges/xarimages/I.gif" style="vertical-align: middle">';
-var $bar = '<img src="modules/privileges/xarimages/s.gif" style="vertical-align: middle">';
-var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle">';
-var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle">';
-var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle">';
-var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle">';
+var $el = '<img src="modules/privileges/xarimages/el.gif" style="vertical-align: middle" />';
+var $tee = '<img src="modules/privileges/xarimages/T.gif" style="vertical-align: middle" />';
+var $aye = '<img src="modules/privileges/xarimages/I.gif" style="vertical-align: middle" />';
+var $bar = '<img src="modules/privileges/xarimages/s.gif" style="vertical-align: middle" />';
+var $emptybox = '<img class="box" src="modules/privileges/xarimages/k1.gif" style="vertical-align: middle" />';
+var $expandedbox = '<img class="box" src="modules/privileges/xarimages/k2.gif" style="vertical-align: middle" />';
+var $blank = '<img src="modules/privileges/xarimages/blank.gif" style="vertical-align: middle" />';
+var $collapsedbox = '<img class="box" src="modules/privileges/xarimages/k3.gif" style="vertical-align: middle" />';
 
 // we'll use this to check whether a group has already been processed
 var	$alreadydone;

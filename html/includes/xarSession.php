@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarSession.php 1.54 03/01/25 16:38:25-05:00 John.Cox@mcnabb. $
+ * File: $Id$
  *
  * Session Support
  *
  * @package sessions
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage Session Support
  * @author Jim McDonald
 */
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File: $Id$
  *
@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage adminpanels module
  * @author Patrick Kellum, Jim McDonald, Greg Allan, John Cox
 */
@@ -64,15 +64,12 @@ function base_menublock_display($blockinfo)
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
 
-    if (!xarSecAuthAction(0, 'base:Menublock', 
-                             "$blockinfo[title]::",
-                              ACCESS_READ)) {
-        return;
-    }
+// Security Check
+	if(!xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]::')) return;
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
-    
+
     // are there any admin modules, then get their names
     // checking as early as possible :)
     $mods = xarModGetList(array('UserCapable' => 1));
@@ -80,19 +77,19 @@ function base_menublock_display($blockinfo)
 	// there aren't any admin modules, dont display adminmenu
 	    return;
 	}
-    
+
     // Get the marker for the main menu
     if (empty($vars['marker'])) {
         $vars['marker'] = '[x]';
     }
-    
+
     $marker = $vars['marker'];
 
-   
+
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with user type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
-    
+
     // Sort Order, Status, Common Labels and Links Display preparation
     //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
@@ -136,7 +133,8 @@ function base_menublock_display($blockinfo)
                         $title = $parts[1];
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
-                        if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
+// Security Check
+		    			if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$title:')) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
                             $comment = xarVarPrepForDisplay($comment);
@@ -157,15 +155,15 @@ function base_menublock_display($blockinfo)
                         if($label == $thismodname && $thismodtype == 'user'){
                             // Get list of links for modules
                             $labelDisplay = ucwords($label);
-                            $usermods[] = array(   'label'     => $labelDisplay, 
-                                                   'link'      => '', 
+                            $usermods[] = array(   'label'     => $labelDisplay,
+                                                   'link'      => '',
                                                    'modactive' => 1);
 
                             // Lets check to see if the function exists and just skip it if it doesn't
-                            // with the new api load, it causes some problems.  We need to load the api 
+                            // with the new api load, it causes some problems.  We need to load the api
                             // in order to do it right.
                             xarModAPILoad($label, 'user');
-                            if (function_exists($label.'_userapi_getmenulinks')){ 
+                            if (function_exists($label.'_userapi_getmenulinks')){
                                 // The user API function is called.
                                 $menulinks = xarModAPIFunc($label,
                                                            'user',
@@ -185,13 +183,14 @@ function base_menublock_display($blockinfo)
                                         $funcactive = 0;
                                     }
 
-                                    if (xarSecAuthAction(0, 'base:Menublock', "$menulink[title]:$blockinfo[title]:", ACCESS_READ)) {
+						// Security Check
+		    						if (xarSecurityCheck('ReadBase',0,'Menublock','$menulink[title]:$blockinfo[title]:')) {
                                         $indlinks[] = array('userlink'      => $menulink['url'],
-                                                            'userlabel'     => $menulink['label'], 
+                                                            'userlabel'     => $menulink['label'],
                                                             'usertitle'     => $menulink['title'],
                                                             'funcactive'    => $funcactive);
                                     }
-                                } 
+                                }
                             } else {
                                 $indlinks= '';
                             }
@@ -204,7 +203,7 @@ function base_menublock_display($blockinfo)
                             }
 
                             $labelDisplay = ucwords($label);
-                            $usermods[] = array('label' => $labelDisplay, 
+                            $usermods[] = array('label' => $labelDisplay,
                                                 'link' => $link,
                                                 'desc' => $desc,
                                                 'modactive' => 0);
@@ -219,18 +218,17 @@ function base_menublock_display($blockinfo)
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
-                
+
                 // we dont want to show logout link if the user is anonymous or admin
                 // admins have their own logout method, which is more robust
-                if (xarSecAuthAction(0, 'base:Menublock', 
-                                        "$blockinfo[title]::",
-                                        ACCESS_ADMIN) or !xarUserIsLoggedIn()){
+				// Security Check
+							if (xarSecurityCheck('ReadBase',0,'Menublock','$blockinfo[title]:$blockinfo[title]:') or !xarUserIsLoggedIn()){
                     $showlogout = false;
                 }else{
                     $showlogout = true;
                 }
-                
-                $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods, 
+
+                $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods,
                                                              'indlinks'         => $indlinks,
                                                              'logouturl'        => $logouturl,
                                                              'logoutlabel'      => $logoutlabel,

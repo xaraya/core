@@ -1,5 +1,4 @@
 <form action="&xar-modurl-roles-user-login;" method="post" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="redirecturl" id="returnurl" value="#$return_url#" />
     <table border="0" width="100%">
         <tr>
             <td>
@@ -26,7 +25,8 @@
         </xar:if>
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" value="Sign in" align="middle" />
+                <input type="hidden" name="redirecturl" id="returnurl" value="#$return_url#" />
+                <input type="submit" value="Sign in" />
             </td>
         </tr>
         <tr>

@@ -542,8 +542,8 @@ function base_activate()
             }
     }
 
-    // Initialise and activate adminpanels, mail, themes
-    $modlist = array('adminpanels','mail');
+    // Initialise and activate adminpanels, mail, dynamic data
+    $modlist = array('adminpanels','mail', 'dynamicdata');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);

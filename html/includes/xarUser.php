@@ -1,13 +1,14 @@
 <?php
 /**
- * File: $Id: s.xarUser.php 1.95 03/01/21 04:15:07+01:00 marcel@hsdev.com $
- *
+ * File: $Id$
+ * 
  * User System
- *
+ * 
  * @package user
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage User System
  * @author Jim McDonald
  * @todo <marco> user status field
  * @todo <johnny> look over xarUserComparePasswords
@@ -39,10 +40,10 @@ define('XARUSER_AUTH_FAILED', -1);
 
 /**
  * Initialise the User System
- *
+ * 
  * @access protected
- * @global xarUser_authentication modules array
- * @param args[authenticationModules] array
+ * @global xarUser_authentication modules array 
+ * @param args[authenticationModules] array 
  * @return bool true on success
  */
 function xarUser_init($args, $whatElseIsGoingLoaded)
@@ -84,6 +85,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
     if (xarUserIsLoggedIn()) {
         return true;
     }
+
     if (empty($userName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
         return;
@@ -610,10 +612,13 @@ function xarUser__getAuthModule($userId)
 {
     if ($userId == xarSessionGetVar('uid')) {
         $authModName = xarSessionGetVar('authenticationModule');
-        assert('isset($authModName)');
-    } else {
-        list($dbconn) = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        if (isset($authModName)) {
+            return $authModName;
+        }
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
         // Get user auth_module name
         $rolestable = $xartable['roles'];
@@ -963,7 +968,7 @@ function xarUser__validationApply($validation, $valueToCheck)
 // Simple data structure used by validation stuff
 /**
  *
- *
+ * 
  * @package user
  */
 class xarUser__ValEntry

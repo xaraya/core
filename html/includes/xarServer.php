@@ -7,7 +7,8 @@
  * @package server
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.org
+ * @link http://www.xaraya.com
+ * @subpackage HTTP Protocol Server/Request/Response utilities
  * @author Marco Canini <m.canini@libero.it>
  */
 
@@ -186,10 +187,10 @@ function xarServerGetBaseURL()
 }
 
 /**
- * Get current URL
+ * Get current URL (and optionally add/replace some parameters)
  *
  * @access public
- * @param args array additional parameters to be added to the URL (e.g. theme, ...)
+ * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
  * @return string current URL
  * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
  */
@@ -219,21 +220,42 @@ function xarServerGetCurrentURL($args = array())
         }
     }
 
-    // add optional parameters
-    if (strpos($request,'?') === false) $request .= '?';
-    else $request .= '&';
+// Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
 
-    foreach ($args as $k=>$v) {
-        if (is_array($v)) {
-            foreach($v as $l=>$w) {
-                if (!empty($w)) $request .= $k . "[$l]=$w&";
+    // add optional parameters
+    if (count($args) > 0) {
+        if (strpos($request,'?') === false) $request .= '?';
+        else $request .= '&';
+
+        foreach ($args as $k=>$v) {
+            if (is_array($v)) {
+                foreach($v as $l=>$w) {
+                // TODO: replace in-line here too ?
+                    if (!empty($w)) $request .= $k . "[$l]=$w&";
+                }
+            } else {
+                // if this parameter is already in the query string...
+                if (preg_match("/(&|\?)($k=[^&]*)/",$request,$matches)) {
+                    $find = $matches[2];
+                    // ... replace it in-line if it's not empty
+                    if (!empty($v)) {
+                        $request = preg_replace("/(&|\?)$find/","$1$k=$v",$request);
+
+                    // ... or remove it otherwise
+                    } elseif ($matches[1] == '?') {
+                        $request = preg_replace("/\?$find(&|)/",'?',$request);
+                    } else {
+                        $request = preg_replace("/&$find/",'',$request);
+                    }
+                } elseif (!empty($v)) {
+                    $request .= "$k=$v&";
+                }
             }
-        } elseif (!empty($v)) {
-            $request .= "$k=$v&";
         }
+
+        $request = substr($request, 0, -1);
     }
 
-    $request = substr($request, 0, -1);
     if ($GLOBALS['xarServer_generateXMLURLs']) $request = htmlspecialchars($request);
 
     return $baseurl . $request;
