@@ -46,6 +46,10 @@
         $pid2cid = unserialize($pids);
         $pids = '';
     }
+       // Get datbase setup
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
+
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_XForum_posts';
     $result =& $dbconn->Execute($query);
     if (!$result) {
@@ -100,10 +104,10 @@
             $uid = $userid[$uid];
         } // else we're lost :)
         if (empty($uid) || $uid < 2) {
-            $fuid = 2; //make them all Anonymous
+            $fuid = xarConfigGetVar('Site.User.AnonymousUID'); //make them all Anonymous
         }
         if ($uid ==2) {
-        $uid=3;//Let's make the old PN admin user2 new Xar Admin - check!
+        $uid=xarModGetVar('roles','admin');//Let's make the old PN admin user2 new Xar Admin - check!
         }
         $fuid=$uid; 
         

@@ -41,6 +41,9 @@
     } else {
         $postids = unserialize($posts);
     }
+   // Get datbase setup
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
     $query = 'SELECT COUNT(*) FROM ' . $oldprefix . '_XForum_threads';
     $result =& $dbconn->Execute($query);
     if (!$result) {
@@ -80,14 +83,51 @@
   //let's try and assign correct UID - may not exist yet if users not imported
         if (isset($userid[$uid])) {
             $uid = $userid[$uid];
-        } // else we're lost :)
-        if (empty($uid) || $uid < 2) {
-            $fuid = 2; //make them all Anonymous
+        //} // else we're lost :)
+        //if (empty($uid) || $uid < 2) {
+       //    $uid=xarConfigGetVar('Site.User.AnonymousUID');            //make them all Anonymous
+       // }
+       // if ($uid ==2) {
+       //Let's make the old PN admin user2 new Xar Admin
+       //Assumes xaraya v0.9.8
+       }else {
+        $uid=xarModGetVar('roles','admin');
         }
-        if ($uid ==2) {
-        $uid=3;//Let's make the old PN admin user2 new Xar Admin - check!
-        }
-        $fuid=$uid;
+       $fuid=$uid;
+
+       //Let's try and find the last poster
+       $lastposted=array();
+       $lastposted  = explode('|',$lastpost);
+       $lastposttime   = isset($lastposted[0]) ? date('Y-m-d G:i:s',$lastposted[0]): date('Y-m-d G:i:s',now());
+       $lastpostuser = isset($lastposted[1])? $lastposted[1] : 'Admin';
+
+      //get the lastposter
+      $oldmemberstable=$oldprefix."_XForum_members";
+       $query2 = "SELECT uid
+              FROM $oldmemberstable
+              WHERE username = '".$lastpostuser."'";
+
+
+       $result2 =& $dbconn->Execute($query2);
+       if (!$result2) {
+        die("Oops, select last poster failed : " . $dbconn->ErrorMsg());
+       }
+       for(; !$result2->EOF; $result2->MoveNext()) {
+            $olduid=$result2->fields[0];
+       }
+       if (isset($userid[$olduid]))  {
+            $luid= $userid[$olduid];
+       }else {
+         $luid=xarModGetVar('roles','admin');
+       }
+       //if (($olduid ==1)) {
+       //     $luid=xarConfigGetVar('Site.User.AnonymousUID');//make them all Anonymous
+      // }
+      // if (($olduid ==2) || !isset($olduid)) {
+       //Let's make the old PN admin user2 new Xar Admin
+       //Assumes xaraya v0.9.8
+      //  $luid=xarModGetVar('roles','admin');
+      // }
 
        $newtid=xarModAPIFunc('xarbb',
                                'user',
@@ -95,21 +135,13 @@
                                array('fid'      => $forumids[$fid],
                                      'ttitle'   => $title,
                                      'tpost'    => $text,
-                                     'tposter'  => $fuid));
-
-        echo "The new topic for $title is ". $newtid."<br />";
-
-/* Seems xarBB can't handle this - need to work out why and/or update xarBB function
-        xarModAPIFunc('xarbb',
-                                'admin',
-                                'updatetopic',
-                                array('fid'      =>$forumids[$fid],
-                                     'ttitle'   => $title,
-                                     'tpost'    => $text,
                                      'tposter'  => $fuid,
-                                     'time'     => $time,
+                                     'ttime'    => $lastposttime,
                                      'treplies' => $replies,
-                                     'treplier' => $lastid)); */
+                                     'treplier' => $luid,
+                                     'tstatus' => 0));
+
+       echo "The new topic for $title is ". $newtid."<br />";
 
   /*      if (!isset($newtid[$tid])) {
             echo "Insert topic ($tid) $title failed : " . xarExceptionRender('text') . "<br/>\n";
@@ -123,11 +155,11 @@
             $threadids[$tid] = $newtid;
     } */
 
-    $threadids[$tid] = $newtid;
-    $postids[$tid] = $newtid;
-    $num++;
+        $threadids[$tid] = $newtid;
+        $postids[$tid] = $newtid;
+        $num++;
 
-      $result->MoveNext();
+       $result->MoveNext();
     }
     $result->Close();
     xarModSetVar('installer','topicid',serialize($threadids));

@@ -48,26 +48,24 @@ if (isset($step)) {
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
 ?>
-    <b>Requirement :</b> you must be using the same database, but a different prefix...
+    <b>REQUIREMENTS :</b> Please READ CAREFULLY.
     <ol>
-    <li>Make sure you have ALREADY INSTALLED xarBB!</li>
-    <li>Make sure you have your xForum tables in the same database as your current Xaraya installation
+    <li>Make sure you have INSTALLED xarBB.</li>
+    <li>If using recent Bitkeeper code, make sure you update BOTH import script AND xarBB from Bitkeeper
+    <li>Your xForum tables must be in the SAME database as your current Xaraya installation
         but with a different table prefix - copy over your xForum tables if necessary to your Xaraya Database with a new table prefix.</li>
-    <li>There are VERY LARGE limitations in using this script. Use this script to import Users for best effect. Where userid's are not known (ie do not yet exist in Xaraya), the topic or post will be assigned to Anonymous.</li>
-    <li>Due to differences between Xaraya data tables and PN data tables, and limitations in this script - there will be some incomplete updating  - you will have to update through your database interface or Xaraya GUI where possible.</li>
-    <li>Other limitations are may be improved as xarBB is also updated with more functionality, and if someone has time :)</li>
+    <li>Due to differences between Xaraya xarBB data tables and PN xForum data tables, and limitations in this script - there will be some incomplete updating  - you will have to update through your database interface or Xaraya GUI where possible.</li>
+    <li>Improvements if and when someone has time :)</li>
     </ol>
-    <p></p>
     <form method="POST" action="import_xforum.php">
     <table border="0" cellpadding="4">
-    <tr><td align="right">Prefix used for your xForum tables</td><td>
-    <input type="text" name="oldprefix" value="xar"></td></tr>
-    <tr><td align="right">Import xForum users</td><td>
-    <select name="importusers">
-    <option value="0">Don't import users (= test only)</option>
+    <tr><td align="right">Prefix of your xForum tables:</td>
+    <td><input type="text" name="oldprefix" value="xar"></td></tr>
+    <tr><td align="right">Import xForum users</td>
+    <td><select name="importusers">
+    <option value="0">Assume all users already exist in Xaraya</option>
     <option value="1">Create all users</option>
-    <option value="2">Try to match usernames, and create otherwise (TODO)</option>
-    <option value="3">Do something else...like using xarBB for instance :)</option>
+    <option value="2">Try and match users, else create one (TO DO)</option>
     </select></td></tr>
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
@@ -78,19 +76,19 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <h1>Recommended usage :</h1>
     <ol>
     <li>DO NOT use this on a live site</li>
-    <li>copy this script to your Xaraya html directory and try it out...</li>
+    <li>Copy this script to your Xaraya html directory and try it out...</li>
 </ol>
 
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
         xarModSetVar('installer','oldprefix',$oldprefix);
-        if (empty($importusers)) {
+        if ($importusers >1) {
             $step = 2;
         }
     }
 
-    $dbconn =& xarDBGetConn();
+    list($dbconn) = xarDBGetConn();
 
     if (!xarModAPILoad('roles','admin')) {
         die("Unable to load the users admin API");
@@ -116,7 +114,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
         $docounter = 1;
     }
-    $tables =& xarDBGetTables();
+    $tables = xarDBGetTables();
 
     $importfiles = array(
                          1 => array('import_xforum_users.php'),

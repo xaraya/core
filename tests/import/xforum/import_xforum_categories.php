@@ -21,7 +21,7 @@
     echo "<strong>$step. Importing xforum categories into categories</strong><br/>\n";
 
     $regid = xarModGetIDFromName('xarbb');
-    $categories = xarModAPIFunc('categories', 'admin', 'create',
+    $xarbbcats = xarModAPIFunc('categories', 'admin', 'create',
                                 array('name' => 'xarBB Forum Index',
                                       'description' => 'xarBB Forum Index',
                                       'parent_id' => 0));
@@ -30,10 +30,12 @@
  //     if (!empty($ptid)) {
    //      $settings = unserialize(xarModGetVar('xarbb', 'settings.'.$ptid));
    //   $settings['defaultview'] = 'c' . $categories;
- //      xarModSetVar('xarbb', 'settings.'.$ptid, serialize($settings));
-    xarModSetVar('xarbb', 'number_of_categories.1', 1);
-        xarModSetVar('xarbb', 'mastercids', $categories);
+        xarModSetVar('xarbb', 'number_of_categories.1', 1);
+        xarModSetVar('xarbb', 'mastercids.1', $xarbbcats);
  //  }
+   // Get datbase setup
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
 
     $query = 'SELECT type , fid, name, displayorder,fup
               FROM `'.$oldprefix.'_XForum_forums`
@@ -49,7 +51,7 @@
         $catid[$id] = xarModAPIFunc('categories', 'admin', 'create',
                                     array('name' => $title,
                                           'description' => $title,
-                                          'parent_id' => $categories));
+                                          'parent_id' => $xarbbcats));
         echo "Creating category ($id) $title<br/>\n";
         }else {
         $catid[$id] = xarModAPIFunc('categories', 'admin', 'create',
@@ -60,7 +62,7 @@
         $result->MoveNext();
     }
     $result->Close();
-    xarModSetVar('installer','categories',$categories);
+    xarModSetVar('installer','categories',serialize($catid));
     xarModSetVar('installer','catid',serialize($catid));
 
 ?>
