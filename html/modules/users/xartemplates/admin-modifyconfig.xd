@@ -15,9 +15,9 @@
 						</td>
 						<td>
 							<xar:if condition="xarModGetVar('users', 'showterms')">
-								<input type="checkbox" name="showterms" id="showterms" value="1" checked="checked" tabindex="2" />
+								<input type="checkbox" name="showterms" id="showterms" value="1" checked="checked" tabindex="1" />
 							<xar:else />
-								<input type="checkbox" name="showterms" id="showterms" value="1" tabindex="2" />
+								<input type="checkbox" name="showterms" id="showterms" value="1" tabindex="1" />
 							</xar:if>
 						</td>
 					</tr>
@@ -142,6 +142,15 @@
 						</td>
 						<td>
 						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" rows="10" cols="30" />#$emails#</textarea> 
+						</td>
+					</tr>
+					<tr align="left" valign="top">
+						<td>
+							<xar:mlstring>Disallowed IP addresses</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
+						</td>
+						<td>
+						        <textarea name="disallowedips" id="disallowedips" tabindex="4" rows="10" cols="30" />#$ips#</textarea> 
 						</td>
 					</tr>
 					#$hooks#
