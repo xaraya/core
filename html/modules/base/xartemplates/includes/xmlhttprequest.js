@@ -7,13 +7,14 @@
 
 // TODO: can this global be eliminated?
 var req;
+var tagToGo; // Apparently at least safari needs this
 
 function loadContent(url,tagid) {
     // TODO: this doesnt belong here
+    //alert('URL: ' + url + ', TagId: ' + tagid);
     var postfix = "&pageName=module";
-    // Set the tag id as property of the processReqChange function 
-    // instead of a global variable
-    processReqChange.tagid = tagid;
+    // Make the tag id global in this scope, required for some implementations
+    tagToGo = tagid;
     try {
         if (window.XMLHttpRequest) {
             document.body.style.cursor='wait';
@@ -33,8 +34,8 @@ function loadContent(url,tagid) {
             return false;
         } else {
             return true; // do the normal action
-        }   
-    } catch (e) {
+        }  
+    } catch(e) {
         alert(e);
     }
 }
@@ -46,7 +47,7 @@ function processReqChange()
         if (req.readyState == 4) {
             if (req.status == 200) {
                 // Do whatever we need with the content returned
-                tag = document.getElementById(this.tagid);
+                tag = document.getElementById(tagToGo);
                 if(tag == null) {
                     // not found, fallback
                     document.location = req.url;
@@ -56,9 +57,9 @@ function processReqChange()
                 myparent = tag.parentNode;
                 tag.id ='dummytogetridoftheoriginal';
                 tag.innerHTML = req.responseText;
-                newtag = document.getElementById(this.tagid);
+                newtag = document.getElementById(tagToGo);
                 if(newtag == null) {
-                    alert('cant find the new tag [' + this.tagid + ']');
+                    alert('cant find the new tag [' + tagToGo + ']');
                     tag.innerHTML = req.responseText;
                     document.body.style.cursor='default';
                     return false;
