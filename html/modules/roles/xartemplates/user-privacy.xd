@@ -66,7 +66,7 @@
 	
 	<xar:if condition="xarModGetVar('roles', 'minage') gt '0'" >
 	    <xar:set name="$curnum">++$curnum</xar:set>
-	    <h3 class="xar-title" id="children">#$curnum#<xar:mlstring>. Children</xar:mlstring></h3>
+	    <h3 id="children">#$curnum#<xar:mlstring>. Children</xar:mlstring></h3>
 	        <p><xar:mlstring>We do not allow persons who are aged&nbsp;</xar:mlstring>#$minagewords[$mina-1]#
             (#$mina-1#)<xar:mlstring>&nbsp;or younger to become members of this site. For more information, please contact </xar:mlstring>
                 <a href="mailto:#$contmail#">our webmaster</a>.</p>
