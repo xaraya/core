@@ -10,8 +10,11 @@
  */
 function modules_admin_release()
 {
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('EditModules')) return;
+
+    // allow fopen
+    ini_set('allow_url_fopen', 1);
 
     // Require the xmlParser class
     require_once('modules/base/xarclass/xmlParser.php');
