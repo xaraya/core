@@ -10,49 +10,41 @@
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>What is it?</xar:mlstring>
+            <p><xar:mlstring>What is it?</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>The Themes Module controls the display of your website.  Certain display variables are set from this module to allow you to control the site name, footer information, etc.</xar:mlstring>
+            <p><xar:mlstring>The Themes Module controls the display of your website.  Certain display variables are set from this module to allow you to control the site name, footer information, etc.</xar:mlstring></p>
 		</div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>How to use it?</xar:mlstring>
+            <p><xar:mlstring>How to use it?</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <xar:mlstring>
+                <p><xar:mlstring>
                 From the menu, you have three choices.  "View", "Modify Config", and "Certified Releases". 
-                </xar:mlstring>
+                </xar:mlstring></p>
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Modify Configuration -- Allows you to set certain display configuration values.</xar:mlstring></li>
                     <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcments from Xaraya.com</xar:mlstring></li>
                 </ul>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Blocks</xar:mlstring>
+            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-			<xar:mlstring>Metablock</xar:mlstring>
+			<p><xar:mlstring>Metablock</xar:mlstring></p>
 			<ul>
 				<li><xar:mlstring>The meta block allows you to configure at one time the meta values for your site.  This template is can be overridden from your theme directory.</xar:mlstring></li>
 			</ul>
         </div>
-        <br />
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>Included Hooks</xar:mlstring>
+            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
         </div>
-        <br />
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <xar:mlstring>The Themes modules has a user menu hook which allows the users of your Xaraya site to change the default theme to their choosing.  This can be activated and deactivated from the modules module.</xar:mlstring>
+            <p><xar:mlstring>The Themes modules has a user menu hook which allows the users of your Xaraya site to change the default theme to their choosing.  This can be activated and deactivated from the modules module.</xar:mlstring></p>
         </div>
-        <br />
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
         </div>
     </div>
 </div>
