@@ -28,7 +28,7 @@ class ErrorCollection extends Exception
 
     function ErrorCollection() {
         $this->title = "PHP Error";
-        $this->msg = "Default msg";
+//        $this->msg = xarML("Default message");
     }
 
     function toString()

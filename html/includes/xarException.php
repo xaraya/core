@@ -348,11 +348,10 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                     }
                 } else {
                     // raise an error collection
-//                    echo $ExceptionStack->size();
                     $exc = new ErrorCollection();
                     $thisexcp = new SystemException($msg);
                     $thisexcp->setID('PHP_ERROR');
-                    $exception->exceptions[] = $thisexcp;
+                    $exc->exceptions[] = $thisexcp;
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
                 }
             }

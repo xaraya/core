@@ -26,16 +26,25 @@ class ExceptionRendering
 
 
     function ExceptionRendering($exception = NULL){
+    global $ExceptionStack;
         $this->exception = $exception;
         $this->linebreak = "<br/>";
         $this->id = $exception->getID();
         switch ($exception->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
                 include "includes/exceptions/systemexception.defaults.php";
-                if (!array_key_exists($this->id, $this->defaults)) {
-                    $this->id = "EXCEPTION_FAILURE";
+                if ($this->id == "ErrorCollection") {
+                $short = "";
+                foreach ($exception->exceptions as $excp)
+                $short .= $excp->getID() . ": " . $excp->getShort(). $this->linebreak;
+               $this->short = $short;
                 }
-                $this->load();
+                else {
+                    if (!array_key_exists($this->id, $this->defaults)) {
+                        $this->id = "EXCEPTION_FAILURE";
+                    }
+                    $this->load();
+                }
                 break;
             case XAR_USER_EXCEPTION:
                 include "includes/exceptions/defaultuserexception.defaults.php";
