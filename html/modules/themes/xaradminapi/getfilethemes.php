@@ -56,7 +56,9 @@ function themes_adminapi_getfilethemes()
 
                     // TODO: beautify :-)
                     if (!isset($regId) || xarVarPrepForOS($directory) != $themeOsDir) {
-                        xarSessionSetVar('errormsg', "Theme '$name' exists in themes/$themeOsDir but should be in themes/$directory according to themes/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
+                        xarSessionSetVar('errormsg', "Theme '$name' exists in ".xarConfigGetVar('Site.BL.ThemesDirectory')."/$themeOsDir but should be in "
+                        .xarConfigGetVar('Site.BL.ThemesDirectory').
+                        "/$directory according to themes/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
                         continue;
                     }
                     //Defaults

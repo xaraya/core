@@ -131,7 +131,7 @@ function themes_init()
 
 function themes_activate()
 {
-    if (file_exists('themes/Xaraya_Classic/xartheme.php')) {
+    if (file_exists(xarConfigGetVar('Site.BL.ThemesDirectory').'/Xaraya_Classic/xartheme.php')) {
         xarModSetVar('themes', 'default', 'Xaraya_Classic');
     } 
 
@@ -214,6 +214,6 @@ function themes_delete()
 { 
     // this module cannot be removed
     return false;
-} 
+}
 
 ?>
