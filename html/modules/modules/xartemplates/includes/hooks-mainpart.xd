@@ -135,12 +135,12 @@
                             </div>
                             <!-- NOTE: the position of this script thingie is important, it has to come AFTER the div above -->
                             <xar:if condition="$hasItemTypes">
-                                <script language="javascript">
+                                <script type="text/javascript">
                                     setDisplayOn('itemtypes_#$hookedmod['name']#');
                                     document.getElementById('SOME_hooked_#$hookedmod['name']#[0]').checked="checked";
                                 </script>
                             <xar:else/>
-                                <script language="javascript">
+                                <script type="text/javascript">
                                     setDisplayOff('itemtypes_#$hookedmod['name']#');
                                 </script>
                             </xar:if>
