@@ -196,13 +196,13 @@ function base_menublock_display($blockinfo)
                                         }
 
                             // Security Check
-                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
+//                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
                                             $indlinks[] = array('userlink'      => $menulink['url'],
                                                                 'userlabel'     => $menulink['label'],
                                                                 'usertitle'     => $menulink['title'],
                                                                 'funcactive'    => $funcactive);
                                         }
-                                    }
+//                                    }
                                 } else {
                                     $indlinks= '';
                                 }
