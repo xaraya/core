@@ -385,7 +385,9 @@ function xarRequestGetInfo()
     if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != '') {
         // NOTE: <marco> The '-' character is not allowed in modules, types and function names,
         //               so it's not present in this regex
-        preg_match_all('|/([a-z0-9_]+)|i', $path, $matches);
+        //preg_match_all('|/([a-z0-9_]+)|i', $path, $matches);
+    // FIXME: we need to match anything that might be used as module params here too ! (without compromising security)
+        preg_match_all('|/([a-z0-9_ +-]+)|i', $path, $matches);
         $params = $matches[1];
         if (count($params) > 0) {
             $modName = $params[0];
