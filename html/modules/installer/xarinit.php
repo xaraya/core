@@ -24,10 +24,6 @@ function installer_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    $masks = new xarMasks();
-
-    $masks->register('Admin','All','installer','All','All',ACCESS_ADMIN);
-
     // Load in installer API
     if (!xarInstallAPILoad('installer','admin')) {
         return NULL;

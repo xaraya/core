@@ -51,7 +51,7 @@ function initializeSetup() {
     *********************************************************************/
 
     registerPrivilege('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
-    registerPrivilege('FullPrivileges','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
+    registerPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
     registerPrivilege('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
     registerPrivilege('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
     registerPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
@@ -70,7 +70,7 @@ function initializeSetup() {
     *********************************************************************/
 
 	makePrivilegeRoot('NoPrivileges');
-	makePrivilegeRoot('FullPrivileges');
+	makePrivilegeRoot('Administration');
 	//makePrivilegeMember('NoPrivileges','FullPrivileges');
 	makePrivilegeRoot('ReadAll');
 	//makePrivilegeMember('NoPrivileges','ReadAll');
@@ -114,27 +114,27 @@ function initializeSetup() {
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    registerMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
-    registerMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
-    registerMask('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
-    registerMask('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
-    registerMask('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
-    registerMask('ViewPrivilegeRoles','All','Privileges','ViewRoles','All',ACCESS_READ);
-    registerMask('RemoveRole','All','Privileges','RemoveRole','All',ACCESS_DELETE);
+    xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
+    xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
+    xarRegisterMask('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
+    xarRegisterMask('AddPrivilege','All','Privileges','AddPrivilege','All',ACCESS_ADD);
+    xarRegisterMask('DeletePrivilege','All','Privileges','DeletePrivilege','All',ACCESS_DELETE);
+    xarRegisterMask('ViewPrivilegeRoles','All','Privileges','ViewRoles','All',ACCESS_READ);
+    xarRegisterMask('RemoveRole','All','Privileges','RemoveRole','All',ACCESS_DELETE);
 
-    registerMask('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
-    registerMask('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
+    xarRegisterMask('AssignPrivAll','All','Privileges','AssignPrivilege','All',ACCESS_ADD);
+    xarRegisterMask('RemovePrivAll','All','Privileges','RemovePrivilege','All',ACCESS_DELETE);
 
-    registerMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
-   	registerMask('ViewRoles','All','Roles','ViewRoles','All',ACCESS_READ);
-   	registerMask('ModMemberAll','All','Roles','EditMember','All',ACCESS_EDIT);
-    registerMask('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
-    registerMask('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
+    xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
+   	xarRegisterMask('ViewRoles','All','Roles','ViewRoles','All',ACCESS_READ);
+   	xarRegisterMask('ModMemberAll','All','Roles','EditMember','All',ACCESS_EDIT);
+    xarRegisterMask('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
+    xarRegisterMask('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
 
 //	'Mask to limit access to the installer to Oversight'
-	registerMask('Admin','All','installer','All','All',ACCESS_ADMIN);
+	xarRegisterMask('Admin','All','installer','All','All',ACCESS_ADMIN);
 
-   	registerMask('Admin','All','modules','All','All',ACCESS_ADMIN);
+   	xarRegisterMask('Admin','All','modules','All','All',ACCESS_ADMIN);
 
     // Initialisation successful
     return true;

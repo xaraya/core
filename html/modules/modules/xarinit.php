@@ -170,14 +170,6 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    /*********************************************************************
-    * Register the module components that are privileges objects
-    * Format is
-    * register(Name,Realm,Module,Component,Instance,Level,Description)
-    *********************************************************************/
-
-   registerMask('Admin','All','modules','All','All',ACCESS_ADMIN);
-
     // Initialisation successful
     return true;
 }

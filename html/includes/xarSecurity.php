@@ -276,7 +276,7 @@ $schemas = array();
 	}
 
 /**
- * registerMask: wrapper function for registering a mask
+ * xarRegisterMask: wrapper function for registering a mask
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
@@ -286,7 +286,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function registerMask($name,$realm,$module,$component,$instance,$level,$description='')
+	function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 	{
 		global $installing;
 
