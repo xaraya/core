@@ -2462,7 +2462,14 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         $content = '';  // Content attribute is empty by default
         $title = '';    // Title attribute is empty by default        
         $template = ''; // Template attribute is empty by default
+        $instance = 0;  // Default value for instance
         extract($this->attributes);
+
+        // If the block instance attribute is specified in the tag, render it directly 
+        // NOTE: $id is also an attribute, but that is an id attribute in XML sense, not in DB sense
+        if ($instance != 0)) {
+            return "xarBlock_renderBlock(array('bid' => '$instance'))";
+        }
 
         if (!isset($name)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:block> tag.', $this);
@@ -2472,14 +2479,6 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         if (!isset($module)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:block> tag.', $this);
             return;
-        }
-
-        // If the block instance attribute is specified in the tag, render it directly 
-        // NOTE: $id is also an attribute, but that is an id attribute in XML sense, not in DB sense
-        if (isset($instance)) {
-            return "xarBlock_renderBlock(array('bid' => '$instance'))";
-        } else {
-            $instance = 0;
         }
 
         // Calculate block ID - theme dependent
