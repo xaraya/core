@@ -25,7 +25,7 @@ NOTE: <Dracos>  All the widget stuff in here is essentially dead code,
 /**
  * Initializes the BlockLayout Template Engine
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
  * @global xarTpl_cacheTemplates bool
  * @global xarTpl_themesBaseDir string
@@ -312,7 +312,7 @@ function xarTplGetJavaScript($position = '', $index = '')
 /**
  * Turns module output into a template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access public
  * @global xarTpl_themeDir string
  * @param modName string the module name
@@ -364,7 +364,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Turns block output into a template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access public
  * @global xarTpl_themeDir string
  * @param modName string the module name
@@ -695,7 +695,7 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
- * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
  * @global xarTpl_themeDir string
  * @global xarTpl_pageTemplateName string
