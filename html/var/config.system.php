@@ -18,5 +18,5 @@ $systemConfiguration['DB.TablePrefix'] = 'pn';
 // Database username and password encoding
 // 0 = not encoded
 // 1 = encoded
-$systemConfiguration['DB.Encoded'] = 0;
+$systemConfiguration['DB.Encoded'] = '0';
 ?>

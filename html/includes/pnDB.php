@@ -63,7 +63,7 @@ function pnDB_init($args)
         define('ADODB_DIR', 'pnadodb');
     }
     
-    include 'pnadodb/adodb.inc.php';
+    include_once 'pnadodb/adodb.inc.php';
 
     // Database connection is a global (for now)
     global $dbconn;
