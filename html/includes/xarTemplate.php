@@ -195,9 +195,9 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
 {
     assert('$position == "head" || $position == "body"');
     if ($position == 'head') {
-        $GLOBALS['xarTpl_headJavaScript'] .= "\n// JavaScript code from {$owner}\n{$code}\n";
+        $GLOBALS['xarTpl_headJavaScript'] .= "\n<!--- JavaScript code from {$owner}\n ---> {$code} \n";
     } else {
-        $GLOBALS['xarTpl_bodyJavaScript']  .= "\n// JavaScript code from {$owner}\n{$code}\n";
+        $GLOBALS['xarTpl_bodyJavaScript']  .= "\n<!--- JavaScript code from {$owner}\n---> {$code} \n";
     }
     return true;
 }
@@ -488,7 +488,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
     $sourceFileName = $GLOBALS['xarTpl_themeDir']."/pages/$templateName.xt";
 
     if ($GLOBALS['xarTpl_headJavaScript'] !='') {
-        $GLOBALS['xarTpl_headJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS['xarTpl_headJavaScript']}\n// -->\n</script>";
+//        $GLOBALS['xarTpl_headJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS['xarTpl_headJavaScript']}\n// -->\n</script>";
     }
     if ($GLOBALS['xarTpl_bodyJavaScript'] !='') {
         $GLOBALS['xarTpl_bodyJavaScript'] = "<script type=\"text/javascript\">\n<!--\n{$GLOBALS['xarTpl_bodyJavaScript']}\n// -->\n</script>";
