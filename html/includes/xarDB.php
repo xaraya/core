@@ -76,6 +76,8 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarDB_connections'] = array($dbconn);
     $GLOBALS['xarDB_tables'] = array();
 
+    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . '/cache/adodb';
+
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
 

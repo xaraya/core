@@ -962,8 +962,23 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     }
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    if (xarCore_getSystemVar('DB.UseADODBCache')){
+        switch(strtolower($type)) {
+            case 'modvar':
+            case 'themevar':
+            case 'configvar':
+                $result =& $dbconn->CacheExecute(3600*24*7,$query);
+                if (!$result) return;
+                break;
+            case 'moduservar':
+                $result =& $dbconn->Execute($query);
+                if (!$result) return;
+                break;
+        }
+    } else {
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+    }
 
     switch(strtolower($type)) {
         case 'modvar':
@@ -1168,6 +1183,10 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                               '" . xarVarPrepForStore($value). "')";
 
             break;
+    }
+
+    if (xarCore_getSystemVar('DB.UseADODBCache')){
+        $result =& $dbconn->CacheFlush();
     }
 
     $result =& $dbconn->Execute($query);
