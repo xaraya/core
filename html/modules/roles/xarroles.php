@@ -1271,6 +1271,10 @@ class xarRole
     {
         return $this->name;
     }
+    function getUname()
+    {
+        return $this->uname;
+    }
     function getType()
     {
         return $this->type;
@@ -1311,6 +1315,10 @@ class xarRole
     function setName($var)
     {
         $this->name = $var;
+    }
+    function setUname($var)
+    {
+        $this->uname = $var;
     }
     function setParent($var)
     {
