@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/modify.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/modify.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/modify.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -70,7 +70,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'private'
         ,'common'
         ,array(
-            'title' => 'Modify <xsl:value-of select="label" /> ' . $item_title
+            'title' => xarML( 'Modify <xsl:value-of select="label" />' ) . ' ' . $item_title
             ,'type' => 'admin'
             ));
 
@@ -96,7 +96,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     }
 
-    <xsl:if test="@hooks = 'enable'">
     /*
      * call the hook 'item:modify:GUI'
      */
@@ -110,12 +109,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,$itemid
         ,$args
         ,'<xsl:value-of select="$module_prefix" />' );
-    </xsl:if>
 
     /*
      * Compose the data for the template
      */
-    $data['object'] = $object;
+    $data['object_props'] =&amp; $object->getProperties();
     $data['itemid'] = $itemid;
     $data['action'] = xarModURL(
         '<xsl:value-of select="$module_prefix" />'

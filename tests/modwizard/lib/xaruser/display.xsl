@@ -13,7 +13,7 @@
 
 <xsl:template match="xaraya_module" mode="xaruser_display" xml:space="default">
 
-    <xsl:message>      * display</xsl:message>
+    <xsl:message>      * xaruser/display.php</xsl:message>
 
     <xsl:document href="{$output}/xaruser/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -81,7 +81,7 @@ function <xsl:value-of select="$module_prefix" />_user_display( $args ) {
         default:
             xarSessionSetVar(
                 '<xsl:value-of select="$module_prefix" />_statusmsg'
-                ,'Error: Itemtype not specified or invalid. Redirected you to main page!' );
+                ,xarML( 'Error: Itemtype not specified or invalid. Redirected you to main page!' ) );
 
             xarResponseRedirect(
                 xarModURL(

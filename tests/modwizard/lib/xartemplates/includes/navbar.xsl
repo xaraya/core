@@ -1,0 +1,34 @@
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xar="dd"
+                xmlns="http://www.w3.org/TR/xhtml1/strict">
+
+<xsl:template match="xaraya_module" mode="xd_includes_navbar">
+    <xsl:variable name="module_prefix" select="registry/name" />
+
+    <xsl:message>       * xartemplates/includes/navbar.xd</xsl:message>
+
+<xsl:document href="{$output}/xartemplates/includes/navbar.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
+<xsl:element name="xar:if"><xsl:attribute name="condition">xarTplAddStyleLink('<xsl:value-of select="$module_prefix" /> ', 'navbar')</xsl:attribute>
+    <div>
+    <div class="tabnav">
+        <div class="navhelp help" title="#xarML('Click on a tab to display that itemtype' )#">
+            <xar:mlstring>Itemtype</xar:mlstring>:
+        </div>
+        <div class="tabnav-hairline"><!-- &nbsp; --></div>
+        <ul class="navlist">
+            <xar:foreach in="$common_menu" value="$value">
+                <xar:if condition="empty($value['url'])">
+                    <li class="active"><a href="#xarServerGetCurrentURL()#" title="#$value['title']#"> #$value['title']# </a></li>
+                    <xar:else />
+                    <li><a href="#$value['url']#" title="#$value['title']#"> #$value['title']# </a></li>
+                </xar:if>
+            </xar:foreach>
+        </ul>
+        <div class="tabnav-hairline"><!-- &nbsp; --></div>
+    </div>
+    </div>
+</xsl:element>
+</xsl:document>
+</xsl:template>
+</xsl:stylesheet>

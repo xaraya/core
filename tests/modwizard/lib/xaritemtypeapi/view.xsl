@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/view.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/view.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -50,7 +50,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'private'
         ,'common'
         ,array(
-            'title' => 'View <xsl:value-of select="label" />'
+            'title' => xarML( 'List all <xsl:value-of select="label" />' )
             ,'type' => $type
             ));
 

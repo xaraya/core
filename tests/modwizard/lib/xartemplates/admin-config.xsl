@@ -3,60 +3,35 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/includes/xarinit.php
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_admin-config">
-    generating xartemplates/admin-config.xd <xsl:apply-templates mode="xd_admin-config" select="xaraya_module" /> finished
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
 <xsl:template match="xaraya_module" mode="xd_admin-config">
+
+    <xsl:message>      * xartemplates/admin-config.xd</xsl:message>
+
 <xsl:document href="{$output}/xartemplates/admin-config.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-<!--
-
-    COMMON HEADER
-
--->
-<xar:template file="header" type="module" />
+    <xar:template file="header" type="module" />
+    <div class="xar-mod-body">
+    <div style="padding: 1px;" class="xar-norm-outline">
 
 <form method="post" action="#$action#">
 
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
-    <!--
+    <table width="100%" cellspacing="0" cellpadding="8" border="0">
 
-        MODULE CONFIGURATION
+        <colgroup>
+            <col width="30%" />
+            <col />
+        </colgroup>
 
-    -->
-    <h3>Configure Module</h3>
-
-    <!-- // FUNC // ShortURLSupport
-
-         create the following checkbox only if the user enabled short url
-         support
-
-    -->
     <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) )
                   or configuration/capabilities/supportshorturls/text() = 'yes'">
 
-    <table width="100%">
-
         <tr>
-            <td><label for="supportshorturls">Short URL Support</label></td>
+            <td><label for="supportshorturls"><xar:mlstring>Short URL Support</xar:mlstring></label></td>
             <td>
                 <xsl:element name="xar:data-input" xml:space="default">
+                    <xsl:attribute name="id">supportshorturls</xsl:attribute>
                     <xsl:attribute name="type">checkbox</xsl:attribute>
                     <xsl:attribute name="name">supportshorturls</xsl:attribute>
                     <xsl:attribute name="value">$supportshorturls</xsl:attribute>
@@ -64,42 +39,24 @@
             </td>
         </tr>
 
-    </table>
-
     </xsl:if>
 
-    <!--
-
-        HOOKS
-
-    -->
     <xsl:if test="configuration/hooks/@enable = 'true'">
-    <div>
         <xar:if condition="!empty($hooks)">
-        <table width="100%">
         <xar:foreach in="$hooks" key="$hookmodule">
         <tr>
-            <td>#$hookmodule#</td>
-            <td>#$hooks[$hookmodule]#</td>
+            <td colspan="2">#$hooks[$hookmodule]#</td>
         </tr>
         </xar:foreach>
-        </table>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="#xarML('Modify')#" /><input type="submit" name="cancel"  value="#xarML('Cancel')#" /></td>
+        </tr>
         </xar:if>
-    </div>
     </xsl:if>
-
-    <!--
-
-        BUTTONS
-
-    -->
-    <span>
-        <br />
-        <input type="submit"                value="Modify" />
-        <input type="submit" name="cancel"  value="Cancel" />
-    </span>
-
+    </table>
 </form>
+</div>
+</div>
 
 </xsl:document>
 </xsl:template>

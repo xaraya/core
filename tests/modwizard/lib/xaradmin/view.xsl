@@ -68,7 +68,7 @@ function <xsl:value-of select="$module_prefix" />_admin_view($args) {
                     ,'private'
                     ,'common'
                     ,array(
-                        'title' => 'Main Page'
+                        'title' => xarML( 'Main Page' )
                         ,'type' => 'admin'
                         ));
     }

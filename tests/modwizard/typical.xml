@@ -21,7 +21,6 @@
             <email>module-wizard@michael-jansen.biz</email>
         </author>
 
-
         <description>
 
             <!-- add a short ONE LINE description -->
@@ -33,6 +32,10 @@
             *   # 2 blocks
             *   # uses hooks
             * </long>
+
+            <category>Content</category>
+            <class>Complete</class>
+
         </description>
 
     </about>
@@ -52,6 +55,10 @@
 
     <!-- MODULE CONFIGURATION related stuff -->
     <configuration>
+
+        <!-- if you're module requires other), give a comma separated list of the modules id -->
+        <dependency>147</dependency>
+
 
         <!-- CAPABILITIES OF THE MODULE
 

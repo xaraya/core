@@ -3,37 +3,17 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/includes/xarinit.php
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_admin-view-itemtype">
-    <xsl:apply-templates mode="xd_admin-view-itemtype" select="xaraya_module" />
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
-<xsl:template match="xaraya_module" mode="xd_admin-view-itemtype">
-
-    <xsl:for-each select="database/table">
-    generating xartemplates/admin-view<xsl:value-of select="@name" />.xd ...<xsl:apply-templates select="." mode="xd_admin-view-itemtype" />... finished
-    </xsl:for-each>
-
-</xsl:template>
-
 <xsl:template match="table" mode="xd_admin-view-itemtype">
+
     <xsl:variable name="table" select="@name" />
+    <xsl:message>      * xartemplates/admin-view-<xsl:value-of select="@name" />.xd</xsl:message>
+
 <xsl:document xml:space="preserve" href="{$output}/xartemplates/admin-view-{$table}.xd" format="text" omit-xml-declaration="yes" >
 
-<xar:template file="header" type="module" />
+    <xar:template file="header" type="module" />
+
+<div class="xar-mod-body">
+    <div style="padding: 1px;" class="xar-norm-outline">
 
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
@@ -89,6 +69,9 @@
     </tr>
     </xar:if>
     </table>
+
+    </div>
+</div>
 
 </xsl:document>
 </xsl:template>

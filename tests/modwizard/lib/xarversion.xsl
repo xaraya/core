@@ -51,8 +51,12 @@ $modversion['contact']        = '<xsl:value-of select="about/author/email" />';
 $modversion['admin']          = 1;
 $modversion['user']           = 1;
 $modversion['securityschema'] = array();
-$modversion['class']          = 'Complete';
-$modversion['category']       = 'Content';
+$modversion['class']          = '<xsl:value-of select="about/description/class" />';
+$modversion['category']       = '<xsl:value-of select="about/description/category" />';
+
+<xsl:if test="$gCommentsLevel >= 10">// Dependencies of the module</xsl:if>
+$modversion['dependency']     = array( <xsl:value-of select="configuration/dependency/text()" /> );
+
 </xsl:template>
 
 </xsl:stylesheet>

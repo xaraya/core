@@ -42,29 +42,39 @@
 -->
 <xsl:param name="gCommentsLevel"   required="no">3</xsl:param>
 
+<!-- INCLUDES -->
 <xsl:include href="include/verify_hooks.xsl" />
 <xsl:include href="include/verify_database.xsl" />
-
 <xsl:include href="include/xaraya_standard.xsl" />
+
+<!-- TOP LEVEL FILES -->
 <xsl:include href="xartables.xsl" />
 <xsl:include href="xarinit.xsl" />
 <xsl:include href="xarobject.xsl" />
-<xsl:include href="xarblocks.xsl" />
 <xsl:include href="xarversion.xsl" />
+
+<!-- SUBDIRECTORIES -->
+<xsl:include href="xarblocks.xsl" />
+<xsl:include href="xardocs.xsl" />
 <xsl:include href="xaritemtypeapi.xsl" />
 <xsl:include href="xarprivateapi.xsl" />
 <xsl:include href="xarhookapi.xsl" />
-
 <xsl:include href="xaruserapi.xsl" />
 <xsl:include href="xaruser.xsl" />
-
 <xsl:include href="xaradmin.xsl" />
 <xsl:include href="xaradminapi.xsl" />
-<xsl:include href="xartemplates/includes/header.xsl" />
+<xsl:include href="xarstyles.xsl" />
 
+<!-- XARTEMPLATE INCLUDES -->
+<xsl:include href="xartemplates/includes/header.xsl" />
+<xsl:include href="xartemplates/includes/navbar.xsl" />
 
 
 <xsl:template match="/">
+    <xsl:apply-templates select="xaraya_module" />
+</xsl:template>
+
+<xsl:template match="xaraya_module">
 
     <xsl:message>
     Xaraya module generator will generate the following module for you:
@@ -83,34 +93,32 @@
     <xsl:message>
 ### Begin of code generation</xsl:message>
 
-    <!-- CREATE -->
-    <xsl:apply-templates select="xaraya_module" />
+    <!-- TOP LEVEL FILES -->
+    <xsl:apply-templates mode="xartables"             select="." />
+    <xsl:apply-templates mode="xarinit"               select="." />
+    <xsl:apply-templates mode="xarobject"             select="." />
+    <xsl:apply-templates mode="xarversion"            select="." />
+
+    <!-- SUBDIRECTORIES -->
+    <xsl:apply-templates mode="xaritemtypeapi"        select="." />
+    <xsl:apply-templates mode="xarprivateapi"         select="." />
+    <xsl:apply-templates mode="xarhookapi"            select="." />
+    <xsl:apply-templates mode="xaradminapi"           select="." />
+    <xsl:apply-templates mode="xaradmin"              select="." />
+    <xsl:apply-templates mode="xaruserapi"            select="." />
+    <xsl:apply-templates mode="xaruser"               select="." />
+    <xsl:apply-templates mode="xarblocks"             select="." />
+    <xsl:apply-templates mode="xardocs"               select="." />
+    <xsl:apply-templates mode="xarstyles"             select="." />
+
+    <!-- XARTEMPLATE INCLUDES -->
+    <xsl:apply-templates mode="xd_includes_header"    select="." />
+    <xsl:apply-templates mode="xd_includes_navbar"    select="." />
 
     <xsl:message>
 ### End of code generation
 
 </xsl:message>
-
-</xsl:template>
-
-<!-- ENTRY POINT    print out progress and call module template -->
-<xsl:template match="xaraya_module" xml:space="default">
-
-    <xsl:apply-templates mode="xartables"             select="." />
-    <xsl:apply-templates mode="xarinit"               select="." />
-    <xsl:apply-templates mode="xarobject"             select="." />
-    <xsl:apply-templates mode="xarversion"            select="." />
-    <xsl:apply-templates mode="xaritemtypeapi"        select="." />
-    <xsl:apply-templates mode="xarprivateapi"         select="." />
-    <xsl:apply-templates mode="xarhookapi"            select="." />
-
-    <xsl:apply-templates mode="xaradminapi"           select="." />
-    <xsl:apply-templates mode="xaradmin"              select="." />
-
-    <xsl:apply-templates mode="xaruserapi"            select="." />
-    <xsl:apply-templates mode="xaruser"               select="." />
-    <xsl:apply-templates mode="xarblocks"               select="." />
-    <xsl:apply-templates mode="xd_includes_header"    select="." />
 
 </xsl:template>
 

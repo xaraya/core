@@ -58,7 +58,7 @@ function <xsl:value-of select="$module_prefix" />_admin_main() {
             ,'private'
             ,'common'
             ,array(
-                'title' => 'Overview'
+                'title' => xarML( 'Overview' )
                 ,'type' => 'admin'
                 ));
         return $data;

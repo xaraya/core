@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/display.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/display.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -91,11 +91,10 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'private'
             ,'common'
             ,array(
-                'title' => '<xsl:value-of select="label" />' . $item_title
+                'title' => xarML( '<xsl:value-of select="label" />' ) . ' ' . $item_title
                 ,'type' => 'user'
                 ));
 
-        <xsl:if test="@hooks = 'enable'">
         /*
          * Call the hook 'item:display:GUI'.
          *
@@ -123,7 +122,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'<xsl:value-of select="$module_prefix" />' );
         if ( !isset( $hooks ) ) { return; }
         $data['hooks'] = $hooks;
-        </xsl:if>
     }
 
     $data['object_props'] =&amp; $object->getProperties();

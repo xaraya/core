@@ -92,7 +92,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
         ,'private'
         ,'common'
         ,array(
-            'title' => 'Module Configuration'
+            'title' => xarML( 'Global Settings' )
             ,'type' => 'admin'
             ));
 
@@ -139,7 +139,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
          */
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
-            ,'Updated the modules configuration!' );
+            ,xarML( 'Updated the global module settings!' ) );
 
         /*
          * Finished. Back to the sender!
@@ -171,11 +171,12 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) {
 
     </xsl:if>
 
-    $data['common']['menu_label'] = 'Configure';
+    $data['common']['menu_label'] = xarML( 'Configure' );
     $data['common']['menu']       = xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'private'
-        ,'adminconfigmenu' );
+        ,'adminconfigmenu'
+        ,0 );
 
     /*
      * Populate the rest of the template

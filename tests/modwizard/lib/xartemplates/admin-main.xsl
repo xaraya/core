@@ -3,36 +3,55 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/includes/xarinit.php
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_admin-main">
-    generating xartemplates/admin-main.xd <xsl:apply-templates mode="xd_admin-main" select="xaraya_module" /> finished
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
 <xsl:template match="xaraya_module" mode="xd_admin-main">
+
+    <xsl:message>      * xartemplates/admin-main.xd</xsl:message>
+
 <xsl:document href="{$output}/xartemplates/admin-main.xd" format="text" omit-xml-declaration="yes" >
+    <xsl:variable name="module_prefix" select="registry/name" />
 
     <xar:template file="header" type="module" />
 
-<h3>Welcome to the administration of <xsl:value-of select="about/name" /></h3>
-<span>
-    <h3>What is it</h3>
-    <h3>How to use it</h3>
-    <h3>Included Blocks</h3>
-    <h3>Included Hooks</h3>
-</span>
+<div class="xar-mod-body">
+    <div style="padding: 1px;" class="xar-norm-outline">
+        <div style="float:right;padding:10px;">
+            <xar:if condition="file_exists('modules/modules/xarimages/admin.gif')" >
+                <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:else />
+                <img src="modules/modules/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+            </xar:if>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <p><xar:mlstring>What is it?</xar:mlstring></p>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>Describe your module here.</xar:mlstring></p>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <p><xar:mlstring>How to use it?</xar:mlstring></p>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+                <p><xar:mlstring>
+                Describe the usage of your module here.
+                </xar:mlstring></p>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+        <p><xar:mlstring>Describe the block included with your module here.</xar:mlstring></p>
+        </div>
+        <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
+            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
+        </div>
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+            <p><xar:mlstring>Describe the provided hooks or delete this section.</xar:mlstring></p>
+        </div>
+        <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
+        </div>
+    </div>
+</div>
 
 </xsl:document>
 </xsl:template>

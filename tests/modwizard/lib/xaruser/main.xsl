@@ -13,7 +13,7 @@
 
 <xsl:template match="xaraya_module" mode="xaruser_main" xml:space="default">
 
-    <xsl:message>      * main</xsl:message>
+    <xsl:message>      * xaruser/main.php</xsl:message>
 
     <xsl:document href="{$output}/xaruser/main.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -49,7 +49,7 @@ function <xsl:value-of select="$module_prefix" />_user_main() {
         ,'private'
         ,'common'
         ,array(
-            'title' =>  'Splash Page' ));
+            'title' =>  xarML( 'Splash Page' )));
 
     return $data;
 }

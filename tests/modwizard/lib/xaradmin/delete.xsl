@@ -101,12 +101,14 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
             </xsl:for-each>
 
                 default:
-                    // TODO // Add statusmessage
+                    xarSessionSetVar(
+                        '<xsl:value-of select="$module_prefix" />_statusmsg'
+                        ,xarML( 'Unknown itemtype #(1). Redirected you to the main page!', $itemid ) );
                     return xarResponseRedirect(
                         xarModURL(
                             '<xsl:value-of select="$module_prefix" />'
                             ,'admin'
-                            ,'view' ));
+                            ,'main' ));
             }
 
             // This function generated no output, and so now it is complete we redirect
@@ -134,7 +136,9 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
             break;
     </xsl:for-each>
         default:
-            // TODO // Add statusmessage
+            xarSessionSetVar(
+                '<xsl:value-of select="$module_prefix" />_statusmsg'
+                ,xarML( 'Unknown itemtype #(1). Redirected you to the main page!', $itemid ) );
             return xarResponseRedirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix" />'
@@ -148,7 +152,6 @@ function <xsl:value-of select="$module_prefix" />_admin_delete( $args ) {
         ,'delete'
         ,$data
         ,$itemtype_name );
-
 
 }
 </xsl:template>

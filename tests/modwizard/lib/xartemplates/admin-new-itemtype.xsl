@@ -5,43 +5,60 @@
 
 
 <xsl:template match="table" mode="xd_admin-new-itemtype">
+
     <xsl:variable name="table" select="@name" />
+    <xsl:message>      * xartemplates/admin-new-<xsl:value-of select="@name" />.xd</xsl:message>
+
 <xsl:document href="{$output}/xartemplates/admin-new-{$table}.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-<xar:template file="header" type="module" />
+    <xar:template file="header" type="module" />
+
+    <div class="xar-mod-body">
+    <div style="padding: 1px;" class="xar-norm-outline">
 
 <xar:if condition="!empty($preview)">
+<div class="xar-norm-outline">
     #$preview#
+</div>
 </xar:if>
 
 <form method="post" action="#$action#">
 
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
-    <table>
-        <xar:data-form object="$object" />
-    </table>
+    <xsl:for-each select="structure/field">
+        <xsl:comment>FIELD <xsl:value-of select="@name" /></xsl:comment>
+
+        <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+            <xsl:element name="xar:data-label" xml:space="default">
+                  <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+                  <xsl:attribute name="label">id</xsl:attribute>
+            </xsl:element>:
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+            <xsl:element name="xar:data-input" xml:space="default">
+                <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+            </xsl:element>
+        </span>
+        </div>
+    </xsl:for-each>
 
     <!-- Only display hooks when necessary -->
-    <xsl:if test="@hooks = 'enable'">
-    <div>
-        <xar:if condition="!empty($hooks)">
-        <table>
-        <xar:foreach in="$hooks" key="$hookmodule">
-        <tr>
-            <td>#$hookmodule#</td>
-            <td>#$hooks[$hookmodule]#</td>
-        </tr>
-        </xar:foreach>
-        </table>
-        </xar:if>
-    </div>
-    </xsl:if>
+    <xar:if condition="!empty($hooks)">
+    <xar:foreach in="$hooks" key="$hookmodule">
+        #$hooks[$hookmodule]#
+    </xar:foreach>
+    </xar:if>
 
-        <input type="submit"                value="Create" />
-        <input type="submit" name="preview" value="Preview" />
-        <input type="submit" name="cancel"  value="Cancel" />
+    <div style="clear: both; padding-top: 10px; text-align: center; width: 100%;">
+        <input type="submit"                value="#xarML('Create')#" />
+        <input type="submit" name="preview" value="#xarML('Preview')#" />
+        <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
+    </div>
 </form>
+</div>
+</div>
 </xsl:document>
 </xsl:template>
 

@@ -28,7 +28,6 @@
         <xsl:apply-templates mode="xd_user-main"    select="." />
 
         <xsl:apply-templates mode="xaruser_display" select="." />
-
         <xsl:apply-templates mode="xaruser_view"    select="." />
 
 

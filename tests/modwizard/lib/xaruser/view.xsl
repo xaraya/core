@@ -14,7 +14,7 @@
 
 <xsl:template match="xaraya_module" mode="xaruser_view" xml:space="default">
 
-    <xsl:message>      * view</xsl:message>
+    <xsl:message>      * xaruser/view.php</xsl:message>
 
     <xsl:document href="{$output}/xaruser/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -62,7 +62,7 @@ function <xsl:value-of select="$module_prefix" />_user_view( $args ) {
         default:
             xarSessionSetVar(
                 '<xsl:value-of select="$module_prefix" />_statusmsg'
-                ,'Error: Itemtype not specified or invalid. Redirected you to main page!' );
+                ,xarML( 'Error: Itemtype not specified or invalid. Redirected you to main page!' ) );
 
             xarResponseRedirect(
                 xarModURL(

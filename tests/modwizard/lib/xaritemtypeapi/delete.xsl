@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/delete.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/delete.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/delete.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -68,16 +68,16 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     /*
      * The user confirmed the deletion so let's go.
      */
+    // The 'api:delete' hook is called from dynamic data during createItem()
     $itemid = $object->deleteItem();
     if ( empty( $itemid ) ) return;
 
-    <xsl:if test="@hooks = 'enable'">// The 'api:delete' hook is called from dynamic data during createItem() !</xsl:if>
     /*
      * Set the status message
      */
     xarSessionSetVar(
         '<xsl:value-of select="$module_prefix" />_statusmsg'
-        ,'Deleted  <xsl:value-of select="label" /> '. $itemid .' -> '. $item_title .'!' );
+        ,xarML( 'Deleted <xsl:value-of select="label" /> [#(1)] - "#(2)"', $itemid, $item_title  ) );
 
     return;
 }

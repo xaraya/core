@@ -10,7 +10,7 @@
 
 <xsl:template match="xaraya_module" mode="xarprivateapi_common">
 
-    <xsl:message>      * xarprivateapi/configmenu.php</xsl:message>
+    <xsl:message>      * xarprivateapi/common.php</xsl:message>
 
     <xsl:document href="{$output}/xarprivateapi/common.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -63,10 +63,10 @@ function <xsl:value-of select="$module_prefix" />_privateapi_common( $args ) {
     xarTplSetPageTitle( '<xsl:value-of select="$module_prefix" /> :: ' . $title );
     </xsl:if>
 
-    // Initilaize the title
+    // Initialize the title
     $common['pagetitle'] = $title;
     if ( isset( $type ) and $type == 'admin' ) {
-        $common['type']      = '<xsl:value-of select="about/name" /> Administration';
+        $common['type']      = xarML( '<xsl:value-of select="about/name" /> Administration' );
     }
 
     return array( 'common' => $common );

@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/confirmdelete.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/confirmdelete.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/confirmdelete.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -69,14 +69,23 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'private'
         ,'common'
         ,array(
-            'title' => 'Delete <xsl:value-of select="label" /> ' .$item_title
+            'title' => xarML( 'Confirm deletion of <xsl:value-of select="label" />' ) . ' ' . $item_title
             ,'type' => 'admin'
             ));
 
     /*
      * Compose the data for the template
      */
-    $data['object'] = $object;
+    $preview = xarModFunc(
+        '<xsl:value-of select="../../registry/name" />'
+        ,'user'
+        ,'display'
+        ,array(
+            'itemtype'  => '<xsl:value-of select="@itemtype" />'
+            ,'object'   => $object ));
+    if ( !isset( $preview ) ) return;
+    $data['preview'] = $preview;
+
     $data['itemid'] = $itemid;
     $data['action'] = xarModURL(
         '<xsl:value-of select="$module_prefix" />'

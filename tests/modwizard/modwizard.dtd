@@ -24,8 +24,10 @@
 <!ELEMENT license   ( #PCDATA )>
 <!ELEMENT author    ( name, email )>
 <!ELEMENT email    ( #PCDATA )>
+<!ELEMENT category    ( #PCDATA )>
+<!ELEMENT class    ( #PCDATA )>
 
-<!ELEMENT description ( short, long )>
+<!ELEMENT description ( short, long, category, class )>
     <!ELEMENT short ( #PCDATA )>
     <!ELEMENT long ( #PCDATA )>
 
@@ -97,14 +99,14 @@
     CONFIGURATION SECTION
 
 -->
-<!ELEMENT configuration ( capabilities, modvars, hooks, security )>
+<!ELEMENT configuration ( dependency?, capabilities, modvars, hooks, security )>
 
 <!ELEMENT capabilities ( supportshorturls, setpagetitle, item_hooks, transform_hooks )* >
 <!ELEMENT supportshorturls ( #PCDATA )>
+<!ELEMENT dependency ( #PCDATA )>
 <!ELEMENT setpagetitle ( #PCDATA )>
 <!ELEMENT item_hooks ( #PCDATA )>
 <!ELEMENT transform_hooks ( #PCDATA )>
-
 
 <!ELEMENT modvars ( var )*>
 

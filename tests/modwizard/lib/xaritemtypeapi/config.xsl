@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/config.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/config.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/config.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -46,7 +46,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'private'
         ,'common'
         ,array(
-            'title' => 'View <xsl:value-of select="label" /> Configuration'
+            'title' => xarML( 'Settings for <xsl:value-of select="label" />' )
             ,'type' => 'admin'
             ));
 
@@ -72,7 +72,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />'
             ,$itemsperpage );
 
-        <xsl:if test="@hooks = 'enable'">
         /*
          * call the hook 'module:updateconfig:GUI'
          */
@@ -85,14 +84,13 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'<xsl:value-of select="$module_prefix" />'
             ,$args
             ,'<xsl:value-of select="$module_prefix" />' );
-        </xsl:if>
 
         /*
          * Set a status message
          */
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
-            ,'Updated the <xsl:value-of select="label" /> configuration!' );
+            ,xarML( 'Updated the settings for <xsl:value-of select="label" />!' ));
 
         /*
          * Finished. Back to the sender!
@@ -107,7 +105,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     } // Save the changes
 
-    <xsl:if test="@hooks = 'enable'">
     /*
      * call the hook 'module:modifyconfig:GUI'
      */
@@ -121,8 +118,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,$args
         ,'<xsl:value-of select="$module_prefix" />' );
 
-    </xsl:if>
-
     $data['itemtype']       = <xsl:value-of select="@itemtype" />;
     $data['itemtype_label'] = <xsl:value-of select="@itemtype" />;
     $data['itemsperpage']   = xarModGetVar(
@@ -133,12 +128,12 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     /*
      * Populate the rest of the template
      */
-    $data['common']['menu_label'] = 'Configure';
+    $data['common']['menu_label'] = xarML( 'Configure' );
     $data['common']['menu']       = xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
         ,'private'
         ,'adminconfigmenu'
-        ,array() );
+        ,<xsl:value-of select="@itemtype" /> );
     $data['action']     = xarModURL( '<xsl:value-of select="$module_prefix" />', 'admin', 'config' );
     $data['authid']     = xarSecGenAuthKey();
 

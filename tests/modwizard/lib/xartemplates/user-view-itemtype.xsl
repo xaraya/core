@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * user-view-<xsl:value-of select="$itemtype" />.xd</xsl:message>
+    <xsl:message>      * xartemplates/user-view-<xsl:value-of select="$itemtype" />.xd</xsl:message>
     <xsl:apply-templates mode="xd_user-view-itemtype-file" select="." />
 
 </xsl:template>
@@ -43,6 +43,7 @@
             <xsl:comment>Field <xsl:value-of select="@name" /></xsl:comment>
             <xsl:element name="xar:if" xml:space="preserve"><xsl:attribute name="condition">!empty($fields['<xsl:value-of select="@name" />'])</xsl:attribute><xsl:attribute name="xmlns:html">http://www.w3.org/TR/xhtml1/strict</xsl:attribute>
 
+            <!-- the next is a trick to get a td instead of a xar:td. xmlproc insist on creating the second one. don't know why -->
             <xsl:element name="td">
                 <xsl:element name="a" xml:space="default">
                     <xsl:attribute disable-output-escaping="yes" name="href">#xarModURL('<xsl:value-of select="$module_prefix" />','user','display', $test )#</xsl:attribute>
@@ -53,6 +54,7 @@
                 </xsl:element>
             </xsl:element>
             <xar:else />
+            <!-- the next is a trick to get a td instead of a xar:td. xmlproc insist on creating the second one. don't know why -->
             <xsl:element name="td">
                 <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
             </xsl:element>

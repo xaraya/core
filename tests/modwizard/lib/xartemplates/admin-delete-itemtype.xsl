@@ -3,66 +3,41 @@
                 xmlns:xar="dd"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<!--
-
-    xartemplates/
-    =================================
-
--->
-
-<xsl:template match="/" mode="xd_admin-delete-itemtype">
-    <xsl:apply-templates mode="xd_admin-delete-itemtype" select="xaraya_module" />
-</xsl:template>
-
-
-<!--
-
-    THE FILE
-    ========
-
--->
-<xsl:template match="xaraya_module" mode="xd_admin-delete-itemtype">
-    <xsl:for-each select="database/table">
-    generating xartemplates/admin-delete-itemtype<xsl:value-of select="@name" />.xd ...<xsl:apply-templates select="." mode="xd_admin-delete-itemtype" />... finished
-    </xsl:for-each>
-</xsl:template>
-
 <xsl:template match="table" mode="xd_admin-delete-itemtype">
-<xsl:variable name="table" select="@name" />
+
+    <xsl:variable name="table" select="@name" />
+    <xsl:message>      * xartemplates/admin-delete-<xsl:value-of select="@name" />.xd</xsl:message>
+
 <xsl:document href="{$output}/xartemplates/admin-delete-{$table}.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-<xar:template file="header" type="module" />
+    <xar:template file="header" type="module" />
+    <div class="xar-mod-body">
+    <div style="padding: 1px;" class="xar-norm-outline">
 
 <form method="post" action="#$action#">
 
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />
 
-    <table>
-        <xar:data-form object="$object" />
-    </table>
+    <div class="xar-norm-outline">
+        #$preview#
+    </div>
 
     <!-- Only display hooks when necessary -->
-    <xsl:if test="@hooks = 'enable'">
-    <div>
-        <b>hooks</b>
-        <xar:if condition="!empty($hooks)">
-        <table>
-        <xar:foreach in="$hooks" key="$hookmodule">
-        <tr>
-            <td>#$hookmodule#</td>
-            <td>#$hooks[$hookmodule]#</td>
-        </tr>
-        </xar:foreach>
-        </table>
-        </xar:if>
-    </div>
-    </xsl:if>
+    <xar:if condition="!empty($hooks)">
+    <xar:foreach in="$hooks" key="$hookmodule">
+        #$hooks[$hookmodule]#
+    </xar:foreach>
+    </xar:if>
 
-        <input type="submit" name="confirm"     value="Delete" />
-        <input type="submit" name="cancel"      value="Cancel" />
+    <div style="clear: both; padding-top: 10px; text-align: center; width: 100%;">
+            <input type="submit" name="confirm" value="#xarML('Delete')#" />
+            <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
+    </div>
 
 </form>
+</div>
+</div>
 </xsl:document>
 </xsl:template>
 

@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/update.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/update.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/update.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -69,7 +69,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         $itemid = $object->updateItem();
         if (empty( $itemid) ) return; // throw back
 
-        <xsl:if test="@hooks = 'enable'">
         /*
          * call the hook 'item:update:API'
          */
@@ -83,7 +82,6 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,$itemid
             ,$args
             ,'<xsl:value-of select="$module_prefix" />' );
-        </xsl:if>
 
         /*
          * Compose the statusmessage
@@ -98,7 +96,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
-            ,'Modified <xsl:value-of select="label" /> ' . $itemid . ' -> ' . $item_title . '.' );
+            ,xarML( 'Modified <xsl:value-of select="label" /> [#(1)] - "#(2)"', $itemid, $item_title  ) );
 
         /*
          * This function generated no output, and so now it is complete we redirect
@@ -107,11 +105,10 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         xarResponseRedirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix" />'
-                ,'user'
-                ,'display'
+                ,'admin'
+                ,'view'
                 ,array(
-                    'itemid'    => $itemid
-                    ,'itemtype'  => <xsl:value-of select="@itemtype" /> )));
+                    'itemtype'  => <xsl:value-of select="@itemtype" /> )));
 
     } else {
 

@@ -49,6 +49,8 @@
 
     <xsl:for-each select="database/table[ @user='true' or @admin='true' ]">
 
+        <xsl:message>   - <xsl:value-of select="@name" /></xsl:message>
+
         <xsl:if test="@admin = 'true'">
 
             <xsl:apply-templates mode="xaritemtypeapi_new" select="." />

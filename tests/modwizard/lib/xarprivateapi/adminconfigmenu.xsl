@@ -10,7 +10,7 @@
 
 <xsl:template match="xaraya_module" mode="xarprivateapi_adminconfigmenu">
 
-    <xsl:message>      * xarprivateapi/configmenu.php</xsl:message>
+    <xsl:message>      * xarprivateapi/adminconfigmenu.php</xsl:message>
 
     <xsl:document href="{$output}/xarprivateapi/adminconfigmenu.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -37,28 +37,30 @@
 /**
  * Create a little submenu for the configuration screen.
  */
-function <xsl:value-of select="$module_prefix" />_privateapi_adminconfigmenu() {
+function <xsl:value-of select="$module_prefix" />_privateapi_adminconfigmenu( $itemtype ) {
 
     /*
      * Build the configuration submenu
      */
-    $menu = array(
-        array(
-            'label' =>  'Config',
+    $menu = array();
+    $menu[0] = array(
+            'title' =>  xarML( 'Config' ),
             'url'   =>  xarModURL(
                 '<xsl:value-of select="$module_prefix" />',
                 'admin',
-                'config' )));
+                'config' ));
 
     <xsl:for-each select="database/table[@admin='true']">
-    $menu[] = array(
-            'label' =>  '<xsl:value-of select="label/text()" />',
+    $menu[<xsl:value-of select="@itemtype" />] = array(
+            'title' =>  xarML( '<xsl:value-of select="label/text()" />' ),
             'url'   =>  xarModURL(
                 '<xsl:value-of select="$module_prefix" />',
                 'admin',
                 'config'
                 ,array( 'itemtype' => '<xsl:value-of select="@itemtype" />' )));
     </xsl:for-each>
+
+    $menu[$itemtype]['url'] = "";
 
     return $menu;
 

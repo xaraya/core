@@ -12,7 +12,7 @@
 
     <xsl:variable name="itemtype" select="@name" />
 
-    <xsl:message>      * <xsl:value-of select="$itemtype" />api/create.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/create.php</xsl:message>
 
     <xsl:document href="{$output}/xar{$itemtype}api/create.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
 
@@ -68,8 +68,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         $itemid = $object->createItem();
         if (empty( $itemid) ) return; // throw back
 
-        <xsl:if test="@hooks = 'enable'">// The 'api:create' hook is called from dynamic data during createItem() !</xsl:if>
-
+        // The 'api:create' hook is called from dynamic data during createItem() !
         $item_title = xarModAPIFunc(
             '<xsl:value-of select="$module_prefix" />'
             ,'user'
@@ -80,7 +79,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
-            ,'Created <xsl:value-of select="label" /> ' . $itemid .' -> '.  $item_title .'.' );
+            ,xarML( 'Created <xsl:value-of select="label" /> [#(1)] - "#(2)"', $itemid, $item_title  ) );
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
