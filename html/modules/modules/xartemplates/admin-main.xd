@@ -21,12 +21,11 @@
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
                 <p><xar:mlstring>
-                From the menu, you have three choices.  "View", "Configure Hooks", and "Certified Releases". 
+                From the menu, you have two choices.  "View", and "Configure Hooks". 
                 </xar:mlstring></p>
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Configure Hooks -- Allows you to set certain hooks for modules to be reused (such as allowing comments on a module's data)</xar:mlstring></li>
-                    <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcements from Xaraya.com</xar:mlstring></li>
                 </ul>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
