@@ -82,7 +82,7 @@ function base_menublock_display($blockinfo)
 
     // Modules
     if (!empty($vars['displaymodules'])) {
-        $mods = pnModGetUserMods();
+        $mods = pnModGetList(array('UserCapable' => 1));
 
         // Separate from current content, if any
         if ($content == 1) {

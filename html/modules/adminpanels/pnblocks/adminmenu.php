@@ -50,7 +50,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     
     // are there any admin modules, then get their names
     // checking as early as possible :)
-    $mods = pnModGetAdminMods();
+    $mods = pnModGetList(array('AdminCapable' => 1));
 	if(!$mods) {
 	// there aren't any admin modules, dont display admin menus
 	    return;

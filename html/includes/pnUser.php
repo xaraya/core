@@ -655,7 +655,7 @@ function pnUserComparePasswords($givenPassword, $realPassword, $userName, $crypt
  */
 function pnUser_getThemeName()
 {
-    if (!pnUserLoggedIn()) {
+    if (!pnUserIsLoggedIn()) {
         return;
     }
     $themeName = pnUserGetVar('Theme');

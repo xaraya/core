@@ -10,13 +10,8 @@
 // ----------------------------------------------------------------------
 
 /*
- * Core version informations - should be upgraded on each release for
- * better control on config settings
+ * Core version informations - Moved to Base Module
  */
-define('PNCORE_VERSION_NUM', '0.8');
-define('PNCORE_VERSION_ID',  'PostNuke');
-define('PNCORE_VERSION_SUB', 'adam_baum');
-
 /*
  * System dependencies for optional systems
  * ----------------------------------------------
