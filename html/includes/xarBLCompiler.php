@@ -2994,6 +2994,8 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
+    var $_name;
+
     function render()
     {
         return '';
@@ -3007,20 +3009,23 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:set> tag.', $this);
             return;
         }
+        // Allow specifying name="test" and name="$test" and deprecate the $ form over time
+        $name = str_replace(XAR_TOKEN_VAR_START,'',$name);
+        $this->_name = str_replace(XAR_TOKEN_VAR_START,'',$name);
 
-        /*
-        if (count($this->children) != 1) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:set> tag can contain only one child tag.', $this);
-            return;
-        }
-        */
-
-        return $name;
+        return XAR_TOKEN_VAR_START . $name;
     }
 
     function renderEndTag()
     {
-        return '';
+        /**
+         *  Register the variable in the bl_data array so it's passed to included templates
+         *  see the xar:template tag how this will work and bug 1120 for all the details
+         */
+        // FIXME: add some checking whether $name already is a template variable, or consider
+        //        using tpl: specials for registering.
+
+        return ' $_bl_data[\''.$this->_name.'\'] = '. XAR_TOKEN_VAR_START . $this->_name.';';
     }
 
     function isAssignable()
