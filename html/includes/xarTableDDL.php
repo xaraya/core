@@ -342,6 +342,13 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
+            if ($index['unique'] == true) {
+                $sql = 'ALTER TABLE '.$tableName.' ADD UNIQUE '.$index['name'];
+            } else {
+                $sql = 'ALTER TABLE '.$tableName.' ADD INDEX '.$index['name'];
+            }
+            $sql .= ' ('.join(',', $index['fields']).')';
+            break;
         case 'postgres':
         case 'oci8':
             if ($index['unique'] == true) {
@@ -394,7 +401,7 @@ function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            $sql .= 'DROP INDEX '.$index['name'].' ON '.$tableName;
+            $sql .= 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
         case 'postgres':
         case 'oci8':
