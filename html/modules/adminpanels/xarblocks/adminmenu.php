@@ -92,62 +92,93 @@ function adminpanels_adminmenublock_display($blockinfo){
     }
     
     // which module is loaded atm?
-    // we need it's name and type - dealing only with admin type mods, aren't we?
-    list($thismodname, $thismodtype) = xarRequestGetInfo();
+    // we need it's name, type and function - dealing only with admin type mods, aren't we?
+    list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
     
     // Sort Order, Status, Common Labels and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
     
-    switch(strtolower($menustyle)) {
+    switch(strtolower($menustyle)){
         case 'byname':
                 // sort by name
                 foreach($mods as $mod){
                     $label = $mod['name'];
-                    $link = xarModURL($mod['name'] ,'admin', 'main', array());
+                    $link = xarModURL($label ,'admin', 'main', array());
 
-                    // depending on which module is currently loaded we display accordingly
+                    // depending on which module is currently loaded, prepare display data
                     if($label == $thismodname && $thismodtype == 'admin'){
+                        // clarification (to avoid new template bugs)
+                        // this module is currently loaded (active), we need to display
+                        // 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // lets also add clear identifier for the template that this module is the active one
                         $labelDisplay = ucwords($label);
-                        $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
-
-                        // Load API for individual links. 
-                        xarModAPILoad($label, 'admin'); // throw back
-
-                        // The user API function is called.
-                        $menulinks = xarModAPIFunc($label,
-                                                   'admin',
-                                                   'getmenulinks');
-                        if (!empty($menulinks)) {
+                        $adminmods[] = array(   'label'     => $labelDisplay, 
+                                                'link'      => '', 
+                                                'modactive' => 1);
+                                                
+                        // For active module we need to display the mod functions links
+                        xarModAPILoad($label, 'admin');
+                        // call the api function to obtain function links
+                        $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
+                        // scan array and prepare the links
+                        if (!empty($menulinks)){
                             $indlinks = array();
                             foreach($menulinks as $menulink){
-                                $indlinks[] = array('adminlink' => $menulink['url'], 'adminlabel' => $menulink['label'], 'admintitle' => $menulink['title']);
+                                // please note how we place the marker against active function link
+                                // a quick hack to enable active function link identification
+                                // <andyv> i think john's method to provide functions links should be changed
+                                // TODO: provide a more robust and core-like method for this
+                                if(!strstr($menulink['url'], 'func='.$thisfuncname)){
+                                    $funcactive = 0;
+                                }else{
+                                    $funcactive = 1;
+                                }
+                                
+                                $indlinks[] = array('adminlink'     => $menulink['url'], 
+                                                    'adminlabel'    => $menulink['label'], 
+                                                    'admintitle'    => $menulink['title'],
+                                                    'funcactive'    => $funcactive);
                             } 
-                        } else {
+                        }else{
+                            // not sure if we need this
                             $indlinks= '';
                         }
                     }else{
-                        $modid = xarModGetIDFromName($mod['name']);
+                        // clarification (to avoid new template bugs)
+                        // this module is currently not loaded (inactive), we need to display
+                        // 1. link 2. label 3. alt text ($desc var in this case)
+                        // lets also add clear identifier for the template that this module is not the active one
+                        $modid = xarModGetIDFromName($label);
                         $modinfo = xarModGetInfo($modid);
                         if($modinfo){
+                            // is this in the legacy now?
                             $desc = $modinfo['description'];
                         }
                         $labelDisplay = ucwords($label);
-                        $adminmods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
+                        $adminmods[] = array(   'label'     => $labelDisplay, 
+                                                'link'      => $link,
+                                                'desc'      => $desc,
+                                                'modactive' => 0);
                     }
                 }
                 // prepare the data for template(s)
+                
+                // not sure if we need this
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
 
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods,
-                                                                    'indlinks'     => $indlinks,
-                                                                    'menustyle'     => $menustyle,
-                                                                    'logouturl'     => $logouturl,
-                                                                    'logoutlabel'   => $logoutlabel));
+                $data = xarTplBlock('adminpanels',
+                                    'sidemenu', 
+                                    array(  'adminmods'     => $adminmods,  
+                                            'indlinks'      => $indlinks,
+                                            'menustyle'     => $menustyle,
+                                            'logouturl'     => $logouturl,
+                                            'logoutlabel'   => $logoutlabel,
+                                            'marker'        => $marker));
                 // this should do for now
                 break;
 
@@ -169,37 +200,60 @@ function adminpanels_adminmenublock_display($blockinfo){
                     // depending on which module is currently loaded we display accordingly
                     // also we are treating category lables in ML fasion
                     if($label == $thismodname && $thismodtype == 'admin'){
+                        // clarification (to avoid new template bugs)
+                        // this module is currently loaded (active), we need to display
+                        // 1. blank label 2. no link 3. no alt text 4. links to module functions
+                        // lets also add clear identifier for the template that this module is the active one
                         $labelDisplay = ucwords($label);
-                        $adminmods[] = array('label' => $labelDisplay, 'link' => '', 'marker' => $marker);
-
-                        // Load API for individual links. 
-                        xarModAPILoad($label, 'admin'); // throw back
-
-                        // The user API function is called.
-                        $menulinks = xarModAPIFunc($label,
-                                                   'admin',
-                                                   'getmenulinks');
+                        $adminmods[] = array(   'label'     => $labelDisplay, 
+                                                'link'      => '', 
+                                                'modactive' => 1);
+                        
+                        // For active module we need to display the mod functions links
+                        xarModAPILoad($label, 'admin');
+                        // call the api function to obtain function links
+                        $menulinks = xarModAPIFunc($label, 'admin', 'getmenulinks');
+                        // scan array and prepare the links
                         if (!empty($menulinks)) {
                             $indlinks = array();
                             foreach($menulinks as $menulink){
-                                $indlinks[] = array('adminlink' => $menulink['url'], 'adminlabel' => $menulink['label'], 'admintitle' => $menulink['title']);
+                                // please note how we place the marker against active function link
+                                if(!strstr($menulink['url'], 'func='.$thisfuncname)){
+                                    $funcactive = 0;
+                                }else{
+                                    $funcactive = 1;
+                                }
+                                
+                                $indlinks[] = array('adminlink'     => $menulink['url'], 
+                                                    'adminlabel'    => $menulink['label'], 
+                                                    'admintitle'    => $menulink['title'],
+                                                    'funcactive'    => $funcactive);
                             } 
-                        } else {
+                        }else{
+                            // not sure if we need this
                             $indlinks= '';
                         }
-                    } else {
+                    }else{
                         switch (strtolower($label)) {
                             case 'global':
-                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    $adminmods[] = array(   'label' => xarML($label), 
+                                                            'link'  => false, 
+                                                            'modactive' => 0);
                                     break;
                             case 'content':
-                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    $adminmods[] = array(   'label' => xarML($label), 
+                                                            'link'  => false, 
+                                                            'modactive' => 0);
                                     break;
                             case 'users & groups':
-                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    $adminmods[] = array(   'label' => xarML($label), 
+                                                            'link'  => false, 
+                                                            'modactive' => 0);
                                     break;
                             case 'miscellaneous':
-                                    $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
+                                    $adminmods[] = array(   'label' => xarML($label), 
+                                                            'link'  => false, 
+                                                            'modactive' => 0);
                                     break;
                             default:
                                     $modid = xarModGetIDFromName($label);
@@ -208,7 +262,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                                         $desc = $modinfo['description'];
                                     }
                                     $labelDisplay = ucwords($label);
-                                    $adminmods[] = array('label' => $labelDisplay, 'link' => $link, 'desc' => $desc, 'marker' => '');
+                                    $adminmods[] = array(   'label'     => $labelDisplay, 
+                                                'link'      => $link,
+                                                'desc'      => $desc,
+                                                'modactive' => 0);
                                     break;
 
                         }
@@ -219,25 +276,33 @@ function adminpanels_adminmenublock_display($blockinfo){
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
-                                                                    'indlinks'     => $indlinks,
-                                                                    'menustyle'     => $menustyle,
-                                                                    'logouturl'     => $logouturl,
-                                                                    'logoutlabel'   => $logoutlabel));
+                $data = xarTplBlock('adminpanels',
+                                    'sidemenu', 
+                                    array(  'adminmods'     => $adminmods,  
+                                            'indlinks'      => $indlinks,
+                                            'menustyle'     => $menustyle,
+                                            'logouturl'     => $logouturl,
+                                            'logoutlabel'   => $logoutlabel,
+                                            'marker'        => $marker));
+                // this should do for now
                 break;
 
         case 'byweight':
                 // sort by weight
                 xarModAPILoad('adminpanels', 'admin');
-                $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
+                // $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
 
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
-                                                                    'menustyle'     => $menustyle,
-                                                                    'logouturl'     => $logouturl,
-                                                                    'logoutlabel'   => $logoutlabel));
+                $data = xarTplBlock('adminpanels',
+                                    'sidemenu', 
+                                    array(  'adminmods'     => $adminmods = array(),  
+                                            'indlinks'      => $indlinks ='',
+                                            'menustyle'     => $menustyle,
+                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&type=admin&func=modifyconfig',
+                                            'logoutlabel'   => $logoutlabel ='not implemented',
+                                            'marker'        => $marker));
                 break;
 
         case 'bygroup':
@@ -248,10 +313,14 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
-                                                                    'menustyle'     => $menustyle,
-                                                                    'logouturl'     => $logouturl,
-                                                                    'logoutlabel'   => $logoutlabel));
+                $data = xarTplBlock('adminpanels',
+                                    'sidemenu', 
+                                    array(  'adminmods'     => $adminmods = array(),  
+                                            'indlinks'      => $indlinks ='',
+                                            'menustyle'     => $menustyle,
+                                            'logouturl'     => $logouturl ='index.php?module=adminpanels&type=admin&func=modifyconfig',
+                                            'logoutlabel'   => $logoutlabel ='not implemented',
+                                            'marker'        => $marker));
                 break;
 
     }
