@@ -148,3 +148,23 @@ function adminpanels_adminmenublock_update($blockinfo)
     return $blockinfo;
 }
 
+/**
+ * utility function to add module links
+ */
+function addMenuStyledUrl($name, $url, $comment)
+{
+        // Bullet list
+        if (empty($url)) {
+            // Separator
+            if (empty($name)) {
+                $content = "<br />";
+            } else {
+                $content = "<br /><b>$name</b><br />";
+            }
+        } else {
+	    // End Bracket Linking
+            $content = "<strong><big>&middot;</big></strong>&nbsp;<a class=\"xar-normal\" href=\"$url\" title=\"$comment\">$name</a><br />";
+        }
+
+    return $content;
+}
