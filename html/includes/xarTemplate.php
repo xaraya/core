@@ -135,10 +135,10 @@ function xarTplSetThemeName($themeName)
 function xarTplSetThemeDir($themeDir)
 {
     assert('$themeDir != "" && $themeDir{0} != "/"');
+    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
     if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
         return false;
     }
-    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
     return true;
 }
 
