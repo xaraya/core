@@ -68,14 +68,12 @@ function adminpanels_adminmenublock_display($blockinfo){
     
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
-    $mods = xarModGetList(array('AdminCapable' => 1), NULL, NULL, 'name');
+    $mods = xarModGetList(array('AdminCapable' => 1), NULL, NULL, 'class');
 	if(empty($mods)) {
-	// there aren't any admin modules, dont display adminmenu
+        // there aren't any admin modules, dont display adminmenu
 	    return;
 	}
-    
-    // TODO: display content sensitive link to the manual-online_help
-    
+        
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
     
