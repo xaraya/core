@@ -1,13 +1,18 @@
 <?php
-// File: $Id: s.xaradmin.php 1.35 03/01/16 18:54:29+00:00 johnny@falling.local.lan $
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Paul Rosania
-// Purpose of file: Installer display functions
-// ----------------------------------------------------------------------
+
+/**
+ * File: $Id$
+ *
+ * Installer admin display functions
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ * 
+ * @subpackage module name
+ * @author Paul Rosania
+ * @author Marcel van der Boom <marcel@hsdev.com>
+*/
 
 
 /**
@@ -169,11 +174,6 @@ function installer_admin_phase5()
        $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3)) or dbPrefix (#(4)) or dbType (#(5)).'
               , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType);
        xarCore_die($msg);
-    }
-
-    
-    if (!xarInstallAPILoad('installer','admin')) {
-        return;
     }
 
     // Save config data

@@ -123,10 +123,15 @@ function xarInstallAPIFunc($modName, $modType = 'user', $funcName = 'main', $arg
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     if (!function_exists($modAPIFunc)) {
-        $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException($msg));
-        return;
+        // attempt to load the install api
+        xarInstallAPILoad($modName,$modType);
+        // let's check for the function again to be sure
+        if (!function_exists($modAPIFunc)) {
+            $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                            new SystemException($msg));
+            return;
+        }
     }
 
     return $modAPIFunc($args);
