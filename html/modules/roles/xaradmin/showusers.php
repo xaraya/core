@@ -123,7 +123,7 @@ function roles_admin_showusers()
     $numitems = xarModGetVar('roles', 'rolesperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
-    $q->run();
+    if(!$q->run()) return;
 
     $data['totalselect'] = $q->getrows();
 
