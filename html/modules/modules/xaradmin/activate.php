@@ -22,9 +22,8 @@ function modules_admin_activate()
     // Activate
     $activated = xarModAPIFunc('modules',
                               'admin',
-                              'setstate',
-                              array('regid' => $id,
-                                    'state' => XARMOD_STATE_ACTIVE));
+                              'activate',
+                              array('regid' => $id));
 
     //throw back
     if (!isset($activated)) return;

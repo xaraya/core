@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Initialize module with its dependencies.
+ * Install a module with all its dependencies.
  *
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies activated, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_initialisewithdependencies($args) 
+function modules_adminapi_installwithdependencies($args) 
 {
 	
 	$mainId = $args['regid'];
@@ -30,6 +30,11 @@ function modules_adminapi_initialisewithdependencies($args)
 		return;
 	}
 
+	// Make xarModGetInfo not cache anything...
+	//We should make a funcion to handle this or maybe whenever we
+	//have a central caching solution...
+	$GLOBALS['xarMod_noCacheState'] = true;
+
 	// Get module information
 	$modInfo = xarModGetInfo($mainId);
 	if (!isset($modInfo)) {
@@ -38,13 +43,17 @@ function modules_adminapi_initialisewithdependencies($args)
 	}
 
 	switch ($modInfo['state']) {
-		case XARMOD_STATE_INACTIVE:
 		case XARMOD_STATE_ACTIVE:
 		case XARMOD_STATE_UPGRADED: 
-			//It is already initialised
+			//It is already installed
 			return true;
+		case XARMOD_STATE_INACTIVE:
+			$initialised = true;
+			break;
+
 		default:
-		break;
+			$initialised = false;
+			break;
 	}
 
 
@@ -54,8 +63,8 @@ function modules_adminapi_initialisewithdependencies($args)
 		$dependency = array();
 	}
 
-	//The dependencies are ok, they shouldnt change in the middle of the 
-	//script execution, so let's assume this.
+	//The dependencies are ok, assuming they shouldnt change in the middle of the 
+	//script execution.
 	foreach ($dependency as $module_id => $conditions) {
 		if (is_array($conditions)) {
 			//The module id is in $modId
@@ -65,16 +74,26 @@ function modules_adminapi_initialisewithdependencies($args)
 			$modId = $conditions;
 		}
 
-		if (!xarModAPIFunc('modules', 'admin', 'initialisewithdependencies', array('regid'=>$modId))) {
+		if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
 			$msg = xarML('Unable to initialize dependecy module with ID (#(1)).', $modId);
 			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 			return;
 		}
 	}
 
-	// Finally, now that dependencies are dealt with, initialize the module
-	if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
-		$msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+	//Checks if the module is already initialised
+	if (!$initialised) {
+		// Finally, now that dependencies are dealt with, initialize the module
+		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
+			$msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+			return;
+		}
+	}
+
+	// And activate it!
+	if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
+		$msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
 		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;
 	}

@@ -82,7 +82,7 @@ function modules_adminapi_initialise($args)
         $func = $modInfo['name'] . '_init';
         if (function_exists($func)) {
             if ($func() != true) {
-		    	$msg = xarML('Module initialisation failed because the function returned false');
+		    	$msg = xarML('Module initialisation failed because the function (#(1)) returned false', $func);
 		        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
         		return;
             }

@@ -26,7 +26,7 @@ function modules_admin_initialise()
 		//Handle the exception with a nice GUI:
 		xarExceptionHandled();
 
-    	//Checking if we have already sent a GUI to the user:
+    	//Checking if the user has already passed thru the GUI:
     	xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
     } else {
     	//No dependencies problems, jump dependency GUI
@@ -47,7 +47,7 @@ function modules_admin_initialise()
    	
    	//Initialize with dependencies, first initialise the necessary dependecies
    	//then the module itself
-	if (!xarModAPIFunc('modules','admin','initialisewithdependencies',array('regid'=>$id))) {
+	if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
 		//Call exception
 		return;	
 	} // Else
@@ -55,21 +55,8 @@ function modules_admin_initialise()
     $minfo = xarModGetInfo($id);
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-    
-    // attempt to activate
-    $activated = xarModAPIFunc('modules',
-                               'admin',
-                               'activate',
-                               array('regid' => $id));
-	
-	//For some strange reason it is not sending me to list anymore?
-    if (!isset($activated)){                             
-        // something gone wrong with normal activation
-        xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
-    } else {
-        // done with complete install cycle i.e. init+activate in a single step
-        xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-    }    
+
+    xarResponseRedirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
 
     return true;
 }

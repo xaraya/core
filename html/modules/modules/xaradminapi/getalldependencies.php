@@ -103,12 +103,12 @@ function modules_adminapi_getalldependencies($args)
 		
 		//TODO: Add version checks later on
 		switch ($modInfo['state']) {
-			 case XARMOD_STATE_INACTIVE:
-			 case XARMOD_STATE_ACTIVE:
-			 case XARMOD_STATE_UPGRADED: 
+			case XARMOD_STATE_ACTIVE:
+			case XARMOD_STATE_UPGRADED: 
 				//It is satisfied if already initialized
 				$dependency_array['satisfied'][] = $modInfo;
 			break;
+			case XARMOD_STATE_INACTIVE:
 			default:
 				//If not then it is satisfiable
 				$dependency_array['satisfiable'][] = $modInfo;

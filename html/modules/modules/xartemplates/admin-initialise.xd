@@ -1,6 +1,6 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Module Initialization with unmet Dependencies</xar:mlstring></h2>
+    <h2><xar:mlstring>Module Instalation with unmet Dependencies</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
     <form action="#xarModURL('modules','admin','initialise')#" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" id="id" value="#$id#" />
@@ -61,7 +61,7 @@
 			</table>
         	<br />
 		<xar:else />
-	        <input type="submit" name="command" id="command" value="#xarML('Initiliase All')#" align="middle" tabindex="9" />
+	        <input type="submit" name="command" id="command" value="#xarML('Install All')#" align="middle" tabindex="9" />
 	        <br />
         </xar:if>
 
