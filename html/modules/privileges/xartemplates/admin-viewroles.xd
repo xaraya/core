@@ -15,7 +15,7 @@
  window.onload = doOnLoad;
  window.onunload = doOnUnload;
 </script>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Priviledges Administration</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>View</xar:mlstring></h2><br />
 <div style="margin: auto;">
 <table border="0" width="100%" cellpadding="2">
