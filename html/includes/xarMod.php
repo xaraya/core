@@ -933,15 +933,13 @@ function xarModPrivateLoad($modName, $modType)
     if (!file_exists($fileName)){
             $fileName = "modules/$modDir/pn$modType.php";
     }
-
-    if (!file_exists($fileName)) {
-        // File does not exist
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $fileName);
-        return;
+    
+    // Removed the execption.  Causing some wierd results with modules without an api.
+    if (file_exists($fileName)) {
+        // Load file
+        include_once($fileName);
     }
 
-    // Load file
-    include_once($fileName);
 
     // MrB: this was a fix in main (the strtolower thing)
     // Make sure we access the case with lower case key

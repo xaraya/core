@@ -307,7 +307,7 @@ function xarBlock_render($blockInfo)
 // this lets the security system know what module we're in
     xarModSetVar('blocks','currentmodule',$modName);
 
-
+/* Lets get rid of these for a bit.  Blocks shouldn't kill a site.
     if (empty($modName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
@@ -316,6 +316,7 @@ function xarBlock_render($blockInfo)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'blockType');
         return;
     }
+*/
 
     if (!xarBlock_load($modName, $blockType)) return;
 
@@ -339,9 +340,6 @@ function xarBlock_render($blockInfo)
             }
             $blockInfo['content'] = xarTplBlock($modName, $blockType, $blockInfo['content'], $templateName);
         }
-    } else {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $displayFuncName);
-        return;
     }
 
     // Determine which block box template to use

@@ -3,30 +3,9 @@
 <div style="margin: auto;">
 	<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<table>
-			<tr>
-				<td align="left">
-					<xar:mlstring>Username</xar:mlstring>
-				</td>
-				<td align="left">
-					<input type="text" name="name" id="name" value="" size="32" maxlength="32" tabindex="1" />
-				</td>
-			</tr>
-			<tr align="left" valign="middle">
-				<td align="left">
-					<xar:mlstring>User Number</xar:mlstring>
-				</td>
-				<td align="left">
-					<input type="text" name="number" id="number" value="" size="5" maxlength="5" tabindex="2" />
-				</td>
-			</tr>
-		</table>
-		<xar:mlstring>Message</xar:mlstring>
-		<br />
-		<textarea name="confirmationemail" id="confirmationemail" wrap="soft" rows="20" cols="50" tabindex="1"></textarea>
-		<br /> 
-		<br />
-		<input type="submit" value="Submit new confirmation email" align="middle" tabindex="2" />
+		<p><xar:mlstring>Message</xar:mlstring></p>
+		<p><textarea name="email" id="email" wrap="soft" rows="20" cols="50"></textarea></p>
+		<p><input type="submit" value="Submit" align="middle" /></p>
 	</form>
 </div>
 </div>

@@ -9,53 +9,51 @@
 <input type="radio" name="what" id="what" value="1" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="1"  />
-</xar:if>General info
+</xar:if><xar:mlstring>General info</xar:mlstring>
 
 <xar:if condition="$what eq 2">
 <input type="radio" name="what" id="what" value="2" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="2"  />
-</xar:if>Credits
+</xar:if><xar:mlstring>Credits</xar:mlstring>
 
 <xar:if condition="$what eq 4">
 <input type="radio" name="what" id="what" value="4" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="4"  />
-</xar:if>Configuration
+</xar:if><xar:mlstring>Configuration</xar:mlstring>
 
 <xar:if condition="$what eq 8">
 <input type="radio" name="what" id="what" value="8" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="8"  />
-</xar:if>Modules
+</xar:if><xar:mlstring>Modules</xar:mlstring>
 
 <xar:if condition="$what eq 16">
 <input type="radio" name="what" id="what" value="16" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="16"  />
-</xar:if>Environment
+</xar:if><xar:mlstring>Environment</xar:mlstring>
 
 <xar:if condition="$what eq 32">
 <input type="radio" name="what" id="what" value="32" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="32"  />
-</xar:if>Variables
+</xar:if><xar:mlstring>Variables</xar:mlstring>
 
 <xar:if condition="$what eq 64">
 <input type="radio" name="what" id="what" value="64" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="64"  />
-</xar:if>License
+</xar:if><xar:mlstring>License</xar:mlstring>
 
 <xar:if condition="$what eq -1">
 <input type="radio" name="what" id="what" value="-1" checked="checked" />
 <xar:else />
 <input type="radio" name="what" id="what" value="-1"  />
-</xar:if>All
-<input type="submit" value="Refresh" />
+</xar:if><xar:mlstring>All</xar:mlstring>
+&nbsp;&nbsp;<input type="submit" value="Refresh" />
 </form>
-
-<br />
-#$phpinfo#
+<p>#$phpinfo#</p>
 </div>
 </div>
