@@ -13,13 +13,13 @@
                 </dt>
                 <xar:if condition="$tab eq 'realms'">
                     <dd class="active">
-                        <a href="#xarModURL('privileges', 'admin', 'modifyconfig', array('tab' => 'realms'))#">
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms">
                             <xar:mlstring>Realms</xar:mlstring>
                         </a>
                     </dd>    
                 <xar:else />
                     <dd>
-                        <a href="#xarModURL('privileges', 'admin', 'modifyconfig', array('tab' => 'realms'))#">    
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms">    
                             <xar:mlstring>Realms</xar:mlstring>
                         </a>
                     </dd>    
@@ -31,7 +31,7 @@
     <xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
         <br />
         <xar:if condition="$tab eq 'realms'">
-            <form method="post" action="#xarModURL('privileges', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
+            <form method="post" action="#xarModURL('privileges', 'admin', 'modifyconfig')#" enctype="application/x-www-form-urlencoded" >
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="update" />
                 <input type="hidden" name="tab" id="tab" value="#$tab#" />

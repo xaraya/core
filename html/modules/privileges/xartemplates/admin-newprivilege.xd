@@ -210,8 +210,7 @@ document.forms['privilegeform'].submit();}
             <xar:elseif condition="!empty($target)" />
                 <p>
                 <xar:set name="targetlinktitle"><xar:mlstring>Use Wizard</xar:mlstring></xar:set>
-                <xar:set name="targetlink">"href=\"$target\" title=\"$targetlinktitle\""</xar:set>
-                <a #$targetlink#><xar:mlstring>Specify the instances that apply for this privilege</xar:mlstring></a>
+                <a href="#$target#" title="#$targetlinktitle#"><xar:mlstring>Specify the instances that apply for this privilege</xar:mlstring></a>
                 </p>
             </xar:if>
         </xar:if>

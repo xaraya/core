@@ -13,7 +13,7 @@
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
-                            <a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $parents[$i]['parentid']))#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
+                            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parents[$i]['parentid']#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                         </dd>
                     </xar:if>
                     <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -29,16 +29,16 @@
                 <xar:mlstring>Actions</xar:mlstring> :
             </dt>
             <dd>
-                <a href="#xarModURL('privileges', 'admin', 'displayprivilege', array('pid' => $pid))#"><xar:mlstring>Display</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$pid#"><xar:mlstring>Display</xar:mlstring></a>
             </dd>    
             <dd>
-                <a href="#xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid))#"><xar:mlstring>Modify</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$pid#"><xar:mlstring>Modify</xar:mlstring></a>
             </dd>    
             <dd>
-                <a href="#xarModURL('privileges', 'admin', 'deleteprivilege', array('pid' => $pid))# "class="active"><xar:mlstring>Delete</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;pid=#$pid#" class="active"><xar:mlstring>Delete</xar:mlstring></a>
             </dd>    
             <dd>
-                <a href="#xarModURL('privileges', 'admin', 'viewroles', array('pid' => $pid))#"><xar:mlstring>Groups/Users</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
             </dd>    
         </dl>
     </div>
