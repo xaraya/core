@@ -246,7 +246,7 @@ TD.xar-alt {}
    font-weight: bold;
    font-family: Verdana,Arial,Helvetica,sans-serif;
    padding-left: .5em;
-   padding-bottom: .5em;
+   padding-bottom: .3em;
 }
 .xar-menu-item:hover {
    background-color: #f0f0f0;
