@@ -67,7 +67,7 @@ function saveBlockOrder(f) {
 <center>
 <form method="post" action="&xar-modurl-blocks-admin-update_group;" onsubmit="saveBlockOrder(this);">
     <input type="hidden" name="authid" value="&xar-var-authid;" />
-    <input type="hidden" name="gid" value="<xar:var name="$group.id" />" />
+    <input type="hidden" name="gid" value="<xar:var name="$group['id']" />" />
     <input type="hidden" name="group_instance_order" value="" />
     <table border="0" width="300">
         <tr>
@@ -75,7 +75,7 @@ function saveBlockOrder(f) {
                 Name:
             </td>
             <td>
-                <input type="text" name="group_name" value="<xar:var name="$group.name" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_name" value="<xar:var name="$group['name']" />" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -87,7 +87,7 @@ function saveBlockOrder(f) {
                     <tr>
                         <td rowspan="2">
                             <select name="group_instances" size="&xar-var-instance_count;">
-                                <xar:loop name="$group.instances">
+                                <xar:loop name="$group['instances']">
                                     <option value="&xar-var-id;"><xar:var name="$title" /></option>
                                 </xar:loop>
                             </select>
@@ -109,7 +109,7 @@ function saveBlockOrder(f) {
                 Template:
             </td>
             <td>
-                <input type="text" name="group_template" value="<xar:var name="$group.template" />" length="40" maxlength="255" style="width:150px;" />
+                <input type="text" name="group_template" value="<xar:var name="$group['template']" />" length="40" maxlength="255" style="width:150px;" />
             </td>
         </tr>
         <tr>
