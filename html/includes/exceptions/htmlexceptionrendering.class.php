@@ -18,7 +18,6 @@ class HTMLExceptionRendering extends ExceptionRendering
 
     function getTitle() { return xarVarPrepForDisplay(parent::getTitle()); }
     function getShort() { return xarVarPrepForDisplay(parent::getShort()); }
-    function getLong() { return xarVarPrepForDisplay(parent::getLong()); }
     function getHint() { return xarVarPrepForDisplay(parent::getHint()); }
     function getMsg() { return xarVarPrepForDisplay(parent::getMsg()); }
 
