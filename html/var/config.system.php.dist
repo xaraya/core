@@ -40,5 +40,5 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  *                your db does no query caching (mysql 3.x for exampl)
  *                this might speed things up a little
 */
-$systemConfiguration['DB.UseADODBCache'] = true;
+$systemConfiguration['DB.UseADODBCache'] = false;
 ?>
