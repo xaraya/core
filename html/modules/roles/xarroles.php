@@ -200,6 +200,7 @@ var $expandedbox = '<img class="box" src="modules/roles/xarimages/k2.gif" alt=""
 var $collapsedbox = '<img class="box" src="modules/roles/xarimages/k3.gif" alt="" style="vertical-align: middle"/>';
 var $blank = '<img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle"/>';
 var $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+var $smallblank ='<span style="padding-left: 0em; padding-right: 0em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
 
 // we'll use this to check whether a group has already been processed
 var $alreadydone;
@@ -258,7 +259,7 @@ function drawbranch($node){
     }
     else {
         $drawchildren = true;
-        array_push($this->alreadydone,$object['uid']);
+        $this->alreadydone[] = $object['uid'];
     }
 
 // is this a branch?
@@ -330,8 +331,9 @@ function drawbranch($node){
                  'admin',
                  'testprivileges',
                  array('uid'=>$object['uid'])) .
-                 '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 1em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
+                 '" title="Test this Groups\'s Privileges" style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/roles/xarimages/test.gif" style="vertical-align: middle;" /></a>';
     }
+    $this->html .= $this->smallblank;
 
 // this table hold the index, the tree drawing gifs and the info about the role
     $this->html .= $this->drawindent();
