@@ -10,7 +10,7 @@
     <h2><xar:mlstring>Modify Instance</xar:mlstring></h2>
 
     <form class="xar-fullwidth" action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-		<div class="xar-fullwidth">
+        <div class="xar-fullwidth">
         <p style="float: left;">
             <span style="float: left; width: 20%; text-align: right;">
                 <span class="help" title="#xarML('This is the type of block that is being modified.')#">
