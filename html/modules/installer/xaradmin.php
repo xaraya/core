@@ -166,6 +166,8 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
+    xarVarSetCached('installer','installing', true);
+
     // Get arguments
     if (!xarVarFetch('install_database_host','str:1:',$dbHost)) return;
     if (!xarVarFetch('install_database_name','str:1:',$dbName)) return;
@@ -216,7 +218,6 @@ function installer_admin_phase5()
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
 
-    xarVarSetCached('installer','installing', true);
     include_once 'includes/xarSecurity.php';
     xarSecurity_init();
 
@@ -241,22 +242,13 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
+    xarVarSetCached('installer','installing', true);
     xarTplSetThemeName('installer');
 
     // activate the security stuff
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
-
-    // log in admin user
-    if (!xarUserLogIn('Admin', 'password', 0)) {
-        $msg = xarML('Cannot log in the default administrator. Check your setup.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    xarVarDelCached('installer','installing');
 
     // Set up default user properties, etc.
 
@@ -337,8 +329,7 @@ function installer_admin_bootstrap()
 function installer_admin_create_administrator()
 {
 
-    // Security Check
-    if(!xarSecurityCheck('AdminInstaller')) return;
+    xarVarSetCached('installer','installing', true);
 
     xarTplSetThemeName('installer');
     $data['language'] = 'English';
@@ -390,6 +381,7 @@ function installer_admin_create_administrator()
                    'state' => 3);
 
     xarModSetVar('roles', 'lastuser', $userName);
+    xarModSetVar('roles', 'adminpass', $pass);
 
     // create a role from the data
     $role = new xarRole($pargs);
@@ -521,9 +513,6 @@ function installer_admin_choose_configuration()
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Choose your configuration');
 
-    // Security Check
-    if(!xarSecurityCheck('AdminInstaller')) return;
-
     $basedir = realpath('modules/installer/xarconfigurations');
 
     $files = array();
@@ -566,6 +555,8 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
+    xarVarSetCached('installer','installing', true);
+
     //We should probably break here if $configuration is not set.
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET)) {return;}
 
@@ -578,9 +569,6 @@ function installer_admin_confirm_configuration()
     $data['language'] = 'English';
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
-
-    // Security Check
-    if(!xarSecurityCheck('AdminInstaller')) return;
 
     if (!$confirmed) {
         include $configuration;
@@ -602,6 +590,18 @@ function installer_admin_confirm_configuration()
 
 function installer_admin_finish()
 {
+
+    xarUserLogOut();
+// log in admin user
+    $uname = xarModGetVar('roles','lastuser');
+    $pass = xarModGetVar('roles','adminpass');
+    if (!xarUserLogIn($uname, $pass, 0)) {
+        $msg = xarML('Cannot log in the default administrator. Check your setup.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return false;
+    }
+    $remove = xarModDelVar('roles','adminpass');
 
     // Load up database
     list($dbconn) = xarDBGetConn();
@@ -725,6 +725,8 @@ function installer_admin_finish()
 
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
+
+
     return $data;
 }
 
