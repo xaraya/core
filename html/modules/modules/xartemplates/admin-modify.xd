@@ -45,52 +45,47 @@
             <xar:foreach in="$hooklist" value="$hookmod">
                 <fieldset>
                     <legend>
-                        <a href="javascript:void(0);" title="#xarML('Click to toggle hook display')#" onclick="return toggleDisplay('hookdisplay_#$hookmod['modname']#');">
-                            <xar:mlstring>Hooks from module:</xar:mlstring> 
-                            #$hookmod['modname']#
-                        </a>
+                        <xar:mlstring>Hooks from module:</xar:mlstring> 
+                        #$hookmod['modname']#
                     </legend>
 
-                    <div id="hookdisplay_#$hookmod['modname']#" style="display:none;">
-                        <div class="xar-floatleft xar-halfwidth">
-                            <p>
-                                <xar:mlstring>Enable hooks for:</xar:mlstring>
-                            </p>
+                    <div class="xar-floatleft xar-halfwidth">
+                        <p>
+                            <xar:mlstring>Enable hooks for:</xar:mlstring>
+                        </p>
+                        <div>
+                            <xar:if condition="!empty($hookmod['checked'][0])">
+                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked" />
+                            <xar:else />
+                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" />
+                            </xar:if>
+                            <label for="hooks_#$hookmod['modname']#_0">
+                                <xar:mlstring>All</xar:mlstring>
+                            </label>
+                        </div>
+                        <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
                             <div>
-                                <xar:if condition="!empty($hookmod['checked'][0])">
-                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked" />
+                                <xar:if condition="!empty($hookmod['checked'][$typeid])">
+                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
                                 <xar:else />
-                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" />
+                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" />
                                 </xar:if>
-                                <label for="hooks_#$hookmod['modname']#_0">
-                                    <xar:mlstring>All</xar:mlstring>
+                                <label for="hooks_#$hookmod['modname']#_#$typeid#">
+                                    #$itemtype['label']#
                                 </label>
                             </div>
-                            <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
-                                <div>
-                                    <xar:if condition="!empty($hookmod['checked'][$typeid])">
-                                        <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
-                                    <xar:else />
-                                        <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" />
-                                    </xar:if>
-                                    <label for="hooks_#$hookmod['modname']#_#$typeid#">
-                                        #$itemtype['label']#
-                                    </label>
-                                </div>
+                        </xar:foreach>
+                    </div>
+
+                    <div class="xar-floatleft xar-halfwidth">
+                        <p>
+                            <xar:mlstring>Avalable hooks:</xar:mlstring>
+                        </p>
+                        <ul>
+                            <xar:foreach in="$hookmod['hooks']" key="$hook">
+                                <li>#$hook#</li>
                             </xar:foreach>
-                        </div>
-
-                        <div class="xar-floatleft xar-halfwidth">
-                            <p>
-                                <xar:mlstring>Avalable hooks:</xar:mlstring>
-                            </p>
-                            <ul>
-                                <xar:foreach in="$hookmod['hooks']" key="$hook">
-                                    <li>#$hook#</li>
-                                </xar:foreach>
-                            </ul>
-                        </div>
-
+                        </ul>
                     </div>
                 </fieldset>
             </xar:foreach>
