@@ -60,7 +60,7 @@ function roles_user_getvalidation()
                 return;
             }
 
-            $pending = xarModGetVar('roles', 'welcomeemail');
+            $pending = xarModGetVar('roles', 'explicitapproval');
             if ($pending == 1){
 
                 // Update the user status table to reflect a pending account.
