@@ -47,6 +47,7 @@ function themes_admin_list()
     $data['reloadlabel']                            = xarML('Refresh');
     $data['pager']                                  = '';
     $authid = xarSecGenAuthKey();
+    $data['default'] = xarModGetVar('themes', 'default');
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
     $data['hidecore']                               = xarModGetUserVar('themes', 'hidecore');
@@ -54,6 +55,7 @@ function themes_admin_list()
     $data['selstyle']                               = xarModGetUserVar('themes', 'selstyle');
     $data['selfilter']                              = xarModGetUserVar('themes', 'selfilter');
     $data['selsort']                                = xarModGetUserVar('themes', 'selsort');
+    $data['defaultlabel']                           = xarML('Set As Default');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
@@ -91,6 +93,7 @@ function themes_admin_list()
     $img_upgrade        = xarTplGetImage('set1/upgrade.png');
     $img_initialise     = xarTplGetImage('set1/initialise.png');
     $img_remove         = xarTplGetImage('set1/remove.png');
+    $img_setdefault     = xarTplGetImage('set1/setdefault.png');
     
     // get other images
     $data['infoimg']    = xarTplGetImage('set1/info.png');
@@ -142,6 +145,11 @@ function themes_admin_list()
                                     'upgrade',
                                      array( 'id'        => $thisthemeid,
                                             'authid'    => $authid));
+        $defaulturl                 = xarModURL('themes',
+                                    'admin',
+                                    'setdefault',
+                                     array( 'id'        => $thisthemeid,
+                                            'authid'    => $authid));
         
         // common urls
         $listrows[$i]['editurl']    = xarModURL('themes',
@@ -168,6 +176,8 @@ function themes_admin_list()
         $listrows[$i]['displayname']    = $theme['name'];
         $listrows[$i]['version']        = $theme['version'];
         $listrows[$i]['edit']           = xarML('Edit');
+        $listrows[$i]['class']          = $theme['class'];
+        $listrows[$i]['defaultlabel']   = xarML('Set As Default');
         
         if (empty($theme['state'])){
             $theme['state'] = 1;
@@ -186,7 +196,7 @@ function themes_admin_list()
             $listrows[$i]['actionimg1']         = $img_initialise;
             $listrows[$i]['actionimg2']         = $img_none;
 
-            
+            $listrows[$i]['defaultimg']         = $img_disabled;
         }elseif($theme['state'] == 2){
             // this theme is 'Inactive'        - set labels and links
             $statelabel = xarML('Inactive');
@@ -200,6 +210,8 @@ function themes_admin_list()
             
             $listrows[$i]['actionimg1']         = $img_activate;
             $listrows[$i]['actionimg2']         = $img_remove;
+
+            $listrows[$i]['defaultimg']     = $img_disabled;
         }elseif($theme['state'] == 3){
             // this theme is 'Active'          - set labels and links
             $statelabel = xarML('Active');
@@ -209,17 +221,23 @@ function themes_admin_list()
             if(!$coretheme){
                 $listrows[$i]['actionlabel']    = xarML('Deactivate');
                 $listrows[$i]['actionurl']      = $deactivateurl;
+                $listrows[$i]['defaulturl']      = $defaulturl;
                 $listrows[$i]['removeurl']      = '';
                 
                 $listrows[$i]['actionimg1']     = $img_deactivate;
                 $listrows[$i]['actionimg2']     = $img_none;
+
+                $listrows[$i]['defaultimg']     = $img_setdefault;
             }else{
-                $listrows[$i]['actionlabel']    = xarML('[core module]');
+                $listrows[$i]['actionlabel']    = xarML('[core theme]');
                 $listrows[$i]['actionurl']      = '';
+                $listrows[$i]['defaulturl']      = '';
                 $listrows[$i]['removeurl']      = '';
                 
                 $listrows[$i]['actionimg1']     = $img_disabled;
                 $listrows[$i]['actionimg2']     = $img_disabled;
+
+                $listrows[$i]['defaultimg']     = $img_disabled;
             }
         }elseif($theme['state'] == 4 ||
                 $theme['state'] == 7 ||
@@ -236,6 +254,7 @@ function themes_admin_list()
             $listrows[$i]['actionimg1']         = $img_none;
             $listrows[$i]['actionimg2']         = $img_remove;
             
+            $listrows[$i]['defaultimg']     = $img_disabled;
         }elseif($theme['state'] == 5){
             // this theme is 'Upgraded'        - set labels and links
             $statelabel = xarML('Upgraded');
@@ -248,11 +267,13 @@ function themes_admin_list()
             $listrows[$i]['actionimg1']         = $img_none;
             $listrows[$i]['actionimg2']         = $img_upgrade;
 
+            $listrows[$i]['defaultimg']     = $img_disabled;
         }
         
         // nearly done
         $listrows[$i]['statelabel']     = $statelabel;
         $listrows[$i]['regid']          = $thisthemeid;
+        $listrows[$i]['directory']      = $theme['directory'];
 
         $data['listrowsitems'] = $listrows;
         $i++;

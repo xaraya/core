@@ -108,6 +108,7 @@ function themes_adminapi_getthemelist($args)
         $query = "SELECT themes.xar_regid,
                          themes.xar_name,
                          themes.xar_directory,
+                         themes.xar_class,
                          states.xar_state
                   FROM $themestable AS themes
                   LEFT JOIN $theme_statesTable AS states 
@@ -128,6 +129,7 @@ function themes_adminapi_getthemelist($args)
             list($themeInfo['regid'],
                  $themeInfo['name'],
                  $themeInfo['directory'],
+                 $themeInfo['class'],
                  $themeState) = $result->fields;
 
             if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
@@ -162,7 +164,7 @@ function themes_adminapi_getthemelist($args)
                             $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_UPGRADED;
                             break;
                     }
-                    $themeInfo['class'] = "";
+                    //$themeInfo['class'] = "";
                     $themeInfo['version'] = "&nbsp;";
                     // end patch
                 }
