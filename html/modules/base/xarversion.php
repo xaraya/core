@@ -12,7 +12,7 @@ $modversion['official'] = 1;
 $modversion['author'] = 'John Robeson, Greg Allan';
 $modversion['contact'] = 'johnny@xaraya.com';
 $modversion['admin'] = 1;
-$modversion['user'] = 0;
+$modversion['user'] = 1;
 $modversion['securityschema'] = array('base::' => '::');;
 $modversion['class'] = 'Core Admin';
 $modversion['category'] = 'Global';
