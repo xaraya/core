@@ -953,12 +953,11 @@ class xarPrivileges extends xarMasks
         while(!$result->EOF) {
             list($header,$selection,$limit) = $result->fields;
 
-// check if an external instance wizard is requested, if so redirect
-            if (substr($header,0,9) == 'external:') {
-                $externallink = trim(substr($header,9));
-                $target = eval("return " . $externallink . ";");
+// Check if an external instance wizard is requested, if so redirect using the URL in the 'query' part
+// This is indicated by the keyword 'external' in the 'header' of the instance definition
+            if ($header == 'external') {
                 return array('external' => 'yes',
-                             'target' => $target);
+                             'target'   => $selection);
             }
 
 // check if the query is there
@@ -1611,6 +1610,8 @@ function drawindent() {
         }
 
         if (count($instance1) != count($instance2)) {
+echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
+return false;
             $msg = xarML('Mask and privilege do not have the same instances');
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
