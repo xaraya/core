@@ -167,9 +167,9 @@ class xarCache_Storage
         $keys = array();
         foreach ($list as $item) {
             if (empty($item['key'])) continue;
-            $keys[] = $item['key'];
+            $keys[$item['key']] = 1;
         }
-        return $keys;
+        return array_keys($keys);
     }
 }
 
