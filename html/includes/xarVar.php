@@ -104,14 +104,14 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
 function xarVarBatchFetch() {
 
     $batch = func_get_args();
-    
+
     $result_array = array();
     $no_errors    = true;
 
     foreach ($batch as $line) {
         $result_array[$line[2]] = array();
         $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
-        
+
         if (!$result) {
             //Records the error presented in the given input variable
             $result_array[$line[2]]['error'] = xarExceptionValue();
@@ -123,11 +123,11 @@ function xarVarBatchFetch() {
             $result_array[$line[2]]['error'] = '';
         }
     }
-    
+
     //Chose this key name to avoid clashes and make it easy to go on if there is no
     //errors present in the Fetched variables.
     $result_array['no_errors'] = $no_errors;
-    
+
     return $result_array;
 }
 
@@ -152,7 +152,7 @@ function xarVarBatchFetch() {
  * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
  * to one of XARVAR_GET_ONLY or XARVAR_POST_ONLY.
  *
- * You can force xarVarFetch not to reuse the variable by setting  
+ * You can force xarVarFetch not to reuse the variable by setting
  * the $flag parameter to XARVAR_DON_REUSE.
  *
  * By default $flag is XARVAR_GET_OR_POST which means tha xarVarFetch will lookup both GET and POST parameters and
@@ -198,7 +198,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     $result = xarVarValidate($validation, $value, $supress);
-    
+
     if (xarExceptionMajor()) {return;} //Throw back
 
     // Check prep of $value
@@ -279,8 +279,8 @@ function xarVarValidate($validation, &$subject, $supress = false) {
 //             As id/int/str are used in every page view, probably they should be here.
 
     $valParams = explode(':', $validation);
-    $valType = xarVarPrepForOS(strtolower(array_shift($valParams)));
-    
+    $valType = strtolower(array_shift($valParams));
+
     if (empty($valType)) {
         // Raise an exception
         $msg = xarML('No validation type present.');
@@ -304,327 +304,11 @@ function xarVarValidate($validation, &$subject, $supress = false) {
     // {ML_include 'includes/validations/notempty.php'}
     // {ML_include 'includes/validations/regexp.php'}
     // {ML_include 'includes/validations/str.php'}
-    $function_file = './includes/validations/'.$valType.'.php';
-    $function_name = 'variable_validations_'.$valType;
 
-    if (!function_exists($function_name)) {
-        if (file_exists($function_file)) {
-            include_once($function_file);
-        }
-    }
+    $function_name = xarVarLoad ('validations', $valType);
+    if (!$function_name) {return;}
 
-    if (function_exists($function_name)) {
-        $return = $function_name($subject, $valParams, $supress);
-        //The helper functions already have a nicer interface, let?s change the main function too?
-        return $return;
-    } else {
-        // Raise an exception
-        $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
-}
-
-/**
- * Cleans a variable.
- *
- *
- * Cleaning it up to try to ensure that hack attacks
- * don't work. Typically used for cleaning variables
- * coming from user input.
- *
- * @access public
- * @param var variable to clean
- * @return string prepared variable
- */
-function xarVarCleanUntrusted($var)
-{
-    $search = array('|</?\s*SCRIPT[^>]*>|si',
-                    '|</?\s*FRAME[^>]*>|si',
-                    '|</?\s*OBJECT[^>]*>|si',
-                    '|</?\s*META[^>]*>|si',
-                    '|</?\s*APPLET[^>]*>|si',
-                    '|</?\s*LINK[^>]*>|si',
-                    '|</?\s*IFRAME[^>]*>|si',
-                    '|STYLE\s*=\s*"[^"]*"|si');
-    // <?
-    $replace = array('');
-    // Clean var
-    $var = preg_replace($search, $replace, $var);
-
-    return $var;
-}
-
-/**
- * Clean user input
- *
- * Gets a global variable, cleaning it up to try to ensure that
- * hack attacks don't work. Can have as many parameters as needed.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
- * @todo <marco> FIXME: This function will not work if the security system is not loaded!
- */
-function xarVarCleanFromInput()
-{
-    $resarray = array();
-    foreach (func_get_args() as $name) {
-        if (empty($name)) {
-            // you sure you want to return like this ?
-            return;
-        }
-
-        $var = xarRequestGetVar($name);
-        if (!isset($var)) {
-            array_push($resarray, NULL);
-            continue;
-        }
-
-        // TODO: <marco> Document this security check!
-        if (!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
-            $var = xarVarCleanUntrusted($var);
-        }
-
-        // Add to result array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-/**
- * Ready user output
- *
- * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected. Can have as many parameters as desired.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- */
-function xarVarPrepForDisplay()
-{
-// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-/*
-    // This search and replace finds the text 'x@y' and replaces
-    // it with HTML entities, this provides protection against
-    // email harvesters
-    static $search = array('/(.)@(.)/se');
-
-    static $replace = array('"&#" .
-                            sprintf("%03d", ord("\\1")) .
-                            ";&#064;&#" .
-                            sprintf("%03d", ord("\\2")) . ";";');
-
-*/
-    $resarray = array();
-    foreach (func_get_args() as $var) {
-
-        // Prepare var
-        $var = htmlspecialchars($var);
-
-//        $var = preg_replace($search, $replace, $var);
-
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-/**
- * Ready HTML output
- *
- * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected, except for allowed HTML tags which
- * are allowed through. Can have as many parameters as desired.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- * @raise DATABASE_ERROR, BAD_PARAM
- */
-function xarVarPrepHTMLDisplay()
-{
-// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-/*
-    // This search and replace finds the text 'x@y' and replaces
-    // it with HTML entities, this provides protection against
-    // email harvesters
-    //
-    // Note that the use of \024 and \022 are needed to ensure that
-    // this does not break HTML tags that might be around either
-    // the username or the domain name
-    static $search = array('/([^\024])@([^\022])/se');
-
-    static $replace = array('"&#" .
-                            sprintf("%03d", ord("\\1")) .
-                            ";&#064;&#" .
-                            sprintf("%03d", ord("\\2")) . ";";');
-*/
-    static $allowedtags = NULL;
-
-    if (!isset($allowedtags)) {
-        $allowedHTML = array();
-        foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
-            if ($k == '!--') {
-                if ($v <> 0) {
-                    $allowedHTML[] = "$k.*?--";
-                }
-            } else {
-                switch($v) {
-                    case 0:
-                        break;
-                    case 1:
-                        $allowedHTML[] = "/?$k\s*/?";
-                        break;
-                    case 2:
-                        $allowedHTML[] = "/?$k(\s+[^>]*)?/?";
-                        break;
-                }
-            }
-        }
-        if (count($allowedHTML) > 0) {
-            $allowedtags = '~<(' . join('|',$allowedHTML) . ')>~is';
-        } else {
-            $allowedtags = '';
-        }
-    }
-
-    $resarray = array();
-    foreach (func_get_args() as $var) {
-        // Preparse var to mark the HTML that we want
-        if (!empty($allowedtags))
-            $var = preg_replace($allowedtags, "\022\\1\024", $var);
-
-        // Prepare var
-        $var = htmlspecialchars($var);
-//        $var = preg_replace($search, $replace, $var);
-//        $var = strtr($var,array('@' => '&#064;'));
-
-        // Fix the HTML that we want
-/*
-        $var = preg_replace('/\022([^\024]*)\024/e',
-                               "'<' . strtr('\\1',
-                                            array('&gt;' => '>',
-                                                  '&lt;' => '<',
-                                                  '&quot;' => '\"',
-                                                  '&amp;' => '&'))
-                               . '>';", $var);
-*/
-        $var = preg_replace_callback('/\022([^\024]*)\024/',
-                                     'xarVarPrepHTMLDisplay__callback',
-                                     $var);
-
-        // Fix entities if required
-        if ($GLOBALS['xarVar_fixHTMLEntities']) {
-            $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
-        }
-
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-function xarVarPrepHTMLDisplay__callback($matches)
-{
-    return '<' . strtr($matches[1],
-                       array('&gt;' => '>',
-                             '&lt;' => '<',
-                             '&quot;' => '"',
-                             '&amp;' => '&'))
-           . '>';
-}
-
-/**
- * Ready database output
- *
- * Gets a variable, cleaning it up such that the text is
- * stored in a database exactly as expected. Can have as many parameters as desired.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- * @todo are we allowing arrays and objects for real?
- */
-function xarVarPrepForStore()
-{
-    //Does the quoting change from database to database?
-    //If so, this should be done thru ADODB instead of an API functions like this
-
-    $resarray = array();
-    foreach (func_get_args() as $var) {
-
-        // Prepare var
-        if (!get_magic_quotes_runtime()) {
-            // FIXME: allow other than strings?
-            $var = addslashes($var);
-        }
-
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-/**
- * Ready operating system output
- *
- * Gets a variable, cleaning it up such that any attempts
- * to access files outside of the scope of the Xaraya
- * system is not allowed. Can have as many parameters as desired.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- */
-function xarVarPrepForOS()
-{
-    static $special_characters = array(':'  => ' ',
-                                       '/'  => ' ',
-                                       '\\' => ' ',
-                                       '..' => ' ',
-                                       '?'  => ' ',
-                                       '*'  => ' ');
-
-    $args = func_get_args();
-    
-    foreach ($args as $key => $var) {
-        // Remove out bad characters
-        $args[$key] = strtr($var, $special_characters);
-    }
-    
-
-    // Return vars
-    // <nuncanada> I really dont like this kind of behaviour... It?s not consistent.
-    if (func_num_args() == 1) {
-        return $args[0];
-    } else {
-        return $args;
-    }
+    return $function_name($subject, $valParams, $supress);
 }
 
 /*
@@ -884,7 +568,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-    
+
     switch(strtolower($type)) {
     case 'modvar':
     default:
@@ -940,9 +624,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                       WHERE xar_name='" . xarVarPrepForStore($name) . "'";
         
         break;
-        
+
     }
-    
+
     // TODO : Explain the cache logic behind this, why exclude moduservars?
     // TODO : why have cache period 1 week ?
     if (xarCore_getSystemVar('DB.UseADODBCache')){
@@ -1317,111 +1001,419 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     return true;
 }
 
-function xarVarTransformHTML2XML ($text) {
+/**
+ * Changes one variable from one context to another
+ *
+ * @access public
+ * @param string The string to be Converted
+ * @param sourceContext The name of the module
+ * @param targetContext The name of the module
+ * @return string the string in the new context
+ * @raise EMPTY_PARAM
+ */
+function xarVarTransform ($string, $sourceContext, $targetContext) {
 
-    //Taken from Reverend's Jim feedparser
-    //http://revjim.net/code/feedParser/feedParser-0.5.phps
+    //Would it be useful to be able to transform arrays of strings at once?
 
-    static $entities = array(
-        '&nbsp'   => "&#160;",
-        '&iexcl'  => "&#161;",
-        '&cent'   => "&#162;",
-        '&pound'  => "&#163;",
-        '&curren' => "&#164;",
-        '&yen'    => "&#165;",
-        '&brvbar' => "&#166;",
-        '&sect'   => "&#167;",
-        '&uml'    => "&#168;",
-        '&copy'   => "&#169;",
-        '&ordf'   => "&#170;",
-        '&laquo'  => "&#171;",
-        '&not'    => "&#172;",
-        '&shy' =>    "&#173;",
-        '&reg' =>    "&#174;",
-        '&macr' =>   "&#175;",
-        '&deg' =>    "&#176;",
-        '&plusmn' => "&#177;",
-        '&sup2' =>   "&#178;",
-        '&sup3' =>   "&#179;",
-        '&acute' =>  "&#180;",
-        '&micro' =>  "&#181;",
-        '&para' =>   "&#182;",
-        '&middot' => "&#183;",
-        '&cedil' =>  "&#184;",
-        '&sup1' =>   "&#185;",
-        '&ordm' =>   "&#186;",
-        '&raquo' =>  "&#187;",
-        '&frac14' => "&#188;",
-        '&frac12' => "&#189;",
-        '&frac34' => "&#190;",
-        '&iquest' => "&#191;",
-        '&Agrave' => "&#192;",
-        '&Aacute' => "&#193;",
-        '&Acirc' =>  "&#194;",
-        '&Atilde' => "&#195;",
-        '&Auml' =>   "&#196;",
-        '&Aring' =>  "&#197;",
-        '&AElig' =>  "&#198;",
-        '&Ccedil' => "&#199;",
-        '&Egrave' => "&#200;",
-        '&Eacute' => "&#201;",
-        '&Ecirc' =>  "&#202;",
-        '&Euml' =>   "&#203;",
-        '&Igrave' => "&#204;",
-        '&Iacute' => "&#205;",
-        '&Icirc' =>  "&#206;",
-        '&Iuml' =>   "&#207;",
-        '&ETH' =>    "&#208;",
-        '&Ntilde' => "&#209;",
-        '&Ograve' => "&#210;",
-        '&Oacute' => "&#211;",
-        '&Ocirc' =>  "&#212;",
-        '&Otilde' => "&#213;",
-        '&Ouml' =>   "&#214;",
-        '&times' =>  "&#215;",
-        '&Oslash' => "&#216;",
-        '&Ugrave' => "&#217;",
-        '&Uacute' => "&#218;",
-        '&Ucirc' =>  "&#219;",
-        '&Uuml' =>   "&#220;",
-        '&Yacute' => "&#221;",
-        '&THORN' =>  "&#222;",
-        '&szlig' =>  "&#223;",
-        '&agrave' => "&#224;",
-        '&aacute' => "&#225;",
-        '&acirc' =>  "&#226;",
-        '&atilde' => "&#227;",
-        '&auml' =>   "&#228;",
-        '&aring' =>  "&#229;",
-        '&aelig' =>  "&#230;",
-        '&ccedil' => "&#231;",
-        '&egrave' => "&#232;",
-        '&eacute' => "&#233;",
-        '&ecirc' =>  "&#234;",
-        '&euml' =>   "&#235;",
-        '&igrave' => "&#236;",
-        '&iacute' => "&#237;",
-        '&icirc' =>  "&#238;",
-        '&iuml' =>   "&#239;",
-        '&eth' =>    "&#240;",
-        '&ntilde' => "&#241;",
-        '&ograve' => "&#242;",
-        '&oacute' => "&#243;",
-        '&ocirc' =>  "&#244;",
-        '&otilde' => "&#245;",
-        '&ouml' =>   "&#246;",
-        '&divide' => "&#247;",
-        '&oslash' => "&#248;",
-        '&ugrave' => "&#249;",
-        '&uacute' => "&#250;",
-        '&ucirc' =>  "&#251;",
-        '&uuml' =>   "&#252;",
-        '&yacute' => "&#253;",
-        '&thorn' =>  "&#254;",
-        '&yuml' =>   "&#255;"
-    );
+    if (empty($sourceContext) || empty($targetContext)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'sourceContext or targetContext');
+        return;
+    }
 
-    return strtr($text, $entities);
+    $transform_type = $sourceContext.'_to_'.$targetContext;
+    $function_name = xarVarLoad ('transforms', $transform_type);
 
+    if (!$function_name) {return;}
+
+    return $function_name ($string);
 }
+
+/**
+ * Loads variable's drivers. Should be changed to module space latter on.
+ *
+ * @access private
+ * @param string The drivers directory
+ * @param filename The name file to be used
+ * @return string the function anme
+ * @raise BAD_PARAM
+ */
+function xarVarLoad ($includes_type, $filename) {
+
+    $filename = xarVarPrepForOS($filename);
+
+    $function_file = './includes/'.$includes_type.'/'.$filename.'.php';
+    $function_name = 'variable_'.$includes_type.'_'.$filename;
+
+    if (!function_exists($function_name)) {
+        if (file_exists($function_file)) {
+            include_once($function_file);
+        }
+    }
+
+    if (!function_exists($function_name)) {
+        // Raise an exception
+        $msg = xarML('The '.$includes_type.' type \'#(1)\' couldn\'t be found.', $filename);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        return;
+    }
+
+    return $function_name;
+}
+
+/**
+ * Escapes on variable for the use in a specific context
+ *
+ * @access public
+ * @param string The string to be Converted
+ * @param targetContext The name of the context to escape for
+ * @return string the string escape for the context
+ * @raise EMPTY_PARAM
+ */
+function xarVarEscape ($string, $targetContext, $extras = array()) {
+
+    //Would it be useful to be able to transform arrays of strings at once?
+    if (empty($targetContext)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'targetContext');
+        return;
+    }
+
+    $function_name = xarVarLoad ('escapes', $targetContext);
+    if (!$function_name) {return;}
+
+    return $function_name ($string, $extras);
+}
+
+/*
+    ---------------------------------------------------------------------
+    Everything below should be remade, working thru xarVarEscape or xarVarTransform
+    * xarVarCleanFromInput
+    * xarVarCleanUntrusted
+    should disappear, there is nothing to prevent from input, that's not the way to add security.
+
+    They produce a false feeling of security... Handy for stopping script kids, but the holes
+    are still there, just harder to find.
+
+    * xarVarPrepForStore should work thru ADODB
+
+    * xarVarPrep* -- the rest, only one of them is needed usually, maybe one to
+         - escape XML
+         - another to escape HTML.
+
+    * Allowed HTML - how to handle that? imo it should be on input... The necessary function can be
+      offered here. If it's an allowed html input, do not escape on the output.
+                   - Why? Because the allowed html can change depending on the user - Would you
+                     want to check everytime if the author user is able to send such html?
+                   - The Allowed HTML can change between a post and it's view. That would display
+                     escaped html, which shouldnt...
+    ----------------------------------------------------------------------
+*/
+
+
+/**
+ * Cleans a variable.
+ *
+ *
+ * Cleaning it up to try to ensure that hack attacks
+ * don't work. Typically used for cleaning variables
+ * coming from user input.
+ *
+ * @access public
+ * @param var variable to clean
+ * @return string prepared variable
+ * @deprecated
+ */
+function xarVarCleanUntrusted($var)
+{
+    $search = array('|</?\s*SCRIPT[^>]*>|si',
+                    '|</?\s*FRAME[^>]*>|si',
+                    '|</?\s*OBJECT[^>]*>|si',
+                    '|</?\s*META[^>]*>|si',
+                    '|</?\s*APPLET[^>]*>|si',
+                    '|</?\s*LINK[^>]*>|si',
+                    '|</?\s*IFRAME[^>]*>|si',
+                    '|STYLE\s*=\s*"[^"]*"|si');
+    // <?
+    $replace = array('');
+    // Clean var
+    $var = preg_replace($search, $replace, $var);
+
+    return $var;
+}
+
+/**
+ * Clean user input
+ *
+ * Gets a global variable, cleaning it up to try to ensure that
+ * hack attacks don't work. Can have as many parameters as needed.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
+ * @todo <marco> FIXME: This function will not work if the security system is not loaded!
+ * @deprecated
+ */
+function xarVarCleanFromInput()
+{
+    $resarray = array();
+    foreach (func_get_args() as $name) {
+        if (empty($name)) {
+            // you sure you want to return like this ?
+            return;
+        }
+
+        $var = xarRequestGetVar($name);
+        if (!isset($var)) {
+            array_push($resarray, NULL);
+            continue;
+        }
+
+        // TODO: <marco> Document this security check!
+        if (!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
+            $var = xarVarCleanUntrusted($var);
+        }
+
+        // Add to result array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
+}
+
+/**
+ * Ready user output
+ *
+ * Gets a variable, cleaning it up such that the text is
+ * shown exactly as expected. Can have as many parameters as desired.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ */
+function xarVarPrepForDisplay()
+{
+// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+/*
+    // This search and replace finds the text 'x@y' and replaces
+    // it with HTML entities, this provides protection against
+    // email harvesters
+    static $search = array('/(.)@(.)/se');
+
+    static $replace = array('"&#" .
+                            sprintf("%03d", ord("\\1")) .
+                            ";&#064;&#" .
+                            sprintf("%03d", ord("\\2")) . ";";');
+
+*/
+    $resarray = array();
+    foreach (func_get_args() as $var) {
+
+        // Prepare var
+        $var = htmlspecialchars($var);
+
+//        $var = preg_replace($search, $replace, $var);
+
+        // Add to array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
+}
+
+/**
+ * Ready HTML output
+ *
+ * Gets a variable, cleaning it up such that the text is
+ * shown exactly as expected, except for allowed HTML tags which
+ * are allowed through. Can have as many parameters as desired.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ * @raise DATABASE_ERROR, BAD_PARAM
+ */
+function xarVarPrepHTMLDisplay()
+{
+// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+/*
+    // This search and replace finds the text 'x@y' and replaces
+    // it with HTML entities, this provides protection against
+    // email harvesters
+    //
+    // Note that the use of \024 and \022 are needed to ensure that
+    // this does not break HTML tags that might be around either
+    // the username or the domain name
+    static $search = array('/([^\024])@([^\022])/se');
+
+    static $replace = array('"&#" .
+                            sprintf("%03d", ord("\\1")) .
+                            ";&#064;&#" .
+                            sprintf("%03d", ord("\\2")) . ";";');
+*/
+    static $allowedtags = NULL;
+
+    if (!isset($allowedtags)) {
+        $allowedHTML = array();
+        foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
+            if ($k == '!--') {
+                if ($v <> 0) {
+                    $allowedHTML[] = "$k.*?--";
+                }
+            } else {
+                switch($v) {
+                    case 0:
+                        break;
+                    case 1:
+                        $allowedHTML[] = "/?$k\s*/?";
+                        break;
+                    case 2:
+                        $allowedHTML[] = "/?$k(\s+[^>]*)?/?";
+                        break;
+                }
+            }
+        }
+        if (count($allowedHTML) > 0) {
+            $allowedtags = '~<(' . join('|',$allowedHTML) . ')>~is';
+        } else {
+            $allowedtags = '';
+        }
+    }
+
+    $resarray = array();
+    foreach (func_get_args() as $var) {
+        // Preparse var to mark the HTML that we want
+        if (!empty($allowedtags))
+            $var = preg_replace($allowedtags, "\022\\1\024", $var);
+
+        // Prepare var
+        $var = htmlspecialchars($var);
+//        $var = preg_replace($search, $replace, $var);
+//        $var = strtr($var,array('@' => '&#064;'));
+
+        // Fix the HTML that we want
+/*
+        $var = preg_replace('/\022([^\024]*)\024/e',
+                               "'<' . strtr('\\1',
+                                            array('&gt;' => '>',
+                                                  '&lt;' => '<',
+                                                  '&quot;' => '\"',
+                                                  '&amp;' => '&'))
+                               . '>';", $var);
+*/
+        $var = preg_replace_callback('/\022([^\024]*)\024/',
+                                     'xarVarPrepHTMLDisplay__callback',
+                                     $var);
+
+        // Fix entities if required
+        if ($GLOBALS['xarVar_fixHTMLEntities']) {
+            $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
+        }
+
+        // Add to array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
+}
+
+function xarVarPrepHTMLDisplay__callback($matches)
+{
+    return '<' . strtr($matches[1],
+                       array('&gt;' => '>',
+                             '&lt;' => '<',
+                             '&quot;' => '"',
+                             '&amp;' => '&'))
+           . '>';
+}
+
+/**
+ * Ready database output
+ *
+ * Gets a variable, cleaning it up such that the text is
+ * stored in a database exactly as expected. Can have as many parameters as desired.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ * @todo are we allowing arrays and objects for real?
+ */
+function xarVarPrepForStore()
+{
+    //Does the quoting change from database to database?
+    //If so, this should be done thru ADODB instead of an API functions like this
+    //FIXME: This should be done thru our database interface, ADODB!
+    //FIXME: Different databases DO quote differently! Sybase, MySQL (MySQl is too lenient on quoting
+    // allowing things other databases wont)
+
+    $resarray = array();
+    foreach (func_get_args() as $var) {
+
+        // Prepare var
+        if (!get_magic_quotes_runtime()) {
+            // FIXME: allow other than strings?
+            $var = addslashes($var);
+        }
+
+        // Add to array
+        array_push($resarray, $var);
+    }
+
+    // Return vars
+    if (func_num_args() == 1) {
+        return $resarray[0];
+    } else {
+        return $resarray;
+    }
+}
+
+/**
+ * Ready operating system output
+ *
+ * Gets a variable, cleaning it up such that any attempts
+ * to access files outside of the scope of the Xaraya
+ * system is not allowed. Can have as many parameters as desired.
+ *
+ * @access public
+ * @return mixed prepared variable if only one variable passed
+ * in, otherwise an array of prepared variables
+ */
+function xarVarPrepForOS()
+{
+    static $special_characters = array(':'  => ' ',
+                                       '/'  => ' ',
+                                       '\\' => ' ',
+                                       '..' => ' ',
+                                       '?'  => ' ',
+                                       '*'  => ' ');
+
+    $args = func_get_args();
+
+    foreach ($args as $key => $var) {
+        // Remove out bad characters
+        $args[$key] = strtr($var, $special_characters);
+    }
+
+
+    // Return vars
+    // <nuncanada> I really dont like this kind of behaviour... It's not consistent.
+    if (func_num_args() == 1) {
+        return $args[0];
+    } else {
+        return $args;
+    }
+}
+
 ?>
