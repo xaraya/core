@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * removeRole - remove a role from a privilege assignment
+ * prompts for confirmation
+ */
+function privileges_admin_removerole()
+{
+    list($pid, $roleid, $confirmation) = xarVarCleanFromInput('pid', 'roleid', 'confirmation');
+
+//Call the Roles class and get the role to be removed
+    $roles = new xarRoles();
+    $role = $roles->getRole($roleid);
+
+//Call the Privileges class and get the privilege to be de-assigned
+    $privs = new xarPrivileges();
+    $priv = $privs->getPrivilege($pid);
+
+
+// some assignments can't be changed, for your own good
+    if ((($roleid == 1) && ($pid == 1)) ||
+        (($roleid == 2) && ($pid == 6)) ||
+        (($roleid == 4) && ($pid == 2)))
+        {
+        $msg = xarML('This privilege cannot be removed');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+// Clear Session Vars
+    xarSessionDelVar('privileges_statusmsg');
+
+// Security Check
+    if(!xarSecurityCheck('EditPrivilege')) return;
+
+// get the names of the role and privilege for display purposes
+    $rolename = $role->getName();
+    $privname = $priv->getName();
+
+    if (empty($confirmation)) {
+
+        //Load Template
+        $data['authid'] = xarSecGenAuthKey();
+        $data['roleid'] = $roleid;
+        $data['pid'] = $pid;
+        $data['ptype'] = $role->getType();
+        $data['privname'] = $privname;
+        $data['rolename'] = $rolename;
+        return $data;
+
+    }
+    else {
+
+// Check for authorization code
+        if (!xarSecConfirmAuthKey()) return;
+
+        //Try to remove the privilege and bail if an error was thrown
+        if (!$role->removePrivilege($priv)) {return;}
+
+        xarSessionSetVar('privileges_statusmsg', xarML('Role Removed',
+                        'privileges'));
+
+// redirect to the next page
+        xarResponseRedirect(xarModURL('privileges',
+                                 'admin',
+                                 'viewroles',
+                                 array('pid'=>$pid)));
+    }
+
+}
+?>
