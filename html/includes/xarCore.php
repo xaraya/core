@@ -11,7 +11,7 @@
  * @author Marco Canini
 */
 
-/*
+/**
  * Core version informations 
  *
  * should be upgraded on each release for
@@ -449,7 +449,7 @@ function xarCore_disposeDebugger()
 /**
  * Error function before Exceptions are loaded
  *
- * @access proctected
+ * @access protected
  * @param msg string message to print as an error
  */ 
 function xarCore_die($msg)
@@ -499,7 +499,7 @@ EOM;
  * Core.AllowedAPITypes.
  * 
  * @access protected
- * $param  apiType string Type of API to check whether allowed to load
+ * @param  apiType string Type of API to check whether allowed to load
  * @author Marcel van der Boom marcel@hsdev.com
  * @return bool
  */
