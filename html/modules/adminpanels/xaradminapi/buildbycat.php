@@ -45,9 +45,9 @@ function adminpanels_adminapi_buildbycat($args)
         // get records from the table to match our categories
         $query =   "SELECT xar_name
                     FROM $menutable
-                    WHERE xar_category = '".xarVarPrepForStore($cat)."'
+                    WHERE xar_category = ?
                     AND xar_flag = 1";
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array($cat));
         if (!$result) return;
 
         // the category label

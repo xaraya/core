@@ -216,7 +216,7 @@ function base_menublock_display($blockinfo)
                 if($mod['name'] == $thismodname && $thismodtype == 'user'){
 
                     // Get list of links for modules
-                    $labelDisplay = ucwords($label);
+                    $labelDisplay = $label;
                     $usermods[] = array(   'label'     => $labelDisplay,
                                            'link'      => '',
                                            'modactive' => 1);
@@ -266,7 +266,7 @@ function base_menublock_display($blockinfo)
                         $desc = $modinfo['description'];
                     }
 
-                    $labelDisplay = ucwords($label);
+                    $labelDisplay = $label;
                     $usermods[] = array('label' => $labelDisplay,
                                         'link' => $link,
                                         'desc' => $desc,

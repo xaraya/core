@@ -52,11 +52,7 @@
  */
 function modules_adminapi_GetList($args)
 {
-
     extract($args);
-
-    // This function is screaming to be in the modules API.
-
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',
                                      'class' => 'mods', 'category' => 'mods');
 
@@ -74,11 +70,15 @@ function modules_adminapi_GetList($args)
     if (!isset($numItems)) $numItems = -1;
     if (!isset($orderBy)) $orderBy = 'name';
 
-    $extraSelectClause = '';
-    $whereClauses = array();
-
+    // Determine the tables we need to consider
+    $dbconn =& xarDBGetConn();
+    $tables =& xarDBGetTables();
+    $modulestable = $tables['modules'];
+    $module_statesTables = array($tables['system/module_states'], $tables['site/module_states']);
+    
+    // Construct the order by clause and join it up into one string
     $orderFields = explode('/', $orderBy);
-    $orderByClauses = array();
+    $orderByClauses = array(); $extraSelectClause = '';
     foreach ($orderFields as $orderField) {
         if (!isset($validOrderFields[$orderField])) {
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'orderBy');
@@ -90,71 +90,64 @@ function modules_adminapi_GetList($args)
             $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
         }
     }
+    $orderByClause = join(', ', $orderByClauses);
 
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-    $modulestable = $tables['modules'];
-
-    $module_statesTables = array($tables['system/module_states'], $tables['site/module_states']);
-
+    // Keep a record of the different conditions and their bindvars
+    $whereClauses = array(); $bindvars = array();
     if (isset($filter['Mode'])) {
-        $whereClauses[] = 'mods.xar_mode = '.xarVarPrepForStore($filter['Mode']);
+        $whereClauses[] = 'mods.xar_mode = ?';
+        $bindvars[] = $filter['Mode'];
     }
     if (isset($filter['UserCapable'])) {
-        $whereClauses[] = 'mods.xar_user_capable = '.xarVarPrepForStore($filter['UserCapable']);
+        $whereClauses[] = 'mods.xar_user_capable = ?';
+        $bindvars[] = $filter['UserCapable'];
     }
     if (isset($filter['AdminCapable'])) {
-        $whereClauses[] = 'mods.xar_admin_capable = '.xarVarPrepForStore($filter['AdminCapable']);
+        $whereClauses[] = 'mods.xar_admin_capable = ?';
+        $bindvars[] = $filter['AdminCapable'];
     }
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'mods.xar_class = '.xarVarPrepForStore($filter['Class']);
+        $whereClauses[] = 'mods.xar_class = ?';
+        $bindvars[] = $filter['Class'];
     }
     if (isset($filter['Category'])) {
-        $whereClauses[] = 'mods.xar_category = '.xarVarPrepForStore($filter['Category']);
+        $whereClauses[] = 'mods.xar_category = ?';
+        $bindvars[] = $filter['Category'];
     }
     if (isset($filter['State'])) {
         if ($filter['State'] != XARMOD_STATE_ANY) {
             if ($filter['State'] != XARMOD_STATE_INSTALLED) {
-                $whereClauses[] = 'states.xar_state = '.xarVarPrepForStore($filter['State']);
+                $whereClauses[] = 'states.xar_state = ?';
+                $bindvars[] = $filter['State'];
             } else {
-                $whereClauses[] = 'states.xar_state != '.XARMOD_STATE_UNINITIALISED;
+                $whereClauses[] = 'states.xar_state != ?';
+                $bindvars[] = XARMOD_STATE_UNINITIALISED;
             }
         }
     } else {
-        $whereClauses[] = 'states.xar_state = '.XARMOD_STATE_ACTIVE;
+        $whereClauses[] = 'states.xar_state = ?';
+        $bindvars[] = XARMOD_STATE_ACTIVE;
     }
-
-    $orderByClause = join(', ', $orderByClauses);
-
-    $mode = XARMOD_MODE_SHARED;
-
-    $modList = array();
 
     // Here we do 2 SELECTs: one for SHARED moded modules and
     // one for PER_SITE moded modules
     // Maybe this could be done with a single query?
+    $modList = array(); $mode = XARMOD_MODE_SHARED;
     for ($i = 0; $i < 2; $i++ ) {
         $module_statesTable = $module_statesTables[$i];
 
-        $query = "SELECT mods.xar_regid,
-                         mods.xar_name,
-                         mods.xar_directory,
-                         mods.xar_version,
-                         mods.xar_id,
-                         states.xar_state";
-
-
-        $query .= " FROM $modulestable AS mods";
-        array_unshift($whereClauses, 'mods.xar_mode = '.$mode);
-
-        // Do join
-        $query .= " LEFT JOIN $module_statesTable AS states ON mods.xar_regid = states.xar_regid";
-
+        $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
+                         mods.xar_version, mods.xar_id, states.xar_state
+                  FROM $modulestable AS mods
+                  LEFT JOIN $module_statesTable AS states ON mods.xar_regid = states.xar_regid";
+        
+        // Add the first mode to the where clauses and join it into one string
+        array_unshift($whereClauses, 'mods.xar_mode = ?');
+        array_unshift($bindvars,$mode);
         $whereClause = join(' AND ', $whereClauses);
-        $query .= " WHERE $whereClause";
-
-        $query .= " ORDER BY $orderByClause";
-        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
+        $query .= " WHERE $whereClause ORDER BY $orderByClause";
+        
+        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
         if (!$result) return;
 
         while(!$result->EOF) {
@@ -198,6 +191,7 @@ function modules_adminapi_GetList($args)
                             break;
                     }
                 }
+
                 $modList[] = $modInfo;
             }
             $modInfo = array();
@@ -205,8 +199,10 @@ function modules_adminapi_GetList($args)
         }
 
         $result->Close();
+        // Go over to the next mode
         $mode = XARMOD_MODE_PER_SITE;
         array_shift($whereClauses);
+        array_shift($bindvars);
     }
 
     return $modList;
