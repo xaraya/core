@@ -304,12 +304,16 @@ class xarMasks
 
     function xarSecLevel($levelname)
     {
+        if (xarVarIsCached('Security.xarSecLevel', $levelname)) {
+            return xarVarGetCached('Security.xarSecLevel', $levelname);
+        }
         $query = "SELECT xar_level FROM $this->levelstable
                     WHERE xar_leveltext = '$levelname'";
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
         $level = -1;
         if (!$result->EOF) list($level) = $result->fields;
+        xarVarSetCached('Security.xarSecLevel', $levelname, $level);
         return $level;
     }
 
@@ -448,6 +452,9 @@ class xarMasks
 */
     function getprivset($role)
     {
+        if (xarVarIsCached('Security.getprivset', $role)) {
+            return xarVarGetCached('Security.getprivset', $role);
+        }
         $query = "SELECT xar_set FROM $this->privsetstable WHERE xar_uid =" . $role->getID();
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -461,6 +468,7 @@ class xarMasks
         else {
             list($serprivs) = $result->fields;
         }
+        xarVarSetCached('Security.getprivset', $role, unserialize($serprivs));
         return unserialize($serprivs);
     }
 
@@ -2158,18 +2166,29 @@ class xarPrivilege extends xarMask
 */
     function getChildren()
     {
-// create an array to hold the objects to be returned
+        // create an array to hold the objects to be returned
         $children = array();
 
-// if this is a user just perform a SELECT on the rolemembers table
+        $cacheId = $this->getID();
+
+        if (xarVarIsCached('Privileges.getChildren', $cacheId)) {
+            return xarVarGetCached('Privileges.getChildren', $cacheId);
+        }
+
+        // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT p.*, pm.xar_parentid
                     FROM $this->privilegestable AS p, $this->privmemberstable AS pm
                     WHERE p.xar_pid = pm.xar_pid
-                      AND pm.xar_parentid = " . $this->getID();
-        $result = $this->dbconn->Execute($query);
-        if (!$result) return;
+                      AND pm.xar_parentid = " . $cacheId;
+        if (xarCore_getSystemVar('DB.UseADODBCache')){
+            $result =& $this->dbconn->CacheExecute(3600,$query);
+            if (!$result) return;
+        } else {
+            $result = $this->dbconn->Execute($query);
+            if (!$result) return;
+        }
 
-// collect the table values and use them to create new role objects
+            // collect the table values and use them to create new role objects
             while(!$result->EOF) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
             $pargs = array('pid'=>$pid,
@@ -2184,7 +2203,8 @@ class xarPrivilege extends xarMask
             array_push($children, new xarPrivilege($pargs));
             $result->MoveNext();
             }
-// done
+        // done
+        xarVarSetCached('Privileges.getChildren', $cacheId, $children);
         return $children;
     }
 

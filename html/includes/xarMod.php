@@ -360,6 +360,10 @@ function xarModGetVarId($modName, $name)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
+    if (xarVarIsCached('Mod.GetVarID', $modName . $name)) {
+        return xarVarGetCached('Mod.GetVarID', $modName . $name);
+    }
+
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
@@ -388,6 +392,8 @@ function xarModGetVarId($modName, $name)
     */
     list($modvarid) = $result->fields;
     $result->Close();
+
+    xarVarSetCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
 }
@@ -1420,6 +1426,10 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
         return;
     }
+
+    if (empty($GLOBALS['xarMod_noCacheState']) && xarVarIsCached('Mod.getFileInfos', $modOsDir)) {
+        return xarVarGetCached('Mod.getFileInfos', $modOsDir);
+    }
     
     // TODO redo legacy support via type.
     switch(strtolower($type)) {
@@ -1481,6 +1491,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     $FileInfo['license']        = isset($version['license'])        ? $version['license'] : false;
     $FileInfo['version']        = isset($version['version'])        ? $version['version'] : false;
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
+
+    xarVarSetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
 
     return $FileInfo;
 }
