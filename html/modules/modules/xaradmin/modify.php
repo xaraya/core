@@ -17,7 +17,7 @@ function modules_admin_modify()
 {
     // xarVarFetch does validation if not explicitly set to be not required
     xarVarFetch('id','id',$regId);
-    xarVarFetch('details','int:0:1',$details,0,XARVAR_NOT_REQUIRED);
+    xarVarFetch('details','str:0:1',$details,0,XARVAR_NOT_REQUIRED);
 
     $modInfo = xarModGetInfo($regId);
     if (!isset($modInfo)) return;
