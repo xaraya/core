@@ -134,7 +134,7 @@ function xarUserLogIn($userName, $password, $rememberMe)
     $query = "UPDATE $userstable
               SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
               WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     // Set session variables
@@ -633,7 +633,7 @@ function xarUser__getAuthModule($userId)
         $query = "SELECT xar_auth_module
                   FROM $userstable
                   WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-        $result = $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query);
         if (!$result) return;
 
         if ($result->EOF) {
@@ -693,7 +693,7 @@ function xarUser__getUserVarInfo($name)
                              xar_prop_validation
                              FROM $propertiestable
                              WHERE xar_prop_label LIKE '" . xarVarPrepForStore($name_prefix) ."%%'";
-            $result = $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query);
             if (!$result) return;
 
             while (!$result->EOF) {
@@ -731,7 +731,7 @@ function xarUser__getUserVarInfo($name)
                       xar_prop_validation
                       FROM $propertiestable
                       WHERE xar_prop_label = '" . xarVarPrepForStore($name) ."'";
-            $result = $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query);
             if (!$result) return;
 
             if (!$result->EOF) {
@@ -824,7 +824,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     $query = "UPDATE $userstable
               SET xar_name = '" . xarVarPrepForStore($value) . "'
               WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;

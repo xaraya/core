@@ -254,7 +254,7 @@ function xarSec__getAuthInfo($userId)
               FROM $userpermtable
               WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
               ORDER by xar_sequence";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while(!$result->EOF) {
@@ -282,7 +282,7 @@ function xarSec__getAuthInfo($userId)
               FROM $groupmembershiptable
               WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $usergroups[] = -1;
@@ -306,7 +306,7 @@ function xarSec__getAuthInfo($userId)
               FROM $grouppermtable
               WHERE xar_gid IN (" . xarVarPrepForStore($usergroups) . ")
               ORDER by xar_sequence";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while(!$result->EOF) {

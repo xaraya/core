@@ -81,7 +81,7 @@ function xarBlockGetInfo($blockId)
               ON        groups.xar_id = group_inst.xar_group_id
               WHERE     inst.xar_id = $blockId";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -129,7 +129,7 @@ function xarBlockGroupGetInfo($blockGroupId)
               FROM      $block_groups_table
               WHERE     xar_id = $blockGroupId";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     // Freak if we don't get one and only one result
@@ -158,7 +158,7 @@ function xarBlockGroupGetInfo($blockGroupId)
               WHERE     groups.xar_id = '$blockGroupId'
               ORDER BY  group_inst.xar_position ASC";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     // Load up list of group's instances
@@ -175,6 +175,7 @@ function xarBlockGroupGetInfo($blockGroupId)
     return $group;
 }
 
+    $result =& $dbconn->Execute($query);
 // PROTECTED FUNCTIONS
 
 /**
@@ -249,7 +250,7 @@ function xarBlock_loadAll()
                    xar_directory,
                    xar_regid
             FROM $modNametable";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while (!$result->EOF) {
@@ -397,7 +398,7 @@ function xarBlock_renderGroup($groupName)
               AND       inst.xar_state > 0
               ORDER BY  group_inst.xar_position ASC";
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $output = '';

@@ -269,7 +269,7 @@ function xarMLGetDynamic($refid, $table_name, $fields)
     $fields = implode(',', $fields);
 
     $query = "SELECT $fields FROM $table_name WHERE xar_refid = $refid";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return $dbresult;

@@ -21,6 +21,7 @@ function xarMain()
     xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
 
     // ANSWER <marco>: Who's gonna use that?
+    // EXAMPLE <mikespub>: print, rss, wap, ...
     // Allow theme override in URL first
     $themeName = xarVarCleanFromInput('theme');
     if (!empty($themeName)) {
@@ -75,27 +76,33 @@ function xarMain()
         return; // throw back
     }
 
-    /*
-    // TODO: formalize this and put code in xarTpl_renderPage ?
-    // Override default page template
-    if (xarVarIsCached('PageSettings','template')) {
-        $template = xarVarGetCached('PageSettings','template');
-    } else {
-        $template = 'default';
-    }
-    // Override default page title
+// FIXME: <mikespub> should modules call xarTplSetPageTitle() directly, if they want to override the page title ?
+    // Set page title
     if (xarVarIsCached('PageSettings','title')) {
-       $title = xarVarGetCached('PageSettings','title');
-       // dirty trick :-)
-       xarVarSetCached('Config.Variables', 'Site.Core.Slogan', $title);
+        // Override default page title
+        xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarVarGetCached('PageSettings','title'));
+    } else {
+        // Set the default page title
+        xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
     }
-    */
 
-    // Render page
-	if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+// FIXME: <mikespub> should modules call xarTplSetPageTemplateName() directly, if they want to override the page template ?
+    // Set page template
+    if (xarVarIsCached('PageSettings','template')) {
+        // Override default page template
+        xarTplSetPageTemplateName(xarVarGetCached('PageSettings','template'));
+    }
+
+    if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
         // Use the admin.xt page if available when $modType is admin
         xarTplSetPageTemplateName('admin');
-	}
+    }
+
+    if (xarTplGetPageTemplateName() == 'default') {
+        xarTplSetPageTemplateName($modName);
+    }
+
+    // Render page
     //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 

@@ -143,7 +143,7 @@ function xarModGetVar($modName, $name)
               FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -218,7 +218,7 @@ function xarModSetVar($modName, $name, $value)
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
     }
 
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
@@ -265,7 +265,7 @@ function xarModDelVar($modName, $name)
     $query = "DELETE FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     xarVarDelCached('Mod.Variables.' . $modName, $name);
@@ -325,7 +325,7 @@ function xarModGetInfo($modRegId)
                      xar_mode
               FROM $modulestable
               WHERE xar_regid = " . xarVarPrepForStore($modRegId);
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -403,7 +403,7 @@ function xarModGetInfo($modRegId)
 function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $orderBy = 'name')
 {
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',
-                                     'class' => 'infos', 'category' => 'infos');
+                                     'class' => 'mods', 'category' => 'mods');
 
     // Optional arguments.
     if (!isset($startNum)) $startNum = 1;
@@ -421,7 +421,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
         }
         // Here $validOrderFields[$orderField] is the table alias
         $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
-        if ($validOrderFields[$orderField] == 'infos') {
+        if ($validOrderFields[$orderField] == 'mods') {
             $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
         }
     }
@@ -1059,7 +1059,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
               AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
               AND xar_action = '" . xarVarPrepForStore($hookAction) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $resarray = array();
@@ -1161,7 +1161,7 @@ function xarMod_getBaseInfo($modName)
                      xar_mode
               FROM $modulestable
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     if ($result->EOF) {
@@ -1226,7 +1226,7 @@ function xarMod_getVarsByModule($modName)
                      xar_value
               FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while (!$result->EOF) {
@@ -1267,7 +1267,7 @@ function xarMod_getVarsByName($name)
                      xar_value
               FROM $module_varsTable
               WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     while (!$result->EOF) {
@@ -1361,7 +1361,7 @@ function xarMod__getState($modRegId, $modMode)
     $query = "SELECT xar_state
               FROM $module_statesTable
               WHERE xar_regid = '" . xarVarPrepForStore($modRegId) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     // Should never happen!

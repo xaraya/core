@@ -282,7 +282,7 @@ function pnModRegisterHook($hookObject,
               '" . xarVarPrepForStore($hookModName) . "',
               '" . xarVarPrepForStore($hookModType) . "',
               '" . xarVarPrepForStore($hookFuncName) . "')";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -324,7 +324,7 @@ function pnModUnregisterHook($hookObject,
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
               AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
               AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -376,7 +376,7 @@ function xarModRegisterHook($hookObject,
               '" . xarVarPrepForStore($hookModName) . "',
               '" . xarVarPrepForStore($hookModType) . "',
               '" . xarVarPrepForStore($hookFuncName) . "')";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
@@ -418,7 +418,7 @@ function xarModUnregisterHook($hookObject,
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
               AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
               AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
-    $result = $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     return true;
