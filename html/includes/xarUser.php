@@ -84,7 +84,6 @@ function xarUserLogIn($userName, $password, $rememberMe)
     if (xarUserIsLoggedIn()) {
         return true;
     }
-
     if (empty($userName)) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
         return;

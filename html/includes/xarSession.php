@@ -203,7 +203,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
 
     $sessioninfoTable = $xartable['session_info'];
     $query = "UPDATE $sessioninfoTable
-              SET xar_pid = " . xarVarPrepForStore($userId) . ",
+              SET xar_uid = " . xarVarPrepForStore($userId) . ",
                   xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
               WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
     $result =& $dbconn->Execute($query);

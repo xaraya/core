@@ -109,6 +109,7 @@ class xarMasks
 					FROM $this->maskstable WHERE xar_module = '$module'
 					AND xar_component = '$component'
 					ORDER BY xar_name";
+		echo $query;exit;
 			}
 		}
 		$result = $this->dbconn->Execute($query);
@@ -296,9 +297,10 @@ class xarMasks
 		if ($module == '') list($module) = xarRequestGetInfo();
 		$masks =  $this->getMasks($module, $component);
 		if ($masks == array()) {
-			$msg = xarML('No masks registered for component name: ') . $component;
+			$msg = xarML('No masks registered for component name: ') . $component .
+			xarML(' in module: ') . $module . xarML('. Check if the component and module names are correct.');
 			xarExceptionSet(XAR_USER_EXCEPTION, 'NO_COMPONENT',
-						   new SystemException($msg));
+						   new DefaultUserException($msg));
         	return;
 		}
 

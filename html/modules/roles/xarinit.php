@@ -143,8 +143,8 @@ function roles_init()
 	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
 			VALUES (3, 'Oversight', 1)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email)
-			VALUES (4, 'Overseer', 0, 'overseer', 'overseer@xaraya.com')";
+	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
+			VALUES (4, 'Overseer', 0, 'overseer', 'overseer@xaraya.com', md5('xaraya'))";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_roles (xar_pid, xar_name, xar_type)
 			VALUES (5, 'Admins', 1)";

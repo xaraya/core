@@ -223,10 +223,10 @@ function installer_admin_bootstrap()
      xarTplSetThemeName('installer');
 
     // log in admin user
-    if (!xarUserLogIn('overseer', 'password', 0)) {
+    if (!xarUserLogIn('overseer', 'xaraya', 0)) {
         return;
     }
-    // Activate modules
+   // Activate modules
     if (!xarModAPIFunc('installer',
                         'admin',
                         'initialise',
@@ -250,7 +250,7 @@ function installer_admin_create_administrator()
 	xarTplSetThemeName('installer');
     $data['language'] = 'English';
 
-// Security Check
+echo "hi";exit;// Security Check
 	if(!securitycheck('Admin')) return;
 
     if (!xarVarCleanFromInput('create')) {

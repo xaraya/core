@@ -375,51 +375,55 @@ function privileges_init()
     *********************************************************************/
 
 	$query = "INSERT INTO xar_masks VALUES (
-	1, 'PrivilegesGateway', 'All', 'Privileges',
+	1, 'Admin', 'All', 'installer',
+	'Admin','All',800,'')";
+	if (!$dbconn->Execute($query)) return;
+	$query = "INSERT INTO xar_masks VALUES (
+	2, 'PrivilegesGateway', 'All', 'Privileges',
 	'All','All',200,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	2, 'ViewPrivileges', 'All', 'Privileges',
+	3, 'ViewPrivileges', 'All', 'Privileges',
 	'ViewPrivileges','All',200,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	3, 'EditPrivilege', 'All', 'Privileges',
+	4, 'EditPrivilege', 'All', 'Privileges',
 	'EditPrivilege','All',500,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	4, 'AddPrivilege', 'All', 'Privileges',
+	5, 'AddPrivilege', 'All', 'Privileges',
 	'AddPrivilege','All',600,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	5, 'DeletePrivilege', 'All', 'Privileges',
+	6, 'DeletePrivilege', 'All', 'Privileges',
 	'DeletePrivilege','All',700,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	6, 'ViewPrivilegeRoles', 'All', 'Privileges',
+	7, 'ViewPrivilegeRoles', 'All', 'Privileges',
 	'ViewRoles','All',200,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	7, 'RemoveRole', 'All', 'Privileges',
+	8, 'RemoveRole', 'All', 'Privileges',
 	'RemoveRole','All',700,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	8, 'RolesGateway', 'All', 'Roles',
+	9, 'RolesGateway', 'All', 'Roles',
 	'All','All',200,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	9, 'ViewRoles', 'All', 'Roles',
+	10, 'ViewRoles', 'All', 'Roles',
 	'ViewRoles','All',200,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	10, 'ModMemberAll', 'All', 'Roles',
+	11, 'ModMemberAll', 'All', 'Roles',
 	'EditMember','All',500,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	11, 'AddMemberAll', 'All', 'Roles',
+	12, 'AddMemberAll', 'All', 'Roles',
 	'AddMember','All',600,'')";
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_masks VALUES (
-	12, 'DelMemberAll', 'All', 'Roles',
+	13, 'DelMemberAll', 'All', 'Roles',
 	'DeleteMember','All',700,'')";
 	if (!$dbconn->Execute($query)) return;
 

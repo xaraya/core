@@ -46,6 +46,29 @@ define('ACCESS_ADMIN', 800);
  */
 $schemas = array();
 
+include_once 'modules/privileges/xarprivileges.php';
+
+
+/**
+ * securitycheck: check a role's privileges against the masks of a component
+ *
+ * Checks the current group or user's privileges against a component
+ * This function should be invoked every time a security check needs to be done
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   component string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function securitycheck($component,$showexception=1,$instance='',$role='',$module='')
+	{
+		$masks = new xarMasks();
+		return $masks->securitycheck($component,$showexception,$instance,$role,$module);
+	}
+
 /**
  * see if a user is authorised to carry out a particular task
  * @access public
