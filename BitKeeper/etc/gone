@@ -3524,6 +3524,7 @@ jan@jack.iwr.uni-heidelberg.de|docs/rfc/images/rfc0007_3.dia~|20021126191024|278
 johnny@falling.local.lan|html/images/index.html|20021003154139|20688|ca7c306767ddff11
 johnny@falling.local.lan|html/index.html|20021003153845|26519|1b682d56eaba4d7e
 johnny@falling.local.lan|html/modules/xarlang/index.html|20030117163131|00840|e915f49fce8176ee
+marcel@hsdev.com
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/HTMLSmartyConverter.inc|20030102003718|05721|bba999cd34ee86de
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/templates/default/templates/basicindex.tpl|20030102003718|09725|ee42917d78dcf1a9
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/templates/default/templates/blank.tpl|20030102003718|12653|caf8125d54f0dd8
@@ -3617,6 +3618,7 @@ marcel@hsdev.com|html/modules/comments/xarincludes/rendering/flat.php|2002122901
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/nested.php|20021229014640|29999|dcaba3759da027b4
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/renderbase.php|20021229014640|33771|60a22f8172d51c53
 marcel@hsdev.com|html/modules/comments/xarincludes/rendering/threaded.php|20021229014640|37538|30c409fb5b4eeee2
+marcel@hsdev.com|html/var/cache/templates/index.html|20030203085125|46538|5592895c37061f27
 marcel@hsdev.com|tests/bk/tobedeletd3|20021201185524|27771|2ad34953b9eb374d
 marcel@hsdev.com|tests/bk/tobedelted1|20021201185524|23311|4964bad518a1862a
 marcel@hsdev.com|tests/bk/tobedleted2|20021201185524|24280|230730a268eb4cc3
@@ -3643,6 +3645,7 @@ marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-01-30-11-18-43|2003021511225
 marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-02-15-11-05-40|20030215112254|06142|db0cb813baaa926b
 marcel@sasquatch.pulpcontent.com|PENDING/patch-2003-02-15-11-28-06|20030215113015|13732|e57e01667ca7e7b1
 marcel@sasquatch.pulpcontent.com|PENDING/placeholder|20021104230459|12476|a57f1db1920c49e4
+marcel@sasquatch.pulpcontent.com|PENDING/placeholder|20021105015158|62144|e6c3f51d496ece92
 marco@jabawack.canini.org|BitKeeper/deleted/.del-admin-release_info.xd~ddfb32f578e82abc|20030102175838|59788
 marco@jabawack.canini.org|BitKeeper/deleted/.del-admin-show_menu.xd~112af6aad63c479d|20030102175909|40380
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030102175539|31590
@@ -3650,6 +3653,8 @@ marco@jabawack.canini.org|BitKeeper/etc/ignore|20030102180532|43897
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030111102716|44898
 marco@jabawack.canini.org|BitKeeper/etc/ignore|20030114090110|45797
 marco@jabawack.canini.org|docs/rfc/rfc0020.txt|20021222121721|50563|f9c640e3b20a4ae
+marco@jabawack.canini.org|html/locales/en_US.ISO-8859-1/php/core/core.php|20030107014412|05069|697a3d6fe
+marco@jabawack.canini.org|html/locales/en_US.ISO-8859-1/php/core/core.php|20030107014412|05069|697a3d6fe51ae916
 marco@jabawack.canini.org|html/locales/en_US.iso-8859-1/locale.xml|20021230150718|58635|f0e901602454777b
 marco@jabawack.canini.org|html/locales/en_US.iso-8859-1/php/xarcore.php|20021130224109|33405|f52cf649f7788c15
 marco@jabawack.canini.org|html/modules/translations/class/PHPParser.php|20030107020326|20525
