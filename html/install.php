@@ -62,8 +62,9 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
-    // Get module parameters
-    list($modName, $modType, $funcName) = xarRequestGetInfo();
+    // Hardcode module name and type
+    $modName = 'installer';
+    $modType = 'admin';
 
     // Build functioname from phase
     $funcName = 'phase'.$phase;
