@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id:
- * 
+ *
  * Add a privilege to the repository
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,7 +19,7 @@
 function privileges_admin_addprivilege()
 {
     if(!xarVarFetch('pname',      'isset', $pname,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',     'isset', $prealm,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prealm',     'isset', $prealm,     'All', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pmodule',    'isset', $pmodule,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pcomponent', 'isset', $pcomponent, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}

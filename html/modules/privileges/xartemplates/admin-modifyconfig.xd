@@ -1,0 +1,59 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+</xar:if>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
+	<div class="xar-mod-body"><h2><xar:mlstring>Configuration</xar:mlstring></h2>
+		<div>
+			<dl class="xar-tabs">
+				<dt class="help">
+					<xar:mlstring>
+						Actions
+					</xar:mlstring>
+					: 
+				</dt>
+				<xar:if condition="$tab eq 'realms'">
+					<dd class="active">
+						<a href="#xarModURL('privileges', 'admin', 'modifyconfig', array('tab' => 'realms'))#">
+							<xar:mlstring>Realms</xar:mlstring>
+						</a>
+					</dd>    
+				<xar:else />
+					<dd>
+						<a href="#xarModURL('privileges', 'admin', 'modifyconfig', array('tab' => 'realms'))#">    
+							<xar:mlstring>Realms</xar:mlstring>
+						</a>
+					</dd>    
+				</xar:if>
+			</dl>
+		</div>
+		<div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
+
+	<xar:comment> ------------------- Begin General Options --------------------- </xar:comment>
+		<br />
+		<xar:if condition="$tab eq 'realms'">
+			<form method="post" action="#xarModURL('roles', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded" >
+				<input type="hidden" name="authid" id="authid" value="#$authid#" />
+				<input type="hidden" name="phase" id="phase" value="update" />
+				<input type="hidden" name="tab" id="tab" value="#$tab#" />
+				<h4><xar:mlstring>Working with realms</xar:mlstring></h4>
+				<table border="0" cellpadding="2" cellspacing="0">
+					<tr>
+						<td>
+							<label for="enablerealms">
+							<xar:mlstring>Enable Realms</xar:mlstring>:</label>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('privileges', 'showrealms')">
+								<input type="checkbox" name="enablerealms" id="enablerealms" value="1" checked="checked" />
+							<xar:else />
+								<input type="checkbox" name="enablerealms" id="enablerealms" value="1" />
+							</xar:if>
+						</td>
+					</tr>
+				</table>
+				<br /><br />
+				<input type="submit" value="#$updatelabel#"  />
+			</form>
+		</xar:if>
+    </div>
+</div>

@@ -21,8 +21,6 @@
  */
 function privileges_adminapi_getmenulinks()
 {
-
-// Security Check
     if (xarSecurityCheck('EditPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
@@ -31,13 +29,20 @@ function privileges_adminapi_getmenulinks()
                               'label' => xarML('View Privileges'));
     }
 
-// Security Check
     if (xarSecurityCheck('AssignPrivilege',0)) {
         $menulinks[] = Array('url'   => xarModURL('privileges',
                                                   'admin',
                                                   'newprivilege'),
                               'title' => xarML('Add a new privilege to the system'),
                               'label' => xarML('Add Privilege'));
+    }
+
+    if (xarSecurityCheck('AdminRole',0)) {
+        $menulinks[] = Array('url'   => xarModURL('privileges',
+                                                  'admin',
+                                                  'modifyconfig'),
+                              'title' => xarML('Modify the privileges module configuration'),
+                              'label' => xarML('Modify Config'));
     }
 
     if (empty($menulinks)){

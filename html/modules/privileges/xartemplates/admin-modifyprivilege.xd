@@ -120,23 +120,24 @@ document.forms['privilegeform'].submit();}
                                             <label for="ptype1_full"><xar:mlstring>with rights</xar:mlstring></label>
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td>
-                                            <xar:mlstring>Realm</xar:mlstring>
-                                        </td>
-                                        <td>
-                                            <select name="prealm" id="prealm" size="1" tabindex="3">
-                                                <xar:loop name="$realms">
-                                                    <xar:if condition="$loop:item['name'] eq $prealm">
-                                                        <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-                                                    <xar:else />
-                                                        <option value="#$loop:item['name']#">#$loop:item['name']#</option>
-                                                    </xar:if>
-                                                </xar:loop>
-                                            </select>
-                                        </td>
-                                    </tr>
+									<xar:if condition="xarModGetVar('privileges','showrealms')">
+										<tr>
+											<td>
+												<xar:mlstring>Realm</xar:mlstring>
+											</td>
+											<td>
+												<select name="prealm" id="prealm" size="1" tabindex="3">
+													<xar:loop name="$realms">
+														<xar:if condition="$loop:item['name'] eq $prealm">
+															<option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
+														<xar:else />
+															<option value="#$loop:item['name']#">#$loop:item['name']#</option>
+														</xar:if>
+													</xar:loop>
+												</select>
+											</td>
+										</tr>
+                                    </xar:if>
                                     <tr>
                                         <td>
                                             <xar:mlstring>Module</xar:mlstring>
@@ -283,7 +284,7 @@ document.forms['privilegeform'].submit();}
             </tr>
         </table>
         <br /><br />
-        <h3><xar:mlstring>Add Privilege To</xar:mlstring> '#$pname#'</h3>
+        <h3><xar:mlstring>Add a Privilege to</xar:mlstring> '#$pname#'</h3>
         <table border="0" cellpadding="2" cellspacing="0">
             <tr>
                 <td>
