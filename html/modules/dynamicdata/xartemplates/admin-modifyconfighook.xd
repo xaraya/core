@@ -13,16 +13,16 @@
        <td><b>#$labels['source']#</b></td>
        <td><b>#$labels['validation']#</b></td>
     </tr>
-<xar:loop name="$fields">
+<xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
-        <td>#$id#</td>
-        <td>#$label#</td>
-        <td><xar:data-output type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
-        <td>#$default#</td>
-        <td>#$source#</td>
-        <td>#$validation#</td>
+        <td>#$field['id']#</td>
+        <td>#$field['label']#</td>
+        <td><xar:data-output property="$fieldtypeprop" value="$field['type']" /></td>
+        <td>#$field['default']#</td>
+        <td>#$field['source']#</td>
+        <td>#$field['validation']#</td>
     </tr>
-</xar:loop>
+</xar:foreach>
 </xar:if>
 </table>
 <br />

@@ -42,33 +42,32 @@ Tip : empty label -> delete field for all items
        <td><b>#$labels['status']#</b></td>
     </tr>
 
-<xar:loop name="$fields">
+<xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
-        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $id))#">#$id#</a></td>
-        <td><input type="text" name="dd_label[#$id#]" id="dd_label[#$id#]" size="10" value="#$label#" /></td>
-        <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" id="dd_type['.$id.']" value="$type" /></td>
-        <td><input type="text" name="dd_default[#$id#]" id="dd_default[#$id#]" size="10" value="#$default#" /></td>
-        <td>#$source#</td>
-        <td><input type="text" name="dd_validation[#$id#]" id="dd_validation[#$id#]" size="10" value="#$validation#" /></td>
-        <td><xar:data-input type="fieldstatus" name="dd_status['.$id.']" size="15" value="$status" /></td>
+        <td><a href="#xarModURL('dynamicdata','admin','modify',array('objectid' => 2, 'itemid' => $field['id']))#">#$field['id']#</a></td>
+        <td><input type="text" name="dd_label[#$field['id']#]" id="dd_label[#$field['id']#]" size="10" value="#$field['label']#" /></td>
+        <td><xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="dd_type['.$field['id'].']" value="$field['type']" /></td>
+        <td><input type="text" name="dd_default[#$field['id']#]" id="dd_default[#$field['id']#]" size="10" value="#$field['default']#" /></td>
+        <td>#$field['source']#</td>
+        <td><input type="text" name="dd_validation[#$field['id']#]" id="dd_validation[#$field['id']#]" size="10" value="#$field['validation']#" /></td>
+        <td><xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" size="15" value="$field['status']" /></td>
     </tr>
-</xar:loop>
+</xar:foreach>
 
     <tr align="left" valign="middle">
         <td>#$labels['new']#</td>
         <td><input type="text" name="dd_label[0]" id="dd_label[0]" size="10" /></td>
-        <td><xar:data-input type="fieldtype" name="dd_type[0]" value="" /></td>
+        <td><xar:data-input property="$fieldtypeprop" name="dd_type[0]" value="" /></td>
         <td><input type="text" name="dd_default[0]" id="dd_default[0]" size="10" /></td>
         <td>
             <select name="dd_source[0]" id="dd_source[0]">
-            <!-- xar:foreach var="$sources" as="$mysource" Johnny was here :) -->
             <xar:foreach in="$sources" value="$mysource">
                 <option>#$mysource#</option>
             </xar:foreach>
             </select>
         </td>
         <td><input type="text" name="dd_validation[0]" id="dd_validation[0]" size="10" /></td>
-        <td><xar:data-input type="fieldstatus" name="dd_status[0]" value="1" /></td>
+        <td><xar:data-input property="$fieldstatusprop" name="dd_status[0]" value="1" /></td>
     </tr>
 
 <xar:if condition="$modid eq 182">
@@ -125,31 +124,31 @@ Tip : empty label -> delete field for all items
        <td><b>#$labels['validation']#</b></td>
     </tr>
 
-<xar:loop name="$static">
+<xar:foreach in="$static" value="$field">
     <tr align="left" valign="middle">
-        <td>#$name#</td>
-        <td>#$label#</td>
-        <td><xar:data-output type="fieldtype" name="static_type['.$id.']" value="$type" /></td>
-        <td>#$default#</td>
-        <td>#$source#</td>
-        <td>#$validation#</td>
+        <td>#$field['name']#</td>
+        <td>#$field['label']#</td>
+        <td><xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']" /></td>
+        <td>#$field['default']#</td>
+        <td>#$field['source']#</td>
+        <td>#$field['validation']#</td>
     </tr>
-</xar:loop>
+</xar:foreach>
 
 <!-- xar:data-list module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
 
 <xar:if condition="count($tables) gt 0">
     <tr>
        <td colspan="6" align="center">
-       <xar:loop name="$tables">
+       <xar:foreach in="$tables" value="$table">
            <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
                <input type="hidden" name="authid" id="authid" value="#$authid#" />
                <input type="hidden" name="modid" id="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-               <input type="hidden" name="table" id="table" value="#$tname#" />
-               <input type="submit" value="#xarML('Import table')# #$tname#">
+               <input type="hidden" name="table" id="table" value="#$table#" />
+               <input type="submit" value="#xarML('Import table')# #$table#">
            </form>
-       </xar:loop>
+       </xar:foreach>
        </td>
     <tr>
 </xar:if>
@@ -173,25 +172,25 @@ Tip : empty label -> delete field for all items
        <td><b>#$labels['linkto']#</b></td>
     </tr>
 
-<xar:loop name="$relations">
-    <xar:if condition="count($links) gt 0">
-        <xar:loop name="$links">
+<xar:foreach in="$relations" value="$relation">
+    <xar:if condition="count($relation['links']) gt 0">
+        <xar:foreach in="$relation['links']" value="$link">
         <tr align="left" valign="middle">
-            <td>#$module#</td>
-            <td>#$type#</td>
-            <td>#$from#</td>
-            <td>#$to#</td>
+            <td>#$relation['module']#</td>
+            <td>#$link['type']#</td>
+            <td>#$link['from']#</td>
+            <td>#$link['to']#</td>
         </tr>
-        </xar:loop>
+        </xar:foreach>
     <xar:else />
         <tr align="left" valign="middle">
-            <td>#$module#</td>
+            <td>#$relation['module']#</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
             <td>-</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
         </tr>
     </xar:if>
-</xar:loop>
+</xar:foreach>
 
 </form>
 </table>

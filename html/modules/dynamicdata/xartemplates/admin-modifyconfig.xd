@@ -20,17 +20,17 @@
        <td><b>...</b></td>
     </tr>
 
-<xar:loop name="$fields">
+<xar:foreach in="$fields" value="$field">
     <tr align="left" valign="middle">
-        <td>#$id#</td>
-        <td><input type="text" name="name[#$id#]" id="name[#$id#]" size="15" value="#$name#" /></td>
-        <td><input type="text" name="label[#$id#]" id="label[#$id#]" size="20" value="#$label#" /></td>
-        <td><xar:data-input type="fieldtype" name="format['.$id.']" value="$format" /></td>
+        <td>#$field['id']#</td>
+        <td><input type="text" name="name[#$field['id']#]" id="name[#$field['id']#]" size="15" value="#$field['name']#" /></td>
+        <td><input type="text" name="label[#$field['id']#]" id="label[#$field['id']#]" size="20" value="#$field['label']#" /></td>
+        <td><xar:data-input property="$fieldtypeprop" name="format['.$field['id'].']" value="$field['format']" /></td>
         <td>&lt;-- see input</td>
-        <td><input type="text" name="validation[#$id#]" id="validation[#$id#]" size="20" value="#$validation#" /></td>
+        <td><input type="text" name="validation[#$field['id']#]" id="validation[#$field['id']#]" size="20" value="#$field['validation']#" /></td>
         <td>...</td>
     </tr>
-</xar:loop>
+</xar:foreach>
 
     <tr align="left" valign="middle">
         <td>#$labels['new']#</td>

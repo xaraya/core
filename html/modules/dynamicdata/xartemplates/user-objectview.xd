@@ -18,9 +18,9 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                <xar:loop name="$links[$itemid]">
-                    #$ojoin# <a href="#$olink#">#$otitle#</a>
-                </xar:loop>
+                <xar:foreach in="$links[$itemid]" value="$option">
+                    #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+                </xar:foreach>
                 </td>
             </tr>
             </xar:if>
@@ -76,9 +76,9 @@
         <xar:if condition="empty($linkfield)">
             <td valign="top" align="center">
             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
-                <xar:loop name="$links[$itemid]">
-                    #$ojoin# <a href="#$olink#">#$otitle#</a>
-                </xar:loop>
+                <xar:foreach in="$links[$itemid]" value="$option">
+                    #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+                </xar:foreach>
             <xar:else />
                 &nbsp;
             </xar:if>
@@ -106,24 +106,24 @@
 
 <xar:elseif condition="$layout eq 'bullet'" />
     <ul>
-    <xar:loop name="$items">
+    <xar:foreach in="$items" value="$item">
     <li>
-        <xar:loop name="$fields">
-            <xar:if condition="!empty($flink)">
-                <a href="#$flink#">
+        <xar:foreach in="$item['fields']" value="$field">
+            <xar:if condition="!empty($field['flink'])">
+                <a href="#$field['flink']#">
             </xar:if>
-            <xar:data-output type="$type" name="dd_'.$id.'" value="$value" />
-            <xar:if condition="!empty($flink)">
-                </a><xar:set name="$flink">''</xar:set>
+            <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
+            <xar:if condition="!empty($field['flink'])">
+                </a>
             </xar:if>
-        </xar:loop>
-        <xar:if condition="!empty($options) and count($options) gt 0">
-           [ <xar:loop name="$options">
-                #$ojoin# <a href="#$olink#">#$otitle#</a>
-            </xar:loop> ]
+        </xar:foreach>
+        <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
+           [ <xar:foreach in="$item['options']" value="$option">
+                #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+            </xar:foreach> ]
         </xar:if>
     </li>
-    </xar:loop>
+    </xar:foreach>
     </ul>
 
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">

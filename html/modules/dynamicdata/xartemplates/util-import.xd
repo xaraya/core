@@ -11,9 +11,9 @@
 
 <xar:mlstring>File</xar:mlstring> :
 <select name="import" id="import">
-<xar:loop name="$options">
-    <option value="#$id#">#$name#</option>
-</xar:loop>
+<xar:foreach in="$options" value="$option">
+    <option value="#$option['id']#">#$option['name']#</option>
+</xar:foreach>
 </select>
 <br /><br />
 <input type="submit" value="#xarML('Import Definition')#" />

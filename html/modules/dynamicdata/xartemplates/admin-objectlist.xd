@@ -18,9 +18,9 @@
             </xar:if>
         </xar:foreach>
         <td>
-            <xar:loop name="$links[$itemid]">
-                #$ojoin# <a href="#$olink#">#$otitle#</a>
-            </xar:loop>
+            <xar:foreach in="$links[$itemid]" value="$option">
+                #$option['ojoin']# <a href="#$option['olink']#">#$option['otitle']#</a>
+            </xar:foreach>
         </td>
     </tr>
     </xar:foreach>

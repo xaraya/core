@@ -1,30 +1,30 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <xar:loop name="$labels">
-            <th align="center">#$label#</th>
-        </xar:loop>
+        <xar:foreach in="$labels" value="$item">
+            <th align="center">#$item['label']#</th>
+        </xar:foreach>
         <th align="center"><xar:mlstring>Options</xar:mlstring></th>
     </tr>
-    <xar:loop name="$items">
+    <xar:foreach in="$items" value="$item">
     <tr>
     <!-- we don't use xar:data-form or xar:data-input here, because this
          is typically not an input form -->
-        <xar:loop name="$fields">
-            <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
-        </xar:loop>
+        <xar:foreach in="$item['fields']" value="$field">
+            <td><xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" /></td>
+        </xar:foreach>
         <td>
-            <xar:loop name="$options">
-                #$join# <a href="#$link#">#$title#</a>
-            </xar:loop>
+            <xar:foreach in="$item['options']" value="$option">
+                #$option['join']# <a href="#$option['link']#">#$option['title']#</a>
+            </xar:foreach>
         </td>
     </tr>
-    </xar:loop>
+    </xar:foreach>
     <xar:if condition="!empty($newlink)">
     <tr>
-        <xar:loop name="$labels">
+        <xar:foreach in="$labels" value="$item">
             <td>&nbsp;</td>
-        </xar:loop>
+        </xar:foreach>
         <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
     </tr>
     </xar:if>
@@ -50,22 +50,22 @@
 <xar:elseif condition="$layout eq 'cells'" />
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
-        <xar:loop name="$labels">
-            <th align="center">#$label#</th>
-        </xar:loop>
+        <xar:foreach in="$labels" value="$item">
+            <th align="center">#$item['label']#</th>
+        </xar:foreach>
     </tr>
-    <xar:loop name="$items">
+    <xar:foreach in="$items" value="$item">
     <tr>
-        <xar:loop name="$fields">
-            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" size="15" /></td>
-        </xar:loop>
+        <xar:foreach in="$item['fields']" value="$field">
+            <td><xar:data-input type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" size="15" /></td>
+        </xar:foreach>
     </tr>
-    </xar:loop>
+    </xar:foreach>
     <xar:if condition="!empty($newlink)">
     <tr>
-        <xar:loop name="$labels">
+        <xar:foreach in="$labels" value="$item">
             <td>&nbsp;</td>
-        </xar:loop>
+        </xar:foreach>
         <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
     </tr>
     </xar:if>

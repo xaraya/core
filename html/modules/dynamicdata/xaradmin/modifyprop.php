@@ -132,6 +132,9 @@ function dynamicdata_admin_modifyprop()
     // Specify some labels and values for display
     $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
 
+    $data['fieldtypeprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
+    $data['fieldstatusprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldstatus'));
+
     if (empty($details)) {
         $data['static'] = array();
         $data['relations'] = array();
@@ -164,7 +167,7 @@ function dynamicdata_admin_modifyprop()
         foreach ($data['static'] as $field) {
             if (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
                 $table = $matches[1];
-                $data['tables'][$table] = array('tname' => $table);
+                $data['tables'][$table] = $table;
             }
         }
     }

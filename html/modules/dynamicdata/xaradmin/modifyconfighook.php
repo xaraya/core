@@ -64,14 +64,16 @@ function dynamicdata_admin_modifyconfighook($args)
 
     $labels['dynamicdata'] = xarML('Dynamic Data Fields');
     $labels['config'] = xarML('modify');
-    $link = xarModURL('dynamicdata','admin','modifyprop',
-                     array('modid' => $modid,
-                           'itemtype' => $itemtype));
 
-    return xarTplModule('dynamicdata','admin','modifyconfighook',
-                         array('labels' => $labels,
-                               'link' => $link,
-                               'fields' => $fields));
+    $data = array();
+    $data['labels'] = $labels;
+    $data['link'] = xarModURL('dynamicdata','admin','modifyprop',
+                              array('modid' => $modid,
+                                    'itemtype' => $itemtype));
+    $data['fields'] = $fields;
+    $data['fieldtypeprop'] = & Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
+
+    return xarTplModule('dynamicdata','admin','modifyconfighook',$data);
 }
 
 ?>

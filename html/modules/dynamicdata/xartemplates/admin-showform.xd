@@ -1,10 +1,10 @@
 <xar:if condition="empty($layout) or $layout eq 'default'">
-    <xar:loop name="$fields">
+    <xar:foreach in="$fields" value="$field">
         <tr align="left" valign="middle">
-            <td>#$label# </td>
-            <td><xar:data-input type="$type" name="dd_'.$id.'" value="$value" validation="$validation" /> <xar:if condition="!empty($invalid)"><span class="xar-error"><xar:mlstring>Invalid</xar:mlstring> #$invalid#</span></xar:if></td>
+            <td>#$field['label']# </td>
+            <td><xar:data-input type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" validation="$field['validation']" /> <xar:if condition="!empty($field['invalid'])"><span class="xar-error"><xar:mlstring>Invalid</xar:mlstring> #$field['invalid']#</span></xar:if></td>
         </tr>
-    </xar:loop>
+    </xar:foreach>
 <xar:else />
     <xar:mlstring>Specify your own layout here...</xar:mlstring>
     <br /><br />

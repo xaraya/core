@@ -14,23 +14,23 @@
         <th><xar:mlstring>Module</xar:mlstring></th>
         <th><xar:mlstring>Options</xar:mlstring></th>
     </tr>
-    <xar:loop name="$modlist">
-    <xar:if condition="!empty($header)">
+    <xar:foreach in="$modlist" value="$module">
+    <xar:if condition="!empty($module['header'])">
     <tr>
-        <td colspan="2"><b>#$header#</b></td>
+        <td colspan="2"><b>#$module['header']#</b></td>
     </tr>
     </xar:if>
     <tr>
-        <td>#$name#</td>
+        <td>#$module['name']#</td>
         <td>
-           <xar:if condition="empty($link)">
+           <xar:if condition="empty($module['link'])">
                <xar:mlstring>Not applicable</xar:mlstring>
                <xar:else />
-                   <a href="#$link#"><xar:mlstring>View Properties</xar:mlstring></a>
+                   <a href="#$module['link']#"><xar:mlstring>View Properties</xar:mlstring></a>
            </xar:if>
         </td>
     </tr>
-    </xar:loop>
+    </xar:foreach>
 </table>
 
 </xar:if>

@@ -28,6 +28,8 @@ function dynamicdata_admin_modifyconfig()
         $data['fields'] = array();
     }
 
+    $data['fieldtypeprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
+
     $data['labels'] = array(
                             'id' => xarML('ID'),
                             'name' => xarML('Name'),

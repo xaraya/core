@@ -9,25 +9,25 @@
        <td><strong><xar:mlstring>To</xar:mlstring></strong></td>
     </tr>
 
-<xar:loop name="$relations">
-    <xar:if condition="count($links) gt 0">
-        <xar:loop name="$links">
+<xar:foreach in="$relations" value="$relation">
+    <xar:if condition="count($relation['links']) gt 0">
+        <xar:foreach in="$relation['links']" value="$link">
         <tr align="left" valign="middle">
-            <td>#$module#</td>
-            <td>#$type#</td>
-            <td>#$from#</td>
-            <td>#$to#</td>
+            <td>#$relation['module']#</td>
+            <td>#$link['type']#</td>
+            <td>#$link['from']#</td>
+            <td>#$link['to']#</td>
         </tr>
-        </xar:loop>
+        </xar:foreach>
     <xar:else />
         <tr align="left" valign="middle">
-            <td>#$module#</td>
+            <td>#$relation['module']#</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
             <td>-</td>
             <td>(<xar:mlstring>not found</xar:mlstring>)</td>
         </tr>
     </xar:if>
-</xar:loop>
+</xar:foreach>
 </table>
 </div>
 </div>
