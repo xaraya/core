@@ -40,9 +40,9 @@ if (empty($step)) {
 <div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
 <div style="margin: auto;">
     <form method="POST" action="upgrade.php">
-    <p><input type="submit" value="Upgrade Core Tables"></p>
+    <p><input type="submit" value="Upgrade Core Tables">
 
-    <input type="hidden" name="step" value="1">
+    <input type="hidden" name="step" value="1"></p>
     </form>
     </div>
     </div>
