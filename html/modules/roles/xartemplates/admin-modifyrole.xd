@@ -29,11 +29,11 @@
 			      </tr>
 				    <tr>
 					    <td colspan="2">
-						    <xar:mlstring>This</xar:mlstring> 
+						    <xar:mlstring>This&nbsp;</xar:mlstring> 
 						    <xar:if condition="$ptype eq 0">
-							    <xar:mlstring>User</xar:mlstring>
+							    <xar:mlstring>User&nbsp;</xar:mlstring>
 						    <xar:else />
-							    <xar:mlstring>Group</xar:mlstring>
+							    <xar:mlstring>Group&nbsp;</xar:mlstring>
 						    </xar:if>
 						    <xar:mlstring>cannot be edited or deleted</xar:mlstring>
 					    </td>
@@ -153,14 +153,21 @@
     </div>
   </form>
 
-<h2><xar:mlstring>Add</xar:mlstring> 
+<h2><xar:mlstring>Add&nbsp;</xar:mlstring> 
 				<xar:if condition="$ptype eq 0">
-					<xar:mlstring>User</xar:mlstring>
+					<xar:mlstring>User&nbsp;</xar:mlstring>
 				<xar:else />
-					<xar:mlstring>Group</xar:mlstring>
+					<xar:mlstring>Group&nbsp;</xar:mlstring>
 				</xar:if>
-				'#$pname#' <xar:mlstring>To A Group</xar:mlstring></h2>
-<xar:if condition="$uid gt 4">
+				'#$pname#'&nbsp;<xar:mlstring>To A Group</xar:mlstring></h2>
+	<xar:if condition="$frozen">
+		<xar:mlstring>Cannot add to this&nbsp;</xar:mlstring>
+		<xar:if condition="$ptype eq 0">
+			<xar:mlstring>User&nbsp;</xar:mlstring>
+		<xar:else />
+			<xar:mlstring>Group&nbsp;</xar:mlstring>
+		</xar:if>
+	<xar:else />
 	<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
              <div>
 		<input type="hidden" name="uid" id="adduid" value="#$uid#" />
@@ -187,11 +194,11 @@
              </div>
 	</form>
 </xar:if>
-<h2><xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-<xar:else /><xar:mlstring>User</xar:mlstring>
+<h2><xar:if condition="$ptype eq 1"><xar:mlstring>Group&nbsp;</xar:mlstring>
+<xar:else /><xar:mlstring>User&nbsp;</xar:mlstring>
 </xar:if>
  '#$pname#' 
-<xar:mlstring>Group Memberships:</xar:mlstring></h2>
+<xar:mlstring>&nbsp;Group Memberships:</xar:mlstring></h2>
 <table border="0" cellpadding="2" cellspacing="0" class="xar-accent-outline">
     <tr>
         <th><xar:mlstring>Group</xar:mlstring></th>
