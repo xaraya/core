@@ -50,17 +50,17 @@ function initializeSetup() {
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    registerPrivilege('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
-    registerPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
-    registerPrivilege('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
-    registerPrivilege('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-    registerPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
-    registerPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
-    registerPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
-    registerPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
-    registerPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
-    registerPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
-    registerPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
+    xarRegisterPrivilege('NoPrivileges','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
+    xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
+    xarRegisterPrivilege('ReadAll','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
+    xarRegisterPrivilege('EditAll','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
+    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
+    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
+    xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
+    xarRegisterPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
+    xarRegisterPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
+    xarRegisterPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
+    xarRegisterPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
 
     /*********************************************************************
     * Arrange the  privileges in a hierarchy

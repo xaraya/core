@@ -155,7 +155,7 @@ $schemas = array();
 	}
 
 /**
- * registerPrivilege: create an entry in the database for a privilege
+ * xarRegisterPrivilege: create an entry in the database for a privilege
  *
  * This is a wrapper function
  *
@@ -168,7 +168,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function registerPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
+	function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='') {
 			$privileges = new xarPrivileges();
 			return $privileges->register($name,$realm,$module,$component,$instance,$level,$description='');
 	}
