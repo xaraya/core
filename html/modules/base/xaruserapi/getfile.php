@@ -48,6 +48,20 @@ function base_userapi_getfile($args)
 
     $invalid = false;
     $islocal = false;
+    
+    // <jsb> Do we only use getfile for remote files? Looks like it, but if 
+    // I'm wrong, this check should be moved further down.
+    if (!get_cfg_var('allow_url_fopen')) {
+        if (!$superrors){
+            $msg = xarML('PHP is not currently configured to allow URL retrieval
+                         of files.  Please turn on allow_url_fopen to use the 
+                         base module getfile userapi.');
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+        }
+        return;
+    }
+    
     if (empty($url)) {
         $invalid = true;
     } elseif (strstr($url,'://')) {
