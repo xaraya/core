@@ -40,7 +40,7 @@ function blocks_userapi_getallblocktypes($args)
     $block_types_table = $xartable['block_types'];
 
     // Fetch instance details.
-    $query = 'SELECT xar_id, xar_type, xar_module FROM ' . $block_types_table;
+    $query = 'SELECT xar_id, xar_module, xar_type FROM ' . $block_types_table;
 
     if (!empty($where)) {
         $query .= ' WHERE ' . implode(' AND ', $where);

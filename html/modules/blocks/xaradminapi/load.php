@@ -60,8 +60,8 @@ function blocks_adminapi_load($args)
     $blockDir = 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
 
     // Load the block.
-    // The base block file will always be loaded, and the block function will
-    // be loaded if available and requested.
+    // The base block file will always be loaded, and a more specific block
+    // function will be loaded if available and requested.
 
     if (!isset($loaded[$modName . ':' . $blockType])) {
         // Load the block base script.
@@ -71,6 +71,7 @@ function blocks_adminapi_load($args)
 
         if (!file_exists($filePath)) {
             // TODO: should the block base be optional now?
+            // i.e. do we really need to raise an error?
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filePath);
             return;
         }
@@ -80,13 +81,6 @@ function blocks_adminapi_load($args)
         // Load the block language files
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:blocks', $blockType) === NULL) { 
             return;
-        }
-
-        // Initialise block if required.
-        // This is mainly legacy support, but could still be useful.
-        $initFunc = "{$modName}_{$blockType}block_init";
-        if (function_exists($initFunc)) {
-            $initFunc();
         }
     }
 
