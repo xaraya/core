@@ -5,12 +5,22 @@
  * This is a standard function to provide an overview of all of the items
  * available from the module.
  */
-function dynamicdata_user_view()
+function dynamicdata_user_view($args)
 {
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+
+    // Override if needed from argument array
+    extract($args);
+
+    // Security measure for table browsing
+    if (!empty($table)) {
+        if(!xarSecurityCheck('AdminDynamicData')) return;
+    }
 
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
@@ -22,7 +32,9 @@ function dynamicdata_user_view()
     $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
+                                  'itemtype' => $itemtype,
+                                  'join'     => $join,
+                                  'table'    => $table));
     if (isset($object)) {
         $objectid = $object['objectid'];
         $modid = $object['moduleid'];
@@ -43,6 +55,8 @@ function dynamicdata_user_view()
     $data['param'] = $param;
     $data['startnum'] = $startnum;
     $data['label'] = $label;
+    $data['join'] = $join;
+    $data['table'] = $table;
 
 /*  // we could also retrieve the object list here, and pass that along to the template
     $numitems = 30;
