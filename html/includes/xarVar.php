@@ -159,10 +159,13 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  *                that could be one of restricted, basic, enhanced, admin. This last level is not configurable and allows
  *                every tag
  *
- * 'array' validates if the subject is an array
- * 'array: *other validation*' validates if the subject is an array, and if every element of the array
- *                             validate in the *other validation*
- *                          Example: xarVarValidate('array:str:1:20', $strings_array);
+ * 'array:<min elements>:<max elements>' validates if the subject is an array with the minimum and maximum
+ *                                       of elements specified
+ *
+ * 'list' validates if the subject is a list
+ * 'list: *other validation*' validates if the subject is an array, and if every element of the array
+ *                            validate in the *other validation*
+ *                          Example: xarVarValidate('list:str:1:20', $strings_array);
  *
  * 'enum' validates if the subject is any of the parameters
  *                  Example: xarVarValidate('enum:apple:orange:strawberry', $options);
