@@ -36,12 +36,12 @@ function roles_user_email($args)
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Mail User')));
             break;
 
-        case 'update':
+        case 'confirm':
 
             if (!xarVarFetch('name','str:1:100',$name)) return;
             if (!xarVarFetch('fname','str:1:100',$fname)) return;
-            if (!xarVarFetch('subject','html:strict',$subject)) return;
-            if (!xarVarFetch('message','html:strict',$message)) return;
+            if (!xarVarFetch('subject','html:restricted',$subject, '',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('message','html:restricted',$message, '',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('femail','str:1:100',$femail)) return;
 
             // Confirm authorisation code.
@@ -75,7 +75,7 @@ function roles_user_email($args)
 
 
             // lets update status and display updated configuration
-            xarResponseRedirect(xarModURL('roles', 'user', 'main'));
+            xarResponseRedirect(xarModURL('roles', 'user', 'view'));
 
             break;
     }
