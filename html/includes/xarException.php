@@ -164,7 +164,11 @@ function xarErrorSet($major, $errorID, $value = NULL)
     if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
         // TODO: remove again once xarLogException works
         if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
-        xarLogMessage("Logged error " . $obj->toString(), XARLOG_LEVEL_ERROR);
+        xarLogMessage("Logged error: " . $obj->toString(), XARLOG_LEVEL_ERROR);
+        if (!empty($stack)) 
+            xarLogMessage(
+                "Logged error backtrace: \n" . xarException__formatBacktrace($stack), 
+                XARLOG_LEVEL_ERROR);
         //xarLogException();
     }
 }
@@ -315,7 +319,7 @@ function xarExceptionHandled()
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
- * @return void
+ * @return voidx
  */
 function xarErrorHandled()
 {
@@ -706,6 +710,56 @@ function xarIsCoreException()
 {
     global $CoreStack;
     return $CoreStack->size() > 1;
+}
+
+//NOT GPLed CODE: (Probably Public Domain? or PHP's?)
+//Code from PHP's manual on function print_r
+//So this can work for versions lower than php 4.3 http://br.php.net/function.print_r
+//Code by ???? matt at crx4u dot com??? Not clear from the manual
+function xarException__formatBacktrace ($vardump,$key=false,$level=0)
+{
+    if (version_compare("4.3.0", phpversion(), "<=")) return print_r($vardump, true);
+    //else
+
+    $tabsize = 4;
+    
+    //make layout
+    $return .= str_repeat(' ', $tabsize*$level);
+    if ($level != 0) $key = "[$key] =>";
+        
+    //look for objects
+    if (is_object($vardump))
+        $return .= "$key ".get_class($vardump)." ".$vardump."\n";
+    else
+        $return .= "$key $vardump\n";
+        
+     //look recursief
+     if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
+        $level++;
+        $return .= str_repeat(' ', $tabsize*$level);
+        $return .= "(\n";
+    }
+
+    switch(gettype($vardump)){
+        case "object":
+            $vars=(array)get_object_vars($vardump);
+             foreach($vars as $key => $value)
+                $return .= xarException__formatBacktrace($value,$key,$level+1);
+            break;
+        case "array":
+            foreach ($vardump as $key => $value)
+                $return .= xarException__formatBacktrace($value,$key,$level+1);
+            break;
+    }
+
+    if (gettype($vardump) == 'object' || gettype($vardump) == 'array') {
+        $return .= str_repeat(' ', $tabsize*$level);
+        $return .= ")\n";
+        $level--;
+    }
+
+     //return everything
+     return $return;
 }
 
 ?>
