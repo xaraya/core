@@ -51,6 +51,7 @@ ie-win can calculate the widths correctly
 .xar-halfwidth,
 .xar-thirdwidth,
 .xar-quarterwidth,
+.xar-twothirdwidth,
 .xar-threequarterswidth {
     padding: 0;
     margin: auto 0;
@@ -275,6 +276,11 @@ miscellaneous utility clases
 }
 .xar-form-label {
     width: 15em;
+    display: block;
+    float: left;
+}
+.xar-form-labelshort {
+    width: 7em;
     display: block;
     float: left;
 }
