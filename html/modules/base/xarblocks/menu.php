@@ -113,7 +113,13 @@ function base_menublock_display($blockinfo)
                     $usercontent = array();
                     $contentlines = explode("LINESPLIT", $vars['content']);
                     foreach ($contentlines as $contentline) {
-                        list($url, $title, $comment, $child) = explode('|', $contentline);
+                        //list($url, $title, $comment, $child) = explode('|', $contentline);
+                    // FIXME: make sure we don't generate content lines with missing pieces elsewhere
+                        $parts = explode('|', $contentline);
+                        $url = $parts[0];
+                        $title = $parts[1];
+                        $comment = $parts[2];
+                        $child = isset($parts[3]) ? $parts[3] : '';
                         if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
