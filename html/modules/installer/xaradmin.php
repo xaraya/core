@@ -358,15 +358,9 @@ function installer_admin_finish()
               FROM      $blockGroupsTable
               WHERE     xar_name = 'right'";
 
-    $result = $dbconn->Execute($query);
-
     // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
@@ -383,11 +377,46 @@ function installer_admin_finish()
     if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
+
     if (!xarModAPIFunc('blocks',
                        'admin',
                        'create_instance', array('title'    => 'Login',
                                                 'type'     => $loginBlockId,
                                                 'group'    => $rightBlockGroup,
+                                                'template' => '',
+                                                'state'    => 2))) {
+        return;
+    }
+
+    $query = "SELECT    xar_id as id
+              FROM      $blockGroupsTable
+              WHERE     xar_name = 'header'";
+
+    // Check for db errors
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Freak if we don't get one and only one result
+    if ($result->PO_RecordCount() != 1) {
+        $msg = xarML("Group 'header' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    list ($headerBlockGroup) = $result->fields;
+
+    $metaBlockId = xarBlockTypeExists('themes', 'meta');
+
+    if (!isset($metaBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        return;
+    }
+
+    if (!xarModAPIFunc('blocks',
+                       'admin',
+                       'create_instance', array('title'    => 'Meta',
+                                                'type'     => $metaBlockId,
+                                                'group'    => $headerBlockGroup,
                                                 'template' => '',
                                                 'state'    => 2))) {
         return;

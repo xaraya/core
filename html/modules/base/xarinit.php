@@ -598,8 +598,8 @@ function base_activate()
             }
     }
     
-    // Initialise and activate adminpanels, mail
-    $modlist = array('adminpanels','mail');
+    // Initialise and activate adminpanels, mail, themes
+    $modlist = array('adminpanels','mail', 'themes');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -648,6 +648,11 @@ function base_activate()
 
     if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
                                                                 'template' => 'right'))) {
+        return NULL;
+    }
+
+    if (!xarModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'header',
+                                                                'template' => 'header'))) {
         return NULL;
     }
     return true;
