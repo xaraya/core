@@ -38,6 +38,6 @@
     <p><xar:mlstring>There are no included hooks.</xar:mlstring></p>
 
     <div class="xar-norm-outline xar-accent xar-mod-foot">
-        <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://docs.xaraya.com/docs/rfcs/rfc0030.html">RFC-30</a>.</p>
+        <p><xar:mlstring>Extended information about this module can be found in</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html">RFC-30</a>.</p>
     </div>
 </div>
