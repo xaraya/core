@@ -48,11 +48,8 @@ function modules_adminapi_updatehooks($args)
     }
 
     // Delete all entries of modules using this hook (but don't delete the '' module)
-    $sql = "DELETE FROM $xartable[hooks]
-            WHERE xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'
-            AND   xar_smodule <> ''";
-
-    $result =& $dbconn->Execute($sql);
+    $sql = "DELETE FROM $xartable[hooks] WHERE xar_tmodule = ? AND xar_smodule <> ''";
+    $result =& $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     // get the list of all (active) modules
@@ -78,31 +75,18 @@ function modules_adminapi_updatehooks($args)
     }
 
     // get the list of individual hooks offered by this module
-    $sql = "SELECT DISTINCT xar_id,
-                            xar_smodule,
-                            xar_stype,
-                            xar_object,
-                            xar_action,
-                            xar_tarea,
-                            xar_tmodule,
-                            xar_ttype,
+    $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
+                            xar_action, xar_tarea, xar_tmodule, xar_ttype,
                             xar_tfunc
             FROM $xartable[hooks]
-            WHERE xar_tmodule ='" . xarVarPrepForStore($modinfo['name']) . "'";
+            WHERE xar_tmodule = ?";
 
-    $result =& $dbconn->Execute($sql);
+    $result =& $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
     for (; !$result->EOF; $result->MoveNext()) {
-        list($hookid,
-             $hooksmodname,
-             $hookstype,
-             $hookobject,
-             $hookaction,
-             $hooktarea,
-             $hooktmodule,
-             $hookttype,
-             $hooktfunc) = $result->fields;
+        list($hookid, $hooksmodname, $hookstype, $hookobject, $hookaction,
+             $hooktarea, $hooktmodule, $hookttype, $hooktfunc) = $result->fields;
 
         // See if this is checked and isn't in the database
         if (empty($hooksmodname)) {
@@ -112,26 +96,14 @@ function modules_adminapi_updatehooks($args)
                     if ($itemtype == 0) $itemtype = '';
 
                     $sql = "INSERT INTO $xartable[hooks] (
-                          xar_id,
-                          xar_object,
-                          xar_action,
-                          xar_smodule,
-                          xar_stype,
-                          xar_tarea,
-                          xar_tmodule,
-                          xar_ttype,
-                          xar_tfunc)
-                        VALUES (
-                          " . xarVarPrepForStore($dbconn->GenId($xartable['hooks'])) . ",
-                          '" . xarVarPrepForStore($hookobject) . "',
-                          '" . xarVarPrepForStore($hookaction) . "',
-                          '" . xarVarPrepForStore($modname) . "',
-                          '" . xarVarPrepForStore($itemtype) . "',
-                          '" . xarVarPrepForStore($hooktarea) . "',
-                          '" . xarVarPrepForStore($hooktmodule) . "',
-                          '" . xarVarPrepForStore($hookttype) . "',
-                          '" . xarVarPrepForStore($hooktfunc) . "')";
-                    $subresult =& $dbconn->Execute($sql);
+                          xar_id, xar_object, xar_action, xar_smodule,
+                          xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
+                        VALUES (?,?,?,?,?,?,?,?,?)";
+                    $bindvars = array($dbconn->GenId($xartable['hooks']),
+                                      $hookobject, $hookaction, $modname,
+                                      $itemtype, $hooktarea, $hooktmodule,
+                                      $hookttype,$hooktfunc);
+                    $subresult =& $dbconn->Execute($sql,$bindvars);
                     if (!$subresult) return;
                 }
             }

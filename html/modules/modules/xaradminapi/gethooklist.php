@@ -38,25 +38,20 @@ function modules_adminapi_gethooklist($args)
     // TODO: allow finer selection of hooks based on type etc., and
     //       filter out irrelevant ones (like module remove, search...)
     // MrB: changed the IS NULL statement to ='', query returned no records.
-    $query = "SELECT DISTINCT xar_smodule, xar_stype,
-                            xar_tmodule,
-                            xar_object,
-                            xar_action,
-                            xar_tarea,
-                            xar_ttype,
+    $query = "SELECT DISTINCT xar_smodule, xar_stype, xar_tmodule,
+                            xar_object, xar_action, xar_tarea, xar_ttype,
                             xar_tfunc
             FROM $xartable[hooks] ";
 
     if (!empty($modName)) {
         $query .= " WHERE xar_smodule=''
-                       OR xar_smodule = '" . xarVarPrepForStore($modName) . "'
+                       OR xar_smodule = ?
                  ORDER BY xar_tmodule,
                           xar_smodule DESC";
     } else {
         $query .= " ORDER BY xar_tmodule";
     }
-
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array($modName));
     if(!$result) return;
 
     // hooklist will hold the available hooks

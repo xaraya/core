@@ -79,13 +79,13 @@ function modules_adminapi_upgrade($args)
     $xartable =& xarDBGetTables();
 
     $sql = "UPDATE $xartable[modules]
-            SET xar_version = '" . xarVarPrepForStore($modFileInfo['version']) . "',
-                xar_admin_capable = '" . xarVarPrepForStore($modFileInfo['admin_capable']) . "',
-                xar_user_capable = '" . xarVarPrepForStore($modFileInfo['user_capable']) . "',
-                xar_class = '". xarVarPrepForStore($modFileInfo['class']) . "',
-                xar_category = '". xarVarPrepForStore($modFileInfo['category']) . "'
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result = $dbconn->Execute($sql);
+            SET xar_version = ?, xar_admin_capable = ?, xar_user_capable = ?,
+                xar_class = ?, xar_category = ?
+            WHERE xar_regid = ?";
+    $bindvars = array($modFileInfo['version'], $modFileInfo['admin_capable'],
+                      $modFileInfo['user_capable'],$modFileInfo['class'],
+                      $modFileInfo['category'], $regid);
+    $result = $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     // Message to display in the module list view (only for core modules atm)

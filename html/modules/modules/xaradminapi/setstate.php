@@ -60,8 +60,8 @@ function modules_adminapi_setstate($args)
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
                 $module_statesTable = $xartable['system/module_states'];
-                $query = "SELECT * FROM $module_statesTable WHERE xar_regid = $regid";
-                $result =& $dbconn->Execute($query);
+                $query = "SELECT * FROM $module_statesTable WHERE xar_regid = ?";
+                $result =& $dbconn->Execute($query,array($regid));
                 if (!$result) return;
                 if ($result->EOF) {
                     // Bug #1813 - Have to use GenId to get or create the sequence 
@@ -70,15 +70,11 @@ function modules_adminapi_setstate($args)
                     $seqId = $dbconn->GenId($module_statesTable);
 
                     $query = "INSERT INTO $module_statesTable
-                       (xar_id,
-                        xar_regid,
-                        xar_state)
-                        VALUES
-                        ($seqId,
-                         '" . xarVarPrepForStore($regid) . "',
-                         '" . xarVarPrepForStore($state) . "')";
+                                (xar_id, xar_regid, xar_state)
+                        VALUES  (?,?,?)";
+                    $bindvars = array($seqId,$regid,$state);
 
-                    $result =& $dbconn->Execute($query);
+                    $result =& $dbconn->Execute($query,$bindvars);
                     if (!$result) return;
                 }
                 return true;
@@ -123,9 +119,9 @@ function modules_adminapi_setstate($args)
     }
 
     $query = "UPDATE $module_statesTable
-              SET xar_state = " . xarVarPrepForStore($state) . "
-              WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result =& $dbconn->Execute($query);
+              SET xar_state = ? WHERE xar_regid = ?";
+    $bindvars = array($state,$regid);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
     // We're update module state here we must update at least
     // the base info in the cache.

@@ -39,20 +39,25 @@ function modules_adminapi_gethookedmodules($args)
     $dbconn =& xarDBGetConn();
     $xartable      =& xarDBGetTables();
 
+    $bindvars = array();
     $query = "SELECT DISTINCT xar_smodule, xar_stype
               FROM $xartable[hooks] 
-              WHERE xar_tmodule= '" . xarVarPrepForStore($hookModName) . "'";
+              WHERE xar_tmodule= ?";
+    $bindvars[] = $hookModName;
     if (!empty($hookObject)) {
-        $query .= " AND xar_object = '" . xarVarPrepForStore($hookObject) . "'";
+        $query .= " AND xar_object = ?";
+        $bindvars[] = $hookObject;
     }
     if (!empty($hookAction)) {
-        $query .= " AND xar_action = '" . xarVarPrepForStore($hookAction) . "'";
+        $query .= " AND xar_action = ?";
+        $bindvars[] = $hookAction;
     }
     if (!empty($hookArea)) {
-        $query .= " AND xar_tarea = '" . xarVarPrepForStore($hookArea) . "'";
+        $query .= " AND xar_tarea = ?";
+        $bindvars[] = $hookArea;
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if(!$result) return;
 
     // modlist will hold the hooked modules

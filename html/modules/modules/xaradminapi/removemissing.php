@@ -34,11 +34,11 @@ function modules_adminapi_removemissing($args)
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = $regid";
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = ?";
+    $result =& $dbconn->Execute($query,array($regid));
     // This next entry probably already gone, but lets be sure
-    $query = "DELETE FROM " . $tables['system/module_states'] . " WHERE xar_regid = $regid";
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM " . $tables['system/module_states'] . " WHERE xar_regid = ?";
+    $result =& $dbconn->Execute($query,array($regid));
 
 /*    if(isset($remove)) {
 
@@ -57,28 +57,27 @@ function modules_adminapi_removemissing($args)
 
         // Delete any hooks assigned for that module, or by that module
         $query = "DELETE FROM $tables[hooks]
-                  WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'
-                     OR xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
-        $result =& $dbconn->Execute($query);
+                  WHERE xar_smodule = ? OR xar_tmodule = ?";
+        $result =& $dbconn->Execute($query,array($modinfo['name'],$modinfo['name']));
         if (!$result) return;
 
         // Collect the block types and remove them
         $query = "SELECT xar_id
                   FROM $tables[block_types]
-                  WHERE xar_module = '" . xarVarPrepForStore($modinfo['name']) . "'";
-        $result =& $dbconn->Execute($query);
+                  WHERE xar_module = ?";
+        $result =& $dbconn->Execute($query,array($modinfo['name']));
         if (!$result) return;
         while (!$result->EOF) {
             list($typeid) = $result->fields;
             $query = "DELETE FROM $tables[block_instances]
-                      WHERE xar_type_id = " . $typeid;
-            $result1 =& $dbconn->Execute($query);
+                      WHERE xar_type_id = ?";
+            $result1 =& $dbconn->Execute($query,array($typeid));
             if (!$result1) return;
             $result->MoveNext();
         }
         $query = "DELETE FROM $tables[block_types]
-                  WHERE xar_module = '" . xarVarPrepForStore($modinfo['name']) . "'";
-        $result =& $dbconn->Execute($query);
+                  WHERE xar_module = ?";
+        $result =& $dbconn->Execute($query,array($modinfo['name']));
         if (!$result) return;
 
         foreach($tablestodrop as $tabletodrop) {

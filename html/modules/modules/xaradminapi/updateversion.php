@@ -46,11 +46,10 @@ function modules_adminapi_updateversion($args)
     if (!isset($fileModule)) return;
 
     // Update database version
-    $sql = "UPDATE $modules_table
-            SET xar_version = '" . xarVarPrepForStore($fileModule['version']) ."'
-            WHERE xar_regid = " . xarVarPrepForStore($fileModule['regid']);
+    $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
+    $bindvars = array($fileModule['version'],$fileModule['regid']);
 
-    $result =& $dbconn->Execute($sql);
+    $result =& $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     return true;

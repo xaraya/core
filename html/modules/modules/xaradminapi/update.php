@@ -45,20 +45,12 @@ function modules_adminapi_update($args)
     $modinfo = xarModGetInfo($regid);
 
     // Delete hook regardless
-    $sql = "DELETE FROM $xartable[hooks]
-            WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
-
-        $result =& $dbconn->Execute($sql);
+    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodule = ?";
+    $result =& $dbconn->Execute($sql,array($modinfo['name']));
     if (!$result) return;
 
-    $sql = "SELECT DISTINCT xar_id,
-                            xar_smodule,
-                            xar_stype,
-                            xar_object,
-                            xar_action,
-                            xar_tarea,
-                            xar_tmodule,
-                            xar_ttype,
+    $sql = "SELECT DISTINCT xar_id, xar_smodule, xar_stype, xar_object,
+                            xar_action, xar_tarea, xar_tmodule, xar_ttype,
                             xar_tfunc
             FROM $xartable[hooks]
             WHERE xar_smodule =''";
@@ -86,26 +78,19 @@ function modules_adminapi_update($args)
             foreach (array_keys($hookvalue) as $itemtype) {
                 if ($itemtype == 0) $itemtype = '';
                 $sql = "INSERT INTO $xartable[hooks] (
-                      xar_id,
-                      xar_object,
-                      xar_action,
-                      xar_smodule,
-                      xar_stype,
-                      xar_tarea,
-                      xar_tmodule,
-                      xar_ttype,
-                      xar_tfunc)
-                    VALUES (
-                      " . xarVarPrepForStore($dbconn->GenId($xartable['hooks'])) . ",
-                      '" . xarVarPrepForStore($hookobject) . "',
-                      '" . xarVarPrepForStore($hookaction) . "',
-                      '" . xarVarPrepForStore($modinfo['name']) . "',
-                      '" . xarVarPrepForStore($itemtype) . "',
-                      '" . xarVarPrepForStore($hooktarea) . "',
-                      '" . xarVarPrepForStore($hooktmodule) . "',
-                      '" . xarVarPrepForStore($hookttype) . "',
-                      '" . xarVarPrepForStore($hooktfunc) . "')";
-                $subresult =& $dbconn->Execute($sql);
+                      xar_id, xar_object, xar_action, xar_smodule,
+                      xar_stype, xar_tarea, xar_tmodule, xar_ttype, xar_tfunc)
+                    VALUES (?,?,?,?,?,?,?,?,?)";
+                $bindvars = array($dbconn->GenId($xartable['hooks']),
+                                  $hookobject,
+                                  $hookaction,
+                                  $modinfo['name'],
+                                  $itemtype,
+                                  $hooktarea,
+                                  $hooktmodule,
+                                  $hookttype,
+                                  $hooktfunc);
+                $subresult =& $dbconn->Execute($sql,$bindvars);
                 if (!$subresult) return;
             }
         }

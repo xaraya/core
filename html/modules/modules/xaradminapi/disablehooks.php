@@ -46,11 +46,12 @@ function modules_adminapi_disablehooks($args)
 
     // Delete hooks regardless
     $sql = "DELETE FROM $xartable[hooks]
-            WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'
-              AND xar_stype = '" . xarVarPrepForStore($callerItemType) . "'
-              AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'";
+            WHERE xar_smodule = ?
+              AND xar_stype = ?
+              AND xar_tmodule = ?";
+    $bindvars = array($callerModName,$callerItemType,$hookModName);
 
-    $result =& $dbconn->Execute($sql);
+    $result =& $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
 
     return true;

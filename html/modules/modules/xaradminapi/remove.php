@@ -51,16 +51,14 @@ function modules_adminapi_remove($args)
 
         // Delete any module variables that the module cleanup function might
         // have missed.
-        // This needs to be done before the module ntry is removed.
+        // This needs to be done before the module entry is removed.
         xarModDelAllVars($modinfo['name']);
 
-        $query = "DELETE FROM " . $tables['modules'] .
-                  " WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
-        $result =& $dbconn->Execute($query);
+        $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = ?";
+        $result =& $dbconn->Execute($query,array($modinfo['regid']));
         if (!$result) return;
-        $query = "DELETE FROM " . $tables['system/module_states'] .
-                  " WHERE xar_regid = " . xarVarPrepForStore($modinfo['regid']);
-        $result =& $dbconn->Execute($query);
+        $query = "DELETE FROM " . $tables['system/module_states'] ." WHERE xar_regid = ?";
+        $result =& $dbconn->Execute($query,array($modinfo['regid']));
         if (!$result) return;
     }
     else {
@@ -97,10 +95,9 @@ function modules_adminapi_remove($args)
     xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
     // Delete any hooks assigned for that module, or by that module
-    $query = "DELETE FROM $tables[hooks]
-              WHERE xar_smodule = '" . xarVarPrepForStore($modinfo['name']) . "'
-                 OR xar_tmodule = '" . xarVarPrepForStore($modinfo['name']) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM $tables[hooks] WHERE xar_smodule = ? OR xar_tmodule = ?";
+    $bindvars = array($modinfo['name'],$modinfo['name']);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) {return;}
 
     //
