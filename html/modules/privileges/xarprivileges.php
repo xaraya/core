@@ -1605,29 +1605,22 @@ function drawindent() {
 //echo "Comparing: " . $comparing . $this->getName() . " implies " . $mask->getName();
 
         if($comparing) {
+            $samelevels = $this->getLevel() == $this->getLevel();
+
             $thisrealm = strtolower($this->getRealm());
             $maskrealm = strtolower($mask->getRealm());
-            if (!(
-                ($thisrealm == 'all') ||
-                ($thisrealm == 'none') && ($maskrealm != 'all')
-            ))
-            {return false;}
+            if ($thisrealm != $maskrealm
+            && !($thisrealm == 'all' && $samelevels)) return false;
 
             $thismodule = strtolower($this->getModule());
             $maskmodule = strtolower($mask->getModule());
-            if (!(
-                ($thismodule == $maskmodule) ||
-                ($thismodule != 'all') && ($maskmodule == 'all')
-            ))
-            {return false;}
+            if ($thismodule != $maskmodule
+                && !($thismodule == 'all' && $samelevels)) return false;
 
             $thiscomponent = strtolower($this->getComponent());
             $maskcomponent = strtolower($mask->getComponent());
-            if (!(
-                ($thiscomponent == $maskcomponent) ||
-                ($thiscomponent != 'all') && ($maskcomponent == 'all')
-            ))
-            {return false;}
+            if ($thiscomponent != $maskcomponent
+            && !($thiscomponent == 'all' && $samelevels)) return false;
 
             $instance1 = explode(':',$this->getInstance());
             $instance2 = explode(':',$mask->getInstance());
@@ -1649,11 +1642,8 @@ function drawindent() {
             }
 
             for ($i=0;$i<count($instance1);$i++) {
-                if (!(
-                    (strtolower($instance1[$i]) == strtolower($instance2[$i])) ||
-                    (strtolower($instance1[$i]) != 'all') && (strtolower($instance2[$i]) == 'all')
-                ))
-                {return false;}
+                if (strtolower($instance1[$i]) != strtolower($instance2[$i])
+                && !(strtolower($instance1[$i]) == 'all' && $samelevels)) return false;
             }
         }
         else {
