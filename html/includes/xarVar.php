@@ -148,11 +148,8 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
  * refer to this page for the details:
  * http://www.php.net/manual/en/language.types.string.html#language.types.string.conversion
- * The $validation parameter could also be an object, in this case it must implement the xarVarValidator
- * interface.
  *
- * <nuncanada> For me the $convValue is superfluos, why not return the new string on $subject itself on sucess
- *             and on failure keep the old data type.
+ * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
  *
  * @author Marco Canini
  * @access public
@@ -162,367 +159,33 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @return bool true if the $subject validates correctly, false otherwise
  */
 function xarVarValidate($validation, $subject, &$convValue) {
-
-    global $_xarValidationList;
+// <nuncanada> For me the $convValue is superfluous, why not return the new string on $subject itself on sucess
+//             and on failure keep the old data type.
+// <nuncanada> For now, i have moved all validations to html/modules/variable/validations
+//             I think that will incentivate 3rd party devs to create and send new validations back to us..
+//             As id/int/str are used in every page view, probably they should be here.
+// <nuncanada> For more flexible validations it might be interesting to change how parameters are inserted
+//             to an array?! Although the actual interface seems easier to use...
 
     $valParams = explode(':', $validation);
-    $valType = array_shift($valParams);
+    $valType = xarVarPrepForOS(strtolower(array_shift($valParams)));
+    
+    $function_file = 'modules/variable/validations/'.$valType.'.php';
+    $function_name = 'variable_validations_'.$valType;
 
-    if (isset($_xarValidationList) && isset($_xarValidationList[$valType])) {
-        $_xarValidationList[$valType]->setSubject($subject);
-        $_xarValidationList[$valType]->setParameters($valParams);
-        return $_xarValidationList[$valType]->validate($convValue);
+    if (!function_exists($function_name)) {
+        if (file_exists($function_file)) {
+            include_once($function_file);
+        }
+    }
+
+    if (function_exists($function_name)) {
+        return $function_name($subject, $valParams, $convValue);
     } else {
         // Raise an exception
         $msg = xarML('The validation type \'#(1)\' couldn\'t be found.', $valType);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg)); return;
-    }
-}
-
-
-/**
- * Allows developers to use Xaraya Variable Validation for their own validation schemas
- *
- * Abstract Factory Design Pattern
- *
- * @author Flavio Botelho
- * //@access public for later on
- * @access private
- * @param name mixed the validation to be performed
- * @param object mixed the validation to be performed
- * @return bool true if the $subject validates correctly, false otherwise
- */
-function xarVarRegisterValidation ($validation_name, $object_name)
-{
-    global $_xarValidationList;
-
-    if (!isset($_xarValidationList)) {
-        $_xarValidationList = array();
-    }
-
-    if (empty($validation_name)) {
-        // Raise an exception
-        // ML system not loaded yet
-        // It seems like the log system is not yet loaded too?
-        $msg = "The required validation name '$validation_name' input variable couldn\'t be found.";
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
-    }
-
-    if (isset($_xarValidationList[$validation_name])) {
-        // Raise an exception
-        // ML system not loaded yet
-        $msg = "The validation name '$validation_name' is already being used";
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
-    }
-
-    if (empty($object_name)) {
-        // Raise an exception
-        // ML system not loaded yet
-        $msg = "The required object name '$object_name' input variable couldn\'t be found or do not contain an validation object.";
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
-    }
-
-    if (!class_exists($object_name)) {
-        // Raise an exception
-        // ML system not loaded yet
-        $msg = "'$object_name' isnt the name of an object.";
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
-    }
-
-    if (!is_subclass_of($obj=&new $object_name, 'xarVarValidator')) {
-        // Raise an exception
-        // ML system not loaded yet
-        $msg = "'$object_name' isnt a child of the object xarVarValidator.";
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return false;
-    }
-
-
-    $_xarValidationList[$validation_name] =& $obj;
-    
-    return true;
-
-}
-
-
-
-/**
- * Basic Class to make a validation scheme
- *
- * @package variables
- */
-class xarVarValidator {
-    var $subject;
-    var $parameters = array();
-
-    function setSubject(&$subject) {
-        $this->subject = $subject;
-    }
-
-    function setParameters($parameters) {
-        $this->parameters = $parameters;
-    }
-
-    function validate(&$convValue) {
-        die('Validation not implemented');
-    }
-}
-
-/**
- * Interger Validation Class
- */
-class xarVarValidator_int extends xarVarValidator {
-    function validate (&$convValue) {
-    
-        $value = intval($this->subject);
-        if ("$this->subject" != "$value") {
-            return false;
-        }
-        
-        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
-            if (!is_numeric($this->parameters[0])) {
-                $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($value < (int) $this->parameters[0]) {
-                return false;
-            }
-        }
-
-        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
-            if (!is_numeric($this->parameters[1])) {
-                $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($value > (int) $this->parameters[1]) {
-                return false;
-            }
-        }
-
-        $convValue = $value;
-        return true;
-    }
-}
-
-/**
- * Id Validation Class
- */
-class xarVarValidator_id extends xarVarValidator_int {
-    function setParameters ($paremeters) {
-        $this->parameters = array(0 => 1, 1 => null);
-    }
-}
-
-/**
- * Float Validation Class
- */
-class xarVarValidator_float extends xarVarValidator {
-    function validate (&$convValue) {
-
-        $value = floatval($this->subject);
-        if ("$this->subject" != "$value") {
-            return false;
-        }
-        
-        $this->subject = $value;
-
-        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
-            if (!is_numeric($this->parameters[0])) {
-                $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($value < (float) $this->parameters[0]) {
-                return false;
-            }
-        }
-
-        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
-            if (!is_numeric($this->parameters[1])) {
-                $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($value > (float) $this->parameters[1]) {
-                return false;
-            }
-        }
-
-        $convValue = $value;
-        return true;
-    }
-}
-
-/**
- * Boolean Validation Class
- */
-class xarVarValidator_bool extends xarVarValidator {
-
-    function validate (&$convValue) {
-        if ($this->subject == 'true') {
-            $this->subject = true;
-        } elseif ($this->subject == 'false') {
-            $this->subject = false;
-        } else {
-            return false;
-        }
-
-        $convValue = $this->subject;
-        return true;
-    }
-}
-
-/**
- * Checkbox Validation Class
- */
-class xarVarValidator_checkbox extends xarVarValidator {
-
-    function validate (&$convValue) {
-        if (is_string($this->subject)) {
-            $this->subject = true;
-        } elseif (empty($this->subject) || is_null($this->subject)) {
-            $this->subject = false;
-        } else {
-            return false;
-        }
-
-        $convValue = $this->subject;
-        return true;
-    }
-}
-
-/**
- * Strings Validation Class
- */
-class xarVarValidator_str extends xarVarValidator {
-
-    function validate (&$convValue) {
-
-        $length = strlen($this->subject);
-
-        if (isset($this->parameters[0]) && trim($this->parameters[0]) != '') {
-            if (!is_numeric($this->parameters[0])) {
-                $msg = 'Parameter "'.$this->parameters[0].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($length < (int) $this->parameters[0]) {
-                return false;
-            }
-        }
-
-        if (isset($this->parameters[1]) && trim($this->parameters[1]) != '') {
-            if (!is_numeric($this->parameters[1])) {
-                $msg = 'Parameter "'.$this->parameters[1].'" is not a Numeric Type';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-            } elseif ($length > (int) $this->parameters[1]) {
-                return false;
-            }
-        }
-        
-        $convValue = (string) $this->subject;
-        return true;
-    }
-}
-
-/**
- * Regular Expression Validation Class
- */
-class xarVarValidator_regexp extends xarVarValidator {
-
-    function validate (&$convValue) {
-        if (!isset($this->parameters[0]) || trim($this->parameters[0]) == '') {
-                $msg = 'There is no parameter to check against in Regexp validation';
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
-                return;
-        } elseif (preg_match($this->parameters[0], $this->subject)) {
-            $convValue = $this->subject;
-            return true;
-        }
-        return false;
-    }
-}
-
-/**
- * HTML Validation Class
- */
-class xarVarValidator_html extends xarVarValidator {
-
-    function validate (&$convValue) {
-
-        assert('($this->parameters[0] == "restricted" ||
-                 $this->parameters[0] == "basic" ||
-                 $this->parameters[0] == "enhanced" ||
-                 $this->parameters[0] == "admin")');
-
-        if ($valParams[0] == 'admin') {
-            return true;
-        }
-
-        $allowedTags = xarVar__getAllowedTags($valParams[0]);
-
-        preg_match_all("|</?(\w+)(\s+.*?)?/?>|", $this->subject, $matches, PREG_SET_ORDER);
-
-        foreach ($matches as $match) {
-            $tag = strtolower($match[1]);
-            if (!isset($allowedTags[$tag])) {
-                return false;
-            } elseif (isset($match[2]) && $allowedTags[$tag] == XARVAR_ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
-                return false;
-            }
-        }
-
-        $convValue = $value;
-        return true;
-    }
-}
-
-xarVarRegisterValidation ('int', 'xarVarValidator_int');
-xarVarRegisterValidation ('id', 'xarVarValidator_id');
-xarVarRegisterValidation ('float', 'xarVarValidator_float');
-xarVarRegisterValidation ('bool', 'xarVarValidator_bool');
-xarVarRegisterValidation ('str', 'xarVarValidator_str');
-xarVarRegisterValidation ('regexp', 'xarVarValidator_regexp');
-xarVarRegisterValidation ('html', 'xarVarValidator_html');
-xarVarRegisterValidation ('checkbox', 'xarVarValidator_checkbox');
-
-
-/**
- *
- * 
- * @package variables
- */
-class xarVarGroupValidator extends xarVarValidator
-{
-    var $validations;
-    
-    function xarVarGroupValidator(/*...*/)
-    {
-        $this->validations = func_get_args();
-    }
-    
-    function validate($subject, &$convValue)
-    {
-        foreach ($this->validations as $validation) {
-            if (!xarVarValidate($validation, $subject, $convValue)) {
-                return false;
-            }
-        }
     }
 }
 
@@ -678,6 +341,20 @@ function xarVarPrepForDisplay()
  */
 function xarVarPrepHTMLDisplay()
 {
+    // IMO This makes no sense...
+    // Because there are 2 possibilities:
+    //  1) You have already checked if the html tags present in a certain string are ok
+    //     before storing it, in this case, you should just display the text without
+    //     any kind of preparation. (Validation without Preparation)
+    // OR
+    //  2) You havent checked and so, the only thing you should do is to escape whatever
+    //     meaningful html character that is present.... (Preparation for strings without Validation)
+    
+    // If you want to add the possibility of adding html markup to a text, do 1.
+    
+    // Besides that you could have special transform hooks to transform text, but this is not the case
+    // over here...
+
 
     // This search and replace finds the text 'x@y' and replaces
     // it with HTML entities, this provides protection against
@@ -760,6 +437,9 @@ function xarVarPrepHTMLDisplay()
  */
 function xarVarPrepForStore()
 {
+    //Does the quoting change from database to database?
+    //If so, this should be done thru ADODB instead of an API functions like this
+
     $resarray = array();
     foreach (func_get_args() as $var) {
 
