@@ -345,6 +345,16 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $msg = "At: " . $file." (Line: " . $line.")<br/><br/>". $errorString ;
         if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
 
+// FIXME: fix endless loops on PHP error exceptions !
+if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
+if (isset($_GET['exception'])) {
+echo "Last Error :\n";
+echo $_GET['exception'];
+}
+echo "Current Error :\n";
+echo $msg;
+die;
+}
         xarResponseRedirect(xarModURL('base','user','systemexit',
             array('code' => $errorType,
                   'exception' => urlencode($msg))));
