@@ -655,21 +655,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     } // end case
 
                     //<Dracos>  Stop tag embedding, ie <a href="<xar
-                    $tagcounter = 0;
-                    while(1){
-                        $tagtoken = $this->getNextToken();
-                        $tagcounter++;
-                        if($tagtoken == XAR_TOKEN_TAG_END){
-                            break;
-                        }
-                        // FIXME: this goes bonkers on embedded javascript
-                        if($tagtoken == XAR_TOKEN_TAG_START){
-                            xarLogVariable('parent tag',$parent);
-                            $this->raiseError(XAR_BL_INVALID_TAG,"Found open tag before close tag.", $this);
-                            return;
-                        }
+                    // FIXME: does this still go bonkers on embedded javascript?
+                    $between = $this->windTo(XAR_TOKEN_TAG_END);
+                    if(!isset($between)) return;
+                    if(strpos($between, XAR_TOKEN_TAG_START)) {
+                        // There is a < in there
+                        $this->raiseError(XAR_BL_INVALID_TAG,__LINE__ .": Found open tag before close tag.", $this);
+                        return;
                     }
-                    $this->Stepback($tagcounter+1);
+                    $this->stepBack(strlen($between)+1);
                     break;
                 case XAR_TOKEN_ENTITY_START:
                     // Check for xar entity
