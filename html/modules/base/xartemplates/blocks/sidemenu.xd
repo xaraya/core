@@ -4,13 +4,14 @@
 		<xar:if condition="empty($url)">
 			#$title#
 		<xar:else />
-			<a href="#$url#" title="#$comment#">#$title#</a><br />
+			<div class="xar-menu-item"><a href="#$url#" title="#$comment#">#$title#</a></div>
 		</xar:if>
 	</xar:loop>
 	<br />
 </xar:if>
 
 <xar:if condition="!empty($usermods)">
+	<div class="xar-menu-section"><xar:mlstring>Modules</xar:mlstring></div>
 	<xar:loop name="$usermods">
 		<xar:if condition="$modactive">
 			<div class="xar-menu-item-current">
