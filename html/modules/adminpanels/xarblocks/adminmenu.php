@@ -233,11 +233,13 @@ function adminpanels_adminmenublock_display($blockinfo){
                             $catmods[$cat][$modname]['features'] = array( 	'label'     => $labelDisplay,
 																			'link'      => $link,
 																			'modactive' => 1,
+																			'overview' 	=> 0,
 																			'maintitle' => xarML('Show administration options for module ').$labelDisplay);
                         } else {
                             $catmods[$cat][$modname]['features'] = array( 	'label'     => $labelDisplay,
                                                                 			'link'      => $link,
                                                                 			'modactive' => 1,
+                                                                			'overview' 	=> 1,
                                                                 			'maintitle' => xarML('Display overview information for module ').$labelDisplay);
                         }			
                         // For active module we need to display the mod functions links
@@ -245,7 +247,6 @@ function adminpanels_adminmenublock_display($blockinfo){
                         $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
                         // scan array and prepare the links
                         if (!empty($menulinks)) {
-                            //$indlinks = array();
                             foreach($menulinks as $menulink){
                                 
                                 // please note how we place the marker against active function link
@@ -255,11 +256,11 @@ function adminpanels_adminmenublock_display($blockinfo){
                                     $funcactive = 0;
                                 }
 
-                                $catmods[$cat][$modname]['indlinks'][] = array('adminlink' => $menulink['url'],
-                                                    'adminlabel'    => $menulink['label'],
-                                                    'admintitle'    => $menulink['title'],
-                                                    'funcactive'    => $funcactive);
-                            }
+                                $catmods[$cat][$modname]['indlinks'][] = array(	'adminlink' 	=> $menulink['url'],
+                                                    							'adminlabel'    => $menulink['label'],
+                                                    							'admintitle'    => $menulink['title'],
+                                                    							'funcactive'    => $funcactive);
+                            }							
                         }else{
                             // not sure if we need this
                             $indlinks= array();
@@ -270,6 +271,7 @@ function adminpanels_adminmenublock_display($blockinfo){
                        $catmods[$cat][$modname]['features'] = array('label'     => $labelDisplay,
                                                            			'link'      => $link,
                                                            			'modactive' => 0,
+                                                           			'overview' 	=> 0,
                                                            			'maintitle' => xarML('Show administration options for module ').$labelDisplay);
                     }
                 }

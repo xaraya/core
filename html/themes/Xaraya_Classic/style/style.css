@@ -1,6 +1,6 @@
 /*  Xaraya_Classic - default theme.. [revision 2 by andyv_at_xaraya.com]
 
-Lets make the CSS a bit more interesting and better organised than before;
+Lets make the CSS a bit more interesting and a lot better organised than before;
 
 Differences and aims of this revision will be:
 
@@ -178,6 +178,11 @@ textarea {
 	text-indent: 2px;
 }
 
+checkbox {
+	background-color: transparent;
+	font-weight: normal;
+}
+
 button, input, select, textarea {
 	color: #002D80;
 	background-color: #F8F8F8;
@@ -209,11 +214,6 @@ h5, h6 {
 hr {
 	width: 100%;
 	color: #c0c0c0;
-}
-
-checkbox {
-	background-color: transparent;
-	font-weight: normal;
 }
 
 /* XARAYA REQUIRED INDIVIDUAL CLASSES [gen_heading] */
@@ -315,7 +315,7 @@ module rendering area and related rules
 .xar-mod-foot { }
 
 /*
-complementary styling - backgrounds and outlines 
+complementary styling - colors, backgrounds and outlines 
 -------------------------------------------------------------------------[comment] */
 .xar-alt { background-color: #E7E9F4; }
 
@@ -337,9 +337,20 @@ complementary styling - backgrounds and outlines
 	border-style: solid;
 }
 
+/*
+complementary text related styling
+-------------------------------------------------------------------------[comment] */
 .xar-norm { background-color: #FFFFFF; }
 
 .xar-sub { font-size: 80%; }
+
+.xar-error { color: #ff0000; }
+
+.xar-title {
+	font-weight: bold;
+} /*
+not sure if we still using this rule anywhere TODO: check
+-------------------------------------------------------------------------[comment] */
 
 /*
 system menus and related rules 
@@ -358,10 +369,19 @@ li.xar-menu-item a {
 	padding: 0;
 }
 
-.xar-menu-section, .xar-menu-section ul {
+ul.xar-menu-section, ul.xar-menu-item, ul.xar-menu-subitem {
 	list-style-type: none;
 	margin: 0;
-	padding:0;
+	padding: 0;
+	background-color: #E7EAF4;
+}
+
+ul li.xar-menu-section {
+	margin-top: 2px;
+	border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
+	border-width: 1px;
+	border-style: solid;
+	font-family: helvetica, arial, verdana, sans-serif;
 }
 
 .xar-menu-section li {
@@ -373,8 +393,15 @@ li.xar-menu-item a {
 	padding: 1px 0;
 	width: 160px;
 	color: #003780;
-	background-color: #E7EAEE;
+/* 	background-color: #E7EAEE; */
+/* 	background-color: #6C9BD8; */
 	text-decoration: none;
+}
+
+.xar-menu-section h4 {
+	padding: 0 5px;
+	margin: 1px 5px 5px 5px;
+	border-bottom: 1px solid #BA1D00;
 }
 
 .xar-menu-section a:hover {
@@ -383,25 +410,55 @@ li.xar-menu-item a {
 	text-decoration: none;
 }
 
-.xar-menu-section ul ul li, li.xar-menu-subitem-current {
+.xar-menu-section ul ul li {
 	margin: 0 0 1px 10px;
 }
 
-.xar-menu-section ul ul a, li.xar-menu-subitem-current {
+.xar-menu-section ul ul a {
 	display: block;
 	padding: 1px 10px;
 	width: 140px;
 	color: #fff;
 	background-color: #8296BB;
-	font-family: helvetica, arial, verdana, sans-serif;
-	font-size: 10px; 
-	font-weight: bold;
+	font-size: 10px;
+	font-weight: normal;
 	text-decoration: none;
+	line-height: 12pt;
+	
 } /* this is the only rule where we currently use absolute font size,
-	 this is done only because of the horisontal space restriction in side menus
+	 it is done only because of the horizontal space restriction in side menus
 ------------------------------------------------------------------[important note] */
 
-li.xar-menu-section-current, li.xar-menu-subitem-current {
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+
+* html .xar-menu-item a, * html .xar-menu-item-current a {
+	float:left;
+}
+
+* html .xar-menu-section a {
+	width:170px;
+	w\idth:160px;
+	
+}  
+
+* html .xar-menu-section ul ul a {
+	width:160px;
+	w\idth:140px;
+}
+ /* End hide from IE5/mac -the above rules are for the benefit of older ie-win 
+ browsers which have broken box model, however for ie6 in strict mode we must
+ provide genuine figures or it will not behave as expected - it can have escaped rules.
+ there is also extra space between listitems in IE5+, floating links seems to be a fix 
+-------------------------------------------------------------------------[comment] */
+
+.xar-menu-section ul ul a:hover {
+	color: #002C80;
+	background-color: #BFD5FF;
+	text-decoration: none;
+}
+
+
+li.xar-menu-section-current {
 	color: #2C3F58;
 	background-color: #B1C2E3;
 }
@@ -409,16 +466,25 @@ li.xar-menu-section-current, li.xar-menu-subitem-current {
 li.xar-menu-item-current {
 	color: #2C3F58;
 	background-color: #E7EAEE;
+}
+
+li.xar-menu-item-current a {
 	padding-left: 10px;
+	margin-bottom:1px;
 }
 
-.xar-menu-section ul ul a:hover {
-	color: #fff;
-	background-color: #FF6B00;
-	text-decoration: none;
+li li.xar-menu-subitem-current a, li.xar-menu-item-current a {
+	color: #4C5056;
+	background-color: #C7D2E2;
 }
 
-/* li.xar-menu-item-current, .xar-menu-item-current a { background-color: #B1C2E3; } */
+.xar-menu-subitem-current a:before {
+	content: "\00BB \0020";
+} /*
+people with css2 compliant browsers can see a nice marker against current function,
+why not have some fun when you can ;-)
+------------------------------------------------------------------[important note] */
+
 
 /*
 this was the original method used in old classic, but it never worked in IE/Win 
@@ -427,12 +493,6 @@ this was the original method used in old classic, but it never worked in IE/Win
 /* .xar-menu-item-current > .xar-menu-subitem > a { color: #193970; } */
 /* .xar-menu-subitem > a:hover { background-color: #cce6ff; } */
 /* .xar-menu-item-current > .xar-menu-subitem > a:visited { color: #003366; } */
-
-.xar-title {
-	font-weight: bold;
-}
-
-.xar-error { color: #ff0000; }
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
@@ -447,28 +507,29 @@ div#classicheader {
 div#classicheader img {
 	width: 245px;
 	height: 70px;
-	float:left;
+	float: left;
 }
 
 div#classicthemecontrols {
-	position:relative;
+	position: relative;
 	width: 187px;
 	float: right;
-	padding:0 3px 0 0;
-	margin:0;
+	padding: 0 3px 0 0;
+	margin: 0;
 }
 
 div#classicthemecontrols img {
 	position: relative;
 	float: right;
-	width:26px;
-	height:21px;
+	width: 26px;
+	height: 21px;
 }
 
 * html div#classicthemecontrols img, * html div#classicheader img {
-	margin: 0 -3px; ma\rgin: 0;
+	margin: 0 -3px;
+	ma\rgin: 0;
 } /*
-thus rule (with Tantek filter) is for the benefit of Win-IE browsers only - they 
+thus rule (with Tan filter) is for the benefit of Win-IE browsers only - they 
 cannot float linked images properly, without inserting 3px margins around them
 ------------------------------------------------------------------[important note] */
 
@@ -499,7 +560,7 @@ table#classiccontentarea {
 	width: 100%;
 	margin: 0;
 	border-collapse: separate;
-	border-spacing: 2px;
+	border-spacing: 3px;
 	border-color: #757F8B;
 	border-width: 1px;
 	border-style: solid;
@@ -508,8 +569,8 @@ this table 'holds' our dynamic content in this theme (not ideal, but..)
 -------------------------------------------------------------------------[comment] */
 
 td#leftmenus {
-	background-image: url(../images/leftmenus_bg.jpg);
-	background-repeat: repeat-y;
+	background-image: url(../images/content_bg.jpg);
+	background-repeat: repeat;
 	background-position: 0 0;
 } /*
 area occupied by leftblocksgroup 
@@ -523,8 +584,8 @@ pixel-perfect positioning for leftblocksgroup
 
 
 td#rightmenus {	
-	background-image: url(../images/leftmenus_bg.jpg);
-	background-repeat: repeat-y;
+	background-image: url(../images/content_bg.jpg);
+	background-repeat: repeat;
 	background-position: 0 0;
 } /*
 area occupied by rightblocksgroup 
@@ -542,26 +603,25 @@ all this is done for the sake of cross-browser compatibility and, at the same ti
 to avoid using IE/Win specific hacks for its broken box model 
 ------------------------------------------------------------------[important note] */
 
-td#rightmenus, td#leftmenus {
+td#rightmenus, td#leftmenus, td#maincontent {
 	vertical-align: top;
 	width: 180px;
-	border-color: #757F8B;
+	border-color: #E7EAEE #8296BB #8296BB #E7EAEE;
 	border-width: 1px;
 	border-style: solid;
-	
 } /*
-menu areas - shared properties for both rules
+menu and content areas - shared properties for the table cells
 -------------------------------------------------------------------------[comment] */
 
 td#maincontent {
 	width: auto;
 	vertical-align: top;
-	background-image: url(../images/leftmenus_bg.jpg);
+	background-image: url(../images/content_bg.jpg);
 	background-repeat: repeat;
 	background-position: 0 0;
-	border-color: #757F8B;
-	border-width: 1px;
-	border-style: solid;
+/* 	border-color: #757F8B; */
+/* 	border-width: 0 1px 0 1px; */
+/* 	border-style: solid; */
 	padding: 5px;
 } /*
 it is possible to use padding in this case, because width of this container
