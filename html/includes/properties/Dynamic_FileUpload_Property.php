@@ -262,7 +262,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
 
         if ($this->UploadsModule_isHooked) {
-            return = xarModAPIFunc('uploads','user','showoutput',
+            return xarModAPIFunc('uploads','user','showoutput',
                                  array('value' => $value,
                                        'format' => 'fileupload',
                                        'multiple' => $this->multiple));
