@@ -74,22 +74,22 @@ function roles_userapi_encode_shorturl($args)
 
     } elseif ($func == 'usermenu') {
         $path = '/' . $module . '/settings';
-        if(!empty($phase) && $phase == 'formbasic') {
+        if (!empty($phase) && $phase == 'formbasic') {
             $path = $path . '/form';
         }
 
-   } elseif ($func == 'register') {
-        $path = '/' . $module . '/register';
-      if(!empty($phase) && $phase == 'registerform') {
-            $path = $path . '/registration';
-        }
-/*
     } elseif ($func == 'register') {
-        $path = '/' . $module . '/register.html';
-        if (isset($phase)) {
-            $path = '/' . $module . '/' . $phase . '.html';
+        $path = '/' . $module . '/register';
+        if (!empty($phase)) {
+            if ($phase == 'registerform') {
+                $path = $path . '/registration';
+            } elseif ($phase == 'checkage') {
+                $path = $path . '/checkage';
+            } else {
+                // unsupported phase - must be passed via forms
+            }
         }
-*/
+
     } elseif ($func == 'display') {
         // check for required parameters
         if (isset($uid) && is_numeric($uid)) {

@@ -100,8 +100,14 @@ function roles_userapi_decode_shorturl($params)
     } elseif (preg_match('/^register/i',$params[1])) {
         // something that starts with 'list' is probably for the view function
         // Note : make sure your encoding/decoding is consistent ! :-)
-        if (!empty($params[2]) && preg_match('/^registration/i',$params[2],$matches)) {
-            $args['phase'] = 'registerform';
+        if (!empty($params[2])) {
+            if ($params[2] == 'registration') {
+                $args['phase'] = 'registerform';
+            } elseif ($params[2] == 'checkage') {
+                $args['phase'] = 'checkage';
+            } else {
+                // unsupported phase - must be passed via forms
+            }
         }
         return array('register', $args);
 
