@@ -15,10 +15,7 @@ include_once "includes/exceptions/exceptionrendering.class.php";
 
 class TextExceptionRendering extends ExceptionRendering
 {
-    function TextExceptionRendering($exception = NULL) {
-        parent::ExceptionRendering($exception);
-        $this->linebreak = "\n";
-    }
+    var $linebreak = "\n";
 }
 
 ?>

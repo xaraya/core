@@ -22,12 +22,11 @@ class ExceptionRendering
     var $long;
     var $hint;
     var $stack;
-    var $linebreak;
+    var $linebreak = "<br/>";
 
 
     function ExceptionRendering($exception = NULL){
         $this->exception = $exception;
-        $this->linebreak = "<br/>";
         $this->id = $exception->getID();
         switch ($exception->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
