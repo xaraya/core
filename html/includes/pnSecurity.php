@@ -43,7 +43,6 @@ define('ACCESS_ADMIN', 800);
  * Should wrap this in a static one day, but the information
  * isn't critical so we'll do it later
  */
-global $schemas;
 $schemas = array();
 
 /**
@@ -202,7 +201,7 @@ function pnSecConfirmAuthKey($authIdVarName = 'authid')
  */
 function pnSecAddSchema($component, $schema)
 {
-    global $schemas;
+    $schemas = array();
 
     if (!empty($schemas[$component])) {
         return false;
@@ -454,7 +453,7 @@ function pnSec__getBlocksInstanceSchemaInfo()
 {
     // FIXME: <marco> Exceptions
 
-    global $schemas;
+    $schemas = array();
     static $gotschemas = 0;
 
     if ($gotschemas == 0) {
