@@ -125,10 +125,3 @@ div#xc-outer-wrapper {
 div#xc-left { margin-right: 20px; }
 div#xc-right { margin-left: 20px; }
 div#xc-center-wrapper { margin: 0 -10px 0 -10px; }
-
-/* hide from IE5-Mac and reset for IE6 \*/
-* html div.xc-side-content, * html div#xc-center {
-    width: 100%;
-    w\idth: auto;
-}
-/* IE5+ Win seems to need the above reinforcement due to it's broken box-model and inability to calculate table widths */

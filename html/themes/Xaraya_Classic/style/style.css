@@ -147,26 +147,6 @@ input,
 select,
 textarea {}
 
-/* input types and form elements rules can be accurately re-specified for good browsers, but not at this time yet */
-
-/* input[type="text"], 
-input[type="password"],
-input[type="file"],
-textarea { width: 90%; }
-
-select[multiple="multiple"] { width: 45%; }
-
-input[type="submit"] {
-    border-color: #dddddd #aaaaaa #aaaaaa #dddddd;
-    background-color: #eeeeee;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-    width: auto;
-    margin: auto 3px;
-} */
-
 /*
 replaced elements 
 -------------------------------------------------------------------------[comment] */
@@ -272,11 +252,8 @@ module rendering area and related rules
 }
 
 .xar-mod-body { padding: .3em 0;}
-
-/* andyv and random are two crazies who want ie5-win to work properly - remove next rule when the cure is found */
- * html .xar-mod-body { /*\*/ width:97%; /**/ }
  
- .xar-mod-foot { }
+.xar-mod-foot { }
 
 /*
 complementary styling - colors, backgrounds and outlines 
@@ -332,31 +309,20 @@ div#classicthemecontrols img {
     height: 21px;
 }
 
-* html div#classicthemecontrols img {
-    margin: 0 -3px;
-    ma\rgin: 0;
-}
-
-/*
-thus rule (with Tan filter) is for the benefit of Win-IE browsers only - they 
-cannot float linked images properly, without inserting 3px margins around them
-------------------------------------------------------------------[important note] */
-
 div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
     display: inline;
     list-style-type: none;
     padding: 0 5px;
     margin: 0;
     border: 0;
-}
-
-/*
-since topnav group is available by default, we must be able to lay it out
+} /*
+since topnav group is available by default, we should take care of it
 -------------------------------------------------------------------------[comment] */
 
+/* hide section heading [gen_heading] */
 div.xar-block-body-topnav .xar-menu-section h4 { display: none; }
 
-/* hide section heading [gen_heading] */
+
 div.xar-block-body-topnav .xar-menu-section ul li a {
     display: inline;
     padding-right: .5em;

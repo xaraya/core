@@ -130,16 +130,3 @@
     border-right: 9px solid #7272FF;
     background-color: #666699;
 }
-
-/*  small problem - good browsers can calculate height of li elements just fine but ie-win cannot, 
-    lets then set it explicitly for ie-win, skip for ie5-mac and reset back to default for others */
-
-.xar-block-body ul li, 
-.xar-block-body-right ul li, 
-.xar-block-body ul li a, 
-.xar-block-body-right ul li a { /*\*/ height:1.5em; /**/}
-
-.xar-block-body ul > li, 
-.xar-block-body-right ul > li, 
-.xar-block-body ul li > a, 
-.xar-block-body-right ul li > a { height: auto; }

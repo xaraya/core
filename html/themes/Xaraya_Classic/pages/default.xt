@@ -107,7 +107,7 @@
             <xar:comment>
                 Main CSS rules_____________________________________________________________________________[comment] 
             </xar:comment>
-<style type="text/css" media="all">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style> 
+                <style type="text/css" media="all">@import url(&xar-baseurl;#$classicthemedir#/style/style.css);</style> 
             <xar:comment>
                 Styleswitcher CSS files to link to_________________________________________________________[comment] 
             </xar:comment>
@@ -117,9 +117,13 @@
             </xar:comment>
             #$tpl:additionalStyles# 
             <xar:comment>
+                Finally the CSS rules for ie-win type browsers, we include it via the conditional comment__[comment] 
+            </xar:comment>
+            <!--[if IE]><link href="themes/xaraya_classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
+            <xar:comment>
                 Styleswitcher JavaScript___________________________________________________________________[comment] 
             </xar:comment>
-<script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script> 
+                <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script> 
             <xar:comment>
                 Head JavaScript - required for all themes__________________________________________________[comment] 
             </xar:comment>
