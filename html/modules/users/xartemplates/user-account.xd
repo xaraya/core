@@ -1,1 +1,5 @@
-Your Account
+<h2><xar:mlstring>Your Account</xar:mlstring></h2>
+
+#$hooks#
+<br /><br />
+</form>
