@@ -34,8 +34,8 @@ function installer_adminapi_modifyconfig($args)
     //$dbPass = base64_encode($dbPass);
 
     // Get Logger Options before we write the file in case they are already set
-    $LogLevel   = xarCore_getSystemVar('Log.LogLevel');
-    $LoggerName = xarCore_getSystemVar('Log.LoggerName');
+    $logLevel   = xarCore_getSystemVar('Log.LogLevel');
+    $loggerName = xarCore_getSystemVar('Log.LoggerName');
     $loggerArgs = xarCore_getSystemVar('Log.LoggerArgs');
 
     // Get exception error handler setting
@@ -49,9 +49,9 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
     //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
-    $config_php = preg_replace('/\[\'Log.LogLevel\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LogLevel'] = '$LogLevel';", $config_php);
-    $config_php = preg_replace('/\[\'Log.LoggerName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerName'] = '$LoggerName';", $config_php);
-    $config_php = preg_replace('/\[\'Log.LoggerArgs\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerArgs'] = '$LoggerArgs';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LogLevel\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LogLevel'] = '$logLevel';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LoggerName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerName'] = '$loggerName';", $config_php);
+    $config_php = preg_replace('/\[\'Log.LoggerArgs\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Log.LoggerArgs'] = $loggerArgs;", $config_php);
     $config_php = preg_replace('/\[\'Exception.EnablePHPErrorHandler\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Exception.EnablePHPErrorHandler'] = $enablePHPErrorHandler;", $config_php);
 
 
