@@ -25,13 +25,19 @@
  * with which the protocol is chosed
  *
  * Entry points for client:
- * XMLRPC: http://host.com/ws.php?type=xmlrpc
- * SOAP  : http://host.com/ws.php?type=soap
+ * XMLRPC   : http://host.com/ws.php?type=xmlrpc
+ * SOAP     : http://host.com/ws.php?type=soap
+ * TRACKBACK: http://host.com/ws.php?type=trackback (Is this still right?)
+ * WEBDAV   : http://host.com/ws.php?type=webdav
  */
 
 
 /**
  * Main WebServices Function
+ *
+ * @access public
+ * @todo make this a bit more structured, so all the services have roughly the same interface
+ * @toco provide ws.php as a nice (templated) page instead of the dumb list of links
 */
 include 'includes/xarCore.php';
 
@@ -41,16 +47,17 @@ function xarWebservicesMain()
     // TODO: don't load the whole core
     xarCoreInit(XARCORE_SYSTEM_ALL);
     
-    /* determine the server type (xml-rpc or soap), then
-    create an instance of an that server and define the apis we export
-    and the mapping to the functions.
+    /* 
+     determine the server type, then
+     create an instance of an that server and 
+     serve the request according the ther servers protocol
     */
     $type = xarRequestGetVar('type');
+    xarLogMessage("In webservices with type=$type");
     $server=false;
     switch($type) {
     case  'xmlrpc':
         // xmlrpc server does automatic processing directly
-        $server=false;
         if (xarModIsAvailable('xmlrpcserver')) {
             $server = xarModAPIFunc('xmlrpcserver','user','initxmlrpcserver');
         }
@@ -63,16 +70,17 @@ function xarWebservicesMain()
         }
         
         break;
-    // Trackback with it's mixed spec
+    // Hmmm, this seems a bit of a strange duck in this place here.
+    // Trackback with it's mixed spec. i.e. not an xml formatted request, but a simple POST
+    // It doesnt mean however we can't treat the thing the same, ergo move the specifics out of here
     case  'trackback':
-        // xmlrpc server does automatic processing directly
-        $server=false;
         if (xarModIsAvailable('trackback')) {
             $error = array();
             if (!xarVarFetch('url', 'str:1:', $url)) {
                 // Gots to return the proper error reply
                 $error['errordata'] = xarML('No URL Supplied');
             }
+            // These are the specifics ;-)
             xarVarFetch('title', 'str:1', $title, '', XARVAR_NOT_REQUIRED);
             xarVarFetch('blog_name', 'str:1', $blogname, '', XARVAR_NOT_REQUIRED);
             if (!xarVarFetch('excerpt', 'str:1:255', $excerpt, '', XARVAR_NOT_REQUIRED)) {
@@ -102,11 +110,11 @@ function xarWebservicesMain()
         
         break;
     case 'soap' :
-        $server=false;
         if(xarModIsAvailable('soapserver')) {
             $server = xarModAPIFunc('soapserver','user','initsoapserver');
         
             if (!$server) {
+                // erm, where does this one come from? lucky because we did the api func?
                 $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
                 // TODO: check this
                 echo $fault->serialize();
@@ -116,6 +124,20 @@ function xarWebservicesMain()
                 global $HTTP_RAW_POST_DATA;
                 $server->service($HTTP_RAW_POST_DATA);
             }
+        }
+        break;
+    case 'webdav' :
+        xarLogMessage("WebDAV request");
+        if(xarModIsAvailable('webdavserver')) {
+            $server = xarModAPIFunc('webdavserver','user','initwebdavserver');
+            if(!$server) {
+                xarLogMessage('Could not load webdav server, giving up');
+                // FIXME: construct errors response manually? bah
+                die('Could not load webdav server');
+            } else {
+                xarLogMessage("Created webdav server");
+            }
+            $server->ServeRequest();
         }
         break;
     default:
@@ -128,7 +150,8 @@ function xarWebservicesMain()
             echo '<a href="ws.php?wsdl">WSDL</a><br />
 <a href="ws.php?type=xmlrpc">XML-RPC Interface</a><br />
 <a href="ws.php?type=trackback">Trackback Interface</a><br />
-<a href="ws.php?type=soap">SOAP Interface</a>';
+<a href="ws.php?type=soap">SOAP Interface</a><br/>
+<a href="ws.php?type=webdav">WebDAV Interface</a>';
         }
     }
 }
