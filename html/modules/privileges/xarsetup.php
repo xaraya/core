@@ -19,13 +19,14 @@ function initializeSetup() {
     *********************************************************************/
 
     makeGroup('Everybody');
-	makeUser('Current','current','current@xaraya.com');
+    makeGroup('Administrators');
+	makeUser('Admin','admin','admin@xaraya.com','xaraya');
     makeGroup('Oversight');
-	makeUser('Overseer','overseer','overseer@xaraya.com','xaraya');
-    makeGroup('Admins');
+	makeUser('Overseer','overseer','overseer@xaraya.com');
     makeGroup('Users');
 	makeUser('User','user','user@xaraya.com');
 	makeUser('Anonymous','anonymous','anonymous@xaraya.com');
+//	makeUser('Current','current','current@xaraya.com');
 
     /*********************************************************************
     * Arrange the roles in a hierarchy
@@ -34,13 +35,14 @@ function initializeSetup() {
     *********************************************************************/
 
 	makeRoleRoot('Everybody');
-	makeRoleMember('Current','Everybody');
+	makeRoleMember('Administrators','Everybody');
+	makeRoleMember('Admin','Administrators');
 	makeRoleMember('Oversight','Everybody');
 	makeRoleMember('Overseer','Oversight');
-	makeRoleMember('Admins','Everybody');
 	makeRoleMember('Users','Everybody');
 	makeRoleMember('User','Users');
 	makeRoleMember('Anonymous','Everybody');
+//	makeRoleMember('Current','Everybody');
 
     /*********************************************************************
     * Enter some default privileges
@@ -88,7 +90,7 @@ function initializeSetup() {
     *********************************************************************/
 
 	assignPrivilege('NoPrivileges','Everybody');
-	assignPrivilege('FullPrivileges','Oversight');
+	assignPrivilege('FullPrivileges','Administrators');
 	assignPrivilege('AdminPrivilege','Anonymous');
 	assignPrivilege('AdminRole','Anonymous');
 

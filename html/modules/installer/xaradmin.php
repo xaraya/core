@@ -236,10 +236,12 @@ function installer_admin_bootstrap()
 	initializeSetup();
 
 // log in admin user
-    if (!xarUserLogIn('overseer', 'xaraya', 0)) {
-        return;
+    if (!xarUserLogIn('admin', 'xaraya', 0)) {
+        $msg = xarML('Cannot log in the default administrator. Check your setup.');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+			return false;
     }
-
    // Activate modules
     if (!xarModAPIFunc('installer',
                         'admin',
@@ -267,18 +269,22 @@ function installer_admin_create_administrator()
 // Security Check
 	if(!securitycheck('Admin')) return;
 
+    include_once 'modules/roles/xarroles.php';
     if (!xarVarCleanFromInput('create')) {
-//    	data['install_admin_username'] =
-//    	data['install_admin_name'] =
-//    	data['install_admin_password'] =
-//    	data['install_admin_email'] =
-//    	data['install_admin_url'] =
+// create a role from the data
+    	$roles = new xarRoles();
+    	$role = $roles->getRole(3);
+
+// assemble the template data
+		$data['install_admin_username'] = $role->getUser();
+    	$data['install_admin_name'] = $role->getName();
+    	$data['install_admin_email'] = $role->getEmail();
         return $data;
     }
 
     list ($username,
           $name,
-          $password,
+          $pass,
           $email,
           $url) = xarVarCleanFromInput('install_admin_username',
                                        'install_admin_name',
@@ -289,16 +295,16 @@ function installer_admin_create_administrator()
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 
-    include_once 'modules/roles/xarroles.php';
 
 // assemble the args into an array for the role constructor
-	$pargs = array('pid'=>4,
-					'name'=>'admin',
-					'type'=>1,
-					'uname'=>'admin',
+	$password = md5($pass);
+	$pargs = array('pid'=>3,
+					'name'=>$name,
+					'type'=>0,
+					'uname'=>$username,
 					'email'=>$email,
-					'pass'=>password,
-					'url'=>'hello.com',
+					'pass'=>$password,
+					'url'=>$url,
 					'state'=>3);
 
 // create a role from the data
