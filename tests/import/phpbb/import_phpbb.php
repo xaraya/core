@@ -46,8 +46,6 @@ if (isset($step)) {
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $importmodule = xarModGetVar('installer','importmodule');
-$oldprefix = 'phpbb';
-$importmodule = 'xarbb';
     }
 }
 if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
