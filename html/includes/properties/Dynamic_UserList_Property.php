@@ -31,11 +31,12 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
         if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        $user = xarUserGetVar('name', $value);
-        if (empty($user)) {
-            $user = xarUserGetVar('uname', $value);
+            $user = '';
+        } else {
+            $user = xarUserGetVar('name', $value);
+            if (empty($user)) {
+                $user = xarUserGetVar('uname', $value);
+            }
         }
         if ($value > 1) {
             return '<a href="'.xarModURL('roles','user','display',
