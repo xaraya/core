@@ -7,7 +7,7 @@
         <link rel="StyleSheet" href="themes/print/style/styleNN.css" type="text/css">
         <style type="text/css">@import url(&xar-baseurl;themes/print/style/style.css); </style>
     </head>
-    <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+    <body>
 
 <xar:module main="true" />
 

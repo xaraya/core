@@ -41,7 +41,7 @@
 						&xar-var-actionslabel;
 					</th>
 				</tr>
-				<xar:loop name="$items">
+				<xar:loop name="items">
 				<tr align="CENTER" valign="middle">
 					<td>
 						&xar-var-name;
