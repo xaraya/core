@@ -218,10 +218,10 @@ function xarSession_setUserInfo($userId, $rememberSession)
 
     $sessioninfoTable = $xartable['session_info'];
     $query = "UPDATE $sessioninfoTable
-              SET xar_uid = " . xarVarPrepForStore($userId) . ",
-                  xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
-              WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
-    $result =& $dbconn->Execute($query);
+              SET xar_uid = ? ,xar_remembersess = ?
+              WHERE xar_sessid = ?";
+    $bindvars = array($userId, $rememberSession, session_id());
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     if (xarSession__UseOldSessions()) {
@@ -345,10 +345,10 @@ function xarSession__current($sessionId)
 
     // Touch the last used time
     $query = "UPDATE $sessioninfoTable
-              SET xar_lastused = " . time() . "
-              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-
-    $result =& $dbconn->Execute($query);
+              SET xar_lastused = ?
+              WHERE xar_sessid = ?";
+    $bindvars = array(time(),$sessionId);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
@@ -368,19 +368,10 @@ function xarSession__new($sessionId, $ipAddress)
     $sessioninfoTable = $xartable['session_info'];
 
     $query = "INSERT INTO $sessioninfoTable
-                 (xar_sessid,
-                  xar_ipaddr,
-                  xar_uid,
-                  xar_firstused,
-                  xar_lastused)
-              VALUES
-                 ('" . xarVarPrepForStore($sessionId) . "',
-                  '" . xarVarPrepForStore($ipAddress) . "',
-                  " . _XAR_ID_UNREGISTERED . ",
-                  " . time() . ",
-                  " . time() . ")";
-
-    $result =& $dbconn->Execute($query);
+                 (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
+              VALUES (?,?,?,?,?)";
+    $bindvars = array($sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Generate a random number, used for
@@ -427,12 +418,9 @@ function xarSession__phpRead($sessionId)
 
     // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
     //        out? At least the roles/privileges modules are using it actively
-    $query = "SELECT xar_uid,
-                     xar_ipaddr,
-                     xar_vars
-              FROM $sessioninfoTable
-              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "SELECT xar_uid, xar_ipaddr, xar_vars
+              FROM $sessioninfoTable WHERE xar_sessid = ?";
+    $result =& $dbconn->Execute($query,array($sessionId));
     if (!$result) return;
 
     if (!$result->EOF) {
@@ -471,10 +459,8 @@ function xarSession__phpWrite($sessionId, $vars)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "UPDATE $sessioninfoTable
-              SET xar_vars = '" . xarVarPrepForStore($vars) . "'
-              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "UPDATE $sessioninfoTable SET xar_vars = ? WHERE xar_sessid = ?";
+    $result =& $dbconn->Execute($query,array($vars, $sessionId));
     if (!$result) return;
 
     return true;
@@ -491,9 +477,8 @@ function xarSession__phpDestroy($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "DELETE FROM $sessioninfoTable
-              WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM $sessioninfoTable WHERE xar_sessid = ?";
+    $result =& $dbconn->Execute($query,array($sessionId));
     if (!$result) return;
 
     return true;
@@ -510,29 +495,30 @@ function xarSession__phpGC($maxlifetime)
 
     $sessioninfoTable = $xartable['session_info'];
 
+    $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+    $bindvars=array($timeoutSetting);
     switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
     case 'Low':
         // Low security - delete session info if user decided not to
         //                remember themself
-        $where = "WHERE xar_remembersess = 0
-                      AND xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60));
+        $where = "WHERE xar_remembersess = 0 AND xar_lastused < ?";
         break;
     case 'Medium':
         // Medium security - delete session info if session cookie has
         //                   expired or user decided not to remember
         //                   themself
-        $where = "WHERE (xar_remembersess = 0
-                        AND xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60)) . ")
-                      OR xar_firstused < " . (time() - ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
+        $where = "WHERE (xar_remembersess = 0 AND xar_lastused <  ?)
+                      OR xar_firstused < ?";
+        $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
         break;
     case 'High':
     default:
         // High security - delete session info if user is inactive
-        $where = "WHERE xar_lastused < " . (time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60));
+        $where = "WHERE xar_lastused < ?";
         break;
     }
     $query = "DELETE FROM $sessioninfoTable $where";
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     return true;
