@@ -123,8 +123,9 @@
                     </td>
                 </tr>
             </xar:foreach>
-        </xar:if>
-    </table>
+        </table>
+    </xar:if>
+
     <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
             <label for="roleid" title="#xarML('Choose a new Group to assign this Privilege.')#" class="xar-form-label">

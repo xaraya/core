@@ -75,7 +75,7 @@
             <div class="xar-form-input-wrapper">
                 <span class="xar-form-label">
                     <xar:mlstring>Name:</xar:mlstring>
-                </label>
+                </span>
                 #$pname#
                 <input type="hidden" name="pname" id="pname" value="#$pname#" />
             </div>

@@ -1,27 +1,25 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
-</script>
-<script language="JavaScript">
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
- function doOnLoad() {
-      oldOnLoadFunction();      
-      xarTree_init();
-      }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
- function doOnUnload() {
-      oldOnUnloadFunction();      
-      xarTree_init();
-      }
- 
- window.onload = doOnLoad;
- window.onunload = doOnUnload;
-</script>
-<script language="JavaScript">
+<script type="javascript">
 <!--
-function setaction(target){
-document.forms['privilegeform'].action = target;
-document.forms['privilegeform'].submit();}
-//-->
+    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
+    function doOnLoad() {
+         oldOnLoadFunction();
+         xarTree_init();
+    }
+    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
+    function doOnUnload() {
+         oldOnUnloadFunction();
+         xarTree_init();
+    }
+
+    window.onload = doOnLoad;
+    window.onunload = doOnUnload;
+    
+    function setaction(target){
+    document.forms['privilegeform'].action = target;
+    document.forms['privilegeform'].submit();}
+// -->
 </script>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
