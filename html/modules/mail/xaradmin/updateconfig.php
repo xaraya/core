@@ -1,0 +1,110 @@
+<?php
+/**
+ * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
+ * 
+ * Mail System
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @link http://www.xaraya.com
+ * @subpackage mail module
+ * @author John Cox <admin@dinerminor.com> 
+ */
+
+/**
+ * Update the configuration parameters of the module based on data from the modification form
+ *
+ * @author  John Cox <niceguyeddie@xaraya.com>
+ * @access  public
+ * @param   no parameters
+ * @return  true on success or void on failure
+ * @throws  no exceptions
+ * @todo    nothing
+*/
+function mail_admin_updateconfig()
+{ 
+	// Get parameters
+	if (!xarVarFetch('adminname', 'str:1:', $adminname)) return;
+	if (!xarVarFetch('adminmail', 'str:1:', $adminmail)) return;
+	if (!xarVarFetch('replyto', 'checkbox', $replyto, false, XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('replytoname', 'str:1:', $replytoname, 'Your Alt Reply To Name', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, 'Your Alt Reply To Email', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('html', 'checkbox', $html, false, XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('htmlfooter', 'str:1:', $htmlfooter, '', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('wordwrap', 'int:1:', $wordwrap, '50')) return;
+	if (!xarVarFetch('priority', 'str:1:', $priority, 'normal')) return;
+	if (!xarVarFetch('server', 'str:1:', $server, 'mail')) return;
+	if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, 'Your SMTP Host', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('smtpPort', 'int:1:', $smtpPort, '25', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('smtpAuth', 'checkbox', $smtpAuth, false, XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('smtpUserName', 'str:1:', $smtpUserName, 'Your SMTP User Name', XARVAR_NOT_REQUIRED)) return;
+	if (!xarVarFetch('smtpPassword', 'str:1:', $smtpPassword, 'Your SMTP Password', XARVAR_NOT_REQUIRED)) return; 
+	if (!xarVarFetch('sendmailpath', 'str:1:', $sendmailpath, '/usr/sbin/sendmail', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('searchstrings', 'str:1', $searchstrings, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
+	// Confirm authorisation code
+	if (!xarSecConfirmAuthKey()) return; 
+	// update the data
+	xarModSetVar('mail', 'adminname', $adminname);
+	xarModSetVar('mail', 'adminmail', $adminmail);
+	xarModSetVar('mail', 'replyto', $replyto);
+	xarModSetVar('mail', 'replytoname', $replytoname);
+	xarModSetVar('mail', 'replytoemail', $replytoemail);
+	xarModSetVar('mail', 'html', $html);
+	xarModSetVar('mail', 'htmlheader', $htmlheader);
+	xarModSetVar('mail', 'htmlfooter', $htmlfooter);
+	xarModSetVar('mail', 'priority', $priority);
+	xarModSetVar('mail', 'wordwrap', $wordwrap);
+	xarModSetVar('mail', 'server', $server);
+	xarModSetVar('mail', 'smtpHost', $smtpHost);
+	xarModSetVar('mail', 'smtpPort', $smtpPort);
+	xarModSetVar('mail', 'smtpAuth', $smtpAuth);
+	xarModSetVar('mail', 'smtpUserName', $smtpUserName);
+	xarModSetVar('mail', 'smtpPassword', $smtpPassword); 
+	xarModSetVar('mail', 'sendmailpath', $sendmailpath); 
+    $searchstrings = serialize($searchstrings);
+    xarModSetVar('mail', 'searchstrings', $searchstrings);
+    $replacestrings = serialize($replacestrings);
+    xarModSetVar('mail', 'replacestrings', $replacestrings);
+
+    if (xarModIsAvailable('scheduler')) {
+        if (!xarVarFetch('interval', 'str:1', $interval, '', XARVAR_NOT_REQUIRED)) return;
+        // see if we have a scheduler job running to send queued mail
+        $job = xarModAPIFunc('scheduler','user','get',
+                             array('module' => 'mail',
+                                   'type' => 'scheduler',
+                                   'func' => 'sendmail'));
+        if (empty($job) || empty($job['interval'])) {
+            if (!empty($interval)) {
+                // create a scheduler job
+                xarModAPIFunc('scheduler','admin','create',
+                              array('module' => 'mail',
+                                    'type' => 'scheduler',
+                                    'func' => 'sendmail',
+                                    'interval' => $interval));
+            }
+        } elseif (empty($interval)) {
+            // delete the scheduler job
+            xarModAPIFunc('scheduler','admin','delete',
+                          array('module' => 'mail',
+                                'type' => 'scheduler',
+                                'func' => 'sendmail'));
+        } elseif ($interval != $job['interval']) {
+            // update the scheduler job
+            xarModAPIFunc('scheduler','admin','update',
+                          array('module' => 'mail',
+                                'type' => 'scheduler',
+                                'func' => 'sendmail',
+                                'interval' => $interval));
+        }
+    }
+
+	// lets update status and display updated configuration
+	xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig')); 
+	// Return
+	return true;
+} 
+?>

@@ -1,0 +1,61 @@
+<?php
+/**
+ * File: $Id: s.xaradmin.php 1.28 03/02/08 17:38:40-05:00 John.Cox@mcnabb. $
+ * 
+ * Mail System
+ * 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @link http://www.xaraya.com
+ * @subpackage mail module
+ * @author John Cox <admin@dinerminor.com> 
+ */
+
+/**
+ * Test the email settings
+ *
+ * @author  John Cox <niceguyeddie@xaraya.com>
+ * @access  public
+ * @param   no parameters
+ * @return  true on success or void on failure
+ * @throws  no exceptions
+ * @todo    nothing
+*/
+function mail_admin_sendtest()
+{
+    // Get parameters from whatever input we need
+    if (!xarVarFetch('message', 'str:1:', $message)) return;
+    if (!xarVarFetch('subject', 'str:1', $subject)) return; 
+    // Confirm authorisation code.
+    if (!xarSecConfirmAuthKey()) return; 
+    // Security check
+    if (!xarSecurityCheck('AdminMail')) return; 
+    
+    $email  = xarModGetVar('mail', 'adminmail');
+    $name   = xarModGetVar('mail', 'adminname');
+
+    if (!xarVarFetch('when', 'str:1', $when, '', XARVAR_NOT_REQUIRED)) return;
+    if (!empty($when)) {
+        $when .= ' GMT';
+        $when = strtotime($when);
+        $when -= xarMLS_userOffset() * 3600;
+    } else {
+        $when = 0;
+    }
+
+    if (!xarModAPIFunc('mail',
+            'admin',
+            'sendmail',
+            array('info' => $email,
+                'name' => $name,
+                'subject' => $subject,
+                'message' => $message,
+                'when' => $when))) return;
+
+    // lets update status and display updated configuration
+    xarResponseRedirect(xarModURL('mail', 'admin', 'compose')); 
+    // Return
+    return true;
+} 
+?>
