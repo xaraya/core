@@ -56,8 +56,9 @@ function roles_adminapi_stateupdate($args)
     $rolesTable = $xartable['roles'];
 
     $query = "UPDATE $rolesTable
-            SET xar_state = '" . xarVarPrepForStore($state) . "'
-            WHERE xar_uid = " . xarVarPrepForStore($uid);
+            SET xar_state = '" . xarVarPrepForStore($state)."'" ;
+    if (isset($valcode)) $query .= ", xar_valcode = '".$valcode."'";
+    $query .= " WHERE xar_uid = ".xarVarPrepForStore($uid);
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;

@@ -71,11 +71,13 @@ function roles_admin_updatestate()
         //check if the user must be updated :
 		$role = $roles->getRole($uid);
         if ($role->getState() != $data['status']) {
+            if ($data['status'] == 2) $valcode = xarModAPIFunc('roles','user','makepass');
+            else $valcode = null;
 	    	//Update the user
 	    	if (!xarModAPIFunc('roles',
 	                          'admin',
 	                          'stateupdate',
-	                          array('uid' => $uid, 'state' => $data['status']))) return;
+	                          array('uid' => $uid, 'state' => $data['status'],  'valcode' => $valcode))) return;
 	        $uidnotify[$uid] = 1;
         }
     }
