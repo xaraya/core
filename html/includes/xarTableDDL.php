@@ -1,9 +1,9 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Table Maintenance API
- * 
+ *
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -17,14 +17,14 @@
 
 /**
  * Public Functions:
- * 
- * xarDBCreateDatabase($databaseName, $databaseType = NULL)  
+ *
+ * xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * xarDBCreateTable($tableName, $fields, $databaseType = NULL)
  * xarDBDropTable($tableName, $databaseType = NULL)
  * xarDBAlterTable($tableName, $args, $databaseType = NULL)
  * xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * xarDBDropIndex($tableName, $databaseType = NULL)
- * 
+ *
  */
 
 /*
@@ -89,8 +89,8 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * @param args['command'] command to perform on table(add,modify,drop,rename)
  * @param args['field'] name of column to alter
  * @param args['type'] column type
- * @param args['size'] size of column if varying data 
- * @param args['default'] default value of data 
+ * @param args['size'] size of column if varying data
+ * @param args['default'] default value of data
  * @param args['null'] null or not null (true/false)
  * @param args['unsigned'] allow unsigned data (true/false)
  * @param args['increment'] auto incrementing files
@@ -602,7 +602,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     // look for the exception to know the table has been created.
     list($dbconn) = xarDBGetConn();
     $query = 'DROP TABLE IF EXISTS ' . $tableName;
-    $result =& $dbconn->Execute($query);    
+    $result =& $dbconn->Execute($query);
 
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
     if (!empty($primary_key)) {
@@ -808,7 +808,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
 
     // Test for DEFAULTS
     $this_field['default'] = (isset($parameters['default']))
-                           ? (($parameters['default'] == 'NULL') 
+                           ? (($parameters['default'] == 'NULL')
                                     ? 'DEFAULT NULL'
                                     : "DEFAULT '".$parameters['default']."'")
                            : '';
@@ -882,7 +882,7 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
         $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
 
         // For some reason that is not obvious in the old code, fetching
-        // the values from $this_field was causing an infinite loop - 
+        // the values from $this_field was causing an infinite loop -
         // now check to see if the key exists before assigning to $sql_fields
         $sqlDDL = $field_name;
         if (array_key_exists("type", $this_field))

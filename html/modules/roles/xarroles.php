@@ -1,23 +1,23 @@
 <?php
 /**
  * File: $Id$
- * 
+ *
  * Purpose of file:  Roles administration API
- * 
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  * @subpackage Roles Module
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
 /**
  * xarRoles: class for the role repository
- * 
+ *
  * Represents the repository containing all roles
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
- * @access public 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
  * @throws none
  * @todo none
  */
@@ -34,19 +34,19 @@ class xarRoles {
         $xartable = xarDBGetTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
-    } 
+    }
 
     /**
      * getgroups: returns all the current groups.
-     * 
+     *
      * Returns an array of all the groups in the roles repository
      * The repository contains an entry for each user and group.
      * This function will initially load the groups from the db into an array and return it.
      * On subsequent calls it just returns the array .
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access private 
-     * @param none $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access private
+     * @param none $
      * @return array of arrays representing all the groups
      * @throws none
      * @todo none
@@ -76,23 +76,23 @@ class xarRoles {
                     'users' => $users,
                     'parentid' => $parentid);
                 $result->MoveNext();
-            } 
+            }
             $this->allgroups = $groups;
             return $groups;
         } else {
             return $this->allgroups;
-        } 
-    } 
+        }
+    }
 
     /**
      * getgroup: returns an array representing a group
-     * 
+     *
      * Returns an array of representing a group in the roles repository
      * The repository contains an entry for each user and group.
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access private 
-     * @param integer $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access private
+     * @param integer $
      * @return array representing the group
      * @throws none
      * @todo none
@@ -101,19 +101,19 @@ class xarRoles {
     {
         foreach($this->getgroups() as $group) {
             if ($group['uid'] == $uid) return $group;
-        } 
+        }
         return false;
-    } 
+    }
 
     /**
      * getsubgroups: get the children of a group that are groups themselves
-     * 
+     *
      * This function is useful for setting up trees
      * We don't include users in the tree because there are too many to display
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access private 
-     * @param none $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access private
+     * @param none $
      * @return array representing the subgroups of a group
      * @throws none
      * @todo none
@@ -125,19 +125,19 @@ class xarRoles {
         foreach($groups as $subgroup) {
             if ($subgroup['parentid'] == $uid) {
                 $subgroups[] = $subgroup;
-            } 
-        } 
+            }
+        }
         return $subgroups;
-    } 
+    }
 
     /**
      * getRole: gets a single role
-     * 
+     *
      * Retrieves a single role (user or group) from the roles repository
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param integer $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param integer $
      * @return role object
      * @throws none
      * @todo none
@@ -148,7 +148,7 @@ class xarRoles {
         // set up and execute the query
         $query = "SELECT *
                   FROM $this->rolestable
-                  WHERE xar_uid = $uid"; 
+                  WHERE xar_uid = $uid";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -169,17 +169,17 @@ class xarRoles {
             'auth_module' => $auth_module);
         // create and return the role object
         return new xarRole($pargs);
-    } 
+    }
 
     /**
      * findRole: finds a single role based on its name
-     * 
+     *
      * Retrieves a single role object from the Roles repository
      * This is a convenience class for module developers
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param string $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param string $
      * @return role object
      * @throws none
      * @todo none
@@ -190,7 +190,7 @@ class xarRoles {
         // set up and execute the query
         $query = "SELECT *
                   FROM $this->rolestable
-                  WHERE xar_name = '$name'"; 
+                  WHERE xar_name = '$name'";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -209,23 +209,23 @@ class xarRoles {
                 'date_reg' => $date_reg,
                 'val_code' => $val_code,
                 'state' => $state,
-                'auth_module' => $auth_module); 
+                'auth_module' => $auth_module);
             // create and return the role object
             return new xarRole($pargs);
-        } 
-    } 
+        }
+    }
 
     /**
      * makeMemberByName: makes a role a child of a group
-     * 
+     *
      * Creates an entry in the rolemembers table
      * This is a convenience class for module developers
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param string $ 
-     * @param string $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param string $
+     * @param string $
+     * @return boolean
      * @throws none
      * @todo create exceptions for bad input
      */
@@ -234,7 +234,7 @@ class xarRoles {
         // retrieve the parent's data from the repository
         $query = "SELECT *
                   FROM $this->rolestable
-                  WHERE xar_name = '$parentname'"; 
+                  WHERE xar_name = '$parentname'";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -256,7 +256,7 @@ class xarRoles {
         // retrieve the child's data from the repository
         $query = "SELECT *
                   FROM $this->rolestable
-                  WHERE xar_name = '$childname'"; 
+                  WHERE xar_name = '$childname'";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -277,18 +277,18 @@ class xarRoles {
         $child = new xarRole($pargs);
         // done
         return $parent->addMember($child);
-    } 
+    }
 
     /**
      * isRoot: defines the root of the roles hierarchy
-     * 
+     *
      * Creates an entry in the rolemembers table
      * This is a convenience class for module developers
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param string $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param string $
+     * @return boolean
      * @throws none
      * @todo create exceptions for bad input
      */
@@ -297,32 +297,32 @@ class xarRoles {
         // get the data for the root object
         $query = "SELECT xar_uid
                   FROM $this->rolestable
-                  WHERE xar_name = '$rootname'"; 
+                  WHERE xar_name = '$rootname'";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
         // create the entry
         list($uid) = $result->fields;
         $query = "INSERT INTO $this->rolememberstable
-                VALUES ($uid,0)"; 
+                VALUES ($uid,0)";
         // Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
         // done
         return true;
-    } 
+    }
 
     /**
      * makeUser: add a new role object to the repository
-     * 
+     *
      * Creates an entry in the repository for a role object that has been created
      * This is a convenience method for module developers
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param string $ 
-     * @param string $ 
-     * @param string $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param string $
+     * @param string $
+     * @param string $
+     * @return boolean
      * @throws none
      * @todo create exception handling for bad input
      */
@@ -337,7 +337,7 @@ class xarRoles {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
-        } 
+        }
         // Confirm that this group or user does not already exist
         $query = "SELECT COUNT(*) FROM $this->rolestable
                   WHERE xar_uname = '$uname'";
@@ -355,16 +355,17 @@ class xarRoles {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             return false;
-        } 
+        }
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
+        $createdate = $this->dbconn->DBTimeStamp(mktime());
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
         $unameprep = xarVarPrepForStore($uname);
         $emailprep = xarVarPrepForStore($email);
         $passprep = xarVarPrepForStore(md5($pass));
-        $dateregprep = date('Y-m-d G:i:s');
+        $dateregprep = xarVarPrepForStore($createdate);
         $valcodeprep = xarVarPrepForStore($valcode);
         $stateprep = xarVarPrepForStore($state);
         $authmoduleprep = xarVarPrepForStore($authmodule);
@@ -376,18 +377,18 @@ class xarRoles {
         if (!$this->dbconn->Execute($query)) return;
         // done
         return true;
-    } 
+    }
 
     /**
      * makeGroup: add a new role object to the repository
-     * 
+     *
      * Creates an entry in the repository for a role object that has been created
      * This is a convenience method for module developers
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param string $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param string $
+     * @return boolean
      * @throws none
      * @todo create exception handling for bad input
      */
@@ -409,28 +410,30 @@ class xarRoles {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             return false;
-        } 
+        }
         // create an ID for the group
         $nextId = $this->dbconn->genID($this->rolestable);
+        $creatdate = $this->dbconn->DBTimeStamp(mktime());
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
+        $dateprep = xarVarPrepForStore($creatdate);
         $query = "INSERT INTO $this->rolestable
-                    (xar_uid, xar_name, xar_type, xar_uname)
-                  VALUES ($nextIdprep, '$nameprep', 1, '$nameprep')";
+                    (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
+                  VALUES ($nextIdprep, '$nameprep', 1, '$nameprep', '$dateprep')";
         if (!$this->dbconn->Execute($query)) return;
         // done
         return true;
-    } 
-} 
+    }
+}
 
 /**
  * xarRole: class for the role object
- * 
+ *
  * Represents a single role (user or group)
- * 
- * @author Marc Lutolf <marcinmilan@xaraya.com> 
- * @access public 
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
  * @throws none
  * @todo none
  */
@@ -447,7 +450,7 @@ class xarRole {
     var $state; //the state of this user or group
     var $auth_module; //no idea what this is (not used by groups)
     var $parentlevel; //we use this just to store transient information
-    
+
     var $dbconn;
     var $rolestable;
     var $rolememberstable;
@@ -458,12 +461,12 @@ class xarRole {
 
     /**
      * xarRole: constructor for the role object
-     * 
+     *
      * Retrieves a single role (user or group) from the roles repository
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param array $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param array $
      * @return role object
      * @throws none
      * @todo none
@@ -484,10 +487,10 @@ class xarRole {
         if (empty($uname)) $uname = xarSessionGetVar('uid') . time();
         if (empty($email)) $email = '';
         if (empty($pass)) $pass = '';
-        if (empty($state)) $state = 1; 
+        if (empty($state)) $state = 1;
         // FIXME: why is date_reg a varchar in the database and not a date field?
         if (empty($date_reg)) $date_reg = time();
-        if (empty($val_code)) $val_code = 'createdbyadmin'; 
+        if (empty($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (empty($auth_module)) $auth_module = '';
 
@@ -503,17 +506,17 @@ class xarRole {
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
-    } 
+    }
 
     /**
      * add: add a new role object to the repository
-     * 
+     *
      * Creates an entry in the repository for a role object that has been created
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -527,7 +530,7 @@ class xarRole {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
-        } 
+        }
         // TODO: validate the email address
         if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
             $msg = xarML('You must enter a user name and a valid email address.',
@@ -537,7 +540,7 @@ class xarRole {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
-        } 
+        }
         // Confirm that this group or user does not already exist
         if ($this->type == 1) {
             $query = "SELECT COUNT(*) FROM $this->rolestable
@@ -545,7 +548,7 @@ class xarRole {
         } else {
             $query = "SELECT COUNT(*) FROM $this->rolestable
                   WHERE xar_uname = '$this->uname'";
-        } 
+        }
 
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -560,7 +563,7 @@ class xarRole {
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
             return false;
-        } 
+        }
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
@@ -589,11 +592,11 @@ class xarRole {
                         xar_date_reg, xar_state, xar_valcode, xar_auth_module)
                       VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$emailprep',
                       '$passprep', '$dateregprep', $stateprep, '$valcodeprep', '$authmodprep')";
-        } 
+        }
         // Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
 
-        $query = "SELECT MAX(xar_uid) FROM $this->rolestable"; 
+        $query = "SELECT MAX(xar_uid) FROM $this->rolestable";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -603,18 +606,18 @@ class xarRole {
         $parts = new xarRoles();
         $parentpart = $parts->getRole($this->parentid);
         return $parentpart->addMember($this);
-    } 
+    }
 
     /**
      * addMember: adds a role to a group
-     * 
+     *
      * Make a user or group a member of another group.
      * A user of group can have any number of parents or children..
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
      * @param role $ object
-     * @return boolean 
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -639,23 +642,23 @@ class xarRole {
             $users = $users + 1;
             $query = "UPDATE " . $this->rolestable . " SET " . "xar_users = $users" . " WHERE xar_uid =" . $this->getID();
             if (!$this->dbconn->Execute($query)) return;
-        } 
+        }
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
         // done
         return true;
-    } 
+    }
 
     /**
      * removeMember: removes a role from a group
-     * 
+     *
      * Removes a user or group as an entry of another group.
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
      * @param role $ object
-     * @return boolean 
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -678,13 +681,13 @@ class xarRole {
             $users = $users - 1;
             $query = "UPDATE " . $this->rolestable . " SET " . "xar_users = $users" . " WHERE xar_uid =" . $this->getID();
             if (!$this->dbconn->Execute($query)) return;
-        } 
+        }
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
         // done
         return true;
-    } 
+    }
 
     function update()
     {
@@ -694,15 +697,15 @@ class xarRole {
         // Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
         return true;
-    } 
+    }
 
     /**
      * remove: remove a role from the repository
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo flag illegal deletes
      */
@@ -711,7 +714,7 @@ class xarRole {
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
         $query = "SELECT xar_parentid FROM $this->rolememberstable
-              WHERE xar_uid=" . $this->getID(); 
+              WHERE xar_uid=" . $this->getID();
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -725,15 +728,15 @@ class xarRole {
             $parentpart = $parts->getRole($parentid);
             $parentpart->removeMember($this);
             $result->MoveNext();
-        } 
+        }
         // delete the relevant entry in the roles table
         $query = "DELETE FROM $this->rolestable
-              WHERE xar_uid=" . $this->getID(); 
+              WHERE xar_uid=" . $this->getID();
         // Execute the query, bail if an exception was thrown
         if (!$this->dbconn->Execute($query)) return;
         // done
         return true;
-    } 
+    }
 
     function getAllPrivileges()
     {
@@ -753,13 +756,13 @@ class xarRole {
                 $privileges[$ind] = array('pid' => $pid,
                     'name' => $name);
                 $result->MoveNext();
-            } 
+            }
             $allprivileges = $privileges;
             return $privileges;
         } else {
             return $allprivileges;
-        } 
-    } 
+        }
+    }
 
     function getAssignedPrivileges()
     {
@@ -773,7 +776,7 @@ class xarRole {
                     xar_description
                     FROM $this->privilegestable p INNER JOIN $this->acltable acl
                     ON p.xar_pid = acl.xar_permid
-                    WHERE acl.xar_partid = $this->uid"; 
+                    WHERE acl.xar_partid = $this->uid";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
@@ -794,9 +797,9 @@ class xarRole {
                     'parentid' => 0));
             array_push($privileges, $perm);
             $result->MoveNext();
-        } 
+        }
         return $privileges;
-    } 
+    }
 
     function getInheritedPrivileges()
     {
@@ -806,17 +809,17 @@ class xarRole {
             $perms = $ancestor->getAssignedPrivileges();
             while (list($key, $perm) = each($perms)) {
                 array_push($inherited, $perm);
-            } 
-        } 
-    } 
+            }
+        }
+    }
 
     /**
      * assignPrivilege: assigns a privilege to a role
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
      * @param privilege $ object
-     * @return boolean 
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -830,15 +833,15 @@ class xarRole {
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
         return true;
-    } 
+    }
 
     /**
      * removePrivilege: removes a privilege from a role
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
      * @param privilege $ object
-     * @return boolean 
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -852,15 +855,15 @@ class xarRole {
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
         return true;
-    } 
+    }
 
     /**
      * getUsers: get the members of a group that are users
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -897,13 +900,13 @@ class xarRole {
                         ON r.xar_uid = rm.xar_uid
                         WHERE r.xar_type = 0 AND r.xar_state = $state
                         AND rm.xar_parentid = $this->uid";
-        } 
+        }
         if ($startnum != 0) {
             $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1);
         } else {
             $result = $this->dbconn->Execute($query);
-        } 
-        if (!$result) return; 
+        }
+        if (!$result) return;
         // CHECKME: I suppose this is what you meant here ?
         $parentid = $this->uid;
         // arrange the data in an array of role objects
@@ -924,17 +927,17 @@ class xarRole {
                 'auth_module' => $auth_module);
             $users[] = new xarRole($pargs);
             $result->MoveNext();
-        } 
+        }
         // done
         return $users;
-    } 
+    }
 
     /**
      * getParents: returns the parent objects of a role
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
      * @return array of role objects
      * @throws none
      * @todo none
@@ -954,8 +957,8 @@ class xarRole {
             foreach($parts->getgroups() as $group) {
                 if ($group['uid'] == $this->uid) {
                     $parents[] = $parts->getRole($group['parentid']);
-                } 
-            } 
+                }
+            }
         } else {
             // if this is a user just perform a SELECT on the rolemembers table
             $query = "SELECT r.*
@@ -981,18 +984,18 @@ class xarRole {
                     'auth_module' => $auth_module);
                 $parents[] = new xarRole($pargs);
                 $result->MoveNext();
-            } 
-        } 
+            }
+        }
         // done
         return $parents;
-    } 
+    }
 
     /**
      * getAncestors: returns all objects in the roles hierarchy above a role
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
      * @return array of role objects
      * @throws none
      * @todo if PHP does static variables we can make this a lot easier
@@ -1006,7 +1009,7 @@ class xarRole {
         $parents1 = array();
         foreach ($parents as $key => $parent) {
             $parents[$key]->setLevel(1);
-        } 
+        }
         // Get the parent field for each parent
         while (list($key, $parent) = each ($parents)) {
             $plevel = $parent->getLevel() + 1;
@@ -1014,8 +1017,8 @@ class xarRole {
             foreach ($ancestors as $key1 => $ancestor) {
                 $ancestors[$key1]->setLevel($plevel);
                 array_push($parents, $ancestors[$key1]);
-            } 
-        } 
+            }
+        }
 
         $ancestors = array();
         // If this is a new ancestor add to the end of the array
@@ -1025,56 +1028,56 @@ class xarRole {
                 if ($parent->isEqual($ancestor)) {
                     $iscontained = true;
                     break;
-                } 
-            } 
+                }
+            }
             if (!$iscontained) array_push($ancestors, $parent);
-        } 
+        }
         // done
         return $ancestors;
-    } 
+    }
 
     /**
      * isEqual: checks whether two roles are equal
-     * 
+     *
      * Two role objects are considered equal if they have the same uid.
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
     function isEqual($role)
     {
         return $this->getID() == $role->getID();
-    } 
+    }
 
     /**
      * isUser: checks whether this role is a user
-     * 
+     *
      * Users have type = 0.
      * Groups have type = 1.
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
     function isUser()
     {
         return $this->getType() == 0;
-    } 
+    }
 
     /**
      * isParent: checks whether a role is a parent of this one
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -1083,17 +1086,17 @@ class xarRole {
         $parents = $this->getParents();
         foreach ($parents as $parent) {
             if ($role->isEqual($parent)) return true;
-        } 
+        }
         return false;
-    } 
+    }
 
     /**
      * isAncestor: checks whether a role is an ancestor of this one
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
-     * @return boolean 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
+     * @return boolean
      * @throws none
      * @todo none
      */
@@ -1102,18 +1105,18 @@ class xarRole {
         $ancestors = $this->getAncestors();
         foreach ($ancestors as $ancestor) {
             if ($role->isEqual($ancestor)) return true;
-        } 
+        }
         return false;
-    } 
+    }
 
     /**
      * getPrivileges: returns the privileges in the privileges repository
-     * 
+     *
      * Returns an array of all the privileges objects
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
-     * @param none $ 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
+     * @param none $
      * @return array of privilege objects
      * @throws none
      * @todo none
@@ -1156,15 +1159,15 @@ class xarRole {
                     if (!$iscontained) array_push($parents, $ancestor);
                 }
             }
-*/ } 
+*/ }
 
     /**
      * Gets and Sets
-     * 
+     *
      * Get and set methods for the class variables
-     * 
-     * @author Marc Lutolf <marcinmilan@xaraya.com> 
-     * @access public 
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access public
      * @param n $ /a
      * @return n /a
      * @throws none
@@ -1173,88 +1176,88 @@ class xarRole {
     function getID()
     {
         return $this->uid;
-    } 
+    }
     function getName()
     {
         return $this->name;
-    } 
+    }
     function getType()
     {
         return $this->type;
-    } 
+    }
     function getUser()
     {
         return $this->uname;
-    } 
+    }
     function getEmail()
     {
         return $this->email;
-    } 
+    }
     function getPass()
     {
         return $this->pass;
-    } 
+    }
     function getState()
     {
         return $this->state;
-    } 
+    }
     function getDateReg()
     {
         return $this->date_reg;
-    } 
+    }
     function getValCode()
     {
         return $this->val_code;
-    } 
+    }
     function getAuthModule()
     {
         return $this->auth_module;
-    } 
+    }
     function getLevel()
     {
         return $this->parentlevel;
-    } 
+    }
 
     function setName($var)
     {
         $this->name = $var;
-    } 
+    }
     function setParent($var)
     {
         $this->parentid = $var;
-    } 
+    }
     function setUser($var)
     {
         $this->uname = $var;
-    } 
+    }
     function setEmail($var)
     {
         $this->email = $var;
-    } 
+    }
     function setPass($var)
     {
         $this->pass = $var;
-    } 
+    }
     function setState($var)
     {
         $this->state = $var;
-    } 
+    }
     function setDateReg($var)
     {
         $this->date_reg = $var;
-    } 
+    }
     function setValCode($var)
     {
         $this->val_code = $var;
-    } 
+    }
     function setAuthModule($var)
     {
         $this->auth_module = $var;
-    } 
+    }
     function setLevel($var)
     {
         $this->parentlevel = $var;
-    } 
-} 
+    }
+}
 
 ?>
