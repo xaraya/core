@@ -25,6 +25,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         // check that the user exists
         if (is_numeric($value)) {
             $user = xarUserGetVar('uname', $value);
+            if (!isset($user)) xarExceptionHandled();
         }
         if (!is_numeric($value) || empty($user)) {
             $this->invalid = xarML('user');
@@ -48,7 +49,9 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
         $user = xarUserGetVar('name', $value);
         if (empty($user)) {
+            if (!isset($user)) xarExceptionHandled();
             $user = xarUserGetVar('uname', $value);
+            if (!isset($user)) xarExceptionHandled();
         }
         $output = xarVarPrepForDisplay($user);
         if ($value > 1) {
@@ -72,7 +75,9 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
         $user = xarUserGetVar('name', $value);
         if (empty($user)) {
+            if (!isset($user)) xarExceptionHandled();
             $user = xarUserGetVar('uname', $value);
+            if (!isset($user)) xarExceptionHandled();
         }
         if ($value > 1) {
             return '<a href="'.xarModURL('roles','user','display',
