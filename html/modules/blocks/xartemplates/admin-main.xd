@@ -4,33 +4,6 @@
             Blocks Administration
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-        <table border="0" width="100%" cellpadding="2" cellspacing="0">
-            <tr>
-                <td>&nbsp;</td>
-        <td align="center">
-            <a href="&xar-modurl-blocks-admin-new_instance;">New block instance</a>
-        </td>
-        <td align="center">
-            <a href="&xar-modurl-blocks-admin-new_group;">New block group</a>
-        </td>
-        <td align="center">&nbsp;</td>
-    </tr>
-    <tr align="center">
-        <td align="center" width="25%">
-            <a href="&xar-modurl-blocks-admin-view_types;">View block types</a>
-        </td>
-        <td align="center" width="25%">
-            <a href="&xar-modurl-blocks-admin-view_instances;">View block instances</a>
-        </td>
-        <td align="center" width="25%">
-            <a href="&xar-modurl-blocks-admin-view_groups;">View block groups</a>
-        </td>
-        <td align="center" width="25%">
-            <a href="&xar-modurl-blocks-admin-settings;">General settings</a>
-        </td>
-    </tr>
 </table>
         </td>
     </tr>

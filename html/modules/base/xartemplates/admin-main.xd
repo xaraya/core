@@ -4,23 +4,6 @@
             <xar:mlstring>Base Xaraya Administration</xar:mlstring>            
         </th>
     </tr>
-    <tr align="center">
-        <td align="center">
-        <table border="0" width="100%" cellpadding="2" cellspacing="0">
-            <tr>
-                <td>
-                    <a href="&xar-modurl-base-admin-modifyconfig;"><xar:mlstring>Modify Xaraya Site Configuration</xar:mlstring></a>
-                </td>
-                <td align="center">
-                    <a href="&xar-modurl-base-admin-sysinfo&theme=print;"><xar:mlstring>View System Information</xar:mlstring></a>
-                </td>
-                <td align="center">
-                    <a href="&xar-modurl-base-admin-addallowed;"><xar:mlstring>Add Allowed Vars</xar:mlstring></a>
-                </td>
-            </tr>
-        </table>
-        </td>
-    </tr>
 </table>
 <xar:if id="title_condition" condition="!empty($base_statusmsg)">
 <div align="center"><h2><xar:var scope="session" name="$base_statusmsg" /></h2><br />
