@@ -39,7 +39,8 @@
 					&xar-var-name;
 				</td>
 			<td align="right">
-				<a href="&xar-var-removeurl;&partid=&xar-var-partid;">				
+				<a href="&xar-var-removeurl;&partid=&xar-var-partid;"
+				title="Remove this Permission assignment">				
 					Remove    
 				</a>
 			</td>

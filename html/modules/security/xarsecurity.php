@@ -850,7 +850,8 @@ function drawbranch($node){
 			xarModURL('security',
 				 'admin',
 				 'deletepermission',
-				 array('pid'=>$object['pid'])) . '">&nbsp;Delete&nbsp;</a>';
+				 array('pid'=>$object['pid'])) .
+				 '" title="Delete this Permission">&nbsp;Delete&nbsp;</a>';
 	}
 	$this->html .= '</td>';
 
@@ -859,7 +860,8 @@ function drawbranch($node){
 			xarModURL('security',
 				 'admin',
 				 'showparticipants',
-				 array('pid'=>$object['pid'])) . '">&nbsp;Users/Groups</a>';
+				 array('pid'=>$object['pid'])) .
+				 '" title="Show the Groups/Users this Permission is assigned to">&nbsp;Groups/Users</a>';
 
 // close the html row
 	$this->html .= '</td></tr></table></td></tr>';
