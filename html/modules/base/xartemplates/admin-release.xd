@@ -12,9 +12,9 @@
             <xar:foreach in="$feedcontent" value="$release">
             <li>
                 <xar:if condition="!empty($release['link'])">
-                    <a href="#$release['link']#" target="_BLANK"> #$release['title']# </a>:
+                    <a href="#$release['link']#" onclick="window.open(this.getAttribute('href'));return false;">#$release['title']#</a>: 
                 <xar:else />
-                    #$release['title']#:
+                    #$release['title']#: 
                 </xar:if>
                 <xar:if condition="!empty($release['description'])">
                     #$release['description']#
