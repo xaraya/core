@@ -810,6 +810,63 @@ function pnUserGetTheme()
     return;
 }
 
+// Stubs for pnAPI compatibility testing
+
+function pnAssert($assertion, $file='Unknown', $line='Unknown', $msg='')
+{
+    return xarAssert($assertion, $file, $line, $msg);
+}
+
+function pnBannerDisplay($type=0)
+{
+    return xarAssert($assertion, $file, $line, $msg);
+}
+
+function pnBlockGetInfo($bid)
+{
+    return xarBlockGetInfo($bid);
+}
+
+function pnBlockLoad($modname, $block)
+{
+    return xarBlockLoad($modname, $block);
+}
+
+function pnBlockLoadAll()
+{
+    return xarBlockLoadAll();
+}
+
+function pnBlockShow($modname, $block, $blockinfo=array())
+{
+    return xarBlockShow($modname, $block, $blockinfo);
+}
+
+function pnBlockVarsFromContent($content)
+{
+    return xarBlockVarsFromContent($content);
+}
+
+function pnBlockVarsToContent($vars)
+{
+    return xarBlockVarsToContent($vars);
+}
+
+function pnConfigGetVar($name)
+{
+    return xarConfigGetVar($name);
+}
+
+function pnConfigInit()
+{
+    return xarConfigInit();
+}
+
+function pnConfigSetVar($name, $value)
+{
+    return xarConfigSetVar($name, $value);
+}
+
 /**
  * get a list of database connections
  * @deprec
@@ -832,6 +889,146 @@ function pnDBGetConn()
 function pnDBGetTables()
 {
     return xarDBGetTables();
+}
+
+function pnDBInit()
+{
+    return xarDBInit();
+}
+
+function pnInit()
+{
+    return xarInit();
+}
+
+function pnModAPIFunc($modName, $modType, $funcName, $args = NULL)
+{
+    return xarModAPIFunc($modName, $modType, $funcName, $args);
+}
+
+function pnModAPILoad($modName, $modType) 
+{
+    return xarModAPILoad($modName, $modType);
+}
+
+function pnModCallHooks($hookobject, $hookaction, $hookid, $extrainfo)
+{
+    return xarModCallHooks($hookobject, $hookaction, $hookid, $extrainfo);
+}
+
+function pnModDBInfoLoad($modname, $directory='')
+{
+    return xarModDBInfoLoad($modname, $directory);
+}
+
+function pnModDelVar($modName, $name) 
+{
+    return xarModDelVar($modName, $name);
+}
+
+function pnModFunc($modname, $type='user', $func='main', $args=array())
+{
+    return xarModFunc($modname, $type, $func, $args);
+}
+
+function pnModGetIDFromName($module)
+{
+    return xarModGetIDFromName($module);
+}
+
+function pnModGetInfo($modid)
+{
+    return xarModGetInfo($modid);
+}
+
+function pnModGetVar($modName, $name)
+{
+    return xarModGetVar($modName, $name);
+}
+
+function pnModLoad($modname, $type='user')
+{
+    return xarModLoad($modname, $type);
+}
+
+function pnModSetVar($modName, $name, $value)
+{
+    return xarModSetVar($modName, $name, $value);
+}
+
+function pnModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL)
+{
+    return xarModURL($modName, $modType, $funcName, $args, $generateXMLURL);
+}
+
+function pnPhpVersionCheck($vercheck)
+{
+    return xarPhpVersionCheck($vercheck);
+}
+
+function pnSecAddSchema($component, $schema)
+{
+    return xarSecAddSchema($component, $schema);
+}
+
+function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+{
+    return xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
+}
+
+function pnSecConfirmAuthKey()
+{
+    return xarSecConfirmAuthKey();
+}
+
+function pnSecGenAuthKey($modName='')
+{
+    return xarSecGenAuthKey($modName);
+}
+
+function pnSecGetAuthInfo()
+{
+    return xarSecGetAuthInfo();
+}
+
+function pnSecGetLevel($perms, $testrealm, $testcomponent, $testinstance)
+{
+    return xarSecGetLevel($perms, $testrealm, $testcomponent, $testinstance);
+}
+
+function pnSecureInput()
+{
+    return xarSecureInput();
+}
+
+function pnSessionClose()
+{
+    return xarSessionClose();
+}
+
+function pnSessionCurrent($sessid)
+{
+    return xarSessionCurrent($sessid);
+}
+
+/**
+ * Delete a session variable
+ * @deprec
+ * @param name name of the session variable to delete
+ */
+function pnSessionDelVar($name)
+{
+    return xarSessionDelVar($name);
+}
+
+function pnSessionDestroy($sessid)
+{
+    return xarSessionDestroy($sessid);
+}
+
+function pnSessionGC($maxlifetime)
+{
+    return xarSessionGC($maxlifetime);
 }
 
 /**
@@ -1007,6 +1204,7 @@ function pnDBCreateIndex($tableName, $index, $databaseType = NULL)
 function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
 {
     return xarDBDropIndex($tableName, $fields, $databaseType);
+>>>>>>>
 }
 
 /**
@@ -1017,6 +1215,31 @@ function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
 function pnSessionGetVar($name)
 {
     return xarSessionGetVar($name);
+}
+
+function pnSessionInit()
+{
+    return xarSessionInit();
+}
+
+function pnSessionNew($sessid, $ipaddr)
+{
+    return xarSessionNew($sessid, $ipaddr);
+}
+
+function pnSessionOpen($path, $name)
+{
+    return xarSessionOpen($path, $name);
+}
+
+function pnSessionRead($sessid)
+{
+    return xarSessionRead($sessid);
+}
+
+function pnSessionSetup()
+{
+    return xarSessionSetup();
 }
 
 /** 
@@ -1030,14 +1253,84 @@ function pnSessionSetVar($name, $value)
     return xarSessionSetVar($name, $value);
 }
 
-/**
- * Delete a session variable
- * @deprec
- * @param name name of the session variable to delete
- */
-function pnSessionDelVar($name)
+function pnSessionWrite($sessid, $vars)
 {
-    return SessionDelVar($name);
+    return xarSessionWrite($sessid, $vars);
+}
+
+function pnThemeGetVar($name)
+{
+    return xarThemeGetVar($name);
+}
+
+function pnThemeLoad($thistheme)
+{
+    return xarThemeLoad($thistheme);
+}
+
+function pnUserGetCommentOptions()
+{
+    return xarUserGetCommentOptions();
+}
+
+function pnUserGetCommentOptionsArray()
+{
+    return xarUserGetCommentOptionsArray();
+}
+
+function pnUserGetLang()
+{
+    return xarUserGetLang();
+}
+
+function pnUserGetVar($name, $uid=-1)
+{
+    return xarUserGetVar($name, $uid);
+}
+
+function pnUserLogIn($uname, $pass, $rememberme)
+{
+    return xarUserLogIn($uname, $pass, $rememberme);
+}
+
+function pnUserLogOut()
+{
+    return xarUserLogOut();
+}
+
+function pnUserSetVar($name, $value)
+{
+    return xarUserSetVar($name, $value);
+}
+
+function pnVarCensor()
+{
+    return xarVarCensor();
+}
+
+function pnVarCleanFromInput()
+{
+    return xarVarCleanFromInput();
+}
+
+function pnVarPrepForDisplay($var)
+{
+    return xarVarPrepForDisplay($var);
+}
+
+function pnVarPrepForOS($var)
+{
+    return xarVarPrepForOS($var);
+}
+
+function pnVarPrepForStore($var)
+{
+    return xarVarPrepForStore($var);
+}
+
+function pnVarPrepHTMLDisplay($var)
+{
+    return xarVarPrepHTMLDisplay($var);
 }
 
 /**
