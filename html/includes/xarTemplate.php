@@ -131,11 +131,11 @@ function xarTplGetThemeName()
 function xarTplSetThemeName($themeName)
 {
     assert('$themeName != "" && $themeName{0} != "/"');
-    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeName)) {
+    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeName)) {     
         return false;
     }
-    $GLOBALS['xarTpl_themeName'] = $themeName;
-    xarTplSetThemeDir($GLOBALS['xarTpl_themesBaseDir'].'/'.$GLOBALS['xarTpl_themeName']);
+
+    __setThemeNameAndDir($themeName);
     return true;
 }
 
@@ -154,10 +154,17 @@ function xarTplSetThemeDir($themeDir)
     if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
         return false;
     }
-    $GLOBALS['xarTpl_themeDir'] = $GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir;
+    
+    __setThemeNameAndDir($themeDir);
     return true;
 }
 
+function __setThemeNameAndDir($name)
+{
+    // dir and name are still required to be the same
+    $GLOBALS['xarTpl_themeName'] = $name;
+    $GLOBALS['xarTpl_themeDir']  = $GLOBALS['xarTpl_themesBaseDir'] . '/' . $name;
+}
 /**
  * Get theme directory
  *
@@ -777,6 +784,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
+    xarLogMessage("Using $sourceFileName");
 
     $tplData = array(
         '_bl_mainModuleOutput'     => $mainModuleOutput,
