@@ -75,7 +75,7 @@ function adminpanels_adminmenublock_display($blockinfo){
 
     // this is how we are marking the currently loaded module
     $marker = xarModGetVar('adminpanels', 'marker');
-
+    $dec    = '';
     // dont show marker unless specified
     if(!xarModGetVar('adminpanels', 'showold')){
         $marker = '';
