@@ -873,13 +873,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         $this->lineText .= $token;
 
-		if ($token == "\r") {
+        if ($token == "\r") {
             if (substr($this->templateSource, $this->pos + 1, 1) == "\n") {
                 // Check for \r\n
                 $this->pos++;
             }
-			$token = "\n";
-		}
+            $token = "\n";
+        }
         $this->pos++;
         $this->column++;
         if ($token == "\n") {
@@ -892,7 +892,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         //xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
 
-		return $token;
+        return $token;
     }
 
     function stepBack($len = 1)
@@ -914,13 +914,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         //$this->lineText .= $token;
 
-		if ($token == "\r") {
+        if ($token == "\r") {
             if (substr($this->templateSource, $start + 1, 1) == "\n") {
                 // Check for \r\n
                 $start++;
             }
-			$token = "\n";
-		}
+            $token = "\n";
+        }
         $start++;
         //$this->column++;
         /*if ($token == "\n") {
@@ -933,7 +933,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         //xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
 
-		return $token;
+        return $token;
     }
 }
 
@@ -999,7 +999,7 @@ class xarTpl__NodesFactory
             case 'event':
                 $node = new xarTpl__XarEventNode();
                 break;
-	    // marco: inlude was replaced by template right?
+           // marco: inlude was replaced by template right?
             case 'include':
                 $node = new xarTpl__XarIncludeNode();
                 break;
@@ -2080,7 +2080,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
     function renderBeginTag()
     {
-    	extract($this->attributes);
+        extract($this->attributes);
 
         if (!isset($name)) {
             xarExceptionSet(XAR_USER_EXCEPTION, 'MissingAttribute',
@@ -2126,25 +2126,25 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
                                      '_bl_template' => '$template'))";
     }
 
-	function renderEndTag()
-	{
-		return '';
-	}
+    function renderEndTag()
+    {
+        return '';
+    }
 
-	function render()
-	{
-		return $this->renderBeginTag();
-	}
+    function render()
+    {
+        return $this->renderBeginTag();
+    }
 
-	function needExceptionsControl()
+    function needExceptionsControl()
     {
         return true;
     }
 
-	function hasText()
-	{
-		return true;
-	}
+    function hasText()
+    {
+        return true;
+    }
 }
 
 class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
@@ -2521,7 +2521,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             $directories[] = "themes/$themeName/includes";
         } elseif ($type == 'module') {
             //$directories[] = "themes/$themeName/modules/\$_bl_module_name/includes";
-            $directories[] = "modules/\$_bl_module_name/xartemplates/xarincludes";
+            $directories[] = "modules/\$_bl_module_name/xartemplates/includes";
         } else {
             xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidAttribute',
                            new xarTpl__ParserError("Invalid value '$type' for 'type' attribute in <xar:include> tag.", $this));
