@@ -119,9 +119,10 @@ function base_menublock_display($blockinfo)
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
             //list($url, $title, $comment, $child) = explode('|', $contentline);
-        // FIXME: make sure we don't generate content lines with missing pieces elsewhere
+            // FIXME: make sure we don't generate content lines with missing pieces elsewhere
             $parts = explode('|', $contentline);
             $url = $parts[0];
+            // FIXME: this probably causes bug #3393
             $here = (substr($truecurrenturl, -strlen($url)) == $url) ? 'true' : '';
             if (!empty($url)){
                 switch ($url[0])
