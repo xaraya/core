@@ -415,7 +415,7 @@ class xarCurl {
     * This method extracted from 'nusoap'.
     *
     * @param    string $buffer
-    * @returns	string
+    * @returns  string
     * @access   public
     */
     function _decode_chunked($buffer)
