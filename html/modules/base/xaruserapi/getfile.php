@@ -19,6 +19,7 @@
  * @param $args['refresh'] integer refresh time for the file in seconds
  * @param $args['extension'] string file extension to use after the MD5-hashed filename in cache
  * @param $args['archive'] bool indicates if we want to re-create a directory structure and archive the file as is
+ * @param $args['superrors'] bool indicates whether we want to die without an error shown (for blocks)
  * @return string content of the file
  */
 function base_userapi_getfile($args)
@@ -41,6 +42,9 @@ function base_userapi_getfile($args)
 
     // default no archive
     if (!isset($archive)) $archive = false;
+
+    // default don't supress the errors
+    if (!isset($superrors)) $superrors = false;
 
     $invalid = false;
     $islocal = false;
@@ -67,9 +71,11 @@ function base_userapi_getfile($args)
         $islocal = true;
     }
     if ($invalid) {
-        $msg = xarML('Invalid URL [#(1)]', $url);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
+        if (!$superrors){
+            $msg = xarML('Invalid URL [#(1)]', $url);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+        }
         return;
     }
 
@@ -119,9 +125,11 @@ function base_userapi_getfile($args)
         if (file_exists($file) && filemtime($file) > $expire) {
             $fp = @fopen($file, 'rb');
             if (!$fp) {
-                $msg = xarML('Error opening cache file #(1) for URL #(2)', $file, $url);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
+                if (!$superrors){
+                    $msg = xarML('Error opening cache file #(1) for URL #(2)', $file, $url);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                    new SystemException($msg));
+                }
                 return;
             }
             $content = '';
@@ -139,18 +147,22 @@ function base_userapi_getfile($args)
         $proxyport = xarModGetVar('base','proxyport');
         $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
-            $msg = xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            if (!$superrors){
+                $msg = xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+            }
             return;
         }
         $baseurl = xarServerGetBaseURL();
         $request = "GET $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.com/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
         $size = fwrite($fp, $request);
         if (!$size) {
-            $msg = xarML('Error sending request for URL #(1)', $url);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            if (!$superrors){
+                $msg = xarML('Error sending request for URL #(1)', $url);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+            }
             return;
         }
         $content = '';
@@ -160,9 +172,11 @@ function base_userapi_getfile($args)
         fclose($fp);
         if (!preg_match('/^\s*HTTP\/[\d\.]+\s+(\d+)/s',$content,$matches)) {
             $header = preg_replace('/\r\n\r\n.*$/s','',$content);
-            $msg = xarML('Invalid response headers for URL #(1) : #(2)', $url, $header);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            if (!$superrors){
+                $msg = xarML('Invalid response headers for URL #(1) : #(2)', $url, $header);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+            }
             return;
         }
         $status = $matches[1];
@@ -188,9 +202,11 @@ function base_userapi_getfile($args)
             case 206: // Partial Content - shouldn't be allowed for HTTP/1.0
             default:
                 $header = preg_replace('/\r\n\r\n.*$/s','',$content);
-                $msg = xarML('Invalid status #(1) for URL #(2) : #(3)', $status, $url, $header);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                new SystemException($msg));
+                if (!$superrors){
+                    $msg = xarML('Invalid status #(1) for URL #(2) : #(3)', $status, $url, $header);
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                    new SystemException($msg));
+                }
                 return;
                 break;
         }
@@ -201,9 +217,11 @@ function base_userapi_getfile($args)
     // TODO: we probably want some fancier error checking here too :-)
         $lines = @file($url);
         if (empty($lines)) {
-            $msg = xarML('Invalid URL #(1)', $url);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            if (!$superrors){
+                $msg = xarML('Invalid URL #(1)', $url);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+            }
             return;
         }
         $content = implode('',$lines);
@@ -212,16 +230,20 @@ function base_userapi_getfile($args)
     if ($cached && is_dir($vardir . '/' . $cachedir)) {
         $fp = @fopen($file,'wb');
         if (!$fp) {
+            if (!$superrors){
             $msg = xarML('Error saving URL #(1) to cache file #(2)', $url, $file);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
+            }
             return;
         }
         $size = fwrite($fp, $content);
         if (!$size || $size < strlen($content)) {
-            $msg = xarML('URL #(1) truncated to #(2) bytes when saving to cache file #(3)', $url, $size, $file);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            if (!$superrors){
+                $msg = xarML('URL #(1) truncated to #(2) bytes when saving to cache file #(3)', $url, $size, $file);
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                new SystemException($msg));
+            }
             return;
         }
         fclose($fp);
