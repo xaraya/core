@@ -1176,6 +1176,21 @@ function xarModGetDisplayableName($modName)
 }
 
 /**
+ * Get the displayable description for modName
+ *
+ * The displayable description is sensible to user language.
+ *
+ * @access public
+ * @param modName string description of module
+ * @return string the displayable description
+ */
+function xarModGetDisplayableDescription($modName)
+{
+    $modInfo = xarMod_getFileInfo($modName);
+    return xarML($modInfo['description']);
+}
+
+/**
  * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
  *
  * @access public
