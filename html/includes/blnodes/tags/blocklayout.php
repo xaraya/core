@@ -31,6 +31,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     function renderBeginTag()
     {
         $content = 'text/html'; // Default content type
+        $dtd = '';              // We dont force a DTD if not specified
         extract($this->attributes);
         if(!isset($version)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.', $this);
@@ -39,10 +40,12 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         
         // Literally copy the content type, charset is determined by MLS
         // FIXME: this explicitly limits to one locale per page, do we want that?
+        $docTypeString = DTDIdentifiers::get($dtd);
         $headercode = '
             $_bl_locale  = xarMLSGetCurrentLocale();
         $_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);
-        header("Content-Type: ' . $content . '; charset=$_bl_charset");';
+        header("Content-Type: ' . $content . '; charset=$_bl_charset");
+        echo \''.$docTypeString."\n';";
         return $headercode;
     }
     
