@@ -186,8 +186,14 @@ function adminpanels_adminmenublock_display($blockinfo){
                 }
 
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+                // TPL override
+                if (empty($blockinfo['template'])) {
+                    $template = 'sidemenu';
+                } else {
+                    $template = $blockinfo['template'];
+                }
                 $data = xarTplBlock('adminpanels',
-                                    'sidemenu',
+                                    $template,
                                     array(  'adminmods'     => $adminmods,
                                             'indlinks'      => $indlinks,
                                             'menustyle'     => $menustyle,
@@ -301,8 +307,13 @@ function adminpanels_adminmenublock_display($blockinfo){
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
+                if (empty($blockinfo['template'])) {
+                    $template = 'sidemenu';
+                } else {
+                    $template = $blockinfo['template'];
+                }
                 $data = xarTplBlock('adminpanels',
-                                    'sidemenu',
+                                    $template,
                                     array(  'adminmods'     => $adminmods,
                                             'indlinks'      => $indlinks,
                                             'menustyle'     => $menustyle,
@@ -319,8 +330,13 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
+                if (empty($blockinfo['template'])) {
+                    $template = 'sidemenu';
+                } else {
+                    $template = $blockinfo['template'];
+                }
                 $data = xarTplBlock('adminpanels',
-                                    'sidemenu',
+                                    $template,
                                     array(  'adminmods'     => $adminmods = array(),
                                             'indlinks'      => $indlinks ='',
                                             'menustyle'     => $menustyle,
@@ -336,8 +352,13 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
+                if (empty($blockinfo['template'])) {
+                    $template = 'sidemenu';
+                } else {
+                    $template = $blockinfo['template'];
+                }
                 $data = xarTplBlock('adminpanels',
-                                    'sidemenu',
+                                    $template,
                                     array(  'adminmods'     => $adminmods = array(),
                                             'indlinks'      => $indlinks ='',
                                             'menustyle'     => $menustyle,

@@ -65,8 +65,14 @@ function adminpanels_waitingcontentblock_display($blockinfo)
     // Get publication types
     $data = xarModAPIFunc('adminpanels', 'admin', 'waitingcontent');
 
-    $display = xarTplBlock('adminpanels','waitingcontent', array('output'   => $data['output'],
-                                                                 'message'  => $data['message']));
+    if (empty($blockinfo['template'])) {
+        $template = 'waitingcontent';
+    } else {
+        $template = $blockinfo['template'];
+    }
+
+    $display = xarTplBlock('adminpanels',$template, array('output'   => $data['output'],
+                                                          'message'  => $data['message']));
 
     // Populate block info and pass to BlockLayout.
 

@@ -248,16 +248,21 @@ function base_menublock_display($blockinfo)
                     $showlogout = true;
                 }
 
-                $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods,
-                                                             'indlinks'         => $indlinks,
-                                                             'blockid'          => $blockinfo['bid'],
-                                                             'logouturl'        => $logouturl,
-                                                             'logoutlabel'      => $logoutlabel,
-                                                             'loggedin'         => $loggedin,
-                                                             'usercontent'      => $usercontent,
-                                                             'marker'           => $marker,
-                                                             'showlogout'       => $showlogout
-                                                             ));
+                if (empty($blockinfo['template'])) {
+                    $template = 'sidemenu';
+                } else {
+                    $template = $blockinfo['template'];
+                }
+
+                $data = xarTplBlock('base',$template, array('usermods'         => $usermods,
+                                                            'indlinks'         => $indlinks,
+                                                            'blockid'          => $blockinfo['bid'],
+                                                            'logouturl'        => $logouturl,
+                                                            'logoutlabel'      => $logoutlabel,
+                                                            'loggedin'         => $loggedin,
+                                                            'usercontent'      => $usercontent,
+                                                            'marker'           => $marker,
+                                                            'showlogout'       => $showlogout));
                 // this should do for now
                 break;
     }

@@ -65,8 +65,12 @@ function roles_languageblock_display($blockinfo)
 
     // URL of this page
     $tplData['return_url'] = xarServerGetCurrentURL();
-
-    $blockinfo['content'] = xarTplBlock('roles', 'language', $tplData);
+    if (empty($blockinfo['template'])) {
+        $template = 'language';
+    } else {
+        $template = $blockinfo['template'];
+    }
+    $blockinfo['content'] = xarTplBlock('roles', $template, $tplData);
 
     return $blockinfo;
 }

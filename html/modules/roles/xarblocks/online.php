@@ -102,7 +102,12 @@ function roles_onlineblock_display($blockinfo)
     }
 
     $args['blockid'] = $blockinfo['bid'];
-    $blockinfo['content'] = xarTplBlock('roles', 'online', $args);
+    if (empty($blockinfo['template'])) {
+        $template = 'online';
+    } else {
+        $template = $blockinfo['template'];
+    }
+    $blockinfo['content'] = xarTplBlock('roles', $template, $args);
     return $blockinfo;
 }
 
