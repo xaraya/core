@@ -355,11 +355,10 @@ class xarMasks
             $module = xarVarGetCached('Security.Variables','currentmodule');
 
             if ($component == "") {
-                $msg = xarML('Did not find a mask registered for an unspecified component in module ') . $module;
+                $msg = xarML('Did not find a mask registered for an unspecified component in module #(1)', $module);
             }
             else {
-                $msg = xarML('No masks registered for component ') . $component .
-                xarML(' in module ') . $module;
+                $msg = xarML('No masks registered for component #(1) in module #(2)', $component, $module);
             }
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
                            new DefaultUserException($msg));
@@ -1133,7 +1132,8 @@ class xarPrivileges extends xarMasks
 
 // check if the query is there
             if ($selection =='') {
-                $msg = xarML('A query is missing in component ' . $component . ' of module '. $module);
+                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
+
                 xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA',
                                new DefaultUserException($msg));
                 return;
