@@ -288,38 +288,34 @@ document.forms[0].submit();}
 	</tr>
 	<tr>
 		<td width="50%" valign="top">		
-	<form action="&xar-modurl-privileges-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-		<table border="0" cellpadding="5">
-		<tr>
-		<td colspan="2" align="center">
-            <xar:mlstring>Add a Privilege to Privilege</xar:mlstring>
-             <b>'#$pname#'</b>  
-             </td>
-             </tr>
-
-
-			<tr>
-				<td>
-					<xar:mlstring>Privilege:</xar:mlstring>
-				</td>
-				<td>
-					<select name="privid" id="privid">
-						<xar:loop name="$privileges">
-							<option value="#$pid#">#$name#
-						</xar:loop>
-					</select>
-				</td>
-			</tr>
+			<table border="0" cellpadding="5">
 			<tr>
 			<td colspan="2" align="center">
-		<br />
-		<input type="submit" value="Add" align="middle" tabindex="2" />
-		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<input type="hidden" name="ppid" id="ppid" value="#$ppid#" />
-		</td>
-		</tr>
-		</table>			
-	</form>
+				<xar:mlstring>Add a Privilege to Privilege</xar:mlstring>
+				 <b>'#$pname#'</b>  
+				 </td>
+				 </tr>
+
+
+				<tr>
+					<td>
+						<xar:mlstring>Privilege:</xar:mlstring>
+					</td>
+					<td>
+						<select name="privid" id="privid">
+							<xar:loop name="$privileges">
+								<option value="#$pid#">#$name#
+							</xar:loop>
+						</select>
+					</td>
+				</tr>
+				<tr>
+				<td colspan="2" align="center">
+			<br />
+			<input type="button" value="Add" align="middle" tabindex="2" onClick="javascript:setaction('&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;privid=#$pid#&amp;authid=#$authid#')"/>
+			</td>
+			</tr>
+			</table>			
 		</td>
 		<td width="50%" valign="top">		
 	<table width="100%">
