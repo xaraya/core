@@ -31,8 +31,8 @@ function base_javascriptapi__findfile($args)
 {
     extract($args);
 
-    // File must be supplied and must not include a path.
-    if (empty($filename) || $filename != basename(strval($filename))) {
+    // File must be supplied and may include a path.
+    if (empty($filename) || $filename != strval($filename)) {
         return;
     }
 
