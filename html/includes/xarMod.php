@@ -952,14 +952,14 @@ function xarModIsAvailable($modName)
  */
 function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL)
 {
-    if ($hookObject != 'item' && $hookObject != 'category') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
-        return;
-    }
-    if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
-        return;
-    }
+    //if ($hookObject != 'item' && $hookObject != 'category') {
+    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
+    //    return;
+    //}
+    //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
+    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
+    //    return;
+    //}
 
     // allow override of current module in special cases (e.g. modules admin)
     if (empty($callerModName)) {
@@ -1035,10 +1035,10 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookObject');
         return;
     }
-    if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
-        return;
-    }
+    //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
+    //    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookAction');
+    //    return;
+    //}
 
     if (isset($hookListCache["$callerModName$hookObject$hookAction"])) {
         return $hookListCache["$callerModName$hookObject$hookAction"];
