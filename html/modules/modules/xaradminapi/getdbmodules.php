@@ -15,24 +15,20 @@ function modules_adminapi_getdbmodules()
     $dbModules = array();
 
     // Get all modules in DB
-    $sql = "SELECT xar_regid
-              FROM $xartable[modules]";
+    $sql = "SELECT $xartable[modules].xar_regid, xar_name, xar_directory, xar_version, xar_mode, xar_state
+              FROM $xartable[modules] LEFT JOIN $xartable[module_states] ON $xartable[modules].xar_regid = $xartable[module_states].xar_regid";
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 
     while(!$result->EOF) {
-        list($modRegId) = $result->fields;
-        //Get Module Info
-        $modInfo = xarModGetInfo($modRegId);
-        if (!isset($modInfo)) return;
+        list($regid, $name, $directory, $version, $mode, $state) = $result->fields;
 
-        $name = $modInfo['name'];
         //Push it into array (should we change to index by regid instead?)
         $dbModules[$name] = array('name'    => $name,
-                                  'regid'   => $modRegId,
-                                  'version' => $modInfo['version'],
-                                  'mode'    => $modInfo['mode'],
-                                  'state'   => $modInfo['state']);
+                                  'regid'   => $regid,
+                                  'version' => $version,
+                                  'mode'    => $mode,
+                                  'state'   => $state);
         $result->MoveNext();
     }
     $result->Close();
