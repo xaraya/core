@@ -148,7 +148,7 @@ if (empty($step)) {
                 if (!$result) return;
             break;
 
-            case .902:
+        case .902:
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.3');
 
                 $blockGroupsTable = $tables['block_groups'];
@@ -203,8 +203,8 @@ if (empty($step)) {
 
             break;
 
-            case '0.903':  // this is how it's defined in modules/base/xarinit.php
-            case '.9.0.3': // this is how it's defined in upgrade.php
+        case '0.903':  // this is how it's defined in modules/base/xarinit.php
+        case '.9.0.3': // this is how it's defined in upgrade.php
                 xarConfigSetVar('System.Core.VersionNum', '.9.0.4');
 
                 xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
@@ -236,7 +236,11 @@ if (empty($step)) {
 
             break;
 
-            case '.9.0.4': // this is how it's defined in upgrade.php
+        case '.9.0.4': // this is how it's defined in upgrade.php
+
+        /**
+         * privileges changes
+         */
 
                 //This creates the new Myself role and makes it a child of Everybody
                 xarMakeUser('Myself','myself','myself@xaraya.com','password');
@@ -344,6 +348,49 @@ if (empty($step)) {
 
                 // Note to self, roles datereg field needs to be changed to a date/time field.
 
+        /**
+         * waiting content changes
+         */
+
+            $wctable = xarDBGetSiteTablePrefix() . '_admin_wc';
+
+            // Generate the SQL to drop the table using the API
+            $query = xarDBDropTable($wctable);
+            if (empty($query)) return; // throw back
+
+            // Drop the table and send exception if returns false.
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
+            // when a module item is created
+            if (!xarModUnregisterHook('item', 'create', 'API',
+                                   'adminpanels', 'admin', 'createwc')) {
+                return false;
+            }
+
+        // Note : we use the same function in both update and delete here
+        //        => delete the waiting content entry (if it still exists)
+
+            // when a module item is updated
+            if (!xarModUnregisterHook('item', 'update', 'API',
+                                   'adminpanels', 'admin', 'deletewc')) {
+                return false;
+            }
+
+            // when a module item is deleted
+            if (!xarModUnregisterHook('item', 'delete', 'API',
+                                   'adminpanels', 'admin', 'deletewc')) {
+                return false;
+            }
+
+            // when a whole module is removed, e.g. via the modules admin screen
+            // (set object ID to the module name !)
+            if (!xarModUnregisterHook('module', 'remove', 'API',
+                                   'adminpanels', 'admin', 'deleteallwc')) {
+                return false;
+            }
+
+            break;
     }
 
 // Fini
