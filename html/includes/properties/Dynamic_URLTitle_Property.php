@@ -158,7 +158,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         }
         $data=array();
 
-     if (empty($link) && empty($title)) {
+        if (empty($link) && empty($title)) {
             //return '';
         } elseif (empty($link)) {
             $title = xarVarPrepForDisplay($title);
@@ -173,10 +173,10 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         }
 
         $data['value']   = $this->value;
-        $data['link']    = $link;
+        $data['link']    = (!empty($link)) ? $link : '';
         $data['name']    = $this->name;
         $data['id']      = $this->id;
-        $data['title']   = $title;
+        $data['title']   = (!empty($title)) ? $title : '';
 
         $template="urltitle";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
