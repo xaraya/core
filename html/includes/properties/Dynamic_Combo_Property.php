@@ -29,43 +29,43 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
             $name = 'dd_'.$this->id;
         }
 
-		// First check for text in the text box
-		$tbname  = $name.'_tb';
-		$tbvalue = xarVarCleanFromInput($tbname);
+        // First check for text in the text box
+        $tbname  = $name.'_tb';
+        $tbvalue = xarVarCleanFromInput($tbname);
 
-		if( isset($tbvalue) && ($tbvalue != '') )
-		{
-			$this->fieldname = $tbname;
-			$value = $tbvalue;
-		} else {
-			// Default to checking the selection box.
+        if( isset($tbvalue) && ($tbvalue != '') )
+        {
+            $this->fieldname = $tbname;
+            $value = $tbvalue;
+        } else {
+            // Default to checking the selection box.
 
-			// store the fieldname for validations who need them (e.g. file uploads)
-			$this->fieldname = $name;
-			if (!isset($value)) 
-			{
-				$value = xarVarCleanFromInput($name);
-			}
-		}
+            // store the fieldname for validations who need them (e.g. file uploads)
+            $this->fieldname = $name;
+            if (!isset($value)) 
+            {
+                $value = xarVarCleanFromInput($name);
+            }
+        }
         return $this->validateValue($value);
     }
 
     function validateValue($value = null)
     {
         if (!isset($value)) 
-		{
+        {
             $value = $this->value;
         }
-		$this->value = $value;
-		
-		return true;
+        $this->value = $value;
+        
+        return true;
     }
 
 //    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
-		
+        
         $data=array();
 
         if (!isset($value)) {
@@ -73,20 +73,20 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         } else {
             $data['value'] = $value;
         }
-		
+        
         if (!isset($options) || count($options) == 0) {
             $data['options'] = $this->options;
         }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
         } else {
-        	$data['name'] = $name;
+            $data['name'] = $name;
         }
         if (empty($id)) 
-		{
+        {
             $data['id'] = $data['name'];
         } else {
-        	$data['id']= $id;
+            $data['id']= $id;
         }
         /*$out = '<select' .
                ' name="' . $name . '"' .
@@ -131,37 +131,37 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         // TODO: support multiple selection
         $join = '';
         foreach ($this->options as $option) 
-		{
+        {
             if ($option['id'] == $value) 
-			{
+            {
                 $data['option']['name']=xarVarPrepForDisplay($option['name']);
                 //$out .= $join . xarVarPrepForDisplay($option['name']);
                 $join = ' | ';
             }
         }
 
-		// If the value wasn't found in the select list data, then it was
-		// probably typed in -- so just display it.
-		if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
-		{
-			$data['option']['name'] = xarVarPrepForDisplay($value);
-		}
+        // If the value wasn't found in the select list data, then it was
+        // probably typed in -- so just display it.
+        if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
+        {
+            $data['option']['name'] = xarVarPrepForDisplay($value);
+        }
 
         $template="combobox";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
         // return $out;
     }
 
-	/**
+    /**
      * Get the base information for this property.
      *
      * @returns array
      * @return base information for this property
-	 **/
-	 function getBasePropertyInfo()
-	 {
-	 	$args = array();
-	 	$baseInfo = array(
+     **/
+     function getBasePropertyInfo()
+     {
+         $args = array();
+         $baseInfo = array(
                               'id'         => 506,
                               'name'       => 'combo',
                               'label'      => 'Combo Dropdown Textbox',
@@ -171,11 +171,11 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
                               'dependancies'   => '',
                               'requiresmodule' => '',
                               'aliases'        => '',
-							  'args'           => serialize($args),
-							// ...
-						   );
-		return $baseInfo;
-	 }
+                              'args'           => serialize($args),
+                            // ...
+                           );
+        return $baseInfo;
+     }
 
 
 
