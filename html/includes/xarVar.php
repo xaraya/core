@@ -637,16 +637,16 @@ function xarVarCensor()
                             '@',
                             '1');
 
-        foreach ($xarVar_censoredWords as $censoredWord) {
+//        foreach ($xarVar_censoredWords as $censoredWord) {
             // Simple word
-            $search[] = "/\b$censoredWord\b/i";
+//            $search[] = "/\b$censoredWord\b/i";
 
             // Common replacements
-            $mungedword = preg_replace($repSearch, $repReplace, $censoredWord);
-            if ($mungedword != $censoredWord) {
-                $search[] = "/\b$mungedword\b/";
-            }
-        }
+//            $mungedword = preg_replace($repSearch, $repReplace, $censoredWord);
+//            if ($mungedword != $censoredWord) {
+//                $search[] = "/\b$mungedword\b/";
+//            }
+//        }
     }
 
     $resarray = array();
