@@ -132,7 +132,7 @@
 
         if (empty($newuid)) {
             echo "Insert user ($uid) $uname failed - ";
-            if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
                 xarExceptionRender('text');
                 xarExceptionHandled();
             }
@@ -196,7 +196,7 @@
 */
     }
     $result->Close();
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         xarExceptionRender('text');
         xarExceptionFree();
     }

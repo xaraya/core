@@ -373,7 +373,7 @@
                 echo '<br /><span style="color: red">Unable to add Blog: [<stong><em>'.$blog['name'].'</em></strong>]</span>';
             }
         }
-        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
             xarExceptionHandled();
             xarExceptionFree();
         }
