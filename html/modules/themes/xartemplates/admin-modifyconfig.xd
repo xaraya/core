@@ -101,6 +101,10 @@
         <input type="checkbox" name="cachetemplates" id="cachetemplates" value="1" />
       </xar:if>
     </p>
+	<xar:if condition="xarThemeIsAvailable('atom')">
+		<!-- This should be moved if we ever fully support the atom spec -->
+		<p><xar:mlstring>Atom Tag</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" /></p>
+	</xar:if>
     <input type="submit" value="#$submitbutton#" />
    </div>
 </form>
