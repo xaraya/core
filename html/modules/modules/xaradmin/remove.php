@@ -19,6 +19,8 @@ function modules_admin_remove()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
+	//TODO: Do a similar GUI to the one in initialise.
+	 
     // Remove module
     $removed = xarModAPIFunc('modules',
                             'admin',

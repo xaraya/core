@@ -25,6 +25,8 @@ function modules_adminapi_remove($args)
 
     // Get module database info
     xarModDBInfoLoad($modinfo['name'], $modinfo['directory']);
+    
+    //TODO: Add check if there is any dependents
 
     // Module deletion function
     //FIXME: add module file not exist exception?
