@@ -704,14 +704,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                     //<Dracos>  Stop tag embedding, ie <a href="<xar
                     // FIXME: does this still go bonkers on embedded javascript?
-                    $between = $this->windTo(XAR_TOKEN_TAG_END);
+                    $between = $this->peekTo(XAR_TOKEN_TAG_END);
                     if(!isset($between)) return;
                     if(strpos($between, XAR_TOKEN_TAG_START)) {
                         // There is a < in there
+                        $this->windTo(XAR_TOKEN_TAG_END);
                         $this->raiseError(XAR_BL_INVALID_TAG,__LINE__ .": Found open tag before close tag.", $this);
                         return;
                     }
-                    $this->stepBack(strlen($between)+1);
+                    $token.=$nextToken;
                     break;
                 case XAR_TOKEN_ENTITY_START:
                     // Check for xar entity
