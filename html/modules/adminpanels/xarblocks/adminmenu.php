@@ -72,8 +72,11 @@ function adminpanels_adminmenublock_display($blockinfo){
     // we need it's name and type - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype) = xarRequestGetInfo();
     
-    // Sort Order, Status and Links Display preparation
+    // Sort Order, Status, Common Labels and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
+    $logoutlabel = xarVarPrepForDisplay(xarML('admin logout'));
+    $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
+    
     switch(strtolower($menustyle)) {
         case 'byname':
                 // sort by name
@@ -89,7 +92,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                 }
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                                                                    'menustyle'     => $menustyle,
+                                                                    'logouturl'     => $logouturl,
+                                                                    'logoutlabel'   => $logoutlabel));
                 // this should do for now
                 break;
 
@@ -131,7 +137,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                 }
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by category]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                                                                    'menustyle'     => $menustyle,
+                                                                    'logouturl'     => $logouturl,
+                                                                    'logoutlabel'   => $logoutlabel));
                 break;
 
         case 'byweight':
@@ -142,7 +151,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by weight]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                                                                    'menustyle'     => $menustyle,
+                                                                    'logouturl'     => $logouturl,
+                                                                    'logoutlabel'   => $logoutlabel));
                 break;
 
         case 'bygroup':
@@ -153,7 +165,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                 $adminmods = 'not implemented';
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by group]'));
-                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods' => $adminmods, 'menustyle' => $menustyle));
+                $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods, 
+                                                                    'menustyle'     => $menustyle,
+                                                                    'logouturl'     => $logouturl,
+                                                                    'logoutlabel'   => $logoutlabel));
                 break;
 
     }

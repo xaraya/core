@@ -1,0 +1,31 @@
+<!-- Formatting table to center the menu -->
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center" valign="top">
+            <!-- Menu title -->
+            <xar:mlstring>Administration</xar:mlstring>
+        </th>
+    </tr>
+    <tr>
+        <td align="center" valign="top">
+            <!-- Menu table -->
+            <table border="0" cellspacing="10">
+                <tr>
+                    <td align="center">
+                        &xar-var-warning;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- Confirmation -->
+<div align="center"><h2>&xar-var-question;</h2></div><br />
+<table border="0" width="100%">
+    <tr>
+        <td align="center">
+            <h3>[<a href="&xar-var-logouturl;">&xar-var-logoutlabel;</a>]
+            [<a href="&xar-var-cancelurl;">&xar-var-cancellabel;</a>]</h3>
+        </td>
+    </tr>
+</table>
