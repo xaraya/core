@@ -108,12 +108,16 @@ pre {
 ul {
     padding: 0;
     margin: 0;
-    list-style-position: inside;
-    list-style-image: url(../images/bullet.png);
     list-style-type: none;
 }
 
-ul li { margin-left: 0.5em; }
+ul li {
+    padding-left: 13px;
+    background-image: url(../images/bullet.png);
+    background-repeat: no-repeat;
+    background-position: 0 .45em;
+}
+
 
 blockquote {
     color: #333366;
@@ -143,10 +147,11 @@ input {
     font-weight: normal;
     text-indent: 2px;
     margin: 2px;
+    max-width:100%; 
 }
 
 button { border: 2px outset #f0f0f0; }
-select { font-weight: normal; }
+select { font-weight: normal;}
 
 /*
 in many browsers appearance of select is handled by OSs widgets, not by css

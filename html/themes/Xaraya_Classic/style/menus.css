@@ -6,7 +6,6 @@ system menus and related rules
 .xar-block-body-right ul {
     list-style-position: outside;
     list-style-type: none;
-    list-style-image: none;
     margin: 0;
     padding: 0;
     font-family: arial, helvetica, verdana, sans-serif;
@@ -21,6 +20,7 @@ system menus and related rules
     margin: 0 0 1px 0;
     padding: 0;
     height: 1.7em;
+    background-image: none;
 }
 
 .xar-block-body ul li a,
