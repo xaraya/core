@@ -507,7 +507,11 @@ EOM;
 function xarCoreIsApiAllowed($apiType) {
     // Testing for an empty API type just returns false
     if (empty($apiType)) return false;
-    return in_array($apiType,xarCore_getSiteVar('Core.AllowedAPITypes'));
+
+    $allowed = xarCore_getSiteVar('Core.AllowedAPITypes');
+    // If no API type restrictions are given, return true
+    if (empty($allowed) || count($allowed) == 0) return true;
+    return in_array($apiType,$allowed);
 }
 
 // CORE CLASSES
