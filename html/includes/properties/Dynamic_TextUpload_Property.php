@@ -70,6 +70,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                 $tmpdir = xarCoreGetVarDirPath();
                 $tmpdir .= '/cache/templates';
                 $tmpfile = tempnam($tmpdir, 'dd');
+            // no verification of file types here
                 if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
                     $this->value = join('', file($tmpfile));
                     unlink($tmpfile);
@@ -99,6 +100,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         // <form ... enctype="multipart/form-data" ... > in their input form
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            $extensions = xarModGetVar('uploads','allowed_types');
+            if (!empty($extensions)) {
+                $allowed = '<br />' . xarML('Allowed extensions : #(1)',$extensions);
+            } else {
+                $allowed = '';
+            }
+        } else {
+            // no verification of file types here
+            $allowed = '';
+        }
+
         // we're using a textarea field to keep track of any previously uploaded file here
         return '<textarea' .
                ' name="' . $name . '"' .
@@ -115,7 +128,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
                (!empty($id) ? ' id="'.$id.'_upload"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
+               ' /> ' . $allowed .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 

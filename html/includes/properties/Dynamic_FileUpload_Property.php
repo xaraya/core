@@ -132,6 +132,22 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         // <form ... enctype="multipart/form-data" ... > in their input form
         xarVarSetCached('Hooks.dynamicdata','withupload',1);
 
+        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+            $extensions = xarModGetVar('uploads','allowed_types');
+            if (!empty($extensions)) {
+                $allowed = '<br />' . xarML('Allowed extensions : #(1)',$extensions);
+            } else {
+                $allowed = '';
+            }
+        } else {
+            if (!empty($this->filetype)) {
+                $extensions = $this->filetype;
+                $allowed = '<br />' . xarML('Allowed file types : #(1)',$extensions);
+            } else {
+                $allowed = '';
+            }
+        }
+
         // we're using a hidden field to keep track of any previously uploaded file here
         return (!empty($value) ? xarML('Uploaded file : #(1)',$value) . '<br /><input type="hidden" name="'.$name.'" value="'.$value.'" />' : '') .
                '<input type="hidden" name="MAX_FILE_SIZE"'.
@@ -141,7 +157,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
                (!empty($id) ? ' id="'.$id.'_upload"' : '') .
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
+               ' /> ' . $allowed .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
     }
 
