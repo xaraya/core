@@ -101,9 +101,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
 
-    $subject = xarRequestGetVar($name, $allowOnlyMethod);
+    $value = xarRequestGetVar($name, $allowOnlyMethod);
 
-    if ($subject == NULL) {
+    if ($value == NULL) {
         if ($flags & XARVAR_NOT_REQUIRED || isset($defaultValue)) {
             $value = $defaultValue;
             
@@ -116,7 +116,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         }
     }
 
-    $result = xarVarValidate($validation, $subject, $value);
+    $result = xarVarValidate($validation, $value);
 
     if ($result === NULL) {return;} //SYSTEM_EXCEPTION -> throw back
 
@@ -162,10 +162,10 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * 'array' validates if the subject is an array
  * 'array: *other validation*' validates if the subject is an array, and if every element of the array
  *                             validate in the *other validation*
- *                          Example: xarVarValidate('array:str:1:20', $strings_array, $strings_array);
+ *                          Example: xarVarValidate('array:str:1:20', $strings_array);
  *
  * 'enum' validates if the subject is any of the parameters
- *                  Example: xarVarValidate('enum:apple:orange:strawberry', $options, $options);
+ *                  Example: xarVarValidate('enum:apple:orange:strawberry', $options);
  *
  * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
  * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
@@ -177,18 +177,17 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @author Marco Canini
  * @access public
  * @param validation mixed the validation to be performed
- * @param subject string the subject on which the validation must be performed
- * @param convValue contains the converted value of $subject // i sugest to deprecate this and subject for everything
+ * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, $subject, &$convValue) {
-// <nuncanada> For me the $convValue is superfluous, why not return the new string on $subject itself on sucess
-//             and on failure keep the old data type.
+function xarVarValidate($validation, &$subject) {
 // <nuncanada> For now, i have moved all validations to html/modules/variable/validations
 //             I think that will incentivate 3rd party devs to create and send new validations back to us..
 //             As id/int/str are used in every page view, probably they should be here.
 // <nuncanada> For more flexible validations it might be interesting to change how parameters are inserted
 //             to an array?! Although the actual interface seems easier to use...
+// Thinking about it better, this 'array' validation should be changed for 'list', it fits better what it does
+// Array should be there too to check if its an array and give min/max bounds on it.
 
     $valParams = explode(':', $validation);
     $valType = xarVarPrepForOS(strtolower(array_shift($valParams)));
@@ -200,7 +199,7 @@ function xarVarValidate($validation, $subject, &$convValue) {
         return;
     }
 
-    $function_file = 'modules/variable/validations/'.$valType.'.php';
+    $function_file = './modules/variable/validations/'.$valType.'.php';
     $function_name = 'variable_validations_'.$valType;
 
     if (!function_exists($function_name)) {
@@ -212,7 +211,6 @@ function xarVarValidate($validation, $subject, &$convValue) {
     if (function_exists($function_name)) {
         $return = $function_name($subject, $valParams);
         //The helper functions already have a nicer interface, let´s change the main function too?
-        $convValue = $subject;
         return $return;
     } else {
         // Raise an exception
