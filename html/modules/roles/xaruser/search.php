@@ -65,7 +65,7 @@ function roles_user_search()
 
             // run the search query
             // FIXME: this still errors out when search string contains single quote
-            $q = xarVarAddslashes($q);
+            $q = xarVar_addslashes($q);
             $where = array();
             // see which properties we're supposed to search in
             foreach (array_keys($object->properties) as $field) {
