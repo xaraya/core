@@ -411,6 +411,7 @@ function xarBlock_renderGroup($groupName)
 //        if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             $output .= xarExceptionRender('html');
+            // We handled the exception(s) so we can clear it
             xarExceptionFree();
         }
 

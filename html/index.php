@@ -134,6 +134,7 @@ if (!xarMain()) {
         echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$text</body></html>";
     } else {
         // It's important here to free exception before caling xarTplPrintPage
+        // As we are in the exception handling phase, we can clear it without side effects.
         xarExceptionFree();
         // Render page
         $pageOutput = xarTpl_renderPage($text);

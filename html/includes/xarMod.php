@@ -1194,6 +1194,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             // return a valid url
             xarLogException(XARLOG_LEVEL_ERROR);
         }
+        // IMPORTANT: This freeing cause lots of error to be hidden, due to the fact that multiple
+        // exceptions may be pending. As xarModUrl is used very often, and we want the exceptions
+        // I commented it out (MrB). Not sure how to solve this in a better way.
         //xarExceptionFree();
     }
 

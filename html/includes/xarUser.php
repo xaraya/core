@@ -240,7 +240,10 @@ function xarUserGetNavigationLocale()
                 // so what we can do here is only to log the exception
                 // and call xarExceptionFree
                 xarLogException(XARLOG_LEVEL_ERROR);
-                xarExceptionFree();
+                // This will Free all exceptions, including the ones pending
+                // as these are still unhandled if they are here i commented it out
+                // for now, as we had lots of exceptions hiding on us (MrB)
+                //xarExceptionFree();
             }
             $locale = xarMLSGetSiteLocale();
         }
