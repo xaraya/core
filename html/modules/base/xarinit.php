@@ -147,8 +147,8 @@ function base_init()
     $query = "INSERT INTO $configVarsTable VALUES ($config_id,'Site.Core.AllowableHTML','a:25:{s:3:\"!--\";s:1:\"2\";s:1:\"a\";s:1:\"2\";s:1:\"b\";s:1:\"2\";s:10:\"blockquote\";s:1:\"2\";s:2:\"br\";s:1:\"2\";s:6:\"center\";s:1:\"2\";s:3:\"div\";s:1:\"2\";s:2:\"em\";s:1:\"2\";s:4:\"font\";i:0;s:2:\"hr\";s:1:\"2\";s:1:\"i\";s:1:\"2\";s:3:\"img\";i:0;s:2:\"li\";s:1:\"2\";s:7:\"marquee\";i:0;s:2:\"ol\";s:1:\"2\";s:1:\"p\";s:1:\"2\";s:3:\"pre\";s:1:\"2\";s:4:\"span\";i:0;s:6:\"strong\";s:1:\"2\";s:2:\"tt\";s:1:\"2\";s:2:\"ul\";s:1:\"2\";s:5:\"table\";s:1:\"2\";s:2:\"td\";s:1:\"2\";s:2:\"th\";s:1:\"2\";s:2:\"tr\";s:1:\"2\";}')";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
-    // PRE-SETUP so that xarCoreInit will work 
+
+    // PRE-SETUP so that xarCoreInit will work
     xarInstallConfigSetVar('Site.BL.DefaultTheme','installer');
     xarInstallConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarInstallConfigSetVar('Site.BL.CacheTemplates','true');
@@ -221,7 +221,7 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     // Insert Allowed Vars
     $htmltags = array('!--',
                       'a',
@@ -358,109 +358,33 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     // Load in installer API
     if (!xarInstallAPILoad('installer','admin')) {
         return NULL;
     }
-    
+
     /****************************************************************
-    * Install users module and set up default users
+    * Install roles module and set up default roles
     ****************************************************************/
     if (!xarInstallAPIFunc('installer',
                            'admin',
                            'initialise',
-                           array('directory' => 'users',
+                           array('directory' => 'roles',
                                  'initfunc'  => 'init'))) {
         return NULL;
     }
-
-    $usersTable = $systemPrefix . '_users';
-    $id_anonymous = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','','',0 ,'')";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
-
-    $id_admin = $dbconn->GenId($usersTable);
-    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.xaraya.com','','',3 ,'authsystem')";
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $id_admin = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
-
-    /***************************************************************
-    * Install groups module and setup default groups
-    ***************************************************************/
-    if (!xarInstallAPIFunc('installer',
-                           'admin',
-                           'initialise',
-                           array('directory' => 'groups',
-                                 'initfunc'  => 'init'))) {
-        return NULL;
-    }
-
-    $groupsTable = $systemPrefix . '_groups';
-    $group_users = $dbconn->GenId($groupsTable);
-    $query = "INSERT INTO $groupsTable (xar_gid, xar_name) VALUES ($group_users, 'Users');";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $group_users = $dbconn->PO_Insert_ID($groupsTable,'xar_gid');
-
-    $group_admin = $dbconn->GenId($groupsTable);
-    $query = "INSERT INTO $groupsTable (xar_gid, xar_name) VALUES ($group_admin, 'Admins');";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $group_admin = $dbconn->PO_Insert_ID($groupsTable,'xar_gid');
-    $groupMembershipTable = $systemPrefix . '_group_membership';
-
-    $query = "INSERT INTO $groupMembershipTable (xar_gid, xar_uid) VALUES ($group_admin, $id_admin);";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     /**************************************************************
-    * Install permissions module and setup default permissions
+    * Install privileges module and setup default privileges
     **************************************************************/
     if (!xarInstallAPIFunc('installer',
                            'admin',
                            'initialise',
-                           array('directory' => 'permissions',
+                           array('directory' => 'privileges',
                                  'initfunc'  => 'init'))) {
         return NULL;
     }
-    $groupPermsTable = $systemPrefix . '_group_perms';
-
-    // Set up an Admin Group Permission
-    $id = $dbconn->GenId($groupPermsTable);
-    $query = "INSERT INTO $groupPermsTable
-             (xar_pid, xar_gid, xar_sequence, xar_realm, xar_component, xar_instance, xar_level, xar_bond)
-              VALUES ($id, $group_admin, 1, 0, '.*', '.*', 800, 0);";
-
-    // Set up an 'All Users' group perm with, component = .*, instance = .* and level ACCESS_COMMENT
-    $id = $dbconn->GenId($groupPermsTable);
-    $query = "INSERT INTO $groupPermsTable
-             (xar_pid, xar_gid, xar_sequence, xar_realm, xar_component, xar_instance, xar_level, xar_bond)
-              VALUES ($id, -1, 2, 0, '.*', '.*', 300, 0);";
-              
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $userPermsTable = $systemPrefix . '_user_perms';
-
-    $id = $dbconn->GenId($userPermsTable);
-    $query = "INSERT INTO $userPermsTable VALUES ($id,-1,1,0,'.*','.*',200,0)";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    $id = $dbconn->GenId($userPermsTable);
-    $query = "INSERT INTO $userPermsTable VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     /**************************************************************
     * Install modules table and insert the modules module
@@ -533,7 +457,7 @@ function base_init()
               ) VALUES (13,3)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     /**************************************************************
     * Install the blocks module
     **************************************************************/
@@ -542,7 +466,7 @@ function base_init()
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
 	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
 	    return;
-	}  
+	}
 
 //     /**************************************************************
 //     * Install the sniffer module
@@ -550,8 +474,8 @@ function base_init()
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
 	                       array('directory'=>'sniffer', 'initfunc'=>'init'))) {
 	    return;
-	}  
-    
+	}
+
     // Fill language list(?)
 
     // Initialisation successful
@@ -587,7 +511,7 @@ function base_activate()
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
         if (!xarModAPIFunc('modules','admin','setstate', array('regid'=> $regid,
-                                                               'state'=> XARMOD_STATE_INACTIVE))) 
+                                                               'state'=> XARMOD_STATE_INACTIVE)))
             {
                 return;
             }
@@ -597,7 +521,7 @@ function base_activate()
                 return;
             }
     }
-    
+
     // Initialise and activate adminpanels, mail, themes
     $modlist = array('adminpanels','mail', 'themes');
     foreach ($modlist as $mod) {
@@ -610,7 +534,7 @@ function base_activate()
             return;
         }
     }
-    
+
     //initialise and activate base module by setting the states
     $baseid=xarModGetIDFromName('base');
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseid,
@@ -621,7 +545,7 @@ function base_activate()
                                                               'state' => XARMOD_STATE_ACTIVE))) {
         return;
     }
-    
+
     // Register Block types
     $blocks = array('finclude','html','menu','php','text');
 

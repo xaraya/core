@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -23,10 +23,8 @@ require_once 'modules/dynamicdata/class/objects.php';
  */
 function dynamicdata_util_main()
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
@@ -41,10 +39,8 @@ function dynamicdata_util_main()
  */
 function dynamicdata_util_export($args)
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     list($objectid,
          $modid,
@@ -197,10 +193,8 @@ function dynamicdata_util_export($args)
  */
 function dynamicdata_util_import($args)
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     $import = xarVarCleanFromInput('import');
 
@@ -268,10 +262,8 @@ function dynamicdata_util_import($args)
  */
 function dynamicdata_util_static($args)
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     list($module,
          $modid,
@@ -324,10 +316,8 @@ function dynamicdata_util_static($args)
  */
 function dynamicdata_util_meta($args)
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     $export = xarVarCleanFromInput('export');
 
@@ -353,10 +343,8 @@ function dynamicdata_util_meta($args)
  */
 function dynamicdata_util_relations($args)
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     list($module,
          $modid,
@@ -387,10 +375,8 @@ function dynamicdata_util_relations($args)
  */
 function dynamicdata_util_importprops()
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     list($objectid,
          $modid,

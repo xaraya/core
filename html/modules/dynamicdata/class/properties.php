@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -535,7 +535,9 @@ class Dynamic_Property_Master
 
         while (!$result->EOF) {
             list(...) = $result->fields;
-            if (xarSecAuthAction(0, '...', "...", ACCESS_OVERVIEW)) {
+
+// Security Check
+		if(securitycheck('Overview',0) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();

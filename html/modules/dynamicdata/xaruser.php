@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -104,10 +104,8 @@ function dynamicdata_user_displayhook($args)
  */
 function dynamicdata_user_main()
 {
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_OVERVIEW)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Overview')) return;
 
     $data = dynamicdata_user_menu();
 

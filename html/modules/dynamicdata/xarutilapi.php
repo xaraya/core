@@ -7,7 +7,7 @@
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -24,10 +24,8 @@ require_once 'modules/dynamicdata/class/objects.php';
 function dynamicdata_utilapi_export($args)
 {
     // restricted to DD Admins
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     extract($args);
 
@@ -40,10 +38,8 @@ function dynamicdata_utilapi_export($args)
 function dynamicdata_utilapi_import($args)
 {
     // restricted to DD Admins
-    if (!xarSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+// Security Check
+	if(!securitycheck('Admin')) return;
 
     extract($args);
 
