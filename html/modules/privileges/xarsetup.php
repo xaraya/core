@@ -18,15 +18,15 @@ function initializeSetup() {
     * Enter some default groups and users
     *********************************************************************/
 
-    makeGroup('Everybody');
-	makeUser('Anonymous','anonymous','anonymous@xaraya.com');
-	makeUser('Admin','admin','admin@xaraya.com','xaraya');
-    makeGroup('Administrators');
-    makeGroup('Oversight');
-	makeUser('Overseer','overseer','overseer@xaraya.com');
-    makeGroup('Users');
-	makeUser('User','user','user@xaraya.com');
-//	makeUser('Current','current','current@xaraya.com');
+    xarMakeGroup('Everybody');
+	xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
+	xarMakeUser('Admin','admin','admin@xaraya.com','xaraya');
+    xarMakeGroup('Administrators');
+    xarMakeGroup('Oversight');
+	xarMakeUser('Overseer','overseer','overseer@xaraya.com');
+    xarMakeGroup('Users');
+	xarMakeUser('User','user','user@xaraya.com');
+//	xarMakeUser('Current','current','current@xaraya.com');
 
     /*********************************************************************
     * Arrange the roles in a hierarchy
@@ -34,15 +34,15 @@ function initializeSetup() {
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	makeRoleRoot('Everybody');
-	makeRoleMember('Administrators','Everybody');
-	makeRoleMember('Admin','Administrators');
-	makeRoleMember('Oversight','Everybody');
-	makeRoleMember('Overseer','Oversight');
-	makeRoleMember('Users','Everybody');
-	makeRoleMember('User','Users');
-	makeRoleMember('Anonymous','Everybody');
-//	makeRoleMember('Current','Everybody');
+	xarMakeRoleRoot('Everybody');
+	xarMakeRoleMember('Administrators','Everybody');
+	xarMakeRoleMember('Admin','Administrators');
+	xarMakeRoleMember('Oversight','Everybody');
+	xarMakeRoleMember('Overseer','Oversight');
+	xarMakeRoleMember('Users','Everybody');
+	xarMakeRoleMember('User','Users');
+	xarMakeRoleMember('Anonymous','Everybody');
+//	xarMakeRoleMember('Current','Everybody');
 
     /*********************************************************************
     * Enter some default privileges
@@ -79,32 +79,23 @@ function initializeSetup() {
     * makeMember(Child,Parent)
     *********************************************************************/
 
-	makePrivilegeRoot('NoAccess');
-	makePrivilegeRoot('Administration');
-	makePrivilegeRoot('Oversight');
-	makePrivilegeRoot('DenyRolesPrivileges');
-	makePrivilegeRoot('DenyRoles');
-	makePrivilegeRoot('DenyPrivileges');
-	makePrivilegeRoot('Editing');
-	makePrivilegeRoot('AnonView');
-	makePrivilegeRoot('ViewLogin');
-	makePrivilegeRoot('ViewBlocks');
-	makePrivilegeMember('DenyRoles','DenyRolesPrivileges');
-	makePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
-	makePrivilegeMember('DenyRolesPrivileges','Oversight');
-	makePrivilegeMember('Administration','Oversight');
-	makePrivilegeMember('DenyRolesPrivileges','Editing');
-	makePrivilegeMember('ViewLogin','AnonView');
-	makePrivilegeMember('ViewBlocks','AnonView');
-//	makePrivilegeRoot('ReadAll');
-	//makePrivilegeMember('NoPrivileges','ReadAll');
-	//makePrivilegeMember('NoPrivileges','EditAll');
-//	makePrivilegeRoot('AddAll');
-	//makePrivilegeMember('NoPrivileges','AddAll');
-//	makePrivilegeRoot('DeleteAll');
-	//makePrivilegeMember('NoPrivileges','DeleteAll');
-//	makePrivilegeRoot('AdminPrivilege');
-//	makePrivilegeRoot('AdminRole');
+	xarMakePrivilegeRoot('NoAccess');
+	xarMakePrivilegeRoot('Administration');
+	xarMakePrivilegeRoot('Oversight');
+	xarMakePrivilegeRoot('DenyRolesPrivileges');
+	xarMakePrivilegeRoot('DenyRoles');
+	xarMakePrivilegeRoot('DenyPrivileges');
+	xarMakePrivilegeRoot('Editing');
+	xarMakePrivilegeRoot('AnonView');
+	xarMakePrivilegeRoot('ViewLogin');
+	xarMakePrivilegeRoot('ViewBlocks');
+	xarMakePrivilegeMember('DenyRoles','DenyRolesPrivileges');
+	xarMakePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
+	xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
+	xarMakePrivilegeMember('Administration','Oversight');
+	xarMakePrivilegeMember('DenyRolesPrivileges','Editing');
+	xarMakePrivilegeMember('ViewLogin','AnonView');
+	xarMakePrivilegeMember('ViewBlocks','AnonView');
 
     /*********************************************************************
     * Assign the default privileges to groups/users

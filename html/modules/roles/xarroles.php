@@ -617,7 +617,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exception handling for bad input
 */
-   function makeUser($name,$uname,$email,$pass='xaraya'){
+   function makeUser($name,$uname,$email,$pass='xaraya',$datereg=$now,$valcode='',$state=3,$authmodule=''){
 
 //TODO: validate the email address
 		if(empty($name) && empty($uname) || empty($email)) {
@@ -658,9 +658,15 @@ function drawindent() {
 		$unameprep = xarVarPrepForStore($uname);
 		$emailprep = xarVarPrepForStore($email);
 		$passprep = md5(xarVarPrepForStore($pass));
+		$dateregprep = xarVarPrepForStore($datereg);
+		$valcodeprep = xarVarPrepForStore($valcode);
+		$stateprep = xarVarPrepForStore($state);
+		$authmoduleprep = xarVarPrepForStore($authmodule);
 		$query = "INSERT INTO $this->rolestable
-					(xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass)
-				  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep', '$passprep')";
+					(xar_pid, xar_name, xar_type, xar_uname, xar_email, xar_pass,
+					xar_date_reg, xar_valcode, xar_state, xar_auth_module)
+				  VALUES ($nextIdprep, '$nameprep', 0, '$unameprep', '$emailprep', '$passprep',
+				  '$dateregprep', '$valcodeprep', $stateprep, '$authmoduleprep')";
 		if (!$this->dbconn->Execute($query)) return;
 
 // done

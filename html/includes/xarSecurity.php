@@ -81,7 +81,7 @@ $schemas = array();
 
 
 /**
- * makeGroup: create an entry in the database for a group
+ * xarMakeGroup: create an entry in the database for a group
  *
  * This is a wrapper function
  *
@@ -93,13 +93,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function makeGroup($name) {
+	function xarMakeGroup($name) {
 			$roles = new xarRoles();
 			return $roles->makeGroup($name);
 	}
 
 /**
- * makeUser: create an entry in the database for a user
+ * xarMakeUser: create an entry in the database for a user
  *
  * This is a wrapper function
  *
@@ -111,13 +111,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function makeUser($name,$uname,$email,$pass='') {
+	function xarMakeUser($name,$uname,$email,$pass='',$datereg=$now,$valcode='',$state=3,$authmodule='') {
 			$roles = new xarRoles();
-			return $roles->makeUser($name,$uname,$email,$pass);
+			return $roles->makeUser($name,$uname,$email,$pass,$datereg,$valcode,$state,$authmodule);
 	}
 
 /**
- * makeRoleRoot: defines an entry in the database as the root of a role tree
+ * xaMakeRoleRoot: defines an entry in the database as the root of a role tree
  *
  * This is a wrapper function
  *
@@ -129,13 +129,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function makeRoleRoot($name) {
+	function xaMakeRoleRoot($name) {
 			$roles = new xarRoles();
 			return $roles->isRoot($name);
 	}
 
 /**
- * makeRoleMember: create a parent-child relationship in the database between two roles
+ * xarMakeRoleMember: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
  *
@@ -148,7 +148,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function makeRoleMember($childname, $parentname) {
+	function xarMakeRoleMember($childname, $parentname) {
 			$roles = new xarRoles();
 			return $roles->makeMember($childname, $parentname);
 	}
@@ -173,7 +173,7 @@ $schemas = array();
 	}
 
 /**
- * makePrivilegeRoot: defines an entry in the database as the root of a privilege tree
+ * xarMakePrivilegeRoot: defines an entry in the database as the root of a privilege tree
  *
  * This is a wrapper function
  *
@@ -185,13 +185,13 @@ $schemas = array();
  * @todo    none
 */
 
-	function makePrivilegeRoot($name) {
+	function xarMakePrivilegeRoot($name) {
 			$privileges = new xarPrivileges();
 			return $privileges->makeEntry($name);
 	}
 
 /**
- * makePrivilegeMember: create a parent-child relationship in the database between two privileges
+ * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges
  *
  * This is a wrapper function
  *
@@ -204,7 +204,7 @@ $schemas = array();
  * @todo    none
 */
 
-	function makePrivilegeMember($childname, $parentname) {
+	function xarMakePrivilegeMember($childname, $parentname) {
 			$privileges = new xarPrivileges();
 			return $privileges->makeMember($childname, $parentname);
 	}
@@ -262,6 +262,24 @@ $schemas = array();
 	function xarRemoveInstances($module) {
 			$privileges = new xarPrivileges();
 			return $privileges->removeInstances($module);
+	}
+
+/**
+ * xarGetGroups: returns an array of all the groups in the database
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  array of strings
+ * @throws  none
+ * @todo    none
+*/
+
+	function xarGetGroups() {
+			$roles = new xarRoles();
+			return $roles->getgroups();
 	}
 
 /**
