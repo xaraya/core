@@ -768,7 +768,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                     $data_type = 'FLOAT';
             }
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
-               $data_type .= '('.$parameters['width'].','.$parameters['width'].')';
+               $data_type .= '('.$parameters['width'].','.$parameters['decimals'].')';
             }
             $this_field['type'] = $data_type;
             break;
