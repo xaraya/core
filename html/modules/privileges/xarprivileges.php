@@ -376,6 +376,9 @@ class xarMasks
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
 
+        // normalize the mask now - its properties won't change below
+        $mask->normalize();
+
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
 
@@ -399,9 +402,11 @@ class xarMasks
             // get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)));
 
-            // leave this as same-page caching for now, until the db cache is finished
+            // leave this as same-page caching, even if the db cache is finished
             // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
+                // normalize all privileges before saving, to avoid re-doing that every time
+                $this->normalizeprivset($privileges);
                 xarVarSetCached('Security.Variables','privilegeset',$privileges);
             }
         } else {
@@ -506,6 +511,28 @@ class xarMasks
         }
         $coreset['children'] = $this->irreducibleset(array('roles' => $parents));
         return $coreset;
+    }
+
+/**
+ * normalizeprivset: apply the normalize() method on all privileges in a privilege set
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   array representing the privilege set
+ * @return  none
+ * @throws  none
+ * @todo    none
+*/
+    function normalizeprivset(&$privset)
+    {
+        if (isset($privset['privileges']) && is_array($privset['privileges'])) {
+            foreach (array_keys($privset['privileges']) as $id) {
+                $privset['privileges'][$id]->normalize();
+            }
+        }
+        if (isset($privset['children']) && is_array($privset['children'])) {
+            $this->normalizeprivset($privset['children']);
+        }
     }
 
 /**
@@ -1464,6 +1491,7 @@ class xarPrivileges extends xarMasks
     var $instance;      //the instance of this privilege
     var $level;         //the access level of this privilege
     var $description;   //the long description of this privilege
+    var $normalform;    //the normalized form of this privilege
 
     var $dbconn;
     var $privilegestable;
@@ -1528,14 +1556,20 @@ class xarPrivileges extends xarMasks
  * @todo    none
 */
     function normalize($adds=0) {
-        $normalform = array();
-        $normalform[] = strtolower($this->getLevel());
-        $normalform[] = strtolower($this->getRealm());
-        $normalform[] = strtolower($this->getModule());
-        $normalform[] = strtolower($this->getComponent());
-        $thisinstance = strtolower($this->getInstance());
-        $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
-        $normalform = array_merge($normalform,explode(':',$thisinstance));
+        if (isset($this->normalform)) {
+            if (empty($adds)) return $this->normalform;
+            $normalform = $this->normalform;
+        } else {
+            $normalform = array();
+            $normalform[] = strtolower($this->getLevel());
+            $normalform[] = strtolower($this->getRealm());
+            $normalform[] = strtolower($this->getModule());
+            $normalform[] = strtolower($this->getComponent());
+            $thisinstance = strtolower($this->getInstance());
+            $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
+            $normalform = array_merge($normalform,explode(':',$thisinstance));
+            $this->normalform = $normalform;
+        }
         for ($i=0;$i<$adds;$i++) $normalform[] = 'all';
         return $normalform;
     }
