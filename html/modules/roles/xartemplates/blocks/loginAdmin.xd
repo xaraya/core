@@ -1,20 +1,20 @@
 <tr align="left" valign="middle">
 	<td>
-		<label for="showlogout"><xar:mlstring>Show logout box when logged in</xar:mlstring></label>
+		<label for="showlogout#$blockid#"><xar:mlstring>Show logout box when logged in</xar:mlstring></label>
 	</td>
 	<td>
 		<xar:if condition="$showlogout eq 1">
-			<input type="checkbox" name="showlogout" id="showlogout" value="1" tabindex="1" checked="checked" />
+			<input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" tabindex="1" checked="checked" />
 		<xar:else />
-			<input type="checkbox" name="showlogout" id="showlogout" value="1" tabindex="1" />
+			<input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" tabindex="1" />
 		</xar:if>
 	</td>
 </tr>
 <tr align="left" valign="middle">
 	<td>
-		<label for="logouttitle"><xar:mlstring>Logout Title</xar:mlstring></label>
+		<label for="logouttitle#$blockid#"><xar:mlstring>Logout Title</xar:mlstring></label>
 	</td>
 	<td>
-		<input type="text" name="logouttitle" id="logouttitle" value="#$logouttitle#" size="15" maxlength="25" tabindex="2" />
+		<input type="text" name="logouttitle" id="logouttitle#$blockid#" value="#$logouttitle#" size="15" maxlength="25" tabindex="2" />
 	</td>
 </tr>

@@ -87,6 +87,7 @@ function roles_onlineblock_display($blockinfo)
         $blockinfo['title'] = xarML('Online');
     }
 
+    $args['blockid'] = $blockinfo['bid'];
     $blockinfo['content'] = xarTplBlock('roles', 'online', $args);
     return $blockinfo;
 }

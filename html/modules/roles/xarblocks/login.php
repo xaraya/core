@@ -43,6 +43,7 @@ function roles_loginblock_display($blockinfo)
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
             $args['name'] = xarUserGetVar('name');
+	    $args['blockid'] = $blockinfo['bid'];
             $blockinfo['content'] = xarTplBlock('roles', 'logout', $args);
             if (!empty($vars['logouttitle'])) {
                 $blockinfo['title'] = $vars['logouttitle'];
@@ -83,6 +84,7 @@ function roles_loginblock_modify($blockinfo)
     $args['showlogout'] = $vars['showlogout'];
     $args['logouttitle'] = $vars['logouttitle'];
 
+    $args['blockid'] = $blockinfo['bid'];
     $content = xarTplBlock('roles', 'loginAdmin', $args);
 
     return $content;
