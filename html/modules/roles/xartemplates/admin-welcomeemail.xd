@@ -1,11 +1,28 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Recommend Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify Configuration</xar:mlstring></h2>
 <div style="margin: auto;">
-	<p><xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring></p>
-	<p><xar:mlstring>The welcome email is plain text</xar:mlstring></p>
-	<form action="#xarModURL('roles', 'admin', 'welcomeemail')#" method="post" enctype="application/x-www-form-urlencoded">
-		<input type="hidden" name="authid" id="authid" value="#$authid#" />
-		<input type="hidden" name="phase" id="phase" value="update" />
+<form action="#xarModURL('recommend', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="authid" id="authid" value="#$authid#" />
+	<input type="hidden" name="phase" id="phase" value="update" />
+<h4><xar:mlstring>Statistics</xar:mlstring></h4>
+<p>
+		<xar:mlstring>Number of emails the Recommend module has sent:</xar:mlstring>&nbsp;&nbsp; #$numbersent# <br />
+		<xar:mlstring>Last Email sent to:</xar:mlstring>&nbsp;&nbsp; <a href="mailto:#$lastemailaddy#">#$lastemailname#</a><br />
+		<xar:mlstring>Date last sent:</xar:mlstring>&nbsp;&nbsp; #$date#<br />
+</p>
+<h4><xar:mlstring>User Options</xar:mlstring></h4>
+<p>
+	<label for="usernotes">
+		<xar:mlstring>Allow Users to Send Notes?</xar:mlstring>
+	</label>
+	<xar:if condition="xarModGetVar('recommend', 'usernotes')">
+		<input type="checkbox" name="usernotes" id="usernotes" value="1" checked="checked" />
+	<xar:else />
+		<input type="checkbox" name="usernotes" id="usernotes" value="1" />
+	</xar:if>
+</p>
+<h4><xar:mlstring>Mail Template</xar:mlstring></h4>
+	<p><xar:mlstring>This is the template for the mail to be sent.  If you have HTML mail enabled in your Mail Module, then HTML tags are usable.</xar:mlstring></p>
 		<label for="welcometitle"><xar:mlstring>Welcome Email Title</xar:mlstring></label>:
 		<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
         <br />
