@@ -1,0 +1,115 @@
+<?php
+
+/**
+ * Compare two legal-style versions supplied as strings or arrays, to an arbitrary number of levels
+ * Usage : $which = xarModAPIFunc('base', 'versions', 'compare', array('ver1'=>$version1, 'ver2'=>$version2));
+ *
+ * @author Jason Judge
+ * @param $args['ver1'] version number 1 (string or array)
+ * @param $args['ver2'] version number 2 (string or array)
+ * @param $args['levels'] maxiumum levels to compare (default: all levels)
+ * @param $args['strict'] indicates strict numeric-only comparisons (default: true)
+ * @returns number
+ * @return number indicating which parameter is the latest version
+ */
+function base_versionsapi_compare($args)
+{
+    // Indicates which is the latest version: 1, 2 or 0 (neither).
+    // Can be limited to a certain number of levels. The defaul 0 levels
+    // is limited only by the versions passed in.
+    // Versions can be strings ('1.2.3') or arrays (array(1, 2, 3)).
+    // See test script for examples: tests/base/version_compare.php
+
+    // Extract the arguments.
+    extract($args);
+
+    // Set this flag if checking should be strictly numeric.
+    // With strict set (true), non-numeric characters will be stripped prior to
+    // the comparison.
+    // With strict reset (false), then string comparisons will be
+    // performed where one or both version levels are not numeric.
+    if (!isset($strict))
+    {
+        $strict = true;
+    }
+
+    if (!isset($ver1))
+    {
+        $ver1 = '0';
+    }
+
+    if (!isset($ver2))
+    {
+        $ver2 = '0';
+    }
+
+    // Get the number of levels to check.
+    if (!settype($levels, 'integer') || $levels < 0)
+    {
+        $levels = 0;
+    }
+
+    // If arrays have been passed in, convert them to a legal-format string.
+    if (is_array($ver1))
+    {
+        $ver1 = implode('.', $ver1);
+    }
+
+    if (is_array($ver2))
+    {
+        $ver2 = implode('.', $ver2);
+    }
+
+    // Clean up the input strings.
+    list($ver1, $ver2) = preg_replace(
+        array(
+           '/(\s'. ($strict ? '|[^\d.]' : '') .')*/',
+           '/^\./',
+           '/\.$/',
+           '/\.\./',
+           '/^$/'
+        ),
+        array('', '0.', '.0', '.0.', '0'),
+        array($ver1, $ver2)
+    );
+
+    // Explode the strings into arrays for comparing.
+    $ver1 = explode('.', $ver1);
+    $ver2 = explode('.', $ver2);
+
+    // Get the highest number of levels in a version.
+    $limitlevels = max(count($ver1), count($ver2));
+    
+    // If limited by the calling routine, then cut it down to size.
+    if ($levels > 0 && $limitlevels > $levels)
+    {
+        $limitlevels = $levels;
+    }
+
+    // Pad out version arrays where necessary.
+    while(count($ver1) < $limitlevels)
+    {
+        array_push($ver1, '0');
+    }
+
+    while(count($ver2) < $limitlevels)
+    {
+        array_push($ver2, '0');
+    }
+
+    $latest = 0;
+
+    // Loop through each level to find out which is the latest.
+    for($i=0; $i<$limitlevels; $i++)
+    {
+        // Note, we are comparing strings, BUT if both values happen
+        // to be numeric, then PHP will do a numeric comparison.
+        // PHP's behaviour saves us some work type-casting.
+        if ($ver1[$i] > $ver2[$i]) {$latest = 1; break;}
+        if ($ver2[$i] > $ver1[$i]) {$latest = 2; break;}
+    }
+    
+    return $latest;
+}
+
+?>
