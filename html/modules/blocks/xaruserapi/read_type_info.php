@@ -27,6 +27,13 @@ function blocks_userapi_read_type_info($args)
         return;
     }
 
+    // Function to execute, to get the block info.
+    $infofunc = $module . '_' . $type . 'block_info';
+
+    if (function_exists($infofunc)) {
+        return $infofunc();
+    }
+    
     // Load and execute the info function of the block.
     if (!xarModAPIFunc(
         'blocks', 'admin', 'load',
@@ -37,8 +44,6 @@ function blocks_userapi_read_type_info($args)
         )
     )) {return;}
 
-    // Function to execute, to get the block info.
-    $infofunc = $module . '_' . $type . 'block_info';
     if (function_exists($infofunc)) {
         return $infofunc();
     } else {

@@ -43,8 +43,8 @@ function blocks_adminapi_resequence()
         }
         if ($position != $old_position) {
             $query = 'UPDATE ' . $block_group_instances_table
-                      . ' SET xar_position = ? WHERE xar_id = ?';
-            $result =& $dbconn->Execute($query, array($position, $link_id));
+                      . ' SET xar_position = ? WHERE xar_id = ? AND xar_position <> ?';
+            $result =& $dbconn->Execute($query, array($position, $link_id, $position));
             if (!$result) {return;}
         }
 

@@ -55,43 +55,16 @@ function blocks_adminapi_create_instance($args)
     if (!isset($content)) {
         $content = '';
 
-        // The initialisation function to execute.
-        $initFunc = $blocktype['module'] . '_' . $blocktype['type'] . 'block_init';
-
-        // Load the block - both the 'init' and the 'modify' functions, where available.
-        xarModAPIFunc(
-            'blocks', 'admin', 'load',
-            array(
-                'modName' => $blocktype['module'],
-                'blockType' => $blocktype['type'],
-                'blockFunc' => 'init'
-            )
+        $initresult = xarModAPIfunc(
+            'blocks', 'user', 'read_type_init', $blocktype
         );
 
-        // If the init function is not present, try loading the block modify script.
-        if (!function_exists($initFunc)) {
-            xarModAPIFunc(
-                'blocks', 'admin', 'load',
-                array(
-                    'modName' => $blocktype['module'],
-                    'blockType' => $blocktype['type'],
-                    'blockFunc' => 'modify'
-                )
-            );
-        }
-
-        if (function_exists($initFunc)) {
-            $initresult = $initFunc();
-
-            // Only if the init function returns a string, should it be
-            // considered to be a block initialization.
-            if (isset($initresult) && is_string($initresult) && !empty($initresult)) {
-                $content = $initresult;
-            }
+        if (!empty($initresult)) {
+            $content = $initresult;
         }
     }
 
-    if (is_array($content)) {
+    if (!empty($content) && !is_string($content)) {
         // Serialize the content, so arrays of initial content
         // can be passed directly into this API.
         $content = serialize($content);
@@ -113,17 +86,14 @@ function blocks_adminapi_create_instance($args)
               xar_template,
               xar_state,
               xar_refresh,
-              xar_last_update)
-            VALUES ('
-              . $nextId . ', '
-              . $type . ', '
-              . $dbconn->qstr($name) . ', '
-              . $dbconn->qstr($title) . ', '
-              . $dbconn->qstr($content) . ', '
-              . $dbconn->qstr($template) . ', '
-              . $state . ', 0, 0)';
+              xar_last_update
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0)';
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute(
+        $query, array(
+            $nextId, $type, $name, $title, $content, $template, $state
+        )
+    );
     if (!$result) {return;}
 
     // Get ID of row inserted.

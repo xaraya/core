@@ -34,8 +34,15 @@ function blocks_adminapi_update_instance($args)
         $content = '';
     }
 
+    // The content no longer needs to be serialized before it gets here.
+    // Lets keep the serialization close to where it is stored (since
+    // storage is the only reason we do it).
+    if (!is_string($content)) {
+        $content = serialize($content);
+    }
+
     if (!isset($template)) {
-	$template = '';
+	    $template = '';
     }
 
     // Argument check
@@ -68,15 +75,21 @@ function blocks_adminapi_update_instance($args)
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
-    $query = "UPDATE $block_instances_table
-              SET xar_content='" . xarVarPrepForStore($content) . "',
-                  xar_template='" . xarVarPrepForStore($template) . "',
-                  xar_name = '" . xarVarPrepForStore($name) . "',
-                  xar_title='" . xarVarPrepForStore($title) . "',
-                  xar_refresh = " . $refresh . ",
-                  xar_state = " . $state . "
-              WHERE xar_id = " . $bid;
-    $result =& $dbconn->Execute($query);
+    $query = 'UPDATE ' . $block_instances_table . '
+              SET xar_content = ?,
+                  xar_template = ?,
+                  xar_name = ?,
+                  xar_title = ?,
+                  xar_refresh = ?,
+                  xar_state = ?
+              WHERE xar_id = ?';
+
+    $bind = array(
+        $content, $template, $name, $title,
+        $refresh, $state, $bid
+    );
+
+    $result =& $dbconn->Execute($query, $bind);
     if (!$result) {return;}
 
     // Update the group instances.
