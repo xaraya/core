@@ -190,7 +190,6 @@ function base_init()
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
     xarConfigSetVar('Site.Session.InactivityTimeout', 90);
-    xarConfigSetVar('Site.Session.EnableIntranetMode', false);
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 1);
