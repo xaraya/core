@@ -484,6 +484,28 @@ function base_activate()
         return;
     }
 
+    // Activate the groups module
+    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('groups'),
+                                                              'state' => PNMOD_STATE_INACTIVE));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('groups')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    
+    // Activate the permissions module
+    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('permissions'),
+                                                              'state' => PNMOD_STATE_INACTIVE));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('permissions')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
     // initialize blocks module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('blocks')));
 
@@ -494,7 +516,7 @@ function base_activate()
     $res1 = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('blocks')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
-    }   
+    }
 
     // initialize & activate adminpanels module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));

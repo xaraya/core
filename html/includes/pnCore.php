@@ -14,7 +14,7 @@
  * better control on config settings
  */
 define('PNCORE_VERSION_NUM', '0.8');
-define('PNCORE_VERSION_ID',  'PostNuke');
+define('PNCORE_VERSION_ID',  'Xaraya');
 define('PNCORE_VERSION_SUB', 'adam_baum');
 
 /*

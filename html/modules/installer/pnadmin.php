@@ -293,6 +293,7 @@ function installer_admin_create_administrator()
                                                           'email' => $email,
                                                           'pass'  => $password,
                                                           'url'   => $url));
+    die(var_dump($res));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
@@ -304,18 +305,14 @@ function installer_admin_create_administrator()
 
 function installer_admin_finish()
 {
-    $res = pnModAPILoad('blocks', 'admin');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return NULL;
-    }
-
     // Load up database
     list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
-    $block_groups_table          = $pntable['block_groups'];
+    $tables = pnDBGetTables();
+
+    $blockGroupsTable = $tables['block_groups'];
 
     $query = "SELECT    pn_id as id
-              FROM      $block_groups_table
+              FROM      $blockGroupsTable
               WHERE     pn_name = 'left'";
 
     $result = $dbconn->Execute($query);
@@ -336,15 +333,18 @@ function installer_admin_finish()
         return NULL;
     }
 
-    list ($group_id) = $result->fields;
+    list ($leftBlockGroup) = $result->fields;
 
-    $type_id = pnBlockTypeExists('adminpanels', 'adminmenu');
+    if (!pnModAPILoad('blocks', 'admin') && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return NULL;
+    }
+    $adminBlockId = pnBlockTypeExists('adminpanels', 'adminmenu');
 
     $block_id = pnModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Admin',
-                                                      'type'     => $type_id,
-                                                      'group'    => $group_id,
+                                                      'type'     => $adminBlockId,
+                                                      'group'    => $leftBlockGroup,
                                                       'template' => '',
                                                       'state'    => 2));
 
@@ -354,23 +354,61 @@ function installer_admin_finish()
 
     $msg = pnML('Reminder message body will go here.');
 
-    $type_id = pnBlockTypeExists('base', 'html');
+    $htmlBlockId = pnBlockTypeExists('base', 'html');
     $block_id = pnModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Reminder',
                                                       'content'  => $msg,
-                                                      'type'     => $type_id,
-                                                      'group'    => $group_id,
+                                                      'type'     => $htmlBlockId,
+                                                      'group'    => $leftBlockGroup,
                                                       'template' => '',
                                                       'state'    => 2));
     if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
-    
+
+    $query = "SELECT    pn_id as id
+              FROM      $blockGroupsTable
+              WHERE     pn_name = 'right'";
+
+    $result = $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    // Freak if we don't get one and only one result
+    if ($result->PO_RecordCount() != 1) {
+        $msg = pnML("Group 'right' not found.");
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    list ($rightBlockGroup) = $result->fields;
+
+    $loginBlockId = pnBlockTypeExists('users', 'login');
+    $block_id = pnModAPIFunc('blocks',
+                             'admin',
+                             'create_instance', array('title'    => 'Login',
+                                                      'type'     => $loginBlockId,
+                                                      'group'    => $rightBlockGroup,
+                                                      'template' => '',
+                                                      'state'    => 2));
+
+    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    pnConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
+
     if (pnVarIsCached('Config.Variables', 'Site.BL.DefaultTheme')) {
         pnVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
     }
-    pnConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
 
     return array();
 }

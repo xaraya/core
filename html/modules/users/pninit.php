@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id: s.pninit.php 1.11 02/10/27 12:47:46-05:00 John.Cox@d38yrl11. $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -22,7 +22,12 @@ function users_init()
     // Get datbase setup
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();
-
+    
+    $sitePrefix = pnDBGetSiteTablePrefix();
+    
+    $tables['users']         = $sitePrefix . '_users';
+    $tables['user_data']     = $sitePrefix . '_user_data';
+    $tables['user_property'] = $sitePrefix . '_user_property';
     // Create the table
     // *_users
     $query = pnDBCreateTable($tables['users'],
