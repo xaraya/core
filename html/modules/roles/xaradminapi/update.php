@@ -35,7 +35,7 @@ function roles_adminapi_update($args)
         (!isset($email)) ||
         (!isset($state))) {
         $msg = xarML('Invalid Parameter Count',
-                    join(', ',$invalid), 'admin', 'update', 'Users');
+                    'admin', 'update', 'Users');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;

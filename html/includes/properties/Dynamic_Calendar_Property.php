@@ -86,6 +86,11 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         }
         if (!isset($dateformat)) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
+            if ($this->validation == 'date') {
+                $dateformat = '%Y-%m-%d';
+            } else {
+                $dateformat = '%Y-%m-%d %H:%M:%S';
+            }
         }
 
         // include calendar javascript
