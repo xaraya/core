@@ -17,12 +17,13 @@
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);
 define('XARVAR_ALLOW', 2);
 
-define('XARVAR_GET_OR_POST', 0);
-define('XARVAR_GET_ONLY', 2);
-define('XARVAR_POST_ONLY', 4);
+define('XARVAR_GET_OR_POST',  0);
+define('XARVAR_GET_ONLY',     2);
+define('XARVAR_POST_ONLY',    4);
 
 define('XARVAR_NOT_REQUIRED', 64);
-define('XARVAR_DONT_SET', 128);
+define('XARVAR_DONT_SET',     128);
+define('XARVAR_DONT_REUSE',   256);
 
 /**
  * Initialise the variable handling options
@@ -65,17 +66,30 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
 /**
  * Fetches the $name variable from input variables and validates it by applying the $validation rules.
  *
+ * 1st try to use the variable provided, if this is not set (Or the XARVAR_DONT_REUSE flag is used)
+ * then it try to ge the variable from the input (POST/GET methods for now)
+ *
+ * Then tries to validate the variable thru xarVarValidate.  
+ *
  * See xarVarValidate for details about nature of $validation.
  * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
  * according to the validation applied.
+ *
  * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
  * correctly and the XARVAR_NOT_REQUIRED (see below) flag is set.
+ *
  * The $flag parameter is a bitmask between the following constants: XARVAR_GET_OR_POST, XARVAR_GET_ONLY,
  * XARVAR_POST_ONLY, XARVAR_NOT_REQUIRED.
+ *
  * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
  * to one of XARVAR_GET_ONLY or XARVAR_POST_ONLY.
+ *
  * You can force xarVarFetch function to not raise an exception when the variable is not present or invalid by setting
  * the $flag parameter to XARVAR_NOT_REQUIRED.
+ *
+ * You can force xarVarFetch not to reuse the variable by setting  
+ * the $flag parameter to XARVAR_DON_REUSE.
+ *
  * By default $flag is XARVAR_GET_OR_POST which means tha xarVarFetch will lookup both GET and POST parameters and
  * that if the variable is not present or doesn't validate correctly an exception will be raised.
  *
@@ -91,11 +105,13 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST)
 {
-    //<nuncanada> XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
-    // default value and it will work fine
-    // XARVAR_NOT_REQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
-    // What about cookie/env/request/server variables?
-    
+    /*
+     nuncanada: XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
+     default value and it will work fine
+     XARVAR_NOT_REQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
+     What about cookie/env/request/server variables?
+    */
+
     //XARVAR_DONT_SET
 
     assert('is_int($flags)');
@@ -106,7 +122,8 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
-    if (!isset($value)) {
+	//The FLAG here, stops xarVarFetch from reusing the variable if already present
+    if (!isset($value) || ($flag & XARVAR_DONT_REUSE)) {
         $inputValue = xarRequestGetVar($name, $allowOnlyMethod);
 
         if ($inputValue === NULL) {
@@ -231,7 +248,7 @@ function xarVarValidate($validation, &$subject) {
 
     if (function_exists($function_name)) {
         $return = $function_name($subject, $valParams);
-        //The helper functions already have a nicer interface, let´s change the main function too?
+        //The helper functions already have a nicer interface, let?s change the main function too?
         return $return;
     } else {
         // Raise an exception
@@ -555,7 +572,7 @@ function xarVarPrepForOS()
     
 
     // Return vars
-    // <nuncanada> I really dont like this kind of behaviour... It´s not consistent.
+    // <nuncanada> I really dont like this kind of behaviour... It?s not consistent.
     if (func_num_args() == 1) {
         return $args[0];
     } else {
