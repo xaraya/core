@@ -27,7 +27,7 @@
                 <ul class="xar-menu-item">
                     <xar:foreach in="$cats" value="$mod" key="$modname">
                         <li class="xar-menu-item">
-                            <a href="#$mod[0]['link']#">#$modname#</a> 
+                            <a href="#$mod[0]['link']#">#$mod['features']['label']#</a> 
                             <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                 <ul class="xar-menu-subitem">
                                     <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">

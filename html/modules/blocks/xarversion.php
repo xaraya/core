@@ -15,6 +15,7 @@
 
 $modversion['name'] = 'Blocks administration';
 $modversion['id'] = '13';
+$modversion['displayname'] = 'Blocks';
 $modversion['version'] = '1.0.0';
 $modversion['description'] = 'Administration of block instances and groups';
 $modversion['credits'] = '';

@@ -12,7 +12,7 @@
  * @author Jan Schrage, John Cox, Gregor Rothfuss
  */
 
-$modversion['name'] = 'roles';
+$modversion['name']           = 'Members';
 $modversion['id']             = '27';
 $modversion['version']        = '1.1.0';
 $modversion['description']    = 'User and Group registration and handling';

@@ -8,13 +8,14 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
 */
 
 $modversion['name'] = 'Dynamic Data';
 $modversion['id'] = '182';
+$modversion['displayname'] = 'Dynamic Data';
 $modversion['version'] = '1.2.0';
 $modversion['description'] = 'Dynamic Data Module';
 $modversion['credits'] = 'xardocs/credits.txt';

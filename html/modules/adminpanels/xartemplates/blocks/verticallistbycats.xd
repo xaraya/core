@@ -19,7 +19,7 @@
 			            </xar:comment>
 			            <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
 			                <li class="xar-menu-item-current">
-			                    <a name="activeitem" title="#$modname#">#$modname#</a>
+			                    <a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
 			                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -35,7 +35,7 @@
                             </li>
 			            <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
 			                <li class="xar-menu-item-current">
-			                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
+			                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
 			                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -51,7 +51,7 @@
                             </li>
 			            <xar:else />
 			                <li class="xar-menu-item">
-			                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$modname#</a>
+			                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
 			                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">

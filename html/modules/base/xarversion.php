@@ -6,7 +6,7 @@
  *
  * @package authentication
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage base
@@ -15,6 +15,7 @@
 */
 $modversion['name'] = 'Base';
 $modversion['id'] = '68';
+$modversion['displayname'] = 'Base';
 $modversion['version'] = '0.1.0';
 $modversion['description'] = 'Home Page';
 $modversion['credits'] = 'xardocs/credits.txt';

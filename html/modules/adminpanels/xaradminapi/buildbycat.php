@@ -8,7 +8,7 @@
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
@@ -55,7 +55,7 @@ function adminpanels_adminapi_buildbycat($args)
             // need xhtml compliant label for display
             $cat = 'Users &amp; Groups';
         }
-        
+
         $catdata[$cat] = array();
         // module urls
         while(!$result->EOF){
@@ -63,7 +63,7 @@ function adminpanels_adminapi_buildbycat($args)
             $result->MoveNext();
             $modinfo = xarModGetInfo(xarModGetIDFromName($mname));
             // new style admin links
-            $catdata[$cat][$modinfo['displayname']] = array();
+            $catdata[$cat][$mname]['displayname'] = $modinfo['displayname'];
         }
     }
     // return the data
