@@ -79,7 +79,7 @@ function xarCache_init($args)
         empty($_REQUEST['XARAYASID']) &&
     // we're dealing with a GET OR a HEAD request
         !empty($_SERVER['REQUEST_METHOD']) &&
-        $_SERVER['REQUEST_METHOD'] == ( 'GET' || 'HEAD' ) &&
+        ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') &&
     // the URL is one of the candidates for session-less caching
     // TODO: make compatible with IIS and https (cfr. xarServer.php)
         !empty($_SERVER['HTTP_HOST']) &&
