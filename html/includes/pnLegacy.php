@@ -38,6 +38,14 @@
 * pnModAPIFunc -> xarModAPIFunc
 * pnModAvailable -> xarModIsAvailable
 *
+* pnModDBInfoLoad -> xarModDBInfoLoad
+* pnModGetInfo -> xarModGetInfo
+* pnModGetUserMods -> xarModGetList(array('UserCapable' => 1))
+* pnModGetAdminMods -> xarModGetList(array('AdminCapable' => 1))
+* pnModCallHooks {code}
+* pnModRegisterHook {code}
+* pnModUnregisterHook {code}
+*
 * SESSION FUNCTIONS
 * pnSessionDelVar -> xarSessionDelVar
 * pnSessionSetVar -> xarSessionSetVar
@@ -46,28 +54,68 @@
 * CONFIG FUNCTIONS
 * pnConfigSetVar -> xarConfigSetVar
 * pnConfigGetVar -> xarConfigGetVar
+* pnConfigDelVar -> xarConfigDelVar
+*
+* SECURITY FUNCTIONS
+* pnSecAddSchema -> xarSecAddSchema
+* pnSecAuthAction -> xarSecAuthAction
+* pnSecConfirmAuthKey -> xarSecConfirmAuthKey
+* pnSecGenAuthKey -> xarSecGenAuthKey
+* pnSecGetAuthInfo -> xarSecGetAuthInfo
+* pnSecGetLevel -> xarSecGetLevel
 *
 * SERVER FUNCTIONS (URL URI)
 * pnGetBaseURI -> xarServerGetBaseURI
 * pnGetBaseURL -> xarServerGetBaseURL
 * pnRedirect -> xarResponseRedirect
-* pnIsRedirected -> xarResponseIsRedirected CHECK THIS ONE!
+* pnIsRedirected -> xarResponseIsRedirected CHECK THIS ONE!!! Where is this function?
+* pnLocalReferer -> xarResponseIsLocalReferer
 *
 * USER FUNCTIONS
 * pnUserLoggedIn -> xarUserIsLoggedIn
 * pnUserLogIn -> xarUserLogIn
 * pnUserLogOut -> xarUserLogOut
+* pnUserGetLang -> xarUserGetLang
+* pnUserGetVar -> xarUserGetVar
+* pnUserSetVar -> xarUserSetVar
+* pnUserGetVars -> xarExceptionSet('DEPRECATED_API')
+* pnUserDelVar -> xarExceptionSet('DEPRECATED_API')
+* pnUserGetAll($startnum = 1, $numitems = -1) -> xarExceptionSet('DEPRECATED_API') - invalid args!!!
 *
-* BLOCKS
+* BLOCKS FUNCTIONS
+* pnBlockGetInfo -> xarBlockGetInfo
+* pnBlockLoad -> xarBlockLoad
+* pnBlockLoadAll -> xarBlockLoadAll
+* pnBlockShow -> xarBlockShow
+* pnBlockVarsFromContent -> xarBlockVarsFromContent
+* pnBlockVarsToContent -> xarBlockVarsToContent
+* pnBlock_show -> xarBlock_render !!!
+* pnBlock_groupShow -> xarBlock_renderGroup !!!
 *
-* VAR
+* DATABASE FUNCTIONS
+* pnDBInit -> xarDBInit
+* pnDBGetConn -> xarDBGetConn
+* pnDBGetTables -> xarDBGetTables
+*
+* VAR FUNCTIONS
 * pnVarPrepForStore -> xarPrepForStore
 * pnVarPrepForOS -> xarPrepForOs
 * pnVarPrepForDisplay -> xarPrepForDisplay
 * pnVarPrepHTMLDisplay -> xarPrepHTMLDisplay
 * pnVarCleanFromInput -> xarCleanFromInput
-* pnVarCensor -> xarVarCeonsor CHECK THIS ONE!
+* pnVarCensor -> xarVarCeonsor CHECK THIS ONE!!!
+* pnVarValidate {code}
 *
+* MISC FUNCTIONS
+* pnInit -> xarCoreInit - !!!
+* pnMail {code}
+* pnGetStatusMsg -> xarGetStatusMsg
+* pnSecureInput -> xarSecureInput
+* add it as deprecated?
+*     pnUserGetCommentOptions
+*     pnUserGetCommentOptionsArray
+*     pnUserGetTheme
+*     pnThemeLoad
 *
 */
 /**
@@ -627,12 +675,12 @@ function pnInit()
     return xarCoreInit();
 }
 
-function pnModAPIFunc($modName, $modType, $funcName, $args = array())
+function pnModAPIFunc($modName, $modType='user', $funcName='main', $args = array())
 {
     return xarModAPIFunc($modName, $modType, $funcName, $args);
 }
 
-function pnModAPILoad($modName, $modType)
+function pnModAPILoad($modName, $modType='user')
 {
     return xarModAPILoad($modName, $modType);
 }
