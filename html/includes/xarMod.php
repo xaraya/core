@@ -522,7 +522,9 @@ function xarModGetInfo($modRegId, $type = 'module')
     $query = "SELECT xar_name,
                     xar_directory,
                     xar_mode,
-                    xar_version
+                    xar_version,
+                    xar_admin_capable,
+                    xar_user_capable
                FROM $the_table WHERE xar_regid = ?";
     $result =& $dbconn->Execute($query,array($modRegId));
     if (!$result) return;
@@ -536,7 +538,9 @@ function xarModGetInfo($modRegId, $type = 'module')
     list($modInfo['name'],
          $modInfo['directory'],
          $mode,
-         $modInfo['version']) = $result->fields;
+         $modInfo['version'],
+         $modInfo['admincapable'],
+         $modInfo['usercapable']) = $result->fields;
     $result->Close();
 
     $modInfo['regid'] = (int) $modRegId;
@@ -575,6 +579,8 @@ function xarModGetInfo($modRegId, $type = 'module')
         $modFileInfo['displaydescription'] = xarML('Unknown');
         $modFileInfo['author'] = xarML('Unknown');
         $modFileInfo['contact'] = xarML('Unknown');
+        $modFileInfo['admin'] = xarML('Unknown');
+        $modFileInfo['user'] = xarML('Unknown');
         $modFileInfo['dependency'] = array();
         $modFileInfo['extensions'] = array();
         $modFileInfo['xar_version'] = xarML('Unknown');
@@ -1059,7 +1065,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                 // Append any encoderArgs that weren't handled by the module specific short-url encoder
                 $unencodedArgs = xarModURLGetUnencodedArgs($encoderArgs, $path);
                 $path = xarModURLAppendParams( $unencodedArgs, $path );
-            
+
                 // We now have the short form of the URL.
                 // Further custom manipulation of the URL can be added here.
             }
@@ -1145,26 +1151,26 @@ function xarModURLGetUnencodedArgs ( $args, $path )
     // This first part is ripped from xarServer.php lines 413 through 434
     // ideally this code should be refactored from here and from xarServer.php so that
     // the two sets of code don't get out of sink
-    
+
     $modName = NULL;
     $modType = 'user';
-    $funcName = 'main';        
+    $funcName = 'main';
 
     preg_match_all('|/([^/]+)|i', $path, $matches);
     $params = $matches[1];
-    if (count($params) > 0) 
+    if (count($params) > 0)
     {
         $modName = $params[0];
         // if the second part is not admin, it's user by default
         if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
         else $modType = 'user';
         // Check if this is an alias for some other module
-        $modName = xarRequest__resolveModuleAlias($modName);        
+        $modName = xarRequest__resolveModuleAlias($modName);
         // Call the appropriate decode_shorturl function
-        if (   xarModIsAvailable($modName) 
-            && xarModGetVar($modName, 'SupportShortURLs') 
+        if (   xarModIsAvailable($modName)
+            && xarModGetVar($modName, 'SupportShortURLs')
             && xarModAPILoad($modName, $modType)
-            ) 
+            )
         {
             $loopHole = array($modName,$modType,$funcName);
         // don't throw exception on missing file or function anymore
@@ -1200,7 +1206,7 @@ function xarModURLAppendParams( $args, $path )
     if( count($args) > 0 )
     {
         $params = '';
-    
+
         // Select parameters to add to the path, ensuring each value is encoded correctly.
         foreach ($args as $k=>$v) {
             if (is_array($v)) {
@@ -1221,19 +1227,19 @@ function xarModURLAppendParams( $args, $path )
             array(',', '$', '!', '*', '\'', '(', ')', '[', ']'),
             $params
         );
-        
+
         // Check for Join character
         if( strpos($path,$join) === FALSE )
         {
             // Path does not already have any params, remove leading seperator
             $params = ltrim($params, $psep);
-            
+
             $path .= $join . $params;
         } else {
             $path .= $params;
         }
 
-        
+
     }
     return $path;
 }
