@@ -106,7 +106,7 @@ class ADODB_sqlite extends ADOConnection {
 	
 	function &MetaColumns($tab)
 	{
-	global $ADODB_FETCH_MODE;
+        global $ADODB_FETCH_MODE;
 	
 		$rs = $this->Execute("select * from $tab limit 1");
 		if (!$rs) return false;
@@ -160,6 +160,8 @@ class ADODB_sqlite extends ADOConnection {
 	// returns query ID if successful, otherwise false
 	function _query($sql,$inputarr=false)
 	{
+        // We could put a @ here, but it hides the real problem, yes, we still apparently
+        // hide exceptions in XARAYA, see also below
 		$rez = sqlite_query($sql,$this->_connectionID);
 
 		if (!$rez) {
