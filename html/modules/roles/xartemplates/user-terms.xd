@@ -50,7 +50,7 @@
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="responsible">#$curnum#<xar:mlstring>.&nbsp;Your Responsibilities and Registration Obligations</xar:mlstring></h3>
 	    <p><xar:mlstring>In order to use this web site, you must</xar:mlstring> 
-	    <a href="&xar-modurl-roles-user-main;"><xar:mlstring>register</xar:mlstring></a> <xar:mlstring>on our site, andagree to provide truthful information when requested.</xar:mlstring>
+	    <a href="&xar-modurl-roles-user-main;"><xar:mlstring>register</xar:mlstring></a> <xar:mlstring>on our site, and agree to provide truthful information when requested.</xar:mlstring>
 	    <xar:if condition="xarModGetVar('roles', 'minage') gt '0'" >
   	        <xar:mlstring>You must also be at least the age of </xar:mlstring> #$minagewords[$mina]# (#$mina#) or <xar:mlstring>older.</xar:mlstring>
         </xar:if>
@@ -78,7 +78,7 @@
 	        <li><xar:mlstring>impersonate or misrepresent your association with any person or entity, or forge or otherwise seek to conceal or misrepresent the origin of any Content provided by you;</xar:mlstring></li>
 	        <li><xar:mlstring>collect or harvest any data about other roles;</xar:mlstring></li>
 	        <li><xar:mlstring>provide or use this web site and any Content or service in any commercial manner or in any manner that would involve junk mail, spam, chain letters, pyramid schemes, or any other form of unauthorized advertising without our prior written consent;</xar:mlstring></li>
-	        <li><xar:mlstring>provide any Content that may give rise to our civil or criminal liability or which may consititue or be considered a violation of any local, national or international law, including but not limited to laws relating to copyright, trademark, patent, or trade secrets.</xar:mlstring></li>
+	        <li><xar:mlstring>provide any Content that may give rise to our civil or criminal liability or which may constitute or be considered a violation of any local, national or international law, including but not limited to laws relating to copyright, trademark, patent, or trade secrets.</xar:mlstring></li>
         </ul>
 	
 	<xar:set name="$curnum">++$curnum</xar:set>
