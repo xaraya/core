@@ -80,9 +80,11 @@
                     </a>
                 </th>
             </xar:if>
+            <xar:if condition="xarModGetVar('roles', 'usersendemails')">
                 <th style="width: 10%;">
                     <xar:mlstring>Email</xar:mlstring>
                 </th>
+            </xar:if>
             <xar:if condition="isset($properties) and count($properties) gt 0">
                 <!-- TODO: adapt % of column widths -->
                 <xar:foreach in="$properties" key="$key">
@@ -117,13 +119,15 @@
                         </xar:if>
                     </td>
                 </xar:if>
-                <td style="text-align: center;">
-                    <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
-                        <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
-                    <xar:else />
-                        <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
-                    </xar:if>
-                </td>
+                <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                    <td style="text-align: center;">
+                        <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
+                            <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
+                        <xar:else />
+                            <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
+                        </xar:if>
+                    </td>
+                </xar:if>
                 <xar:if condition="isset($properties) and count($properties) gt 0">
                     <xar:set name="uid">#$loop:item['uid']#</xar:set>
                     <xar:foreach in="$properties" key="$key">

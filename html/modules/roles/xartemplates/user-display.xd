@@ -3,15 +3,17 @@
 <div class="xar-mod-body">
     <div style="margin: auto;">
         <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-            <p>
-                <b><xar:mlstring>Email</xar:mlstring></b>:&nbsp;
-                <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
-                    <xar:ml>
-                        <xar:mlstring>Send an Email to #(1)</xar:mlstring>
-                        <xar:mlvar>#xarVarPrepForDisplay($name)#</xar:mlvar>
-                    </xar:ml>
-                </a>
-            </p>
+            <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                <p>
+                    <b><xar:mlstring>Email</xar:mlstring></b>:&nbsp;
+                    <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
+                        <xar:ml>
+                            <xar:mlstring>Send an Email to #(1)</xar:mlstring>
+                            <xar:mlvar>#xarVarPrepForDisplay($name)#</xar:mlvar>
+                        </xar:ml>
+                    </a>
+                </p>
+            </xar:if>
             <xar:if condition="xarModIsAvailable('dynamicdata')">
             <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
                 <xar:if condition="isset($properties) and count($properties) gt 0">
