@@ -1324,7 +1324,7 @@ function xarModIsAvailable($modName, $type = 'module')
         $modAvailableCache[$modBaseInfo['name']] = false;
 
         if ($modState == XARMOD_STATE_ACTIVE) {
-            $modAvailableCache[$modBaseInfo['name']] = true;
+            $modAvailableCache[$modName] = true;
         }
     }
     xarLogMessage("xarModIsAvailable: end $type:$modName");
