@@ -1,31 +1,31 @@
 <?php
-// File: $Id: s.xarinit.php 1.52 03/01/18 15:32:55+00:00 mikespub@sasquatch.pulpcontent.com $
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Paul Rosania
-// Purpose of file:  Initialisation functions for base
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Base initialization functions
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ * @subpackage installer
+ * @author Paul Rosania
+ */
 
 
+/**
+ * Load Table Maintainance API
+ */
+xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the base module
  *
- * @param none
- * @returns bool
+ * @return bool
  * @raise DATABASE_ERROR
  */
 function base_init()
 {
-    // Start the database
-    xarCoreInit(XARCORE_SYSTEM_ADODB);
-
-    //Load Table Maintainance API
-    xarDBLoadTableMaintenanceAPI();
-
     // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
@@ -64,8 +64,8 @@ function base_init()
     'xar_increment'   => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false),
     'xar_primary_key' => array('type'=>'integer','size'=>'tiny','default'=>'0','null'=>false)
     );
-//    xar_width,
-//    xar_decimals,
+    // xar_width,
+    // xar_decimals,
 
     $query = xarDBCreateTable($tablesTable,$fields);
 
@@ -156,11 +156,16 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // PRE-SETUP so that xarCoreInit will work
-    xarInstallConfigSetVar('Site.BL.DefaultTheme','installer');
-    xarInstallConfigSetVar('Site.BL.ThemesDirectory','themes');
-    xarInstallConfigSetVar('Site.BL.CacheTemplates','true');
-    xarCoreInit(XARCORE_SYSTEM_CONFIGURATION);
+    include_once 'includes/xarConfig.php';
+
+    // Start Configuration Unit
+    $systemArgs = array();
+    // change this loadlevel to the proper level
+    $whatToLoad = XARCORE_SYSTEM_ADODB;
+    xarConfig_init($systemArgs, $whatToLoad);
+    // Start Variable Utils
+    xarVar_init($systemArgs, $whatToLoad);
+
     /****************************************************************
     * Set System Configuration Variables
     *****************************************************************/
@@ -171,6 +176,9 @@ function base_init()
     /*****************************************************************
     * Set site configuration variables
     ******************************************************************/
+    xarConfigSetVar('Site.BL.DefaultTheme','installer');
+    xarConfigSetVar('Site.BL.ThemesDirectory','themes');
+    xarConfigSetVar('Site.BL.CacheTemplates','true');
     xarConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
     xarConfigSetVar('Site.Core.SiteName', 'Your Site Name');
     xarConfigSetVar('Site.Core.Slogan', 'Your slogan here');

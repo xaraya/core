@@ -32,6 +32,67 @@ include 'includes/xarCore.php';
 // Include extra functions
 include 'modules/installer/xarfunctions.php';
 
+//Comment this line to disable debugging
+xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
+//xarCoreActivateDebugger(0);
+
+// Basic systems alway loaded
+// {ML_dont_parse 'includes/xarLog.php'}
+include_once 'includes/xarLog.php';
+// {ML_dont_parse 'includes/xarEvt.php'}
+include_once 'includes/xarEvt.php';
+
+include_once 'includes/xarException.php';
+// {ML_dont_parse 'includes/xarVar.php'}
+include_once 'includes/xarVar.php';
+// {ML_dont_parse 'includes/xarServer.php'}
+include_once 'includes/xarServer.php';
+// {ML_dont_parse 'includes/xarMLS.php'}
+include_once 'includes/xarMLS.php';
+// {ML_dont_parse 'includes/xarTemplate.php'}
+include_once 'includes/xarTemplate.php';
+// {ML_dont_parse 'includes/xarTheme.php'}
+include_once 'includes/xarTheme.php';
+
+$whatToLoad = XARCORE_SYSTEM_NONE;
+
+// Start Exception Handling System
+$systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
+
+xarException_init($systemArgs, $whatToLoad);
+
+// Start Logging Facilities
+$systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
+                    'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
+                    'level'      => xarCore_getSystemVar('Log.LogLevel'));
+
+xarLog_init($systemArgs, $whatToLoad);
+
+// Start Event Messaging System
+$systemArgs = array('loadLevel' => $whatToLoad);
+xarEvt_init($systemArgs, $whatToLoad);
+
+// Start HTTP Protocol Server/Request/Response utilities
+$systemArgs = array('enableShortURLsSupport' =>false,
+                    'defaultModuleName' => 'installer',
+                    'defaultModuleType' => 'admin',
+                    'defaultModuleFunction' => 'main',
+                    'generateXMLURLs' => false);
+xarSerReqRes_init($systemArgs, $whatToLoad);
+
+// Start BlockLayout Template Engine
+$systemArgs = array('enableTemplatesCaching' => true,
+                    'themesBaseDirectory' => 'themes',
+                    'defaultThemeName' => 'installer');
+xarTpl_init($systemArgs, $whatToLoad);
+
+// Start Multi Language System
+$systemArgs = array('translationsBackend' => 'php',
+                    'MLSMode' => 'SINGLE',
+                    'defaultLocale' => 'en_US.iso-8859-1',
+                    'allowedLocales' => 'en_US.iso-8859-1');
+xarMLS_init($systemArgs, $whatToLoad);
+
 // Install Phases
 define ('XARINSTALL_PHASE_WELCOME',             '1');
 define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
@@ -50,8 +111,6 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
  */
 function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 {
-
-    xarCoreInit(XARCORE_SYSTEM_NONE); // Does not initialise any optional system
 
     // Make sure we can render a page
     xarTplSetPageTitle('Xaraya installer');
@@ -75,7 +134,6 @@ function xarInstallMain($phase = XARINSTALL_PHASE_WELCOME)
 
     // Make sure we should still be here
     if ($phase >= XARINSTALL_PHASE_BOOTSTRAP) {
-        xarCoreInit(XARCORE_SYSTEM_ALL);
         xarResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
 
