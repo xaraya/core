@@ -113,12 +113,13 @@ function base_menublock_display($blockinfo)
                     $usercontent = array();
                     $contentlines = explode("LINESPLIT", $vars['content']);
                     foreach ($contentlines as $contentline) {
-                        list($url, $title, $comment) = explode('|', $contentline);
+                        list($url, $title, $comment, $child) = explode('|', $contentline);
                         if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
                             $title = xarVarPrepForDisplay($title);
                             $url = xarVarPrepForDisplay($url);
                             $comment = xarVarPrepForDisplay($comment);
-                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment);
+                            $child = xarVarPrepForDisplay($child);
+                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child);
                         }
                     }
                 } else {
@@ -265,16 +266,23 @@ function base_menublock_modify($blockinfo)
     $c=1;
     $output .= "</table><table>";
     $output .= "<tr><td valign=\"top\" class=\"xar-title\">".xarML('Menu Content')
-    .":</td><td><table border=\"1\"><tr><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    .":</td></tr><tr><td><table border=\"1\"><tr><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
     .xarML('Title')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
     .xarML('URL')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
     .xarML('Description')."&nbsp;</b><span class=\"xar-sub\"><b>(".xarML('Optional').")</b></span></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    .xarML('Delete')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Insert Blank After')."</b></td></tr>";
+    .xarML('Delete')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Child')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Insert Blank After')."</b></td></tr>";
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
             $link = explode('|', $contentline);
-            $output .= "<tr><td valign=\"top\"><input type=\"text\" name=\"linkname[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[1]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkurl[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[0]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkdesc[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[2]) . "\" class=\"xar-normal\" /></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkdelete[$c]\" value=\"1\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkinsert[$c]\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
+            $output .= "<tr><td valign=\"top\"><input type=\"text\" name=\"linkname[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[1]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkurl[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[0]) . "\" class=\"xar-normal\"></td><td valign=\"top\"><input type=\"text\" name=\"linkdesc[$c]\" size=\"30\" maxlength=\"255\" value=\"" . xarVarPrepForDisplay($link[2]) . "\" class=\"xar-normal\" /></td><td valign=\"top\"><input type=\"checkbox\" name=\"linkdelete[$c]\" value=\"1\" class=\"xar-normal\"></td><td valign=\"top\">";
+
+            if (empty($link[3])){
+                $output .= "<input type=\"checkbox\" name=\"linkchild[$c]\" value=\"1\" class=\"xar-normal\" /></td>";
+            } else {
+                $output .= "<input type=\"checkbox\" name=\"linkchild[$c]\" value=\"1\" class=\"xar-normal\" checked /></td>";
+            }
+            $output .= "<td valign=\"top\"><input type=\"checkbox\" name=\"linkinsert[$c]\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
             $c++;
         }
     }
@@ -314,10 +322,10 @@ function base_menublock_insert($blockinfo)
     $content = array();
     $c = 1;
     if (isset($blockinfo['linkname'])) {
-        list($linkurl, $linkname, $linkdesc) = xarVarCleanFromInput('linkurl', 'linkname', 'linkdesc');
+        list($linkurl, $linkname, $linkdesc, $linkchild) = xarVarCleanFromInput('linkurl', 'linkname', 'linkdesc', 'linkchild');
         foreach ($blockinfo['linkname'] as $v) {
             if (!isset($blockinfo['linkdelete'][$c])) {
-                $content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]";
+                $content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
             if (isset($blockinfo['linkinsert'][$c])) {
                 $content[] = "||";
@@ -326,7 +334,7 @@ function base_menublock_insert($blockinfo)
         }
     }
     if ($blockinfo['new_linkname']) {
-       $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc');
+       $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc').'|'.xarVarCleanFromInput('new_linkchild');
     }
     $vars['content'] = implode("LINESPLIT", $content);
 

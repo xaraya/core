@@ -2,7 +2,9 @@
 <xar:if condition="!empty($usercontent)">
 	<xar:loop name="$usercontent">
 		<xar:if condition="empty($url)">
-			#$title#
+			<div class="xar-menu-section">#$title#</div>
+		<xar:elseif condition="!empty($child)" />
+			 &nbsp;&nbsp;<div class="xar-menu-subitem"><a href="#$url#" title="#$comment#">#$title#</a></div>
 		<xar:else />
 			<div class="xar-menu-item"><a href="#$url#" title="#$comment#">#$title#</a></div>
 		</xar:if>
