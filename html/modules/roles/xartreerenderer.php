@@ -18,6 +18,7 @@ class xarTreeRenderer {
     var $tree;
     var $treenode;
     var $treeitems;
+    var $levels;
 
     // some variables we'll need to hold drawing info
     var $html;
@@ -68,10 +69,15 @@ class xarTreeRenderer {
      * @throws none
      * @todo none
      */
-    function maketree($topuid='')
+    function maketree($topuid='',$levels=0)
     {
+        $this->levels = $levels;
         if ($topuid == '') $topuid = xarModGetVar('roles', 'everybody');
-        $this->tree = $this->addbranches(array('parent' => $this->roles->getgroup($topuid)));
+        $initialnode = array(
+                    'parent' => $this->roles->getgroup($topuid),
+                    'level' => 1
+                    );
+        $this->tree = $this->addbranches($initialnode);
     }
 
     /**
@@ -89,9 +95,15 @@ class xarTreeRenderer {
     function addbranches($node)
     {
         $object = $node['parent'];
+        $level = $node['level'];
         $node['children'] = array();
+        if ($level == $this->levels) return $node;
         foreach($this->roles->getsubgroups($object['uid']) as $subnode) {
-            $node['children'][] = $this->addbranches(array('parent' => $subnode));
+            $nextnode = array(
+                        'parent' => $subnode,
+                        'level' => $level + 1
+                        );
+            $node['children'][] = $this->addbranches($nextnode);
         }
         return $node;
     }
