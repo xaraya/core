@@ -15,10 +15,10 @@
 function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc, &$name)
 {
     //Added the '1' because that is what true is translated for afaik
-    if ($subject == 'true' || $subject == '1') {
+    if ($subject === true || $subject === 'true' || $subject == '1') {
         $subject = true;
     //Added '' becayse that is what false get translated for...
-    } elseif ($subject == 'false' || $subject == '') {
+    } elseif ($subject === false || $subject === 'false' || $subject == '0' || $subject == '') {
         $subject = false;
     } else {
         if ($name != '')
