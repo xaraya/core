@@ -1111,7 +1111,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         $instructionClass = 'xarTpl__XarApiInstructionNode';
         $instructionFile = XAR_NODES_LOCATION . 'instructions/api.php';
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
-            $instructionClass .= 'xarTpl__XarVarInstructionNode';
+            $instructionClass = 'xarTpl__XarVarInstructionNode';
             $instructionFile = XAR_NODES_LOCATION . 'instructions/var.php';
         } 
         if(!class_exists($instructionClass)) {
