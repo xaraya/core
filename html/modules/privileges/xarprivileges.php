@@ -1700,21 +1700,7 @@ function drawindent() {
     {
         $p1 = $this->normalize();
         $p2 = $mask->normalize();
-        if(count($p1) != count($p2)) {
-            if(count($p1) > count($p2)) {
-                $p = $p2;
-                $p2 = $mask->normalize(count($p1) - count($p2));
-            }
-            else {
-                $p = $p1;
-                $p1 = $this->normalize(count($p2) - count($p1));
-            }
-            if (count($p) != 5) {
-                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) #(4)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1));
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
-            }
-        }
+
         return array($p1,$p2);
     }
 
@@ -1779,7 +1765,30 @@ function drawindent() {
     {
         list($p1,$p2) = $this->canonical($mask);
         $match = true;
-        for ($i=1;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
+
+// match realm, module and component. bail if no match.
+        for ($i=1;$i<4;$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
+
+        if($match) {
+// now match the instances
+if($mask->getName() =="ViewArticles") echo $mask->present();
+            if(count($p1) != count($p2)) {
+                if(count($p1) > count($p2)) {
+                    $p = $p2;
+                    $p2 = $mask->normalize(count($p1) - count($p2));
+                }
+                else {
+                    $p = $p1;
+                    $p1 = $this->normalize(count($p2) - count($p1));
+                }
+                if (count($p) != 5) {
+                    $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
+                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                                   new SystemException($msg));
+                }
+            }
+            for ($i=4;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
+        }
         return $match;
     }
 
