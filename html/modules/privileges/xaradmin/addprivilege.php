@@ -19,7 +19,7 @@ function privileges_admin_addprivilege()
     //Why using this instead of an array??
     // you can do in the form => <input type=whatever name="array[]">
     // And you will get an array back...
-    while ( xarVarFetch('pinstance'.$i, $pinstance, NULL, XARVAR_NOT_REQUIRED) && $pinstance) {
+    while ( xarVarFetch('pinstance'.$i, 'isset', $pinstance, NULL, XARVAR_NOT_REQUIRED) && $pinstance) {
         $i++;
         $instance .= $pinstance . ":";
     }
