@@ -68,7 +68,30 @@ function xarLog_init($args, $whatElseIsGoingLoaded) {
         $GLOBALS['xarLog_loggers'][] = &$observer;
     }
 
+    // Subsystem initialized, register a shutdown function
+    register_shutdown_function('xarLog__shutdown_handler');
+
     return true;
+}
+
+/**
+ * Shutdown handler for the logging system
+ *
+ *
+ */
+function xarLog__shutdown_handler()
+{
+    // If the debugger was active, we can dispose it now.
+    if($GLOBALS['xarDebug'] & XARDBG_SQL) {
+        xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
+    }
+
+    if ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) {
+        $lmtime = explode(' ', microtime());
+        $endTime = $lmtime[1] + $lmtime[0];
+        $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
+        xarLogMessage("Response was served in $totalTime seconds.");
+    }
 }
 
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.install.php 1.156 03/05/11 21:03:58+02:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * Xaraya Installer
  *

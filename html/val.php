@@ -33,8 +33,6 @@ xarResponseRedirect(xarModURL('roles',
                                     'uname'   => $user['uname'],
                                     'phase'   => 'getvalidate')));
 
-// Kill the debugger
-xarCore_disposeDebugger();
 // done
 exit;
 ?>

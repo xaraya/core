@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarCore.php 1.85 03/06/30 13:34:13+01:00 miko@miko.homelinux.org $
+ * File: $Id$
  *
  * The Core
  *
@@ -429,6 +429,7 @@ function xarCore__assertHandler($script,$line,$code)
 {
     // Redirect the assertion to a system exception
     $msg = "ASSERTION FAILED: $script [$line] : $code";
+    // MrB: check this, this is core exceptions are a tiny bit higher
     xarExceptionSet(XAR_SYSTEM_EXCEPTION,'ASSERT_FAILURE',$msg);
 
 }
@@ -653,12 +654,6 @@ $errPage = <<<EOM
 </html>
 EOM;
     echo $errPage;
-    //If the log system hasnt been set up while the error ocurred, this will cause an warning.
-    //Can be fixed in the log system by setting up a isset( ...xar_Loggers)....
-    //Still i wonder if we are not assuming too much by having the Log system is already loaded here
-    //Probably a remanagement of these xarCore****Debugger functions is in order?
-    //Probably to xarDebug.php?
-//    xarCore_disposeDebugger();
     die();
 }
 

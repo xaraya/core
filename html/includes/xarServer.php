@@ -568,33 +568,16 @@ function xarResponseRedirect($redirectURL)
         $redirectURL = $baseurl.$redirectURL;
     }
 
-    // MrB: I don't think we need this #cls
-    //if ($GLOBALS['xarResponse_closeSession']) {
-    //    xarSession_close();
-    //}
-
-
     if (preg_match('/IIS/', xarServerGetVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServerGetVar('GATEWAY_INTERFACE')) ) {
       $header = "Refresh: 0; URL=$redirectURL";
     } else {
       $header = "Location: $redirectURL";
     }// if
 
+
+    // Start all over again
     header($header);
-
-    // As this is a redirect we can stop processing
-    // It gave some errors on some installations if we just returned true here.
-
-    // But this means we need to close the session and dispose of the debugger here too...
-    // Close the session
-    xarSession_close();
-
-    // Kill the debugger
-    xarCore_disposeDebugger();
-
     exit();
-
-    // return true;
 }
 
 /**

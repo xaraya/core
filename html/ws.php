@@ -132,5 +132,4 @@ function xarWebservicesMain() {
     }
 }
 xarWebservicesMain();
-xarCore_disposeDebugger();
 ?>

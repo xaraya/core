@@ -166,11 +166,5 @@ if (!xarMain()) {
         }
     }
 }
-
-// Close the session
-xarSession_close();
-
-// Kill the debugger
-xarCore_disposeDebugger();
-
+// All done, the shutdown handlers take care of the rest
 ?>

@@ -1181,8 +1181,6 @@ function CatchOutput() {
     ob_end_clean();
     xarTplSetPageTitle(xarML('Upgrade Xaraya'));
     echo xarTpl_renderPage($out);
-    xarSession_close();
     flush();
-    xarCore_disposeDebugger();
 }
 ?>
