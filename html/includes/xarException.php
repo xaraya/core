@@ -152,11 +152,6 @@ function xarCurrentErrorType()
     return $err->getMajor();
 }
 
-function isCoreException()
-{
-    global $CoreStack;
-    return $CoreStack->size() > 1;
-}
 /**
  * Gets the identifier of current error
  *
@@ -360,36 +355,6 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             $CoreStack->push($exception);
             // render this now! go!
             return;
-/*            else {
-                $exception =& $CoreStack->peek();
-                if ($exception->getMajor() != XAR_NO_EXCEPTION) {
-                    $id = xarExceptionId();
-                    $value = xarExceptionValue();
-                    if ($exception->getID() == 'ErrorCollection') {
-                        // add an exception to error collection
-                        $thisexcp = new SystemException($msg);
-                        $thisexcp->setID('PHP_ERROR');
-                        $exception->exceptions[] = $thisexcp;
-                    } else {
-                        // raise an error collection
-                        $exc = new ErrorCollection();
-                        $thisexcp = $exception;
-                        $exc->exceptions[] = $thisexcp;
-                        $thisexcp = new SystemException($msg);
-                        $thisexcp->setID('PHP_ERROR');
-                        $exception->exceptions[] = $thisexcp;
-                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
-                    }
-                } else {
-                    // raise an error collection
-                    $exc = new ErrorCollection();
-                    $thisexcp = new SystemException($msg);
-                    $thisexcp->setID('PHP_ERROR');
-                    $exc->exceptions[] = $thisexcp;
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
-                }
-            }
-            */
             break;
         default:
             echo "<b>FATAL</b> $errorString<br />\n";
@@ -473,121 +438,10 @@ function xarCoreExceptionFree()
     global $CoreStack;
     $CoreStack->initialize();
 }
-function xarCoreExceptionSet($major, $errorID, $value = NULL)
+function isCoreException()
 {
     global $CoreStack;
-    if ($major != XAR_NO_EXCEPTION &&
-        $major != XAR_USER_EXCEPTION &&
-        $major != XAR_SYSTEM_EXCEPTION &&
-        $major != XAR_SYSTEM_MESSAGE) {
-            xarCore_die('Attempting to set an exception with an invalid major value: ' . $major);
-    }
-
-    //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    if (!error_reporting()) {
-        return;
-    }
-
-    $stack = xarException__backTrace();
-    if (!is_object($value)) {
-        // The exception passed in is just a msg or an identifier, try to construct
-        // the object here.
-        if (is_string($value)) {
-            // A msg was passed in, use that
-            $value = $value; // possibly redundant
-        } else {
-            if ($major == XAR_SYSTEM_EXCEPTION) {
-                $value = '';
-            } else {
-                $value = "No further information available.";
-            }
-        }
-
-        if ($major == XAR_SYSTEM_EXCEPTION) {
-            $obj = new SystemException($value);
-        } elseif ($major == XAR_USER_EXCEPTION){
-            $obj = new DefaultUserException($value);
-        } elseif ($major == XAR_SYSTEM_MESSAGE){
-            $obj = new UserMessage($value);
-        } else {
-            $obj = new NoException($value);
-        }
-
-    }
-    else {
-        $obj = $value;
-    }
-
-    // At this point we have a nice exception object
-    // Now add whatever properties are still missing
-    $obj->setID($errorID);
-    $obj->setStack($stack);
-    $obj->major = $major;
-
-    // Stick the object on the exception stack
-    $CoreStack->push($obj);
-
-    // If the XARDBG_EXCEPTIONS flag is set we log every raised exception.
-    // This can be useful in debugging since EHS is not so perfect as a native
-    // EHS could be (read damned PHP language :).
-    if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
-        xarLogMessage('The following exception is logged because the XARDBG_EXCEPTIONS flag is set.');
-    // TODO: remove again once xarLogException works
-        xarLogMessage($obj->toString(), XARLOG_LEVEL_ERROR);
-        //xarLogException();
-    }
+    return $CoreStack->size() > 1;
 }
 
-function xarCoreExceptionRender($format)
-{
-
-    global $CoreStack;
-
-    while (!$CoreStack->isempty()) {
-
-        $error = $CoreStack->pop();
-
-        switch ($error->getMajor()) {
-            case XAR_SYSTEM_EXCEPTION:
-                $type = 'System Error';
-                $template = "systemerror";
-                break;
-            case XAR_USER_EXCEPTION:
-                $type = 'User Error';
-                $template = "usererror";
-                break;
-            case XAR_SYSTEM_MESSAGE:
-                $type = 'System Message';
-                $template = "systeminfo";
-                break;
-            case XAR_NO_EXCEPTION:
-                continue 2;
-            default:
-                continue 2;
-        }
-
-        if ($format == 'html') {
-            include_once "includes/exceptions/htmlexceptionrendering.class.php";
-            $rendering = new HTMLExceptionRendering($error);
-        }
-        else {
-            include_once "includes/exceptions/textexceptionrendering.class.php";
-            $rendering = new TextExceptionRendering($error);
-        }
-
-        $data = array();
-        $data['type'] = $type;
-        $data['title'] = $rendering->getTitle();
-        $data['short'] = $rendering->getShort();
-        $data['long'] = $rendering->getLong();
-        $data['hint'] = $rendering->getHint();
-        $data['stack'] = $rendering->getStack();
-    }
-    if ($format == 'html') {
-        return  xarTplModule('base','message', $template, $data);
-    }
-    else {
-        return $data;
-    }
-}
 ?>
