@@ -27,24 +27,7 @@ Tip : empty label -> delete field for all items
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
         <td><input type="text" name="dd_label[&xar-var-id;]" size="15" value="&xar-var-label;"></td>
-        <td><select name="dd_type[&xar-var-id;]">
-                <xar:if condition="$type eq 1">
-                    <option value="1" selected>option 1
-                <xar:else />
-                    <option value="1">option 1
-                </xar:if>
-                <xar:if condition="$type eq 2">
-                    <option value="2" selected>option 2
-                <xar:else />
-                    <option value="2">option 2
-                </xar:if>
-                <xar:if condition="$type eq 3">
-                    <option value="3" selected>option 3
-                <xar:else />
-                    <option value="3">option 3
-                </xar:if>
-            </select>
-        </td>
+        <td><xar:articles-field type="fieldtype" name="dd_type['.$id.']" value="$type" numeric_id="yes" /></td>
         <td><input type="text" name="dd_default[&xar-var-id;]" size="15" value="&xar-var-default;"></td>
         <td><input type="text" name="dd_validation[&xar-var-id;]" size="15" value="&xar-var-validation;"></td>
     </tr>
@@ -53,12 +36,7 @@ Tip : empty label -> delete field for all items
     <tr align="left" valign="middle">
         <td>&xar-var-labels.new;</td>
         <td><input type="text" name="dd_label[0]" size="15"></td>
-        <td><select name="dd_type[0]">
-                <option value="1">option 1
-                <option value="2">option 2
-                <option value="3">option 3
-            </select>
-        </td>
+        <td><xar:articles-field type="fieldtype" name="dd_type[0]" value="" numeric_id="yes" /></td>
         <td><input type="text" name="dd_default[0]" size="15"></td>
         <td><input type="text" name="dd_validation[0]" size="15"></td>
     </tr>

@@ -1,10 +1,7 @@
-<table width="100%" border="1" cellspacing="0" cellpadding="4">
 <xar:loop name="$fields">
     <tr align="left" valign="middle">
         <td>&xar-var-label;</td>
-        <td><input type="text" name="dd_&xar-var-id;" value="&xar-var-default;"></td>
-        <td>(&xar-var-type;)</td>
+        <td><xar:articles-field type="$type" name="dd_'.$id.'" value="$default" numeric_id="yes" /></td>
     </tr>
 </xar:loop>
-</table>
 
