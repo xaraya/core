@@ -207,6 +207,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         // Start the code generation
         $this->code = '';
         $this->code = $this->generateNode($documentTree);
+        // FIXME: due to the initialization above this will never return
         if (!isset($this->code)) return; // throw back
 
         if (!$this->isPHPBlock()) {
@@ -327,7 +328,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
     var $nodesFactory;
-
     var $tagNamesStack;
     var $tagIds;
     var $tagRootSeen;
@@ -344,21 +344,20 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parse(&$templateSource)
     {
-        //xarLogVariable('templateSource', $templateSource, XARLOG_LEVEL_ERROR);
-        // <garrett> make sure we only have to deal with \n as CR tokens, replace \r\n and \r
-        // <MrB> : Macintosh: \r
-        //         Unix     :  \n
-        //         Windows  :  \r\n
+
+        // <make sure we only have to deal with \n as CR tokens, replace \r\n and \r
+        // Macintosh: \r, Unix: \n, Windows: \r\n
         $this->templateSource = str_replace(array('\r\n','\r'),'\n',$templateSource);
 
         // Initializing parse trace variables
         $this->line = 1; $this->column = 1; $this->pos = 0; $this->lineText = '';
         $this->tagNamesStack = array();  $this->tagIds = array(); $this->tagRootSeen=false;
 
+        // Initializing the containers for template variables and the doctree
         $this->tplVars =& new xarTpl__TemplateVariables();
-
         $documentTree = $this->nodesFactory->createDocumentNode($this);
 
+        // Parse the document tree
         $res = $this->parseNode($documentTree);
         if (!isset($res)) return; // throw back
 
@@ -468,9 +467,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                         // Add text to parent, if there is any
                         // Situation: [...text...]<xar:...
-                        if (trim($text) != '') {
+                        // NOTE: WHITESPACE EATER HERE
+                        $trimmer='xmltrim';
+                        if($parent->tagName == 'set' || $parent->tagName == 'ml') $trimmer='trim';
+                        if ($trimmer($text) != '') {
                             if ($parent->hasText()) {
-                                $children[] = $this->nodesFactory->createTextNode(xmltrim($text), $this);
+                                $children[] = $this->nodesFactory->createTextNode($trimmer($text), $this);
                             } else {
                                 $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
@@ -3258,11 +3260,14 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 */
 function xmltrim($input='')
 {
-    //return $input; // If we wanna revert back to the old situation, uncomment this line
+    // Remember the first char
     // Let's first determine if there is space at all.
     $hasleftspace = (strlen(ltrim($input)) != strlen($input));
     $hasrightspace = (strlen(rtrim($input)) != strlen($input));
-
+    if($hasleftspace && $hasrightspace && trim($input) =='') {
+        // There was more than one space, but only space, only return the first
+        return substr($input,0,1);
+    }
     $leftspace  = $hasleftspace  ? ' ' : '';
     $rightspace = $hasrightspace ? ' ' : '';
     $input = $leftspace . trim($input) . $rightspace;
