@@ -514,6 +514,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             return;
                         }
 
+                        // Create the node we parsed.
                         $node = $this->nodesFactory->createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                         if (!isset($node)) return; // throw back
                         
@@ -3220,6 +3221,7 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
  * @access private
  * @todo improve the flexibility for registered tags/foreign tags
  * @todo add the possibility to be 'relaxed', just ignoring unknown tags?
+ * @todo the method exists are probably paranoid, check that
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
@@ -3231,23 +3233,82 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
     }
     
+    // FIXME: Add the renderbegintag and renderendtag methods here, so custom tags can also support this
     function render()
     {
         assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
+        // FIXME: should we process the expressions here for attributes?
         // let xarTemplate worry about calling the right function :)
         return $this->tagobject->callHandler($this->attributes);
     }
 
     function isAssignable()
     {
-        return false;
+        if(method_exists($this->tagobject,'isAssignable')) {
+            return $this->tagobject->isAssignable();
+        } else {
+            // Return the default
+            return false;
+        }
     }
 
     function isPHPCode()
     {
-        return true;
+        if(method_exists($this->tagobject,'isPHPCode')) {
+            return $this->tagobject->isPHPCode();
+        } else {
+            // Return the default
+            return true;
+        }
     }
+
+    function hasText() 
+    {
+        if(method_exists($this->tagobject,'hasText')) {
+            return $this->tagobject->hasText();
+        } else {
+            // Return the default
+            return false;
+        }
+    }
+    
+    function needAssignment()
+    {
+        if(method_exists($this->tagobject,'needAssignment')) {
+            return $this->tagobject->needAssignement();
+        } else {
+            return false;
+        }
+    }
+
+    function hasChildren()
+    {
+        if(method_exists($this->tagobject,'hasChildren')) {
+            return $this->tagobject->hasChildren();
+        } else {
+            return false;
+        }
+    }
+
+    function needParameter()
+    {
+        if(method_exists($this->tagobject,'needParameter')) {
+            return $this->tagobject->needParameter();
+        } else {
+            return false;
+        }
+    }
+
+    function needExceptionsControl() 
+    {
+        if(method_exists($this->tagobject,'needExceptionsControl')) {
+            return $this->tagobject->needExceptionsControl();
+        } else {
+            return false;
+        }
+    }
+        
 }
 
 /**
