@@ -781,8 +781,11 @@ function xarVar__getAllowedTags($level)
  * Get a public variable
  *
  * @access private
- * @param modName The name of the module
+ * @param modName The name of the module or theme
  * @param name The name of the variable
+ * @param uid The user id for variable
+ * @param prep determines the prepping for the variable
+ * @param type determines type of variable to process
  * @return mixed The value of the variable or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
@@ -803,7 +806,16 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             default:
             if (xarVarIsCached('Mod.Variables.' . $modName, $name)) {
                 $value = xarVarGetCached('Mod.Variables.' . $modName, $name);
-
+                if ($value === '*!*MiSSiNG*!*') {
+                    return;
+                } else {
+                    if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                        $value = xarVarPrepForDisplay($value);
+                    } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                        $value = xarVarPrepHTMLDisplay($value);
+                    }
+                    return $value;
+                }
             } elseif (xarVarIsCached('Mod.GetVarsByModule', $modName)) {
                 // we already got everything for this module, and didn't find it above
                 return;
@@ -842,6 +854,12 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                     }
                     return $value;
                 }
+            } elseif (xarVarIsCached('Theme.GetVarsByTheme', $modName)) {
+                // we already got everything for this module, and didn't find it above
+                return;
+            } elseif (xarVarIsCached('Theme.GetVarsByName', $name)) {
+                // we already got everything for this name, and didn't find it above
+                return;
             }
 
             break;
@@ -1008,6 +1026,282 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     }
 
     return $value;
+}
+
+/**
+ * Set a module variable
+ *
+ * @access public
+ * @param modName The name of the module
+ * @param name The name of the variable
+ * @param value The value of the variable
+ * @return bool true on success
+ * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo  We could delete the user vars for the module with the new value to save space?
+ */
+function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $uid = NULL, $type = 'modvar')
+{
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+
+    switch(strtolower($type)) {
+        case 'modvar':
+        case 'moduservar':
+            default:
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) return; // throw back
+            break;
+        case 'themevar':
+            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            if (!isset($modBaseInfo)) return; // throw back
+            break;
+        case 'configvar':
+            break;
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    switch(strtolower($type)) {
+        case 'modvar':
+            default:
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_varstable = $tables['system/module_vars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_varstable = $tables['site/module_vars'];
+            }
+
+            xarModDelVar($modName, $name);
+
+            $seqId = $dbconn->GenId($module_varstable);
+            $query = "INSERT INTO $module_varstable
+                         (xar_id,
+                          xar_modid,
+                          xar_name,
+                          xar_value)
+                      VALUES
+                         ('$seqId',
+                          '" . xarVarPrepForStore($modBaseInfo['systemid']) . "',
+                          '" . xarVarPrepForStore($name) . "',
+                          '" . xarVarPrepForStore($value) . "');";
+
+            break;
+        case 'moduservar':
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_uservarstable = $tables['system/module_uservars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_uservarstable = $tables['site/module_uservars'];
+            }
+
+            // Get the default setting to compare the value against.
+            $modsetting = xarModGetVar($modName, $name);
+
+            // We need the variable id
+            unset($modvarid);
+            $modvarid = xarModGetVarId($modName, $name);
+            if(!$modvarid) return;
+
+            // First delete it.
+            xarModDelUserVar($modName,$name,$uid);
+
+            // Only store setting if different from global setting
+            if ($value != $modsetting) {
+                $query = "INSERT INTO $module_uservarstable
+                            (xar_mvid, 
+                             xar_uid, 
+                             xar_value)
+                        VALUES
+                         ('" . xarVarPrepForStore($modvarid) . "',
+                          '" . xarVarPrepForStore($uid) . "',
+                          '" . xarVarPrepForStore($value) . "');";
+            }
+            break;
+        case 'themevar':
+            // Takes the right table basing on theme mode
+            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+                $theme_varsTable = $tables['theme_vars'];
+            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+                $theme_varsTable = $tables['site/theme_vars'];
+            }
+
+            xarThemeDelVar($modName, $name);
+
+            $seqId = $dbconn->GenId($theme_varsTable);
+            $query = "INSERT INTO $theme_varsTable
+                         (xar_id,
+                          xar_themename,
+                          xar_name,
+                          xar_prime,
+                          xar_value,
+                          xar_description)
+                      VALUES
+                         ('$seqId',
+                          '" . xarVarPrepForStore($themeName) . "',
+                          '" . xarVarPrepForStore($name) . "',
+                          '" . xarVarPrepForStore($prime) . "',
+                          '" . xarVarPrepForStore($value) . "',
+                          '" . xarVarPrepForStore($description) . "');";
+
+            break;
+        case 'configvar':
+
+            xarVar__DelVarByAlias($modname = NULL, $name, $uid = NULL, $type = 'configvar');
+
+            $config_varsTable = $tables['config_vars'];
+
+            //Here we serialize the configuration variables
+            //so they can effectively contain more than one value
+            $value = serialize($value);
+
+            //Insert
+            $seqId = $dbconn->GenId($config_varsTable);
+            $query = "INSERT INTO $config_varsTable
+                      (xar_id,
+                       xar_name,
+                       xar_value)
+                      VALUES ('$seqId',
+                              '" . xarVarPrepForStore($name) . "',
+                              '" . xarVarPrepForStore($value). "')";
+
+            break;
+    }
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    switch(strtolower($type)) {
+        case 'modvar':
+            default:
+            xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+            break;
+        case 'moduservar':
+            $cachename = $uid . $name;
+            xarVarSetCached('ModUser.Variables.' . $modName, $cachename, $value);
+            break;
+        case 'themevar':
+            xarVarSetCached('Theme.Variables.' . $modName, $name, $value);
+            break;
+        case 'configvar':
+                xarVarSetCached('Config.Variables', $name, $value);
+            break;
+    }
+
+    return true;
+}
+
+/**
+ * Delete a public variable
+ *
+ * @access private
+ * @param modName The name of the module
+ * @param name The name of the variable
+ * @return bool true on success
+ * @raise DATABASE_ERROR, BAD_PARAM
+ * @todo Add caching for user variables?
+ */
+function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'modvar')
+{
+    if (empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        return;
+    }
+
+    switch(strtolower($type)) {
+        case 'modvar':
+        case 'moduservar':
+            default:
+            $modBaseInfo = xarMod_getBaseInfo($modName);
+            if (!isset($modBaseInfo)) return; // throw back
+            break;
+        case 'themevar':
+            $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
+            if (!isset($modBaseInfo)) return; // throw back
+            break;
+        case 'configvar':
+            break;
+    }
+
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
+
+    switch(strtolower($type)) {
+        case 'moduservar':
+            default:
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_uservarstable = $tables['system/module_uservars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_uservarstable = $tables['site/module_uservars'];
+            }
+
+            // Delete the user variables first
+            $modvarid = xarModGetVarId($modName, $name);
+            if(!$modvarid) return;
+
+            // MrB: we could use xarModDelUserVar in a loop here, but this is
+            //      much faster.
+            $query = "DELETE FROM $module_uservarstable
+                      WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
+            $result =& $dbconn->Execute($query);
+            if(!$result) return;
+
+            continue;
+        case 'modvar':
+            // Takes the right table basing on module mode
+            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+                $module_varstable = $tables['system/module_vars'];
+            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+                $module_varstable = $tables['site/module_vars'];
+            }
+            // Now delete the module var
+            $query = "DELETE FROM $module_varstable
+                      WHERE xar_modid = '" . xarVarPrepForStore($modBaseInfo['systemid']) . "'
+                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+            break;
+        case 'themevar':
+            // Takes the right table basing on theme mode
+            if ($themeBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
+                $theme_varsTable = $tables['system/theme_vars'];
+            } elseif ($themeBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
+                $theme_varsTable = $tables['site/theme_vars'];
+            }
+
+            $query = "DELETE FROM $theme_varsTable
+                      WHERE xar_themename = '" . xarVarPrepForStore($themeName) . "'
+                      AND xar_name = '" . xarVarPrepForStore($name) . "'";
+            break;
+        case 'configvar':
+            $config_varsTable = $tables['config_vars'];
+            $query = "DELETE FROM $config_varsTable
+                      WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
+            break;
+    }
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    switch(strtolower($type)) {
+        case 'modvar':
+            default:
+                xarVarDelCached('Mod.Variables.' . $modName, $name);
+            break;
+        case 'moduservar':
+                $cachename = $uid . $name;
+                xarVarDelCached('ModUser.Variables.' . $modName, $cachename);
+            break;
+        case 'themevar':
+                xarVarDelCached('Theme.Variables.' . $modName, $name);
+            break;
+        case 'configvar':
+                xarVarDelCached('Config.Variables.', $name);
+            break;
+    }
+
+    return true;
 }
 
 ?>
