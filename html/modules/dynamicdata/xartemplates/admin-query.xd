@@ -1,13 +1,13 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Query</xar:mlstring> #$label#</h2><br />
 <div style="margin: auto;">
-<form method="post">
+<form method="post" action="#xarModURL('dynamicdata','admin','query')#">
 <table border="0" cellpadding="5">
 <tr>
   <td>
     <label for="itemid"><xar:mlstring>Object:</xar:mlstring></label>
   </td>
-  <td colspan="#$numfields#">
+  <td>
     <input type="hidden" name="olditemid" value="#$olditemid#"/>
     <select name="itemid" id="itemid" onchange="submit()">
       <option value=""></option>
@@ -20,12 +20,34 @@
     </xar:foreach>
     </select>
   </td>
+  <td>
+    <label for="query"><xar:mlstring>Query:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="hidden" name="oldquery" value="#$oldquery#"/>
+    <select name="query" id="query" onchange="submit()">
+      <option value=""></option>
+    <xar:foreach in="$queries" value="$item">
+      <xar:if condition="!empty($query) and $query eq $item">
+        <option value="#$item#" selected="selected">#$item#</option>
+      <xar:else/>
+        <option value="#$item#">#$item#</option>
+      </xar:if>
+    </xar:foreach>
+    </select>
+  </td>
+  <td>
+    <label for="numitems"><xar:mlstring>Items:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" />
+  </td>
 </tr>
 <tr>
   <td>
     <label for="table"><xar:mlstring>Table:</xar:mlstring></label>
   </td>
-  <td colspan="#$numfields#">
+  <td>
     <input type="hidden" name="oldtable" value="#$oldtable#"/>
     <select name="table" id="table" onchange="submit()">
       <option value=""></option>
@@ -38,7 +60,21 @@
     </xar:foreach>
     </select>
   </td>
+  <td>
+    <label for="newquery"><xar:mlstring>Save As:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="text" name="newquery" id="newquery" value="#$newquery#" size="20" />
+  </td>
+  <td>
+    <label for="startnum"><xar:mlstring>Start:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="text" name="startnum" id="startnum" value="#$startnum#" size="5" />
+  </td>
 </tr>
+</table>
+<table border="0" cellpadding="5">
 <xar:if condition="!empty($properties)">
 <tr>
   <td>
@@ -105,10 +141,6 @@
     </select>
   </td>
   </xar:foreach>
-</tr>
-<tr>
-  <td><label for="numitems"><xar:mlstring>Items:</xar:mlstring></label></td>
-  <td colspan="#$numfields#"><input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" /></td>
 </tr>
 </xar:if>
 <tr>
