@@ -250,7 +250,7 @@ function xarErrorFree()
 function xarErrorHandled()
 {
 //    if (xarCurrentErrorType() == XAR_NO_EXCEPTION) {
-//            xarCore_die('xarExceptionHandled: Invalid major value: XAR_NO_EXCEPTION');
+//            xarCore_die('xarErrorHandled: Invalid major value: XAR_NO_EXCEPTION');
 //    }
 
     global $ErrorStack;
