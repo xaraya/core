@@ -61,6 +61,9 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
+    
+    // Bug 1109: xarTpl_JavaScript deprecates xarTpl_{head|body}JavaScript
+    $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
     $GLOBALS['xarTpl_headJavaScript'] = '';
     $GLOBALS['xarTpl_bodyJavaScript'] = '';
    
@@ -246,17 +249,64 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css')
  * @param position string
  * @param owner string
  * @param code string
+ * @deprec ?
  * @return bool
  */ 
 function xarTplAddJavaScriptCode($position, $owner, $code)
 {
     assert('$position == "head" || $position == "body"');
-    if ($position == 'head') {
-        $GLOBALS['xarTpl_headJavaScript'] .= "\n<!--- JavaScript code from {$owner} ---> \n{$code} \n";
+    return xarTplAddJavaScript($position, 'code', "<!--- JavaScript code from {$owner} --->\n" . $code);
+}
+
+/**
+ * Add JavaScript code or links to template output
+ * 
+ * @access public
+ * @global xarTpl_JavaScript array
+ * @param position string
+ * @param type string
+ * @param data string
+ * @param index string optional
+ * @return bool
+ */ 
+function xarTplAddJavaScript($position, $type, $data, $index = '')
+{
+    if (empty($position) || empty($type) || empty($data)) {return;}
+    if (empty($index)) {
+        $GLOBALS['xarTpl_JavaScript'][$position][] = array('type'=>$type, 'data'=>$data);
     } else {
-        $GLOBALS['xarTpl_bodyJavaScript'] .= "\n<!--- JavaScript code from {$owner}---> \n{$code} \n";
+        $GLOBALS['xarTpl_JavaScript'][$position][$index] = array('type'=>$type, 'data'=>$data);
     }
+
+    // Legacy support allows unconverted themes to work as before - remove this
+    // with xarTplAddJavaScriptCode().
+    if ($position == 'head' && $type == 'code') {
+        $GLOBALS['xarTpl_headJavaScript'] .= $data . "\n";
+    }
+
+    if ($position == 'body' && $type == 'code') {
+        $GLOBALS['xarTpl_bodyJavaScript'] .= $data . "\n";
+    }
+
     return true;
+}
+
+/**
+ * Get JavaScript code or links queued for template output
+ * 
+ * @access public
+ * @global xarTpl_JavaScript array
+ * @param position string optional
+ * @param index string optional
+ * @return array
+ */ 
+function xarTplGetJavaScript($position = '', $index = '')
+{
+    if (empty($position)) {return $GLOBALS['xarTpl_JavaScript'];}
+    if (!isset($GLOBALS['xarTpl_JavaScript'][$position])) {return;}
+    if (empty($index)) {return $GLOBALS['xarTpl_JavaScript'][$position];}
+    if (!isset($GLOBALS['xarTpl_JavaScript'][$position][$index])) {return;}
+    return $GLOBALS['xarTpl_JavaScript'][$position][$index];
 }
 
 /**
@@ -566,11 +616,15 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         $GLOBALS['xarTpl_bodyJavaScript'] = "\n<script type=\"text/javascript\">\n{$GLOBALS['xarTpl_bodyJavaScript']}\n</script>";
     }
 
-    $tplData = array('_bl_mainModuleOutput'     => $mainModuleOutput,
-                     '_bl_page_title'           => $GLOBALS['xarTpl_pageTitle'],
-                     '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
-                     '_bl_head_javascript'      => $GLOBALS['xarTpl_headJavaScript'],
-                     '_bl_body_javascript'      => $GLOBALS['xarTpl_bodyJavaScript']);
+    $tplData = array(
+        '_bl_mainModuleOutput'     => $mainModuleOutput,
+        '_bl_page_title'           => $GLOBALS['xarTpl_pageTitle'],
+        '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
+        // Bug 1109: _bl_javascript replaces _bl_{head|body}_javascript eventually.
+        '_bl_javascript'           => $GLOBALS['xarTpl_JavaScript'],
+        '_bl_head_javascript'      => $GLOBALS['xarTpl_headJavaScript'],
+        '_bl_body_javascript'      => $GLOBALS['xarTpl_bodyJavaScript']
+    );
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }

@@ -185,6 +185,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             // Register special variables for templates of type page
             $resolver->push('tpl:pageTitle', '$_bl_page_title');
             $resolver->push('tpl:additionalStyles', '$_bl_additional_styles');
+            // Bug 1109: tpl:JavaScript is replacing tpl:{head|body}JavaScript
+            $resolver->push('tpl:JavaScript', '$_bl_javascript');
             $resolver->push('tpl:headJavaScript', '$_bl_head_javascript');
             $resolver->push('tpl:bodyJavaScript', '$_bl_body_javascript');
         }
