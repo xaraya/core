@@ -21,7 +21,7 @@
 $modversion['name'] = 'Dynamic Data';
 $modversion['id'] = '182';
 $modversion['displayname'] = xarML('Dynamic Data');
-$modversion['version'] = '1.2.0';
+$modversion['version'] = '1.2.1';
 $modversion['description'] = 'Dynamic Data Module';
 $modversion['displaydescription'] = xarML('Dynamic Data Module');
 $modversion['credits'] = 'xardocs/credits.txt';
