@@ -20,7 +20,7 @@ function initializeSetup() {
 
     xarMakeGroup('Everybody');
 	xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
-	xarMakeUser('Admin','admin','admin@xaraya.com','xaraya');
+	xarMakeUser('Admin','Admin','admin@xaraya.com','password');
     xarMakeGroup('Administrators');
     xarMakeGroup('Oversight');
 	xarMakeUser('Overseer','overseer','overseer@xaraya.com');

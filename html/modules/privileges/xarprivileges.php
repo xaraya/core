@@ -328,7 +328,6 @@ class xarMasks
 		else {
 			$role = $roles->findRole($rolename);
 		}
-
 // get the inherited ancestors of the role
 		$ancestors = $role->getAncestors();
 

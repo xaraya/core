@@ -499,7 +499,7 @@ function drawindent() {
 	}
 
 /**
- * makeMember: makes a role a child of a group
+ * makeMemberByName: makes a role a child of a group
  *
  * Creates an entry in the rolemembers table
  * This is a convenience class for module developers
@@ -512,7 +512,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exceptions for bad input
 */
- 	function makeMember($childname,$parentname)
+ 	function makeMemberByName($childname,$parentname)
 	{
 // retrieve the parent's data from the repository
 		$query = "SELECT *
@@ -706,7 +706,6 @@ function drawindent() {
 			return false;
 		}
 
-
 // create an ID for the group
 		$nextId = $this->dbconn->genID($this->rolestable);
 
@@ -714,8 +713,8 @@ function drawindent() {
 		$nextIdprep = xarVarPrepForStore($nextId);
 		$nameprep = xarVarPrepForStore($name);
 		$query = "INSERT INTO $this->rolestable
-					(xar_uid, xar_name, xar_type)
-				  VALUES ($nextIdprep, '$nameprep', 1)";
+					(xar_uid, xar_name, xar_type, xar_uname)
+				  VALUES ($nextIdprep, '$nameprep', 1, '$nameprep')";
 		if (!$this->dbconn->Execute($query)) return;
 
 // done
@@ -1003,7 +1002,7 @@ function drawindent() {
 					"xar_pass = '$this->pass'" .
 					" WHERE xar_uid = " . $this->getID();
 
-		//Execute the query, bail if an exception was thrown
+//Execute the query, bail if an exception was thrown
 		if (!$this->dbconn->Execute($query)) return;
 		return true;
     }
