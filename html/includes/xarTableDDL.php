@@ -31,14 +31,16 @@
 $sql = xarDBAlterTable($xartable['nascar_tracks'],
     array(
         'command'           => 'add',
-        'field_name'        => 'xar_track_name',
-        'new_field_name'    => 'xar_track_name1'
+        'field'             => 'xar_track_name',
         'type'              => 'integer',
+        'unsigned'          => false,
         'null'              => false,
         'increment'         => true,
         'primary_key'       => true,
     )
-);  */
+);
+*/
+
 /**
  * Generate the SQL to create a database
  *
@@ -85,10 +87,12 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * @access public
  * @param tableName the table to alter
  * @param args['command'] command to perform on table(add,modify,drop,rename)
- * @param args['field_name'] field to alter
- * @param args['new_field_name'] new field name
- * @param args['type'] field type
- * @param args['null'] null or not
+ * @param args['field'] name of column to alter
+ * @param args['type'] column type
+ * @param args['size'] size of column if varying data 
+ * @param args['default'] default value of data 
+ * @param args['null'] null or not null (true/false)
+ * @param args['unsigned'] allow unsigned data (true/false)
  * @param args['increment'] auto incrementing files
  * @param args['primary_key'] primary key
  * @param databaseType the database type (optional)
@@ -425,7 +429,7 @@ function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
  * @access private
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
- * @param args['fields']
+ * @param args['field'] name of column to modify
  * @param args['after_field']
  * @param args['new_name'] new name of table
  * @returns string|false
@@ -475,13 +479,13 @@ function xarDB__mysqlAlterTable($tableName, $args)
  * @access private
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
- * @param args['fields'] fields to modify
+ * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
  * @returns string|false
  * @return postgres specific sql to alter a table
  * @raise BAD_PARAM
  */
-function xarDB_postgresqlAlterTable($tableName, $args)
+function xarDB__postgresqlAlterTable($tableName, $args)
 {
     switch ($args['command']) {
         case 'add':
@@ -519,13 +523,13 @@ function xarDB_postgresqlAlterTable($tableName, $args)
  * @access private
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
- * @param args['fields'] fields to modify
+ * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
  * @returns string|false
  * @return oracle specific sql to alter a table
  * @raise BAD_PARAM
  */
-function xarDB_oracleAlterTable($tableName, $args)
+function xarDB__oracleAlterTable($tableName, $args)
 {
     switch ($args['command']) {
         case 'add':
