@@ -48,20 +48,24 @@ function modules_adminapi_regenerate()
         // Check matching name and regid values
         foreach ($dbModules as $dbmodule) {
             // Bail if 2 modules have the same regid but not the same name
-            if(($modinfo['regid'] == $dbmodule['regid']) && 
+            if (($modinfo['regid'] == $dbmodule['regid']) && 
                ($modinfo['name'] != $dbmodule['name'])) {
                 $msg = xarML('The same registered ID (#(1)) was found belonging to a #(2) module in the file system and a registered #(3) module in the database. Please correct this and regenerate the list.', $dbmodule['regid'], $modinfo['name'], $dbmodule['name']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
+                xarErrorSet(
+                    XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    new SystemException($msg)
+                );
                 return;
             }
 
             // Bail if 2 modules have the same name but not the same regid
-            if(($modinfo['name'] == $dbmodule['name']) && 
+            if (($modinfo['name'] == $dbmodule['name']) && 
                ($modinfo['regid'] != $dbmodule['regid'])) {
                 $msg = xarML('The module #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.', $modinfo['name'], $modinfo['regid'], $dbmodule['regid']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
+                xarErrorSet(
+                    XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    new SystemException($msg)
+                );
                 return;
             }
         }
@@ -81,18 +85,20 @@ function modules_adminapi_regenerate()
                        xar_category,
                        xar_admin_capable,
                        xar_user_capable)
-                    VALUES
-                      (" . xarVarPrepForStore($modId) . ",
-                       '" . xarVarPrepForStore($modinfo['name']) . "',
-                       '" . xarVarPrepForStore($modinfo['regid']) . "',
-                       '" . xarVarPrepForStore($modinfo['directory']) . "',
-                       '" . xarVarPrepForStore($modinfo['version']) . "',
-                       '" . xarVarPrepForStore($modinfo['mode']) . "',
-                       '" . xarVarPrepForStore($modinfo['class']) . "',
-                       '" . xarVarPrepForStore($modinfo['category']) . "',
-                       '" . xarVarPrepForStore($modinfo['admin_capable']) . "',
-                       '" . xarVarPrepForStore($modinfo['user_capable']) . "')";
-            $result =& $dbconn->Execute($sql);
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $params = array(
+                $modId,
+                $modinfo['name'],
+                $modinfo['regid'],
+                $modinfo['directory'],
+                $modinfo['version'],
+                $modinfo['mode'],
+                $modinfo['class'],
+                $modinfo['category'],
+                $modinfo['admin_capable'],
+                $modinfo['user_capable']
+            );
+            $result =& $dbconn->Execute($sql, $params);
 
             if (!$result) return;
 
@@ -126,6 +132,26 @@ function modules_adminapi_regenerate()
                 // i.e. that the module is not being downgraded.
                 if ($vercompare >= 0) {
                     // The new version is either the same (to 3 levels) or higher.
+                    $is_core = (substr($dbModules[$name]['class'], 0, 4) == 'Core') ? true : false;
+
+                    if ($is_core && $vercompare > 0) {
+                        // Bug 2879: Attempt to run the core module upgrade and activate functions.
+                        xarModAPIFunc(
+                            'modules', 'admin', 'upgrade',
+                            array(
+                                'regid' => $modinfo['regid'],
+                                'state' => XARMOD_STATE_INACTIVE
+                            )
+                        );
+
+                        xarModAPIFunc(
+                            'modules', 'admin', 'activate',
+                            array(
+                                'regid' => $modinfo['regid'],
+                                'state' => XARMOD_STATE_ACTIVE
+                            )
+                        );
+                    }
 
                     // Automatically update the module version for uninstalled modules or
                     // where the version number is equivalent (but could be a different format)
@@ -133,19 +159,18 @@ function modules_adminapi_regenerate()
                     if ($dbModules[$name]['state'] == XARMOD_STATE_UNINITIALISED ||
                         $dbModules[$name]['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
                         $dbModules[$name]['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
-                        $vercompare == 0 ||
-                        substr($dbModules[$name]['class'], 0, 4)  == 'Core')
+                        $vercompare == 0 || $is_core)
                     {
                         // Update the module version number
                         $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
                         $result = $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
-                        if (!$result) return;
+                        if (!$result) {return;}
                     } else {
                         // Else set the module state to upgraded
                         $set = xarModAPIFunc(
                             'modules', 'admin', 'setstate', 
                             array(
-                                'regid' =>   $modinfo['regid'],
+                                'regid' => $modinfo['regid'],
                                 'state' => XARMOD_STATE_UPGRADED
                             )
                         );
@@ -235,11 +260,6 @@ function modules_adminapi_regenerate()
                     )
                 );
             }
-            // Check if there was a version change and adjust
-            // TODO: find out what this call to 'checkversion' is for.
-            // It seems to attempt to do what regenerate does, but not so well, except it
-            // does extra stuff for core modules. Upgrades seem to work fine without this call.
-            //xarModAPIFunc('modules', 'admin', 'checkversion');
         }
     }
 
