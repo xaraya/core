@@ -17,7 +17,7 @@ class TextExceptionRendering extends ExceptionRendering
 {
     function TextExceptionRendering() {
         ExceptionRendering();
-        $this->linebreak = "<br/>";
+        $this->linebreak = "\n";
     }
 }
 

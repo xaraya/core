@@ -26,7 +26,6 @@ class ExceptionRendering
 
 
     function ExceptionRendering($exception = NULL){
-    global $ExceptionStack;
         $this->exception = $exception;
         $this->linebreak = "<br/>";
         $this->id = $exception->getID();
