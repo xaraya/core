@@ -33,3 +33,11 @@ if ( not -e "$OUTPUT_DIR/modwizard.dtd" )
 print STDERR "[MSG] Executing the wizard\n\n";
 print STDERR qx/ xsltproc --stringparam output $OUTPUT_DIR $WIZARD_DIR\/lib\/xarmodule.xsl $INPUT_FILE /;
 print STDERR "[MSG] Finished the wizard\n\n";
+
+#
+# Take all the generated xd files and remove the lame xmlns things
+# this is a fault of Xaraya, not the xst processor (although its implementation could be a bit more flexible)
+#
+print STDERR "[MSG] Doing some postprocessing to compensate for limitations\n\n";
+#print STDERR qx/ find $OUTPUT_DIR -name '*.xd' -exec gawk '{gsub("xmlns:xar=\"dd\""," "); print {} > FILENAME }' '{}' ';'/;
+print STDERR qx/ find $OUTPUT_DIR -name '*.xd' -exec perl -pi -e 's\/xmlns\:xar\="dd"\/ \/g' '{}' ';'/;

@@ -67,7 +67,7 @@
     required by some other functions. In example SupportShortURLs.
 
 -->
-<xsl:template mode="xarinit_init_modvars" select="xaraya_module">
+<xsl:template mode="xarinit_init_modvars" match="xaraya_module">
     <xsl:variable name="module_prefix" select="registry/name" />
     /*
      * REGISTER THE MODULE VARIABLES
