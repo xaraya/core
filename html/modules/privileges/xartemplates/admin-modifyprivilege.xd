@@ -194,7 +194,7 @@ document.forms[0].submit();}
 								<option value="0"><xar:mlstring>None</xar:mlstring></option>
 							</xar:if>						
 							<xar:if condition="$plevel eq 100">
-								<option value="100" selected="selected"><xar:mlstring>Overview</xar:mlstring></option
+								<option value="100" selected="selected"><xar:mlstring>Overview</xar:mlstring></option>
 							<xar:else />
 								<option value="100"><xar:mlstring>Overview</xar:mlstring></option>
 							</xar:if>						
