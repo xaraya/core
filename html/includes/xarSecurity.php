@@ -60,7 +60,7 @@
 function xarSecurity_init()
 {
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarSecurity__shutdown_handler');
+    //register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
 }
 

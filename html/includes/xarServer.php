@@ -43,7 +43,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
     xarEvt_registerEvent('ServerRequest');
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarServer__shutdown_handler');
+    //register_shutdown_function ('xarServer__shutdown_handler');
     return true;
 }
 
@@ -56,7 +56,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
  */
 function xarServer__shutdown_handler()
 {
-    xarLogMessage("xarServer shutdown handler");
+    //xarLogMessage("xarServer shutdown handler");
 }
 
 /**

@@ -69,7 +69,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
 
     // All initialized register the shutdown function
-    register_shutdown_function('xarDB__shutdown_handler');
+    //register_shutdown_function('xarDB__shutdown_handler');
 
     return true;
 }

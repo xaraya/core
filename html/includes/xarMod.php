@@ -130,7 +130,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
     xarDB_importTables($tables);
 
     // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarMod__shutdown_handler');
+    //register_shutdown_function ('xarMod__shutdown_handler');
     return true;
 }
 
@@ -141,7 +141,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
  */
 function xarMod__shutdown_handler()
 {
-    xarLogMessage("xarMod shutdown handler");
+    //xarLogMessage("xarMod shutdown handler");
 }
 
 /**
