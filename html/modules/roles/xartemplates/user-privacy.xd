@@ -27,7 +27,7 @@
 
 
 <div class="xar-mod-head">
-    <p><span class="xar-mod-title"><xar:mlstring>User Registration</xar:mlstring></span></p>
+    <span class="xar-mod-title"><xar:mlstring>User Registration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Privacy Policy</xar:mlstring></h2>

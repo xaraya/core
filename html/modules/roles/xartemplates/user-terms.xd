@@ -25,7 +25,7 @@
 <xar:set name="$curnum">0</xar:set>
 <xar:set name="$contmail">xarModGetVar('mail','adminmail',1)</xar:set>
 
-<div class="xar-mod-head"><span class="xar-mod-title"><p><xar:mlstring>User Information</xar:mlstring></span></p></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
 <div class="xar-mod-body">
 <h2><xar:mlstring>Terms of Use</xar:mlstring></h2>
 <div style="margin: auto;">
