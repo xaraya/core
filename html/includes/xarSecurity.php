@@ -400,12 +400,12 @@ function xarTree()
  * @param   string role ID uid
  * @return  bool
  */
-function xarPrivilegeCheck($privname,$uid='')
+function xarPrivilegeCheck($privilege,$uid='')
 {
    $roles = new xarRoles();
     if (empty($uid)) $uid = xarSessionGetVar('uid');
     $role = $roles->getRole($uid);
-    return $role->hasPrivilege($privname);
+    return $role->hasPrivilege($privilege);
 }
 
 /* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
