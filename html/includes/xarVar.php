@@ -666,15 +666,16 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
                 xarVarSetCached($cacheCollection, $name, $value);
                 $result->MoveNext();
             }
+            //Special value to tell this select has already been run, any 
+            //variable not found now on is missing
+             xarVarSetCached($cacheCollection, 0, true);
             //It should be here!
             if (xarVarIsCached($cacheCollection, $cacheName)) {
                 $value = xarVarGetCached($cacheCollection, $cacheName);
             } else {
                 xarVarSetCached($cacheCollection, $cacheName, $missing);
+                return;
             }
-            //Special value to tell this select has already been run, any 
-            //variable not found now on is missing
-             xarVarSetCached($cacheCollection, 0, true);
         break;
 
         default:
