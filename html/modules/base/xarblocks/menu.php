@@ -373,27 +373,33 @@ function base_menublock_insert($blockinfo)
     if (!xarVarFetch('displayprint', 'str:1', $vars['displayprint'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('marker', 'str:1', $vars['marker'], '[x]', XARVAR_NOT_REQUIRED)) return;
 
+    if (!xarVarFetch('linkname', 'str:1', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('linkdelete', 'str', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('linkinsert', 'str', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('new_linkname', 'str', $new_linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+
     // User links
     $content = array();
     $c = 1;
-    if (isset($blockinfo['linkname'])) {
-    if(!xarVarFetch('linkurl',   'isset', $linkurl,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('linkname',  'isset', $linkname,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('linkdesc',  'isset', $linkdesc,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('linkchild', 'isset', $linkchild, NULL, XARVAR_DONT_SET)) {return;}
+    if (isset($linkname)) {
+        if (!xarVarFetch('linkurl',   'isset', $linkurl,   NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('linkname',  'isset', $linkname,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('linkdesc',  'isset', $linkdesc,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('linkchild', 'isset', $linkchild, NULL, XARVAR_DONT_SET)) {return;}
 
-        foreach ($blockinfo['linkname'] as $v) {
-            if (!isset($blockinfo['linkdelete'][$c])) {
+        foreach ($linkname as $v) {
+            if (!isset($linkdelete[$c])) {
                 // FIXME: MrB, i added the @ to avoid testing whether all fields contains something usefull
                 @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
             }
-            if (isset($blockinfo['linkinsert'][$c])) {
+            if (isset($linkinsert[$c])) {
                 $content[] = "||";
             }
             $c++;
         }
     }
-    if ($blockinfo['new_linkname']) {
+
+    if ($new_linkname) {
        $content[] = xarVarCleanFromInput('new_linkurl').'|'.xarVarCleanFromInput('new_linkname').'|'.xarVarCleanFromInput('new_linkdesc').'|'.xarVarCleanFromInput('new_linkchild');
     }
     $vars['content'] = implode("LINESPLIT", $content);
