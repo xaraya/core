@@ -33,9 +33,20 @@
         xarModSetVar('articles', 'mastercids.4', $faqs);
     }
     if ($faqs > 0) {
-        $query = 'SELECT id_cat, categories
-                  FROM ' . $oldprefix . '_faqcategories 
-                  ORDER BY id_cat ASC';
+        switch ($phpnukeversion) {
+        case "6.0":
+        case "6.5":
+        case "6.8":
+            $query = 'SELECT id_cat, categories
+                      FROM ' . $oldprefix . '_faqCategories 
+                      ORDER BY id_cat ASC';
+            break;
+        default:
+            $query = 'SELECT id_cat, categories
+                      FROM ' . $oldprefix . '_faqcategories 
+                      ORDER BY id_cat ASC';
+            break;
+        }
         $result =& $dbconn->Execute($query);
         if (!$result) {
             die("Oops, select faqcategories failed : " . $dbconn->ErrorMsg());

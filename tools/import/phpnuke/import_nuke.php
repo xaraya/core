@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * Quick & dirty import of PN .71x data into Xaraya test sites
+ * Quick & dirty import of PHP-Nuke data into Xaraya test sites
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002 by the Xaraya Development Team.
@@ -16,20 +16,19 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-
+if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
 
 if (!isset($step)) {
-// start the output buffer
-ob_start();
+    // start the output buffer
+    ob_start();
 }
 ?>
 
-<h3>Begin your import of PHP-Nuke 6.5 data</h3>
+<h3>Begin your import of PHP-Nuke data</h3>
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
@@ -40,12 +39,14 @@ xarModSetVar('installer','dbtype',$dbtype);
 
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('reset',     'isset', $reset,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('resetcat',  'isset', $resetcat,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('imgurl',    'isset', $imgurl,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('phpnukeversion', 'isset', $phpnukeversion,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('oldprefix',      'isset', $oldprefix,       NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('reset',          'isset', $reset,           NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('resetcat',       'isset', $resetcat,        NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('imgurl',         'isset', $imgurl,          NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     } elseif ($step > 1 || isset($startnum)) {
+        $phpnukeversion = xarModGetVar('installer','phpnukeversion');
         $oldprefix = xarModGetVar('installer','oldprefix');
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
@@ -58,7 +59,15 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <p></p>
     <form method="POST" action="import_nuke.php">
     <table border="0" cellpadding="4">
-    <tr><td align="right">Prefix used in your Nuke 6.5 site</td><td>
+
+    <tr><td align="right">PHP-Nuke version</td><td>
+    <select name="phpnukeversion" id="phpnukeversion" size="1">
+        <option value="default" selected="selected">Default</option>
+        <option value="6.0">6.0</option>
+        <option value="6.5">6.5 altnuke</option>
+        <option value="6.8">6.8</option>
+    </select>
+    <tr><td align="right">Prefix used in your PHP-Nuke site</td><td>
     <input type="text" name="oldprefix" value="nuke"></td></tr>
     <tr><td align="right">URL of the /images directory on your Nuke 6.5 site</td><td>
     <input type="text" name="imgurl" value="/images"></td></tr>
@@ -92,6 +101,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
+        xarModSetVar('installer','phpnukeversion',$phpnukeversion);
         xarModSetVar('installer','oldprefix',$oldprefix);
         if (!isset($reset)) { $reset = 0; }
         xarModSetVar('installer','reset',$reset);

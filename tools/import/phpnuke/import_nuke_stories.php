@@ -48,11 +48,24 @@
             break;
     }
 
-    $query = 'SELECT sid, title, hometext, bodytext, aid,
+    switch ($phpnukeversion) {
+    case "6.0":
+        $query = 'SELECT sid, title, hometext, bodytext, uname, uid,
                      ' . $dbfunction . ', alanguage, catid, topic,
-                     notes, ihome, counter
-              FROM ' . $oldprefix . '_stories
-              ORDER BY sid ASC';
+                     notes, ihome, ' . $oldprefix . '_stories.counter
+                  FROM ' . $oldprefix . '_stories
+                  LEFT JOIN ' . $oldprefix . '_users
+                  ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_stories.informant
+                  ORDER BY sid ASC';
+        break;
+    default:
+        $query = 'SELECT sid, title, hometext, bodytext, aid,
+                         ' . $dbfunction . ', alanguage, catid, topic,
+                         notes, ihome, counter
+                  FROM ' . $oldprefix . '_stories
+                  ORDER BY sid ASC';
+        break;
+    }
     $numitems = 1000;
     if (!isset($startnum)) {
         $startnum = 0;
@@ -77,8 +90,16 @@
     }
     $num = 1;
     while (!$result->EOF) {
-        list($aid, $title, $summary, $body, $authorid, $pubdate, $language,
-            $cat, $topic, $notes, $ihome, $counter) = $result->fields;
+        switch ($phpnukeversion) {
+        case "6.0":
+            list($aid, $title, $summary, $body, $uname, $authorid, $pubdate, $language,
+                 $cat, $topic, $notes, $ihome, $counter) = $result->fields;
+            break;
+        default:
+            list($aid, $title, $summary, $body, $authorid, $pubdate, $language,
+                 $cat, $topic, $notes, $ihome, $counter) = $result->fields;
+            break;
+        }
         if (empty($ihome)) {
             $status = 3;
         } else {

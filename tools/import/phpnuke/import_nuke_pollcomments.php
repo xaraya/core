@@ -63,12 +63,26 @@
             break;
     }
 
-    $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , uname, uid,
-              host_name, subject, comment 
-              FROM ' . $oldprefix . '_pollcomments 
-              LEFT JOIN ' . $oldprefix . '_users
-              ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_pollcomments.name
-              ORDER BY tid ASC';
+    switch ($phpnukeversion) {
+    case "6.5":
+    case "6.8":
+        $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , username, user_id,
+                  host_name, subject, comment 
+                  FROM ' . $oldprefix . '_pollcomments 
+                  LEFT JOIN ' . $oldprefix . '_users
+                  ON ' . $oldprefix . '_users.username = ' . $oldprefix . '_pollcomments.name
+                  ORDER BY tid ASC';
+        break;
+    default:
+        $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , uname, uid,
+                  host_name, subject, comment 
+                  FROM ' . $oldprefix . '_pollcomments 
+                  LEFT JOIN ' . $oldprefix . '_users
+                  ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_pollcomments.name
+                  ORDER BY tid ASC';
+        break;
+    }
+
 /* if you try to match against Xaraya users someday
     $query = 'SELECT tid, pollID, pid, ' . $dbfunction . ' , xar_uname, xar_uid,
               host_name, subject, comment 

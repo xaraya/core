@@ -22,9 +22,19 @@
     $faqs = xarModGetVar('installer','faqs');
     $faqid = unserialize(xarModGetVar('installer','faqid'));
 
-    $query = 'SELECT id, id_cat, question, answer
-              FROM ' . $oldprefix . '_faqanswer
-              ORDER BY id ASC';
+    switch ($phpnukeversion) {
+    case "6.0":
+    case "6.5":
+        $query = 'SELECT id, id_cat, question, answer
+                  FROM ' . $oldprefix . '_faqAnswer
+                  ORDER BY id ASC';
+        break;
+    default:
+        $query = 'SELECT id, id_cat, question, answer
+                  FROM ' . $oldprefix . '_faqanswer
+                  ORDER BY id ASC';
+        break;
+    }
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, select faq answer failed : " . $dbconn->ErrorMsg());

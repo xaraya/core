@@ -25,12 +25,25 @@
     }
     $count = $result->fields[0];
     $result->Close();
-    $query = 'SELECT uid, name, uname, email, pass, url, user_regdate,
-                     user_avatar, user_icq, user_aim, user_yim, user_msnm,
-                     user_from, user_occ, user_intrest, user_sig, bio
-              FROM ' . $oldprefix . '_users 
-              WHERE uid > 2
-              ORDER BY uid ASC';
+    switch ($phpnukeversion) {
+    case "6.5":
+    case "6.8":
+        $query = 'SELECT user_id, name, username, user_email, user_password, user_website, user_regdate,
+                         user_avatar, user_icq, user_aim, user_yim, user_msnm,
+                         user_from, user_occ, user_interests, user_sig, bio
+                  FROM ' . $oldprefix . '_users 
+                  WHERE user_id > 2
+                  ORDER BY user_id ASC';
+        break;
+    default:
+        $query = 'SELECT uid, name, uname, email, pass, url, user_regdate,
+                         user_avatar, user_icq, user_aim, user_yim, user_msnm,
+                         user_from, user_occ, user_intrest, user_sig, bio
+                  FROM ' . $oldprefix . '_users 
+                  WHERE uid > 2
+                  ORDER BY uid ASC';
+        break;
+    }
     $numitems = 1000;
     if (!isset($startnum)) {
         $startnum = 0;
@@ -106,8 +119,19 @@
         if (empty($name)) {
             $name = $uname;
         }
-        if (empty($date)) {
-            $date = time();
+        switch ($phpnukeversion) {
+        case "6.0":
+            if (empty($date)) {
+                $date = time();
+            } else {
+                $date = strtotime($date);
+            }
+            break;
+        default:
+            if (empty($date)) {
+                $date = time();
+            }
+            break;
         }
         $user = array(//'uid'        => $uid,
                       'uname'      => $uname,

@@ -40,13 +40,27 @@
             break;
     }
 
-    $query = 'SELECT lid, cid, title, ' . $oldprefix . '_links_links.url, 
-                     description, ' . $dbfunction . ', ' . $oldprefix . '_links_links.name, ' . $oldprefix . '_links_links.email, 
-                     hits, submitter, linkratingsummary, totalvotes, uid
-             FROM ' . $oldprefix . '_links_links
-             LEFT JOIN ' . $oldprefix . '_users
-             ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_links_links.submitter
-             ORDER BY lid ASC';
+    switch ($phpnukeversion) {
+    case "6.5":
+    case "6.8":
+        $query = 'SELECT lid, cid, title, ' . $oldprefix . '_links_links.url, 
+                         description, ' . $dbfunction . ', ' . $oldprefix . '_links_links.name, ' . $oldprefix . '_links_links.email, 
+                         hits, submitter, linkratingsummary, totalvotes, user_id
+                 FROM ' . $oldprefix . '_links_links
+                 LEFT JOIN ' . $oldprefix . '_users
+                 ON ' . $oldprefix . '_users.username = ' . $oldprefix . '_links_links.submitter
+                 ORDER BY lid ASC';
+        break;
+    default:
+        $query = 'SELECT lid, cid, title, ' . $oldprefix . '_links_links.url, 
+                         description, ' . $dbfunction . ', ' . $oldprefix . '_links_links.name, ' . $oldprefix . '_links_links.email, 
+                         hits, submitter, linkratingsummary, totalvotes, uid
+                 FROM ' . $oldprefix . '_links_links
+                 LEFT JOIN ' . $oldprefix . '_users
+                 ON ' . $oldprefix . '_users.uname = ' . $oldprefix . '_links_links.submitter
+                 ORDER BY lid ASC';
+        break;
+    }
     $result =& $dbconn->Execute($query);
     if (!$result) {
         die("Oops, select links failed : " . $dbconn->ErrorMsg());
