@@ -1296,7 +1296,7 @@ function drawindent() {
 // look for the parent uids and create role objects from them
             foreach($parts->getgroups() as $group){
                 if ($group['uid'] == $this->uid){
-                    array_push($parents, $parts->getRole($group['parentid']));
+                    $parents[] = $parts->getRole($group['parentid']);
                 }
             }
         }else {
@@ -1324,7 +1324,7 @@ function drawindent() {
                         'val_code'=>$val_code,
                         'state'=>$state,
                         'auth_module'=>$auth_module);
-                array_push($parents, new xarRole($pargs));
+                $parents[] = new xarRole($pargs);
                 $result->MoveNext();
             }
         }
