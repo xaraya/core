@@ -82,7 +82,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!empty($value)) {
             $link = $value;
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('URL').'" /></a>';
             }
         }
         return '';

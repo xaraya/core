@@ -77,7 +77,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (!empty($value)) {
             $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('AIM').'"/></a>';
             }
         }
         return '';

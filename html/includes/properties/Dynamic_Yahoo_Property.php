@@ -77,7 +77,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         if (!empty($value)) {
             $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('Yahoo').'"/></a>';
             }
         }
         return '';

@@ -80,7 +80,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 // TODO: what's the link to use for MSN Messenger ??
             $link = "TODO: what's the link for MSN ?".$value;
             if (!empty($this->icon)) {
-                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" /></a>';
+                return '<a href="'.xarVarPrepForDisplay($link).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="'.xarML('MSN').'"/></a>';
             }
         }
         return '';
