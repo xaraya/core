@@ -66,6 +66,8 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     switch($databaseType) {
         case 'mysql':
         case 'postgres':
+            $sql = 'CREATE DATABASE "'.$databaseName .'"';
+            break;
         case 'oci8':
             $sql = 'CREATE DATABASE '.$databaseName;
             break;

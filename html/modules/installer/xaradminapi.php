@@ -41,7 +41,6 @@ function installer_adminapi_modifyconfig($args)
     // Get exception error handler setting
     $enablePHPErrorHandler = xarCore_getSystemVar('Exception.EnablePHPErrorHandler');
 
-
     $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbType';", $config_php);
     $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbHost';", $config_php);
     $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbUname';", $config_php);
@@ -159,7 +158,12 @@ function installer_adminapi_createdb($args)
 
     // Start connection
     $dbconn = ADONewConnection($dbType);
-    $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass);
+    if ($dbType == 'postgres') {
+        // quick hack to enable Postgres DB creation
+        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass, 'template1');
+    } else {
+        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass);
+    }
     if (!$dbh) {
         $dbpass = '';
         die("Failed to connect to $dbType://$dbUname:$dbPass@$dbHost/, error message: " . $dbconn->ErrorMsg());
