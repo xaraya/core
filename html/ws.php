@@ -68,17 +68,17 @@ function xarWebservicesMain() {
         $server=false;
         if (xarModIsAvailable('trackback')) {
             $error = array();
-            if (!xarVarFetch('url', 'str:1:', $url, XARVAR_PREP_FOR_DISPLAY)) {
+            if (!xarVarFetch('url', 'str:1:', $url)) {
                 // Gots to return the proper error reply
                 $error['errordata'] = xarML('No URL Supplied');
             }
-            xarVarFetch('title', 'str:1', $title, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
-            xarVarFetch('blog_name', 'str:1', $blogname, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
-            if (!xarVarFetch('excerpt', 'str:1:255', $excerpt, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_HTML)) {
+            xarVarFetch('title', 'str:1', $title, '', XARVAR_NOT_REQUIRED);
+            xarVarFetch('blog_name', 'str:1', $blogname, '', XARVAR_NOT_REQUIRED);
+            if (!xarVarFetch('excerpt', 'str:1:255', $excerpt, '', XARVAR_NOT_REQUIRED)) {
                 // Gots to return the proper error reply
                 $error['errordata'] = xarML('Excerpt longer that 255 characters');
             }
-            if (!xarVarFetch('id','str:1:',$id, XARVAR_PREP_FOR_DISPLAY)){
+            if (!xarVarFetch('id','str:1:',$id)){
                 // Gots to return the proper error reply
                 $error['errordata'] = xarML('Bad TrackBack URL.');
             }
