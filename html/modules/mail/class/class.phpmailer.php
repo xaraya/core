@@ -679,7 +679,7 @@ class phpmailer
 
             if($smtp->Connect($host, $port, $this->Timeout))
                 $connection = true;
-            //printf("%s host could not connect<br>", $hosts[$index]); //debug only
+            //printf("%s host could not connect<br />", $hosts[$index]); //debug only
             $index++;
         }
         if(!$connection)
