@@ -159,7 +159,8 @@
 				</div>
 				<div style="text-align:center;">
 					<input type="hidden" name="install_phase" id="install_phase" value="5" />
-					<input type="submit" value="Continue &gt;" />
+          <xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
+          <input type="submit" value="#$buttonnext#" />
 				</div>
 			</div>
 		</form>

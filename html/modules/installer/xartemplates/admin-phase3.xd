@@ -131,11 +131,13 @@
 					<span class="xar-normal">
 						<xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable && $adodbTemplatesIsWritable && $rssTemplatesIsWritable">
 							<input type="hidden" name="install_phase" id="install_phase" value="4" />
-							<input type="submit" value="Continue &gt;" />
+              <xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
+              <input type="submit" value="#$buttonnext#" />
 							<xar:else />
 							<input type="hidden" name="install_phase" id="install_phase" value="3" />
 							<input type="hidden" name="agree" id="agree" value="agree" />
-							<input type="submit" value="Check Again &gt;" />
+              <xar:set name="buttonagain"><xar:mlstring>Check Again &gt;</xar:mlstring></xar:set>
+							<input type="submit" value="#$buttonagain#" />
 						</xar:if>
 					</span>
 				</div>

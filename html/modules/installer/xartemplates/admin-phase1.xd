@@ -37,7 +37,8 @@
             </xar:foreach>
           </select>
           <input type="hidden" name="install_phase" id="install_phase" value="2" />
-          <input type="submit" value="Continue &gt;" />
+          <xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
+          <input type="submit" value="#$buttonnext#" />
         </p>
       </form>
     </div>

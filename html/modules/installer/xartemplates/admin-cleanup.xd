@@ -1,72 +1,72 @@
 <div style="padding:10px;">
-    <span class="xar-pagetitle">
+  <span class="xar-pagetitle">
+    <xar:mlstring>
+      Installation Complete 
+    </xar:mlstring>
+  </span>
+  <br />
+  <br />
+  <div style="justify;">
+    <span class="xar-normal">
+      <p>
+        <strong>
+          <xar:mlstring>
+            Congratulations, you have successfully installed 
+          </xar:mlstring>
+          #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")! 
+        </strong>
+      </p>
+      <p>
         <xar:mlstring>
-            Installation Complete 
+          Take this time to customize your installation to match your needs. Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars. 
         </xar:mlstring>
+      </p>
+      <p>
+        <strong>
+          <xar:mlstring>
+            Security Hint 
+          </xar:mlstring>
+          : 
+        </strong>
+        <xar:mlstring>
+          You are strongly advised to remove write access to html/var/config.system.php once the install has completed. This can be done on UNIX using the command 
+        </xar:mlstring>
+        "<code>chmod 444 config.system.php</code>" 
+        <xar:mlstring>
+          from within the html/var directory. 
+        </xar:mlstring>
+      </p>
+      <p>
+        <xar:mlstring>
+          If you are feeling even more security conscious you could remove read access from those who don't need it 
+        </xar:mlstring>
+        : 
+        <xar:mlstring>
+          (substitute "apache" for the group your webserver runs as, probably one of apache, web, www or www-data) 
+        </xar:mlstring>
+        <br />
+        <code>
+          chgrp apache config.system.php 
+        </code>
+        <br />
+        <code>
+          chmod 440 config.system.php 
+        </code>
+      </p>
+      <p>
+        <a href="#$finalurl#">
+          <xar:mlstring>
+            Launch the site! 
+          </xar:mlstring>
+        </a>
+      </p>
     </span>
-    <br />
-    <br />
-    <div style="justify;">
-        <span class="xar-normal">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Congratulations, you have successfully installed 
-                    </xar:mlstring>
-                    #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")! 
-                </strong>
-            </p>
-            <p>
-                <xar:mlstring>
-                    Take this time to customize your installation to match your needs. Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars. 
-                </xar:mlstring>
-            </p>
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Security Hint 
-                    </xar:mlstring>
-                    : 
-                </strong>
-                <xar:mlstring>
-                    You are strongly advised to remove write access to html/var/config.system.php once the install has completed. This can be done on UNIX using the command 
-                </xar:mlstring>
-                "<code>chmod 444 config.system.php</code>" 
-                <xar:mlstring>
-                    from within the html/var directory. 
-                </xar:mlstring>
-            </p>
-            <p>
-                <xar:mlstring>
-                    If you are feeling even more security conscious you could remove read access from those who don't need it 
-                </xar:mlstring>
-                : 
-                <xar:mlstring>
-                    (substitute "apache" for the group your webserver runs as, probably one of apache, web, www or www-data) 
-                </xar:mlstring>
-                <br />
-                <code>
-                    chgrp apache config.system.php 
-                </code>
-                <br />
-                <code>
-                    chmod 440 config.system.php 
-                </code>
-            </p>
-            <p>
-                <a href="#$finalurl#">
-                    <xar:mlstring>
-                        Launch the site! 
-                    </xar:mlstring>
-                </a>
-            </p>
-        </span>
-    </div>
+  </div>
 </div>
 <div style="text-align:center;padding:5px;">
-    <p class="xar-sub">
-        <xar:mlstring>
-            Thank you for using Xaraya. 
-        </xar:mlstring>
-    </p>
+  <p class="xar-sub">
+    <xar:mlstring>
+      Thank you for using Xaraya. 
+    </xar:mlstring>
+  </p>
 </div>

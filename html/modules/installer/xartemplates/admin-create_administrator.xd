@@ -1,125 +1,126 @@
 <div id="install">
-    <div style="padding:10px;">
-        <div style="text-align:center;">
-            <span class="xar-pagetitle">
-                <xar:mlstring>
-                    Administrator Account Creation 
-                </xar:mlstring>
-            </span>
+  <div style="padding:10px;">
+    <div style="text-align:center;">
+      <span class="xar-pagetitle">
+        <xar:mlstring>
+          Administrator Account Creation 
+        </xar:mlstring>
+      </span>
+    </div>
+    <br />
+    <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
+      <div style="text-align:center;">
+        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+        <div style="text-align:justify;">
+          <span class="xar-normal">
+            <xar:mlstring>
+              Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the roles module. 
+            </xar:mlstring>
+          </span>
         </div>
         <br />
-        <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
-            <div style="text-align:center;">
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                <div style="text-align:justify;">
-                    <span class="xar-normal">
-                        <xar:mlstring>
-                            Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the roles module. 
-                        </xar:mlstring>
-                    </span>
-                </div>
-                <br />
-                <div style="text-align:justify;">
-                    <table cellspacing="0" border="0" summary="For creating the site administrator account">
-                        <thead>
-                            <tr>
-                                <th colspan="2">
-                                    <xar:mlstring>
-                                        Administrator Information 
-                                    </xar:mlstring>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td align="left">
-                                    <span class="xar-normal">
-                                        <label for="install_admin_name">
-                                            <xar:mlstring>
-                                                Display name 
-                                            </xar:mlstring>
-                                        </label>
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left">
-                                    <span class="xar-normal">
-                                        <label for="install_admin_username">
-                                            <xar:mlstring>
-                                                Username 
-                                            </xar:mlstring>
-                                        </label>
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left">
-                                    <span class="xar-normal">
-                                        <label for="install_admin_password">
-                                            <xar:mlstring>
-                                                Password 
-                                            </xar:mlstring>
-                                        </label>
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left">
-                                    <span class="xar-normal">
-                                        <label for="install_admin_password1">
-                                            <xar:mlstring>
-                                                Password Again 
-                                            </xar:mlstring>
-                                        </label>
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    <input type="password" name="install_admin_password1" id="install_admin_password1" maxlength="80" value="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left">
-                                    <span class="xar-normal">
-                                        <label for="install_admin_email">
-                                            <xar:mlstring>
-                                                Email 
-                                            </xar:mlstring>
-                                        </label>
-                                    </span>
-                                </td>
-                                <td align="left">
-                                    <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br />
-                <div style="text-align:justify;">
-                    <span class="xar-normal">
-                        <p>
-                            <xar:mlstring>
-                                Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation. 
-                            </xar:mlstring>
-                        </p>
-                    </span>
-                </div>
-                <div style="text-align:center;">
-                    <input type="submit" name="create" id="create" value="Continue &gt;" />
-                </div>
-            </div>
-        </form>
-    </div>
+        <div style="text-align:justify;">
+          <table cellspacing="0" border="0" summary="For creating the site administrator account">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  <xar:mlstring>
+                    Administrator Information 
+                  </xar:mlstring>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td align="left">
+                  <span class="xar-normal">
+                    <label for="install_admin_name">
+                      <xar:mlstring>
+                        Display name 
+                      </xar:mlstring>
+                    </label>
+                  </span>
+                </td>
+                <td align="left">
+                  <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" />
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <span class="xar-normal">
+                    <label for="install_admin_username">
+                      <xar:mlstring>
+                        Username 
+                      </xar:mlstring>
+                    </label>
+                  </span>
+                </td>
+                <td align="left">
+                  <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" />
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <span class="xar-normal">
+                    <label for="install_admin_password">
+                      <xar:mlstring>
+                        Password 
+                      </xar:mlstring>
+                    </label>
+                  </span>
+                </td>
+                <td align="left">
+                  <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <span class="xar-normal">
+                    <label for="install_admin_password1">
+                      <xar:mlstring>
+                        Password Again 
+                      </xar:mlstring>
+                    </label>
+                  </span>
+                </td>
+                <td align="left">
+                  <input type="password" name="install_admin_password1" id="install_admin_password1" maxlength="80" value="" />
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <span class="xar-normal">
+                    <label for="install_admin_email">
+                      <xar:mlstring>
+                        Email 
+                      </xar:mlstring>
+                    </label>
+                  </span>
+                </td>
+                <td align="left">
+                  <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <br />
+        <div style="text-align:justify;">
+          <span class="xar-normal">
+            <p>
+              <xar:mlstring>
+                Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation. 
+              </xar:mlstring>
+            </p>
+          </span>
+        </div>
+        <div style="text-align:center;">
+          <xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
+          <input type="submit" name="create" id="create" value="#$buttonnext#" />
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 <xar:set name="$active_step">6</xar:set>
 <xar:template file="status"/>
