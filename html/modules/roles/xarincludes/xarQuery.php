@@ -23,7 +23,7 @@ class xarQuery
     var $bindings;
     var $sorts;
     var $result;
-    var $rows;
+    var $rows = 0;
     var $rowstodo = 0;
     var $startat = 1;
     var $output;
@@ -65,20 +65,27 @@ class xarQuery
 
     function run($statement='',$pretty=1)
     {
-        $this->setstatement($statement);
 
         if ($this->type == 'SELECT') {
-            if($this->rowstodo != 0 && $this->limits == 1) {
+            if($this->rowstodo != 0 && $this->limits == 1 && $statement == '') {
+                $temp = $this->fields;
+                $this->clearfields();
+                $this->addfield('COUNT(*)');
+                $this->setstatement();
+                $result = $this->dbconn->Execute($this->statement);
+                list($this->rows) = $result->fields;
+                $this->fields = $temp;
+                $this->setstatement();
+
                 $begin = $this->startat-1;
                 $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
                 $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-            } else {
+            }
+            else {
+                $this->setstatement($statement);
                 $result = $this->dbconn->Execute($this->statement);
             }
             if (!$result) return;
-        // this gives the number of rows for the actual query - use countall() if you want to get the
-        // total number of records matching the conditions without any limits
-            $this->rows = $result->_numOfRows;
             $this->result =& $result;
 
             if (($result->fields) === false) $numfields = 0;
@@ -116,9 +123,12 @@ class xarQuery
                     }
                 }
             }
-        } else {
+        }
+        else {
+            $this->setstatement($statement);
             $result = $this->dbconn->Execute($this->statement);
         }
+
         return true;
 
     }
@@ -872,34 +882,4 @@ class xarQuery
         $this->setstatement();
         echo $this->getstatement();
     }
-    function countall()
-    {
-        $st =  $this->type . " ";
-        switch ($this->type) {
-        case "SELECT" :
-            $st .= 'COUNT(*)';
-            //$st .= $this->assembledfields("SELECT");
-            $st .= " FROM ";
-            $st .= $this->assembledtables();
-            break;
-        case "INSERT" :
-        case "UPDATE" :
-        case "DELETE" :
-        case "CREATE" :
-        case "DROP" :
-        default :
-            return;
-        }
-        $st .= $this->assembledconditions();
-        //$st .= $this->assembledsorts();
-
-        $result = $this->dbconn->Execute($st);
-        if (!$result) return;
-        if ($result->EOF) return 0;
-
-        $count = $result->fields[0];
-        $result->Close();
-        return $count;
-    }
 }
-?>
