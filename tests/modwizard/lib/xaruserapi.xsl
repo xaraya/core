@@ -18,6 +18,7 @@
 <xsl:include href="xaruserapi/encode_shorturl.xsl" />
 <xsl:include href="xaruserapi/getall.xsl" />
 <xsl:include href="xaruserapi/getitemlinks.xsl" />
+<xsl:include href="xaruserapi/getitemtypes.xsl" />
 <xsl:include href="xaruserapi/getmenulinks.xsl" />
 <xsl:include href="xaruserapi/gettitle.xsl" />
 <xsl:include href="xaruserapi/get.xsl" />
@@ -26,12 +27,6 @@
 
     <xsl:message>
 ### Generating user api</xsl:message>
-
-    <!-- UTILITY FUNCTIONS
-    -->
-
-    <xsl:apply-templates select="." mode="xaruserapi_getmenulinks" />
-
 
     <!-- // FUNC // ShortURLSupport
 
@@ -52,14 +47,21 @@
     -->
     <xsl:if test="boolean( database/table[@user='true'] )">
 
-        <xsl:apply-templates mode="xaruserapi_count" select="." />
-        <xsl:apply-templates mode="xaruserapi_getall" select="." />
-        <xsl:apply-templates mode="xaruserapi_get" select="." />
+        <xsl:apply-templates mode="xaruserapi_count"    select="." />
+        <xsl:apply-templates mode="xaruserapi_getall"   select="." />
+        <xsl:apply-templates mode="xaruserapi_get"      select="." />
         <xsl:apply-templates mode="xaruserapi_gettitle" select="." />
-        <xsl:apply-templates select="." mode="xaruserapi_getitemlinks" />
+        <xsl:apply-templates mode="xaruserapi_getitemlinks" select="." />
+        <xsl:apply-templates mode="xaruserapi_getmenulinks" select="." />
 
     </xsl:if>
 
+
+    <!-- if more than 2 itemtype are generated ... create this function to let
+         the end user turn on hooks based on itemtypes -->
+    <xsl:if test="count( database/table ) > 1">
+        <xsl:apply-templates mode="xaruserapi_getitemtypes"    select="." />
+    </xsl:if>
 
 </xsl:template>
 
