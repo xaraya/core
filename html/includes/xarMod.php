@@ -995,7 +995,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
  *
  * @access private
  * @param data string the data to be encoded (see todo)
- * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url')
+ * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
  * @return string the encoded URL parts
  * @todo this could be made public
  * @todo support arrays and encode the complete array (keys and values)
@@ -1035,8 +1035,8 @@ function xarMod__URLencode($data, $type = 'getname')
     // TODO: check what automatic ML settings have on this.
     // I suspect none, as all multi-byte characters have ASCII values
     // of their parts > 127.
-    if (isset($decode[$data])) {
-        $data = str_replace($decode[$data][0], $decode[$data][1]);
+    if (isset($decode[$type])) {
+        $data = str_replace($decode[$type][0], $decode[$type][1], $data);
     }
 
     return $data;
@@ -1080,7 +1080,7 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
     {
         $params = '';
 
-        foreach ($args as $k=>$v) {
+        foreach ($args as $k => $v) {
             if (is_array($v)) {
                 // Recursively walk the array tree to as many levels as necessary
                 // e.g. ...&foo[bar][dee][doo]=value&...
@@ -1093,12 +1093,7 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
 
         // Join to the path with the appropriate character,
         // depending on whether there are already GET parameters.
-        if (strpos($path, $pini) === FALSE)
-        {
-            $path .= $pini . $params;
-        } else {
-            $path .= $psep . $params;
-        }
+        $path .= (strpos($path, $pini) === FALSE ? $pini : $psep) . $params;
     }
 
     return $path;
@@ -1177,7 +1172,9 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                         foreach($short['path'] as $pathpart) {
                             // Use path encoding method, which can differ from
                             // the GET parameter encoding method.
-                            $path .= $pathsep . xarMod__URLencode($pathpart, 'path');
+                            if ($pathpart != '') {
+                                $path .= $pathsep . xarMod__URLencode($pathpart, 'path');
+                            }
                         }
                     }
                     // Unconsumed arguments, to be treated as additional GET parameters.
