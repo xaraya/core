@@ -51,8 +51,6 @@ include "includes/exceptions/noexception.class.php";
 include "includes/exceptions/errorcollection.class.php";
 
 global $CoreStack, $ErrorStack;
-$CoreStack = new xarExceptionStack();
-$ErrorStack = new xarExceptionStack();
 
 /* Error Handling System implementation */
 
@@ -62,11 +60,21 @@ $ErrorStack = new xarExceptionStack();
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool true
- * @todo   can we move the stacks above into the init?
- * @todo   this subsystem screams for a shutdown handler 
+ * @todo   can we move the stacks above into the init? 
  */
 function xarError_init($systemArgs, $whatToLoad)
 {
+    global $CoreStack,$ErrorStack;
+    
+    // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
+    if ($systemArgs['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
+        set_error_handler('xarException__phpErrorHandler');
+    }
+    
+    $CoreStack = new xarExceptionStack();
+    $CoreStack->initialize();
+    
+    $ErrorStack = new xarExceptionStack();
     xarErrorFree();
     
     // Subsystem initialized, register a handler to run when the request is over
@@ -568,10 +576,6 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         $rawmsg .= $msg . "</div>";
         echo $rawmsg;
         exit;
-//        $redirectURL = xarServerGetBaseURL() . "index.php?module=base&func=rawexit";
-//        $redirectURL .= "&code=" . $errorType . "&exception=" . urlencode($msg);
-//        $header = "Location: $redirectURL";
-//        header($header, headers_sent());
     }
 
     // Make cached files also display their source file if it's a template
@@ -691,29 +695,13 @@ function xarException__xdebugBackTrace()
     return array_reverse($stack);
 }
 
-/**
- * The Core Exceptions System
- *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @access private
- */
-function xarCES_init($args, $whatToLoad)
-{
-    global $CoreStack;
 
-    // The check for xdebug_enable is not necessary here, we want the handler enabled on the flag, period.
-    if ($args['enablePHPErrorHandler'] == true ) { // && !function_exists('xdebug_enable')) {
-        set_error_handler('xarException__phpErrorHandler');
-    }
-
-    $CoreStack->initialize();
-    return true;
-}
 function xarCoreExceptionFree()
 {
     global $CoreStack;
     $CoreStack->initialize();
 }
+
 function xarIsCoreException()
 {
     global $CoreStack;
