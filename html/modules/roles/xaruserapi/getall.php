@@ -76,11 +76,13 @@ function roles_userapi_getall($args)
     }
 
     $where_clause = array();
-
+    $bindvars = array();
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
-        $where_clause[] = 'roletab.xar_state = ' . $state;
+        $where_clause[] = 'roletab.xar_state = ?';
+        $bindvars[] = $state;
     } else {
-        $where_clause[] = 'roletab.xar_state <> ' . ROLES_STATE_DELETED;
+        $where_clause[] = 'roletab.xar_state <> ?';
+        $bindvars[] = ROLES_STATE_DELETED;
     }
 
     // Select-clause.
@@ -101,15 +103,19 @@ function roles_userapi_getall($args)
         $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
         $where_clause[] = 'roletab.xar_uid = rolememb.xar_uid';
         if (count($group_list) > 1) {
-            $where_clause[] = 'rolememb.xar_parentid in (' . implode(', ', $group_list) . ')';
+            $bindmarkers = '?' . str_repeat(',?',count($group_list)-1);
+            $where_clause[] = 'rolememb.xar_parentid in (' . $bindmarkers. ')';
+            $bindvars = array_merge($bindvars, $group_list);
         } else {
-            $where_clause[] = 'rolememb.xar_parentid = ' . $group_list[0];
+            $where_clause[] = 'rolememb.xar_parentid = ?';
+            $bindvars[] = $group_list[0];
         }
     }
 
     // Hide pending users from non-admins
     if (!xarSecurityCheck('AdminRole', 0)) {
-        $where_clause[] = 'roletab.xar_state <> ' . ROLES_STATE_PENDING;
+        $where_clause[] = 'roletab.xar_state <> ?';
+        $bindvars[] = ROLES_STATE_PENDING;
     }
 
     // If we aren't including anonymous in the query,
@@ -118,12 +124,14 @@ function roles_userapi_getall($args)
     // By default, include both 'myself' and 'anonymous'.
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
-        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole['uid'];
+        $where_clause[] = 'roletab.xar_uid <> ?';
+        $bindvars[] = $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
-        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole['uid'];
+        $where_clause[] = 'roletab.xar_uid <> ?';
+        $bindvars[] = $thisrole['uid'];
     }
 
     // Return only users (not groups).
@@ -143,9 +151,9 @@ function roles_userapi_getall($args)
     }
 
     if ($startnum == 0) {
-        $result = $dbconn->Execute($query);
+        $result = $dbconn->Execute($query,$bindvars);
     } else {
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
+        $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
     }
     if (!$result) {return;}
 

@@ -56,6 +56,7 @@ function roles_userapi_getdeleteduser($args)
 
     $rolestable = $xartable['roles'];
 
+    $bindvars = array();
     $query = "SELECT xar_uid,
                    xar_uname,
                    xar_name,
@@ -66,21 +67,26 @@ function roles_userapi_getdeleteduser($args)
                    xar_state
             FROM $rolestable
             WHERE xar_state = 0
-            AND xar_type = " . xarVarPrepForStore($type);
+            AND xar_type = ?";
+    $bindvars[] = $type;
 
     if (!empty($uid) && is_numeric($uid)) {
-        $query .= " AND xar_uid = " . xarVarPrepForStore($uid);
+        $query .= " AND xar_uid = ?";
+        $bindvars[] = $uid
     } elseif (!empty($name)) {
-        $query .= " AND xar_name = '" . xarVarPrepForStore($name) . "'";
+        $query .= " AND xar_name = ?";
+        $bindvars[] = $name;
     } elseif (!empty($uname)) {
         // Need to add 'deleted' string to username
         $deleted = '[' . xarML('deleted') . ']';
-        $query .= " AND xar_uname LIKE '" . xarVarPrepForStore($uname.$deleted) . "%'";
+        $query .= " AND xar_uname LIKE ?";
+        $bindvars[] = $uname.$deleted."%";
     } elseif (!empty($email)) {
-        $query .= " AND xar_email = '" . xarVarPrepForStore($email) . "'";
+        $query .= " AND xar_email = ?";
+        $bindvars[] = $email;
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Check for no rows found, and if so return

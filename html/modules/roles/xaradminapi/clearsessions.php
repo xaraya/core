@@ -41,8 +41,8 @@ function roles_adminapi_clearsessions($spared)
             $thatrole = $roles->getRole($uid);
             if (!$thisuid == $uid && !$thisrole->isParent($thatrole)) {
                 $query = "DELETE FROM $sessionstable
-                  WHERE xar_sessid = '" . $thissession . "'";
-                if (!$dbconn->Execute($query)) return;
+                  WHERE xar_sessid = ?";
+                if (!$dbconn->Execute($query,array($thissession))) return;
                 break;
             }
         }

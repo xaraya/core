@@ -71,24 +71,19 @@ function roles_adminapi_update($args)
     if (!empty($pass)){
         $cryptpass=md5($pass);
         $query = "UPDATE $rolesTable
-                SET xar_name    =  '" . xarVarPrepForStore($name) . "',
-                    xar_uname   = '" . xarVarPrepForStore($uname) . "',
-                    xar_email   = '" . xarVarPrepForStore($email) . "',
-                    xar_pass    = '" . xarVarPrepForStore($cryptpass) . "',
-                    xar_valcode = '" . xarVarPrepForStore($valcode) . "',
-                    xar_state   = '" . xarVarPrepForStore($state) . "'
-                WHERE xar_uid   = " . xarVarPrepForStore($uid);
+                  SET xar_name = ?, xar_uname = ?, xar_email = ?,
+                      xar_pass = ?, xar_valcode = ?, xar_state = ?
+                WHERE xar_uid = ?";
+        $bindvars = array($name,$uname,$email,$cryptpass,$valcode,$state,$uid);
     } else {
         $query = "UPDATE $rolesTable
-                SET xar_name    =  '" . xarVarPrepForStore($name) . "',
-                    xar_uname   = '" . xarVarPrepForStore($uname) . "',
-                    xar_email   = '" . xarVarPrepForStore($email) . "',
-                    xar_valcode = '" . xarVarPrepForStore($valcode) . "',
-                    xar_state   = '" . xarVarPrepForStore($state) . "'
-                WHERE xar_uid   = " . xarVarPrepForStore($uid);
+                SET xar_name = ?, xar_uname = ?, xar_email = ?,
+                    xar_valcode = ?, xar_state = ?
+                WHERE xar_uid = ?";
+        $bindvars = arry($name,$uname,$email,$valcode,$state,$uid);
     }
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     $item['module'] = 'roles';

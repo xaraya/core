@@ -23,6 +23,7 @@
  * @param args optional array with validation-specific settings
  * @returns bool
  * @return true if the validation was successful, false otherwise
+ * @todo move this to xarVar* api
  */
 function roles_userapi_validatevar($args)
 {

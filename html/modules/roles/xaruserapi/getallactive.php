@@ -54,12 +54,14 @@ function roles_userapi_getallactive($args)
     $sessioninfoTable = $xartable['session_info'];
     $rolestable = $xartable['roles'];
 
+    $bindvars = array();
     $query = "SELECT a.xar_uid,
                      a.xar_name,
                      a.xar_email,
                      b.xar_ipaddr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > $filter AND a.xar_uid > 1";
+              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > 1";
+    $bindvars[] = $filter;
 
     if (isset($selection)) $query .= $selection;
 
@@ -68,17 +70,19 @@ function roles_userapi_getallactive($args)
     // a where clause to the query
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND a.xar_uid != $anon[uid]";
+        $query .= " AND a.xar_uid != ?";
+        $bindvars[] = $anon['uid'];
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND a.xar_uid != $thisrole[uid]";
+        $query .= " AND a.xar_uid != ?";
+        $bindvars[] = $thisrole[uid];
     }
 
     $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
 
-    if($startnum==0) $result = $dbconn->Execute($query);
-    else $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
+    if($startnum==0) $result = $dbconn->Execute($query,$bindvars);
+    else $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
     if (!$result) return;
 
     // Put users into result array

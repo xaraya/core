@@ -43,11 +43,10 @@ function roles_adminapi_recall($args)
     $uname = explode($deleted,$role->getUser());
 //            echo $uname[0];exit;
     $query = "UPDATE $rolestable
-            SET xar_uname = '" . xarVarPrepForStore($uname[0]) .
-                "', xar_state = " . xarVarPrepForStore($state) ;
-    $query .= " WHERE xar_uid = ".xarVarPrepForStore($uid);
-
-    $result =& $dbconn->Execute($query);
+              SET xar_uname = ?, xar_state = ?
+              WHERE xar_uid = ?";
+    $bindvars = array($uname[0],$state,$uid);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     //finished successfully

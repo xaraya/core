@@ -64,6 +64,7 @@ function roles_user_search()
             $data['properties'] =& $object->getProperties();
 
             // run the search query
+            // FIXME: could this be just addslashes?
             $q = xarVarPrepForStore($q);
             $where = array();
             // see which properties we're supposed to search in

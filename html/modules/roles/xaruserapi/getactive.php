@@ -46,9 +46,9 @@ function roles_userapi_getactive($args)
 
     $query = "SELECT xar_uid
               FROM $sessioninfoTable
-              WHERE xar_lastused > $filter AND xar_uid = $uid";
-
-    $result =& $dbconn->Execute($query);
+              WHERE xar_lastused > ? AND xar_uid = ?";
+    $bindvars = array($filter,$uid);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Put users into result array

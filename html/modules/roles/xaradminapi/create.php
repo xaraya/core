@@ -53,9 +53,8 @@ function roles_adminapi_create($args)
 
     // Check if that username exists
     $query = "SELECT xar_uid FROM $rolestable
-            WHERE xar_uname='".xarVarPrepForStore($uname)."'
-            AND xar_type = 0";
-    $result =& $dbconn->Execute($query);
+            WHERE xar_uname= ? AND xar_type = 0";
+    $result =& $dbconn->Execute($query,array($uname));
     if (!$result) return;
 
     if ($result->RecordCount() > 0) {
@@ -89,29 +88,15 @@ function roles_adminapi_create($args)
     //$date_reg = trim($date_reg,"'");
 
     $query = "INSERT INTO $rolestable (
-              xar_uid,
-              xar_uname,
-              xar_name,
-              xar_type,
-              xar_pass,
-              xar_email,
-              xar_date_reg,
-              xar_valcode,
-              xar_state,
-              xar_auth_module
+              xar_uid, xar_uname, xar_name, xar_type,
+              xar_pass, xar_email, xar_date_reg, xar_valcode,
+              xar_state, xar_auth_module
               )
-            VALUES (
-              $nextId,
-              '" . xarVarPrepForStore($uname) . "',
-              '" . xarVarPrepForStore($realname) . "',
-              0,
-              '" . xarVarPrepForStore($cryptpass) . "',
-              '" . xarvarPrepForStore($email) . "',
-              '" . xarvarPrepForStore($date_reg) . "',
-              '" . xarVarPrepForStore($valcode) . "',
-              '" . xarVarPrepForStore($state) . "',
-              '" . xarVarPrepForStore($authmodule) . "')";
-    $result =& $dbconn->Execute($query);
+            VALUES (?,?,?,?,?,?,?,?,?,?)";
+    $bindvars = array($nextId, $uname, $realname, 0,
+                      $cryptpass,$email,$date_reg,$valcode,
+                      $state,$authmodule);
+    $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Get the ID of the user that we created.

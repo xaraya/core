@@ -227,11 +227,9 @@ class xarRoles
     function makeMemberByName($childname, $parentname)
     {
         // retrieve the parent's data from the repository
-        $query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_name = '$parentname'";
+        $query = "SELECT * FROM $this->rolestable WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array($parentname));
         if (!$result) return;
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
@@ -249,11 +247,10 @@ class xarRoles
             'auth_module' => $auth_module);
         $parent = new xarRole($pargs);
         // retrieve the child's data from the repository
-        $query = "SELECT *
-                  FROM $this->rolestable
-                  WHERE xar_name = '$childname'";
+        $query = "SELECT * FROM $this->rolestable
+                  WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array($childname));
         if (!$result) return;
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
@@ -292,16 +289,16 @@ class xarRoles
         // get the data for the root object
         $query = "SELECT xar_uid
                   FROM $this->rolestable
-                  WHERE xar_name = '$rootname'";
+                  WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array($rootname));
         if (!$result) return;
         // create the entry
         list($uid) = $result->fields;
         $query = "INSERT INTO $this->rolememberstable
-                VALUES ($uid,0)";
+                VALUES (?,0)";
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query)) return;
+        if (!$this->dbconn->Execute($queryarray($uid))) return;
         // done
         return true;
     }
@@ -400,18 +397,14 @@ class xarRoles
                 new DefaultUserException($msg));
             return false;
         }
-        // create an ID for the group
-        $nextId = $this->dbconn->genID($this->rolestable);
+
         $createdate = mktime();
-        // set up the query and create the entry
-        $nextIdprep = xarVarPrepForStore($nextId);
-        $nameprep = xarVarPrepForStore($name);
-        $unameprep = xarVarPrepForStore($uname);
-        $dateprep = xarVarPrepForStore($createdate);
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES ($nextIdprep, '$nameprep', 1, '$unameprep', '$dateprep')";
-        if (!$this->dbconn->Execute($query)) return;
+                  VALUES (?,?,1,?,?)";
+        $bindvars = array($this->dbconn->genID($this->rolestable),
+                          $name, $uname, $createdate);
+        if (!$this->dbconn->Execute($query,$bindvars)) return;
         // done
         return true;
     }
@@ -629,15 +622,15 @@ class xarRole
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
-            $query = "SELECT xar_users FROM $this->rolestable
-                    WHERE xar_uid =" . $this->getID();
-            $result = $this->dbconn->Execute($query);
+            $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
+            $result = $this->dbconn->Execute($query,array($this->getID()));
             if (!$result) return;
             // add 1 and update.
             list($users) = $result->fields;
             $users = $users + 1;
-            $query = "UPDATE " . $this->rolestable . " SET " . "xar_users = $users" . " WHERE xar_uid =" . $this->getID();
-            if (!$this->dbconn->Execute($query)) return;
+            $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
+            $bindvars = array($users,$this->getID());
+            if (!$this->dbconn->Execute($query,$bindvars)) return;
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -661,22 +654,22 @@ class xarRole
     function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
-        $query = "DELETE FROM $this->rolememberstable
-              WHERE xar_uid=" . $member->getID() . " AND xar_parentid=" . $this->getID();
-        if (!$this->dbconn->Execute($query)) return;
+        $query = "DELETE FROM $this->rolememberstable WHERE xar_uid= ? AND xar_parentid= ?";
+        $bindvars = array($member->getID(), $this->getID());
+        if (!$this->dbconn->Execute($query,$bindvars)) return;
         // for children that are users
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
-            $query = "SELECT xar_users FROM $this->rolestable
-                    WHERE xar_uid =" . $this->getID();
-            $result = $this->dbconn->Execute($query);
+            $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
+            $result = $this->dbconn->Execute($query,array($this->getID()));
             if (!$result) return;
             // subtract 1 and update.
             list($users) = $result->fields;
             $users = $users - 1;
-            $query = "UPDATE " . $this->rolestable . " SET " . "xar_users = $users" . " WHERE xar_uid =" . $this->getID();
-            if (!$this->dbconn->Execute($query)) return;
+            $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
+            $bindvars = array($users, $this->getID());
+            if (!$this->dbconn->Execute($query,$bindvars)) return;
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -715,10 +708,9 @@ class xarRole
     {
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
-        $query = "SELECT xar_parentid FROM $this->rolememberstable
-              WHERE xar_uid=" . $this->getID();
+        $query = "SELECT xar_parentid FROM $this->rolememberstable WHERE xar_uid= ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array($this->getID()));
         if (!$result) return;
         // get the Roles class so we can use its methods
         $parts = new xarRoles();
@@ -762,10 +754,9 @@ class xarRole
     function getAllPrivileges()
     {
         if ((!isset($allprivileges)) || count($allprivileges) == 0) {
-            $query = "SELECT xar_pid,
-                        xar_name
-                        FROM $this->privilegestable
-                        ORDER BY xar_name";
+            $query = "SELECT xar_pid, xar_name
+                      FROM $this->privilegestable
+                      ORDER BY xar_name";
 
             $result = $this->dbconn->Execute($query);
             if (!$result) return;
@@ -794,19 +785,12 @@ class xarRole
      */
     function getAssignedPrivileges()
     {
-        $query = "SELECT xar_pid,
-                    xar_name,
-                    xar_realm,
-                    xar_module,
-                    xar_component,
-                    xar_instance,
-                    xar_level,
-                    xar_description
-                    FROM $this->privilegestable AS p, $this->acltable AS acl
-                    WHERE p.xar_pid = acl.xar_permid
-                      AND acl.xar_partid = $this->uid";
+        $query = "SELECT xar_pid, xar_name, xar_realm, xar_module,
+                    xar_component, xar_instance, xar_level, xar_description
+                  FROM $this->privilegestable AS p, $this->acltable AS acl
+                  WHERE p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array($this->uid));
         if (!$result) return;
 
         include_once 'modules/privileges/xarprivileges.php';
@@ -862,9 +846,9 @@ class xarRole
     function assignPrivilege($perm)
     {
         // create an entry in the privmembers table
-        $query = "INSERT INTO $this->acltable
-                VALUES (" . $this->getID() . "," . $perm->getID() . ")";
-        if (!$this->dbconn->Execute($query)) return;
+        $query = "INSERT INTO $this->acltable VALUES (?,?)";
+        $bindvars = array($this->getID(),$perm->getID());
+        if (!$this->dbconn->Execute($query,$bindvars)) return;
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -885,8 +869,9 @@ class xarRole
     {
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
-              WHERE xar_partid=" . $this->uid . " AND xar_permid=" . $perm->getID();
-        if (!$this->dbconn->Execute($query)) return;
+                  WHERE xar_partid= ? AND xar_permid= ?";
+        $bindvars = array($this->uid, $perm->getID());
+        if (!$this->dbconn->Execute($query,$bindvars)) return;
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -925,7 +910,8 @@ class xarRole
                         WHERE r.xar_uid = rm.xar_uid
                         AND r.xar_type = 0
                         AND r.xar_state != " . ROLES_STATE_DELETED .
-                        " AND rm.xar_parentid = $this->uid";
+                        " AND rm.xar_parentid = ?";
+            $bindvars = array($this->uid);
         } else {
             $query = "SELECT r.xar_uid,
                         r.xar_name,
@@ -939,15 +925,16 @@ class xarRole
                         r.xar_auth_module
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0 AND r.xar_state = $state
-                        AND rm.xar_parentid = $this->uid";
+                        AND r.xar_type = 0 AND r.xar_state = ?
+                        AND rm.xar_parentid = ?";
+            $bindvars = array($state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;
         if ($startnum != 0) {
-            $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1);
+            $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
         } else {
-            $result = $this->dbconn->Execute($query);
+            $result = $this->dbconn->Execute($query,$bindvars);
         }
         if (!$result) return;
         // CHECKME: I suppose this is what you meant here ?
@@ -996,15 +983,17 @@ class xarRole
                         AND r.xar_type = 0
                         AND r.xar_state != " . ROLES_STATE_DELETED .
                         " AND rm.xar_parentid = $this->uid";
+            $bindvars = array($this->uid);
         } else {
             $query = "SELECT COUNT(r.xar_uid)
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0 AND r.xar_state = $state
-                        AND rm.xar_parentid = $this->uid";
+                        AND r.xar_type = 0 AND r.xar_state = ?
+                        AND rm.xar_parentid = ?";
+            $bindvars = array($state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,$bindvars);
         if (!$result) return;
         list($numusers) = $result->fields;
         // done
@@ -1043,8 +1032,8 @@ class xarRole
             $query = "SELECT r.*
                         FROM $this->rolestable AS r, $this->rolememberstable AS rm
                         WHERE r.xar_uid = rm.xar_parentid
-                        AND rm.xar_uid = $this->uid";
-            $result = $this->dbconn->Execute($query);
+                        AND rm.xar_uid = ?";
+            $result = $this->dbconn->Execute($query,array($this->uid));
             if (!$result) return;
             // collect the table values and use them to create new role objects
             while (!$result->EOF) {

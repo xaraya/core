@@ -58,9 +58,8 @@ function roles_adminapi_delete($args)
     $rolestable = $xartable['roles'];
 
     // Delete the item
-    $query = "DELETE FROM $rolestable
-            WHERE xar_uid = " . xarVarPrepForStore($uid);
-    $result =& $dbconn->Execute($query);
+    $query = "DELETE FROM $rolestable WHERE xar_uid = ?";
+    $result =& $dbconn->Execute($query,array($uid));
     if (!$result) return;
 
     // Let any hooks
