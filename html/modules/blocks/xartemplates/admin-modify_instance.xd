@@ -206,15 +206,13 @@
             </p>
         </xar:if>
 
-		<xar:if condition="empty($extra_fields)">
-			<div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
-		<xar:else />
-        <!---
-            Blocks can send more fields to be shown and configured
-            the extra_fields var shows those values
-        --->
+	<xar:if condition="!empty($extra_fields)">
+            <xar:comment>
+                Blocks can send more fields to be shown and configured
+                the extra_fields var shows those values
+            </xar:comment>
             #$extra_fields#
-            <div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
         </xar:if>
         <div>#$hooks#</div>
+        <div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
     </form>
