@@ -38,23 +38,23 @@ function xarCache_init($args)
         return FALSE;
     }
 
-    $xarOutput_cacheCollection  = $cacheDir;
-    $xarOutput_cacheTheme       = isset($cachingConfiguration['Output.DefaultTheme']) ?
-                                    $cachingConfiguration['Output.DefaultTheme'] : '';
-    $xarOutput_cacheSizeLimit   = isset($cachingConfiguration['Output.SizeLimit']) ?
-                                    $cachingConfiguration['Output.SizeLimit'] : 2097152;
-    $xarPage_cacheTime          = isset($cachingConfiguration['Page.TimeExpiration']) ?
-                                    $cachingConfiguration['Page.TimeExpiration'] : 1800;
-    $xarPage_cacheDisplay       = isset($cachingConfiguration['Page.DisplayView']) ?
-                                    $cachingConfiguration['Page.DisplayView'] : 0;
-    $xarPage_cacheShowTime      = isset($cachingConfiguration['Page.ShowTime']) ?
-                                    $cachingConfiguration['Page.ShowTime'] : 1;
-    $xarPage_cacheExpireHeader  = isset($cachingConfiguration['Page.ExpireHeader']) ?
-                                    $cachingConfiguration['Page.ExpireHeader'] : 1;
-    $xarPage_cacheGroups        = isset($cachingConfiguration['Page.CacheGroups']) ?
-                                    $cachingConfiguration['Page.CacheGroups'] : '';
-    $xarBlock_cacheTime         = isset($cachingConfiguration['Block.TimeExpiration']) ?
-                                    $cachingConfiguration['Block.TimeExpiration'] : 7200;
+    $xarOutput_cacheCollection = $cacheDir;
+    $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
+        $cachingConfiguration['Output.DefaultTheme'] : '';
+    $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
+        $cachingConfiguration['Output.SizeLimit'] : 2097152;
+    $xarPage_cacheTime = isset($cachingConfiguration['Page.TimeExpiration']) ?
+        $cachingConfiguration['Page.TimeExpiration'] : 1800;
+    $xarPage_cacheDisplay = isset($cachingConfiguration['Page.DisplayView']) ?
+        $cachingConfiguration['Page.DisplayView'] : 0;
+    $xarPage_cacheShowTime = isset($cachingConfiguration['Page.ShowTime']) ?
+        $cachingConfiguration['Page.ShowTime'] : 1;
+    $xarPage_cacheExpireHeader = isset($cachingConfiguration['Page.ExpireHeader']) ?
+        $cachingConfiguration['Page.ExpireHeader'] : 1;
+    $xarPage_cacheGroups = isset($cachingConfiguration['Page.CacheGroups']) ?
+        $cachingConfiguration['Page.CacheGroups'] : '';
+    $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
+        $cachingConfiguration['Block.TimeExpiration'] : 7200;
 
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarCache__shutdown_handler');
@@ -189,7 +189,7 @@ function xarPageIsCached($cacheKey, $name = '')
 }
 
 /**
- * Check wheter a block is cached
+ * Check whether a block is cached
  *
  * @access public
  * @param  array $args($cacheKey,$blockDynamics, $blockPermissions, $name = '')
@@ -388,11 +388,11 @@ function xarPageSetCached($cacheKey, $name, $value)
                 $now = xarML('Last updated on #(1)',
                              strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
                 $value = preg_replace('#</body>#',
-                                      // TODO: set this up to be templated
-                                      '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
-                                      $value);
+                    // TODO: set this up to be templated
+                    '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
+                    $value);
             }
-            @fwrite($fp,$value);
+            @fwrite($fp, $value);
             @fclose($fp);
             @rename($tmp_cache_file, $cache_file);
         }
