@@ -28,16 +28,19 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
     {
         $this->Dynamic_Select_Property($args);
         if (count($this->options) == 0) {
-        /*  // TODO: get language list
-            $list = ...;
-            foreach ($list as $code => $language) {
-                $this->options[] = array('id' => $code,
-                                         'name' => $language);
-            }
-        */
-            $this->options[] = array('id' => 'eng',
-                                     'name' => 'English');
 
+            $list = xarMLSListSiteLocales();
+
+            asort($list);
+
+            foreach ($list as $locale) {
+                $locale_data =& xarMLSLoadLocaleData($locale);
+                $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
+                $this->options[] = array(
+                    'id'   => $locale,
+                    'name' => $name,
+                );
+            }
         }
     }
 
