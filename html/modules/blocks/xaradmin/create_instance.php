@@ -23,6 +23,7 @@ function blocks_admin_create_instance()
     if (!xarVarFetch('block_state', 'int:0:2', $state)) {return;}
     if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_template', 'str:1:', $template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_groups', 'array', $groups, array(), XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}
@@ -42,11 +43,12 @@ function blocks_admin_create_instance()
     $bid = xarModAPIFunc(
         'blocks', 'admin', 'create_instance',
         array(
-            'name'     => $name,
-            'title'    => $title,
-            'type'     => $type,
-            'template' => $template,
-            'state'    => $state
+            'name'      => $name,
+            'title'     => $title,
+            'type'      => $type,
+            'template'  => $template,
+            'state'     => $state,
+            'groups'    => $groups
         )
     );
 

@@ -30,33 +30,28 @@ function blocks_adminapi_create_group($args)
 
     // Argument check
     if ((!isset($name))) {
+        // TODO: the __FILE__ stuff can be handled centrally in xarMod.php
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__."(".__LINE__."): Missing block group name."));return;
+            new SystemException(__FILE__."(".__LINE__."): Missing block group name.")
+        );
+        return;
     }
 
     // Security
-    if(!xarSecurityCheck('AddBlock',1,'Block',"All:$name:All")) return;
+    if (!xarSecurityCheck('AddBlock', 1, 'Block', "All:$name:All")) {return;}
 
     // Load up database
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
-    $block_groups_table          = $xartable['block_groups'];
-
-    // TODO: make sure group does not already exist
+    $block_groups_table =& $xartable['block_groups'];
 
     // Insert group into table
     $nextId = $dbconn->GenId($block_groups_table);
-    $query = "INSERT INTO $block_groups_table (
-              xar_id,
-              xar_name,
-              xar_template)
-            VALUES (
-              " . xarVarPrepForStore($nextId) . ",
-              '" . xarVarPrepForStore($name) . "',
-              '" . xarVarPrepForStore($template) . "');";
+    $query = 'INSERT INTO ' . $block_groups_table
+        . ' (xar_id, xar_name, xar_template) VALUES (?, ?, ?)';
 
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    $result =& $dbconn->Execute($query , array($nextId, $name, $template));
+    if (!$result) {return;}
 
     // Get group ID as index of groups table
     $group_id = $dbconn->PO_Insert_ID($block_groups_table, 'xar_id');

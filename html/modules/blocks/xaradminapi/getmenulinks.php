@@ -47,7 +47,7 @@ function blocks_adminapi_getmenulinks()
     }
     if (xarSecurityCheck('AdminBlock', 0)) {
         $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'registerblock'),
+            'url'   => xarModURL('blocks', 'admin', 'new_type'),
             'title' => xarML('Add a new block type into the system'),
             'label' => xarML('Add Block Type')
         );

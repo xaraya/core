@@ -26,34 +26,7 @@
  */
 function blocks_adminapi_register_block_type($args)
 {
-    extract($args);
-
-    if (!empty($modName)) {$module = $modName;}
-    if (!empty($blockType)) {$type = $blockType;}
-
-    $origtype = xarModAPIFunc('blocks', 'user', 'getblocktype', array('module'=>$module, 'type'=>$type));
-
-    if (!empty($origtype)) {
-        // Already registered - no need to raise an error, since we are where we wanted to be.
-        // Just return the type ID.
-        return $origtype['tid'];
-    }
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $block_types_table = $xartable['block_types'];
-
-    $nextID = $dbconn->GenId($block_types_table);
-    $query = "INSERT INTO $block_types_table (xar_id, xar_module, xar_type)"
-        . " VALUES ($nextID, '" . xarVarPrepForStore($module) . "', '" . xarVarPrepForStore($type) . "');";
-    $result =& $dbconn->Execute($query);
-    if (!$result) {return;}
-
-    if (empty($nextID)) {
-        $nextID = $dbconn->PO_Insert_ID($block_types_table, 'xar_id');
-    }
-
-    return $nextID;
+    return xarModAPIfunc('blocks', 'admin', 'create_type', $args);
 }
 
 ?>

@@ -45,7 +45,7 @@ function blocks_adminapi_create_instance($args)
     // Security.
     // TODO: fix this. A security check on whether a certain title can be created
     // does not make any sense to me. Probably remove it.
-	if (!xarSecurityCheck('AddBlock', 1, 'Block', "All:$title:All")) {return;}
+	//if (!xarSecurityCheck('AddBlock', 1, 'Block', "All:$title:All")) {return;}
 
     // Make sure type exists.
     $blocktype = xarModAPIfunc('blocks', 'user', 'getblocktype', array('tid' => $type));

@@ -61,7 +61,7 @@
 			<span class="help" title="#xarML('Initial block group to place this block into (optional)')#"><label for="block_type"><xar:mlstring>Block group (optional)</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 78%; text-align: left;">
-			<select name="block_group" id="block_group">
+			<select name="block_groups[][gid]" id="block_groups">
             <option value="">
                 -- <xar:mlstring>Add To Block Group</xar:mlstring> --
             </option>

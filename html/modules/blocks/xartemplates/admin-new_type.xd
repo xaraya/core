@@ -1,0 +1,61 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+<xar:base-include-javascript module="base" filename="formcheck.js" />
+<script language="JavaScript">
+<!--
+	// Enter name of mandatory fields
+	//var blocks_fieldRequired = Array("modulename", "blockname");
+	// Enter field description to appear in the dialog box
+	//var blocks_fieldDescription = Array("Module Name", "Block Name");
+//-->
+</script>
+
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Register Block (Add Block Type)</xar:mlstring></h2>
+	<div style="margin: auto;">
+	<form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded" >
+              <div>
+		<div style="clear: both; padding-top: 10px;">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="confirm" id="confirm" value="true" />
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('This is the name of the module that this block is to be associated with.  Blocks must be associated with modules.  When in doubt use the base module.')#"><label for="modulename"><xar:mlstring>Module name:</xar:mlstring></label></span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <select name="modulename" id="modulename">
+                    <xar:loop name="$module_list">
+                        <xar:if condition="$loop:item.name eq $modulename">
+                            <option value="#xarVarPrepForDisplay($loop:item.name)#" selected="selected">#xarVarPrepForDisplay($loop:item.name)#</option>
+                        <xar:else />
+                            <option value="#xarVarPrepForDisplay($loop:item.name)#">#xarVarPrepForDisplay($loop:item.name)#</option>
+                        </xar:if>
+                    </xar:loop>
+                </select>
+            </span>
+		</div>
+
+		<div style="clear: both; padding-top: 10px;">
+            <span style="float: left; width: 20%; text-align: right;">
+                <span class="help" title="#xarML('This is the exact name of the block.  It must be case specific, otherwise the block will not function correctly.')#"><label for="blockname"><xar:mlstring>Block name:</xar:mlstring></label></span>
+            </span>
+            <span style="float: right; width: 78%; text-align: left;">
+                <xar:if condition="!empty($type_list)">
+                    <select name="blockname" id="blockname">
+                        <xar:loop name="$type_list">
+                            <xar:if condition="$loop:item.name eq $blockname">
+                                <option value="#xarVarPrepForDisplay($loop:item.name)#" selected="selected">#xarVarPrepForDisplay($loop:item.name)#</option>
+                            <xar:else />
+                                <option value="#xarVarPrepForDisplay($loop:item.name)#">#xarVarPrepForDisplay($loop:item.name)#</option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                <xar:else/>
+                    <input type="text" name="blockname" id="blockname" value="" size="40" maxlength="255" />
+                </xar:if>
+                <input type="submit" name="scan" value="#xarML('Scan Module')#" />
+            </span>
+            </div>
+            <p style="clear: both;"><input type="submit" name="submit" value="#xarML('Submit')#" /></p>
+        </div>
+	</form>
+	</div>
+</div>

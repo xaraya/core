@@ -50,12 +50,11 @@ function blocks_adminapi_update_instance_groups($args)
     $block_group_instances_table = $xartable['block_group_instances'];
 
     // Get the current group membership for this block instance.
-    // TODO: select template from table when available.
     $query = 'SELECT xar_id, xar_group_id, xar_template'
         . ' FROM ' . $block_group_instances_table
-        . ' WHERE xar_instance_id = ' . $bid;
+        . ' WHERE xar_instance_id = ?';
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query, array($bid));
 
     $current = array();
     while (!$result->EOF) {
@@ -67,28 +66,32 @@ function blocks_adminapi_update_instance_groups($args)
         $result->MoveNext();
     }
 
-    // Get the full list of block groups.
-    // TODO: move this to an API.
-    $query = 'SELECT xar_id FROM ' . $block_groups_table;
-    $result =& $dbconn->Execute($query);
-
-    $allgroups = array();
-    while (!$result->EOF) {
-        $allgroups[] = $result->fields[0];
-        $result->MoveNext();
-    }
-
+    // Get all groups for the main update loop.
+    $allgroups = xarModAPIfunc('blocks', 'user', 'getallgroups');
+    
     // Key the new groups on the gid for convenience
     $newgroups = array();
     foreach($groups as $group) {
+        // Set default template. This comes into play when
+        // creating a new block instance, and assigning it
+        // to a group at the same time.
+        if (!isset($group['template'])) {
+            $group['template'] = '';
+        }
+
         $newgroups[$group['gid']] = $group;
     }
 
     $query_arr = array();
 
     // Now we need to create a set of insert/update/delete commands.
+    // If sessions were available, I would normally delete all the rows
+    // and then insert new ones. In this case we don't want to do that
+    // as an error anywhere in this code or data could result in all existing
+    // block group associations being lost.
     // Loop for each group.
-    foreach ($allgroups as $gid) {
+    foreach ($allgroups as $group) {
+        $gid = $group['gid'];
         // If the group is not in the $groups array, and is in the 
         // current instance groups, then it should be deleted.
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
@@ -102,8 +105,8 @@ function blocks_adminapi_update_instance_groups($args)
             $nextId = $dbconn->GenId($block_group_instances_table);
             $query_arr[] = 'INSERT INTO ' . $block_group_instances_table
                 . ' (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)'
-                . ' VALUES (' . $nextId . ', ' . $gid . ', ' . $bid . ', 0, \''
-                . xarVarPrepForStore($newgroups[$gid]['template']) . '\')';
+                . ' VALUES (' . $nextId . ', ' . $gid . ', ' . $bid . ', 0, '
+                . $dbconn->qstr($newgroups[$gid]['template']) . ')';
             //echo " create:$gid with " . $newgroups[$gid]['template'];
         }
 
@@ -111,7 +114,7 @@ function blocks_adminapi_update_instance_groups($args)
         if (isset($newgroups[$gid]) && isset($current[$gid])
             && $newgroups[$gid]['template'] != $current[$gid]['template']) {
             $query_arr[] = 'UPDATE ' . $block_group_instances_table
-                . ' SET xar_template = \'' . xarVarPrepForStore($newgroups[$gid]['template']) . '\''
+                . ' SET xar_template = ' . $dbconn->qstr($newgroups[$gid]['template']) . ''
                 . ' WHERE xar_id = ' . $current[$gid]['id'];
             //echo " update:$gid with " . $newgroups[$gid]['template'];
         }

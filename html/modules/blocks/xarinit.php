@@ -133,7 +133,7 @@ function blocks_init()
 
     $query = xarDBCreateIndex($prefix . '_block_types',
                              array('name'   => 'i_' . $prefix . '_block_types',
-                                   'fields' => array('xar_type'),
+                                   'fields' => array('xar_module', 'xar_type'),
                                    'unique' => 'false'));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
