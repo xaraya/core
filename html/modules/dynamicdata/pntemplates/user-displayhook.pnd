@@ -1,0 +1,8 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<pnt:loop name="fields">
+    <tr align="left" valign="middle">
+        <td>&pnt-var-label;</td>
+        <td>&pnt-var-value; (&pnt-var-type;)</td>
+    </tr>
+</pnt:loop>
+</table>

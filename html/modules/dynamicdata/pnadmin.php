@@ -10,6 +10,441 @@
 // ----------------------------------------------------------------------
 
 /**
+ * This is a standard function to modify the configuration parameters of the
+ * module
+ */
+function dynamicdata_admin_modifyconfig()
+{
+    // Initialise the $data variable that will hold the data to be used in
+    // the blocklayout template, and get the common menu configuration - it
+    // helps if all of the module pages have a standard menu at the top to
+    // support easy navigation
+    $data = dynamicdata_admin_menu();
+
+    // Security check - important to do this as early as possible to avoid
+    // potential security holes or just too much wasted processing
+    if (!pnSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
+        $msg = pnML('Not authorized to modify #(1) configuration settings',
+                               'DynamicData');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($modid,
+         $itemtype) = pnVarCleanFromInput('modid',
+                                          'itemtype');
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module id', 'admin', 'modifyconfig', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $data['modid'] = $modid;
+    if (empty($itemtype)) {
+        $data['itemtype'] = '';
+        $itemtype = null;
+    } else {
+        $data['itemtype'] = $itemtype;
+    }
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = pnSecGenAuthKey();
+
+    $modinfo = pnModGetInfo($modid);
+    $data['module'] = pnML('for module "#(1)"', $modinfo['displayname']);
+    if (!empty($itemtype)) {
+        $data['module'] .= ' ' . pnML('type #(1)', $itemtype);
+    }
+
+    $data['newlink'] = pnModURL('dynamicdata','admin','newprop',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype));
+    $data['formlink'] = pnModURL('dynamicdata','admin','viewform',
+                                 array('modid' => $modid,
+                                      'itemtype' => $itemtype));
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $data['fields'] = pnModAPIFunc('dynamicdata','user','getprop',
+                                   array('modid' => $modid,
+                                         'itemtype' => $itemtype));
+    if (!isset($data['fields']) || $data['fields'] == false) {
+        $data['fields'] = array();
+    }
+
+    $data['labels'] = array(
+                            'id' => pnML('ID'),
+                            'label' => pnML('Label'),
+                            'type' => pnML('Type'),
+                            'default' => pnML('Default'),
+                            'validation' => pnML('Validation'),
+                            'new' => pnML('New'),
+                      );
+
+    // Specify some labels and values for display
+    $data['updatebutton'] = pnVarPrepForDisplay(pnML('Update Configuration'));
+
+    // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * This is a standard function to update the configuration parameters of the
+ * module given the information passed back by the modification form
+ */
+function dynamicdata_admin_updateconfig()
+{
+    // Get parameters from whatever input we need.  All arguments to this
+    // function should be obtained from pnVarCleanFromInput(), getting them
+    // from other places such as the environment is not allowed, as that makes
+    // assumptions that will not hold in future versions of PostNuke
+    list($modid,
+         $itemtype,
+         $dd_label,
+         $dd_type,
+         $dd_default,
+         $dd_validation) = pnVarCleanFromInput('modid',
+                                               'itemtype',
+                                               'dd_label',
+                                               'dd_type',
+                                               'dd_default',
+                                               'dd_validation');
+
+    // Confirm authorisation code.  This checks that the form had a valid
+    // authorisation code attached to it.  If it did not then the function will
+    // proceed no further as it is possible that this is an attempt at sending
+    // in false data to the system
+    if (!pnSecConfirmAuthKey()) {
+        $msg = pnML('Invalid authorization key for updating #(1) configuration',
+                    'DynamicData');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+
+    if (!pnModAPILoad('dynamicdata', 'admin'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','admin');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    // update old fields
+    foreach ($fields as $id => $field) {
+        if (empty($dd_label[$id])) {
+            // delete property (and corresponding data) in pnadminapi.php
+            if (!pnModAPIFunc('dynamicdata','admin','deleteprop',
+                              array('prop_id' => $id))) {
+                return;
+            }
+        } else {
+        // TODO : only if necessary
+            // update property in pnadminapi.php
+            if (!isset($dd_default[$id])) {
+                $dd_default[$id] = null;
+            }
+            if (!isset($dd_validation[$id])) {
+                $dd_validation[$id] = null;
+            }
+            if (!pnModAPIFunc('dynamicdata','admin','updateprop',
+                              array('prop_id' => $id,
+                              //      'modid' => $modid,
+                              //      'itemtype' => $itemtype,
+                                    'label' => $dd_label[$id],
+                                    'type' => $dd_type[$id],
+                                    'default' => $dd_default[$id],
+                                    'validation' => $dd_validation[$id]))) {
+                return;
+            }
+        }
+    }
+
+    // insert new field
+    if (!empty($dd_label[0]) && !empty($dd_type[0])) {
+        // create new property in pnadminapi.php
+        $prop_id = pnModAPIFunc('dynamicdata','admin','createprop',
+                                array('modid' => $modid,
+                                      'itemtype' => $itemtype,
+                                      'label' => $dd_label[0],
+                                      'type' => $dd_type[0],
+                                      'default' => $dd_default[0],
+                                      'validation' => $dd_validation[0]));
+        if (empty($prop_id)) {
+            return;
+        }
+    }
+
+    pnRedirect(pnModURL('dynamicdata', 'admin', 'modifyconfig',
+                        array('modid' => $modid,
+                              'itemtype' => $itemtype)));
+
+    // Return
+    return true;
+}
+
+/**
+ * generate the common admin menu configuration
+ */
+function dynamicdata_admin_menu()
+{
+    // Initialise the array that will hold the menu configuration
+    $menu = array();
+
+    // Specify the menu title to be used in your blocklayout template
+    $menu['menutitle'] = pnML('Dynamic Data Configuration');
+
+    // Preset some status variable
+    $menu['status'] = '';
+
+    // Return the array containing the menu configuration
+    return $menu;
+}
+
+// ----------------------------------------------------------------------
+// Hook functions (admin GUI)
+// ----------------------------------------------------------------------
+
+/**
+ * select dynamicdata for a new item - hook for ('item','new','GUI')
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_admin_newhook($args)
+{
+    extract($args);
+
+    if (!isset($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'modifyhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = 0;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        return;
+    } elseif (count($fields) == 0) {
+        return;
+    }
+
+    return pnTplModule('dynamicdata','admin','newhook',
+                         array('fields' => $fields));
+}
+
+/**
+ * modify dynamicdata for an item - hook for ('item','modify','GUI')
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_admin_modifyhook($args)
+{
+    extract($args);
+
+    if (!isset($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!isset($objectid) || !is_numeric($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object ID', 'admin', 'modifyhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'modifyhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } else {
+        $itemid = $objectid;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getall',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype,
+                                 'itemid' => $itemid));
+    if (!isset($fields) || $fields == false) {
+        return;
+    }
+
+    return pnTplModule('dynamicdata','admin','modifyhook',
+                         array('fields' => $fields));
+}
+
+/**
+ * modify configuration for a module - hook for ('module','modifyconfig','GUI')
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_admin_modifyconfighook($args)
+{
+    extract($args);
+
+    if (!isset($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'modifyconfighook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'modifyconfighook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!empty($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        $fields = array();
+    }
+
+    $labels = array();
+    $labels['dynamicdata'] = pnML('Dynamic Data Fields');
+    $labels['config'] = pnML('modify');
+    $link = pnModURL('dynamicdata','admin','modifyconfig',
+                     array('modid' => $modid,
+                           'itemtype' => $itemtype));
+
+    return pnTplModule('dynamicdata','admin','modifyconfighook',
+                         array('labels' => $labels,
+                               'link' => $link,
+                               'fields' => $fields));
+}
+
+// ----------------------------------------------------------------------
+// TODO: all of the 'standard' admin functions, if that makes sense someday...
+//
+
+/**
  * the main administration function
  * This function is the default function, and is called whenever the
  * module is initiated without defining arguments.  As such it can
@@ -607,414 +1042,9 @@ function dynamicdata_admin_delete($args)
     return true;
 }
 
-/**
- * This is a standard function to modify the configuration parameters of the
- * module
- */
-function dynamicdata_admin_modifyconfig()
-{
-    // Initialise the $data variable that will hold the data to be used in
-    // the blocklayout template, and get the common menu configuration - it
-    // helps if all of the module pages have a standard menu at the top to
-    // support easy navigation
-    $data = dynamicdata_admin_menu();
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-    if (!pnSecAuthAction(0, 'DynamicData::', '::', ACCESS_ADMIN)) {
-        $msg = pnML('Not authorized to modify #(1) configuration settings',
-                               'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
-
-    list($modid,
-         $itemtype) = pnVarCleanFromInput('modid',
-                                          'itemtype');
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'admin', 'modifyconfig', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $data['modid'] = $modid;
-    if (empty($itemtype)) {
-        $data['itemtype'] = '';
-        $itemtype = null;
-    } else {
-        $data['itemtype'] = $itemtype;
-    }
-
-    // Generate a one-time authorisation code for this operation
-    $data['authid'] = pnSecGenAuthKey();
-
-    $modinfo = pnModGetInfo($modid);
-    $data['module'] = pnML('for module "#(1)"', $modinfo['displayname']);
-    if (!empty($itemtype)) {
-        $data['module'] .= ' ' . pnML('type #(1)', $itemtype);
-    }
-
-    $data['newlink'] = pnModURL('dynamicdata','admin','newprop',
-                                array('modid' => $modid,
-                                      'itemtype' => $itemtype));
-    $data['formlink'] = pnModURL('dynamicdata','admin','viewform',
-                                 array('modid' => $modid,
-                                      'itemtype' => $itemtype));
-
-    if (!pnModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $data['fields'] = pnModAPIFunc('dynamicdata','user','getprop',
-                                   array('modid' => $modid,
-                                         'itemtype' => $itemtype));
-    if (!isset($data['fields']) || $data['fields'] == false) {
-        $data['fields'] = array();
-    }
-
-    $data['labels'] = array(
-                            'id' => pnML('ID'),
-                            'label' => pnML('Label'),
-                            'type' => pnML('Type'),
-                            'default' => pnML('Default'),
-                            'validation' => pnML('Validation'),
-                            'new' => pnML('New'),
-                      );
-
-    // Specify some labels and values for display
-    $data['updatebutton'] = pnVarPrepForDisplay(pnML('Update Configuration'));
-
-    // Return the template variables defined in this function
-    return $data;
-}
-
-/**
- * This is a standard function to update the configuration parameters of the
- * module given the information passed back by the modification form
- */
-function dynamicdata_admin_updateconfig()
-{
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from pnVarCleanFromInput(), getting them
-    // from other places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
-    list($modid,
-         $itemtype,
-         $dd_label,
-         $dd_type,
-         $dd_default,
-         $dd_validation) = pnVarCleanFromInput('modid',
-                                               'itemtype',
-                                               'dd_label',
-                                               'dd_type',
-                                               'dd_default',
-                                               'dd_validation');
-
-    // Confirm authorisation code.  This checks that the form had a valid
-    // authorisation code attached to it.  If it did not then the function will
-    // proceed no further as it is possible that this is an attempt at sending
-    // in false data to the system
-    if (!pnSecConfirmAuthKey()) {
-        $msg = pnML('Invalid authorization key for updating #(1) configuration',
-                    'DynamicData');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
-
-    if (!pnModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = pnModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-
-    if (!pnModAPILoad('dynamicdata', 'admin'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','admin');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    // update old fields
-    foreach ($fields as $id => $field) {
-        if (empty($dd_label[$id])) {
-            // delete property (and corresponding data) in pnadminapi.php
-        } else {
-            // update property in pnadminapi.php if necessary
-        }
-    }
-
-    // insert new field
-    if (!empty($dd_label[0]) && !empty($dd_type[0])) {
-        // create new property in pnadminapi.php
-        $prop_id = pnModAPIFunc('dynamicdata','admin','createprop',
-                                array('modid' => $modid,
-                                      'itemtype' => $itemtype,
-                                      'label' => $dd_label[0],
-                                      'type' => $dd_type[0],
-                                      'default' => $dd_default[0],
-                                      'validation' => $dd_validation[0]));
-        if (empty($prop_id)) {
-            return;
-        }
-    }
-
-    pnRedirect(pnModURL('dynamicdata', 'admin', 'modifyconfig',
-                        array('modid' => $modid,
-                              'itemtype' => $itemtype)));
-
-    // Return
-    return true;
-}
-
-/**
- * generate the common admin menu configuration
- */
-function dynamicdata_admin_menu()
-{
-    // Initialise the array that will hold the menu configuration
-    $menu = array();
-
-    // Specify the menu title to be used in your blocklayout template
-    $menu['menutitle'] = pnML('Dynamic Data Configuration');
-
-    // Preset some status variable
-    $menu['status'] = '';
-
-    // Return the array containing the menu configuration
-    return $menu;
-}
-
-// ----------------------------------------------------------------------
-// Hook functions (admin GUI)
+//
+// TODO: all of the 'standard' admin functions, if that makes sense someday...
 // ----------------------------------------------------------------------
 
-/**
- * select dynamicdata for a new item - hook for ('item','new','GUI')
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_admin_newhook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = 0;
-    }
-
-    if (!pnModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = pnModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-    if (!isset($fields) || $fields == false) {
-        return;
-    } elseif (count($fields) == 0) {
-        return;
-    }
-
-    return pnTplModule('dynamicdata','admin','newhook',
-                         array('fields' => $fields));
-}
-
-/**
- * modify dynamicdata for an item - hook for ('item','modify','GUI')
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_admin_modifyhook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'admin', 'modifyhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = null;
-    }
-
-    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
-        $itemid = $extrainfo['itemid'];
-    } else {
-        $itemid = $objectid;
-    }
-
-    if (!pnModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = pnModAPIFunc('dynamicdata','user','getall',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype,
-                                 'itemid' => $itemid));
-    if (!isset($fields) || $fields == false) {
-        return;
-    }
-
-    return pnTplModule('dynamicdata','admin','modifyhook',
-                         array('fields' => $fields));
-}
-
-/**
- * modify configuration for a module - hook for ('module','modifyconfig','GUI')
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_admin_modifyconfighook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyconfighook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyconfighook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (!empty($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = null;
-    }
-
-    if (!pnModAPILoad('dynamicdata', 'user'))
-    {
-        $msg = pnML('Unable to load #(1) #(2) API',
-                    'dynamicdata','user');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
-                       new SystemException($msg));
-        return $msg;
-    }
-    $fields = pnModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-    if (!isset($fields) || $fields == false) {
-        $fields = array();
-    }
-
-    $labels = array();
-    $labels['dynamicdata'] = pnML('Dynamic Data Fields');
-    $labels['config'] = pnML('modify');
-    $link = pnModURL('dynamicdata','admin','modifyconfig',
-                     array('modid' => $modid,
-                           'itemtype' => $itemtype));
-
-    return pnTplModule('dynamicdata','admin','modifyconfighook',
-                         array('labels' => $labels,
-                               'link' => $link,
-                               'fields' => $fields));
-}
 
 ?>

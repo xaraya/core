@@ -9,36 +9,32 @@
 // Purpose of file:  DynamicData administration API
 // ----------------------------------------------------------------------
 
+// ----------------------------------------------------------------------
+// Item data APIs
+// ----------------------------------------------------------------------
+
 /**
- * create a new dynamicdata item
+ * create new dynamicdata fields for an item
  *
  * @author the DynamicData module development team
- * @param $args['name'] name of the item
- * @param $args['number'] number of the item
- * @returns int
- * @return dynamicdata item ID on success, false on failure
+ * @param $args['itemid'] item id of the original item
+ * @param $args['values'] array of prop_id => value
+ * @param $args['modid'] module id for the original item
+ * @param $args['itemtype'] item type of the original item
+ * @returns bool
+ * @return true on success, false on failure
  * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_create($args)
 {
-
-    // Get arguments from argument array - all arguments to this function
-    // should be obtained from the $args array, getting them from other
-    // places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
     extract($args);
 
-    // Argument check - make sure that all required arguments are present
-    // and in the right format, if not then set an appropriate error
-    // message and return
-    // Note : since we have several arguments we want to check here, we'll
-    // report all those that are invalid at the same time...
     $invalid = array();
-    if (!isset($name) || !is_string($name)) {
-        $invalid[] = 'name';
+    if (!isset($itemid) || !is_numeric($itemid)) {
+        $invalid[] = 'item id';
     }
-    if (!isset($number) || !is_numeric($number)) {
-        $invalid[] = 'number';
+    if (!isset($values) || !is_array($values)) {
+        $invalid[] = 'values';
     }
     if (count($invalid) > 0) {
         $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -50,7 +46,7 @@ function dynamicdata_adminapi_create($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!pnSecAuthAction(0, 'DynamicData::Item', "$name::", ACCESS_ADD)) {
+    if (!pnSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_ADD)) {
         $msg = pnML('Not authorized to add #(1) items',
                     'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
@@ -58,145 +54,116 @@ function dynamicdata_adminapi_create($args)
         return;
     }
 
-    // Get database setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For pnDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
 
-    // It's good practice to name the table and column definitions you
-    // are getting - $table and $column don't cut it in more complex
-    // modules
-    $dynamicdatatable = $pntable['dynamicdata'];
+    $dynamicdata = $pntable['dynamic_data'];
 
-    // Get next ID in table - this is required prior to any insert that
-    // uses a unique ID, and ensures that the ID generation is carried
-    // out in a database-portable fashion
-    $nextId = $dbconn->GenId($dynamicdatatable);
+    foreach ($values as $prop_id => $value) {
+        // invalid prop_id or undefined value (empty is OK, though !)
+        if (empty($prop_id) || !is_numeric($prop_id) || !isset($value)) {
+            continue;
+        }
 
-    // Add item - the formatting here is not mandatory, but it does make
-    // the SQL statement relatively easy to read.  Also, separating out
-    // the sql statement from the Execute() command allows for simpler
-    // debug operation if it is ever needed
-    $sql = "INSERT INTO $dynamicdatatable (
-              pn_exid,
-              pn_name,
-              pn_number)
+        $nextId = $dbconn->GenId($dynamicdata);
+
+        $sql = "INSERT INTO $dynamicdata (
+                  pn_dd_id,
+                  pn_dd_propid,
+                  pn_dd_itemid,
+                  pn_dd_value)
             VALUES (
               $nextId,
-              '" . pnVarPrepForStore($name) . "',
-              " . pnvarPrepForStore($number) . ")";
-    $dbconn->Execute($sql);
+              " . pnVarPrepForStore($prop_id) . ",
+              " . pnVarPrepForStore($itemid) . ",
+              '" . pnvarPrepForStore($value) . "')";
 
-    // Check for an error with the database code, and if so raise an
-    // appropriate exception
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        $dbconn->Execute($sql);
+
+        // Check for an error with the database code, and if so raise an
+        // appropriate exception
+        if ($dbconn->ErrorNo() != 0) {
+            $msg = pnMLByKey('DATABASE_ERROR', $sql);
+            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+            return;
+        }
+
+        //$id = $dbconn->PO_Insert_ID($dynamicdata, 'pn_dd_id');
     }
 
-    // Get the ID of the item that we inserted.  It is possible, depending
-    // on your database, that this is different from $nextId as obtained
-    // above, so it is better to be safe than sorry in this situation
-    $exid = $dbconn->PO_Insert_ID($dynamicdatatable, 'pn_exid');
-
-    // Let any hooks know that we have created a new item.  As this is a
-    // create hook we're passing 'exid' as the extra info, which is the
-    // argument that all of the other functions use to reference this
-    // item
-// TODO: evaluate
-//    pnModCallHooks('item', 'create', $exid, 'exid');
-    $item = $args;
-    $item['module'] = 'dynamicdata';
-    $item['itemid'] = $exid;
-    pnModCallHooks('item', 'create', $exid, $item);
-
-    // Return the id of the newly created item to the calling process
-    return $exid;
+    return true;
 }
 
 /**
- * delete a dynamicdata item
+ * delete dynamicdata fields for an item
  *
  * @author the DynamicData module development team
- * @param $args['exid'] ID of the item
+ * @param $args['itemid'] item id of the original item
+ * @param $args['modid'] module id for the original item
+ * @param $args['itemtype'] item type of the original item
  * @returns bool
  * @return true on success, false on failure
  * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_delete($args)
 {
-    // Get arguments from argument array - all arguments to this function
-    // should be obtained from the $args array, getting them from other
-    // places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
     extract($args);
 
-    // Argument check - make sure that all required arguments are present and
-    // in the right format, if not then set an appropriate error message
-    // and return
-    if (!isset($exid) || !is_numeric($exid)) {
+    $invalid = array();
+    if (!isset($itemid) || !is_numeric($itemid)) {
+        $invalid[] = 'item id';
+    }
+    if (!isset($modid) || !is_numeric($modid)) {
+        $invalid[] = 'module id';
+    }
+    if (count($invalid) > 0) {
         $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'item ID', 'admin', 'delete', 'DynamicData');
+                    join(', ',$invalid), 'admin', 'delete', 'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    // Load API.  Note that this is loading the user API in addition to
-    // the administration API, that is because the user API contains
-    // the function to obtain item information which is the first thing
-    // that we need to do.  If the API fails to load the raised exception is thrown back to PostNuke
-    if (!pnModAPILoad('dynamicdata', 'user')) return; // throw back
-
-    // The user API function is called.  This takes the item ID which
-    // we obtained from the input and gets us the information on the
-    // appropriate item.  If the item does not exist we post an appropriate
-    // message and return
-    $item = pnModAPIFunc('dynamicdata',
-            'user',
-            'get',
-            array('exid' => $exid));
-
-    // Check for exceptions
-    if (!isset($item) && pnExceptionMajor() != PN_NO_EXCEPTION) return; // throw back
+    if (!isset($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = 0;
+    }
 
     // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing.
-    // However, in this case we had to wait until we could obtain the item
-    // name to complete the instance information so this is the first
-    // chance we get to do the check
-    if (!pnSecAuthAction(0, 'DynamicData::Item', "$item[name]::$exid", ACCESS_DELETE)) {
-        $msg = pnML('Not authorized to delete #(1) item #(2)',
-                    'DynamicData', pnVarPrepForStore($exid));
+    // avoid potential security holes or just too much wasted processing
+    if (!pnSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_DELETE)) {
+        $msg = pnML('Not authorized to delete #(1) items',
+                    'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
         return;
     }
 
-    // Get database setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For pnDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        return true;
+    }
+    $ids = array_keys($fields);
+
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
 
-    // It's good practice to name the table and column definitions you
-    // are getting - $table and $column don't cut it in more complex
-    // modules
-    $dynamicdatatable = $pntable['dynamicdata'];
+    $dynamicdata = $pntable['dynamic_data'];
 
-    // Delete the item - the formatting here is not mandatory, but it does
-    // make the SQL statement relatively easy to read.  Also, separating
-    // out the sql statement from the Execute() command allows for simpler
-    // debug operation if it is ever needed
-    $sql = "DELETE FROM $dynamicdatatable
-            WHERE pn_exid = " . pnVarPrepForStore($exid);
+    $sql = "DELETE FROM $dynamicdata
+            WHERE pn_dd_propid IN (" . join(', ',$ids) . ")
+              AND pn_dd_itemid = " . pnVarPrepForStore($itemid);
+
     $dbconn->Execute($sql);
 
     // Check for an error with the database code, and if so raise an
@@ -208,144 +175,552 @@ function dynamicdata_adminapi_delete($args)
         return;
     }
 
-    // Let any hooks know that we have deleted an item.  As this is a
-    // delete hook we're not passing any extra info
-//    pnModCallHooks('item', 'delete', $exid, '');
-    $item['module'] = 'dynamicdata';
-    $item['itemid'] = $exid;
-    pnModCallHooks('item', 'delete', $exid, $item);
-
-    // Let the calling process know that we have finished successfully
     return true;
 }
 
 /**
- * update a dynamicdata item
+ * update dynamicdata fields for an item
  *
  * @author the DynamicData module development team
- * @param $args['exid'] the ID of the item
- * @param $args['name'] the new name of the item
- * @param $args['number'] the new number of the item
+ * @param $args['itemid'] item id of the original item
+ * @param $args['values'] array of prop_id => value
+ * @param $args['modid'] module id for the original item
+ * @param $args['itemtype'] item type of the original item
+ * @returns bool
+ * @return true on success, false on failure
  * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_update($args)
 {
-    // Get arguments from argument array - all arguments to this function
-    // should be obtained from the $args array, getting them from other
-    // places such as the environment is not allowed, as that makes
-    // assumptions that will not hold in future versions of PostNuke
     extract($args);
 
-    // Argument check - make sure that all required arguments are present
-    // and in the right format, if not then set an appropriate error
-    // message and return
-    // Note : since we have several arguments we want to check here, we'll
-    // report all those that are invalid at the same time...
     $invalid = array();
-    if (!isset($exid) || !is_numeric($exid)) {
-        $invalid[] = 'item ID';
+    if (!isset($itemid) || !is_numeric($itemid)) {
+        $invalid[] = 'item id';
     }
-    if (!isset($name) || !is_string($name)) {
-        $invalid[] = 'name';
+    if (!isset($modid) || !is_numeric($modid)) {
+        $invalid[] = 'module id';
     }
-    if (!isset($number) || !is_numeric($number)) {
-        $invalid[] = 'number';
+    if (!isset($values) || !is_array($values)) {
+        $invalid[] = 'values';
     }
     if (count($invalid) > 0) {
         $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'update', 'DynamicData');
+                    join(', ',$invalid), 'admin', 'create', 'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    // Load API.  Note that this is loading the user API in addition to
-    // the administration API, that is because the user API contains
-    // the function to obtain item information which is the first thing
-    // that we need to do.  If the API fails to load the raised exception is thrown back to PostNuke
-    if (!pnModAPILoad('dynamicdata', 'user')) return; // throw back
-
-    // The user API function is called.  This takes the item ID which
-    // we obtained from the input and gets us the information on the
-    // appropriate item.  If the item does not exist we post an appropriate
-    // message and return
-    $item = pnModAPIFunc('dynamicdata',
-            'user',
-            'get',
-            array('exid' => $exid));
-
-    // Check for exceptions
-    if (!isset($item) && pnExceptionMajor() != PN_NO_EXCEPTION) return; // throw back
+    if (!isset($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = 0;
+    }
 
     // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing.
-    // However, in this case we had to wait until we could obtain the item
-    // name to complete the instance information so this is the first
-    // chance we get to do the check
-
-    // Note that at this stage we have two sets of item information, the
-    // pre-modification and the post-modification.  We need to check against
-    // both of these to ensure that whoever is doing the modification has
-    // suitable permissions to edit the item otherwise people can potentially
-    // edit areas to which they do not have suitable access
-    if (!pnSecAuthAction(0, 'DynamicData::Item', "$item[name]::$exid", ACCESS_EDIT)) {
-        $msg = pnML('Not authorized to edit #(1) item #(2)',
-                    'DynamicData', pnVarPrepForStore($exid));
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
-    if (!pnSecAuthAction(0, 'DynamicData::Item', "$name::$exid", ACCESS_EDIT)) {
-        $msg = pnML('Not authorized to edit #(1) item #(2)',
-                    'DynamicData', pnVarPrepForStore($exid));
+    // avoid potential security holes or just too much wasted processing
+    if (!pnSecAuthAction(0, 'DynamicData::Item', "::$itemid", ACCESS_ADD)) {
+        $msg = pnML('Not authorized to add #(1) items',
+                    'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
         return;
     }
 
-    // Get database setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For pnDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
+// TODO: be a bit more efficient in how we update fields here :-)
+    if (!pnModAPIFunc('dynamicdata', 'admin', 'delete',
+                      array('modid' => $modid,
+                            'itemtype' => $itemtype,
+                            'itemid' => $itemid))) {
+        return;
+    }
+
+    if (!pnModAPIFunc('dynamicdata', 'admin', 'create',
+                      array('modid' => $modid,
+                            'itemtype' => $itemtype,
+                            'itemid' => $itemid,
+                            'values'  => $values))) {
+        return;
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------
+// Hook functions (admin API)
+// ----------------------------------------------------------------------
+
+/**
+ * create fields for an item - hook for ('item','create','API')
+ * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_createhook($args)
+{
+    extract($args);
+
+    if (!isset($objectid) || !is_numeric($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object id', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    if (!isset($extrainfo) || !is_array($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!empty($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!empty($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } else {
+        $itemid = $objectid;
+    }
+    if (empty($itemid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        $fields = array();
+    }
+
+    $values = array();
+    foreach ($fields as $id => $field) {
+// TODO: allow field label (sanitized !) here too ?
+        if (isset($extrainfo['dd_'.$id])) {
+             $values[$id] = $extrainfo['dd_'.$id];
+        } else {
+             $values[$id] = pnVarCleanFromInput('dd_'.$id);
+        }
+    }
+
+    if (!pnModAPIFunc('dynamicdata', 'admin', 'create',
+                      array('modid' => $modid,
+                            'itemtype' => $itemtype,
+                            'itemid' => $itemid,
+                            'values'  => $values))) {
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // update the extrainfo array
+    foreach ($fields as $id => $field) {
+        if (isset($values[$id])) {
+            $extrainfo['dd_'.$id] = $values[$id];
+        }
+    }
+
+    // Return the extra info
+    return $extrainfo;
+}
+
+/**
+ * update fields for an item - hook for ('item','update','API')
+ * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_updatehook($args)
+{
+    extract($args);
+
+    if (!isset($objectid) || !is_numeric($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object id', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    if (!isset($extrainfo) || !is_array($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!empty($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!empty($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } else {
+        $itemid = $objectid;
+    }
+    if (empty($itemid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'updatehook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (!isset($fields) || $fields == false) {
+        $fields = array();
+    }
+
+    $values = array();
+    foreach ($fields as $id => $field) {
+// TODO: allow field label (sanitized !) here too ?
+        if (isset($extrainfo['dd_'.$id])) {
+             $values[$id] = $extrainfo['dd_'.$id];
+        } else {
+             $values[$id] = pnVarCleanFromInput('dd_'.$id);
+        }
+    }
+
+    if (!pnModAPIFunc('dynamicdata', 'admin', 'update',
+                      array('modid' => $modid,
+                            'itemtype' => $itemtype,
+                            'itemid' => $itemid,
+                            'values'  => $values))) {
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // update the extrainfo array
+    foreach ($fields as $id => $field) {
+        if (isset($values[$id])) {
+            $extrainfo['dd_'.$id] = $values[$id];
+        } elseif (isset($extrainfo['dd_'.$id])) {
+            unset($extrainfo['dd_'.$id]);
+        }
+    }
+
+    // Return the extra info
+    return $extrainfo;
+}
+
+/**
+ * delete fields for an item - hook for ('item','delete','API')
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_deletehook($args)
+{
+    extract($args);
+
+    if (!isset($objectid) || !is_numeric($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object id', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    if (!isset($extrainfo) || !is_array($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'createhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!empty($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!empty($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } else {
+        $itemid = $objectid;
+    }
+    if (empty($itemid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name', 'admin', 'deletehook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!pnModAPIFunc('dynamicdata', 'admin', 'delete',
+                      array('modid' => $modid,
+                            'itemtype' => $itemtype,
+                            'itemid' => $itemid))) {
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // Return the extra info
+    return $extrainfo;
+}
+
+/**
+ * update configuration for a module - hook for ('module','updateconfig','API')
+ * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_updateconfighook($args)
+{
+    // Return the extra info
+    return $extrainfo;
+
+/*
+ * currently NOT used (we're going through the 'normal' updateconfig for now)
+*/
+
+}
+
+/**
+ * delete all dynamicdata fields for a module - hook for ('module','remove','API')
+ *
+ * @param $args['objectid'] ID of the object (must be the module name here !!)
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_removehook($args)
+{
+    extract($args);
+
+    if (!isset($extrainfo)) {
+        $extrainfo = array();
+    }
+
+    // When called via hooks, we should get the real module name from objectid
+    // here, because the current module is probably going to be 'modules' !!!
+    if (!isset($objectid) || !is_string($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object ID (= module name)', 'admin', 'removehook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    $modid = pnModGetIDFromName($objectid);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module ID', 'admin', 'removehook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    if (!pnSecAuthAction(0, "DynamicData::Item", "$modid::", ACCESS_DELETE)) {
+        $msg = pnML('Not authorized to delete #(1) for #(2)',
+                    'category items',pnVarPrepForStore($modid));
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // Get database setup
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
 
-    // It's good practice to name the table and column definitions you
-    // are getting - $table and $column don't cut it in more complex
-    // modules
-    $dynamicdatatable = $pntable['dynamicdata'];
+    $dynamicprop = $pntable['dynamic_properties'];
 
-    // Update the item - the formatting here is not mandatory, but it does
-    // make the SQL statement relatively easy to read.  Also, separating
-    // out the sql statement from the Execute() command allows for simpler
-    // debug operation if it is ever needed
-    $sql = "UPDATE $dynamicdatatable
-            SET pn_name = '" . pnVarPrepForStore($name) . "',
-                pn_number = " . pnVarPrepForStore($number) . "
-            WHERE pn_exid = " . pnVarPrepForStore($exid);
-    $dbconn->Execute($sql);
+    $sql = "SELECT pn_prop_id
+            FROM $dynamicprop
+            WHERE pn_prop_moduleid = " . pnVarPrepForStore($modid);
 
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
+    $result = $dbconn->Execute($sql);
+
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $sql);
+        $msg = pnML('Database error for #(1) function #(2)() in module #(3)',
+                    'admin', 'removehook', 'dynamicdata');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+    $ids = array();
+    while (!$result->EOF) {
+        list($id) = $result->fields;
+        $result->MoveNext();
+        $ids[] = $id;
+    }
+    $result->Close;
+
+    if (count($ids) == 0) {
+        return $extrainfo;
     }
 
-    // Let any hooks know that we have updated an item.  As this is an
-    // update hook we're passing the updated $item array as the extra info
-    $item['module'] = 'dynamicdata';
-    $item['itemid'] = $exid;
-    $item['name'] = $name;
-    $item['number'] = $number;
-    pnModCallHooks('item', 'update', $exid, $item);
+    $dynamicdata = $pntable['dynamic_data'];
 
-    // Let the calling process know that we have finished successfully
-    return true;
+    // Delete the item fields
+    $sql = "DELETE FROM $dynamicdata
+            WHERE pn_dd_propid IN (" . join(', ',$ids) . ")";
+    $dbconn->Execute($sql);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnML('Database error for #(1) function #(2)() in module #(3)',
+                    'admin', 'removehook', 'dynamicdata');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // Delete the properties
+    $sql = "DELETE FROM $dynamicprop
+            WHERE pn_prop_id IN (" . join(', ',$ids) . ")";
+    $dbconn->Execute($sql);
+
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnML('Database error for #(1) function #(2)() in module #(3)',
+                    'admin', 'removehook', 'dynamicdata');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException($msg));
+        // we *must* return $extrainfo for now, or the next hook will fail
+        //return false;
+        return $extrainfo;
+    }
+
+    // Return the extra info
+    return $extrainfo;
 }
+
+// ----------------------------------------------------------------------
+// Property field APIs
+// ----------------------------------------------------------------------
 
 /**
  * create a new property field
@@ -365,24 +740,16 @@ function dynamicdata_adminapi_createprop($args)
 {
     extract($args);
 
+    // Required arguments
     $invalid = array();
     if (!isset($modid) || !is_numeric($modid)) {
         $invalid[] = 'module id';
-    }
-    if (!isset($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = 0;
     }
     if (!isset($label) || !is_string($label)) {
         $invalid[] = 'label';
     }
     if (!isset($type) || !is_numeric($type)) {
         $invalid[] = 'type';
-    }
-    if (!isset($default) || !is_string($default)) {
-        $default = '';
-    }
-    if (!isset($validation) || !is_string($validation)) {
-        $validation = '';
     }
     if (count($invalid) > 0) {
         $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
@@ -392,9 +759,20 @@ function dynamicdata_adminapi_createprop($args)
         return;
     }
 
+    // Optional arguments
+    if (!isset($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = 0;
+    }
+    if (!isset($default) || !is_string($default)) {
+        $default = '';
+    }
+    if (!isset($validation) || !is_string($validation)) {
+        $validation = '';
+    }
+
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if (!pnSecAuthAction(0, 'DynamicData::Fields', "$label:$type:", ACCESS_ADD)) {
+    if (!pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:", ACCESS_ADD)) {
         $msg = pnML('Not authorized to add #(1) items',
                     'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
@@ -460,383 +838,185 @@ function dynamicdata_adminapi_createprop($args)
     return $prop_id;
 }
 
-// TODO...
-
-// ----------------------------------------------------------------------
-// Hook functions (admin API)
-// ----------------------------------------------------------------------
-
 /**
- * create field for an item - hook for ('item','create','API')
- * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
+ * update a property field
  *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
+ * @author the DynamicData module development team
+ * @param $args['prop_id'] property id of the item field to update
+ * @param $args['modid'] module id of the item field to update (optional)
+ * @param $args['itemtype'] item type of the item field to update (optional)
+ * @param $args['label'] name of the field to update
+ * @param $args['type'] type of the field to update
+ * @param $args['default'] default of the field to update (optional)
+ * @param $args['validation'] validation of the field to update (optional)
  * @returns bool
  * @return true on success, false on failure
  * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_createhook($args)
+function dynamicdata_adminapi_updateprop($args)
 {
     extract($args);
 
-    if (!isset($extrainfo)) {
-        $extrainfo = array();
+    // Required arguments
+    $invalid = array();
+    if (!isset($prop_id) || !is_numeric($prop_id)) {
+        $invalid[] = 'property id';
     }
-
-    // see if we have anything to do here (might be empty => return)
-    if (empty($extrainfo['dd_*']) || count($extrainfo['dd_*']) == 0) {
-        // try to get cids from input
-        $cids = pnVarCleanFromInput('dd_*');
-        if (empty($cids) || !is_array($cids)) {
-            $extrainfo['dd_*'] = array();
-            // no dynamicdata to link here
-            return $extrainfo;
-        } else {
-            $extrainfo['dd_*'] = $cids;
-        }
+    if (!isset($label) || !is_string($label)) {
+        $invalid[] = 'label';
     }
-    // get all valid cids
-    $seencid = array();
-    foreach ($extrainfo['dd_*'] as $cid) {
-        if (empty($cid) || !is_numeric($cid)) {
-            continue;
-        }
-        $seencid[$cid] = 1;
+    if (!isset($type) || !is_numeric($type)) {
+        $invalid[] = 'type';
     }
-    if (count($seencid) == 0) {
-        // no dynamicdata to link here
-        return $extrainfo;
-    }
-    $cids = array_keys($seencid);
-
-    if (!isset($objectid) || !is_numeric($objectid)) {
+    if (count($invalid) > 0) {
         $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'admin', 'createhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                    join(', ',$invalid), 'admin', 'updateprop', 'DynamicData');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-        return false;
+        return;
     }
 
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    if (!pnModAPIFunc('dynamicdata', 'admin', 'linkcat',
-                      array('dd_*'  => $cids,
-                            'iids'  => array($objectid),
-                            'modid' => $modid))) {
-        return false;
-    }
-
-    // Return the extra info
-    return $extrainfo;
-}
-
-/**
- * update field for an item - hook for ('item','update','API')
- * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_adminapi_updatehook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $extrainfo = array();
-    }
-
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'admin', 'createhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    // see what we have to do here (might be empty => we need to unlink)
-    if (empty($extrainfo['dd_*'])) {
-        // try to get cids from input
-        $cids = pnVarCleanFromInput('dd_*');
-        if (empty($cids) || !is_array($cids)) {
-            $extrainfo['dd_*'] = array();
-        } else {
-            $extrainfo['dd_*'] = $cids;
-        }
-    }
-    // get all valid cids for this item
-    // Note : an item may *not* belong to the same cid twice
-    $seencid = array();
-    foreach ($extrainfo['dd_*'] as $cid) {
-        if (empty($cid) || !is_numeric($cid)) {
-            continue;
-        }
-        $seencid[$cid] = 1;
-    }
-    $cids = array_keys($seencid);
-
-    if (count($cids) == 0) {
-        if (!pnModAPIFunc('dynamicdata', 'admin', 'unlink',
-                          array('iid' => $objectid,
-                                'modid' => $modid))) {
-            return false;
-        }
-    } elseif (!pnModAPIFunc('dynamicdata', 'admin', 'linkcat',
-                            array('dd_*'  => $cids,
-                                  'iids'  => array($objectid),
-                                  'modid' => $modid,
-                                  'clean_first' => true))) {
-        return false;
-    }
-
-    // Return the extra info
-    return $extrainfo;
-}
-
-/**
- * delete field for an item - hook for ('item','delete','API')
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_adminapi_deletehook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $extrainfo = array();
-    }
-
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'admin', 'deletehook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'deletehook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    if (!pnModAPIFunc('dynamicdata', 'admin', 'unlink',
-                      array('iid' => $objectid,
-                            'modid' => $modid))) {
-        return false;
-    }
-
-    // Return the extra info
-    return $extrainfo;
-}
-
-/**
- * update configuration for a module - hook for ('module','updateconfig','API')
- * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
- *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_adminapi_updateconfighook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $extrainfo = array();
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = pnModGetName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
-
-    $modid = pnModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'updateconfighook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    // see what we have to do here (might be empty => we need to delete)
-    if (empty($extrainfo['number_of_dynamicdata'])) {
-        // try to get number of dynamicdata from input
-        $numcats = (int) pnVarCleanFromInput('number_of_dynamicdata');
-    } else {
-        $numcats = $extrainfo['number_of_dynamicdata'];
-    }
-    if (empty($numcats) || !is_numeric($numcats)) {
-        $numcats = 0;
-    }
-    if (!empty($extrainfo['itemtype'])) {
-        pnModSetVar($modname,'number_of_dynamicdata.'.$extrainfo['itemtype'],$numcats);
-    } else {
-        pnModSetVar($modname,'number_of_dynamicdata',$numcats);
-    }
-
-    if (empty($extrainfo['dd_*']) || !is_array($extrainfo['dd_*'])) {
-        // try to get cids from input
-        $cids = pnVarCleanFromInput('dd_*');
-        if (empty($cids) || !is_array($cids)) {
-            $cids = array();
-        }
-    } else {
-        $cids = $extrainfo['dd_*'];
-    }
-    // get all valid master cids for this module
-    // Note : a module might have the same master cid twice (just in case...)
-    $mastercid = array();
-    foreach ($cids as $cid) {
-        if (empty($cid) || !is_numeric($cid)) {
-            continue;
-        }
-        $mastercids[] = $cid;
-    }
-    if (count($mastercids) > $numcats) {
-        $mastercids = array_slice($mastercids,0,$numcats);
-    }
-
-    if ($numcats == 0 || count($mastercids) == 0) {
-        if (!empty($extrainfo['itemtype'])) {
-            pnModDelVar($modname,'mastercids.'.$extrainfo['itemtype']);
-        } else {
-            pnModDelVar($modname,'mastercids');
-        }
-    } else {
-        if (!empty($extrainfo['itemtype'])) {
-            pnModSetVar($modname,'mastercids.'.$extrainfo['itemtype'],
-                        join(';',$mastercids));
-        } else {
-            pnModSetVar($modname,'mastercids',join(';',$mastercids));
-        }
-    }
-
-    // Return the extra info
-    return $extrainfo;
-}
-
-/**
- * delete all category links for a module - hook for ('module','remove','API')
- *
- * @param $args['objectid'] ID of the object (must be the module name here !!)
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
- */
-function dynamicdata_adminapi_removehook($args)
-{
-    extract($args);
-
-    if (!isset($extrainfo)) {
-        $extrainfo = array();
-    }
-
-    // When called via hooks, we should get the real module name from objectid
-    // here, because the current module is probably going to be 'modules' !!!
-    if (!isset($objectid) || !is_string($objectid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID (= module name)', 'admin', 'removehook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    $modid = pnModGetIDFromName($objectid);
-    if (empty($modid)) {
-        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module ID', 'admin', 'removehook', 'dynamicdata');
-        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return false;
-    }
-
-    if (!pnSecAuthAction(0, "dynamicdata::item", ":$modid:", ACCESS_DELETE)) {
-        $msg = pnML('Not authorized to delete #(1) for #(2)',
-                    'category items',pnVarPrepForStore($modid));
+    // Security check - important to do this as early on as possible to
+    // avoid potential security holes or just too much wasted processing
+    if (!pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:$prop_id", ACCESS_EDIT)) {
+        $msg = pnML('Not authorized to update #(1) items',
+                    'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
-        return false;
+        return;
     }
 
-    // Get database setup
+    // Get database setup - note that both pnDBGetConn() and pnDBGetTables()
+    // return arrays but we handle them differently.  For pnDBGetConn()
+    // we currently just want the first item, which is the official
+    // database handle.  For pnDBGetTables() we want to keep the entire
+    // tables array together for easy reference later on
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
-    $dynamicdatafieldtable = $pntable['dynamicdata_field'];
-    $dynamicdatafieldcolumn = &$pntable['dynamicdata_field_column'];
 
-    // Delete the link
-    $sql = "DELETE FROM $dynamicdatafieldtable
-            WHERE $dynamicdatafieldcolumn[modid] = " . pnVarPrepForStore($modid);
-    $dbconn->Execute($sql);
+    // It's good practice to name the table and column definitions you
+    // are getting - $table and $column don't cut it in more complex
+    // modules
+    $dynamicprop = $pntable['dynamic_properties'];
 
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnML('Database error for #(1) function #(2)() in module #(3)',
-                    'admin', 'removehook', 'dynamicdata');
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return false;
+    $sql = "UPDATE $dynamicprop
+            SET pn_prop_label = '" . pnVarPrepForStore($label) . "',
+                pn_prop_dtype = " . pnVarPrepForStore($type);
+    if (isset($default) && is_string($default)) {
+        $sql .= ", pn_prop_default = '" . pnVarPrepForStore($default) . "'";
+    }
+    if (isset($validation) && is_string($validation)) {
+        $sql .= ", pn_prop_validation = '" . pnVarPrepForStore($validation) . "'";
+    }
+// TODO: evaluate if we allow update those too
+    if (isset($modid) && is_numeric($modid)) {
+        $sql .= ", pn_prop_moduleid = " . pnVarPrepForStore($modid);
+    }
+    if (isset($itemtype) && is_numeric($itemtype)) {
+        $sql .= ", pn_prop_itemtype = " . pnVarPrepForStore($itemtype);
     }
 
-    // Return the extra info
-    return $extrainfo;
+    $sql .= " WHERE pn_prop_id = " . pnVarPrepForStore($prop_id);
+
+    $dbconn->Execute($sql);
+
+    // Check for an error with the database code, and if so raise an
+    // appropriate exception
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $sql);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    return true;
 }
+
+/**
+ * delete a property field
+ *
+ * @author the DynamicData module development team
+ * @param $args['prop_id'] property id of the item field to delete
+// TODO: do we want those for security check ? Yes, but the original values...
+ * @param $args['modid'] module id of the item field to delete
+ * @param $args['itemtype'] item type of the item field to delete
+ * @param $args['label'] name of the field to delete
+ * @param $args['type'] type of the field to delete
+ * @param $args['default'] default of the field to delete
+ * @param $args['validation'] validation of the field to delete
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_adminapi_deleteprop($args)
+{
+    extract($args);
+
+    // Required arguments
+    $invalid = array();
+    if (!isset($prop_id) || !is_numeric($prop_id)) {
+        $invalid[] = 'property id';
+    }
+    if (count($invalid) > 0) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    join(', ',$invalid), 'admin', 'deleteprop', 'DynamicData');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return;
+    }
+
+    // Security check - important to do this as early on as possible to
+    // avoid potential security holes or just too much wasted processing
+// TODO: check based on other arguments too
+    if (!pnSecAuthAction(0, 'DynamicData::Field', "::$prop_id", ACCESS_DELETE)) {
+        $msg = pnML('Not authorized to update #(1) items',
+                    'DynamicData');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return;
+    }
+
+    list($dbconn) = pnDBGetConn();
+    $pntable = pnDBGetTables();
+
+    // It's good practice to name the table and column definitions you
+    // are getting - $table and $column don't cut it in more complex
+    // modules
+    $dynamicprop = $pntable['dynamic_properties'];
+
+    $sql = "DELETE FROM $dynamicprop
+            WHERE pn_prop_id = " . pnVarPrepForStore($prop_id);
+
+    $dbconn->Execute($sql);
+
+    // Check for an error with the database code, and if so raise an
+    // appropriate exception
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $sql);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    // delete all data too !
+    $dynamicdata = $pntable['dynamic_data'];
+
+    $sql = "DELETE FROM $dynamicdata
+            WHERE pn_dd_propid = " . pnVarPrepForStore($prop_id);
+
+    $dbconn->Execute($sql);
+
+    // Check for an error with the database code, and if so raise an
+    // appropriate exception
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $sql);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return;
+    }
+
+    return true;
+}
+
 
 ?>

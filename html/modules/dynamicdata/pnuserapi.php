@@ -51,7 +51,7 @@ function dynamicdata_userapi_getall($args)
         return;
     }
 
-    if (!pnSecAuthAction(0, 'DynamicData::Items', $modid.':'.$itemtype.':'.$itemid, ACCESS_OVERVIEW)) {
+    if (!pnSecAuthAction(0, 'DynamicData::Item', "$modid:$itemtype:$itemid", ACCESS_OVERVIEW)) {
         $msg = pnML('Not authorized to access #(1) fields',
                     'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
@@ -59,16 +59,20 @@ function dynamicdata_userapi_getall($args)
         return;
     }
 
+    $fields = pnModAPIFunc('dynamicdata','user','getprop',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype));
+    if (empty($fields) || count($fields) == 0) {
+        return array();
+    }
+
+    $ids = array_keys($fields);
+
     list($dbconn) = pnDBGetConn();
     $pntable = pnDBGetTables();
 
     $dynamicdata = $pntable['dynamic_data'];
     $dynamicprop = $pntable['dynamic_properties'];
-
-    $fields = pnModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
-                                 'itemtype' => $itemtype));
-    $ids = array_keys($fields);
 
     $sql = "SELECT pn_dd_propid,
                    pn_dd_value
@@ -86,10 +90,7 @@ function dynamicdata_userapi_getall($args)
 
     while (!$result->EOF) {
         list($id, $value) = $result->fields;
-        if (pnSecAuthAction(0, 'DynamicData::Items', "$modid:$itemtype:$id", ACCESS_READ)) {
-            if (!isset($value)) {
-                $value = $default;
-            }
+        if (isset($value)) {
             $fields[$id]['value'] = $value;
         }
         $result->MoveNext();
@@ -98,8 +99,12 @@ function dynamicdata_userapi_getall($args)
     $result->Close();
 
     foreach ($fields as $id => $field) {
-        if (!isset($field['value'])) {
-            $fields[$id]['value'] = $fields[$id]['default'];
+        if (pnSecAuthAction(0, 'DynamicData::Field', $field['label'].':'.$field['type'].':'.$id, ACCESS_READ)) {
+            if (!isset($field['value'])) {
+                $fields[$id]['value'] = $fields[$id]['default'];
+            }
+        } else {
+            unset($fields[$id]);
         }
     }
 
@@ -194,7 +199,7 @@ function dynamicdata_userapi_get($args)
     list($label, $type, $id, $default, $value) = $result->fields;
     $result->Close();
 
-    if (!pnSecAuthAction(0, 'DynamicData::Fields', "$label:$type:$id", ACCESS_READ)) {
+    if (!pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
         $msg = pnML('Not authorized to access #(1) fields',
                     'DynamicData');
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
@@ -221,6 +226,8 @@ function dynamicdata_userapi_get($args)
  */
 function dynamicdata_userapi_getprop($args)
 {
+    static $propertybag = array();
+
     extract($args);
 
     if (empty($modid) && !empty($module)) {
@@ -243,6 +250,10 @@ function dynamicdata_userapi_getprop($args)
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
+    }
+
+    if (isset($propertybag["$modid:$itemtype"])) {
+        return $propertybag["$modid:$itemtype"];
     }
 
     list($dbconn) = pnDBGetConn();
@@ -274,7 +285,7 @@ function dynamicdata_userapi_getprop($args)
 
     while (!$result->EOF) {
         list($label, $type, $id, $default, $validation) = $result->fields;
-        if (pnSecAuthAction(0, 'DynamicData::Fields', "$label:$type:$id", ACCESS_READ)) {
+        if (pnSecAuthAction(0, 'DynamicData::Field', "$label:$type:$id", ACCESS_READ)) {
             $fields[$id] = array('label' => $label,
                                  'type' => $type,
                                  'id' => $id,
@@ -286,10 +297,13 @@ function dynamicdata_userapi_getprop($args)
 
     $result->Close();
 
+    $propertybag["$modid:$itemtype"] = $fields;
     return $fields;
 }
 
-// TODO...
+// ----------------------------------------------------------------------
+// TODO: search API, some generic queries for statistics, etc.
+//
 
 /**
  * utility function to count the number of items held by this module

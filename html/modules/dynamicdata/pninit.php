@@ -213,6 +213,18 @@ function dynamicdata_init()
         return false;
     }
 
+// TODO: replace this with block/cached variables/special template tag/... ?
+//
+//       Ideally, people should be able to use the dynamic fields in their
+//       module templates as if they were 'normal' fields -> this means
+//       adapting the get() function in the user API of the module, perhaps...
+
+    // when a module item is being displayed
+    if (!pnModRegisterHook('item', 'display', 'GUI',
+                           'dynamicdata', 'user', 'displayhook')) {
+        return false;
+    }
+
     // Initialisation successful
     return true;
 }
@@ -318,6 +330,17 @@ function dynamicdata_delete()
     }
     if (!pnModUnregisterHook('module', 'remove', 'API',
                              'dynamicdata', 'admin', 'removehook')) {
+        pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
+    }
+
+// TODO: replace this with block/cached variables/special template tag/... ?
+//
+//       Ideally, people should be able to use the dynamic fields in their
+//       module templates as if they were 'normal' fields -> this means
+//       adapting the get() function in the user API of the module, perhaps...
+
+    if (!pnModUnregisterHook('item', 'display', 'GUI',
+                             'dynamicdata', 'user', 'displayhook')) {
         pnSessionSetVar('errormsg', pnML('Could not unregister hook'));
     }
 

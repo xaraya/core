@@ -9,6 +9,101 @@
 // Purpose of file:  Example user display functions
 // ----------------------------------------------------------------------
 
+// ----------------------------------------------------------------------
+// Hook functions (user GUI)
+// ----------------------------------------------------------------------
+
+
+// TODO: replace this with block/cached variables/special template tag/... ?
+//
+//       Ideally, people should be able to use the dynamic fields in their
+//       module templates as if they were 'normal' fields -> this means
+//       adapting the get() function in the user API of the module, perhaps...
+
+/**
+ * display dynamicdata for an item - hook for ('item','display','GUI')
+ *
+ * @param $args['objectid'] ID of the object
+ * @param $args['extrainfo'] extra information
+ * @returns bool
+ * @return true on success, false on failure
+ * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ */
+function dynamicdata_user_displayhook($args)
+{
+    extract($args);
+
+    if (!isset($extrainfo)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'extrainfo', 'user', 'displayhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!isset($objectid) || !is_numeric($objectid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'object ID', 'user', 'displayhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    // When called via hooks, the module name may be empty, so we get it from
+    // the current module
+    if (empty($extrainfo['module']) || !is_array($extrainfo['module'])) {
+        $modname = pnModGetName();
+    } else {
+        $modname = $extrainfo['module'];
+    }
+
+    $modid = pnModGetIDFromName($modname);
+    if (empty($modid)) {
+        $msg = pnML('Invalid #(1) for #(2) function #(3)() in module #(4)',
+                    'module name ' . $modname, 'user', 'displayhook', 'dynamicdata');
+        pnExceptionSet(PN_USER_EXCEPTION, 'BAD_PARAM',
+                       new SystemException($msg));
+        return $msg;
+    }
+
+    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+        $itemtype = $extrainfo['itemtype'];
+    } else {
+        $itemtype = null;
+    }
+
+    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
+        $itemid = $extrainfo['itemid'];
+    } else {
+        $itemid = $objectid;
+    }
+
+    if (!pnModAPILoad('dynamicdata', 'user'))
+    {
+        $msg = pnML('Unable to load #(1) #(2) API',
+                    'dynamicdata','user');
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNABLE_TO_LOAD',
+                       new SystemException($msg));
+        return $msg;
+    }
+    $fields = pnModAPIFunc('dynamicdata','user','getall',
+                           array('modid' => $modid,
+                                 'itemtype' => $itemtype,
+                                 'itemid' => $itemid));
+    if (!isset($fields) || $fields == false || count($fields) == 0) {
+        return;
+    }
+
+// TODO: use custom template per module + itemtype ?
+     return pnTplModule('dynamicdata','user','displayhook',
+                         array('fields' => $fields));
+
+}
+
+// ----------------------------------------------------------------------
+// TODO: all of the 'standard' user functions, if that makes sense someday...
+//
+
 /**
  * the main user function
  * This function is the default function, and is called whenever the module is
@@ -385,5 +480,9 @@ function dynamicdata_user_menu()
     // Return the array containing the menu configuration
     return $menu;
 }
+
+//
+// TODO: all of the 'standard' user functions, if that makes sense someday...
+// ----------------------------------------------------------------------
 
 ?>

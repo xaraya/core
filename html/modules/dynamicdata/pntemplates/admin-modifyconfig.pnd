@@ -6,7 +6,9 @@
 <br />
 
 // TODO: very much under construction, obviously :-)
-
+<br /><br />
+Tip : empty label -> delete field for all items
+<br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&pnt-modurl-dynamicdata-admin-updateconfig;">
     <input type="hidden" name="authid" value="&pnt-var-authid;" />
