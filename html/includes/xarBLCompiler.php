@@ -232,7 +232,11 @@ class xarTpl__CodeGenerator
                 if (!isset($childCode)) {
                     return; // throw back
                 }
-                $code .= $childCode;
+                if ($child->tagName != 'TextNode' || !$checkNode->needAssignment()) {
+                    $code .= $childCode;
+                } else {
+                    $code .= "'" . strtr($childCode, array("\\" => "\\\\", "'" => "\\'")) . "'";
+                }
                 if ($child->isAssignable() && !($checkNode->needParameter()) || $checkNode->needAssignment()) {
                     //xarLogVariable('checkNode', $checkNode, XARLOG_LEVEL_ERROR);
                     //xarLogMessage('here', XARLOG_LEVEL_ERROR);
