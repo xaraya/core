@@ -62,11 +62,37 @@ function mail_adminapi_hookmailcreate($args)
 
     $from = xarModGetVar('mail', 'adminmail');
     $fromname = xarModGetVar('mail', 'adminname');
-    $subject = xarML('New addition') . ' -- ' . $extrainfo['title'];
-// TODO: use BL template for message
-    // Send a regular old text message.
 
-    $message = xarModGetVar('mail', 'hooktemplate');
+// Get the templates for this message
+    $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'mail', 'template' => 'createhook'));
+
+    $subject = $strings['subject'];
+    $message = $strings['message'];
+
+// Get the template that defines the substitution vars
+    $messaginghome = "var/messaging/mail";
+    if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
+    }
+    $string = '';
+    $fd = fopen($messaginghome . "/includes/message-vars.xd", 'r');
+    while(!feof($fd)) {
+        $line = fgets($fd, 1024);
+        $string .= $line;
+    }
+
+// Substitute the static vars in the template
+    $subject  = xarTplCompileString($string . $subject);
+    $message  = xarTplCompileString($string . $message);
+
+// Substitute the dynamic vars in the template
+    $data = array('modulename' => $modname, 'objectid' => $objectid);
+    $subject = xarTplString($subject, $data);
+    $message = xarTplString($message, $data);
+
+    // TODO How to do html message with BL? Create yet another template? Don't think so.
+
+//    $message = xarModGetVar('mail', 'hooktemplate');
 
 /*
     $search = array('/%%name%%/',

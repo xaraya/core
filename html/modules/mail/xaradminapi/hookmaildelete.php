@@ -16,7 +16,7 @@
  * This is a hook function that is called to send mail on deletion of an item
  *
  * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'itemid' is the item created.
+ * @param  $ 'objectid' is the item deleted.
  */
 function mail_adminapi_hookmaildelete($args)
 {
@@ -66,8 +66,6 @@ function mail_adminapi_hookmaildelete($args)
 //    if (!xarSecurityCheck('DeleteMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
-    $sitename = xarModGetVar('themes', 'SiteName');
-    $slogan = xarModGetVar('themes', 'SiteSlogan');
     $wordwrap = xarModGetVar('mail', 'wordwrap');
     $priority = xarModGetVar('mail', 'priority');
     $encoding = xarModGetVar('mail', 'encoding');
@@ -77,17 +75,42 @@ function mail_adminapi_hookmaildelete($args)
     }
     $from = xarModGetVar('mail', 'adminmail');
     $fromname = xarModGetVar('mail', 'adminname');
-    $subject = xarML('An item was deleted');
-// TODO: use BL template for message
-    // Send a regular old text message.
-    $message = "" . xarML('An item was deleted in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "\r\n\n";
-    $message .= "" . xarML('Site Name') . ": $sitename :: $slogan\n";
-    $message .= "" . xarML('Site URL') . ": " . xarServerGetBaseURL() . "\n";
-    // Send a formatted html message to the mail module for use if the admin has the html turned on.
-    $htmlmessage = "" . xarML('An item was deleted in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "<br /><br />";
-    $htmlmessage .= "" . xarML('Site Name') . ": $sitename :: <i>$slogan</i> <br />";
-    $htmlmessage .= "" . xarML('Site URL') . ": <a href='" . xarServerGetBaseURL() . "'>" . xarServerGetBaseURL() . "</a><br />";
-    // Set mail args array
+
+// Get the templates for this message
+    $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'mail', 'template' => 'deletehook'));
+
+    $subject = $strings['subject'];
+    $message = $strings['message'];
+
+// Get the template that defines the substitution vars
+    $messaginghome = "var/messaging/mail";
+    if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
+    }
+    $string = '';
+    $fd = fopen($messaginghome . "/includes/message-vars.xd", 'r');
+    while(!feof($fd)) {
+        $line = fgets($fd, 1024);
+        $string .= $line;
+    }
+
+// Substitute the static vars in the template
+    $subject  = xarTplCompileString($string . $subject);
+    $message  = xarTplCompileString($string . $message);
+
+// Substitute the dynamic vars in the template
+    $data = array('modulename' => $modname, 'objectid' => $objectid);
+    $subject = xarTplString($subject, $data);
+    $message = xarTplString($message, $data);
+
+    // TODO How to do this with BL? Create yet another template? Don't think so.
+// Send a formatted html message to the mail module for use if the admin has the html turned on.
+    $htmlmessage = $message;
+//    $htmlmessage = "" . xarML('An item was deleted in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "<br /><br />";
+//    $htmlmessage .= "" . xarML('Site Name') . ": $sitename :: <i>$slogan</i> <br />";
+//    $htmlmessage .= "" . xarML('Site URL') . ": <a href='" . xarServerGetBaseURL() . "'>" . xarServerGetBaseURL() . "</a><br />";
+
+// Set mail args array
     $mailargs = array('info' => $from, // set info to $from
         'subject' => $subject,
         'message' => $message,
@@ -98,13 +121,13 @@ function mail_adminapi_hookmaildelete($args)
         'wordwrap' => $wordwrap,
         'from' => $from,
         'fromname' => $fromname);
-    // Check if HTML mail has been configured by the admin
+// Check if HTML mail has been configured by the admin
     if (xarModGetVar('mail', 'html')) {
         xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $mailargs);
     } else {
         xarModAPIFunc('mail', 'admin', 'sendmail', $mailargs);
     }
-    // life goes on, and so do hook calls :)
+// life goes on, and so do hook calls :)
     return $extrainfo;
 }
 

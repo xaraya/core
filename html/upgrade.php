@@ -1082,6 +1082,8 @@ Password : %%password%%
         echo "Setting Ratings Delete All Hook... done! <br />";
     }
 
+    if (!xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange')) {}
+
     // Check the installed privs and masks.
     echo "<h5>Checking Time / Date Structure</h5>";
 

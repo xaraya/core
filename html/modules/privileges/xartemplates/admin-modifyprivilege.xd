@@ -267,7 +267,7 @@ document.forms['privilegeform'].submit();}
 			</tr>
 		</table>
 		<br /><br />
-		<h2><xar:mlstring>Add Privilege To</xar:mlstring> '#$pname#'</h2>
+		<h3><xar:mlstring>Add Privilege To</xar:mlstring> '#$pname#'</h3>
 		<table border="0" cellpadding="2" cellspacing="0">
 			<tr>
 				<td>
@@ -291,7 +291,7 @@ document.forms['privilegeform'].submit();}
 		</table>
 	</div>
 </form>
-<h2>'#$pname#' <xar:mlstring>Component Memberships</xar:mlstring></h2>
+<h3>'#$pname#' <xar:mlstring>Component Memberships</xar:mlstring></h3>
 <table border="0" cellpadding="2" cellspacing="0" class="xar-accent-outline">
     <tr>
         <th><xar:mlstring>Component</xar:mlstring></th>

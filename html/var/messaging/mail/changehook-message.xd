@@ -1,0 +1,4 @@
+An item was changed in the #$modulename# module. -- 
+"#$objectid#" is the id of the item that was changed.
+
+Site Name: #$sitename# :: #$siteslogan#&nbsp;#$siteurl#

@@ -23,6 +23,7 @@ function roles_adminapi_getmessagestrings($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_DATA', new SystemException('No template name was given.'));
     }
 
+//FIXME: the default is always roles
     if(!isset($module)){
         list($module) = xarRequestGetInfo();
     }

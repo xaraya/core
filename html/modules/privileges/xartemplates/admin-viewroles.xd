@@ -55,21 +55,21 @@ document.forms['privilegeform'].submit();}
 	<table border="0" width="100%" cellpadding="2">
 		<xar:if condition="count($roles) eq 0">
 			<tr>
-				<td colspan="3">
+				<th colspan="3">
 					<xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>            
-				</td>
+				</th>
 			</tr>
 		<xar:else />
 			<tr>
-				<td>
+				<th>
 					<xar:mlstring>Type </xar:mlstring>            
-				</td>
-				<td>
+				</th>
+				<th>
 					<xar:mlstring>Name </xar:mlstring>            
-				</td>
-				<td>
+				</th>
+				<th>
 					&nbsp;            
-				</td>
+				</th>
 			</tr>
 			<xar:foreach in="$roles" value="$role">
 				<tr>
