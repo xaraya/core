@@ -74,7 +74,7 @@ function users_loginblock_display($blockinfo)
 function users_loginblock_modify($blockinfo)
 {
     // Create output object
-    $output = new xarHTML();
+    $output = new pnHTML();
 
     // Get current content
     $vars = @unserialize($blockinfo['content']);
@@ -89,30 +89,30 @@ function users_loginblock_modify($blockinfo)
 
     // Create row
     $row = array();
-    $output->SetOutputMode(_XARH_RETURNOUTPUT);
+    $output->SetOutputMode(_PNH_RETURNOUTPUT);
     $row[] = $output->Text(xarML('Show logout box when logged in'));
     $row[] = $output->FormCheckbox('showlogout',$vars['showlogout']);
-    $output->SetOutputMode(_XARH_KEEPOUTPUT);
+    $output->SetOutputMode(_PNH_KEEPOUTPUT);
 
     // Add row
-    $output->SetInputMode(_XARH_VERBATIMINPUT);
+    $output->SetInputMode(_PNH_VERBATIMINPUT);
     $output->TableAddRow($row, 'left');
-    $output->SetInputMode(_XARH_PARSEINPUT);
+    $output->SetInputMode(_PNH_PARSEINPUT);
 
     // Create row
     $row = array();
-    $output->SetOutputMode(_XARH_RETURNOUTPUT);
+    $output->SetOutputMode(_PNH_RETURNOUTPUT);
     $row[] = $output->Text(xarML('Logout Title'));
     $row[] = $output->FormText('logouttitle',
                                xarVarPrepForDisplay($vars['logouttitle']),
                                15,
                                25);
-    $output->SetOutputMode(_XARH_KEEPOUTPUT);
+    $output->SetOutputMode(_PNH_KEEPOUTPUT);
 
     // Add row
-    $output->SetInputMode(_XARH_VERBATIMINPUT);
+    $output->SetInputMode(_PNH_VERBATIMINPUT);
     $output->TableAddRow($row, 'left');
-    $output->SetInputMode(_XARH_PARSEINPUT);
+    $output->SetInputMode(_PNH_PARSEINPUT);
 
 
     // Return output

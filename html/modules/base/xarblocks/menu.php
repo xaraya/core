@@ -144,27 +144,27 @@ function base_menublock_modify($blockinfo)
     }
 
     // What style of menu
-    $output = '<tr><td class="xar-title">'._MENU_FORMAT.'</td><td></td></tr>';
+    $output = '<tr><td class="xar-title">'.xarML('Menu Format').'</td><td></td></tr>';
 
-    $output .= '<tr><td class="xar-normal">'._MENU_AS_LIST.':</td><td><input type="radio" name="style" value="1"';
+    $output .= '<tr><td class="xar-normal">'.xarML('Menu as List').':</td><td><input type="radio" name="style" value="1"';
     if ($vars['style'] == 1) {
         $output .= ' checked';
     }
-    $output .= '></td></tr><tr><td class="xar-normal">'._MENU_AS_DROPDOWN.':</td><td><input type="radio" name="style" value="2"';
+    $output .= '></td></tr><tr><td class="xar-normal">'.xarML('Menu as Dropdown').':</td><td><input type="radio" name="style" value="2"';
     if ($vars['style'] == 2) {
         $output .= ' checked';
     }
     $output .= ' /></td></tr>';
 
     // What to display
-    $output .= '<tr><td class="xar-title">'._DISPLAY.'</td><td></td></tr>';
+    $output .= '<tr><td class="xar-title">'.xarML('Display').'</td><td></td></tr>';
 
-    $output .= '<tr><td class="xar-normal">'._MENU_MODULES.':</td><td><input type="checkbox" value="1" name="displaymodules"';
+    $output .= '<tr><td class="xar-normal">'.xarML('Display Modules').':</td><td><input type="checkbox" value="1" name="displaymodules"';
     if (!empty($vars['displaymodules'])) {
         $output .= ' checked';
     }
 
-    $output .= ' /></td></tr><tr><td class="xar-normal">'._WAITINGCONT.':</td><td><input type="checkbox" value="1" name="displaywaiting"';
+    $output .= ' /></td></tr><tr><td class="xar-normal">'.xarML('Display Waiting Content').':</td><td><input type="checkbox" value="1" name="displaywaiting"';
     if (!empty($vars['displaywaiting'])) {
         $output .= ' checked';
     }
@@ -173,12 +173,12 @@ function base_menublock_modify($blockinfo)
     // Content
     $c=1;
     $output .= "</table><table>";
-    $output .= "<tr><td valign=\"top\" class=\"xar-title\">"._MENU_CONTENT
+    $output .= "<tr><td valign=\"top\" class=\"xar-title\">".xarML('Menu Content')
     .":</td><td><table border=\"1\"><tr><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    ._TITLE."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    ._URL."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    ._MENU_DESCRIPTION."&nbsp;</b><span class=\"xar-sub\"><b>("._OPTIONAL.")</b></span></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
-    ._DELETE."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"._INSERT_BLANK_AFTER."</b></td></tr>";
+    .xarML('Title')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    .xarML('URL')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    .xarML('Description')."&nbsp;</b><span class=\"xar-sub\"><b>(".xarML('Optional').")</b></span></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>"
+    .xarML('Delete')."</b></td><td align=\"center\" class=\"xar-normal\" style=\"color:$xartheme[table_header_text]; background-color:$xartheme[table_header]; text-align:center\"><b>".xarML('Insert Blank After')."</b></td></tr>";
     if (!empty($vars['content'])) {
         $contentlines = explode("LINESPLIT", $vars['content']);
         foreach ($contentlines as $contentline) {
@@ -188,7 +188,7 @@ function base_menublock_modify($blockinfo)
         }
     }
 
-    $output .= "<tr><td><input type=\"text\" name=\"new_linkname\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td><input type=\"text\" name=\"new_linkurl\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\"><input type=\"text\" name=\"new_linkdesc\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\">"._NEWONE."</td><td class=\"xar-normal\"><input type=\"checkbox\" name=\"new_linkinsert\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
+    $output .= "<tr><td><input type=\"text\" name=\"new_linkname\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td><input type=\"text\" name=\"new_linkurl\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\"><input type=\"text\" name=\"new_linkdesc\" size=\"30\" maxlength=\"255\" class=\"xar-normal\" /></td><td class=\"xar-normal\">".xarML('New Line')."</td><td class=\"xar-normal\"><input type=\"checkbox\" name=\"new_linkinsert\" value=\"1\" class=\"xar-normal\" /></td></tr>\n";
     $output .= '</table></td></tr>';
 
     return $output;

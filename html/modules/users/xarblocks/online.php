@@ -61,7 +61,7 @@ function users_onlineblock_display($blockinfo)
         return;
     }
 
-    $output = new xarHTML();
+    $output = new pnHTML();
 
     // Database setup
     list($dbconn) = xarDBGetConn();
@@ -105,21 +105,21 @@ function users_onlineblock_display($blockinfo)
     if (!empty($vars['howmany'])) {
         // Pluralise
         if ($numguests == 1) {
-            $guests = _USERSGUEST;
+            $guests = xarML('guest');
         } else {
-            $guests = _USERSGUESTS;
+            $guests = xarML('guests');
         }
         if ($numusers == 1) {
-            $users = _USERSMEMBER;
+            $users = xarML('member');
         } else {
-            $users = _USERSMEMBERS;
+            $users = xarML('members');
         }
 
-        $output->Text(_USERSCURRENTLY);
+        $output->Text(xarML('guest'));//(_USERSCURRENTLY);
         $output->Text(" $numguests $guests ");
-        $output->Text(_USERSAND);
+        $output->Text(xarML('guest'));//(_USERSAND);
         $output->Text(" $numusers $users ");
-        $output->Text(_USERSONLINE);
+        $output->Text(xarML('guest'));//(_USERSONLINE);
         $output->Linebreak();
     }
 
@@ -144,7 +144,7 @@ function users_onlineblock_display($blockinfo)
             if (!empty($vars['howmany'])) {
                 $output->Linebreak();
             }
-            $output->Text(_USERSLOGGEDIN);
+            $output->Text(xarML('guest'));//(_USERSLOGGEDIN);
             $output->Linebreak();
         }
 
@@ -166,7 +166,7 @@ function users_onlineblock_display($blockinfo)
 
     // Block formatting
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = _USERSWHOSONLINE;
+        $blockinfo['title'] = pnML('Online');
     }
 
     $blockinfo['content'] = $output->GetOutput();
