@@ -21,19 +21,44 @@
         #$label# 
     </h2>
     <xar:if condition="!empty($objectid)">
-        <p>
-            <a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#">
-                <xar:mlstring>
-                    Modify Object Definition 
-                </xar:mlstring>
-            </a>
-            | 
-            <a href="#xarModURL('dynamicdata','util','export',array('modid' => $modid, 'itemtype' => $itemtype))#">
-                <xar:mlstring>
-                    Export Object Definition to XML 
-                </xar:mlstring>
-            </a>
-        </p>
+        <table width="100%" border="0" cellspacing="0" cellpadding="4">
+            <tr>
+                <td align="left" width="33%">
+                    <a href="#xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))#">
+                        <xar:mlstring>
+                            Modify Object Definition 
+                        </xar:mlstring>
+                    </a>
+                </td>
+                <td align="center">
+                <xar:if condition="!empty($fields)">
+                    <xar:set name="urlform">#xarModURL('dynamicdata','admin','form',array('objectid' => $objectid, 'theme' => 'print'),false)#</xar:set>
+<script type="text/javascript">
+function xar_dynamicdata_formpreview()
+{
+    var my_window = window.open('#$urlform#',
+                                'FormPreview',
+                                'width=780,height=580,status=no,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+    my_window.opener = window;
+    my_window.focus();
+}
+</script>
+                    <a href="javascript:xar_dynamicdata_formpreview();">
+                        <xar:mlstring>
+                            Preview Input Form 
+                        </xar:mlstring>
+                    </a>
+                </xar:if>
+                </td>
+                <td align="right">
+                    <a href="#xarModURL('dynamicdata','util','export',array('modid' => $modid, 'itemtype' => $itemtype))#">
+                        <xar:mlstring>
+                            Export Object Definition to XML 
+                        </xar:mlstring>
+                    </a>
+               </td>
+            </tr>
+        </table>
 <!-- show some basic info about this dynamic object -->
         <xar:data-display module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
     </xar:if>

@@ -1,0 +1,24 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Preview Input Form for #(1)</xar:mlstring><xar:mlvar>#$object:label#</xar:mlvar></xar:ml></h2><br />
+<div style="margin: auto;">
+
+<xar:set name="objectid">#$object:objectid#</xar:set>
+<form method="post" action="#xarModURL('dynamicdata','admin','form')#">
+<div>
+    <input type="hidden" name="objectid" value="#$objectid#" />
+    <input type="hidden" name="theme" value="print" />
+    <input type="submit" value="#xarML('Refresh')#" />
+</div>
+</form>
+
+<form>
+<div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+        <xar:data-form object="$object" />
+    </table>
+</div>
+</form>
+
+</div>
+</div>
