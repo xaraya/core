@@ -23,11 +23,9 @@
  * @param $args['ver1'] or $args[0] version number 1 (string or array)
  * @param $args['ver2'] or $args[1] version number 2 (string or array)
  * @param $args['levels'] maxiumum levels to compare (default: 0/all levels)
- * @param $args['strict'] *removed* - see 'normalize'
  * @param $args['sep'] level separator character (default: '.')
  * @param $args['normalize'] parse the versions into a standard format 'numeric'/'alpha'/false (default: false/none)
  * @param $args['validate'] validation rule to apply (default: false/none)
- * @param $args['reverse'] *removed* see 'order'
  * @param $args['order'] the order in which to compare (number or array)
  * @returns number
  * @return number indicating which version number is the latest
