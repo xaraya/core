@@ -66,7 +66,7 @@ class Dynamic_Property_Master
         $properties = array();
         while (!$result->EOF) {
             list($name, $label, $type, $id, $default, $source, $fieldstatus, $order, $validation) = $result->fields;
-			if(xarSecurityCheck('ReadDynamicDataField',1,'Field',"$name:$type:$id")) {
+            if(xarSecurityCheck('ReadDynamicDataField',1,'Field',"$name:$type:$id")) {
                 $property = array('name' => $name,
                                   'label' => $label,
                                   'type' => $type,
@@ -328,6 +328,11 @@ class Dynamic_Property_Master
                 $property = new Dynamic_TColorPicker_Property($args);
                 break;
 
+            case 45: // (grouplist) Group List
+                require_once "includes/properties/Dynamic_GroupList_Property.php";
+                $property = new Dynamic_GroupList_Property($args);
+                break;
+
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
                 $property = new Dynamic_Upload_Property($args);
@@ -338,7 +343,7 @@ class Dynamic_Property_Master
                 $property = new Dynamic_SendToFriend_Property($args);
                 break;
 
-			// Using 200 range for experimental
+            // Using 200 range for experimental
             case 201: // (htmlarea_small) Small GUI Editor
                 $args['rows'] = 2;
                 require_once "includes/properties/Dynamic_HTMLArea_Property.php";
@@ -772,6 +777,14 @@ class Dynamic_Property_Master
                               'validation' => '',
                               // ...
                              );
+        $proptypes[45] = array(
+                              'id'         =>45,
+                              'name'       => 'grouplist',
+                              'label'      => 'Group List',
+                              'format'     => '45',
+                              'validation' => '',
+                              // ...
+                             );
 
     // TODO: add multiple select and multiple checkboxes
 
@@ -833,7 +846,7 @@ class Dynamic_Property_Master
                                    );
         }
 
-	// Integrate with the uploads module for this property.
+    // Integrate with the uploads module for this property.
         if (xarModIsAvailable('uploads')) {
             $proptypes[105] = array(
                                     'id'         => 105,
@@ -857,68 +870,68 @@ class Dynamic_Property_Master
                              );
         }
 
-	// Integrate WYSIWYG Editor, if available
-		if( file_exists('htmlarea/htmlarea.js') )
-		{
-			$proptypes[201] = array(
-								  'id'         => 201,
-								  'name'       => 'htmlarea_small',
-								  'label'      => 'Small GUI Editor',
-								  'format'     => '3',
-								  'validation' => '',
-								  // ...
-								 );
-			$proptypes[202] = array(
-								  'id'         => 202,
-								  'name'       => 'htmlarea_medium',
-								  'label'      => 'Medium GUI Editor',
-								  'format'     => '4',
-								  'validation' => '',
-								  // ...
-								 );
-			$proptypes[203] = array(
-								  'id'         => 203,
-								  'name'       => 'htmlarea_large',
-								  'label'      => 'Large GUI Editor',
-								  'format'     => '5',
-								  'validation' => '',
-								  // ...
-								 );
-		}
+    // Integrate WYSIWYG Editor, if available
+        if( file_exists('htmlarea/htmlarea.js') )
+        {
+            $proptypes[201] = array(
+                                  'id'         => 201,
+                                  'name'       => 'htmlarea_small',
+                                  'label'      => 'Small GUI Editor',
+                                  'format'     => '3',
+                                  'validation' => '',
+                                  // ...
+                                 );
+            $proptypes[202] = array(
+                                  'id'         => 202,
+                                  'name'       => 'htmlarea_medium',
+                                  'label'      => 'Medium GUI Editor',
+                                  'format'     => '4',
+                                  'validation' => '',
+                                  // ...
+                                 );
+            $proptypes[203] = array(
+                                  'id'         => 203,
+                                  'name'       => 'htmlarea_large',
+                                  'label'      => 'Large GUI Editor',
+                                  'format'     => '5',
+                                  'validation' => '',
+                                  // ...
+                                 );
+        }
 
         if (xarModIsAvailable('paypalsetup')){
-			$proptypes[800] = array(
-								  'id'         => 800,
-								  'name'       => 'paypalnow',
-								  'label'      => 'PayPal Now Button',
-								  'format'     => '800',
-								  'validation' => '',
-								  // ...
-								 );
-			$proptypes[801] = array(
-								  'id'         => 801,
-								  'name'       => 'paypalcart',
-								  'label'      => 'PayPal Cart Button',
-								  'format'     => '801',
-								  'validation' => '',
-								  // ...
-								 );
-			$proptypes[802] = array(
-								  'id'         => 802,
-								  'name'       => 'paypaldonate',
-								  'label'      => 'PayPal Donate Button',
-								  'format'     => '802',
-								  'validation' => '',
-								  // ...
-								 );
-			$proptypes[803] = array(
-								  'id'         => 803,
-								  'name'       => 'paypalsubscription',
-								  'label'      => 'PayPal Subscription Button',
-								  'format'     => '803',
-								  'validation' => '',
-								  // ...
-								 );
+            $proptypes[800] = array(
+                                  'id'         => 800,
+                                  'name'       => 'paypalnow',
+                                  'label'      => 'PayPal Now Button',
+                                  'format'     => '800',
+                                  'validation' => '',
+                                  // ...
+                                 );
+            $proptypes[801] = array(
+                                  'id'         => 801,
+                                  'name'       => 'paypalcart',
+                                  'label'      => 'PayPal Cart Button',
+                                  'format'     => '801',
+                                  'validation' => '',
+                                  // ...
+                                 );
+            $proptypes[802] = array(
+                                  'id'         => 802,
+                                  'name'       => 'paypaldonate',
+                                  'label'      => 'PayPal Donate Button',
+                                  'format'     => '802',
+                                  'validation' => '',
+                                  // ...
+                                 );
+            $proptypes[803] = array(
+                                  'id'         => 803,
+                                  'name'       => 'paypalsubscription',
+                                  'label'      => 'PayPal Subscription Button',
+                                  'format'     => '803',
+                                  'validation' => '',
+                                  // ...
+                                 );
         }
 
 
@@ -940,7 +953,7 @@ class Dynamic_Property_Master
             list(...) = $result->fields;
 
 // Security Check
-		if (xarSecurityCheck('ViewDynamicData',0)) {
+        if (xarSecurityCheck('ViewDynamicData',0)) {
                 $proptypes[] = array(...);
             }
             $result->MoveNext();

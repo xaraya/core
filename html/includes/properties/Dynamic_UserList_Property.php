@@ -21,9 +21,12 @@ include_once "includes/properties/Dynamic_Select_Property.php";
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
 
+    var $roles;
+
     function Dynamic_UserList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
+        $this->roles = xarModAPIFunc('roles', 'user', 'getall');
     }
 
     function validateValue($value = null)
@@ -63,8 +66,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
 // TODO: handle large # of users too
 
-            $users = xarModAPIFunc('roles', 'user', 'getall');
-            foreach ($users as $user) {
+            foreach ($this->roles as $user) {
                 $options[] = array('id' => $user['uid'], 'name' => $user['name']);
             }
         }
@@ -97,7 +99,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
     function showOutput($args = array())
     {
-				extract($args);
+                extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
