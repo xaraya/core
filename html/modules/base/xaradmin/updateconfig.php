@@ -86,10 +86,17 @@ function base_admin_updateconfig()
             if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
             sort($localesList);
 
-            if (($MLSMode == 'UNBOXED') && (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8')) {
-                $msg = xarML('You should select utf-8 locale as default before selecting UNBOXED mode');
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                break;
+            if ($MLSMode == 'UNBOXED') {
+                if ((!function_exists('mb_http_input')) || (version_compare(phpversion(), "4.3.0", "<"))) {
+                    $msg = xarML('You cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0 with the mbstring extension compiled in');
+                    xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                    break;
+                }
+                if (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8') {
+                    $msg = xarML('You should select utf-8 locale as default before selecting UNBOXED mode');
+                    xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                    break;
+                }
             }
 
             // Locales
