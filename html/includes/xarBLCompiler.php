@@ -505,7 +505,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     {
         // Start of parsing a node, initialize our result variables
         $text = ''; $children = array();
-        $token = $this->getNextToken();
+        // Get the first character, if source happens to be empty, dont except
+        $token = $this->getNextToken(1,true);
         // Main parse loop
         while (isset($token)) {
             // At the start of parsing we can have:
@@ -811,7 +812,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             } // end switch
             // Once we get here, nothing in the switch caught the token, we copy verbatim to output.
             $text .= $token;
-            // and get a new one
+            // and get a new one, but dont except on it
             $token = $this->getNextToken(1,true);
         } // end while
         
