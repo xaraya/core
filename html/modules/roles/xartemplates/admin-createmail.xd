@@ -27,12 +27,13 @@
 		</xar:if>
 		<br />
 		<form method="post" action="#xarModUrl('roles', 'admin', 'createmail')#">
+		<input type="hidden" name="q" id="q" value="new"/>
 		<div class="xar-norm-outline" style="padding: 0px;">
 		    <xar:comment> Module List Sort and Filter Controls table </xar:comment>
 		    <table width="100%" border="0" cellspacing="1" cellpadding="1">
 		      <tr>
 			<th nowrap="nowrap">
-			    <label class="xar-mod-title" for="filter" title="#xarML('Select display type')#"><xar:mlstring>Style</xar:mlstring></label>
+			    <label class="xar-mod-title" for="filter" title="#xarML('Select display type')#"><xar:mlstring>Show Users</xar:mlstring></label>
 			</th>
 			<th nowrap="nowrap">
 			    <label class="xar-mod-title" for="filter" title="#xarML('Select a group')#"><xar:mlstring>Groups</xar:mlstring></label>
@@ -40,9 +41,11 @@
 			<th nowrap="nowrap">
 			    <label class="xar-mod-title" for="filter" title="#xarML('Select the state of users')#"><xar:mlstring>State</xar:mlstring></label>
 			</th>
-			<th nowrap="nowrap">
-			    <label class="xar-mod-title" for="filter" title="#xarML('Includes subgroups')#"><xar:mlstring>Include Subgroups</xar:mlstring></label>
-			</th>
+			<xar:if condition="$uid gt 0">
+				<th nowrap="nowrap">
+					<label class="xar-mod-title" for="filter" title="#xarML('Includes subgroups')#"><xar:mlstring>Include Subgroups</xar:mlstring></label>
+				</th>
+			</xar:if>
 			<th nowrap="nowrap">
 			    <label class="xar-mod-title" for="filter" title="#xarML('Select template for the message')#"><xar:mlstring>Templates</xar:mlstring></label>
 			</th>
@@ -67,6 +70,11 @@
 					<xar:if condition="$type eq 'single'">
 						<option value="#$uid#" selected="selected">
 							<xar:mlstring>Single user</xar:mlstring>
+						</option>
+					</xar:if>
+					<xar:if condition="$uid eq -1">
+						<option value="#$uid#" selected="selected">
+							<xar:mlstring>-- choose --</xar:mlstring>
 						</option>
 					</xar:if>
 					<xar:if condition="$uid eq 0">
@@ -140,13 +148,15 @@
 					</xar:if>
 				</select>
 			</td>
-			<td style="text-align: center; vertical-align: middle;">
-				<xar:if condition="$includesubgroups eq 0">
-					<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" onchange="this.form.submit()"/>
-				<xar:else/>
-					<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" checked="checked" onchange="this.form.submit()"/>
-				</xar:if>
-			</td>
+			<xar:if condition="$uid gt 0">
+				<td style="text-align: center; vertical-align: middle;">
+					<xar:if condition="$includesubgroups eq 0">
+						<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" onchange="this.form.submit()"/>
+					<xar:else/>
+						<input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" checked="checked" onchange="this.form.submit()"/>
+					</xar:if>
+				</td>
+			</xar:if>
 			<td style="text-align: center; vertical-align: middle;">
 				<select name="mailtype" id="mailtype" size="1" tabindex="5"  onchange="this.form.submit()">
 				<xar:if condition="$mailtype eq 'blank'">
@@ -336,7 +346,7 @@
 		 <div style="float:left;width:100%"> <xar:comment> containing float - quick fix for JC's css layouts [andyv] </xar:comment>
 			<div style="clear: both; padding-top: 10px;">
 			   <span style="float: right; width: 95%; text-align: left;">
-				<xar:mlstring>Once the users/groups selected, type your message below :</xar:mlstring>
+				<xar:mlstring>Choose a message template from the Templates dropdown above, or type in your message directly :</xar:mlstring>
 			    </span>
 			 </div>
 			 <div style="clear: both; padding-top: 10px;">

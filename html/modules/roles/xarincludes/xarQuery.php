@@ -459,9 +459,12 @@ class xarQuery
     }
     function removecondition($mycondition)
     {
-        for($i=0;$i<count($this->conditions);$i++)
-            if ($this->conditions[$i]['field1'] == $mycondition) {
-                unset($this->conditions[$i]);
+        foreach($this->conditions as $key => $value)
+            if ($this->conditions[$key]['field1'] == $mycondition) {
+                unset($this->conditions[$key]);
+                foreach($this->conjunctions as $key1 => $value1) {
+                    if ($value1['conditions'] == $key) unset($this->conjunctions[$key1]);
+                }
                 break;
             }
     }
