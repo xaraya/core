@@ -1,10 +1,17 @@
 <?php
 /**
+ * File: $Id$
+ *
  * Dynamic Password Box Property
  *
  * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
- */
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 class Dynamic_PassBox_Property extends Dynamic_Property
 {
     var $size = 25;
@@ -59,12 +66,17 @@ class Dynamic_PassBox_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        
+        $data = array();
+
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
                 $this->size = $this->maxlength;
             }
         }
+
+        /*
         return '<input type="password"'.
                ' name="' . (!empty($name) ? $name : 'dd_'.$this->id.'[0]') . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
@@ -82,12 +94,33 @@ class Dynamic_PassBox_Property extends Dynamic_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+//         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
+         $data['name']     = !empty($name) ? $name :'';
+         $data['name1']    = !empty($name) ? $name : 'dd_'.$this->id.'[0]';
+         $data['name2']    = !empty($name) ? $name : 'dd_'.$this->id.'[1]';
+         $data['id']       = !empty($id) ? ' id="'.$id.'"' : '';
+         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+         $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"'  : '';
+         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+         $data['size']     = !empty($size) ? $size : $this->size;
+
+        $template="password";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($value = null)
     {
 	//we don't really want to show the password, do we?
-	return '';
+	$data=array();
+	$data['value']='';
+
+    $template="password";
+    return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
+	//return '';
     }
 
 }
