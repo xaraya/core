@@ -18,7 +18,7 @@ function roles_user_display($args)
 {
     extract($args);
 
-    if (!xarVarFetch('uid','int:1:',$uid)) return;
+    if (!xarVarFetch('uid','int:1:',$uid, xarUserGetVar('uid'))) return;
 
     // Get user information
     $data = xarModAPIFunc('roles',

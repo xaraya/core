@@ -1,14 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span>
-</div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Information</xar:mlstring></span></div>
 <div class="xar-mod-body">
-    <h2>
-        <a href="#xarModURL('roles', 'user', 'view')#">
-            <xar:mlstring>Member List</xar:mlstring>
-        </a>
-        &nbsp;&gt;&nbsp;#xarVarPrepForDisplay($name)#
-    </h2>
     <div style="margin: auto;">
         <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
             <p>

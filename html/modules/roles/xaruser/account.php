@@ -18,6 +18,7 @@
  */
 function roles_user_account()
 {
+    if(!xarVarFetch('moduleload','str', $data['moduleload'], '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarUserIsLoggedIn()){
         xarResponseRedirect(xarModURL('roles',
                                       'user',

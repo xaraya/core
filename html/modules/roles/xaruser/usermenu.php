@@ -26,7 +26,7 @@ function roles_user_usermenu($args)
             $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
                                                                          'iconenhanced' => $iconenhanced));
             break;
-        case 'formbasic':
+        case 'form':
             $properties = null;
             $withupload = (int) FALSE;
             if (xarModIsAvailable('dynamicdata')) {

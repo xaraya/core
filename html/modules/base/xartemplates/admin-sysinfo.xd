@@ -14,71 +14,79 @@
             System Information 
         </xar:mlstring>
     </h2>
-    <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-        <div id="tabnav">
-            <div class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
-                <xar:mlstring>
-                    PHP Info Sort Information 
-                </xar:mlstring>
-                : 
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
-                    <xar:mlstring>
-                        General info 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 2))#">
-                    <xar:mlstring>
-                        Credits 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 4))#">
-                    <xar:mlstring>
-                        Configuration 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 8))#">
-                    <xar:mlstring>
-                        Modules 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 16))#">
-                    <xar:mlstring>
-                        Enviroment 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 32))#">
-                    <xar:mlstring>
-                        Variables 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 64))#">
-                    <xar:mlstring>
-                        License 
-                    </xar:mlstring>
-                </a>
-            </div>
-            <div>
-                <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => -1))#">
-                    <xar:mlstring>
-                        All 
-                    </xar:mlstring>
-                </a>
-            </div>
-        </div>
+    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
     </xar:if>
+    <dl class="xar-tabs">
+        <dt class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
+            <xar:mlstring>
+                PHP Info Sort Information 
+            </xar:mlstring>
+            : 
+        </dt>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
+                <xar:mlstring>
+                    General info 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
+                <xar:mlstring>
+                    General info 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 2))#">
+                <xar:mlstring>
+                    Credits 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 4))#">
+                <xar:mlstring>
+                    Configuration 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 8))#">
+                <xar:mlstring>
+                    Modules 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 16))#">
+                <xar:mlstring>
+                    Enviroment 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 32))#">
+                <xar:mlstring>
+                    Variables 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 64))#">
+                <xar:mlstring>
+                    License 
+                </xar:mlstring>
+            </a>
+        </dd>
+        <dd>
+            <a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => -1))#">
+                <xar:mlstring>
+                    All 
+                </xar:mlstring>
+            </a>
+        </dd>
+    </dl>
+    <div>&nbsp;</div>
     #$phpinfo# 
 </div>

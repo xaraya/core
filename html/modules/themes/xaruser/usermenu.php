@@ -17,14 +17,15 @@
  * 
  * @return themes _admin_main
  */
-function themes_user_usermenu()
+function themes_user_usermenu($args)
 { 
+    extract($args);
     // Security Check
     if (!xarSecurityCheck('ViewThemes',0)) return '';
 
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'menu', XARVAR_NOT_REQUIRED)) return;
-
-    switch (strtolower($phase)) {
+    if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
+    switch(strtolower($phase)) {
         case 'menu':
 
             $icon = 'modules/themes/xarimages/themes.gif';

@@ -1,6 +1,4 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
-</xar:if>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script language="JavaScript">
 <!--
@@ -11,63 +9,69 @@
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Modify System Configuration</xar:mlstring></h2><br />
-<div id="tabnav">
-    <div class="help" title="Choose a set of configuration options"><xar:mlstring>Actions</xar:mlstring> :</div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify System Configuration</xar:mlstring></h2>
+<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+</xar:if>
+<dl class="xar-tabs">
+    <dt class="help" title="Choose a set of configuration options">
+        <xar:mlstring>
+            Actions
+        </xar:mlstring>
+        : 
+    </dt>
     <xar:if condition="$tab eq 'display'">
-        <div>
-            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#" class="active">
+        <dd class="active">
+            <a href="#xarServerGetCurrentURL()#">
                 <xar:mlstring>Site Display</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     <xar:else />
-        <div>
+        <dd>
             <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">    
                 <xar:mlstring>Site Display</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     </xar:if>
     <xar:if condition="$tab eq 'security'">
-        <div>
-            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#" class="active">
+        <dd class="active">
+            <a href="#xarServerGetCurrentURL()#">
                 <xar:mlstring>Sessions/Security</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     <xar:else />
-        <div>
+        <dd>
             <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">    
                 <xar:mlstring>Sessions and Security</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     </xar:if>
     <xar:if condition="$tab eq 'locales'">
-        <div>
-            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#" class="active">
+        <dd class="active">
+            <a href="#xarServerGetCurrentURL()#">
                 <xar:mlstring>Languages and Locales</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     <xar:else />
-        <div>
+        <dd>
             <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">    
                 <xar:mlstring>Languages and Locales</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     </xar:if>
     <xar:if condition="$tab eq 'other'">
-        <div>
-            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#" class="active">
+        <dd class="active">
+            <a href="#xarServerGetCurrentURL()#">
                 <xar:mlstring>Other</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     <xar:else />
-        <div>
+        <dd>
             <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">    
                 <xar:mlstring>Other</xar:mlstring>
             </a>
-        </div>    
+        </dd>    
     </xar:if>
-    </div>
-    <div style="border: 1px solid #ccc; text-align: left; width: 100%; border-top: none; padding-left: 5px;">
+</dl>
     
 <xar:comment> ------------------- Begin Site Display Options --------------------- </xar:comment>
     <xar:if condition="$tab eq 'display'">
@@ -337,5 +341,4 @@
             </div>
         </form>
     </xar:if>
-</div>
 </div>
