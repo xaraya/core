@@ -113,7 +113,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->maxSize) {
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($_FILES[$upname]['name'])) {
-                $fileName = xarVarPrepForOS(basename($file['name']));
+                $fileName = xarVarPrepForOS(basename(strval($file['name'])));
                 if (!empty($filetype) && !preg_match("/\.$filetype$/",$file)) {
                     $this->invalid = xarML('file type');
                     $this->value = null;
