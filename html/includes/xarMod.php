@@ -133,13 +133,13 @@ function xarModGetVar($modName, $name)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varsTable = $tables['system/module_vars'];
+        $module_varstable = $tables['system/module_vars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varsTable = $tables['site/module_vars'];
+        $module_varstable = $tables['site/module_vars'];
     }
 
     $query = "SELECT xar_value
-              FROM $module_varsTable
+              FROM $module_varstable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
@@ -189,9 +189,9 @@ function xarModSetVar($modName, $name, $value)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varsTable = $tables['system/module_vars'];
+        $module_varstable = $tables['system/module_vars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varsTable = $tables['site/module_vars'];
+        $module_varstable = $tables['site/module_vars'];
     }
 
     $oldValue = xarModGetVar($modName, $name);
@@ -199,8 +199,8 @@ function xarModSetVar($modName, $name, $value)
     if (!isset($oldValue)) {
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
-        $seqId = $dbconn->GenId($module_varsTable);
-        $query = "INSERT INTO $module_varsTable
+        $seqId = $dbconn->GenId($module_varstable);
+        $query = "INSERT INTO $module_varstable
                      (xar_id,
                       xar_modname,
                       xar_name,
@@ -211,7 +211,7 @@ function xarModSetVar($modName, $name, $value)
                       '" . xarVarPrepForStore($name) . "',
                       '" . xarVarPrepForStore($value) . "');";
     } else {
-        $query = "UPDATE $module_varsTable
+        $query = "UPDATE $module_varstable
                   SET xar_value = '" . xarVarPrepForStore($value) . "'
                   WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
@@ -256,11 +256,11 @@ function xarModDelVar($modName, $name)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varsTable = $tables['system/module_vars'];
-        $module_uservarsTable = $tables['system/module_uservars']; 
+        $module_varstable = $tables['system/module_vars'];
+        $module_uservarstable = $tables['system/module_uservars']; 
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varsTable = $tables['site/module_vars'];
-        $module_uservarsTable = $tables['site/module_uservars'];
+        $module_varstable = $tables['site/module_vars'];
+        $module_uservarstable = $tables['site/module_uservars'];
     }
 
     // Delete the user variables first
@@ -268,20 +268,20 @@ function xarModDelVar($modName, $name)
     if(!$modvarid) return;
     // MrB: we could use xarModDelUserVar in a loop here, but this is 
     //      much faster.
-    $query = "DELETE FROM $module_uservarsTable
+    $query = "DELETE FROM $module_uservarstable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'";
     $result =& $dbconn->Execute($query);
     if(!$result) return;
-
+    
     // Now delete the module var 
-    $query = "DELETE FROM $module_varsTable
+    $query = "DELETE FROM $module_varstable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-
+    
     xarVarDelCached('Mod.Variables.' . $modName, $name);
-
+    
     return true;
 }
 
@@ -317,7 +317,7 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
 	
     // If uid not specified take the current user
     if ($uid == NULL) $uid=xarUserGetVar('uid');
-
+    
 	// Anonymous user always uses the module default setting
     if ($uid==0) return xarModGetVar($modName,$name);
     
@@ -326,7 +326,7 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
     if (!isset($modBaseInfo)) {
         return; // throw back
     }
-
+    
     list($dbconn) = xarDBGetConn();
 	$tables = xarDBGetTables();
 	
@@ -341,14 +341,14 @@ function xarModGetUserVar($modName, $name, $uid=NULL)
     unset($modvarid); // is this necessary?
 	$modvarid = xarModGetVarId($modName, $name);
 	if (!$modvarid) return;
-
+    
 	$query = "SELECT xar_value
               FROM $module_uservarstable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
               AND xar_uid ='" . xarVarPrepForStore($uid). "'";
 	$result =& $dbconn->Execute($query);
 	if (!$result) return;
-
+    
     // If there is no such thing, return the global setting.
 	if ($result->EOF) {
 		// return global setting
@@ -392,19 +392,19 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
-  
+    
 	// If no uid specified assume current user
     if ($uid == NULL) $uid = xarUserGetVar('uid');
-
+    
     // For anonymous users no preference can be set
     // MrB: should we raise an exception here?
     if ($uid==0) return false;
-
+    
     // Get the info for the module so we can determine where we need to set 
     // the variable
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
-
+    
 	list($dbconn) = xarDBGetConn();
 	$tables = xarDBGetTables();
 	
@@ -494,9 +494,9 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_uservarsTable = $tables['system/module_uservars'];
+        $module_uservarstable = $tables['system/module_uservars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_uservarsTable = $tables['site/module_uservars'];
+        $module_uservarstable = $tables['site/module_uservars'];
     }
         
     // We need the variable id
@@ -504,7 +504,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     $modvarid = xarModGetVarId($modName, $name);
     if(!$modVarid) return;
  
-    $query = "DELETE FROM $module_uservarsTable
+    $query = "DELETE FROM $module_uservarstable
               WHERE xar_mvid = '" . xarVarPrepForStore($modvarid) . "'
               AND xar_uid = '" . xarVarPrepForStore($uid) . "'";
     if(!$dbconn->Execute($query)) return;
@@ -1651,14 +1651,14 @@ function xarMod_getVarsByModule($modName)
 
     // Takes the right table basing on module mode
     if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varsTable = $tables['system/module_vars'];
+        $module_varstable = $tables['system/module_vars'];
     } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varsTable = $tables['site/module_vars'];
+        $module_varstable = $tables['site/module_vars'];
     }
 
     $query = "SELECT xar_name,
                      xar_value
-              FROM $module_varsTable
+              FROM $module_varstable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
@@ -1694,13 +1694,13 @@ function xarMod_getVarsByName($name)
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
 
-    $module_varsTable = $tables['system/module_vars'];
+    $module_varstable = $tables['system/module_vars'];
 // TODO: fetch from site table too ?
-//    $module_varsTable = $tables['site/module_vars'];
+//    $module_varstable = $tables['site/module_vars'];
 
     $query = "SELECT xar_modname,
                      xar_value
-              FROM $module_varsTable
+              FROM $module_varstable
               WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
