@@ -41,6 +41,7 @@
 		<input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" />
 			<label for="agreetoterms">
 				<xar:mlstring>I agree to be bound by this website's </xar:mlstring> <a href="#xarModURL('roles', 'user', 'terms')#"> <xar:mlstring>Terms of Use</xar:mlstring> </a>.
+			</label>
 				<xar:if condition="!empty($invalid['agreetoterms'])">
 					<span style="color: red">#$invalid['agreetoterms']#</span>
 				</xar:if>

@@ -10,11 +10,11 @@
 		<input type="hidden" name="phase" id="phase" value="getvalidate" />
 	<table border="0" cellpadding="4" cellspacing="0">
 	<tr>
-		<td><xar:mlstring>Username</xar:mlstring></td>
+		<td><label for="uname"><xar:mlstring>Username</xar:mlstring></label></td>
 		<td><input type="text" name="uname" id="uname" value="#$uname#" /></td>
 	</tr>
 	<tr>
-		<td><xar:mlstring>Validation Code</xar:mlstring></td>
+		<td><label for="valcode"><xar:mlstring>Validation Code</xar:mlstring><label></td>
 		<td><input type="text" name="valcode" id="valcode" value="" /></td>
 	</tr>
 	<tr>

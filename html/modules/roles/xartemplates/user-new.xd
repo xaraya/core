@@ -23,7 +23,7 @@
 		<table border="0" cellpadding="5">
 			<tr>
 				<td>
-					<xar:mlstring>User Name</xar:mlstring>
+					<label for="uname"><xar:mlstring>User Name</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="text" name="uname" id="uname" value="" size="25" maxlength="25" tabindex="1" />
@@ -31,7 +31,7 @@
 			</tr>
 			<tr>
 				<td>
-					<xar:mlstring>Real Name</xar:mlstring>
+					<label for="realname"><xar:mlstring>Real Name</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="text" name="realname" id="realname" value="" size="25" maxlength="60" tabindex="2" />
@@ -39,7 +39,7 @@
 			</tr>
 			<tr>
 				<td>
-					<xar:mlstring>E-Mail</xar:mlstring>
+					<label for="email"><xar:mlstring>E-Mail</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="text" name="email" id="email" value="" size="25" maxlength="100" tabindex="3" />
@@ -48,7 +48,7 @@
                        <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
 			<tr>
 				<td>
-					<xar:mlstring>Password</xar:mlstring>
+					<label for="pass1"><xar:mlstring>Password</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="password" name="pass1" id="pass1" value="" size="25" maxlength="40" tabindex="4" />
@@ -56,7 +56,7 @@
 			</tr>
 			<tr>
 				<td>
-					<xar:mlstring>Retype Password</xar:mlstring>
+					<label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="password" name="pass2" id="pass2" value="" size="25" maxlength="40" tabindex="5" />

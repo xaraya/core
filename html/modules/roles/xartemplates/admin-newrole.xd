@@ -29,7 +29,7 @@ document.forms[0].submit();}
 		<table border="0" cellpadding="5">
 			<tr>
 				<td>
-					<xar:mlstring>Display Name</xar:mlstring>
+					<label for="pname"><xar:mlstring>Display Name</xar:mlstring></label>
 				</td>
 				<td>
 					<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="50" tabindex="1" />
@@ -89,7 +89,7 @@ document.forms[0].submit();}
 				</tr>
 				<tr>
 					<td>
-						<xar:mlstring>User Name</xar:mlstring>
+						<label for="puname"><xar:mlstring>User Name</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="text" name="puname" id="puname" value="#$puname#" size="20" maxlength="20" tabindex="4" />
@@ -98,7 +98,7 @@ document.forms[0].submit();}
 						&nbsp;
 					</td>
 					<td>
-						<xar:mlstring>Email</xar:mlstring>
+						<label for="pemail"><xar:mlstring>Email</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="text" name="pemail" id="pemail" value="#$pemail#" size="40" maxlength="40" tabindex="5" />
@@ -136,7 +136,7 @@ document.forms[0].submit();}
 						&nbsp;
 					</td>
 					<td>
-						<xar:mlstring>Password</xar:mlstring>
+						<label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="6" />
@@ -153,7 +153,7 @@ document.forms[0].submit();}
 						&nbsp;
 					</td>
 					<td>
-						<xar:mlstring>Pwd. Again</xar:mlstring>
+						<label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="7" />

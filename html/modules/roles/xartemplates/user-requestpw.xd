@@ -3,8 +3,8 @@
 <xar:mlstring>Enter your username or your e-mail address.</xar:mlstring>
 <br /><br />
 <form action="#xarModURL('roles', 'user', 'lostpassword')#" method="post" enctype="application/x-www-form-urlencoded">
-<p><xar:mlstring>Username</xar:mlstring>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" size="25" maxlength="25" /><br />
-<xar:mlstring>E-mail address</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="email" id="email" size="25" maxlength="60" /></p>
+<p><label for="uname"><xar:mlstring>Username</xar:mlstring></label>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" id="uname" size="25" maxlength="25" /><br />
+<label for="email"><xar:mlstring>E-mail address</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="email" id="email" size="25" maxlength="60" /></p>
 <input type="hidden" name="authid" id="authid" value="#$authid#" />
 <input type="hidden" name="phase" id="phase" value="send" />
 <input type="submit" value="E-Mail new password" />

@@ -35,7 +35,7 @@ document.forms[0].submit();}
 			<xar:if condition="$ppid lt 3">
 				<tr>
 					<td>
-						<xar:mlstring>Name</xar:mlstring>
+						<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
@@ -50,7 +50,7 @@ document.forms[0].submit();}
 			<xar:if condition="$ptype eq 'empty'">
 				<tr>
 					<td>
-						<xar:mlstring>Name</xar:mlstring>
+						<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />
@@ -68,7 +68,7 @@ document.forms[0].submit();}
 			<xar:else />
 				<tr>
 					<td>
-						<xar:mlstring>Name</xar:mlstring>
+						<label for="pname"><xar:mlstring>Name</xar:mlstring></label>
 					</td>
 					<td>
 						<input type="text" name="pname" id="pname" value="#$pname#" size="20" maxlength="20" tabindex="1" />

@@ -4,8 +4,8 @@
 	<form action="#xarModURL('roles', 'admin', 'sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="authid" id="authid" value="#$authid#" />
 		<input type="hidden" name="uid" id="uid" value="#$uid#" />
-		<p><xar:mlstring>Subject</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
-		<p><xar:mlstring>Message</xar:mlstring>:</p>
+		<p><label for="subject"><xar:mlstring>Subject</xar:mlstring></label>:&nbsp;&nbsp;<input type="text" name="subject" id="subject"></p>
+		<p><label for="message"><xar:mlstring>Message</xar:mlstring></label>:</p>
 		<p><textarea name="message" id="message" wrap="soft" rows="20" cols="50"></textarea></p>
 		<p><input type="submit" value="Submit" align="middle" /></p>
 	</form>

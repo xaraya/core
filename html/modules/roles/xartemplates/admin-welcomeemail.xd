@@ -11,7 +11,7 @@
 		<table>
 		<tr>
 			<td>
-				<xar:mlstring>Welcome Email Title</xar:mlstring>:
+				<label for="welcometitle"><xar:mlstring>Welcome Email Title</xar:mlstring></label>:
 			</td>
 			<td>
 				<input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />

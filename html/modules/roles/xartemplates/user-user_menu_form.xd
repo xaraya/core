@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 		<td>
-			<b><xar:mlstring>Display Name</xar:mlstring>:</b>
+			<b><label for="name"><xar:mlstring>Display Name</xar:mlstring></label>:</b>
 		</td>
 		<td>
 			<input type="text" name="name" id="name" value="#$name#" size="20" maxlength="60" />
@@ -31,7 +31,7 @@
 	</tr>
 	<tr>
 		<td>
-			<b><xar:mlstring>Password</xar:mlstring></b>
+			<b><label for="pass1"><xar:mlstring>Password</xar:mlstring></label></b>
 		</td>
 		<td>
 			<input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" />
@@ -39,7 +39,7 @@
 	</tr>
 	<tr>
 		<td>
-			<b><xar:mlstring>Retype Password</xar:mlstring></b>
+			<b><label for="pass2"><xar:mlstring>Confirm Password</xar:mlstring></label></b>
 		</td>
 		<td>
 			<input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" />
@@ -53,7 +53,7 @@
 	    <xar:foreach in="$properties" key="$name">
 	<tr>
 		<td>
-			<b><xar:data-label property="$properties[$name]" /></b>
+			<b><label for="$properties[$name]"><xar:data-label property="$properties[$name]" /></label></b>
 		</td>
 		<td>
 			<xar:data-input property="$properties[$name]" />
