@@ -129,7 +129,7 @@
 				</div>
 				<div style="text-align:center;">
 					<span class="xar-normal">
-						<xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable">
+						<xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable && $adodbTemplatesIsWritable && $rssTemplatesIsWritable">
 							<input type="hidden" name="install_phase" id="install_phase" value="4" />
 							<input type="submit" value="Continue &gt;" />
 							<xar:else />
