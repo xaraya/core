@@ -412,7 +412,8 @@ function pnBlock_loadAll()
                        new SystemException($msg));
         return;
     }
-    while (list($name, $directory, $mid) = $result->fields) {
+    while (!$result->EOF) {
+        list($name, $directory, $mid) = $result->fields;
         $result->MoveNext();
         $blockDir = 'modules/' . pnVarPrepForOS($directory) . '/pnblocks';
         if (!@is_dir($blockDir)) {

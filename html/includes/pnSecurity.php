@@ -275,7 +275,8 @@ function pnSec__getAuthInfo($userId)
         return;
     }
 
-    while(list($realm, $component, $instance, $level) = $result->fields) {
+    while(!$result->EOF) {
+        list($realm, $component, $instance, $level) = $result->fields;
         $result->MoveNext();
 
         // Fix component and instance to auto-insert '.*'
@@ -313,7 +314,8 @@ function pnSec__getAuthInfo($userId)
        // Anonymous user
        $usergroups[] = 0;
     }
-    while(list($gid) = $result->fields) {
+    while(!$result->EOF) {
+        list($gid) = $result->fields;
         $result->MoveNext();
 
         $usergroups[] = $gid;
@@ -337,7 +339,8 @@ function pnSec__getAuthInfo($userId)
         return;
     }
 
-    while(list($realm, $component, $instance, $level) = $result->fields) {
+    while(!$result->EOF) {
+        list($realm, $component, $instance, $level) = $result->fields;
         $result->MoveNext();
 
         // Fix component and instance to auto-insert '.*' where

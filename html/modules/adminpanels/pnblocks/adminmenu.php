@@ -131,7 +131,8 @@ function adminpanels_adminmenublock_display($blockinfo){
         
         $temp = array();
         
-        while(list($bid) = $result->fields){
+        while(!$result->EOF){
+            list($bid) = $result->fields;
             $result->MoveNext();
             // temporary deactivate unwanted centre user blocks
             $sql=   "UPDATE $ublockstable 
