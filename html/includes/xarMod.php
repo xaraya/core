@@ -971,44 +971,49 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if (!isset($generateXMLURL)) {
         $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
     }
-
-    if ($GLOBALS['xarMod_generateShortURLs'] &&
+	
+	// lets do a real quick check first, then everything else if necessary
+	// otherwise we are spending too much time and calling too many extra functions everytime 
+	// even if what we need is just a plain simple mod url [andyv]
+	// this function is VERY popular, often called recursively, prolly need to be optimised or refactored
+    if ($GLOBALS['xarMod_generateShortURLs']) {
         // WATCH OUT! : the encode_shorturl should be in userapi, so don't pass $modType
-        xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') &&
-        xarModAPILoad($modName, 'user')) {
+        if (xarModGetVar($modName, 'SupportShortURLs') && ($modType == 'user') && xarModAPILoad($modName, 'user')) {
 
-        $encoderArgs = $args;
-        $encoderArgs['func'] = $funcName;
-        // don't throw exception on missing file or function anymore
-        $path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
-        if (!empty($path)) {
-            if ($generateXMLURL) {
-                $path = htmlspecialchars($path);
-            }
-
-            // FIXME: check if this works with all modules supporting short urls
-            if ($target != NULL) {
-                $path = "$path#$target";
-            }
-
-            // The following allows you to modify the BaseURL from the config file
-            // it can be used to configure Xaraya for mod_rewrite by
-            // setting BaseModURL = '' in config.php
-            $BaseModURL =  xarCore_getSystemVar('BaseModURL',true);
-            if( !isSet($BaseModURL) )
-            {
-                // Use xaraya default if BaseModURL not provided in config.php
-                return xarServerGetBaseURL() . 'index.php' . $path;
-            } else {
-                // Build Base URL from Config
-
-                // remove the leading / from the short URL path
-                $path = preg_replace('/^\//','',$path);
-                // put everything together for the complete URL
-                return xarServerGetBaseURL() . $BaseModURL . $path;
-            }
+			$encoderArgs = $args;
+			$encoderArgs['func'] = $funcName;
+			// don't throw exception on missing file or function anymore
+			$path = xarModAPIFunc($modName, 'user', 'encode_shorturl', $encoderArgs, 0);
+			if (!empty($path)) {
+				if ($generateXMLURL) {
+					$path = htmlspecialchars($path);
+				}
+	
+				// FIXME: check if this works with all modules supporting short urls
+				if ($target != NULL) {
+					$path = "$path#$target";
+				}
+	
+				// The following allows you to modify the BaseURL from the config file
+				// it can be used to configure Xaraya for mod_rewrite by
+				// setting BaseModURL = '' in config.php
+				$BaseModURL =  xarCore_getSystemVar('BaseModURL',true);
+				if( !isSet($BaseModURL) )
+				{
+					// Use xaraya default if BaseModURL not provided in config.php
+					return xarServerGetBaseURL() . 'index.php' . $path;
+				} else {
+					// Build Base URL from Config
+	
+					// remove the leading / from the short URL path
+					$path = preg_replace('/^\//','',$path);
+					// put everything together for the complete URL
+					return xarServerGetBaseURL() . $BaseModURL . $path;
+				}
+			}
         }
     }
+    
     if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
         // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
         // this exception means that the module does not support short urls
