@@ -215,6 +215,10 @@ president@whitehouse.gov';
     $disallowedemails = serialize($emails);
     xarModSetVar('roles', 'disallowedemails', $disallowedemails);
 
+    $ips = '';
+    $disallowedips = serialize($ips);
+    xarModSetVar('roles', 'disallowedips', $disallowedips);
+
     xarModSetVar('roles', 'minage', 13);
 
     // Register blocks
@@ -314,6 +318,11 @@ function roless_upgrade($oldVersion)
     $query = xarDBCreateIndex($tables['roles'],$index);
     $result =& $dbconn->Execute($query);
     if (!$result) return;
+
+    $ips = '';
+    $disallowedips = serialize($ips);
+    xarModSetVar('roles', 'disallowedips', $disallowedips);
+
             break;
         case 2.0:
             // Code to upgrade from version 2.0 goes here
