@@ -269,7 +269,13 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         // fall back to default template if necessary
         if (!empty($templateName) && !file_exists($sourceFileName)) {
             $tplName = "$modType-$funcName";
-            $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
+			
+			//check if theme overides default template		
+		    $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/$modType-$funcName" .'.xt';
+			if(!file_exists($sourceFileName))
+			{
+	            $sourceFileName = "modules/$modOsDir/xartemplates/$modType-$funcName.xd";
+			}
         }
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, XARMLS_CTXTYPE_TEMPLATE, $tplName) === NULL) return;
     } /*else {
