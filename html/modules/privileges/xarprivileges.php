@@ -1574,7 +1574,6 @@ function drawindent() {
                 ($thisrealm == 'none') && ($maskrealm != 'all')
             ))
             {return false;}
-
             $thismodule = strtolower($this->getModule());
             $maskmodule = strtolower($mask->getModule());
             if (!(
@@ -1587,7 +1586,7 @@ function drawindent() {
             $thiscomponent = strtolower($this->getComponent());
             $maskcomponent = strtolower($mask->getComponent());
             if (!(
-                ($thiscomponent == $mask->getComponent()) ||
+                ($thiscomponent == $maskcomponent) ||
                 ($maskcomponent == 'all') ||
                 ($thiscomponent == 'all') && ($maskcomponent != 'none')
             ))
