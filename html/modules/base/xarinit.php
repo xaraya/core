@@ -170,9 +170,9 @@ function base_init()
     * Set System Configuration Variables
     *****************************************************************/
     xarConfigSetVar('System.Core.TimeZone', 'US/New York');
-    xarConfigSetVar('System.Core.VersionNum', '.9.1.4');
-    xarConfigSetVar('System.Core.VersionId', 'Xaraya');
-    xarConfigSetVar('System.Core.VersionSub', 'adam_baum');
+    xarConfigSetVar('System.Core.VersionNum', XARCORE_VERSION_NUM);
+    xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
+    xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
     $allowedAPITypes = array();
     xarConfigSetVar('System.Core.AllowedAPITypes',$allowedAPITypes);
     /*****************************************************************

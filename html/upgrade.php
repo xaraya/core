@@ -31,12 +31,14 @@ if(!xarSecurityCheck('AdminPanel')){
     return;
 }
 
+// The System.Core.VersionNum contains the currently stored version number
+// this may be different from the define in xarCore.php
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
 
 $title = xarML('Upgrade');
 
 if (empty($step)) {
-    $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1)',$xarVersion);
+    $descr = xarML('Preparing to upgrade from previous Xaraya Version #(1) to version #(2)',$xarVersion, XARCORE_VERSION_NUM);
     // start the output buffer
     ob_start();
 ?>
@@ -854,7 +856,7 @@ Password : %%password%%
     $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
                                 'set'     =>  $roleanon->getID()),
                           array('name'    =>  'System.Core.VersionNum',
-                                'set'     =>  '.9.1.4'));
+                                'set'     =>  XARCORE_VERSION_NUM));
 
     foreach($configvars as $configvar){
         foreach($configvar as $var){
