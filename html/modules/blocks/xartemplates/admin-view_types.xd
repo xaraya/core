@@ -5,13 +5,13 @@
 		<div class="xar-norm-outline" style="margin: 0px 3px 6px 3px;padding: 10px;text-align: left;">
 			<div class="xar-accent" style="padding-top: 10px; padding-bottom: 10px;">
 				<span style="float: left; text-align: center; width: 19%; font-weight: bold;">
-					<span class="help" title="#xarML('The module listed is the module of which this block originates')#"><xar:mlstring>Module</xar:mlstring></span>
+					<span class="help" title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></span>
 				</span>
 				<span style="float: left; text-align: center; width: 51%; font-weight: bold;">
 					&nbsp;
 				</span>
 				<span style="float: right; text-align: center; width: 19%; font-weight: bold;">
-					<span class="help" title="#xarML('The block type indicates the type of block which can be selected.')#"><xar:mlstring>Type</xar:mlstring></span>
+					<span class="help" title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></span>
 				</span>
 				<br />
 			</div>

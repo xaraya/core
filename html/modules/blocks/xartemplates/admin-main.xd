@@ -10,7 +10,7 @@
             <p><xar:mlstring>What is it?</xar:mlstring></p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>The Blocks Module controls the configuration, display position and grouping of each "block" on your website.  The Blocks module is a standard module within Xaraya, and cannot be removed.</xar:mlstring></p>
+            <p><xar:mlstring>The Blocks Module controls the configuration, display position and grouping of each "block" on your website.  The Blocks module is a core module within Xaraya, and cannot be removed.</xar:mlstring></p>
 		</div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <p><xar:mlstring>How to use it?</xar:mlstring></p>
