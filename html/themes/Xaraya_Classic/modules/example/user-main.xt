@@ -1,5 +1,8 @@
 <p style="color: #FF0000;">
-    This is an over-ridden template. See #xarTplGetThemeDir()#/modules/example/user-main.xt for the example 
+    <xar:ml>
+    <xar:mlstring>This is an over-ridden template. See #(1)/modules/example/user-main.xt for the example</xar:mlstring>
+    <xar:mlvar>#xarTplGetThemeDir()#</xar:mlvar>
+    </xar:ml>
 </p>
 <!--- common user menu for this module - remove link to the current function --->
 <table border="0" width="100%">

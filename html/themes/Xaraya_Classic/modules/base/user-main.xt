@@ -1,10 +1,22 @@
 <p>
-    Xaraya is currently in Beta Production. If you notice any unexpected functionality, please use our bug tracker at 
-    <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>. Thank you for your support, and feel free to join our development or user discussions to become involved in our community. 
+    <xar:mlstring>
+        Xaraya is currently in Beta Production.
+    </xar:mlstring>
+    <xar:mlstring>
+        If you notice any unexpected functionality, please use our bug tracker at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>.
+    </xar:mlstring>
+    <xar:mlstring>
+        Thank you for your support, and feel free to join our development or user discussions to become involved in our community.
+    </xar:mlstring>
 </p>
 <p>
-    For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website. 
+    <xar:mlstring>
+        For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website.
+    </xar:mlstring>
 </p>
 <p>
-    This message can be edited by creating an override template (#xarConfigGetVar('Site.BL.ThemesDirectory')#/themename/modules/base/user-main.xt) for the base module. 
+    <xar:ml>
+    <xar:mlstring>This message can be edited by creating an override template (#(1)/themename/modules/base/user-main.xt) for the base module.</xar:mlstring>
+    <xar:mlvar>#xarConfigGetVar('Site.BL.ThemesDirectory')#</xar:mlvar>
+    </xar:ml>
 </p>
