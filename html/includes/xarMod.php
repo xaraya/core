@@ -855,7 +855,13 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
                 }
             }
         }
+
+        if ($found) {
+            // Load the translations file - only if we have successfuly loaded the module function.
+            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:'.$modType, $funcName) === NULL) {return;}
+        }
     }
+
     if (!$found) {
         // if it's loaded but not found, then set the error message to that
         if (!$isLoaded || empty($msg)) {
@@ -864,9 +870,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         return;
     }
-
-    // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:'.$modType, $funcName) === NULL) return;
 
     $tplData = $modFunc($args);
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
