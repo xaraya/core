@@ -134,6 +134,16 @@ pre {
     font-family: monaco, courier, monospace;
 }
 
+ul {
+    padding: 0;
+    margin: 0;
+    list-style-position: inside;
+}
+
+ul li {
+    margin-left: 0.5em;
+}
+
 blockquote {
     color: #191970;
     margin: 2em;
