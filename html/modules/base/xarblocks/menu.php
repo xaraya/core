@@ -2,14 +2,13 @@
 /**
  * File: $Id$
  *
- * Initialise Block
+ * Menu System
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
  *
- * @subpackage base module
+ * @subpackage adminpanels module
  * @author Patrick Kellum, Jim McDonald, Greg Allan, John Cox
 */
 
@@ -66,7 +65,7 @@ function base_menublock_display($blockinfo)
     $xartable = xarDBGetTables();
 
 // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:All")) return;
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) return;
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);
@@ -146,7 +145,9 @@ function base_menublock_display($blockinfo)
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
                         // Security Check
-                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$title:All")) {
+                        //FIX: Should contain a check for the particular menu item
+                        //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
+                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
                             $title = xarVarPrepForDisplay($title);
                             $comment = xarVarPrepForDisplay($comment);
                             $child = xarVarPrepForDisplay($child);
@@ -159,7 +160,7 @@ function base_menublock_display($blockinfo)
 
                 // Added list of modules if selected.
                 if (!empty($vars['displaymodules'])) {
-                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:All")) {
+                    if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
                         foreach($mods as $mod){
                             $label = $mod['name'];
                             $link = xarModURL($mod['name'] ,'user', 'main', array());
