@@ -653,7 +653,7 @@
         $this->raiseErrorFn = false;
 
 		$getnext = sprintf($this->_genIDSQL,$seqname);
-		$rs = @$this->Execute($getnext);
+		$rs = $this->Execute($getnext);
 
         $this->raiseErrorFn = $errorfn;
         // XARAYA MODIFICATION END  - TURN OFF/ON ERROR HANDLER
