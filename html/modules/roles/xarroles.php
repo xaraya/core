@@ -313,7 +313,7 @@ function drawbranch($node){
 
 // this next table holds the Delete, Users and Privileges links
 // don't allow deletion of certain roles
-	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 1em;">';
+	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 17em;">';
 	if(($object['pid'] < 5) || ($object['users'] > 0) || (!$drawchildren)) {
 		$this->html .= '&nbsp;';
 	}
