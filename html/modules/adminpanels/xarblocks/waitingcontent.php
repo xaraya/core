@@ -67,7 +67,7 @@ function adminpanels_waitingcontentblock_info()
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock',"$blockinfo[title]:All:All")) {return;}
+    if(!xarSecurityCheck('AdminPanel',0,'Block',"waitingcontent:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get publication types
     $data = xarModAPIFunc('adminpanels', 'admin', 'waitingcontent');
