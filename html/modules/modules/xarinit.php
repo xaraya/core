@@ -155,7 +155,7 @@ function modules_init()
     $result =& $dbconn->Execute($query);
     if(!$result) return;
 
-    $index = array('name'   => 'i_xar_name',
+    $index = array('name'   => 'i_modules_xar_name',
                    'fields' => array('xar_name'));
 
     $query = xarDBCreateIndex($tables['module_vars'],$index);

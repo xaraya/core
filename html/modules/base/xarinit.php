@@ -107,7 +107,7 @@ function base_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    $index = array('name'   => 'i_xar_uid',
+    $index = array('name'   => 'i_base_xar_uid',
                    'fields' => array('xar_uid'));
 
     $query = xarDBCreateIndex($sessionInfoTable,$index);
@@ -142,7 +142,7 @@ function base_init()
     if (!$result) return;
 
     // config var name should be unique
-    $index = array('name'   => 'i_xar_name',
+    $index = array('name'   => 'i_base_xar_name',
                    'fields' => array('xar_name'),
                    'unique' => true);
 

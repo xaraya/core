@@ -118,7 +118,7 @@ function roles_init()
 
     // allow identical "real names" here
     $index = array(
-                   'name'      => 'i_xar_name',
+                   'name'      => 'i_roles_xar_name',
                    'fields'    => array('xar_name'),
                    'unique'    => false
                   );
@@ -153,7 +153,7 @@ function roles_init()
                                            'default'     => '0')));
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name'      => 'i_xar_uid',
+    $index = array('name'      => 'i_roles_xar_uid',
                    'fields'    => array('xar_uid'),
                    'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['rolemembers'],$index);
