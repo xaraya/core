@@ -2563,7 +2563,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
-    function renderBeginTag()
+    function render()
     {
         extract($this->attributes);
 
@@ -2579,33 +2579,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
 
-        if (count($this->children) != 1) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
-                           new xarTpl__ParserError('The <xar:set> tag can contain only one child tag.', $this));
-            return;
-        }
-
-        return '$'.$name.'='.$value;
-    }
-
-    function renderEndTag()
-    {
-        return '';
-    }
-
-    function isAssignable()
-    {
-        return false;
-    }
-
-    function hasChildren()
-    {
-        return false;
-    }
-
-    function needAssignment()
-    {
-        return false;
+        return $name.'='.$value;
     }
 }
 
