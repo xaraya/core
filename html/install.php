@@ -92,41 +92,59 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
         pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
-    // Load the installer module, the hard way - file check too
-    $installer_admin_file = 'modules/installer/pnadmin.php';
-    require $installer_admin_file;
 
-    // Run the function, check for existence
-    $mod_func = 'installer_admin_phase'.$phase;
+    // Load installer
+    $loaded = pnInstallLoad('installer','admin');
 
-    if (function_exists($mod_func)) {
-        $data = $mod_func();
+    // if the debugger is active, start it
+    if (pnCoreIsDebuggerActive()) {
+       ob_start();
+    }
+    // Build functioname from phase
+    $funcName = 'phase'.$phase;
 
-        // Handle exceptions
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
-            return;
+    //run install functions
+    $mainInstallOutput = pnInstallFunc('installer', 'admin', $funcName);
+
+    if (pnCoreIsDebuggerActive()) {
+        if (ob_get_length() > 0) {
+            $rawOutput = ob_get_contents();
+            $mainInstallOutput = 'The following lines were printed in raw mode by module, however this
+                                 should not happen. The module is probably directly calling functions
+                                 like echo, print, or printf. Please modify the module to exclude direct output.
+                                 The module is violating PostNuke architecture principles.<br /><br />'.
+                                 $rawOutput.
+                                 '<br /><br />This is the real module output:<br /><br />'.
+                                 $mainInstallOutput;
         }
+        ob_end_clean();
+    }
 
-        $return = pnTplInstall('installer', 'admin', 'phase'.$phase, $data);
-    } else {
-        // exception time!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $mod_func doesn't exist."));return;
+    // Close the session
+    //pnSession_close();
+
+    if (pnResponseIsRedirected()) {
+        // If the redirection header was yet sent we can't handle exceptions
+        // However if we're here with a thrown exception it means that the mod developer
+        // is not checking exceptions, so it's also their fault.
+        return true;
+    }
+    
+    // Here we check for exceptions even if $res isn't empty
+    if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return; // throw back
     }
 
     // Render page
-    // Load the template, the hard way - file check too
-    $installer_tpl_file = 'themes/SeaBreeze/pages/install.pnt';
-    extract ($data, EXTR_OVERWRITE);
-    require $installer_tpl_file;
+    $pageOutput = pnTpl_renderPage($mainInstallOutput);
 
     // Handle exceptions
     if (pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
 
-    //echo $pageOutput;
-    
+    echo $pageOutput;
+
     return true;
 }
 
