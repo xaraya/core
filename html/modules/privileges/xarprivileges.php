@@ -1542,7 +1542,7 @@ function drawindent() {
 			for ($i=0;$i<count($instance1);$i++) {
 				if (!(
 					($instance1[$i] == $instance2[$i]) ||
-					($instance1[$i] != 'All') && ($instance2[i] == 'All')
+					($instance1[$i] != 'All') && ($instance2[$i] == 'All')
 				))
 				{return false;}
 			}
