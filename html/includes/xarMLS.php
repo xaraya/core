@@ -214,7 +214,9 @@ function xarMLSGetCharsetFromLocale($locale)
  */
 function xarML($string/*, ...*/)
 {
-    assert('!empty($string)');
+    // if an empty string is passed in, just return an empty string. it's
+    // the most sensible thing to do
+    if(empty($string)) return '';
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translate($string);
@@ -251,12 +253,12 @@ function xarML($string/*, ...*/)
  */
 function xarMLByKey($key/*, ...*/)
 {
-    // <mrb> Really check for key contains a space with an assert?
-    // rather fail gracefully here. This will happen a lot!!
-    // FIXME: Find a better way to check for spaces in $key
-    // and also for empty keys, we just can't keep bombing out like this.
-    //assert('!empty($key) && strpos($key, " ") === false');
-    assert(!empty($key));
+    // Key must have a value and not contain spaces
+    if(empty($key) || strpos($key," ")) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+        return;
+    }
+    
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
