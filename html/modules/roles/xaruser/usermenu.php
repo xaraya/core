@@ -28,6 +28,7 @@ function roles_user_usermenu($args)
                                                                          'iconenhanced' => $iconenhanced));
             break;
         case 'form':
+        case 'formbasic':
             $properties = null;
             $withupload = (int) FALSE;
             if (xarModIsAvailable('dynamicdata')) {
