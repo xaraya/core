@@ -976,7 +976,7 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div name="xarBranch" style="align: left;">';
+	$this->html .= '<div name="xarBranch" id="' . $object['name'] . '" style="align: left;">';
 
 // this table holds the index, the tree drawing gifs and the info about the permission
 	$this->html .= $this->drawindent();
@@ -1015,9 +1015,22 @@ function drawbranch($node){
 	$this->html .= count($this->getsubpermissions($object['pid'])) . ' components</span>';
 
 // this next table holds the Delete, Users and Permissions links
+
+// toggle the tree
+	$this->html .=  '<span name="togglelink" style="position: absolute; right: 16em">';
+	if(count($this->getsubpermissions($object['pid'])) == 0) {
+		$this->html .= '&nbsp;';
+	}
+	else {
+		$this->html .= '<a href="javascript:xarTree_exec(\''. $object['name'] .'\',2);" title="Expand or collapse this tree">
+			&nbsp;Toggle&nbsp;
+			</a>';
+	}
+	$this->html .= '</span>';
+
 // don't allow deletion of certain permissions
 	$this->html .=  '<span name="deletelink" style="position: absolute; right: 11em">';
-	if(($object['pid'] < 3)) {
+	if($object['pid'] < 3) {
 		$this->html .= '&nbsp;';
 	}
 	else {

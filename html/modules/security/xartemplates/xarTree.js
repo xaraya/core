@@ -16,7 +16,7 @@ function xarTree_init() {
 		var trees = document.getElementsByName('PermissionsTree');
 		var i=0;
 		while( i < trees.length ) {
-			if (xarTree_config.is.norm) tree.normalize();
+			if (xarTree_config.is.norm) trees[i].normalize();
 			xarTree_buildTree(trees[i]);
 			var treeID = 'PermissionsTree' & i;
 //			if (xarTree_config.persistance) xarTree_open(treeID);
@@ -109,27 +109,35 @@ function xarTree_getChild(branch) {
 	return(node);
 	}	
 
+function xarTree_exec(id, op) { 
+    xarTree_config.operation = op; 
+    var node = document.getElementById(id) 
+    if (node == null) return; 
+    xarTree_commands(node); 
+} 
+     
 function xarTree_commands(thisnode) {
     var i = 0;
     while( i < thisnode.childNodes.length ) {
         var currNode = thisnode.childNodes[i];
         if (currNode.childNodes.length > 0)
             xarTree_commands(currNode);
-        if (currNode.nodeName == "xarBranch" && currNode.className == xarTree_config.branchtitle) {
+        if (currNode.name == "box"){
+        var branch = xarTree_getParent(currNode);
             switch (parseInt(xarTree_config.operation)) {
                 case 0 : // Hide all
-                    if (currNode.getAttribute(xarTree_config.attr) == 'visible') currNode.click(); break;
+                    if (branch.getAttribute(xarTree_config.attr) == 'visible') currNode.click(); break;
                 case 1 : // Show all
-                    if (currNode.getAttribute(xarTree_config.attr) == 'hidden') currNode.click(); break;
+                    if (branch.getAttribute(xarTree_config.attr) == 'hidden') currNode.click(); break;
                 case 2 : // Toggle all
                     currNode.click(); break;
                 default: return;
-                }
-            xarTree_config.count++;
-            }
-        i++;
-        }
-    }
+			}
+		xarTree_config.count++;
+		}
+	i++;
+	}
+}
 
 function xarTree_saveLoad(thisnode) {
     var i = 0;

@@ -272,7 +272,7 @@ document.forms[0].submit();}
 				&nbsp;
 			</td>
 			<td width="50" align="right">
-				<xar:if condition="count($parents) ne 1">
+				<xar:if condition="count($parents) neq 1">
 					<a href="&xar-modurl-security-admin-removemember;&childid=&xar-var-ppid;&parentid=&xar-var-parentid;">				
 						<xar:mlstring>Remove</xar:mlstring>    
 					</a>
