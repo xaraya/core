@@ -1,9 +1,5 @@
-/*
-system menus and related rules 
--------------------------------------------------------------------------[comment] */
-
-.xar-block-body ul,
-.xar-block-body-right ul {
+/* system menus and related rules -------------------------------------------------------------------------[comment] */
+.xar-block-body ul, .xar-block-body-right ul {
     list-style-position: outside;
     list-style-type: none;
     margin: 0;
@@ -14,8 +10,7 @@ system menus and related rules
     display: block;
 }
 
-.xar-block-body ul li,
-.xar-block-body-right ul li {
+.xar-block-body ul li, .xar-block-body-right ul li {
     list-style-type: none;
     margin: 0 0 1px 0;
     padding: 0;
@@ -23,8 +18,7 @@ system menus and related rules
     background-image: none;
 }
 
-.xar-block-body ul li a,
-.xar-block-body-right ul li a {
+.xar-block-body ul li a, .xar-block-body-right ul li a {
     text-decoration: none;
     display: block;
     color: #666666;
@@ -35,8 +29,7 @@ system menus and related rules
     height: 1.7em;
 }
 
-.xar-block-body ul li a:hover,
-.xar-block-body-right ul li a:hover {
+.xar-block-body ul li a:hover, .xar-block-body-right ul li a:hover {
     text-decoration: none;
     display: block;
     color: #eeeeee;
@@ -45,26 +38,30 @@ system menus and related rules
     height: 1.7em;
 }
 
-.xar-block-body ul ul ul li a,
-.xar-block-body-right ul ul ul li a {
-    margin: 0 10px 0 0;
+.xar-block-body ul ul ul li a, .xar-block-body-right ul ul ul li a {
+    margin: 0;
     padding: 0 4px;
     text-align: right;
     background-color: #f5f5f5;
     height: 1.7em;
 }
 
-.xar-block-body ul ul li.xar-menu-subitem-current a,
-.xar-block-body-right ul ul li.xar-menu-subitem-current a {
+.xar-block-body ul ul li.xar-menu-subitem-current a, .xar-block-body-right ul ul li.xar-menu-subitem-current a {
     color: #eeeeee;
     background-color: #999999;
 }
 
+.xar-block-body ul ul li.xar-menu-item-current a { margin: 0 9px 0 0; }
+.xar-block-body ul li.xar-menu-item-current { background-color: #dddddd; }
+
+.xar-block-body ul ul li.xar-menu-subitem-current, .xar-block-body-right ul ul li.xar-menu-subitem-current {
+    background-image: url(../images/leftarrow.gif);
+    background-repeat: no-repeat;
+    background-position: right .5em;
+}
+
 /* proper browsers can calculate height alright, ie-win cannot apparently */
-.xar-block-body ul > li,
-.xar-block-body-right ul > li, 
-.xar-block-body ul li > a,
-.xar-block-body-right ul li > a {
+.xar-block-body ul > li, .xar-block-body-right ul > li, .xar-block-body ul li > a, .xar-block-body-right ul li > a {
     height: auto;
     line-height: 1.7em;
 }
