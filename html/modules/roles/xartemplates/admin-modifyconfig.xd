@@ -151,15 +151,15 @@
 	<h4><xar:mlstring>Filtering Options</xar:mlstring></h4>
 	<p><label for=-"disallowednames"><xar:mlstring>Disallowed user names</xar:mlstring>:</label><br />
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
-	<textarea name="disallowednames" id="disallowednames" rows="10" cols="30" />#$names#</textarea> 
+	<textarea name="disallowednames" id="disallowednames" rows="10" cols="30">#$names#</textarea> 
 
 	<p><label for="disallowedemails"><xar:mlstring>Disallowed email addresses</xar:mlstring>:</label><br />
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
-	<textarea name="disallowedemails" id="disallowedemails" rows="10" cols="30" />#$emails#</textarea> 
+	<textarea name="disallowedemails" id="disallowedemails" rows="10" cols="30">#$emails#</textarea> 
 
 	<p><label for="disallowedips"><xar:mlstring>Disallowed IP addresses</xar:mlstring>:</label><br />
 	<i><xar:mlstring>Note: Enter each name on a single line.  Do not separate with comma, etc</xar:mlstring></i></p>
-	<textarea name="disallowedips" id="disallowedips" rows="10" cols="30" />#$ips#</textarea> 
+	<textarea name="disallowedips" id="disallowedips" rows="10" cols="30">#$ips#</textarea> 
 	</xar:if>
 		#$hooks#
 	<br /><br />
