@@ -24,7 +24,7 @@ function mail_adminapi_hookmailchange($args)
 
     if (!isset($objectid) || !is_numeric($objectid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            'object ID', 'admin', 'hookmail', 'Mail - hooks');
+            'object ID', 'admin', 'hookmailchange', 'mail');
         xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
             new SystemException($msg));
         return;
@@ -46,7 +46,7 @@ function mail_adminapi_hookmailchange($args)
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            'module name', 'admin', 'change', 'adminpanels - waiting content');
+            'module name', 'admin', 'hookmailchange', 'mail');
         xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
             new SystemException($msg));
         return;
@@ -77,50 +77,44 @@ function mail_adminapi_hookmailchange($args)
     $fromname = xarModGetVar('mail', 'adminname');
 
 // Get the templates for this message
-    $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'mail', 'template' => 'changehook'));
+    $strings = xarModAPIFunc('mail','admin','getmessagestrings',
+                             array('module' => 'mail',
+                                   'template' => 'changehook'));
 
     $subject = $strings['subject'];
     $message = $strings['message'];
 
 // Get the template that defines the substitution vars
-    $messaginghome = "var/messaging/mail";
-    if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
-    }
-    $string = '';
-    $fd = fopen($messaginghome . "/includes/message-vars.xd", 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
+    $vars  = xarModAPIFunc('mail','admin','getmessageincludestring',
+                           array('module' => 'mail',
+                                 'template' => 'message-vars'));
 
 // Substitute the static vars in the template
-    $subject  = xarTplCompileString($string . $subject);
-    $message  = xarTplCompileString($string . $message);
+    $subject  = xarTplCompileString($vars . $subject);
+    $message  = xarTplCompileString($vars . $message);
 
 // Substitute the dynamic vars in the template
-    $data = array('modulename' => $modname, 'objectid' => $objectid);
+    $data = $extrainfo;
+    $data['modulename'] = $modname;
+    $data['objectid'] = $objectid;
     $subject = xarTplString($subject, $data);
     $message = xarTplString($message, $data);
 
     // TODO How to do this with BL? Create yet another template? Don't think so.
 // Send a formatted html message to the mail module for use if the admin has the html turned on.
     $htmlmessage = $message;
-//    $htmlmessage = "" . xarML('An item was changed in the') . " $modname " . xarML('module') . " -- $objectid " . xarML('is the new id for the item') . "<br /><br />";
-//    $htmlmessage .= "" . xarML('Site Name') . ": $sitename :: <i>$slogan</i> <br />";
-//    $htmlmessage .= "" . xarML('Site URL') . ": <a href='" . xarServerGetBaseURL() . "'>" . xarServerGetBaseURL() . "</a><br />";
 
 // Set mail args array
     $mailargs = array('info' => $from, // set info to $from
-        'subject' => $subject,
-        'message' => $message,
-        'htmlmessage' => $htmlmessage,
-        'name' => $fromname, // set name to $fromname
-        'priority' => $priority,
-        'encoding' => $encoding,
-        'wordwrap' => $wordwrap,
-        'from' => $from,
-        'fromname' => $fromname);
+                      'subject' => $subject,
+                      'message' => $message,
+                      'htmlmessage' => $htmlmessage,
+                      'name' => $fromname, // set name to $fromname
+                      'priority' => $priority,
+                      'encoding' => $encoding,
+                      'wordwrap' => $wordwrap,
+                      'from' => $from,
+                      'fromname' => $fromname);
 // Check if HTML mail has been configured by the admin
     if (xarModGetVar('mail', 'html')) {
         xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $mailargs);
