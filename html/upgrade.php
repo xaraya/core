@@ -26,11 +26,6 @@ xarRequestGetInfo();
 //Load Table Maintainance API
 xarDBLoadTableMaintenanceAPI();
 
-if(!xarSecurityCheck('AdminPanel')){
-    echo xarML('You must be logged in with admin permissions to upgrade Xaraya.');
-    return;
-}
-
 // The System.Core.VersionNum contains the currently stored version number
 // this may be different from the define in xarCore.php
 $xarVersion = xarConfigGetVar('System.Core.VersionNum');
@@ -45,34 +40,71 @@ if (empty($step)) {
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
 <div class="xar-mod-body"><h2><?php echo $descr; ?></h2><br />
-<div style="margin: auto;">
+  <div style="margin: auto;">
     <form method="POST" action="upgrade.php">
     <p><input type="submit" value="Upgrade Core Tables">
 
     <input type="hidden" name="step" value="1"></p>
     </form>
-    </div>
-    </div>
+  </div>
+</div>
 
 <?php
 } else {
 
-// Fini
+    // Fini
     $in_process = xarML('Checking and Correcting');
     $complete = xarML('Upgrades Complete');
 
-// start the output buffer
+    // start the output buffer
     ob_start();
 ?>
 
 <div class="xar-mod-head"><span class="xar-mod-title"><?php echo $title; ?></span></div>
-<div class="xar-mod-body"><h2><?php echo $in_process; ?></h2>
-<div style="margin: auto;">
+<div class="xar-mod-body">
+  <h2><?php echo $in_process; ?></h2>
+  <div style="margin: auto;">
 <?php
-  // Check the installed security instances table for hard coded prefix bug and the bug fix bug :).
-    echo "<h5>Checking Security Instances Table</h5>";
-
     $sprefix=xarDBGetSiteTablePrefix();
+    // First see if the authsystem module has been upgraded.
+    echo "<h5>Making sure the system is ready for authenticating</h5>";
+    
+    // UNSECURE CODE, RETHINK THIS
+    // If authsystem module is upgraded
+    $as_dbinfo = xarModGetInfo(42);
+    $as_fileinfo = xarMod_getFileInfo('authsystem');
+    if($as_dbinfo['version'] != $as_fileinfo['version']) {
+        echo xarML("Authentication system needs an upgrade") . "<br/>";
+        echo xarML("Upgrading authsystem from version #(1) to version #(2)",$as_dbinfo['version'],$as_fileinfo['version']) . "<br/>";
+        // authsystem has no init function, so we can just patch in the new version number in the database.
+        $sql = "UPDATE " . $sprefix . "_modules SET xar_version='".  $as_fileinfo['version'] . "' WHERE xar_regid='42'";
+        list($dbconn) = xarDBGetConn();
+        if(!$dbconn->Execute($sql)) {
+            echo xarML("FAILED upgrading the authentication system. I cannot continue, I'm sorry.");
+            echo "</div></div>";
+            CatchOutput();
+            return;
+        } else {
+            echo xarML("Upgrade of authentication system successfull") . "<br/>";
+        }
+    } else {
+        echo xarML("System capable to authenticate, no upgrade needed");
+        echo "<br/>";
+    }
+
+    // Now we can check whether people are logged in
+    if(!xarSecurityCheck('AdminPanel')){
+        echo xarML('You must be logged in with admin permissions to upgrade Xaraya.');
+        echo '</div></div>';
+        // catch the output
+        CatchOutput();
+        return;
+    }
+
+    // Check the installed security instances table for hard coded prefix bug and the bug fix bug :).
+    echo "<h5>Checking Security Instances Table</h5>";
+    $sprefix=xarDBGetSiteTablePrefix();
+
     echo "Table Prefix is : ".$sprefix."<br /><br />";
     echo "Checking for a missing 'underscore' in the dynamicdata security_instance table name entries.<br />";
     echo "Checking hard coded table prefixes in security_instances table for dynamicdata, categories, articles, ratings and hitcount modules.<br /><br />";
@@ -1075,25 +1107,21 @@ Thank you, the upgrades are complete.
 <?php
 }
 
-// catch the output
-$return = ob_get_contents();
-ob_end_clean();
-
-xarTplSetPageTitle(xarML('Upgrade Xaraya'));
-
-// render the page
-echo xarTpl_renderPage($return);
-
-// Close the session
-xarSession_close();
-
-//$dbconn->Close();
-
-flush();
-
-// Kill the debugger
-xarCore_disposeDebugger();
-
+CatchOutput();
 // done
 exit;
+
+/**
+ * Helper function to render the output as we have it so far
+ *
+ */
+function CatchOutput() {
+    $out = ob_get_contents();
+    ob_end_clean();
+    xarTplSetPageTitle(xarML('Upgrade Xaraya'));
+    echo xarTpl_renderPage($out);
+    xarSession_close();
+    flush();
+    xarCore_disposeDebugger();
+}
 ?>

@@ -13,7 +13,7 @@
 */
 $modversion['name'] = 'AuthSystem';
 $modversion['id'] = '42';
-$modversion['version'] = '0.91';
+$modversion['version'] = '0.91.0';
 $modversion['description'] = 'Xaraya default authentication module';
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
