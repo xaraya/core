@@ -27,12 +27,15 @@ function roles_admin_createmail()
     if (!xarVarFetch('selstyle', 'isset', $selstyle, 0, XARVAR_NOT_REQUIRED)) return;
 
    // what type of email: a selection or a single email?
-    if ($uid < 1) $type = 'selection';
-    else {
+    if ($uid < 1) {
+        $type = 'selection';
+    } else {
         $roles = new xarRoles();
         $role = $roles->getRole($uid);
         $type = $role->getType() ? 'selection' : 'single';
     }
+
+    $xartable =& xarDBGetTables();
 
     if ($type == 'single') {
         $data['users'][$role->getID()] = array('uid' => $role->getID(),
@@ -42,18 +45,26 @@ function roles_admin_createmail()
             'status' => $role->getState(),
             'date_reg' => $role->getDateReg()
         );
-        if ($selstyle == 0) $selstyle =2;
-    }
-    else {
-        if ($selstyle == 0) $selstyle =1;
+        if ($selstyle == 0) $selstyle = 2;
+
+        // Create a query for this single user, and save it in the session
+        // for use in subsequent screens.
+        $q = new xarQuery('SELECT');
+        $q->addtable($xartable['roles'],'r');
+        $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
+        $q->eq('r.xar_uid',$uid);
+        xarSessionSetVar('rolesquery', serialize($q));
+    } else {
+        if ($selstyle == 0) $selstyle = 1;
 
         // Get the current query or create a new one if need be
-        $xartable =& xarDBGetTables();
-        if ($uid == -1) $q = xarSessionGetVar('rolesquery');
-        if(isset($q)) {
-            $q = unserialize($q);
+        if ($uid == -1) {
+            $q = xarSessionGetVar('rolesquery');
         }
-        else {
+
+        if (isset($q)) {
+            $q = unserialize($q);
+        } else {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
             $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email','r.xar_state','r.xar_date_reg'));
@@ -71,12 +82,13 @@ function roles_admin_createmail()
             if ($state == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
             elseif ($state == ROLES_STATE_ALL) {}
             else $q->eq('xar_state',$state);
+        } else {
+            $state = -1;
         }
-        else $state = -1;
 
         if ($uid != -1) {
             if ($uid != 0) {
-            // If a group was chosen, get only the users of that group
+                // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.xar_uid','rm.xar_uid');
                 $q->eq('rm.xar_parentid',$uid);
@@ -120,11 +132,13 @@ function roles_admin_createmail()
             }
         }
     }
-// Get the list of available templates
+
+    // Get the list of available templates
     $messaginghome = "var/messaging/roles";
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
     }
+
     $dd = opendir($messaginghome);
     $templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
     while ($filename = readdir($dd)) {
@@ -136,7 +150,7 @@ function roles_admin_createmail()
                 $templates[] = array('key' => $templatename, 'value' => $templatelabel);
             }
         }
-   }
+    }
     closedir($dd);
 
 // Assemble the data for the template
