@@ -182,7 +182,8 @@ function dynamicdata_admin_updateprop()
         return $msg;
     }
     // update old fields
-    foreach ($fields as $id => $field) {
+    foreach ($fields as $label => $field) {
+        $id = $field['id'];
         if (empty($dd_label[$id])) {
             // delete property (and corresponding data) in xaradminapi.php
             if (!xarModAPIFunc('dynamicdata','admin','deleteprop',
@@ -320,17 +321,18 @@ function dynamicdata_admin_newhook($args)
     }
 
     // prefill the values with defaults (if any)
-    foreach (array_keys($fields) as $id) {
-        $fields[$id]['value'] = $fields[$id]['default'];
+    foreach (array_keys($fields) as $label) {
+        $fields[$label]['value'] = $fields[$label]['default'];
     }
 
     // if we are in preview mode, we need to check for any preview values
     $preview = xarVarCleanFromInput('preview');
     if (!empty($preview)) {
-        foreach (array_keys($fields) as $id) {
+        foreach ($fields as $label => $field) {
+            $id = $field['id'];
             $value = xarVarCleanFromInput('dd_'.$id);
             if (isset($value)) {
-                $fields[$id]['value'] = $value;
+                $fields[$label]['value'] = $value;
             }
         }
     }
@@ -417,10 +419,11 @@ function dynamicdata_admin_modifyhook($args)
     if (is_array($fields) && count($fields) > 0) {
         $preview = xarVarCleanFromInput('preview');
         if (!empty($preview)) {
-            foreach (array_keys($fields) as $id) {
+            foreach ($fields as $label => $field) {
+                $id = $field['id'];
                 $value = xarVarCleanFromInput('dd_'.$id);
                 if (isset($value)) {
-                    $fields[$id]['value'] = $value;
+                    $fields[$label]['value'] = $value;
                 }
             }
         }

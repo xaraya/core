@@ -10,10 +10,14 @@
                 <td><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
             </tr>
             </xar:loop>
-            <xar:if condition="!empty($displaylink)">
+            <xar:if condition="!empty($options) and count($options) gt 0">
             <tr>
                 <td>&nbsp;</td>
-                <td><a href="#$displaylink#"><xar:mlstring>Display...</xar:mlstring></a> </td>
+                <td>
+                <xar:loop name="$options">
+                    #$join# <a href="#$link#">#$title#</a>
+                </xar:loop>
+                </td>
             </tr>
             </xar:if>
             </table>
@@ -43,8 +47,10 @@
             <td valign="top"><xar:data-output type="$type" name="dd_'.$id.'" value="$value" /></td>
         </xar:loop>
         <td valign="top" align="center">
-        <xar:if condition="!empty($displaylink)">
-            <a href="#$displaylink#"><xar:mlstring>Display...</xar:mlstring></a>
+        <xar:if condition="!empty($options) and count($options) gt 0">
+            <xar:loop name="$options">
+                #$join# <a href="#$link#">#$title#</a>
+            </xar:loop>
         <xar:else />
             &nbsp;
         </xar:if>

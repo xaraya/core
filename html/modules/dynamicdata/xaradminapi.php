@@ -1879,7 +1879,10 @@ function dynamicdata_adminapi_showlist($args)
                                                     'itemtype' => $itemtype)),
                                    'join'  => '|');
             }
-            $items[] = array('fields' => $fields, 'options' => $options);
+            $items[$itemid] = array('itemid' => $itemid,
+                                    'fields' => $fields,
+                                    'options' => $options);
+
         }
     }
     // TODO: improve this + SECURITY !!!
