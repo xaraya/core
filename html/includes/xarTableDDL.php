@@ -588,6 +588,9 @@ function xarDB__mysqlCreateTable($tableName, $fields)
         if ($this_field['primary_key'] == true) {
             $primary_key[] = $field_name;
         }
+        if (empty($this_field['increment_start'])) {
+            $this_field['increment_start'] = false;
+        }
         if ($this_field['increment_start'] != false) {
             $increment_start = $this_field['increment_start'];
         }
