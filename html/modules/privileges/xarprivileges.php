@@ -322,7 +322,7 @@ class xarMasks
 			$role = $roles->getRole($userID);
 		}
 		else {
-			$role = $roles->findRole($role);
+			$role = $roles->findRole($rolename);
 		}
 
 // get the inherited ancestors of the role
@@ -380,7 +380,7 @@ class xarMasks
 
 // get the assigned privileges and winnow them
 			$roleprivileges = $role->getAssignedPrivileges();
-echo "hi".$role->getName();
+
 			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
@@ -475,11 +475,12 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-	function defineInstance($module,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='')
+	function defineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='')
 	{
 		$nextID = $this->dbconn->genID($this->instancestable);
 		$nextIDprep = xarVarPrepForStore($nextID);
 		$moduleprep = xarVarPrepForStore($module);
+		$typeprep = xarVarPrepForStore($type);
 		$table1prep = xarVarPrepForStore($table1);
 		$valueprep = xarVarPrepForStore($valuefield);
 		$displayprep = xarVarPrepForStore($displayfield);
@@ -490,6 +491,7 @@ class xarPrivileges extends xarMasks
 		$descriptionprep = xarVarPrepForStore($description);
 		$query = "INSERT INTO $this->instancestable VALUES ($nextIDprep,
 												'$moduleprep',
+												'$typeprep',
 												'$table1prep',
 												'$valueprep',
 												'$displayprep',

@@ -242,9 +242,9 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarDefineInstance($module,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
+	function xarDefineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate=0,$table2='',$childID='',$parentID='',$description='') {
 			$privileges = new xarPrivileges();
-			return $privileges->defineInstance($module,$table1,$valuefield,$displayfield,$propagate,$table2,$childID,$parentID,$description);
+			return $privileges->defineInstance($module,$type,$table1,$valuefield,$displayfield,$propagate,$table2,$childID,$parentID,$description);
 	}
 
 /**
@@ -313,7 +313,11 @@ $schemas = array();
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
-  return true;
+ 		return true;
+ 		$msg = xarML('This call needs to be converted to the Xaraya security system');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+                       new SystemException($msg));
+        return true;
   // FIXME: <marco> BAD_PARAM?
 
     if (empty($userId)) {

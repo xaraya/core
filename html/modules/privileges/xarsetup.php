@@ -111,15 +111,15 @@ function initializeSetup() {
     /*********************************************************************
     * Define instances for some modules
     * Format is
-    * setInstance(Module,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    * setInstance(Module,Type,ModuleTable,IDField,NameField,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
 
-    xarDefineInstance('roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    xarDefineInstance('privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+    xarDefineInstance('roles','Roles','xar_roles','xar_pid','xar_name',0,'xar_rolemembers','xar_pid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    xarDefineInstance('privileges','Privileges','xar_privileges','xar_pid','xar_name',0,'xar_privmembers','xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
 
-    xarDefineInstance('categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
-    xarDefineInstance('articles','xar_articles','xar_aid','xar_title',0);
-    xarDefineInstance('xproject','xar_xproject','xar_projectid','xar_name',0);
+    xarDefineInstance('categories','Categories','xar_categories','xar_cid','xar_name',0,'xar_categories','xar_cid','xar_parent','Instances of the categories module, including multilevel nesting');
+    xarDefineInstance('articles','Articles','xar_articles','xar_aid','xar_title',0);
+    xarDefineInstance('xproject','Projects','xar_xproject','xar_projectid','xar_name',0);
 
 
     /*********************************************************************
@@ -145,11 +145,13 @@ function initializeSetup() {
     xarRegisterMask('AddMemberAll','All','Roles','AddMember','All',ACCESS_ADD);
     xarRegisterMask('DelMemberAll','All','Roles','DeleteMember','All',ACCESS_DELETE);
 
-//	'Mask to limit access to the installer to Oversight'
+//	'Mask to limit access to the installer to Admins'
 	xarRegisterMask('Admin','All','installer','All','All',ACCESS_ADMIN);
 
    	xarRegisterMask('Admin','All','modules','All','All',ACCESS_ADMIN);
+    xarRegisterMask('Overview','All','base','Overview','All',ACCESS_OVERVIEW);
 
     // Initialisation successful
     return true;
 }
+

@@ -221,7 +221,7 @@ function base_init()
 
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     // Insert Allowed Vars
     $htmltags = array('!--',
                       'a',
@@ -471,7 +471,7 @@ function base_init()
               ) VALUES (70,3)";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     /**************************************************************
     * Install the blocks module
     **************************************************************/
@@ -480,12 +480,12 @@ function base_init()
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
 	                       array('directory'=>'blocks', 'initfunc'=>'init'))) {
 	    return;
-	}  
+	}
 
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
 	                       array('directory'=>'themes', 'initfunc'=>'init'))) {
 	    return;
-	}  
+	}
 
 //     /**************************************************************
 //     * Install the sniffer module
