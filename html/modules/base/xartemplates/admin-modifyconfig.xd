@@ -3,12 +3,10 @@
 <div style="margin: auto;">
 <p><xar:mlstring>Please note that the default theme variable has moved to the themes module
 and that you cannot use UNBOXED mode of the MultiLanguage system unless you have php 4.3.0
-with the mbstring extension compiled in.
+with the mbstring extension compiled in.</xar:mlstring></p>
 
-Legacy Testers Note: The Load Legacy allows the usage of pnHTML and and other legacy PostNuke functions.
-Xaraya itself is completely legacy free, but other modules may still yet use them.
-
-</p></xar:mlstring>
+<p><xar:mlstring>Legacy Testers Note: The Load Legacy allows the usage of pnHTML and and other legacy PostNuke functions.
+Xaraya itself is completely legacy free, but other modules may still yet use them.</p></xar:mlstring>
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
     <input type="hidden" name="authid" value="&xar-var-authid;" />
 	<h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
@@ -99,7 +97,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 		<input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
 	</xar:if></p>
 
-	<p><input type="submit" value="<xar:mlstring>Update Base Configuration</xar:mlstring>" align="middle" /></p>
+	<p><input type="submit" value="#$updatelabel#" align="middle" /></p>
 </form>
 </div>
 </div>
