@@ -132,8 +132,12 @@ function adminpanels_adminmenublock_display($blockinfo){
         case 'bycat':
                 // sort by categories
                 xarModAPILoad('adminpanels', 'admin');
+                
                 // check if we need to update the table
-                xarModAPIFunc('adminpanels', 'admin', 'updatemenudb');
+                if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')){
+                    // if we fail lets have at list an error displayed
+                    return;
+                }
 
                 $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
                 foreach($catmods as $mod){
