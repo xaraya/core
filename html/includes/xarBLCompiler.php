@@ -2537,7 +2537,9 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         // Calculate block ID - theme dependent
         // FIXME: <marco> What is this for?
         // <mikespub> for block caching, perhaps ? Note that there's not necessarily a unique id here !
-        if (!isset($id)) {
+        if (isset($id)) {
+            return "xarBlock_renderBlock(array('bid' => '$id'))";
+        } else {
             $id = 0;
         }
         $bid = md5(xarTplGetThemeName().$id);

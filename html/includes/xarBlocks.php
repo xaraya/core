@@ -187,4 +187,30 @@ function xarBlock_renderGroup($groupName)
     return $output;
 }
 
+/**
+ * Renders a block group
+ *
+ * @author Paul Rosania, Marco Canini <m.canini@libero.it>
+ * @access protected
+ * @param string groupName the name of the block group
+ * @return string
+ * @raise BAD_PARAM, DATABASE_ERROR
+ */
+function xarBlock_renderBlock($blockInfo)
+{
+    $blockID = $blockInfo['bid'];
+    if (empty($blockID)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'blockID');
+        return;
+    }
+
+    $blockInfo = xarModAPIFunc('blocks', 
+                               'admin', 
+                               'getInfo', array('blockId' => $blockID));
+
+    $output = xarBlock_render($blockInfo);
+
+    return $output;
+}
+
 ?>
