@@ -986,8 +986,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 
     // Load cached template file    
     ob_start();
-    include $cachedFileName;
-    $res = ob_get_clean();
+    $res = include $cachedFileName;
+    $tplOutput = ob_get_clean();
     
     // flag used to determine if the header content has been found.
     static $headerContentFound;
@@ -1016,11 +1016,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
                                       '<\?xml\s+version[^>]*\?>');// eg. <?xml version="1.0"? > // remove space between qmark and gt
 
             foreach($headerTagRegexes as $headerTagRegex) {
-                if(preg_match("/$headerTagRegex/smix", $res, $matchedHeaderTag)) {
+                if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
                     $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
                     // replace matched tag with an appended start comment tag in the first match
-                    // in the template output $res
-                    $res = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $res, 1);
+                    // in the template output $tplOutput
+                    $tplOutput = preg_replace("/$headerTagRegex/smix", $matchedHeaderTag[0] . $startComment, $tplOutput, 1);
                     // set flag that header content has been found so this matching doesnt happen again.
                     $headerContentFound = true;
                     // dont want start comment to be sent below as it has already been added.
@@ -1039,7 +1039,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     }
     
     // output template
-    echo $res;
+    echo $tplOutput;
 
     // optionally show template filenames
     if ($GLOBALS['xarTpl_showTemplateFilenames']) {
