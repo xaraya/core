@@ -11,17 +11,17 @@ return false;
 
 function setDisplayOn(id)
 {
-	if(document.getElementById(id) != undefined)
-	{
-	    document.getElementById(id).style.display = 'block';
-	}
+    if(document.getElementById(id) != undefined)
+    {
+        document.getElementById(id).style.display = 'block';
+    }
 }
 
 function setDisplayOff(id)
 {
-	if(document.getElementById(id) != undefined)
-	{
-	    document.getElementById(id).style.display = 'none';
-	}
+    if(document.getElementById(id) != undefined)
+    {
+        document.getElementById(id).style.display = 'none';
+    }
 }
 
