@@ -643,16 +643,30 @@ function installer_admin_confirm_configuration()
         // load the modules from the configuration
             foreach ($options2 as $module) {
                 if(in_array($module['item'],$chosen)) {
-                    xarModAPIFunc('modules','admin','initialise',array('regid'=>$module['item']));
-                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+                   $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
+                   if (count($dependents['unsatisfiable']) > 0) {
+//                   echo var_dump($dependents);exit;
+                        $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
+                        foreach ($dependents['unsatisfiable'] as $dependent) {
+                            $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
+                            $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
+                            $msg .= $modname . " (ID: " . $modid . "), ";
+                        }
+                        $msg = trim($msg,', ') . ". " . xarML("Please check the listings at www.xaraya.com to identify any modules flagged as 'Unknown'.");
+                        $msg .= " " . xarML('Add the missing module(s) to the modules directory and run the installer again.');
+                        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+                        return;
+                   }
+                   xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
+//                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
                 }
             }
         // load any other modules chosen
             xarModAPIFunc('modules','admin','regenerate');
             foreach ($options3 as $module) {
                 if(in_array($module['item'],$chosen)) {
-                    xarModAPIFunc('modules','admin','initialise',array('regid'=>$module['item']));
-                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
+                    xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
+//                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
                 }
             }
         $func = "installer_" . basename($configuration,'.conf.php') . "_configuration_load";
