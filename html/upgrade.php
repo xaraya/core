@@ -16,8 +16,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-// Use the installer theme
-xarTplSetThemeName('installer');
+// Use the installer page template in Xaraya_Classic
+xarTplSetThemeName('Xaraya_Classic');
 
 if(!xarVarFetch('step','int', $step, NULL, XARVAR_DONT_SET)) {return;}
 
@@ -1361,6 +1361,6 @@ function CatchOutput()
     $out = ob_get_contents();
     ob_end_clean();
     xarTplSetPageTitle(xarML('Upgrade Xaraya'));
-    echo xarTpl_renderPage($out);
+    echo xarTpl_renderPage($out,NULL, 'installer');
 }
 ?>
