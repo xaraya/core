@@ -7,7 +7,7 @@
 </xar:if>
 
 <xar:if condition="count($options) gt 0">
-    <select name="#$name#[]" id="#$id#"  multiple="multiple" size="#$size#" #$tabindex# >
+    <select name="#$name#[]" id="#$id#"  multiple="multiple" size="#$size#" tabindex="#$tabindex#" >
         <xar:foreach in="$options" value="$option" >
             <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                 <xar:if condition="in_array($option['id'],$value)" >
