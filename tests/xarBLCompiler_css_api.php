@@ -375,7 +375,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $documentTree;
     }
 
-    function parseNode($parent) {
+    function parseNode($parent) 
+    {
         $children = array();
         $text = '';
         while (true) {
@@ -804,7 +805,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $children;
     }
 
-    function parseHeaderTag() {
+    function parseHeaderTag() 
+    {
         $variables = array();
         while (true) {
             $variable = $this->parseTagAttribute();
@@ -839,7 +841,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $variables;
     }
 
-    function parseBeginTag() {
+    function parseBeginTag() 
+    {
         //xarLogMessage('parseBeginTag', XARLOG_LEVEL_ERROR);
         // Tag name
         $tagName = '';
@@ -898,7 +901,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return array($tagName, $attributes, ($exitToken == '/') ? true : false);
     }
 
-    function parseTagAttribute() {
+    function parseTagAttribute() 
+    {
         //xarLogMessage('parseTagAttribute', XARLOG_LEVEL_ERROR);
         // Tag attribute
         $name = '';
@@ -959,7 +963,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return array($name, $value);
     }
 
-    function parseEndTag() {
+    function parseEndTag() 
+    {
         //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Tag name
         $tagName = '';
@@ -984,7 +989,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $tagName;
     }
 
-    function parseEntity() {
+    function parseEntity() 
+    {
         //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
         // Entity type
         $entityType = '';
@@ -1289,7 +1295,8 @@ class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
 {
     var $varsMapping = array();
 
-    function &instance() {
+    function &instance() 
+    {
         static $instance = NULL;
         if (!isset($instance)) {
             $instance = new xarTpl__SpecialVariableNamesResolver();
