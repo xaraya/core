@@ -110,7 +110,8 @@ function base_menublock_display($blockinfo)
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
-    $currenturl = str_replace('&', '&amp;', xarServerGetCurrentURL());
+    $truecurrenturl = xarServerGetCurrentURL();
+    $currenturl = str_replace('&', '&amp;', $truecurrenturl);
 
     // Added Content For non-modules list.
     if (!empty($vars['content'])) {
@@ -121,7 +122,7 @@ function base_menublock_display($blockinfo)
         // FIXME: make sure we don't generate content lines with missing pieces elsewhere
             $parts = explode('|', $contentline);
             $url = $parts[0];
-            $here = ($url == $currenturl) ? 'true' : '';
+            $here = (substr($truecurrenturl, -strlen($url)) == $url) ? 'true' : '';
             if (!empty($url)){
                 switch ($url[0])
                 {

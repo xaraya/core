@@ -10,7 +10,7 @@
  * @link http://www.xaraya.com
  * @TODO: provide admin functions for this block - not site global settings
  * @TODO: this script seems to be the same code repeated over and over - let's remove that duplication
- *
+ * 
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
 */
@@ -68,7 +68,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
-
+    
     if (empty($mods)) {
         // there aren't any admin modules, dont display adminmenu
         return;
