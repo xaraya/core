@@ -20,11 +20,10 @@
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <xar:mlstring>From the menu, you have five choices. </xar:mlstring>
 			<ul>
-				<li><xar:mlstring>View Types -- View the current block types that are installed on your system and what module they are extending</xar:mlstring></li>
 				<li><xar:mlstring>View Instances -- View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
-				<li><xar:mlstring>View Groups -- View the current block groups that you have installed on your system.  A block group is used for positioning in the templates.</xar:mlstring></li>
 				<li><xar:mlstring>Add instance -- Add a new block instance to be displayed on your site.</xar:mlstring></li>
 				<li><xar:mlstring>Add Group -- Add a new block group for template positioning.</xar:mlstring></li>
+				<li><xar:mlstring>Register Block -- Register a block that was not included in a module's installation.</xar:mlstring></li>
 			</ul>
         </div>
         <br />

@@ -54,10 +54,10 @@ document.forms['privilegeform'].submit();}
 					</xar:if>
 				</td>
 				<td width="150">
-					#$name#
+					#$loop:item['name']#
 				</td>
 			<td align="right">
-				<a href="#$removeurl#&roleid=#$roleid#" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+				<a href="#$loop:item['removeurl']#&amp;roleid=#$loop:item['roleid']#" title="Remove this Privilege assignment"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 			</td>
 			</tr>
 		</xar:loop>
