@@ -701,29 +701,19 @@ function pnDB__postgresColumnDefinition($field_name, $parameters)
 
     switch($parameters['type']) {
         case 'integer':
-            if (isset($parameters['increment']) && $parameters['increment'] == true) {
-                switch ($parameters['size']) {
-                    case 'big':
-                        $this_field[] = 'BIGSERIAL';
-                        break;
-                    default:
-                        $this_field[] = 'SERIAL';
-                }
-            } else {
-                switch ($parameters['size']) {
-                    case 'tiny':
-                        $this_field[] = 'SMALLINT';
-                        break;
-                    case 'small':
-                        $this_field[] = 'SMALLINT';
-                        break;
-                    case 'big':
-                        $this_field[] = 'BIGINT';
-                        break;
-                    default:
-                        $this_field[] = 'INTEGER';
-                }
-            } // switch ($parameters['size'])
+            switch ($parameters['size']) {
+                case 'tiny':
+                    $this_field[] = 'SMALLINT';
+                    break;
+                case 'small':
+                    $this_field[] = 'SMALLINT';
+                    break;
+                case 'big':
+                    $this_field[] = 'BIGINT';
+                    break;
+                default:
+                    $this_field[] = 'INTEGER';
+            }
             break;
 
         case 'char':
@@ -820,7 +810,7 @@ function pnDB__postgresColumnDefinition($field_name, $parameters)
         if ($parameters['default'] == 'NULL') {
             $this_field[] = 'DEFAULT NULL';
         } else {
-            $this_field[] = "DEFAULT '".$parameters['default']."'";
+            $this_field[] = "DEFAULT ".$parameters['default']."";
         }
     }
 

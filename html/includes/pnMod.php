@@ -516,10 +516,11 @@ function pnModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $or
         }
 
         if (!$result->EOF) {
-            while(list($modInfo['regid'],
-                  $modInfo['name'],
-                  $modInfo['directory'],
-                  $modState) = $result->fields) {
+            while(!$result->EOF) {
+                list($modInfo['regid'],
+                    $modInfo['name'],
+                    $modInfo['directory'],
+                    $modState) = $result->fields;
                 $result->MoveNext();
 
                 if (pnVarIsCached('Mod.Infos', $modInfo['regid'])) {
