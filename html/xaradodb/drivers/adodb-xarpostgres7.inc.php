@@ -29,7 +29,8 @@ class ADODB_xarpostgres7 extends ADODB_postgres7
     }
 
     // Add some debug timings to the driver execute method.
-    function &_Execute($sql, $inputarr = false) {
+    function &_Execute($sql, $inputarr = false)
+    {
         if (xarCoreIsDebugFlagSet(XARDBG_SQL)) {
             global $xarDebug_sqlCalls;
             $xarDebug_sqlCalls++;
