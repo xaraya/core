@@ -1,4 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript module="base" filename="formcheck.js" />
 <script language="JavaScript">
 <!--
 	// Enter name of mandatory fields
