@@ -8,13 +8,18 @@
 			<td>
 				<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
 				<input type="hidden" name="toggle" id="toggle" value="#$toggle#" />
-				&nbsp;
-				<b>#$statusmessage#</b>&nbsp;<input type="button" value="#$togglelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=toggle';this.form.submit();"/>
+				
+				<b>#$statusmessage#</b>&nbsp;&nbsp;<input type="button" value="#$togglelabel#" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-roles-admin-sitelock;&cmd=toggle';this.form.submit();"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<hr/>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				&nbsp;			
 			</td>
 		</tr>
 		<tr>
