@@ -1,122 +1,71 @@
-<div align="left" style="border:solid 5px ##000000;width:758px;">
-  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
-	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
-	<p style="padding:10px;">
-<div align="center">
-<span class="xar-pagetitle">Xaraya Installation</span><br />
-<span class="xar-sub">Page 4/6</span><br /><br />
-<span class="xar-title">Database Settings Collection</span><br /><br />
-<form action="install.php" method="post">
-<input type="hidden" name="install_language" value="#$language#" />
-
-<table border=0>
-</table>
-<table width="50%" align="center">
-    <tr>
-        <td align="center" style="text-align:justify;" colspan="2">
-            <span class="xar-normal">
-                Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.
-                <br /><br />
-                UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script.
-            </span>
-            <br /><br />
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">
-                Database Host
-            </span>
-        </td>
-        <td>
-            <input type="text" name="install_database_host" maxlength="80" value="#$database_host#">
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">
-                Database Username
-            </span>
-        </td>
-        <td>
-            <input type="text" name="install_database_username" maxlength="80" value="#$database_username#">
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">
-                Database Password
-            </span>
-        </td>
-        <td>
-            <input type="password" name="install_database_password" size="25" maxlength="80" value="#$database_password#">
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">
-                Database Name
-            </span>
-        </td>
-        <td>
-            <input type="text" name="install_database_name" maxlength="80" value="#$database_name#">
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">
-                Table Prefix (for Table Sharing)
-            </span>
-        </td>
-        <td>
-            <input type="text" name="install_database_prefix" maxlength="10" value="#$database_prefix#">
-        </td>
-    </tr>
-    <tr>
-        <td align="left">
-            <span class="xar-normal">Database Type</span>
-        </td>
-        <td>
-            <select name="install_database_type">
-                <xar:foreach in="$database_types" key="$key" value="$value"> 
-                    <option value="#$key#">#$value#</option>
-                </xar:foreach>
+<img src="themes/installer/images/step4_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Four" /><br />
+<div style="padding:10px;">
+  <span class="xar-pagetitle">Step Four : Database Settings Collection</span><br /><br /><br />
+	<form action="install.php" method="post">
+  <div style="text-align:center;">
+  <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+    <div style="text-align:justify;padding:0% 23% 0% 23%;">
+		  <span class="xar-normal">
+      Please enter your database settings. If you do not have root access to your database (due to virtual hosting, etc.), you will need to have a pre-existing one configured before you proceed.
+      <br /><br />
+      UPGRADE NOTE: If you plan on upgrading to Xaraya from a previous version or another Weblog/CMS, install as normal, then run the provided upgrade script.
+      </span>
+		</div>
+		<br /><br />
+		<div style="padding:0% 23% 0% 23%;">
+      <table cellspacing="0" border="0" summary="For entering required database information">
+			  <thead>
+          <tr>
+					  <th colspan="2">Database Information</th>
+					</tr>
+				</thead>
+				<tbody>
+			    <tr>
+			      <td align="left"><span class="xar-normal">Database Host</span></td>
+            <td align="left"><input type="text" name="install_database_host" maxlength="80" value="#$database_host#" /></td>
+          </tr>
+          <tr>
+            <td align="left"><span class="xar-normal">Database Username</span></td>
+						<td align="left"><input type="text" name="install_database_username" maxlength="80" value="#$database_username#" /></td>
+          </tr>
+          <tr>
+            <td align="left"><span class="xar-normal">Database Password</span></td>
+						<td align="left"><input type="password" name="install_database_password" maxlength="80" value="#$database_password#" /></td>
+					</tr>
+					<tr>
+					  <td align="left"><span class="xar-normal">Database Name</span></td>
+						<td align="left"><input type="text" name="install_database_name" maxlength="80" value="#$database_name#" /></td>
+					</tr>
+					<tr>
+					  <td align="left"><span class="xar-normal">Table Prefix (for Table Sharing)</span></td>
+						<td align="left"><input type="text" name="install_database_prefix" maxlength="10" value="#$database_prefix#" /></td>
+					</tr>
+					<tr>
+					  <td align="left"><span class="xar-normal">Database Type</span></td>
+						<td align="left"><select name="install_database_type">
+              <xar:foreach in="$database_types" key="$key" value="$value"> 
+                <option value="#$key#">#$value#</option>
+              </xar:foreach>
             </select>
-        </td>
-    </tr>
-    <tr>
-        <td align="left" colspan="2">
-            <input type="checkbox" name="install_create_database" value="1">
-            <span class="xar-normal">Create the database</span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align:justify;">
-            <span class="xar-normal">
-                 If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.
-            </span><br /><br />
-        </td>
-    </tr>
-    <tr>
-        <td align="left" colspan="2">
-            <input type="checkbox" name="install_intranet" value="1">
-            <span class="xar-normal">This site is for intranet or other local (non-internet) use</span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align:justify;">
-            <span class="xar-normal">
-                You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.Xaraya.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b>
-            </span><br /><br />
-        </td>
-    </tr>
-    <tr>
-        <td align="center" colspan="2" class="xar-normal">
-            <input type="hidden" name="install_phase" value="5" />
-            <input type="submit" value="Continue &gt;" />
-        </td>
-    </tr>
-</table>
-</form>
-<span class="xar-sub">Thank you for trying Xaraya.</span>
-</div>
+            </td>
+				  </tr>
+				</tbody>
+			</table>
+		</div>
+		<br />
+		<div style="text-align:justify;padding:0% 23% 0% 23%;">
+		  <input type="checkbox" name="install_create_database" value="1" />
+			<span class="xar-normal">Create the database</span><br />
+			<span class="xar-sub">If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you.</span><br /><br />
+      <input type="checkbox" name="install_intranet" value="1" />
+      <span class="xar-normal">This site is for intranet or other local (non-internet) use</span><br />
+      <span class="xar-sub">You must enable the "intranet" option if your site will not operate on a fully-qualified domain name (e.g. www.Xaraya.com, foo.bar.com).  Examples of hostnames that are not fully qualified are bar.com, localhost, and mysite.org.  <b>If you do not set this parameter properly you may be unable to log in to your site.</b></span><br /><br />
+    </div>
+		<div style="text-align:center;">
+		  <input type="hidden" name="install_phase" id="install_phase" value="5" />
+      <input type="submit" value="Next Step &gt;" />
+		</div>
+	</div>
+  </form>
+</div><br />	
+<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>

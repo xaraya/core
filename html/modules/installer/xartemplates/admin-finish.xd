@@ -1,24 +1,13 @@
-<div align="left" style="border:solid 5px ##000000;width:758px;">
-  <img src="themes/installer/images/banner1.png" style="border:0px;width:530px;height:70px;" alt="now installing xaraya" /><br />
-	<img src="themes/installer/images/step#$phase#_header.png" style="border:0px;width:758px;height:223px;" alt="xaraya installation: $phase_label" /><br />
-	<p style="padding:10px;">
-<div align="center">
-<span class="xar-pagetitle">Xaraya Installation</span><br />
-<span class="xar-sub">Page 6/6</span><br /><br />
-<span class="xar-title">Installation completed</span><br /><br />
-<table width="50%" align="center">
-    <tr>
-        <td align="center" style="text-align:justify;" colspan="2">
-            <span class="xar-normal">
-                <b>Congratulations, you have successfully installed #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")!</b>
-                <br /><br />
-                Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
-            <br /><br />
+<img src="themes/installer/images/complete_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Complete!" /><br />
+<div style="padding:10px;">
+  <span class="xar-pagetitle">Installation Complete</span><br /><br />
+	<div style="padding:0% 23% 0% 23%;">
+	  <span class="xar-normal">
+		  <b>Congratulations, you have successfully installed #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")!</b>
+			<br /><br />
+			Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
+      <br /><br />
 	    <a href=index.php>Launch the site!</a>
-            </span>
-            <br /><br />
-        </td>
-    </tr>
-</table>
-<span class="xar-sub">Thank you for trying Xaraya.</span>
-</div>
+    </span>
+  </div><br /><br />
+<div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>
