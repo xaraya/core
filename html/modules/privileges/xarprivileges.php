@@ -922,29 +922,41 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
 */
     function getinstances($module, $component) {
+
+
         if ($component =="All") {
             $componentstring = "";
         }
         else {
-            $componentstring = "AND xar_component= '$component'";
+            $componentstring = "AND ";
         }
         $query = "SELECT xar_header, xar_query, xar_limit
                     FROM $this->instancestable
-                    WHERE xar_module= '$module' "
-                    . $componentstring .
-                    " ORDER BY xar_component,xar_iid";
+                    WHERE xar_module= '$module' AND xar_component= '$component'
+                     ORDER BY xar_component,xar_iid";
 
+        $instances = array();
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
 
-        $instances = array();
         while(!$result->EOF) {
             list($header,$selection,$limit) = $result->fields;
 
 // check if an external instance wizard is requested, if so redirect
-//            if (substr($header,0,9) == 'external:') {
-//                eval(substr($header,9));
-//            }
+            if (substr($header,0,9) == 'external:') {
+                $externallink = trim(substr($header,9));
+                $target = eval("return " . $externallink . ";");
+                return array('external' => 'yes',
+                             'target' => $target);
+            }
+
+// check if the query is there
+            if ($selection =='') {
+                $msg = xarML('A query is missing in component ' . $component . ' of module '. $module);
+                xarExceptionSet(XAR_USER_EXCEPTION, 'NO_QUERY',
+                               new DefaultUserException($msg));
+                return;
+            }
 
             $result1 = $this->dbconn->Execute($selection);
             if (!$result1) return;
@@ -987,6 +999,7 @@ class xarPrivileges extends xarMasks
                                 );
             $result->MoveNext();
         }
+
         return $instances;
     }
 
@@ -1007,6 +1020,53 @@ class xarPrivileges extends xarMasks
             }
         }
         return $subprivileges;
+    }
+
+/**
+ * returnPrivilege: adds or modifies a privilege coming from an external wizard .
+ *
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   strings with pid, name, realm, module, component, instances and level
+ * @return  none
+*/
+    function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level) {
+
+        $instance = "";
+        foreach ($instances as $inst) {
+            $instance .= $inst . ":";
+        }
+        if ($instance =="") {
+            $instance = "All";
+        }
+        else {
+            $instance = substr($instance,0,strlen($instance)-1);
+        }
+
+        if($pid==0) {
+            $pargs = array('name' => $name,
+                        'realm' => $realm,
+                        'module' => $module,
+                        'component' => $component,
+                        'instance' => $instance,
+                        'level' => $level,
+                        'parentid' => 0
+                        );
+            $priv = new xarPrivilege($pargs);
+            return $priv->add();
+        }
+        else {
+            $privs = new xarPrivileges();
+            $priv = $privs->getPrivilege($pid);
+            $priv->setName($name);
+            $priv->setRealm($realm);
+            $priv->setModule($module);
+            $priv->setComponent($component);
+            $priv->setInstance($instance);
+            $priv->setLevel($level);
+            return $priv->update();
+        }
     }
 
 /**
@@ -1741,7 +1801,7 @@ class xarPrivilege extends xarMask
                         'DUPLICATE_DATA',
                          new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return false;
+            return;
         }
 
 // set up the variables for inserting the object into the repository
