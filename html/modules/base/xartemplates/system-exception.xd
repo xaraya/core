@@ -1,25 +1,22 @@
+<xar:set name="$icon">xarTplGetImage("exception.jpg", "base")</xar:set>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Exception System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2>#$type#</h2>
-    <div style="padding: 1px;" class="xar-norm-outline">
+    <div class="xar-norm-outline">
         <div style="float:right;padding:10px;">
-            <xar:if condition="file_exists('modules/roles/xarimages/admin.gif')" >
-                <img src="modules/roles/xarimages/admin.gif" alt="official icon" width="96" height="96" />
-            <xar:else />
-                <img src="modules/roles/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
-            </xar:if>
+            <img src="#$icon#" alt="Exception Icon" />
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
              #$title#
        </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p>#$message#
+            <p>#$message#</p>
 		</div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
             <xar:mlstring>The next part might be used for a longer explanation, or show the stack</xar:mlstring>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p>#$stack#
+            <p>#$stack#</p>
 		</div>
     </div>
 </div>
