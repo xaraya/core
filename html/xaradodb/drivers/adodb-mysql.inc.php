@@ -436,13 +436,31 @@ class ADODB_mysql extends ADOConnection {
 	// parameters use PostgreSQL convention, not MySQL
 	function &SelectLimit($sql,$nrows=-1,$offset=-1,$inputarr=false,$secs=0)
 	{
-		$offsetStr =($offset>=0) ? "$offset," : '';
-		
-		if ($secs)
-			$rs =& $this->CacheExecute($secs,$sql." LIMIT $offsetStr$nrows",$inputarr);
-		else
-			$rs =& $this->Execute($sql." LIMIT $offsetStr$nrows",$inputarr);
+        // XARAYA MODIFICATION - START (complete function)
+        // Return if no rows are being request.
+        if ($nrows == 0) {return false;}
+
+        // Special handling if nrows is negative (-ve nrows means 'to end of table')
+        if ($nrows < 0) {
+            if ($offset > 1) {
+                // Offset present: set nrows to a large number (max possible rows)
+                $limitStr = ' LIMIT 18446744073709551615,'.$nrows;
+            } else {
+                // No offset: no limit on query.
+                $limitStr = '';
+            }
+        } else {
+            // Normal row limit and optional offset.
+            $limitStr = ' LIMIT '.(($offset > 1) ? "$offset," : '').$nrows;
+        }
+
+		if ($secs) {
+			$rs =& $this->CacheExecute($secs, $sql.$limitStr, $inputarr);
+		} else {
+			$rs =& $this->Execute($sql.$limitStr, $inputarr);
+        }
 		return $rs;
+        // XARAYA MODIFICATION - END
 	}
 	
 	
