@@ -6,7 +6,8 @@ license:
 single_user: 
 single_host: 
 compression: gzip
-autofix: 
+autofix:yes
+checkout:edit
 contact: 
 email: marcel@hsdev.com
 street: 
