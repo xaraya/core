@@ -64,7 +64,7 @@ document.forms['privilegeform'].submit();}
 						<label for="pparentid"><xar:mlstring>Member of</xar:mlstring></label>
 					</td>
 					<td>
-						<select name="pparentid" id="pparentid" size="1" tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-privileges-admin-newprivilege;';this.form.submit();">
+						<select name="pparentid" id="pparentid" size="1" tabindex="2">
 							<xar:loop name="$privileges">
 							  <xar:if condition="$loop:item['pid'] eq $pparentid">
 								<option value="#$loop:item['pid']#" selected="selected">#$loop:item['name']#</option>
