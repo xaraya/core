@@ -56,6 +56,7 @@ function xarBlock_render($blockInfo)
 {
     $modName = $blockInfo['module'];
     $blockType = $blockInfo['type'];
+    xarLogMessage("block rendering");
 
 // this lets the security system know what module we're in
 // no need to update / select in database for each block here
@@ -88,7 +89,14 @@ function xarBlock_render($blockInfo)
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
             return '';
         }
-        assert('is_array($blockInfo)');
+
+        // FIXME:
+        // <mrb> We somehow need to be able to raise exceptions here. We can't
+        //       just ignore things which are wrong.
+        //assert('is_array($blockInfo); // Blockinfo needs to be an array');
+        
+        if (!is_array($blockInfo)) return '';
+
         // Handle the new block templating style
         if (is_array($blockInfo['content'])) {
             // Here $blockInfo['content'] is $tplData
