@@ -6,4 +6,6 @@
     <xar:mlvar>#$users#</xar:mlvar>
 </xar:ml>
 	<br /><br />
-	<xar:mlstring>Welcome to our latest member,</xar:mlstring><a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#"> #$lastuser['name']#</a>
+    <xar:if condition="isset(#$lastuser#)">
+	    <xar:mlstring>Welcome to our latest member,</xar:mlstring><a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#"> #$lastuser['name']#</a>
+    </xar:if>
