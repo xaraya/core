@@ -119,12 +119,12 @@ function roles_userapi_getall($args)
     // By default, include both 'myself' and 'anonymous'.
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
-        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole[uid];
+        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
-        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole[uid];
+        $where_clause[] = 'roletab.xar_uid <> ' . $thisrole['uid'];
     }
 
     // Return only users (not groups).
