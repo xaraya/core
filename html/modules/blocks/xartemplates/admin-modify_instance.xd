@@ -216,3 +216,4 @@
         <div>#$hooks#</div>
         <div style="clear:both; padding-top: 10px; padding-left: 20px;"><input type="submit" value="#xarML('Update')#" /></div>
     </form>
+</div>
