@@ -2,4 +2,4 @@ Xaraya is currently in Beta Production.  If you notice any unexpected functional
 <br /><br />
 For more information on Xaraya, please visit <a href="http://www.xaraya.com">Xaraya's</a> website.
 <br /><br />
-This message can be edited by creating an override template ( theme/themename/pages/base/user-main.xt ) for the base module.
+This message can be edited by creating an override template ( themes/themename/modules/base/user-main.xt ) for the base module.
