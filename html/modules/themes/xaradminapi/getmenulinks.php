@@ -32,6 +32,19 @@ function themes_adminapi_getmenulinks()
                               'label' => xarML('Modify Config'));
     }
 
+    // addition by sw@telemedia.ch (Simon Wunderlin)
+    // as per http://bugs.xaraya.com/show_bug.cgi?id=1162
+    // added and commited by <andyv>
+    // TODO: add credits in changelist.. John?
+    if (xarSecurityCheck('AdminTheme',0)) {
+
+        $menulinks[] = Array('url'   => xarModURL('themes',
+                                                  'admin',
+                                                  'listtpltags'),
+                              'title' => xarML('View the registered template tags.'),
+                              'label' => xarML('Template Tags'));
+	}
+	
 	if (xarSecurityCheck('AdminTheme',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('themes',
@@ -40,6 +53,8 @@ function themes_adminapi_getmenulinks()
                               'title' => xarML('View recent release information for certified themes within the last week.'),
                               'label' => xarML('Certified Releases'));
     }
+    
+    
 
     if (empty($menulinks)){
         $menulinks = '';

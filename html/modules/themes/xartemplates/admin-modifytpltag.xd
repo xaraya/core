@@ -1,0 +1,72 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify template tag</xar:mlstring></h2><br />
+<div style="margin: auto;">
+<form method="post" action="#$updateurl#" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="authid" id="authid" value="#$authid#" />
+
+	<!-- the same function is used for updates and inserts, therefore we 
+	     tell the function what to do -->
+	<xar:if condition="$tagname == ''">
+		<input type="hidden" name="tag_action" value="insert" />
+	<xar:else />
+		<input type="hidden" name="tag_action" value="update" />
+	</xar:if>
+
+	<table width="100%">
+		<tr>
+			<td><xar:mlstring>Module</xar:mlstring></td>
+			<td><input style="width:100%;" 
+			           type="text" 
+			           name="tag_module"
+			           id="tag_module"
+			           value="#$module#" /></td>
+		</tr>
+		<tr>
+			<td><xar:mlstring>Tag</xar:mlstring></td>
+			<td><input style="width:100%;" 
+			           type="text" 
+			           name="tag_name" 
+			           id="tag_name" 
+			           value="#$tagname#" /></td>
+		</tr>
+		<tr>
+			<td><xar:mlstring>Handler</xar:mlstring></td>
+			<td><input style="width:100%;" 
+			           type="text" 
+			           name="tag_handler" 
+			           id="tag_handler" 
+			           value="#$handler#" /></td>
+		</tr>
+		<tr>
+			<td valign="top"><xar:mlstring>Attributes</xar:mlstring></td>
+			<td> // TODO<!--
+
+				<xar:for start="$i=0" test="$i<$max_attrs" iter="$i++">
+					<xar:set name="$current_name">''</xar:set>
+					<xar:if condition="isset($attributes[$i])">
+						<xar:set name="$current_name">#$attributes[$i]['name']#</xar:set>
+					</xar:if>
+
+					<input style="width:100%;" 
+					       type="text" 
+					       name="tag_attrname[#$i#]" 
+					       id="tag_attrname[#$i#]" 
+					       value="#$current_name#" /><br />
+				</xar:for> -->
+			</td>
+		</tr>
+		
+		<tr>
+			<td></td>
+			<td>
+				<input type="submit" 
+				       value="#xarMl('Save')#" />
+				<input type="Button" 
+				       value="#xarMl('cancel')#" 
+				       onclick="history.back(-1);" />
+			</td>
+		</tr>
+	</table>
+	
+</form>
+</div>
