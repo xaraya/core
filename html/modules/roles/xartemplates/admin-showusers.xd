@@ -44,7 +44,7 @@
 <br />
 <form method="post" action="#xarModURL('roles','admin','showusers')#">
 <label for="search" class="help" title="Search for users with either their real name, login name or email matching the string"><xar:mlstring>Search :</xar:mlstring></label>
-	<input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+	<input type="hidden" name="uid" id="uid" value="#$groupuid#" />
 	<input type="hidden" name="state" id="state" value="#$state#" />
 	<input type="hidden" name="order" id="order" value="#$order#" />
 	<input type="text" name="search" id="search" value="" size="15" maxlength="255" tabindex="1" />
