@@ -47,17 +47,22 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
+        // If there is no theme, there is no page template, we dont know what to do now.
         xarCore_die("xarTpl_init: Nonexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     if (!xarTplSetPageTemplateName('default')) {
+        // If there is no page template, we can't show anything
         xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
-            xarCore_die("xarTpl_init: Cannot write in cache/templates directory '".
-                       xarCoreGetVarDirPath().'/cache/templates'.
-                       "'. Change directory permissions.");
+            $msg = "xarTpl_init: Cannot write in cache/templates directory '"
+                . xarCoreGetVarDirPath()
+                ."/cache/templates', but setting: 'cache templates' is set to On. Either change file/directory permissions or set caching to Off (not recommended).";
+            $GLOBALS['xarTpl_cacheTemplates'] = false;
+            // Set the exception, but do not return just yet, because we *can* continue.
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
         }
     }
 

@@ -21,9 +21,13 @@
             'short' => xarML('A parameter encountered was bad.'),
             'long' => xarML('A parameter provided during this operation could not be validated, or was not accepted for other reasons.') ),
         'COMPILER ERROR' => array(
-            'title' => xarML('Compliler error'),
+            'title' => xarML('Compiler error'),
             'short' => xarML('The Blocklayout compiler encountered an error.'),
             'long' => xarML('The Blocklayout compiler encountered an error it could not recover from. No specific information is available.') ),
+        'CONFIG_ERROR' => array(
+	    'title' => xarML('Xaraya is not properly configured'),
+            'short' => xarML('The combination of configuration settings has led to a conflict'),
+            'long'  => xarML('Xaraya is configured with some settings which lead to a conflicting situation. Some configuration settings cannot be used simultanously') ),	    
         'CONTEXT_NOT_EXIST' => array(
             'title' => xarML('Context does not exist'),
             'short' => xarML('A context element was not found.'),
