@@ -19,7 +19,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'Administration';
+$modversion['name'] = 'Adminpanels';
 $modversion['description'] = 'Taking care of the admin navigation';
 $modversion['displayname'] = xarML('Admin Panels');
 $modversion['displaydescription'] = xarML('Taking care of the admin navigation');
