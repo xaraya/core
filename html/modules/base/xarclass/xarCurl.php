@@ -32,7 +32,8 @@
 // $page_text = $curl->exec();
 // if ($curl->errno <> 0) {...raise error...}
 
-class xarCurl {
+class xarCurl
+{
     // The curl object.
     // Extra methods and properties can be accessed through this property.
     var $curl;

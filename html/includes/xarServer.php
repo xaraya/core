@@ -27,6 +27,7 @@
  * @param whatElseIsGoingLoaded integer
  * @return bool true
  */
+
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarServer_generateXMLURLs']       = $args['generateXMLURLs'];
