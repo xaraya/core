@@ -42,7 +42,6 @@ function roles_user_email($args)
             if ($data == false) return;
 
             $data['authid'] = xarSecGenAuthKey();
-            $data['confirm'] = xarML('Confirm');
 
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Mail User')));
             break;
