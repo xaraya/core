@@ -208,6 +208,7 @@ function initializeSetup() {
 
     xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
 
+   	xarRegisterMask('EditModules','All','modules','All','All',ACCESS_EDIT);
    	xarRegisterMask('AdminModules','All','modules','All','All',ACCESS_ADMIN);
 
     // Initialisation successful
