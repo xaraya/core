@@ -16,6 +16,11 @@ generic alignments
 .xar-align-right { text-align: right; }
 
 /*
+white space control
+*/
+.xar-nowrap { white-space: nowrap; }
+
+/*
 inline boxes alignments
 */
 .xar-valign-top { vertical-align: top; }
