@@ -1,11 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-</table>
-<br />
-
-<h2><xar:mlstring>Modify</xar:mlstring> #$object->label# ## #$object->itemid#</h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Modify</xar:mlstring> #$object->label# ## #$object->itemid#</h2><br />
+<div style="margin: auto;">
 
 <xar:if condition="!empty($objectid) and $objectid eq 1">
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
@@ -61,5 +56,5 @@
     </table>
 
 </form>
-
-
+</div>
+</div>

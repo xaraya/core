@@ -1,11 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-</table>
-<br />
-
-<h2>#$label# </h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2>#$label#</h2><br />
+<div style="margin: auto;">
 
 <form>
 <textarea name="xml" id="xml" rows="30" cols="80">
@@ -20,4 +15,5 @@
 <xar:if condition="!empty($filelink)">
 <a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>&nbsp;&nbsp;&nbsp;
 </xar:if>
-
+</div>
+</div>

@@ -1,9 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-</table>
-<br />
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Objects</xar:mlstring></h2><br />
+<div style="margin: auto;">
 
 <ul>
     <li><a href="#xarModURL('dynamicdata','util','import')#"><xar:mlstring>Import Object Definitions and Data</xar:mlstring></a></li>
@@ -12,4 +9,5 @@
     <li><a href="#xarModURL('dynamicdata','util','relations')#"><xar:mlstring>Relations between Objects</xar:mlstring></a> (<xar:mlstring>TODO</xar:mlstring>)</li>
     <li><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Meta Table Definitions</xar:mlstring></a> (<xar:mlstring>for all tables in your database - you may have to increase the PHP memory limit for this, if you have many tables</xar:mlstring>)</li>
 </ul>
-
+</div>
+</div>

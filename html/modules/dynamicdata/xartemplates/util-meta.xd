@@ -1,11 +1,6 @@
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center">#$menutitle#</th>
-    </tr>
-</table>
-<br />
-
-<h2><xar:mlstring>Meta Table Definitions</xar:mlstring> </h2>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
+<div class="xar-mod-body"><h2><xar:mlstring>Meta Table Definitions</xar:mlstring></h2><br />
+<div style="margin: auto;">
 
 <xar:if condition="empty($export)">
 
@@ -73,4 +68,5 @@
 <div align="center"><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>
 
 </xar:if>
-
+</div>
+</div>
