@@ -655,18 +655,18 @@ class xarPrivileges extends xarMasks
 */
     function getprivileges() {
 	if ((!isset($allprivileges)) || count($allprivileges)==0) {
-			$query = "SELECT xar_privileges.xar_pid,
-						xar_privileges.xar_name,
-						xar_privileges.xar_realm,
-						xar_privileges.xar_module,
-						xar_privileges.xar_component,
-						xar_privileges.xar_instance,
-						xar_privileges.xar_level,
-						xar_privileges.xar_description,
-						xar_privmembers.xar_parentid
-						FROM $this->privilegestable INNER JOIN $this->privmemberstable
-						ON xar_privileges.xar_pid = xar_privmembers.xar_pid
-						ORDER BY xar_privileges.xar_name";
+			$query = "SELECT p.xar_pid,
+						p.xar_name,
+						p.xar_realm,
+						p.xar_module,
+						p.xar_component,
+						p.xar_instance,
+						p.xar_level,
+						p.xar_description,
+						pm.xar_parentid
+						FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
+						ON p.xar_pid = pm.xar_pid
+						ORDER BY p.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -713,19 +713,19 @@ class xarPrivileges extends xarMasks
 */
     function gettoplevelprivileges() {
 	if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
-			$query = "SELECT xar_privileges.xar_pid,
-						xar_privileges.xar_name,
-						xar_privileges.xar_realm,
-						xar_privileges.xar_module,
-						xar_privileges.xar_component,
-						xar_privileges.xar_instance,
-						xar_privileges.xar_level,
-						xar_privileges.xar_description,
-						xar_privmembers.xar_parentid
-						FROM $this->privilegestable INNER JOIN $this->privmemberstable
-						ON xar_privileges.xar_pid = xar_privmembers.xar_pid
-						WHERE xar_privmembers.xar_parentid = 0
-						ORDER BY xar_privileges.xar_name";
+			$query = "SELECT p.xar_pid,
+						p.xar_name,
+						p.xar_realm,
+						p.xar_module,
+						p.xar_component,
+						p.xar_instance,
+						p.xar_level,
+						p.xar_description,
+						pm.xar_parentid
+						FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
+						ON p.xar_pid = pm.xar_pid
+						WHERE pm.xar_parentid = 0
+						ORDER BY p.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -770,8 +770,8 @@ class xarPrivileges extends xarMasks
 */
     function getrealms() {
 	if ((!isset($allrealms)) || count($allrealms)==0) {
-			$query = "SELECT xar_security_realms.xar_rid,
-						xar_security_realms.xar_name
+			$query = "SELECT xar_rid,
+							xar_name
 						FROM $this->realmstable";
 
 			$result = $this->dbconn->Execute($query);
@@ -779,11 +779,11 @@ class xarPrivileges extends xarMasks
 
 // add some extra lines we want
 			$realms = array();
-//			$realms[0] = array('rid' => -2,
+//			$realms[] = array('rid' => -2,
 //							   'name' => ' ');
-			$realms[1] = array('rid' => -1,
+			$realms[] = array('rid' => -1,
 							   'name' => 'All');
-//			$realms[2] = array('rid' => 0,
+//			$realms[] = array('rid' => 0,
 //							   'name' => 'None');
 
 // add the realms from the database
@@ -791,8 +791,7 @@ class xarPrivileges extends xarMasks
 			$ind = 2;
 			while(!$result->EOF) {
 				list($rid, $name) = $result->fields;
-				$ind = $ind + 1;
-				$realms[$ind] = array('rid' => $rid,
+				$realms[] = array('rid' => $rid,
 								   'name' => $name);
 				$result->MoveNext();
 			}
@@ -831,20 +830,18 @@ class xarPrivileges extends xarMasks
 
 // add some extra lines we want
 			$modules = array();
-//			$modules[0] = array('id' => -2,
+//			$modules[] = array('id' => -2,
 //							   'name' => ' ');
-			$modules[1] = array('id' => -1,
+			$modules[] = array('id' => -1,
 							   'name' => 'All');
-//			$modules[2] = array('id' => 0,
+//			$modules[] = array('id' => 0,
 //							   'name' => 'None');
 
 // add the modules from the database
 // TODO: maybe remove the key, don't really need it
-			$ind = 2;
 			while(!$result->EOF) {
 				list($mid, $name) = $result->fields;
-				$ind = $ind + 1;
-				$modules[$ind] = array('id' => $mid,
+				$modules[] = array('id' => $mid,
 								   'name' => ucfirst($name));
 				$result->MoveNext();
 			}
@@ -1913,16 +1910,16 @@ class xarPrivilege extends xarMask
 
 // set up a query to select the roles this privilege
 // is linked to in the acl table
-		$query = "SELECT xar_roles.xar_uid,
-					xar_roles.xar_name,
-					xar_roles.xar_type,
-					xar_roles.xar_uname,
-					xar_roles.xar_email,
-					xar_roles.xar_pass,
-					xar_roles.xar_auth_module
-					FROM $this->rolestable INNER JOIN $this->acltable
-					ON xar_roles.xar_uid = xar_security_acl.xar_partid
-					WHERE xar_security_acl.xar_permid = $this->pid";
+		$query = "SELECT r.xar_uid,
+					r.xar_name,
+					r.xar_type,
+					r.xar_uname,
+					r.xar_email,
+					r.xar_pass,
+					r.xar_auth_module
+					FROM $this->rolestable r INNER JOIN $this->acltable acl
+					ON r.xar_uid = acl.xar_partid
+					WHERE acl.xar_permid = $this->pid";
 //Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1984,10 +1981,10 @@ class xarPrivilege extends xarMask
 		$parents = array();
 
 // if this is a user just perform a SELECT on the rolemembers table
-		$query = "SELECT xar_privileges.*, xar_privmembers.xar_parentid
-					FROM $this->privilegestable INNER JOIN $this->privmemberstable
-					ON xar_privileges.xar_pid = xar_privmembers.xar_parentid
-					WHERE xar_privmembers.xar_pid = " . $this->getID();
+		$query = "SELECT p.*, pm.xar_parentid
+					FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
+					ON p.xar_pid = pm.xar_parentid
+					WHERE pm.xar_pid = " . $this->getID();
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 
@@ -2064,10 +2061,10 @@ class xarPrivilege extends xarMask
 		$children = array();
 
 // if this is a user just perform a SELECT on the rolemembers table
-		$query = "SELECT xar_privileges.*, xar_privmembers.xar_parentid
-					FROM $this->privilegestable INNER JOIN $this->privmemberstable
-					ON xar_privileges.xar_pid = xar_privmembers.xar_pid
-					WHERE xar_privmembers.xar_parentid = " . $this->getID();
+		$query = "SELECT p.*, pm.xar_parentid
+					FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm
+					ON p.xar_pid = pm.xar_pid
+					WHERE pm.xar_parentid = " . $this->getID();
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
 

@@ -58,14 +58,14 @@
 	if ((!isset($this->allgroups)) || count($this->allgroups)==0) {
 
 // set up the query and get the groups
-			$query = "SELECT xar_roles.xar_uid,
-						xar_roles.xar_name,
-						xar_roles.xar_users,
-						xar_rolemembers.xar_parentid
-						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
-						WHERE xar_roles.xar_type = 1
-						ORDER BY xar_roles.xar_name";
+			$query = "SELECT r.xar_uid,
+						r.xar_name,
+						r.xar_users,
+						rm.xar_parentid
+						FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
+						ON r.xar_uid = rm.xar_uid
+						WHERE r.xar_type = 1
+						ORDER BY r.xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -1050,10 +1050,10 @@ function drawindent() {
 
     function getAllPrivileges() {
 	if ((!isset($allprivileges)) || count($allprivileges)==0) {
-			$query = "SELECT xar_privileges.xar_pid,
-						xar_privileges.xar_name
+			$query = "SELECT xar_pid,
+						xar_name
 						FROM $this->privilegestable
-						ORDER BY xar_privileges.xar_name";
+						ORDER BY xar_name";
 
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
@@ -1084,9 +1084,9 @@ function drawindent() {
 					xar_instance,
 					xar_level,
 					xar_description
-					FROM $this->privilegestable INNER JOIN $this->acltable
-					ON xar_privileges.xar_pid = xar_security_acl.xar_permid
-					WHERE xar_security_acl.xar_partid = $this->uid";
+					FROM $this->privilegestable p INNER JOIN $this->acltable acl
+					ON p.xar_pid = acl.xar_permid
+					WHERE acl.xar_partid = $this->uid";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1180,30 +1180,30 @@ function drawindent() {
 
 // set up the query and get the data
 	if ($state == '') {
-		$query = "SELECT xar_roles.xar_uid,
-						xar_roles.xar_name,
-						xar_roles.xar_type,
-						xar_roles.xar_uname,
-						xar_roles.xar_email,
-						xar_roles.xar_pass,
-						xar_roles.xar_auth_module
-						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
-						WHERE xar_roles.xar_type = 0
-						AND xar_rolemembers.xar_parentid = $this->uid";
+		$query = "SELECT r.xar_uid,
+						r.xar_name,
+						r.xar_type,
+						r.xar_uname,
+						r.xar_email,
+						r.xar_pass,
+						r.xar_auth_module
+						FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
+						ON r.xar_uid = rm.xar_uid
+						WHERE r.xar_type = 0
+						AND rm.xar_parentid = $this->uid";
 	}
 	else {
-		$query = "SELECT xar_roles.xar_uid,
-						xar_roles.xar_name,
-						xar_roles.xar_type,
-						xar_roles.xar_uname,
-						xar_roles.xar_email,
-						xar_roles.xar_pass,
-						xar_roles.xar_auth_module
-						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_uid = xar_rolemembers.xar_uid
-						WHERE xar_roles.xar_type = 0 AND xar_state = $state
-						AND xar_rolemembers.xar_parentid = $this->uid";
+		$query = "SELECT r.xar_uid,
+						r.xar_name,
+						r.xar_type,
+						r.xar_uname,
+						r.xar_email,
+						r.xar_pass,
+						r.xar_auth_module
+						FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
+						ON r.xar_uid = rm.xar_uid
+						WHERE r.xar_type = 0 AND r.xar_state = $state
+						AND rm.xar_parentid = $this->uid";
 	}
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
@@ -1267,10 +1267,10 @@ function drawindent() {
 		}else {
 
 // if this is a user just perform a SELECT on the rolemembers table
-			$query = "SELECT xar_roles.*
-						FROM $this->rolestable INNER JOIN $this->rolememberstable
-						ON xar_roles.xar_uid = xar_rolemembers.xar_parentid
-						WHERE xar_rolemembers.xar_uid = $this->uid";
+			$query = "SELECT r.*
+						FROM $this->rolestable r INNER JOIN $this->rolememberstable rm
+						ON r.xar_uid = rm.xar_parentid
+						WHERE rm.xar_uid = $this->uid";
 			$result = $this->dbconn->Execute($query);
 			if (!$result) return;
 
