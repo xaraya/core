@@ -50,14 +50,14 @@ class xarTreeRenderer
     {
         $boxwidth = '1em';
         $boxheight = '21px';
-        $this->el = '<img src="' . xarTplGetImage("el.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->tee = '<img src="' . xarTplGetImage("T.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->aye = '<img src="' . xarTplGetImage("I.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->bar = '<img src="' . xarTplGetImage("s.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
-        $this->emptybox = '<img src="' . xarTplGetImage("k1.gif") . '" alt="" style="vertical-align: middle" />';
-        $this->blank = '<img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle" />';
-        $this->bigblank = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif") . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" /></span>';
+        $this->el = '<img src="' . xarTplGetImage("el.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->tee = '<img src="' . xarTplGetImage("T.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->aye = '<img src="' . xarTplGetImage("I.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->bar = '<img src="' . xarTplGetImage("s.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" />';
+        $this->emptybox = '<img src="' . xarTplGetImage("k1.gif",'roles') . '" alt="" style="vertical-align: middle" />';
+        $this->blank = '<img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle" />';
+        $this->bigblank = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
+        $this->smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="' . xarTplGetImage("blank.gif",'roles') . '" alt="" style="vertical-align: middle; width: ' . $boxwidth . '; height: ' . $boxheight . ';" /></span>';
         $this->roles = new xarRoles();
         $this->setitem(1, "deleteitem");
         $this->setitem(2, "leafitem");
