@@ -172,7 +172,6 @@ class xarXmlParser
         // Activate the parser with resolve base the base path of the file
         $resolve_base = dirname($fileName);
         $this->__activate($resolve_base);
-        $this->handler->fileName=$fileName;
         while ($xmldata = fread($fp, XARXML_BLOCKREAD_SIZE)) {
             if(!xml_parse($this->parser, $xmldata, feof($fp))) {
                 $error = xml_get_error_code($this->parser);
@@ -303,7 +302,7 @@ class xarXmlHandler
     var $_nsregister=array();
     var $_state = XARXML_HSTATE_INITIAL;
     var $_dtd_data ='';
-    var $fileName;
+    
     /** 
      * We need a base for resolving entities when they are not 
      * specified relatively. On creation of the handler this can have a number of values
@@ -497,12 +496,13 @@ class xarXmlHandler
             if(!file_exists($system_id)) {
                 // couldn't find it directly through absolute reference, try relative
                 // if that doesn't help, the parser will raise an error for us
-                if($this->_resolve_base) $system_id=$this->_resolve_base . $systemid;
+                if($this->_resolve_base) $system_id=$this->_resolve_base ."/". $system_id;
             }           
+            
             if(!$ee_parser->parseFile($system_id)) {
                 return false;
             }
-            $ee_tree = $ee_parser->handler->_tree;
+            $ee_tree = $ee_parser->tree;
         }
         // The node in the parent is an entity reference
         $this->open_tag($parser,$entity,array(), XML_ENTITY_REF_NODE);
