@@ -424,6 +424,9 @@ function xarModGetVarId($modName, $name)
 
     if(!$result) return;
 
+    if ($result->EOF) {
+        return;
+    }
     list($modvarid) = $result->fields;
     $result->Close();
 
@@ -1810,8 +1813,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     $query = 'SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,'
         . ' mods.xar_id, modstates.xar_state, mods.xar_name'
-        . ' FROM '.$modulestable.' AS mods'
-        . ' LEFT JOIN '.$modules_statesTable.' AS modstates'
+        . ' FROM '.$modulestable.' mods'
+        . ' LEFT JOIN '.$modules_statesTable.' modstates'
         . ' ON modstates.xar_regid = mods.xar_regid'
         . ' WHERE mods.xar_name = ? OR mods.xar_directory = ?';
     $bindvars = array($modName, $modName);
@@ -1980,7 +1983,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
         $module_table = $tables['modules'];
 
         $query = "SELECT mods.xar_name, vars.xar_value
-                      FROM $module_table as mods , $module_varstable as vars
+                      FROM $module_table mods , $module_varstable vars
                       WHERE mods.xar_id = vars.xar_modid AND
                             vars.xar_name = ?";
         break;
