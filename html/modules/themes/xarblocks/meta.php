@@ -89,10 +89,9 @@ function themes_metablock_display($blockinfo)
         $meta['keywords'] = $vars['metakeywords'];
     }
 
-    $meta['generator'] = 'Xaraya ';
-    $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
+    $meta['generator'] = xarConfigGetVar('System.Core.VersionId');
     $meta['generator'] .= ' :: ';
-    $meta['generator'] .= xarConfigGetVar('System.Core.VersionID');
+    $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
 
     if (!empty($vars['usegeo'])){
         $meta['longitude'] = $vars['longitude'];
