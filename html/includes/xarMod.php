@@ -323,6 +323,7 @@ function xarModDelAllVars($modName)
 
     // FIXME: this syntax is not supported by 
     // PostGres (allows only one table in DELETE)
+    // MySql: multiple table delete only from 4.0 up
 
     // Delete the user variables first
     $query = "DELETE $module_uservarstable, $module_varstable FROM $module_uservarstable, $module_varstable
