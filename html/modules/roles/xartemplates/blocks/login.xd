@@ -31,7 +31,8 @@
         </tr>
         <tr>
             <td colspan="2" align="justify">
-                <xar:mlstring>Need an account?</xar:mlstring> <a href="&xar-modurl-roles-user-main;"><xar:mlstring>Register here</xar:mlstring></a>.
+                <xar:mlstring>Need an account?</xar:mlstring>
+                <br /><a href="&xar-modurl-roles-user-main;"><xar:mlstring>Register here</xar:mlstring></a>.
             </td>
         </tr>
     </table>

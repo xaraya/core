@@ -3,24 +3,24 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Modules List</xar:mlstring></h2>
     <form method="post" action="&xar-modurl-modules-admin-settings;">
-        <div style="border: 1px solid ##B3B3B3; padding: 0px;">
+        <div class="xar-mod-body" style="border-width: thin; border-style: solid; border-color: ##B3B3B3; padding: 0px;">
             <!--- Module List Sort and Filter Controls table --->
-            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+            <table width="100%" border="0" cellspacing="1" cellpadding="1">
               <tr>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selstyle"><xar:mlstring>Style</xar:mlstring></label>
+                    <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selfilter"><xar:mlstring>View</xar:mlstring></label>
+                    <label class="xar-mod-title" for="filter"><xar:mlstring>View</xar:mlstring></label>
                 </th>
                 <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="selsort"><xar:mlstring>Sort by</xar:mlstring></label>
+                    <label class="xar-mod-title" for="sort"><xar:mlstring>Sort by</xar:mlstring></label>
                 </th>
-                <th nowrap="nowrap" class="xar-mod-title">
-                    <xar:mlstring>Hide</xar:mlstring>
+                <th nowrap="nowrap" colspan="2">
+                    <label class="xar-mod-title" for="hide"><xar:mlstring>Hide</xar:mlstring></label>
                 </th>
-                <th nowrap="nowrap" colspan="2" class="xar-mod-title">
-                    <xar:mlstring>Specific Actions</xar:mlstring>
+                <th nowrap="nowrap" colspan="3">
+                    <label class="xar-mod-title" for="reload"><xar:mlstring>Specific Actions</xar:mlstring></label>
                 </th>
               </tr>
               <tr>

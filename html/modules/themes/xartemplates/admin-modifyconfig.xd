@@ -1,62 +1,90 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span></div>
+<div class="xar-mod-head">
+	<span class="xar-mod-title">
+		<xar:mlstring>
+			Themes Administration
+		</xar:mlstring>
+	</span>
+</div>
 <!-- common admin menu for this module - remove link to the current function -->
 <div class="xar-mod-body">
-<h2><xar:mlstring>Configure Themes</xar:mlstring></h2>
-<div align="center">
-<h3><xar:var scope="session" name="$themes_statusmsg" /></h3>
-<form method="post" action="&xar-modurl-themes-admin-updateconfig;">
-<input type="hidden" name="authid" id="authid" value="#$authid#" />
-<table border="0" cellpadding="2" cellspacing="0">
-    <tr align="left" valign="top">
-        <td>
-            #$defaultthemelabel#
-        </td>
-        <td>
-            <select name="defaulttheme" id="defaulttheme" size="1">
-            <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
-                <xar:loop name="$themes">
-                <xar:if condition="$name eq $defaulttheme">
-                    <option value="#$regid#" selected="selected">#$name#</option>
-                <xar:else />
-                    <option value="#$regid#">#$name#</option>
-                </xar:if>
-                </xar:loop>
-            </select>
-        </td>
-    </tr>
-	<tr align="left" valign="middle">
-		<td>
-			<xar:mlstring>Site Name</xar:mlstring>
-		</td>
-		<td>
-			<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName')#" size="30" maxlength="100" />
-		</td>
-	</tr>
-	<tr align="left" valign="middle">
-		<td>
-			<xar:mlstring>Site Slogan</xar:mlstring>
-		</td>
-		<td>
-			<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan')#" size="50" maxlength="100" />
-		</td>
-	</tr>
-	<tr align="left" valign="middle">
-		<td>
-			<xar:mlstring>Copyright</xar:mlstring>
-		</td>
-		<td>
-			<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight')#" size="50" maxlength="100" />
-		</td>
-	</tr>
-	<tr align="left" valign="middle">
-		<td>
-			<xar:mlstring>Footer Note</xar:mlstring>
-		</td>
-		<td>
-			<textarea name="footer" id="footer" cols="60" rows="5" wrap="virtual" class="xar-normal">#xarModGetVar('themes', 'SiteFooter')#</textarea>
-		</td>
-	</tr>
-</table>
-<br />
-<input type="submit" value="#$submitbutton#" />
-</form>
+	<h2>
+		<xar:mlstring>
+			Configure Themes
+		</xar:mlstring>
+	</h2>
+	<div align="center">
+		<h3>
+			<xar:var scope="session" name="$themes_statusmsg" />
+		</h3>
+		<form method="post" action="&xar-modurl-themes-admin-updateconfig;">
+			<input type="hidden" name="authid" id="authid" value="#$authid#" />
+			<table border="0" cellpadding="2" cellspacing="0">
+				<tr align="left" valign="top">
+					<td>
+						#$defaultthemelabel# 
+					</td>
+					<td>
+						<select name="defaulttheme" id="defaulttheme" size="1">
+<!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
+							<xar:loop name="$themes">
+								<xar:if condition="$name eq $defaulttheme">
+									<option value="#$regid#" selected="selected">
+										#$name#
+									</option>
+									<xar:else />
+									<option value="#$regid#">
+										#$name#
+									</option>
+								</xar:if>
+							</xar:loop>
+						</select>
+					</td>
+				</tr>
+				<tr align="left" valign="middle">
+					<td>
+						<xar:mlstring>
+							Site Name
+						</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName')#" size="30" maxlength="100" />
+					</td>
+				</tr>
+				<tr align="left" valign="middle">
+					<td>
+						<xar:mlstring>
+							Site Slogan
+						</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan')#" size="50" maxlength="100" />
+					</td>
+				</tr>
+				<tr align="left" valign="middle">
+					<td>
+						<xar:mlstring>
+							Copyright
+						</xar:mlstring>
+					</td>
+					<td>
+						<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight')#" size="50" maxlength="100" />
+					</td>
+				</tr>
+				<tr align="left" valign="middle">
+					<td>
+						<xar:mlstring>
+							Footer Note
+						</xar:mlstring>
+					</td>
+					<td>
+						<textarea name="footer" id="footer" cols="60" rows="5" wrap="virtual" class="xar-normal">
+							#xarModGetVar('themes', 'SiteFooter')#
+						</textarea>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<input type="submit" value="#$submitbutton#" />
+		</form>
+    </div>
+</div>
