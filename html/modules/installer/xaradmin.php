@@ -13,6 +13,9 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
+// Do not allow this script to run if the install script has been removed.
+// This assumes the install.php and index.php are in the same directory.
+if (!file_exists('install.php')) die(xarML('Already installed'));
 
 /**
  * Dead
