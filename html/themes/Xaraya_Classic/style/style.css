@@ -203,7 +203,9 @@ TD.xar-alt {}
 .xar-mod-body {}
 .xar-mod-foot {}
 .xar-alt {background-color: #E47C55; }
-.xar-sub {}
+.xar-accent {background-color: #CCE6FF; }
+.xar-norm {background-color: #FFFFFF; }
+.xar-sub {font-size: smaller;}
 .xar-menu-section {
    color: #191970;
    font-size: 12px;
