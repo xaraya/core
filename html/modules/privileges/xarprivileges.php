@@ -2044,5 +2044,19 @@ class xarPrivilege extends xarMask
  * @todo    none
 */
 	function getID()              {return $this->pid;}
+
+/**
+ * isEmpty: returns the type of this privilege
+ *
+ * This methods returns true if the privilege is an empty container
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   none
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+	function isEmpty()              {return $this->module == 'empty';}
 }
 ?>
