@@ -10,24 +10,20 @@
  *
  * @subpackage adminpanels module
  * @author Andy Varganov <andyv@xaraya.com>
-*/
+ */
 
 /**
- * initialise block
+ * Initialise block
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   none
- * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
-*/
+ */
 function adminpanels_adminmenublock_init(){
     return true;
 }
 
 /**
- * get information on block
+ * Get information on block
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
@@ -48,13 +44,11 @@ function adminpanels_adminmenublock_info(){
 }
 
 /**
- * display adminmenu block
+ * Display adminmenu block
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   none
  * @return  data array on success or void on failure
- * @throws  no exceptions
  * @todo    implement centre menu position
 */
 function adminpanels_adminmenublock_display($blockinfo){
@@ -377,15 +371,13 @@ function adminpanels_adminmenublock_display($blockinfo){
 }
 
 /**
- * modify block settings
+ * Modify block settings
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   $blockinfo
  * @return  $blockinfo data array
- * @throws  no exceptions
- * @todo    nothing
-*/
+ */
 function adminpanels_adminmenublock_modify($blockinfo)
 {
     // Return - nothing to modify
@@ -393,15 +385,13 @@ function adminpanels_adminmenublock_modify($blockinfo)
 }
 
 /**
- * update block settings
+ * Update block settings
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   $blockinfo
  * @return  $blockinfo data array
- * @throws  no exceptions
- * @todo    nothing
-*/
+ */
 function adminpanels_adminmenublock_update($blockinfo)
 {
 
