@@ -821,7 +821,7 @@ Validation Code to activate your account:  %%valcode%%
 
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%',
+%%siteadmin%%',
                              'override'  =>  1),
                     array('name'    =>  'deactivationtitle',
                              'module'  =>  'roles',
@@ -835,7 +835,7 @@ Your account was deactivated by the administrator.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email as soon as your account is activated again.
 
-%%siteadmin%%%',
+%%siteadmin%%',
                              'override'  =>  1),
                     array('name'    =>  'pendingtitle',
                              'module'  =>  'roles',
@@ -851,7 +851,7 @@ again.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%',
+%%siteadmin%%',
                              'override'  =>  1),
                     array('name'    =>  'passwordtitle',
                              'module'  =>  'roles',
