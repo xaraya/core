@@ -1,11 +1,9 @@
 <?php
 /**
- * File: $Id: xarBLCompiler.php 1.184 04/06/10 22:36:42+02:00 marcel@hsdev.com $
- *
  * BlockLayout Template Engine Compiler
  *
  * @package blocklayout
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2003,2004 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -148,7 +146,6 @@ class xarTpl__Compiler extends xarTpl__CompilerError
     {
         $documentTree = $this->parser->parse($templateSource);
         if (!isset($documentTree)) return; // throw back
-
         return $this->codeGenerator->generate($documentTree);
     }
 }
@@ -167,6 +164,11 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
     var $line = 1;
     var $column = 1;
     var $lineText = '';
+    
+    function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+    }
 }
 
 /**
@@ -345,11 +347,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     function xarTpl__Parser()
     {
         $this->nodesFactory =& new xarTpl__NodesFactory();
-    }
-
-    function setFileName($fileName)
-    {
-        $this->fileName = $fileName;
     }
 
     function parse(&$templateSource)
@@ -1078,29 +1075,27 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function getNextToken($len = 1)
     {
-        $token = substr($this->templateSource, $this->pos, 1);
-        if ($token === false) {
-            // This line fixes a bug that happen when $len is > 1
-            // and the file ends before the token has been read
-            $this->pos += $len;
-            return;
-        }
-        $this->lineText .= $token;
+        $result = '';
+        while($len >= 1) {
+            $token = substr($this->templateSource, $this->pos, 1);
+            if ($token === false) {
+                // This line fixes a bug that happen when $len is > 1
+                // and the file ends before the token has been read
+                $this->pos += $len;
+                return;
+            }
+            $this->lineText .= $token;
 
-        $this->pos++;
-        $this->column++;
-        if ($token == "\n") {
-            $this->line++;
-            $this->column = 0;
-            $this->lineText = '';
+            $this->pos++; $this->column++;
+            if ($token == "\n") {
+                $this->line++;
+                $this->column = 0;
+                $this->lineText = '';
+            }
+            $result .= $token;
+            $len--;
         }
-        // <mrb> do we really need the overhead of recursive calling here?
-        if ($len != 1) {
-            $token .= $this->getNextToken($len - 1);
-        }
-        //xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
-
-        return $token;
+        return $result;
     }
 
     function stepBack($len = 1)
@@ -1116,9 +1111,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         if($start == 0) $start = $this->pos; // can't do this in param init
 
         $token = substr($this->templateSource, $start, $len);
-        if ($token === false) {
-            return;
-        }
+        if ($token === false) return;
         return $token;
     }
 }
