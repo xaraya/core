@@ -10,16 +10,16 @@
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>A title/short message would appear here</xar:mlstring>
-        </div>
+             #$title#
+       </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
             <p>#$message#
 		</div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <xar:mlstring>The next part might be used for a longer explanation</xar:mlstring>
+            <xar:mlstring>The next part might be used for a longer explanation, or show the stack</xar:mlstring>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p>Could also be used for hints on how to solve the problem, perhaps even with a link to another page, and so on.
+            <p>#$stack#
 		</div>
     </div>
 </div>
