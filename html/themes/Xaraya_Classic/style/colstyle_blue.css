@@ -1,16 +1,1 @@
-/* Blue'ish colours styles */
-
-/*
-with the styleswitcher in this theme we mainly need to override/modify 
-those attributes which influence colours, like color, background-color 
-and background-image.. although it's possible to alter any other rule here,
-lets keep these alternative stylesheets relatively small and easy to work with.
-
-Because this stylesheet is not suppose to override the default style.css yet
-we can just leave a single rule here..
-(some browsers dont like totally empty external css files)
-------------------------------------------------------------------[important note] */
-
-body {
-    
-}
+body { }

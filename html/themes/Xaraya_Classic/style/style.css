@@ -1,59 +1,7 @@
 @import url(layout.css);
 @import url(menus.css);
 
-/*  Xaraya_Classic - default theme.. [revision 3 by andyv_at_xaraya.com]
-
-Lets make the CSS a bit more interesting and a lot better organised than the old original;
-
-Differences so far are as follows:
-
-    - improved readability and formatting of source
-    - rules arranged according to page structure, layout and other properties
-    - detailed comments for each class and selector
-    - the page layouts should be rendered similar by a wide range of browsers
-    - improved consistency for the theme typography
-    - increased reliance on relative sizing and positioning
-    - a few more advanced rules provided as examples of theme capabilities
-    - cleaned up and removed unnecessary duplication of inheritable properties
-    - introduced professional quality in colour co-ordination and graphics
-
-additions and corrections as of Aug 15 - 2004 
-
-    - text colours is in the web-safe range (should easier to read on low-res screen)
-    - body background attachement changed to fixed
-    - general cleanup
-
-additions and corrections as of Oct 15 - 2004 
-
-    - tried hard to achieve the source ordered 3-col layout, when the content comes first
-    - general facelift undertaken
-    - redone all backgrounds, the look seems clearer after removing the textures
-    - all images are gifs now
-    - new set of micro badges for the footer
-    - added link to the p/shop source files archive for those who want them
-    - gone totally tableless (Rabbitt said it's ok to disregard IE windows users ;-)
-    - tried to eliminate the potential box-model problems and consequent hacks
-    - redone the header - no longer we use the transparent gif to make it clickable
-    - javascript style switcher is slightly modified for a better onload events handling
-    - actually tested on FF, Moz, Safari, IE5-Mac, IE6-Win (no special linux tests yet)
-    - added _undo_ browsers defaults section right at the beginning (just in case)
-    
-*/
-
-/*  occasionally may need to UNDO some of the default browsers styles, 
-    so that we know exactly where we are */
-
-/* body, div, ul, li, td, h1, h2, h3, h4, h5, h6, code, pre { */
-/*  font-size: 1em; */
-/* } */
-/* p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, blockquote, fieldset, input { */
-/*  margin: 0; */
-/*  padding: 0; */
-/* } */
-/* :link, :visited { text-decoration: none; } */
-/* ul, ol { list-style-type: none; } */
-/* a img, :link img, :visited img { border: none; } */
-/* XARAYA REQUIRED CLASSES [gen_heading] */
+/* long comments moved to documentation dir readme.txt */
 
 /*
 Main (X)HTML Selectors - Typography, Colours and Positioning 
@@ -70,7 +18,6 @@ body {
     background-image: url(../images/page_bg.gif);
     background-repeat: repeat-x;
     background-position: 0% 0%;
-    /*  background-attachment: fixed; */
     text-align: center;
 }
 
@@ -125,6 +72,9 @@ tfoot {
     font-weight: bold;
     background-color: #DCDCE1;
 }
+
+th, td { padding: .25em; }
+
 
 /*
 General text and related selectors 
