@@ -295,7 +295,7 @@ class xarDataDict {
         }
 
         // Generate SQL to create the index
-        $sql = $this->dict->CreateIndex($index, $table, $fields, $options);
+        $sql = $this->dict->CreateIndexSQL($index, $table, $fields, $options);
         if (!$sql)
             return false;
 

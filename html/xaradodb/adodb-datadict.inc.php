@@ -118,8 +118,12 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 			}
 			
 			if ($quoted) $tokarr[] = $ch;
-			else if (ctype_alnum($ch) || strpos($tokenchars,$ch) !== false) $tokarr[] = $ch;
-			else {
+            // Function ctype_alnum() is not available on the earlier supported PHP versions.
+			else if (function_exists('ctype_alnum') && ctype_alnum($ch) || strpos($tokenchars,$ch) !== false) {
+                $tokarr[] = $ch;
+            } else if (!function_exists('ctype_alnum') && preg_match('/^[a-z0-9]*$/i', $ch) || strpos($tokenchars,$ch) !== false) {
+                $tokarr[] = $ch;
+            } else {
 				if ($ch == $endstmtchar) {			
 					$tokens[$stmtno][] = implode('',$tokarr);
 					$stmtno += 1;
