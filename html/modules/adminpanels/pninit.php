@@ -26,6 +26,7 @@ function adminpanels_init()
     $table = pnDBGetTables();
 
     // Create tables
+    $adminMenuTable = pnDBGetSiteTablePrefix() . '_admin_menu';
     /*********************************************************************
      * Here we create all the tables for the adminpanels module
      *
@@ -44,7 +45,7 @@ function adminpanels_init()
     * )
     *********************************************************************/
     // *_admin_menu
-    $query = pnDBCreateTable($table['admin_menu'],
+    $query = pnDBCreateTable($adminMenuTable,
                              array('pn_amid'        => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0',
@@ -77,11 +78,57 @@ function adminpanels_init()
     
     // Set config vars
 
-
-    
     // Fill admin menu
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'adminpanels', 'Global', 0, 1);";
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'adminpanels', 'Global', 0, 1);";
+    $dbconn->Execute($query);
+    
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'authsystem', 'Global', 0, 1);";
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'base', 'Global', 0, 1);";
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'blocks', 'Global', 0, 1);";
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -92,8 +139,8 @@ function adminpanels_init()
         return NULL;
     }
     
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'authsystem', 'Global', 0, 1);";
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -103,9 +150,9 @@ function adminpanels_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'base', 'Global', 0, 1);";
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -115,9 +162,9 @@ function adminpanels_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'blocks', 'Global', 0, 1);";
+
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
@@ -127,57 +174,9 @@ function adminpanels_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
-    $id = $dbconn->GenId($table['admin_menu']);
-    $query = "INSERT INTO $table['admin_menu'] (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
+
     // Register Block types
-    pnBlockTypeRegister('adminpanels', 'adminmenu');
+    $res = pnBlockTypeRegister('adminpanels', 'adminmenu');
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }

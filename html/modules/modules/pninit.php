@@ -24,7 +24,14 @@ function modules_init()
     // Get database information
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();
+    
+    $sitePrefix   = pnDBGetSiteTablePrefix();
+    $systemPrefix = pnDBGetSystemTablePrefix();
 
+    $tables['modules']       = $systemPrefix . '_modules';
+    $tables['module_states'] = $sitePrefix . '_module_states';
+    $tables['module_vars']   = $sitePrefix . '_module_vars';
+    $tables['hooks']         = $sitePrefix . '_hooks';
     // Create tables
     /*********************************************************************
      * Here we create all the tables for the module system
@@ -88,8 +95,8 @@ function modules_init()
     'pn_state' => array('type'=>'integer','null'=>false,'default'=>'0')
     );
 
-    $query = pnDBCreateTable($tables['system/module_states'],$fields);
-    
+    $query = pnDBCreateTable($tables['module_states'],$fields);
+
     $dbconn->Execute($query);
 
     // Check for db errors

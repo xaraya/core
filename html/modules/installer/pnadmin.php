@@ -347,7 +347,8 @@ function installer_admin_finish()
                                                       'group'    => $group_id,
                                                       'template' => '',
                                                       'state'    => 2));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+
+    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
 
@@ -362,9 +363,14 @@ function installer_admin_finish()
                                                       'group'    => $group_id,
                                                       'template' => '',
                                                       'state'    => 2));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
+    
+    if (pnVarIsCached('Config.Variables', 'Site.BL.DefaultTheme')) {
+        pnVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
+    }
+    pnConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
 
     return array();
 }

@@ -25,6 +25,9 @@ function base_init()
     list($dbconn) = pnDBGetConn();
     $tables = pnDBGetTables();
 
+    $systemPrefix = pnDBGetSystemTablePrefix();
+
+
     /*********************************************************************
     * Here we create non module associated tables
     *
@@ -32,6 +35,7 @@ function base_init()
     * prefix_session_info  - Session table
     * prefix_template_tags - module template tag registry
     *********************************************************************/
+    $sessionInfoTable = $systemPrefix . '_session_info';
     /*********************************************************************
     * CREATE TABLE pn_session_info (
     *  pn_sessid varchar(32) NOT NULL default '',
@@ -54,7 +58,7 @@ function base_init()
     'pn_remembersess' => array('type'=>'integer','size'=>'tiny','default'=>'0')
     );
 
-    $query = pnDBCreateTable($tables['session_info'],$fields);
+    $query = pnDBCreateTable($sessionInfoTable,$fields);
 
     $dbconn->Execute($query);
 
@@ -67,9 +71,10 @@ function base_init()
         return NULL;
     }
     /*********************************************************************
-    * Here we install the configuration table and set some default 
-    * configuration variables                                            
+    * Here we install the configuration table and set some default
+    * configuration variables
     *********************************************************************/
+    $configVarsTable  = $systemPrefix . '_config_vars';
     /*********************************************************************
     * CREATE TABLE pn_config_vars (
     *  pn_id int(11) unsigned NOT NULL auto_increment,
@@ -86,10 +91,8 @@ function base_init()
     'pn_value' => array('type'=>'text','size'=>'long')
     );
 
-    $query = pnDBCreateTable($tables['config_vars'],$fields);
-
+    $query = pnDBCreateTable($configVarsTable,$fields);
     $dbconn->Execute($query);
-
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
@@ -100,7 +103,7 @@ function base_init()
     $index = array('name'   => 'pn_name',
                    'fields' => array('pn_name'));
 
-    $query = pnDBCreateIndex($tables['config_vars'],$index);
+    $query = pnDBCreateIndex($configVarsTable,$index);
 
     $dbconn->Execute($query);
 
@@ -110,47 +113,58 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
+    $config_id = $dbconn->GenId($configVarsTable);
+    $query = "INSERT INTO $configVarsTable VALUES ($config_id,'Site.Core.AllowableHTML','a:25:{s:3:\"!--\";s:1:\"2\";s:1:\"a\";s:1:\"2\";s:1:\"b\";s:1:\"2\";s:10:\"blockquote\";s:1:\"2\";s:2:\"br\";s:1:\"2\";s:6:\"center\";s:1:\"2\";s:3:\"div\";s:1:\"2\";s:2:\"em\";s:1:\"2\";s:4:\"font\";i:0;s:2:\"hr\";s:1:\"2\";s:1:\"i\";s:1:\"2\";s:3:\"img\";i:0;s:2:\"li\";s:1:\"2\";s:7:\"marquee\";i:0;s:2:\"ol\";s:1:\"2\";s:1:\"p\";s:1:\"2\";s:3:\"pre\";s:1:\"2\";s:4:\"span\";i:0;s:6:\"strong\";s:1:\"2\";s:2:\"tt\";s:1:\"2\";s:2:\"ul\";s:1:\"2\";s:5:\"table\";s:1:\"2\";s:2:\"td\";s:1:\"2\";s:2:\"th\";s:1:\"2\";s:2:\"tr\";s:1:\"2\";}')";
+    $dbconn->Execute($query);
 
-    // Set config vars
-    pnConfigSetVar('sitename', 'Your Site Name');
-    pnConfigSetVar('slogan', 'Your slogan here');
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+    
+    pnCoreInit(PNCORE_SYSTEM_CONFIGURATION);
+    /****************************************************************
+    * Set System Configuration Variables
+    *****************************************************************/
+    pnConfigSetVar('System.Core.TimeZone', 'Europe/Rome');
+    pnConfigSetVar('System.Core.VersionNum', 'Xaraya Pre - 1.0');
+    pnConfigSetVar('System.Core.VersionId', 'Xaraya');
+    pnConfigSetVar('System.Core.VersionSub', 'adam_baum');
 
-    pnConfigSetVar('seclevel', 'Medium');
-    pnConfigSetVar('secmeddays', 7);
-    pnConfigSetVar('secinactivemins', 90);
+    /*****************************************************************
+    * Set site configuration variables
+    ******************************************************************/
+    pnConfigSetVar('Site.Core.TimeZone', 'Europe/Rome');
+    pnConfigSetVar('Site.Core.SiteName', 'Your Site Name');
+    pnConfigSetVar('Site.Core.Slogan', 'Your slogan here');
+    pnConfigSetVar('Site.Core.EnableShortURLsSupport', 'false');
+    // FIXME: which to use ... one config var.. or 3? it seemeth that one is better..
+    pnConfigSetVar('Site.Core.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
+    pnConfigSetVar('Site.Core.DefaultModuleName', 'base');
+    pnConfigSetVar('Site.Core.DefaultModuleType', 'user');
+    pnConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
 
-    pnConfigSetVar('Version_Num', 'Xaraya Pre - 1.0');
-    pnConfigSetVar('Version_ID', 'Xaraya');
-    pnConfigSetVar('Version_Sub', 'adam_baum');
-
-    pnConfigSetVar('Default_Theme', 'Xaraya_Classic');
-
-    pnConfigSetVar('Site.DefaultModule', array('module'=>'base', 'type'=>'user', 'func'=>'main'));
-    pnConfigSetVar('Site.TranslationsBackend', 'php');
+    pnConfigSetVar('Site.Session.SecurityLevel', 'Medium');
+    pnConfigSetVar('Site.Session.Duration', 7);
+    pnConfigSetVar('Site.Session.InactivityTimeout', 90);
+    pnConfigSetVar('Site.Session.EnableIntranetMode', 90);
+    pnConfigSetVar('Site.BL.DefaultTheme', 'installer');
+    pnConfigSetVar('Site.BL.ThemesDirectory','themes');
+    pnConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
-    pnConfigSetVar('Site.MLSMode', 1);
-    pnConfigSetVar('Site.Locale', 'en_US.iso-8859-1');
-    pnConfigSetVar('Site.TimeZone', 'Europe/Rome');
-    pnConfigSetVar('System.TimeZone', 'Europe/Rome');
+    pnConfigSetVar('Site.MLS.MLSMode', 1);
+    pnConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
+    pnConfigSetVar('Site.MLS.AllowedLocales','en_US.iso-8858-1');
+    pnConfigSetVar('Site.User.AuthenticationModules','authsystem');
 
-    // Simple logger
-    /*
-    pnConfigSetVar('Site.Logger', 'simple');
-    pnConfigSetVar('Site.Logger.Args', array('filename'=>'cache/logs/log.txt'));
-    */
-    // HTML logger
-    /*
-    pnConfigSetVar('Site.Logger', 'html');
-    pnConfigSetVar('Site.Logger.Args', array('filename'=>'cache/logs/log.html'));
-    */
-    // Javascript Logger
-    /*
-    pnConfigSetVar('Site.Logger', 'javascript');
-    */
     // Dummy logger
-    pnConfigSetVar('Site.Logger', 'dummy');
+    pnConfigSetVar('Site.Log.LoggerName', 'dummy');
+    pnConfigSetVar('Site.Log.LoggerArgs', '');
+    pnConfigSetVar('Site.Log.LogLevel', 1 /*PNLOG_LEVEL_DEBUG*/);
 
-    pnConfigSetVar('Site.Logger.Level', 1 /*PNLOG_LEVEL_DEBUG*/);
+    $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
     * CREATE TABLE pn_template_tags (
     *  pn_id int(11) NOT NULL auto_increment,
@@ -169,7 +183,7 @@ function base_init()
     'pn_data'    => array('type'=>'text')
      );
 
-    $query = pnDBCreateTable($tables['template_tags'],$fields);
+    $query = pnDBCreateTable($templateTagsTable,$fields);
 
     $dbconn->Execute($query);
 
@@ -192,13 +206,13 @@ function base_init()
                             'initialise',
                             array('directory' => 'users',
                                   'initfunc'  => 'init'));
-
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
-    
-    $id_anonymous = $dbconn->GenId($tables['users']);
-    $query = "INSERT INTO ".$tables['users']." VALUES ($id_anonymous ,'','Anonymous','','','','')";
+
+    $usersTable = $systemPrefix . '_users';
+    $id_anonymous = $dbconn->GenId($usersTable);
+    $query = "INSERT INTO $usersTable VALUES ($id_anonymous ,'','Anonymous','','','','')";
     
     $dbconn->Execute($query);
     // Check for db errors
@@ -208,10 +222,10 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    $id_anonymous = $dbconn->PO_Insert_ID($tables['users'],'pn_uid');
+    $id_anonymous = $dbconn->PO_Insert_ID($usersTable,'pn_uid');
 
-    $id_admin = $dbconn->GenId($tables['users']);
-    $query = "INSERT INTO ".$tables['users']." VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
+    $id_admin = $dbconn->GenId($usersTable);
+    $query = "INSERT INTO $usersTable VALUES ($id_admin,'Admin','Admin','none@none.com','5f4dcc3b5aa765d61d8327deb882cf99','http://www.postnuke.com','authsystem')";
 
     $dbconn->Execute($query);
     // Check for db errors
@@ -221,7 +235,7 @@ function base_init()
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
-    $id_admin = $dbconn->PO_Insert_ID($tables['users'],'pn_uid');
+    $id_admin = $dbconn->PO_Insert_ID($usersTable,'pn_uid');
 
     /***************************************************************
     * Install groups module and setup default groups
@@ -235,33 +249,9 @@ function base_init()
         return NULL;
     }
 
-    $group_users = $dbconn->GenId($tables['groups']);
-    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_users, 'Users');";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    $group_users = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
-
-    $group_admin = $dbconn->GenId($tables['groups']);
-    $query = "INSERT INTO ".$tables['groups']." (pn_gid, pn_name) VALUES ($group_admin, 'Admins');";
-    $dbconn->Execute($query);
-    $group_admin = $dbconn->PO_Insert_ID($tables['groups'],'pn_gid');
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-
-    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_users, $id_anonymous);";
+    $groupsTable = $systemPrefix . '_groups';
+    $group_users = $dbconn->GenId($groupsTable);
+    $query = "INSERT INTO $groupsTable (pn_gid, pn_name) VALUES ($group_users, 'Users');";
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -272,7 +262,35 @@ function base_init()
         return NULL;
     }
 
-    $query = "INSERT INTO ".$tables['group_membership']." (pn_gid, pn_uid) VALUES ($group_admin, $id_admin);";
+    $group_users = $dbconn->PO_Insert_ID($groupsTable,'pn_gid');
+
+    $group_admin = $dbconn->GenId($groupsTable);
+    $query = "INSERT INTO $groupsTable (pn_gid, pn_name) VALUES ($group_admin, 'Admins');";
+    $dbconn->Execute($query);
+    $group_admin = $dbconn->PO_Insert_ID($groupsTable,'pn_gid');
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $groupMembershipTable = $systemPrefix . '_group_membership';
+
+    $query = "INSERT INTO $groupMembershipTable (pn_gid, pn_uid) VALUES ($group_users, $id_anonymous);";
+    $dbconn->Execute($query);
+
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+
+    $query = "INSERT INTO $groupMembershipTable (pn_gid, pn_uid) VALUES ($group_admin, $id_admin);";
     $dbconn->Execute($query);
 
     // Check for db errors
@@ -294,12 +312,12 @@ function base_init()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
-    
-    $id = $dbconn->GenId($tables['group_perms']);
-    $query = "INSERT INTO ".$tables['group_perms']."
+    $groupPermsTable = $systemPrefix . '_group_perms';
+
+    $id = $dbconn->GenId($groupPermsTable);
+    $query = "INSERT INTO $groupPermsTable
              (pn_pid, pn_gid, pn_sequence, pn_realm, pn_component, pn_instance, pn_level, pn_bond)
               VALUES ($id, $group_admin, 1, 0, '.*', '.*', 800, 0);";
-              //VALUES (1, 2, 1, 0, '.*', '.*', 800, 0);";
 
     $dbconn->Execute($query);
     // Check for db errors
@@ -310,8 +328,10 @@ function base_init()
         return NULL;
     }
 
-    $id = $dbconn->GenId($tables['user_perms']);
-    $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,-1,1,0,'.*','.*',200,0)";
+    $userPermsTable = $systemPrefix . '_user_perms';
+
+    $id = $dbconn->GenId($userPermsTable);
+    $query = "INSERT INTO $userPermsTable VALUES ($id,-1,1,0,'.*','.*',200,0)";
     $dbconn->Execute($query);
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
@@ -321,8 +341,8 @@ function base_init()
         return NULL;
     }
 
-    $id = $dbconn->GenId($tables['user_perms']);
-    $query = "INSERT INTO ".$tables['user_perms']." VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
+    $id = $dbconn->GenId($userPermsTable);
+    $query = "INSERT INTO $userPermsTable VALUES ($id,$id_admin,0,0,'.*','.*',800,0)";
     $dbconn->Execute($query);
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
@@ -344,10 +364,12 @@ function base_init()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return NULL;
     }
+    $modulesTable = $systemPrefix .'_modules';
+    $systemModuleStatesTable = $systemPrefix .'_module_states';
 
     // Install Modules module
-    $seqId = $dbconn->GenId($tables['modules']);
-    $query = "INSERT INTO " . $tables['modules'] ."
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
               (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
      ) VALUES ($seqId, 'modules', 1, 'modules', '2.02', 1, 'Core Admin', 'Global', 1, 0)";
 
@@ -362,7 +384,7 @@ function base_init()
     }
 
     // Set Modules Module to active
-    $query = "INSERT INTO " .$tables['system/module_states'] ." (pn_regid, pn_state
+    $query = "INSERT INTO $systemModuleStatesTable (pn_regid, pn_state
               ) VALUES (1, 3)";
 
     $dbconn->Execute($query);
@@ -376,8 +398,8 @@ function base_init()
     }
 
     // Install authsystem module
-    $seqId = $dbconn->GenId($tables['modules']);
-    $query = "INSERT INTO " . $tables['modules'] ."
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
               (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
      ) VALUES ($seqId, 'authsystem', 42, 'authsystem', '0.91', 1, 'Core Utility', 'Global', 0, 0)";
 
@@ -392,7 +414,7 @@ function base_init()
     }
 
     // Set authsystem to active
-    $query = "INSERT INTO " .$tables['system/module_states'] ." (pn_regid, pn_state
+    $query = "INSERT INTO $systemModuleStatesTable (pn_regid, pn_state
               ) VALUES (42, 3)";
 
     $dbconn->Execute($query);
@@ -406,8 +428,8 @@ function base_init()
     }
 
     // Install installer module
-    $seqId = $dbconn->GenId($tables['modules']);
-    $query = "INSERT INTO " . $tables['modules'] ."
+    $seqId = $dbconn->GenId($modulesTable);
+    $query = "INSERT INTO $modulesTable
               (pn_id, pn_name, pn_regid, pn_directory, pn_version, pn_mode, pn_class, pn_category, pn_admin_capable, pn_user_capable
      ) VALUES ('".$seqId."', 'installer', 200, 'installer', '1.0', 1, 'Core Utility', 'Global', 1, 0)";
 
@@ -422,7 +444,7 @@ function base_init()
     }
 
     // Set installer to active
-    $query = "INSERT INTO " .$tables['system/module_states'] ." (pn_regid, pn_state
+    $query = "INSERT INTO $systemModuleStatesTable (pn_regid, pn_state
               ) VALUES (200, 3)";
 
     $dbconn->Execute($query);

@@ -9,8 +9,6 @@
                 <b>Congratulations, you have successfully installed <pnt:var name="Version_ID" scope="config" /> <pnt:var name="Version_Num" scope="config" /> ("<pnt:var name="Version_Sub" scope="config" />")!</b>
                 <br /><br />
                 Take this time to customize your installation to match your needs.  Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.
-                <br /><br />
-                For further support and customization needs, visit <a href="http://www.postnuke.com/">PostNuke.com</a>, or the #postnuke-support channel at ircsupport.postnuke.com.
             </span>
             <br /><br />
         </td>

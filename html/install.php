@@ -79,10 +79,10 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
 
     // Check for installer theme
     //TODO: use main function as the gateway to the phases and the location for this check
-    $installerTheme = pnCore_getSiteVar('BL.Theme.Name');
+    $installerTheme = pnCore_getSiteVar('BL.DefaultTheme');
     if (strcmp(PNINSTALL_THEME, $installerTheme)) {
         $varDir = pnCoreGetVarDirPath();
-        die('Please change the BL.Theme.Name variable in ' .$varDir.'/config.site.xml
+        die('Please change the BL.DefaultTheme variable in ' .$varDir.'/config.site.xml
         from '.$installerTheme.' to installer');
     }
 

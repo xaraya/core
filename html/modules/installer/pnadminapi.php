@@ -1,4 +1,4 @@
-<?php 
+<?php
 // File: $Id$
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
@@ -86,7 +86,8 @@ function installer_adminapi_initialise($args)
     } else {
         // modules/modulename/pninit.php not found?!
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));return;
+                       new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));
+                       return;
     }
 
     // Run the function, check for existence
@@ -100,12 +101,14 @@ function installer_adminapi_initialise($args)
         if ($res == false) {
             // exception
             pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));return;
+                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));
+                           return;
         }
     } else {
         // modulename_init() not found?!
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));return;
+                       new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
+                       return;
     }
 
     return true;
