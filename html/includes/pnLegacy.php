@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.pnLegacy.php 1.26 03/01/18 11:53:04+01:00 marcel@hsdev.com $
  *
  * Legacy Functions
  *
@@ -990,5 +990,4 @@ function xarUser_getThemeName()
     }
     return $themeName;
 }
-
 ?>

@@ -1377,4 +1377,3 @@ function xarMod__getState($modRegId, $modMode)
     return (int) $modState;
 }
 
-?>

@@ -554,4 +554,3 @@ class xarLog__EmailLogger extends xarLog__Logger
 
 }
 
-?>

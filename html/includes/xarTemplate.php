@@ -866,4 +866,3 @@ function xarTplPrintWidget($module, $widget_sourcefile, $args = array())
     return xarTplPrint($widget_sourcefile, $args);
 }
 
-?>

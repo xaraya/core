@@ -8,7 +8,7 @@
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.org
- * @author Marco Canini <m.canini@libero.it>, Paul Rosania
+ * @author Marco Canini <marco@xaraya.com>
 */
 
 
@@ -189,13 +189,12 @@ class xarTpl__CodeGenerator
                 }
                 //xarLogVariable('child', $child, XARLOG_LEVEL_ERROR);
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
-                    /*
-                    if (!$child->isAssignable()) {
+                    if (!$child->isAssignable() && $child->tagName != 'TextNode') {
                         xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
                                        new xarTpl__ParserError("The '".$checkNode->tagName."' tag cannot have children of type '".$child->tagName."'.", $child));
                         return;
                     }
-                    */
+
                     if ($checkNode->needAssignment()) {
                         $code .= ' = ';
                     }
@@ -1462,7 +1461,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * xarTpl__TextNode
  * hasChildren -> false
  * hasText -> false
- * isAssignable -> false
+ * isAssignable -> true
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
@@ -3124,4 +3123,3 @@ class xarTpl__WidgetPostfield extends xarTpl__TplWidgetNode
     }
 }
 
-?>

@@ -188,4 +188,3 @@ function xarEvt__checkEvent($eventName)
     */
 }
 
-?>

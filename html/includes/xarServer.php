@@ -513,4 +513,3 @@ function xarResponseIsRedirected()
     return $GLOBALS['xarResponse_redirectCalled'];
 }
 
-?>

@@ -1045,4 +1045,3 @@ function xarUser__validationParse($validationString)
     }
     return $val_stack;
 }
-?>

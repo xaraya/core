@@ -614,4 +614,3 @@ class xarCore__ConfigFileLoader
 
 }
 
-?>

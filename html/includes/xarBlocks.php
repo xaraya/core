@@ -420,4 +420,3 @@ function xarBlock_renderGroup($groupName)
     return $output;
 }
 
-?>

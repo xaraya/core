@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: s.xarException.php 1.22 03/01/21 04:15:07+01:00 marcel@hsdev.com $
  *
  * Exception Handling System
  * 

@@ -477,4 +477,3 @@ function xarSec__getModulesInstanceSchemaInfo()
     closedir($moddir);
 }
 
-?>
