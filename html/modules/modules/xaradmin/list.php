@@ -211,6 +211,7 @@ function modules_admin_list()
             $listrows[$i]['state'] = 4;
             
             $listrows[$i]['actionlabel']        = xarML('Remove');
+            $listrows[$i]['actionlabel2']       = xarML('Remove');
             $listrows[$i]['actionurl']          = $removeurl;
             $listrows[$i]['removeurl']          = $removeurl;
             
