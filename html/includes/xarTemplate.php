@@ -1,5 +1,5 @@
 <?php
-// File: $Id$
+// File: $Id: s.xarTemplate.php 1.69 02/12/14 18:32:47+01:00 marco@jabawack.canini.org $
 // ----------------------------------------------------------------------
 // Xaraya eXtensible Management System
 // Copyright (C) 2002 by the Xaraya Development Team.
@@ -9,44 +9,17 @@
 // Purpose of file: The BlockLayout template engine
 // ----------------------------------------------------------------------
 
-/**
- * Load BlockLayout
- *
- * @access private
- * @param $args['enableTemplatesCaching']
- * @param $args['themesBaseDir']
- * @param $args['defaultThemeName']
- * @returns bool
- */
+//  Find specifications at the following address
+//  http://developer.hostnuke.com/modules.php?op=modload&name=Sections&file=index&req=viewarticle&artid=1&page=1
+
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
     global $xarTpl_cacheTemplates, $xarTpl_themesBaseDir, $xarTpl_defaultThemeName;
     global $xarTpl_additionalStyles, $xarTpl_headJavaScript, $xarTpl_bodyJavaScript;
 
-    if (!$whatElseIsGoingLoaded & XARCORE_SYSTEM_CONFIGURATION) {
-        // Use variables in the site's config file
-        $xarTpl_themesBaseDir    = $args['themesBaseDirectory'];
-        $xarTpl_defaultThemeName = $args['defaultThemeName'];
-        $xarTpl_cacheTemplates   = $args['enableTemplatesCaching'];
-    } else {
-        // use variables in the site's config table
-        $xarTpl_themesBaseDir = xarConfigGetVar('Site.BL.ThemesDirectory');
-        if (!isset($xarTpl_themesBaseDir) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
-        $xarTpl_defaultThemeName = xarConfigGetVar('Site.BL.DefaultTheme');
-        if (!isset($xarTpl_defaultThemeName) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
-        $xarTpl_cacheTemplates = xarConfigGetVar('Site.BL.CacheTemplates');
-        if (!isset($xarTpl_cacheTemplates) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
-    }
-
+    $xarTpl_themesBaseDir = $args['themesBaseDirectory'];
+    $xarTpl_defaultThemeName = $args['defaultThemeName'];
+    
     if (!xarTplSetThemeName($xarTpl_defaultThemeName)) {
         global $xarTpl_themeDir;
         xarCore_die("xarTpl_init: Unexistent theme directory '$xarTpl_themeDir'.");
@@ -61,6 +34,8 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
                    "'. Control directory permissions.");
     }
 
+    $xarTpl_cacheTemplates = $args['enableTemplatesCaching'];
+    
     $xarTpl_additionalStyles = '';
     $xarTpl_headJavaScript = '';
     $xarTpl_bodyJavaScript = '';
@@ -174,7 +149,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
     $tplData['_bl_module_func'] = $funcName;
-
+    
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
