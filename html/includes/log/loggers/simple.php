@@ -110,6 +110,11 @@ class xarLogger_simple extends xarLogger
     var $_fileheader;
 
     /**
+    * Maximum file size
+    */
+    var $_maxFileSize = 1048576; // 1Mb == 1024 * 1024 byte
+
+    /**
     * Set up the configuration of the specific Log Observer.
     * 
     * @param  array $conf  with
@@ -126,6 +131,11 @@ class xarLogger_simple extends xarLogger
         /* If a file mode has been provided, use it. */
         if (!empty($conf['mode'])) {
             $this->_mode = $conf['mode'];
+        }
+
+        /* If a file mode has been provided, use it. */
+        if (!empty($conf['maxFileSize'])) {
+            $this->_maxFileSize = $conf['maxFileSize'];
         }
 
         $this->_buffer          = '--------------------------------------------------------------------------------------------------------------------------------------'
@@ -255,8 +265,14 @@ class xarLogger_simple extends xarLogger
 		if (!file_exists($this->_filename)) {
 			$insert_header = true;
 		}
+
+        if (filesize($this->_filename) > $this->_maxFileSize) {
+            $option = 'w'; //write over
+        } else {
+            $option = 'a'; //append
+        }
 		
-        if (($this->_fp = fopen($this->_filename, 'a')) == false) {
+        if (($this->_fp = fopen($this->_filename, $option)) == false) {
 	        die('unable to open log file '.$this->_filename);
             return false;
         }  // else {
