@@ -797,10 +797,11 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
         $modinfo = xarModGetInfo($this->moduleid);
         foreach ($this->datastores as $name => $datastore) {
-            $datastore->getItem(array('modid'    => $this->moduleid,
-                                      'itemtype' => $this->itemtype,
-                                      'itemid'   => $this->itemid,
-                                      'modname'  => $modinfo['name']));
+            $itemid = $datastore->getItem(array('modid'    => $this->moduleid,
+                                                'itemtype' => $this->itemtype,
+                                                'itemid'   => $this->itemid,
+                                                'modname'  => $modinfo['name']));
+            if (empty($itemid)) return;
         }
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) {

@@ -55,6 +55,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         if (!$result) return;
 
+        if ($result->EOF) {
+            return;
+        }
         while (!$result->EOF) {
             list($propid, $value) = $result->fields;
             if (isset($value)) {
@@ -65,6 +68,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $result->Close();
+        return $itemid;
     }
 
     function createItem($args)

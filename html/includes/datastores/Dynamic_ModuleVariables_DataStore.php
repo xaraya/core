@@ -65,6 +65,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
             // set the value for this property
             $this->fields[$field]->setValue($value);
         }
+        return $itemid;
     }
 
     function createItem($args)

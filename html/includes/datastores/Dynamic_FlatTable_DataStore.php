@@ -112,6 +112,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             // set the value for this property
             $this->fields[$field]->setValue(array_shift($values));
         }
+        return $itemid;
     }
 
     function createItem($args)

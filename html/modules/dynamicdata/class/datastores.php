@@ -207,6 +207,7 @@ class Dynamic_DataStore
 
     function getItem($args)
     {
+        return $args['itemid'];
     }
 
     function createItem($args)

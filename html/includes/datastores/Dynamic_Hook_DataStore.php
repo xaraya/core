@@ -57,6 +57,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
                 }
             }
         }
+        return $itemid;
     }
 
 }

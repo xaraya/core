@@ -90,6 +90,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 }
             }
         }
+        return $itemid;
     }
 
     /* fetch a list of the values for all items in the datastore */

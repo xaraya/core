@@ -68,6 +68,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
             //    $this->fields[$field]->setValue(xarModGetVar($this->modname,$field));
             }
         }
+        return $itemid;
     }
 
     function createItem($args)
