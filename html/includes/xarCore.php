@@ -164,6 +164,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enablePHPErrorHandler' => xarCore_getSiteVar('Exception.EnablePHPErrorHandler'));
     xarException_init($systemArgs, $whatToLoad);
 
+    // Start Logging Facilities
+    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
+                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
+                        'level' => xarCore_getSiteVar('Log.LogLevel'));
+    xarLog_init($systemArgs, $whatToLoad);
+
     // Start Database Connection Handling System
     if ($whatToLoad & XARCORE_SYSTEM_ADODB) {
         // {ML_dont_parse 'includes/xarDB.php'}
@@ -225,12 +231,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'defaultLocale' => xarCore_getSiteVar('MLS.DefaultLocale'),
                         'allowedLocales' => xarCore_getSiteVar('MLS.AllowedLocales'));
     xarMLS_init($systemArgs, $whatToLoad);
-
-    // Start Logging Facilities
-    $systemArgs = array('loggerName' => xarCore_getSiteVar('Log.LoggerName'),
-                        'loggerArgs' => xarCore_getSiteVar('Log.LoggerArgs'),
-                        'level' => xarCore_getSiteVar('Log.LogLevel'));
-    xarLog_init($systemArgs, $whatToLoad);
 
     // Start Sessions Subsystem
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
