@@ -85,6 +85,11 @@ function modules_admin_install()
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
+    
+    if (function_exists('xarOutputFlushCached')) {
+        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('base-block');
+    }
 
     xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 

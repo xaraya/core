@@ -54,6 +54,11 @@ function modules_adminapi_activate ($args)
         return NULL;
     }
 
+    if (function_exists('xarOutputFlushCached')) {
+        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('base-block');
+    }
+
     return true;
 }
 ?>
