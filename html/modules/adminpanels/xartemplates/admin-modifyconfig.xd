@@ -2,132 +2,132 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Adminpanels Administration</pnt:mlstring>            
+            <xar:mlstring>Adminpanels Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
         <td align="center">
-            <a href="&pnt-modurl-adminpanels-admin-view;"><pnt:mlstring>Quick View</pnt:mlstring></a>
+            <a href="&xar-modurl-adminpanels-admin-view;"><xar:mlstring>Quick View</xar:mlstring></a>
         </td>
         <td align="center">
-            <b><pnt:mlstring>Configure</pnt:mlstring></b>
+            <b><xar:mlstring>Configure</xar:mlstring></b>
         </td>
 
     </tr>
 </table>
 
 <!-- BL style form for adminpanels configuration options -->
-<form method="post" action="&pnt-modurl-adminpanels-admin-updateconfig;">
-    <input type="hidden" name="authid" id="authid" value="&pnt-var-authid;" />
+<form method="post" action="&xar-modurl-adminpanels-admin-updateconfig;">
+    <input type="hidden" name="authid" id="authid" value="&xar-var-authid;" />
     <table border="0" width="100%">
         <tr>
             <td>
                 <table border="0" width="100%">
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>Use marker against active module:</pnt:mlstring>
+                            <xar:mlstring>Use marker against active module:</xar:mlstring>
                         </td>
                         <td>
-                            <pnt:if condition="pnModGetVar('adminpanels', 'showold')">
+                            <xar:if condition="xarModGetVar('adminpanels', 'showold')">
                                 <input type="checkbox" name="showold" id="showold" value="0" checked="checked" tabindex="1" />
-                            <pnt:else />
+                            <xar:else />
                                 <input type="checkbox" name="showold" id="showold" value="1"tabindex="1" />
-                            </pnt:if>
+                            </xar:if>
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>Specify type of marker: (not implemented yet)</pnt:mlstring>
+                            <xar:mlstring>Specify type of marker: (not implemented yet)</xar:mlstring>
                         </td>
                         <td>
-                            <!-- will pass marker as a variable from module &pnt-var-marker; (not implemented yet) -->
+                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
                             <input type="text" name="marker" size=3 maxlength=3 value="[x]">
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>Sort admin menu items:</pnt:mlstring>
+                            <xar:mlstring>Sort admin menu items:</xar:mlstring>
                         </td>
                         <td>
                             <select name="menustyle" id="menustyle" size="1" tabindex="2">
                             <!-- ToDo: ML labels for all selects -->
                             <!-- there is a bug in BL which prevents using entities in if tag, so for now this will work -->
-                                <pnt:if condition="'byname' eq pnModGetVar('adminpanels', 'menustyle')">
+                                <xar:if condition="'byname' eq xarModGetVar('adminpanels', 'menustyle')">
                                     <option value="byname" selected="selected">By Name</option>
                                     <option value="bycat">By Category</option>
                                     <option value="byweight">By Weight</option>
                                     <option value="bygroup">By Group</option>
-                                <pnt:elseif condition="'bycat' eq pnModGetVar('adminpanels', 'menustyle')" />
+                                <xar:elseif condition="'bycat' eq xarModGetVar('adminpanels', 'menustyle')" />
                                     <option value="byname">By Name</option>
                                     <option value="bycat" selected="selected">By Category</option>
                                     <option value="byweight">By Weight</option>
                                     <option value="bygroup">By Group</option>
-                                <pnt:elseif condition="'byweight' eq pnModGetVar('adminpanels', 'menustyle')" />
+                                <xar:elseif condition="'byweight' eq xarModGetVar('adminpanels', 'menustyle')" />
                                     <option value="byname">By Name</option>
                                     <option value="bycat">By Category</option>
                                     <option value="byweight" selected="selected">By Weight</option>
                                     <option value="bygroup">By Group</option>
-                                <pnt:elseif condition="'bygroup' eq pnModGetVar('adminpanels', 'menustyle')" />
+                                <xar:elseif condition="'bygroup' eq xarModGetVar('adminpanels', 'menustyle')" />
                                     <option value="byname">By Name</option>
                                     <option value="bycat">By Category</option>
                                     <option value="byweight">By Weight</option>
                                     <option value="bygroup" selected="selected">By Group</option>
-                                </pnt:if>
+                                </xar:if>
                             </select>
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>If sort order is "By Weight", please specify here:</pnt:mlstring>
+                            <xar:mlstring>If sort order is "By Weight", please specify here:</xar:mlstring>
                         </td>
                         <td>
-                            <!-- will pass marker as a variable from module &pnt-var-marker; (not implemented yet) -->
-                            <pnt:mlstring>LIST of WEIGHTS/MODULES<br />(not implemented)</pnt:mlstring>
-                        </td>
-                    </tr>
-                    <tr align="left" valign="middle">
-                        <td>
-                            <pnt:mlstring>If sort order is "By Group", please select here:</pnt:mlstring>
-                        </td>
-                        <td>
-                            <!-- will pass marker as a variable from module &pnt-var-marker; (not implemented yet) -->
-                            <pnt:mlstring>LIST of GROUPS/MODULES<br />(not implemented)</pnt:mlstring>
+                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
+                            <xar:mlstring>LIST of WEIGHTS/MODULES<br />(not implemented)</xar:mlstring>
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>Add/Delete/Modify Module Groups:</pnt:mlstring>
+                            <xar:mlstring>If sort order is "By Group", please select here:</xar:mlstring>
                         </td>
                         <td>
-                            <!-- will pass marker as a variable from module &pnt-var-marker; (not implemented yet) -->
-                            <pnt:mlstring>LINK to FUNCTION<br />(not implemented)</pnt:mlstring>
+                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
+                            <xar:mlstring>LIST of GROUPS/MODULES<br />(not implemented)</xar:mlstring>
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>Position admin menu:</pnt:mlstring>
+                            <xar:mlstring>Add/Delete/Modify Module Groups:</xar:mlstring>
+                        </td>
+                        <td>
+                            <!-- will pass marker as a variable from module &xar-var-marker; (not implemented yet) -->
+                            <xar:mlstring>LINK to FUNCTION<br />(not implemented)</xar:mlstring>
+                        </td>
+                    </tr>
+                    <tr align="left" valign="middle">
+                        <td>
+                            <xar:mlstring>Position admin menu:</xar:mlstring>
                         </td>
                         <td>
                             <select name="menuposition" id="menuposition" size="1" tabindex="3">
-                               <pnt:if condition="'l' eq pnModGetVar('adminpanels', 'menuposition')">
+                               <xar:if condition="'l' eq xarModGetVar('adminpanels', 'menuposition')">
                                     <option value="l" selected="selected">Left</option>
                                     <option value="c">Centre</option>
                                     <option value="r">Right</option>
-                                 <pnt:elseif condition="'c' eq pnModGetVar('adminpanels', 'menuposition')" />
+                                 <xar:elseif condition="'c' eq xarModGetVar('adminpanels', 'menuposition')" />
                                     <option value="l">Left</option>
                                     <option value="c" selected="selected">Centre</option>
                                     <option value="r">Right</option>
-                                 <pnt:elseif condition="'r' eq pnModGetVar('adminpanels', 'menuposition')" />
+                                 <xar:elseif condition="'r' eq xarModGetVar('adminpanels', 'menuposition')" />
                                     <option value="l">Left</option>
                                     <option value="c">Centre</option>
                                     <option value="r" selected="selected">Right</option>
-                                </pnt:if>
+                                </xar:if>
                             </select>
                         </td>
                     </tr>
                     <tr align="left" valign="middle">
                         <td>
-                            <pnt:mlstring>When finished, click Submit:</pnt:mlstring>
+                            <xar:mlstring>When finished, click Submit:</xar:mlstring>
                         </td>
                         <td>
                             <!-- submit button -->

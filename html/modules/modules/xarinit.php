@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------------
 
 // Load Table Maintainance API
-pnDBLoadTableMaintenanceAPI();
+xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the modules module
@@ -22,11 +22,11 @@ pnDBLoadTableMaintenanceAPI();
 function modules_init()
 {
     // Get database information
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
     
-    $sitePrefix   = pnDBGetSiteTablePrefix();
-    $systemPrefix = pnDBGetSystemTablePrefix();
+    $sitePrefix   = xarDBGetSiteTablePrefix();
+    $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables['modules']       = $systemPrefix . '_modules';
     $tables['module_states'] = $sitePrefix . '_module_states';
@@ -44,133 +44,133 @@ function modules_init()
 
     // prefix_modules
     /*********************************************************************
-    * CREATE TABLE pn_modules (
-    *  pn_id int(11) NOT NULL auto_increment,
-    *  pn_name varchar(64) NOT NULL default '',
-    *  pn_regid int(10) unsigned NOT NULL default '0',
-    *  pn_directory varchar(64) NOT NULL default '',
-    *  pn_version varchar(10) NOT NULL default '0',
-    *  pn_mode int(6) NOT NULL default '1',
-    *  pn_class varchar(64) NOT NULL default '',
-    *  pn_category varchar(64) NOT NULL default '',
-    *  pn_admin_capable tinyint(1) NOT NULL default '0',
-    *  pn_user_capable tinyint(1) NOT NULL default '0',
-    *  PRIMARY KEY  (pn_id)
+    * CREATE TABLE xar_modules (
+    *  xar_id int(11) NOT NULL auto_increment,
+    *  xar_name varchar(64) NOT NULL default '',
+    *  xar_regid int(10) unsigned NOT NULL default '0',
+    *  xar_directory varchar(64) NOT NULL default '',
+    *  xar_version varchar(10) NOT NULL default '0',
+    *  xar_mode int(6) NOT NULL default '1',
+    *  xar_class varchar(64) NOT NULL default '',
+    *  xar_category varchar(64) NOT NULL default '',
+    *  xar_admin_capable tinyint(1) NOT NULL default '0',
+    *  xar_user_capable tinyint(1) NOT NULL default '0',
+    *  PRIMARY KEY  (xar_id)
     * )
     *********************************************************************/
     $fields = array(
-    'pn_id'             => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-    'pn_name'           => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_regid'          => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
-    'pn_directory'      => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_version'        => array('type'=>'varchar','size'=>10,'null'=>false),
-    'pn_mode'           => array('type'=>'integer','size'=>'small','null'=>false,'default'=>'1'),
-    'pn_class'          => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_category'       => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_admin_capable'  => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0'),
-    'pn_user_capable'   => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0')
+    'xar_id'             => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'xar_name'           => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_regid'          => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+    'xar_directory'      => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_version'        => array('type'=>'varchar','size'=>10,'null'=>false),
+    'xar_mode'           => array('type'=>'integer','size'=>'small','null'=>false,'default'=>'1'),
+    'xar_class'          => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_category'       => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_admin_capable'  => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0'),
+    'xar_user_capable'   => array('type'=>'integer','size'=>'tiny','null'=>false,'default'=>'0')
     );
 
-    $query = pnDBCreateTable($tables['modules'],$fields);
+    $query = xarDBCreateTable($tables['modules'],$fields);
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // prefix_module_states
     /********************************************************************
-    * CREATE TABLE pn_module_states (
-    *  pn_regid int(11) unsigned NOT NULL default '0',
-    *  pn_state tinyint(1) NOT NULL default '0',
-    *  PRIMARY KEY  (pn_regid)
+    * CREATE TABLE xar_module_states (
+    *  xar_regid int(11) unsigned NOT NULL default '0',
+    *  xar_state tinyint(1) NOT NULL default '0',
+    *  PRIMARY KEY  (xar_regid)
     * )
     ********************************************************************/
     $fields = array(
-    'pn_regid' => array('type'=>'integer','null'=>false,'unsigned'=>true,'primary_key'=>false),
-    'pn_state' => array('type'=>'integer','null'=>false,'default'=>'0')
+    'xar_regid' => array('type'=>'integer','null'=>false,'unsigned'=>true,'primary_key'=>false),
+    'xar_state' => array('type'=>'integer','null'=>false,'default'=>'0')
     );
 
-    $query = pnDBCreateTable($tables['module_states'],$fields);
+    $query = xarDBCreateTable($tables['module_states'],$fields);
 
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // prefix_module_vars
     /********************************************************************
-    * CREATE TABLE pn_module_vars (
-    *  pn_id int(11) NOT NULL auto_increment,
-    *  pn_modname varchar(64) NOT NULL default '',
-    *  pn_name varchar(64) NOT NULL default '',
-    *  pn_value longtext,
-    *  PRIMARY KEY  (pn_id)
+    * CREATE TABLE xar_module_vars (
+    *  xar_id int(11) NOT NULL auto_increment,
+    *  xar_modname varchar(64) NOT NULL default '',
+    *  xar_name varchar(64) NOT NULL default '',
+    *  xar_value longtext,
+    *  PRIMARY KEY  (xar_id)
     * )
     ********************************************************************/
     $fields = array(
-    'pn_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-    'pn_modname' => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_name'    => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_value'   => array('type'=>'text','size'=>'long')
+    'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'xar_modname' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_name'    => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_value'   => array('type'=>'text','size'=>'long')
     );
 
-    $query = pnDBCreateTable($tables['module_vars'],$fields);
+    $query = xarDBCreateTable($tables['module_vars'],$fields);
 
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // prefix_hooks
     /********************************************************************
-    * CREATE TABLE pn_hooks (
-    *  pn_id int(10) unsigned NOT NULL auto_increment,
-    *  pn_object varchar(64) NOT NULL default '',
-    *  pn_action varchar(64) NOT NULL default '',
-    *  pn_smodule varchar(64) default NULL,
-    *  pn_stype varchar(64) default NULL,
-    *  pn_tarea varchar(64) NOT NULL default '',
-    *  pn_tmodule varchar(64) NOT NULL default '',
-    *  pn_ttype varchar(64) NOT NULL default '',
-    *  pn_tfunc varchar(64) NOT NULL default '',
-    *  PRIMARY KEY  (pn_id)
+    * CREATE TABLE xar_hooks (
+    *  xar_id int(10) unsigned NOT NULL auto_increment,
+    *  xar_object varchar(64) NOT NULL default '',
+    *  xar_action varchar(64) NOT NULL default '',
+    *  xar_smodule varchar(64) default NULL,
+    *  xar_stype varchar(64) default NULL,
+    *  xar_tarea varchar(64) NOT NULL default '',
+    *  xar_tmodule varchar(64) NOT NULL default '',
+    *  xar_ttype varchar(64) NOT NULL default '',
+    *  xar_tfunc varchar(64) NOT NULL default '',
+    *  PRIMARY KEY  (xar_id)
     * )
     *********************************************************************/
     $fields = array(
-    'pn_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-    'pn_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_smodule' => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_stype'   => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),
-    'pn_tfunc'   => array('type'=>'varchar','size'=>64,'null'=>false)
+    'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+    'xar_object'  => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_action'  => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_smodule' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_stype'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_tarea'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_tmodule' => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_ttype'   => array('type'=>'varchar','size'=>64,'null'=>false),
+    'xar_tfunc'   => array('type'=>'varchar','size'=>64,'null'=>false)
     );
      
-    $query = pnDBCreateTable($tables['hooks'],$fields);
+    $query = xarDBCreateTable($tables['hooks'],$fields);
 
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }

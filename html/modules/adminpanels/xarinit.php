@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------------
 
 // Load Table Maintaince API
-pnDBLoadTableMaintenanceAPI();
+xarDBLoadTableMaintenanceAPI();
 
 /**
  * Initialise the adminpanels module
@@ -22,11 +22,11 @@ pnDBLoadTableMaintenanceAPI();
 function adminpanels_init()
 {
     // Get database information
-    list($dbconn) = pnDBGetConn();
-    $table = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $table = xarDBGetTables();
 
     // Create tables
-    $adminMenuTable = pnDBGetSiteTablePrefix() . '_admin_menu';
+    $adminMenuTable = xarDBGetSiteTablePrefix() . '_admin_menu';
     /*********************************************************************
      * Here we create all the tables for the adminpanels module
      *
@@ -35,34 +35,34 @@ function adminpanels_init()
 
     // prefix_admin_menu
     /*********************************************************************
-    * CREATE TABLE pn_admin_menu (
-    *  pn_amid int(11) NOT NULL auto_increment,
-    *  pn_name varchar(32) NOT NULL default '',
-    *  pn_category varchar(32) NOT NULL default '',
-    *  pn_weight int(11) NOT NULL default '0',
-    *  pn_flag tinyint(4) NOT NULL default '1',
-    *  PRIMARY KEY  (pn_amid)
+    * CREATE TABLE xar_admin_menu (
+    *  xar_amid int(11) NOT NULL auto_increment,
+    *  xar_name varchar(32) NOT NULL default '',
+    *  xar_category varchar(32) NOT NULL default '',
+    *  xar_weight int(11) NOT NULL default '0',
+    *  xar_flag tinyint(4) NOT NULL default '1',
+    *  PRIMARY KEY  (xar_amid)
     * )
     *********************************************************************/
     // *_admin_menu
-    $query = pnDBCreateTable($adminMenuTable,
-                             array('pn_amid'        => array('type'        => 'integer',
+    $query = xarDBCreateTable($adminMenuTable,
+                             array('xar_amid'        => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0',
                                                              'increment'   => true,
                                                              'primary_key' => true),
-                                   'pn_name'        => array('type'        => 'varchar',
+                                   'xar_name'        => array('type'        => 'varchar',
                                                              'size'        => 32,
                                                              'null'        => false,
                                                              'default'     => ''),
-                                   'pn_category'    => array('type'        => 'varchar',
+                                   'xar_category'    => array('type'        => 'varchar',
                                                              'size'        => 32,
                                                              'null'        => false,
                                                              'default'     => ''),
-                                   'pn_weight'       => array('type'        => 'integer',
+                                   'xar_weight'       => array('type'        => 'integer',
                                                              'null'        => false,
                                                              'default'     => '0'),
-                                   'pn_flag'         => array('type'        => 'integer',
+                                   'xar_flag'         => array('type'        => 'integer',
                                                              'size'        => 'tiny',
                                                              'null'        => false,
                                                              'default'     => '1')));
@@ -70,8 +70,8 @@ function adminpanels_init()
         
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
@@ -80,104 +80,104 @@ function adminpanels_init()
 
     // Fill admin menu
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'adminpanels', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'adminpanels', 'Global', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'authsystem', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'authsystem', 'Global', 0, 1);";
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'base', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'base', 'Global', 0, 1);";
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'blocks', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'blocks', 'Global', 0, 1);";
     $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
-    $dbconn->Execute($query);
-    
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return NULL;
-    }
-    
-    $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'groups', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+    }
+    
+    $id = $dbconn->GenId($adminMenuTable);
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'modules', 'Global', 0, 1);";
+    $dbconn->Execute($query);
+    
+    // Check for db errors
+    if ($dbconn->ErrorNo() != 0) {
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'permissions', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     $id = $dbconn->GenId($adminMenuTable);
-    $query = "INSERT INTO $adminMenuTable (pn_amid, pn_name, pn_category, pn_weight, pn_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
+    $query = "INSERT INTO $adminMenuTable (xar_amid, xar_name, xar_category, xar_weight, xar_flag) VALUES ($id, 'users', 'Users & Groups', 0, 1);";
     $dbconn->Execute($query);
     
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // Register Block types
-    $res = pnBlockTypeRegister('adminpanels', 'adminmenu');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarBlockTypeRegister('adminpanels', 'adminmenu');
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
     

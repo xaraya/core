@@ -1,15 +1,15 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <b><a href="&pnt-modurl-modules-admin-main;">Modules Administration</a></b>
+            <b><a href="&xar-modurl-modules-admin-main;">Modules Administration</a></b>
         </th>
     </tr>
     <tr align="center">
         <td align="center" width="25%">
-            <a href="&pnt-modurl-modules-admin-list;">List available modules</a>
+            <a href="&xar-modurl-modules-admin-list;">List available modules</a>
         </td>
         <td align="center" width="25%">
-            <a href="&pnt-modurl-modules-admin-regenerate;">Regenerate module list</a>
+            <a href="&xar-modurl-modules-admin-regenerate;">Regenerate module list</a>
         </td>
     </tr>
 </table>
@@ -18,9 +18,9 @@
 <br />
 
 <center>
-<form method="post" action="&pnt-modurl-modules-admin-update;">
-    <input type="hidden" name="authid" value="<?php echo pnSecGenAuthKey(); ?>" />
-    <input type="hidden" name="id" value="&pnt-var-regId;" />
+<form method="post" action="&xar-modurl-modules-admin-update;">
+    <input type="hidden" name="authid" value="<?php echo xarSecGenAuthKey(); ?>" />
+    <input type="hidden" name="id" value="&xar-var-regId;" />
 
     <table border="0" width="300">
         <tr>
@@ -28,7 +28,7 @@
                  Edit Display Name:
             </td>
             <td>
-                <input type="text" name="newdisplayname" value="&pnt-var-displayName;" length="40" maxlength="254" style="width:150px;" />
+                <input type="text" name="newdisplayname" value="&xar-var-displayName;" length="40" maxlength="254" style="width:150px;" />
             </td>
         </tr>
         <tr>
@@ -36,23 +36,23 @@
                  Edit Display Name:
             </td>
             <td>
-                 <input type="text" name="newdescription" value="&pnt-var-description;" length="60" maxlength="254" style="width:150px;" />
+                 <input type="text" name="newdescription" value="&xar-var-description;" length="60" maxlength="254" style="width:150px;" />
             </td>
         </tr>
-        <pnt:loop name="hooks">
+        <xar:loop name="hooks">
         <tr>
             <td>
-                Activate &pnt-var-hooks['tmodName']; for this module
+                Activate &xar-var-hooks['tmodName']; for this module
             </td>
             <td>
-               <pnt:if condition="$hooks['checked'] eq 1">
-                    <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" checked="checked" />
-                    <pnt:else />
-                        <input type="checkbox" name="hook_&pnt-var-hooks['tmodName'];" value="1" />
-                </pnt:if>
+               <xar:if condition="$hooks['checked'] eq 1">
+                    <input type="checkbox" name="hook_&xar-var-hooks['tmodName'];" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="hook_&xar-var-hooks['tmodName'];" value="1" />
+                </xar:if>
             </td>
         </tr>
-        </pnt:loop>
+        </xar:loop>
         <tr>
             <td colspan="2" align="center"><br />
                     <input type="submit" value="Save Changes" align="middle" />

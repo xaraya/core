@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Modules Administration</pnt:mlstring>            
+            <xar:mlstring>Modules Administration</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
@@ -9,10 +9,10 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-modules-admin-list;"><pnt:mlstring>View Installed Modules</pnt:mlstring></a>
+            <a href="&xar-modurl-modules-admin-list;"><xar:mlstring>View Installed Modules</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-modules-admin-regenerate&;authid=&pnt-var-authid;"><pnt:mlstring>Regenerate Available Modules</pnt:mlstring></a>
+            <a href="&xar-modurl-modules-admin-regenerate&;authid=&xar-var-authid;"><xar:mlstring>Regenerate Available Modules</xar:mlstring></a>
         </td>
 
     </tr>
