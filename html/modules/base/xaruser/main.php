@@ -25,8 +25,6 @@ function base_user_main($args)
     extract($args);
     if (!xarVarFetch('page','str',$page,'',XARVAR_NOT_REQUIRED)) return;
 
-echo var_dump($page);
-
     // if you want to include different pages in your user-main template
     //return array('page' => $page);
     // if you want to use different user-main-<page> templates
