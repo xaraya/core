@@ -1039,7 +1039,7 @@ var	$alreadydone;
 
 function drawtree($node) {
 
-	$this->html = '<div name="PrivilegesTree" id="PrivilegesTree" style="padding-left: 1em">';
+	$this->html = '<div name="PrivilegesTree" id="PrivilegesTree">';
 	$this->nodeindex = 0;
 	$this->indent = array();
 	$this->level = 0;
@@ -1087,6 +1087,7 @@ function drawbranch($node){
 	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '" style="align: left">';
 
 // this table holds the index, the tree drawing gifs and the info about the privilege
+	$this->html .= '<div style="position: relative;">';
 	$this->html .= $this->drawindent();
 	if (count($node['children']) > 0) {
 		if ($this->nodeindex != 1){
@@ -1125,7 +1126,7 @@ function drawbranch($node){
 // this next table holds the Delete, Users and Privileges links
 
 // toggle the tree
-	$this->html .=  '<span name="togglelink" style="position: absolute; right: 16em">';
+	$this->html .=  '<span name="togglelink" style="text-align:center; position:absolute; right: 15em">';
 	if(count($this->getsubprivileges($object['pid'])) == 0) {
 		$this->html .= '&nbsp;';
 	}
@@ -1137,7 +1138,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // don't allow deletion of certain privileges
-	$this->html .=  '<span name="deletelink" style="position: absolute; right: 11em">';
+	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 10em">';
 	if($object['pid'] < 3) {
 		$this->html .= '&nbsp;';
 	}
@@ -1152,7 +1153,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // offer to show the users/groups of this group
-	$this->html .=  '<span name="userslink" style="position: absolute; right: 2em">';
+	$this->html .=  '<span name="userslink" style="text-align:center; position:absolute; right: 1em">';
 	$this->html .= '<a href="' .
 			xarModURL('privileges',
 				 'admin',
@@ -1161,7 +1162,7 @@ function drawbranch($node){
 				 '" title="Show the Groups/Users this Privilege is assigned to">&nbsp;Groups/Users</a>';
 
 // close the html row
-	$this->html .= '</span>';
+	$this->html .= '</span></div>';
 
 // we've finished this row; now do the children of this privilege
 	$this->html .= $isbranch ? '<div class="xarleaf" id="x' . $this->nodeindex . '" >' : '';

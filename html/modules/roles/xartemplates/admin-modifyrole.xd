@@ -21,6 +21,7 @@ document.forms[0].submit();}
 //-->
 </script>
 
+<div align="center">
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
@@ -29,7 +30,6 @@ document.forms[0].submit();}
     </tr>
 </table>
 
-<div align="center">
 	<br /><br />
 	<form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
 
@@ -205,16 +205,14 @@ document.forms[0].submit();}
 			</table>
 		</td>
 	</tr>
-</table
+</table>
 
 <table border="0" width="100%">
 	<tr>
-		<th align="center">
+        <th colspan="4" align="center">
 			<xar:mlstring>Current Groups</xar:mlstring>
 		</th>
 	</tr>
-</table>
-<table border="0" cellspacing="5" width="100%">
 	<tr>
 		<td>
 			<a href="&xar-modurl-roles-admin-newrole;">
@@ -243,7 +241,7 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="4">
 			#$tree#
 		</td>
 	</tr>

@@ -27,6 +27,7 @@ document.forms[0].submit();}
 		</th>
 	</tr>
 </table>
+
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
 		<td>
@@ -56,7 +57,7 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="4">
 			#$tree#
 		</td>
 	</tr>

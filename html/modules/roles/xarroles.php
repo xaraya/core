@@ -222,7 +222,7 @@ var	$alreadydone;
 
 function drawtree($node) {
 
-	$this->html = '<div name="RolesTree" id="RolesTree" style="padding-left: 1em">';
+	$this->html = '<div name="RolesTree" id="RolesTree">';
 	$this->nodeindex = 0;
 	$this->indent = array();
 	$this->level = 0;
@@ -267,9 +267,10 @@ function drawbranch($node){
 	$isbranch = count($node['children'])>0 ? true : false;
 
 // now begin adding rows to the string
-	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '" style="align: left">';
+	$this->html .= '<div class="xarbranch" id="x' . $this->nodeindex . '">';
 
 // this table hold the index, the tree drawing gifs and the info about the role
+	$this->html .= '<div style="position: relative;">';
 	$this->html .= $this->drawindent();
 	if ($isbranch) {
 		if ($this->nodeindex != 1){
@@ -312,7 +313,7 @@ function drawbranch($node){
 
 // this next table holds the Delete, Users and Privileges links
 // don't allow deletion of certain roles
-	$this->html .=  '<span name="deletelink" style="position: absolute; right: 17em">';
+	$this->html .=  '<span name="deletelink" style="text-align:center; position:absolute; right: 1em;">';
 	if(($object['pid'] < 5) || ($object['users'] > 0) || (!$drawchildren)) {
 		$this->html .= '&nbsp;';
 	}
@@ -327,7 +328,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // offer to show users of a group if there are some
-	$this->html .=  '<span name="userslink" style="position: absolute; right: 12em">';
+	$this->html .=  '<span name="userslink" style="text-align:center; position:absolute; right: 12em;">';
 	if($object['users'] == 0 || (!$drawchildren)) {
 		$this->html .= '&nbsp;';
 	}
@@ -342,7 +343,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // offer to show the privileges of this group
-	$this->html .=  '<span name="privilegeslink" style="position: absolute; right: 5em">';
+	$this->html .=  '<span name="privilegeslink" style="text-align:center; position:absolute; right: 5em;">';
 	if(!$drawchildren) {
 		$this->html .= '&nbsp;';
 	}
@@ -357,8 +358,7 @@ function drawbranch($node){
 	$this->html .= '</span>';
 
 // offer to test the privileges of this group
-//	$this->html .= '</td><td width="30" align="right">';
-	$this->html .=  '<span name="testlink" style="position: absolute; right: 2em">';
+	$this->html .=  '<span name="testlink" style="text-align:center; position:absolute; right: 1em; border:">';
 	if(!$drawchildren) {
 		$this->html .= '&nbsp;';
 	}
@@ -370,7 +370,7 @@ function drawbranch($node){
 				 array('ppid'=>$object['pid'])) .
 				 '" title="Test this Groups\'s Privileges">&nbsp;Test&nbsp;</a>';
 	}
-	$this->html .= '</span>';
+	$this->html .= '</span></div>';
 
 
 // we've finished this row; now do the children of this role

@@ -167,7 +167,7 @@ document.forms[0].submit();}
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="4">
 			#$tree#
 		</td>
 	</tr>
