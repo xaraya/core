@@ -236,14 +236,14 @@ module rendering area and related rules
 -------------------------------------------------------------------------[comment] */
 
 .xar-mod-head {
-	color: #333366;
-	background-color: #DDDDF0;
-	padding: 2px;
-	text-align: center;
-	font-weight: bold;
-	border-color: #333366;
-	border-width: 1px;
-	border-style: solid;
+    color: #333366;
+    background-color: #DDDDF0;
+    padding: 2px;
+    text-align: center;
+    font-weight: bold;
+    border-color: #333366;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .xar-mod-title {
