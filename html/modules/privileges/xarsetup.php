@@ -188,7 +188,7 @@ function initializeSetup() {
 
     xarRegisterMask('EditMail','All','mail','All','All',ACCESS_EDIT);
     xarRegisterMask('AdminMail','All','mail','All','All',ACCESS_ADMIN);
-    xarRegisterMask('DeleteMailPanel','adminpanels','mail','All','All',ACCESS_DELETE);
+    xarRegisterMask('DeleteMail', 'All','mail','All','All',ACCESS_DELETE);
 
     xarRegisterMask('EditBlock','All','blocks','All','All',ACCESS_EDIT);
     xarRegisterMask('AddBlock','All','blocks','All','All',ACCESS_ADD);
