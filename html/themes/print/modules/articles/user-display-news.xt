@@ -1,11 +1,11 @@
 <h3><xar:var name="title"/></h3>
 <span class="xar-sub">
 <xar:mlstring>Posted by</xar:mlstring>: 
-	<xar:if condition="!empty($profile)">
-		<a href="#$profile#"><xar:var name="author"/></a>
-		<xar:else />
-			<xar:var name="author"/>
-	</xar:if>
+    <xar:if condition="!empty($profile)">
+        <a href="#$profile#"><xar:var name="author"/></a>
+        <xar:else />
+            <xar:var name="author"/>
+    </xar:if>
 <xar:mlstring>on</xar:mlstring>
 <xar:var name="date"/>
 </span>
@@ -18,6 +18,6 @@
 <xar:if condition="!empty($notes)">
 <br />
 <span class="xar-quote">
-	<xar:mlstring>Note </xar:mlstring>:<i><xar:var name="notes"/></i>
+    <xar:mlstring>Note </xar:mlstring>:<i><xar:var name="notes"/></i>
 </span>
 </xar:if>

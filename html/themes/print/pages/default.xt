@@ -15,7 +15,7 @@
 <h2><xar:mlstring>Document From </xar:mlstring> <a href="index.php"><xar:var scope="module" module="themes" name="SiteName"/></a></h2>
 
 <div id="main">
-	<xar:module id="modulespace" main="true" />
+    <xar:module id="modulespace" main="true" />
 </div>
 </body>
 </html>

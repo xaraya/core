@@ -2,5 +2,5 @@
 <xar:var name="body"/>
 <br />
 <span class="xar-quote">
-	<xar:var name="notes"/>
+    <xar:var name="notes"/>
 </span>

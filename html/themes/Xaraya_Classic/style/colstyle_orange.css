@@ -8,23 +8,23 @@ lets keep these alternative stylesheets relatively small and easy to work with.
 ------------------------------------------------------------------[important note] */
 
 body {
-	color: #7F5300;
-	background-color: #E59600;
-	background-image: url(../images/page_bg_orange.jpg);
+    color: #7F5300;
+    background-color: #E59600;
+    background-image: url(../images/page_bg_orange.jpg);
 }
 
 a { color: #7F693F; }
 a:link:hover, a:visited:hover { color: #E54000; }
 
 .xar-mod-head {
-	color: #7F5300;
-	background-color: #FFD37F;
-	border-color: #7F5300;
+    color: #7F5300;
+    background-color: #FFD37F;
+    border-color: #7F5300;
 }
 
 th {
-	color: #7F5300;
-	background-color: #F2EADD;
+    color: #7F5300;
+    background-color: #F2EADD;
 }
 .xar-alt { background-color: #FFDE80; }
 .xar-accent { background-color: #E5CF00; }
@@ -39,50 +39,50 @@ ul.xar-menu-section, ul.xar-menu-item, ul.xar-menu-subitem { background-color: #
 .xar-menu-section a { color: #E14F21; }
 
 ul li.xar-menu-section {
-	border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
+    border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
 }
 .xar-menu-section h4 {
-	border-bottom: #E59600;
+    border-bottom: #E59600;
 }
 
 .xar-menu-section a:hover {
-	color: #fff;
-	background-color: #E59600;
+    color: #fff;
+    background-color: #E59600;
 }
 
 .xar-menu-section ul ul a {
-	color: #fff;
-	background-color: #E59600;
+    color: #fff;
+    background-color: #E59600;
 }
 
 .xar-menu-section ul ul a:hover {
-	color: #804340;
-	background-color: #FFD37F;
+    color: #804340;
+    background-color: #FFD37F;
 }
 
 
 li.xar-menu-section-current a {
-	color: #583D2C;
-	background-color: #FFD37F;
+    color: #583D2C;
+    background-color: #FFD37F;
 }
 
 li.xar-menu-item-current {
-	color: #2C3F58;
-	background-color: #FFDE80;
+    color: #2C3F58;
+    background-color: #FFDE80;
 }
 
 li li.xar-menu-subitem-current a, li.xar-menu-item-current a {
-	color: #5C3C00;
-	background-color: #FFA700;
+    color: #5C3C00;
+    background-color: #FFA700;
 }
 
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
-	background-image: url(../images/xa_logo_orange.jpg);
+    background-image: url(../images/xa_logo_orange.jpg);
 }
 
 div#classicfooter {
-	background-image: url(../images/footer_bg_orange.jpg);
+    background-image: url(../images/footer_bg_orange.jpg);
 } 

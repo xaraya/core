@@ -4,8 +4,8 @@ function setActiveStyleSheetProperty(title,property) {
   var i, a, main;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
     if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && a.getAttribute("title").indexOf(property) != -1) {
-      	a.disabled = true;
-      	if(a.getAttribute("title") == title) a.disabled = false;
+          a.disabled = true;
+          if(a.getAttribute("title") == title) a.disabled = false;
     }
   }
   return true;

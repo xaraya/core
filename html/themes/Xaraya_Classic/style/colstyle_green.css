@@ -8,23 +8,23 @@ lets keep these alternative stylesheets relatively small and easy to work with.
 ------------------------------------------------------------------[important note] */
 
 body {
-	color: #003F3F;
-	background-color: #409999;
-	background-image: url(../images/page_bg_green.jpg);
+    color: #003F3F;
+    background-color: #409999;
+    background-image: url(../images/page_bg_green.jpg);
 }
 
 a { color: #3F7F7F; }
 a:link:hover, a:visited:hover { color: #994040; }
 
 .xar-mod-head {
-	color: #7FFFFF;
-	background-color: #3F7F7F;
-	border-color: #7F5300;
+    color: #7FFFFF;
+    background-color: #3F7F7F;
+    border-color: #7F5300;
 }
 
 th {
-	color: #3F7F7F;
-	background-color: #D2E3CC;
+    color: #3F7F7F;
+    background-color: #D2E3CC;
 }
 .xar-alt { background-color: #FFDE80; }
 .xar-accent { background-color: #DBFFFF; }
@@ -39,46 +39,46 @@ ul.xar-menu-section, ul.xar-menu-item, ul.xar-menu-subitem { background-color: #
 .xar-menu-section a { color: #038000; }
 
 ul li.xar-menu-section {
-	border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
+    border-color: #C7D2E2 #DBDEE2 #DBDEE2 #C7D2E2;
 }
 .xar-menu-section h4 { border-bottom: #40806B; }
 
 .xar-menu-section a:hover {
-	color: #fff;
-	background-color: #C1DCD3;
+    color: #fff;
+    background-color: #C1DCD3;
 }
 
 .xar-menu-section ul ul a {
-	color: #fff;
-	background-color: #008056;
+    color: #fff;
+    background-color: #008056;
 }
 
 .xar-menu-section ul ul a:hover {
-	color: #5A8040;
-	background-color: #DBFFFF;
+    color: #5A8040;
+    background-color: #DBFFFF;
 }
 
 
 li.xar-menu-section-current a {
-	color: #2C5858;
-	background-color: #BFFF7F;
+    color: #2C5858;
+    background-color: #BFFF7F;
 }
 
 li.xar-menu-item-current {
-	color: #2C5858;
-	background-color: #BFFE80;
+    color: #2C5858;
+    background-color: #BFFE80;
 }
 
 li li.xar-menu-subitem-current a, li.xar-menu-item-current a {
-	color: #005C00;
-	background-color: #8FCAB7;
+    color: #005C00;
+    background-color: #8FCAB7;
 }
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
 
 div#classicheader {
-	background-image: url(../images/xa_logo_green.jpg);
+    background-image: url(../images/xa_logo_green.jpg);
 }
 
 div#classicfooter {
-	background-image: url(../images/footer_bg_green.jpg);
+    background-image: url(../images/footer_bg_green.jpg);
 }

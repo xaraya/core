@@ -1,59 +1,59 @@
 body {
-	background-color: #B6A4BB;
-	color: #7a7a7a;
-	font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
-	font-size: 18px;
-	text-align: center;
-	margin: 0;
-	padding: 0;
+    background-color: #B6A4BB;
+    color: #7a7a7a;
+    font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 #wrapper {
-	margin-top: 5%;
-	width: 760px;
-	margin-right: auto;
-	margin-left: auto;
-	background-color: #ffffff;
-	background-image: url(../modules/installer/images/top.gif);
-	background-repeat: no-repeat;
+    margin-top: 5%;
+    width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #ffffff;
+    background-image: url(../modules/installer/images/top.gif);
+    background-repeat: no-repeat;
 }
 
 #main {
-	border-style: solid;
-	border-width: 1px;
-	border-color: #0f0f0f;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 70px 0 95px 0;
-	background-image: url(../modules/installer/images/bottom.gif);
-	background-repeat: no-repeat;
-	background-position: 0 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #0f0f0f;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 70px 0 95px 0;
+    background-image: url(../modules/installer/images/bottom.gif);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
 }
 
 #install { padding: 0 0 0 20px; }
 
 #status {
-	font-weight: bold;
-	float: right;
-	border-style: solid;
-	border-width: 2px;
-	border-color: #4B0A86;
-	width: 225px;
-	padding: 5px;
-	margin: 0px 20px 0px 10px;
-	text-align: left;
+    font-weight: bold;
+    float: right;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #4B0A86;
+    width: 225px;
+    padding: 5px;
+    margin: 0px 20px 0px 10px;
+    text-align: left;
 }
 
 h1,h2,h3,h4 {
-	font-family: Arial, Helvetica, Tahoma, sans-serif;
-	font-weight: bold;
-	color: #A256B8;
-	line-height: 1.2em;
-	text-align: center;
-	padding: 0 0 .4em 0;
-	margin: 0;
-	width: 460px;
-	text-shadow: -1px 3px 3px silver;
+    font-family: Arial, Helvetica, Tahoma, sans-serif;
+    font-weight: bold;
+    color: #A256B8;
+    line-height: 1.2em;
+    text-align: center;
+    padding: 0 0 .4em 0;
+    margin: 0;
+    width: 460px;
+    text-shadow: -1px 3px 3px silver;
 }
 
 h1 { font-size: 1.4em; }
@@ -62,148 +62,148 @@ h3 { font-size: 1em; }
 h4 { font-size: .8em; }
 
 p {
-	font-size: .8em;
-	text-align: left;
-	line-height: 1.5em;
+    font-size: .8em;
+    text-align: left;
+    line-height: 1.5em;
 }
 
 form p.center { text-align: center; }
 
 form label {
-	font-weight: bold;
-	margin: 0 .5em;
-	color: gray;
+    font-weight: bold;
+    margin: 0 .5em;
+    color: gray;
 }
 
 textarea#license, select#configuration {
-	width: 440px;
-	height: 13em;
-	padding: .5em;
-	font-size: .8em;
+    width: 440px;
+    height: 13em;
+    padding: .5em;
+    font-size: .8em;
 }
 
 label.block {
-	display: block;
-	padding: .5em 0;
-	clear: both;
+    display: block;
+    padding: .5em 0;
+    clear: both;
 }
 
 div.configuration {
-	width: 460px;
+    width: 460px;
 }
 
 div.simpleform {
-	float: left;
-	width: 460px;
-	padding: 0;
-	margin: 0;
-	text-align: center;
-	border: 1px solid #B6A4BB;
+    float: left;
+    width: 460px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #B6A4BB;
 }
 
 div.simpleform p {
-	width: 460px;
-	padding: .35em 0;
-	margin: 0 auto;
-	text-align: left;
-	border-bottom: #ffffff;
-	border-width: 0 0 1px 0;
-	border-style: none none solid none;
-	background-color: #f0f0f0;
+    width: 460px;
+    padding: .35em 0;
+    margin: 0 auto;
+    text-align: left;
+    border-bottom: #ffffff;
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+    background-color: #f0f0f0;
 }
 
 div.simpleform label {
-	width: 30%;
-	float: left;
-	padding: 0 .5em;
-	margin: 0;
+    width: 30%;
+    float: left;
+    padding: 0 .5em;
+    margin: 0;
 }
 
 div.simpleform input {
-	width: 30%;
-	float: left;
-	padding: 0;
-	margin: 0 .25em;
+    width: 30%;
+    float: left;
+    padding: 0;
+    margin: 0 .25em;
 }
 
 div.scroller {
-	padding: 5px;
-	margin-bottom: .5em;
-	width:440px;
-	overflow: auto;
-	height: 150px;
-	border: 1px solid black;
+    padding: 5px;
+    margin-bottom: .5em;
+    width:440px;
+    overflow: auto;
+    height: 150px;
+    border: 1px solid black;
 }
 div.scroller p, div.scroller input {
-	line-height: 1em;
-	padding: .25em 0;
-	margin: 0;
+    line-height: 1em;
+    padding: .25em 0;
+    margin: 0;
 }
 
 p.complete, p.active, p.greyed {
-	padding: 0 0 0 30px;
-	font-size: .8em;
-	line-height: 30px;
-	text-indent: 20px;
-	background-repeat: no-repeat;
-	background-position: 0 .35em;
+    padding: 0 0 0 30px;
+    font-size: .8em;
+    line-height: 30px;
+    text-indent: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 .35em;
 }
 
 .complete {
-	color: #B0B0B0;
-	text-decoration: line-through;
-	background-image: url(../modules/installer/images/completed.gif);
+    color: #B0B0B0;
+    text-decoration: line-through;
+    background-image: url(../modules/installer/images/completed.gif);
 }
 
 .active {
-	color: #8200A8;
-	background-image: url(../modules/installer/images/active.gif);
+    color: #8200A8;
+    background-image: url(../modules/installer/images/active.gif);
 }
 
 .greyed {
-	color: #B0B0B0;
-	background-image: url(../modules/installer/images/greyed.gif);
+    color: #B0B0B0;
+    background-image: url(../modules/installer/images/greyed.gif);
 }
 
 .xar-normal {
-	color: #000000;
-	font-size: .75em;
+    color: #000000;
+    font-size: .75em;
 }
 
 .xar-normal a:link {
-	color: #8200A8;
-	font-weight: bold;
-	text-decoration: underline;
+    color: #8200A8;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .xar-normal a:visited {
-	color: #4B0A86;
-	font-weight: bold;
-	text-decoration: underline;
+    color: #4B0A86;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .xar-normal a:hover {
-	color: #4B0A86;
-	font-weight: bold;
-	text-decoration: overline underline;
+    color: #4B0A86;
+    font-weight: bold;
+    text-decoration: overline underline;
 }
 
 .xar-normal a:active {
-	color: #4B0A86;
-	font-weight: bold;
-	text-decoration: overline underline;
+    color: #4B0A86;
+    font-weight: bold;
+    text-decoration: overline underline;
 }
 
 .xar-title p strong {
-	color: #4B0A86;
-	font-weight: bold;
+    color: #4B0A86;
+    font-weight: bold;
 }
 
 .xar-title p { text-align: left; }
 
 #status p {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .xar-sub { font-size: .7em; }

@@ -67,29 +67,29 @@ ________________________________________________________________________________
         <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
 
         <div id="classicheader">
-			<div id="classicthemecontrols">
-				<a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
-					<img src="#$classicthemedir#/images/txt_large.gif" id="butlg" alt="#$changetexttolarge#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetTxt('Medium classictext'); createCookie('xarayaclassic_textsize','Medium classictext',365); return false;" title="#$changetexttomedium#">
-					<img src="#$classicthemedir#/images/txt_medium.gif" id="butmd" alt="#$changetexttomedium#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetTxt('Small classictext'); createCookie('xarayaclassic_textsize','Small classictext',365); return false;" title="#$changetexttosmall#">
-					<img src="#$classicthemedir#/images/txt_small.gif" id="butsm" alt="#$changetexttosmall#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Contrast classiccolors'); createCookie('xarayaclassic_colscheme','Contrast classiccolors',365); return false;" title="#$changecoltocontrast#">
-					<img src="#$classicthemedir#/images/contrast.gif" id="butct" alt="#$changecoltocontrast#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Orange classiccolors'); createCookie('xarayaclassic_colscheme','Orange classiccolors',365); return false;" title="#$changecoltoorange#">
-					<img src="#$classicthemedir#/images/orange.gif" id="butor" alt="#$changecoltoorange#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Green classiccolors'); createCookie('xarayaclassic_colscheme','Green classiccolors',365); return false;" title="#$changecoltogreen#">
-					<img src="#$classicthemedir#/images/green.gif" id="butgr" alt="#$changecoltogreen#" />
-				</a>
-				<a href="#" onclick="setActiveStyleSheetCol('Blue classiccolors'); createCookie('xarayaclassic_colscheme','Blue classiccolors',365); return false;" title="#$changecoltoblue#">
-					<img src="#$classicthemedir#/images/blue.gif" id="butbl" alt="#$changecoltoblue#" />
-				</a>
-			</div>
+            <div id="classicthemecontrols">
+                <a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
+                    <img src="#$classicthemedir#/images/txt_large.gif" id="butlg" alt="#$changetexttolarge#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetTxt('Medium classictext'); createCookie('xarayaclassic_textsize','Medium classictext',365); return false;" title="#$changetexttomedium#">
+                    <img src="#$classicthemedir#/images/txt_medium.gif" id="butmd" alt="#$changetexttomedium#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetTxt('Small classictext'); createCookie('xarayaclassic_textsize','Small classictext',365); return false;" title="#$changetexttosmall#">
+                    <img src="#$classicthemedir#/images/txt_small.gif" id="butsm" alt="#$changetexttosmall#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetCol('Contrast classiccolors'); createCookie('xarayaclassic_colscheme','Contrast classiccolors',365); return false;" title="#$changecoltocontrast#">
+                    <img src="#$classicthemedir#/images/contrast.gif" id="butct" alt="#$changecoltocontrast#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetCol('Orange classiccolors'); createCookie('xarayaclassic_colscheme','Orange classiccolors',365); return false;" title="#$changecoltoorange#">
+                    <img src="#$classicthemedir#/images/orange.gif" id="butor" alt="#$changecoltoorange#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetCol('Green classiccolors'); createCookie('xarayaclassic_colscheme','Green classiccolors',365); return false;" title="#$changecoltogreen#">
+                    <img src="#$classicthemedir#/images/green.gif" id="butgr" alt="#$changecoltogreen#" />
+                </a>
+                <a href="#" onclick="setActiveStyleSheetCol('Blue classiccolors'); createCookie('xarayaclassic_colscheme','Blue classiccolors',365); return false;" title="#$changecoltoblue#">
+                    <img src="#$classicthemedir#/images/blue.gif" id="butbl" alt="#$changecoltoblue#" />
+                </a>
+            </div>
             <a href="&xar-baseurl;" rel="" title="#$sitename#">
                 <!-- in this theme we just use a transparent gif to overlay the logo -->
                 <img src="#$classicthemedir#/images/transparent_pix.gif" alt="#$sitename#" />
