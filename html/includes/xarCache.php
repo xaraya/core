@@ -137,14 +137,12 @@ function xarBlockIsCached($args)
 {
     global $xarPage_cacheCollection, $xarPage_cacheTime, $xarPage_cacheTheme, $xarBlock_cacheCode;
     
-    global $xarTpl_themeDir;
+    $xarTpl_themeDir = xarTplGetThemeDir();
     
     extract($args);
     
-    $factors = $xarTpl_themeDir;
-    
-    //error_log("block id = " . $blockid);
-    
+    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir;
+
     if (!isset($blockDynamics)) {
     	$blockDynamics = 1;
     }
