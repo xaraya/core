@@ -373,6 +373,7 @@ function installer_admin_create_administrator()
 
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
+    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2003 ' . $name);
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
