@@ -39,3 +39,5 @@ rs2html($rs);
 
 </body>
 </html>
+<?php
+?>

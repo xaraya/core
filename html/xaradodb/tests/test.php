@@ -1427,3 +1427,5 @@ adodb_date_test();
 <p><i>ADODB Database Library  (c) 2000-2003 John Lim. All rights reserved. Released under BSD and LGPL.</i></p>
 </body>
 </html>
+<?php
+?>

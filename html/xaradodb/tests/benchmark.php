@@ -82,3 +82,5 @@ include("testdatabases.inc.php");
 
 </body>
 </html>
+<?php
+?>
