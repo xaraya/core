@@ -197,9 +197,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Start Configuration Unit
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
-    }
 
-    xarVar_init($systemArgs, $whatToLoad);
+        xarVar_init($systemArgs, $whatToLoad);
+    }
 
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         include_once 'includes/xarMod.php';
