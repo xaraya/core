@@ -305,9 +305,16 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         } else {
             // If there are no children or no text, we can render it as is.
             $code = $node->render();
-            if(!isset($code)) xarLogVariable('offending node:', $node);
+            
+            if(!isset($code)) { 
+                xarLogVariable('offending node:', $node);
+            }
+            
             assert('isset($code); /* The rendering code for a node is not working properly */');
-            if (!isset($code))  return; // throw back
+            
+            if (!isset($code))  {
+                return; // throw back
+            }
         }
         return $code;
     }
@@ -3164,7 +3171,7 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     function render()
     {
         assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
-        if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
+        if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return false;
         // let xarTemplate worry about calling the right function :)
         return $this->tagobject->callHandler($this->attributes);
     }
