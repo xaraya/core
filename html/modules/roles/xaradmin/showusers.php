@@ -7,8 +7,8 @@ function roles_admin_showusers()
 {
     // Get parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('startnum', 'int:1:', $startnum, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase', 'str:1:', $phase, 'viewall', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase', 'str:1:', $phase, 'viewall', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     // Security Check
     if (!xarSecurityCheck('ReadRole')) return;
     // Call the Roles class and get the role
