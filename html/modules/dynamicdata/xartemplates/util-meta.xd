@@ -37,6 +37,7 @@
 <xar:else />
 
 <form>
+<div>
 <textarea name="xml" id="xml" rows="30" cols="80">
 &lt;objects&gt;
 <xar:foreach in="$tables" key="$table" value="$fields">
@@ -63,6 +64,7 @@
 </xar:foreach>
 &lt;/objects&gt;
 </textarea>
+</div>
 </form>
 <br />
 <div align="center"><a href="#xarModURL('dynamicdata','util','meta')#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>

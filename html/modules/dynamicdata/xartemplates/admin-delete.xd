@@ -14,6 +14,7 @@
 
 <div align="center">
 <form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
+    <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="objectid" id="objectid" value="#$object->objectid#" />
     <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
@@ -23,6 +24,7 @@
     <input type="submit" name="confirm" value=" #xarML('Yes')# " />
     &nbsp;&nbsp;&nbsp;&nbsp;
     <input type="submit" name="noconfirm" value="  #xarML('No')#  " />
+    </div>
 </form>
 </div>
 </div>

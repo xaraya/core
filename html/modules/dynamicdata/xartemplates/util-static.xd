@@ -29,11 +29,13 @@
     <tr>
        <td colspan="6" align="center"><br />
            <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+               <div>
                <input type="hidden" name="authid" value="#$authid#" />
                <input type="hidden" name="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" value="#$itemtype#" />
                <input type="hidden" name="table" value="#$table#" />
                <input type="submit" value=" #xarML('Import table')# #$table# ">
+               </div>
            </form>
        </td>
     <tr>
@@ -45,6 +47,7 @@
 <xar:else />
 
 <form>
+<div>
 <textarea name="xml" rows="30" cols="80">
 &lt;objects&gt;
 <xar:foreach in="$tables" key="$table" value="$fields">
@@ -71,6 +74,7 @@
 </xar:foreach>
 &lt;/objects&gt;
 </textarea>
+</div>
 </form>
 <br />
 <div align="center"><a href="#xarModURL('dynamicdata','util','static',array('modid' => $modid))#"><xar:mlstring>Show Table Definitions</xar:mlstring></a></div>

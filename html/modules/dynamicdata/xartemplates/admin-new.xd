@@ -28,6 +28,7 @@
 <xar:else />
 <form method="POST" action="#xarModURL('dynamicdata', 'admin', 'create')#">
 </xar:if>
+<div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="modid" id="modid" value="#$object->moduleid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$object->itemtype#" />
@@ -46,5 +47,6 @@
         </tr>
     </table>
 
+</div>
 </form>
 

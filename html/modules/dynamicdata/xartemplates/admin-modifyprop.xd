@@ -19,6 +19,7 @@ Tip : empty label -> delete field for all items
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
+    <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
     <input type="hidden" name="modid" id="modid" value="#$modid#" />
@@ -91,6 +92,7 @@ Tip : empty label -> delete field for all items
            <input type="submit" value="#$updatebutton#" />
         </td>
     </tr>
+</div>
 </form>
 
 </table>
@@ -142,11 +144,13 @@ Tip : empty label -> delete field for all items
        <td colspan="6" align="center">
        <xar:foreach in="$tables" value="$table">
            <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+               <div>
                <input type="hidden" name="authid" id="authid" value="#$authid#" />
                <input type="hidden" name="modid" id="modid" value="#$modid#" />
                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                <input type="hidden" name="table" id="table" value="#$table#" />
                <input type="submit" value="#xarML('Import table')# #$table#">
+               </div>
            </form>
        </xar:foreach>
        </td>
@@ -165,6 +169,7 @@ Tip : empty label -> delete field for all items
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <!-- don't accept updates for this (for now) -->
 <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+    <div>
     <tr>
        <td><b>#$labels['module']#</b></td>
        <td><b>#$labels['linktype']#</b></td>
@@ -192,6 +197,7 @@ Tip : empty label -> delete field for all items
     </xar:if>
 </xar:foreach>
 
+</div>
 </form>
 </table>
 <br />

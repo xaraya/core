@@ -8,6 +8,7 @@
 <br />
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+    <div>
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
     <tr>
@@ -47,6 +48,7 @@
            <input type="submit" value="#$updatebutton#" />
         </td>
     </tr>
+    </div>
 </form>
 
 </table>
