@@ -926,10 +926,10 @@
         // See http://phplens.com/lens/lensforum/msgs.php?id=11956
         // There is not an easy way to provide this customisation as an
         // overloaded class.
-        $save_handler = $this->connection->raiseErrorFn;
-        $this->connection->raiseErrorFn = '';
+        $save_handler = $this->raiseErrorFn;
+        $this->raiseErrorFn = '';
 		@($rs = $this->Execute($getnext));
-        $this->connection->raiseErrorFn = $save_handler;
+        $this->raiseErrorFn = $save_handler;
         // XARAYA MODIFICATION - END
 
         if (!$rs) {

@@ -25,7 +25,7 @@ class ADODB_xarpostgres7 extends ADODB_postgres7
         }
 
         // Execute the standard PGSQL driver method.
-        return ADODB_postgres64::Execute($sql, $inputarr);
+        return ADODB_postgres7::Execute($sql, $inputarr);
     }
 
     // Add some debug timings to the driver execute method.
