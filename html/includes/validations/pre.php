@@ -32,6 +32,7 @@
  * store        - prep for store (uses the default database connection for escaping quotes)
  * field:name   - name of the form field; if a validation error occurs, an error message will
  *                be generated, with the field name quoted.
+ * left:bytes   - take only the left 'bytes' number of bytes (i.e. truncate the input string)
  *
  * Examples:
  * 1. Get a trimmed, lower-case string between 5 and 10 characters long:
@@ -76,44 +77,22 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         // The first switch is for rules that require a value to be set.
         if (isset($subject)) {
             switch ($param) {
-                case 'trim' :
-                    $subject = trim($subject);
-                    break;
-
-                case 'upper' :
-                    $subject = strtoupper($subject);
-                    break;
-
-                case 'lower' :
-                    $subject = strtolower($subject);
-                    break;
-
-                case 'html' :
-                    $subject = xarVarPrepHTMLDisplay($subject);
-                    break;
-
-                case 'display' :
-                    $subject = xarVarPrepForDisplay($subject);
-                    break;
+                case 'trim' : $subject = trim($subject); break;
+                case 'upper' : $subject = strtoupper($subject); break;
+                case 'lower' : $subject = strtolower($subject); break;
+                case 'html' : $subject = xarVarPrepHTMLDisplay($subject); break;
+                case 'display' : $subject = xarVarPrepForDisplay($subject); break;
 
                 case 'store' :
                 case 'sql' :
-                    // Preparing for use in a quoted SQL string.
+                    // Preparing for use as a quoted SQL string.
                     $dbconn =& xarDBGetConn();
                     $subject = $dbconn->qstr($subject);
                     break;
 
-                case 'alpha' :
-                    $subject = preg_replace('/[^a-z]+/i', '', $subject);
-                    break;
-
-                case 'alnum' :
-                    $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
-                    break;
-
-                case 'num' :
-                    $subject = preg_replace('/[^0-9]+/i', '', $subject);
-                    break;
+                case 'alpha' : $subject = preg_replace('/[^a-z]+/i', '', $subject); break;
+                case 'alnum' : $subject = preg_replace('/[^a-z0-9]+/i', '', $subject); break;
+                case 'num' : $subject = preg_replace('/[^0-9]+/i', '', $subject); break;
 
                 case 'vtoken' :
                     // Variable-name compatible token.
@@ -153,53 +132,64 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     }
                     break;
 
+                case 'left' :
+                    // Truncate the string to 'n' bytes.
+                    if (!empty($parameters)) {
+                        $trimvalue = array_shift($parameters);
+                        if (!empty($trimvalue) && is_numeric($trimvalue)) {
+                            $subject = substr($subject, 0, $trimvalue);
+                        }
+                    }
+                    break;
+
                 default: break;
             } // switch
-        }
 
-        // The second switch is for rules that don't require a value to be set.
-        switch ($param) {
-            case 'trim' :
-            case 'upper' :
-            case 'lower' :
-            case 'html' :
-            case 'display' :
-            case 'store' :
-            case 'sql' :
-            case 'alpha' :
-            case 'alnum' :
-            case 'num' :
-            case 'vtoken' :
-            case 'ftoken' :
-            case 'field' :
-                break;
+            // The second switch is for rules that don't require a value to be set.
+            switch ($param) {
+                case 'trim' :
+                case 'upper' :
+                case 'lower' :
+                case 'html' :
+                case 'display' :
+                case 'store' :
+                case 'sql' :
+                case 'alpha' :
+                case 'alnum' :
+                case 'num' :
+                case 'vtoken' :
+                case 'ftoken' :
+                case 'field' :
+                case 'left' :
+                    break;
 
-            case 'field' :
-                if (!empty($parameters)) {
-                    $fieldname = array_shift($parameters);
-                }
-                break;
+                case 'field' :
+                    if (!empty($parameters)) {
+                        $fieldname = array_shift($parameters);
+                    }
+                    break;
 
-                // Assume an unrecognised option refers to an alternative validation
-                // type, making 'passthru' redundant. Doing it this way simplifies the
-                // validation, so fetching a string 'str:1:20' can be trimmed by adding
-                // a simple prefix - 'pre:trim:str:1:20'
-                // Put the current parameter back onto the parameters stack, as we will now
-                // be treating it as the passthru validation type.
-            default:
-                array_unshift($parameters, $param);
-            case 'passthru' :
-            case 'val' :
-                if (!empty($parameters)) {
-                    // Roll up the remaining parameters.
-                    $validation = implode(':', $parameters);
-                    $return = xarVarValidate($validation, $subject, $supress_soft_exc);
-                }
+                    // Assume an unrecognised option refers to an alternative validation
+                    // type, making 'passthru' redundant. Doing it this way simplifies the
+                    // validation, so fetching a string 'str:1:20' can be trimmed by adding
+                    // a simple prefix - 'pre:trim:str:1:20'
+                    // Put the current parameter back onto the parameters stack, as we will now
+                    // be treating it as the passthru validation type.
+                default:
+                    array_unshift($parameters, $param);
+                case 'passthru' :
+                case 'val' :
+                    if (!empty($parameters)) {
+                        // Roll up the remaining parameters.
+                        $validation = implode(':', $parameters);
+                        $return = xarVarValidate($validation, $subject, $supress_soft_exc);
+                    }
 
-                // The passthru validation consumes all further parameters, so clear
-                // them here to complete the loop.
-                $parameters = array();
-                break;
+                    // The passthru validation consumes all further parameters, so clear
+                    // them here to complete the loop.
+                    $parameters = array();
+                    break;
+            }
         }
     }
     
