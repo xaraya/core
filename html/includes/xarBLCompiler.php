@@ -428,6 +428,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $result;
     }
         
+    function canBeChild(&$node)
+    {
+        if (!$node->hasChildren()) {
+            $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have children.", $node);
+            return;
+        }
+        return true;
+    }
+    
     /**
      * parseNode
      * 
@@ -459,11 +468,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $xarToken = $this->getNextToken(3);
                             if ($nextToken . $xarToken == XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM) {
                                 // <xar: tag
-                                if (!$parent->hasChildren()) {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
-                                    return;
-                                }   
-                            
+                                if(!$this->canbeChild($parent) return;
+                                      
                                 // Situation: [...text...]<xar:...
                                 $trimmer='xmltrim'; 
                                 // If we're in native php tags which always have xar children, trim it
@@ -660,10 +666,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Check for xar entity
                     $nextToken = $this->getNextToken(4);
                     if ($nextToken == 'xar-') {
-                            if (!$parent->hasChildren()) {
-                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
-                                return;
-                            }
+                        if(!$this->canbeChild($parent) return;
+
                         // Add text to parent
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
@@ -713,10 +717,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $this->getNextToken(); // eat the matching #
                         $instruction = $between;
                     
-                        if (!$parent->hasChildren()) {
-                            $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
-                            return;
-                        }
+                        if(!$this->canbeChild($parent) return;
+
                         // Add text to parent, if applicable
                         // Situation: [...text...]#$....# or [...text...]#xarFunction()#
                         $trimmer='noop'; 
