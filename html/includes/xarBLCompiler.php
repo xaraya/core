@@ -39,6 +39,7 @@ define('XAR_TOKEN_CDATA_END'         , ']]'     ); // CDATA end marker
 define('XAR_TOKEN_VAR_START'         , '$'    );       // Start of a variable
 define('XAR_TOKEN_CI_DELIM'          , '#'    );       // Delimiter for variables, functions and other the CI stands for Code Item
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );       // Our own default namespace prefix
+define('XAR_FUNCTION_PREFIX'         , 'xar'  );       // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout'); // Default name of the root tag
 
 /**
@@ -569,8 +570,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             break 2; // done
                         case XAR_TOKEN_CDATA_START:
                             // Treat it as text
-                            // FIXME: total hack here, we dont check whether it ends properly for example, let's give the client
-                            // that problem for now
+                            // FIXME: CDATA should really be skipped, but our RSS theme depends on the resolving inside
                             $token = XAR_TOKEN_TAG_START . XAR_TOKEN_NONMARKUP_START .  $buildup;
                             break 3;
                         }
@@ -692,9 +692,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $nextToken = $this->getNextToken();
 
                 // Break out of processing if # is escaped as ##
-                if ($nextToken == XAR_TOKEN_CI_DELIM) {
-                    break;
-                }
+                if ($nextToken == XAR_TOKEN_CI_DELIM) break;
+                
                 // Break out of processing if nextToken is (, because #(.) is used by MLS
                 if ($nextToken == '(') {
                     $token .= '(';
@@ -705,9 +704,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     // Check if we have a function in here
                     if($nextToken == 'x'){
                         $temptoken = $nextToken . $this->getNextToken(2);
-                        if($temptoken == 'xar'){
+                        if($temptoken == XAR_FUNCTION_PREFIX){
                             $tagcounter = 0;
-                            $func = 'xar';
+                            $func = XAR_FUNCTION_PREFIX;
                             while(1) {
                                 $tagtoken = $this->getNextToken();
                                 $tagcounter++;
@@ -715,7 +714,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $func .= $tagtoken;
                             }
                             // Only allow xar* functions
-                            if(!function_exists($func) && substr($func,0,3) != 'xar'){
+                            if(!function_exists($func) && substr($func,0,3) != XAR_FUNCTION_PREFIX ){
                                 $this->raiseError(XAR_BL_INVALID_TAG,"Invalid or disallowed API call: $func", $this);
                                 return;
                             }
@@ -754,8 +753,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         } elseif ($nextToken == XAR_TOKEN_CI_DELIM) {
                             // We seem to be at the end, stop here.
                             break;
-                        }
-                        elseif ($this->peek() == chr(10)) {
+                        } elseif ($this->peek() == chr(10)) {
                             $this->stepBack($distance);
                             $this->raiseError(XAR_BL_INVALID_TAG,"Misplaced '". XAR_TOKEN_CI_DELIM .
                                               "' character. To print the literal '".XAR_TOKEN_CI_DELIM.
@@ -779,7 +777,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         $this->raiseError(XAR_BL_INVALID_TAG, "Injected PHP detected in: $instruction", $this);
                         return;
                     }
-                    // Instruction is now set to $varname of xFunction(.....)
+                    // Instruction is now set to $varname or xarFunction(.....)
                     $node = $this->nodesFactory->createTplInstructionNode($instruction, $this);
                     if (!isset($node)) return; // throw back
 
@@ -1184,7 +1182,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             return $node;
         }
 
-        $this->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '". XAR_TOKEN_CI_DELIM .
+        $this->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent or invalid instruction '". XAR_TOKEN_CI_DELIM .
                           "$instruction" . XAR_TOKEN_CI_DELIM . "'.", $parser);
         return;
     }
