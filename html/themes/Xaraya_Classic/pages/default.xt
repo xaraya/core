@@ -36,20 +36,20 @@
                 <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
                     <td id="leftmenus">
                         <div id="leftmenuswrapper">
-                            <div id="iewintablefixer">
+                            <div class="iewintablefixer">
                                 #$leftblocksgroup#
                             </div>
                         </div>
                     </td>
                     <td id="maincontent">
-                        <div id="iewintablefixer">
+                        <div class="iewintablefixer">
                             #$centerblocksgroup#
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                     <td id="rightmenus">
                         <div id="rightmenuswrapper">
-                            <div id="iewintablefixer">
+                            <div class="iewintablefixer">
                                 #$rightblocksgroup#
                             </div>
                         </div>
@@ -57,34 +57,34 @@
                 <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
                     <td id="leftmenus">
                         <div id="leftmenuswrapper">
-                            <div id="iewintablefixer">
+                            <div class="iewintablefixer">
                                 #$leftblocksgroup#
                             </div>
                         </div>
                     </td>
                     <td id="maincontent">
-                        <div id="iewintablefixer">
+                        <div class="iewintablefixer">
                             #$centerblocksgroup#
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                 <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
                     <td id="maincontent">
-                        <div id="iewintablefixer">
+                        <div class="iewintablefixer">
                             #$centerblocksgroup#
                             <xar:module class="modulespace" main="true" />
                         </div>
                     </td>
                     <td id="rightmenus">
                         <div id="rightmenuswrapper">
-                            <div id="iewintablefixer">
+                            <div class="iewintablefixer">
                                 #$rightblocksgroup#
                             </div>
                         </div>
                     </td>
                 <xar:else />
                     <td id="maincontent">
-                        <div id="iewintablefixer">
+                        <div class="iewintablefixer">
                             #$centerblocksgroup#
                             <xar:module class="modulespace" main="true" />
                         </div>
