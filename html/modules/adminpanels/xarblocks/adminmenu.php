@@ -72,7 +72,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     // which module is loaded atm?
     list($modName) = xarRequestGetInfo();
     
-    // Sort Order Status and Links Display.
+    // Sort Order, Status and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
     if($menustyle == 'byname'){
         // sort by name
