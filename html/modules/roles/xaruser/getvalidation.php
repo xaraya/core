@@ -34,9 +34,7 @@ function roles_user_getvalidation()
                                         'phase');
 
 
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                       xarVarPrepForDisplay(xarML('Users'))
-               .' :: '.xarVarPrepForDisplay(xarML('Validate Your Account')));
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Validate Your Account')));
 
     if (empty($phase)){
         $phase = 'startvalidation';

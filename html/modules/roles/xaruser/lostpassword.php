@@ -19,9 +19,7 @@ function roles_user_lostpassword()
        return true;
     }
 
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                       xarVarPrepForDisplay(xarML('Users'))
-               .' :: '.xarVarPrepForDisplay(xarML('Lost Password')));
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
 
     $phase = xarVarCleanFromInput('phase');
 

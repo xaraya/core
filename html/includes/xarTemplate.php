@@ -161,9 +161,32 @@ function xarTplSetPageTemplateName($templateName)
  * @param title string
  * @returns bool
  */
-function xarTplSetPageTitle($title)
+function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
-    $GLOBALS['xarTpl_pageTitle'] = $title;
+    if (!function_exists('xarModGetVar')){
+        $GLOBALS['xarTpl_pageTitle'] = $title;
+    } else {
+        $order      = xarModGetVar('themes', 'SiteTitleOrder');
+        $separator  = xarModGetVar('themes', 'SiteTitleSeparator');
+        if (empty($module)) {
+            $module = ucwords(xarModGetName());
+        }
+        switch(strtolower($order)) {
+            case 'default':
+            default:    
+                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $module . $separator . $title;
+            break;
+            case 'sp':
+                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $title;
+            break;
+            case 'mps':
+                $GLOBALS['xarTpl_pageTitle'] = $module . $separator . $title . $separator .  xarModGetVar('themes', 'SiteName');
+            break;
+            case 'pms':
+                $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModGetVar('themes', 'SiteName');
+            break;
+        }
+    }
     return true;
 }
 
@@ -505,11 +528,11 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         $GLOBALS['xarTpl_bodyJavaScript'] = "\n<script type=\"text/javascript\">\n{$GLOBALS['xarTpl_bodyJavaScript']}\n</script>";
     }
 
-    $tplData = array('_bl_mainModuleOutput' => $mainModuleOutput,
-                     '_bl_page_title' => $GLOBALS['xarTpl_pageTitle'],
-                     '_bl_additional_styles' => $GLOBALS['xarTpl_additionalStyles'],
-                     '_bl_head_javascript' => $GLOBALS['xarTpl_headJavaScript'],
-                     '_bl_body_javascript' => $GLOBALS['xarTpl_bodyJavaScript']);
+    $tplData = array('_bl_mainModuleOutput'     => $mainModuleOutput,
+                     '_bl_page_title'           => $GLOBALS['xarTpl_pageTitle'],
+                     '_bl_additional_styles'    => $GLOBALS['xarTpl_additionalStyles'],
+                     '_bl_head_javascript'      => $GLOBALS['xarTpl_headJavaScript'],
+                     '_bl_body_javascript'      => $GLOBALS['xarTpl_bodyJavaScript']);
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }

@@ -8,9 +8,7 @@ function roles_user_usermenu()
 
     $phase = xarVarCleanFromInput('phase');
 
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                       xarVarPrepForDisplay(xarML('Users'))
-               .' :: '.xarVarPrepForDisplay(xarML('Your Account Preferences')));
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
 
     if (empty($phase)){
         $phase = 'menu';

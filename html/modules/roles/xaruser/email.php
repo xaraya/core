@@ -39,8 +39,7 @@ function roles_user_email($args)
             $data['authid'] = xarSecGenAuthKey();
             $data['confirm'] = xarML('Confirm');
 
-            xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                               xarVarPrepForDisplay(xarML('Mail User')));
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Mail User')));
             break;
 
         case 'update':

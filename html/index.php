@@ -37,7 +37,7 @@ function xarMain()
     // TODO: 1
     // Line below was manually merged in, so if merge was wrong,
     // it's easy to recover
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.xarModGetVar('themes', 'SiteSlogan'));
+    xarTplSetPageTitle(xarModGetVar('themes', 'SiteSlogan'));
 
     // ANSWER <marco>: Who's gonna use that?
     // EXAMPLE <mikespub>: print, rss, wap, ...

@@ -8,17 +8,14 @@ function themes_admin_updateconfig()
 {
     // Get parameters
 
-    list($defaulttheme,
-         $sitename,
-         $slogan,
-         $footer,
-         $showtemplates,
-         $copyright) = xarVarCleanFromInput('defaulttheme',
-                                            'sitename',
-                                            'slogan',
-                                            'footer',
-                                            'showtemplates',
-                                            'copyright');
+    if (!xarVarFetch('defaulttheme','str:1:',$defaulttheme)) return;
+    if (!xarVarFetch('sitename','str:1:',$sitename,'Your Site Name',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('separator','str:1:',$separator,' :: ',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pagetitle','str:1:',$pagetitle,'default',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showtemplates','checkbox',$showtemplates,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('slogan','str:1:',$slogan,'Your Site Slogan',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('footer','str:1:',$footer,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('copyright','str:1:',$copyright,'', XARVAR_NOT_REQUIRED)) return;
 
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
@@ -27,14 +24,12 @@ function themes_admin_updateconfig()
 	if(!xarSecurityCheck('AdminTheme')) return;
 
     xarModSetVar('themes', 'SiteName', $sitename);
+    xarModSetVar('themes', 'SiteTitleSeparator', $separator);
+    xarModSetVar('themes', 'SiteTitleOrder', $pagetitle);
     xarModSetVar('themes', 'SiteSlogan', $slogan);
     xarModSetVar('themes', 'SiteCopyRight', $copyright);
     xarModSetVar('themes', 'SiteFooter', $footer);
-    if (!empty($showtemplates)) {
-        xarModSetVar('themes', 'ShowTemplates', 1);
-    } else {
-        xarModSetVar('themes', 'ShowTemplates', 0);
-    }
+    xarModSetVar('themes', 'ShowTemplates', $showtemplates);
 
     $whatwasbefore = xarModGetVar('themes', 'default');
 

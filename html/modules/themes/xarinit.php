@@ -166,6 +166,8 @@ function themes_activate()
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
     xarModSetVar('themes', 'SiteCopyRight', '2003');
+    xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
+    xarModSetVar('themes', 'SiteTitleOrder', 'default');
     xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" style="border:0px;" /></a>');
     xarModSetVar('themes', 'ShowTemplates', 0);
 

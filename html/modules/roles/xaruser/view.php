@@ -53,9 +53,7 @@ function roles_user_view()
                 return $data;
             }
 
-            xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                               xarVarPrepForDisplay(xarML('Users'))
-                       .' :: '.xarVarPrepForDisplay(xarML('Active Users')));
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Users')));
 
             break;
 
@@ -73,9 +71,7 @@ function roles_user_view()
 
             if ($items == false) return;
 
-            xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                               xarVarPrepForDisplay(xarML('Users'))
-                       .' :: '.xarVarPrepForDisplay(xarML('All Users')));
+            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Users')));
 
             break;
     }

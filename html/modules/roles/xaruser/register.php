@@ -26,9 +26,7 @@ function roles_user_register()
        return true;
     }
 
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                       xarVarPrepForDisplay(xarML('Users'))
-               .' :: '.xarVarPrepForDisplay(xarML('New Account')));
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('New Account')));
 
     $phase = xarVarCleanFromInput('phase');
 

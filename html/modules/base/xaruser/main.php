@@ -19,6 +19,8 @@ function base_user_main()
 // Security Check
     if(!xarSecurityCheck('ViewBase')) return;
 
+    xarTplSetPageTitle(xarML('Welcome'));
+
     //return the output
     return array();
 }

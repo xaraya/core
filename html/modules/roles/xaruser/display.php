@@ -36,9 +36,7 @@ function roles_user_display($args)
         $data['hooks'] = $hooks;
     }
 
-    xarTplSetPageTitle(xarModGetVar('themes', 'SiteName').' :: '.
-                       xarVarPrepForDisplay(xarML('Users'))
-               .' :: '.xarVarPrepForDisplay($data['name']));
+    xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
 
     return $data;
 }
