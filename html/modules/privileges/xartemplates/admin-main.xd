@@ -1,0 +1,8 @@
+<table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <th align="center">#$menutitle#</th>
+    </tr>
+    <tr>
+        <td>#$help#</td>
+    </tr>
+</table>

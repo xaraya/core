@@ -22,10 +22,10 @@ function initializeSetup() {
 	xarMakeUser('Anonymous','anonymous','anonymous@xaraya.com');
 	xarMakeUser('Admin','Admin','admin@xaraya.com','password');
     xarMakeGroup('Administrators');
-    xarMakeGroup('Oversight');
-	xarMakeUser('Overseer','overseer','overseer@xaraya.com','password');
+//    xarMakeGroup('Oversight');
+//	xarMakeUser('Overseer','overseer','overseer@xaraya.com','password');
     xarMakeGroup('Users');
-	xarMakeUser('User','user','user@xaraya.com','password');
+//	xarMakeUser('User','user','user@xaraya.com','password');
 //	xarMakeUser('Current','current','current@xaraya.com','password');
 
     /*********************************************************************
@@ -37,10 +37,10 @@ function initializeSetup() {
 	xarMakeRoleRoot('Everybody');
 	xarMakeRoleMemberByName('Administrators','Everybody');
 	xarMakeRoleMemberByName('Admin','Administrators');
-	xarMakeRoleMemberByName('Oversight','Everybody');
-	xarMakeRoleMemberByName('Overseer','Oversight');
+//	xarMakeRoleMemberByName('Oversight','Everybody');
+//	xarMakeRoleMemberByName('Overseer','Oversight');
 	xarMakeRoleMemberByName('Users','Everybody');
-	xarMakeRoleMemberByName('User','Users');
+//	xarMakeRoleMemberByName('User','Users');
 	xarMakeRoleMemberByName('Anonymous','Everybody');
 //	xarMakeRoleMemberByName('Current','Everybody');
 
@@ -52,21 +52,21 @@ function initializeSetup() {
 
     xarRegisterPrivilege('NoAccess','All','All','All','All',ACCESS_NONE,'The base privilege granting no access');
     xarRegisterPrivilege('Administration','All','All','All','All',ACCESS_ADMIN,'The base privilege granting full access');
-    xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
-    xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
-    xarRegisterPrivilege('DenyPrivileges','All','Privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
-    xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Roles and Privileges modules');
-    xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
-    xarRegisterPrivilege('Reading','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
+//    xarRegisterPrivilege('Oversight','All','empty','All','All',ACCESS_NONE,'The privileges for the Obersight group');
+//    xarRegisterPrivilege('DenyRoles','All','Roles','All','All',ACCESS_NONE,'Exclude access to the Roles module');
+//    xarRegisterPrivilege('DenyPrivileges','All','Privileges','All','All',ACCESS_NONE,'Exclude access to the Privileges modules');
+//    xarRegisterPrivilege('DenyRolesPrivileges','All','empty','All','All',ACCESS_NONE,'Exclude access to the Roles and Privileges modules');
+//    xarRegisterPrivilege('Editing','All','All','All','All',ACCESS_EDIT,'The base privilege granting edit access');
+//    xarRegisterPrivilege('Reading','All','All','All','All',ACCESS_READ,'The base privilege granting read access');
 
     xarRegisterPrivilege('ViewLogin','All','All','Loginblock','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All',ACCESS_OVERVIEW,'A privilege for the Anonymous user');
-    xarRegisterPrivilege('AnonView','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
+    xarRegisterPrivilege('CasualAccess','All','themes','metablock','All',ACCESS_OVERVIEW,'The base privilege for the Anonymous user');
 //    xarRegisterPrivilege('AddAll','All','All','All','All',ACCESS_ADD,'The base privilege granting add access');
 //    xarRegisterPrivilege('DeleteAll','All','All','All','All',ACCESS_DELETE,'The base privilege granting delete access');
-    xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
-    xarRegisterPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
-    xarRegisterPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
+//    xarRegisterPrivilege('ModPrivilege','All','Privileges','All','All',ACCESS_EDIT,'');
+//    xarRegisterPrivilege('AddPrivilege','All','Privileges','All','All',ACCESS_ADD,'');
+//    xarRegisterPrivilege('DelPrivilege','All','Privileges','All','All',ACCESS_DELETE,'');
 //    xarRegisterPrivilege('AdminPrivilege','All','Privileges','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Privileges for Anonymous');
 //    xarRegisterPrivilege('AdminRole','All','Roles','All','All',ACCESS_ADMIN,'A special privilege granting admin access to Roles for Anonymous');
 
@@ -79,23 +79,23 @@ function initializeSetup() {
 
 	xarMakePrivilegeRoot('NoAccess');
 	xarMakePrivilegeRoot('Administration');
-	xarMakePrivilegeRoot('Oversight');
-	xarMakePrivilegeRoot('DenyRolesPrivileges');
-	xarMakePrivilegeRoot('DenyRoles');
-	xarMakePrivilegeRoot('DenyPrivileges');
-	xarMakePrivilegeRoot('Editing');
-	xarMakePrivilegeRoot('Reading');
-	xarMakePrivilegeRoot('AnonView');
+//	xarMakePrivilegeRoot('Oversight');
+//	xarMakePrivilegeRoot('DenyRolesPrivileges');
+//	xarMakePrivilegeRoot('DenyRoles');
+//	xarMakePrivilegeRoot('DenyPrivileges');
+//	xarMakePrivilegeRoot('Editing');
+//	xarMakePrivilegeRoot('Reading');
+	xarMakePrivilegeRoot('CasualAccess');
 	xarMakePrivilegeRoot('ViewLogin');
 	xarMakePrivilegeRoot('ViewBlocks');
-	xarMakePrivilegeMember('DenyRoles','DenyRolesPrivileges');
-	xarMakePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
-	xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
-	xarMakePrivilegeMember('Administration','Oversight');
-	xarMakePrivilegeMember('DenyRolesPrivileges','Editing');
-	xarMakePrivilegeMember('DenyRolesPrivileges','Reading');
-	xarMakePrivilegeMember('ViewLogin','AnonView');
-	xarMakePrivilegeMember('ViewBlocks','AnonView');
+//	xarMakePrivilegeMember('DenyRoles','DenyRolesPrivileges');
+//	xarMakePrivilegeMember('DenyPrivileges','DenyRolesPrivileges');
+//	xarMakePrivilegeMember('DenyRolesPrivileges','Oversight');
+//	xarMakePrivilegeMember('Administration','Oversight');
+//	xarMakePrivilegeMember('DenyRolesPrivileges','Editing');
+//	xarMakePrivilegeMember('DenyRolesPrivileges','Reading');
+	xarMakePrivilegeMember('ViewLogin','CasualAccess');
+	xarMakePrivilegeMember('ViewBlocks','CasualAccess');
 
     /*********************************************************************
     * Assign the default privileges to groups/users
@@ -105,9 +105,9 @@ function initializeSetup() {
 
 	xarAssignPrivilege('NoAccess','Everybody');
 	xarAssignPrivilege('Administration','Administrators');
-	xarAssignPrivilege('Oversight','Oversight');
-	xarAssignPrivilege('AnonView','Anonymous');
-	xarAssignPrivilege('Reading','Users');
+//	xarAssignPrivilege('Oversight','Oversight');
+	xarAssignPrivilege('CasualAccess','Anonymous');
+//	xarAssignPrivilege('Reading','Users');
 
     /*********************************************************************
     * Define instances for the core modules
