@@ -1707,7 +1707,7 @@ function drawindent() {
                 $p1 = $this->normalize(count($p2) - count($p1));
             }
             if (count($p) != 5) {
-                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) #(4)',$mask->getName(),$this->getName(),implode(',',$p1),implode(',',$p2));
+                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) #(4)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1));
                 xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException($msg));
             }

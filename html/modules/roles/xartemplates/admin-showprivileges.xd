@@ -162,9 +162,13 @@
 				#$level#
 			</td>
 			<td align="right">
-				<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
-					Remove    
-				</a>
+				<xar:if condition="in_array($privid,$directassigned)">
+					<a href="#$removeurl#&amp;privid=#$privid#" title="Remove this Privilege assignment">				
+						Remove    
+					</a>
+				<xar:else />
+						not directly assigned
+				</xar:if>
 			</td>
 			</tr>
 		</xar:loop>
