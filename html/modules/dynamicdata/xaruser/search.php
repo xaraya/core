@@ -46,7 +46,7 @@ function dynamicdata_user_search()
                 }
             }
         }
-        if (!empty($q)) {
+        if (!empty($q) && count($wherelist) > 0) {
             $where = join(' or ',$wherelist);
             $numitems = 20;
             $status = 1;
