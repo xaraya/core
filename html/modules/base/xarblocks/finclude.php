@@ -42,7 +42,7 @@ function base_fincludeblock_info()
 function base_fincludeblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block','$blockinfo[title]:All:All')) return;
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"$blockinfo[title]:All:All")) return;
 
     if (empty($blockinfo['title'])){
         $blockinfo['title'] = xarML('File Include');
