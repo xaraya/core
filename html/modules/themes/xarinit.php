@@ -135,6 +135,8 @@ function themes_init()
     $res =& $dbconn->Execute($query);
     if(!$res) return;
 
+    xarModSetVar('themes', 'default', 'installer');
+
     // Initialisation successful
     return true;
 }
