@@ -394,7 +394,7 @@ function installer_admin_finish()
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockId = xarBlockTypeExists('users', 'login');
+    $loginBlockId = xarBlockTypeExists('roles', 'login');
 
     if (!isset($loginBlockId) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;

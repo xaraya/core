@@ -341,7 +341,7 @@ function privileges_init()
 	if (!$dbconn->Execute($query)) return;
 	$query = "INSERT INTO xar_acl VALUES (2,2)";
 	if (!$dbconn->Execute($query)) return;
-	$query = "INSERT INTO xar_acl VALUES (3,1)";
+	$query = "INSERT INTO xar_acl VALUES (3,2)";
 	if (!$dbconn->Execute($query)) return;
 //	$privileges->assign('AdminPrivilege','Anonymous');
 //	$privileges->assign('AdminRole','Anonymous');

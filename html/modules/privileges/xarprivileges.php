@@ -306,6 +306,7 @@ class xarMasks
 						   new DefaultUserException($msg));
         	return;
 		}
+
 // get the Roles class
 		include_once 'modules/roles/xarroles.php';
     	$roles = new xarRoles();
@@ -314,7 +315,7 @@ class xarMasks
 // an empty role means take the current user
 // TODO: what if the id is a group?
 		if ($rolename == '') {
-			$userID = xarSessionGetVar('pid');
+			$userID = xarSessionGetVar('uid');
 			if (empty($userID)) {
 				$userID = _XARSEC_UNREGISTERED;
 			}
@@ -389,7 +390,7 @@ class xarMasks
 
 // check against each mask defined for the component
 			foreach ($masks as $mask) {
-			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
+//			echo "Security check: " . $chiave->getName() . " " . $mask->getName() . " " .$chiave->implies($mask);
 				if ($chiave->implies($mask)) {
 
 // found a privilege that admits: return the privilege
@@ -400,6 +401,8 @@ class xarMasks
 // nothing found: return false
 // check if the exception needs to be caught here or not
 		if ($showexception) {
+//		echo "A".xarSessionGetVar('pid')."A".count($ancestors) . "B" . count($roles) . "b" . count($roleprivileges);exit;
+
         $msg = xarML('No privilege for modifying this item');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));

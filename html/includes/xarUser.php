@@ -174,7 +174,7 @@ function xarUserLogOut()
  */
 function xarUserIsLoggedIn()
 {
-    return xarSessionGetVar('pid') != 0;
+    return xarSessionGetVar('uid') != 0;
 }
 
 /**
@@ -274,10 +274,10 @@ function xarUserSetNavigationLocale($locale)
  * @author Marco Canini
  * @access public
  * @param name string the name of the variable
- * @param pid integer the user to get the variable for
+ * @param uid integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
  * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION, UNKNOWN, DATABASE_ERROR, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST, VARIABLE_NOT_REGISTERED
- * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('pid')) {
+ * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
  */
 function xarUserGetVar($name, $userId = NULL)
@@ -288,14 +288,14 @@ function xarUserGetVar($name, $userId = NULL)
     }
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('pid');
+        $userId = xarSessionGetVar('uid');
     }
-    if ($name == 'pid') {
+    if ($name == 'uid') {
         // User id for Anonymous is NULL, so we check later for this
         return $userId;
     }
     if ($userId == 0) {
-        // Anonymous user => only pid, name and uname allowed, for other variable names
+        // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         if ($name == 'name' || $name == 'uname') {
             return xarMLByKey('ANONYMOUS');
@@ -305,7 +305,7 @@ function xarUserGetVar($name, $userId = NULL)
     }
 
 /* TODO: #1
-    if ($userId != xarSessionGetVar('pid')) {
+    if ($userId != xarSessionGetVar('uid')) {
         // Security check
         // Here we use a trick
         // One user can make private some of its data by creating a permission with ACCESS_NONE as level
@@ -314,7 +314,7 @@ function xarUserGetVar($name, $userId = NULL)
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = xarML('No permission to get value of #(1) user variable for pid #(2).', $name, $userId);
+            $msg = xarML('No permission to get value of #(1) user variable for uid #(2).', $name, $userId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
@@ -368,7 +368,7 @@ function xarUserGetVar($name, $userId = NULL)
         }
 
         $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
-                               array('pid' => $userId,
+                               array('uid' => $userId,
                                      'name' => $name,
                                      'prop_id' => $prop_id,
                                      'prop_dtype' => $prop_dtype));
@@ -426,13 +426,13 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
-    if ($name == 'pid' || $name == 'authenticationModule') {
+    if ($name == 'uid' || $name == 'authenticationModule') {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('pid');
+        $userId = xarSessionGetVar('uid');
     }
     if ($userId == 0) {
         // Anonymous user
@@ -440,7 +440,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
     /*
     Disabled for now!
-    if ($userId != xarSessionGetVar('pid')) {
+    if ($userId != xarSessionGetVar('uid')) {
         // If you want to set a variable owned by another user
         // you must have ACCESS_EDIT permission
         // Security check
@@ -448,7 +448,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 return; // throw back
             }
-            $msg = xarML('No permission to set value of #(1) user variable for pid #(2).', $name, $userId);
+            $msg = xarML('No permission to set value of #(1) user variable for uid #(2).', $name, $userId);
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                            new SystemException($msg));
             return;
@@ -512,7 +512,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
 
     if (!xarModAPIFunc($authModName, 'user', 'set_user_variable',
-                       array('pid' => $userId,
+                       array('uid' => $userId,
                              'name' => $name,
                              'value' => $value,
                              'prop_id' => $prop_id,
@@ -623,7 +623,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  */
 function xarUser__getAuthModule($userId)
 {
-    if ($userId == xarSessionGetVar('pid')) {
+    if ($userId == xarSessionGetVar('uid')) {
         $authModName = xarSessionGetVar('authenticationModule');
         assert('isset($authModName)');
     } else {
@@ -783,7 +783,7 @@ function xarUser__getUserVarInfo($name)
  */
 function xarUser__syncUsersTableFields()
 {
-    $userId = xarSessionGetVar('pid');
+    $userId = xarSessionGetVar('uid');
     assert('$userId != 0');
 
     $authModName = xarUser__getAuthModule($userId);

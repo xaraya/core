@@ -131,7 +131,7 @@ function xarSessionGetVar($name)
  */
 function xarSessionSetVar($name, $value)
 {
-    if ($name == 'pid') {
+    if ($name == 'uid') {
         return false;
     }
 
@@ -159,7 +159,7 @@ function xarSessionSetVar($name, $value)
  */
 function xarSessionDelVar($name)
 {
-    if ($name == 'pid') {
+    if ($name == 'uid') {
         return false;
     }
 
@@ -210,10 +210,10 @@ function xarSession_setUserInfo($userId, $rememberSession)
     if (!$result) return;
 
     if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-        global $XARSVpid;
-        $XARSVpid = $userId;
+        global $XARSVuid;
+        $XARSVuid = $userId;
     } else {
-        $_SESSION['pid'] = $userId;
+        $_SESSION['uid'] = $userId;
     }
     return true;
 }
@@ -359,7 +359,7 @@ function xarSession__new($sessionId, $ipAddress)
     $query = "INSERT INTO $sessioninfoTable
                  (xar_sessid,
                   xar_ipaddr,
-                  xar_pid,
+                  xar_uid,
                   xar_firstused,
                   xar_lastused)
               VALUES
@@ -406,7 +406,7 @@ function xarSession__phpRead($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "SELECT xar_pid,
+    $query = "SELECT xar_uid,
                      xar_ipaddr,
                      xar_vars
               FROM $sessioninfoTable
@@ -417,19 +417,19 @@ function xarSession__phpRead($sessionId)
     if (!$result->EOF) {
         $GLOBALS['xarSession_isNewSession'] = false;
         if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-            global $XARSVpid;
+            global $XARSVuid;
         }
-        list($XARSVpid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
+        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
     } else {
         $GLOBALS['xarSession_isNewSession'] = true;
         // NOTE: <marco> Since it's useless to save the same information twice into
-        // the session_info table, we use a little hack: $XARSVpid will appear to be
+        // the session_info table, we use a little hack: $XARSVuid will appear to be
         // a session variable even if it's not registered as so!
         if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
-            global $XARSVpid;
-            $XARSVpid = 0;
+            global $XARSVuid;
+            $XARSVuid = 0;
         } else {
-            $_SESSION['pid'] = 0;
+            $_SESSION['uid'] = 0;
         }
         $GLOBALS['xarSession_ipAddress'] = '';
         $vars = '';
