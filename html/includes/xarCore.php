@@ -413,6 +413,7 @@ function xarCore__shutdown_handler()
  */
 function xarCoreGetVarDirPath()
 {
+    include_once("includes/xarPreCore.php");
     return xarPreCoreGetVarDirPath();
 }
 
