@@ -6,7 +6,7 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 <rss version="2.0">
 <channel>
 <title>&xar-config-sitename;</title>
-<link><?php echo pnVarPrepForDisplay(pnGetBaseURL()) ?></link>
+<link><?php echo xarVarPrepForDisplay(xarGetBaseURL()) ?></link>
 <description>&xar-config-backend_title;</description>
 <language>&xar-config-locale;</language>
 <copyright>&xar-config-copyright;</copyright>
