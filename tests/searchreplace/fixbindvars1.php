@@ -16,19 +16,32 @@ function first_replace ( $matches )
     for ($i=0; $i<$size; $i++) {
         if (!($i % 2)) {
             //Inside quotes
-            $exploded[$i] = preg_replace_callback("/\\\$[^ '\\n\\r]*/m", 'replace_inside_quotes', $exploded[$i] );
+            $exploded[$i] = preg_replace_callback("/\\{(\\\$[^ \\n\\r,]*)\\}|'(\\\$[^ \\n\\r,]*)'|(\\\$[^ \\n\\r,]*)/m", 'replace_inside_quotes', $exploded[$i] );
         } else {
             //Outside quotes
             $exploded[$i] = preg_replace_callback("/[ ]*\\.[ ]*([^\\.]*)[ ]*\\.[ ]*/m", 'replace_outside_quotes', $exploded[$i] );
         }
     }
 
-    $matches[3] = preg_replace_callback("/\\\$query/m", 'replace_result', $matches[3] );
+    $variables_list = implode(', ', $GLOBALS['variables_found']);
 
-    $result_string = $matches[1] . implode('', $exploded) . $matches[3];
+    if (count($GLOBALS['variables_found'])>1) {
+        //Remove the aestethically unpleasing ending ','
+        $variables_list = substr($variables_list, 0, -1);
+    }
 
-//    print_r($matches);
-//    print_r ($result_string);
+    //Reset Global, this shouldnt be needed, but saw problems somwhere, hack here anyways
+    $GLOBALS['variables_found'] = array();
+
+    $bindvars = "\$bindvars = array(". $variables_list .");";
+
+    $matches[5] = preg_replace("/\\\$query/m", "\\\$query, \\\$bindvars", $matches[5] );
+
+    $result_string = $matches[1] . implode('', $exploded) . $matches[3] .
+        $matches[4] . $bindvars . $matches[4] . $matches[5];
+
+    print_r($matches);
+    print_r ($result_string);
 
     //Clean everything...
     //Seems the regex in the main function is catching more than i expected, so this quick
@@ -39,22 +52,25 @@ function first_replace ( $matches )
     return $result_string;
 }
 
-function replace_result ( $matches ) {
-    array_unshift($GLOBALS['variables_found'], '$query');
-
-    return implode(', ', $GLOBALS['variables_found']);
-}
-
-
-
 function replace_inside_quotes ( $matches ) {
-    $GLOBALS['variables_found'][] = $matches[0];
+    $GLOBALS['variables_found'][] = $matches[count($matches)-1];
 
-    return '?';
+    echo "<br />";
+    print_r($matches);
+    echo "<br />";
+
+    if (substr($matches[0], 0, 1) == "'") {
+        return "'?'";
+    } else {
+        return '?';
+    }
 }
 
 function replace_outside_quotes ( $matches ) {
-    $string = preg_replace('/xarVarPrepForStore\\((.*)\\)/', "$1", $matches[1]);
+    $string = preg_replace('/xarVarPrepForStore\\((.*)\\)/i', "$1", $matches[1]);
+
+//     print_r($matches);
+//     print_r($string);
 
     $GLOBALS['variables_found'][] = $string;
 
@@ -91,14 +107,15 @@ function searchDir($path) {
                 $GLOBALS['variables_found'] = array();
 
                 $new_file_contents = preg_replace_callback(
-                     "/(\\\$query[ ]*=[ ]*\")([^;]*)(\";[^;]*\\\$result[^-]*-\\>Execute[^;]*;)/m", 'first_replace', $file_contents );
+                     "/(\\\$query[ ]*=[ ]*\")([^;]*)(\";)([^;]*)(\\\$result[^-]*-\\>Execute[ ]*\\([ ]*\\\$query[ ]*\\)[ ]*;)/m", 'first_replace', $file_contents );
 
                 if ($GLOBALS['called']) {
                     echo "Changing file $path/$entry\r\n";
+/*
                     $fp = fopen ( "$path/$entry", "w+" );
                     fwrite($fp, $new_file_contents);
                     fclose($fp);
-
+*/
                     $GLOBALS['called'] = false;
                     //Something was replaced!
                     //Exchange Contents
