@@ -64,6 +64,8 @@ function &dynamicdata_userapi_getitems($args)
     // check the optional field list
     if (empty($fieldlist)) {
         $fieldlist = null;
+    } elseif (is_string($fieldlist)) {
+        $fieldlist = explode(',',$fieldlist);
     }
 
     // limit to property fields of a certain status (e.g. active)

@@ -54,6 +54,9 @@ function &dynamicdata_userapi_getitem($args)
     // check the optional field list
     if (empty($fieldlist)) {
         $fieldlist = null;
+    } elseif (is_string($fieldlist)) {
+        // support comma-separated field list
+        $fieldlist = explode(',',$fieldlist);
     }
 
     // limit to property fields of a certain status (e.g. active)

@@ -145,52 +145,12 @@ class Dynamic_Object_Master
                 continue;
             }
 
-            // normal dynamic data field
-            if ($property->source == 'dynamic_data') {
-                $storename = '_dynamic_data_';
-                $storetype = 'data';
-
-            // data field coming from some static table
-            } elseif (preg_match('/^(\w+)\.(\w+)$/', $property->source, $matches)) {
-                $table = $matches[1];
-                $field = $matches[2];
-                $storename = $table;
-                $storetype = 'table';
-
-            // data managed by a hook/utility module
-            } elseif ($property->source == 'hook module') {
-                $storename = '_hooks_';
-                $storetype = 'hook';
-
-            // data managed by some user function (specified in validation for now)
-            } elseif ($property->source == 'user function') {
-                $storename = '_functions_';
-                $storetype = 'function';
-
-            // data available in user variables
-            } elseif ($property->source == 'user settings') {
-                // we'll keep a separate data store per module/itemtype here for now
-            // TODO: integrate user variable handling with DD
-                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype;
-                $storetype = 'uservars';
-
-            // data available in module variables
-            } elseif ($property->source == 'module variables') {
-                // we'll keep a separate data store per module/itemtype here for now
-            // TODO: integrate module variable handling with DD
-                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype;
-                $storetype = 'modulevars';
-
-            // TODO: extend with LDAP, file, ...
-            } else {
-                $storename = '_todo_';
-                $storename = 'todo';
-            }
-
+            list($storename, $storetype) = $this->property2datastore($property);
             if (!isset($this->datastores[$storename])) {
                 $this->addDataStore($storename, $storetype);
             }
             $this->properties[$name]->datastore = $storename;
+
             if (empty($this->fieldlist) || in_array($name,$this->fieldlist)) {
                 // we add this to the data store fields
                 $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
@@ -209,6 +169,56 @@ class Dynamic_Object_Master
             }
         }
         return $this->datastores;
+    }
+
+    /**
+     * Find the datastore name and type corresponding to the data source of a property
+     */
+    function property2datastore(&$property)
+    {
+        // normal dynamic data field
+        if ($property->source == 'dynamic_data') {
+            $storename = '_dynamic_data_';
+            $storetype = 'data';
+
+        // data field coming from some static table
+        } elseif (preg_match('/^(\w+)\.(\w+)$/', $property->source, $matches)) {
+            $table = $matches[1];
+            $field = $matches[2];
+            $storename = $table;
+            $storetype = 'table';
+
+        // data managed by a hook/utility module
+        } elseif ($property->source == 'hook module') {
+            $storename = '_hooks_';
+            $storetype = 'hook';
+
+        // data managed by some user function (specified in validation for now)
+        } elseif ($property->source == 'user function') {
+            $storename = '_functions_';
+            $storetype = 'function';
+
+        // data available in user variables
+        } elseif ($property->source == 'user settings') {
+            // we'll keep a separate data store per module/itemtype here for now
+        // TODO: (don't) integrate user variable handling with DD
+            $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype;
+            $storetype = 'uservars';
+
+        // data available in module variables
+        } elseif ($property->source == 'module variables') {
+            // we'll keep a separate data store per module/itemtype here for now
+        // TODO: (don't) integrate module variable handling with DD
+            $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype;
+            $storetype = 'modulevars';
+
+        // TODO: extend with LDAP, file, ...
+        } else {
+            $storename = '_todo_';
+            $storetype = 'todo';
+        }
+
+        return array($storename, $storetype);
     }
 
     /**
@@ -972,8 +982,17 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
             if (isset($this->properties[$criteria])) {
                 // pass the sort criteria to the right data store
-            // TODO: put sort criteria in fieldlist if necessary
                 $datastore = $this->properties[$criteria]->datastore;
+                // assign property to datastore if necessary
+                if (empty($datastore)) {
+                    list($storename, $storetype) = $this->property2datastore($this->properties[$criteria]);
+                    if (!isset($this->datastores[$storename])) {
+                        $this->addDataStore($storename, $storetype);
+                    }
+                    $this->properties[$criteria]->datastore = $storename;
+                    $this->datastores[$storename]->addField($this->properties[$criteria]); // use reference to original property
+                    $datastore = $storename;
+                }
                 $this->datastores[$datastore]->addSort($this->properties[$criteria],$sortorder);
                 // if we're sorting on some field, we should start querying by the data store that holds it
                 if (!isset($this->startstore)) {
@@ -1011,8 +1030,17 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
             if (isset($this->properties[$name])) {
                 // pass the where clause to the right data store
-            // TODO: put where criteria in fieldlist if necessary
                 $datastore = $this->properties[$name]->datastore;
+                // assign property to datastore if necessary
+                if (empty($datastore)) {
+                    list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
+                    if (!isset($this->datastores[$storename])) {
+                        $this->addDataStore($storename, $storetype);
+                    }
+                    $this->properties[$name]->datastore = $storename;
+                    $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
+                    $datastore = $storename;
+                }
                 $this->datastores[$datastore]->addWhere($this->properties[$name],
                                                         join(' ',$pieces),
                                                         $join);
