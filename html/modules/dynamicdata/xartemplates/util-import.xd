@@ -1,56 +1,95 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Import Object Definition</xar:mlstring></h2><br />
-<div style="margin: auto;">
-
-<p>#$warning#</p>
-
-<form method="post" action="#xarModURL('dynamicdata','util','import')#">
-<div>
-<table width="100%" border="0" cellpadding="2" cellspacing="1">
-    <tr>
-        <td style="text-align: left;">
-            <label for="basedir"><xar:mlstring>Base directory</xar:mlstring>
-        </td>
-        <td style="text-align: left;">
-            <input type="text" name="basedir" id="basedir" value="#$basedir#" size="50" maxlength="250" />
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">
-            <label for="import"><xar:mlstring>Available .xml files</xar:mlstring>
-        </td>
-        <td style="text-align: left;">
-            <select name="import" id="import">
-            <xar:foreach in="$options" value="$option">
-                <option value="#$option['id']#">#$option['name']#</option>
-            </xar:foreach>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">
-            <label for="keepitemid"><xar:mlstring>Preserve item ids if possible</xar:mlstring>
-        </td>
-        <td style="text-align: left;">
-            <input type="checkbox" name="keepitemid" id="keepitemid" value="1" />
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">
-            &nbsp;
-        </td>
-        <td style="text-align: left;">
-            <input type="submit" value="#xarML('Import Definition')#" />
-        </td>
-    </tr>
-</table>
-<br /><br />
-<xar:mlstring>Select a file in the list above, or paste the object definition in here</xar:mlstring> :<br/>
-<textarea name="xml" id="xml" rows="30" cols="80"></textarea>
+<xar:comment>
+	License: GPL http://www.gnu.org/copyleft/gpl.html 
+</xar:comment>
+<xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
+	<xar:comment>
+		no action required if external file was not added 
+	</xar:comment>
+</xar:if>
+<div class="xar-mod-head">
+	<span class="xar-mod-title">
+		<xar:mlstring>
+			Dynamic Data Administration 
+		</xar:mlstring>
+	</span>
 </div>
-</form>
-</div>
+<div class="xar-mod-body">
+	<h2>
+		<xar:mlstring>
+			Import Object Definition 
+		</xar:mlstring>
+	</h2>
+	<p>
+		#$warning# 
+	</p>
+	<form class="dd-modifyprop-form" method="post" action="#xarModURL('dynamicdata','util','import')#">
+		<fieldset>
+			<table class="xar-accent">
+				<tr>
+					<td>
+						<label class="dd-norm" for="basedir">
+							<xar:mlstring>
+								Base directory 
+							</xar:mlstring>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="basedir" id="basedir" value="#$basedir#" size="50" maxlength="250" />
+						<input type="hidden" name="authid" id="authid" value="#$authid#" />
+						<input class="dd-norm" type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="dd-norm" for="import">
+							<xar:mlstring>
+								Available .xml files 
+							</xar:mlstring>
+						</label>
+					</td>
+					<td>
+						<select name="import" id="import">
+							<xar:foreach in="$options" value="$option">
+								<option value="#$option['id']#">
+									#$option['name']# 
+								</option>
+							</xar:foreach>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="dd-norm" for="keepitemid">
+							<xar:mlstring>
+								Preserve item ids if possible 
+							</xar:mlstring>
+						</label>
+					</td>
+					<td>
+						<input class="dd-norm" type="checkbox" name="keepitemid" id="keepitemid" value="1" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&nbsp; 
+					</td>
+					<td>
+						<input class="dd-norm" type="submit" value="#xarML('Import Definition')#" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<xar:mlstring>
+							Select a file in the list above, or paste the object definition in here 
+						</xar:mlstring>
+						: 
+					</td>
+					<td>
+						<textarea name="xml" id="xml" rows="30" cols="80">
+						</textarea>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
 </div>

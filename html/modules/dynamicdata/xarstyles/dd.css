@@ -42,8 +42,22 @@ form.dd-modifyprop-form label {
     width: 20%;
 }
 
+form.dd-modifyprop-form table {
+    vertical-align: top;
+    table-layout: auto;
+    border-collapse: collapse;
+    border-spacing: 1px;
+}
+
+form.dd-modifyprop-form td {
+    vertical-align: top;
+    border: 1px solid #ffffff;
+    padding: .5em;
+}
+
 form.dd-modifyprop-form select,
-form.dd-modifyprop-form input { width: 95%; }
+form.dd-modifyprop-form input,
+form.dd-modifyprop-form textarea { width: 95%; }
 form.dd-modifyprop-form label strong { display: block; }
 form.dd-modifyprop-form .dd-norm { width: auto; }
 
