@@ -40,7 +40,7 @@
         <span class="xar-normal">Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</span><br /><br />
       </div>
       <div style="text-align:center;">
-        <input type="submit" name="create" id="create" value="Finish &gt;" />
+        <input type="submit" name="create" id="create" value="Continue &gt;" />
       </div>
     </div>
   </form>
