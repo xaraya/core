@@ -117,6 +117,15 @@ function base_menublock_display($blockinfo)
                     // FIXME: make sure we don't generate content lines with missing pieces elsewhere
                         $parts = explode('|', $contentline);
                         $url = $parts[0];
+                        switch ($url[0])
+                        {
+                            case '[': // module link
+                            {
+                                $url = explode(':', substr($url, 1,  - 1));
+                                $url = 'index.php?module='.$url[0];
+                                break;
+                            }
+                        }
                         $title = $parts[1];
                         $comment = $parts[2];
                         $child = isset($parts[3]) ? $parts[3] : '';
