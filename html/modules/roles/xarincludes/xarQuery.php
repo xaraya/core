@@ -19,7 +19,6 @@ class xarQuery
     var $fields;
     var $conditions;
     var $conjunctions;
-    var $implicitconjunction = "AND";
     var $bindings;
     var $sorts;
     var $result;
@@ -31,10 +30,15 @@ class xarQuery
     var $dbconn;
     var $statement;
     var $israwstatement = 0;
-    var $usebinding = 0;
     var $bindvars;
     var $bindstring;
     var $limits = 1;
+
+// Flags
+// Set to true to use binding variables supported by some dbs
+    var $usebinding = true;
+// Two unrelated conditions will be inserted into the query as AND or OR
+    var $implicitconjunction = "AND";
 
 //---------------------------------------------------------
 // Constructor
@@ -69,7 +73,12 @@ class xarQuery
     {
         $this->setstatement($statement);
         if ($this->type != 'SELECT') {
-            $result = $this->dbconn->Execute($this->statement);
+            if ($this->usebinding) {
+                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+            }
+            else {
+                $result = $this->dbconn->Execute($this->statement);
+            }
             if(!$result) return;
             $this->rows = $result->_numOfRows;
             return true;
@@ -80,7 +89,12 @@ class xarQuery
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
         }
         else {
-            $result = $this->dbconn->Execute($this->statement);
+            if ($this->usebinding) {
+                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+            }
+            else {
+                $result = $this->dbconn->Execute($this->statement);
+            }
             $this->rows = $result->_numOfRows;
         }
         if (!$result) return;
@@ -636,17 +650,16 @@ class xarQuery
             if (count($this->fields) == 0) return "*";
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    $f .= $field['name'];
-                    $f .= (isset($field['alias']) && $field['alias'] != '') ? " AS " . $field['alias'] . ", " : ", ";
+                    $this->bindstring .= $field['name'];
+                    $this->bindstring .= (isset($field['alias']) && $field['alias'] != '') ? " AS " . $field['alias'] . ", " : ", ";
                 }
                 else {
-                    $f .= $field . ", ";
+                    $this->bindstring .= $field . ", ";
                 }
             }
-            if ($f != "") $f = trim($f," ,");
+            if ($this->bindstring != "") $this->bindstring = trim($this->bindstring," ,");
             break;
         case "INSERT" :
-            $f .= " (";
             $this->bindstring .= " (";
             $names = '';
             $values = '';
@@ -654,29 +667,34 @@ class xarQuery
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
-                        if (gettype($field['value']) == 'string') {
-                            $sqlfield = $this->dbconn->qstr($field['value']);
+                        $names .= $field['name'] . ", ";
+                        if ($this->usebinding) {
+                            $bindvalues .= "?, ";
+                            $this->bindvars[] = $field['value'];
                         }
                         else {
-                            $sqlfield = $field['value'];
+                            if (gettype($field['value']) == 'string') {
+                                $sqlfield = $this->dbconn->qstr($field['value']);
+                            }
+                            else {
+                                $sqlfield = $field['value'];
+                            }
+                            $values .= $sqlfield . ", ";
                         }
-                        $names .= $field['name'] . ", ";
-                        $values .= $sqlfield . ", ";
-                        $bindvalues .= "?, ";
-                        $this->bindvars[] = $sqlfield;
                     }
                 }
                 else {
-//                    $f .= $field . ", ";
                 }
             }
             $names = substr($names,0,strlen($names)-2);
-            $values = substr($values,0,strlen($values)-2);
-            $f .= $names . ") VALUES (" . $values;
-            $f .= ")";
-            $bindvalues = substr($bindvalues,0,strlen($values)-2);
-            $this->bindstring = $names . ") VALUES (" . $bindvalues;
-            $this->bindstring .= ")";
+            if ($this->usebinding) {
+                $bindvalues = substr($bindvalues,0,strlen($bindvalues)-2);
+                $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
+            }
+            else {
+                $values = substr($values,0,strlen($values)-2);
+                $this->bindstring .= $names . ") VALUES (" . $values . ")";
+            }
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
@@ -685,28 +703,31 @@ class xarQuery
             }
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    if(isset($field['name']) && isset($field['value']))
-                        if (gettype($field['value']) == 'string') {
-                            $sqlfield = $this->dbconn->qstr($field['value']);
+                    if(isset($field['name']) && isset($field['value'])) {
+                        if ($this->usebinding) {
+                            $this->bindstring .= $field['name'] . " = ?, ";
+                            $this->bindvars[] = $field['value'];
                         }
                         else {
-                            $sqlfield = $field['value'];
+                            if (gettype($field['value']) == 'string') {
+                                $sqlfield = $this->dbconn->qstr($field['value']);
+                            }
+                            else {
+                                $sqlfield = $field['value'];
+                            }
+                            $this->bindstring .= $field['name'] . " = " . $sqlfield . ", ";
                         }
-                    $f .= $field['name'] . " = " . $sqlfield . ", ";
-                    $this->bindstring .= $field['name'] . " = ?, ";
-                    $this->bindvars[] = $sqlfield;
+                    }
                 }
                 else {
-//                    $f .= $field . ", ";
                 }
             }
-            if ($f != "") $f = substr($f,0,strlen($f)-2);
             if ($this->bindstring != "") $this->bindstring = substr($this->bindstring,0,strlen($this->bindstring)-2);
             break;
         case "DELETE" :
             break;
         }
-        return $f;
+        return $this->bindstring;
     }
     function assembledconditions()
     {
@@ -883,7 +904,7 @@ class xarQuery
     function qecho()
     {
         $this->setstatement();
-        if ($usebinding) $this->bindstatement();
+        if ($this->usebinding) $this->bindstatement();
         echo $this->getstatement();
     }
     function bindstatement()
@@ -892,7 +913,13 @@ class xarQuery
         $bound = $pieces[0];
         $limit = count($pieces);
         for ($i=1;$i<$limit;$i++){
-            $bound .= $this->bindvars[i] . $pieces[i];
+            if (gettype($this->bindvars[$i-1]) == 'string') {
+                $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
+            }
+            else {
+                $sqlfield = $this->bindvars[$i-1];
+            }
+            $bound .= $sqlfield . $pieces[$i];
         }
         $this->statement = $bound;
     }
