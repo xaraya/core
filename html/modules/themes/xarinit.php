@@ -136,7 +136,7 @@ function themes_init()
     if(!$res) return;
 
     xarModSetVar('themes', 'default', 'installer');
-
+    xarModSetVar('themes', 'selsort', 'nameasc');
     // Initialisation successful
     return true;
 }
