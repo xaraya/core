@@ -257,7 +257,6 @@ TD.xar-alt {}
    font-family: Verdana,Arial,Helvetica,sans-serif;
    margin-left: 4px;
    padding-left: 0px;
-   margin-right: .5em;
 }
 .xar-menu-subitem:hover {
    background-color: #CDD5F8;
@@ -269,7 +268,6 @@ TD.xar-alt {}
    font-size: 10px;
    margin-left: 4px;
    padding-left: 0px;
-   margin-right: .5em;
 }
 .xar-menu-item-current > .xar-menu-subitem > A {
    color: #193970;
