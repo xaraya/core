@@ -1,0 +1,8 @@
+<item>
+<title>#$title#</title>
+<link>#$link#</link>
+<author>#$author#</author>
+<pubDate>#$date#</pubDate>
+<description><?php $summary = preg_replace('<br />',"\n",$summary); echo xarVarPrepForDisplay(strip_tags($summary)); ?></description>
+<comments><?php if (!empty($comments)) { $url = xarModURL('comments','user','display',array('modid' => xarModGetIDFromName('articles'),'objectid' => $aid)); echo xarVarPrepForDisplay($url); } ?></comments>
+</item>
