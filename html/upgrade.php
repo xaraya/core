@@ -1167,34 +1167,63 @@ Password : %%password%%
         }
     }
 
-    // Bug 630, let's throw the reminder back up after upgrade.
-
-    $now = time();
-
-    $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
-    $varshtml['expire'] = $now + 24000;
-    $msg = serialize($varshtml);
-
-    $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                   array('module'  => 'base',
-                                         'type'    => 'html'));
-
-    if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return;
+    // If output caching if enabled, check to see if the table xar_cache_blocks exists.
+    // If it does not exist, disable output caching so that xarcachemanager can be upgraded.
+    echo "<h5>Checking xarCache State</h5>";
+    $varCacheDir = xarCoreGetVarDirPath() . '/cache';
+    if (file_exists($varCacheDir . '/output/cache.touch')) {
+        echo "Output caching enabled, checking for required table...<br/>";
+        $dbconn =& xarDBGetConn();
+        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
+        $blockscachetable = xarDBGetSiteTablePrefix() . '_cache_blocks';
+        $tables = $datadict->getTables();
+        // look for the required table
+        if (array_search($blockscachetable, $tables) == false) {
+            echo "The required " . $blockscachetable . " table is not available.<br/>";
+            echo "Disabling output caching...<br/>";
+            if (unlink($varCacheDir . '/output/cache.touch')) {
+                echo "...done.<br/>";
+            } else {
+                echo "...Failed to remove \"" . $varCacheDir . "/output/cache.touch\".  Please remove this file by hand. <br/>";
+            }
+        } else {
+            echo "Required table is present.<br/>";
+        }
+    } else {
+        echo "Output caching is not enabled.<br/>";
     }
 
-    $htmlBlockTypeId = $htmlBlockType['tid'];
+    // Bug 630, let's throw the reminder back up after upgrade.
 
-    if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                       array('title'    => 'Reminder',
-                             'name'     => 'reminder',
-                             'content'  => $msg,
-                             'type'     => $htmlBlockTypeId,
-                             'groups'   => array(array('gid'      => 1,
-                                                       'template' => '')),
-                             'template' => '',
-                             'state'    => 2))) {
-        return;
+    if (!xarModAPIFunc('blocks', 'user', 'getall', array('name' => 'reminder'))) {
+
+        $now = time();
+
+        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
+        $varshtml['expire'] = $now + 24000;
+        $msg = serialize($varshtml);
+
+        $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                       array('module'  => 'base',
+                                             'type'    => 'html'));
+
+        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+        $htmlBlockTypeId = $htmlBlockType['tid'];
+
+        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                           array('title'    => 'Reminder',
+                                 'name'     => 'reminder',
+                                 'content'  => $msg,
+                                 'type'     => $htmlBlockTypeId,
+                                 'groups'   => array(array('gid'      => 1,
+                                                           'template' => '')),
+                                 'template' => '',
+                                 'state'    => 2))) {
+            return;
+        }
     }
 
 ?>

@@ -9,6 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @param args[$bid] optional block instance ID
+ * @param args[$name] optional block instance name
  *
  * @subpackage Blocks administration
  * @author Jim McDonald, Paul Rosania
@@ -20,6 +21,7 @@ function blocks_userapi_getall($args)
 
     // Check parameters.
     if (!empty($bid) && !xarVarValidate('int:1:', $bid)) {return;}
+    if (!empty($name) && !xarVarValidate('str', $name)) {return;}
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -46,6 +48,9 @@ function blocks_userapi_getall($args)
 
     if (!empty($bid)) {
         $query .= ' WHERE inst.xar_id = ' . $bid;
+    }
+    if (!empty($name)) {
+        $query .= ' WHERE inst.xar_name = \'' . $name . '\'';
     }
 
     // Return if no details retrieved.
