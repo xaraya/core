@@ -1,8 +1,8 @@
 <img src="themes/installer/images/step2_header.png" style="border:0px;width:758px;height:223px;" alt="Xaraya Installation: Step Two" /><br />
 <div style="padding:10px;">
   <span class="xar-pagetitle">Step Two : License Agreement</span><br /><br /><br />
-	<div style="text-align:center;"><span class="xar-pagetitle">Our License</span><br /><br />
-	  <div style="text-align:justify;padding:0% 23% 0% 23%;">
+      <div style="text-align:center;"><span class="xar-pagetitle">Our License</span><br /><br />
+      <div style="text-align:justify;padding:0% 23% 0% 23%;">
       <span class="xar-normal">Please read through the GNU General Public License. Xaraya is developed as free software, but there are certain requirements for redistribution and modification.
       <br /><br />
       This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.<br /><br />
@@ -97,16 +97,16 @@ END OF TERMS AND CONDITIONS
 
     </textarea>
     <br /><br />
-		<form action="install.php" method="post">
-		<p class="xar-normal">
+        <form action="install.php" method="post">
+        <p class="xar-normal">
       <input type="hidden" name="install_language" id="install_language" value="#$language#" />
       <input type="hidden" name="install_phase" id="install_phase" value="3" />
       <input type="radio" name="agree" value="agree" />I have read and agree to abide by the Terms and Conditions as stated above<br />
       <input type="radio" name="agree" value="disagree" checked="checked" />I have read and do <b>NOT</b> agree to abide by the Terms and Conditions as stated above<br /><br />
-		</p>
+        </p>
     <div style="text-align:center;"><input type="submit" value="Next Step &gt;" /></div>
     </form>
-		</div>
+        </div>
   </div>
 </div><br /><br />
 <div style="text-align:center;padding:5px;"><span class="xar-sub">Thank you for trying Xaraya.</span></div>

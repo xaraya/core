@@ -5,26 +5,38 @@
 	  <div style="text-align:center;">
     <input type="hidden" name="install_language" value="#$language#" />
       <div style="text-align:justify;padding:0% 23% 0% 23%;">
-			  <span class="xar-normal">For Xaraya to function properly, the installer must write your database information to the <?php echo $systemConfigFile; ?> file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</span><br /><br />
+              <span class="xar-normal">For Xaraya to function properly, the installer must write your database information to the #$systemConfigFile# file.  If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.</span><br /><br />
         <span class="xar-title">
+         <xar:if condition="$metRequiredPHPVersion">
+            SUCCESS: PHP Version is greater than 4.1.2. Your PHP Version is #$phpVersion#.
+          <xar:else />
+            FAILURE: PHP Version is less than 4.1.2. Your PHP Version is #$phpVersion#. Please upgrade PHP.
+          </xar:if>
+          <br />
           <xar:if condition="$systemConfigIsWritable">
             SUCCESS: The installer can write to the configuration file.
           <xar:else />
-            FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the <?php echo $systemConfigFile; ?>  file.
+            FAILURE: The installer cannot write to the configuration file. Please verify that your webserver has write access to the #$systemConfigFile#  file.
+          </xar:if>
+          <br />
+          <xar:if condition="$cacheTemplatesIsWritable">
+            SUCCESS: The installer can write to the #$cacheTemplatesDir# directory.
+          <xar:else />
+            FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.
           </xar:if>
         </span><br /><br />
-			</div>
-			<div style="text-align:center;">
+            </div>
+            <div style="text-align:center;">
         <span class="xar-normal">
-          <xar:if condition="$systemConfigIsWritable">
+          <xar:if condition="$systemConfigIsWritable && $cacheTemplatesIsWritable">
             <input type="hidden" name="install_phase" id="install_phase" value="4" />
             <input type="submit" value="Next Step &gt;" />
           <xar:else />
             <input type="hidden" name="install_phase" id="install_phase" value="3" />
             <input type="submit" value="Check Again &gt;" />
           </xar:if>
-				</span>
-			</div>
+            </span>
+            </div>
 	  </div>
   </form>
 </div><br /><br />	
