@@ -1223,7 +1223,7 @@ class xarTpl__NodesFactory
         // TODO: is xarTplRegisterTag still supposed to work for this ?
         //If we get here, the tag doesn't exist so we raise a user exception
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_TAG',
-                       new xarTpl__ParserError("Cannot instantiate unexistent tag '$tagName'.", $parser));
+                       new xarTpl__ParserError("Cannot instantiate nonexistent tag '$tagName'.", $parser));
         return;
     }
 
@@ -1265,7 +1265,7 @@ class xarTpl__NodesFactory
         // FIXME: how do you handle new entities registered by module developers ?
         // TODO: how do you register new entities in the first place ?
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY',
-                       new xarTpl__ParserError("Cannot instantiate unexistent entity '$entityType'.", $parser));
+                       new xarTpl__ParserError("Cannot instantiate nonexistent entity '$entityType'.", $parser));
         return;
     }
 
@@ -1288,7 +1288,7 @@ class xarTpl__NodesFactory
         }
 
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_INSTRUCTION',
-                       new xarTpl__ParserError("Cannot instantiate non-existent instruction '#$instruction#'.", $parser));
+                       new xarTpl__ParserError("Cannot instantiate nonexistent instruction '#$instruction#'.", $parser));
         return;
     }
 

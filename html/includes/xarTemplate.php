@@ -46,10 +46,10 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
-        xarCore_die("xarTpl_init: Unexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
+        xarCore_die("xarTpl_init: Nonexistent theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     if (!xarTplSetPageTemplateName('default')) {
-        xarCore_die("xarTpl_init: Unexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
+        xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '$GLOBALS[xarTpl_themeDir]'.");
     }
     
     if ($GLOBALS['xarTpl_cacheTemplates']) {
