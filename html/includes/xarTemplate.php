@@ -990,7 +990,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Load cached template file    
     ob_start();
     $res = include $cachedFileName;
-    $tplOutput = ob_get_clean();
+    $tplOutput = ob_get_contents();
+    ob_end_clean();
     
     // flag used to determine if the header content has been found.
     static $headerContentFound;
