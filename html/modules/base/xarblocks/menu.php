@@ -110,7 +110,7 @@ function base_menublock_display($blockinfo)
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
-    $currenturl = preg_replace('/&/', '&amp;', xarServerGetCurrentURL());
+    $currenturl = str_replace('&', '&amp;', xarServerGetCurrentURL());
 
     // Added Content For non-modules list.
     if (!empty($vars['content'])) {
@@ -171,7 +171,7 @@ function base_menublock_display($blockinfo)
                         } else {
                             $cids = array();
                         }
-                        $catid = preg_replace('/_/','',$catid);
+                        $catid = str_replace('_', '', $catid);
                         $ancestors = xarModAPIFunc('categories','user','getancestors',
                                                   array('cid' => $catid,
                                                         'cids' => $cids,
@@ -306,8 +306,8 @@ function base_menublock_display($blockinfo)
     }
 
     //$meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
-    $rssurl         = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'rss')));
-    $printurl       = preg_replace('/&/', "&amp;$1", xarServerGetCurrentURL(array('theme' => 'print')));
+    $rssurl         = str_replace('&', '&amp;', xarServerGetCurrentURL(array('theme' => 'rss')));
+    $printurl       = str_replace('&', '&amp;', xarServerGetCurrentURL(array('theme' => 'print')));
 
     if (isset($vars['displayprint'])) {
         $displayprint = $vars['displayprint'];
