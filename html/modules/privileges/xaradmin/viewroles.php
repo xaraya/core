@@ -35,6 +35,9 @@ function privileges_admin_viewroles()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
+    include_once 'modules/privileges/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     $data['pname'] = $priv->getName();
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
@@ -44,7 +47,7 @@ function privileges_admin_viewroles()
                              'admin',
                              'removerole',
                              array('pid'=>$pid));
-    $data['trees'] = $privs->drawtrees($data['show']);
+    $data['trees'] = $renderer->drawtrees($data['show']);
     return $data;
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',

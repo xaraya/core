@@ -15,9 +15,13 @@ function roles_admin_viewroles()
 // Call the Roles class
 // should be static, but apparently not doable in php?
     $roles = new xarRoles();
+
+    include_once 'modules/roles/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
 // Load Template
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $roles->drawtree($roles->maketree());
+    $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
 }
 

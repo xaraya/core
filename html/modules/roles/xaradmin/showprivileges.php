@@ -82,6 +82,9 @@ function roles_admin_showprivileges()
     }
     $currentprivileges = array_reverse($currentprivileges);
 
+    include_once 'modules/roles/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     // Load Template
     $data['pname'] = $role->getName();
     $data['ptype'] = $role->getType();
@@ -99,7 +102,7 @@ function roles_admin_showprivileges()
     $data['groupurl'] = xarModURL('roles',
                              'admin',
                              'showprivileges');
-    $data['tree'] = $roles->drawtree($roles->maketree());
+    $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
 
     // redirect to the next page

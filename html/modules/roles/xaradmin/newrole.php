@@ -69,8 +69,11 @@ function roles_admin_newrole()
     if(isset($pparentid)) {$data['pparentid'] = $pparentid;}
     else {$data['pparentid'] = 1;}
 
+    include_once 'modules/roles/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $roles->drawtree($roles->maketree());
+    $data['tree'] = $renderer->drawtree($renderer->maketree());
     $data['groups'] = $groups;
     return $data;
 }

@@ -90,8 +90,11 @@ function privileges_admin_newprivilege()
         $data['instances'] = $instances;
     }
 
+    include_once 'modules/privileges/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     $data['authid'] = xarSecGenAuthKey();
-    $data['trees'] = $privs->drawtrees($data['show']);
+    $data['trees'] = $renderer->drawtrees($data['show']);
     $data['realms'] = $privs->getrealms();
     $data['modules'] = $privs->getmodules();
     $data['privileges'] = $privileges;

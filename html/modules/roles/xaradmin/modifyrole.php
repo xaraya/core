@@ -65,11 +65,14 @@ function roles_admin_modifyrole()
     if(isset($pstate)) {$data['pstate'] = $pstate;}
     else {$data['pstate'] = $role->getState();}
 
+    include_once 'modules/roles/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     $data['uid'] = $uid;
     $data['groups'] = $groups;
     $data['parents'] = $parents;
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $roles->drawtree($roles->maketree());
+    $data['tree'] = $renderer->drawtree($renderer->maketree());
     return $data;
 }
 

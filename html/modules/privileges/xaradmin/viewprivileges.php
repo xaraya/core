@@ -21,8 +21,11 @@ function privileges_admin_viewprivileges()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
+    include_once 'modules/privileges/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
+
     $data['authid'] = xarSecGenAuthKey();
-    $data['trees'] = $privs->drawtrees($data['show']);
+    $data['trees'] = $renderer->drawtrees($data['show']);
     return $data;
 }
 

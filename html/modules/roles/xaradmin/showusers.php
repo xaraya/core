@@ -93,8 +93,10 @@ function roles_admin_showusers()
                                     'email'=>$user->getEmail());
     }
 
-    // Load Template
+    include_once 'modules/roles/xartreerenderer.php';
+    $renderer = new xarTreeRenderer();
 
+    // Load Template
     $data['pname'] = $role->getName();
     $data['uid'] = $uid;
     $data['users'] = $users;
@@ -103,7 +105,7 @@ function roles_admin_showusers()
                              'admin',
                              'deleterole',
                              array('roleid'=>$uid));
-    $data['tree'] = $roles->drawtree($roles->maketree());
+    $data['tree'] = $renderer->drawtree($renderer->maketree());
     $filter['startnum'] = '%%';
     $filter['uid'] = $uid;
     $data['pager'] = xarTplGetPager($startnum,
