@@ -39,7 +39,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -84,7 +84,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -128,7 +128,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -199,7 +199,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
 
@@ -240,7 +240,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
         $dynamicdata = $xartable['dynamic_data'];
 
         // easy case where we already know the items we want
@@ -447,7 +447,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
         $dynamicdata = $xartable['dynamic_data'];
 
         $propids = array_keys($this->fields);
@@ -546,7 +546,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $dbconn =& xarDBGetConn(0);
-        $xartable = xarDBGetTables();
+        $xartable =& xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
