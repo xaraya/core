@@ -41,8 +41,8 @@
 	<xar:if condition="isset($properties) and count($properties) gt 0">
 	    <xar:foreach in="$properties" key="$name">
 			<tr>
-				<td><label for="$properties[$name]"><xar:data-label property="$properties[$name]" />:</label></td>
-				<td><xar:data-input property="$properties[$name]" /></td>
+				<td><label for="#$properties[$name]#"><xar:data-label property="#$properties[$name]#" />:</label></td>
+				<td><xar:data-input property="#$properties[$name]#" /></td>
 			</tr>
 	    </xar:foreach>
 	</xar:if>
