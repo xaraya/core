@@ -29,6 +29,10 @@
                  	<td align="left"><input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" /></td>
                	</tr>
                	<tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_password1">Password Again</label></span></td>
+                 	<td align="left"><input type="password" name="install_admin_password1" id="install_admin_password1" maxlength="80" value="" /></td>
+               	</tr>
+               	<tr>
                	  <td align="left"><span class="xar-normal"><label for="install_admin_email">Email</label></span></td>
                  	<td align="left"><input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" /></td>
                	</tr>

@@ -368,12 +368,17 @@ function installer_admin_create_administrator()
     if (!xarVarFetch('install_admin_username','str:1:100',$userName)) return;
     if (!xarVarFetch('install_admin_name','str:1:100',$name)) return;
     if (!xarVarFetch('install_admin_password','str:4:100',$pass)) return;
-    //if (!xarVarFetch('install_confirm_password','str:4:100',$pass)) return;
+    if (!xarVarFetch('install_admin_password1','str:4:100',$pass1)) return;
     if (!xarVarFetch('install_admin_email','str:1:100',$email)) return;
 
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 
+    if ($pass != $pass1) {
+        $msg = xarML('The passwords do not match');
+        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        return;
+    } 
 
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $adminuid,
