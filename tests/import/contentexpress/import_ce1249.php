@@ -345,7 +345,8 @@ exit;
 // Parent id = -1 at start to start with root CE categories
 // categ_parent is set to te current Category ID, if 0 $contentexpress root is used
 
-function walk_ce_menutree($parent_id, $categ_parent = 0) {
+function walk_ce_menutree($parent_id, $categ_parent = 0) 
+{
 
     GLOBAL $dbconn, $oldprefix, $contentexpress, $ce_menus;
 
@@ -400,7 +401,8 @@ function walk_ce_menutree($parent_id, $categ_parent = 0) {
 // Depending on the user selection, child articles are stored as
 // separated articles or concatenated into one.
 
-function walk_ce_articletree ($parent, $latest_ok_category, $cat_string) {
+function walk_ce_articletree ($parent, $latest_ok_category, $cat_string) 
+{
 
     GLOBAL $dbconn, $oldprefix, $contentexpress, $ce_menus, $subarticles;
 
