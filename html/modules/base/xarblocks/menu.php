@@ -146,6 +146,9 @@ function base_menublock_display($blockinfo)
 
                 // prepare the data for template(s)
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
+                if (empty($indlinks)){
+                    $indlinks = '';
+                }
                 $data = xarTplBlock('base','sidemenu', array('usermods'     => $usermods, 
                                                              'indlinks'     => $indlinks,
                                                              'logouturl'     => $logouturl,

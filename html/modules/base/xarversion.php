@@ -3,7 +3,7 @@
 $modversion['name'] = 'Base';
 $modversion['id'] = '68';
 $modversion['version'] = '0.1';
-$modversion['description'] = 'Holds core blocks';
+$modversion['description'] = 'Home Page';
 $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
 $modversion['changelog'] = 'xardocs/changelog.txt';
