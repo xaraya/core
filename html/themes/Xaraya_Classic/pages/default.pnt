@@ -26,9 +26,9 @@
     </tr>
 <!--
     <tr>
-        <td align="center" colspan="3">
+        <td align="center" colspan="3">-->
             <!--pnt:blockgroup name="top" id="top" /-->
-        </td>
+        <!--</td>
     </tr>
 -->
 </table>
@@ -36,17 +36,38 @@
 
 <!-- start body -->
 
-<table width="100%" border=0 cellpadding=2 cellspacing=0>
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
     <tr>
-        <td width="20%" align=left valign=top>
-            <pnt:blockgroup name="left" id="left" />
+        <td width="18%" align=left valign=top>
+            <table width="100%" border=0 cellpadding=0 cellspacing=0>
+                <tr>
+                    <td bgcolor="#f0f0f0">
+                        <pnt:blockgroup name="left" id="left" />
+                    </td>
+                </tr>
+                <tr height=200>
+                    <td background="themes/Xaraya_Classic/images/sideline.gif">
+                        <img src="themes/Xaraya_Classic/images/dot.gif">
+                    </td>
+                </tr>
+            </table> 
+        <td width="1%" background="themes/Xaraya_Classic/images/vline.gif">   
         </td>
         <td width="60%" class=main_copy valign=top>
             <pnt:blockgroup name="center" id="center" />
             <pnt:module id="modulespace" main="true" />
         </td>
-        <td width="20%" align=left valign=top>
+        <td width="1%">   
+        </td>
+        <td width="20%" align=left valign=top background="themes/Xaraya_Classic/images/side_all.gif">
             <pnt:blockgroup name="right" id="right" />
+        </td>
+    </tr>
+</table>
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
+    <tr>
+        <td align=right bgcolor="#f0f0f0">
+            <b>&pnt-config-slogan;</b>
         </td>
     </tr>
 </table>
