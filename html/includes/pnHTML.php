@@ -55,7 +55,7 @@ define('_PNH_PARSEINPUT', 1);
  * the site administrator.
  *
  *
- * <B>Example</B>
+ * <b>Example</b>
  * <pre>
  * // Information array
  * $colors = array(array('id' => 1,
