@@ -397,9 +397,9 @@ $mask =  $this->getMask($mask);
 // add some info on the group they belong to and stick it all in an array
                 $groupname = $ancestor->getName();
                 $grouplevel = $ancestor->getLevel();
-                array_push($final,array('privileges'=>$privileges,
+                $final[] = array('privileges'=>$privileges,
                                     'name'=>$groupname,
-                                    'level'=>$grouplevel));
+                                    'level'=>$grouplevel);
             }
 
 // winnow all privileges of a given level above the role
@@ -1534,58 +1534,70 @@ function drawindent() {
         }
 
         if($comparing) {
+            $thisrealm = strtolower($this->getRealm());
+            $maskrealm = strtolower($mask->getRealm());
             if (!(
-                ($this->getRealm() == 'All') ||
-                ($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+                ($thisrealm == 'all') ||
+                ($thisrealm == 'none') && ($maskrealm != 'all')
             ))
             {return false;}
 
+            $thismodule = strtolower($this->getModule());
+            $maskmodule = strtolower($mask->getModule());
             if (!(
-                ($this->getModule() == $mask->getModule()) ||
-                ($this->getModule() != 'All') && ($mask->getModule() == 'All')
+                ($thismodule == $maskmodule) ||
+                ($thismodule != 'all') && ($maskmodule == 'all')
             ))
             {return false;}
 
+            $thiscomponent = strtolower($this->getComponent());
+            $maskcomponent = strtolower($mask->getComponent());
             if (!(
-                ($this->getComponent() == $mask->getComponent()) ||
-                ($this->getComponent() != 'All') && ($mask->getComponent() == 'All')
+                ($thiscomponent == $maskcomponent) ||
+                ($thiscomponent != 'all') && ($maskcomponent == 'all')
             ))
             {return false;}
 
             for ($i=0;$i<count($instance1);$i++) {
                 if (!(
-                    ($instance1[$i] == $instance2[$i]) ||
-                    ($instance1[$i] != 'All') && ($instance2[$i] == 'All')
+                    (strtolower($instance1[$i]) == strtolower($instance2[$i])) ||
+                    (strtolower($instance1[$i]) != 'all') && (strtolower($instance2[$i]) == 'all')
                 ))
                 {return false;}
             }
         }
         else {
+            $thisrealm = strtolower($this->getRealm());
+            $maskrealm = strtolower($mask->getRealm());
             if (!(
-                ($this->getRealm() == 'All') ||
-                ($this->getRealm() == 'None') && ($mask->getRealm() != 'All')
+                ($thisrealm == 'all') ||
+                ($thisrealm == 'none') && ($maskrealm != 'all')
             ))
             {return false;}
 
+            $thismodule = strtolower($this->getModule());
+            $maskmodule = strtolower($mask->getModule());
             if (!(
-                ($this->getModule() == $mask->getModule()) ||
-                ($mask->getModule() == 'All') ||
-                ($this->getModule() == 'All') && ($mask->getModule() != 'None')
+                ($thismodule == $maskmodule) ||
+                ($maskmodule == 'all') ||
+                ($thismodule == 'all') && ($maskmodule != 'none')
             ))
             {return false;}
 
+            $thiscomponent = strtolower($this->getComponent());
+            $maskcomponent = strtolower($mask->getComponent());
             if (!(
-                ($this->getComponent() == $mask->getComponent()) ||
-                ($mask->getComponent() == 'All') ||
-                ($this->getComponent() == 'All') && ($mask->getComponent() != 'None')
+                ($thiscomponent == $mask->getComponent()) ||
+                ($maskcomponent == 'all') ||
+                ($thiscomponent == 'all') && ($maskcomponent != 'none')
             ))
             {return false;}
 
             for ($i=0;$i<count($instance1);$i++) {
                 if (!(
-                    ($instance1[$i] == $instance2[$i]) ||
-                    ($instance2[$i] == 'All') ||
-                    ($instance1[$i] == 'All') && ($instance2[$i] != 'None')
+                    (strtolower($instance1[$i]) == strtolower($instance2[$i])) ||
+                    (strtolower($instance2[$i]) == 'all') ||
+                    (strtolower($instance1[$i]) == 'all') && (strtolower($instance2[$i]) != 'none')
                 ))
                 {return false;}
             }
