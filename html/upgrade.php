@@ -1216,8 +1216,29 @@ if (empty($step)) {
 
     // If output caching if enabled, check to see if the table xar_cache_blocks exists.
     // If it does not exist, disable output caching so that xarcachemanager can be upgraded.
-    echo "<h5>Checking xarCache State</h5>";
-    $varCacheDir = xarCoreGetVarDirPath() . '/cache';
+    echo "<h5>Checking for and adding the xarCache block cache table</h5>";
+    $dbconn =& xarDBGetConn();
+    $xartable =& xarDBGetTables();
+    $cacheblockstable = xarDBGetSiteTablePrefix() . '_cache_blocks';
+    $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
+    $flds = "
+        xar_bid             I           NotNull DEFAULT 0,
+        xar_nocache         L           NotNull DEFAULT 0,
+        xar_page            L           NotNull DEFAULT 0,
+        xar_user            L           NotNull DEFAULT 0,
+        xar_expire          I           Null
+    ";  
+    // Create or alter the table as necessary.
+    $result = $datadict->changeTable($cacheblockstable, $flds);    
+    if (!$result) {return;}
+    // Create a unique key on the xar_bid collumn
+    $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',
+                                     $cacheblockstable,
+                                     'xar_bid',
+                                     array('UNIQUE'));
+    echo "...done.<br/>";
+    
+  /*$varCacheDir = xarCoreGetVarDirPath() . '/cache'; 
     if (file_exists($varCacheDir . '/output/cache.touch')) {
         echo "Output caching enabled, checking for required table...<br/>";
         $dbconn =& xarDBGetConn();
@@ -1238,7 +1259,8 @@ if (empty($step)) {
         }
     } else {
         echo "Output caching is not enabled.<br/>";
-    } // Done with xarCache state check
+    } */ 
+    // Done with xarCache state check
 
     // Bug 1798 - Rename davedap module to phpldapmodule
     $regId = 1651;

@@ -38,34 +38,29 @@ function xarBlockIsCached($args)
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
         $dbconn =& xarDBGetConn();
-        $tables = $dbconn->MetaTables();
-        if (in_array($blocksettings, $tables)) {
-            $query = "SELECT xar_bid,
-                             xar_nocache,
-                             xar_page,
-                             xar_user,
-                             xar_expire
-                     FROM $blocksettings";
-            $result =& $dbconn->Execute($query);
-            if ($result) {
-                $blocks = array();
-                while (!$result->EOF) {
-                    list ($bid,
-                          $noCache,
-                          $pageShared,
-                          $userShared,
-                          $blockCacheExpireTime) = $result->fields;
-                    $blocks[$bid] = array('bid'         => $bid,
-                                          'nocache'     => $noCache,
-                                          'pageshared'  => $pageShared,
-                                          'usershared'  => $userShared,
-                                          'cacheexpire' => $blockCacheExpireTime);
-                    $result->MoveNext();
-                }
-                $result->Close();
-            } else {
-                $blocks = 'noSettings';
+        $query = "SELECT xar_bid,
+                         xar_nocache,
+                         xar_page,
+                         xar_user,
+                         xar_expire
+                 FROM $blocksettings";
+        $result =& $dbconn->Execute($query);
+        if ($result) {
+            $blocks = array();
+            while (!$result->EOF) {
+                list ($bid,
+                      $noCache,
+                      $pageShared,
+                      $userShared,
+                      $blockCacheExpireTime) = $result->fields;
+                $blocks[$bid] = array('bid'         => $bid,
+                                      'nocache'     => $noCache,
+                                      'pageshared'  => $pageShared,
+                                      'usershared'  => $userShared,
+                                      'cacheexpire' => $blockCacheExpireTime);
+                $result->MoveNext();
             }
+            $result->Close();
         } else {
             $blocks = 'noSettings';
         }
