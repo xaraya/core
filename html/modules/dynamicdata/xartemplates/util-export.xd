@@ -17,14 +17,14 @@
     </form>
 
     <xar:if condition="!empty($formlink)">
-    	<p class="xar-align-center">
-	        <a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>
-	    </p>
+        <p class="xar-align-center">
+            <a href="#$formlink#"><xar:mlstring>Export Data for all Items to Browser</xar:mlstring></a>
+        </p>
     </xar:if>
 
     <xar:if condition="!empty($filelink)">
-		<p class="xar-align-center">
-	        <a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>
-	    </p>
+        <p class="xar-align-center">
+            <a href="#$filelink#"><xar:mlstring>Export Data for all Items to File</xar:mlstring></a>
+        </p>
     </xar:if>
 </div>

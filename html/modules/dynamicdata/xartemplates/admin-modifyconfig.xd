@@ -12,11 +12,11 @@
     </p>
 
     <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
-		<div class="xar-align-center">
-	        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	        <input type="hidden" name="flushPropertyCache" value="true" />
-	        <input type="submit" value="Flush Property Cache" />
-	    </div>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="flushPropertyCache" value="true" />
+            <input type="submit" value="Flush Property Cache" />
+        </div>
     </form>
 
     <xar:comment>
@@ -67,10 +67,10 @@
             </xar:foreach>
         </table>
         <p>
-        	<xar:mlstring>Add a new Property Type using the fields below.</xar:mlstring>
+            <xar:mlstring>Add a new Property Type using the fields below.</xar:mlstring>
         </p>
 
-		<table class="xar-fullwidth">
+        <table class="xar-fullwidth">
             <tr>
                 <th>
                     #$labels['id']# 
@@ -107,9 +107,9 @@
             </tr>
         </table>
 
-		<div class="xar-align-center">
-		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-		    <input type="submit" value="#xarML('Update Property Types')#" />
-		</div>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="submit" value="#xarML('Update Property Types')#" />
+        </div>
     </form>
 </div>

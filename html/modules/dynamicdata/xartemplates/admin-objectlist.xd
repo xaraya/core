@@ -10,18 +10,18 @@
 <xar:if condition="empty($layout) or $layout eq 'list' or $layout eq 'default'">
     <div class="xar-fullwidth">
         <xar:if condition="!empty($newlink)">
-        	</p>
-	            <a href="#$newlink#">
-	                <xar:mlstring>Create New</xar:mlstring>
-	             </a>
-	         </p>
+            <p>
+                <a href="#$newlink#">
+                    <xar:mlstring>Create New</xar:mlstring>
+                 </a>
+            </p>
         </xar:if>
-		<xar:comment>
-		we don't use xar:data-form or xar:data-input here, because this is typically not an input form
-		</xar:comment>
-		<p>
-			<xar:mlstring>(Click column headers to sort)</xar:mlstring>
-		</p>
+        <xar:comment>
+        we don't use xar:data-form or xar:data-input here, because this is typically not an input form
+        </xar:comment>
+        <p>
+            <xar:mlstring>(Click column headers to sort)</xar:mlstring>
+        </p>
 
         <table class="xar-fullwidth">
             <tr>
@@ -32,13 +32,13 @@
                         </a>
                     </th>
                 </xar:foreach>
-            	<th>
-            		<xar:mlstring>Actions</xar:mlstring>
-            	</th>
+                <th>
+                    <xar:mlstring>Actions</xar:mlstring>
+                </th>
             </tr>
-	        <xar:foreach in="$items" key="$itemid" value="$fields">
+            <xar:foreach in="$items" key="$itemid" value="$fields">
                 <tr>
-	                <xar:foreach in="$properties" key="$name">
+                    <xar:foreach in="$properties" key="$name">
                         <td class="xar-nowrap">
                             <xar:if condition="!empty($fields[$name])">
                                 <xar:data-output property="$properties[$name]" value="$fields[$name]" />
@@ -47,7 +47,7 @@
                             </xar:if>
                         </td>
                     </xar:foreach>
-					<td class="xar-align-center xar-nowrap">
+                    <td class="xar-align-center xar-nowrap">
                         <xar:foreach in="$links[$itemid]" value="$option">
                             <xar:if condition="!empty($option['olink'])">
                                 #$option['ojoin']# 
@@ -55,12 +55,12 @@
                                     #$option['otitle']# 
                                 </a>
                             <xar:else />
-                                #$option['ojoin']# #$option['otitle']# 
+                                #$option['ojoin']# #$option['otitle']#
                             </xar:if>
-						</xar:foreach>
+                        </xar:foreach>
                      </td>
-				</tr>
-	        </xar:foreach>
+                </tr>
+            </xar:foreach>
         </table>
     </div>
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
@@ -92,9 +92,9 @@
                 </xar:foreach>
             </td>
         </tr>
-		<xar:comment>
-		for this layout, we'll use xar:data-input here
-		</xar:comment>
+        <xar:comment>
+        for this layout, we'll use xar:data-input here
+        </xar:comment>
         <xar:foreach in="$items" key="$itemid" value="$fields">
             <tr>
                 <td>
@@ -135,9 +135,9 @@
             </xar:if>
         </p>
     </xar:if>
-	<xar:comment>
-	TODO: multi-column output
-	</xar:comment>
+    <xar:comment>
+    TODO: multi-column output
+    </xar:comment>
 <xar:elseif condition="$layout eq 'table'"/>
     <div class="xar-fullwidth">
         <h4>
@@ -156,7 +156,7 @@
                     <xar:set name="colspan">count($properties)+2</xar:set>
                     <th style="text-align: left;" colspan="#$colspan#">
                         <a href="#$newlink#">
-                        	<xar:mlstring>Create New</xar:mlstring>
+                            <xar:mlstring>Create New</xar:mlstring>
                         </a>
                     </th>
                 </tr>
@@ -279,10 +279,10 @@
         </p>
     </xar:if>
 <xar:else />
-	<p>
-	    <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    <p>
+        <xar:mlstring>Specify your own layout here...</xar:mlstring>
     </p>
     <p>
-	    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+        <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
     </p>
 </xar:if>

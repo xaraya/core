@@ -51,7 +51,7 @@
             <xar:mlstring>Available tags: (replace 'users', '&#36;uidlist' and '&#36;uid' with your own)</xar:mlstring>
         </p>
 
-		<pre>
+        <pre>
 <code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module,
      and their value for all items listed in &#36;uidlist. You'll need to build
      that uid list in your module function and pass it along to the template</xar:mlstring> --&gt;
@@ -68,16 +68,16 @@
 &lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;uid, 
  formatted for input</xar:mlstring> --&gt;
 &lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;uid][&#36;name]" /&gt;</code>
-		</pre> 
+        </pre> 
         <p>
             <xar:mlstring>Sample use:</xar:mlstring>
         </p>
 
-		<p>
-	        <xar:mlstring>(somewhere near the beginning of your template)</xar:mlstring>
-	    </p>
+        <p>
+            <xar:mlstring>(somewhere near the beginning of your template)</xar:mlstring>
+        </p>
 
-		<pre>
+        <pre>
 <code>&lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
 &lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
 &lt;xar:data-getitems name="&#36;properties" values="&#36;values" module="users" 
@@ -104,7 +104,7 @@
             <xar:mlstring>(when you're looping over the individual items, and you want to add the dynamic values for item &#36;uid)</xar:mlstring>
         </p>
 
-		<pre>
+        <pre>
 <code>    &lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
     &lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
     &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
@@ -126,7 +126,7 @@
             <xar:mlstring>If you want to show a standard list of items, with all the dynamic properties that are defined for that object.</xar:mlstring>
         </p>
 
-		<pre>
+        <pre>
 <code>&lt;xar:data-view module="example" /&gt;
 
 &lt;xar:data-view module="example" linkfield="name" /&gt;
@@ -149,7 +149,7 @@
 &lt;xar:data-view object="&#36;mylist" /&gt;</code>
 </pre> 
 
-	<p>
+    <p>
         <xar:mlstring>Idem for</xar:mlstring>
     </p>
 
@@ -174,9 +174,9 @@
 &lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;uid" /&gt;</code>
 </pre> 
 
-		<p>
-	        <xar:mlstring>(where you want to add the dynamic labels and values for this item)</xar:mlstring>
-		</p>
+        <p>
+            <xar:mlstring>(where you want to add the dynamic labels and values for this item)</xar:mlstring>
+        </p>
 
 <pre>
 <code>&lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;

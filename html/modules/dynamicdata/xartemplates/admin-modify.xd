@@ -1,91 +1,91 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:ml>
-			<xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
-			<xar:mlvar>#$object:itemid#</xar:mlvar>
-			<xar:mlvar>#$object:label#</xar:mlvar>
-		</xar:ml>
-	</h2>
+    <h2>
+        <xar:ml>
+            <xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
+            <xar:mlvar>#$object:itemid#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
+        </xar:ml>
+    </h2>
 
-	<xar:if condition="!empty($objectid) and $objectid eq 1">
-		<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-		</xar:if>
-		<div>
-			<dl class="xar-tabs">
-				<dt class="help">
-					<xar:mlstring>Options:</xar:mlstring>
-				</dt>
-		        <dd>
-		        	<a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
-		        </dd>
-		        <dd>
-		        	<a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a>
-		        </dd>
-		        <dd>
-		        	<a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>
-		        </dd>
-			</dl>
-		</div>
-	</xar:if>
+    <xar:if condition="!empty($objectid) and $objectid eq 1">
+        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+        </xar:if>
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help">
+                    <xar:mlstring>Options:</xar:mlstring>
+                </dt>
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>
+                </dd>
+            </dl>
+        </div>
+    </xar:if>
 
-	<h3>
-		<xar:mlstring>Preview</xar:mlstring>
-	</h3>
+    <h3>
+        <xar:mlstring>Preview</xar:mlstring>
+    </h3>
 
     <xar:data-display object="$object" />
 
-	<xar:set name="isupload">#$object:upload#</xar:set>
-	<xar:if condition="!empty($isupload)">
-	    <xar:set name="enc_type">'multipart/form-data'</xar:set>
-	<xar:else/> 
-	    <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-	</xar:if>
+    <xar:set name="isupload">#$object:upload#</xar:set>
+    <xar:if condition="!empty($isupload)">
+        <xar:set name="enc_type">'multipart/form-data'</xar:set>
+    <xar:else/> 
+        <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+    </xar:if>
 
-	<form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
+    <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
 
         <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
-	        <h3 class="xar-align-center">
-	        	<xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
-	        </h3>
-	        	
-	        <p>
-	        	<xar:mlstring>Trying to modify this object may break the Dynamic Data module. Proceed with caution.</xar:mlstring>
-	        </p>
-		</xar:if>
+            <h3 class="xar-align-center">
+                <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
+            </h3>
+                
+            <p>
+                <xar:mlstring>Trying to modify this object may break the Dynamic Data module. Proceed with caution.</xar:mlstring>
+            </p>
+        </xar:if>
 
-	    <table class="xar-fullwidth" border="2">
-	        <!-- this does most of the hard work :) -->
-	        <xar:data-form object="$object" />
-	    </table>
+        <table class="xar-fullwidth" border="2">
+            <!-- this does most of the hard work :) -->
+            <xar:data-form object="$object" />
+        </table>
 
-		<xar:if condition="!empty($hooks)">
-			<div>
-				#$hooks#
-			</div>
-		</xar:if>
+        <xar:if condition="!empty($hooks)">
+            <div>
+                #$hooks#
+            </div>
+        </xar:if>
 
-		<div class="xar-align-center">
-		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-		    <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
-		    <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
-		    <input type="hidden" name="join" id="join" value="#$object:join#" />
-		    <input type="hidden" name="table" id="table" value="#$object:table#" />
-		    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
+            <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+            <input type="hidden" name="join" id="join" value="#$object:join#" />
+            <input type="hidden" name="table" id="table" value="#$object:table#" />
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
             <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
             <input type="submit" value="#xarML('Update')#" class="xar-margin-thickleft" />
-		</div>
+        </div>
 
-		<xar:if condition="!empty($objectid) and $objectid eq 2">
-			<p>
-			    <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
-			    	<xar:mlstring>Edit validation</xar:mlstring>
-			    </a>
-			</p>
-		</xar:if>
+        <xar:if condition="!empty($objectid) and $objectid eq 2">
+            <p>
+                <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                    <xar:mlstring>Edit validation</xar:mlstring>
+                </a>
+            </p>
+        </xar:if>
 
-	</form>
+    </form>
 </div>

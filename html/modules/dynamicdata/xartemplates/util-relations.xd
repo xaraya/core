@@ -8,68 +8,68 @@
     </h2>
 
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
-		<div class="xar-form-input-wrapper">
-		    <label for="modid" class="xar-form-label">
-		        <xar:mlstring>Module:</xar:mlstring>
-		    </label>
-	        <xar:data-input type="module" name="modid" value="$modid" />
-		</div>
-		<div class="xar-form-input-wrapper-after">
-	        <input type="submit" name="select" id="select" value="#xarML('Select')#" />
-		</div>
+        <div class="xar-form-input-wrapper">
+            <label for="modid" class="xar-form-label">
+                <xar:mlstring>Module:</xar:mlstring>
+            </label>
+            <xar:data-input type="module" name="modid" value="$modid" />
+        </div>
+        <div class="xar-form-input-wrapper-after">
+            <input type="submit" name="select" id="select" value="#xarML('Select')#" />
+        </div>
     </form>
 
     <xar:if condition="!empty($modid)">
-    	<xar:if condition="count($relations) gt 0">
-	        <table class="xar-clearboth">
-	            <tr>
-	                <th>
-	                    <xar:mlstring>Module</xar:mlstring>
-	                </th>
-	                <th>
-	                    <xar:mlstring>Link Type</xar:mlstring>
-	                </th>
-	                <th>
-	                    <xar:mlstring>From</xar:mlstring>
-	                </th>
-	                <th>
-	                    <xar:mlstring>To</xar:mlstring>
-	                </th>
-	            </tr>
-	    
-	            <xar:foreach in="$relations" value="$relation">
-	                <xar:if condition="count($relation['links']) gt 0">
-	                    <xar:foreach in="$relation['links']" value="$link">
-	                        <tr>
-	                            <td>#$relation['module']#</td>
-	                            <td>#$link['type']#</td>
-	                            <td>#$link['from']#</td>
-	                            <td>#$link['to']#</td>
-	                        </tr>
-	                    </xar:foreach>
-	                <xar:else />
-	                    <tr>
-	                        <td>
-	                            #$relation['module']#
-	                        </td>
-	                        <td>
-	                            (<xar:mlstring>not found</xar:mlstring>)
-	                        </td>
-	                        <td>
-	                            -
-	                        </td>
-	                        <td>
-	                            (<xar:mlstring>not found</xar:mlstring>)
-	                        </td>
-	                    </tr>
-	                </xar:if>
-	            </xar:foreach>
-	        </table>
-	    <xar:else />
-	    	<p>
-	    		<xar:mlstring>No relationships for this module.</xar:mlstring>
-	    	</p>
-	    </xar:if>
+        <xar:if condition="count($relations) gt 0">
+            <table class="xar-clearboth">
+                <tr>
+                    <th>
+                        <xar:mlstring>Module</xar:mlstring>
+                    </th>
+                    <th>
+                        <xar:mlstring>Link Type</xar:mlstring>
+                    </th>
+                    <th>
+                        <xar:mlstring>From</xar:mlstring>
+                    </th>
+                    <th>
+                        <xar:mlstring>To</xar:mlstring>
+                    </th>
+                </tr>
+        
+                <xar:foreach in="$relations" value="$relation">
+                    <xar:if condition="count($relation['links']) gt 0">
+                        <xar:foreach in="$relation['links']" value="$link">
+                            <tr>
+                                <td>#$relation['module']#</td>
+                                <td>#$link['type']#</td>
+                                <td>#$link['from']#</td>
+                                <td>#$link['to']#</td>
+                            </tr>
+                        </xar:foreach>
+                    <xar:else />
+                        <tr>
+                            <td>
+                                #$relation['module']#
+                            </td>
+                            <td>
+                                (<xar:mlstring>not found</xar:mlstring>)
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                (<xar:mlstring>not found</xar:mlstring>)
+                            </td>
+                        </tr>
+                    </xar:if>
+                </xar:foreach>
+            </table>
+        <xar:else />
+            <p>
+                <xar:mlstring>No relationships for this module.</xar:mlstring>
+            </p>
+        </xar:if>
     </xar:if>
 
     <h2>
@@ -77,41 +77,41 @@
     </h2>
 
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
-		<div class="xar-form-input-wrapper">
-		    <label for="objectid" class="xar-form-label">
-		        <xar:mlstring>Object:</xar:mlstring>
-		    </label>
-	        <select name="objectid" id="objectid">
-	            <option value=""></option>
-	            <xar:foreach in="$objects" key="$id" value="$object">
-	                <xar:if condition="!empty($objectid) and $objectid eq $id">
-	                    <option value="#$id#" selected="selected">#$object['label']#</option>
-	                <xar:else/>
-	                    <option value="#$id#">#$object['label']#</option>
-	                </xar:if>
-	            </xar:foreach>
-	        </select>
-		</div>
+        <div class="xar-form-input-wrapper">
+            <label for="objectid" class="xar-form-label">
+                <xar:mlstring>Object:</xar:mlstring>
+            </label>
+            <select name="objectid" id="objectid">
+                <option value=""></option>
+                <xar:foreach in="$objects" key="$id" value="$object">
+                    <xar:if condition="!empty($objectid) and $objectid eq $id">
+                        <option value="#$id#" selected="selected">#$object['label']#</option>
+                    <xar:else/>
+                        <option value="#$id#">#$object['label']#</option>
+                    </xar:if>
+                </xar:foreach>
+            </select>
+        </div>
 
-		<div class="xar-form-input-wrapper">
-		    <label for="table" class="xar-form-label">
-		        <xar:mlstring>Table:</xar:mlstring>
-		    </label>
-		    <select name="table" id="table">
-		        <option value=""></option>
-		        <xar:foreach in="$tables" value="$name">
-		            <xar:if condition="!empty($table) and $table eq $name">
-		                <option value="#$name#" selected="selected">#$name#</option>
-		            <xar:else/>
-		                <option value="#$name#">#$name#</option>
-		            </xar:if>
-		        </xar:foreach>
-		    </select>
-		</div>
+        <div class="xar-form-input-wrapper">
+            <label for="table" class="xar-form-label">
+                <xar:mlstring>Table:</xar:mlstring>
+            </label>
+            <select name="table" id="table">
+                <option value=""></option>
+                <xar:foreach in="$tables" value="$name">
+                    <xar:if condition="!empty($table) and $table eq $name">
+                        <option value="#$name#" selected="selected">#$name#</option>
+                    <xar:else/>
+                        <option value="#$name#">#$name#</option>
+                    </xar:if>
+                </xar:foreach>
+            </select>
+        </div>
 
-		<div class="xar-form-input-wrapper-after">
-	        <input type="submit" name="select" id="select" value="Select" />
-		</div>
+        <div class="xar-form-input-wrapper-after">
+            <input type="submit" name="select" id="select" value="Select" />
+        </div>
 
     </form>
 
@@ -175,63 +175,63 @@
         <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
 
         <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
-			<div class="xar-form-input-wrapper">
-			    <label class="xar-form-label">
-			        <xar:mlstring>Relation Type:</xar:mlstring>
-			    </label>
-	            <input type="hidden" name="modid" value="#$modid#" />
-	            <input type="hidden" name="itemtype" value="#$itemtype#" />
-	            <input type="hidden" name="objectid" value="#$objectid#" />
-	            <input type="hidden" name="table" value="#$table#" />
-	            <input type="hidden" name="authid" value="#$authid#" />
-	            <select name="relation" id="relation">
-	                <option value="parent">
-	                    <xar:mlstring>is parent of (one-to-many)</xar:mlstring>
-	                </option>
-	                <option value="child">
-	                    <xar:mlstring>is child of (many-to-one)</xar:mlstring>
-	                </option>
-	                <option value="direct">
-	                    <xar:mlstring>is linked to (one-to-one)</xar:mlstring>
-	                </option>
-	                <option value="directfrom">
-	                    <xar:mlstring>is linked from (one-to-one)</xar:mlstring>
-	                </option>
-	                <option value="recursive">
-	                    <xar:mlstring>is recursive with</xar:mlstring>
-	                </option>
-	                <option value="extension">
-	                    <xar:mlstring>extends</xar:mlstring>
-	                </option>
-	                <option value="extended">
-	                    <xar:mlstring>is extended by</xar:mlstring>
-	                </option>
-	            </select>
-	
-	            <select name="withtable" id="withtable">
-	                <xar:foreach in="$tables" value="$name">
-	                    <xar:if condition="!empty($withtable) and $withtable eq $name">
-	                        <option value="#$name#" selected="selected">#$name#</option>
-	                    <xar:else/>
-	                        <option value="#$name#">#$name#</option>
-	                    </xar:if>
-	                </xar:foreach>
-	            </select>
-			</div>
-			<div class="xar-form-input-wrapper-after">
-	            <input type="submit" name="add" id="add" value="#xarML('Add Relation')#" />
-			</div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    <xar:mlstring>Relation Type:</xar:mlstring>
+                </label>
+                <input type="hidden" name="modid" value="#$modid#" />
+                <input type="hidden" name="itemtype" value="#$itemtype#" />
+                <input type="hidden" name="objectid" value="#$objectid#" />
+                <input type="hidden" name="table" value="#$table#" />
+                <input type="hidden" name="authid" value="#$authid#" />
+                <select name="relation" id="relation">
+                    <option value="parent">
+                        <xar:mlstring>is parent of (one-to-many)</xar:mlstring>
+                    </option>
+                    <option value="child">
+                        <xar:mlstring>is child of (many-to-one)</xar:mlstring>
+                    </option>
+                    <option value="direct">
+                        <xar:mlstring>is linked to (one-to-one)</xar:mlstring>
+                    </option>
+                    <option value="directfrom">
+                        <xar:mlstring>is linked from (one-to-one)</xar:mlstring>
+                    </option>
+                    <option value="recursive">
+                        <xar:mlstring>is recursive with</xar:mlstring>
+                    </option>
+                    <option value="extension">
+                        <xar:mlstring>extends</xar:mlstring>
+                    </option>
+                    <option value="extended">
+                        <xar:mlstring>is extended by</xar:mlstring>
+                    </option>
+                </select>
+    
+                <select name="withtable" id="withtable">
+                    <xar:foreach in="$tables" value="$name">
+                        <xar:if condition="!empty($withtable) and $withtable eq $name">
+                            <option value="#$name#" selected="selected">#$name#</option>
+                        <xar:else/>
+                            <option value="#$name#">#$name#</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <input type="submit" name="add" id="add" value="#xarML('Add Relation')#" />
+            </div>
 
             <xar:if condition="!empty($withtable)">
-            	<div class="xar-floatleft xar-thirdwidth">
-            		<h4>
-            			<xar:mlstring>From</xar:mlstring>
-            			#$table#
-            		</h4>
-					<div class="xar-form-input-wrapper">
-					    <label for="field" class="xar-form-labelshort">
-					        <xar:mlstring>Field:</xar:mlstring>
-					    </label>
+                <div class="xar-floatleft xar-thirdwidth">
+                    <h4>
+                        <xar:mlstring>From</xar:mlstring>
+                        #$table#
+                    </h4>
+                    <div class="xar-form-input-wrapper">
+                        <label for="field" class="xar-form-labelshort">
+                            <xar:mlstring>Field:</xar:mlstring>
+                        </label>
                         <select name="field" id="field">
                             <option value=""></option>
                             <xar:foreach in="$fields" key="$name">
@@ -242,24 +242,24 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-					</div>
-					<div class="xar-form-input-wrapper">
-					    <label for="value" class="xar-form-labelshort">
-					        <xar:mlstring>Value:</xar:mlstring>
-					    </label>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="value" class="xar-form-labelshort">
+                            <xar:mlstring>Value:</xar:mlstring>
+                        </label>
                         <input type="textbox" name="value" id="value" value="#$value#" class="xar-form-textmedium" />
-					</div>
-				</div>
+                    </div>
+                </div>
 
-            	<div class="xar-floatleft xar-thirdwidth">
-            		<h4>
-            			<xar:mlstring>To</xar:mlstring>
-            			#$table#
-            		</h4>
-					<div class="xar-form-input-wrapper">
-					    <label for="withfield" class="xar-form-labelshort">
-					        <xar:mlstring>Field:</xar:mlstring>
-					    </label>
+                <div class="xar-floatleft xar-thirdwidth">
+                    <h4>
+                        <xar:mlstring>To</xar:mlstring>
+                        #$table#
+                    </h4>
+                    <div class="xar-form-input-wrapper">
+                        <label for="withfield" class="xar-form-labelshort">
+                            <xar:mlstring>Field:</xar:mlstring>
+                        </label>
                         <select name="withfield" id="withfield">
                             <option value=""></option>
                             <xar:foreach in="$withfields" key="$name">
@@ -270,17 +270,17 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-					</div>
-					<div class="xar-form-input-wrapper">
-					    <label for="withvalue" class="xar-form-labelshort">
-					        <xar:mlstring>Value:</xar:mlstring>
-					    </label>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="withvalue" class="xar-form-labelshort">
+                            <xar:mlstring>Value:</xar:mlstring>
+                        </label>
                         <input type="textbox" name="withvalue" id="withvalue" value="#$withvalue#" class="xar-form-textmedium" />
-					</div>
-				</div>
-				<div class="xar-form-input-wrapper-after">
-	                <input type="submit" name="confirm" value="#xarML('Confirm')#" />
-				</div>
+                    </div>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" name="confirm" value="#xarML('Confirm')#" />
+                </div>
             </xar:if>
         </form>
 
@@ -290,36 +290,36 @@
 
         <xar:if condition="!empty($relations[$table])">
             <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
-	            <table>
-	                <tr>
-	                    <th>
-	                        <xar:mlstring>Delete</xar:mlstring>
-	                    </th>
-	                    <th>
-	                        <xar:mlstring>Parents</xar:mlstring>
-	                    </th>
-	                    <th>
-	                        <xar:mlstring>Direct From</xar:mlstring>
-	                    </th>
-	                    <th>
-	                        -
-	                    </th>
-	                    <th>
-	                        <xar:mlstring>Direct To</xar:mlstring>
-	                    </th>
-	                    <th>
-	                        <xar:mlstring>Children</xar:mlstring>
-	                    </th>
-	                </tr>
-	                <xar:foreach in="$relations[$table]" key="$where" value="$links">
-	                    <!-- TODO: check this section, it contains greater than signs, dummy xar:sets and some other hackery -->
-	                    <xar:if condition="is_numeric($where)">
-	                        <xar:set name="wherelink">#xarModURL('dynamicdata','util','relations',array('objectid' => $where))#</xar:set>
-	                        <xar:set name="wherename">#$objects[$where]['label']#</xar:set>
-	                    <xar:else/>
-	                        <xar:set name="wherelink">#xarModURL('dynamicdata','util','relations',array('table' => $where))#</xar:set>
-	                        <xar:set name="wherename">#$where#</xar:set>
-	                    </xar:if>
+                <table>
+                    <tr>
+                        <th>
+                            <xar:mlstring>Delete</xar:mlstring>
+                        </th>
+                        <th>
+                            <xar:mlstring>Parents</xar:mlstring>
+                        </th>
+                        <th>
+                            <xar:mlstring>Direct From</xar:mlstring>
+                        </th>
+                        <th>
+                            -
+                        </th>
+                        <th>
+                            <xar:mlstring>Direct To</xar:mlstring>
+                        </th>
+                        <th>
+                            <xar:mlstring>Children</xar:mlstring>
+                        </th>
+                    </tr>
+                    <xar:foreach in="$relations[$table]" key="$where" value="$links">
+                        <!-- TODO: check this section, it contains greater than signs, dummy xar:sets and some other hackery -->
+                        <xar:if condition="is_numeric($where)">
+                            <xar:set name="wherelink">#xarModURL('dynamicdata','util','relations',array('objectid' => $where))#</xar:set>
+                            <xar:set name="wherename">#$objects[$where]['label']#</xar:set>
+                        <xar:else/>
+                            <xar:set name="wherelink">#xarModURL('dynamicdata','util','relations',array('table' => $where))#</xar:set>
+                            <xar:set name="wherename">#$where#</xar:set>
+                        </xar:if>
 
                         <xar:foreach in="$links" key="$idx" value="$link">
                             <xar:if condition="is_numeric($link['to'])">
@@ -439,12 +439,12 @@
                     </xar:foreach>
                 </table>
 
-				<div class="xar-form-input-wrapper-after">
-		            <input type="hidden" name="objectid" value="#$objectid#" />
-		            <input type="hidden" name="table" value="#$table#" />
-		            <input type="hidden" name="authid" value="#$authid#" />
-	                <input type="submit" name="delete" id="delete" value="#xarML('Delete')#" />
-				</div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="objectid" value="#$objectid#" />
+                    <input type="hidden" name="table" value="#$table#" />
+                    <input type="hidden" name="authid" value="#$authid#" />
+                    <input type="submit" name="delete" id="delete" value="#xarML('Delete')#" />
+                </div>
             </form>
         </xar:if>
     </xar:if>
