@@ -1,7 +1,7 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>
         <td align="center" colspan="5">
-            <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="&xar-var-link;" target="dd">&xar-var-labels.config;</a> ]
+            <strong>&xar-var-labels.dynamicdata;</strong> [ <a href="&xar-var-link;" target="hook">&xar-var-labels.config;</a> ]
 <br />
 // TODO: well, just about everything :-)
         </td>
@@ -19,7 +19,7 @@
     <tr align="left" valign="middle">
         <td>&xar-var-id;</td>
         <td>&xar-var-label;</td>
-        <td><xar:data-input type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
+        <td><xar:data-output type="fieldtype" name="dd_type['.$id.']" value="$type" /></td>
         <td>&xar-var-default;</td>
         <td>&xar-var-source;</td>
         <td>&xar-var-validation;</td>
