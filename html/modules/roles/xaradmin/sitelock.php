@@ -112,6 +112,16 @@ function roles_admin_sitelock($args)
                 $mailinfo['info'] = $recipient->getEmail();
                 xarModAPIFunc('mail','admin','sendmail', $mailinfo);
             }
+
+            // Write the configuration to disk
+            if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
+            if(!isset($notify)) $notify = array();
+            for($i=0;$i<count($roles);$i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
+            $lockdata = array('roles' => $roles,
+                              'message' => $lockedoutmsg,
+                              'locked' => $toggle,
+                              'notifymsg' => $notifymsg);
+            xarModSetVar('roles', 'lockdata', serialize($lockdata));
         }
     }
 
