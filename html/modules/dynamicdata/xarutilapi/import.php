@@ -11,7 +11,12 @@ function dynamicdata_utilapi_import($args)
 
     extract($args);
 
-    if (empty($file) || !file_exists($file) || !preg_match('/\.xml$/',$file)) {
+    if (empty($xml) && empty($file)) {
+        $msg = xarML('Missing import file or XML content');
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                        new SystemException($msg));
+        return;
+    } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
         $msg = xarML('Invalid import file');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
@@ -27,12 +32,17 @@ function dynamicdata_utilapi_import($args)
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';
 
-    $fp = @fopen($file, 'r');
-    if (!$fp) {
-        $msg = xarML('Unable to open import file');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+    if (!empty($file)) {
+        $fp = @fopen($file, 'r');
+        if (!$fp) {
+            $msg = xarML('Unable to open import file');
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                           new SystemException($msg));
+            return;
+        }
+    } else {
+        $lines = preg_split("/\r?\n/", $xml);
+        $maxcount = count($lines);
     }
 
     $what = '';
@@ -40,8 +50,12 @@ function dynamicdata_utilapi_import($args)
     $objectname2objectid = array();
     $objectcache = array();
     $objectmaxid = array();
-    while (!feof($fp)) {
-        $line = fgets($fp, 4096);
+    while ( (!empty($file) && !feof($fp)) || (!empty($xml) && $count < $maxcount) ) {
+        if (!empty($file)) {
+            $line = fgets($fp, 4096);
+        } else {
+            $line = $lines[$count];
+        }
         $count++;
         if (empty($what)) {
             if (preg_match('#<object name="(\w+)">#',$line,$matches)) { // in case we import the object definition
@@ -291,7 +305,9 @@ function dynamicdata_utilapi_import($args)
         } else {
         }
     }
-    fclose($fp);
+    if (!empty($file)) {
+        fclose($fp);
+    }
 
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {

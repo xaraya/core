@@ -8,7 +8,8 @@ function dynamicdata_util_import($args)
 // Security Check
 	if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    $import = xarVarCleanFromInput('import');
+    if(!xarVarFetch('import', 'isset', $import,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('xml', 'isset', $xml,  NULL, XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
@@ -29,24 +30,29 @@ function dynamicdata_util_import($args)
         return $data;
     }
 
-    if (!empty($import)) {
+    if (!empty($import) || !empty($xml)) {
         if (!xarSecConfirmAuthKey()) return;
 
-        $found = '';
-        foreach ($files as $file) {
-            if ($file == $import) {
-                $found = $file;
-                break;
+        if (!empty($import)) {
+            $found = '';
+            foreach ($files as $file) {
+                if ($file == $import) {
+                    $found = $file;
+                    break;
+                }
             }
+            if (empty($found) || !file_exists($basedir . '/' . $file)) {
+                $msg = xarML('File not found');
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException($msg));
+                return;
+            }
+            $objectid = xarModAPIFunc('dynamicdata','util','import',
+                                      array('file' => $basedir . '/' . $file));
+        } else {
+            $objectid = xarModAPIFunc('dynamicdata','util','import',
+                                      array('xml' => $xml));
         }
-        if (empty($found) || !file_exists($basedir . '/' . $file)) {
-            $msg = xarML('File not found');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-            return;
-        }
-        $objectid = xarModAPIFunc('dynamicdata','util','import',
-                                  array('file' => $basedir . '/' . $file));
         if (empty($objectid)) return;
 
         $objectinfo = xarModAPIFunc('dynamicdata','user','getobjectinfo',
