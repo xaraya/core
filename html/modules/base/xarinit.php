@@ -378,7 +378,12 @@ function base_init()
  */
 function base_upgrade($oldVersion)
 {
-    return false;
+    switch($oldVersion) {
+    case '0.1':
+        // compatability upgrade, nothing to be done
+        break;
+    }
+    return true;
 }
 
 /**
