@@ -1,0 +1,18 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Instructions Sent</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<br /><br />
+<form action="#xarModURL('users', 'user', 'register')#" method="post" enctype="application/x-www-form-urlencoded">
+<xar:mlstring>This is the final step.  We just need to confirm that you sent us a valid email and that you are who you say you are.  If all goes well, we will have created the account.  To continue, just press the "confirm account" button below.</xar:mlstring> 
+
+<br />
+<br />
+
+<input type="hidden" name="phase" id="phase" value="validate">
+<input type="hidden" name="uvar" id="uvar" value="#xarSessionGetVar('concode')#">
+<input type="submit" value="<xar:mlstring>Confirm Account</xar:mlstring>">
+</form>

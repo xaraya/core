@@ -1,0 +1,9 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <xar:mlstring>Instructions Sent</xar:mlstring>            
+        </th>
+    </tr>
+</table>
+<br /><br />
+<xar:mlstring>Further instructions for registering have been sent to your e-mail of record.  Please take a moment and read the instructions.  If you have a question, or didn't receive your instructions please contact the</xar:mlstring><a href="mailto:#xarModGetVar('mail','adminmail')#"><xar:mlstring>  &nbsp;website administrator</xar:mlstring></a>.

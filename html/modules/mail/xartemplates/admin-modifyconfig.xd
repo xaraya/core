@@ -61,6 +61,36 @@
 					</xar:if>
 					<tr align="left" valign="middle">
 						<td>
+							<xar:mlstring>Send HTML Emails?</xar:mlstring>
+						</td>
+						<td>
+							<xar:if condition="xarModGetVar('mail', 'html')">
+								<input type="checkbox" name="html" id="html" value="1" checked="checked" tabindex="1" />
+							<xar:else />
+								<input type="checkbox" name="html" id="html" value="1" tabindex="1" />
+							</xar:if>
+						</td>
+					</tr>
+					<xar:if condition="xarModGetVar('mail', 'html')">
+						<tr align="left" valign="top">
+							<td>
+								<xar:mlstring>HTML Email Header</xar:mlstring>
+							</td>
+							<td>
+								<textarea name="htmlheader" rows="20" cols="60">#xarModGetVar('mail', 'htmlheader')#</textarea>
+							</td>
+						</tr>
+						<tr align="left" valign="top">
+							<td>
+								<xar:mlstring>HTML Email Footer</xar:mlstring>
+							</td>
+							<td>
+								<textarea name="htmlfooter" rows="20" cols="60">#xarModGetVar('mail', 'htmlfooter')#</textarea>
+							</td>
+						</tr>
+					</xar:if>
+					<tr align="left" valign="middle">
+						<td>
 							<xar:mlstring>Default Word Wrap Size</xar:mlstring>
 						</td>
 						<td>
