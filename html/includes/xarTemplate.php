@@ -954,7 +954,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
         }
     }
 
-
+    // $cachedFileName should have a value from this point on
+    // see the return statement couple of lines back.
+   
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
@@ -964,6 +966,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     if (is_array($tplData)) {
         extract($tplData, EXTR_OVERWRITE);
     } else {
+        // This should actually never be reached.
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
@@ -997,10 +1000,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Start output buffering
     ob_start();
     
-    if($GLOBALS['xarTpl_showTemplateFilenames'])
-    {
-        if($headerContentFound === false)
-        {
+    if($GLOBALS['xarTpl_showTemplateFilenames']) {
+        if($headerContentFound === false) {
             $outputStartComment = true;
 
             // $headerTagsRegexes is an array of string regexes to match tags that could
@@ -1011,10 +1012,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             //   correctly.
             // - xml parsers dont like comments that precede xml output.
             // At this time attempting to match <!doctype... and <?xml version... tags.
+	    // This is about the best we can do now, until we process xar documents with an xml parser and actually 'parse'
+	    // the document.
             $headerTagRegexes = array('<!DOCTYPE[^>].*]>',// eg. <!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">]>
                                       '<!DOCTYPE[^>]*>',// eg. <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
                                       '<\?xml\s+version[^>]*\?>');// eg. <?xml version="1.0"? > // remove space between qmark and gt
-
+            
             foreach($headerTagRegexes as $headerTagRegex) {
                 if(preg_match("/$headerTagRegex/smix", $tplOutput, $matchedHeaderTag)) {
                     $startComment = '<!-- start(output actually commenced before header(s)): ' . $sourceFileName . '-->';
@@ -1028,9 +1031,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
                     break;
                 }
             }
-        }
-        else
+        } else {
             $outputStartComment = true;
+        }
 
         // optionally show template filenames if start comment has not already
         // been added as part of a header determination.
@@ -1038,7 +1041,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             echo '<!-- start: ' . $sourceFileName . '-->';
     }
     
-    // output template
+    // output template, we're still buffering
     echo $tplOutput;
 
     // optionally show template filenames
