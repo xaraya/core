@@ -66,15 +66,17 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
             $xarLogConfig[] = array('type'    => $args['loggerName'],
                                                       'config' => $args['loggerArgs']);
         }
-    } else {
+    } elseif (xarLogFallbackPossible()) {
         //Fallback mechanism to allow some logging in important cases when
         //the user might now have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
-        $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
-        if (file_exists($logFile) && is_writeable($logFile)) {
-            $xarLogConfig[] = array('type' => 'simple',
-                                                     'config' =>array('fileName' => $logFile,
-                                                                                  'logLevel'  => (2*XARLOG_LEVEL_DEBUG-1)));
+        $logFile = xarLogFallbackFile();
+        if ($logFile) {
+            $xarLogConfig[] = array(
+                'type'      => 'simple',
+                'config'    => array(
+                    'fileName' => $logFile,
+                    'logLevel'  => (2*XARLOG_LEVEL_DEBUG-1)));
         }
     }
 
@@ -89,6 +91,37 @@ function xarLog_init($args, &$whatElseIsGoingLoaded)
     register_shutdown_function('xarLog__shutdown_handler');
 
     return true;
+}
+
+/**
+ * Will return the log file directory and name
+ */
+function xarLogFallbackFile ()
+{
+    static $logFile;
+    
+    if (isset($logFile)) return $logFile;
+    
+    $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
+
+    if (file_exists($logFile) && is_writeable($logFile)) {
+        $logFile = realpath($logFile);
+    }
+    
+    return $logFile;
+}
+
+/**
+ * Will check if the fallback mechanism can be used
+ */
+function xarLogFallbackPossible ()
+{
+    $logFile = xarLogFallbackFile ();
+    if (file_exists($logFile) && is_writeable($logFile)) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
