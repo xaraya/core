@@ -410,6 +410,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         xarPage_checkUserCaching()) {
         
         xarOutputSetCached($cacheKey, $cache_file, 'Page', $value);
+        xarPage_httpCacheHeaders($cache_file);
 
     }
 }
@@ -813,12 +814,12 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
 function xarPage_httpCacheHeaders($cache_file)
 {
     global $xarPage_cacheCode,
-            $xarPage_cacheExpireHeader,
-            $xarPage_cacheTime;
+           $xarPage_cacheExpireHeader,
+           $xarPage_cacheTime;
 
     $mod = filemtime($cache_file);
     // doesn't seem to be taken into account ?
-    $etag = $xarPage_cacheCode . $mod;
+    $etag = $xarPage_cacheCode.$mod;
     header("ETag: $etag");
     $match = xarServerGetVar('HTTP_IF_NONE_MATCH');
     if (!empty($match) && $match == $etag) {
@@ -826,7 +827,7 @@ function xarPage_httpCacheHeaders($cache_file)
         exit;
     } else {
         $since = xarServerGetVar('HTTP_IF_MODIFIED_SINCE');
-        if (!empty($since) && strtotime($since) >= $mod) {
+        if (!empty($since) && strtotime($since) >= $mod) {   
             header('HTTP/1.0 304');
             exit;
         }
@@ -837,11 +838,14 @@ function xarPage_httpCacheHeaders($cache_file)
         header("Expires: " .
                gmdate("D, d M Y H:i:s", $mod + $xarPage_cacheTime) .
                " GMT");
+        header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
+    } else {
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate");
     }
     header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mod) . " GMT");
     // we can't use this after session_start()
     //session_cache_limiter('public');
-    header("Cache-Control: public, max-age=" . $xarPage_cacheTime);
     // PHP doesn't set the Pragma header when sending back a cookie
     if (isset($_COOKIE['XARAYASID'])) {
         header("Pragma: public");
