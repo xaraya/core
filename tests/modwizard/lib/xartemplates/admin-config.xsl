@@ -48,11 +48,16 @@
             <td colspan="2">#$hooks[$hookmodule]#</td>
         </tr>
         </xar:foreach>
-        <tr>
-            <td colspan="2" align="center"><input type="submit" value="#xarML('Modify')#" /><input type="submit" name="cancel"  value="#xarML('Cancel')#" /></td>
-        </tr>
         </xar:if>
     </xsl:if>
+
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit"                value="#xarML('Modify')#" />
+                <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
+            </td>
+        </tr>
+
     </table>
 </form>
 </div>

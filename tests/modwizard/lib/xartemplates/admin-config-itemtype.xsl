@@ -19,7 +19,7 @@
     <input type="hidden" name="authid" id="authid" value="#$authid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
 
-    <table width="100%" cellspacing="1" cellpadding="8" border="0">
+    <table width="100%" cellspacing="0" cellpadding="8" border="0">
 
         <colgroup>
             <col width="30%" />
@@ -49,7 +49,7 @@
         </xar:if>
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" value="#xarML('Modify')#" />
+                <input type="submit"                value="#xarML('Modify')#" />
                 <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
             </td>
         </tr>
