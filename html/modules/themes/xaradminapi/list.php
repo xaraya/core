@@ -16,7 +16,7 @@ function themes_adminapi_list()
     // Obtain information
     $themeList = xarModAPIFunc('themes', 
                           'admin', 
-                          'GetList', 
+                          'GetThemeList', 
                           array('filter'     => array('State' => XARTHEME_STATE_ANY)));
     //throw back
     if (!isset($themeList)) return;
