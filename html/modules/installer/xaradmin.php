@@ -654,7 +654,8 @@ function installer_admin_choose_configuration()
         $names = array();
         include 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',
-                         'display'  => 'Core Xaraya install (aka minimal)');
+                         'display'  => 'Core Xaraya install (aka minimal)',
+                         'selected' => true);
     }
     // Add more criteria for filtering the configurations to be displayed here
     else {
@@ -665,7 +666,8 @@ function installer_admin_choose_configuration()
             if($pos == strlen($file)-8) {
                 include $basedir . '/' . $file;
                 $names[] = array('value' => $basedir . '/' . $file,
-                                'display' => $configuration_name);
+                                 'display' => $configuration_name,
+                                 'selected' => false);
             }
         }
     }
