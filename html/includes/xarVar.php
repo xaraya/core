@@ -347,13 +347,13 @@ class xarVarValidator_float extends xarVarValidator {
         $this->subject = $value;
 
         if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
-            if ($value < (int) $this->parameters[0]) {
+            if ($value < (float) $this->parameters[0]) {
                 return false;
             }
         }
 
         if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
-            if ($value > (int) $this->parameters[1]) {
+            if ($value > (float) $this->parameters[1]) {
                 return false;
             }
         }
