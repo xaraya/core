@@ -327,7 +327,7 @@ class xarMasks
  * @todo    none
 */
 
-    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='')
+    function xarSecurityCheck($mask,$catch=1,$component='', $instance='',$module='',$rolename='',$pnrealm,$pnlevel)
     {
         $mask =  $this->getMask($mask);
         if (!$mask) {
@@ -362,6 +362,11 @@ class xarMasks
         if ($component != '') $mask->setComponent($component);
         // insert any instance overrides
         if ($instance != '') $mask->setInstance($instance);
+
+        // insert any overrides of realm and level
+        // this is for PostNuke backward compatibility
+        if ($pnrealm != '') $mask->setRealm($pnrealm);
+        if ($pnlevel != '') $mask->setLevel($pnlevel);
 
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
