@@ -43,6 +43,10 @@ class ADODB_Iterator implements Iterator {
 	{
         $this->rs->MoveNext();
     }
+    function valid()
+    {
+	return !$this->rs->EOF;
+    }
 }
 
 

@@ -548,7 +548,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     global $CoreStack;
 
     //Checks for a @ presence in the given line, should stop from setting Xaraya or DB errors
-    if (!error_reporting()) {
+    if (!error_reporting() || $errorType > E_ALL) {
         return;
     }
 
