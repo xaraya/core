@@ -9,7 +9,10 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @subpackage Installer
- * @author Johnny Robeson Paul Rosania
+ * @author Johnny Robeson 
+ * @author Paul Rosania
+ * @author Marc Lutolf
+ * @author Marcel van der Boom
  */
 
 /**
@@ -32,16 +35,14 @@ include 'includes/xarCore.php';
 // Include extra functions
 include 'modules/installer/xarfunctions.php';
 
-//Comment this line to disable debugging
+// Enable debugging always for the installer
 xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
-//xarCoreActivateDebugger(0);
 
-// Basic systems alway loaded
+// Basic systems always loaded
 // {ML_dont_parse 'includes/xarLog.php'}
 include_once 'includes/xarLog.php';
 // {ML_dont_parse 'includes/xarEvt.php'}
 include_once 'includes/xarEvt.php';
-
 include_once 'includes/xarException.php';
 // {ML_dont_parse 'includes/xarVar.php'}
 include_once 'includes/xarVar.php';
@@ -58,12 +59,10 @@ $whatToLoad = XARCORE_SYSTEM_NONE;
 $systemArgs = array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
                     'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
                     'level'      => xarCore_getSystemVar('Log.LogLevel'));
-
 xarLog_init($systemArgs, $whatToLoad);
 
 // Start Exception Handling System
 $systemArgs = array('enablePHPErrorHandler' => xarCore_getSystemVar('Exception.EnablePHPErrorHandler'));
-
 xarError_init($systemArgs, $whatToLoad);
 
 // Start Event Messaging System

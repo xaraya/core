@@ -371,8 +371,13 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
         $templateName = xarVarPrepForOS($templateName);
     }
 
-    if (!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
-    $modOsDir = $modBaseInfo['osdirectory'];
+    if(function_exists('xarMod_getBaseInfo')) {
+        if (!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+        $modOsDir = $modBaseInfo['osdirectory'];
+    } elseif(!empty($modName)) {
+        // We can assume $modOsDir = $modName
+        $modOsDir = $modName;
+    }
 
     // Basename of module template is apitype-functioname
     $tplBase      = "$modType-$funcName";
@@ -1047,8 +1052,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
  */
 function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '') 
 {
-    if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
-    $modOsDir = $modBaseInfo['osdirectory'];
+    if(function_exists('xarMod_getBaseInfo')) {
+        if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+        $modOsDir = $modBaseInfo['osdirectory'];
+    } elseif(!empty($modName)) {
+        $modOsDir = $modName;
+    }
 
     // For modules: {tplBase} = {modType}-{funcName}
     // For blocks : {tplBase} = {blockType} or overridden value

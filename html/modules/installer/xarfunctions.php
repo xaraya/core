@@ -18,6 +18,7 @@
  * NOTE: this function is identical to
  *       xarModFunc except that it uses xarTplInstall
  *       instead of xarTplModule
+ * UPDATE: Not anymore, migrated xarTplInstall function out
  *
  * @access public
  * @param modName registered name of module
@@ -60,7 +61,7 @@ function xarInstallFunc($modName, $modType = 'user', $funcName = 'main', $args =
         $templateName = $tplData['_bl_template'];
     }
 
-    return xarTplInstall($modName, $modType, $funcName, $tplData, $templateName);
+    return xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
 }
 
 function xarInstallAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
@@ -229,7 +230,7 @@ function xarInstallLoad($modName, $modType = 'user')
     if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return; // throw back exception
     }
-
+ 
     // Load database info
     //xarMod__loadDbInfo($modName, $modOsDir);
 
@@ -239,51 +240,4 @@ function xarInstallLoad($modName, $modType = 'user')
     return true;
 }
 
-/**
- * Turn installer output into a template
- *
- * NOTE: this function is identical to xarTplModule without xarMod_getBaseInfo
- * prolly will get removed in the future, i have it just for consistancy
- *
- * @access public
- * @param modName the module name
- * @param modType user|admin
- * @param funcName module function to template
- * @param tplData arguments for the template
- * @param templateName the specific template to call
- * @returns string
- * @return output of the template
- */
-function xarTplInstall($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
-{
-    global $xarTpl_themeDir;
-
-    if (!empty($templateName)) {
-        $templateName = xarVarPrepForOS($templateName);
-    }
-
-    /*
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-    $modOsDir = $modBaseInfo['osdirectory'];
-    */
-    $modOsDir = 'installer';
-
-    // Try theme template
-    $sourceFileName = xarTplGetThemeDir() . "/modules/$modOsDir/$modType-$funcName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
-    if (!file_exists($sourceFileName)) {
-        // Use internal template
-        $tplName = "$modType-$funcName" . (empty($templateName) ? '' : "-$templateName");
-        $sourceFileName = "modules/$modOsDir/xartemplates/$tplName.xd";;
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates', $tplName) === NULL) return;
-    }
-
-    // TODO: do we want overridden translations?
-
-    $tplData['_bl_module_name'] = $modName;
-    $tplData['_bl_module_type'] = $modType;
-    $tplData['_bl_module_func'] = $funcName;
-
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
-}
 ?>
