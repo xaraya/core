@@ -36,7 +36,5 @@
             </tr>
         </xar:foreach> 
     </table>    
-    
-    
-    </div>
+
 </div>

@@ -81,13 +81,12 @@
 
         <xar:if condition="$modstatus">
             <xar:comment> lets display latest status on themes upgrades if any</xar:comment>
-                <p>
-                    <xar:mlstring>Latest status - the following core modules have been successfully upgraded:</xar:mlstring>
-                </p>
-                <p>
-                    #$modstatus#
-                </p>
-            </div>
+            <p>
+                <xar:mlstring>Latest status - the following core modules have been successfully upgraded:</xar:mlstring>
+            </p>
+            <p>
+                #$modstatus#
+            </p>
         </xar:if>
 
         <xar:comment> the Module Lists css-based styles </xar:comment>

@@ -45,7 +45,7 @@
                     <xar:else />
                         <p>
                             <xar:mlstring>This is a primary theme variable.</xar:mlstring>
-                        <p>
+                        </p>
                     </xar:if>
 
                 </fieldset>
@@ -99,8 +99,8 @@
     </form>
 
     <h2>
-        <xar:mlstring>Credits</xar:mlstring></h2>
-    </div>
+        <xar:mlstring>Credits</xar:mlstring>
+    </h2>
 
     <xar:loop name="$themeInfo">
         <p>
