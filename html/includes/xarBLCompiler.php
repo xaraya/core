@@ -192,7 +192,13 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
     function setPHPBlock($isPHPBlock)
     {
-        $this->isPHPBlock = $isPHPBlock;
+        $code = '';
+        // Only change when needed
+        if($this->isPHPBlock != $isPHPBlock) {
+            $this->isPHPBlock = $isPHPBlock;
+            $code = ($isPHPBlock)? '<?php ' : '?>';
+        }
+        return $code;
     }
 
     function isPendingExceptionsControl()
@@ -222,14 +228,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
         // This seems a bit strange, but we always want to end with return 
         // true at then end, even if we're not in a php block
-        if (!$this->isPHPBlock()) {
-            $this->code .= "<?php ";
-            $this->setPHPBlock(true);
-        }
-        if ($this->isPHPBlock()) {
-            $this->code .= " return true;?>";
-            $this->setPHPBlock(false);
-        }
+        $this->code .= $this->setPHPBlock(true);
+        $this->code .= " return true;" . $this->setPHPBlock(false);
         return $this->code;
     }
 
@@ -253,12 +253,10 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             //
             $checkNode = $node;
             foreach ($node->children as $child) {
-                if ($child->isPHPCode() && !$this->isPHPBlock()) {
-                    $code .= "<?php ";
-                    $this->setPHPBlock(true);
-                } elseif (!$child->isPHPCode() && $this->isPHPBlock() && !$checkNode->needAssignment()) {
-                    $code .= "?>";
-                    $this->setPHPBlock(false);
+                if ($child->isPHPCode()) {
+                    $code .= $this->setPHPBlock(true);
+                } elseif (!$checkNode->needAssignment()) {
+                    $code .= $this->setPHPBlock(false);
                 }
                 if ($checkNode->needAssignment() || $checkNode->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
@@ -296,9 +294,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             //
             // PART 3: Handle the end rendering of the node
             //
-            if ($node->isPHPCode() && !$this->isPHPBlock()) {
-                $code .= "<?php ";
-                $this->setPHPBlock(true);
+            if ($node->isPHPCode()) {
+                $code .= $this->setPHPBlock(true);
             }
             $endCode = $node->renderEndTag();
             if (!isset($endCode)) return; // throw back
@@ -306,11 +303,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $code .= $endCode;
 
             // Other part: exception handling
-            if (!$node->isAssignable() && ($node->needExceptionsControl() /*&& $this->isPendingExceptionsControl()*/)) {
-                if (!$this->isPHPBlock()) {
-                    $code .= "<?php ";
-                    $this->setPHPBlock(true);
-                }
+            if (!$node->isAssignable() && ($node->needExceptionsControl())) {
+                $code .= $this->setPHPBlock(true);
                 $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
                 $this->setPendingExceptionsControl(false);
             }
