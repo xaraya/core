@@ -5,7 +5,9 @@
         </th>
     </tr>
 </table>
-<div align="center"><h2><xar:mlstring>List of All Modules</xar:mlstring></h2></div><br />
+<h2><xar:mlstring>List of All Modules</xar:mlstring></h2>
+Click on status label to sort by states.
+<br /><br />
 <div class="xar-accent">
 <!--  -->
 <!-- <table border="0" width="100%"> -->
@@ -38,21 +40,7 @@
 						#$version#
 					</td>
 					<td nowrap>
-                        <xar:if condition="$state eq 4">
-                            #$state4label#
-                        </xar:if>
-                        <xar:if condition="$state eq 3">
-                            #$state3label#
-                        </xar:if>
-                        <xar:if condition="$state eq 2">
-                            #$state2label#
-                        </xar:if>
-                        <xar:if condition="$state eq 1">
-                            #$state1label#
-                        </xar:if>
-                        <xar:if condition="$state eq 5">
-                            #$state5label#
-                        </xar:if>
+						<a href="#$sorturl#">#$statelabel#</a>
                     </td>
                     <td nowrap>
                         <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
