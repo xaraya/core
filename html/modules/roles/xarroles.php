@@ -851,10 +851,10 @@ class xarRole
      */
     function hasPrivilege($privname)
     {
-        $privs = getAssignedPrivileges();
+        $privs = $this->getAssignedPrivileges();
         foreach ($privs as $privilege)
             if ($privilege->getName() == $privname) return true;
-        $privs = getInheritedPrivileges();
+        $privs = $this->getInheritedPrivileges();
         foreach ($privs as $privilege)
             if ($privilege->getName() == $privname) return true;
         return false;

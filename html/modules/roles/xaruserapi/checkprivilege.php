@@ -31,7 +31,7 @@ function roles_userapi_checkprivilege($args)
     if (empty($uid)) $uid = xarSessionGetVar('uid');
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
-    return $role->hasPrivilege($privname);
+    return $role->hasPrivilege($privilege);
 }
 
 ?>
