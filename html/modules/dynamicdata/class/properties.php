@@ -302,7 +302,10 @@ class Dynamic_Property_Master
                 require_once "includes/properties/Dynamic_MultiSelect_Property.php";
                 $property = new Dynamic_MultiSelect_Property($args);
                 break;
-
+            case 40: // (affero) Affero
+                require_once "includes/properties/Dynamic_Affero_Property.php";
+                $property = new Dynamic_Affero_Property($args);
+                break;
 
             case 105: // (uploads) Upload
                 require_once "includes/properties/Dynamic_Upload_Property.php";
@@ -683,6 +686,14 @@ class Dynamic_Property_Master
                               'name'       => 'multiselect',
                               'label'      => 'Multi Select',
                               'format'     => '39',
+                              'validation' => '',
+                              // ...
+                             );
+        $proptypes[40] = array(
+                              'id'         => 40,
+                              'name'       => 'affero',
+                              'label'      => 'Affero Username',
+                              'format'     => '40',
                               'validation' => '',
                               // ...
                              );
