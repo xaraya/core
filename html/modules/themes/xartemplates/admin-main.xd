@@ -21,12 +21,12 @@
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
                 <p><xar:mlstring>
-                From the menu, you have three choices.  "View", "Modify Config", and "Certified Releases". 
+                From the menu, you have three choices.  "View", "Modify Config", and "Template Tags". 
                 </xar:mlstring></p>
                 <ul>
                     <li><xar:mlstring>View -- Allows you to see what modules are currently installed on your system, and the current state that they are in.</xar:mlstring></li>
                     <li><xar:mlstring>Modify Configuration -- Allows you to set certain display configuration values.</xar:mlstring></li>
-                    <li><xar:mlstring>Certified Releases -- Allows you to see the latest certified release announcments from Xaraya.com</xar:mlstring></li>
+                    <li><xar:mlstring>Template tags -- Allows you view / edit / delete template tags on the system, as well as add new tags to functions.</xar:mlstring></li>
                 </ul>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
