@@ -44,10 +44,10 @@ function modules_admin_list()
     $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('All Active');
     $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('All Inactive');
     $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Not Installed');
-    $data['filter'][XARMOD_STATE_MISSING_FROM_UNINITIALISED] = xarML('Missing files');
-    $data['filter'][XARMOD_STATE_MISSING_FROM_INACTIVE] = xarML('Missing files');
-    $data['filter'][XARMOD_STATE_MISSING_FROM_ACTIVE]   = xarML('Missing files');
-    $data['filter'][XARMOD_STATE_MISSING_FROM_UPGRADED] = xarML('Missing files');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_UNINITIALISED] = xarML('Missing (Not Installed)');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_INACTIVE] = xarML('Missing (Inactive)');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_ACTIVE]   = xarML('Missing (Active)');
+    $data['filter'][XARMOD_STATE_MISSING_FROM_UPGRADED] = xarML('Missing (Upgraded)');
 
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
     $data['sort']['namedesc']                       = xarML('Name [z-a]');
