@@ -6,7 +6,7 @@
     </xar:mlstring>
 </div>
 <xar:comment> two pseudo-columns compact layout (tested in css compliant browser) </xar:comment>
-<div>
+<div style="width: 100%">
     <xar:loop name="$blocks">
         <xar:if condition="(($loop:index + 1) % 2)">
             <div class="xar-accent-outline" style="position:relative;left:0px;width:49%;height:1.5em;border-width:0px 0px 1px 0px;">

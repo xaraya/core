@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-norm-outline" style="padding: 0px 0px 5px 0px;">
-    <table border="0" width="100%">
+<div class="xar-norm-outline" style="padding: 0px 0px 5px 0px; width: 100%;">
+    <table class="xar-fullwidth" border="0"">
         <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
             <th><xar:mlstring>Groups</xar:mlstring></th>
