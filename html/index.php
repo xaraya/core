@@ -38,7 +38,7 @@ function xarMain()
     xarTplSetPageTitle(xarVarPrepForDisplay($SiteSlogan));
 
     // Theme Override
-    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED);
+    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
     if (!empty($themeName)) {
         $themeName = xarVarPrepForOS($themeName);
         xarTplSetThemeName($themeName);
