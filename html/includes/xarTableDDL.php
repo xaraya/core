@@ -129,31 +129,21 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         $dbconn =& xarDBGetConn();
         $nextId = $dbconn->GenId($metaTable);
         $query = "INSERT INTO $metaTable (
-                      xar_tableid,
-                      xar_table,
-                      xar_field,
-                      xar_type,
-                      xar_size,
-                      xar_default,
-                      xar_null,
-                      xar_unsigned,
-                      xar_increment,
-                      xar_primary_key)
-                    VALUES (
-                      $nextId,
-                      '" . xarVarPrepForStore($tableName) . "',
-                      '" . xarVarPrepForStore($args['field']) . "',
-                      '" . (empty($args['type']) ? '' : xarvarPrepForStore($args['type'])) . "',
-                      '" . (empty($args['size']) ? '' : xarvarPrepForStore($args['size'])) . "',
-                      '" . (empty($args['default']) ? '' : xarvarPrepForStore($args['default'])) . "', " .
-                      (empty($args['null']) ? '0' : '1') . ", " .
-                      (empty($args['unsigned']) ? '0' : '1') . ", " .
-                      (empty($args['increment']) ? '0' : '1') . ", " .
-                      (empty($args['primary_key']) ? '0' : '1') .
-                      ")";
+                      xar_tableid, xar_table, xar_field, xar_type,
+                      xar_size,  xar_default, xar_null,  xar_unsigned,
+                      xar_increment, xar_primary_key)
+                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $bindvars = array($nextId,$tableName,$args['field'],
+                          (empty($args['type']) ? '' : $args['type']),
+                          (empty($args['size']) ? '' : $args['size']),
+                          (empty($args['default']) ? '' : $args['default']),
+                          (empty($args['null']) ? '0' : '1'),
+                          (empty($args['unsigned']) ? '0' : '1'),
+                          (empty($args['increment']) ? '0' : '1'),
+                          (empty($args['primary_key']) ? '0' : '1'));
                   //    xar_width,
                   //    xar_decimals,
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,$bindvars);
     }
 
     // Select the correct database type
@@ -214,31 +204,21 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
         while (list($field_name, $parameters) = each($fields)) {
             $nextId = $dbconn->GenId($metaTable);
             $query = "INSERT INTO $metaTable (
-                      xar_tableid,
-                      xar_table,
-                      xar_field,
-                      xar_type,
-                      xar_size,
-                      xar_default,
-                      xar_null,
-                      xar_unsigned,
-                      xar_increment,
-                      xar_primary_key)
-                    VALUES (
-                      $nextId,
-                      '" . xarVarPrepForStore($tableName) . "',
-                      '" . xarVarPrepForStore($field_name) . "',
-                      '" . (empty($parameters['type']) ? '' : xarvarPrepForStore($parameters['type'])) . "',
-                      '" . (empty($parameters['size']) ? '' : xarvarPrepForStore($parameters['size'])) . "',
-                      '" . (empty($parameters['default']) ? '' : xarvarPrepForStore($parameters['default'])) . "', " .
-                      (empty($parameters['null']) ? '0' : '1') . ", " .
-                      (empty($parameters['unsigned']) ? '0' : '1') . ", " .
-                      (empty($parameters['increment']) ? '0' : '1') . ", " .
-                      (empty($parameters['primary_key']) ? '0' : '1') .
-                      ")";
+                      xar_tableid, xar_table, xar_field,  xar_type,
+                      xar_size,  xar_default, xar_null, xar_unsigned,
+                      xar_increment, xar_primary_key)
+                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+            $bindvars = array($nextId,$tableName,$field_name,
+                              (empty($parameters['type']) ? '' : $parameters['type']),
+                              (empty($parameters['size']) ? '' : $parameters['size']),
+                              (empty($parameters['default']) ? '' : $parameters['default']),
+                              (empty($parameters['null']) ? '0' : '1'),
+                              (empty($parameters['unsigned']) ? '0' : '1'),
+                              (empty($parameters['increment']) ? '0' : '1'),
+                              (empty($parameters['primary_key']) ? '0' : '1'));
                   //    xar_width,
                   //    xar_decimals,
-            $result =& $dbconn->Execute($query);
+            $result =& $dbconn->Execute($query,$bindvars);
         }
     }
 
@@ -289,8 +269,8 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     $metaTable = $systemPrefix . '_tables';
     if ($tableName != $metaTable) {
         $dbconn =& xarDBGetConn();
-        $query = "DELETE FROM $metaTable WHERE xar_table='" . xarVarPrepForStore($tableName) . "'";
-        $result =& $dbconn->Execute($query);
+        $query = "DELETE FROM $metaTable WHERE xar_table=?";
+        $result =& $dbconn->Execute($query,array($tableName));
     }
 
     switch($databaseType) {
@@ -631,6 +611,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     // look for the exception to know the table has been created.
     $dbconn =& xarDBGetConn();
     $query = 'DROP TABLE IF EXISTS ' . $tableName;
+    // CHECKME: Do we want to use bind vars here?
     $result =& $dbconn->Execute($query);
 
     $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
