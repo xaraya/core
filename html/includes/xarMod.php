@@ -987,12 +987,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // for this $modType.
         // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
         // this exception means that the module does not have the $modType API.
-        if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
-            xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
-            // In all other cases we just log the exception since we must always
-            // return a valid url
-            xarLogException(XARLOG_LEVEL_ERROR);
-        }
+
         // IMPORTANT: This freeing cause lots of error to be hidden, due to the fact that multiple
         // exceptions may be pending. As xarModUrl is used very often, and we want the exceptions
         // I commented it out (MrB). Not sure how to solve this in a better way.
