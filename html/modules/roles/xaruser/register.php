@@ -105,7 +105,7 @@ function roles_user_register()
                                                                        'values'     => $values,
                                                                        'invalid'    => $invalid,
                                                                        'properties' => $properties,
-                                                                       'withupload' => $withupload,
+                                                                       'withupload' => isset($withupload) ? $withupload : (int) FALSE,
                                                                        'userlabel' => xarML('New User')));
             break;
 
