@@ -25,29 +25,15 @@ function roles_admin_sendmail()
     $subject = xarVarPrepForDisplay($subject);
 
     // Confirm authorisation code.
-//    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
 
-    //Get the common search and replace values
-    $sitename = xarModGetVar('themes', 'SiteName');
-    $siteadmin = xarModGetVar('mail', 'adminname');
-    $adminmail = xarModGetVar('mail', 'adminmail');
-    $siteurl = xarServerGetBaseURL();
-    $search = array('/%%sitename%%/','/%%siteadmin%%/', '/%%adminmail%%/','/%%siteurl%%/');
-    $replace = array("$sitename", "$siteadmin", "$adminmail", "$siteurl");
-    $message = preg_replace($search,
-                              $replace,
-                              $message);
-    $subject = preg_replace($search,
-                              $replace,
-                              $subject);
-
     // Get the current query
     $q = unserialize(xarSessionGetVar('rolesquery'));
 
-    // only need the uid,name and email fields
+    // only need the uid, name and email fields
     $q->clearfields();
     $q->addfields(array('r.xar_uid','r.xar_name','r.xar_email'));
 
@@ -81,6 +67,11 @@ function roles_admin_sendmail()
 
 // now send the mails
     foreach ($users as $user) {
+        //Get the common search and replace values
+        $search = array('/%%recipientname%%/','/%%recipientuid%%/');
+        $replace = array($user['name'],$user['uid']);
+        $message = preg_replace($search, $replace, $message);
+        $subject = preg_replace($search, $replace, $subject);
         if (!xarModAPIFunc('mail',
             'admin',
             'sendmail',
@@ -93,31 +84,6 @@ function roles_admin_sendmail()
     xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     // Return
     return true;
-}
-
-function roles_admin_sendmail__getsubusers($uid, $state)
-{
-
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
-    $users = $role->getUsers($state);
-
-    $ua = array();
-    foreach($users as $user){
-        //using the ID as the key so that if a person is in more than one sub group they only get one email
-        $ua[$user->getID()] = $user;
-    }
-
-    //Get the sub groups and go for another round
-    $groups = $roles->getSubGroups($uid);
-    foreach($groups as $group){
-        $users = roles_admin_sendmail__getsubusers($group['uid'], $state);
-        foreach($users as $user){
-            $ua[$user->getID()] = $user;
-        }
-    }
-
-    return($ua);
 }
 
 ?>

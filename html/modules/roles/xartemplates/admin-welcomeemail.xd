@@ -35,7 +35,7 @@
 		</tr>
 		<tr align="left" valign="middle">
 			<td>
-				%%name%%
+				%%myname%%
 			</td>
 			<td>
 				<xar:mlstring>Name given during registration</xar:mlstring>

@@ -242,9 +242,9 @@ president@whitehouse.gov';
 * Set reminder email
 */
 
-    $remindertitle = 'Replacement login information for %%name%% at
+    $remindertitle = 'Replacement login information for %%recipientname%% at
 %%sitename%%';
-    $reminderemail = '%%name%%,
+    $reminderemail = '%%recipientname%%,
 
 Here is your new password for %%sitename%%. You may now login to %%siteurl%%
 using the following username and password:
@@ -259,8 +259,8 @@ password: %%password%%
 /*---------------------------------------------------------------
 * Set notification values
 */
-    $validationtitle = 'Validate your account %%name%% at %%sitename%%';
-    $validationemail = '%%name%%,
+    $validationtitle = 'Validate your account %%recipientname%% at %%sitename%%';
+    $validationemail = '%%recipientname%%,
 
 Your account must be validated again because your e-mail address has changed or
 an administrator has unvalidated it. You can either do this now, or on the next
@@ -277,8 +277,8 @@ You will receive an email has soon as your account is activated again.
 /*---------------------------------------------------------------
 * Set deactivation email
 */
-    $deactivationtitle = '%%name%% deactivated at %%sitename%%';
-    $deactivationemail = '%%name%%,
+    $deactivationtitle = '%%recipientname%% deactivated at %%sitename%%';
+    $deactivationemail = '%%recipientname%%,
 
 Your account was deactivated by the administrator.
 If you want to know the reason, contact %%adminmail%%
@@ -291,8 +291,8 @@ You will receive an email as soon as your account is activated again.
 /*---------------------------------------------------------------
 * Set pending email
 */
-    $pendingtitle = 'Pending state of %%name%% at %%sitename%%';
-    $pendingemail = '%%name%%,
+    $pendingtitle = 'Pending state of %%recipientname%% at %%sitename%%';
+    $pendingemail = '%%recipientname%%,
 
 Your account is pending.
 You\'ll have to wait for the explicit approval of the administrator to log
@@ -308,7 +308,7 @@ You will receive an email has soon as your account is activated again.
 * Set password reminder email
 */
     $passwordtitle = 'Your password at %%sitename%% has been changed';
-    $passwordemail = '%%name%%,
+    $passwordemail = '%%recipientname%%,
 
 Your password has been changed by an administrator.
 You can now login at %%siteurl%% with the following information:

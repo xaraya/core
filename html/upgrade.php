@@ -794,12 +794,12 @@ no further emails from us.Thank you,
                              'override'  =>  1),
                      array('name'    =>  'remindertitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Replacement login information for %%name%% at
+                             'set'     =>  'Replacement login information for %%recipientname%% at
 %%sitename%%',
                              'override'  =>  1),
                     array('name'    =>  'reminderemail',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%%,
+                             'set'     =>  '%%recipientname%%,
 
 Here is your new password for %%sitename%%. You may now login to %%siteurl%%
 using the following username and password:
@@ -810,11 +810,11 @@ password: %%password%%
                              'override'  =>  1),
                     array('name'    =>  'validationtitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Validate your account %%name%% at %%sitename%%',
+                             'set'     =>  'Validate your account %%recipientname%% at %%sitename%%',
                              'override'  =>  1),
                     array('name'    =>  'validationemail',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%%,
+                             'set'     =>  '%%recipientname%%,
 
 Your account must be validated again because your e-mail address has changed or
 an administrator has unvalidated it. You can either do this now, or on the next
@@ -828,11 +828,11 @@ You will receive an email has soon as your account is activated again.
                              'override'  =>  1),
                     array('name'    =>  'deactivationtitle',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%% deactivated at %%sitename%%',
+                             'set'     =>  '%%recipientname%% deactivated at %%sitename%%',
                              'override'  =>  1),
                     array('name'    =>  'deactivationemail',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%%,
+                             'set'     =>  '%%recipientname%%,
 
 Your account was deactivated by the administrator.
 If you want to know the reason, contact %%adminmail%%
@@ -842,11 +842,11 @@ You will receive an email as soon as your account is activated again.
                              'override'  =>  1),
                     array('name'    =>  'pendingtitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Pending state of %%name%% at %%sitename%%',
+                             'set'     =>  'Pending state of %%recipientname%% at %%sitename%%',
                              'override'  =>  1),
                     array('name'    =>  'pendingemail',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%%,
+                             'set'     =>  '%%recipientname%%,
 
 Your account is pending.
 You\'ll have to wait for the explicit approval of the administrator to log
@@ -862,7 +862,7 @@ You will receive an email has soon as your account is activated again.
                              'override'  =>  1),
                     array('name'    =>  'passwordemail',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%%,
+                             'set'     =>  '%%recipientname%%,
 
 Your password has been changed by an administrator.
 You can now login at %%siteurl%% with the following information:

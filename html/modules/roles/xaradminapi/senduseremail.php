@@ -63,7 +63,7 @@ function roles_adminapi_senduseremail($args)
             else $validationlink = '';
 
             //user specific data
-            $usersearch = array('/%%name%%/','/%%username%%/','/%%useremail%%/', '/%%userstate%%/',
+            $usersearch = array('/%%myname%%/','/%%username%%/','/%%useremail%%/', '/%%userstate%%/',
                     '/%%password%%/', '/%%ipaddress%%/', '/%%valcode%%/', '/%%validationlink%%/');
 
             $userreplace = array($user['name'],$user['uname'], $user['email'], $user['state'],
