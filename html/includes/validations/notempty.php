@@ -13,11 +13,11 @@
 /**
  * notempty Validation Function
  */
-function variable_validations_notempty (&$subject, $parameters) {
+function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc) {
 
     if (empty($subject)) {
         $msg = xarML('Variable "#(1)" should not be empty', $subject);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 

@@ -12,7 +12,7 @@
 /**
  * Boolean Validation Function
  */
-function variable_validations_bool (&$subject, $parameters=null) {
+function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc) {
 
     if ($subject == 'true') {
         $subject = true;
@@ -20,7 +20,7 @@ function variable_validations_bool (&$subject, $parameters=null) {
         $subject = false;
     } else {
         $msg = xarML('Variable "#(1)" is not boolean', $subject);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', $msg);
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', $msg);
         return false;
     }
 

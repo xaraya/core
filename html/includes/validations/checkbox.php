@@ -12,7 +12,7 @@
 /**
  * Checkbox Validation Class
  */
-function variable_validations_checkbox (&$subject, $parameters) {
+function variable_validations_checkbox (&$subject, $parameters, $supress_soft_exc) {
 
     if (is_string($subject)) {
         $subject = true;
@@ -20,7 +20,7 @@ function variable_validations_checkbox (&$subject, $parameters) {
         $subject = false;
     } else {
         $msg = xarML('Not a checkbox Type: "#(1)"', $subject);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 

@@ -13,7 +13,7 @@
 /**
  * Regular Expression Validation Class
  */
-function variable_validations_regexp (&$subject, $parameters) {
+function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc) {
 
     if (!isset($parameters[0]) || trim($parameters[0]) == '') {
         $msg = 'There is no parameter to check against in Regexp validation';
@@ -24,7 +24,7 @@ function variable_validations_regexp (&$subject, $parameters) {
     }
 
     $msg = xarML('Variable "#(1)" didnt match pattern "#(2)"', $subject, $parameters[0]);
-    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+    if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
     return false;
 }
 

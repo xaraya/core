@@ -27,8 +27,8 @@ define('XARVAR_DONT_REUSE',   256);
 
 define('XARVAR_PREP_FOR_NOTHING', 0);
 define('XARVAR_PREP_FOR_DISPLAY', 1);
-define('XARVAR_PREP_FOR_HTML', 2);
-define('XARVAR_PREP_FOR_STORE', 3);
+define('XARVAR_PREP_FOR_HTML',    2);
+define('XARVAR_PREP_FOR_STORE',   4);
 
 /**
  * Initialise the variable handling options
@@ -176,15 +176,6 @@ function xarVarBatchFetch() {
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
-    /*
-     nuncanada: XARVAR_NOT_REQUIRED is useless in the logic used here, just put the
-     default value and it will work fine
-     XARVAR_NOT_REQUIRED should be some independent integer so it could be mixed(!) with XARVAR_GET_OR_POST
-     What about cookie/env/request/server variables?
-    */
-
-    //XARVAR_DONT_SET
-
     assert('is_int($flags)');
 
     $allowOnlyMethod = NULL;
@@ -198,42 +189,32 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         $value = xarRequestGetVar($name, $allowOnlyMethod);
     }
 
-    // Check prep of $value
-    if ($prep != XARVAR_PREP_FOR_NOTHING) {
-        switch ($prep) {
-            case XARVAR_PREP_FOR_DISPLAY:
-                $value = xarVarPrepForDisplay($value);
-                break;
-            case XARVAR_PREP_FOR_HTML:
-                $value = xarVarPrepHTMLDisplay($value);
-                break;
-            case XARVAR_PREP_FOR_STORE:
-                $value = xarVarPrepForStore($value);
-                break;
-            default:
-                break;
-        }
+    if (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
+        $supress = true;
+    } else {
+        $supress = false;
     }
 
-    $result = xarVarValidate($validation, $value);
+    $result = xarVarValidate($validation, $value, $supress);
+    
+    if (xarExceptionMajor()) {return;} //Throw back
 
-    if ($result === NULL) {return;} //SYSTEM_EXCEPTION -> throw back
+    // Check prep of $value
+    if ($prep & XARVAR_PREP_FOR_DISPLAY) {
+       $value = xarVarPrepForDisplay($value);
+    }
 
-    //USER_EXCEPTION -> find if there is a defaultValue set.
-    if ($result === FALSE) {
-        if ($flags & XARVAR_DONT_SET) {
-            xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
-            return true;
-        }
+    if ($prep & XARVAR_PREP_FOR_HTML) {
+        $value = xarVarPrepHTMLDisplay($value);
+    }
 
-        if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
-            $value = $defaultValue;
-            xarExceptionHandled(); //<- We should have an USER_EXCEPTION on the stack
-        } else {
-            // We should already have an USER EXCEPTION on the stack...
-            // Let it go alone.
-            return;
-        }
+    if ($prep & XARVAR_PREP_FOR_STORE) {
+        $value = xarVarPrepForStore($value);
+    }
+
+    if ((!$result) &&
+        (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue))) {
+        $value = $defaultValue;
     }
 
     return true;
@@ -286,7 +267,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, &$subject) {
+function xarVarValidate($validation, &$subject, $supress = false) {
 // <nuncanada> For now, i have moved all validations to html/modules/variable/validations
 //             I think that will incentivate 3rd party devs to create and send new validations back to us..
 //             As id/int/str are used in every page view, probably they should be here.
@@ -315,7 +296,7 @@ function xarVarValidate($validation, &$subject) {
     }
 
     if (function_exists($function_name)) {
-        $return = $function_name($subject, $valParams);
+        $return = $function_name($subject, $valParams, $supress);
         //The helper functions already have a nicer interface, let?s change the main function too?
         return $return;
     } else {

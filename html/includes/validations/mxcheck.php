@@ -35,7 +35,7 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
  * valdidate email
  *
  */
-function variable_validations_mxcheck (&$subject, $parameters=null) {
+function variable_validations_mxcheck (&$subject, $parameters=null, $supress_soft_exc) {
 
     global $HTTP_HOST;
 
@@ -99,7 +99,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null) {
                     // hardware consumption exploit thru sending many of these e-mails to be checked
                     
                     $msg = xarML('Invalid e-mail #(1), the mail server doesnt recognize it.', $subject);
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+                    if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
 
                     return false;
                 }
@@ -107,7 +107,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null) {
     } else { // Failure in socket connection
 
         $msg = xarML('Unable to connect to the mail server #(1) for e-mail #(2).', $ConnectAddress, $subject);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
 
         return false;
     }

@@ -12,9 +12,9 @@
 /**
  * Id Validation Class
  */
-function variable_validations_id (&$subject, $parameters)
+function variable_validations_id (&$subject, $parameters, $supress_soft_exc)
 {
-    return xarVarValidate ('int:1', $subject);
+    return xarVarValidate ('int:1', $subject, $supress_soft_exc);
 }
 
 ?>

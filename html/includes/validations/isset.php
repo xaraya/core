@@ -13,11 +13,11 @@
 /**
  * IsSet Validation Function
  */
-function variable_validations_isset (&$subject, $parameters) {
+function variable_validations_isset (&$subject, $parameters, $supress_soft_exc) {
 
     if (!isset($subject)) {
         $msg = xarML('Variable not set!');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 
