@@ -240,9 +240,6 @@ xarSession_close();
 
 flush();
 
-// Kill the debugger
-xarCore_disposeDebugger();
-
 // done
 exit;
  
