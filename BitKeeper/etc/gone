@@ -3473,6 +3473,7 @@ marcel@sasquatch.pulpcontent.com|PENDING/patch-2002-12-04-18-53-46|2002120421285
 marcel@sasquatch.pulpcontent.com|PENDING/placeholder|20021104230459|12476|a57f1db1920c49e4
 marco@jabawack.canini.org|docs/rfc/rfc0020.txt|20021222121721|50563|f9c640e3b20a4ae
 marco@jabawack.canini.org|html/locales/en_US.ISO-8859-1/php/core/core.php|20030107014412|05069|697a3d6fe51ae916
+marco@jabawack.canini.org|html/locales/en_US.iso-8859-1/php/xarcore.php|20021130224109|33405|f52cf649f7788c15
 marco@jabawack.canini.org|html/modules/translations/class/PHPParser.php|20021222154100|18559|543eb8f8f40a13d0
 marco@jabawack.canini.org|html/modules/translations/class/PHPTransGenerator.php|20021222154100|28159|49ed01d511837638
 marco@jabawack.canini.org|html/modules/translations/class/TPLParser.php|20021222154100|34126|816a9575f0c1f639
