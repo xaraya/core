@@ -214,6 +214,7 @@ function initializeSetup()
     xarRegisterMask('DeleteRole','All','roles','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminRole','All','roles','All','All','ACCESS_ADMIN');
     xarRegisterMask('MailRoles','All','roles','Mail','All','ACCESS_ADMIN');
+
     xarRegisterMask('AttachRole','All','roles','Relation','All','ACCESS_ADD');
     xarRegisterMask('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
 

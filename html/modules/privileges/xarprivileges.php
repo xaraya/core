@@ -6,7 +6,7 @@
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Privileges Module
@@ -28,9 +28,9 @@
 //quick hack to show some of what the functions are doing
 //set to 1 to activate
 define('XARDBG_WINNOW', 0);
-define('XARDBG_TEST', 0);
+define('XARDBG_TEST', 1);
 define('XARDBG_TESTDENY', 0);
-define('XARDBG_MASK', 'All');
+define('XARDBG_MASK', 'AttachRole');
 define('XAR_ENABLE_WINNOW', 0);
 
 class xarMasks
@@ -64,7 +64,7 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-    function xarMasks() 
+    function xarMasks()
     {
         $this->dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -108,7 +108,7 @@ class xarMasks
  * @throws  list of exception identifiers which can be thrown
  * @todo    list of things which must be done to comply to relevant RFC
 */
-    function getmasks($module = 'All',$component='All') 
+    function getmasks($module = 'All',$component='All')
     {
 
         if ($module == '' || $module == 'All') {
@@ -267,11 +267,16 @@ class xarMasks
                 $matched = false;
                 foreach ($privs2 as $key2 => $priv2) {
                     if(XARDBG_WINNOW) {
+                        $w1 = $priv1->matchesexactly($priv2) ? "<font color='green'>Yes</font>" : "<font color='red'>No</font>";
+                        $w2 = $priv2->matchesexactly($priv1) ? "<font color='green'>Yes</font>"  : "<font color='red'>No</font>";
+                        echo "Winnowing: ";
+                        echo $priv1->getName(). " implies " . $priv2->getName() . ": " . $w1 . "<br />";
+                        echo $priv2->getName(). " implies " . $priv1->getName() . ": " . $w2 . "<br /><br />";
                         /* debug output */
                         $w1 = $priv1->matchesexactly($priv2) ? "YES" : "NO";
                         $w2 = $priv2->matchesexactly($priv1) ? "YES" : "NO";
-                        $msg = "Winnowing: \n  ".$priv1->getName()." implies ". 
-                                $priv2->getName()."?: ".$w1."\n  ". 
+                        $msg = "Winnowing: \n  ".$priv1->getName()." implies ".
+                                $priv2->getName()."?: ".$w1."\n  ".
                                 $priv2->getName()." implies ".
                                 $priv1->getName()."?: ".$w2;
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
@@ -560,10 +565,13 @@ class xarMasks
         // Note : DENY rules override all others here...
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
+                if (($privilege->level == 0) && ($privilege->includes($mask))) echo $privilege->getName() . " found. ";
+                else echo "not found. ";
                 /* debugging output */
-                $msg = "Comparing for DENY.\n  ".$privilege->present()."\n  ".
+                $msg = "Comparing for DENY.".$privilege->present(). "\n  ".
                     $mask->present();
-                if (($privilege->level == 0) && 
+                if (($privilege->level == 0) &&
                     ($privilege->includes($mask))) {
                     $msg .= $privilege->getName() . " FOUND. \n";
                 } else {
@@ -578,6 +586,7 @@ class xarMasks
 
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                echo "<br />Comparing <br />" . $privilege->present() . " and <br />" . $mask->present() . ". <br />";
                 $msg = "Comparing \n  Privilege: ".$privilege->present().
                     "\n       Mask: ".$mask->present();
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
@@ -585,6 +594,7 @@ class xarMasks
             if ($privilege->includes($mask)) {
                 if ($privilege->implies($mask)) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level greater or equal.<br />";
                         $msg = $privilege->getName() . " WINS! ".
                             "Privilege includes mask. ".
                             "Privilege level greater or equal.\n";
@@ -594,6 +604,7 @@ class xarMasks
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Privilege includes mask. Privilege level lesser.<br />";
                         $msg = $mask->getName() . " MATCHES! ".
                                 "Privilege includes mask. Privilege level ".
                                 "lesser.\n";
@@ -605,6 +616,7 @@ class xarMasks
             elseif ($mask->includes($privilege)) {
                 if ($privilege->level >= $mask->level) {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $privilege->getName() . " <font color='blue'>wins</font>. Continuing .. <br />Mask includes privilege. Privilege level greater or equal.<br />";
                         $msg = $privilege->getName()." WINS! ".
                             "Mask includes privilege. Privilege level ".
                             "greater or equal.\n";
@@ -614,9 +626,11 @@ class xarMasks
                 }
                 else {
                     if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                        echo $mask->getName() . " <font color='blue'>wins</font>. Continuing...<br />Mask includes privilege. Privilege level lesser.<br />";
                         $msg = $mask->getName()." MATCHES! ".
                             "Mask includes privilege. Privilege level ".
                             "lesser.\n";
+                        echo $msg;
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
@@ -624,6 +638,7 @@ class xarMasks
             }
             else {
                 if(XARDBG_TEST && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
+                    echo "<font color='red'>no match</font>. Continuing...<br />";
                     $msg = "NO MATCH.\n";
                     xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                 }
@@ -859,7 +874,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-    function getprivileges() 
+    function getprivileges()
     {
     if ((!isset($allprivileges)) || count($allprivileges)==0) {
             $query = "SELECT p.xar_pid,
@@ -916,7 +931,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-    function gettoplevelprivileges($arg) 
+    function gettoplevelprivileges($arg)
     {
 //    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
         if($arg == "all") {
@@ -987,7 +1002,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getrealms() 
+    function getrealms()
     {
     if ((!isset($allrealms)) || count($allrealms)==0) {
             $query = "SELECT xar_rid,
@@ -1036,7 +1051,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getmodules() 
+    function getmodules()
     {
     if ((!isset($allmodules)) || count($allmodules)==0) {
             $query = "SELECT modules.xar_id,
@@ -1089,7 +1104,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getcomponents($module) 
+    function getcomponents($module)
     {
         $query = "SELECT DISTINCT xar_component
                     FROM $this->instancestable
@@ -1143,7 +1158,7 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getinstances($module, $component) 
+    function getinstances($module, $component)
     {
 
 
@@ -1256,7 +1271,7 @@ class xarPrivileges extends xarMasks
  * @param   strings with pid, name, realm, module, component, instances and level
  * @return  mixed pid if OK, void if not
 */
-    function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level) 
+    function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level)
     {
 
         $instance = "";
@@ -1573,7 +1588,7 @@ class xarPrivileges extends xarMasks
         $this->description  = $description;
     }
 
-    function present() 
+    function present()
     {
         $display = $this->getName();
         $display .= "-" . strtolower($this->getLevel());
@@ -1593,12 +1608,12 @@ class xarPrivileges extends xarMasks
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   integer   adds  Number of additional instance parts to add to the array 
+ * @param   integer   adds  Number of additional instance parts to add to the array
  * @return  array of strings
  * @throws  none
  * @todo    none
 */
-    function normalize($adds=0) 
+    function normalize($adds=0)
     {
         if (isset($this->normalform)) {
             if (empty($adds)) return $this->normalform;
@@ -1614,11 +1629,11 @@ class xarPrivileges extends xarMasks
             $normalform   = array_merge($normalform, explode(':', $thisinstance));
             $this->normalform = $normalform;
         }
-        
+
         for ($i=0;$i<$adds;$i++) {
             $normalform[] = 'all';
         }
-        
+
         return $normalform;
     }
 
@@ -1714,14 +1729,14 @@ class xarPrivileges extends xarMasks
         } else {
             $p2 = $mask->normalize();
         }
-        
+
         // match realm, module and component. bail if no match.
         for ($i=1;$i<4;$i++) {
             if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
                 return false;
             }
         }
-		
+
         // now match the instances
         $p1count = count($p1);
         $p2count = count($p2);
@@ -1767,77 +1782,77 @@ class xarPrivileges extends xarMasks
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
-    function getID()              
+    function getID()
     {
         return $this->sid;
     }
-    
-    function getName()            
+
+    function getName()
     {
         return $this->name;
     }
-    
-    function getRealm()           
+
+    function getRealm()
     {
         return $this->realm;
     }
-    
-    function getModule()          
+
+    function getModule()
     {
         return $this->module;
     }
-    
-    function getComponent()       
+
+    function getComponent()
     {
         return $this->component;
     }
-    
-    function getInstance()        
+
+    function getInstance()
     {
         return $this->instance;
     }
-    
-    function getLevel()           
+
+    function getLevel()
     {
         return $this->level;
     }
-    
-    function getDescription()     
+
+    function getDescription()
     {
         return $this->description;
     }
 
-    function setName($var)        
+    function setName($var)
     {
         $this->name = $var;
     }
-    
-    function setRealm($var)       
+
+    function setRealm($var)
     {
         $this->realm = $var;
     }
-    
-    function setModule($var)      
+
+    function setModule($var)
     {
         $this->module = $var;
     }
-    
-    function setComponent($var)   
+
+    function setComponent($var)
     {
         $this->component = $var;
     }
-    
-    function setInstance($var)    
+
+    function setInstance($var)
     {
         $this->instance = $var;
     }
-    
-    function setLevel($var)       
+
+    function setLevel($var)
     {
         $this->level = $var;
     }
-    
-    function setDescription($var) 
+
+    function setDescription($var)
     {
         $this->description = $var;
     }
@@ -2011,7 +2026,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    check to make sure the child is not a parent of the parent
 */
-    function makeEntry() 
+    function makeEntry()
     {
 
         $query = "INSERT INTO $this->privmemberstable
@@ -2034,7 +2049,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    check to make sure the child is not a parent of the parent
 */
-    function addMember($member) 
+    function addMember($member)
     {
 
         $query = "INSERT INTO $this->privmemberstable
@@ -2061,7 +2076,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function removeMember($member) 
+    function removeMember($member)
     {
 
         $query = "DELETE FROM $this->privmemberstable
@@ -2235,7 +2250,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function removeRole($role) 
+    function removeRole($role)
     {
 
 // use the equivalent method from the roles object
@@ -2453,7 +2468,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function getID()              
+    function getID()
     {
         return $this->pid;
     }
@@ -2470,7 +2485,7 @@ class xarPrivilege extends xarMask
  * @throws  none
  * @todo    none
 */
-    function isEmpty()              
+    function isEmpty()
     {
         return $this->module == 'empty';
     }
