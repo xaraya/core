@@ -19,7 +19,7 @@ function adminpanels_adminapi_buildbycat($args){
     // TODO: store our categories in module variable to be able add/remove them via interface
     $cats = array(  '1'=>'Global',
                     '2'=>'Content',
-                    '3'=>'Users &amp; Groups',
+                    '3'=>'Users & Groups',
                     '4'=>'Miscellaneous');
 
     list($dbconn) = xarDBGetConn();
@@ -38,7 +38,12 @@ function adminpanels_adminapi_buildbycat($args){
         if (!$result) return;
 
         // the category label
-        $catdata[$cat] = array();
+        if($cat == 'Users & Groups') {
+            // need xhtml compliant label for display
+            $catdata['Users &amp; Groups'] = array();
+        }else{
+            $catdata[$cat] = array();
+        }
 
         // module urls
         while(!$result->EOF){
@@ -46,7 +51,7 @@ function adminpanels_adminapi_buildbycat($args){
             $result->MoveNext();
             $modinfo = xarModGetInfo(xarModGetIDFromName($mname));
             // new style admin links
-                $catdata[$cat][$modinfo['displayname']] = array();
+            $catdata[$cat][$modinfo['displayname']] = array();
         }
     }
     // return the data
