@@ -1149,6 +1149,10 @@ class xarMLS__LocaleDataLoader
             return false;
         }
 
+        if(file_size($filename) == 0 ) {
+            return false;
+        }
+
         $this->tmpVars = array();
 
         $this->curData = '';
