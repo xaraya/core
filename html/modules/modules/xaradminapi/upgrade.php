@@ -50,6 +50,19 @@ function modules_adminapi_upgrade($args)
     $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
     if (!isset($modFileInfo)) return;
 
+    // Bug 1671 - Invalid SQL
+    // If the module fields returned from xarMod_getFileInfo()
+    // are set to false, then they must be set to a some valid value
+    // or a SQL error will occur due to null and zero length fields. 
+    if (!$modFileInfo['admin_capable'])
+        $modFileInfo['admin_capable'] = 0;
+    if (!$modFileInfo['user_capable'])
+        $modFileInfo['user_capable'] = 0;
+    if (!$modFileInfo['class'])
+        $modFileInfo['class'] = 'Unknown';
+    if (!$modFileInfo['category'])
+        $modFileInfo['category'] = 'Unknown';
+
     // Note the changes in the database...
     list($dbconn) = xarDBGetConn();
     $xartable = xarDBGetTables();
