@@ -446,7 +446,10 @@ function xarOutputCleanCached($type, $cacheKey = '')
     if (${'xar' . $type . '_cacheTime'} == 0 || (file_exists($touch_file) && filemtime($touch_file) > time() - ${'xar' . $type . '_cacheTime'})) {
         return;
     }
-    touch($touch_file);
+    if (!@touch($touch_file)) {
+        // hmm, somthings amiss... better let the administrator know, without disrupting the site
+    	error_log('Error from Xaraya::xarCache::xarOutputCleanCached - web process can not touch ' . $touch_file);
+    }
     if ($handle = @opendir($xarOutput_cacheCollection)) {
         while (($file = readdir($handle)) !== false) {
             $cache_file = $xarOutput_cacheCollection . '/' . $file;
