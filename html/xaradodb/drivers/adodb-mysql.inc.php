@@ -48,7 +48,10 @@ class ADODB_mysql extends ADOConnection {
 	{
 // XARAYA MODIFICATION - START
 		//$arr['description'] = $this->GetOne("select version()");
-		$arr['description'] = $this->_query("select version()",false);
+		$arr['description'] = $this->_query('select version()', false);
+		$result = $this->_query('select version()', false);
+		$resultfields = mysql_fetch_row($result);
+		$arr['description'] = $resultfields[0];
 // XARAYA MODIFICATION - END
 		$arr['version'] = ADOConnection::_findvers($arr['description']);
 		return $arr;
