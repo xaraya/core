@@ -179,8 +179,8 @@ function base_init()
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 1);
-    xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.ISO-8859-1');
-    xarConfigSetVar('Site.MLS.AllowedLocales','en_US.ISO-8858-1');
+    xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.iso-8859-1');
+    xarConfigSetVar('Site.MLS.AllowedLocales','en_US.iso-8858-1');
     xarConfigSetVar('Site.User.AuthenticationModules','authsystem');
 
     // Dummy logger

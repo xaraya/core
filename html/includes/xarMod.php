@@ -1243,7 +1243,7 @@ function xarMod_getFileInfo($modOsDir)
     $modFileInfo['securityschema'] = isset($modversion['securityschema']) ? $modversion['securityschema'] : false;
     $modFileInfo['class']          = isset($modversion['class']) ? $modversion['class'] : false;
     $modFileInfo['category']       = isset($modversion['category']) ? $modversion['category'] : false;
-    $modFileInfo['locale']         = isset($modversion['locale']) ? $modversion['locale'] : 'en_US.ISO-8859-1';
+    $modFileInfo['locale']         = isset($modversion['locale']) ? $modversion['locale'] : 'en_US.iso-8859-1';
 
     return $modFileInfo;
 }

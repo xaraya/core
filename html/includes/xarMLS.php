@@ -658,21 +658,21 @@ function xarMLS__parseLocaleString($locale)
  * @return string the charset
  */
 function xarMLS__getSingleByteCharset($langISO2Code) {
-    static $charsets = array('af' => 'ISO-8859-1', 'sq' => 'ISO-8859-1',
-    'ar' => 'ISO-8859-6',  'eu' => 'ISO-8859-1',  'bg' => 'ISO-8859-5',
-    'be' => 'ISO-8859-5',  'ca' => 'ISO-8859-1',  'hr' => 'ISO-8859-2',
-    'cs' => 'ISO-8859-2',  'da' => 'ISO-8859-1',  'nl' => 'ISO-8859-1',
-    'en' => 'ISO-8859-1',  'eo' => 'ISO-8859-3',  'et' => 'ISO-8859-15',
-    'fo' => 'ISO-8859-1',  'fi' => 'ISO-8859-1',  'fr' => 'ISO-8859-1',
-    'gl' => 'ISO-8859-1',  'de' => 'ISO-8859-1',  'el' => 'ISO-8859-7',
-    'iw' => 'ISO-8859-8',  'hu' => 'ISO-8859-2',  'is' => 'ISO-8859-1',
-    'ga' => 'ISO-8859-1',  'it' => 'ISO-8859-1',  //'ja' => '',
-    'lv' => 'ISO-8859-13', 'lt' => 'ISO-8859-13', 'mk' => 'ISO-8859-5',
-    'mt' => 'ISO-8859-3',  'no' => 'ISO-8859-1',  'pl' => 'ISO-8859-2',
-    'pt' => 'ISO-8859-1',  'ro' => 'ISO-8859-2',  'ru' => 'KOI8-R',
-    'gd' => 'ISO-8859-1',  'sr' => 'ISO-8859-2',  'sk' => 'ISO-8859-2',
-    'sl' => 'ISO-8859-2',  'es' => 'ISO-8859-1',  'sv' => 'ISO-8859-1',
-    'tr' => 'ISO-8859-9',  'uk' => 'ISO-8859-5');
+    static $charsets = array('af' => 'iso-8859-1', 'sq' => 'iso-8859-1',
+    'ar' => 'iso-8859-6',  'eu' => 'iso-8859-1',  'bg' => 'iso-8859-5',
+    'be' => 'iso-8859-5',  'ca' => 'iso-8859-1',  'hr' => 'iso-8859-2',
+    'cs' => 'iso-8859-2',  'da' => 'iso-8859-1',  'nl' => 'iso-8859-1',
+    'en' => 'iso-8859-1',  'eo' => 'iso-8859-3',  'et' => 'iso-8859-15',
+    'fo' => 'iso-8859-1',  'fi' => 'iso-8859-1',  'fr' => 'iso-8859-1',
+    'gl' => 'iso-8859-1',  'de' => 'iso-8859-1',  'el' => 'iso-8859-7',
+    'iw' => 'iso-8859-8',  'hu' => 'iso-8859-2',  'is' => 'iso-8859-1',
+    'ga' => 'iso-8859-1',  'it' => 'iso-8859-1',  //'ja' => '',
+    'lv' => 'iso-8859-13', 'lt' => 'iso-8859-13', 'mk' => 'iso-8859-5',
+    'mt' => 'iso-8859-3',  'no' => 'iso-8859-1',  'pl' => 'iso-8859-2',
+    'pt' => 'iso-8859-1',  'ro' => 'iso-8859-2',  'ru' => 'KOI8-R',
+    'gd' => 'iso-8859-1',  'sr' => 'iso-8859-2',  'sk' => 'iso-8859-2',
+    'sl' => 'iso-8859-2',  'es' => 'iso-8859-1',  'sv' => 'iso-8859-1',
+    'tr' => 'iso-8859-9',  'uk' => 'iso-8859-5');
     return @$charsets[$langISO2Code];
 }
 
@@ -711,14 +711,14 @@ class xarMLS__LocaleDataLoader
         $this->localeData = array();
 
         // TRICK: <marco> Since this xml parser sucks, we obviously use UTF-8 for utf-8 charset
-        // and ISO-8859-1 for other charsets, even if they're not single byte.
+        // and iso-8859-1 for other charsets, even if they're not single byte.
         // The only important thing here is to split utf-8 from other charsets.
         $charset = xarMLSGetCharsetFromLocale($locale);
         // FIXME: <marco> try, re-try and re-re-try this!
         if ($charset == 'UTF-8') {
-            $this->parser = xml_parser_create('UTF-8');
+            $this->parser = xml_parser_create('utf-8');
         } else {
-            $this->parser = xml_parser_create('ISO-8859-1');
+            $this->parser = xml_parser_create('iso-8859-1');
         }
         xml_set_object($this->parser, $this);
         xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
