@@ -22,7 +22,7 @@
             #$loop:item['name']#&nbsp;
         </td>
         <td>&nbsp;
-            <xar:loop name="$instances" prefix="inst">
+            <xar:loop name="$instances">
                 <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item['id']#">#$loop:item['title']#</a><br />
             </xar:loop>
         </td>
