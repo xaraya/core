@@ -1,24 +1,42 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya eXtensible Management System
-// Copyright (C) 2002 by the Xaraya Development Team.
-// http://www.xaraya.org
-// ----------------------------------------------------------------------
-// Original Author of file: Patrick Kellum
-// Purpose of file: Display the text content of the block
-// ----------------------------------------------------------------------
+/**
+ * File: $Id$
+ *
+ * Administration System
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2002 by the Xaraya Development Team.
+ * @link http://www.xaraya.com
+ *
+ * @subpackage adminpanels module
+ * @author John Cox <admin@dinerminor.com>
+*/
 
 /**
- * init func
- */
+ * initialise block
+ *
+ * @author  John Cox <admin@dinerminor.com>
+ * @access  public
+ * @param   none
+ * @return  nothing
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_waitingcontentblock_init()
 {
     return true;
 }
+
 /**
- * Block info array
- */
+ * get information on block
+ *
+ * @author  John Cox <admin@dinerminor.com>
+ * @access  public
+ * @param   none
+ * @return  data array
+ * @throws  no exceptions
+ * @todo    nothing
+*/
 function adminpanels_waitingcontentblock_info()
 {
     return array('text_type' => 'Waiting Content',
@@ -29,28 +47,26 @@ function adminpanels_waitingcontentblock_info()
          'form_refresh' => false,
          'show_preview' => true);
 }
+
 /**
- * Display func.
- */
+ * display adminmenu block
+ *
+ * @author  John Cox <admin@dinerminor.com>
+ * @access  public
+ * @param   none
+ * @return  data array on success or void on failure
+ * @throws  no exceptions
+*/
 function adminpanels_waitingcontentblock_display($blockinfo)
 {
 // Security Check
     if(!xarSecurityCheck('EditPanel',0,'Waitingcontentblock',"$blockinfo[title]:All:All")) return;
 
-    $moditems = array();
+    // Get publication types
+    $data = xarModAPIFunc('adminpanels', 'admin', 'waitingcontent');
 
-    $modlist = xarModAPIFunc('adminpanels','admin','getmoduleswc');
-    foreach ($modlist as $modid => $numitems) {
-        $modinfo = xarModGetInfo($modid);
-        $moditem = array();
-        $moditem['name'] = $modinfo['name'];
-        $moditem['numitems'] = $numitems;
-        $moditem['link'] = xarModURL($modinfo['name'],'admin','main');
-
-        $moditems[] = $moditem;
-    }
-
-    $data = xarTplBlock('adminpanels','waitingcontent', array('moditems' => $moditems));
+    $display = xarTplBlock('adminpanels','waitingcontent', array('output'   => $data['output'],
+                                                                 'message'  => $data['message']));
 
     // Populate block info and pass to BlockLayout.
 
@@ -58,7 +74,7 @@ function adminpanels_waitingcontentblock_display($blockinfo)
         $blockinfo['title'] = xarML('Waiting Content');
     }
 
-    $blockinfo['content'] = $data;
+    $blockinfo['content'] = $display;
 
 
     return $blockinfo;

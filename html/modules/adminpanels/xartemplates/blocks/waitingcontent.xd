@@ -1,8 +1,6 @@
-<xar:if condition="count($moditems) gt 0">
-    <xar:foreach in="$moditems" value="$moditem">
-        <a href="#$moditem['link']#">#$moditem['name']#</a> <xar:mlstring>has new content</xar:mlstring> (#$moditem['numitems']#)<br />
-    </xar:foreach>
+<xar:if condition="!empty($message)">
+	#$message#
 <xar:else />
-    <xar:mlstring>There is no waiting content to approve</xar:mlstring>
+	#$output#
 </xar:if>
-
+<br /><br />
