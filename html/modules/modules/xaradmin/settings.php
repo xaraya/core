@@ -27,10 +27,10 @@ function modules_admin_settings()
     if (!xarVarFetch('selsort', 'str:1:', $selsort, 'namedesc', XARVAR_NOT_REQUIRED)) return; 
     if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
     
-    xarModSetVar('modules', 'hidecore', $hidecore);
-    xarModSetVar('modules', 'selstyle', $selstyle);
-    xarModSetVar('modules', 'selfilter', $selfilter);
-    xarModSetVar('modules', 'selsort', $selsort);
+    xarModSetUserVar('modules', 'hidecore', $hidecore);
+    xarModSetUserVar('modules', 'selstyle', $selstyle);
+    xarModSetUserVar('modules', 'selfilter', $selfilter);
+    xarModSetUserVar('modules', 'selsort', $selsort);
     
     xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
 }
