@@ -14,7 +14,7 @@
 $modversion['name'] = 'Administration';
 $modversion['description'] = 'Displays the Adminstration Area in a user friendly block format';
 $modversion['id'] = '9';
-$modversion['version'] = '1.2';
+$modversion['version'] = '2.1';
 $modversion['official'] = 1;
 $modversion['author'] = 'Andy Varganov';
 $modversion['contact'] = 'andyv@xaraya.com';
