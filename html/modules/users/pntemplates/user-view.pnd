@@ -1,0 +1,72 @@
+<table border="0" width="100%">
+    <tr>
+        <th colspan="4" align="center">
+            <pnt:mlstring>Users Administration</pnt:mlstring>            
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center">
+        
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>New Account</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-modify;"><pnt:mlstring>Modify Account</pnt:mlstring></a>
+        </td>
+        <td align="center">
+            <a href="&pnt-modurl-users-user-view;"><pnt:mlstring>View Current Users</pnt:mlstring></a>
+        </td>
+    </tr>
+</table>
+
+<center>
+<br />
+<br />
+
+<table width="100%" border="1" cellspacing="0" cellpadding="4">
+    <tr>        
+		<th width="20%">
+			&pnt-var-numberlabel;
+		</th>
+        <th width="20%">
+			&pnt-var-namelabel;
+		</th>
+        <th width="50%">
+			&pnt-var-emaillabel;
+		</th>
+        <th width="10%">
+			&pnt-var-optionslabel;
+		</th>
+	</tr>
+    <pnt:loop name="items">
+    <tr>
+        <td>
+			&pnt-var-uname;
+		</td>
+        <td>
+			&pnt-var-name;
+		</td>
+        <td>
+			<a href="mailto:&pnt-var-name;">&pnt-var-email;</a>
+		</td>
+		<td>
+           <pnt:if condition="empty($editurl)">
+               &pnt-var-edittitle;
+               <pnt:else />
+                   <a href="&pnt-var-editurl;">&pnt-var-edittitle;</a>
+           </pnt:if>
+           |
+           <pnt:if condition="empty($deleteurl)">
+               &pnt-var-deletetitle;
+               <pnt:else />
+                   <a href="&pnt-var-deleteurl;">&pnt-var-deletetitle;</a>
+           </pnt:if>
+        </td>
+    </tr>
+    </pnt:loop>
+</table>
+<br />
+
+<!-- add the pager here -->
+&pnt-var-pager;
