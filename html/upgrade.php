@@ -1206,19 +1206,19 @@ Password : %%password%%
     $dbModule = xarModAPIFunc('modules',
                               'admin',
                               'getdbmodules',
-                              array('regId' => $regId));                                                                      
+                              array('regId' => $regId));
     // Get module information from the filesystem
     $fileModule = xarModAPIFunc('modules',
                                 'admin',
                                 'getfilemodules',
                                 array('regId' => $regId));
 
-    if ((!isset($dbModule)) || (!isset($fileModule))){ 
+    if ((!isset($dbModule)) || (!isset($fileModule))){
         echo "FAILED to update the davedap module to phpldapadmin module<br/>";
     } elseif (($dbModule['name'] == 'davedap') && ($fileModule['name'] == 'phpldapadmin')) {
         // Update modules table with new module name
         echo "<h5>Rename davedap module to phpldapadmin module in database.</h5>";
-        $query = "UPDATE " . $sitePrefix . "_modules 
+        $query = "UPDATE " . $sitePrefix . "_modules
                   SET xar_name = 'phpldapadmin',
                       xar_directory = 'phpldapadmin'
                   WHERE xar_regid = " . $regId;
@@ -1227,7 +1227,7 @@ Password : %%password%%
             echo "FAILED to update the davedap module to phpldapadmin module<br/>";
         } else {
             echo "Successfully renamed davedap module to phpldapadmin module in database<br/>";
-        } 
+        }
     } // End bug 1798
 
     // Bug 630, let's throw the reminder back up after upgrade.
@@ -1291,3 +1291,4 @@ function CatchOutput()
     echo xarTpl_renderPage($out);
     flush();
 }
+?>
