@@ -371,59 +371,52 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     }
 
     function parseNode($parent) {
-        $children = array();
-        $text = '';
+        // Start of parsing a node, initialize our result variables
+        $text = ''; $token=''; $children = array();
+
         while (true) {
             $token = $this->getNextToken();
-            $nextToken = '';
-            if (!isset($token)) {
-                break;
-            }
+            if (!isset($token)) break;
+
+            // At the start of parsing we can have:
+            // < -> opening tag
+            // & -> entity
+            // # -> replacement (variable or function)
             switch ($token) {
-                //
-                // Check for begin tag (<)
-                //
+            // Parsing begins with the opening < for a tag
             case '<':
+                // We distinguish :
+                // ? -> Processing instructions
+                // ! -> Comments or doctypes
+                // x -> Possible xar stuff
+                // / -> end tag
+                // other -> rest
                 $nextToken = $this->getNextToken();
-                //
-                // Check for header tag (<?xar)
-                //
                 if ($nextToken == '?') {
-                    $nextToken = $this->getNextToken(3);
-                    if ($nextToken == 'xar') {
-                        // <?xar header tag
-                        // Handle Header Tag
-                        $variables = $this->parseHeaderTag();
-                        if (!isset($variables)) {
-                            return; // throw back
-                        }
-                        foreach ($variables as $name => $value) {
-                            $this->tplVars->set($name, $value);
-                        }
+                    $target = $this->getNextToken(3);
+                    switch ($target) {
+                    case 'xar':
+                        // <?xar processing instruction
+                        $variables = $this->parseHeaderTag();  
+                        if (!isset($variables))  return; // throw back
+                   
+                        // Register the attributes or <?xar at template variables
+                        // FIXME: this is awkward syntax juggling
+                        foreach ($variables as $name => $value) $this->tplVars->set($name, $value);
+                      
                         // Here we set token to an empty string so that $text .= $token will result in $text
                         $token = '';
                         break;
-                    }
-                    elseif ($nextToken == 'xml') {
+                    case 'xml':
                         // <?xml header tag
-                        // <Dracos> No idea how to handle this atm
-                        // <Mrb> This is why we need <xar:blocklayout> as the root tag
-                        //       in the theme, anything before the <xar:blocklayout>
-                        //       will be copied verbatim to the output.
-                        //       (well, almost verbatim)
-
                         // Wind forward and copy to output
 
-                        $foundEndXmlHeader=false;
-                        $copy = '';
-                        $peek = '';
+                        $foundEndXmlHeader=false; $copy = ''; $peek = '';
                         while(!$foundEndXmlHeader && $peek!='>') {
                             $peek = $this->getNextToken(1);
                             if($peek == '?') {
                                 $end = $this->getNextToken();
-                                if($end == '>') {
-                                    $foundEndXmlHeader = true;
-                                }
+                                if($end == '>') $foundEndXmlHeader = true;
                             } else {
                                 $copy .= $peek;
                             }
@@ -431,15 +424,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if($peek == '>' && !$foundEndXmlHeader) {
                             // Template error, found a > before the end
                             $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
-                            break;
+                            return;
                         }
 
-                        // We do the exception check here, so the output is already parsed.
+                        // We do the exception check after parsing it, so we get usefull info in the error
                         if($this->line != 1) {
                             $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML header can only be on the first line of the document',$this);
-                            $token ='';
-                            // Don't return here, do the rest of the document?
-                            break;
+                            return;
                         }
 
                         // Copy the header to the output
@@ -450,25 +441,21 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                             $token = "<?xml " . $copy . "?>\n";
                         }
                         break;
-                    }
-                    // <Dracos>  Embedded php killer
-                    elseif ($nextToken == 'php') {
-                       $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax ", $this);
+                    case 'php':
+                        // Do a specific error for php processing instruction
+                        $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax ", $this);
+                        return;
+                    default:
+                        // Anything else leads to an error, that includes the short form of the php tag (empty target)
+                        $this->raiseError(XAR_BL_INVALID_TAG,"Unknown processing instruction '<?$target' found",$this);
                         return;
                     }
-                    else {
-                        $this->stepBack(3);
-                        $nextToken = $this->getNextToken(1);
-                        $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax", $this);
-                        return;
-                    }
-                    $this->stepBack(3);
-                    //
-                    // Check for xar tag (<xar:)
-                    //
+                    // If we get here, we have handled the processing instruction and we can break the outer switch
+                    break;
                 } elseif ($nextToken == 'x') {
-                    $nextToken = $this->getNextToken(3);
-                    if ($nextToken == 'ar:') {
+                    // Check for xar tag (<xar:)
+                    $xarToken = $this->getNextToken(3);
+                    if ($xarToken == 'ar:') {
                         // <xar: tag
                         if (!$parent->hasChildren()) {
                             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have children.", $parent);
@@ -523,50 +510,39 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     }
                     $this->stepBack(3);
-
-                    //
-                    // Check for end tag (</)
-                    //
                 } elseif ($nextToken == '/') {
-                    $nextToken = $this->getNextToken();
-                    //
                     // Check for xar end tag
-                    //
-                    if ($nextToken == 'x') {
-                        $nextToken = $this->getNextToken(3);
-                        if ($nextToken == 'ar:') {
-                            // </xar: tag
-                            // Add text to parent
-                            if (trim($text) != '') {
-                                if ($parent->hasText()) {
-                                    $node = $this->nodesFactory->createTextNode($text, $this);
-                                    $children[] = $node;
-                                } elseif (trim($text) != '') {
-                                    $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
-                                    return;
-                                }
-                                $text = '';
-                            }
-                            // Handle End Tag
-                            $tagName = $this->parseEndTag();
-                            if (!isset($tagName)) {
-                                return; // throw back
-                            }
-                            $stackTagName = array_pop($this->tagNamesStack);
-                            if ($tagName != $stackTagName) {
-                                $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
+                    $xarToken = $this->getNextToken(4);
+                    if ($xarToken == 'xar:') {
+                        // Add text to parent
+                        if (trim($text) != '') {
+                            //echo "Close:$text\n";
+                            if ($parent->hasText()) {
+                                $node = $this->nodesFactory->createTextNode($text, $this);
+                                //print_r($node);
+                                $children[] = $node;
+                            } else {
+                                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$parent->tagName."' tag cannot have text.", $parent);
                                 return;
                             }
-                            return $children;
+                            $text = '';
                         }
-                        $this->stepBack(3);
+                        // Handle End Tag
+                        $tagName = $this->parseEndTag();
+                        if (!isset($tagName)) {
+                            return; // throw back
+                        }
+                        $stackTagName = array_pop($this->tagNamesStack);
+                        if ($tagName != $stackTagName) {
+                            $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where close '$stackTagName' was expected.", $this);
+                            return;
+                        }
+                        //print_r($children);
+                        return $children;
                     }
-                    $this->stepBack(1);
-                }
-                //
-                // Check for comments or doctype
-                //
-                elseif ($nextToken == '!') {
+                    $this->stepBack(4);
+                } elseif ($nextToken == '!') {
+                    // Check for comments or doctype
                     // <garett> handle both <!-- and <!--- comment types
                     // (html comments are passed through, BL comments are stripped out)
 
@@ -663,15 +639,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         return;
                     }
                 }
-                $this->Stepback($tagcounter);
-                $this->stepBack(1);
+                $this->Stepback($tagcounter+1);
                 // xarLogVariable('token', $token, XARLOG_LEVEL_ERROR);
                 break;
-                //
-                // Check for xar entity
-                //
-                //
             case '&':
+                // Check for xar entity
                 $nextToken = $this->getNextToken(4);
                 if ($nextToken == 'xar-') {
                     if (!$parent->hasChildren()) {
@@ -792,6 +764,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     break;
                 }
             } // end switch
+            // Once we get here, nothing in the switch caught the token, we copy verbatim to output.
             $text .= $token;
         } // end while
         if (trim($text) != '') {
