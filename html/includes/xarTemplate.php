@@ -211,6 +211,9 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
             case 'pms':
                 $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModGetVar('themes', 'SiteName');
             break;
+            case 'to':
+                $GLOBALS['xarTpl_pageTitle'] = $title;
+            break;
         }
     }
     return true;
