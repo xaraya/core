@@ -42,3 +42,6 @@
     <br />
     [<a href="#$logouturl#">#$logoutlabel#</a>]
 </xar:if>
+    <br />
+    [<a href="#xarServerGetCurrentURL(array('theme' => 'print'))#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
+
