@@ -1151,10 +1151,6 @@ class xarTpl__NodesFactory
             case 'event':
                 $node = new xarTpl__XarEventNode();
                 break;
-            // <MrB>: include is deprecated, replaced by template, this is handled in the node itself
-            case 'include':
-                $node = new xarTpl__XarIncludeNode();
-                break;
             case 'template':
                 $node = new xarTpl__XarTemplateNode();
                 break;
@@ -2945,25 +2941,6 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
     }
 }
 
-/**
- * xarTpl__XarIncludeNode: <xar:include> tag
- *
- * @package blocklayout
- * @access private
- * @deprecated
- */
-class xarTpl__XarIncludeNode extends xarTpl__TplTagNode
-{
-    function render()
-    {
-        extract($this->attributes);
-        
-        xarExceptionSet(XAR_USER_EXCEPTION, 'InvalidTag',
-                           new xarTpl__ParserError('The <xar:include> tag has been deprecated, you must use <xar:template>.', $this));
-        return;
-
-    }
-}
 
 /**
  * xarTpl__XarTemplateNode: <xar:template> tag class
