@@ -822,7 +822,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     // from the users table.
     $query = "UPDATE $rolestable
               SET $usercolumns[$name] = '" . xarVarPrepForStore($value) . "'
-              WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
+              WHERE xar_pid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
     if (!$result) return;
     return true;
