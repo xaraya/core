@@ -198,7 +198,14 @@ function base_userapi_getfile($args)
 
     } else {
     // TODO: we probably want some fancier error checking here too :-)
-        $content = implode('',@file($url));
+        $lines = @file($url);
+        if (empty($lines)) {
+            $msg = xarML('Invalid URL #(1)', $url);
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            new SystemException($msg));
+            return;
+        }
+        $content = implode('',$lines);
     }
 
     if ($cached && is_dir($vardir . '/' . $cachedir)) {
