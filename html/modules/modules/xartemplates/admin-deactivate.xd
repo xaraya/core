@@ -1,0 +1,30 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Module Deactivation with dependents still active</xar:mlstring></h2>
+    <!-- The form for editting the module settings and hooks -->
+    <form action="#xarModURL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="id" id="id" value="#$id#" />
+        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+
+        <xar:if condition="count($dependencies['active']) ne 0">
+            <br />
+            <table border="1" cellpadding="5" cellspacing="0">
+                <tr>
+                    <th><xar:mlstring>Dependents still Active</xar:mlstring></th>
+                </tr>
+    
+                <xar:foreach in="$dependencies['active']" value="$modInfo">
+                    <tr>
+                        <td>#xarML($modInfo['displayname'])#</td>
+                    </tr>
+                </xar:foreach>
+            </table>
+            <br />
+        </xar:if>
+
+        <input type="submit" name="command" id="command" value="#xarML('Deactivate All')#" align="middle" tabindex="9" />
+        <br />
+
+        <a href="#xarModURL('modules','admin','list')#>#xarML('Go back to the modules list.')#</a>
+    </form>
+</div>

@@ -21,34 +21,33 @@ function modules_admin_deactivate ()
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
 
-	//First check the modules dependencies
+    //First check the modules dependencies
     $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
-	if (count($dependents['active']) > 1) {
-    	//Checking if the user has already passed thru the GUI:
-    	xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
+    if (count($dependents['active']) > 1) {
+        //Checking if the user has already passed thru the GUI:
+        xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
     } else {
-    	//No dependencies problems, jump dependency GUI
-    	$command = true;
+        //No dependencies problems, jump dependency GUI
+        $command = true;
     }
 
-   	if (!$command) {
-  		//Let's make a nice GUI to show the user the options
-   		$data = array();
-   		$data['id'] = $id;
-		//They come in 3 arrays: satisfied, satisfiable and unsatisfiable
-		//First 2 have $modInfo under them foreach module,
-		//3rd has only 'regid' key with the ID of the module
-	    $data['authid']       = xarSecGenAuthKey();
-   		$data['dependencies'] = $dependents;
-   		return $data;
-   	}
-   	
-   	//Installs with dependencies, first initialise the necessary dependecies
-   	//then the module itself
-	if (!xarModAPIFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
-		//Call exception
-		return;	
-	} // Else
+    if (!$command) {
+        //Let's make a nice GUI to show the user the options
+        $data = array();
+        $data['id'] = $id;
+        //They come in 2 arrays: active, initialised
+        //Both have $name => $modInfo under them foreach
+        $data['authid']       = xarSecGenAuthKey();
+        $data['dependencies'] = $dependents;
+        return $data;
+    }
+           
+    //Deactivate with dependents, first dependents
+    //then the module itself
+    if (!xarModAPIFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
+        //Call exception
+        return;
+    } // Else
 
 
     $minfo=xarModGetInfo($id);
