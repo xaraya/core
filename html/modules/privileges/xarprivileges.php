@@ -227,55 +227,7 @@ class xarMasks
  * @throws  none
  * @todo    create exceptions for bad input
 */
-    function winnow($perms1, $perms2)
-    {
-        if ((($perms1 == array()) || ($perms1 == '')) &&
-            (($perms2 == array()) || ($perms2 == ''))) return array();
-        if ($perms1 == array()) return $perms2;
-        if ($perms2 == array()) return $perms1;
-
-        foreach ($perms1 as $perm1) {
-            $isimplied = false;
-            foreach ($perms2 as $key=>$perm2) {
-//      echo "hi".$perm1->getName() . $perm2->getName()."ho";
-                if ($perm2->isEqual($perm1)) {
-                    $isimplied = true;
-                    break;
-                }
-                else if ($perm1->implies($perm2,true)) {
-                    array_splice($perms2,$key);
-                    array_push($perms2,$perm1);
-                    $isimplied = true;
-                    break;
-                }
-                else if ($perm2->implies($perm1,true)) {
-                    $isimplied = true;
-                    break;
-                }
-            }
-            if (!$isimplied) array_push($perms2, $perm1);
-        }
-
-// done
-        return $perms2;
-    }
-
-/**
- * trump: merges two arrays of privileges to a single array of privileges
- *
- * The privileges are compared for implication and the less recent are discarded.
- * The less recent are assumed to be in the first array
- * This is the way privileges hierarchies in role hierarchies are contracted.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of privileges objects
- * @param   array of privileges objects
- * @return  array of privileges objects
- * @throws  none
- * @todo    create exceptions for bad input
-*/
-    function trump($privs1, $privs2)
+    function winnow($privs1, $privs2)
     {
         if ((($privs1 == array()) || ($privs1 == '')) &&
             (($privs2 == array()) || ($privs2 == ''))) return array();
@@ -398,7 +350,7 @@ class xarMasks
 // TODO: this is a bug.Probably should winnow the lowerlevel and THEN trump against
 // the higher level
                 else {
-                    $irreducibleset = $this->trump($irreducibleset,$step['privileges']);
+                    $irreducibleset = $this->winnow($irreducibleset,$step['privileges']);
                     $top = $step['level'];
                 }
             }
@@ -416,7 +368,7 @@ class xarMasks
 //      foreach($roleprivileges as $test) echo $test->getName();
 
 // trump them against the accumulated privileges from higher levels
-        $irreducibleset = $this->trump($irreducibleset,$roleprivileges);
+        $irreducibleset = $this->winnow($irreducibleset,$roleprivileges);
 //      echo "Irreducible: ";
 //      foreach($irreducibleset as $test) echo $test->getName();
 // check each privilege from the irreducible set
