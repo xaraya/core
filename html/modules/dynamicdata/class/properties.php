@@ -991,8 +991,8 @@ class Dynamic_Property_Master
  */
 class Dynamic_Property
 {
-    var $id;
-    var $name;
+    var $id = null;
+    var $name = null;
     var $label;
     var $type = 1;
     var $default = '';
