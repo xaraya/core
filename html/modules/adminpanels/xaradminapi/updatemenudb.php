@@ -1,6 +1,5 @@
 <?php
 /**
- * File: $Id
  *
  * Update an adminmenu db entries
  *

@@ -1,7 +1,5 @@
 <?php
 /**
- * File: $Id: s.adminmenu.php 1.69 03/07/13 11:22:33+02:00 marcel@hsdev.com $
- *
  * Administration System
  *
  * @package Xaraya eXtensible Management System
@@ -83,15 +81,14 @@ function adminpanels_adminmenublock_display($blockinfo)
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
     
     // there aren't any admin modules, dont display adminmenu
-    // <mrb> How would this happen? 
+    // <mrb> How would this happen? adminpanels is here :-)
     if (empty($mods)) return;
 
     // this is how we are marking the currently loaded module
-    $marker = xarModGetVar('adminpanels', 'marker');
-
     // dont show marker unless specified
-    if (!xarModGetVar('adminpanels', 'showmarker')) {
-        $marker = '';
+    $marker = '';
+    if (xarModGetVar('adminpanels', 'showmarker')) {
+        $marker = xarModGetVar('adminpanels', 'marker');
     }
 
     // which module is loaded atm?
@@ -107,8 +104,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     $currenturl = xarServerGetCurrentURL();
 
     // TODO: why isn't the menustyle part of the block admin?
-    // Set up like it is, means we are forced to use global menu
-    // style settings site-wide.
+    // Set up like it is, means we are forced to use global menu style settings site-wide.
     switch(strtolower($menustyle)){
         case 'byname':
             // display by name
@@ -144,21 +140,17 @@ function adminpanels_adminmenublock_display($blockinfo)
                     if (!empty($menulinks)) {
                         foreach($menulinks as $menulink) {
                             // please note how we place the marker against active function link
-                            $funcactive = ($menulink['url'] == $currenturl) ? 1 : 0;
-                            
                             $adminmods[$modname]['indlinks'][] = array(
                                 'adminlink'     => $menulink['url'],
                                 'adminlabel'    => $menulink['label'],
                                 'admintitle'    => $menulink['title'],
-                                'funcactive'    => $funcactive
+                                'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
                     } else {
                         // not sure if we need this
                         $indlinks = array();
                     }
-                } else {
-
                 }
             }
             // TODO: move prep to template
@@ -186,7 +178,7 @@ function adminpanels_adminmenublock_display($blockinfo)
             $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildmenu',array('menustyle' => 'bycat'));
 
             // scan the array and set labels and states
-            foreach ($catmods as $cat => $mods) {
+            foreach ($catmods as $cat => $mods) { 
                 // display label for each category
                 // TODO: make them ML
                 $label = $cat;
@@ -201,7 +193,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                         'link'      => $link,
                         'modactive' => 0,
                         'overview'  => 0,
-                         // TODO: untranslatable
                         'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
                     if ($modname == $thismodname && $thismodtype == 'admin') {
                         // this module is currently loaded (active), we need to display
@@ -220,16 +211,13 @@ function adminpanels_adminmenublock_display($blockinfo)
 
                         // scan array and prepare the links
                         if (!empty($menulinks)) {
-                            foreach($menulinks as $menulink){
-
+                            foreach($menulinks as $menulink) {
                                 // please note how we place the marker against active function link
-                                $funcactive = ($menulink['url'] == $currenturl) ? 1 : 0;
-
                                 $catmods[$cat][$modname]['indlinks'][] = array(
                                     'adminlink'     => $menulink['url'],
                                     'adminlabel'    => $menulink['label'],
                                     'admintitle'    => $menulink['title'],
-                                    'funcactive'    => $funcactive
+                                    'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                                 );
                             }
                         }else{
@@ -257,8 +245,6 @@ function adminpanels_adminmenublock_display($blockinfo)
                 'logoutlabel'   => $logoutlabel,
                 'marker'        => $marker
             );
-
-            // this should do for now
             break;
 
         case 'byweight':
@@ -306,6 +292,7 @@ function adminpanels_adminmenublock_display($blockinfo)
     }
 
     // Set template base.
+    // FIXME: not allowed to set private variables of BL directly
     $blockinfo['_bl_template_base'] = $template;
 
     // Populate block info and pass to BlockLayout.
