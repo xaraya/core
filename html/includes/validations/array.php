@@ -14,7 +14,14 @@
  */
 function variable_validations_array (&$subject, $parameters) {
 
-    if (!is_array($subject) && ($subject !== NULL)) {
+    if ($subject === NULL) {
+        //Most likely there will be a foreach on this $subject right
+        //after the validation... I think it is nicer to have an empty array, then
+        //have the devs checking the $subject == NULL...
+        $subject = array();
+    }
+    
+    if (!is_array($subject)) {
         $msg = xarML('Not an array: "#(1)"', $subject);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
