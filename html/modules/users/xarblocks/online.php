@@ -64,7 +64,7 @@ function users_onlineblock_display($blockinfo)
 
    $query2 = "SELECT count( 1 )
              FROM $sessioninfotable
-              WHERE xar_lastused > $activetime AND xar_uid = '1'
+              WHERE xar_lastused > $activetime AND xar_uid = '0'
 			  GROUP BY xar_ipaddr
 			 ";
    $result2 = $dbconn->Execute($query2);
