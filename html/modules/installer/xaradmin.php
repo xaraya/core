@@ -211,12 +211,12 @@ function installer_admin_phase5()
     // Start the database
     xarCoreInit(XARCORE_SYSTEM_ADODB);
 
-// install the security stuff here, but disable the registerMask and
-// and xarSecurityCheck functions until we've finished the installation process
+    // install the security stuff here, but disable the registerMask and
+    // and xarSecurityCheck functions until we've finished the installation process
 
-	$installing = true;
-	include_once 'includes/xarSecurity.php';
-	xarSecurity_init();
+    $installing = true;
+    include_once 'includes/xarSecurity.php';
+    xarSecurity_init();
 
     // Load in modules/installer/xarinit.php and start the install
     if (!xarInstallAPIFunc('installer', 'admin', 'initialise',
@@ -242,21 +242,21 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
-     xarTplSetThemeName('installer');
+    xarTplSetThemeName('installer');
 
-	$installing = false;
+    $installing = false;
 
 // activate the security stuff
 // create the default roles and privileges setup
-	include 'modules/privileges/xarsetup.php';
-	initializeSetup();
+    include 'modules/privileges/xarsetup.php';
+    initializeSetup();
 
 // log in admin user
     if (!xarUserLogIn('Admin', 'password', 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
-			return false;
+            return false;
     }
 
     // Activate modules
@@ -268,7 +268,7 @@ function installer_admin_bootstrap()
         return;
     }
 
-	xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 }
 
 /**
@@ -280,25 +280,25 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
-	xarTplSetThemeName('installer');
+    xarTplSetThemeName('installer');
     $data['language'] = 'English';
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
 // Security Check
-	if(!xarSecurityCheck('AdminInstaller')) return;
+    if(!xarSecurityCheck('AdminInstaller')) return;
 
     include_once 'modules/roles/xarroles.php';
 
     if (!xarVarCleanFromInput('create')) {
 // create a role from the data
-    	$roles = new xarRoles();
-    	$role = $roles->getRole(3);
+        $roles = new xarRoles();
+        $role = $roles->getRole(3);
 
 // assemble the template data
-		$data['install_admin_username'] = $role->getUser();
-    	$data['install_admin_name'] = $role->getName();
-    	$data['install_admin_email'] = $role->getEmail();
+        $data['install_admin_username'] = $role->getUser();
+        $data['install_admin_name'] = $role->getName();
+        $data['install_admin_email'] = $role->getEmail();
         return $data;
     }
 
@@ -317,15 +317,15 @@ function installer_admin_create_administrator()
 
 
 // assemble the args into an array for the role constructor
-	$password = md5($pass);
-	$pargs = array('uid'=>3,
-					'name'=>$name,
-					'type'=>0,
-					'uname'=>$username,
-					'email'=>$email,
-					'pass'=>$password,
-					'url'=>$url,
-					'state'=>3);
+    $password = md5($pass);
+    $pargs = array('uid'=>3,
+                    'name'=>$name,
+                    'type'=>0,
+                    'uname'=>$username,
+                    'email'=>$email,
+                    'pass'=>$password,
+                    'url'=>$url,
+                    'state'=>3);
 
 // create a role from the data
     $role = new xarRole($pargs);
