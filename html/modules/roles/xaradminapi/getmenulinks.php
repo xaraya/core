@@ -84,7 +84,7 @@ function roles_adminapi_getmenulinks()
     }
 
     if (xarSecurityCheck('AdminRole',0)) {
-        $menulinks[] = Array('url'   => xarModURL('base',
+        $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'listwizards',
                                                   array('info' => xarRequestGetInfo())),
