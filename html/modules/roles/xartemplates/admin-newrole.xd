@@ -76,7 +76,7 @@
 						<label for="pstate"><xar:mlstring>State</xar:mlstring></label>
 					</td>
 					<td>
-					<select name="pstate" id="pstate" size="1" tabindex="8">				
+					<select name="pstate" id="pstate" size="1" tabindex="6">				
 						<xar:if condition="$pstate eq 1">
 							<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
 						<xar:else />
@@ -105,7 +105,7 @@
 						<label for="ppass1"><xar:mlstring>Password</xar:mlstring></label>
 					</td>
 					<td>
-						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="6" />
+						<input type="password" name="ppass1" id="ppass1" value="#$ppass1#" size="40" maxlength="40" tabindex="7" />
 					</td>
 				</tr>
 				<tr>
@@ -113,7 +113,7 @@
 						<label for="ppass2"><xar:mlstring>Confirm Password</xar:mlstring></label>
 					</td>
 					<td>
-						<input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="7" />
+						<input type="password" name="ppass2" id="ppass2" value="" size="40" maxlength="40" tabindex="8" />
 					</td>
 				</tr>
 			</xar:if>
