@@ -555,13 +555,15 @@ function xarExceptionRender($format)
         else $imadmin = true;
         if ($format == 'html') {
           if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (xarExceptionId() == "ErrorCollection") {
-                  $exception['exceptionId'] = "PHP_ERROR";
-                  $collecteditems = "One or more PHP errors were encountered. <BR /><BR />";
-                  foreach($exception['value']->exceptions as $collecteditem) {
-                      $collecteditems .= $collecteditem['value']->getShort() . "<BR />";
+              if (is_array($exception['value']->exceptions)) {
+                  $collection = $exception['value']->exceptions;
+                  $message = "One or more PHP errors were encountered. <BR /><BR />";
+                  foreach($collection as $collecteditem) {
+                      $message .= $collecteditem['id'] . "<BR />";
+                      $message .= $collecteditem['value']->msg . "<BR />";
                   }
-                  $exception['value']->setMsg($collecteditems);
+                  $exception['exceptionId'] = "PHP_ERROR";
+                  $exception['value']->setMsg($message);
               }
                 $stack = $exception['stack'];
                 $text = "";
@@ -585,13 +587,15 @@ function xarExceptionRender($format)
             }
         } else {
             if ($exception['major'] != XAR_USER_EXCEPTION && $imadmin) {
-              if (xarExceptionId() == "ErrorCollection") {
-                  $exception['exceptionId'] = "PHP_ERROR";
-                  $collecteditems = "One or more PHP errors were encountered. \n\n";
-                  foreach($exception['value']->exceptions as $collecteditem) {
-                      $collecteditems .= $collecteditem['value']->getShort() . "\n";
+              if (is_array($exception['value']->exceptions)) {
+                  $collection = $exception['value']->exceptions;
+                  $message = "One or more PHP errors were encountered. \n\n";
+                  foreach($collection as $collecteditem) {
+                      $message .= $collecteditem['id'] . "\n";
+                      $message .= $collecteditem['value']->msg . "\n";
                   }
-                  $exception['value']->setMsg($collecteditems);
+                  $exception['exceptionId'] = "PHP_ERROR";
+                  $exception['value']->setMsg($message);
               }
                 $stack = $exception['stack'];
                 $text = "";
