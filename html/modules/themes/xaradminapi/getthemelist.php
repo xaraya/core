@@ -163,3 +163,4 @@ function themes_adminapi_getthemelist($args)
     return $themeList;
 }
 
+?>

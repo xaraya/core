@@ -89,3 +89,4 @@ function adminpanels_adminapi_updatemenudb($args){
     return true;
 }
 
+?>

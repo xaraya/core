@@ -59,3 +59,4 @@ function blocks_adminapi_update_group($args)
     return true;
 }
 
+?>

@@ -166,3 +166,4 @@ function dynamicdata_formblock_help()
 
     return $output->GetOutput();
 }
+?>

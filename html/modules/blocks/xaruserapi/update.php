@@ -56,3 +56,4 @@ function blocks_userapi_update($args)
 
     return;
 }
+?>

@@ -80,3 +80,4 @@ function blocks_userapi_getState($args)
     return true;
 }
 */
+?>

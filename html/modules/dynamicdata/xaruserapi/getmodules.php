@@ -54,3 +54,4 @@ function dynamicdata_userapi_getmodules($args)
     return $modules;
 }
 
+?>

@@ -119,3 +119,5 @@ $test_array = array(
 </table>
 </body>
 </html>
+<?php
+?>

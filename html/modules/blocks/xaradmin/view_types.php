@@ -52,3 +52,4 @@ function blocks_admin_view_types()
     return array('block_types' => $block_types);
 }
 
+?>

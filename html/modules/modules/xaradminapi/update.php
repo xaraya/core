@@ -115,3 +115,4 @@ function modules_adminapi_update($args)
     return true;
 }
 
+?>

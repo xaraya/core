@@ -758,3 +758,4 @@ function dynamicdata_delete()
     return true;
 }
 
+?>

@@ -55,3 +55,4 @@ function authsystem_userapi_authenticate_user($args)
     return $uid;
 }
 
+?>

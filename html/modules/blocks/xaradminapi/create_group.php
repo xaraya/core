@@ -64,3 +64,4 @@ function blocks_adminapi_create_group($args)
     return $group_id;
 }
 
+?>

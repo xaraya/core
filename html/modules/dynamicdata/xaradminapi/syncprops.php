@@ -63,3 +63,4 @@ function dynamicdata_adminapi_syncprops($args)
     return true;
 }
 
+?>

@@ -76,3 +76,4 @@ function modules_adminapi_gethooklist($args)
     return $hooklist;
 }
 
+?>

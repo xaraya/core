@@ -268,3 +268,4 @@ function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $pa
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
     }
 }
+?>

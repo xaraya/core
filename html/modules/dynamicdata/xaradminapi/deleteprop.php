@@ -88,3 +88,4 @@ function dynamicdata_adminapi_deleteprop($args)
     return true;
 }
 
+?>

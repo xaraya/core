@@ -78,3 +78,4 @@ function themes_adminapi_remove($args)
     return true;
 }
 
+?>

@@ -97,3 +97,4 @@ function blocks_adminapi_groupgetinfo($args)
     return $group;
 }
 
+?>

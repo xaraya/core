@@ -146,3 +146,4 @@ function adminpanels_admin_updateconfig()
     return true;
 }
 
+?>

@@ -72,3 +72,4 @@ function roles_adminapi_delete($args)
     return true;
 }
 
+?>

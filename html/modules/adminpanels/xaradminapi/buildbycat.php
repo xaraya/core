@@ -69,3 +69,4 @@ function adminpanels_adminapi_buildbycat($args){
     return $catdata;
 }
 
+?>

@@ -735,3 +735,4 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     return true;
 }
 
+?>

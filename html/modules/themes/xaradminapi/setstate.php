@@ -154,3 +154,4 @@ function themes_adminapi_setstate($args)
     return true;
 }
 
+?>

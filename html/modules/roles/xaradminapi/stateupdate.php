@@ -65,3 +65,4 @@ function roles_adminapi_stateupdate($args)
     return true;
 }
 
+?>

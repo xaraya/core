@@ -60,3 +60,4 @@ function blocks_adminapi_resequence()
     return true;
 }
 
+?>

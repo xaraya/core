@@ -60,3 +60,4 @@ function blocks_admin_view_groups()
     return array('block_groups' => $block_groups);
 }
 
+?>

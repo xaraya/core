@@ -72,3 +72,4 @@ function roles_userapi_countall($args)
     return $numroles;
 }
 
+?>

@@ -69,3 +69,4 @@ function themes_adminapi_upgrade($args)
     return true;
 }
 
+?>

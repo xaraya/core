@@ -128,3 +128,4 @@ function roles_adminapi_create($args)
     return $uid;
 }
 
+?>

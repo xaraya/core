@@ -118,3 +118,4 @@ function xarConfig_loadVars()
     return true;
 }
 
+?>

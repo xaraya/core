@@ -142,3 +142,4 @@ function modules_adminapi_updatehooks($args)
     return true;
 }
 
+?>

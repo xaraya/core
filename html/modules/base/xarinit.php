@@ -414,3 +414,4 @@ function base_delete()
   return false;
 }
 
+?>

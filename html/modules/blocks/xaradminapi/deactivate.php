@@ -46,3 +46,4 @@ function blocks_adminapi_deactivate($args)
     return true;
 }
 
+?>

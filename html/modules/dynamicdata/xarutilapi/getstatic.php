@@ -202,3 +202,4 @@ function dynamicdata_utilapi_getstatic($args)
     return $static;
 }
 
+?>

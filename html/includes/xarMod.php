@@ -2144,3 +2144,4 @@ function xarModGetName()
     return $modName;
 }
 
+?>

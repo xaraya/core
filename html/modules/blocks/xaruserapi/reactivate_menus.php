@@ -36,3 +36,4 @@ function blocks_userapi_reactivate_menus()
     return true;
 }
 
+?>

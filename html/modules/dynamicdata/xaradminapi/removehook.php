@@ -128,3 +128,4 @@ function dynamicdata_adminapi_removehook($args)
     return $extrainfo;
 }
 
+?>

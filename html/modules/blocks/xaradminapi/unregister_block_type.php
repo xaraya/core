@@ -70,3 +70,4 @@ function blocks_adminapi_unregister_block_type($args)
     return true;
 }
 
+?>

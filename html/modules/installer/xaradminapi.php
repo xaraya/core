@@ -291,3 +291,4 @@ function installer_adminapi_CheckTableExists($args)
     }
 }
 
+?>

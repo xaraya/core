@@ -101,3 +101,4 @@ function roles_adminapi_update($args)
     return true;
 }
 
+?>

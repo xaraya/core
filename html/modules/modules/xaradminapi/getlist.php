@@ -211,3 +211,4 @@ function modules_adminapi_GetList($args)
 
     return $modList;
 }
+?>
