@@ -73,22 +73,22 @@
                           <label for="ptype"><xar:mlstring>Type</xar:mlstring></label>
                       </td>
                   <td>
-                  	<xar:if condition="$ptype eq 1 and $haschildren">
-                  	  <xar:mlstring>Group</xar:mlstring>
-					<xar:else />                
+                      <xar:if condition="$ptype eq 1 and $haschildren">
+                        <xar:mlstring>Group</xar:mlstring>
+                    <xar:else />                
                       <select name="ptype" id="ptype"  tabindex="2" onchange="javascript:this.form.action = '&xar-modurl-roles-admin-modifyrole;';this.form.submit();">
                                 <xar:if condition="$ptype eq 1">
-                           			<option value="1" selected="selected">Group</option>
+                                   <option value="1" selected="selected">Group</option>
                                 <xar:else />
-                           			<option value="1">Group</option>
+                                   <option value="1">Group</option>
                                 </xar:if>
                                 <xar:if condition="$ptype eq 0">
-                           			<option value="0" selected="selected">User</option>
+                                   <option value="0" selected="selected">User</option>
                                 <xar:else />
-                           			<option value="0">User</option>
+                                   <option value="0">User</option>
                                 </xar:if>
                           </select>
-					</xar:if>                
+                    </xar:if>                
               </td>
                   </tr>
                   <xar:if condition="$ptype eq 0">
