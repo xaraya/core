@@ -369,8 +369,9 @@ function dynamicdata_admin_update($args)
 
     if (!isset($itemid)) return; // throw back
 
-    // check if we need to set a module alias (or remove it) for short URLs
+    // special case for dynamic objects themselves
     if ($myobject->objectid == 1) {
+        // check if we need to set a module alias (or remove it) for short URLs
         $name = $myobject->properties['name']->value;
         $alias = xarModGetAlias($name);
         $isalias = $myobject->properties['isalias']->value;
@@ -384,6 +385,17 @@ function dynamicdata_admin_update($args)
             if ($alias == 'dynamicdata') {
                 xarModDelAlias($name,'dynamicdata');
             }
+        }
+
+        // resynchronise properties with object in terms of module id and itemtype (for now)
+        $objectid = $myobject->properties['objectid']->value;
+        $moduleid = $myobject->properties['moduleid']->value;
+        $itemtype = $myobject->properties['itemtype']->value;
+        if (!xarModAPIFunc('dynamicdata','admin','syncprops',
+                           array('objectid' => $objectid,
+                                 'moduleid' => $moduleid,
+                                 'itemtype' => $itemtype))) {
+            return;
         }
     }
 
