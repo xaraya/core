@@ -17,7 +17,7 @@
            		</thead>
            		<tbody>
                	<tr>
-               	  <td align="left"><span class="xar-normal"><label for="install_admin_name">Full name</label></span></td>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_name">Display name</label></span></td>
                  	<td align="left"><input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" /></td>
                	</tr>
              	  <tr>
