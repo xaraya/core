@@ -226,7 +226,7 @@
                     <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" /><xar:mlstring>Activate</xar:mlstring>
                     <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" /><xar:mlstring>Deactivate</xar:mlstring>
                     <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" /><xar:mlstring>Upgrade</xar:mlstring>
-                    <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Initialise</xar:mlstring>
+                    <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Install</xar:mlstring>
                     <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
                 </div>
             </xar:if>

@@ -45,7 +45,7 @@ function modules_admin_list()
     $data['filter'][XARMOD_STATE_ANY]               = xarML('All modules');
     $data['filter'][XARMOD_STATE_ACTIVE]            = xarML('Active');
     $data['filter'][XARMOD_STATE_INACTIVE]          = xarML('Inactive');
-    $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Uninitialised');
+    $data['filter'][XARMOD_STATE_UNINITIALISED]     = xarML('Not Installed');
     $data['filter'][XARMOD_STATE_MISSING]           = xarML('Missing files');
 
     $data['sort']['nameasc']                        = xarML('Name [a-z]');
@@ -160,10 +160,10 @@ function modules_admin_list()
         // conditional data
         if(     $mod['state'] == 1){
             // this module is 'Uninitialised'   - set labels and links
-            $statelabel = xarML('Uninitialised');
+            $statelabel = xarML('Not Installed');
             $listrows[$i]['state'] = 1;
             
-            $listrows[$i]['actionlabel']        = xarML('Initialise');
+            $listrows[$i]['actionlabel']        = xarML('Install');
             $listrows[$i]['actionurl']          = $initialiseurl;
             $listrows[$i]['removeurl']          = '';
             
