@@ -158,7 +158,8 @@ class Dynamic_DataStore
     var $where;
     var $groupby;
     var $join;
-    var $itemids;  // reference to itemids in Dynamic_Object_List
+
+    var $_itemids;  // reference to itemids in Dynamic_Object_List
 
     var $cache = 0;
 

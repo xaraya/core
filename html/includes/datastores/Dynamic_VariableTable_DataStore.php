@@ -220,8 +220,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
-        } elseif (isset($this->itemids)) {
-            $itemids = $this->itemids;
+        } elseif (isset($this->_itemids)) {
+            $itemids = $this->_itemids;
         } else {
             $itemids = array();
         }
@@ -413,7 +413,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result->MoveNext();
             }
             // add the itemids to the list
-            $this->itemids = array_keys($itemidlist);
+            $this->_itemids = array_keys($itemidlist);
 
             $result->Close();
 
@@ -469,7 +469,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                     continue;
                 }
                 // add this itemid to the list
-                $this->itemids[] = $itemid;
+                $this->_itemids[] = $itemid;
 
                 foreach ($propids as $propid) {
                     // add the item to the value list for this property
@@ -508,7 +508,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result->MoveNext();
             }
             // add the itemids to the list
-            $this->itemids = array_keys($itemidlist);
+            $this->_itemids = array_keys($itemidlist);
 
             $result->Close();
         }
@@ -518,8 +518,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
-        } elseif (isset($this->itemids)) {
-            $itemids = $this->itemids;
+        } elseif (isset($this->_itemids)) {
+            $itemids = $this->_itemids;
         } else {
             $itemids = array();
         }

@@ -264,8 +264,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
-        } elseif (isset($this->itemids)) {
-            $itemids = $this->itemids;
+        } elseif (isset($this->_itemids)) {
+            $itemids = $this->_itemids;
         } else {
             $itemids = array();
         }
@@ -435,7 +435,7 @@ if (empty($itemidfield)) {
 
             // add this itemid to the list
             if ($saveids) {
-                $this->itemids[] = $itemid;
+                $this->_itemids[] = $itemid;
             }
 
             foreach ($fieldlist as $field) {
@@ -452,8 +452,8 @@ if (empty($itemidfield)) {
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
-        } elseif (isset($this->itemids)) {
-            $itemids = $this->itemids;
+        } elseif (isset($this->_itemids)) {
+            $itemids = $this->_itemids;
         } else {
             $itemids = array();
         }
@@ -570,8 +570,8 @@ if (empty($itemidfield)) {
             }
             if (!empty($args['itemids'])) {
                 $itemids = $args['itemids'];
-            } elseif (isset($this->itemids)) {
-                $itemids = $this->itemids;
+            } elseif (isset($this->_itemids)) {
+                $itemids = $this->_itemids;
             } else {
                 $itemids = array();
             }

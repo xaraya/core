@@ -122,7 +122,11 @@ class Dynamic_Property_Master
 
         // for dynamic object lists, put a reference to the $items array in the property
         if (method_exists($objectref, 'getItems')) {
-            $property->items =& $objectref->items;
+            $property->_items =& $objectref->items;
+
+        // for dynamic objects, put a reference to the $itemid value in the property
+        } elseif (method_exists($objectref, 'getItem')) {
+            $property->_itemid =& $objectref->itemid;
         }
 
         // add it to the list of properties
@@ -310,7 +314,8 @@ class Dynamic_Property
     var $value = null;   // value of this property for a particular Dynamic_Object
     var $invalid = '';   // result of the checkInput/validateValue methods
 
-    var $items;          // reference to $items in Dynamic_Object_List, where the different item values are kept
+    var $_itemid;        // reference to $itemid in Dynamic_Object, where the current itemid is kept
+    var $_items;         // reference to $items in Dynamic_Object_List, where the different item values are kept
 
     /**
      * Default constructor setting the variables
@@ -399,7 +404,7 @@ class Dynamic_Property
      */
     function getItemValue($itemid)
     {
-        return $this->items[$itemid][$this->name];
+        return $this->_items[$itemid][$this->name];
     }
 
     /**
@@ -407,7 +412,7 @@ class Dynamic_Property
      */
     function setItemValue($itemid, $value)
     {
-        $this->items[$itemid][$this->name] = $value;
+        $this->_items[$itemid][$this->name] = $value;
     }
 
     /**

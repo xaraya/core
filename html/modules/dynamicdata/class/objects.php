@@ -57,6 +57,8 @@ class Dynamic_Object_Master
     var $primary = null;
     // secondary key could be item type (e.g. for articles)
     var $secondary = null;
+    // set this true to automatically filter by current itemtype on secondary key
+    var $filter;
 
     // flag indicating if this object has some property that provides file upload
     var $upload = false;
@@ -245,7 +247,7 @@ class Dynamic_Object_Master
                 $this->primary = $name;
             }
             // keep track of what property holds the secondary key (item type)
-            if (!isset($this->secondary) && $property->type == 20) {
+            if (!isset($this->secondary) && $property->type == 20 && !empty($this->filter)) {
                 $this->secondary = $name;
             }
         }
@@ -318,7 +320,7 @@ class Dynamic_Object_Master
 
         // for dynamic object lists, put a reference to the $itemids array in the data store
         if (method_exists($this, 'getItems')) {
-            $this->datastores[$datastore->name]->itemids =& $this->itemids;
+            $this->datastores[$datastore->name]->_itemids =& $this->itemids;
         }
     }
 
@@ -1199,7 +1201,6 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         $modinfo = xarModGetInfo($this->moduleid);
-
     // TODO: this won't work for objects with several static tables !
         // update all the data stores
         foreach (array_keys($this->datastores) as $store) {

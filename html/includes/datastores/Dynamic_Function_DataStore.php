@@ -97,7 +97,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
     function getItems($args)
     {   
         /* don't bother if there are no item ids set */
-        if (empty($this->itemids)) {
+        if (empty($this->_itemids)) {
             return array();
         }
 
@@ -119,7 +119,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
 
         /* fetch the items */
         //xarLogMessage(var_export($this, true));
-        foreach ($this->itemids as $itemid) {
+        foreach ($this->_itemids as $itemid) {
             $args['itemid'] = $itemid;
             $this->getItem($args);
 
