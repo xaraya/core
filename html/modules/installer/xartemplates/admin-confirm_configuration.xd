@@ -72,16 +72,16 @@
 									</p>
 								</xar:if>
 							</xar:loop>
-							<xar:if condition="$missing ne ''">
-								<p class="xar-normal">
-									<xar:mlstring>
-										The following modules for this configuration are missing in the modules directory 
-									</xar:mlstring>
-									: #$missing# 
-								</p>
-							</xar:if>
 						</xar:if>
 					</div>
+					<xar:if condition="$missing ne ''">
+						<p class="xar-normal">
+							<xar:mlstring>
+								The following modules for this configuration are missing in the modules directory 
+							</xar:mlstring>
+							: #$missing# 
+						</p>
+					</xar:if>
 					<h4>
 						<xar:mlstring>
 							Other Modules 

@@ -218,15 +218,15 @@ function installer_admin_phase5()
     }
 
     // Create the database if necessary
-    $data['confirmDB']  = $confirmDB;
     if ($createDb) {
+        $data['confirmDB']  = true;
         //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
         //Probably there is already a core function that can make that for us...
         //the config.system.php is lazy loaded in xarCore_getSystemVar($name), which means we cant reload the values
         // in this phase... Not a big deal 'though.
         if (!xarInstallAPIFunc('installer', 'admin', 'createdb', $config_args)) {
-            $msg = xarML('Could not create database (#(1)).', $dbName);
+            $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
             xarCore_die($msg);
             return;
         }
@@ -240,6 +240,7 @@ function installer_admin_phase5()
             $data['dbPrefix']   = $dbPrefix;
             $data['dbType']     = $dbType;
             $data['createDb']   = $createDb;
+            $data['confirmDB']  = $confirmDB;
             return $data;
         }
     }
