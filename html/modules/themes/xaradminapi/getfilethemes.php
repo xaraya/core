@@ -10,8 +10,10 @@
 function themes_adminapi_getfilethemes()
 {
     $fileThemes = array();
-    $dh = opendir('themes');
+    //jojodee, removed hard coded theme path
 
+    //$dh = opendir('themes');
+    $dh = opendir(xarConfigGetVar('Site.BL.ThemesDirectory'));
     while ($themeOsDir = readdir($dh)) {
         switch ($themeOsDir) {
             case '.':
@@ -21,7 +23,8 @@ function themes_adminapi_getfilethemes()
             case 'PENDING':
                 break;
             default:
-                if (is_dir("themes/$themeOsDir")) {
+                //jojodee, remove hard coded theme path
+                if (is_dir(xarConfigGetVar('Site.BL.ThemesDirectory')."/$themeOsDir")) {
 
                     // no xartheme.php, no theme
                     $themeFileInfo = xarTheme_getFileInfo($themeOsDir);
