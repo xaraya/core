@@ -345,9 +345,9 @@ class xarMasks
     function irreducibleset($coreset)
     {
         $roles = $coreset['roles'];
-        if (count($roles) == 0) return $coreset;
-
         $coreset['privileges'] = array();
+        $coreset['children'] = array();
+        if (count($roles) == 0) return $coreset;
 
         $parents = array();
         foreach ($roles as $role) {
@@ -390,7 +390,7 @@ class xarMasks
                 break;
             }
         }
-        if (!$matched) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
+        if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
         return $pass;
     }
 
