@@ -26,7 +26,11 @@ warningmsg = '#xarML('You must select the block to move.')#';
 			<span class="help" title="#xarML('You may reorder the members in this block group by selecting the block to reorder and then using the up and down arrows to chose the position.')#"><label for="group_instances"><xar:mlstring>Members</xar:mlstring></label>:</span>
 		</span>
 		<span style="float: right; width: 68%; text-align: left;">
+                        <xar:if condition="$instance_count gt 2">
 			<select name="group_instances" id="group_instances" size="#$instance_count#">
+                        <xar:else />
+			<select name="group_instances" id="group_instances" size="3">
+                        </xar:if>
 				<xar:loop name="$group['instances']">
 					<option value="#$loop:item['id']#"><xar:var name="$loop:item['title']" /></option>
 				</xar:loop>
