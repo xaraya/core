@@ -512,8 +512,10 @@ function xarResponseRedirect($redirectURL)
     }
 
     header($header, headers_sent());
-
-    return true;
+    
+    exit();
+    
+    // return true;
 }
 
 /**
