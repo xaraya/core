@@ -82,7 +82,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php');
+        xarResponseRedirect('install.php?install_phase=2');
     }
 
     //Defaults
