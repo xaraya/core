@@ -6,7 +6,7 @@
 function variable_validations_fullemail (&$subject, $parameters=null)
 {
     if (xarVarValidate ('email', $subject) &&
-        xarVarValidate ('mxcheck', $subject) {
+        xarVarValidate ('mxcheck', $subject)) {
         return true;
     }
 
