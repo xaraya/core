@@ -350,7 +350,12 @@ function xarRequestGetInfo()
 
     // If $modName is still empty we use the default module/type/func to be loaded in that such case
     if (empty($modName)) {
-        $modName = $xarRequest_defaultModule['module'];
+        // Get Start Page -- Defined in Base Config or from config.site.xml
+        // TODO -- Allow user select start page
+        $modName = xarConfigGetVar('Site.Core.DefaultModuleName');
+        if (empty($modName)){
+            $modName = $xarRequest_defaultModule['module'];
+        }        
         if (isset($xarRequest_defaultModule['type'])) $modType = $xarRequest_defaultModule['type'];
         if (isset($xarRequest_defaultModule['func'])) $funcName = $xarRequest_defaultModule['func'];
     }
