@@ -413,11 +413,11 @@ class xarRoles {
         }
         // create an ID for the group
         $nextId = $this->dbconn->genID($this->rolestable);
-        $creatdate = $this->dbconn->DBTimeStamp(mktime());
+        $createdate = $this->dbconn->DBTimeStamp(mktime());
         // set up the query and create the entry
         $nextIdprep = xarVarPrepForStore($nextId);
         $nameprep = xarVarPrepForStore($name);
-        $dateprep = xarVarPrepForStore($creatdate);
+        $dateprep = xarVarPrepForStore($createdate);
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
                   VALUES ($nextIdprep, '$nameprep', 1, '$nameprep', '$dateprep')";
@@ -566,6 +566,7 @@ class xarRole {
         }
 
         $nextId = $this->dbconn->genID($this->rolestable);
+        $createdate = $this->dbconn->DBTimeStamp(mktime());
 
         if ($this->type == 1) {
             $nextIdprep = xarVarPrepForStore($nextId);
@@ -573,9 +574,10 @@ class xarRole {
             $typeprep = xarVarPrepForStore($this->type);
             $unameprep = xarVarPrepForStore($this->uname);
             $valcodeprep = xarVarPrepForStore($this->val_code);
+            $dateregprep = xarVarPrepForStore($createdate);
             $query = "INSERT INTO $this->rolestable
-                        (xar_uid, xar_name, xar_type, xar_uname, xar_valcode)
-                      VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$valcodeprep')";
+                        (xar_uid, xar_name, xar_type, xar_uname, xar_valcode, xar_date_reg)
+                      VALUES ($nextIdprep, '$nameprep', $typeprep, '$unameprep', '$valcodeprep', '$dateregprep')";
         } else {
             $nextIdprep = xarVarPrepForStore($nextId);
             $nameprep = xarVarPrepForStore($this->name);
@@ -583,7 +585,7 @@ class xarRole {
             $unameprep = xarVarPrepForStore($this->uname);
             $emailprep = xarVarPrepForStore($this->email);
             $passprep = xarVarPrepForStore(md5($this->pass));
-            $dateregprep = xarVarPrepForStore($this->date_reg);
+            $dateregprep = xarVarPrepForStore($createdate);
             $stateprep = xarVarPrepForStore($this->state);
             $valcodeprep = xarVarPrepForStore($this->val_code);
             $authmodprep = xarVarPrepForStore($this->auth_module);
