@@ -58,4 +58,19 @@ function base_phpblock_display($blockinfo)
 
     return $blockinfo;
 }
+
+/**
+ * Modify Function to the Blocks Admin
+ * @param $blockinfo array containing title,content
+ */
+function base_phpblock_modify($blockinfo)
+{
+    // Get current content
+    $vars = @unserialize($blockinfo['content']);
+
+    $vars['blockid'] = $blockinfo['bid'];
+    $content = xarTplBlock('base', 'phpAdmin', $vars);
+
+    return $content;
+}
 ?>

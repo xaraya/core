@@ -43,9 +43,12 @@
     [<a href="#$logouturl#">#$logoutlabel#</a>]
 </xar:if>
     <br />
-    [<a href="#xarServerGetCurrentURL(array('theme' => 'print'))#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
-
-	<xar:if condition="($where eq 'articles') and ($what eq 'view')">
-		<br />
-		[<a href="#xarServerGetCurrentURL(array('theme' => 'rss'))#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
+	<xar:if condition="xarThemeIsAvailable('print')">
+		[<a href="#xarServerGetCurrentURL(array('theme' => 'print'))#" title="Print View"><xar:mlstring>Print View</xar:mlstring></a>]
+	</xar:if>
+	<xar:if condition="xarThemeIsAvailable('rss')">
+		<xar:if condition="($where eq 'articles') and ($what eq 'view')">
+			<br />
+			[<a href="#xarServerGetCurrentURL(array('theme' => 'rss'))#" title="Syndication"><xar:mlstring>Syndication</xar:mlstring></a>]
+		</xar:if>
 	</xar:if>

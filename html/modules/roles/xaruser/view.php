@@ -15,13 +15,14 @@ function roles_user_view()
 
     if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED, 1)) {return;}
     if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED, 1)) {return;}
-    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED, 1)) {return;}
+    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET, 1)) {return;}
 
     $data['items'] = array();
 
     // Specify some labels for display
     $data['pager'] = '';
+    $order = xarVarPrepForDisplay($order);
 
     $perpage = xarModGetVar('roles','itemsperpage');
 

@@ -14,19 +14,6 @@ function blocks_adminapi_update_group($args)
     // Get arguments from argument array
     extract($args);
 
-    // Optional arguments
-    if (!isset($template)) {
-	$template = '';
-    }
-
-    // Argument check
-    if (!isset($id) ||
-        !isset($name) ||
-        !isset($instance_order)) {
-        xarSessionSetVar('errormsg', _MODARGSERROR);
-        return false;
-    }
-
     // Security
 	if(!xarSecurityCheck('EditBlock',1,'Block',"$name::$id")) return;
 
@@ -42,15 +29,17 @@ function blocks_adminapi_update_group($args)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    $instance_order = explode('/', $instance_order);
+    if (!empty($instance_order)){
+        $instance_order = explode('/', $instance_order);
 
-    while (list($position, $instance_id) = each($instance_order)) {
-        $query = "UPDATE $block_group_instances_table
-                  SET   xar_position='" . xarVarPrepForStore($position) . "'
-                  WHERE xar_instance_id=" . xarVarPrepForStore($instance_id);
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
+        while (list($position, $instance_id) = each($instance_order)) {
+            $query = "UPDATE $block_group_instances_table
+                      SET   xar_position='" . xarVarPrepForStore($position) . "'
+                      WHERE xar_instance_id=" . xarVarPrepForStore($instance_id);
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
 
+        }
     }
 
     return true;
