@@ -992,6 +992,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
 
     function bindDomain($dnType, $dnName)
     {
+        $varDir = xarCoreGetVarDirPath();
         switch ($dnType) {
         case XARMLS_DNTYPE_MODULE:
             $dirName = "modules/$dnName/";
@@ -1003,7 +1004,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__TranslationsBackend
             $dirName = 'core/';
         }
         foreach ($this->locales as $locale) {
-            $this->baseDir = "locales/$locale/php/$dirName";
+            $this->baseDir = "$varDir/locales/$locale/php/$dirName";
             if (file_exists($this->baseDir)) return true;
         }
         if ($dnType == XARMLS_DNTYPE_MODULE) {
