@@ -1582,7 +1582,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $query = "SELECT DISTINCT xar_tarea,
                    xar_tmodule,
                    xar_ttype,
-                   xar_tfunc
+                   xar_tfunc,
+                   xar_order
               FROM $hookstable
               WHERE xar_smodule = '" . xarVarPrepForStore($callerModName) . "'";
     if (empty($callerItemType)) {
@@ -1602,7 +1603,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
         list($hookArea,
              $hookModName,
              $hookModType,
-             $hookFuncName) = $result->fields;
+             $hookFuncName,
+             $hookOrder) = $result->fields;
 
         $tmparray = array('area' => $hookArea,
                           'module' => $hookModName,
