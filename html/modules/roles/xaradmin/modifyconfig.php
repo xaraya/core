@@ -42,8 +42,8 @@ function roles_admin_modifyconfig()
             $xartable =& xarDBGetTables();
             $acltable = xarDBGetSiteTablePrefix() . '_security_acl';
             $query = "SELECT xar_partid FROM $acltable
-                    WHERE xar_permid   = " . $adminpriv;
-            $result =& $dbconn->Execute($query);
+                    WHERE xar_permid   = ?";
+            $result =& $dbconn->Execute($query, array((int) $adminpriv));
             if (!$result) return;
 
 
