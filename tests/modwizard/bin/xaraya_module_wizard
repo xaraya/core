@@ -1,0 +1,21 @@
+#!/usr/bin/perl -w
+
+use strict;
+use File::Basename;
+
+#
+# CHANGE TO WORKING DIRECTORY
+#
+my $wd = File::Basename::dirname( $ARGV[0] );
+chdir ( $wd );
+
+#
+# FIND LIBRARY
+#
+my $lib = File::Basename::dirname( File::Basename::dirname( $0 ) ) . '/lib';
+
+print "Validating you xml file";
+print qx/ xmlproc_val $ARGV[0] /;
+
+print "Executing the wizard";
+print qx/ xsltproc --stringparam output $wd $lib\/xarmodule.xsl $ARGV[0] /;

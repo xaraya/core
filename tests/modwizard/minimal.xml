@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- vim: tw=0
+-->
+<!DOCTYPE xaraya_module SYSTEM "./modwizard.dtd">
+
+<xaraya_module>
+
+    <!-- ABOUT
+
+        Information about you and your module
+
+    -->
+    <about>
+
+        <name>Wizard ( Minimal )</name>
+        <copyright>by Michael Jansen</copyright>
+        <license>GPL (http://www.gnu.org/licenses/gpl.html)</license>
+
+        <author>
+            <name>Michael Jansen</name>
+            <email>module-wizard@michael-jansen.biz</email>
+        </author>
+
+
+        <description>
+
+            <!-- add a short ONE LINE description -->
+            <short>Test Module for the Module Wizard</short>
+            <!-- add a description as long and detailed as you want. -->
+            <long>
+            * Just a silly test to check out if the wizard works.
+            * </long>
+        </description>
+
+    </about>
+
+    <!-- MODULE REGISTRY
+
+        insert the appropriate values you got from the module registry at
+        http://www.xaraya.org
+
+    -->
+    <registry>
+
+        <id>5635</id>
+        <name>wizardminimal</name>
+
+    </registry>
+
+    <!-- MODULE CONFIGURATION related stuff -->
+    <configuration>
+
+        <!-- CAPABILITIES OF THE MODULE
+
+        -->
+        <capabilities>
+
+            <!-- Add code for short url-support? -->
+            <supportshorturls>yes</supportshorturls>
+
+            <!-- Add code to change <head> -> <title> tag for each page? -->
+            <setpagetitle>yes</setpagetitle>
+
+        </capabilities>
+
+
+        <!-- MODULE VARIABLES
+
+            * create and initialize / remove in xarinit
+            * create a default admin_configuration possibility ??
+
+        -->
+        <modvars>
+            <!--
+            <var type="number" name="MembersPerPage">0</var>
+            -->
+        </modvars>
+
+        <!-- HOOKS
+
+            You have different options here:
+
+                The enable attribute controls the generation of the hook
+                calls. These calls are only generated if you say enable="yes" !
+
+                Inside you can list module which should be hooked during
+                module initialization.
+
+        -->
+        <hooks />
+
+        <!-- SECURITY related stuff ( ROLES / PRIVILEGES )
+
+            Create / remove Instances and Masks during initialization / removing
+
+                The appropriate calls have to be inserted manually
+
+            MODULE Level Instance and Masks for Blocks and Itemtypes will be created automatically and used to
+            provide basic access control.
+        -->
+        <security>
+
+            <!-- I have no usage for these. Perhaps they should be removed. -->
+            <!--
+            <component name="block">
+                <query>
+                    <header>Block ID</header>
+                    <select>select * from block</select>
+                    <limit>10</limit>
+                </query>
+
+                <query>
+                    <header>Block Cat</header>
+                    <select>select * from block</select>
+                </query>
+
+                <mask name="ViewMask">
+                    <instance>all</instance>
+                    <level>ACCESS_OVERVIEW</level>
+                    <comment>A description</comment>
+                </mask>
+
+                <mask name="AdminMask">
+                    <instance>all</instance>
+                    <level>ACCESS_ADMIN</level>
+                    <comment>A description</comment>
+                </mask>
+            </component>
+            -->
+
+        </security>
+
+    </configuration>
+
+    <!-- DATABASE related stuff -->
+    <database />
+
+    <!-- BLOCKS
+
+        stub functions and privileges will be generated
+    -->
+    <blocks />
+
+</xaraya_module>

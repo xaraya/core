@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- vim: tw=0
+-->
+<!DOCTYPE xaraya_module SYSTEM "./modwizard.dtd">
+
+<xaraya_module>
+
+    <!-- ABOUT
+
+        Information about you and your module
+
+    -->
+    <about>
+
+        <name>Wizard ( Example )</name>
+        <copyright>by Michael Jansen</copyright>
+        <license>GPL (http://www.gnu.org/licenses/gpl.html)</license>
+
+        <author>
+            <name>Michael Jansen</name>
+            <email>module-wizard@michael-jansen.biz</email>
+        </author>
+
+
+        <description>
+
+            <!-- add a short ONE LINE description -->
+            <short>Test Module for the Module Wizard</short>
+            <!-- add a description as long and detailed as you want. -->
+            <long>
+            * Just a silly test to check out if the wizard works.
+            * </long>
+        </description>
+
+    </about>
+
+    <!-- MODULE REGISTRY
+
+        insert the appropriate values you got from the module registry at
+        http://www.xaraya.org
+
+    -->
+    <registry>
+
+        <id>5634</id>
+        <name>wizardtest</name>
+
+    </registry>
+
+    <!-- MODULE CONFIGURATION related stuff -->
+    <configuration>
+
+        <!-- CAPABILITIES OF THE MODULE
+
+        -->
+        <capabilities>
+
+            <!-- Add code for short url-support? -->
+            <supportshorturls>yes</supportshorturls>
+
+            <!-- Add code to change <head> -> <title> tag for each page? -->
+            <setpagetitle>yes</setpagetitle>
+
+        </capabilities>
+
+
+        <!-- MODULE VARIABLES
+
+            * create and initialize / remove in xarinit
+            * create a default admin_configuration possibility ??
+
+        -->
+        <modvars>
+            <!--
+            <var type="number" name="MembersPerPage">0</var>
+            -->
+        </modvars>
+
+        <!-- HOOKS
+
+            You have different options here:
+
+                The enable attribute controls the generation of the hook
+                calls. These calls are only generated if you say enable="yes" !
+
+                Inside you can list module which should be hooked during
+                module initialization.
+
+        -->
+        <hooks enable="true">
+            <hook module="hitcount"   require="yes" />
+            <hook module="ratings"    require="no" />
+            <hook module="comments"   require="no" />
+            <hook module="categories" require="no" />
+        </hooks>
+
+        <!-- SECURITY related stuff ( ROLES / PRIVILEGES )
+
+            Create / remove Instances and Masks during initialization / removing
+
+                The appropriate calls have to be inserted manually
+
+            MODULE Level Instance and Masks for Blocks and Itemtypes will be created automatically and used to
+            provide basic access control.
+        -->
+        <security>
+
+            <!-- I have no usage for these. Perhaps they should be removed. -->
+            <!--
+            <component name="block">
+                <query>
+                    <header>Block ID</header>
+                    <select>select * from block</select>
+                    <limit>10</limit>
+                </query>
+
+                <query>
+                    <header>Block Cat</header>
+                    <select>select * from block</select>
+                </query>
+
+                <mask name="ViewMask">
+                    <instance>all</instance>
+                    <level>ACCESS_OVERVIEW</level>
+                    <comment>A description</comment>
+                </mask>
+
+                <mask name="AdminMask">
+                    <instance>all</instance>
+                    <level>ACCESS_ADMIN</level>
+                    <comment>A description</comment>
+                </mask>
+            </component>
+            -->
+
+        </security>
+
+    </configuration>
+
+    <!-- DATABASE related stuff -->
+    <database>
+
+        <!-- Declare a database table.
+
+             We will generate code for
+
+             USER VIEW
+             =========
+
+                * show all
+                * display one
+
+             ADMIN VIEW
+             ==========
+
+                * show all ( with links to edit / delete / modify / create )
+                * delete
+                * modify
+                * create
+
+
+            @itemtype   =>  'The numeric itemtype'
+            @hooks      =>  'enable'    =>  call hooks for this itemtype
+                            'disable'   =>  do not call hooks for this itemtype
+            @admin      =>  create admin interface for this itemtype?
+            @user       =>  cerate user interface for this itemtype?
+
+        -->
+        <table name="member" itemtype="1" hooks="enable">
+
+            <label>Member</label>
+            <labelfields separator=", "><field name="lastname" /><field name="firstname" /></labelfields>
+
+            <!-- describe the table -->
+            <structure>
+
+                <!-- the one and only primary_key field is mapped to 'Item ID'. No need to specify ourselve -->
+                <field name="memid"     type="integer" size="6"  notnull="true" primary_key="true" increment="true" overview="false">
+                    <label>Id</label>
+                </field>
+
+                <!-- Default Input type is textbox. No need to specify ourselve -->
+                <field name="lastname"  type="varchar" size="32" notnull="true" overview="true">
+                    <label>Lastname</label>
+                </field>
+
+                <field name="firstname" type="varchar" size="32" overview="true">
+                    <label>Firstname</label>
+                </field>
+
+                <field name="shortname" type="varchar" size="32" overview="true">
+                    <label>Shortname</label>
+                </field>
+
+                <field name="email"     type="varchar" size="100" overview="false">
+                    <dd_type>email</dd_type>
+                    <label>Email</label>
+                </field>
+
+                <field name="birthday"  type="date"               overview="false">
+                    <dd_type>calendar</dd_type>
+                    <label>Birthday</label>
+                </field>
+
+                <field name="city"      type="varchar" size="40" overview="false">
+                    <label>City</label>
+                </field>
+
+                <field name="picture"   type="varchar" size="20"  overview="false">
+                    <dd_type>imagelist</dd_type>
+                    <dd_validation>players/</dd_validation>
+                    <label>Picture</label>
+                </field>
+
+            </structure>
+
+            <order>
+                <field name="lastname" />
+                <field name="firstname" />
+            </order>
+
+            <index name="name" unique="true">
+                <comment>index for name searching</comment>
+                <field name="lastname" />
+                <field name="firstname" />
+            </index>
+
+            <index name="birthday">
+                <comment>index for birthday access</comment>
+                <field name="birthday" />
+            </index>
+
+        </table>
+
+    </database>
+
+    <!-- BLOCKS
+
+        stub functions and privileges will be generated
+    -->
+    <blocks>
+
+        <!-- declaration of a block -->
+        <block name="useful" />
+        <block name="block2" />
+
+    </blocks>
+
+</xaraya_module>

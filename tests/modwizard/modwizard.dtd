@@ -1,0 +1,145 @@
+<!-- ========================================================================
+
+    XARAYA MODULE WIZARD - DTD
+
+-->
+
+<!-- the root element -->
+<!ELEMENT xaraya_module (
+    about
+    ,registry
+    ,configuration
+    ,database
+    ,blocks
+    )>
+
+<!--
+
+    ABOUT SECTION
+
+-->
+<!ELEMENT about ( name, copyright, license, author, description )>
+<!ELEMENT name ( #PCDATA )>
+<!ELEMENT copyright ( #PCDATA )>
+<!ELEMENT license   ( #PCDATA )>
+<!ELEMENT author    ( name, email )>
+<!ELEMENT email    ( #PCDATA )>
+
+<!ELEMENT description ( short, long )>
+    <!ELEMENT short ( #PCDATA )>
+    <!ELEMENT long ( #PCDATA )>
+
+<!--
+
+    XARAYA.ORG REGISTRY SECTION
+
+-->
+<!ELEMENT registry ( id | name )* >
+<!ELEMENT id ( #PCDATA )>
+
+<!--
+
+    DATABASE SECTION
+    ================
+
+    Is not necessary to fill something in here.
+
+-->
+<!ELEMENT database ( table )* >
+
+<!ELEMENT table ( label, labelfields, structure, order?, index* )* >
+<!ATTLIST table
+    name        CDATA #REQUIRED
+    itemtype    CDATA #REQUIRED
+    admin       ( true | false ) 'true'
+    user        ( true | false ) 'true'
+    hooks       ( enable | disable ) 'disable' >
+
+<!ELEMENT label ( #PCDATA )>
+<!ELEMENT labelfields    ( field+ )>
+<!ATTLIST labelfields
+     separator  CDATA '|' >
+<!ELEMENT order ( field+ )>
+
+<!ELEMENT structure ( field )*>
+
+<!ELEMENT field ( dd_type?, dd_validation?, label? )>
+<!--
+
+    type   => from xarDB
+
+-->
+<!ATTLIST field
+     name        CDATA #REQUIRED
+     type        ( integer | char | varchar | text | blob | boolean | datetime | date | float | timestamp ) #IMPLIED
+     size        CDATA #IMPLIED
+     notnull     ( true | false ) 'false'
+     primary_key ( true | false ) 'false'
+     width       CDATA #IMPLIED
+     decimals    CDATA #IMPLIED
+     default     CDATA #IMPLIED
+     increment   ( true | false ) 'false'
+     overview    ( true | false ) 'true' >
+
+<!ELEMENT dd_type       ( #PCDATA )>
+<!ELEMENT dd_validation ( #PCDATA )>
+
+    <!ELEMENT index ( comment?, field+ )>
+    <!ATTLIST index
+        name    CDATA #REQUIRED
+        unique  ( true |  false ) "true" >
+
+    <!ELEMENT comment ( #PCDATA ) >
+
+<!--
+
+    CONFIGURATION SECTION
+
+-->
+<!ELEMENT configuration ( capabilities, modvars, hooks, security )>
+
+<!ELEMENT capabilities ( supportshorturls, setpagetitle )* >
+<!ELEMENT supportshorturls ( #PCDATA )>
+<!ELEMENT setpagetitle ( #PCDATA )>
+
+
+<!ELEMENT modvars ( var )*>
+
+<!ELEMENT var ( #PCDATA )>
+<!ATTLIST var
+    type CDATA  #REQUIRED
+    name CDATA  #REQUIRED >
+
+
+<!ELEMENT hooks ( hook )* >
+<!ATTLIST hooks
+    enable   ( true | false ) 'false'>
+
+<!ELEMENT hook EMPTY>
+<!ATTLIST hook
+    module      CDATA #REQUIRED
+    require     ( yes | no ) 'no' >
+
+<!ELEMENT security ( component )*>
+<!ELEMENT component ( query+, mask+ )+>
+<!ATTLIST component
+    name CDATA #REQUIRED >
+
+<!ELEMENT query ( header, select, limit? )>
+<!ELEMENT header ( #PCDATA )>
+<!ELEMENT select ( #PCDATA )>
+<!ELEMENT limit ( #PCDATA )>
+
+<!ELEMENT mask (  instance, level, comment )>
+<!ATTLIST mask
+    name CDATA #REQUIRED >
+<!ELEMENT instance ( #PCDATA )>
+<!ELEMENT level ( #PCDATA )>
+
+
+<!ELEMENT blocks ( block* )>
+<!ELEMENT block ( #PCDATA ) >
+<!ATTLIST block
+    name CDATA #REQUIRED >
+
+

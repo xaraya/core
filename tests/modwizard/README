@@ -1,0 +1,131 @@
+*****************************************************************************
+***
+*** XARAYA MODULE WIZARD
+***
+*** for xaraya -> http://www.xaraya.com
+***
+*** for the wizard -> xaraya@schneelocke.de
+***
+***
+*****************************************************************************
+
+This is a xml/xslt application to create a xaraya module from the scratch. It
+is still now considered beta status.
+
+
+REQUIREMENTS
+============
+
+I'm using
+    libxslt ( 1.0.26-12 ) -> xsltproc
+    pyxml   ( 0.8.2-34 )  -> xmlproc_val
+
+Xmlproc_val is not necessary. If you don't have it edit
+bin/xaraya_module_wizard and comment out the line. It's only for validation
+purposes!
+
+For Windows you can get xsltproc here:
+    http://www.zlatkovic.com/projects/libxml/index.html
+
+    The only issue is you have to create the directories by hand. If you find
+    a solution or script something please send it back to me. The following
+    directories are needed
+        xarblocks/
+        xartemplates/
+        xartemplates/includes
+        xartemplates/blocks
+
+Other xml/xslt tool might work. If you tried one, please tell me if you
+encountered problems.
+
+
+HOW TO GET STARTED ( with the provided test.xml )
+=================================================
+
+1. Create a directory "wizard_test" in xarayas module directory
+
+2. Gunzip and untar xarayamodulewizard.tar.gz in this directory
+
+3. Now you should have
+[ bash:1052 ] $ ls
+xaraya_module_wizard
+
+4. Copy test.xml
+[ bash:1053 ] $ cp xaraya_module_wizard/test.xml .
+
+5. Execute the wizard
+[ bash:1054 ] $ xaraya_module_wizard/bin/xaraya_module_wizard test.xml
+
+7. You're done :-)
+
+8. Initialise / Activate the module
+
+...
+
+
+STATUS
+======
+
+The wizard provides currently the following functionality
+
+o creation of a module
+    + create database tables
+    + create and initialise module variable
+    + register hooks
+    + register schemes
+    + register instances
+    + enable hooks
+
+o deletion of modules
+    + undo all the task from the creation
+    + call the module:delete:api hook
+
+o hooks
+    + can be enabled / disabled in general
+    + generate the appropriate calls to xarModCallHooks()
+    + hitcount/ratings/comments work out of the box ( no 'sort by'! )
+    + categories works too, but requires much work to get where the articles
+      module is
+    - content hooks aren't called. -> TODO
+
+o create stub for blocks
+
+o create admin/user gui for your database objects
+    + the generated code depends tightly ob dynamic-data
+
+o create module configuration gui
+
+o enable/disable short url support and get the appropriate functions
+
+o create all templates
+
+this list is very likely not complete. try it.
+
+
+TODO
+====
+
+o change the generation of the template for user-display and
+    user-displaytable. it should be easier to adapt the layout to your needs.
+
+o solve the content hooks problem
+
+o evaluate if it's possible to support the categories module fully
+
+o evaluate if it is possible to generate the 'sort by ( hits, ratings,
+    categorie )' thing.
+
+o check the security schemes
+
+o allow a finer configuration of the generated code. Say call hooks for object
+    xyz but not for zyx.
+
+o your turn ....
+
+o enhance the layout ... any takers?
+
+o enhance the DTD and the validation part of the stylesheet
+
+
+sincerly
+    Michael Jansen
