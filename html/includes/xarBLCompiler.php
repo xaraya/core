@@ -1838,7 +1838,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             return "xarModGetVar('".$module."', '".$name."')";
         case 'theme':
             if (!isset($themeName)) {
-                $themeName = xarCore_getSiteVar('BL.DefaultTheme');
+                $themeName = xarModGetVar('themes', 'default');
             }
             return "xarThemeGetVar('".$themeName."', '".$name."')";
         case 'local':
