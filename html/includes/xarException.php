@@ -325,13 +325,13 @@ function xarErrorRender($format,$stacktype = "ERROR")
         return $msg;
     }
     elseif ($format == 'text') {
-        $msg = $data['title'] . "\n\n";
-        $msg .= "Description: " . $data['short'] . "\n\n";
-        $msg .= "Explanation: " . $data['long'] . "<br /><br/>";
-        if ($data['hint'] != '') $msg .= "Hint: " . $data['hint'] . "\n\n";
-        if ($data['stack'] != '') $msg .= "Stack:\n" . $data['stack'] . "\n\n";
-        if ($data['product'] != '') $msg .= "Product: " . $data['product'] . "\n\n";
-        if ($data['component'] != '') $msg .= "Component: " . $data['component'] . "\n\n";
+        $msg = $data['title'] . "\n";
+        $msg .= "Description: " . $data['short'] . "\n";
+        $msg .= "Explanation: " . $data['long'] . "\n";
+        if ($data['hint'] != '') $msg .= "Hint: " . $data['hint'] . "\n";
+        if ($data['stack'] != '') $msg .= "Stack:\n" . $data['stack'] . "\n";
+        if ($data['product'] != '') $msg .= "Product: " . $data['product'] . "\n";
+        if ($data['component'] != '') $msg .= "Component: " . $data['component'] . "\n";
         return $msg;
     }
 }
