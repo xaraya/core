@@ -24,7 +24,7 @@
 <xsl:template match="xaraya_module" mode="xd_admin-main">
 <xsl:document href="{$output}/xartemplates/admin-main.xd" format="text" omit-xml-declaration="yes" >
 
-    <xar:template file="admin-header" type="module" />
+    <xar:template file="header" type="module" />
 
 <h3>Welcome to the administration of <xsl:value-of select="about/name" /></h3>
 <span>

@@ -25,7 +25,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xd_user-main">
 <xsl:document href="{$output}/xartemplates/user-main.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
-    <xar:template file="user-header" type="module" />
+    <xar:template file="header" type="module" />
 </xsl:document>
 </xsl:template>
 </xsl:stylesheet>

@@ -23,7 +23,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xd_admin-view">
 <xsl:document href="{$output}/xartemplates/admin-view.xd" format="text" omit-xml-declaration="yes" >
-    <xar:template file="admin-header" type="module" />
+    <xar:template file="header" type="module" />
 
 </xsl:document>
 </xsl:template>
