@@ -281,6 +281,67 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
 }
 
 /**
+ * Get theme template image replacement for a module's image
+ *
+ * Usage 1: a module developer should use it to avoid hardcoding
+ * the module's image url if there is a clear need for the image
+ * to be able to blend seamlessly into a current theme.. 
+ * Example:
+ * $my_module_image = xarTplGetImage('button1.png');
+ *
+ * Usage 2: a theme utility developer can use it to check if
+ * a particular module's image exists and suggest a replacement
+ * image url for the theme or show a preview of the original.. 
+ * Example:
+ * $my_theme_image = xarTplGetImage('button1.png', 'example');
+ *
+ * Correct practices: 
+ *
+ * 1. module developers should never rely on theme's images, but instead
+ * provide their own inside <module name>/xarimage/ directory and use
+ * this function to reference their images in the module's functions.
+ * Such reference can then be safely passed to the module template.
+ *
+ * 2. theme developers should always check for the modules images
+ * (at least for all core modules) and provide replacements images 
+ * inside the corresponding theme modules/<module name>/images/ 
+ * directories as required
+ *
+ * @author  Andy Varganov <andyv@xaraya.com>
+ * @access  public
+ * @param   modImage string, the module image url relative to xarimages/
+ * @param   modName string, the module to check for the image <optional>
+ * @returns theme image url if it exists
+ * @returns module image url if it exists and theme image not found
+ * @returns NULL if neither image exists
+ * @todo    provide examples, test and improve description
+*/
+function xarTplGetImage($modImage, $modName = NULL)
+{
+    // obtain module name if not specified
+    if(!isset($modName)){
+    
+    list($thismodname) = xarRequestGetInfo();
+    
+    // lets not hardcode module directory
+    $modBaseInfo = xarMod_getBaseInfo($thismodname);
+    if (!isset($modBaseInfo)) return; // throw back
+    $modOsDir = $modBaseInfo['osdirectory'];
+    
+    // make relative url (path) to this module's image
+    $modImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
+    
+    }else{
+    // check if this image file exists
+    
+    // make relative url (path) to this module image
+    $modImage = 'modules/'.$modName.'/xarimages/'.$modImage;
+    }
+    
+    return $modImage;
+}
+
+/**
  * TODO: add this description
  *
  * @access public
