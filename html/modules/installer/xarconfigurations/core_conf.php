@@ -1,6 +1,6 @@
 <?php
 /**
- * File: core_conf.php
+ * File: core.conf.php
  *
  * Configuration file for a core xaraya installation
  *
