@@ -18,8 +18,11 @@
  */
 function themes_admin_updateconfig()
 { 
+    // Confirm authorisation code
+    if (!xarSecConfirmAuthKey()) return; 
+    // Security Check
+    if (!xarSecurityCheck('AdminTheme')) return;
     // Get parameters
-    if (!xarVarFetch('defaulttheme', 'str:1:', $defaulttheme)) return;
     if (!xarVarFetch('sitename', 'str:1:', $sitename, 'Your Site Name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('separator', 'str:1:', $separator, ' :: ', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pagetitle', 'str:1:', $pagetitle, 'default', XARVAR_NOT_REQUIRED)) return;
@@ -31,10 +34,6 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
-    // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return; 
-    // Security Check
-    if (!xarSecurityCheck('AdminTheme')) return;
 
     xarModSetVar('themes', 'SiteName', $sitename);
     xarModSetVar('themes', 'SiteTitleSeparator', $separator);
@@ -48,24 +47,6 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'var_dump', $var_dump);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
-    $whatwasbefore = xarModGetVar('themes', 'default');
-
-    if (!isset($defaulttheme)) {
-        $defaulttheme = $whatwasbefore;
-    } 
-
-    $themeInfo = xarThemeGetInfo($defaulttheme);
-
-    if ($themeInfo['class'] != 2) {
-        xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig'));
-    } 
-
-    if (xarVarIsCached('Mod.Variables.themes', 'default')) {
-        xarVarDelCached('Mod.Variables.themes', 'default');
-    } 
-    // update the data
-    xarTplSetThemeDir($themeInfo['directory']);
-    xarModSetVar('themes', 'default', $themeInfo['directory']); 
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;

@@ -26,15 +26,9 @@ function themes_admin_modifyconfig()
     // prepare labels and values for display by the template
     $data['title'] = xarVarPrepForDisplay(xarML('Configure Themes'));
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
-
-    $filter['Class'] = 2;
-    $data['themes'] = xarModAPIFunc('themes', 'admin', 'getlist', $filter); // This get the theme info structure
-    $data['defaulttheme'] = xarModGetVar('themes', 'default', 1); // This gets the directory name
-    $data['defaultthemelabel'] = xarVarPrepForDisplay(xarML('Default Theme:'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
     $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
-
     // everything else happens in Template for now
     return $data;
 } 
