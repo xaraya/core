@@ -151,6 +151,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * The $validation parameter could also be an object, in this case it must implement the xarVarValidator
  * interface.
  *
+ * <nuncanada> For me the $convValue is superfluos, why not return the new string on $subject itself on sucess
+ *             and on failure keep the old data type.
+ *
  * @author Marco Canini
  * @access public
  * @param validation mixed the validation to be performed
@@ -286,16 +289,17 @@ class xarVarValidator_int extends xarVarValidator {
             return false;
         }
         
-        if (isset($this->parameters[0]) && !empty($this->parameters[0])) {
-            if ($value < (int) $this->parameters[0]) {
-                return false;
-            }
+        if (isset($this->parameters[0]) &&
+            is_numeric($this->parameters[0]) &&
+            $value < (int) $this->parameters[0]) {
+            return false;
         }
 
-        if (isset($this->parameters[1]) && !empty($this->parameters[1])) {
-            if ($value > (int) $this->parameters[1]) {
+
+        if (isset($this->parameters[1]) &&
+            is_numeric($this->parameters[1]) &&
+            $value > (int) $this->parameters[1]) {
                 return false;
-            }
         }
 
         $convValue = $value;
