@@ -919,7 +919,7 @@ class xarPrivileges extends xarMasks
 					FROM $this->instancestable
 					WHERE xar_module= '$module' "
 					. $componentstring .
-					" ORDER BY xar_component";
+					" ORDER BY xar_component,xar_iid";
 
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;
