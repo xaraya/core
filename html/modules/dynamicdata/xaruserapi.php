@@ -31,6 +31,7 @@ require_once 'modules/dynamicdata/class/objects.php';
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @param $args['getobject'] flag indicating if you want to get the whole object back
+ * @param $args['preview'] flag indicating if you're previewing an item
  * @returns array
  * @return array of (name => value), or false on failure
  * @raise BAD_PARAM, NO_PERMISSION
@@ -89,7 +90,12 @@ function &dynamicdata_userapi_getitem($args)
                                        'fieldlist' => $fieldlist,
                                        'status'    => $status));
     if (!isset($object) || empty($object->objectid)) return;
-    $object->getItem();
+    if (!empty($itemid)) {
+        $object->getItem();
+    }
+    if (!empty($preview)) {
+        $object->checkInput();
+    }
 
     if (!empty($getobject)) {
         return $object;

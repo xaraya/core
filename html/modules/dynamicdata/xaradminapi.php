@@ -384,7 +384,11 @@ function dynamicdata_adminapi_updateprop($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
+    if (isset($name) && is_string($name)) {
 	if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$prop_id")) return;
+    } else {
+	if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$prop_id")) return;
+    }
 
     // Get database setup - note that both xarDBGetConn() and xarDBGetTables()
     // return arrays but we handle them differently.  For xarDBGetConn()

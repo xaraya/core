@@ -1047,7 +1047,7 @@ class Dynamic_Select_Property extends Dynamic_Property
                 foreach ($options as $option) {
                     if (strchr($option, ',')) {
                         // if the option contains a , we'll assume it's an id,name combination
-                        list($id,$name) = explode(',', $this->validation);
+                        list($id,$name) = explode(',', $option);
                         array_push($this->options, array('id' => $id, 'name' => $name));
                     } else {
                         // otherwise we'll use the option for both id and name
