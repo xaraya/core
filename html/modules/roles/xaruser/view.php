@@ -55,9 +55,13 @@ function roles_user_view($args)
         $selection = " AND (";
         $selection .= "(xar_name LIKE '%" . $search . "%')";
         $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
-        $selection .= " OR (xar_email LIKE '%" . $search . "%')";
+        if (xarModGetVar('roles', 'searchbyemail')) {
+            $selection .= " OR (xar_email LIKE '%" . $search . "%')";
+            $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
+        } else {
+            $data['msg'] = xarML('Members whose Display Name or User Name "#(1)"', $search);
+        }
         $selection .= ")";
-        $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
     }
     else {
         $data['msg'] = xarML("All members");

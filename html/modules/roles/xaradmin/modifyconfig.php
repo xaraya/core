@@ -167,6 +167,9 @@ function roles_admin_modifyconfig()
                 case 'hooks':
                     break;
                 case 'memberlist':
+                    if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;
+                    xarModSetVar('roles', 'searchbyemail', $searchbyemail);
+                    break;
             }
 
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;

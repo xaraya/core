@@ -104,7 +104,11 @@ function roles_user_search()
     $selection = " AND (";
     $selection .= "(xar_name LIKE '%" . $q . "%')";
     $selection .= " OR (xar_uname LIKE '%" . $q . "%')";
-    $selection .= " OR (xar_email LIKE '%" . $q . "%')";
+
+    if (xarModGetVar('roles', 'searchbyemail')) {
+        $selection .= " OR (xar_email LIKE '%" . $q . "%')";
+    }
+    
     $selection .= ")";
 
     $data['total'] = xarModAPIFunc('roles',

@@ -329,6 +329,21 @@
 			<input type="hidden" name="authid" id="authid" value="#$authid#" />
 			<input type="hidden" name="phase" id="phase" value="update" />
 			<input type="hidden" name="tab" id="tab" value="#$tab#" />
+
+			<table><tr>
+				<td><xar:mlstring>Allow searching by email</xar:mlstring>:</td>
+				<td>
+					<xar:if condition="xarModGetVar('roles', 'searchbyemail')">
+						<input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" tabindex="1"/>
+					<xar:else />
+						<input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" tabindex="1"/>
+					</xar:if>
+				</td>
+				<td>
+					<i><xar:mlstring>Note: Be careful, it might reveal enough information to help compromising user's login.</xar:mlstring></i>
+				</td>
+			</tr></table>
+				
 			<br /><br />
 			<input type="submit" value="#$updatelabel#"  />
 		</form>
