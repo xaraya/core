@@ -1175,7 +1175,7 @@ Password : %%password%%
     // If it does not exist, disable output caching so that xarcachemanager can be upgraded.
     echo "<h5>Checking xarCache State</h5>";
     $varCacheDir = xarCoreGetVarDirPath() . '/cache';
-    if (file_exists($varCacheDir . '/output/cache.touch') && !xarModGetVar('xarcachemanager','CacheBlockOutput')) {
+    if (file_exists($varCacheDir . '/output/cache.touch')) {
         echo "Output caching enabled, checking for required table...<br/>";
         $dbconn =& xarDBGetConn();
         $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
