@@ -239,9 +239,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before anything fancy is loaded, let's start the legacy systems
      *
      */
-    if (xarConfigGetVar('Site.Core.LoadLegacy') == true){
-        include 'includes/pnHTML.php';
-        include 'includes/pnLegacy.php';
+    if (xarConfigGetVar('Site.Core.LoadLegacy') == true) {
+        include 'includes/xarLegacy.php';
     }
 
     /*

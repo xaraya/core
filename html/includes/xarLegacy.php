@@ -13,11 +13,15 @@
 
 /***********************************************************************
 * This file is for legacy functions needed to make it
-* easier to use pn modules in Xaraya. Please don't fill it with useless
-* stuff or deprecated API funcs except as wrappers, and also.. please
+* easier to use pn modules in Xaraya and have a place for our own legacy
+* function which are on their way to deprecation. 
+* Please don't fill it with useless
+* stuff except as wrappers, and also.. please
 * do not duplicate constants that already exist in xaraya core
 * If a function did not exist in pn before...don't prefix it with pn
 ***********************************************************************/
+
+include 'includes/pnHTML.php';
 
 /**********************************************************************
 * WARNING: THIS FILE IS A WORK IN PROGRESS!!!!!!!!!!!!!!!!!!!
