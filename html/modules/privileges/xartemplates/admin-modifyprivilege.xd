@@ -291,6 +291,7 @@ document.forms['privilegeform'].submit();}
                 </td>
                 <td>
                     <select name="privid" id="privid">
+                        <option value=""></option>
                         <xar:loop name="$privileges">
                             <option value="#$loop:item['pid']#">#$loop:item['name']#</option>
                         </xar:loop>

@@ -34,6 +34,14 @@ function privileges_admin_addmember()
     if(!xarVarFetch('ppid',   'isset', $pid   , NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
 
+    if (empty($pid) || empty($privid)) {
+        xarResponseRedirect(xarModURL('privileges',
+                                      'admin',
+                                      'modifyprivilege',
+                                      array('pid'=>$pid)));
+        return true;
+    }
+
 // call the Privileges class and get the parent and child objects
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
