@@ -52,7 +52,7 @@ function roles_adminapi_recall($args)
 
     // Let any hooks know that we have recalled this user.
     $item['module'] = 'roles';
-    $item['itemid'] = $item['uid'];
+    $item['itemid'] = $uid;
     $item['method'] = 'recall';
     xarModCallHooks('item', 'create', $uid, $item);
 
