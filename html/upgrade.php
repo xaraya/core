@@ -238,6 +238,110 @@ if (empty($step)) {
 
             case '.9.0.4': // this is how it's defined in upgrade.php
 
+                //This creates the new Myself role and makes it a child of Everybody
+                xarMakeUser('Myself','myself','myself@xaraya.com','password');
+                xarMakeRoleMemberByName('Myself','Everybody');
+
+                // This creates the new lock privileges and assigns them to the relevant roles
+                xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+                xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
+                xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
+                xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
+                xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
+                xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
+                xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
+                xarMakePrivilegeRoot('GeneralLock');
+                xarMakePrivilegeMember('LockMyself','GeneralLock');
+                xarMakePrivilegeMember('LockEverybody','GeneralLock');
+                xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+                xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+                xarMakePrivilegeMember('LockAdministration','GeneralLock');
+                xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+                xarAssignPrivilege('GeneralLock','Everybody');
+                xarAssignPrivilege('GeneralLock','Administrators');
+                xarAssignPrivilege('GeneralLock','Users');
+
+                //Make sure we have the correct stuff for Anonymous and Everybody
+                xarModDelVar('roles', 'Everybody');
+                xarModDelVar('roles', 'Anonymous');
+                $role = xarFindRole('Everybody');
+                xarModSetVar('roles', 'everybody', $role->getID());
+                $role = xarFindRole('Anonymous');
+                xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+
+                // create and populate the security levels table
+                $leveltable = $tables['security_levels'];
+                $query = xarDBCreateTable($leveltable,
+                         array('xar_lid'  => array('type'       => 'integer',
+                                                  'null'        => false,
+                                                  'default'     => '0',
+                                                  'increment'   => true,
+                                                  'primary_key' => true),
+                               'xar_level' => array('type'      => 'integer',
+                                                  'null'        => false,
+                                                  'default'     => '0'),
+                               'xar_leveltext' => array('type'=> 'varchar',
+                                                  'size'        => 255,
+                                                  'null'        => false,
+                                                  'default'     => ''),
+                               'xar_sdescription' => array('type'=> 'varchar',
+                                                  'size'        => 255,
+                                                  'null'        => false,
+                                                  'default'     => ''),
+                               'xar_ldescription' => array('type'=> 'varchar',
+                                                  'size'        => 255,
+                                                  'null'        => false,
+                                                  'default'     => '')));
+
+                if (!$dbconn->Execute($query)) return;
+
+                $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
+                               'fields'    => array('xar_level'),
+                               'unique'    => FALSE);
+                $query = xarDBCreateIndex($leveltable,$index);
+                if (!$dbconn->Execute($query)) return;
+
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
+                if (!$dbconn->Execute($query)) return;
+                $nextId = $dbconn->GenId($leveltable);
+                $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
+                          VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
+                if (!$dbconn->Execute($query)) return;
+
                 // Note to self, roles datereg field needs to be changed to a date/time field.
 
     }

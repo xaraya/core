@@ -351,7 +351,7 @@ function installer_admin_create_administrator()
     $role = xarFindRole('Everybody');
     xarModSetVar('roles', 'everybody', $role->getID());
     $role = xarFindRole('Anonymous');
-    xarConfigSetVar('Site.User.AnonynousUID', $role->getID());
+    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
 
     // Security Check
     if(!xarSecurityCheck('AdminInstaller')) return;
