@@ -29,9 +29,9 @@ th {
 
 /* BLOCKS */
 .xar-block-title, .xar-block-title-right {
-    color: #ffffff;
-    background-color: #666666;
-    padding: 0 4px;
+    color: #333333;
+    background-color: #f0f0f0;
+    background-image: url(../images/page_bg_hicontrast.gif);
 }
 
 /* MENUS */

@@ -199,32 +199,29 @@ td.xar-alt { }
 /* XARAYA REQUIRED ANONYMOUS CLASSES  [gen_heading] */
 
 /*
-these defaults apply to the left block group 
+these defaults apply to the left and right block group 
 -------------------------------------------------------------------------[comment] */
 
-.xar-block-head { color: #333399; }
-
-.xar-block-title {
-    font-weight: bold;
-    font-size: 110%;
-}
-
-.xar-block-body { }
-.xar-block-foot { }
-
-/*
-these defaults apply to the right block group 
--------------------------------------------------------------------------[comment] */
-
+.xar-block-head,
 .xar-block-head-right { color: #333399; }
 
+.xar-block-title,
 .xar-block-title-right {
     font-weight: bold;
     font-size: 110%;
+    padding: 0 4px;
+    color: #333366;
+    background-color: #DDDDF0;
+    background-image: url(../images/page_bg.gif);
+    background-repeat: repeat-x;
+    background-position: 0% 10%;
 }
 
+.xar-block-body,
 .xar-block-body-right { }
-.xar-block-foot-right { }
+
+.xar-block-foot,
+.xar-block-foot-right { margin-bottom: 2px; }
 
 /*
 topnav block group classes 

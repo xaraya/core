@@ -30,7 +30,7 @@ th {
 .xar-block-title, .xar-block-title-right {
     color: #7F5300;
     background-color: #F2EADD;
-    padding: 0 4px;
+    background-image: url(../images/page_bg_orange.gif);
 }
 
 /* MENUS */
