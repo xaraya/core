@@ -88,10 +88,12 @@ function installer_admin_phase3()
     //Defaults
     $systemConfigIsWritable   = false;
     $cacheTemplatesIsWritable = false;
+    $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
 
     $systemVarDir             = xarCoreGetVarDirPath();
     $cacheTemplatesDir        = $systemVarDir . '/cache/templates';
+    $rssTemplatesDir          = $systemVarDir . '/cache/rss';
     $systemConfigFile         = $systemVarDir . '/config.system.php';
 
     if (function_exists('version_compare')) {
@@ -106,10 +108,16 @@ function installer_admin_phase3()
         $cacheTemplatesIsWritable = true;
     }
 
+    if (is_writable($rssTemplatesDir)) {
+        $rssTemplatesIsWritable = true;
+    }
+
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
     $data['cacheTemplatesDir']        = $cacheTemplatesDir;
     $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
+    $data['rssTemplatesDir']          = $rssTemplatesDir;
+    $data['rssTemplatesIsWritable']   = $rssTemplatesIsWritable;
     $data['systemConfigFile']         = $systemConfigFile;
     $data['systemConfigIsWritable']   = $systemConfigIsWritable;
 

@@ -24,6 +24,12 @@
          			<xar:else />
          			  FAILURE: The installer cannot write to the #$cacheTemplatesDir# Please verify that your webserver has write access to the #$cacheTemplatesDir#  directory.
          			</xar:if>
+					<br /><br />
+         			<xar:if condition="$rssTemplatesIsWritable">
+         			  SUCCESS: The installer can write to the #$rssTemplatesDir# directory.
+         			<xar:else />
+         			  FAILURE: The installer cannot write to the #$rssTemplatesDir# Please verify that your webserver has write access to the #$rssTemplatesDir#  directory.
+         			</xar:if>
        			</span>
 						<br /><br />
           </div>
