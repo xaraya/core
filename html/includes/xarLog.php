@@ -35,9 +35,7 @@ define('XARLOG_LEVEL_DEBUG',     128);
 
 function xarLog_init($args, $whatElseIsGoingLoaded) {
 
-    global $_xarLoggers;
-
-    $_xarLoggers = array();
+    $GLOBALS['xarLog_loggers'] = array();
 
     //<nuncanada>Can we change the config file to accomodate multiple loggers?
 
@@ -68,18 +66,19 @@ function xarLog_init($args, $whatElseIsGoingLoaded) {
 
         $observer->setConfig($loggerArgs);
 
-        $_xarLoggers[] = &$observer;
+        $GLOBALS['xarLog_loggers'][] = &$observer;
     }
     
     return true;
 }
 
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) {
-    global $_xarLoggers;
     
     if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
-    foreach ($_xarLoggers as $logger) {
-       $logger->notify($message, $level);
+    // this makes a copy of the object, so the original $this->_buffer was never updated
+    //foreach ($_xarLoggers as $logger) {
+    foreach (array_keys($GLOBALS['xarLog_loggers']) as $id) {
+       $GLOBALS['xarLog_loggers'][$id]->notify($message, $level);
     }
 }
 
