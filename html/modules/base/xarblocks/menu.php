@@ -119,14 +119,19 @@ function base_menublock_display($blockinfo)
                             case '[': // module link
                             {
                                 $url = explode(':', substr($url, 1,  - 1));
-                                $url = 'index.php?module='.$url[0];
+                                $url = xarModUrl($url[0], 'user', 'main');
                                 break;
                             }
-                            case '{': // module link
+                            case '{': // article link
                             {
                                 $url = explode(':', substr($url, 1,  - 1));
-                                $url = 'index.php?module=articles&function=view&ptid='.$url[0];
-                                $url = htmlspecialchars($url);
+                                $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
+                                break;
+                            }
+                            case '(': // category link
+                            {
+                                $url = explode(':', substr($url, 1,  - 1));
+                                $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                                 break;
                             }
                         }
@@ -136,7 +141,6 @@ function base_menublock_display($blockinfo)
                         // Security Check
                         if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$title:All")) {
                             $title = xarVarPrepForDisplay($title);
-                            $url = xarVarPrepForDisplay($url);
                             $comment = xarVarPrepForDisplay($comment);
                             $child = xarVarPrepForDisplay($child);
                             $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child);
