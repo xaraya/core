@@ -23,7 +23,7 @@ function roles_user_view($args)
     if(!xarVarFetch('phase', 'enum:active:viewall', $phase, 'active', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('name', 'notempty', $data['name'], '', XARVAR_NOT_REQUIRED)) {return;}
 
-    if(!xarVarFetch('letter', 'str:1:2', $letter, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('letter', 'str:1', $letter, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('search', 'str:1:100', $search, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'enum:name:uname:email:uid:state:date_reg', $order, 'name', XARVAR_NOT_REQUIRED)) {return;}
 
@@ -56,7 +56,11 @@ function roles_user_view($args)
         } else {
         // TODO: handle case-sensitive databases
             $selection = ' AND xar_name LIKE ' . $dbconn->qstr($letter.'%');
-            $data['msg'] = xarML('Members whose Display Name begins with "#(1)"', $letter);
+            if(strtolower($phase) == 'active') {
+                $data['msg'] = xarML('Members Online whose Display Name begins with "#(1)"', $letter);
+            } else {
+                $data['msg'] = xarML('Members whose Display Name begins with "#(1)"', $letter);
+            }
         }
     } elseif ($search) {
         // Quote the search string
@@ -73,7 +77,11 @@ function roles_user_view($args)
         }
         $selection .= ")";
     } else {
-        $data['msg'] = xarML("All members");
+        if(strtolower($phase) == 'active') {
+            $data['msg'] = xarML("All members online");
+        } else {
+            $data['msg'] = xarML("All members");
+        }
     }
 
     $data['order'] = $order;
