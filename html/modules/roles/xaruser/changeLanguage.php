@@ -4,7 +4,7 @@
  * Changes the navigation language
  * This is the external entry point to tell MLS use another language
  */
-function roles_user_changeLanguage()
+function roles_user_changelanguage()
 {
     if (!xarVarFetch('locale', 'str:1:', $locale, NULL, XARVAR_POST_ONLY)) return;
     if (!xarVarFetch('return_url', 'str:1:', $return_url, NULL, XARVAR_POST_ONLY)) return;
