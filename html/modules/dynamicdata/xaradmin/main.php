@@ -24,12 +24,6 @@ function dynamicdata_admin_main()
     if (xarModGetVar('adminpanels', 'overview') == 0){
         $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-        $data['help'] = '';
-        // TODO: ML-ise
-        if (file_exists('modules/dynamicdata/xardocs/help.txt')) {
-            $data['help'] = join('',@file('modules/dynamicdata/xardocs/help.txt'));
-        }
-
         // Return the template variables defined in this function
         return $data;
     } else {
