@@ -361,6 +361,53 @@ if (empty($step)) {
 
   }
 
+//check roles instances
+  $rolesupdate=false;
+  $rolesinstance ='SELECT DISTINCT xar_name FROM ' . xarDBGetSystemTablePrefix() . '_roles';
+  $systemPrefix = xarDBGetSystemTablePrefix();
+  $roleMembersTable    = $systemPrefix . '_rolemembers';
+  $dbconn =& xarDBGetConn();
+
+// Do the Parent instance
+  $query = "SELECT xar_iid, xar_header, xar_query
+            FROM $instancestable
+            WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Parent:'";
+  $result =&$dbconn->Execute($query);
+
+   list($iid, $header, $xarquery) = $result->fields;
+   if ($rolesinstance != $xarquery) {
+       $rolesupdate=true;
+       echo "Attempting to update roles instance with component Relation and header Parent:.<br />";
+
+        $instances = array(array('header' => 'Parent:',
+                                 'query' => $rolesinstance,
+                                 'limit' => 20));
+        xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+   }
+   if (!$rolesupdate) {
+       echo "Roles security_instance entry Relation/Parent does not require updating.<br />";
+   }
+
+// Do the Child instance
+  $query = "SELECT xar_iid, xar_header, xar_query
+            FROM $instancestable
+            WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Child:'";
+  $result =&$dbconn->Execute($query);
+
+   list($iid, $header, $xarquery) = $result->fields;
+   if ($rolesinstance != $xarquery) {
+       $rolesupdate=true;
+       echo "Attempting to update roles instance with component Relation and header Child:.<br />";
+
+        $instances = array(array('header' => 'Child:',
+                                 'query' => $rolesinstance,
+                                 'limit' => 20));
+        xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+   }
+   if (!$rolesupdate) {
+       echo "Roles security_instance entry Relation/Child does not require updating.<br />";
+   }
+
     // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
     $sitePrefix = xarDBGetSiteTablePrefix();
     echo "<h5>Checking Table Structure</h5>";
