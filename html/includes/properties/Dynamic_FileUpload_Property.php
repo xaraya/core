@@ -20,6 +20,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     var $filetype;
     var $UploadsModule_isHooked = FALSE;
     var $basePath;
+    var $multiple = TRUE;
     
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     var $upload = true;
@@ -27,7 +28,14 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     function Dynamic_FileUpload_Property($args)
     {
         $this->Dynamic_Property($args);
-        
+
+        if (!empty($this->validation)) {
+            if ('single' == $this->validation) {
+                $this->multiple = FALSE;
+            } else {
+                $this->multiple = TRUE;
+            } 
+        }     
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality 
         $list = xarModGetHookList(xarModGetName(), 'item', 'transform');
@@ -286,8 +294,14 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 break;
             case _UPLOADS_GET_STORED:
 
-                if (!xarVarFetch($this->id . '_attach_stored', 'list:str:1:', $fileList)) return;
-
+                if (!xarVarFetch($this->id . '_attach_stored', 'list:str:1:', $fileList, XARVAR_NOT_REQUIRED)) return;
+                
+                // If we've made it this far, then fileList was empty to start, 
+                // so don't complain about it being empty now
+                if (empty($fileList) || !is_array($fileList)) {
+                    $this->value = NULL;
+                    return true;
+                }
                 // We prepend a semicolon onto the list of fileId's so that
                 // we can tell, in the future, that this is a list of fileIds 
                 // and not just a filename
@@ -298,7 +312,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             case '-1':
             case 0: 
                 $this->value = NULL;
-
                 return true;
             default: 
                 break;
@@ -359,7 +372,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['fileList']     = xarModAPIFunc('uploads', 'user', 'import_get_filelist', 
                                                array('descend' => $descend, 'fileLocation' => $trusted_dir));
         $data['storedList']   = xarModAPIFunc('uploads', 'user', 'db_getall_files');
-        
+
+        // used to allow selection of multiple files
+        $data['multiple_' . $this->id] = $this->multiple;
 
         if (!empty($value)) {
             // We use array_filter to remove any values from 
