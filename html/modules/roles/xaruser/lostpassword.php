@@ -25,8 +25,7 @@ function roles_user_lostpassword()
     if (xarUserIsLoggedIn()) {
         xarResponseRedirect(xarModURL('roles',
                                       'user',
-                                      'account',
-                                       array('uid' => $item['uid'])));
+                                      'account'));
        return true;
     }
 
