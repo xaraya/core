@@ -183,12 +183,7 @@ CHECKBOX {
    font-size: 10px;
    font-weight: normal;
 }
-.xar-menu-item-current > .xar-menu-subitem > A {
-   color: #193970;
-}
-.xar-menu-item-current > .xar-menu-subitem > A:visited {
-   color: #003366;
-}
+
 /*  XARAYA REQUIRED INDIVIDUAL CLASSES */
 TD.xar-norm {}
 TD.xar-alt {}
@@ -230,11 +225,28 @@ TD.xar-alt {}
    margin-top: 4px;
    margin-bottom: 4px;
 }
+.xar-menu-section-current {
+   background-color: #CCE6FF;
+   color: #191970;
+   font-size: 12px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: thin double #191970;
+   line-height: 170%;
+}
 .xar-menu-item {
    font-size: 11px;
    font-weight: bold;
    font-family: Verdana,Arial,Helvetica,sans-serif;
    padding-left: .5em;
+}
+.xar-menu-item-current {
+   background-color: #CCE6FF;
+   font-size: 11px;
+   font-weight: bold;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   padding-left: .5em;
+   padding-bottom: .5em;
 }
 .xar-menu-item:hover {
    background-color: #f0f0f0;
@@ -245,28 +257,26 @@ TD.xar-alt {}
    font-family: Verdana,Arial,Helvetica,sans-serif;
    margin-left: 4px;
    padding-left: 0px;
+   margin-right: .5em;
 }
 .xar-menu-subitem:hover {
    background-color: #CDD5F8;
 }
-.xar-menu-section-current {
-   background-color: #CCE6FF;
-   color: #191970;
-   font-size: 12px;
+.xar-menu-subitem-current {
    font-weight: bold;
-   font-family: Verdana,Arial,Helvetica,sans-serif;
-   border-bottom: thin double #191970;
-   line-height: 170%;
+   color: #000000;
+   background-color: #f0f0f0;
+   font-size: 10px;
+   margin-left: 4px;
+   padding-left: 0px;
+   margin-right: .5em;
 }
-.xar-menu-item-current {
-   background-color: #CCE6FF;
-   font-size: 11px;
-   font-weight: bold;
-   font-family: Verdana,Arial,Helvetica,sans-serif;
-   padding-left: .5em;
-   padding-bottom: .5em;
+.xar-menu-item-current > .xar-menu-subitem > A {
+   color: #193970;
 }
-.xar-menu-subitem-current {}
+.xar-menu-item-current > .xar-menu-subitem > A:visited {
+   color: #003366;
+}
 
 .xar-block-head-left {}
 .xar-block-title-left {}

@@ -1,28 +1,28 @@
 <xar:if condition="isset($menustyle)">
-	&xar-var-menustyle;
+	#$menustyle#
 </xar:if>
 <br />
 <!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRUELY ACTIVE LINKS NOW -->
 <xar:loop name="$adminmods">
     <xar:if condition="$modactive">
         <div class="xar-menu-item-current">
-        <div class="xar-menu-section">&xar-var-label;</div>
+        #$label#
         <xar:if condition="$indlinks ne ''">
             <xar:loop name="$indlinks">
                 <xar:if condition="$funcactive">
-                    <div class="xar-menu-subitem">&xar-var-adminlabel; &xar-var-marker;</div>
+                    <div class="xar-menu-subitem-current">#$adminlabel# #$marker#</div>
                 <xar:else />
-                    <div class="xar-menu-subitem"><a href="&xar-var-adminlink;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a></div>
+                    <div class="xar-menu-subitem"><a href="#$adminlink#" title="#$admintitle#">#$adminlabel#</a></div>
                 </xar:if>
             </xar:loop>
         </xar:if>
         </div>
     <xar:elseif condition="!$modactive and !$link" />
-        <div class="xar-menu-section">&xar-var-label;</div>
+        <div class="xar-menu-section">#$label#</div>
     <xar:else />
-        <div class="xar-menu-item"><a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a></div>
+        <div class="xar-menu-item"><a href="#$link#" title="#$desc#">#$label#</a></div>
     </xar:if>
 </xar:loop>
 <br />
 <!-- Logout -->
-[<a href="&xar-var-logouturl;">&xar-var-logoutlabel;</a>]
+[<a href="#$logouturl#">#$logoutlabel#</a>]
