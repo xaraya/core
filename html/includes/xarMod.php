@@ -805,6 +805,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     $found = true;
     $isLoaded = true;
+    $msg='';
     if (!function_exists($modFunc)) {
         // attempt to load the module's api
         xarModLoad($modName,$modType);
