@@ -26,16 +26,6 @@
 			#$email#
 		</td>
 	</tr>
-    <xar:if condition="xarModGetVar('roles', 'chooseownpassword')" >
-		<tr>
-			<td>
-				<xar:mlstring>Password</xar:mlstring>
-			</td>
-			<td>
-				#$pass#
-			</td>
-		</tr>
-    </xar:if>
     <xar:if condition="isset($properties)" >
 	<xar:foreach in="$properties" key="$name">
 	<tr>

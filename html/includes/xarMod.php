@@ -1222,6 +1222,65 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 }
 
 /**
+ * Generates an URL that reference to a module function via Email.
+ *
+ * @access public
+ * @param modName string registered name of module
+ * @param modType string type of function
+ * @param funcName string module function
+ * @param args array of arguments to put on the URL
+ * @return mixed absolute URL for call, or false on failure
+ */
+function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array())
+{
+    if (empty($modName)) {
+        return xarServerGetBaseURL() . 'index.php';
+    }
+
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
+        // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
+        // this exception means that the module does not support short urls
+        // for this $modType.
+        // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
+        // this exception means that the module does not have the $modType API.
+        if (xarExceptionId() != 'MODULE_FUNCTION_NOT_EXIST' &&
+            xarExceptionId() != 'MODULE_FILE_NOT_EXIST') {
+            // In all other cases we just log the exception since we must always
+            // return a valid url
+            xarLogException(XARLOG_LEVEL_ERROR);
+        }
+        xarExceptionFree();
+    }
+
+    // The arguments
+    $urlArgs[] = "module=$modName";
+    if ((!empty($modType)) && ($modType != 'user')) {
+        $urlArgs[] = "type=$modType";
+    }
+    if ((!empty($funcName)) && ($funcName != 'main')) {
+        $urlArgs[] = "func=$funcName";
+    }
+    $urlArgs = join('&', $urlArgs);
+
+    $url = "index.php?$urlArgs";
+
+    foreach ($args as $k=>$v) {
+        if (is_array($v)) {
+            foreach($v as $l=>$w) {
+                if (isset($w)) {
+                    $url .= "&$k" . "[$l]=$w";
+                }
+            }
+        } elseif (isset($v)) {
+            $url .= "&$k=$v";
+        }
+    }
+
+    // The URL
+    return xarServerGetBaseURL() . $url;
+}
+
+/**
  * Get the displayable name for modName
  *
  * The displayable name is sensible to user language.
