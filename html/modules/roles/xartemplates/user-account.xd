@@ -9,6 +9,13 @@
         <xar:if condition="!empty($message)">
             #$message#
         <xar:else />
+			<p>
+				<a href="#xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')))#">
+					<xar:mlstring>
+						Display your profile
+					</xar:mlstring>
+				</a>
+			</p>
             <p>
                 <xar:mlstring>
                     Configure Your Account Settings:
