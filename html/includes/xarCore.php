@@ -59,7 +59,7 @@ define('XARCORE_VERSION_SUB', 'adam_baum');
  * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
  * dependancies will be automatically resolved
  */
- 
+
 //TODO: <besfred> rethink runlevels and make them independant from one another
 
 define('XARCORE_SYSTEM_NONE', 0);
@@ -86,7 +86,7 @@ define('XARDBG_SQL', 2);
 define('XARDBG_EXCEPTIONS', 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 
-define('_XAR_ID_UNREGISTERED', '2');
+define('_XAR_ID_UNREGISTERED', '7');
 
 /**
  * Initializes the core engine

@@ -1171,6 +1171,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
 
     // Build function name and call function
+    $funcName = strtolower($funcName);
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     $found = true;
     if (!function_exists($modAPIFunc)) {
@@ -1407,7 +1408,7 @@ function xarModIsAvailable($modName)
     if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
 
         $modBaseInfo = xarMod_getBaseInfo($modName);
-        // Catch the MODULE_NOT_EXIST exception first, 
+        // Catch the MODULE_NOT_EXIST exception first,
         // because that is what we're testing
         // here, we don't want to except on that.
         if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
