@@ -14,6 +14,11 @@ function xar_base_formCheck(formobj, fieldRequired, fieldDescription){
         var obj = formobj.elements[fieldRequired[i]];
         if (obj){
             switch(obj.type){
+            case "checkbox":
+                if (!obj.checked){
+                    alertMsg += " - " + fieldDescription[i] + "\n";
+                }
+                break;
             case "select-one":
                 if (obj.selectedIndex == -1 || obj.options[obj.selectedIndex].text == ""){
                     alertMsg += " - " + fieldDescription[i] + "\n";
