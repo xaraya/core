@@ -788,11 +788,17 @@ function drawindent() {
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
 
-    // FIXME: provide default values for undefined variables
-    //        (e.g. parentid, date_reg, val_code, auth_module)
-    //        or make sure the calling function sets all these vars
-    //        Cfr. exceptions logged during installation.
 
+        // FIXME: should parentid be zero if no parent?
+        if(empty($parentid)) $parentid =0;
+        // FIXME: why is date_reg a varchar in the database and not a date field?
+        // FIXME: why is date_reg set to allow null?
+        if(empty($date_reg)) $date_reg='';
+        // FIXME: is val_code set to '' a sensible default?
+        if(empty($val_code)) $val_code='';
+        // FIXME: what is a sensible default for auth_module?
+        if(empty($auth_module)) $auth_module='';
+       
         $this->uid          = $uid;
         $this->name         = $name;
         $this->type         = $type;

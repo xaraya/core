@@ -426,7 +426,8 @@ function installer_admin_choose_configuration()
     $data['names'] = $names;
     return $data;
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer')));
+    // Huh? This is never reached
+    //xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer')));
 }
 
 /**
@@ -458,7 +459,8 @@ function installer_admin_confirm_configuration()
         $data['options'] = $configuration_options;
         $data['configuration'] = $configuration;
         return $data;
-        xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer','options' => $options)));
+        // Huh? This is never reached
+        //xarResponseRedirect(xarModURL('installer', 'admin', 'confirm_configuration', array('theme' => 'installer','options' => $options)));
     }
     else {
         include $configuration;
