@@ -137,16 +137,16 @@ function roles_admin_updaterole()
         if ($user['state'] != $pstate) {
             //Get the notice message
             switch ($pstate) {
-                case 1 :
+                case ROLES_STATE_INACTIVE :
                     $mailtype = 'deactivation';
                 break;
-                case 2 :
+                case ROLES_STATE_NOTVALIDATED :
                     $mailtype = 'validation';
                 break;
-                case 3 :
+                case ROLES_STATE_ACTIVE :
                     $mailtype = 'welcome';
                 break;
-                case 4 :
+                case ROLES_STATE_PENDING :
                     $mailtype = 'pending';
                 break;
             }

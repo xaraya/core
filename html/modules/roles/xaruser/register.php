@@ -315,8 +315,8 @@ function roles_user_register()
             $requireValidation = xarModGetVar('roles', 'requirevalidation');
             if ($requireValidation == false) {
                 $pending = xarModGetVar('roles', 'explicitapproval');
-                if ($pending == 1) $state = 4;
-                else $state = 3;
+                if ($pending == 1) $state = ROLES_STATE_PENDING;
+                else $state = ROLES_STATE_ACTIVE;
 
                 $uid = xarModAPIFunc('roles', 'admin', 'create',
                                       array('uname' => $username,
@@ -383,7 +383,7 @@ function roles_user_register()
                                             'pass'  => $pass,
                                             'date'     => $now,
                                             'valcode'  => $confcode,
-                                            'state'   => 2));
+                                            'state'   => ROLES_STATE_NOTVALIDATED));
 
 
                 // Check for user creation failure

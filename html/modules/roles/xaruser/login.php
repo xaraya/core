@@ -67,7 +67,7 @@ function roles_user_login()
                 // then a corresponding entry will be created in the
                 // roles table.  So set the user state to allow for
                 // login.
-                $state = 3;
+                $state =ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
 
@@ -79,7 +79,7 @@ function roles_user_login()
                 // the user's credentials), just as authldap
                 // delegates to an LDAP server. Behavior same as
                 // described in authldap case.
-                $state = 3;
+                $state = ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
 
@@ -122,7 +122,7 @@ function roles_user_login()
                 // then a corresponding entry will be created in the
                 // roles table.  So set the user state to allow for
                 // login.
-                $state = 3;
+                $state = ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
         }
@@ -130,7 +130,7 @@ function roles_user_login()
 
     switch(strtolower($state)) {
 
-        case '0':
+        case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
             $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
@@ -139,7 +139,7 @@ function roles_user_login()
 
             break;
 
-        case '1':
+        case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
             $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.');
@@ -148,14 +148,14 @@ function roles_user_login()
 
             break;
 
-        case '2':
+        case ROLES_STATE_NOTVALIDATED:
 
             // User has not validated.
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
-        case '3':
+        case ROLES_STATE_ACTIVE:
         default:
 
             // User is active.
@@ -217,10 +217,10 @@ function roles_user_login()
 
             break;
 
-        case '4':
+        case ROLES_STATE_PENDING:
 
             // User is pending activation
-	    $msg = xarML('Your account has not yet been activated by the site administrator');
+        $msg = xarML('Your account has not yet been activated by the site administrator');
             xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 

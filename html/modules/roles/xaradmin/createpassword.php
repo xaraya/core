@@ -20,7 +20,7 @@ function roles_admin_createpassword()
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // Get parameters
-    if(!xarVarFetch('state', 'isset', $state, 0, XARVAR_DONT_SET)) return;
+    if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uid', 'isset', $uid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'createpassword', 'Roles');

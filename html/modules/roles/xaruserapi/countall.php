@@ -29,18 +29,18 @@ function roles_userapi_countall($args)
 
     $rolestable = $xartable['roles'];
 
-    if (!empty($state) && is_numeric($state)) {
+    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
         $query = "SELECT COUNT(xar_uid)
         FROM $rolestable
                 WHERE xar_state = " . xarVarPrepForStore($state);
     } else {
         $query = "SELECT COUNT(xar_uid)
         FROM $rolestable
-                WHERE xar_state != 0";
+                WHERE xar_state != " . ROLES_STATE_DELETED;
     }
 
     //suppress display of pending users to non-admins
-    if (!xarSecurityCheck("AdminRole",0)) $query .= " AND xar_state != 4";
+    if (!xarSecurityCheck("AdminRole",0)) $query .= " AND xar_state != " . ROLES_STATE_PENDING;
 
 
     if (isset($selection)) $query .= $selection;

@@ -1,4 +1,9 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="$statedeleted">ROLES_STATE_DELETED</xar:set>
+<xar:set name="$stateinactive">ROLES_STATE_INACTIVE</xar:set>
+<xar:set name="$statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
+<xar:set name="$stateactive">ROLES_STATE_ACTIVE</xar:set>
+<xar:set name="$statepending">ROLES_STATE_PENDING</xar:set>
 <xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
 </xar:if>
 <xar:if condition="xarTplAddStyleLink('roles', 'privileges')">
@@ -65,25 +70,25 @@
 				</td>
 				<td style="text-align: center;vertical-align: middle;">
 					<select name="recallstate" id="recallstate" size="1" tabindex="4">
-						<xar:if condition="$recallstate eq 1">
-							<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+						<xar:if condition="$recallstate eq $stateinactive">
+							<option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
 						<xar:else />
-							<option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+							<option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
 						</xar:if>
-						<xar:if condition="$recallstate eq 2">
-							<option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+						<xar:if condition="$recallstate eq $statenotvalidated">
+							<option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
 						<xar:else />
-							<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+							<option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
 						</xar:if>
-						<xar:if condition="$recallstate eq 3">
-							<option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+						<xar:if condition="$recallstate eq $stateactive">
+							<option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
 						<xar:else />
-							<option value="3"><xar:mlstring>Active</xar:mlstring></option>
+							<option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
 						</xar:if>
-						<xar:if condition="$recallstate eq 4">
-							<option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+						<xar:if condition="$recallstate eq $statepending">
+							<option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
 						<xar:else />
-							<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+							<option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
 						</xar:if>
 					</select>
 					&nbsp;
@@ -203,30 +208,30 @@
 							<xar:else />
 								<option value="-1"></option>
 							</xar:if>
-							<xar:if condition="$purgestate eq 0">
-								<option value="0" selected="selected"><xar:mlstring>Delete</xar:mlstring></option>
+							<xar:if condition="$purgestate eq $statedeleted">
+								<option value="#$statedeleted#" selected="selected"><xar:mlstring>Delete</xar:mlstring></option>
 							<xar:else />
-								<option value="0"><xar:mlstring>Delete</xar:mlstring></option>
+								<option value="#$statedeleted#"><xar:mlstring>Delete</xar:mlstring></option>
 							</xar:if>
-							<xar:if condition="$purgestate eq 1">
-								<option value="1" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
+							<xar:if condition="$purgestate eq $stateinactive">
+								<option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
 							<xar:else />
-								<option value="1"><xar:mlstring>Inactive</xar:mlstring></option>
+								<option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
 							</xar:if>
-							<xar:if condition="$purgestate eq 2">
-								<option value="2" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
+							<xar:if condition="$purgestate eq $statenotvalidated">
+								<option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
 							<xar:else />
-								<option value="2"><xar:mlstring>Not Validated</xar:mlstring></option>
+								<option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
 							</xar:if>
-							<xar:if condition="$purgestate eq 3">
-								<option value="3" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
+							<xar:if condition="$purgestate eq $stateactive">
+								<option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
 							<xar:else />
-								<option value="3"><xar:mlstring>Active</xar:mlstring></option>
+								<option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
 							</xar:if>
-							<xar:if condition="$purgestate eq 4">
-								<option value="4" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
+							<xar:if condition="$purgestate eq $statepending">
+								<option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
 							<xar:else />
-								<option value="4"><xar:mlstring>Pending</xar:mlstring></option>
+								<option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
 							</xar:if>
 						</select>
 						&nbsp;

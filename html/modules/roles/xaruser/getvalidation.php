@@ -79,7 +79,7 @@ function roles_user_getvalidation()
                                    'user',
                                    'updatestatus',
                                     array('uname' => $uname,
-                                          'state' => '4'))) return;
+                                          'state' => ROLES_STATE_PENDING))) return;
                 /*Send Pending Email toggable ?
                 if (!xarModAPIFunc( 'roles',
                                 'admin',
@@ -97,7 +97,7 @@ function roles_user_getvalidation()
                                    'user',
                                    'updatestatus',
                                     array('uname' => $uname,
-                                          'state' => '3'))) return;
+                                          'state' => ROLES_STATE_ACTIVE))) return;
                 //send welcome email (option)
                 if (xarModGetVar('roles', 'sendwelcomeemail')) {
                     if (!xarModAPIFunc( 'roles',

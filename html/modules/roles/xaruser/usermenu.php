@@ -132,7 +132,7 @@ function roles_user_usermenu($args)
                                          'uname' => $uname,
                                          'name' => $name,
                                          'email' => $oldemail,
-                                         'state' => 3,
+                                         'state' => ROLES_STATE_ACTIVE,
                                          'pass' => $pass))) return;
             }
             if (!empty($email)){
@@ -190,7 +190,7 @@ function roles_user_usermenu($args)
                                          'uname' => $uname,
                                          'name' => $name,
                                          'email' => $email,
-                                         'state' => 3))) return;
+                                         'state' => ROLES_STATE_ACTIVE))) return;
             } else {
                 // Step 2
                 xarUserLogOut();
@@ -210,7 +210,7 @@ function roles_user_usermenu($args)
                                          'name'     => $name,
                                          'email'    => $email,
                                          'valcode'  => $confcode,
-                                         'state'    => 2))) return;
+                                         'state'    => ROLES_STATE_NOTVALIDATED))) return;
                 //Send validation email
                 if (!xarModAPIFunc( 'roles',
                                     'admin',
@@ -230,7 +230,7 @@ function roles_user_usermenu($args)
                                          'uname' => $uname,
                                          'name' => $name,
                                          'email' => $email,
-                                         'state' => 3))) return;
+                                         'state' => ROLES_STATE_ACTIVE))) return;
             }
 
             // Redirect

@@ -77,10 +77,10 @@ function roles_userapi_getall($args)
 
     $where_clause = array();
 
-    if (!empty($state) && is_numeric($state)) {
+    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
         $where_clause[] = 'roletab.xar_state = ' . $state;
     } else {
-        $where_clause[] = 'roletab.xar_state <> 0';
+        $where_clause[] = 'roletab.xar_state <> ' . ROLES_STATE_DELETED;
     }
 
     // Select-clause.
@@ -109,7 +109,7 @@ function roles_userapi_getall($args)
 
     // Hide pending users from non-admins
     if (!xarSecurityCheck('AdminRole', 0)) {
-        $where_clause[] = 'roletab.xar_state <> 4';
+        $where_clause[] = 'roletab.xar_state <> ' . ROLES_STATE_PENDING;
     }
 
     // If we aren't including anonymous in the query,

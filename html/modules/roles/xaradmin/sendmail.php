@@ -11,17 +11,17 @@
  * @subpackage Roles Module
  * @author Xaraya Team
  */
- 
+
 function roles_admin_sendmail()
 {
     // Get parameters from whatever input we need
     if (!xarVarFetch('uid', 'int:0:', $uid, 0)) return;
-    if (!xarVarFetch('state', 'int:0:', $state, 0)) return;
+    if (!xarVarFetch('state', 'int:0:', $state, ROLES_STATE_CURRENT)) return;
     if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0)) return;
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
     xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED);
-    
+
     $message = xarVarPrepHTMLDisplay($message);
     $subject = xarVarPrepForDisplay($subject);
 
@@ -30,13 +30,13 @@ function roles_admin_sendmail()
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
-    
+
     //Get the common search and replace values
     $sitename = xarModGetVar('themes', 'SiteName');
     $siteadmin = xarModGetVar('mail', 'adminname');
     $adminmail = xarModGetVar('mail', 'adminmail');
     $siteurl = xarServerGetBaseURL();
-	$search = array('/%%sitename%%/','/%%siteadmin%%/', '/%%adminmail%%/','/%%siteurl%%/');
+    $search = array('/%%sitename%%/','/%%siteadmin%%/', '/%%adminmail%%/','/%%siteurl%%/');
     $replace = array("$sitename", "$siteadmin", "$adminmail", "$siteurl");
     $message = preg_replace($search,
                               $replace,
