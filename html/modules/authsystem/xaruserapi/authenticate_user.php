@@ -19,6 +19,7 @@
  * @param args['uname'] user name of user
  * @param args['pass'] password of user
  * @returns int
+ * @todo use roles api, not direct db
  * @return uid on successful authentication, XARUSER_AUTH_FAILED otherwise
  */
 function authsystem_userapi_authenticate_user($args)
@@ -32,11 +33,8 @@ function authsystem_userapi_authenticate_user($args)
 
     // Get user information
     $rolestable = $xartable['roles'];
-    $query = "SELECT xar_uid,
-                     xar_pass
-              FROM $rolestable
-              WHERE xar_uname = '" . xarVarPrepForStore($uname) . "'";
-    $result =& $dbconn->Execute($query);
+    $query = "SELECT xar_uid, xar_pass FROM $rolestable WHERE xar_uname = ?";
+    $result =& $dbconn->Execute($query,array($uname));
     if (!$result) return;
 
     if ($result->EOF) {
