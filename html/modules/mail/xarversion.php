@@ -12,7 +12,7 @@
  */
 $modversion['name']           = 'Mail';
 $modversion['id']             = '771';
-$modversion['version']        = '0.01';
+$modversion['version']        = '0.1.0';
 $modversion['description']    = 'Mail handling utility module';
 $modversion['credits']        = 'xardocs/credits.txt';
 $modversion['help']           = 'xardocs/help.txt';

@@ -65,12 +65,17 @@ function mail_activate()
  * @param  $oldVersion 
  * @return true on success or false on failure
  * @throws no exceptions
- * @todo nothing
+ * @todo create separate xar_mail_queue someday
+ * @todo allow mail gateway functionality
  */
-function mail_upgrade($oldversion)
+function mail_upgrade($oldVersion)
 {
-// TODO: create separate xar_mail_queue table here someday
-    return false;
+    switch($oldVersion) {
+    case '0.01':
+        // Compatability upgrade nothing to be done
+        break;
+    }
+    return true;
 } 
 
 /**
