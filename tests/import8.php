@@ -29,7 +29,7 @@ ob_start();
 }
 ?>
 
-<h3>Quick and dirty import of test data from an existing .71 site</h3>
+<h3>Quick and dirty import of test data from an existing PN .71+ site</h3>
 
 <?php
 $prefix = xarDBGetSystemTablePrefix();
@@ -55,13 +55,13 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <p></p>
     <form method="POST" action="import8.php">
     <table border="0" cellpadding="4">
-    <tr><td align="right">Prefix used in your .71 site</td><td>
-    <input type="text" name="oldprefix" value="not '<?php echo $prefix ?>' !"></td></tr>
-    <tr><td align="right">URL of the /images directory on your .71 site</td><td>
+    <tr><td align="right">Prefix used in your PN .71+ site</td><td>
+    <input type="text" name="oldprefix" value="nuke"></td></tr>
+    <tr><td align="right">URL of the /images directory on your PN .71+ site</td><td>
     <input type="text" name="imgurl" value="/images"></td></tr>
-    <tr><td align="right">Reset corresponding .8 data ?</td><td>
+    <tr><td align="right">Reset corresponding Xaraya data ?</td><td>
     <input type="checkbox" name="reset" checked></td></tr>
-    <tr><td align="right">Reset existing .8 categories ?</td><td>
+    <tr><td align="right">Reset existing Xaraya categories ?</td><td>
     <input type="checkbox" name="resetcat" checked></td></tr>
     <tr><td colspan=2 align="middle">
     <input type="submit" value=" Import Data "></td></tr>
@@ -69,8 +69,23 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     <input type="hidden" name="step" value="1">
     <input type="hidden" name="module" value="roles">
     </form>
-    <p></p>
-    Note : you must at least activate the 'categories' and 'articles' modules first. Activating 'comments' and 'hitcount' is also a good idea :-)
+    <p><strong>Warning : for PHP 4.2+, this script needs to be run with register_globals OFF (for now)...</strong></p>
+    Recommended usage :<br /><ol>
+    <li>install Xaraya with the 'Community Site' option</li>
+    <li>initialize and activate the following modules :<ul>
+<li>categories</li>
+<li>comments</li>
+<li>hitcount</li>
+<li>ratings (optional)</li>
+<li>articles</li>
+</ul>
+[do not modify the default privileges, hooks etc. yet]
+</li>
+    <li>copy the import8.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
+    <li>???</li>
+    <li>profit ;-)</li>
+</ol>
+
 <?php
 } else {
     if ($step == 1 && !isset($startnum)) {
@@ -88,6 +103,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     if (!xarUserLogIn('Admin', 'password', 0)) {
         die('Unable to log in');
     }
+
+//    echo var_dump($_SESSION);
+    $curname = xarUserGetVar('name');
+    echo "Welcome back, <strong>" . xarVarPrepForDisplay($curname). "</strong><br><br>\n";
 */
 
     list($dbconn) = xarDBGetConn();
@@ -292,6 +311,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                       array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
         echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
+
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['rolemembers']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['dynamic_data']);
     }
 
     if ($step == 2) {
@@ -398,6 +421,10 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('installer','catid',serialize($catid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
+    if (!empty($docounter)) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
+    }
     }
 
     if ($step == 3) {
@@ -498,6 +525,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         echo '<a href="import8.php?step=' . $step . '&module=articles&startnum=' . $startnum . '">Go to step ' . $step . ' - articles ' . $startnum . '+ of ' . $count . '</a><br>';
     } else {
         echo '<a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    }
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+    if (!empty($docounter)) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
     }
     }
 
@@ -685,6 +717,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     $result->Close();
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+    if (!empty($docounter)) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
+    }
     }
 
     if ($step == 7) {
@@ -735,6 +772,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     xarModSetVar('installer','faqid',serialize($faqid));
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     }
 
     if ($step == 8) {
@@ -790,6 +828,11 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     echo "<strong>TODO : do something with FAQ display</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+    if (!empty($docounter)) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
+    }
     }
 
     if ($step == 9) {
@@ -816,7 +859,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
               LEFT JOIN ' . $oldprefix . '_users
               ON ' . $oldprefix . '_users.pn_uname = ' . $oldprefix . '_comments.pn_name
               ORDER BY pn_tid ASC';
-    $numitems = 1000;
+    $numitems = 1500;
     if (!isset($startnum)) {
         $startnum = 0;
     }
@@ -881,6 +924,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
         xarModDelVar('installer','commentid');
         echo '<a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
     }
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
     }
 
 
@@ -924,6 +968,7 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
 
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '&module=articles">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
     }
 
     if ($step == 11) {
@@ -991,23 +1036,17 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
     echo "<strong>TODO : import ratings, editorials, new links and modifications etc.</strong><br><br>\n";
     echo '<a href="import8.php">Return to start</a>&nbsp;&nbsp;&nbsp;
           <a href="import8.php?step=' . ($step+1) . '">Go to step ' . ($step+1) . '</a><br>';
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
+    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
+    if (!empty($docounter)) {
+        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
+    }
     }
 
 // TODO: add the rest :-)
 
     if ($step == 12) {
-    echo "<strong>12. Optimizing database tables</strong><br>\n";
-    $result =& $dbconn->Execute('OPTIMIZE TABLE ' . $tables['roles']);
-    if (!$result) {
-        echo $dbconn->ErrorMsg();
-    }
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories']);
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['articles']);
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['categories_linkage']);
-    if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','admin')) {
-        $dbconn->Execute('OPTIMIZE TABLE ' . $tables['hitcount']);
-    }
-    $dbconn->Execute('OPTIMIZE TABLE ' . $tables['comments']);
+    echo "<strong>12. Cleaning up</strong><br>\n";
 
     echo "<strong>TODO : import the rest...</strong><br><br>\n";
     //xarModDelVar('installer','userobjectid');
