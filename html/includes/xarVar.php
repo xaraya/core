@@ -471,13 +471,13 @@ class xarVarGroupValidator extends xarVarValidator
  */
 function xarVarCleanUntrusted($var)
 {
-    $search = array('|</?\s*SCRIPT.*?>|si',
-                    '|</?\s*FRAME.*?>|si',
-                    '|</?\s*OBJECT.*?>|si',
-                    '|</?\s*META.*?>|si',
-                    '|</?\s*APPLET.*?>|si',
-                    '|</?\s*LINK.*?>|si',
-                    '|</?\s*IFRAME.*?>|si',
+    $search = array('|</?\s*SCRIPT[^>]*>|si',
+                    '|</?\s*FRAME[^>]*>|si',
+                    '|</?\s*OBJECT[^>]*>|si',
+                    '|</?\s*META[^>]*>|si',
+                    '|</?\s*APPLET[^>]*>|si',
+                    '|</?\s*LINK[^>]*>|si',
+                    '|</?\s*IFRAME[^>]*>|si',
                     '|STYLE\s*=\s*"[^"]*"|si');
     // <?
     $replace = array('');
@@ -499,13 +499,13 @@ function xarVarCleanUntrusted($var)
  */
 function xarVarCleanFromInput()
 {
-    $search = array('|</?\s*SCRIPT.*?>|si',
-                    '|</?\s*FRAME.*?>|si',
-                    '|</?\s*OBJECT.*?>|si',
-                    '|</?\s*META.*?>|si',
-                    '|</?\s*APPLET.*?>|si',
-                    '|</?\s*LINK.*?>|si',
-                    '|</?\s*IFRAME.*?>|si',
+    $search = array('|</?\s*SCRIPT[^>]*>|si',
+                    '|</?\s*FRAME[^>]*>|si',
+                    '|</?\s*OBJECT[^>]*>|si',
+                    '|</?\s*META[^>]*>|si',
+                    '|</?\s*APPLET[^>]*>|si',
+                    '|</?\s*LINK[^>]*>|si',
+                    '|</?\s*IFRAME[^>]*>|si',
                     '|STYLE\s*=\s*"[^"]*"|si');
     // <?
     $replace = array('');
