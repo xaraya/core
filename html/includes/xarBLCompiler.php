@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: s.xarBLCompiler.php 1.71 03/07/05 11:35:12+02:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * BlockLayout Template Engine Compiler
  *
@@ -1896,7 +1896,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             }
             return $name;
         default:
-            $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'local\' attribute in <xar:var> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.', $this);
             return;
         }
     }
