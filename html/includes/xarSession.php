@@ -5,17 +5,17 @@
  * Session Support
  *
  * @package sessions
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @subpackage Session Support
- * @author Jim McDonald
-*/
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>, Michel Dalle
+ */
 
 /**
  * Initialise the Session Support
- * @returns bool
- * @return true on success
+ * 
+ * @author Jim McDonald, Marco Canini <m.canini@libero.it>
+ * @return bool true
  */
 function xarSession_init($args, $whatElseIsGoingLoaded)
 {
@@ -23,9 +23,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     // Session Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
-
     $tables = array('session_info' => $systemPrefix . '_session_info');
-
     xarDB_importTables($tables);
 
     // Register the SessionCreate event
@@ -33,7 +31,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     xarSession__setup($args);
 
-    if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    if (xarSession__UseOldSessions()) {
         // First thing we do is ensure that there is no attempted pollution
         // of the session namespace (yes, we still need this for now)
         foreach($GLOBALS as $k=>$v) {
@@ -62,23 +60,10 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     if ($GLOBALS['xarSession_isNewSession']) {
         xarSession__new($sessionId, $ipAddress);
-
-        // Generate a random number, used for
-        // some authentication
-        srand((double) microtime() * 1000000);
-
-        xarSessionSetVar('rand', rand());
     } else {
-        // same remark as in .71x branch : AOL, NZ and other ISPs don't
-        // necessarily have a fixed IP (or a reliable X_FORWARDED_FOR)
-        // if ($ipAddress == $GLOBALS['xarSession_ipAddress']) {
-            xarSession__current($sessionId);
-        // } else {
-            // Mismatch - destroy the session
-            //  session_destroy();
-            //  xarRedirect('index.php');
-            //  return false;
-        // }
+        // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
+        // so we don't test for the IP-address session var
+        xarSession__current($sessionId);
     }
 
     return true;
@@ -104,16 +89,18 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
-    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    // First try to handle stuff through _SESSION
+    if (!xarSession__UseOldSessions()) {
         if (isset($_SESSION[$name])) {
             return $_SESSION[$name];
         }
         return;
     }
 
+    // Use the 'old' session var way
     $var = 'XARSV' . $name;
 
-    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + $_SESSION doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
     //    if (isset($HTTP_SESSION_VARS[$var])) {
     //        return $HTTP_SESSION_VARS[$var];
@@ -135,18 +122,17 @@ function xarSessionGetVar($name)
  */
 function xarSessionSetVar($name, $value)
 {
-    if ($name == 'uid') {
-        return false;
-    }
+    if ($name == 'uid') return false;
 
-    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    // Try to handle through _SESSION
+    if (!xarSession__UseOldSessions()) {
         $_SESSION[$name] = $value;
         return true;
     }
 
     $var = 'XARSV' . $name;
 
-    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + $_SESSION for now - doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
     //    $HTTP_SESSION_VARS[$var] = $value;
     $GLOBALS[$var] = $value;
@@ -163,11 +149,10 @@ function xarSessionSetVar($name, $value)
  */
 function xarSessionDelVar($name)
 {
-    if ($name == 'uid') {
-        return false;
-    }
+    if ($name == 'uid') return false;
 
-    if (!$GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    // First try to handle through _SESSION
+    if (!xarSession__UseOldSessions()) {
         if (!isset($_SESSION[$name])) {
             return false;
         }
@@ -177,7 +162,7 @@ function xarSessionDelVar($name)
 
     $var = 'XARSV' . $name;
 
-    // forget about $_SESSION for now - doesn't work for PHP 4.0.6
+    // + $_SESSION for now - doesn't work for PHP 4.0.6
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
     //    if (isset($HTTP_SESSION_VARS[$var])) {
     //        unset($HTTP_SESSION_VARS[$var]);
@@ -213,7 +198,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+    if (xarSession__UseOldSessions()) {
         global $XARSVuid;
         $XARSVuid = $userId;
     } else {
@@ -376,6 +361,11 @@ function xarSession__new($sessionId, $ipAddress)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    // Generate a random number, used for
+    // some authentication
+    srand((double) microtime() * 1000000);
+    xarSessionSetVar('rand', rand());
+
     // Congratulations. We have created a new session
     xarEvt_trigger('SessionCreate');
     
@@ -423,7 +413,7 @@ function xarSession__phpRead($sessionId)
 
     if (!$result->EOF) {
         $GLOBALS['xarSession_isNewSession'] = false;
-        if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+        if (xarSession__UseOldSessions()) {
             global $XARSVuid;
         }
         list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $vars) = $result->fields;
@@ -432,7 +422,7 @@ function xarSession__phpRead($sessionId)
         // NOTE: <marco> Since it's useless to save the same information twice into
         // the session_info table, we use a little hack: $XARSVuid will appear to be
         // a session variable even if it's not registered as so!
-        if ($GLOBALS['xarSession_systemArgs']['useOldPHPSessions']) {
+        if (xarSession__UseOldSessions()) {
             global $XARSVuid;
             $XARSVuid = _XAR_ID_UNREGISTERED;
         } else {
@@ -522,6 +512,14 @@ function xarSession__phpGC($maxlifetime)
     if (!$result) return;
 
     return true;
+}
+
+/**
+ * Use the sessions from befor php 4.2?
+ *
+ */
+function xarSession__UseOldSessions() {
+    return (phpversion() < "4.2.0");
 }
 
 ?>
