@@ -1018,7 +1018,8 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
                 if (!$invalidDate) {
                     // Timestamp literal value must be placed in quotes
-                    $parameters['default'] = "'" . $parameters['default'] . "'";
+                    //$parameters['default'] = "'" . $parameters['default'] . "'";
+                    // the programmer should take care by using DBTimeStamp, which auto-quotes
                 }
 
             } else {
