@@ -14,7 +14,7 @@
  */
 function users_userblock_init()
 {
-    pnSecAddSchema(0, 'users:userblock', 'Block title');
+    xarSecAddSchema(0, 'users:userblock', 'Block title');
 }
 
 /**
@@ -36,13 +36,13 @@ function users_userblock_info()
  */
 function users_userblock_display($blockinfo)
 {
-    if ((pnUserLoggedIn()) && (pnUserGetVar('ublockon') == 1)) {
-        $ublock = pnUserGetVar('ublock');
+    if ((xarUserLoggedIn()) && (xarUserGetVar('ublockon') == 1)) {
+        $ublock = xarUserGetVar('ublock');
         if ($ublock === false) {
             $ublock = '';
         }
-        $username = pnUserGetVar('name');
-        $blockinfo['title'] = _MENUFOR." ".pnVarPrepForDisplay($username)."";
+        $username = xarUserGetVar('name');
+        $blockinfo['title'] = _MENUFOR." ".xarVarPrepForDisplay($username)."";
         $blockinfo['content'] = $ublock;
         return $blockinfo;
     }

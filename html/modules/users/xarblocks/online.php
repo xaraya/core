@@ -15,7 +15,7 @@
 function users_onlineblock_init()
 {
     // Security
-    pnSecAddSchema('users:Onlineblock:', 'Block title::');
+    xarSecAddSchema('users:Onlineblock:', 'Block title::');
 }
 
 /**
@@ -34,7 +34,7 @@ function users_onlineblock_info()
 function users_onlineblock_display($blockinfo)
 {
     // Security check
-    if (!pnSecAuthAction(0,
+    if (!xarSecAuthAction(0,
                          'users:Onlineblock:',
                          "$blockinfo[title]::",
                          ACCESS_READ)) {
@@ -61,22 +61,22 @@ function users_onlineblock_display($blockinfo)
         return;
     }
 
-    $output = new pnHTML();
+    $output = new xarHTML();
 
     // Database setup
-    list($dbconn) = pnDBGetConn();
-    $pntable = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
-    $sessioninfotable = $pntable['session_info'];
+    $sessioninfotable = $xartable['session_info'];
 
-    $activetime = time() - (pnConfigGetVar('secinactivemins') * 60);
+    $activetime = time() - (xarConfigGetVar('secinactivemins') * 60);
 
     // TODO - see if this can be done in a better way
-    $query = "SELECT pn_uid,
+    $query = "SELECT xar_uid,
                    COUNT(1)
             FROM $sessioninfotable
-            WHERE pn_lastused > $activetime
-            GROUP BY pn_uid";
+            WHERE xar_lastused > $activetime
+            GROUP BY xar_uid";
     $result = $dbconn->Execute($query);
 
     if ($dbconn->ErrorNo() != 0) {
@@ -124,14 +124,14 @@ function users_onlineblock_display($blockinfo)
     }
 
     if (!empty($vars['who'])) {
-        $userstable = $pntable['users'];
+        $userstable = $xartable['users'];
 
         $userlist = join(',', $userlist);
-        $sql = "SELECT pn_uname,
-                       pn_uid
+        $sql = "SELECT xar_uname,
+                       xar_uid
                 FROM $userstable
-                WHERE pn_uid in (" . pnVarPrepForStore($userlist) . ")
-                ORDER BY pn_uname";
+                WHERE xar_uid in (" . xarVarPrepForStore($userlist) . ")
+                ORDER BY xar_uname";
         $result = $dbconn->Execute($sql);
 
         if ($dbconn->ErrorNo()) {//echo $sql.$dbconn->ErrorMsg();exit;
@@ -151,7 +151,7 @@ function users_onlineblock_display($blockinfo)
         $numdisplayed=0;
         for (; !$result->EOF && $numdisplayed<$vars['maxwho']; $result->MoveNext()) {
             list($uname, $uid) = $result->fields;
-	    $output->URL(pnModURL('users',
+	    $output->URL(xarModURL('users',
 				  'user',
 				  'display',
 				  array('uid' => $uid)),

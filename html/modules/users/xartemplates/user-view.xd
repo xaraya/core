@@ -1,7 +1,7 @@
 <table border="0" width="100%">
     <tr>
         <th colspan="4" align="center">
-            <pnt:mlstring>Users Area</pnt:mlstring>            
+            <xar:mlstring>Users Area</xar:mlstring>            
         </th>
     </tr>
     <tr align="center">
@@ -9,37 +9,37 @@
         
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-user-new;"><pnt:mlstring>New Account</pnt:mlstring></a>
+            <a href="&xar-modurl-users-user-new;"><xar:mlstring>New Account</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-user-modify;"><pnt:mlstring>Modify Account</pnt:mlstring></a>
+            <a href="&xar-modurl-users-user-modify;"><xar:mlstring>Modify Account</xar:mlstring></a>
         </td>
         <td align="center">
-            <a href="&pnt-modurl-users-user-view;"><pnt:mlstring>View Current Users</pnt:mlstring></a>
+            <a href="&xar-modurl-users-user-view;"><xar:mlstring>View Current Users</xar:mlstring></a>
         </td>
     </tr>
     <tr align="center">
         <td align="center">
         
         </td>
-		<pnt:if condition="pnModGetVar('users', 'showterms')">
+		<xar:if condition="xarModGetVar('users', 'showterms')">
 			<td align="center">
-				<a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Terms of Use</pnt:mlstring></a>
+				<a href="&xar-modurl-users-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>
 			</td>
-		<pnt:else />
-			<td align="center">
-			</td>
-		</pnt:if>
-		<pnt:if condition="pnModGetVar('users', 'showprivacy')">
-			<td align="center">
-				<a href="&pnt-modurl-users-user-terms;"><pnt:mlstring>Privacy Policy</pnt:mlstring></a>
-			</td>
-		<pnt:else />
+		<xar:else />
 			<td align="center">
 			</td>
-		</pnt:if>
+		</xar:if>
+		<xar:if condition="xarModGetVar('users', 'showprivacy')">
+			<td align="center">
+				<a href="&xar-modurl-users-user-terms;"><xar:mlstring>Privacy Policy</xar:mlstring></a>
+			</td>
+		<xar:else />
+			<td align="center">
+			</td>
+		</xar:if>
         <td align="center">
-            <a href="&pnt-modurl-users-user-logout;"><pnt:mlstring>Logout</pnt:mlstring></a>
+            <a href="&xar-modurl-users-user-logout;"><xar:mlstring>Logout</xar:mlstring></a>
         </td>
     </tr>
 </table>
@@ -51,46 +51,46 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>        
 		<th width="20%">
-			&pnt-var-numberlabel;
+			&xar-var-numberlabel;
 		</th>
         <th width="20%">
-			&pnt-var-namelabel;
+			&xar-var-namelabel;
 		</th>
         <th width="50%">
-			&pnt-var-emaillabel;
+			&xar-var-emaillabel;
 		</th>
         <th width="10%">
-			&pnt-var-optionslabel;
+			&xar-var-optionslabel;
 		</th>
 	</tr>
-    <pnt:loop name="items">
+    <xar:loop name="items">
     <tr>
         <td>
-			&pnt-var-uname;
+			&xar-var-uname;
 		</td>
         <td>
-			&pnt-var-name;
+			&xar-var-name;
 		</td>
         <td>
-			&pnt-var-email;
+			&xar-var-email;
 		</td>
 		<td>
-           <pnt:if condition="empty($editurl)">
-               &pnt-var-edittitle;
-               <pnt:else />
-                   <a href="&pnt-var-editurl;">&pnt-var-edittitle;</a>
-           </pnt:if>
+           <xar:if condition="empty($editurl)">
+               &xar-var-edittitle;
+               <xar:else />
+                   <a href="&xar-var-editurl;">&xar-var-edittitle;</a>
+           </xar:if>
            |
-           <pnt:if condition="empty($deleteurl)">
-               &pnt-var-deletetitle;
-               <pnt:else />
-                   <a href="&pnt-var-deleteurl;">&pnt-var-deletetitle;</a>
-           </pnt:if>
+           <xar:if condition="empty($deleteurl)">
+               &xar-var-deletetitle;
+               <xar:else />
+                   <a href="&xar-var-deleteurl;">&xar-var-deletetitle;</a>
+           </xar:if>
         </td>
     </tr>
-    </pnt:loop>
+    </xar:loop>
 </table>
 <br />
 
 <!-- add the pager here -->
-&pnt-var-pager;
+&xar-var-pager;
