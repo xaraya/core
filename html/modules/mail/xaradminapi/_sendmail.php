@@ -141,7 +141,7 @@ function mail_adminapi__sendmail($args)
     $mail->WordWrap = $wordwrap;
     $mail->Priority = $priority;
     $mail->Encoding = $encoding;
-    $mail->CharSet = "iso-8859-1"; // Need to get the var for the ML
+    $mail->CharSet = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
     $mail->From = $from;
     $mail->FromName = $fromname;
 
