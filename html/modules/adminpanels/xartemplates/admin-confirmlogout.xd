@@ -1,19 +1,11 @@
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration</xar:mlstring></span></div>
+<!-- common admin menu for this module - remove link to the current function -->
+<div class="xar-mod-body">
+<h2><xar:mlstring>Confirm Logout</xar:mlstring></h2>
+<div align="center">
 <!-- Formatting table to center the menu -->
-<table border="1" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="center" valign="top">
-            <!-- Menu title -->
-            <xar:mlstring>Administration</xar:mlstring>
-        </th>
-    </tr>
-</table>
-<!-- Confirmation -->
-<div align="center"><h2>#$question#</h2></div><br />
-<table border="0" width="100%">
-    <tr>
-        <td align="center">
-            <h3>[<a href="#$logouturl#">#$logoutlabel#</a>]
-            [<a href="#$cancelurl#">#$cancellabel#</a>]</h3>
-        </td>
-    </tr>
-</table>
+<h3><xar:mlstring>Are you sure? Click "Cancel" to return to previous admin panel</xar:mlstring></h3>
+            [<a href="#$logouturl#">#$logoutlabel#</a>]
+            [<a href="#$cancelurl#">#$cancellabel#</a>]
+</div>
+</div>
