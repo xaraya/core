@@ -2,9 +2,14 @@
 /**
  * Dynamic Multi Select Property (saved as serialized array internally)
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -53,6 +58,8 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -75,6 +82,12 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         if (empty($id)) {
             $id = $name;
         }
+        $data['value']  = $value;
+        $data['name']   = $name;
+        $data['id']     = $id;
+        $data['options']= $options;
+
+        /*
         $out = '<select' .
                ' name="' . $name . '[]"' .
                ' id="'. $id . '"' .
@@ -93,12 +106,19 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         }
         $out .= '</select>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
+        */
+        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
+        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+
+        $template="multiselect";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -112,15 +132,21 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                 $value = $tmp;
             }
         }
-        $out = '';
-        $join = '';
-        foreach ($this->options as $option) {
+        if (!isset($options)) {
+            $options = $this->options;
+        }
+        $data['value']= $value;
+        $data['options']= $options;
+
+
+        /*foreach ($this->options as $option) {
             if (in_array($option['id'],$value)) {
                 $out .= $join . xarVarPrepForDisplay($option['name']);
                 $join = ' | ';
             }
-        }
-        return $out;
+        }*/
+        $template="multiselect";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
 
 }

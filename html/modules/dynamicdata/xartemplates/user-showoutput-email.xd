@@ -1,0 +1,5 @@
+<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
+
+<xar:if condition="!empty($value)">
+<a href="mailto:#$value#">#$value#</a>
+</xar:if>

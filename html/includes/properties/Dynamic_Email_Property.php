@@ -1,10 +1,17 @@
 <?php
 /**
- * Dynamic E-Mail Property
+ * File: $Id$
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * Dynamic Data Email Property
+ *
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * Include the base class
@@ -43,6 +50,8 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -55,7 +64,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         if (empty($id)) {
             $id = $name;
         }
-        return '<input type="text"'.
+        /*return '<input type="text"'.
                ' name="' . $name . '"' .
                ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
                ' size="'. (!empty($size) ? $size : $this->size) . '"' .
@@ -64,22 +73,45 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                ' />' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+        */
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
+        $data['size']     = !empty($size) ? $size : $this->size;
+
+
+        $template="email";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
+        $data=array();
+
         if (!isset($value)) {
-            $value = $this->value;
+            $value = xarVarPrepHTMLDisplay($this->value);
         }
-    // TODO: use redirect function here ?
         if (!empty($value)) {
+            $value=xarVarPrepHTMLDisplay($value);
+        }
+        // TODO: use redirect function here ?
+        /*if (!empty($value)) {
             $value = xarVarPrepForDisplay($value);
             return '<a href="mailto:'.$value.'">'.$value.'</a>';
         }
-        return '';
-    }
+        */
+        $data['value'] = $value;
+        $data['name'] = $this->name;
+        $data['id']   = $this->id;
 
+        $template="email";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+    }
 }
 
 ?>

@@ -63,6 +63,8 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
+        $data = array();
+        
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
