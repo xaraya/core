@@ -158,7 +158,7 @@
             <span class="help" title="#xarML('Enter the priority to send messages.')#"><label for="priority"><xar:mlstring>Default Priority to send messages</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <select name="priority" id="priority" size="1" tabindex="1">
+            <select name="priority" id="priority" size="1">
                 <xar:if condition="xarModGetVar('mail', 'priority') eq '1'">
                     <option label="High" value="1" selected="selected">High</option>
                     <option label="Normal" value="3">Normal</option>
@@ -181,7 +181,7 @@
             <span class="help" title="#xarML('Select the default method to send mail  Mail should work in most cases, however Windows installs might need to use the SMTP method.')#"><label for="server"><xar:mlstring>Default method to send mail</xar:mlstring></label>:</span>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
-            <select name="server" id="server" size="1" tabindex="1">
+            <select name="server" onChange="this.form.submit();" id="server" size="1">
                 <xar:if condition="xarModGetVar('mail', 'server') eq 'smtp'">
                     <option label="SMTP" value="smtp" selected="selected">SMTP</option>
                     <option label="SendMail" value="sendmail">SendMail</option>
@@ -244,9 +244,9 @@
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xar:if condition="xarModGetVar('mail', 'smtpAuth')">
-                <input type="checkbox" name="smtpAuth" id="smtpAuth" value="1" checked="checked" tabindex="1" />
+                <input type="checkbox" name="smtpAuth" id="smtpAuth" value="1" checked="checked" onChange="this.form.submit();" />
             <xar:else />
-                <input type="checkbox" name="smtpAuth" id="smtpAuth" value="1" tabindex="1" />
+                <input type="checkbox" name="smtpAuth" id="smtpAuth" value="1" onChange="this.form.submit();" />
             </xar:if>
         </span>
         </div>
