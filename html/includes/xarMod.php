@@ -1327,7 +1327,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     } else {
         $modName = $callerModName;
     }
-
+    xarLogMessage("xarModCallHooks: getting hooks for $modName");
     $hooklist = xarModGetHookList($modName, $hookObject, $hookAction);
 
     // TODO: #2
