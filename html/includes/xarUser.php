@@ -820,7 +820,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
 
     // The $name variable will be used to get the appropriate column
     // from the users table.
-    $query = "UPDATE $userstable
+    $query = "UPDATE $rolestable
               SET $usercolumns[$name] = '" . xarVarPrepForStore($value) . "'
               WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
     $result =& $dbconn->Execute($query);
