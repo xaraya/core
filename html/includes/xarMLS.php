@@ -21,6 +21,7 @@
  * Implements the request(ed) locale APIs for backend interactions
  * See how utf-8 works for xml backend
  * finish phpdoc tags
+ * Implement the $whatToLoad passage to every subsytem
  */
 
 define('XARMLS_SINGLE_LANGUAGE_MODE', 1);
