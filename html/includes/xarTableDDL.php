@@ -463,8 +463,11 @@ function xarDB__mysqlAlterTable($tableName, $args)
             }
             
             // Add table options, if any
-            if($coldef['increment_start'] > 0) {
-                $sql.= 'AUTO_INCREMENT=' .$coldef['increment_start'] . ' ';
+            // FIXME: when the callee was more sensible, we could simplify this
+            if(array_key_exists('increment_start',$coldef)) {
+                if($coldef['increment_start'] > 0) {
+                    $sql.= 'AUTO_INCREMENT=' .$coldef['increment_start'] . ' ';
+                }
             }
             break;
         case 'rename':
