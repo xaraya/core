@@ -76,57 +76,73 @@ $table_submissions = 'submissions';
 $table_comments = 'comments';
 $table_discussions = 'discussions';
 
-// Count number of users
-$query = 'SELECT COUNT(uid) FROM ' . $table_users;
-$result =& $dbconn->Execute($query);
-if (!$result) {
-    die("Oops, count of " . $table_users . " failed : " . $dbconn->ErrorMsg());
-} 
-$usercount = $result->fields[0];
-xarModSetVar('installer','usercount',$usercount);
-$result->Close();
+if (empty($step)) {
+    // Count number of users
+    $query = 'SELECT COUNT(uid) FROM ' . $table_users;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        echo("Oops, count of " . $table_users . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        xarErrorHandled();
+        $usercount = 0;
+    } else {
+        $usercount = $result->fields[0];
+        xarModSetVar('installer','usercount',$usercount);
+        $result->Close();
+    }
 
-// Count number of stories
-$query = 'SELECT COUNT(stoid) FROM ' . $table_stories;
-$result =& $dbconn->Execute($query);
-if (!$result) {
-    die("Oops, count of " . $table_stories . " failed : " . $dbconn->ErrorMsg());
-} 
-$storycount = $result->fields[0];
-xarModSetVar('installer','storycount',$storycount);
-$result->Close();
+    // Count number of stories
+    $query = 'SELECT COUNT(stoid) FROM ' . $table_stories;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        echo("Oops, count of " . $table_stories . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        xarErrorHandled();
+        $storycount = 0;
+    } else {
+        $storycount = $result->fields[0];
+        xarModSetVar('installer','storycount',$storycount);
+        $result->Close();
+    }
 
-// Count number of submissions (these are also stories)
-$query = 'SELECT COUNT(subid) FROM ' . $table_submissions;
-$result =& $dbconn->Execute($query);
-if (!$result) {
-    die("Oops, count of " . $table_submissions . " failed : " . $dbconn->ErrorMsg());
-} 
-$submissioncount = $result->fields[0];
-xarModSetVar('installer','submissioncount',$submissioncount);
-$result->Close();
+    // Count number of submissions (these are also stories)
+    $query = 'SELECT COUNT(subid) FROM ' . $table_submissions;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        echo("Oops, count of " . $table_submissions . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        xarErrorHandled();
+        $submissioncount = 0;
+    } else {
+        $submissioncount = $result->fields[0];
+        xarModSetVar('installer','submissioncount',$submissioncount);
+        $result->Close();
+    }
 
-// Count number of comments
-$query = 'SELECT COUNT(cid) FROM ' . $table_comments;
-$result =& $dbconn->Execute($query);
-if (!$result) {
-    die("Oops, count of " . $table_comments . " failed : " . $dbconn->ErrorMsg());
-} 
-$commentcount = $result->fields[0];
-xarModSetVar('installer','commentcount',$commentcount);
-$result->Close();
+    // Count number of comments
+    $query = 'SELECT COUNT(cid) FROM ' . $table_comments;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        echo("Oops, count of " . $table_comments . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        xarErrorHandled();
+        $commentcount = 0;
+    } else {
+        $commentcount = $result->fields[0];
+        xarModSetVar('installer','commentcount',$commentcount);
+        $result->Close();
+    }
 
-// Count number of discussions
-$query = 'SELECT COUNT(id) FROM ' . $table_discussions;
-$result =& $dbconn->Execute($query);
-if (!$result) {
-    die("Oops, count of " . $table_discussions . " failed : " . $dbconn->ErrorMsg());
-} 
-$discussioncount = $result->fields[0];
-xarModSetVar('installer','discussioncount',$discussioncount);
-$result->Close();
+    // Count number of discussions
+    $query = 'SELECT COUNT(id) FROM ' . $table_discussions;
+    $result =& $dbconn->Execute($query);
+    if (!$result) {
+        echo("Oops, count of " . $table_discussions . " failed : " . $dbconn->ErrorMsg() . '<br/>');
+        xarErrorHandled();
+        $discussioncount = 0;
+    } else {
+        $discussioncount = $result->fields[0];
+        xarModSetVar('installer','discussioncount',$discussioncount);
+        $result->Close();
+    }
 
-
+    // only show this when we start
 ?>
     Requirement for use : The Slashcode data and the Xaraya data HAVE to be in the same database for this script to work and they HAVE to be using a different prefix.  We read the Slashcode data and use the Xaraya API to import the data into Xaraya.  In order to do this we must be reading from the same database.  Easiest solution is to copy your Slashcode data into the same database as your Xaraya installation.
     <p></p>
@@ -173,6 +189,8 @@ $result->Close();
 </ol>
 
 <?php
+    } // if (empty($step))
+
     if ($step == 1 && !isset($startnum)) {
         if (!isset($reset)) { $reset = 0; }
         xarModSetVar('installer','reset',$reset);
