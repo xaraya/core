@@ -88,24 +88,21 @@ function base_menublock_display($blockinfo)
         default:
         case 'side':
                 // Content
-        /* Needs more work
                 if (!empty($vars['content'])) {
-                    $usercontent[] = array();
+                    $usercontent = array();
                     $contentlines = explode("LINESPLIT", $vars['content']);
                     foreach ($contentlines as $contentline) {
                         list($url, $title, $comment) = explode('|', $contentline);
                         if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
-                            $usercontenttitle = xarVarPrepForDisplay($title);
-                            $usercontenturl = xarVarPrepForDisplay($url);
-                            $usercontentcomment = xarVarPrepForDisplay($comment);
+                            $title = xarVarPrepForDisplay($title);
+                            $url = xarVarPrepForDisplay($url);
+                            $comment = xarVarPrepForDisplay($comment);
+                            $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment);
                         }
                     }
                 } else {
-                    $usercontenttitle = '';
-                    $usercontenturl = '';
-                    $usercontentcomment = '';
+                    $usercontent = '';
                 }
-        */
                 // sort by name
                 foreach($mods as $mod){
                     $label = $mod['name'];
@@ -124,9 +121,7 @@ function base_menublock_display($blockinfo)
                                                              'logouturl'     => $logouturl,
                                                              'logoutlabel'   => $logoutlabel,
                                                              'loggedin'      => $loggedin,
-                                                             //'usercontenttitle' => $usercontenttitle,
-                                                             //'usercontenturl' => $usercontenturl,
-                                                             //'usercontentcomment' => $usercontentcomment
+                                                             'usercontent'   => $usercontent
                                                              ));
                 // this should do for now
                 break;
@@ -135,103 +130,7 @@ function base_menublock_display($blockinfo)
     // Populate block info and pass to BlockLayout.
     $blockinfo['content'] = $data;
     return $blockinfo;
-    /*
 
-
-
-
-
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
-
-    // Generic check
-    if (!xarSecAuthAction(0, 'base:Menublock', '::', ACCESS_READ)) {
-        return;
-    }
-
-    // Break out options from our content field
-    $vars = unserialize($blockinfo['content']);
-
-    // Display style
-    // style = 1 - simple list
-    // style = 2 - drop-down list
-
-    // Title
-    $block['title'] = $blockinfo['title'];
-
-    // Styling
-    if (empty($vars['style'])) {
-        $vars['style'] = 1;
-    }
-    $block['content'] = startMenuStyle($vars['style']);
-
-    $content = 0;
-
-    // nkame: must start with some blank line, otherwise we're not able to
-    // chose the first option in case of a drop-down menu.
-    // a better solution would be to detect where we are, and adjust the selected
-    // option in the list, and only add a blank line in case of no recognition.
-    if($vars['style'] == 2)
-        $block['content'] .= addMenuStyledUrl($vars['style'], "", "", "");
-
-    // Content
-    if (!empty($vars['content'])) {
-        $contentlines = explode("LINESPLIT", $vars['content']);
-        foreach ($contentlines as $contentline) {
-            list($url, $title, $comment) = explode('|', $contentline);
-            if (xarSecAuthAction(0, 'base:Menublock', "$blockinfo[title]:$title:", ACCESS_READ)) {
-                $block['content'] .= addMenuStyledUrl($vars['style'], xarVarPrepForDisplay($title), $url, xarVarPrepForDisplay($comment));
-                $content = 1;
-            }
-        }
-    }
-
-    // Modules
-    if (!empty($vars['displaymodules'])) {
-        $mods = xarModGetList(array('UserCapable' => 1));
-
-        // Separate from current content, if any
-        if ($content == 1) {
-            $block['content'] .= addMenuStyledUrl($vars['style'], "", "", "");
-        }
-
-        foreach($mods as $mod) {
-// jgm - need to work back ML into modules table somehow
-//            if (file_exists("modules/$mod/modname.php")) {
-//                include "modules/$mod/modname.php";
-//            } else {
-
-            if (xarSecAuthAction(0, "$mod[name]::", "::", ACCESS_OVERVIEW)) {
-
-/*                        $block['content'] .= addMenuStyledUrl($vars['style'],
-                                                              xarVarPrepForDisplay($mod['displayname']),
-                                                              xarModURL($mod['name'],
-                                                                       'user',
-                                                                       'main'),
-                                                              xarVarPrepForDisplay($mod['description']));
-END COMMENT WHEN ACTIVE/
-                        $block['content'] .= addMenuStyledUrl($vars['style'],
-                                                              xarVarPrepForDisplay($mod['displayname']),
-                                                              xarModURL($mod['name'],
-                                                                       'user',
-                                                                       'main'),
-                                                                       '');
-                        $content = 1;
-               }
-        }
-
-    }
-
-    // Styling
-    $block['content'] .= endMenuStyle($vars['style']);
-
-    if ($content) {
-        $blockinfo['title'] = $block['title'];
-        $blockinfo['content'] = $block['content'];
-        //return themesideblock($blockinfo);
-        return $blockinfo;
-    }
-    */
 }
 
 function base_menublock_modify($blockinfo)
@@ -347,36 +246,4 @@ function base_menublock_insert($blockinfo)
     return($blockinfo);
 }
 
-function startMenuStyle($style)
-{
-    // Nothing to do for style == 1 (bullet list)
-    $content = "";
-
-    if ($style == 2) {
-        $content = xarTplBlock('base','startMenuStyle', array('style' => $style));
-    }
-
-    return $content;
-}
-
-function endMenuStyle($style)
-{
-    $content = "";
-
-    if ($style == 2){
-        $content = xarTplBlock('base','endMenuStyle', array('style' => $style));
-    }
-
-    return $content;
-}
-
-function addMenuStyledUrl($style, $name, $url, $comment)
-{
-    $content = xarTplBlock('base','MenuStyledUrl', array('style' => $style, 
-                                                         'name' => $name,
-                                                         'url' => $url,
-                                                         'comment' => $comment));
-
-    return $content;
-}
 ?>

@@ -1,13 +1,16 @@
 <br />
-<!-- <xar:loop name="$usercontent">
-	<strong>&nbsp;</strong>
-	<strong>&middot;</strong>
-    <xar:if condition="empty($usercontenturl)">
-        &xar-var-usercontenttitle;
-    <xar:else />
-        <a href="&xar-var-usercontenturl;">&xar-var-usercontenttitle;</a>
-    </xar:if>
-</xar:loop> -->
+<xar:if condition="!empty($usercontent)">
+	<xar:loop name="$usercontent">
+		<strong>&middot;</strong>
+		<xar:if condition="empty($url)">
+			&xar-var-title;
+		<xar:else />
+			<a href="&xar-var-url;" title="&xar-var-comment;">&xar-var-title;</a>
+		</xar:if>
+	</xar:loop>
+	<br />
+	<br />
+</xar:if>
 
 <xar:loop name="$usermods">
     <xar:if condition="$marker eq '' and $link eq ''">
@@ -18,7 +21,7 @@
     <xar:if condition="empty($link)">
         <b>&xar-var-label;</b>
     <xar:else />
-        <a href="&xar-var-link;">&xar-var-label;</a>
+        <a href="&xar-var-link;" title="&xar-var-label;">&xar-var-label;</a>
     </xar:if>
     <xar:if condition="!empty($marker)">
         &xar-var-marker;
