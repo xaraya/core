@@ -255,29 +255,35 @@ function xarBlock_renderGroup($groupName)
  *
  * @author John Cox
  * @access protected
- * @param string args[bid] contains id of block instance to render
+ * @param string args[bid] contains id of block instance to render; or
+ * @param string args[name] contains name of block instance to render
  * @return string
  * @raise EMPTY_PARAM
+ * @TODO honour the block state flag (max/hidden)?
  */
 function xarBlock_renderBlock($args)
 {
+    $bid = NULL;
+    $name = NULL;
+    $gid = NULL;
+
     extract($args);
 
-    if (empty($bid)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'bid');
+    if (empty($bid) && empty($name)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'bid or name');
         return;
     }
 
-    // If a block has more than one group, then the group needs to be specified.
-    if (!isset($gid)) {
-        $gid = NULL;
-    }
-
-    $blockInfo = xarModAPIFunc(
-        'blocks', 'admin', 'getinfo', array('bid' => $bid, 'gid' => $gid)
+    $blockinfo = xarModAPIFunc(
+        'blocks', 'user', 'getinfo', array('bid' => $bid, 'name' => $name, 'gid' => $gid)
     );
 
-    $output = xarBlock_render($blockInfo);
+    if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
+        $output = xarBlock_render($blockinfo);
+    } else {
+        // TODO: return NULL to indicate no block found?
+        $output = '';
+    }
 
     return $output;
 }

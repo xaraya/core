@@ -2,8 +2,8 @@
 /** 
  * File: $Id$
  *
- * Get details suitable for rendering for a block instance.
- * This will return the details for a block 
+ * Get details suitable for *rendering* a block instance.
+ * This will return the details for a block.
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -16,16 +16,21 @@
 
 function blocks_userapi_getinfo($args)
 {
+    $bid = 0;
+    $name = NULL;
     extract($args);
 
     // Check parameters.
-    if (empty($bid) && !is_numeric($bid)) {return;}
+    if (empty($bid) && !is_numeric($bid) && empty($name)) {return;}
 
-    if (xarVarIsCached('Block.Infos2', $bid)) {
+    if (!empty($bid) && xarVarIsCached('Block.Infos2', $bid)) {
         $instance = xarVarGetCached('Block.Infos2', $bid);
     } else {
         // Get the raw block instance data.
-        $instance = xarModAPIfunc('blocks', 'user', 'get', array($bid));
+        $instance = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $bid, 'name' => $name));
+        // No matching block was found.
+        if (empty($instance)) {return;}
+        $bid = $instance['bid'];
         xarVarSetCached('Block.Infos2', $bid, $instance);
     }
 

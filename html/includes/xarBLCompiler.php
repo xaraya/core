@@ -2462,13 +2462,16 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         $content = '';  // Content attribute is empty by default
         $title = '';    // Title attribute is empty by default        
         $template = ''; // Template attribute is empty by default
-        $instance = 0;  // Default value for instance
+        $instance = NULL;  // Default value for instance
         extract($this->attributes);
 
         // If the block instance attribute is specified in the tag, render it directly 
-        // NOTE: $id is also an attribute, but that is an id attribute in XML sense, not in DB sense
-        if ($instance != 0) {
-            return "xarBlock_renderBlock(array('bid' => '$instance'))";
+        if (!empty($instance)) {
+            if (is_numeric($instance)) {
+                return "xarBlock_renderBlock(array('bid' => '$instance'))";
+            } else {
+                return "xarBlock_renderBlock(array('name' => '" . xarVar_addSlashes($instance) . "'))";
+            }
         }
 
         if (!isset($name)) {
@@ -2487,9 +2490,15 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         // <mikespub> for block caching, perhaps ? Note that there's not necessarily a unique id here !
         // <mrb>      i could not figure out where this is used, but $id is optional attribute, so that is not
         //            always set. The bid is never used.
-        $bid = md5(xarTplGetThemeName().$instance);
+        // <jj>       the bid is wrong - I will disable it for now
+        //$bid = md5(xarTplGetThemeName().$instance);
+        $bid = NULL;
         
         // TODO: allow designers to fill in or override the settings defined in the (serialized) blockinfo['content']
+        // <jj> this should work if a serialized array is put into the tag content - not ideal - however, we
+        //      do now have the concept of default block settings, which could form the basis for a standalone
+        //      block, with attributes over-riding individual values (block array attributes would still be a problem
+        //      though). Bug 1571 should track progress here.
         if (isset($this->children) && count($this->children) > 0) {
             $contentNode = $this->children[0];
             if (isset($contentNode)) {
@@ -2499,8 +2508,8 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 
         $this->children = array();
 
-
         // TODO: check it, use xarVar_addSlashes instead of addslashes
+        // <jj> this type of rendering makes no sense unless we can set specific block properties through the block tag
         return "xarBlock_render(array('module' => '$module', 'type' => '$name', 'bid' => '$bid',
                                      'title' => \"".addslashes($title)."\", 'content' => '$content',
                                      '_bl_template' => '$template'))";

@@ -15,9 +15,7 @@
 
 function blocks_userapi_get($args)
 {
-    if (is_array($args)) {extract($args);}
-    if (is_numeric($args)) {$bid = $args;}
-    if (is_string($args)) {$name = $args;}
+    extract($args);
     
     if (!xarVarValidate('int:1', $bid, true)) {$bid = 0;}
     if (!xarVarValidate('str:1', $name, true)) {$name = '';}

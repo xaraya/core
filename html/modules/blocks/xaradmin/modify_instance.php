@@ -33,7 +33,7 @@ function blocks_admin_modify_instance()
     $block_types_table = $xartable['block_types'];
 
     // Get the instance details.
-    $instance = xarModAPIfunc('blocks', 'user', 'get', $bid);
+    $instance = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $bid));
 
     // Load block
     if (!xarModAPIFunc(
