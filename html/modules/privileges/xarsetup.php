@@ -176,6 +176,9 @@ function initializeSetup() {
     xarRegisterMask('EditMail','All','mail','All','All',ACCESS_EDIT);
     xarRegisterMask('AdminMail','All','mail','All','All',ACCESS_ADMIN);
 
+    xarRegisterMask('ViewBase','All','base','All','All',ACCESS_OVERVIEW);
+
+
     xarRegisterMask('PrivilegesGateway','All','Privileges','All','All',ACCESS_READ);
     xarRegisterMask('ViewPrivileges','All','Privileges','ViewPrivileges','All',ACCESS_READ);
     xarRegisterMask('EditPrivilege','All','Privileges','EditPrivilege','All',ACCESS_EDIT);
@@ -190,7 +193,6 @@ function initializeSetup() {
     xarRegisterMask('RolesGateway','All','Roles','All','All',ACCESS_READ);
 
    	xarRegisterMask('AdminModules','All','modules','All','All',ACCESS_ADMIN);
-    xarRegisterMask('ViewBase','All','base','Overview','All',ACCESS_OVERVIEW);
 
     // Initialisation successful
     return true;

@@ -829,10 +829,10 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
 */
     function getcomponents($module) {
-		$query = "SELECT xar_masks.xar_sid,
-					xar_masks.xar_component
-					FROM $this->maskstable
-					WHERE xar_masks.xar_module= '$module'
+		$query = "SELECT DISTINCT xar_instances.xar_iid,
+					xar_instances.xar_component
+					FROM $this->instancestable
+					WHERE xar_instances.xar_module= '$module'
 					ORDER BY xar_component";
 
 		$result = $this->dbconn->Execute($query);
@@ -882,12 +882,19 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    this isn't really the right place for this function
 */
-    function getinstances($module) {
-		$query = "SELECT xar_type,
+    function getinstances($module, $component) {
+    	if ($component =="All") {
+    		$componentstring = "";
+    	}
+    	else {
+    		$componentstring = "AND xar_component= '$component'";
+    	}
+		$query = "SELECT xar_component,
 					xar_query
 					FROM $this->instancestable
-					WHERE xar_module= '$module'
-					ORDER BY xar_type";
+					WHERE xar_module= '$module' "
+					. $componentstring .
+					" ORDER BY xar_component";
 
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;

@@ -126,7 +126,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Component</xar:mlstring>
 					</td>
 					<td>
-						<select name="pcomponent" id="pcomponent" size="1" tabindex="5">
+						<select name="pcomponent" id="pcomponent" size="1" tabindex="5" onChange="javascript:setaction('&xar-modurl-privileges-admin-newprivilege;')">
 							<xar:loop name="$components">
 								<xar:if condition="$name eq $pcomponent">
 									<option value="#$name#" selected="selected">#$name#</option>

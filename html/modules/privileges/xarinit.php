@@ -262,7 +262,7 @@ function privileges_init()
                                       'size'        => 100,
                                       'null'        => false,
                                       'default'     => ''),
-                   'xar_type' => array('type'   => 'varchar',
+                   'xar_component' => array('type'   => 'varchar',
                                       'size'        => 100,
                                       'null'        => false,
                                       'default'     => ''),
