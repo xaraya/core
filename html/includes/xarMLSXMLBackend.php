@@ -44,7 +44,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     function translate($string)
     {
         if (!isset($this->transEntries[$string])) {
-            return;
+            return $string;
         }
         $ind = $this->transEntries[$string];
         return $this->trans[$ind]['translation'];
@@ -53,7 +53,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     function translateByKey($key)
     {
         if (!isset($this->transKeyEntries[$key])) {
-            return;
+            return $key;
         }
         $ind = $this->transKeyEntries[$key];
         return $this->trans[$ind]['translation'];
@@ -97,9 +97,10 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            die("Could not load context:" . $ctxName . " in " . $this->locale);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
-            return;
+//            die("Could not load context:" . $ctxName . " in " . $this->locale);
+//            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
+//            return;
+            return true;
         }
 
         $currentcharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());

@@ -1514,7 +1514,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
         $fileName .= $ctxName . "." . $this->backendtype;
         if (!file_exists($fileName)) {
-            die("File does not exist:" . $fileName);
+//            die("File does not exist:" . $fileName);
             return false;
         }
         return $fileName;
@@ -1541,12 +1541,14 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
             return $GLOBALS['xarML_PHPBackend_entries'][$string];
+        else return $string;
     }
 
     function translateByKey($key)
     {
         if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
             return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
+        else return $key;
     }
 
     function clear()
@@ -1584,9 +1586,10 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function loadContext($ctxType, $ctxName)
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
-            return;
+//            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
+//            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
+//            return;
+            return true;
         }
         include $fileName;
 
