@@ -133,13 +133,16 @@ class ADODB2_mysql extends ADODB_DataDict {
 	function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
 	{
 		//if (isset($idxoptions['REPLACE'])) $sql[] = "DROP INDEX IF EXISTS $idxname";
-		if (isset($idxoptions['REPLACE'])) $sql[] = "DROP INDEX $idxname ON $tabname";
+		//if (isset($idxoptions['REPLACE'])) $sql[] = "DROP INDEX $idxname ON $tabname";
+        // TODO: support dropping of indexes?
+		if (isset($idxoptions['REPLACE'])) $sql[] = "ALTER TABLE $tabname DROP INDEX $idxname";
 		if (isset($idxoptions['FULLTEXT'])) $unique = ' FULLTEXT';
 		else if (isset($idxoptions['UNIQUE'])) $unique = ' UNIQUE';
 		else $unique = '';
 		
 		if (is_array($flds)) $flds = implode(', ',$flds);
-		$s = "CREATE$unique INDEX $idxname ON $tabname ($flds)";
+		//$s = "CREATE$unique INDEX $idxname ON $tabname ($flds)";
+		$s = "ALTER TABLE $tabname ADD$unique INDEX $idxname ($flds)";
 		if (isset($idxoptions[$this->upperName])) $s .= $idxoptions[$this->upperName];
 		$sql[] = $s;
 		
