@@ -54,9 +54,6 @@ function blocks_adminapi_create_instance($args)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_instances_table       = $xartable['block_instances'];
-    //$block_group_instances_table = $xartable['block_group_instances'];
-    //$block_groups_table          = $xartable['block_groups'];
-    //$block_types_table           = $xartable['block_types'];
 
     // TODO: make sure type exists.
 

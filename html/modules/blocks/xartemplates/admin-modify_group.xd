@@ -1,14 +1,15 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<script language="javascript" type="text/javascript" src="modules/blocks/xarincludes/blocks.js"></script>
+
+<xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
 <script type="text/javascript">
-warningmsg = '#xarML('You must select the block to move.')#';
+    xar_base_reorder_warn = '#xarML('You must select the block to move.')#';
 </script>
 
 
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Group</xar:mlstring></h2>
 	<div style="margin: auto;">
-	<form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" onsubmit="saveBlockOrder(this);" enctype="application/x-www-form-urlencoded" >
+	<form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
             <div>
 		<div style="clear: both; padding-top: 10px;">
 	    <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -34,13 +35,17 @@ warningmsg = '#xarML('You must select the block to move.')#';
 			<select name="group_instances" id="group_instances" size="3">
                         </xar:if>
 				<xar:loop name="$group['instances']">
-					<option value="#$loop:item['id']#"><xar:var name="$loop:item['title']" /></option>
+                    <xar:if condition="empty($loop:item['title'])">
+					    <option value="#$loop:item['id']#">#$loop:item['name']#</option>
+                    <xar:else />
+    					<option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
+                    </xar:if>
 				</xar:loop>
 			</select>
 		</span>
 		<span style="float: right; width: 10%; text-align: left;">
-             <input type="image" src="#$up_arrow_src#" onclick="return moveBlock(this.form, true)" title="#$moveuplabel#" /> <br />
-			 <input type="image" src="#$down_arrow_src#" onclick="return moveBlock(this.form, false)" title="#$movedownlabel#" />
+             <input type="image" src="#$up_arrow_src#" onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" /> <br />
+			 <input type="image" src="#$down_arrow_src#" onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" />
 		</span>
 		</div>
 

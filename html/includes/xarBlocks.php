@@ -92,6 +92,18 @@ function xarBlock_render($blockInfo)
         // If the block has not done the rendering already, then render now.
         if (is_array($blockInfo['content'])) {
             // Here $blockInfo['content'] is template data.
+
+            // Set some additional details that the could be useful in the block.
+            // TODO: prefix these extra variables (_bl_) to indicate they are supplied by the core.
+            $blockInfo['content']['blockid'] = $blockInfo['bid'];
+            $blockInfo['content']['blockname'] = $blockInfo['name'];
+            $blockInfo['content']['blocktypename'] = $blockInfo['type'];
+            if (isset($blockInfo['bgid'])) {
+                // The block may not be rendered as part of a group.
+                $blockInfo['content']['blockgid'] = $blockInfo['bgid'];
+                $blockInfo['content']['blockgroupname'] = $blockInfo['group_name'];
+            }
+
             // Render this block template data.
             $blockInfo['content'] = xarTplBlock(
                 $modName, $blockType, $blockInfo['content'],
@@ -145,6 +157,7 @@ function xarBlock_renderGroup($groupName)
                         inst.xar_last_update as last_update,
                         inst.xar_state as state,
                         group_inst.xar_position as position,
+                        bgroups.xar_id              AS bgid,
                         bgroups.xar_name            AS group_name,
                         bgroups.xar_template        AS group_bl_template,
                         inst.xar_template           AS inst_bl_template,
@@ -205,6 +218,8 @@ function xarBlock_renderGroup($groupName)
             // Cascade level over-rides for the block template.
             $blockInfo['_bl_block_template'] = !empty($group_inst_bl_template[1]) ? $group_inst_bl_template[1]
                 : (!empty($inst_bl_template[1]) ? $inst_bl_template[1] : $group_bl_template[1]);
+
+            $blockInfo['_bl_template_base'] = $blockInfo['type'];
 
             // Unset a few elements that clutter up the block details.
             // They are for internal use and we don't want them used within blocks.

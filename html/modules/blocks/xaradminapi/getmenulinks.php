@@ -21,42 +21,44 @@
  */
 function blocks_adminapi_getmenulinks()
 {
-    if (xarSecurityCheck('EditBlock',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'view_instances'),
-                              'title' => xarML('View or edit all block instances'),
-                              'label' => xarML('View Instances'));
+    if (xarSecurityCheck('EditBlock', 0)) {
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'view_instances'),
+            'title' => xarML('View or edit all block instances'),
+            'label' => xarML('View Instances')
+        );
     }
-    if (xarSecurityCheck('AddBlock',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'new_instance'),
-                              'title' => xarML('Add a new block instance'),
-                              'label' => xarML('Add Instance'));
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'new_group'),
-                              'title' => xarML('Add a new group of blocks'),
-                              'label' => xarML('Add Group'));
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'view_groups'),
-                              'title' => xarML('View the defined block groups'),
-                              'label' => xarML('View Groups'));
+    if (xarSecurityCheck('AddBlock', 0)) {
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'new_instance'),
+            'title' => xarML('Add a new block instance'),
+            'label' => xarML('Add Instance')
+        );
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'new_group'),
+            'title' => xarML('Add a new group of blocks'),
+            'label' => xarML('Add Group')
+        );
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'view_groups'),
+            'title' => xarML('View the defined block groups'),
+            'label' => xarML('View Groups')
+        );
     }
-    if (xarSecurityCheck('AdminBlock',0)) {
-
-        $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                  'admin',
-                                                  'registerblock'),
-                              'title' => xarML('Add a new block type into the system'),
-                              'label' => xarML('Register Block'));
+    if (xarSecurityCheck('AdminBlock', 0)) {
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'registerblock'),
+            'title' => xarML('Add a new block type into the system'),
+            'label' => xarML('Add Block Type')
+        );
+        $menulinks[] = array(
+            'url'   => xarModURL('blocks', 'admin', 'view_types'),
+            'title' => xarML('View block types'),
+            'label' => xarML('View Block Types')
+        );
     }
 
-    if (empty($menulinks)){
+    if (empty($menulinks)) {
         $menulinks = '';
     }
 

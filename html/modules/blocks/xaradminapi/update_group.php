@@ -42,8 +42,6 @@ function blocks_adminapi_update_group($args)
     if (!$result) return;
 
     if (!empty($instance_order)){
-        $instance_order = explode('/', $instance_order);
-
         while (list($position, $instance_id) = each($instance_order)) {
             // added the "+ 1" to $position because array indicies start at 0 and the
             // $position index should start at 1

@@ -17,28 +17,30 @@
  */
 function blocks_admin_modify_group()
 {
-    if (!xarVarFetch('gid','int:1:',$gid)) return;
+    if (!xarVarFetch('gid', 'int:1:', $gid)) {return;}
 
     // Security Check
-	if(!xarSecurityCheck('EditBlock',0,'Group')) return;
+	if(!xarSecurityCheck('EditBlock', 0, 'Group')) {return;}
 
     // Get details on current group
-    $group = xarModAPIFunc('blocks', 
-                           'admin', 
-                           'groupgetinfo', array('blockGroupId' => $gid));
+    $group = xarModAPIFunc(
+        'blocks', 'user', 'groupgetinfo',
+        array('gid' => $gid)
+    );
 
     $up_arrow_src   = xarTplGetImage('up.gif');
     $down_arrow_src = xarTplGetImage('down.gif');
 
-    return array('group'            => $group,
-                 'instance_count'   => count($group['instances']),
-                 'up_arrow_src'     => $up_arrow_src,
-                 'down_arrow_src'   => $down_arrow_src,
-                 'authid'           => xarSecGenAuthKey(),
-                 'moveuplabel'      => xarML('Move selected instance up'),
-                 'movedownlabel'    => xarML('Move selected instance down'),
-                 'updatelabel'      => xarML('Update'));
-
+    return array(
+        'group'            => $group,
+        'instance_count'   => count($group['instances']),
+        'up_arrow_src'     => $up_arrow_src,
+        'down_arrow_src'   => $down_arrow_src,
+        'authid'           => xarSecGenAuthKey(),
+        'moveuplabel'      => xarML('Move selected instance up'),
+        'movedownlabel'    => xarML('Move selected instance down'),
+        'updatelabel'      => xarML('Update')
+    );
 }
 
 ?>
