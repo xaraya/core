@@ -42,7 +42,7 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_groups',
-                             array('name'   => $prefix . '_block_groups_idx',
+                             array('name'   => 'i_' . $prefix . '_block_groups',
                                    'fields' => array('xar_name'),
                                    'unique' => 'true'));
     $result =& $dbconn->Execute($query);
@@ -82,7 +82,7 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_instances',
-                             array('name'   => $prefix . '_block_instances_idx',
+                             array('name'   => 'i_' . $prefix . '_block_instances',
                                    'fields' => array('xar_type_id'),
                                    'unique' => false));
     $result =& $dbconn->Execute($query);
@@ -107,7 +107,7 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_types',
-                             array('name'   => $prefix . '_block_types_idx',
+                             array('name'   => 'i_' . $prefix . '_block_types',
                                    'fields' => array('xar_type'),
                                    'unique' => 'false'));
     $result =& $dbconn->Execute($query);
@@ -115,7 +115,7 @@ function blocks_init()
 /*
     TODO: Find a fix for this - Postgres will not allow partial indexes
     $query = xarDBCreateIndex($prefix . '_block_types',
-                             array('name'   => $prefix . '_block_types_2_idx',
+                             array('name'   => 'i_' . $prefix . '_block_types_2',
                                    'fields' => array('xar_type(50)', 'xar_module(50)'),
                                    'unique' => true));
     $result =& $dbconn->Execute($query);
@@ -141,14 +141,14 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                              array('name' => $prefix . '_block_group_instances_idx',
+                              array('name' => 'i_' . $prefix . '_block_group_instances',
                                     'fields' => array('xar_group_id'),
                                     'unique' => false));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                              array('name' => $prefix . '_block_group_instances_2_idx',
+                              array('name' => 'i_' . $prefix . '_block_group_instances_2',
                                     'fields' => array('xar_instance_id'),
                                     'unique' => false));
     $result =& $dbconn->Execute($query);
@@ -175,7 +175,7 @@ function blocks_init()
     if (!$result) return;
 
     $query = xarDBCreateIndex($prefix . '_userblocks',
-                             array('name'   => $prefix . '_userblocks_idx',
+                             array('name'   => 'i_' . $prefix . '_userblocks',
                                    'fields' => array('xar_uid', 'xar_bid'),
                                    'unique' => true));
     $result =& $dbconn->Execute($query);
