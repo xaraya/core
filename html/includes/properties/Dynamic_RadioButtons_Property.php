@@ -40,30 +40,18 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
+        if (empty($id)) {
+            $id = $name;
+        }
+		
         $data['value']   = $value;
         $data['name']    = $name;
+        $data['id']      = $id;
         $data['options'] = $options;
 
 
-        /*
-        $out = '';
-        $idx = 1;
-        foreach ($options as $option) {
-            $out .= '<input type="radio" name="'.$name.'" id="'.$name.'_'.$idx.'" value="'.$option['id'].'"';
-            if ($option['id'] == $value) {
-                $out .= ' checked="checked">';
-            } else {
-                $out .= '>';
-            }
-            $out .= '<label for="'.$name.'_'.$idx.'"> '.$option['name'].' </label></input>';
-            $idx++;
-        }
-        $out .= (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
-        */
-        
         $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
+        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
         $template="radio";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data ,$template);

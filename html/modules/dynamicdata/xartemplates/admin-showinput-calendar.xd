@@ -6,7 +6,7 @@
 <a href="javascript:#$jsID#_cal.popup()"><img src="modules/base/xarimages/calendar.gif" style="border:0px none;" alt="#$alttext#" /></a>
 
 <script type="text/javascript">
-var #$jsID#_cal = new xar_base_calendar(document.getElementById("#$id#_input"), "#$baseuri#");
+var #$jsID#_cal = new xar_base_calendar(document.getElementById("#$id#"), "#$baseuri#");
 #$jsID#_cal.year_scroll = true;
 #$jsID#_cal.time_comp = true;
 </script>

@@ -2,14 +2,22 @@
 
 <xar:if condition="count($options) gt 0">
 	<xar:foreach in="$options" value="$option" key="$key">
-		<xar:if condition="$option['checked']">
-			<input type="checkbox" name="#$name#[]" id="#$id#_#$key#" value="#$option['id']#" checked="true" /> #$option['name']#
+		<xar:if condition="$key == 0">
+			<xar:set name="$theID">$id</xar:set>
 		<xar:else />
-			<input type="checkbox" name="#$name#[]" id="#$id#_#$key#" value="#$option['id']#" /> #$option['name']#
+			<xar:set name="$theID">$id.'_'.$key</xar:set>
+		</xar:if>
+	
+		<label for="#$theID#">#$option['name']# </label>
+	
+		<xar:if condition="$option['checked']">
+			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" /> #$option['name']#
+		<xar:else />
+			<input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" /> #$option['name']#
 		</xar:if>
 	</xar:foreach>
 <xar:else />
-	No options specified in validation field.
+	No options specified for CheckBox List in validation field.
 </xar:if>
 
 <xar:if condition="!empty($invalid)">
