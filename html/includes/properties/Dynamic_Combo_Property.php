@@ -76,6 +76,8 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         
         if (!isset($options) || count($options) == 0) {
             $data['options'] = $this->options;
+        } else {
+            $data['options'] = $options;
         }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
@@ -122,7 +124,7 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }

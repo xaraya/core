@@ -2,19 +2,18 @@
 
 <div class="xar-mod-body">
 <h2>
-<xar:if condition="!empty($extcomponent) and $extcomponent eq 'Type'">
+  <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
     <xar:ml>
       <xar:mlstring>Select Fields for Privilege '#(1)'</xar:mlstring>
       <xar:mlvar>#$extname#</xar:mlvar>
     </xar:ml>
-<xar:else/>
+  <xar:else/>
     <xar:ml>
       <xar:mlstring>Select Items for Privilege '#(1)'</xar:mlstring>
       <xar:mlvar>#$extname#</xar:mlvar>
     </xar:ml>
-</xar:if>
+  </xar:if>
 </h2>
-
 <div style="margin: auto;">
 
 <form method="post" action="&xar-modurl-dynamicdata-admin-privileges;">
@@ -26,7 +25,7 @@
 
 <table border="1" cellpadding="8" cellspacing="0">
 
-<xar:if condition="!empty($extcomponent) and $extcomponent eq 'Type'">
+<xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
 
 <tr><th valign="top" align="right">
 <xar:mlstring>Name</xar:mlstring>

@@ -114,16 +114,18 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
         if (!isset($options) || count($options) == 0) {
             $data['options'] = $this->options;
+        } else {
+            $data['options'] = $options;
         }
         if (empty($name)) {
             $data['name'] = 'dd_' . $this->id;
         } else {
-        $data['name'] = $name;
+            $data['name'] = $name;
         }
         if (empty($id)) {
             $data['id'] = $data['name'];
         } else {
-        $data['id']= $id;
+            $data['id']= $id;
         }
         /*$out = '<select' .
                ' name="' . $name . '"' .
@@ -159,7 +161,7 @@ class Dynamic_Select_Property extends Dynamic_Property
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
