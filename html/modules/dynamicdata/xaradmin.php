@@ -49,10 +49,12 @@ function dynamicdata_admin_view($args)
     list($itemid,
          $modid,
          $itemtype,
-         $startnum) = xarVarCleanFromInput('itemid',
+         $startnum,
+         $sort) = xarVarCleanFromInput('itemid',
                                            'modid',
                                            'itemtype',
-                                           'startnum');
+                                           'startnum',
+                                           'sort');
 
     extract($args);
 
@@ -92,6 +94,7 @@ function dynamicdata_admin_view($args)
     $data['param'] = $param;
     $data['startnum'] = $startnum;
     $data['label'] = $label;
+    $data['sort']=$sort;
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
