@@ -31,7 +31,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                                   $value['mon'],$value['mday'],$value['year']);
         } elseif (is_string($value)) {
             // assume dates are stored in UTC format
-        // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
+            // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
@@ -77,7 +77,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             $value = -1;
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
-        // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
+            // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
@@ -93,38 +93,18 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                       array('module' => 'base',
                             'filename' => 'calendar.js'));
 
-/*
-        $output = xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $value);
-        $output .= '<br />';
-*/
-        //$output = '';
-        $timeval = xarLocaleFormatDate($dateformat, $value);
-        $jsID = str_replace(array('[', ']'), '_', $id);
-        /*
-        $output .= '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.$timeval.'" size="20" maxlength="19" />
-<a href="javascript:'.$jsID.'_cal.popup();"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date" /></a>
-<script language="JavaScript">
-var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input"), "'.xarServerGetBaseURI().'");
-'.$jsID.'_cal.year_scroll = true;
-'.$jsID.'_cal.time_comp = true;
-</script>';
-        if (!empty($this->invalid)) {
-            $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
-        }
-         */
-        $data['baseuri']   =xarServerGetBaseURI();
-        $data['dateformat']= $dateformat;
-        $data['jsID']     = $jsID;
-        $data['timeval']  = $timeval;
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        // $timeval = xarLocaleFormatDate($dateformat, $value);
+        $data['baseuri']    = xarServerGetBaseURI();
+        $data['dateformat'] = $dateformat;
+        $data['jsID']       = str_replace(array('[', ']'), '_', $id);
+        // $data['timeval']    = $timeval;
+        $data['name']       = $name;
+        $data['id']         = $id;
+        $data['value']      = $value;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-      $template="calendar";
-      return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
-
-        //return $output;
+        $template="calendar";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
     }
 
     function showOutput($args = array())
@@ -141,7 +121,7 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
             $value = -1;
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
-        // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
+            // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
@@ -150,11 +130,10 @@ var '.$jsID.'_cal = new xar_base_calendar(document.getElementById("'.$id.'_input
         if (!isset($dateformat)) {
             $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
         }
-        //return xarLocaleFormatDate($dateformat, $value);
 
-        $data['dateformat']=$dateformat;
+        $data['dateformat'] = $dateformat;
         $data['value'] = $value;
-        $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
+        // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
 
         $template="calendar";
         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
