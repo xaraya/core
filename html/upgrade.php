@@ -703,7 +703,17 @@ if (empty($step)) {
                              'set'     =>  serialize(array())),
                        array('name'    =>  'expertlist',
                              'module'  =>  'modules',
-                             'set'     =>  0));
+                             'set'     =>  0),
+                       array('name'    =>  'lockdata',
+                             'module'  =>  'roles',
+                             'set'     =>  serialize(array('roles' => array( array('uid' => 2,
+                                                  'name' => 'Administrators',
+                                                  'notify' => TRUE)
+                                           ),
+                                          'message' => '',
+                                          'locked' => 0,
+                                          'notifymsg' => '')))
+                          );
 
     foreach($modvars as $modvar){
         foreach($modvar as $var){
@@ -866,26 +876,6 @@ if (empty($step)) {
     } else {
         echo "Setting Ratings Delete All Hook... done! <br />";
     }
-
-    // Check if site lock has been installed
-    echo "<h5>Checking Site Lock Installation</h5>";
-
-    $upgrade['sitelock'] = xarModGetVar('roles', 'lockdata');
-    if (!$upgrade['sitelock']) {
-        echo "Site Lock is not installed, attempting to install... ";
-        $lockdata = array('roles' => array( array('uid' => 2,
-                                                  'name' => 'Administrators',
-                                                  'notify' => TRUE)
-                                           ),
-                          'message' => '',
-                          'locked' => 0,
-                          'notifymsg' => '');
-        xarModSetVar('roles', 'lockdata', serialize($lockdata));
-        echo "done! <br />";
-    } else {
-        echo "Site Lock is already installed, moving to next check. <br />";
-    }
-
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
