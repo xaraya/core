@@ -376,12 +376,12 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL) {
  *
  * @access public
  * @param tableName
- * @param fields array of database index fields?
+ * @param name a db index name
  * @param databaseType
  * @return string|false generated sql to drop an index
  * @raise BAD_PARAM
  */
-function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
+function xarDBDropIndex($tableName, $index, $databaseType = NULL)
 {
     // perform validations on input arguments
     if (empty($tableName)) {
@@ -403,11 +403,11 @@ function xarDBDropIndex($tableName, $fields, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            $sql .= 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
+            $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
         case 'postgres':
         case 'oci8':
-            $sql .= 'DROP INDEX '.$index['name'];
+            $sql = 'DROP INDEX '.$index['name'];
             break;
         // Other DBs go here
         default:

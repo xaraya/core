@@ -42,7 +42,7 @@ $MLSData = array(
                 'file' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
                           'dir' => '',
-                          'label' => ''
+                          'label' => '',
                          ),
                 'core' => array(
                           'type' => XARMLS_CTXTYPE_FILE,
@@ -1504,7 +1504,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         if ($context->getDir() != "") $fileName .= $context->getDir() . "/";
         $fileName .= $ctxName . "." . $this->backendtype;
         if (!file_exists($fileName)) {
-            die("File does not exist:" . $fileName);
+//            die("File does not exist:" . $fileName);
             return false;
         }
         return $fileName;
