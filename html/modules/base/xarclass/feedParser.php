@@ -254,8 +254,10 @@ class feedParser
                 }
             }
         
-        } 
-    
+        }
+        if (!isset($info)) {
+            $info = array('warning' => TRUE);
+        }
         return $info;
             
     }
@@ -381,7 +383,11 @@ class feedParser
                 }
             }
         }
-    
+        // prevent a broken feed from breaking a site
+        // FIXME: raise exception?
+        if (!isset($item)) {
+            $item = array('info' => array('warning' => TRUE));
+        }
         return array('channel' => $channel, 'item' => $item);
     }
 
