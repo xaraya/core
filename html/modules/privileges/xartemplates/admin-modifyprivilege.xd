@@ -25,8 +25,9 @@ document.forms['privilegeform'].submit();}
 
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Modify Privilege</xar:mlstring></h2>
-<div style="text-align: center; margin: auto;">
+<div style="text-align: left; margin: auto;">
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+    <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#" />
         <input type="hidden" name="pid" id="pid" value="#$ppid#" />
@@ -247,7 +248,9 @@ document.forms['privilegeform'].submit();}
 <input type="button" value="Add" align="middle" tabindex="2" onClick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
 </td>
 </tr>
-</table>            
+</table>
+</div>
+</form>
 <h2>'#$pname#' <xar:mlstring>Component Memberships</xar:mlstring></h2>
 <table border="0" cellpadding="2" cellspacing="0" class="xar-accent-outline">
     <tr>
