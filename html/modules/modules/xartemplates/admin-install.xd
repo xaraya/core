@@ -67,7 +67,7 @@
 	        <br />
         </xar:if>
 
-        <a href="#xarModURL('modules','admin','list')#>#xarML('Go back to the modules list.')#</a>
+        <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
        </div>
     </form>
 </div>
