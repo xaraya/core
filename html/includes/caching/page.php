@@ -38,7 +38,7 @@ function xarPageCache_init($args = array())
     $xarPage_cacheShowTime = isset($args['Page.ShowTime']) ?
         $args['Page.ShowTime'] : 1;
     $xarPage_cacheExpireHeader = isset($args['Page.ExpireHeader']) ?
-        $args['Page.ExpireHeader'] : 1;
+        $args['Page.ExpireHeader'] : 0;
     $xarPage_cacheGroups = isset($args['Page.CacheGroups']) ?
         $args['Page.CacheGroups'] : '';
     $xarPage_cacheHookedOnly = isset($args['Page.HookedOnly']) ?
