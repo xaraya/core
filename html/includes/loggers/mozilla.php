@@ -29,7 +29,8 @@ class xarLogger_mozilla extends xarLogger
 
     var $commoncodeinserted = false;
 
-    function getCommonCode() {
+    function getCommonCode()
+    {
         // Common javascript to get a variable which has the logmessage method
         $code="netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');\n".
               "var con_service_class = Components.classes['@mozilla.org/consoleservice;1'];\n".
@@ -46,7 +47,8 @@ class xarLogger_mozilla extends xarLogger
     * @return boolean  True on success or false on failure.
     * @access public
     */
-    function notify($message, $level) {
+    function notify($message, $level)
+    {
         static $commoncodeinserted = false;
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
         // it should be done with a signed script eventually, but this is rather complex
