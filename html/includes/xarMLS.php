@@ -700,9 +700,9 @@ function xarMLS_userOffset()
  *  %T - current time, equal to %H:%M:%S (for windows compatibility)
  *  %x - preferred date representation for the current locale without the time (same at %D)
  *  %X - preferred time representation for the current locale without the date
+ *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
  *
  *  // TODO: unsupported strftime() format rules
- *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
  *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
  */
 function xarMLS_strftime($format=null,$timestamp=null)
