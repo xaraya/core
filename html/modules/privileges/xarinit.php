@@ -42,6 +42,7 @@ function privileges_init()
     $tables['security_masks'] = $sitePrefix . '_security_masks';
     $tables['security_instances'] = $sitePrefix . '_security_instances';
     $tables['security_realms']      = $sitePrefix . '_security_realms';
+    $tables['security_levels']      = $sitePrefix . '_security_levels';
     $tables['security_privsets']      = $sitePrefix . '_security_privsets';
 
     // Create tables
@@ -128,6 +129,24 @@ function privileges_init()
 
    if (!$dbconn->Execute($query)) return;
 
+    $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realm',
+                   'fields'    => array('xar_realm'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['privileges'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_privileges_module',
+                   'fields'    => array('xar_module'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['privileges'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_privileges_level',
+                   'fields'    => array('xar_level'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['privileges'],$index);
+    if (!$dbconn->Execute($query)) return;
+
     xarDB_importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
 
     // prefix_privmembers
@@ -149,6 +168,12 @@ function privileges_init()
     if (!$dbconn->Execute($query)) return;
 
     xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_id',
+                   'fields'    => array('xar_pid','xar_parentid'),
+                   'unique'    => TRUE);
+    $query = xarDBCreateIndex($tables['privmembers'],$index);
+    if (!$dbconn->Execute($query)) return;
 
     $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
                    'fields'    => array('xar_pid'),
@@ -182,6 +207,24 @@ function privileges_init()
                                            'key'         => true)));
     if (!$dbconn->Execute($query)) return;
 
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_id',
+                   'fields'    => array('xar_partid','xar_permid'),
+                   'unique'    => TRUE);
+    $query = xarDBCreateIndex($tables['security_acl'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_partid',
+                   'fields'    => array('xar_partid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_acl'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_permid',
+                   'fields'    => array('xar_permid'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_acl'],$index);
+
+    if (!$dbconn->Execute($query)) return;
     xarDB_importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
 
     // prefix_security_masks
@@ -240,6 +283,24 @@ function privileges_init()
                                       'null'        => false,
                                       'default'     => '')));
 
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_realm',
+                   'fields'    => array('xar_realm'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_masks'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_module',
+                   'fields'    => array('xar_module'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_masks'],$index);
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_level',
+                   'fields'    => array('xar_level'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_masks'],$index);
     if (!$dbconn->Execute($query)) return;
 
     xarDB_importTables(array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks'));
@@ -311,6 +372,43 @@ function privileges_init()
     if (!$dbconn->Execute($query)) return;
 
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
+
+    // prefix_security_levels
+    /*********************************************************************
+    * CREATE TABLE xar_security_levels (
+    *   xar_lid int(11) NOT NULL auto_increment,
+    *   xar_level int(3) NOT NULL default '0',
+    *   xar_sdescription varchar(255) NOT NULL default '',
+    *   xar_ldescription varchar(255) NOT NULL default '',
+    *   PRIMARY KEY  (xar_lid)
+    * )
+    *********************************************************************/
+
+    $query = xarDBCreateTable($tables['security_levels'],
+             array('xar_lid'  => array('type'       => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0',
+                                      'increment'   => true,
+                                      'primary_key' => true),
+                   'xar_level' => array('type'      => 'integer',
+                                      'null'        => false,
+                                      'default'     => '0'),
+                   'xar_sdescription' => array('type'=> 'varchar',
+                                      'size'        => 255,
+                                      'null'        => false,
+                                      'default'     => ''),
+                   'xar_ldescription' => array('type'=> 'varchar',
+                                      'size'        => 255,
+                                      'null'        => false,
+                                      'default'     => '')));
+
+    if (!$dbconn->Execute($query)) return;
+
+    $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
+                   'fields'    => array('xar_level'),
+                   'unique'    => FALSE);
+    $query = xarDBCreateIndex($tables['security_levels'],$index);
+    if (!$dbconn->Execute($query)) return;
 
     // prefix_security_privsets
     /*********************************************************************
