@@ -12,7 +12,7 @@
 * @package Log
 */
 
-include_once ('modules/logger/xarLogger.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 /**
  * The Log_syslog class is a concrete implementation of the Log::

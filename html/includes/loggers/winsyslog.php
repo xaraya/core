@@ -1,6 +1,6 @@
 <?php
 
-include_once ('modules/logger/drivers/syslog.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 class xarLogger_winsyslog extends xarLogger_syslog {
     /**

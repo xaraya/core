@@ -54,7 +54,7 @@ function xarLog_init($args, $whatElseIsGoingLoaded) {
     // If someone doesnt want logging, then dont event load any code.
     if ($loggerName != 'dummy') {
 
-        if (!include_once ('modules/logger/drivers/'.xarVarPrepForOS($loggerName).'.php')) {
+        if (!include_once ('./includes/loggers/'.xarVarPrepForOS($loggerName).'.php')) {
             xarCore_die('xarLog_init: Unable to load driver for logging: '.$loggerName);
         }
 

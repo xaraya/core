@@ -1,6 +1,6 @@
 <?php
 
-include_once('modules/logger/drivers/simple.php');
+include_once ('./includes/loggers/simple.php');
 
 /**
  * HTMLLoggger

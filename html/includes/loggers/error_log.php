@@ -12,7 +12,7 @@
 * @package Log
 */
 
-include_once ('modules/logger/xarLogger.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 /**
  * The error_log class is an implementation of the xarLoggger

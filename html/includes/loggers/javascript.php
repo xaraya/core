@@ -9,7 +9,7 @@
  * @package logging
  */
 
-include_once ('modules/logger/xarLogger.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 class xarLogger_javascript extends xarLogger
 {

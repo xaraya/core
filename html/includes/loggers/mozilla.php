@@ -1,6 +1,6 @@
 <?php
 
-include_once ('modules/logger/xarLogger.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 /**
  * MozJSConsoleLogger

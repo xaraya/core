@@ -48,7 +48,7 @@
 * @package Log
 */
 
-include_once ('modules/logger/xarLogger.php');
+include_once ('./includes/loggers/xarLogger.php');
 
 class xarLogger_simple extends xarLogger
 {

@@ -1,5 +1,6 @@
 <?php
 
+include_once ('./includes/loggers/xarLogger.php');
 // Modified from the original by the Xaraya Team
 
 /**
