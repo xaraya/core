@@ -1008,7 +1008,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
  * @return mixed
  *
  * @todo  inserting the header part like this is not output agnostic
- * @todo  the commented code is actually a good thing to measure how often race conditions occur
+ * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
@@ -1057,13 +1057,6 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
-
-        // Commented this out for now, a double entry should not occur anyway, eventually this could even be an assert.
-            //if (!in_array($entry, $file)) {
-            //   $fd = fopen($varDir . XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
-            //   fwrite($fd, $entry);
-            //   fclose($fd);
-            //}
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
@@ -1318,9 +1311,8 @@ function xarTpl__loadFromFile($sourceFileName)
     $needCompilation = true;
 
     if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $varDir = xarCoreGetVarDirPath();
         $cacheKey = md5($sourceFileName);
-        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
+        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
         if (file_exists($cachedFileName)
             && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
             $needCompilation = false;
@@ -1347,14 +1339,6 @@ function xarTpl__loadFromFile($sourceFileName)
             $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
             fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
             fclose($fd);
-
-            // commented this out for now, a double entry should never occure, eventuall this mayb even become an assert
-            // for the details see bug #1600
-            //if (!in_array($entry, $file)) {
-            //    $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
-            //    fwrite($fd, $entry);
-            //    fclose($fd);
-            //}
         }
         return $templateCode;
     }
