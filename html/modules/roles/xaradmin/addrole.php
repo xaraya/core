@@ -62,6 +62,12 @@ function roles_admin_addrole()
             xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         }
+        // check for empty email address
+        if ($pemail == '') {
+            $msg = xarML('Please enter an email address');
+            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            return;
+        }
         // check for duplicate email address
         $user = xarModAPIFunc('roles',
             'user',
