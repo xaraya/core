@@ -470,10 +470,34 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
 {
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
+
+    // Make cached files also display their source file if it's a template
+    // This is just for convenience when giving support, as people will probably
+    // not look in the CACHEKEYS file to mention the template.
+    if($GLOBALS['xarTpl_cacheTemplates']) {
+        $sourcetmpl='';
+        $base = basename($file,'.php');
+        $varDir = xarCoreGetVarDirPath();
+        $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
+        while($cache_entry = fscanf($fd, "%s\t%s\n")) {
+            list($hash, $template) = $cache_entry;
+            // Strip the colon
+            $hash = substr($hash,0,-1);
+            if($hash == $base) {
+                // Found the file, source is $template
+                $sourcetmpl = $template;
+                break;
+            }
+        }
+        fclose($fd);
+    }
+
     switch($errorType) {
         case 2: // Warning
         case 8: // Notice
-            $msg = $file.'('.$line."):\n".$errorString;
+            $msg = $file.'('.$line."):\n". $errorString ;
+            if(isset($sourcetmpl)) $msg .= "\n[".$sourcetmpl."]";
+           
             if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
                 $id = xarExceptionId();
                 $value = xarExceptionValue();
