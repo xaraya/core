@@ -627,7 +627,7 @@ if (empty($step)) {
         }
 
         // Ensure the module and type columns are the correct length.
-        $data = 'xar_type C(64) NotNull DEFAULT \'\', 
+        $data = 'xar_type C(64) NotNull DEFAULT \'\',
         xar_module C(64) NotNull DEFAULT \'\'';
         $result = $datadict->changeTable($blocktypestable, $data);
         echo "Table $blocktypestable xar_module and xar_type columns are up-to-date<br/>";
@@ -1216,7 +1216,7 @@ Password : %%password%%
                     $result->MoveNext();
                 }
             }
-            
+
             // Create the unique index.
             $result = $datadict->createIndex($indexname, $module_states_table, 'xar_regid', array('UNIQUE'));
             if ($result) {
@@ -1302,10 +1302,10 @@ Password : %%password%%
             return;
         }
 
-        // Get the first available group ID, and assume that will be 
+        // Get the first available group ID, and assume that will be
         // visible to the administrator.
         $allgroups = xarModAPIFunc(
-            'blocks', 'user', 'getallgroups', 
+            'blocks', 'user', 'getallgroups',
             array('order' => 'id')
         );
         $topgroup = array_shift($allgroups);
