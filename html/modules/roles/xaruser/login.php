@@ -31,9 +31,11 @@ function roles_user_login()
     global $xarUser_authenticationModules;
 
     $unlockTime  = (int) xarSessionGetVar('roles.login.lockedout');
+    $lockouttime=xarModGetVar('roles','lockouttime')? xarModGetVar('roles','lockouttime') : 15;
+    $lockouttries =xarModGetVar('roles','lockouttries') ? xarModGetVar('roles','lockouttries') : 3;
 
-    if (time() < $unlockTime) {
-        $msg = xarML('Your account has been locked for 15 minutes.');
+    if ((time() < $unlockTime) && (xarModGetVar('roles','uselockout')==true)) {
+        $msg = xarML('Your account has been locked for '.$lockouttime.' minutes.');
         xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
@@ -225,14 +227,14 @@ function roles_user_login()
                 // Cast the result to an int in case VOID is returned
                 $attempts = (int) xarSessionGetVar('roles.login.attempts');
 
-                if ($attempts >= 3){
+                if (($attempts >= $lockouttries) && (xarModGetVar('roles','uselockout')==true)){
                     // set the time for fifteen minutes from now
-                    xarSessionSetVar('roles.login.lockedout', time() + (60 * 15));
+                    xarSessionSetVar('roles.login.lockedout', time() + (60 * $lockouttime));
                     xarSessionSetVar('roles.login.attempts', 0);
-                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for 15 minutes.');
+                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for '.$lockouttime .' minutes.');
                     xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
-                } else {
+                } else{
                     $newattempts = $attempts + 1;
                     xarSessionSetVar('roles.login.attempts', $newattempts);
                     $msg = xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.', $newattempts);

@@ -98,6 +98,9 @@ function roles_admin_modifyconfig()
             $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
             $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Roles Configuration');
+            $data['uselockout'] =  xarModGetVar('roles', 'uselockout') ? 'checked' : '';
+            $data['lockouttime'] = xarModGetVar('roles', 'lockouttime')? xarModGetVar('roles', 'lockouttime'): 15; //minutes
+            $data['lockouttries'] = xarModGetVar('roles', 'lockouttries') ? xarModGetVar('roles', 'lockouttries'): 3; 
 
             switch ($data['tab']) {
                 case 'hooks':
@@ -134,11 +137,18 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('showterms', 'checkbox', $showterms, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('showprivacy', 'checkbox', $showprivacy, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('uselockout', 'checkbox', $uselockout, true, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('lockouttime', 'int:1:', $lockouttime, 15, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('lockouttries', 'int:1:', $lockouttries, 3, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+
                     xarModSetVar('roles', 'rolesperpage', $rolesperpage);
                     xarModSetVar('roles', 'SupportShortURLs', $shorturls);
                     xarModSetVar('roles', 'showterms', $showterms);
                     xarModSetVar('roles', 'showprivacy', $showprivacy);
                     xarModSetVar('roles', 'admin', $siteadmin);
+                    xarModSetVar('roles', 'uselockout', $uselockout);
+                    xarModSetVar('roles', 'lockouttime', $lockouttime);
+                    xarModSetVar('roles', 'lockouttries', $lockouttries);
                     break;
                 case 'registration':
                     if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
