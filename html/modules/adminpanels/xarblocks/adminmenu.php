@@ -70,7 +70,10 @@ function adminpanels_adminmenublock_display($blockinfo){
     }
     
     // which module is loaded atm?
-    list($modName) = xarRequestGetInfo();
+    $thismod = xarRequestGetInfo();
+    // we need it's name and type, because we deal here only with admin type mods, dont we?
+    $thismodname = $thismod[0];
+    $thismodtype = $thismod[1];
     
     // Sort Order, Status and Links Display preparation
     $menustyle = xarModGetVar('adminpanels','menustyle');
@@ -80,8 +83,10 @@ function adminpanels_adminmenublock_display($blockinfo){
             $label = $mod['name'];
             $link = xarModURL($mod['name'] ,'admin', 'main', array());
             // depending on which module is currently loaded we display accordingly
-            if($label == $modName){
-                $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+            if($label == $thismodname && $thismodtype == 'admin'){
+//                if($modType != 'user'){
+                    $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
+//                }
             }else{
                 $adminmods[] = array('label' => $label, 'link' => $link, 'marker' => '');
             }
@@ -103,7 +108,7 @@ function adminpanels_adminmenublock_display($blockinfo){
             $link = xarModURL($mod ,'admin', 'main', array());
             // depending on which module is currently loaded we display accordingly
             // also we are treating category lables in ML fasion
-            if($label == $modName){
+            if($label == $thismodname && $thismodtype == 'admin'){
                 $adminmods[] = array('label' => $label, 'link' => '', 'marker' => $marker);
             }elseif($label == 'Global'){
                 $adminmods[] = array('label' => xarML($label), 'link' => '', 'marker' => '');
