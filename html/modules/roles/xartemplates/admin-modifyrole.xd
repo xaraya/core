@@ -268,9 +268,5 @@ document.forms[0].submit();}
 			<hr />
 		</td>
 	</tr>
-	<tr>
-		<td colspan="4">
-			#$tree#
-		</td>
-	</tr>
 </table>
+#$tree#

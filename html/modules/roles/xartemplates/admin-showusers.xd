@@ -134,10 +134,23 @@
 				<xar:mlstring>Add User/Group</xar:mlstring>
 			</a>
 		</td>
-	</tr>
-	<tr>
-		<td>
-			#$tree#
+		<td valign="bottom" width="80" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',1);">
+			Expand</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="70" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',0);">
+			Collapse</a>  &nbsp;
+		</td>
+		<td valign="bottom" width="60" align="right">
+			<a href="javascript:xarTree_exec('RolesTree',2);">
+			Toggle</a>  &nbsp;
 		</td>
 	</tr>
+	<tr>
+	<td colspan="4">
+	<hr>
+	</td>
+	</tr>
 </table>			
+#$tree#
