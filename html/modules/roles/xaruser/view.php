@@ -19,60 +19,82 @@ function roles_user_view($args)
     extract($args);
 
     // Get parameters
-    if(!xarVarFetch('startnum', 'isset',    $startnum, 1,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED)) {return;}
-    //This $filter variable isnt being used for anything...
-    //It is set later on.
-    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('startnum', 'int:1', $startnum, 1, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('phase', 'enum:active:viewall', $phase, 'active', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('name', 'notempty', $data['name'], '', XARVAR_NOT_REQUIRED)) {return;}
 
-    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET)) {return;}
+    // This $filter variable isnt being used for anything...
+    // It is set later on.
+    if(!xarVarFetch('filter', 'str', $filter, NULL, XARVAR_DONT_SET)) {return;}
+
+    if(!xarVarFetch('letter', 'str:1:2', $letter, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('search', 'str:1:100', $search, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('order', 'enum:name:uname:email:uid:state:date_reg', $order, 'name', XARVAR_NOT_REQUIRED)) {return;}
+
+    // Bug 3338: disable 'selection' since it allows a user to manipulate the query directly
+    //if(!xarVarFetch('selection', 'str', $selection, '', XARVAR_DONT_SET)) {return;}
+    if (!isset($selection)) {$selection = '';}
 
     $data['items'] = array();
 
     // Specify some labels for display
     $data['pager'] = '';
 
-// Security Check
-    if(!xarSecurityCheck('ReadRole')) return;
+    // Security Check
+    if (!xarSecurityCheck('ReadRole')) return;
 
-// FIXME: SQL injection risk here - use bind variables.
+    // Need the database connection for quoting strings.
+    $dbconn =& xarDBGetConn();
+
+    // FIXME: SQL injection risk here - use bind variables.
+    // NOTE: Cannot use bind variables here, until we know the knock-on
+    // effect of changing the get*() API functions to accept bind variables.
     if ($letter) {
         if ($letter == 'Other') {
-        // TODO: check for syntax in other databases
+            // TODO: check for syntax in other databases or use a different matching method.
             $selection = " AND xar_name REGEXP '^[^A-Z]'";
-            $data['msg'] = xarML('Members whose Display Name begins with character not listed in alphabet above (labeled as "Other")', $letter);
+            // TODO: move these messages to the template (and shorten it a bit;-).
+            $data['msg'] = xarML(
+                'Members whose Display Name begins with character not listed in alphabet above (labeled as "Other")'
+            );
         } else {
         // TODO: handle case-sensitive databases
-            $selection = " AND xar_name LIKE '" . $letter . "%'";
+            $selection = ' AND xar_name LIKE ' . $dbconn->qstr($letter.'%');
             $data['msg'] = xarML('Members whose Display Name begins with "#(1)"', $letter);
         }
-    }
-    elseif ($search) {
-        $selection = " AND (";
-        $selection .= "(xar_name LIKE '%" . $search . "%')";
-        $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
+    } elseif ($search) {
+        // Quote the search string
+        $qsearch = $dbconn->qstr('%'.$search.'%');
+
+        $selection = ' AND (';
+        $selection .= '(xar_name LIKE ' . $qsearch . ')';
+        $selection .= ' OR (xar_uname LIKE ' . $qsearch . ')';
         if (xarModGetVar('roles', 'searchbyemail')) {
-            $selection .= " OR (xar_email LIKE '%" . $search . "%')";
+            $selection .= ' OR (xar_email LIKE ' . $qsearch . ')';
             $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
         } else {
             $data['msg'] = xarML('Members whose Display Name or User Name "#(1)"', $search);
         }
         $selection .= ")";
-    }
-    else {
+    } else {
         $data['msg'] = xarML("All members");
     }
+
     $data['order'] = $order;
     $data['letter'] = $letter;
     $data['search'] = $search;
     $data['searchlabel'] = xarML('Go');
-    $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
-                            "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+
+    $data['alphabet'] = array(
+        'A', 'B', 'C', 'D', 'E', 'F',
+        'G', 'H', 'I', 'J', 'K', 'L',
+        'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z'
+    );
+
     $filter['startnum'] = $startnum;
+
     switch(strtolower($phase)) {
         case 'active':
             $data['phase'] = 'active';
@@ -80,19 +102,21 @@ function roles_user_view($args)
             $data['title'] = xarML('Online Members');
             // The user API function is called. First pass to get the total number of records
             // for the pager. Not very efficient, but there you are.
-            $items = xarModAPIFunc('roles',
-                                   'user',
-                                   'getallactive',
-                                    array('startnum' => 0,
-                                          'filter'   => $filter,
-                                          'order'   => $order,
-                                          'selection'   => $selection,
-                                          'include_anonymous' => false,
-                                          'include_myself' => false,
-                                          'numitems' => xarModGetVar('roles',
-                                                                     'rolesperpage')));
+            $items = xarModAPIFunc(
+                'roles', 'user', 'getallactive',
+                array(
+                    'startnum' => 0,
+                    'filter'   => $filter,
+                    'order'   => $order,
+                    'selection'   => $selection,
+                    'include_anonymous' => false,
+                    'include_myself' => false,
+                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                )
+            );
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
-            if (!$items){
+
+            if (!$items) {
                 $data['message'] = xarML('There are no online members selected');
                 $data['total'] = 0;
                 return $data;
@@ -100,17 +124,18 @@ function roles_user_view($args)
             $data['total'] = count($items);
 
             // Now get the actual records to be displayed
-            $items = xarModAPIFunc('roles',
-                                   'user',
-                                   'getallactive',
-                                    array('startnum' => $startnum,
-                                          'filter'   => $filter,
-                                          'order'   => $order,
-                                          'selection'   => $selection,
-                                          'include_anonymous' => false,
-                                          'include_myself' => false,
-                                          'numitems' => xarModGetVar('roles',
-                                                                     'rolesperpage')));
+            $items = xarModAPIFunc(
+                'roles', 'user', 'getallactive',
+                array(
+                    'startnum' => $startnum,
+                    'filter'   => $filter,
+                    'order'   => $order,
+                    'selection'   => $selection,
+                    'include_anonymous' => false,
+                    'include_myself' => false,
+                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                )
+            );
             break;
 
         case 'viewall':
@@ -119,12 +144,14 @@ function roles_user_view($args)
 
             // The user API function is called. First pass to get the total number of records
             // for the pager. Not very efficient, but there you are.
-            $data['total'] = xarModAPIFunc('roles',
-                                           'user',
-                                           'countall',
-                                           array('selection'   => $selection,
-                                                 'include_anonymous' => false,
-                                                 'include_myself' => false));
+            $data['total'] = xarModAPIFunc(
+                'roles', 'user', 'countall',
+                array(
+                    'selection' => $selection,
+                    'include_anonymous' => false,
+                    'include_myself' => false
+                )
+            );
 
             if (!$data['total']){
                 $data['message'] = xarML('There are no members selected');
@@ -135,16 +162,17 @@ function roles_user_view($args)
             xarTplSetPageTitle(xarML('All Members'));
 
             // Now get the actual records to be displayed
-            $items = xarModAPIFunc('roles',
-                                   'user',
-                                   'getall',
-                                    array('startnum' => $startnum,
-                                          'order'   => $order,
-                                          'selection'   => $selection,
-                                          'include_anonymous' => false,
-                                          'include_myself' => false,
-                                          'numitems' => xarModGetVar('roles',
-                                                                     'rolesperpage')));
+            $items = xarModAPIFunc(
+                'roles', 'user', 'getall',
+                array(
+                    'startnum' => $startnum,
+                    'order' => $order,
+                    'selection' => $selection,
+                    'include_anonymous' => false,
+                    'include_myself' => false,
+                    'numitems' => xarModGetVar('roles', 'rolesperpage')
+                )
+            );
             break;
     }
 
@@ -159,16 +187,15 @@ function roles_user_view($args)
         // Change email to a human readible entry.  Anti-Spam protection.
 
         if (xarUserIsLoggedIn()) {
-            $items[$i]['emailurl'] = xarModURL('roles',
-                                               'user',
-                                               'email',
-                                                array('uid' => $item['uid']));
-
+            $items[$i]['emailurl'] = xarModURL(
+                'roles', 'user', 'email',
+                array('uid' => $item['uid'])
+            );
         } else {
             $items[$i]['emailurl'] = '';
         }
 
-        if (empty($items[$i]['ipaddr'])){
+        if (empty($items[$i]['ipaddr'])) {
             $items[$i]['ipaddr'] = '';
         }
         $items[$i]['emailicon'] = xarTplGetImage('emailicon.gif');
@@ -178,17 +205,20 @@ function roles_user_view($args)
     // Add the array of items to the template variables
     $data['items'] = $items;
 
-    $numitems = xarModGetVar('roles','rolesperpage');
+    $numitems = xarModGetVar('roles', 'rolesperpage');
     $pagerfilter['phase'] = $phase;
     $pagerfilter['order'] = $order;
     $pagerfilter['letter'] = $letter;
     $pagerfilter['search'] = $search;
     $pagerfilter['startnum'] = '%%';
-    $data['pager'] = xarTplGetPager($startnum,
-                            $data['total'],
-                            xarModURL('roles', 'user', 'view',
-                                      $pagerfilter),
-                            $numitems);
+
+    $data['pager'] = xarTplGetPager(
+        $startnum,
+        $data['total'],
+        xarModURL('roles', 'user', 'view', $pagerfilter),
+        $numitems
+    );
     return $data;
 }
+
 ?>
