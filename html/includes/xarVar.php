@@ -1040,7 +1040,7 @@ function xarVarLoad ($includes_type, $filename) {
 
     if (!function_exists($function_name)) {
         // Raise an exception
-        $msg = xarML('The '.$includes_type.' type \'#(1)\' couldn\'t be found.', $filename);
+        $msg = xarML('The #(1) type \'#(2)\' couldn\'t be found.', $includes_type, $filename);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }

@@ -28,100 +28,6 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-/*
-define('XARMLS_CTXTYPE_FILE', 1);
-define('XARMLS_CTXTYPE_TEMPLATE', 2);
-define('XARMLS_CTXTYPE_BLOCK', 3);
-define('XARMLS_CTXTYPE_INCLTEMPL', 4);
-define('XARMLS_CTXTYPE_BLKTEMPL',5);
-define('XARMLS_CTXTYPE_ADMIN', 6);
-define('XARMLS_CTXTYPE_ADMINAPI', 7);
-define('XARMLS_CTXTYPE_USER', 8);
-define('XARMLS_CTXTYPE_USERAPI', 9);
-define('XARMLS_CTXTYPE_VISUALAPI', 10);
-
-$MLSData = array(
-                'file' => array(
-                          'type' => XARMLS_CTXTYPE_FILE,
-                          'xtype' => 'php',
-                          'dir' => '',
-                          'label' => ''
-                         ),
-                'core' => array(
-                          'type' => XARMLS_CTXTYPE_FILE,
-                          'xtype' => 'php',
-                          'dir' => '',
-                          'label' => 'Common'
-                         ),
-                'core:' => array(
-                          'type' => XARMLS_CTXTYPE_FILE,
-                          'xtype' => 'php',
-                          'dir' => '',
-                          'label' => ''
-                         ),
-                'modules:' => array(
-                          'type' => XARMLS_CTXTYPE_FILE,
-                          'xtype' => 'php',
-                          'dir' => '',
-                          'label' => ''
-                         ),
-                'modules:templates' => array(
-                          'type' => XARMLS_CTXTYPE_TEMPLATE,
-                          'xtype' => 'xd',
-                          'dir' => 'templates',
-                          'label' => 'Templates'
-                         ),
-                'modules:blocks' => array(
-                          'type' => XARMLS_CTXTYPE_BLOCK,
-                          'xtype' => 'php',
-                          'dir' => 'blocks',
-                          'label' => 'Blocks'
-                         ),
-                'modules:templates/includes' => array(
-                          'type' => XARMLS_CTXTYPE_INCLTEMPL,
-                          'xtype' => 'xd',
-                          'dir' => 'templates/includes',
-                          'label' => 'Included Templates'
-                         ),
-                'modules:templates/blocks' => array(
-                          'type' => XARMLS_CTXTYPE_BLKTEMPL,
-                          'xtype' => 'xd',
-                          'dir' => 'templates/blocks',
-                          'label' => 'Block Templates'
-                         ),
-                'modules:admin' => array(
-                          'type' => XARMLS_CTXTYPE_ADMIN,
-                          'xtype' => 'php',
-                          'dir' => 'admin',
-                          'label' => 'Admin'
-                         ),
-                'modules:adminapi' => array(
-                          'type' => XARMLS_CTXTYPE_ADMINAPI,
-                          'xtype' => 'php',
-                          'dir' => 'adminapi',
-                          'label' => 'AdminAPI'
-                         ),
-                'modules:user' => array(
-                          'type' => XARMLS_CTXTYPE_USER,
-                          'xtype' => 'php',
-                          'dir' => 'user',
-                          'label' => 'User'
-                         ),
-                'modules:userapi' => array(
-                          'type' => XARMLS_CTXTYPE_USERAPI,
-                          'xtype' => 'php',
-                          'dir' => 'userapi',
-                          'label' => 'UserAPI'
-                         ),
-                'modules:visualapi' => array(
-                          'type' => XARMLS_CTXTYPE_VISUALAPI,
-                          'xtype' => 'php',
-                          'dir' => 'visualapi',
-                          'label' => 'VisualAPI'
-                         )
-);
-*/
-
 // This class represents the MLS environment on the site
 class MLSEnvironment {
     var $mlsdata;
@@ -130,10 +36,6 @@ class MLSEnvironment {
     var $domain;
     var $backend = "php";
 
-//    function MLSEnvironment($data) {
-//        $this->mlsobjects = array();
-//        foreach ($data as $key => $value) $this->mlsobjects[$key] = new MLSObject($key,$value);
-//    }
     function MLSEnvironment() {
         $this->mlsobjects = array();
     }
@@ -153,46 +55,10 @@ class MLSEnvironment {
             return NULL;
         }
     }
-//    function getContexts() { return $this->mlsobjects; }
     function getLocale() { return $this->locale; }
     function getBackend() { return $this->backend; }
     function getDomain() { return $this->domain; }
-//    function getContextByName($name) { return $this->mlsobjects[$name]; }
-//    function getContextByType($type) {
-//        foreach ($this->mlsobjects as $object)
-//            if ($object->getType() == $type) return $object;
-//        return NULL;
-//    }
 }
-/*
-class MLSObject {
-    var $name;
-    var $label;
-    var $type;
-    var $xtype;
-    var $dir;
-
-    function MLSObject($name,$data) {
-        $this->name = $name;
-        $this->type = $data['type'];
-        $this->xtype = $data['xtype'];
-        $this->label = $data['label'];
-        $this->dir = $data['dir'];
-    }
-
-    function setName($x) { $this->name = $x; }
-    function setType($x) { $this->type = $x; }
-    function setXtype($x) { $this->xtype = $x; }
-    function setLabel($x) { $this->label = $x; }
-    function setDir($x) { $this->dir = $x; }
-
-    function getName() { return $this->name; }
-    function getType() { return $this->type; }
-    function getXtype() { return $this->xtype; }
-    function getLabel() { return $this->label; }
-    function getDir() { return $this->dir; }
-}
-*/
 
 /**
  * Initializes the Multi Language System
@@ -224,7 +90,6 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
         xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
 
-//    $GLOBALS['MLS'] = new MLSEnvironment($args['MLSData']);
     $GLOBALS['MLS'] = new MLSEnvironment();
 
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
