@@ -252,11 +252,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 if($child->tagName != 'TextNode') {
                     $childCode = trim($this->generateNode($child));
                 } else {
-                    // But do compress space
-                    $childCode = $this->generateNode($child);
-                    $leftspace = (strlen(ltrim($childCode)) != strlen($childCode)) ? ' ' : '';
-                    $rightspace = (strlen(rtrim($childCode)) != strlen($childCode)) ? ' ' : '';
-                    $childCode = $leftspace . trim($childCode) . $rightspace;  
+                    // But do compress space, preserving the type of whitespace
+                    $childCode = _compress_space($this->generateNode($child));
                 }
 
                 if (!isset($childCode)) {
@@ -448,9 +445,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Copy the header to the output
                         $short_open_allowed = ini_get('short_open_tag');
                         if($short_open_allowed) {
-                            $token = "<?php echo '<?xml " . $copy . "?>';?>";
+                            $token = "<?php echo '<?xml " . trim($copy) . "?>\n';?>";
                         } else {
-                            $token = "<?xml " . $copy . "?>";
+                            $token = "<?xml " . $copy . "?>\n";
                         }
                         break;
                     }
@@ -3197,4 +3194,32 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         return true;
     }
 }
+
+/**
+ * Compresses space for output generation
+ *
+ * A helper function which compresses space around an input string.
+ * This function regards 'space' in the xml sense i.e.:
+ * - multiple spaces are equivalent to one
+ * - only 'outside space' is considered, not space 'inside' the input
+ * 
+ * As the 'whitespace' problem is really unsolvable (by me) isolate it
+ * here. If someone finds a solution, here's where it should happen
+ *
+ * @access  protected
+ * @param   string $input String for which to compress space
+*/
+function _compress_space($input='')
+{
+    //return $input; // If we wanna revert back to the old situation, uncomment this line
+    // Let's first determine if there is space at all.
+    $hasleftspace = (strlen(ltrim($input)) != strlen($input));
+    $hasrightspace = (strlen(rtrim($input)) != strlen($input));
+    
+    $leftspace  = $hasleftspace  ? ' ' : '';
+    $rightspace = $hasrightspace ? ' ' : '';
+    $input = $leftspace . trim($input) . $rightspace;  
+    return $input;
+}
+
 ?>
