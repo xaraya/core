@@ -52,7 +52,7 @@
 			<xar:if condition="$ptype eq 0">
 				<tr>
 					<td colspan="2" align="center">
-						<xar:mlstring>The following fields only apply for Users</xar:mlstring>
+						<xar:mlstring>The following fields only apply to Users</xar:mlstring>
 					</td>
 				</tr>
 				<tr>

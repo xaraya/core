@@ -28,6 +28,15 @@ function roles_admin_deleterole()
 // Security Check
     if(!xarSecurityCheck('DeleteRole',0,'Roles',$name)) return;
 
+// Prohibit removal of any groups the system needs
+    if(strtolower($role->getName()) == strtolower(xarModGetVar('roles','defaultgroup'))) {
+        $msg = xarML('The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.', $role->getName());
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+                    'BAD_PARAM',
+                     new SystemException($msg));
+        return false;
+    }
+
     if (empty($confirmation)) {
         // Load Template
         $data['authid'] = xarSecGenAuthKey();
