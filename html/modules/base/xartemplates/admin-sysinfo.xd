@@ -2,61 +2,55 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>System Information</xar:mlstring></h2><br />
 <div style="margin: auto;">
-<p><b><xar:mlstring>Sort Options</xar:mlstring>:</b></p>
 
-<form action="&xar-modurl-base-admin-sysinfo;" method="post">
-<div>
-
-<xar:if condition="$what eq 1">
-<input type="radio" name="what" id="what_general" value="1" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_general" value="1"  />
-</xar:if><label for="what_general"><xar:mlstring>General info</xar:mlstring></label>
-
-<xar:if condition="$what eq 2">
-<input type="radio" name="what" id="what_credits" value="2" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_credits" value="2"  />
-</xar:if><label for="what_credits"><xar:mlstring>Credits</xar:mlstring></label>
-
-<xar:if condition="$what eq 4">
-<input type="radio" name="what" id="what_config" value="4" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_config" value="4"  />
-</xar:if><label for="what_config"><xar:mlstring>Configuration</xar:mlstring></label>
-
-<xar:if condition="$what eq 8">
-<input type="radio" name="what" id="what_mods" value="8" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_mods" value="8"  />
-</xar:if><label for="what_mods"><xar:mlstring>Modules</xar:mlstring></label>
-
-<xar:if condition="$what eq 16">
-<input type="radio" name="what" id="what_env" value="16" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_env" value="16"  />
-</xar:if><label for="what_env"><xar:mlstring>Environment</xar:mlstring></label>
-
-<xar:if condition="$what eq 32">
-<input type="radio" name="what" id="what_vars" value="32" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_vars" value="32"  />
-</xar:if><label for="what_vars"><xar:mlstring>Variables</xar:mlstring></label>
-
-<xar:if condition="$what eq 64">
-<input type="radio" name="what" id="what_license" value="64" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_license" value="64"  />
-</xar:if><label for="what_license"><xar:mlstring>License</xar:mlstring></label>
-
-<xar:if condition="$what eq -1">
-<input type="radio" name="what" id="what_all" value="-1" checked="checked" />
-<xar:else />
-<input type="radio" name="what" id="what_all" value="-1"  />
-</xar:if><label for="what_all"><xar:mlstring>All</xar:mlstring></label>
-&nbsp;&nbsp;<input type="submit" value="Refresh" />
-</div>
-</form>
-<p>#$phpinfo#</p>
+	<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+	<p>
+		<div id="tabnav">
+			<div class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#"><xar:mlstring>PHP Info Sort Information</xar:mlstring> :</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 1))#">
+						<xar:mlstring>General info</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 2))#">
+						<xar:mlstring>Credits</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 4))#">
+						<xar:mlstring>Configuration</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 8))#">
+						<xar:mlstring>Modules</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 16))#">
+						<xar:mlstring>Enviroment</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 32))#">
+						<xar:mlstring>Variables</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => 64))#">
+						<xar:mlstring>License</xar:mlstring>
+					</a>
+				</div>
+				<div>
+					<a href="#xarModUrl('base', 'admin', 'sysinfo', array('what' => -1))#">
+						<xar:mlstring>All</xar:mlstring>
+					</a>
+				</div>
+			</div>
+		</div>
+	</p>
+	</xar:if>
+	<p>#$phpinfo#</p>
 </div>
 </div>
