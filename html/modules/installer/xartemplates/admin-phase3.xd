@@ -1,18 +1,18 @@
 <div align="center">
-<span class="pn-pagetitle">Xaraya Installation</font><br />
-<span class="pn-sub">Page 3/6</font><br /><br />
-<span class="pn-title">File Permissions Check</span><br /><br />
+<span class="xar-pagetitle">Xaraya Installation</font><br />
+<span class="xar-sub">Page 3/6</font><br /><br />
+<span class="xar-title">File Permissions Check</span><br /><br />
 <form action="install.php" method="post">
 <input type="hidden" name="install_language" value="<?php echo $language; ?>" />
 <table width="50%" align="center">
     <tr>
-        <?php $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php'; ?>
+        <?php $systemConfigFile = xarCoreGetVarDirPath() . '/config.system.php'; ?>
         <td align="center" style="text-align:justify;">
-            <span class="pn-normal">
+            <span class="xar-normal">
                 For Xaraya to function properly, the installer must write your database information to the <?php echo $systemConfigFile; ?> file.
                 If your settings are not correct, this script will not be able to do so. The installer needs write access for steps 3 and 4 only.
             </span><br /><br />
-            <span class="pn-title">
+            <span class="xar-title">
                 <?php if(is_writable($systemConfigFile)) { ?>
                     SUCCESS: The installer can write to the configuration file.
                 <?php } else { ?>
@@ -22,7 +22,7 @@
         </td>
     </tr>
     <tr>
-        <td align="center" class="pn-normal">
+        <td align="center" class="xar-normal">
             <?php if (is_writable($systemConfigFile)) { ?>
                 <input type="hidden" name="install_phase" value="4" />
                 <input type="submit" value="Continue &gt;">
@@ -34,5 +34,5 @@
     </tr>
 </table>
 </form>
-<font class="pn-sub">Thank you for trying Xaraya.</font>
+<font class="xar-sub">Thank you for trying Xaraya.</font>
 </div>

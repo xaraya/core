@@ -32,7 +32,7 @@ function installer_admin_main()
  */
 function installer_admin_phase1()
 {
-    //$locales = pnMLSListSiteLocales();
+    //$locales = xarMLSListSiteLocales();
 
     /*
      * TODO: Find way to convert locale string into language, country, etc..
@@ -64,11 +64,11 @@ function installer_admin_phase2() {
  */
 function installer_admin_phase3()
 {
-    $agree = pnVarCleanFromInput('agree');
+    $agree = xarVarCleanFromInput('agree');
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        pnResponseRedirect('install.php');
+        xarResponseRedirect('install.php');
     }
 
     return array();
@@ -83,11 +83,11 @@ function installer_admin_phase3()
 function installer_admin_phase4()
 {
     // Get default values from config files
-    $dbHost   = pnCore_getSystemVar('DB.Host');
-    $dbUser   = pnCore_getSystemVar('DB.UserName');
-    $dbPass   = pnCore_getSystemvar('DB.Password');
-    $dbName   = pnCore_getSystemvar('DB.Name');
-    $dbPrefix = pnCore_getSystemvar('DB.TablePrefix');
+    $dbHost   = xarCore_getSystemVar('DB.Host');
+    $dbUser   = xarCore_getSystemVar('DB.UserName');
+    $dbPass   = xarCore_getSystemvar('DB.Password');
+    $dbName   = xarCore_getSystemvar('DB.Name');
+    $dbPrefix = xarCore_getSystemvar('DB.TablePrefix');
 
     return array('database_host' => $dbHost,
                  'database_username' => $dbUser,
@@ -126,7 +126,7 @@ function installer_admin_phase5()
          $dbType,
          $installType,
          $intranetMode,
-         $createDb)    = pnVarCleanFromInput('install_database_host',
+         $createDb)    = xarVarCleanFromInput('install_database_host',
                                              'install_database_name',
                                              'install_database_username',
                                              'install_database_password',
@@ -140,7 +140,7 @@ function installer_admin_phase5()
     if (empty($dbHost) || empty($dbName) || empty($dbUname)
         || empty($dbPrefix) || empty($dbType) || empty($installType)) {
 
-       $msg = pnML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3))
+       $msg = xarML('Empty dbHost (#(1)) or dbName (#(2)) or dbUname (#(3))
                    or dbPrefix (#(4)) or dbType (#(5)) or installType (#(6)).'
                   , $dbHost, $dbName, $dbUname, $dbPrefix, $dbType, $installType);
        die($msg);
@@ -173,10 +173,10 @@ function installer_admin_phase5()
 
 
 
-    pnInstallAPILoad('installer','admin');
+    xarInstallAPILoad('installer','admin');
 
     // Save config data
-    $res = pnInstallAPIFunc('installer',
+    $res = xarInstallAPIFunc('installer',
                             'admin',
                             'modifyconfig',
                             array('dbHost'    => $dbHost,
@@ -186,30 +186,30 @@ function installer_admin_phase5()
                                   'dbPrefix'  => $dbPrefix,
                                   'dbType'    => $dbType));
     // throw back
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return NULL;
     }
 
     // Create the database if necessary
     if ($createDb) {
-        $res = pnInstallAPIFunc('installer',
+        $res = xarInstallAPIFunc('installer',
                                 'admin',
                                 'createdb');
-        if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return NULL;
         }
     }
 
     // Start the database
-    pnCoreInit(PNCORE_SYSTEM_ADODB);
+    xarCoreInit(XARCORE_SYSTEM_ADODB);
 
-    // Load in modules/installer/pninit.php and choose a new install or upgrade
-    $res = pnInstallAPIFunc('installer',
+    // Load in modules/installer/xarinit.php and choose a new install or upgrade
+    $res = xarInstallAPIFunc('installer',
                             'admin',
                             'initialise',
                             array('directory' => 'installer',
                                   'initfunc'  => $initFunc));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return NULL;
     }
    
@@ -233,25 +233,25 @@ function installer_admin_bootstrap()
 {
 
     // log in admin user
-    $res = pnUserLogIn('Admin', 'password', 0);
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    $res = xarUserLogIn('Admin', 'password', 0);
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
     // Load installer API
-    pnModAPILoad('installer','admin');
+    xarModAPILoad('installer','admin');
 
     // Activate modules
-    $res = pnModAPIFunc('installer',
+    $res = xarModAPIFunc('installer',
                         'admin',
                         'initialise',
                         array('directory' => 'base',
                               'initfunc' => 'activate'));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator'));
 
 }
 
@@ -264,12 +264,12 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
-    if (!pnSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+    if (!xarSecAuthAction(0, 'Installer::', '::', ACCESS_ADMIN)) {
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException(__FILE__."(".__LINE__."): You do not have permission to access the Installer module."));return;
     }
 
-    if (!pnVarCleanFromInput('create')) {
+    if (!xarVarCleanFromInput('create')) {
         return array();
     }
 
@@ -277,28 +277,28 @@ function installer_admin_create_administrator()
           $name,
           $password,
           $email,
-          $url) = pnVarCleanFromInput('install_admin_username',
+          $url) = xarVarCleanFromInput('install_admin_username',
                                        'install_admin_name',
                                        'install_admin_password',
                                        'install_admin_email',
                                        'install_admin_url');
 
-    pnModAPILoad('users', 'admin');
+    xarModAPILoad('users', 'admin');
 
     $password = md5($password);
 
-    $res = pnModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
+    $res = xarModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
                                                           'name'  => $name,
                                                           'uname' => $username,
                                                           'email' => $email,
                                                           'pass'  => $password,
                                                           'url'   => $url));
 
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    pnResponseRedirect(pnModURL('installer', 'admin', 'finish'));
+    xarResponseRedirect(xarModURL('installer', 'admin', 'finish'));
 }
 
 
@@ -306,41 +306,41 @@ function installer_admin_create_administrator()
 function installer_admin_finish()
 {
     // Load up database
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
 
     $blockGroupsTable = $tables['block_groups'];
 
-    $query = "SELECT    pn_id as id
+    $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     pn_name = 'left'";
+              WHERE     xar_name = 'left'";
 
     $result = $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
-        $msg = pnML("Group 'left' not found.");
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML("Group 'left' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     list ($leftBlockGroup) = $result->fields;
 
-    if (!pnModAPILoad('blocks', 'admin') && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!xarModAPILoad('blocks', 'admin') && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return NULL;
     }
-    $adminBlockId = pnBlockTypeExists('adminpanels', 'adminmenu');
+    $adminBlockId = xarBlockTypeExists('adminpanels', 'adminmenu');
 
-    $block_id = pnModAPIFunc('blocks',
+    $block_id = xarModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Admin',
                                                       'type'     => $adminBlockId,
@@ -348,14 +348,14 @@ function installer_admin_finish()
                                                       'template' => '',
                                                       'state'    => 2));
 
-    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    $msg = pnML('Reminder message body will go here.');
+    $msg = xarML('Reminder message body will go here.');
 
-    $htmlBlockId = pnBlockTypeExists('base', 'html');
-    $block_id = pnModAPIFunc('blocks',
+    $htmlBlockId = xarBlockTypeExists('base', 'html');
+    $block_id = xarModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Reminder',
                                                       'content'  => $msg,
@@ -363,36 +363,36 @@ function installer_admin_finish()
                                                       'group'    => $leftBlockGroup,
                                                       'template' => '',
                                                       'state'    => 2));
-    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    $query = "SELECT    pn_id as id
+    $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     pn_name = 'right'";
+              WHERE     xar_name = 'right'";
 
     $result = $dbconn->Execute($query);
 
     // Check for db errors
     if ($dbconn->ErrorNo() != 0) {
-        $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
-        $msg = pnML("Group 'right' not found.");
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML("Group 'right' not found.");
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
     }
 
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockId = pnBlockTypeExists('users', 'login');
-    $block_id = pnModAPIFunc('blocks',
+    $loginBlockId = xarBlockTypeExists('users', 'login');
+    $block_id = xarModAPIFunc('blocks',
                              'admin',
                              'create_instance', array('title'    => 'Login',
                                                       'type'     => $loginBlockId,
@@ -400,14 +400,14 @@ function installer_admin_finish()
                                                       'template' => '',
                                                       'state'    => 2));
 
-    if (!isset($block_id) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($block_id) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
-    pnConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
+    xarConfigSetVar('Site.BL.DefaultTheme','Xaraya_Classic');
 
-    if (pnVarIsCached('Config.Variables', 'Site.BL.DefaultTheme')) {
-        pnVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
+    if (xarVarIsCached('Config.Variables', 'Site.BL.DefaultTheme')) {
+        xarVarDelCached('Config.Variables', 'Site.BL.DefaultTheme');
     }
 
     return array();

@@ -19,14 +19,14 @@
 function installer_init()
 {
     // Load in installer API
-    pnInstallAPILoad('installer','admin');
+    xarInstallAPILoad('installer','admin');
 
-    $res = pnInstallAPIFunc('installer',
+    $res = xarInstallAPIFunc('installer',
                             'admin',
                             'initialise',
                             array('directory' => 'base',
                                   'initfunc'  => 'init'));
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return;
     }
 
@@ -43,8 +43,8 @@ function installer_init()
 function installer_upgrade($oldVersion)
 {
     // Get database information
-    list($dbconn) = pnDBGetConn();
-    $tables = pnDBGetTables();
+    list($dbconn) = xarDBGetConn();
+    $tables = xarDBGetTables();
 
 
     return false;

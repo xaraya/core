@@ -1,13 +1,13 @@
 <div align="center">
-<font class="pn-pagetitle">Xaraya Installation</font><br />
-<font class="pn-sub">Step 1/6</font><br /><br />
-<font class="pn-title">Select your language.</font>
+<font class="xar-pagetitle">Xaraya Installation</font><br />
+<font class="xar-sub">Step 1/6</font><br /><br />
+<font class="xar-title">Select your language.</font>
 <form action="install.php" method="post">
 <table width="50%" align="center">
     <tr>
-        <td align="center" class="pn-normal">
+        <td align="center" class="xar-normal">
                 Language:
-                <select name="install_language" class="pn-text">
+                <select name="install_language" class="xar-text">
                     <?php while (list($key, $name) = each($languages)) { ?>
                         <option value="<?php echo $key; ?>"><?php echo $name; ?></option>
                     <?php } ?>
@@ -18,5 +18,5 @@
     </tr>
 </table>
 </form><br /><br />
-<font class="pn-sub">Thank you for trying Xaraya.</font>
+<font class="xar-sub">Thank you for trying Xaraya.</font>
 </div>

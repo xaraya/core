@@ -31,7 +31,7 @@ function installer_adminapi_modifyconfig($args)
 {
     extract($args);
 
-    $systemConfigFile = pnCoreGetVarDirPath() . '/config.system.php';
+    $systemConfigFile = xarCoreGetVarDirPath() . '/config.system.php';
     $config_php = join('', file($systemConfigFile));
     if (isset($HTTP_ENV_VARS['OS']) && strstr($HTTP_ENV_VARS['OS'], 'Win')) {
         $system = 1;
@@ -72,20 +72,20 @@ function installer_adminapi_initialise($args)
     extract($args);
 
     if (empty($directory) || empty($initfunc)) {
-        $msg = pnML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
 
-    $osDirectory = pnVarPrepForOS($directory);
-    $modInitFile = 'modules/'. $osDirectory. '/pninit.php';
+    $osDirectory = xarVarPrepForOS($directory);
+    $modInitFile = 'modules/'. $osDirectory. '/xarinit.php';
 
     if (file_exists($modInitFile)) {
         include_once ($modInitFile);
     } else {
-        // modules/modulename/pninit.php not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        // modules/modulename/xarinit.php not found?!
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));
                        return;
     }
@@ -95,18 +95,18 @@ function installer_adminapi_initialise($args)
     if (function_exists($initFunc)) {
         $res = $initFunc();
         // Handle exceptions
-        if (pnExceptionMajor() != PN_NO_EXCEPTION) {
+        if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
             return;
         }
         if ($res == false) {
             // exception
-            pnExceptionSet(PN_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));
                            return;
         }
     } else {
         // modulename_init() not found?!
-        pnExceptionSet(PN_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
                        return;
     }
@@ -128,24 +128,24 @@ function installer_adminapi_createdb($args)
     extract($args);
 
     if (!isset($dbName)) {
-        $dbName = pnCore_getSystemVar('DB.Name');
+        $dbName = xarCore_getSystemVar('DB.Name');
     }
 
     if (!isset($dbType)) {
-        $dbType = pnCore_getSystemVar('DB.Type');
+        $dbType = xarCore_getSystemVar('DB.Type');
     }
 
     // Get connection parameters from config.system.php
-    $dbHost  = pnCore_getSystemVar('DB.Host');
-    $dbUname = pnCore_getSystemVar('DB.UserName');
-    $dbPass  = pnCore_getSystemVar('DB.Password');
-    $dbType  = pnCore_getSystemVar('DB.Type');
+    $dbHost  = xarCore_getSystemVar('DB.Host');
+    $dbUname = xarCore_getSystemVar('DB.UserName');
+    $dbPass  = xarCore_getSystemVar('DB.Password');
+    $dbType  = xarCore_getSystemVar('DB.Type');
     // Load in Table Maintainance API
-    include_once 'includes/pnTableDDL.php';
+    include_once 'includes/xarTableDDL.php';
 
     // Load in ADODB
-    define('ADODB_DIR','pnadodb');
-    include_once 'pnadodb/adodb.inc.php';
+    define('ADODB_DIR','xaradodb');
+    include_once 'xaradodb/adodb.inc.php';
 
     // Start connection
     $dbconn = ADONewConnection($dbType);
@@ -155,12 +155,12 @@ function installer_adminapi_createdb($args)
         die("Failed to connect to $dbType://$dbUname:$dbPass@$dbHost/, error message: " . $dbconn->ErrorMsg());
     }
 
-    $query = pnDBCreateDatabase($dbName,$dbType);
+    $query = xarDBCreateDatabase($dbName,$dbType);
 
     $dbconn->Execute($query);
     if ($dbconn->ErrorNo() != 0) {
-       $msg = pnMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-       pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+       $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
+       xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
        return NULL;
     }
