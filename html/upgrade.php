@@ -672,7 +672,9 @@ if (empty($step)) {
     // Set any empty modvars.
     echo "<h5>Checking Module and Config Variables</h5>";
     $role = xarFindRole('Everybody');
-    $admin = xarFindRole('Admin');
+    $admin = xarUFindRole('Admin');
+    if (!isset($admin)) $admin = xarFindRole('Admin');
+    if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
     $modvars[] = array(array('name'    =>  'hidecore',
                              'module'  =>  'themes',
                              'set'     =>  0),
@@ -741,7 +743,7 @@ if (empty($step)) {
                              'set'     =>  1),
                        array('name'    =>  'admin',
                              'module'  =>  'roles',
-                             'set'     =>  $role->getID()),
+                             'set'     =>  $admin->getID()),
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
@@ -1289,4 +1291,3 @@ function CatchOutput()
     echo xarTpl_renderPage($out);
     flush();
 }
-?>

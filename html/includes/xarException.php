@@ -443,7 +443,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     // not look in the CACHEKEYS file to mention the template.
     if(isset($GLOBALS['xarTpl_cacheTemplates'])) {
         $sourcetmpl='';
-        $base = basename($file,'.php');
+        $base = basename(strval($file),'.php');
         $varDir = xarCoreGetVarDirPath();
         if (file_exists($varDir . '/cache/templates/CACHEKEYS')) {
             $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'r');
