@@ -4976,6 +4976,11 @@ jan@jack.iwr.uni-heidelberg.de|tests/PHPUnit/PHPUnit/TestSuite.php|2003031409201
 jan@jack.iwr.uni-heidelberg.de|tests/PHPUnit/gui.php|20030314092011|32454|a329bfc84e10ec32
 jan@jack.iwr.uni-heidelberg.de|tests/unit_tests/test.xt|20030314092011|40341|96c5ccd93ee8485
 jan@jack.iwr.uni-heidelberg.de|tests/unit_tests/testclass.php|20030314092011|48188|a0a02f31220a4d52
+jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarhookapi/item_modify.xsl|20040329233059|64378|89d91f561762714c
+jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarhookapi/item_new.xsl|20040329233059|09145|83cf9e976a27fec4
+jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarhookapi/item_transform-input.xsl|20040329233059|19444|31505af7b329e919
+jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarhookapi/item_transform.xsl|20040329233059|30213|ee689dc9d35af1e
+jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarhookapi/module_modifyconfig.xsl|20040329233100|16900|1a8e2ae827031e68
 jansenm@onslaught.local.michael-jansen.biz|tests/modwizard/lib/xarprivateapi.xls|20040328153718|55839|11ec590bc2d878e7
 jbeames@sting.in-beames.net|tests/caching/config.caching.php|20031008071027|21251|86eb98fdb02a47b6
 jbeames@sting.in-beames.net|tests/caching/var/cache/output/cache.touch|20031014064156|20652|9c4419beadc5fe4a
@@ -5264,6 +5269,17 @@ marcel@hsdev.com|docs/xarayaguide/X-i-gsg.dsl|20030605124030|23162|d2767d4805706
 marcel@hsdev.com|docs/xarayaguide/X-i-gsg.xml|20030605124030|32109|d563e36ce7556854
 marcel@hsdev.com|docs/xarayaguide/gpl.xml|20030605124031|06491|f8701776e79ac932
 marcel@hsdev.com|docs/xarayaguide/jadetex.cfg|20030605124031|15489|836688c9ed02ada7
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install01.tif|20040209115925|12184|6a4f43932f65f9e5
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install02.tif|20040209115925|32917|39f43f67dc7bd06c
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install03.png|20040209115928|54383|78dc8365602b4bdf
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install04.png|20040209115929|22620|f9d18960d8420c1
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install05.png|20040209115930|08253|dd43d2505335c3c9
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install06.png|20040209115931|33195|ffed33398d262dfa
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install07.png|20040209115932|25877|3c927001c8b72f60
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install08.png|20040209115934|24192|38e02cb99016207a
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install09.jpg|20040209115934|46968|12e76f8819388179
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install09.png|20040209115934|28816|d05e2c3b4021392d
+marcel@hsdev.com|docs/xarayaguide/sourceimages/install10.png|20040209115935|49882|d159ff9eda0a72d9
 marcel@hsdev.com|docs/xarayaguide/stylesheet-images/callouts/1.gif|20030605124031|23997|35b97ea7aec2e43b
 marcel@hsdev.com|docs/xarayaguide/stylesheet-images/callouts/10.gif|20030605124031|38822|f05c5e784a23f761
 marcel@hsdev.com|docs/xarayaguide/stylesheet-images/callouts/2.gif|20030605124031|47796|62731ce25db62fb0
@@ -5872,6 +5888,7 @@ mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-config-table.x
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-delete-table.xsl|20030622120902|49514|aef3bd16962cae4c
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-modify-table.xsl|20030622120902|49929|107cc6c9df26af15
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-new-table.xsl|20030622120902|50145|7344b0e59b057b4
+mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/admin-view-table.xsl|20030622120902|50359|e07f7feb9aadc50f
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/includes/admin-header.xsl|20030622120902|51729|a08c1fe7aadfb4e1
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/includes/user-header.xsl|20030622120902|51957|8b668e8170f99fbc
 mikespub@newton.xaraya.com|tests/modwizard/lib/xartemplates/user-display-table.xsl|20030622120902|50791|5bfa9f7c24777842
