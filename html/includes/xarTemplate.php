@@ -852,6 +852,8 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
+    // For lack of a better solution for bug #1120 set $_bl_module_name to the top level module
+    $tplData['_bl_module_name'] = xarModGetName();
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
