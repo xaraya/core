@@ -21,7 +21,7 @@
 	</p>
     <p><xar:mlstring>Site Name</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName')#" size="30" maxlength="100" /></p>
 	<p><xar:mlstring>Site Slogan</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan')#" size="30" maxlength="100" />
-	<p><xar:mlstring>Copyright</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight')#" size="10" maxlength="15" /></p>
+	<p><xar:mlstring>Copyright</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight')#" size="30" maxlength="100" /></p>
 	<p><xar:mlstring>Footer Note</xar:mlstring>:&nbsp;&nbsp;<br /><textarea name="footer" id="footer" cols="60" rows="5" wrap="virtual" class="xar-norm">#xarModGetVar('themes', 'SiteFooter')#</textarea></p>
 	<h3><xar:mlstring>Page Title Options</xar:mlstring></h3>
 	<p><xar:mlstring>Page Title Separator</xar:mlstring>:&nbsp;&nbsp;<input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator')#" size="10" maxlength="15" /></p>
