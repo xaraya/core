@@ -141,10 +141,22 @@ function users_activate()
     // Set up an initial value for module variables.
     xarModSetVar('users', 'usersperpage', 20);
     xarModSetVar('users', 'showtacs', 0);
-    $disallowednames = array('root', 'admin');
+
+    // Unfortunately, crappy format here, and not to PEAR Standardards
+    // But I need the line break to come into play without the tab.
+
+    $names = 'Admin
+Root
+Linux
+Slim Shady';
+    $disallowednames = serialize($names);
     xarModSetVar('users', 'disallowednames', $disallowednames);
-    $disallowedemails = array('@cnn.com', '@whitehouse.gov');
+
+    $emails = 'none@none.com
+president@whitehouse.gov';
+    $disallowedemails = serialize($emails);
     xarModSetVar('users', 'disallowedemails', $disallowedemails);
+
     xarModSetVar('users', 'minage', 13);
 
     // Register blocks

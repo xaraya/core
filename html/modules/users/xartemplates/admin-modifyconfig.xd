@@ -118,20 +118,22 @@
 							</xar:if>
 						</td>
 					</tr>
-					<tr align="left" valign="middle">
+					<tr align="left" valign="top">
 						<td>
-							<xar:mlstring>Disallowed user names</xar:mlstring>
+							<xar:mlstring>Disallowed user names</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
 						</td>
 						<td>
-						        <textarea name="disallowednames" id="disallowednames" tabindex="3" />#xarModGetVar('users','disallowednames')#</textarea> 
+						        <textarea name="disallowednames" id="disallowednames" tabindex="3" rows="10" cols="30" />#$names#</textarea> 
 						</td>
 					</tr>
-					<tr align="left" valign="middle">
+					<tr align="left" valign="top">
 						<td>
-							<xar:mlstring>Disallowed email addresses</xar:mlstring>
+							<xar:mlstring>Disallowed email addresses</xar:mlstring><br />
+							<i><xar:mlstring>Note: Enter after each name.  Do not seperate with comma, etc</xar:mlstring></i>
 						</td>
 						<td>
-						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" />#xarModGetVar('users','disallowedemails')#</textarea> 
+						        <textarea name="disallowedemails" id="disallowedemails" tabindex="4" rows="10" cols="30" />#$emails#</textarea> 
 						</td>
 					</tr>
 				</table>
