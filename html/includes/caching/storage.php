@@ -160,6 +160,17 @@ class xarCache_Storage
     {
         return array();
     }
+
+    function getCachedKeys()
+    {
+        $list = $this->getCachedList();
+        $keys = array();
+        foreach ($list as $item) {
+            if (empty($item['key'])) continue;
+            $keys[] = $item['key'];
+        }
+        return $keys;
+    }
 }
 
 ?>
