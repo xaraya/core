@@ -157,16 +157,18 @@ function roles_user_usermenu($args)
                         return;
                 }
 
-                // check for duplicate email address
-                $user = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
-                                       array('email' => $email));
-                if ($user != false) {
-                    unset($user);
-                    $msg = xarML('That email address is already registered.');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                    return;
+                if(xarModGetVar('roles','uniqueemail')) {
+                    // check for duplicate email address
+                    $user = xarModAPIFunc('roles',
+                                          'user',
+                                          'get',
+                                           array('email' => $email));
+                    if ($user != false) {
+                        unset($user);
+                        $msg = xarML('That email address is already registered.');
+                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                        return;
+                    }
                 }
 
                 // check for disallowed email addresses
