@@ -14,8 +14,6 @@
  */
 
 
-global $installing;
-
 /**
  * Dead
  *
@@ -222,7 +220,7 @@ function installer_admin_phase5()
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
 
-    $installing = true;
+    xarVarSetCached('installer','installing', true);
     include_once 'includes/xarSecurity.php';
     xarSecurity_init();
 
@@ -237,6 +235,8 @@ function installer_admin_phase5()
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
 
+    xarVarDelCached('installer','installing');
+
     return $data;
 }
 
@@ -248,8 +248,6 @@ function installer_admin_phase5()
 function installer_admin_bootstrap()
 {
     xarTplSetThemeName('installer');
-
-    $installing = false;
 
     // activate the security stuff
     // create the default roles and privileges setup

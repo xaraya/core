@@ -380,16 +380,15 @@ function xarSecurityLevel($levelname)
  * @param  string role
  * @return bool
  */
-function xarSecurityCheck($mask,$showException=1,$component='',$instance='',$module='',$role='')
+function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
-    global $installing;
+    $installing = xarVarGetCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
        return true;
-
     } else {
        $masks = new xarMasks();
-       return $masks->xarSecurityCheck($mask,$showException,$component, $instance,$module,$role);
+       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role);
     }
 }
 
@@ -409,7 +408,7 @@ function xarSecurityCheck($mask,$showException=1,$component='',$instance='',$mod
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    global $installing;
+    $installing = xarVarGetCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
         return true;

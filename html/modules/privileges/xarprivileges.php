@@ -327,18 +327,18 @@ class xarMasks
     {
         $mask =  $this->getMask($mask);
         if (!$mask) {
-// <mikespub> moved this whole $module thing where it's actually used, i.e. for
-// error reporting only. If you want to override masks with this someday, move
-// it back before the $this->getMask($mask) or wherever :-)
+            // <mikespub> moved this whole $module thing where it's actually used, i.e. for
+            // error reporting only. If you want to override masks with this someday, move
+            // it back before the $this->getMask($mask) or wherever :-)
 
-// get the masks pertaining to the current module and the component requested
-// <mikespub> why do you need this in the first place ?
+            // get the masks pertaining to the current module and the component requested
+            // <mikespub> why do you need this in the first place ?
             if ($module == '') list($module) = xarRequestGetInfo();
 
-// I'm a bit lost on this line. Does this var ever get set?
-// <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar /
-// xarModGetVar combination you used before (although $module will generally
-// not be 'blocks', so I have no idea why this is needed anyway)
+            // I'm a bit lost on this line. Does this var ever get set?
+            // <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar /
+            // xarModGetVar combination you used before (although $module will generally
+            // not be 'blocks', so I have no idea why this is needed anyway)
             if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
             $module = xarVarGetCached('Security.Variables','currentmodule');
 
@@ -359,15 +359,15 @@ class xarMasks
         // insert any instance overrides
         if ($instance != '') $mask->setInstance($instance);
 
-    // check if we already have the irreducible set of privileges for the current user
+        // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
 
-// get the Roles class
+            // get the Roles class
             include_once 'modules/roles/xarroles.php';
             $roles = new xarRoles();
 
-// get the uid of the role we will check against
-// an empty role means take the current user
+            // get the uid of the role we will check against
+            // an empty role means take the current user
             if ($rolename == '') {
                 $userID = xarSessionGetVar('uid');
                 if (empty($userID)) {
@@ -379,11 +379,11 @@ class xarMasks
                 $role = $roles->findRole($rolename);
             }
 
-// get the privileges and test against them
+            // get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)));
 
-// leave this as same-page caching for now, until the db cache is finished
-        // if this is the current user, save the irreducible set of privileges to cache
+            // leave this as same-page caching for now, until the db cache is finished
+            // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
                 xarVarSetCached('Security.Variables','privilegeset',$privileges);
             }
@@ -394,16 +394,16 @@ class xarMasks
 
         $pass = $this->testprivileges($mask,$privileges,false);
 
-//        $pass = $this->testprivileges($mask,$this->getprivset($role),false);
+        // $pass = $this->testprivileges($mask,$this->getprivset($role),false);
 
-// check if the exception needs to be caught here or not
+        // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             $msg = xarML('No privilege for #(1)',$mask->getName());
             xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
         }
 
-// done
+        // done
         return $pass;
     }
 
