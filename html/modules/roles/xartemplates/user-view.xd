@@ -93,77 +93,48 @@
             </xar:if>
             </tr>
             <xar:loop name="$items">
-            <xar:if condition="(($loop:index + 1) % 2)">
-            <tr>
-                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-                <td class="xar-norm">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                </td>
-                <td class="xar-norm" style="text-align: center;">
-                    <!-- TODO: add link to working whois service -->
-                    #xarVarPrepForDisplay($loop:item['ipaddr'])#
-                </td>
-                <xar:else />
-                <td class="xar-norm">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                </td>
-                </xar:if>
-                <td class="xar-norm" style="text-align: center;">
-                <xar:if condition="empty($loop:item['emailurl'])">
-                    <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
-                <xar:else />
-                    <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
-                </xar:if>
-                </td>
-                <xar:if condition="isset($properties) and count($properties) gt 0">
-                <xar:set name="$uid">#$loop:item['uid']#</xar:set>
-                <xar:foreach in="$properties" key="$key">
-                <td class="xar-norm">
-                    <xar:if condition="isset($values[$uid][$key])">
-                        <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
-                    <xar:else />
-                        &nbsp;&nbsp;
-                    </xar:if>
-                </td>
-                </xar:foreach>
-                </xar:if>
-            </tr>
-            <xar:else />
-            <tr>
-                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-                <td class="xar-accent">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                </td>
-                <td class="xar-accent" style="text-align: center;">
-                    <!-- TODO: add link to working whois service -->
-                    #xarVarPrepForDisplay($loop:item['ipaddr'])#
-                </td>
-                <xar:else />
-                <td class="xar-accent">
-                    <a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                </td>
-                </xar:if>
-                <td class="xar-accent" style="text-align: center;">
-                    <xar:if condition="empty($loop:item['emailurl'])">
-                        <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
-                    <xar:else />
-                        <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
-                    </xar:if>
-                </td>
-                <xar:if condition="isset($properties) and count($properties) gt 0">
-                <xar:set name="$uid">#$loop:item['uid']#</xar:set>
-                <xar:foreach in="$properties" key="$key">
-                <td class="xar-accent">
-                    <xar:if condition="isset($values[$uid][$key])">
-                        <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
-                    <xar:else />
-                        &nbsp;&nbsp;
-                    </xar:if>
-                </td>
-                </xar:foreach>
-                </xar:if>
-            </tr>
-            </xar:if>
+				<xar:if condition="(($loop:index + 1) % 2)">
+					<tr class="xar-norm">
+				<xar:else />
+					<tr class="xar-accent">
+				</xar:if>
+				<xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+					<td>
+						<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+					</td>
+					<td style="text-align: center;">
+						<!-- TODO: add link to working whois service -->
+						#xarVarPrepForDisplay($loop:item['ipaddr'])#
+					</td>
+					<xar:else />
+					<td>
+						<xar:if condition="xarUserIsLoggedIn()">
+							<a href="#xarModURL('roles', 'user', 'display', array('uid' => $loop:item['uid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+						<xar:else />
+							#xarVarPrepForDisplay($loop:item['name'])#
+						</xar:if>
+					</td>
+				</xar:if>
+				<td style="text-align: center;">
+					<xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
+						<img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
+					<xar:else />
+						<a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
+					</xar:if>
+				</td>
+				<xar:if condition="isset($properties) and count($properties) gt 0">
+					<xar:set name="$uid">#$loop:item['uid']#</xar:set>
+					<xar:foreach in="$properties" key="$key">
+						<td>
+							<xar:if condition="isset($values[$uid][$key])">
+								<xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
+							<xar:else />
+								&nbsp;&nbsp;
+							</xar:if>
+						</td>
+					</xar:foreach>
+				</xar:if>
+				</tr>
             </xar:loop>
         </table>
 

@@ -23,6 +23,13 @@
  */
 function roles_user_email($args)
 {
+    // we can only send emails to other members if we are logged in
+    if(!xarUserIsLoggedIn())
+    {
+        xarErrorSet(XAR_USER_EXCEPTION, 'NOT_LOGGED_IN', new DefaultUserException());
+        return;
+    }
+
     extract($args);
 
     if (!xarVarFetch('uid', 'id', $uid)) return;
@@ -77,7 +84,7 @@ function roles_user_email($args)
             //if (!xarVarFetch('fname','str:1:100',$fname)) return;
             //if (!xarVarFetch('femail','str:1:100',$femail)) return;
             //if (!xarVarFetch('name', 'str:1:100', $name)) return;
-            
+
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
 
