@@ -57,7 +57,6 @@ function roles_userapi_getall($args)
             }
         }
     }
-
     // Restriction by group.
     if (isset($group)) {
         $groups = explode(',', $group);
