@@ -1962,7 +1962,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             $instance = '';
         }
 
-        return "if (xarSecurityCheck('$mask', $catch, '$component','$instance')) { ";
+        return "if (xarSecurityCheck(\"$mask\", $catch, \"$component\", \"$instance\")) { ";
     }
 
     function renderEndTag()
@@ -2117,7 +2117,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 
 /**
  *
- * 
+ *
  * @package blocklayout
  */
 class xarTpl__XarElseNode extends xarTpl__TplTagNode
