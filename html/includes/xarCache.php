@@ -75,9 +75,9 @@ function xarCache__shutdown_handler()
  * ...
  * xarPageSetCached('MyCache', 'myvar', 'this value');
  * ...
- * xarPageDelCached('MyCache', 'myvar');
+ * xarOutputDelCached('MyCache', 'myvar');
  * ...
- * xarPageFlushCached('MyCache');
+ * xarOutputFlushCached('MyCache');
  * ...
  *
  */
@@ -391,20 +391,27 @@ function xarBlockSetCached($cacheKey, $name, $value)
 }
 
 /**
- * delete a cached page
+ * delete a cached file
  *
  * @access public
  * @param string $cacheKey the key identifying the particular cache you want to access
- * @param string $name     the name of the page in that particular cache
+ * @param string $name     the name of the file in that particular cache
  * @returns void
  */
-function xarPageDelCached($cacheKey, $name)
+function xarOutputDelCached($cacheKey, $name)
 {
     global $xarOutput_cacheCollection;
     // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
     if (isset($xarOutput_cacheCollection[$cacheKey][$name])) {
         unset($xarOutput_cacheCollection[$cacheKey][$name]);
     }
+}
+/**
+ * aliased depricated function
+ */
+function xarPageDelCached($cacheKey, $name)
+{
+	xarOutputDelCached($cacheKey, $name);
 }
 
 /**
@@ -414,7 +421,7 @@ function xarPageDelCached($cacheKey, $name)
  * @param   string $cacheKey the key identifying the particular cache you want to wipe out
  * @returns void
  */
-function xarPageFlushCached($cacheKey)
+function xarOutputFlushCached($cacheKey)
 {
     global $xarOutput_cacheCollection;
 
@@ -426,6 +433,13 @@ function xarPageFlushCached($cacheKey)
         }
         closedir($handle);
     }
+}
+/**
+ * aliased depricated function
+ */
+function xarPageFlushCached($cacheKey)
+{
+	xarOutputFlushCached($cacheKey);
 }
 
 /**
@@ -478,6 +492,7 @@ function xarOutputCleanCached($type, $cacheKey = '')
  * @author jsb
  * @todo   $dir changes type
  * @todo   come up with a good way to determine which cacheKeys are the least important and flush them to make more space.
+ *         atime would be a possibility, but is often disabled at the filesystem
  */
 function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 {
@@ -501,7 +516,7 @@ function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 
     if($size > $xarOutput_cacheSizeLimit) {
         xarOutputCleanCached($type);
-        //xarPageFlushCached('articles-user-view');
+        //xarOutputFlushCached('articles-user-view');
     }
 
     return $size;
