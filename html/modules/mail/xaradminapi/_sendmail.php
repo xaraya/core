@@ -17,11 +17,17 @@
  * It is used by public functions sendmail() and sendhtmlmail()
  *
  * @param  $ 'info' is the email address we are sending (required)
+ * @param  $ 'name' is the name of the email receipitent (optional)
  * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
+ * @param  $ 'ccinfo' is the email address we are sending (optional)
+ * @param  $ 'ccname' is the name of the email receipitent (optional)
+ * @param  $ 'ccrecipients' is an array of cc recipients (optional)
+ * @param  $ 'bccinfo' is the email address we are sending (required)
+ * @param  $ 'bccname' is the name of the email receipitent (optional)
+ * @param  $ 'bccrecipients' is an array of bcc recipients (optional)
  * @param  $ 'subject' is the subject of the email (required)
  * @param  $ 'message' is the body of the email (required)
  * @param  $ 'htmlmessage' is the html body of the email
- * @param  $ 'name' is the name of the email receipitent
  * @param  $ 'priority' is the priority of the message
  * @param  $ 'encoding' is the encoding of the message
  * @param  $ 'wordwrap' is the column width of the message
@@ -39,9 +45,8 @@ function mail_adminapi__sendmail($args)
     // Get arguments from argument array
     extract($args);
 
-    // Argument check
+    // Check for required arguments
     $invalid = array();
-
     if (!isset($info) && !isset($recipients)) {
         $invalid[] = 'info/recipients';
     }
@@ -58,21 +63,12 @@ function mail_adminapi__sendmail($args)
         return;
     }
 
-    // Check if using xartemplates for email
-    if (!isset($usetemplates)) {
-        $usetemplates = true;
-    }
 
     if (!empty($when) && $when > time() && xarModIsAvailable('scheduler')) {
         if (xarModAPIFunc('mail','admin','_queuemail', $args)) {
             // we're done here
             return true;
         }
-    }
-
-    // If htmlmessage is empty, then set to message
-    if (empty($htmlmessage)) {
-        $htmlmessage = $message;
     }
 
     // Global search and replace %%text%%
@@ -87,33 +83,6 @@ function mail_adminapi__sendmail($args)
     $message = $replace['message'];
     $htmlmessage = $replace['htmlmessage'];
 
-    // Set up variables
-    if (empty($wordwrap)) {
-        $wordwrap = xarModGetVar('mail', 'wordwrap');
-    }
-    if (empty($priority)) {
-        $priority = xarModGetVar('mail', 'priority');
-    }
-    if (empty($encoding)) {
-        $encoding = xarModGetVar('mail', 'encoding');
-        if (empty($encoding)) {
-            $encoding = '8bit';
-            xarModSetVar('mail', 'encoding', $encoding);
-        }
-    }
-    if (empty($from)) {
-        $from = xarModGetVar('mail', 'adminmail');
-    }
-    if (empty($fromname)) {
-        $fromname = xarModGetVar('mail', 'adminname');
-    }
-
-    // Check if htmlmail parameter passed in - sendmail()
-    // does not set this in, only sendhtmlmail()
-    if (!isset($htmlmail)) {
-        $htmlmail = false;
-    }
-
     ini_set("sendmail_from", $from);
 
     include_once 'modules/mail/xarclass/class.phpmailer.php';
@@ -122,6 +91,12 @@ function mail_adminapi__sendmail($args)
     $mail->PluginDir = 'modules/mail/xarclass/';
     $mail->ClearAllRecipients();
 
+    // Set default language path to English.  This is necessary as
+    // phpmailer will set an invalid path to the language directory
+    // and throw an error.
+    $mail->SetLanguage("en", "modules/mail/xarclass/language/");
+
+    // Get type of mail server
     $serverType = xarModGetVar('mail', 'server');
 
     switch($serverType) {
@@ -171,26 +146,74 @@ function mail_adminapi__sendmail($args)
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person recieving email (not required)
-    if (isset($recipients) && !empty($recipients)){
-        if (is_array($recipients)) {
-            foreach($recipients as $k=>$v) {
-                if (!is_numeric($k) && !is_numeric($v)) {
-                    // $recipients[$info] = $name describes $recipients parameter
-                    $mail->AddAddress($k, $v);
-                } else if (!is_numeric($k)) {
-                    // $recipients[$info] = (int) describes $recipients parameter
-                    $mail->AddAddress($k);
-                } else {
-                    // $recipients[(int)] = $info describes $recipients parameter
-                    $mail->AddAddress($v);
-                }// if
-            }// foreach
-        }
+    if (!empty($recipients)) {
+        foreach($recipients as $k=>$v) {
+            if (!is_numeric($k) && !is_numeric($v)) {
+                // $recipients[$info] = $name describes $recipients parameter
+                $mail->AddAddress($k, $v);
+            } else if (!is_numeric($k)) {
+                // $recipients[$info] = (int) describes $recipients parameter
+                $mail->AddAddress($k);
+            } else {
+                // $recipients[(int)] = $info describes $recipients parameter
+                $mail->AddAddress($v);
+            }// if
+        }// foreach
     } else {
-        if (!empty($name)) {
-            $mail->AddAddress($info, $name);
-        } else {
-            $mail->AddAddress($info);
+        if (!empty($info)) {
+            if (!empty($name)) {
+                $mail->AddAddress($info, $name);
+            } else {
+                $mail->AddAddress($info);
+            }
+        }
+    }// if
+
+    // Add a "CC" address
+    if (!empty($ccrecipients)) {
+        foreach($ccrecipients as $k=>$v) {
+            if (!is_numeric($k) && !is_numeric($v)) {
+                // $recipients[$info] = $name describes $recipients parameter
+                $mail->AddCC($k, $v);
+            } else if (!is_numeric($k)) {
+                // $recipients[$info] = (int) describes $recipients parameter
+                $mail->AddCC($k);
+            } else {
+                // $recipients[(int)] = $info describes $recipients parameter
+                $mail->AddCC($v);
+            }// if
+        }// foreach
+    } else {
+        if (!empty($ccinfo)) {
+            if (!empty($ccname)) {
+                $mail->AddCC($ccinfo, $ccname);
+            } else {
+                $mail->AddCC($ccinfo);
+            }
+        }
+    }// if
+
+    // Add a "BCC" address
+    if (!empty($bccrecipients)) {
+        foreach($bccrecipients as $k=>$v) {
+            if (!is_numeric($k) && !is_numeric($v)) {
+                // $recipients[$info] = $name describes $recipients parameter
+                $mail->AddBCC($k, $v);
+            } else if (!is_numeric($k)) {
+                // $recipients[$info] = (int) describes $recipients parameter
+                $mail->AddBCC($k);
+            } else {
+                // $recipients[(int)] = $info describes $recipients parameter
+                $mail->AddBCC($v);
+            }// if
+        }// foreach
+    } else {
+        if (!empty($bccinfo)) {
+            if (!empty($bccname)) {
+                $mail->AddBCC($bccinfo, $bccname);
+            } else {
+                $mail->AddBCC($bccinfo);
+            }
         }
     }// if
 
@@ -253,8 +276,16 @@ function mail_adminapi__sendmail($args)
         $result = false;
     }
 
-    // Clear all address and attachments for next email
+    // Clear all recipients for next email
     $mail->ClearAddresses();
+
+    // Clear all ccrecipients for next email
+    $mail->ClearCCs();
+
+    // Clear all bccrecipients for next email
+    $mail->ClearBCCs();
+
+    // Clear all attachments for next email
     $mail->ClearAttachments();
 
     return $result;
