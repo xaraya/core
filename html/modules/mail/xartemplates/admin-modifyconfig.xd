@@ -86,7 +86,14 @@
 		<p><label for="smtpPassword"><xar:mlstring>SMTP Password</xar:mlstring></label>&nbsp;&nbsp;<input type="password" name="smtpPassword" id="smtpPassword" value="#xarModGetVar('mail', 'smtpPassword')#" size="30" maxlength="30" /></p>
 	</xar:if>
 </xar:if>
-<input type="submit" value="Update Mail Configuration" align="middle" tabindex="3" />
+<h4><xar:mlstring>Filtering Options</xar:mlstring></h4>
+	<p><label for="searchstrings"><xar:mlstring>Stings for search</xar:mlstring>:</label><br />
+	<i><xar:mlstring>Note: Enter each string on a single line.  Do not separate with comma, etc.  Best use is %%string%% to ensure no conflict exists.</xar:mlstring></i></p>
+	<textarea name="searchstrings" id="searchstrings" tabindex="4" rows="10" cols="30" />#$searchstrings#</textarea> 
+	<p><label for="replacestrings"><xar:mlstring>Stings for replacement</xar:mlstring>:</label><br />
+	<i><xar:mlstring>Note: Enter each string on a single line in the same order as the search.  Do not separate with comma, etc</xar:mlstring></i></p>
+	<textarea name="replacestrings" id="replacestrings" tabindex="4" rows="10" cols="40" />#$replacestrings#</textarea> 
+<p><input type="submit" value="Update Mail Configuration" align="middle" tabindex="3" /></p>
 </form>
 </div>
 </div>
