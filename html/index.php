@@ -22,6 +22,7 @@ function xarMain()
 
     // ANSWER <marco>: Who's gonna use that?
     // EXAMPLE <mikespub>: print, rss, wap, ...
+    // <marco> That's wrong! All those things are pages and not themes, and however you have 2 APIs fro changing both of them at run-time. I'm really against having the core to know about this theme get variable.
     // Allow theme override in URL first
     $themeName = xarVarCleanFromInput('theme');
     if (!empty($themeName)) {
@@ -30,26 +31,25 @@ function xarMain()
     }
 
     // Load the module
-    $res = xarModLoad($modName, $modType);
-    if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (!xarModLoad($modName, $modType)) return; // throw back
 
     // if the debugger is active, start it
     if (xarCoreIsDebuggerActive()) {
         ob_start();
     }
 
-    // Set the default page title before calling the module function
-    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarConfigGetVar('Site.Core.Slogan'));
-
     // FIXME: <marco> What's this insanity for?
     // Run the function - also handle cancel button clicking
+
+    /* <marco> Disabled until someone answer.
     if (xarVarCleanFromInput('cancel')) {
         $mainModuleOutput = xarModFunc($modName, $modType);
     } else {
+    */
         $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
+    /*
     }
+    */
 
     if (xarCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {
@@ -68,16 +68,9 @@ function xarMain()
     // Close the session
     xarSession_close();
 
-    if (xarResponseIsRedirected()) {
-        // If the redirection header was yet sent we can't handle exceptions
-        // However if we're here with a thrown exception it means that the mod developer
-        // is not checking exceptions, so it's also their fault.
-        return true;
-    }
+    if (xarResponseIsRedirected()) return true;
     // Here we check for exceptions even if $res isn't empty
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return; // throw back
-    }
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
     // Set page template
     if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
@@ -85,7 +78,6 @@ function xarMain()
         xarTplSetPageTemplateName('admin');
     }
 
-    // Note : the page template may be set to something else in the module function
     if (xarTplGetPageTemplateName() == 'default') {
         xarTplSetPageTemplateName($modName);
     }
@@ -95,9 +87,7 @@ function xarMain()
     $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
     // Handle exceptions
-    if (xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return;
-    }
+    if (xarExceptionMajor() != XAR_NO_EXCEPTION) return; // throw back
 
     echo $pageOutput;
 
