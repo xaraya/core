@@ -74,13 +74,8 @@ function xarBlockGetInfo($blockId)
               WHERE     inst.xar_id = $blockId";
 
     $result = $dbconn->Execute($query);
-    echo $dbconn->ErrorMsg();
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return NULL;
-    }
+    if (!$result) return;
+
     if ($result->EOF) {
         $result->Close();
         $msg = xarML('Block identified by bid #(1) doesn\'t exist.', $blockId);
@@ -131,14 +126,7 @@ function xarBlockGroupGetInfo($blockGroupId)
               WHERE     xar_id = $blockGroupId";
 
     $result = $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return NULL;
-    }
+    if (!$result) return;
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
@@ -169,14 +157,7 @@ function xarBlockGroupGetInfo($blockGroupId)
               ORDER BY  group_inst.xar_position ASC";
 
     $result = $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return NULL;
-    }
+    if (!$result) return;
 
     // Load up list of group's instances
     $instances = array();
@@ -222,14 +203,7 @@ function xarBlockTypeExists($modName, $blockType)
               AND       xar_type = '$blockType'";
 
     $result = $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     // Got exactly 1 result, it exists
     if ($result->PO_RecordCount() == 1) {
@@ -281,15 +255,8 @@ function xarBlockTypeRegister($modName, $blockType)
 
     $seq_id = $dbconn->GenId($block_types_table);
     $query = "INSERT INTO $block_types_table (xar_id, xar_module, xar_type) VALUES ('$seq_id', '$modName', '$blockType');";
-    $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -316,15 +283,8 @@ function xarBlockTypeUnregister($modName, $blockType)
     $block_types_table = $xartable['block_types'];
 
     $query = "DELETE FROM $block_types_table WHERE xar_module = '$modName' AND xar_type = '$blockType';";
-    $dbconn->Execute();
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -405,13 +365,8 @@ function xarBlock_loadAll()
                    xar_regid
             FROM $modNametable";
     $result = $dbconn->Execute($query);
+    if (!$result) return;
 
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
     while (!$result->EOF) {
         list($name, $directory, $mid) = $result->fields;
         $result->MoveNext();
@@ -573,13 +528,7 @@ function xarBlock_renderGroup($groupName)
               ORDER BY  group_inst.xar_position ASC";
 
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return NULL;
-    }
+    if (!$result) return;
 
     $output = '';
     while(!$result->EOF) {

@@ -130,7 +130,8 @@ function xarModGetVar($modName, $name)
               FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    if (!$result = $dbconn->Execute($query)) return;
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();
@@ -204,14 +205,8 @@ function xarModSetVar($modName, $name, $value)
                   AND xar_name = '" . xarVarPrepForStore($name) . "'";
     }
 
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
 
@@ -255,14 +250,8 @@ function xarModDelVar($modName, $name)
     $query = "DELETE FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'
               AND xar_name = '" . xarVarPrepForStore($name) . "'";
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     xarVarDelCached('Mod.Variables.' . $modName, $name);
 
@@ -325,13 +314,8 @@ function xarModGetInfo($modRegId)
               FROM $modulestable
               WHERE xar_regid = " . xarVarPrepForStore($modRegId);
     $result = $dbconn->Execute($query);
+    if (!$result) return;
 
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
     if ($result->EOF) {
         $result->Close();
         $msg = xarML('Module identified by #(1) doesn\'t exist.', $modRegId);
@@ -501,13 +485,7 @@ function xarModGetList($filter = array(), $startNum = NULL, $numItems = NULL, $o
 
         $query .= " ORDER BY $orderByClause";
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1);
-
-        if ($dbconn->ErrorNo() != 0) {
-            $msg = xarMLByKey('DATABASE_ERROR', $query);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                           new SystemException($msg));
-            return;
-        }
+        if (!$result) return;
 
         if (!$result->EOF) {
             while(!$result->EOF) {
@@ -1102,13 +1080,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction)
               AND xar_object = '" . xarVarPrepForStore($hookObject) . "'
               AND xar_action = '" . xarVarPrepForStore($hookAction) . "'";
     $result = $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     $resarray = array();
     if ($result->EOF) {
@@ -1324,13 +1296,7 @@ function xarMod_getBaseInfo($modName)
               FROM $modulestable
               WHERE xar_name = '" . xarVarPrepForStore($modName) . "'";
     $result = $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();
@@ -1397,13 +1363,8 @@ function xarMod_getVarsByModule($modName)
               FROM $module_varsTable
               WHERE xar_modname = '" . xarVarPrepForStore($modName) . "'";
     $result = $dbconn->Execute($query);
+    if (!$result) return;
 
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
     while (!$result->EOF) {
         list($name,$value) = $result->fields;
         xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
@@ -1444,13 +1405,8 @@ function xarMod_getVarsByName($name)
               FROM $module_varsTable
               WHERE xar_name = '" . xarVarPrepForStore($name) . "'";
     $result = $dbconn->Execute($query);
+    if (!$result) return;
 
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
     while (!$result->EOF) {
         list($modName,$value) = $result->fields;
         xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
@@ -1533,13 +1489,7 @@ function xarMod__getState($modRegId, $modMode)
               FROM $module_statesTable
               WHERE xar_regid = '" . xarVarPrepForStore($modRegId) . "'";
     $result = $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 /*
     Should never happen!
     if ($result->EOF) {

@@ -147,13 +147,8 @@ function xarUserLogIn($userName, $password, $rememberMe)
     $query = "UPDATE $userstable
               SET xar_auth_module = '" . xarVarPrepForStore($authModName) . "'
               WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     // Set session variables
 
@@ -755,12 +750,7 @@ function xarUser__getAuthModule($userId)
                   FROM $userstable
                   WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
         $result = $dbconn->Execute($query);
-        if ($dbconn->ErrorNo() != 0) {
-            $msg = xarMLByKey('DATABASE_ERROR', $query);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                           new SystemException($msg));
-            return;
-        }
+        if (!$result) return;
 
         if ($result->EOF) {
             // That user has never logon, strange, don't you think?
@@ -823,12 +813,7 @@ function xarUser__getUserVarInfo($name)
                              FROM $propertiestable
                              WHERE xar_prop_label LIKE '" . xarVarPrepForStore($name_prefix) ."%%'";
             $result = $dbconn->Execute($query);
-            if ($dbconn->ErrorNo() != 0) {
-                $msg = xarMLByKey('DATABASE_ERROR', $query);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                               new SystemException($msg));
-                return;
-            }
+            if (!$result) return;
 
             while (!$result->EOF) {
                 list($prop_id, $prop_label, $prop_dtype, $prop_default, $prop_validation) = $result->fields;
@@ -866,12 +851,7 @@ function xarUser__getUserVarInfo($name)
                       FROM $propertiestable
                       WHERE xar_prop_label = '" . xarVarPrepForStore($name) ."'";
             $result = $dbconn->Execute($query);
-            if ($dbconn->ErrorNo() != 0) {
-                $msg = xarMLByKey('DATABASE_ERROR', $query);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                               new SystemException($msg));
-                return;
-            }
+            if (!$result) return;
 
             if (!$result->EOF) {
                 list($prop_id, $prop_dtype, $prop_default, $prop_validation) = $result->fields;
@@ -989,14 +969,8 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     $query = "UPDATE $userstable
               SET xar_name = '" . xarVarPrepForStore($value) . "'
               WHERE xar_uid = '" . xarVarPrepForStore($userId) . "'";
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }

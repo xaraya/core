@@ -252,13 +252,7 @@ function xarSec__getAuthInfo($userId)
               WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")
               ORDER by xar_sequence";
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     while(!$result->EOF) {
         list($realm, $component, $instance, $level) = $result->fields;
@@ -286,13 +280,7 @@ function xarSec__getAuthInfo($userId)
               WHERE xar_uid IN (" . xarVarPrepForStore($userIds) . ")";
 
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     $usergroups[] = -1;
     if (empty($userId)) {
@@ -316,13 +304,7 @@ function xarSec__getAuthInfo($userId)
               WHERE xar_gid IN (" . xarVarPrepForStore($usergroups) . ")
               ORDER by xar_sequence";
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    if (!$result) return;
 
     while(!$result->EOF) {
         list($realm, $component, $instance, $level) = $result->fields;

@@ -282,13 +282,8 @@ function xarMLGetDynamic($refid, $table_name, $fields)
     $fields = implode(',', $fields);
 
     $query = "SELECT $fields FROM $table_name WHERE xar_refid = $refid";
-    $dbresult = $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__."(".__LINE__."): Database error while querying: $query"));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return $dbresult;
 }

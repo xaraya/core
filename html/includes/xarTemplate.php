@@ -555,11 +555,8 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
                  '$tag_func',
                  '$tag_data');";
 
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -586,11 +583,8 @@ function xarTplUnregisterTag($tag_name)
     
     $query = "DELETE FROM $tag_table WHERE xar_name = '$tag_name';";
                  
-    $dbconn->Execute($query);
-    
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -660,12 +654,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $query = "SELECT xar_data FROM $tag_table WHERE xar_name='$tag_name'";
     
     $result = $dbconn->SelectLimit($query, 1);
-
-    if ($dbconn->ErrorNo() != 0) {
-        // throw exception
-
-        return NULL;
-    }
+    if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();

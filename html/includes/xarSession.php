@@ -217,13 +217,8 @@ function xarSession_setUserInfo($userId, $rememberSession)
               SET xar_uid = " . xarVarPrepForStore($userId) . ",
                   xar_remembersess = " . xarVarPrepForStore($rememberSession) . "
               WHERE xar_sessid = '" . xarVarPrepForStore(session_id()) . "'";
-    $dbconn->Execute($query);
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     if ($xarSession_systemArgs['useOldPHPSessions']) {
         global $XARSVuid;
@@ -354,10 +349,7 @@ function xarSession__current($sessionId)
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
 
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    if (!$result) return;
 
     return true;
 }
@@ -388,11 +380,8 @@ function xarSession__new($sessionId, $ipAddress)
                   " . time() . ",
                   " . time() . ")";
 
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -437,10 +426,7 @@ function xarSession__phpRead($sessionId)
               FROM $sessioninfoTable
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
     $result = $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    if (!$result) return;
 
     if (!$result->EOF) {
         $xarSession_isNewSession = false;
@@ -481,11 +467,8 @@ function xarSession__phpWrite($sessionId, $vars)
     $query = "UPDATE $sessioninfoTable
               SET xar_vars = '" . xarVarPrepForStore($vars) . "'
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -503,11 +486,8 @@ function xarSession__phpDestroy($sessionId)
 
     $query = "DELETE FROM $sessioninfoTable
               WHERE xar_sessid = '" . xarVarPrepForStore($sessionId) . "'";
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -547,11 +527,8 @@ function xarSession__phpGC($maxlifetime)
             break;
     }
     $query = "DELETE FROM $sessioninfoTable $where";
-    $dbconn->Execute($query);
-
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -581,6 +558,7 @@ function xarSession__sniff()
             FROM $uatable
             WHERE $uacolumn[agent] = '" . xarVarPrepForStore($client->get_property('ua')) . "'";
     $result = $dbconn->Execute($sql);
+    if (!$result) return;
 
     if (!$result->EOF) {
         $uaid = $result->fields[0];

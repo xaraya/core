@@ -282,14 +282,8 @@ function pnModRegisterHook($hookObject,
               '" . xarVarPrepForStore($hookModName) . "',
               '" . xarVarPrepForStore($hookModType) . "',
               '" . xarVarPrepForStore($hookFuncName) . "')";
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -330,14 +324,8 @@ function pnModUnregisterHook($hookObject,
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
               AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
               AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -388,14 +376,8 @@ function xarModRegisterHook($hookObject,
               '" . xarVarPrepForStore($hookModName) . "',
               '" . xarVarPrepForStore($hookModType) . "',
               '" . xarVarPrepForStore($hookFuncName) . "')";
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
@@ -436,14 +418,8 @@ function xarModUnregisterHook($hookObject,
               AND xar_tmodule = '" . xarVarPrepForStore($hookModName) . "'
               AND xar_ttype = '" . xarVarPrepForStore($hookModType) . "'
               AND xar_tfunc = '" . xarVarPrepForStore($hookFuncName) . "'";
-    $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException($msg));
-        return;
-    }
+    $result = $dbconn->Execute($query);
+    if (!$result) return;
 
     return true;
 }
