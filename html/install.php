@@ -92,13 +92,12 @@ function pnInstallMain($phase = PNINSTALL_PHASE_WELCOME)
     if ($phase >= PNINSTALL_PHASE_ADMIN_CREATION) {
         pnResponseRedirect('index.php?module=installer&type=admin&func=bootstrap');
     }
-
     // Load the installer module, the hard way - file check too
-    $installer_admin_file = 'modules/installer/pnadminapi.php';
+    $installer_admin_file = 'modules/installer/pnadmin.php';
     require $installer_admin_file;
 
     // Run the function, check for existence
-    $mod_func = 'installer_adminapi_phase'.$phase;
+    $mod_func = 'installer_admin_phase'.$phase;
 
     if (function_exists($mod_func)) {
         $data = $mod_func();
