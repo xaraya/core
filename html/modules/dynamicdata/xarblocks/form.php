@@ -17,7 +17,7 @@
  */
 function dynamicdata_formblock_init()
 {
-    return true;
+    return array('objectid' => null);
 }
 
 /**
@@ -44,7 +44,11 @@ function dynamicdata_formblock_display($blockinfo)
     if(!xarSecurityCheck('ReadDynamicDataBlock',0,'Block',"$blockinfo[title]:All:All")) return;
 
     // Get variables from content block
-    $vars = @unserialize($blockinfo['content']);
+    if (is_string($blockinfo['content'])) {
+        $vars = @unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
+    }
 
     // Populate block info and pass to theme
     if (!empty($vars['objectid'])) {
