@@ -171,6 +171,7 @@ function installer_admin_phase5()
        xarCore_die($msg);
     }
 
+    
     if (!xarInstallAPILoad('installer','admin')) {
         return;
     }
@@ -226,11 +227,6 @@ function installer_admin_bootstrap()
         return;
     }
 
-    // Load installer API
-    if (!xarModAPILoad('installer','admin')) {
-        return;
-    }
-
     // Activate modules
     if (!xarModAPIFunc('installer',
                         'admin',
@@ -274,10 +270,6 @@ function installer_admin_create_administrator()
                                        'install_admin_email',
                                        'install_admin_url');
     
-    if (!xarModAPILoad('users', 'admin')) {
-        return;
-    }
-
     xarModSetVar('mail', 'adminname', $name);
     xarModSetVar('mail', 'adminmail', $email);
 
@@ -309,15 +301,8 @@ function installer_admin_finish()
               FROM      $blockGroupsTable
               WHERE     xar_name = 'left'";
 
-    $result = $dbconn->Execute($query);
-
-    // Check for db errors
-    if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $dbconn->ErrorMsg(), $query);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
 
     // Freak if we don't get one and only one result
     if ($result->PO_RecordCount() != 1) {
@@ -328,10 +313,6 @@ function installer_admin_finish()
     }
 
     list ($leftBlockGroup) = $result->fields;
-
-    if (!xarModAPILoad('blocks', 'admin')) {
-        return;
-    }
 
     $adminBlockId = xarBlockTypeExists('adminpanels', 'adminmenu');
 
