@@ -51,7 +51,7 @@ function adminpanels_adminmenublock_display($blockinfo){
     // are there any admin modules, then get their names
     // checking as early as possible :)
     $mods = xarModGetList(array('AdminCapable' => 1));
-	if(!$mods) {
+	if(empty($mods)) {
 	// there aren't any admin modules, dont display admin menus
 	    return;
 	}
@@ -61,26 +61,26 @@ function adminpanels_adminmenublock_display($blockinfo){
     // we also want to hide other centre blocks
     // hack atm, because I couldn't find proper API functions for this situation
     // NOTE_TO_SELF: prolly need to move this to adminapi
-    list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
-    $modulestable = $xartable['modules'];
-
-    $query = "SELECT xar_admin_capable
-              FROM $modulestable
-              WHERE xar_name ='". xarVarPrepForStore(xarModGetName()) ."'";
-
-    $result = $dbconn->Execute($query);
-
-    if($dbconn->ErrorNo() != 0) {
-        return;
-    }
-
-    if ($result->EOF) {
-        return false;
-    }
-    list($state) = $result->fields;
-    $result->Close();
- 
+//    list($dbconn) = xarDBGetConn();
+//    $xartable = xarDBGetTables();
+//    $modulestable = $xartable['modules'];
+//
+//    $query = "SELECT xar_admin_capable
+//              FROM $modulestable
+//              WHERE xar_name ='". xarVarPrepForStore(xarModGetName()) ."'";
+//
+//    $result = $dbconn->Execute($query);
+//
+//    if($dbconn->ErrorNo() != 0) {
+//        return;
+//    }
+//
+//    if ($result->EOF) {
+//        return false;
+//    }
+//    list($state) = $result->fields;
+//    $result->Close();
+// 
     // are we in the admin part of the module?
     // NOTE_TO_SELF: will it hold water with new php versions?
 //    $isadmin = preg_match("/admin/i", xarServerGetVar("REQUEST_URI"));
@@ -88,10 +88,10 @@ function adminpanels_adminmenublock_display($blockinfo){
     // removed lots of commented out stuff below
 
     // Get variables from content block
-    $vars = unserialize($blockinfo['content']);
+//    $vars = unserialize($blockinfo['content']);
 
     // which module is currently loaded?
-    $thismod = xarModGetName(); // moved to xaradminapi
+//    $thismod = xarModGetName(); // moved to xaradminapi
     
     
     // TODO: display link to the manual (do we need it here?)
