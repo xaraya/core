@@ -1,11 +1,107 @@
-<!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
-<p><xar:ml>
-    <xar:mlstring>There are currently #(1) #(2) and #(3) #(4) online.</xar:mlstring>
-    <xar:mlvar>#$numguests#</xar:mlvar>
-    <xar:mlvar>#$guests#</xar:mlvar>
-    <xar:mlvar>#$numusers#</xar:mlvar>
-    <xar:mlvar>#$users#</xar:mlvar>
-</xar:ml></p>
-    <xar:if condition="isset($lastuser)">
-	    <p><xar:mlstring>Welcome to our latest member,</xar:mlstring><a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#"> #$lastuser['name']#</a></p>
-    </xar:if>
+<table style="width:100%;">
+     <xar:if condition="!empty($test1)">
+         <tr>
+             <td style="width:80%;">
+                 <xar:mlstring>
+                     Users
+                 </xar:mlstring>
+             </td>
+             <td style="width:10%;">
+                 &nbsp;
+             </td>
+             <td colspan="2">
+                 <xar:if condition="xarModIsAvailable('messages')">
+                     <xar:mlstring>
+                         Messages
+                     </xar:mlstring>
+                     <xar:else />
+                     &nbsp;
+                 </xar:if>
+             </td>
+         </tr>
+         <xar:if condition="xarModIsAvailable('messages')">
+             <tr>
+                 <td>
+                     &nbsp;
+                 </td>
+                 <td>
+                     &nbsp;
+                 </td>
+                 <td style="text-align: center; width:19%;">
+                     <img src="modules/roles/xarimages/ob_mail_unreaded.gif" alt="#xarML('Unread messages')#" />
+                 </td>
+                 <td style="text-align: center;width:18%;">
+                     <img src="modules/roles/xarimages/ob_mail_total.gif" alt="#xarML('Total messages')#" />
+                 </td>
+             </tr>
+         </xar:if>
+         <xar:foreach in="$test1" value="$dd">
+             <tr>
+                 <td>
+                     <xar:if condition="!empty($dd['userurl'])">
+                         <img src="modules/roles/xarimages/ob_user.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
+                         <xar:else />
+                         <img src="modules/roles/xarimages/ob_user_other.gif" style="width:16px; height:16px; vertical-align: middle;" />
+                     </xar:if>
+                     <a href="#$dd['userurl']#">
+                         #$dd['name']#
+                     </a>
+                 </td>
+                 <td>
+                     &nbsp;
+                 </td>
+                 <td style="text-align: center;">
+                     <a href="#$dd['messagesurl']#">
+                         #$dd['unread']#
+                     </a>
+                 </td>
+                 <td style="text-align: center;">
+                     <a href="#$dd['messagesurl']#">
+                         #$dd['total']#
+                     </a>
+                 </td>
+             </tr>
+         </xar:foreach>
+     </xar:if>
+     <tr>
+         <td colspan="4" style="height:5px;">
+             &nbsp;
+         </td>
+     </tr>
+     <tr>
+         <td>
+             <img src="modules/roles/xarimages/ob_users.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
+             <xar:mlstring>
+                 Total users
+             </xar:mlstring>
+         </td>
+         <td>
+         </td>
+         <td style="text-align: center;" colspan="2">
+             #$numusers#
+         </td>
+     </tr>
+     <tr>
+         <td>
+             <img src="modules/roles/xarimages/ob_users_an.gif" style="width:16px; height:16px; vertical-align: middle;" />
+             <xar:mlstring>
+                 Total guests
+             </xar:mlstring>
+         </td>
+         <td>
+         </td>
+         <td style="text-align: center;" colspan="2">
+             #$numguests#
+         </td>
+     </tr>
+</table>
+<xar:if condition="isset($lastuser)">
+     <p>
+         <xar:mlstring>
+             Welcome to our latest member,
+         </xar:mlstring>
+         <a href="#xarModURL('roles', 'user', 'display')#&amp;uid=#$lastuser['uid']#">
+             #$lastuser['name']#
+         </a>
+     </p>
+</xar:if>

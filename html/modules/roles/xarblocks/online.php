@@ -1,15 +1,14 @@
 <?php
 /**
- * File: $Id: s.online.php 1.25 03/06/10 20:10:43+02:00 marc@marclaptop. $
- *
  * Online Block
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * @subpackage Roles Module
- * @author Jim McDonald, Greg Allan, John Cox
+ *
+ * @subpackage roles module
+ * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
+ *
 */
 
 /**
@@ -47,7 +46,7 @@ function roles_onlineblock_display($blockinfo)
     $xartable = xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-    $sql = "SELECT COUNT(1)
+    $sql = "SELECT xar_uid
             FROM $sessioninfotable
             WHERE xar_lastused > $activetime AND xar_uid > 2
             GROUP BY xar_uid
@@ -58,48 +57,91 @@ function roles_onlineblock_display($blockinfo)
         return false;
     }
     $args['numusers'] = $result->RecordCount();
+
+    $zz = xarModAPIFunc('roles',
+                        'user',
+                        'getallactive',
+                         array('order' => 'name',
+                               'startnum' => 0,
+                               'include_anonymous' => false,
+                               'include_myself' => true
+                               ));
+
+    if (!empty($zz)) {
+        foreach ($zz as $key => $aa) {
+            $args['test1'][$key] = array('name'=> $aa['name'],
+                                         'userurl'=> xarModURL('roles',
+                                                               'user',
+                                                               'display',
+                                                               array('uid'=>$aa['uid']) ),
+                                         'total'=>'',
+                                         'unread'=>'',
+                                         'messagesurl'=>'');
+
+            if ($aa['name'] == xarUserGetVar('name')) {
+
+                if (xarModIsAvailable('messages')) { 
+                    $args['test1'][$key]['total'] = xarModAPIFunc('messages',
+                                                                  'user',
+                                                                  'count_total',
+                                                                   array('uid'=>$aa['uid']));
+
+                    $args['test1'][$key]['unread'] = xarModAPIFunc('messages',
+                                                                   'user',
+                                                                   'count_unread',
+                                                                    array('uid'=>$aa['uid']));
+
+                    $args['test1'][$key]['messagesurl'] =xarModURL('messages',
+                                                                   'user',
+                                                                   'display',
+                                                                    array('uid'=>$aa['uid']));
+                }
+            }
+        }
+    }
+
     $result->Close();
 
-   $query2 = "SELECT count( 1 )
-             FROM $sessioninfotable
-              WHERE xar_lastused > $activetime AND xar_uid = '2'
-              GROUP BY xar_ipaddr
-             ";
-   $result2 = $dbconn->Execute($query2);
-   $args['numguests'] = $result2->RecordCount();
-   $result2->Close();
+    $query2 = "SELECT count( 1 )
+               FROM $sessioninfotable
+               WHERE xar_lastused > $activetime AND xar_uid = '2'
+               GROUP BY xar_ipaddr
+               ";
+    $result2 = $dbconn->Execute($query2);
+    $args['numguests'] = $result2->RecordCount();
+    $result2->Close();
 
-       // Pluralise
+    // Pluralise
 
-   if ($args['numguests'] == 1) {
-       $args['guests'] = xarML('guest');
-   } else {
-       $args['guests'] = xarML('guests');
-   }
+    if ($args['numguests'] == 1) {
+         $args['guests'] = xarML('guest');
+    } else {
+         $args['guests'] = xarML('guests');
+    }
 
-   if ($args['numusers'] == 1) {
-       $args['users'] = xarML('user');
-   } else {
-       $args['users'] = xarML('users');
-   }
-   $args['blockid'] = $blockinfo['bid'];
-    // Block formatting
+    if ($args['numusers'] == 1) {
+         $args['users'] = xarML('user');
+    } else {
+         $args['users'] = xarML('users');
+    }
+    $args['blockid'] = $blockinfo['bid'];
+     // Block formatting
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = xarML('Online');
+         $blockinfo['title'] = xarML('Online');
     }
 
     $uname = xarModGetVar('roles', 'lastuser');
 
     // Make sure we have a lastuser
     if (!empty($uname)) {
-        $status = xarModAPIFunc('roles',
-                                'user',
-                                'get',
-                                array('uname' => $uname));
+         $status = xarModAPIFunc('roles',
+                                 'user',
+                                 'get',
+                                  array('uname' => $uname));
 
-        // Check return
-        if ($status)
-            $args['lastuser'] = $status;
+          // Check return
+          if ($status)
+                $args['lastuser'] = $status;
     }
 
     $args['blockid'] = $blockinfo['bid'];
