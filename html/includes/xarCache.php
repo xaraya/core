@@ -218,7 +218,7 @@ function xarOutputDelCached($cacheKey, $name)
  */
 function xarOutputFlushCached($cacheKey, $dir = false)
 {
-    global $xarOutput_cacheCollection;
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit;
     
     $lockfile = $xarOutput_cacheCollection . '/cache.full';
     
@@ -237,7 +237,6 @@ function xarOutputFlushCached($cacheKey, $dir = false)
                         if ((preg_match("#$cacheKey#", $item)) &&
                             (strpos($item, '.php') !== false)) {
                             @unlink($dir . $item);
-                            @unlink($lockfile);
                         }
                     }
                 }
@@ -245,6 +244,12 @@ function xarOutputFlushCached($cacheKey, $dir = false)
         }
         closedir($dirId);
     }
+    
+    if (xarCacheGetDirSize($xarOutput_cacheCollection) < $xarOutput_cacheSizeLimit &&
+        file_exists($lockfile)) {
+        @unlink($lockfile);
+    }
+         
 }
 
 /**
@@ -258,7 +263,7 @@ function xarOutputFlushCached($cacheKey, $dir = false)
  */
 function xarOutputCleanCached($cacheType)
 {
-    global $xarOutput_cacheCollection, ${'xar' . $cacheType . '_cacheTime'};
+    global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, ${'xar' . $cacheType . '_cacheTime'};
 
     $sl_cacheType = strtolower($cacheType);
     $cacheOutputTypeDir = $xarOutput_cacheCollection . '/' . $sl_cacheType;
@@ -292,10 +297,14 @@ function xarOutputCleanCached($cacheType)
             if (filemtime($cache_file) < time() - (${'xar' . $cacheType . '_cacheTime'} + 60) &&
                 (strpos($file, '.php') !== false)) {
                 @unlink($cache_file);
-                @unlink($lockfile);
             }
         }
         closedir($handle);
+    }
+
+    if (xarCacheGetDirSize($xarOutput_cacheCollection) < $xarOutput_cacheSizeLimit &&
+        file_exists($lockfile)) {
+        @unlink($lockfile);
     }
 }
 
