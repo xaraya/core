@@ -13,7 +13,7 @@
  */
 
 /**
- * XML based translation backend 
+ * XML based translation backend
  *
  * Implements a concrete translations backend based on the XML language.
  * All xml files are encoded in UTF-8. This backend is useful only when
@@ -103,9 +103,15 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             case XARMLS_CTXTYPE_INCLTEMPL:
             $fileName = "templates/includes/$ctxName";
             break;
+            case XARMLS_CTXTYPE_BLKTEMPL:
+            $fileName = "templates/blocks/$ctxName";
+            break;
         }
         $fileName .= '.xml';
-        if (!file_exists($this->baseDir.$fileName)) return false;
+        if (!file_exists($this->baseDir.$fileName)) {
+        die("existiert nicht:".$this->baseDir.$fileName);
+        return false;
+        }
         return $this->baseDir.$fileName;
     }
 
@@ -136,9 +142,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
+            die("hier tritt der Fehler auf");
             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
             return;
         }
+
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
@@ -153,7 +161,6 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         }
 
         xml_parser_free($this->parser);
-
         return true;
     }
 
@@ -169,6 +176,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
             break;
             case XARMLS_CTXTYPE_INCLTEMPL:
             $dirName .= 'templates/includes';
+            break;
+            case XARMLS_CTXTYPE_BLKTEMPL:
+            $dirName .= 'templates/blocks';
             break;
         }
         $ctxNames = array();
