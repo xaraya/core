@@ -853,7 +853,7 @@ class pnHTML
             .' action="'.xarVarPrepForDisplay($action).'"'
             .' method="post"'
             .' enctype="'.((empty ($this->fileupload)) ? 'application/x-www-form-urlencoded' : 'multipart/form-data').'"'
-            .'>'
+            .'><div>'
         ;
         if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
         {
@@ -872,7 +872,7 @@ class pnHTML
      */
     function FormEnd()
     {
-        $output = '</form>';
+        $output = '</div></form>';
 
         if ($this->GetOutputMode() == _PNH_RETURNOUTPUT)
         {
