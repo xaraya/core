@@ -33,8 +33,7 @@ function roles_user_register()
     if (xarUserIsLoggedIn()) {
         xarResponseRedirect(xarModURL('roles',
                                       'user',
-                                      'account',
-                                       array('uid' => xarUserGetVar('uid'))));
+                                      'account'));
        return true;
     }
     $allowregistration = xarModGetVar('roles', 'allowregistration');
