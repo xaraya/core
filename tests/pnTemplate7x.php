@@ -48,6 +48,17 @@
       instead of 
           return $output->GetOutput();
 
+      Or if you want to use different templates, based on some decision in
+      your function code, you can specify a particular template to be used :
+      if ($this == true) {
+          $template = 'thisone';
+      } else {
+          $template = 'thatone';
+      }
+      // ...
+      // this will use the template 'user-myfunc-<template>.pnd' :
+      return pnTplModule('mymodule','user','myfunc',$data,$template);
+
    Converting a block 'myblock' to use BL templates
    ================================================
    1) create a template called 'myblock.pnd' in your pntemplates/pnblocks
@@ -61,6 +72,8 @@
           $blockinfo['content'] = pnTplBlock('mymodule', 'myblock', $data);
       instead of 
           $blockinfo['content'] = $output->GetOutput();
+
+      Same remark as above about using different templates...
 
    Limitations compared to full Block Layout templating
    ====================================================
