@@ -776,7 +776,7 @@ class xarMetaData {
             list($dbconn) = xarDBGetConn();
         }
 
-        list($this->dbconn) =& $dbconn;
+        list($this->dbconn) = $dbconn;
     }
    
     
