@@ -39,6 +39,29 @@ define('ACCESS_ADD', 600);
 define('ACCESS_DELETE', 700);
 define('ACCESS_ADMIN', 800);
 
+
+/**
+ * Start the security subsystem
+ *
+ * @access protected
+ * @return bool true
+ */
+function xarSecurity_init()
+{
+
+	include_once 'modules/privileges/xarprivileges.php';
+
+//    $systemPrefix = xarDBGetSystemTablePrefix();
+
+    // Add tables
+//    $tables = array('masks' => $systemPrefix . '_masks');
+    $tables = array('masks' => xar . '_masks');
+
+    xarDB_importTables($tables);
+
+    return true;
+}
+
 /*
  * schemas - holds all component/instance schemas
  * Should wrap this in a static one day, but the information
@@ -46,7 +69,6 @@ define('ACCESS_ADMIN', 800);
  */
 $schemas = array();
 
-include_once 'modules/privileges/xarprivileges.php';
 
 
 /**

@@ -24,7 +24,7 @@ function modules_init()
     // Get database information
     list($dbconn) = xarDBGetConn();
     $tables = xarDBGetTables();
-    
+
     $sitePrefix   = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();
 
@@ -148,6 +148,16 @@ function modules_init()
 
     $result =& $dbconn->Execute($query);
     if(!$result) return;
+
+    /*********************************************************************
+    * Register the module components that are privileges objects
+    * Format is
+    * register(Name,Realm,Module,Component,Instance,Level,Description)
+    *********************************************************************/
+
+    $masks = new xarMasks();
+
+    $masks->register('Admin','All','modules','All','All',ACCESS_ADMIN);
 
     // Initialisation successful
     return true;

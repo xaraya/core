@@ -334,7 +334,6 @@ function base_init()
     }
 
 
-
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
     * CREATE TABLE xar_template_tags (
@@ -506,10 +505,11 @@ function base_activate()
     }
 
     // Set the state and activate the following modules
-    $modlist=array('groups','permissions','blocks','users','sniffer');
+    $modlist=array('roles','privileges','blocks','sniffer');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
+
         if (!xarModAPIFunc('modules','admin','setstate', array('regid'=> $regid,
                                                                'state'=> XARMOD_STATE_INACTIVE)))
             {

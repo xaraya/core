@@ -109,7 +109,6 @@ class xarMasks
 					FROM $this->maskstable WHERE xar_module = '$module'
 					AND xar_component = '$component'
 					ORDER BY xar_name";
-		echo $query;exit;
 			}
 		}
 		$result = $this->dbconn->Execute($query);
@@ -304,11 +303,12 @@ class xarMasks
         	return;
 		}
 
+echo $module . " " . $component; exit;
 // get the Roles class
 		include_once 'modules/roles/xarroles.php';
     	$roles = new xarRoles();
 
-// get the uid of the user we will check against
+// get the pid of the user we will check against
 // an empty role means take the current user
 // TODO: what if the id is a group?
 		if ($role == '') {
@@ -320,8 +320,9 @@ class xarMasks
 				}
 			}
 // default to Anonymous right now
-//		$role = $roles->getRole($userID);
-			$role = $roles->findRole('Anonymous');
+//			$role = $roles->findRole('Anonymous');
+			$role = $roles->getRole($userID);
+			echo $userID;exit;
 		}
 		else {
 			$role = $roles->findRole($role);
