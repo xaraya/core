@@ -245,7 +245,7 @@
 		</xar:if>
 		<xar:if condition="!empty($unsent)">
 			(<xar:ml><xar:mlstring>mails scheduled : #(1)</xar:mlstring><xar:mlvar>#$unsent#</xar:mlvar></xar:ml>)
-			<br/><xar:mlstring>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring>
+			<p><xar:mlstring>Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.</xar:mlstring></p>
 		</xar:if>
 		</span>
 		</div>
