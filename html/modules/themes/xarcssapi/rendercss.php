@@ -2,7 +2,7 @@
 /**
  * File: $Id$
  *
- * render css related tags
+ * compile-time template tag handler
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
@@ -15,8 +15,8 @@
  */
 
 /**
- * Format : <xar:themes-render-css /> without params
- * Typical use in the head section is: <xar:themes-render-css />
+ * Format : <xar:additional-styles /> without params
+ * Typical use in the head section is: <xar:additional-styles />
  *
  * @author Andy Varganov
  * @param none
@@ -24,8 +24,7 @@
  */ 
 function themes_cssapi_rendercss($args)
 {
-    // return the collected css tags
-    return "echo xarTplGetCSS();";
+    return "echo xarModFunc('themes', 'user', 'rendercssratruntime');";
 }
 
 ?>

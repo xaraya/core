@@ -37,6 +37,9 @@ function themes_cssapi_registercsstags($args)
     xarTplUnregisterTag('import-theme-stylesheet');
     xarTplUnregisterTag('embed-theme-styles');
     
+    xarTplUnregisterTag('link-common-stylesheet');
+    xarTplUnregisterTag('import-common-stylesheet');
+    
     // use in theme to render all extra styles tags
     xarTplRegisterTag( 'themes', 'additional-styles', array(), 'themes_cssapi_rendercss');
     
@@ -88,6 +91,18 @@ function themes_cssapi_registercsstags($args)
     
     xarTplRegisterTag( 'themes', 'embed-theme-styles', $cssTagAttributes , 'themes_cssapi_embedtheme');
     
+    
+    // LINK COMMON FROM ANY TEMPLATE
+    $cssTagAttributes = array(  new xarTemplateAttribute('filename',    XAR_TPL_OPTIONAL | XAR_TPL_STRING),
+                                new xarTemplateAttribute('media',       XAR_TPL_OPTIONAL | XAR_TPL_STRING));
+    
+    xarTplRegisterTag( 'themes', 'link-common-stylesheet', $cssTagAttributes ,'themes_cssapi_linkcommon');
+    
+    // IMPORT COMMON FROM ANY TEMPLATE
+    $cssTagAttributes = array(  new xarTemplateAttribute('filename',    XAR_TPL_OPTIONAL | XAR_TPL_STRING),
+                                new xarTemplateAttribute('media',       XAR_TPL_OPTIONAL | XAR_TPL_STRING));
+    
+    xarTplRegisterTag( 'themes', 'import-common-stylesheet', $cssTagAttributes , 'themes_cssapi_importcommon');
     
    // return
     return true;

@@ -116,10 +116,10 @@ class xarCSS
         $this->type = $type;
     }
     
-    function set_type($type)
-    {
-        $this->type = $type;
-    }
+//     function set_type($type)
+//     {
+//         $this->type = $type;
+//     }
     
     function set_type_text()
     {
@@ -139,32 +139,46 @@ class xarCSS
     
     function set_media_all()
     {
-        $this->set_media(CSSMEDIAALL);
+        $this->set_media_attribute(CSSMEDIAALL);
     }
     
     function set_media_screen()
     {
-        $this->set_media(CSSMEDIASCREEN);
+        $this->set_media_attribute(CSSMEDIASCREEN);
     }
     
     function set_media_print()
     {
-        $this->set_media(CSSMEDIAPRINT);
+        $this->set_media_attribute(CSSMEDIAPRINT);
     }
     
     function set_media_handheld()
     {
-        $this->set_media(CSSMEDIAHANDHELD);
+        $this->set_media_attribute(CSSMEDIAHANDHELD);
     }
     
     function set_media_projection()
     {
-        $this->set_media(CSSMEDIAPROJECTION);
+        $this->set_media_attribute(CSSMEDIAPROJECTION);
     }
     
     function set_media_aural()
     {
-        $this->set_media(CSSMEDIAAURAL);
+        $this->set_media_attribute(CSSMEDIAAURAL);
+    }
+    
+    function add_media($media)
+    {
+        // support for comma separated list of multiple media types
+        $previous   = $this->get_media_attribute();
+        
+        if (isset($previous)) {
+            $extra = $previous . "," . $media;
+            $this->set_media_attribute($extra);
+        } else {
+            // unlikely scenario, but still need to cover for it
+            $this->set_media_attribute($media);
+        }        
     }
     
     // CSS TAG TITLE ATTRIBUTE - public accessors
@@ -249,7 +263,7 @@ class xarCSS
         $this->source = $source;
     }
     
-    // access doc language for output sensitivity (TODO: xml perhaps)
+    // access doc language for output sensitivity (TODO: xml and some other perhaps)
     function get_language()
     {
         return $this->language;
@@ -263,6 +277,11 @@ class xarCSS
     function set_language_html()
     {
         $this->language = 'html';
+    }
+    
+    function set_language_xml()
+    {
+        $this->language = 'xml';
     }
         
     // output css inclusion string for various languages

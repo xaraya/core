@@ -151,7 +151,14 @@ function themes_init()
 
     // Register theme tags.
     // Additional styles, see bug 3868 note below.
-    xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
+//     xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
+// deprecated by andyv in corecss - delete comments
+
+    // register complete set of css tags is now encapsulated in the module's api function
+    if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
+        return false;
+    }
+
 
     // Set up usermenu hook
     if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
@@ -192,11 +199,18 @@ function themes_upgrade($oldversion)
             // This is for bug 3868 only - available to those that want to use it, but
             // not a permanent replacement for the additional styles global or corecss.
             // TODO: we should not have to 'unregister' a tag just in case.
-            xarTplUnregisterTag('themes-additional-styles');
-            xarTplRegisterTag(
-                'themes', 'themes-additional-styles',
-                array(), 'themes_userapi_handleadditionalstyles'
-            );
+//             xarTplUnregisterTag('themes-additional-styles');
+//             xarTplRegisterTag(
+//                 'themes', 'themes-additional-styles',
+//                 array(), 'themes_userapi_handleadditionalstyles'
+//             );
+
+// deprecated by andyv in corecss - delete comments
+
+            // register complete set of css tags is now encapsulated in the module's api function
+            if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
+                return false;
+            }
 
             // Ensure the meta blocktype is registered
             if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {

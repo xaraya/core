@@ -43,11 +43,11 @@ function themes_adminapi_getmenulinks()
 
     // css configurations, viewer and editor (AndyV - corecss scenario)
     // lets make these links only available when css class lib is loaded
-    if(class_exists("xarCSS")){
+    //if(class_exists("xarCSS")){
         $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'cssconfig'),
         'title' => xarML('View and configure Xaraya Cascading Style Sheets'),
         'label' => xarML('Manage CSS'));
-    }
+    //}
 
     $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'modifyconfig'),
     'title' => xarML('Modify the configuration of the themes module'),
