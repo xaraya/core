@@ -319,6 +319,25 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
     //Newer php versions have a 5th parameter that will give us back the context
     //The variable values during the error...
 
+    $msg = "At: " . $file." (Line: " . $line.")<br/><br/>". $errorString ;
+
+    // Trap for errors that are on the so-called "safe path" for rendering
+    // Need to revert to raw HTML here
+    if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
+        echo '<font color="red"><b>^Error Condition<br /><br />see below<br /><br /></b></font>';
+        $rawmsg = "</table><div><hr /><b>Recursive Error</b><br /><br />";
+        $rawmsg .= "Normal Xaraya error processing has stopped because of a recurring PHP error. <br /><br />";
+        $rawmsg .= "The last registered error message is: <br /><br />";
+        $rawmsg .= "PHP Error code: " . $errorType . "<br /><br />";
+        $rawmsg .= $msg . "</div>";
+        echo $rawmsg;
+        exit;
+//        $redirectURL = xarServerGetBaseURL() . "index.php?module=base&func=rawexit";
+//        $redirectURL .= "&code=" . $errorType . "&exception=" . urlencode($msg);
+//        $header = "Location: $redirectURL";
+//        header($header, headers_sent());
+    }
+
     // Make cached files also display their source file if it's a template
     // This is just for convenience when giving support, as people will probably
     // not look in the CACHEKEYS file to mention the template.
@@ -342,26 +361,10 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
         }
     }
 
-        $msg = "At: " . $file." (Line: " . $line.")<br/><br/>". $errorString ;
-        if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
-
-// FIXME: fix endless loops on PHP error exceptions !
-if (isset($_GET['func']) && $_GET['func'] == 'systemexit') {
-if (isset($_GET['exception'])) {
-echo "Last Error :\n";
-echo $_GET['exception'];
-}
-echo "Current Error :\n";
-echo $msg;
-die;
-}
-        xarResponseRedirect(xarModURL('base','user','systemexit',
-            array('code' => $errorType,
-                  'exception' => urlencode($msg))));
-
-    // This will make us log the errors, still not break the script
-    //if they are not supposed to
-//    if (!(error_reporting() & $errorType)) xarExceptionHandled();
+    if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "<br/><br/>[".$sourcetmpl."]";
+    xarResponseRedirect(xarModURL('base','user','systemexit',
+        array('code' => $errorType,
+              'exception' => urlencode($msg))));
 }
 
 /**
