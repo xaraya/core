@@ -62,34 +62,29 @@ function roles_admin_purge($args)
             }
         }
 // --- display roles that can be recalled
-        $selection = " WHERE xar_state = " . ROLES_STATE_DELETED . " AND xar_email != ''";
         //Create the selection
+        $q = new xarQuery('SELECT',$rolestable);
+        $q->addfields(array('xar_uid',
+                    'xar_uname',
+                    'xar_name',
+                    'xar_email',
+                    'xar_type',
+                    'xar_date_reg'));
+        $q->setorder('xar_name');
         if (!empty($data['recallsearch'])) {
-            $selection .= " AND (";
-            $selection .= "(xar_name LIKE '%" . $data['recallsearch'] . "%')";
-            $selection .= " OR (xar_uname LIKE '%" . $data['recallsearch'] . "%')";
-            $selection .= " OR (xar_email LIKE '%" . $data['recallsearch'] . "%')";
-            $selection .= ")";
+            $c[1] = $q->like('xar_name','%' . $data['recallsearch'] . '%');
+            $c[2] = $q->like('xar_uname','%' . $data['recallsearch'] . '%');
+            $c[3] = $q->like('xar_email','%' . $data['recallsearch'] . '%');
+            $q->qor($c);
         }
-        // Select-clause.
-        $query = '
-            SELECT DISTINCT xar_uid,
-                    xar_uname,
-                    xar_name,
-                    xar_email,
-                    xar_type,
-                    xar_date_reg
-                    FROM ' . $rolestable .
-                    $selection .
-                    ' ORDER BY xar_name';
+        $q->eq('xar_state',ROLES_STATE_DELETED);
+        $q->ne('xar_date_reg','');
+        $q->setrowstodo($numitems);
+        $q->setstartat($recallstartnum);
+//        $q->qecho();
+        $q->run();
 
-        $result = $dbconn->Execute($query);
-        $data['totalselect'] = $result->_numOfRows;
-        if (!$result) {return;}
-        if ($recallstartnum != 0) {
-            $result = $dbconn->SelectLimit($query, $numitems, $recallstartnum-1);
-            if (!$result) {return;}
-        }
+        $data['totalselect'] = $q->getrows();
 
         if ($data['totalselect'] == 0) {
             $data['recallmessage'] = xarML('There are no deleted groups/users ');
@@ -99,29 +94,28 @@ function roles_admin_purge($args)
         }
 
         $recallroles = array();
-        for (; !$result->EOF; $result->MoveNext()) {
-            list($uid, $uname, $name, $email, $type, $date_reg) = $result->fields;
-            if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
+        foreach ($q->output() as $role) {
+            if (xarSecurityCheck('ReadRole', 0, 'All', $role['xar_uname'] . ":All:" . $role['xar_uid'])) {
                 $unique = 1;
-                if ($type) {
-                     $uname = "";
+                if ($role['xar_type']) {
+                     $role['xar_uname'] = "";
                 }
                 else {
-                    $uname1 = explode($deleted,$uname);
+                    $uname1 = explode($deleted,$role['xar_uname']);
                     $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0]));
                     if (is_array($existinguser)) $unique = 0;
-                    $uname = $uname1[0];
+                    $role['xar_uname'] = $uname1[0];
                }
-                $type = $type ? "Group" : "User";
+                $role['xar_type'] = $role['xar_type'] ? "Group" : "User";
+// Not elegant, but this version of xarQuery doesn't support field aliases
                 $recallroles[] = array(
-                    'uid'       => $uid,
-                    'uname'     => $uname,
-                    'name'      => $name,
-                    'email'     => $email,
-                    'type'      => $type,
-                    'date_reg'  => $date_reg,
-                    'unique'    => $unique
-                );
+                    'uid'       => $role['xar_uid'],
+                    'uname'     => $role['xar_uname'],
+                    'name'      => $role['xar_name'],
+                    'email'     => $role['xar_email'],
+                    'type'      => $role['xar_type'],
+                    'date_reg'  => $role['xar_date_reg'],
+                    'unique'    => $unique);
             }
         }
 // --- send to template
@@ -161,15 +155,16 @@ function roles_admin_purge($args)
                 $name = '';
                 $pass = '';
                 $email = '';
-                $query = "UPDATE $rolestable
-                        SET xar_uname = " . $dbconn->qstr($uname) . ",
-                             xar_name = " . $dbconn->qstr($uname) . ",
-                             xar_pass = " . $dbconn->qstr($pass) . ",
-                             xar_email = " . $dbconn->qstr($email) . ",
-                             xar_state = " . $state ;
-                $query .= " WHERE xar_uid = ". $uid;
-                $result =& $dbconn->Execute($query);
-                if (!$result) return;
+                $date_reg = '';
+                $q = new xarQuery('UPDATE',$rolestable);
+                $q->addfield('xar_name',$name);
+                $q->addfield('xar_uname',$uname);
+                $q->addfield('xar_pass',$pass);
+                $q->addfield('xar_email',$email);
+                $q->addfield('xar_date_reg',$date_reg);
+                $q->addfield('xar_state',$state);
+                $q->eq('xar_uid',$uid);
+                $q->run();
             }
         }
 
