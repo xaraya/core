@@ -1,29 +1,25 @@
 <xar:if condition="!empty($menustyle)">
-    &xar-var-menustyle;
+	&xar-var-menustyle;
 </xar:if>
 <br />
 <xar:loop name="$adminmods">
-    <xar:if condition="$marker eq '' and $link eq ''">
-        <strong>&nbsp;</strong>
-    <xar:else />
-        <strong>&middot;</strong>
-    </xar:if>
-    <xar:if condition="empty($link)">
-        <b>&xar-var-label;</b>
-		<xar:if condition="empty($marker)">
-			<br />
+	<xar:if condition="empty($link) and empty($marker)">
+		<h4 style="display:inline;">&xar-var-label;</h4><br>
+	<xar:else />
+		<xar:if condition="!empty($link)">
+		<a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a><br>
+		<xar:else/>
+		&xar-var-label;
 		</xar:if>
-    <xar:else />
-        <a href="&xar-var-link;" title="&xar-var-desc;">&xar-var-label;</a><br />
-    </xar:if>
-    <xar:if condition="!empty($marker)">
-        &xar-var-marker;<br />
+	</xar:if>
+	<xar:if condition="!empty($marker) and !empty($indlinks)">
+		&xar-var-marker;<br />
 			<xar:if condition="!empty($indlinks)">
 				<xar:loop name="$indlinks">
-					&nbsp;&nbsp;<strong>&middot;</strong>&nbsp;&nbsp;<a href="&xar-var-adminlink;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a><br />
+					<a href="&xar-var-adminlink;" style="font-size:smaller;padding-left:1.5em;" title="&xar-var-admintitle;">&xar-var-adminlabel;</a><br />
 				</xar:loop>
 			</xar:if>
-    </xar:if>
+	</xar:if>
 </xar:loop>
 <br />
 <!-- Logout -->
