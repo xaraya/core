@@ -24,7 +24,7 @@ function searchDir($path) {
 
                 $file_contents = implode ('', $file);
                 
-                $new_file_contents = preg_replace( "|([ ]*if[ ]*\(!xarVarFetch\([^,]*,[^,]*,[^,]*,[ ]*),([ ]*XARVAR_NOT_REQUIRED[ ]*\)\))|mU", "\$1NULL,\$2", $file_contents );
+                $new_file_contents = preg_replace( "|([ ]*if*\(!xarVarFetch\([^,]*,[^,]*,[^,]*,[ ]*NULL,[ ]*)(XARVAR_NOT_REQUIRED)([ ]*\)\))|mU", "\$1XARVAR_DONT_SET\$3", $file_contents );
 
                 if ($new_file_contents != $file_contents) {
                     echo "Changing file $path/$entry\r\n";

@@ -31,13 +31,13 @@ function adminpanels_admin_updateconfig()
     if(!xarVarFetch('menuposition', 'str', $menuposition, 'r', XARVAR_NOT_REQUIRED)) {return;}
 
     // show or hide a link in adminmenu to a contectual on-line help for the active module
-    if(!xarVarFetch('showhelp', 'str', $showhelp, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('showhelp', 'str', $showhelp, NULL, XARVAR_DONT_SET)) {return;}
 
     // enable or disable overviews
-    if(!xarVarFetch('overview', 'str', $overview, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('overview', 'str', $overview, NULL, XARVAR_DONT_SET)) {return;}
 
     // which form is this data coming from (we have more than one) - lets find out
-    if(!xarVarFetch('formname', 'str', $formname, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('formname', 'str', $formname, NULL, XARVAR_DONT_SET)) {return;}
 
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;

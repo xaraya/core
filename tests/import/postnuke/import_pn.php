@@ -16,8 +16,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
 
 
 // pre-fill the module name (if any) for hooks
@@ -35,10 +35,10 @@ ob_start();
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
     if ($step == 1 && !isset($startnum)) {
-    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('reset',     'isset', $reset,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('resetcat',  'isset', $resetcat,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('imgurl',    'isset', $imgurl,     NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('reset',     'isset', $reset,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('resetcat',  'isset', $resetcat,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('imgurl',    'isset', $imgurl,     NULL, XARVAR_DONT_SET)) {return;}
 
     } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');

@@ -10,7 +10,7 @@ function dynamicdata_admin_modify($args)
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'id',    $objectid, NULL,                               XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid', 'id',    $objectid, NULL,                               XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'id',    $modid,    xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemtype', 'str:1', $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
 

@@ -6,11 +6,11 @@
 function roles_user_view()
 {
     // Get parameters
-    if(!xarVarFetch('startnum', 'int',   $startnum, NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'int',   $startnum, NULL,     XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('phase',    'str:1', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
     //This $filter variables isnt being used for anything...
     //It is set later on.
-//    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+//    if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
 
     $data['items'] = array();
 

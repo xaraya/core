@@ -9,11 +9,11 @@ function dynamicdata_admin_delete($args)
 {
    extract($args);
  
-    if(!xarVarFetch('objectid', 'isset', $objectid, NULL,                               XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid', 'isset', $objectid, NULL,                               XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'id',    $modid,    xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemtype', 'int',   $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemid',   'id',    $itemid                                                           )) {return;}
-    if(!xarVarFetch('confirm',  'isset', $confirm,  NULL,                               XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('confirm',  'isset', $confirm,  NULL,                               XARVAR_DONT_SET)) {return;}
 
     $myobject = new Dynamic_Object(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
