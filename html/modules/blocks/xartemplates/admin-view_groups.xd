@@ -50,13 +50,13 @@
             Operations
         </th>
     </tr>
-    <xar:loop name="$block_groups">
+    <xar:loop name="block_groups">
     <tr align="center">
         <td>
             &xar-var-name;
         </td>
         <td>
-            <xar:loop name="$instances" prefix="inst">
+            <xar:loop name="instances" prefix="inst">
                 <a href="&xar-modurl-blocks-admin-modify_instance;&bid=&xar-var-inst_id;">&xar-var-inst_title;</a><br />
             </xar:loop>
         </td>
