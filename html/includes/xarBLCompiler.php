@@ -424,7 +424,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                         $foundEndXmlHeader=false; $copy = ''; $peek = '';
                         while(!$foundEndXmlHeader && $peek!=XAR_TOKEN_TAG_END) {
-                            $peek = $this->getNextToken(1);
+                            $peek = $this->getNextToken();
                             if($peek == XAR_TOKEN_PI_DELIM) {
                                 $end = $this->getNextToken();
                                 if($end == XAR_TOKEN_TAG_END) $foundEndXmlHeader = true;
@@ -648,7 +648,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $this->stepBack(4);
                 break;
             case XAR_TOKEN_CI_DELIM:
-                $nextToken = $this->getNextToken(1);
+                $nextToken = $this->getNextToken();
 
                 // Break out of processing if # is escaped as ##
                 if ($nextToken == XAR_TOKEN_CI_DELIM) {
@@ -698,7 +698,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     $instruction = $nextToken;
                     $distance = 0;
                     while (true) {
-                        $nextToken = $this->getNextToken(1);
+                        $nextToken = $this->getNextToken();
                         $distance++;
                         if (!isset($token)) {
                             $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
@@ -930,7 +930,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     }
 
     function parseEntity() {
-        //xarLogMessage('parseEndTag', XARLOG_LEVEL_ERROR);
+        //xarLogMessage('parseEntity', XARLOG_LEVEL_ERROR);
         // Entity type
         $entityType = '';
         while (true) {
@@ -955,7 +955,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 if (!isset($token)) {
                     $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
                     return;
-                } elseif ($token == ';') {
+                } elseif ($token == XAR_TOKEN_ENTITY_END) {
                     if ($parameter == '') {
                         $this->raiseError(XAR_BL_INVALID_ENTITY,"Empty parameter.", $this);
                         return;
