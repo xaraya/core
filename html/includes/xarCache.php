@@ -30,7 +30,7 @@ function xarCache_init($args)
 
     if ((@include('var/cache/config.caching.php')) == false) {
         // if there's a parse problem with the config file, turn caching off
-        unlink($cacheDir . '/cache.touch');
+        @unlink($cacheDir . '/cache.touch');
         return false;
     }
 
@@ -92,6 +92,7 @@ function xarPageIsCached($cacheKey, $name = '')
 
     if (strstr($cacheKey, '-user-') &&
         !strstr($cacheKey, '-search') &&
+        !strstr($cacheKey, '-register') &&
         ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
@@ -233,6 +234,7 @@ function xarPageSetCached($cacheKey, $name, $value)
 
     if (strstr($cacheKey, '-user-') &&
         !strstr($cacheKey, '-search') &&
+        !strstr($cacheKey, '-register') &&
         ((($xarPage_cacheDisplay != 1) && !strstr($cacheKey, '-display')) || ($xarPage_cacheDisplay == 1)) &&
         xarServerGetVar('REQUEST_METHOD') == 'GET' &&
         (empty($xarPage_cacheTheme) || strstr($xarTpl_themeDir, $xarPage_cacheTheme)) &&
@@ -367,7 +369,6 @@ function xarCacheDirSize($dir = FALSE)
             closedir($dirId);
         }
     }
-    $size /= 1048576;
 
     if($size > $xarOutput_cacheSizeLimit) {
         xarPageCleanCached();
