@@ -17,6 +17,7 @@
  * @param $args['method'] string the request method to use (default is HEAD, alternative is GET)
  * @param $args['skiplocal'] bool indicates if we want to skip checking local URLs (default is true)
  * @param $args['referer'] string optional referer (default is base URL of your site)
+ * @param $args['follow'] bool indicates if we want to follow redirects or not (default is true)
  * @return integer status of the link
  */
 function base_userapi_checklink($args)
@@ -27,6 +28,7 @@ function base_userapi_checklink($args)
     if (!isset($method)) $method = 'HEAD';
     if (!isset($skiplocal)) $skiplocal = true;
     if (!isset($referer)) $referer = xarServerGetBaseURL();
+    if (!isset($follow)) $follow = true;
 
     $invalid = false;
     $islocal = false;
@@ -120,7 +122,8 @@ function base_userapi_checklink($args)
                 return xarModAPIFunc('base', 'user', 'checklink',
                                      array('url' => $url,
                                            'method' => 'GET',
-                                           'skiplocal' => $skiplocal));
+                                           'skiplocal' => $skiplocal,
+                                           'follow' => $follow));
             }
             break;
         case 505: // HTTP Version Not Supported
@@ -128,21 +131,21 @@ function base_userapi_checklink($args)
             break;
         case 301: // Moved Permanently
         case 302: // Found
-            if (preg_match('/\nLocation:\s+(.+)\r?\n/',$content,$matches)) {
+            if ($follow && preg_match('/\nLocation:\s+(.+)\r?\n/',$content,$matches)) {
                 $location = $matches[1];
             // TODO: handle relative redirects and endless loops (for messy servers)
                 if ($location != $url && strstr($location,'://')) {
                     return xarModAPIFunc('base', 'user', 'checklink',
                                          array('url' => $location,
                                                'method' => $method,
-                                               'skiplocal' => $skiplocal));
+                                               'skiplocal' => $skiplocal,
+                                               'follow' => $follow));
                 }
             }
             // otherwise fall through
         default:
             break;
     }
-
     return $status;
 }
 
