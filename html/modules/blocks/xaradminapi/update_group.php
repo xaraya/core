@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * update attributes of a block group
+ * @param $args['id'] the ID of the group to update
+ * @param $args['name'] the new name of the group
+ * @param $args['template'] the new default template of the group
+ * @param $args['instance_order'] the new instance sequence
+ * @returns bool
+ * @return true on success, false on failure
+ */
+function blocks_adminapi_update_group($args)
+{
+    // Get arguments from argument array
+    extract($args);
+
+    // Optional arguments
+    if (!isset($template)) {
+	$template = '';
+    }
+
+    // Argument check
+    if (!isset($id) ||
+        !isset($name) ||
+        !isset($instance_order)) {
+        xarSessionSetVar('errormsg', _MODARGSERROR);
+        return false;
+    }
+
+    // Security
+	if(!xarSecurityCheck('EditBlock',1,'Block',"$name::$id")) return;
+
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+    $block_groups_table = $xartable['block_groups'];
+    $block_group_instances_table = $xartable['block_group_instances'];
+
+    $query = "UPDATE $block_groups_table
+              SET xar_name='" . xarVarPrepForStore($name) . "',
+                  xar_template='" . xarVarPrepForStore($template) . "'
+              WHERE xar_id=" . xarVarPrepForStore($id);
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $instance_order = explode('/', $instance_order);
+
+    while (list($position, $instance_id) = each($instance_order)) {
+        $query = "UPDATE $block_group_instances_table
+                  SET   xar_position='" . xarVarPrepForStore($position) . "'
+                  WHERE xar_instance_id=" . xarVarPrepForStore($instance_id);
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+
+    }
+
+    return true;
+}
+
+?>

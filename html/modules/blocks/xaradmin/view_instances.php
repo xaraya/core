@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * view block instances
+ */
+function blocks_admin_view_instances()
+{
+// Security Check
+	if(!xarSecurityCheck('EditBlock',0,'Instance')) return;
+
+    // Load up database
+    list($dbconn) = xarDBGetConn();
+    $xartable = xarDBGetTables();
+    $block_group_instances_table = $xartable['block_group_instances'];
+    $block_instances_table = $xartable['block_instances'];
+    $block_groups_table = $xartable['block_groups'];
+    $block_types_table = $xartable['block_types'];
+
+    $query = "SELECT    inst.xar_id as id,
+                        types.xar_type as type,
+                        types.xar_module as module,
+                        inst.xar_title as title,
+                        inst.xar_content as content,
+                        inst.xar_last_update as last_update,
+                        inst.xar_state as state,
+                        groups.xar_name as group_name,
+                        groups.xar_id as group_id,
+                        group_inst.xar_position as position,
+                        inst.xar_template as template,
+                        groups.xar_template as group_template
+              FROM      $block_group_instances_table as group_inst
+              LEFT JOIN $block_groups_table as groups
+              ON        groups.xar_id = group_inst.xar_group_id
+              LEFT JOIN $block_instances_table as inst
+              ON        inst.xar_id = group_inst.xar_instance_id
+              LEFT JOIN $block_types_table as types
+              ON        types.xar_id = inst.xar_type_id
+              ORDER BY  group_inst.xar_group_id ASC,
+                        group_inst.xar_position ASC";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    // Load up blocks array
+    $blocks = array();
+    while(!$result->EOF) {
+        $block = $result->GetRowAssoc(false);
+
+        switch ($block['state']) {
+            case 0:
+                $block['state_desc'] = 'Hidden';
+                break;
+            case 1:
+                $block['state_desc'] = 'Minimized';
+                break;
+            case 2:
+                $block['state_desc'] = 'Maximized';
+                break;
+        }
+
+        $blocks[] = $block;
+
+        $result->MoveNext();
+    }
+
+    return array('blocks' => $blocks);
+}
+
+?>
