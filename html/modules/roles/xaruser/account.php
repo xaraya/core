@@ -16,7 +16,7 @@ function roles_user_account()
     $data['name'] = xarUserGetVar('name');
     $data['uid'] = xarUserGetVar('uid');
 
-    $output = xarModCallHooks('item', 'usermenu', '', array());
+    $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 
     if (empty($output)){
         $message = xarML('There are no account options configured.');

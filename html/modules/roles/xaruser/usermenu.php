@@ -1,10 +1,12 @@
 <?php
 
-function roles_user_usermenu()
+function roles_user_usermenu($args)
 {
 
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
+
+    extract($args);
 
     if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
 

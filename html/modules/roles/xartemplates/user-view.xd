@@ -8,7 +8,7 @@
 <xar:foreach in="$alphabet" value="$ltr">
 	<a href="#xarModURL('roles','user','view')#&amp;letter=#$ltr#&amp;phase=#$phase#&amp;order=#$order#">#$ltr#</a>&nbsp;|&nbsp;
 </xar:foreach>
-<a href="#xarModURL('roles','user','view')#&amp;letter=&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
+<a href="#xarModURL('roles','user','view')#&amp;letter=Other&amp;phase=#$phase#&amp;order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp;]
 </div>
 
 <form method="post" action="#xarModURL('roles','user','view')#">

@@ -3,8 +3,10 @@
 /**
  * display user
  */
-function roles_user_display()
+function roles_user_display($args)
 {
+    extract($args);
+
     if (!xarVarFetch('uid','int:1:',$uid)) return;
 
     // Get user information

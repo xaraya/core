@@ -3,8 +3,10 @@
 /**
  * view users
  */
-function roles_user_view()
+function roles_user_view($args)
 {
+    extract($args);
+
     // Get parameters
     if(!xarVarFetch('startnum', 'isset',    $startnum, 1,     XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) {return;}
@@ -28,8 +30,14 @@ function roles_user_view()
     if(!xarSecurityCheck('ReadRole')) return;
 
     if ($letter) {
-        $selection = " AND xar_name LIKE '" . $letter . "%'";
-        $data['msg'] = xarML("Members starting with '" . $letter . "'");
+        if ($letter == 'Other') {
+        // TODO: check for syntax in other databases
+            $selection = " AND xar_name REGEXP '^[^A-Z]'";
+        } else {
+        // TODO: handle case-sensitive databases
+            $selection = " AND xar_name LIKE '" . $letter . "%'";
+        }
+        $data['msg'] = xarML("Members starting with '#(1)'", $letter);
     }
     elseif ($search) {
         $selection = " AND (";
@@ -37,7 +45,7 @@ function roles_user_view()
         $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
         $selection .= " OR (xar_email LIKE '%" . $search . "%')";
         $selection .= ")";
-        $data['msg'] = xarML("Members containing '" . $search . "'");
+        $data['msg'] = xarML('Members containing #(1)', $search);
     }
     else {
         $data['msg'] = xarML("All members");
