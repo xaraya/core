@@ -283,6 +283,7 @@ function initializeSetup()
     xarRegisterMask('AdminAll','All','All','All','All',ACCESS_ADMIN);
 
     xarRegisterMask('ViewBaseBlocks','All','base','Block','All:All:All',ACCESS_OVERVIEW);
+    xarRegisterMask('ReadBaseBlock','All','base','Block','All:All:All',ACCESS_READ);
     xarRegisterMask('EditBaseBlock','All','base','Block','All:All:All',ACCESS_EDIT);
     xarRegisterMask('AddBaseBlock','All','base','Block','All:All:All',ACCESS_ADD);
     xarRegisterMask('DeleteBaseBlock','All','base','Block','All:All:ALL',ACCESS_DELETE);
