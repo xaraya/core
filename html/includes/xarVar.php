@@ -780,32 +780,34 @@ function xarVarPrepForStore()
  */
 function xarVarPrepForOS()
 {
-    static $search = array('!\.\./!si',  // .. (directory traversal)
-                           '!^.*://!si', // .*:// (start of URL)
-                           '!/!si',      // Forward slash (directory traversal)
-                           '!\\\\!si');  // Backslash (directory traversal)
+//    static $search = array('!\.\./!si',  // .. (directory traversal)
+//                           '!^.*://!si', // .*:// (start of URL)
+//                           '!/!si',      // Forward slash (directory traversal)
+//                           '!\\\\!si');  // Backslash (directory traversal)
 
-    static $replace = array('',
-                            '',
-                            '_',
-                            '_');
+//    static $replace = array('',
+//                            '',
+//                            '_',
+//                            '_');
 
-    $resarray = array();
-    foreach (func_get_args() as $var) {
+//    $resarray = array();
 
-        // Parse out bad things
-        $var = preg_replace($search, $replace, $var);
+    static $replace_array = array(':' => '',
+                                  '/' => '',
+                                  '\' => '',
+                                  '.' => '',
+                                  '?' => '',
+                                  '*' => '');
 
-        // Prepare var
-        if (!get_magic_quotes_runtime()) {
-            $var = addslashes($var);
-        }
-
-        // Add to array
-        array_push($resarray, $var);
+    $args = func_get_args();
+    
+    foreach ($args as $key => $var) {
+        // Remove out bad characters
+        $$args[$key] = strtr($var, $replace_array);
     }
 
     // Return vars
+    // Nuncanada: I really dont like this kind of behaviour... It´s not consistent.
     if (func_num_args() == 1) {
         return $resarray[0];
     } else {
