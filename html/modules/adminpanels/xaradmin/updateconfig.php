@@ -68,8 +68,8 @@ function adminpanels_admin_updateconfig()
         }else{
             xarModSetVar('adminpanels', 'showhelp', 1);
         }
-    
-        xarModSetVar('adminpanels', 'overview', $overview);
+    	
+    	if ($overview !== null) xarModSetVar('adminpanels', 'overview', $overview);
     
         // if necessary set our block position, left, centre or right
         // Note: maybe we should call a Blocks module function to do it, but for now lets proceed with care
@@ -110,7 +110,7 @@ function adminpanels_admin_updateconfig()
         }
     } elseif ($formname == 'overviews'){
         // update data from second form
-        xarModSetVar('adminpanels', 'overview', $overview);
+        if ($overview !== null) xarModSetVar('adminpanels', 'overview', $overview);
     } else {
         // something bad, bail out
         return;
