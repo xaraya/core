@@ -18,14 +18,14 @@ function roles_adminapi_getmenulinks()
                               'title' => xarML('View and edit the groups on the system'),
                               'label' => xarML('View All Groups'));
     }*/
-    
+
     // Security Check
     if (xarSecurityCheck('EditRole',0)) {
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'showusers'),
-                              'title' => xarML('View and edit all users/groups on the system'),
-                              'label' => xarML('View All Users/Groups'));
+                              'title' => xarML('View and edit all groups/users on the system'),
+                              'label' => xarML('View Groups/Users'));
     }
 
 // Security Check
@@ -42,8 +42,8 @@ function roles_adminapi_getmenulinks()
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'modifynotice'),
-                              'title' => xarML('Modify the notification email'),
-                              'label' => xarML('Notifications Email'));
+                              'title' => xarML('Manage system emails'),
+                              'label' => xarML('Email Messaging'));
     }
 
 
