@@ -147,121 +147,25 @@
                     </div>
                 </xar:if>
                 <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
-                    <div id="xc-leftbg-wrapper">
-                        <div id="xc-rightbg-wrapper">
-                            <div id="xc-outermargin-wrapper">
-                                <div id="xc-inner-wrapper">
-                                    <div id="xc-innerbg-left">
-                                        <div id="xc-innerbg-right">
-                                            <div id="xc-innerbg">
-                                                <div id="xc-innerbg-top">
-                                                </div>
-                                                <div id="xc-left">
-                                                    <div class="xc-side-content">
-                                                        <xar:var name="leftblocksgroup" />
-                                                    </div>
-                                                </div>
-                                                <div id="xc-center-wrapper">
-                                                    <div id="xc-center">
-                                                        <xar:var name="centerblocksgroup" />
-                                                        <xar:module class="modulespace" main="true" />
-                                                    </div>
-                                                </div>
-                                                <div id="xc-right">
-                                                    <div class="xc-side-content">
-                                                        <xar:var name="rightblocksgroup" />
-                                                    </div>
-                                                </div>
-                                                <div id="xc-clear">
-                                                </div>
-                                                <div id="xc-innerbg-bottom">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <xar:comment>
+                            All three columns layout
+                        </xar:comment>
+                        <xar:template file="content_3col" type="theme" />
                     <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
-                    <div id="xc-leftbg-wrapper">
-                        <div id="xc-outermargin-noright-wrapper">
-                            <div id="xc-inner-wrapper">
-                                <div id="xc-innerbg-left">
-                                    <div id="xc-innerbg-right">
-                                        <div id="xc-innerbg">
-                                            <div id="xc-innerbg-top">
-                                            </div>
-                                            <div id="xc-left">
-                                                <div class="xc-side-content">
-                                                    <xar:var name="leftblocksgroup" />
-                                                </div>
-                                            </div>
-                                            <div id="xc-center-wrapper">
-                                                <div id="xc-center">
-                                                    <xar:var name="centerblocksgroup" />
-                                                    <xar:module class="modulespace" main="true" />
-                                                </div>
-                                            </div>
-                                            <div id="xc-clear">
-                                            </div>
-                                            <div id="xc-innerbg-bottom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <xar:comment>
+                            Two columns layout - left and center blocksgroups
+                        </xar:comment>
+                        <xar:template file="content_2col_lc" type="theme" />
                     <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
-                    <div id="xc-rightbg-wrapper">
-                        <div id="xc-outermargin-noleft-wrapper">
-                            <div id="xc-inner-wrapper">
-                                <div id="xc-innerbg-left">
-                                    <div id="xc-innerbg-right">
-                                        <div id="xc-innerbg">
-                                            <div id="xc-innerbg-top">
-                                            </div>
-                                            <div id="xc-center-wrapper">
-                                                <div id="xc-center">
-                                                    <xar:var name="centerblocksgroup" />
-                                                    <xar:module class="modulespace" main="true" />
-                                                </div>
-                                            </div>
-                                            <div id="xc-right">
-                                                <div class="xc-side-content">
-                                                    <xar:var name="rightblocksgroup" />
-                                                </div>
-                                            </div>
-                                            <div id="xc-clear">
-                                            </div>
-                                            <div id="xc-innerbg-bottom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <xar:comment>
+                            Two columns layout - center and right blocksgroups
+                        </xar:comment>
+                        <xar:template file="content_2col_cr" type="theme" />
                     <xar:else />
-                    <div id="xc-inner-wrapper">
-                        <div id="xc-innerbg-left">
-                            <div id="xc-innerbg-right">
-                                <div id="xc-innerbg">
-                                    <div id="xc-innerbg-top">
-                                    </div>
-                                    <div id="xc-center">
-                                        <xar:var name="centerblocksgroup" />
-                                        <xar:module class="modulespace" main="true" />
-                                    </div>
-                                    <div id="xc-clear">
-                                    </div>
-                                    <div id="xc-innerbg-bottom">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <xar:comment>
+                            One column layout - just center blocksgroup
+                        </xar:comment>
+                        <xar:template file="content_1col" type="theme" />
                 </xar:if>
                 <div id="xc-footer">
                     <div class="validators">
