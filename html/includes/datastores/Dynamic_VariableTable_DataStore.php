@@ -246,12 +246,13 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($itemids) > 1) {
                 $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
                 $query .= " AND xar_dd_itemid IN ($bindmarkers) ";
-                $bindvars = array_merge($bindvars, $itemids);
+                foreach ($itemids as $itemid) {
+                    $bindvars[] = (int) $itemid;
+                }
             } else {
                 $query .= " AND xar_dd_itemid = ?";
                 $bindvars[] = (int)$itemids[0];
             }
-
             $result =& $dbconn->Execute($query,$bindvars);
 
             if (!$result) return;
@@ -473,7 +474,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($itemids) > 1) {
                 $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
                 $query .= " AND xar_dd_itemid IN ($bindmarkers) ";
-                $bindvars = array_merge($bindvars,$itemids);
+                foreach ($itemids as $itemid) {
+                    $bindvars[] = (int) $itemid;
+                }
             } else {
                 $query .= " AND xar_dd_itemid = ? ";
                 $bindvars[] = (int)$itemids[0];
