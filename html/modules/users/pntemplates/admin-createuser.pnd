@@ -47,8 +47,11 @@ Welcome Email</pnt:mlstring></a>
 <center>
 	<br /><br />
 	<p>
-		<pnt:if condition="$uid eq 0">
-			User could not be created.
+		<pnt:if condition="$uid eq -1">
+            Passwords don't match.
+		<pnt:elseif condition="$uid eq 0" />
+			User could not be created. Most likely the username exists
+already.
 		<pnt:else />
 			User successfully created with UID &pnt-var-uid;	
 		</pnt:if>
