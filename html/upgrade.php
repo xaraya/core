@@ -120,9 +120,9 @@ if (empty($step)) {
                       $result =& $dbconn->Execute($query);
 
                       if (!$result) {
-                          echo "...update failed!</font><br>\r\n";
+                          echo "...update failed!</font><br/>\r\n";
                       } else {
-                        echo "...done!</font><br>\r\n";
+                        echo "...done!</font><br/>\r\n";
                       }
                   }
               }
@@ -168,9 +168,9 @@ if (empty($step)) {
                               WHERE xar_module='categories' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
                        if (!$result) {
-                          echo "...update failed!</font><br>\r\n";
+                          echo "...update failed!</font><br/>\r\n";
                       } else {
-                        echo "...done!</font><br>\r\n";
+                        echo "...done!</font><br/>\r\n";
                       }
                   }
               }
@@ -195,9 +195,9 @@ if (empty($step)) {
                $result =& $dbconn->Execute($query);
 
                if (!$result) {
-                   echo "...update failed!</font><br>\r\n";
+                   echo "...update failed!</font><br/>\r\n";
                } else {
-                   echo "...done!</font><br>\r\n";
+                   echo "...done!</font><br/>\r\n";
                }
 
           }
@@ -244,9 +244,9 @@ if (empty($step)) {
                       $result =& $dbconn->Execute($query);
 
                      if (!$result) {
-                          echo "...update failed!</font><br>\r\n";
+                          echo "...update failed!</font><br/>\r\n";
                      } else {
-                         echo "...done!</font><br>\r\n";
+                         echo "...done!</font><br/>\r\n";
                      }
                   }
               }
@@ -301,9 +301,9 @@ if (empty($step)) {
                               WHERE xar_module='ratings' AND xar_component = '{$instance['ccomponent']}' AND xar_header= '{$instance['cheader']}'";
                       $result =& $dbconn->Execute($query);
                       if (!$result) {
-                          echo "...update failed!</font><br>\r\n";
+                          echo "...update failed!</font><br/>\r\n";
                        } else {
-                          echo "...done!</font><br>\r\n";
+                          echo "...done!</font><br/>\r\n";
                       }
                   }
               }//end foreach
@@ -338,9 +338,9 @@ if (empty($step)) {
                            WHERE xar_module='articles' AND xar_component = 'Block' AND xar_header= 'Article Block Title:'";
                    $result =& $dbconn->Execute($query);
                    if (!$result) {
-                       echo "...update failed!</font><br>\r\n";
+                       echo "...update failed!</font><br/>\r\n";
                    } else {
-                       echo "...done!</font><br>\r\n";
+                       echo "...done!</font><br/>\r\n";
                    }
                }
                if (!$articlesupdate) {
@@ -390,9 +390,9 @@ if (empty($step)) {
                                           'default'     => '')));
         $result = $dbconn->Execute($query);
         if (!$result){ 
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
 
         echo "Attempting to set index and fill $table_name[security_levels]... ";
@@ -455,9 +455,9 @@ if (empty($step)) {
         $result =& $dbconn->Execute($query);
 
         if (!$result){
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
     } else {
         echo "$table_name[security_levels] already exists, moving to next check. <br />";
@@ -546,9 +546,9 @@ if (empty($step)) {
             $query = xarDBDropTable($table_name['admin_wc']);
             $result =& $dbconn->Execute($query);
             if (!$result){
-                echo "failed</font><br>\r\n";
+                echo "failed</font><br/>\r\n";
             } else {
-                echo "done!</font><br>\r\n";
+                echo "done!</font><br/>\r\n";
             }
     } else {
         echo "$table_name[admin_wc] has been dropped previously, moving to next check. <br />";
@@ -567,9 +567,9 @@ if (empty($step)) {
         $query = xarDBDropTable($table_name['security_privsets']);
         $result =& $dbconn->Execute($query);
         if (!$result){
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
     } else {
         echo "$table_name[security_privsets] has been dropped previously, moving to next check. <br />";  
@@ -598,9 +598,9 @@ if (empty($step)) {
         // Check for db errors
         $result =& $dbconn->Execute($query);
         if (!$result){ 
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
     } else {
         echo "Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. <br />";  
@@ -657,9 +657,9 @@ if (empty($step)) {
             return;
         }
         if (!$result){ 
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
     } else {
         echo "Syndicate block type exists, moving to next check. <br />";  
@@ -748,9 +748,9 @@ if (empty($step)) {
         $result = xarMakeUser('Myself','myself','myself@xaraya.com','password');
         $result .= xarMakeRoleMemberByName('Myself','Everybody');
         if (!$result){ 
-            echo "failed</font><br>\r\n";
+            echo "failed</font><br/>\r\n";
         } else {
-            echo "done!</font><br>\r\n";
+            echo "done!</font><br/>\r\n";
         }
     } else {
         echo "Myself role has been created previously, moving to next check. <br />";  
