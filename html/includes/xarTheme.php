@@ -106,62 +106,6 @@ function xarThemeGetInfo($regId)
     return xarModGetInfo($regId, $type = 'theme');
 }
 
-/**
- * Call a theme API function.
- *
- * Using the theme name, func, and optional arguments
- * builds a function name by joining them together
- * and using the optional arguments as parameters
- * like so:
- * Ex: themenameapi_modFunc($args);
- *
- * @access public
- * @param themeName string registered name of theme
- * @param funcName string specific function to run
- * @param args array arguments to pass to the function
- * @param throwException boolean optional flag to throw an exception if the function doesn't exist or not (default = 1)
- * @return mixed The output of the function, or false on failure
- * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
- * @todo *cough* what's this?? this really needs to go, no go IMNSHO
- */
-// function xarThemeAPIFunc($themeName, $funcName, $args = array(), $throwException = 1)
-// {
-//     if (empty($themeName)) {
-//         //die("$modName, $modType, $funcName");
-//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-//         return;
-//     }
-//     if (empty($funcName)) {
-//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
-//         return;
-//     }
-
-//     // Build function name and call function
-//     $funcName = strtolower($funcName);
-//     $themeAPIFunc = "{$themeName}api_{$funcName}";
-
-//     $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $themeName . '/xarthemeapi.php';
-
-//     if (!file_exists($fileName)) {
-//         $msg = xarML('Theme API function #(1) does not exist.', $modAPIFunc);
-//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
-//         return;
-//     } else {
-//          ob_start();
-//          $r = require_once $fileName;
-//          $error_msg = strip_tags(ob_get_contents());
-//          ob_end_clean();
-
-//          if (empty($r) || !$r) {
-//             $msg = xarML("Could not load theme api file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
-//             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
-//             return;
-//          }
-//     }
-
-//     return $themeAPIFunc($args);
-// }
-
 
 /**
  * load database definition for a theme
