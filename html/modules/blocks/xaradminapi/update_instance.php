@@ -59,6 +59,10 @@ function blocks_adminapi_update_instance($args)
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
+    xarModCallHooks(
+                    'item', 'update', $id, ''
+                    );
+    
     return true;
 }
 
