@@ -68,13 +68,24 @@ function modules_admin_install()
         //then the module itself
         if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
             //Call exception
-            return;
+            //return;
         } // Else
 
         // Bug 1222: give exceptions raised during the install a chance to be displayed.
-        if (xarCurrentErrorType()) {
-            return;
-        }
+        //if (xarCurrentErrorType()) {
+        //    return;
+        //}
+    }
+
+    // Send the full error stack to the install template for rendering.
+    // (The hope is that all errors can be rendered like this eventually)
+    if (xarCurrentErrorType()) {
+        // Get the error stack
+        $errorstack = xarErrorget();
+        // Free up the error stack since we are handling it locally.
+        xarErrorFree();
+        // Return the stack for rendering.
+        return array('errorstack' => $errorstack);
     }
 
     // set the target location (anchor) to go to within the page

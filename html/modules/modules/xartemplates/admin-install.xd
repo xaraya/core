@@ -1,74 +1,93 @@
 <!--- License: GPL http://www.gnu.org/copyleft/gpl.html --->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
+
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Module Installation with unmet Dependencies</xar:mlstring></h2>
-    <!-- The form for editting the module settings and hooks -->
-    <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
-       <div>
-        <input type="hidden" name="id" id="id" value="#$id#" />
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <xar:comment>This section deals with dependancies.</xar:comment>
+    <xar:if condition="!empty($dependencies)">
+        <h2><xar:mlstring>Module Installation with unsatisfied Dependencies</xar:mlstring></h2>
+        <!-- The form for editting the module settings and hooks -->
+        <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
+           <div>
+            <input type="hidden" name="id" id="id" value="#$id#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
 
-        <xar:if condition="count($dependencies['satisfied']) ne 0">
-        	<br />
-	        <table border="1" cellpadding="5" cellspacing="0">
-		        <tr>
-			        <th><xar:mlstring>Dependencies already satisfied</xar:mlstring></th>
-			    </tr>
-	
-    	        <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
-			        <tr>
-				        <td>#xarML($modInfo['displayname'])#</td>
-				    </tr>
-	            </xar:foreach>
-			</table>
-        	<br />
-		</xar:if>
+            <xar:if condition="count($dependencies['satisfied']) ne 0">
+                <br />
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <th><xar:mlstring>Dependencies already satisfied</xar:mlstring></th>
+                    </tr>
+        
+                    <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
+                        <tr>
+                            <td>#xarML($modInfo['displayname'])#</td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+                <br />
+            </xar:if>
 
-        <xar:if condition="count($dependencies['satisfiable']) ne 0">
-        	<br />
-	        <table border="1" cellpadding="5" cellspacing="0">
-		        <tr>
-			        <th><xar:mlstring>Dependencies which can be satisfied</xar:mlstring></th>
-			    </tr>
-	
-    	        <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
-			        <tr>
-				        <td>#xarML($modInfo['displayname'])#</td>
-				    </tr>
-	            </xar:foreach>
-			</table>
-        	<br />
-		</xar:if>
+            <xar:if condition="count($dependencies['satisfiable']) ne 0">
+                <br />
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <th><xar:mlstring>Dependencies which can be satisfied</xar:mlstring></th>
+                    </tr>
+        
+                    <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
+                        <tr>
+                            <td>#xarML($modInfo['displayname'])#</td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+                <br />
+            </xar:if>
 
-        <xar:if condition="count($dependencies['unsatisfiable']) ne 0">
-        	<br />
-	        <table border="1" cellpadding="5" cellspacing="0">
-		        <tr>
-			        <th><xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring></th>
-			    </tr>
-	
-    	        <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
-			        <tr><td>
-				        <xar:if condition="is_array($modInfo)">
-					        #$modInfo['displayname']#
-					    <xar:else />
-				        	<a href="http://www.xaraya.com/index.php?module=release&func=display&rid=#$modInfo#">
-					        	<xar:ml>
-					        		<xar:mlstring>Get Information for the missing Module with ID #(1)</xar:mlstring>
-					        		<xar:mlvar>#$modInfo#</xar:mlvar>
-					        	</xar:ml>
-					        </a>
-					    </xar:if>
-				    </td></tr>
-	            </xar:foreach>
-			</table>
-        	<br />
-		<xar:else />
-	        <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
-	        <br />
-        </xar:if>
+            <xar:if condition="count($dependencies['unsatisfiable']) ne 0">
+                <br />
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <th><xar:mlstring>Dependencies which cannot be satisfied</xar:mlstring></th>
+                    </tr>
+        
+                    <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
+                        <tr><td>
+                            <xar:if condition="is_array($modInfo)">
+                                #$modInfo['displayname']#
+                            <xar:else />
+                                <a href="http://www.xaraya.com/index.php?module=release&func=display&rid=#$modInfo#">
+                                    <xar:ml>
+                                        <xar:mlstring>Get Information for the missing Module with ID #(1)</xar:mlstring>
+                                        <xar:mlvar>#$modInfo#</xar:mlvar>
+                                    </xar:ml>
+                                </a>
+                            </xar:if>
+                        </td></tr>
+                    </xar:foreach>
+                </table>
+                <br />
+            <xar:else />
+                <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
+                <br />
+            </xar:if>
 
-        <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
-       </div>
-    </form>
+            <a href="#xarModURL('modules','admin','list')#">#xarML('Go back to the modules list.')#</a>
+           </div>
+        </form>
+    </xar:if>
+
+    <xar:comment>This section deals with install errors.</xar:comment>
+    <xar:if condition="!empty($errorstack)">
+        <h2><xar:mlstring>Module Installation Failed</xar:mlstring></h2>
+        <xar:loop name="$errorstack">
+            <xar:if condition="$loop:item.major gt 0">
+                <h3>#$loop:item.title#</h3>
+                <div>#$loop:item.short#</div>
+                <div>#$loop:item.long#</div>
+                <xar:if condition="!empty($loop:item.stack)">
+                    <pre>#$loop:item.stack#</pre>
+                </xar:if>
+            </xar:if>
+        </xar:loop>
+    </xar:if>
 </div>
