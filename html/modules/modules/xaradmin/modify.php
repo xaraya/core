@@ -19,35 +19,36 @@
  * for any hooks that the module could use
  * and passes the data to the template.
  *
- * @param id module id
+ * @param id registered module id
  * @returns array
  * @return an array of variables to pass to the template
  */
-//TODO: Make the phpdoc true :)
-function modules_admin_modify()
+function modules_admin_modify($args)
 {
+    extract($args);
+
     // xarVarFetch does validation if not explicitly set to be not required
-    xarVarFetch('id','id',$regId);
+    xarVarFetch('id','id',$id);
     xarVarFetch('details','str:0:1',$details,0,XARVAR_NOT_REQUIRED);
 
-    $modInfo = xarModGetInfo($regId);
+    $modInfo = xarModGetInfo($id);
     if (!isset($modInfo)) return;
 
     $modName     = $modInfo['name'];
     $displayName = $modInfo['displayname'];
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$regId")) return;
+    if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
 
     $data['savechangeslabel'] = xarML('Save Changes');
     if ($details) {
         $data['DetailsLabel'] = xarML('Hide Details');
         $data['DetailsURL'] = xarModURL('modules','admin','modify',
-                                        array('id' => $regId));
+                                        array('id' => $id));
     } else {
         $data['DetailsLabel'] = xarML('Show Details');
         $data['DetailsURL'] = xarModURL('modules','admin','modify',
-                                        array('id' => $regId, 'details' => true));
+                                        array('id' => $id, 'details' => true));
     }
 
     // Get the list of all hook modules, and the current hooks enabled for this module
@@ -92,7 +93,7 @@ function modules_admin_modify()
     // End form
     $data['details'] = $details;
     $data['authid'] = xarSecGenAuthKey();
-    $data['id'] = $regId;
+    $data['id'] = $id;
     $data['displayname'] = $modInfo['displayname'];
     return $data;
 }
