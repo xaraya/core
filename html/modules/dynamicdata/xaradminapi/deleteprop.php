@@ -56,7 +56,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // Check for an error with the database code, and if so raise an
     // appropriate exception
     if ($dbconn->ErrorNo() != 0) {
-        $msg = xarMLByKey('DATABASE_ERROR', $sql);
+        $msg = xarML('DATABASE_ERROR', $sql);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;

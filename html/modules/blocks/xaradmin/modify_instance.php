@@ -39,7 +39,7 @@ function blocks_admin_modify_instance()
 
     // Freak if we don't get one and only one result
     if ($result->RecordCount() != 1) {
-        $msg = xarMLByKey('DATABASE_ERROR', $query);
+        $msg = xarML('DATABASE_ERROR', $query);
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return NULL;
