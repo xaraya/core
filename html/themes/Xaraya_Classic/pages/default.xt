@@ -63,7 +63,6 @@ ________________________________________________________________________________
         <xar:base-render-javascript position="head" />
     </head>
     <body>
-        <xar:comment> Body JavaScript </xar:comment>
         <xar:comment> Styleswitcher JavaScript </xar:comment>
         <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
 
@@ -183,6 +182,7 @@ ________________________________________________________________________________
                 </p>
             </div>
         </div>
+        <xar:comment> Body JavaScript </xar:comment>
         <xar:base-render-javascript position="body" />
     </body>
 </html>
