@@ -416,6 +416,10 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             echo "Fatal error in $file at line $line<br />\n";
             exit;
     }
+
+    // <nuncanada> Dont stop the script from working if @ is preceding the error.
+    // Let´s see if this can work around the SEQUENCE check in ADODB
+    if (error_reporting() == 0) xarExceptionFree();
 }
 
 /**
