@@ -421,3 +421,8 @@ td.xar-alt {}
    line-height: 150%;
    font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 }
+
+abbr, acronym, .help {
+  border-bottom: 1px dotted #333;
+  cursor: help;
+}
