@@ -289,6 +289,10 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
  * inside the corresponding themes/<theme>/modules/<module>/images/ 
  * directories as necessary
  *
+ * Note : your module is still responsible for taking care that "images"
+ *        don't contain nasty stuff. Filter as appropriate when using
+ *        this function to generate image URLs...
+ *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   modImage string, the module image url relative to xarimages/
@@ -300,6 +304,11 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
 */
 function xarTplGetImage($modImage, $modName = NULL)
 {
+    // return absolute URIs and URLs "as is"
+    if (empty($modImage) || substr($modImage,0,1) == '/' || preg_match('/^https?\:\/\//',$modImage)) {
+        return $modImage;
+    }
+
     // obtain current module name if not specified
     if(!isset($modName)){
         list($modName) = xarRequestGetInfo();
