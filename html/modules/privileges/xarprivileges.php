@@ -401,7 +401,7 @@ class xarMasks
         $mask->normalize();
 
         // check if we already have the irreducible set of privileges for the current user
-        if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
+        if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
 
             // get the Roles class
             include_once 'modules/roles/xarroles.php';
@@ -421,18 +421,18 @@ class xarMasks
             }
 
             // get the privileges and test against them
-            $privileges = $this->irreducibleset(array('roles' => array($role)),$module);
+            $privileges = $this->irreducibleset(array('roles' => array($role)),$mask->module);
 
             // leave this as same-page caching, even if the db cache is finished
             // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
                 // normalize all privileges before saving, to avoid re-doing that every time
                 $this->normalizeprivset($privileges);
-                xarVarSetCached('Security.Variables','privilegeset',$privileges);
+                xarVarSetCached('Security.Variables','privilegeset.'.$mask->module,$privileges);
             }
         } else {
             // get the irreducible set of privileges for the current user from cache
-            $privileges = xarVarGetCached('Security.Variables','privilegeset');
+            $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
 
         $pass = $this->testprivileges($mask,$privileges,false);
