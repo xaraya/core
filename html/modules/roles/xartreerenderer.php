@@ -18,13 +18,16 @@ class xarTreeRenderer {
     var $tree;
     var $treenode;
     var $treeitems;
-    var $drawchildren;
-    var $isbranch;
+
     // some variables we'll need to hold drawing info
     var $html;
     var $nodeindex;
     var $indent;
     var $level;
+    var $isbranch;
+    var $drawchildren;
+    var $alreadydone;
+
     // convenience variables to hold strings referring to pictures
     var $el             = '<img src="modules/roles/xarimages/el.gif" alt="" style="vertical-align: middle" />';
     var $tee            = '<img src="modules/roles/xarimages/T.gif" alt="" style="vertical-align: middle" />';
@@ -37,7 +40,6 @@ class xarTreeRenderer {
     var $bigblank       = '<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
     var $smallblank     = '<span style="padding-left: 0em; padding-right: 0em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 1em; height: 16px;" /></span>';
     // we'll use this to check whether a group has already been processed
-    var $alreadydone;
 
     /**
      * Constructor
@@ -153,7 +155,7 @@ class xarTreeRenderer {
 
     function drawbranch($node)
     {
-        $this->level = $this->level + 1;
+        $this->level ++;
         $this->nodeindex = $this->nodeindex + 1;
         $object = $node['parent'];
         $this->treenode = $object;
@@ -168,31 +170,33 @@ class xarTreeRenderer {
         // is this a branch?
         $this->isbranch = count($node['children']) > 0 ? true : false;
         // now begin adding rows to the string
-        $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">';
+        $this->html .= $this->isbranch ?
+            '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">' :
+            '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >';
 
-        foreach ($this->treeitems as $item) {
-            $this->html .= $this->{$item}();
+        for ($i=1;$i<=count($this->treeitems);$i++) {
+            $func = $this->treeitems[$i];
+            $this->html .= $this->{$func}();
         }
 
         // we've finished this row; now do the children of this role
-        $this->html .= $this->isbranch ? '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >' : '';
         $ind = 0;
         foreach($node['children'] as $subnode) {
             $ind = $ind + 1;
             // if this is the last child, get ready to draw an "L", otherwise a sideways "T"
             if ($ind == count($node['children'])) {
-                array_push($this->indent, $this->el);
+                $this->indent[] = $this->el;
             } else {
-                array_push($this->indent, $this->tee);
+                $this->indent[] = $this->tee;
             }
             // draw this child
             $this->drawbranch($subnode);
             // we're done; remove the indent string
             array_pop($this->indent);
         }
-        $this->level = $this->level - 1;
+        $this->level --;
         // write the closing tags
-        $this->html .= $this->isbranch ? '</div>' : '';
+//        $this->html .= $this->isbranch ? '</div>' : '';
         // close the html row
         $this->html .= '</div>';
     }
@@ -296,28 +300,6 @@ class xarTreeRenderer {
         return $html;
     }
 
-    function treeitem()
-    {
-        $html = $this->smallblank;
-        // this table holds the index, the tree drawing gifs and the info about the role
-        $html .= $this->drawindent();
-        if ($this->isbranch) {
-            if ($this->nodeindex != 1) {
-                $lastindent = array_pop($this->indent);
-                if ($lastindent == $this->el) {
-                    array_push($this->indent, $this->blank . $this->blank);
-                } else {
-                    array_push($this->indent, $this->aye . $this->blank);
-                }
-                $html .= $this->bar;
-            }
-            $html .= $this->expandedbox;
-        } else {
-            $html .= $this->bar;
-            $html .= $this->emptybox;
-        }
-        return $html;
-    }
     function descriptionitem()
     {
         $html = '<span style="padding-left: 1em">';
@@ -336,11 +318,39 @@ class xarTreeRenderer {
         }
         return $html;
     }
+    function treeitem()
+    {
+        $html = $this->smallblank;
+        // this table holds the index, the tree drawing gifs and the info about the role
+        $html .= $this->drawindent();
+        if ($this->isbranch) {
+            if ($this->nodeindex != 1) {
+                $lastindent = array_pop($this->indent);
+                if ($lastindent == $this->el) {
+                    array_push($this->indent, $this->blank . $this->blank);
+                } else {
+                    array_push($this->indent, $this->aye . $this->blank);
+                }
+                $html .= $this->bar;
+            }
+            $html .= $this->expandedbox;
+        } else {
+            if ($this->nodeindex != 1) {
+                $html .= $this->bar;
+            }
+            $html .= $this->emptybox;
+        }
+        return $html;
+    }
     function setitem($pos=1,$item ='')
     {
         $this->treeitems[$pos] =& $item;
     }
 
+    function clearitems()
+    {
+        $this->treeitems = array();
+    }
 }
 
 ?>
