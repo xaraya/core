@@ -54,19 +54,19 @@ function roles_admin_updaterole()
 
         if (($user != false) && ($user['uid'] != $uid)) {
             $msg = xarML('That username is already taken.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
             $msg = xarML('There is an error in the username');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
 
         if (strrpos($puname, ' ') > 0) {
             $msg = xarML('There is a space in the username');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
         // TODO: Replace with DD property type check.
@@ -74,13 +74,13 @@ function roles_admin_updaterole()
         $res = preg_match('/.*@.*/', $pemail);
         if ($res == false) {
             $msg = xarML('There is an error in the email address');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
         // check for valid password
         if (strcmp($ppass1, $ppass2) != 0) {
             $msg = xarML('The two password entries are not the same');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
         //Save the old state

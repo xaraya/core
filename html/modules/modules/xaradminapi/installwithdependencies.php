@@ -40,7 +40,7 @@ function modules_adminapi_installwithdependencies ($args)
     // Argument check
     if (!isset($mainId)) {
         $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
@@ -57,7 +57,7 @@ function modules_adminapi_installwithdependencies ($args)
     // Get module information
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
         return;
     }
 
@@ -94,7 +94,7 @@ function modules_adminapi_installwithdependencies ($args)
 
         if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
             $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
             return;
         }
     }
@@ -104,7 +104,7 @@ function modules_adminapi_installwithdependencies ($args)
         // Finally, now that dependencies are dealt with, initialize the module
         if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
             $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
             return;
         }
     }
@@ -112,7 +112,7 @@ function modules_adminapi_installwithdependencies ($args)
     // And activate it!
     if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
         $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
         return;
     }
 

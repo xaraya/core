@@ -28,13 +28,13 @@ function themes_adminapi_update($args)
     // Argument check
     if (!isset($regid)) {
         $msg = xarML('Empty regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!isset($updatevars)) {
         $msg = xarML('Empty updatevars (#(1)).', $updatevars);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -50,7 +50,7 @@ function themes_adminapi_update($args)
         $updated = xarThemeSetVar($themename, $uvar['name'], $uvar['prime'], $uvar['value'], $uvar['description']);
         if (!isset($updatevars)) {
             $msg = xarML('Unable to update #(1) variable #(2)).', $themename, $uvar['name']);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
         }

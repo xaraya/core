@@ -74,9 +74,9 @@
 * pnUserGetLang -> xarUserGetLang
 * pnUserGetVar -> xarUserGetVar
 * pnUserSetVar -> xarUserSetVar
-* pnUserGetVars -> xarExceptionSet('DEPRECATED_API')
-* pnUserDelVar -> xarExceptionSet('DEPRECATED_API')
-* pnUserGetAll($startnum = 1, $numitems = -1) -> xarExceptionSet('DEPRECATED_API') - invalid args!!!
+* pnUserGetVars -> xarErrorSet('DEPRECATED_API')
+* pnUserDelVar -> xarErrorSet('DEPRECATED_API')
+* pnUserGetAll($startnum = 1, $numitems = -1) -> xarErrorSet('DEPRECATED_API') - invalid args!!!
 *
 * BLOCKS FUNCTIONS
 * pnBlockGetInfo -> xarBlockGetInfo
@@ -198,7 +198,7 @@ function pnUserLoggedIn()
  */
 function pnUserGetVars($userId)
 {
-    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return NULL;
 }
@@ -214,7 +214,7 @@ function pnUserGetVars($userId)
  */
 function pnUserDelVar($name)
 {
-    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return NULL;
 }
@@ -232,7 +232,7 @@ function pnUserDelVar($name)
  */
 function pnUserGetAll($startnum = 1, $numitems = -1)
 {
-    xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarErrorSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
     return;
 }
@@ -1019,7 +1019,7 @@ function xarUser_getThemeName()
 function xarSecAddSchema($component, $schema)
 {
     $msg = xarML('This call needs to be removed');
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                     new SystemException($msg));
     return true;
 }

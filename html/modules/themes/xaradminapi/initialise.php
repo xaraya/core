@@ -28,14 +28,14 @@ function themes_adminapi_initialise($args)
     // Argument check
     if (!isset($regid)) {
        $msg = xarML('Missing theme regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
     }
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
     if (!isset($themeInfo)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Theme (regid: $regid) does not exist."));
                        return;
     }
@@ -61,7 +61,7 @@ function themes_adminapi_initialise($args)
             $value['prime'] = 1;
             if(!isset($value['name']) || !isset($value['value'])){
                 $msg = xarML('Malformed Theme Variable (#(1)).', $var);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }

@@ -35,7 +35,7 @@ function blocks_adminapi_create_instance($args)
         // (i.e. no need to pass the position through the error message, as the
         // error handler should already know).
         $msg = xarML('Invalid Parameter Count', 'admin', 'create', 'Blocks');
-        xarExceptionSet(
+        xarErrorSet(
             XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
             new SystemException($msg)
         );

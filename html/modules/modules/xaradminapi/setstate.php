@@ -28,7 +28,7 @@ function modules_adminapi_setstate($args)
     if ((!isset($regid)) ||
         (!isset($state))) {
         $msg = xarML('Empty regid (#(1)) or state (#(2)).', $regid, $state);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }

@@ -30,7 +30,7 @@ function themes_admin_removetpltag()
 
 	if(!xarTplUnregisterTag($tagname)) {
 		$msg = xarML('Could not unregister (#(1)).', $tagname);
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
 		                new SystemException($msg));
        return;
 	}

@@ -44,7 +44,7 @@ function privileges_admin_addmember()
     $descendants = $member->getDescendants();
     foreach ($descendants as $descendant) if ($descendant->getID() == $priv->getID()) $found = true;
     if ($found) {
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException("The privilege you are trying to assign to is already a component of the one you are assigning."));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException("The privilege you are trying to assign to is already a component of the one you are assigning."));
         return;
     }
 

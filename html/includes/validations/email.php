@@ -18,7 +18,7 @@ function variable_validations_email (&$subject, $parameters=null, $supress_soft_
     if (!eregi('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$', $subject)) {
 
         $msg = xarML('Invalid Variable #(1), does not match an e-mail type.', $subject);
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
 
         return false;
     }

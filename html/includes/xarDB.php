@@ -106,7 +106,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 function xarDB__shutdown_handler()
 {
     // Shutdown handler for the DB subsystem
-    // Once the by reference handling of the dbconn is iin, we can do 
+    // Once the by reference handling of the dbconn is in, we can do 
     // a central close for the db connection here.
 }
 
@@ -145,6 +145,8 @@ function &xarDBGetTables()
  * @access public
  * @return true
  * @todo <johnny> change to protected or private?
+ * @todo <mrb> Insane function name
+ * @tod  <mrb> This needs to be replaced by datadict functionality
  */
 function xarDBLoadTableMaintenanceAPI()
 {
@@ -170,13 +172,13 @@ function xarDBLoadTableMaintenanceAPI()
  * all modes except METADATA will return the ALTERDATABASE object.
  *
  * @access public
- * @return data dictionary object (specifics depend on mode)
- * @param object $dbconn ADODB database connection object
- * @param string $mode the mode in which the data dictionary will be used; default READONLY
- * @todo fully implement the mode, by layering the classes into separate files of readonly and amend methods
- * @todo xarMetaData class needs to accept the database connection object
- * @todo make xarMetaData the base class for the data dictionary
- * @todo move these comments off to some proper document
+ * @return data   dictionary object (specifics depend on mode)
+ * @param  object $dbconn ADODB database connection object
+ * @param  string $mode the mode in which the data dictionary will be used; default READONLY
+ * @todo   fully implement the mode, by layering the classes into separate files of readonly and amend methods
+ * @todo   xarMetaData class needs to accept the database connection object
+ * @todo   make xarMetaData the base class for the data dictionary
+ * @todo   move these comments off to some proper document
  */
 function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
 {
@@ -279,15 +281,16 @@ function xarDB_importTables($tables)
  * @param bool param1
  * @param bool param2
  * @raise DATABASE_ERROR
- * @todo <marco> complete it
+ * @todo  <marco> complete it
+ * @todo  can we let the exception system handle this, so we have all error handlers in one place?
  */
 function xarDB__adodbErrorHandler($databaseName, $funcName, $errNo, $errMsg, $param1 = false, $param2 = false)
 {
     if ($funcName == 'EXECUTE') {
         $msg = xarML('Database error while executing: \'#(1)\'; error description is: \'#(2)\'.', $param1, $errMsg);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemException("ErrorNo: ".$errNo.", Message:".$msg));
     } else {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR', $errMsg);
     }
 }
 ?>

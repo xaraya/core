@@ -34,7 +34,7 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc)
 
             $msg .= $param;
         }
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }
 }

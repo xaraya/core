@@ -27,7 +27,7 @@ function roles_user_logout()
     // Log user out
     if (!xarUserLogOut()) {
         $msg = xarML('Problem Logging Out.  Module #(1) Function #(2)', 'roles', 'logout');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
     xarResponseRedirect($redirecturl);

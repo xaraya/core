@@ -31,14 +31,14 @@ function modules_adminapi_verifydependency($args)
     // Argument check
     if (!isset($mainId)) {
     	$msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
     }
 
     // Get module information
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
                        return;
     }
@@ -46,7 +46,7 @@ function modules_adminapi_verifydependency($args)
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules','admin','checkmissing')) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Missing Module');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Missing Module');
         return;
     }
 
@@ -55,7 +55,7 @@ function modules_adminapi_verifydependency($args)
     // So db modules should be a safe start to go looking for them
     $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Unable to find modules in the database');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', 'Unable to find modules in the database');
         return;
     }
 
@@ -81,7 +81,7 @@ function modules_adminapi_verifydependency($args)
 
             //Required module inexistent
             if (!isset($dbMods[$module_id])) {
-                xarExceptionSet(
+                xarErrorSet(
                     XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                     new SystemException(xarML('Required module missing (ID #(1))', $module_id))
                 );
@@ -111,7 +111,7 @@ function modules_adminapi_verifydependency($args)
         } else {
             //Required module inexistent
             if (!isset($dbMods[$conditions])) {
-                xarExceptionSet(
+                xarErrorSet(
                     XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                     new SystemException(xarML('Required module missing (ID #(1))', $conditions))
                 );

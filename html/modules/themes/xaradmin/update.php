@@ -83,7 +83,7 @@ function themes_admin_update()
                 'updatevars' => $updatevars));
         if (!isset($updated)) {
             $msg = xarML('Unable to update theme variable #(1)', $themevar['name']);
-            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         } 
     } 
@@ -91,7 +91,7 @@ function themes_admin_update()
         $deleted = xarThemeDelVar($themename, $d);
         if (!isset($deleted)) {
             $msg = xarML('Unable to delete theme variable #(1)', $d);
-            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             return;
         } 
     } 

@@ -22,7 +22,7 @@ function blocks_userapi_getblocktype($args)
     // Minimum parameters allowed, to fetch a single block type: tid or type.
     if (empty($args['tid']) && (empty($args['module']) || empty($args['type']))) {
         $msg = xarML('blocks_userapi_getblocktype (tid and module/type are NULL)');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new DefaultUserException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new DefaultUserException($msg));
         return;
     }
 

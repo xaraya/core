@@ -28,7 +28,7 @@ function modules_adminapi_executeinitfunction ($args)
     // Argument check
     if (!isset($args['regid'])) {
         $msg = xarML('Missing module regid.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
         return;
     }
 
@@ -40,7 +40,7 @@ function modules_adminapi_executeinitfunction ($args)
         !is_dir('modules/'. $modInfo['osdirectory'])) {
 
         $msg = xarML('Module (regid: #(1) - directory: #(2) does not exist.', $args['regid'], $modInfo['osdirectory']);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',  $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',  $msg);
         return;
     }
 
@@ -58,7 +58,7 @@ function modules_adminapi_executeinitfunction ($args)
     if (empty($xarinitfile)) {
         /*
         $msg = xarML('No Initialization File Found for Module "#(1)"', $modInfo['name']);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
         return;
         */
         //Return gracefully, the metaweblogapi doesnt have the init file..
@@ -75,7 +75,7 @@ function modules_adminapi_executeinitfunction ($args)
 
     if (empty($r) || !$r) {
         $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $xarinitfile, $error_msg);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
         return;
     }
 
@@ -93,11 +93,11 @@ function modules_adminapi_executeinitfunction ($args)
 
         if ($result === false) {
             $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
         } elseif ($result != true) {
             $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
             return;
         }
     } else {
@@ -106,7 +106,7 @@ function modules_adminapi_executeinitfunction ($args)
         /*
         // file exists, but function not found. Exception!
         $msg = xarML('Module change of state failed because your module did not include an #(1) function: #(2)', $args['function'], $func);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', $msg);
         return;
         */
     }

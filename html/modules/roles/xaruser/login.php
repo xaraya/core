@@ -33,14 +33,14 @@ function roles_user_login()
     if (!xarVarFetch('uname','str:1:100',$uname)) {
         xarExceptionFree();
         $msg = xarML('You must provide a username.');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
     $uname = xarVarPrepForDisplay($uname);
     if (!xarVarFetch('pass','str:1:100',$pass)) {
         xarExceptionFree();
         $msg = xarML('You must provide a password.');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
     $pass = xarVarPrepForDisplay($pass);
@@ -98,7 +98,7 @@ function roles_user_login()
                 if (empty($user) && ($extAuthentication == false))
                 {
                     $msg = xarML('Problem logging in: Invalid username or password.');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                     return;
                 }
 
@@ -134,7 +134,7 @@ function roles_user_login()
 
             // User is deleted by all means.  Return a message that says the same.
             $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 
             break;
@@ -143,7 +143,7 @@ function roles_user_login()
 
             // User is inactive.  Return message stating.
             $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 
             break;
@@ -194,7 +194,7 @@ function roles_user_login()
                 }
 
                 if (!$letthru) {
-                    xarExceptionSet(XAR_SYSTEM_MESSAGE,
+                    xarErrorSet(XAR_SYSTEM_MESSAGE,
                     'SITE_LOCKED',
                      new SystemMessage($lockvars['message']));
                      return;
@@ -208,7 +208,7 @@ function roles_user_login()
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
                 $msg = xarML('Problem logging in: Invalid username or password.');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
                 return;
             }
 
@@ -221,7 +221,7 @@ function roles_user_login()
 
             // User is pending activation
 	    $msg = xarML('Your account has not yet been activated by the site administrator');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
 
             break;

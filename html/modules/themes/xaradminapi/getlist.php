@@ -58,7 +58,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
                                      'class' => 'infos');
     if (!is_array($filter)) {
         $msg = xarML('Parameter filter must be an array.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -79,7 +79,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     foreach ($orderFields as $orderField) {
         if (!isset($validOrderFields[$orderField])) {
             $msg = xarML('Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
             return;
         }

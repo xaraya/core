@@ -55,7 +55,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($databaseName)) {
         $msg = xarML('Empty database_name.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -76,7 +76,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -106,13 +106,13 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) {
         $msg = xarML('Empty tableName.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($args) || !isset($args['command'])) {
         $msg = xarML('Invalid args (must be an array, command key must be set).');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -170,7 +170,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -191,13 +191,13 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     // perform validations on input arguments
     if (empty($tableName)) {
         $msg = xarML('Empty tableName.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($fields)) {
         $msg = xarML('Not array fields.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -256,7 +256,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -276,7 +276,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) {
         $msg = xarML('Empty tableName.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -302,7 +302,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -324,13 +324,13 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) {
         $msg = xarML('Empty tableName.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
         $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -366,7 +366,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -387,13 +387,13 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) {
         $msg = xarML('Empty tableName.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
     if (!is_array($index) ||  empty($index['name'])) {
         $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -413,7 +413,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         // Other DBs go here
         default:
             $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -440,7 +440,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
         case 'add':
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set).');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -474,7 +474,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
         case 'rename':
             if (empty($args['new_name'])) {
                 $msg = xarML('Invalid args (new_name key must be set.)');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -482,7 +482,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             break;
         default:
             $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -507,7 +507,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
         case 'add':
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set).');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -524,7 +524,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
         case 'rename':
             if (empty($args['new_name'])) {
                 $msg = xarML('Invalid args (new_name key must be set.)');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -532,7 +532,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             break;
         default:
             $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }
@@ -556,7 +556,7 @@ function xarDB__oracleAlterTable($tableName, $args)
         case 'add':
             if (empty($args['field'])) {
                 $msg = xarML('Invalid args (field key must be set).');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -575,7 +575,7 @@ function xarDB__oracleAlterTable($tableName, $args)
         case 'rename':
             if (empty($args['new_name'])) {
                 $msg = xarML('Invalid args (new_name key must be set.)');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -583,7 +583,7 @@ function xarDB__oracleAlterTable($tableName, $args)
             break;
         default:
             $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
     }

@@ -20,7 +20,7 @@ function roles_adminapi_clearsessions($spared)
 {
     if(!isset($spared)) {
         $msg = xarML('Wrong arguments to groups_adminapi_clearsessions');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

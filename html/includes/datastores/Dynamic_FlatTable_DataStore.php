@@ -178,7 +178,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         if (empty($itemid)) {
             $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                          'item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
             return;
         }

@@ -118,12 +118,12 @@ function modules_adminapi_getfilemodules($args)
                     foreach ($fileModules as $module) {
                         if($regId == $module['regid']) {
                             $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.', $regId, $name, $module['name']);
-                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                            new SystemException($msg));
                         }
                         if($nameinfile == $module['nameinfile']) {
                             $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $nameinfile, $regId, $module['regid']);
-                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                            new SystemException($msg));
                         }
                     }

@@ -39,7 +39,7 @@ function roles_user_register()
     $allowregistration = xarModGetVar('roles', 'allowregistration');
     if ($allowregistration != true) {
         $msg = xarML('Registration has been suspended');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'NO_PERMISSION', new DefaultUserException($msg));
         return;
     }
 
@@ -122,7 +122,7 @@ function roles_user_register()
                 $disallowedips = explode("\r\n", $disallowedips);
                 if (in_array ($ip, $disallowedips)) {
                     $msg = xarML('Your IP is on the banned list');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
                 }
             }
@@ -365,7 +365,7 @@ function roles_user_register()
                                              array('uid' => array($uid => '1'),
                                                    'mailtype'    => 'welcome'))) {
                             $msg = xarML('Problem sending welcome email');
-                            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                         }
                     }
                     xarModAPIFunc('roles', 'user', 'login',
@@ -409,7 +409,7 @@ function roles_user_register()
                                           'ip'       => $ip,
                                           'pass'     => $pass))) {
                     $msg = xarML('Problem sending confirmation email');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }
 
                 $data = xarTplModule('roles','user', 'waitingconfirm');

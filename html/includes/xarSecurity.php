@@ -515,7 +515,7 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
     return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
     $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
                  $testRealm, $testComponent, $testInstance, $testLevel);
-    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
+    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                     new SystemException($msg));
     return true;
 }
@@ -598,7 +598,7 @@ function xarSecConfirmAuthKey($authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        xarExceptionSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
+        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
                        new DefaultUserException());
         return;
 }

@@ -29,7 +29,7 @@ function blocks_userapi_groupgetinfo($args)
     if (empty($name)) {$name = '';}
 
     if (empty($name) && empty($gid)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'gid/name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'gid/name');
         return;
     }
 

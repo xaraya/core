@@ -67,7 +67,7 @@ function modules_admin_upgrade()
             // Also check if module upgrade returned false
             if (!$upgraded) {
                 $msg = xarML('Module failed to upgrade');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR',
                                 new SystemException($msg));
                 // Flag a failure.
                 $success = false;

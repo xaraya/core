@@ -28,7 +28,7 @@ function adminpanels_adminapi_maxsequence($args)
     if ((!isset($table)) ||
         (!isset($column))) {
         $msg = xarML('Empty table (#(1)) or column (#(2)).', $table, $column);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }

@@ -43,19 +43,19 @@ function roles_admin_addmember()
     // check that this assignment hasn't already been made
     if ($member->isEqual($role)) {
         $msg = xarML('This assignment is not possible');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
     }
     // check that this assignment hasn't already been made
     if ($member->isParent($role)) {
         $msg = xarML('This assignment already exists');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
     }
     // check that the parent is not already a child of the child
     if ($role->isAncestor($member)) {
         $msg = xarML('Cannot make this assignment');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
         return;
     }
     // assign the child to the parent and bail if an error was thrown

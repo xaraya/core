@@ -26,7 +26,7 @@ function blocks_adminapi_delete_instance($args)
     // Argument check
     if (!isset($bid) || !is_numeric($bid)) {
         $msg = xarML('Invalid parameter');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 

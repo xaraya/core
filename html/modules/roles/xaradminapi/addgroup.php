@@ -22,7 +22,7 @@ function roles_adminapi_addgroup($args)
 
     if(!isset($gname)) {
         $msg = xarML('Wrong arguments to groups_adminapi_addgroup.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

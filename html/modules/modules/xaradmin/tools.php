@@ -29,7 +29,7 @@ function modules_admin_tools()
 /*     $id = xarVarCleanFromInput('id'); */
 /*     if (empty($id)) { */
 /*         $msg = xarML('No module id specified', 'modules'); */
-/*         xarExceptionSet(XAR_USER_EXCEPTION, */
+/*         xarErrorSet(XAR_USER_EXCEPTION, */
 /*                         'MISSING_DATA', */
 /*                         new DefaultUserException($msg)); */
 /*         return; */

@@ -122,8 +122,8 @@ function xarEvt_init($args, $whatElseIsGoingLoaded)
  * @author  Marco Canini
  * @author  Marcel van der Boom <marcel@xaraya.com>
  * @access  protected
- * @param   $eventName string The name of the event
- * @param   $value mixed Passed as parameter to the even handler function in the module
+ * @param   string $eventName The name of the event
+ * @param   mixed  $value Passed as parameter to the even handler function in the module
  * @return  void
  * @todo    Analyze thoroughly for performance issues
 */
@@ -137,14 +137,14 @@ function xarEvt_trigger($eventName, $value = NULL)
     // Call the event handlers in the active modules
     $activemods = xarEvt__GetActiveModsList();
     xarLogMessage("Triggered event ($eventName)");
-//FIXME: <besfred> ^^^ should we catch its return value and react?
+    //FIXME: <besfred> ^^^ should we catch its return value and react?
 
     $nractive=count($activemods);
     for ($i =0; $i < $nractive; $i++) {
         // We issue the event to the user api for now
         // FIXME: Could all 4 types be supported? In which situations?
         xarEvt_notify($activemods[$i]['name'], 'user', $eventName, $value);
-//FIXME: <besfred> ^^^ should we catch its return value and react?
+        //FIXME: <besfred> ^^^ should we catch its return value and react?
     }
 
 }
@@ -169,7 +169,7 @@ function xarEvt_notify($modName, $modType, $eventName, $value)
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
 
@@ -240,7 +240,7 @@ function xarEvt_registerEvent($eventName)
 {
     
     if (empty($eventName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
         return false;
     }
     
@@ -263,7 +263,7 @@ function xarEvt_registerEvent($eventName)
 function xarEvt__checkEvent($eventName)
 {
     if (!isset($GLOBALS['xarEvt_knownEvents'][$eventName])) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
         return;
     }
     return true;

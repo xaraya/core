@@ -21,7 +21,6 @@
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
  * @throws none
- * @todo none
  */
 class xarDataDict 
 {
@@ -34,10 +33,9 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none 
+     * @param   object $dbconn Database connection
      * @return  none
      * @throws  none
-     * @todo    none
     */
     function xarDataDict($dbconn) 
     {
@@ -63,7 +61,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function addColumn($table, $fields)
     {
@@ -78,7 +75,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'addColumn', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -106,7 +103,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function alterColumn($table, $fields)
     {
@@ -121,7 +117,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'alterColumn', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -153,7 +149,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function alterTable($table, $fields)
     {
@@ -176,7 +171,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function changeTable($table, $fields)
     {
@@ -193,7 +187,7 @@ class xarDataDict
                 'Invalid #(1) for function #(2)() in #(3)',
                 join(', ',$invalid), 'changeTable', 'xarDataDict'
             );
-            xarExceptionSet(
+            xarErrorSet(
                 XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                 new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
             );
@@ -224,7 +218,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function createDatabase($database, $options = false)
     {
@@ -236,7 +229,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'createDatabase', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -267,7 +260,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function createIndex($index, $table, $fields, $options = false)
     {
@@ -287,7 +279,7 @@ class xarDataDict
                 'Invalid #(1) for function #(2)() in #(3)',
                 join(', ',$invalid), 'createIndex', 'xarDataDict'
             );
-            xarExceptionSet(
+            xarErrorSet(
                 XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                 new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
             );
@@ -318,7 +310,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function dropIndex($index, $table)
     {
@@ -335,7 +326,7 @@ class xarDataDict
                 'Invalid #(1) for function #(2)() in #(3)',
                 join(', ',$invalid), 'dropIndex', 'xarDataDict'
             );
-            xarExceptionSet(
+            xarErrorSet(
                 XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                 new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
             );
@@ -375,7 +366,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function createTable($table, $fields, $options = false)
     {
@@ -390,7 +380,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'createTable', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -418,7 +408,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function dropColumn($table, $fields)
     {
@@ -433,7 +422,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'dropColumn', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -460,7 +449,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function dropTable($table)
     {
@@ -472,7 +460,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'dropTable', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -500,7 +488,6 @@ class xarDataDict
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
      * @throws  none
-     * @todo    none
     */
     function executeSQLArray($sql, $contOnError = true)
     {
@@ -522,7 +509,6 @@ class xarDataDict
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getColumns($table)
     {
@@ -534,7 +520,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'getColumns', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -554,7 +540,6 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  array of primary keys for the table, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getPrimaryKeys($table)
     {
@@ -566,7 +551,7 @@ class xarDataDict
         if (count($invalid) > 0) {
             $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
                     join(', ',$invalid), 'getPrimaryKeys', 'xarDataDict');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return false;
         }
@@ -587,7 +572,6 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  returns an array of ADODB index arrays or false if none
      * @throws  none
-     * @todo    none
     */
     function getIndexes($table, $primary = false)
     {
@@ -601,7 +585,7 @@ class xarDataDict
                 'Invalid #(1) for function #(2)() in #(3)',
                 join(', ',$invalid), 'getIndexes', 'xarDataDict'
             );
-            xarExceptionSet(
+            xarErrorSet(
                 XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                 new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
             );
@@ -656,7 +640,6 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getSystemTables()
     {
@@ -699,7 +682,6 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getSiteTables()
     {
@@ -835,7 +817,6 @@ class xarDataDict
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
  * @throws none
- * @todo none
  */
 class xarMetaData 
 {
@@ -851,7 +832,6 @@ class xarMetaData
      * @param   object $dbconn database connection (optional)
      * @return  none
      * @throws  none
-     * @todo    none
     */
     function xarMetaData($dbconn = false) 
     {
@@ -877,7 +857,7 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  array of databases available on the server, false otherwise
      * @throws  none
-     * @todo    none
+     * @todo    make this work for all database types
     */
     function getDatabases()
     {
@@ -901,7 +881,6 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getTables($type='TABLES')
     {
@@ -928,7 +907,6 @@ class xarMetaData
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getColumns($table)
     {
@@ -950,7 +928,6 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  array of columns names for the table, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getColumnNames($table)
     {
@@ -972,7 +949,6 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  array of primary keys for the table, false otherwise
      * @throws  none
-     * @todo    none
     */
     function getPrimaryKeys($table)
     {

@@ -80,7 +80,7 @@ function installer_adminapi_initialise($args)
 
     if (empty($directory) || empty($initfunc)) {
         $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -92,7 +92,7 @@ function installer_adminapi_initialise($args)
         include_once ($modInitFile);
     } else {
         // modules/modulename/xarinit.php not found?!
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));
                        return;
     }
@@ -108,13 +108,13 @@ function installer_adminapi_initialise($args)
 
         if ($res == false) {
             // exception
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));
                            return;
         }
     } else {
         // modulename_init() not found?!
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
                        return;
     }
@@ -203,7 +203,7 @@ function installer_adminapi_CheckForField($args)
         (!isset($table_name))) {
         $msg = xarML('Invalid Parameter Count',
                     join(', ',$invalid), 'admin', 'create', 'Installer');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -242,7 +242,7 @@ function installer_adminapi_GetFieldType($args)
         (!isset($table_name))) {
         $msg = xarML('Invalid Parameter Count',
                     join(', ',$invalid), 'admin', 'create', 'Installer');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -277,7 +277,7 @@ function installer_adminapi_CheckTableExists($args)
     if (!isset($table_name)) {
         $msg = xarML('Invalid Parameter Count',
                     join(', ',$invalid), 'admin', 'create', 'Installer');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }

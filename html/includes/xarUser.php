@@ -87,11 +87,11 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         return true;
     }
     if (empty($userName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
         return;
     }
     if (empty($password)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'password');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'password');
         return;
     }
 
@@ -306,7 +306,7 @@ $GLOBALS['xarUser_objectRef'] = null;
 function xarUserGetVar($name, $userId = NULL)
 {
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -322,13 +322,13 @@ function xarUserGetVar($name, $userId = NULL)
         if ($name == 'name' || $name == 'uname') {
             return xarMLByKey('ANONYMOUS');
         }
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
         return;
     }
 
     // Don't allow any module to retrieve passwords in this way
     if ($name == 'pass') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
 
@@ -349,7 +349,7 @@ function xarUserGetVar($name, $userId = NULL)
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
                 $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -370,7 +370,7 @@ function xarUserGetVar($name, $userId = NULL)
             $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
             if (empty($itemid) || $itemid != $userId) {
                 $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
                 return;
             }
@@ -471,11 +471,11 @@ function xarUserSetVar($name, $value, $userId = NULL)
 {
     // check that $name is valid
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
     if ($name == 'uid' || $name == 'authenticationModule' || $name == 'pass') {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'name');
         return;
     }
 
@@ -484,7 +484,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     }
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NOT_LOGGED_IN');
     }
 
 /* TODO: #1 - some security check from the roles module needed here
@@ -500,7 +500,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     } elseif (!xarUser__isVarDefined($name)) {
         xarVarSetCached('User.Variables.'.$userId, $name, false);
         $msg = xarML('User variable #(1) was not correctly registered', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'VARIABLE_NOT_REGISTERED',
                        new SystemException($msg));
         return;
 
@@ -509,7 +509,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
         if (empty($itemid) || $itemid != $userId) {
             $msg = xarML('User identified by uid #(1) does not exist.', $userId);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
         }

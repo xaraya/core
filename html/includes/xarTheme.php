@@ -32,7 +32,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
     if (empty($themeName)) {
         $msg = xarML('Empty themeName (#(1)).', $themeName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -53,7 +53,7 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
 {
     if (empty($themeName)) {
         $msg = xarML('Empty themeName (#(1)).', $themeName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -74,7 +74,7 @@ function xarThemeDelVar($themeName, $name)
 {
     if (empty($themeName)) {
         $msg = xarML('Empty themeName (#(1)).', $themeName);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
     }
 
     return xarVar__DelVarByAlias($themeName, $name, $uid = NULL, $type = 'themevar');
@@ -128,11 +128,11 @@ function xarThemeGetInfo($regId)
 // {
 //     if (empty($themeName)) {
 //         //die("$modName, $modType, $funcName");
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
 //         return;
 //     }
 //     if (empty($funcName)) {
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
+//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'funcName');
 //         return;
 //     }
 
@@ -144,7 +144,7 @@ function xarThemeGetInfo($regId)
 
 //     if (!file_exists($fileName)) {
 //         $msg = xarML('Theme API function #(1) does not exist.', $modAPIFunc);
-//         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+//         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
 //         return;
 //     } else {
 //          ob_start();
@@ -154,7 +154,7 @@ function xarThemeGetInfo($regId)
 
 //          if (empty($r) || !$r) {
 //             $msg = xarML("Could not load theme api file: [#(1)].\n\n Error Caught:\n #(2)", $fileName, $error_msg);
-//             xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
+//             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
 //             return;
 //          }
 //     }

@@ -36,7 +36,7 @@ class xarQuery
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE"))) $this->type = $type;
         else {
             $msg = xarML('The operation #(1) is not supported', $type);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
             return;
         }
 
@@ -85,7 +85,7 @@ class xarQuery
                         }
                         else {
                             $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
                             return;
                         }
                     }
@@ -157,7 +157,7 @@ class xarQuery
             if (!is_array($table)) {
                 if (!is_string($table)) {
                     $msg = xarML('The table #(1) you are trying to add needs to be a string or an array.', $table);
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
                     return;
                 }
                 else {
@@ -176,7 +176,7 @@ class xarQuery
         }
         else {
             $msg = xarML('This function only take 1 or 2 paramters');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
     $this->tables[] = $argsarray;
@@ -195,7 +195,7 @@ class xarQuery
             if (!is_array($field)) {
                 if (!is_string($field)) {
                     $msg = xarML('The field #(1) you are trying to add needs to be a string or an array.', $field);
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
                     return;
                 }
                 else {
@@ -214,7 +214,7 @@ class xarQuery
         }
         else {
             $msg = xarML('This function only take 1 or 2 paramters');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
             return;
         }
         $done = false;
@@ -496,7 +496,7 @@ class xarQuery
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage(xarML('Your query has no fields.')));
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage(xarML('Your query has no fields.')));
                 return;
             }
             foreach ($this->fields as $field) {

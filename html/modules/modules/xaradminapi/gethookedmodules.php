@@ -32,7 +32,7 @@ function modules_adminapi_gethookedmodules($args)
 
     // Argument check
     if (empty($hookModName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookModName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookModName');
         return;
     }
 

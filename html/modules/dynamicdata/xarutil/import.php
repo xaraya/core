@@ -55,7 +55,7 @@ function dynamicdata_util_import($args)
             }
             if (empty($found) || !file_exists($basedir . '/' . $file)) {
                 $msg = xarML('File not found');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException($msg));
                 return;
             }

@@ -678,7 +678,7 @@ if (empty($step)) {
         // Freak if we don't get one and only one result
         if ($result->PO_RecordCount() != 1) {
             $msg = xarML("Group 'syndicate' not found.");
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
             return;
         }

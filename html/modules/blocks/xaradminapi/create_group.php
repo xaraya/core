@@ -31,7 +31,7 @@ function blocks_adminapi_create_group($args)
     // Argument check
     if ((!isset($name))) {
         // TODO: the __FILE__ stuff can be handled centrally in xarMod.php
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
             new SystemException(__FILE__."(".__LINE__."): Missing block group name.")
         );
         return;

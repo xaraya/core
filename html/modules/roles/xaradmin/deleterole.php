@@ -43,14 +43,14 @@ function roles_admin_deleterole()
 // Prohibit removal of any groups the system needs
     if($uid == xarModGetVar('roles','admin')) {
         $msg = xarML('The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.', $role->getName());
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
     }
     if(strtolower($role->getName()) == strtolower(xarModGetVar('roles','defaultgroup'))) {
         $msg = xarML('The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.', $role->getName());
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
@@ -85,7 +85,7 @@ if (empty($check)) {
             xarModCallHooks('item', 'delete', $uid, $data);
         } else {
             $msg = xarML('That user has a current active session', 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
         // redirect to the next page

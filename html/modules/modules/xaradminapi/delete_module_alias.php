@@ -27,7 +27,7 @@ function modules_adminapi_delete_module_alias($args)
     extract($args);
 
     if (empty($aliasModName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'aliasModName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'aliasModName');
         return;
     }
 

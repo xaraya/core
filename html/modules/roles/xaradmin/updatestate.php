@@ -62,7 +62,7 @@ function roles_admin_updatestate()
     if ( (!isset($uids)) || (!isset($data['status']))
     || (!is_numeric($data['status'])) || ($data['status'] < 1) || ($data['status'] > 4) ) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'updatestate', 'Roles');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uids." -- ".$data['status']));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uids." -- ".$data['status']));
         return;
     }
     $roles = new xarRoles();

@@ -319,7 +319,7 @@ class xarRoles
         if (empty($name) && empty($uname) || empty($email)) {
             $msg = xarML('You must enter a user name and a valid email address.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
@@ -333,7 +333,7 @@ class xarRoles
         if ($q->getrows() == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
@@ -387,7 +387,7 @@ class xarRoles
         if ($count == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
@@ -508,7 +508,7 @@ class xarRole
         if (empty($this->name)) {
             $msg = xarML('You must enter a name.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
@@ -518,7 +518,7 @@ class xarRole
         if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
             $msg = xarML('You must enter a user name and a valid email address.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
@@ -537,7 +537,7 @@ class xarRole
         if ($q->getrows() == 1) {
             $msg = xarML('This entry already exists.',
                 'roles');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                 'DUPLICATE_DATA',
                 new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);

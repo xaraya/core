@@ -46,7 +46,7 @@ function blocks_admin_update_group()
         $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
         if (!empty($checkname)) {
             $msg = xarML('Block group name "#(1)" already exists', $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return;
         }
     }

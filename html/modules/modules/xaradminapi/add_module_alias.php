@@ -27,18 +27,18 @@ function modules_adminapi_add_module_alias($args)
     extract($args);
 
     if (empty($modName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
         return;
     }
     if (empty($aliasModName)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'aliasModName');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'aliasModName');
         return;
     }
 
     // Check if the module name we want to define is already in use
     if (xarMod_getBaseInfo($aliasModName)) {
         $msg = xarML('Module name #(1) is already in use', $aliasModName);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'AlreadyInUse', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'AlreadyInUse', new DefaultUserException($msg));
         return;
     } else {
         // TODO: test this someday...

@@ -27,7 +27,7 @@ function modules_adminapi_initialise($args)
     // Argument check
     if (!isset($regid)) {
        $msg = xarML('Missing module regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -35,7 +35,7 @@ function modules_adminapi_initialise($args)
     // Get module information
     $modInfo = xarModGetInfo($regid);
     if (!isset($modInfo)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                        new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
                        return;
     }
@@ -44,7 +44,7 @@ function modules_adminapi_initialise($args)
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
         //TODO: Add description of the dependencies
         $msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_DEPENDENCY', $msg);
 
         return;
     }
@@ -69,7 +69,7 @@ function modules_adminapi_initialise($args)
 //    die(var_dump($set));
     if (!isset($set)) {
     	$msg = xarML('Module state change failed');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
    		return;
     }
 

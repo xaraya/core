@@ -56,7 +56,7 @@ class xarTpl__CompilerError extends SystemException
     function raiseError($msg)
     {
         // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
     }
 }
 
@@ -82,7 +82,7 @@ class xarTpl__ParserError extends SystemException
         }
         $msg .= '^';
         // FIXME: evaluate whether this needs to be a system exception.
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
     }
 }
 

@@ -9,6 +9,8 @@
  * @author Marc Lutolf
  *
  * @todo bring back possibility of time authorized keys
+ * @todo this needs another place
+ * @todo this needs documentation
  */
 
 class xarDate 

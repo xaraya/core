@@ -22,7 +22,7 @@ function roles_adminapi_deletegroup($args)
 
     if(!isset($uid)) {
         $msg = xarML('Wrong arguments to groups_adminapi_deletegroup');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
@@ -38,7 +38,7 @@ function roles_adminapi_deletegroup($args)
 
     if($role->getName() == xarModGetVar('roles','defaultgroup')) {
         $msg = xarML('The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.', $role->getName());
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

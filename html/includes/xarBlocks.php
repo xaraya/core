@@ -47,9 +47,10 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
- * @param array blockinfo block information parameters
+ * @param  array blockinfo block information parameters
  * @return string output the block to show
- * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @raise  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @todo   this function calls a module function, keep an eye on it
  */
 function xarBlock_render($blockinfo)
 {
@@ -133,7 +134,7 @@ function xarBlock_render($blockinfo)
 function xarBlock_renderGroup($groupname, $template = NULL)
 {
     if (empty($groupname)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
         return;
     }
 
@@ -264,11 +265,12 @@ function xarBlock_renderGroup($groupname, $template = NULL)
  *
  * @author John Cox
  * @access protected
- * @param string args[instance] id or name of block instance to render
- * @param string args[module] module that owns the block
- * @param string args[type] module that owns the block
+ * @param  string args[instance] id or name of block instance to render
+ * @param  string args[module] module that owns the block
+ * @param  string args[type] module that owns the block
  * @return string
- * @raise EMPTY_PARAM
+ * @raise  EMPTY_PARAM
+ * @todo   this function calls a module function, keep an eye on it.
  */
 function xarBlock_renderBlock($args)
 {

@@ -37,7 +37,7 @@ function roles_userapi_login($args)
 if ((!isset($uname)) ||
         (!isset($pass))) {
         $msg = xarML('Wrong arguments to roles_userapi_login.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

@@ -39,7 +39,7 @@ function roles_adminapi_create($args)
         (!isset($state)) ||
         (!isset($pass) && !isset($cryptpass))) {
         $msg = xarML('Wrong arguments to roles_adminapi_create.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

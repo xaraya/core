@@ -32,7 +32,7 @@ function roles_adminapi_stateupdate($args)
         (!isset($state))) {
         $msg = xarML('Invalid Parameter Count',
                     join(', ',$invalid), 'admin', 'update', 'Users');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -44,7 +44,7 @@ function roles_adminapi_stateupdate($args)
 
     if ($item == false) {
         $msg = xarML('No such user','roles');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'ID_NOT_EXIST',
                      new SystemException($msg));
         return false;

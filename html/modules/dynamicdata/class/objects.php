@@ -86,7 +86,7 @@ class Dynamic_Object_Master
             if (!isset($meta) || !isset($meta[$this->table])) {
                 $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
                              'table',$this->table,$this->table);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
             }
@@ -132,7 +132,7 @@ class Dynamic_Object_Master
             if (!isset($meta) || !isset($meta[$this->join])) {
                 $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
                              'join',$this->join,$this->name);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
             }
@@ -577,7 +577,7 @@ class Dynamic_Object_Master
         if (!isset($meta) || !isset($meta[$args['table']])) {
             $msg = xarML('Invalid #(1) #(2) for dynamic object #(3)',
                          'join',$args['table'],$this->name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
             return;
         }
@@ -622,7 +622,7 @@ class Dynamic_Object_Master
                 if (count($pieces) < 2) {
                     $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                                  'query ' . xarVarPrepForStore($args['where']), 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                     new SystemException($msg));
                     return;
                 }
@@ -699,7 +699,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($this->itemid)) {
             $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
                          'getItem',$this->objectid,$this->name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
             return;
         }
@@ -874,7 +874,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             if (!isset($this->primary)) {
                 $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                              'primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
 
@@ -897,7 +897,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                 } else {
                     $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                                  'primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                     new SystemException($msg));
                     return;
                 }
@@ -951,7 +951,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($this->itemid)) {
             $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
                          'updateItem',$this->objectid,$this->name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
             return;
         }
@@ -993,7 +993,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($this->itemid)) {
             $msg = xarML('Invalid item id in method #(1)() for dynamic object [#(2)] #(3)',
                          'deleteItem',$this->objectid,$this->name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                             new SystemException($msg));
             return;
         }
@@ -1256,7 +1256,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if (count($pieces) < 2) {
                 $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                              'query ' . xarVarPrepForStore($where), 'Dynamic_Object_List', 'getWhere', 'DynamicData');
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                 new SystemException($msg));
                 return;
             }

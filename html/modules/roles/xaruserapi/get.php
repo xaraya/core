@@ -29,13 +29,13 @@ function roles_userapi_get($args)
     // Argument checks
     if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
         $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
     } elseif (!empty($uid) && !is_numeric($uid)) {
         $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;

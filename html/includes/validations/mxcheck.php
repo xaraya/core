@@ -100,7 +100,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
                     // hardware consumption exploit thru sending many of these e-mails to be checked
 
                     $msg = xarML('Invalid e-mail #(1), the mail server doesnt recognize it.', $subject);
-                    if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                    if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
 
                     return false;
                 }
@@ -108,7 +108,7 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
     } else { // Failure in socket connection
 
         $msg = xarML('Unable to connect to the mail server #(1) for e-mail #(2).', $ConnectAddress, $subject);
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
 
         return false;
     }

@@ -21,7 +21,7 @@ function variable_validations_checkbox (&$subject, $parameters, $supress_soft_ex
         $subject = true;
     } else {
         $msg = xarML('Not a checkbox Type: "#(1)"', $subject);
-        if (!$supress_soft_exc) xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         return false;
     }
 

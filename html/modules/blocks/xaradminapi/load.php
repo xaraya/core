@@ -48,7 +48,7 @@ function blocks_adminapi_load($args)
 
     // These really are block types, as defined in the block_types.xar_type column.
     if (empty($type)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'type');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'type');
         return;
     }
 

@@ -111,7 +111,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
 //            die("Could not load context:" . $ctxName . " in " . $this->locale);
-//            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
+//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
 //            return;
             return true;
         }
@@ -131,7 +131,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
                                 new SystemException("XML parser error in $fileName: $errstr at line $line."));
                 return;
             }

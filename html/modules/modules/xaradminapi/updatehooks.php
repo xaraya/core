@@ -26,7 +26,7 @@ function modules_adminapi_updatehooks($args)
     // Argument check
     if (!isset($regid)) {
         $msg = xarML('Empty regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -42,7 +42,7 @@ function modules_adminapi_updatehooks($args)
     $modinfo = xarModGetInfo($regid);
     if (empty($modinfo['name'])) {
         $msg = xarML('Invalid module name');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }

@@ -104,8 +104,8 @@ function xarMLSGetMode()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the site locale
+ * @todo   check
  */
-// TODO: check
 function xarMLSGetSiteLocale()
 {
     return $GLOBALS['xarMLS_defaultLocale'];
@@ -117,8 +117,8 @@ function xarMLSGetSiteLocale()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array of locales
+ * @todo   check
  */
-// TODO: check
 function xarMLSListSiteLocales()
 {
     $mode = xarMLSGetMode();
@@ -137,16 +137,14 @@ function xarMLSListSiteLocales()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale data
- * @raise LOCALE_NOT_EXIST
+ * @raise  LOCALE_NOT_EXIST
+ * @todo   figure out why we go through this function for xarModIsAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
 {
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
-    
-    // TODO: figure out why we go through this function for xarModIsAvailable
-    //       (this one breaks on upper/lower-case issues, BTW)
     
     // rraymond : move the check for the loaded locale before processing as
     //          : all of this would have been taken care of the first time
@@ -160,11 +158,11 @@ function &xarMLSLoadLocaleData($locale = NULL)
             if (strstr($locale,'ISO')) {
                 $locale = str_replace('ISO','iso',$locale);
                 if (!in_array($locale, $siteLocales)) {
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
                     return;
                 }
             } else {
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
                 return;
             }
         }
@@ -176,7 +174,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
         if ($res == false) {
             // Can we use xarML here? border case, play it safe for now.
             $msg = "The locale '$locale' could not be loaded";
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
             return;
         }
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
@@ -259,7 +257,7 @@ function xarMLByKey($key/*, ...*/)
 {
     // Key must have a value and not contain spaces
     if(empty($key) || strpos($key," ")) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
         return;
     }
 
@@ -285,21 +283,7 @@ function xarMLByKey($key/*, ...*/)
     return $trans;
 }
 
-/*
-function xarMLGetDynamic($refid, $table_name, $fields)
-{
-    $table_name .= '_mldata';
-    $fields = implode(',', $fields);
-
-    $query = "SELECT $fields FROM $table_name WHERE xar_refid = $refid";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    return $dbresult;
-}
-*/
-
-// L10N API
+// L10N API (Localisation)
 
 /**
  * Gets the locale info for the specified locale string.
@@ -325,17 +309,17 @@ function xarLocaleGetInfo($locale)
 function xarLocaleGetString($localeInfo)
 {
     if (!isset($localeInfo['lang']) || !isset($localeInfo['country']) || !isset($localeInfo['specializer']) || !isset($localeInfo['charset'])) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
         return;
     }
     if (strlen($localeInfo['lang']) != 2) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
         return;
     }
     $locale = strtolower($localeInfo['lang']);
     if (!empty($localeInfo['country'])) {
         if (strlen($localeInfo['country']) != 2) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
             return;
         }
         $locale .= '_'.strtoupper($localeInfo['country']);
@@ -487,13 +471,13 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  *  Wrapper to xarLocalGetFormattedDate
  *
+ *  @todo Take into account System.Core.TimZone
  */
 function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
 {
     $offset = xarMLS_userOffset() * 3600;
     if(!isset($timestamp)) {
         // get UTC timestamp
-        //TODO : Take into account System.Core.TimeZone
         $timestamp = time();
     }
 
@@ -507,16 +491,17 @@ function xarLocaleGetFormattedUTCDate($length = 'short',$timestamp = null)
 /**
  *  Grab the formated date by the user's current locale settings
  *
- *  @access public
- *  @param string $length what date locale we want (short|medium|long)
- *  @param int $timestamp optional unix timestamp in UTC to format
+ * @access public
+ * @param string $length what date locale we want (short|medium|long)
+ * @param int $timestamp optional unix timestamp in UTC to format
+ * @todo Check the exceptions when $length is not in the $validlengths (assert on it?)
  */
 function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
 {
     $length = strtolower($length);
     $validLengths = array('short','medium','long');
     if(!in_array($length,$validLengths)) {
-//TODO: We should throw a USER exception here
+        //TODO: We should throw a USER exception here
         return '';
     }
    
@@ -542,12 +527,12 @@ function xarLocaleGetFormattedDate($length = 'short',$timestamp = null)
 /**
  *  Wrapper to xarLocaleGetFormattedTime
  *
+ * @todo Take into account System.Core.TimeZone
  */
 function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null)
 {
     if(!isset($timestamp)) {
         // get UTC timestamp
-//TODO : Take into account System.Core.TimeZone
         $timestamp = time();
     }
 
@@ -701,7 +686,7 @@ function xarMLS_userOffset()
  *  %X - preferred time representation for the current locale without the date
  *  %e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
  *
- *  // TODO: unsupported strftime() format rules
+ *  @todo unsupported strftime() format rules
  *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
  */
 function xarMLS_strftime($format=null,$timestamp=null)
@@ -1035,7 +1020,7 @@ function xarMLS__parseLocaleString($locale)
     // Match the locales standard format  : en_US.iso-8859-1
     // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(@([0-9a-zA-Z]+))?(\.([0-9a-z\-]+))?/', $locale, $matches)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
         return;
     }
 
@@ -1053,6 +1038,7 @@ function xarMLS__parseLocaleString($locale)
  *
  * @author Marco Canini <marco@xaraya.com>
  * @return string the charset
+ * @todo   Dont hardcode this
  */
 function xarMLS__getSingleByteCharset($langISO2Code) 
 {
@@ -1137,7 +1123,7 @@ class xarMLS__LocaleDataLoader
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
                                new SystemException("XML parser error in $fileName: $errstr at line $line."));
                 return;
             }
@@ -1252,7 +1238,6 @@ class xarMLS__LocaleDataLoader
 
 }
 
-// TODO: <marco> check if it's faster without the extends thing
 /**
  * This is the abstract base class from which every concrete translations backend
  * must inherit.
@@ -1260,6 +1245,7 @@ class xarMLS__LocaleDataLoader
  * string and key based translations.
  *
  * @package multilanguage
+ * @todo    interface once php5 is there
  */
 class xarMLS__TranslationsBackend
 {
@@ -1443,6 +1429,7 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
  * <marc> why? have changed this to be able to collapse common methods
  *
  * @package multilanguage
+ * @todo    move all backends to separate files, only leave the base class
  */
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
 {
@@ -1519,7 +1506,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
 //            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-//            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
+//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
 //            return;
             return true;
         }

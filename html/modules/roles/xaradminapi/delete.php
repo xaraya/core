@@ -25,7 +25,7 @@ function roles_adminapi_delete($args)
     // Argument check
     if (!isset($uid)) {
         $msg = xarML('Wrong arguments to roles_adminapi_delete.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
@@ -39,7 +39,7 @@ function roles_adminapi_delete($args)
 
     if ($item == false) {
         $msg = xarML('No such user','roles');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'ID_NOT_EXIST',
                      new SystemException($msg));
         return false;
@@ -48,7 +48,7 @@ function roles_adminapi_delete($args)
 // CHECKME: is this correct now ? (tid obviously wasn't)
     // Security check
         if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$uid")) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
         return;
     }
 

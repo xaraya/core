@@ -34,7 +34,7 @@ function modules_adminapi_getalldependencies($args)
     // Argument check
     if (!isset($mainId)) {
         $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
 
@@ -89,7 +89,7 @@ function modules_adminapi_getalldependencies($args)
         $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
         if (!$output) {
             $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
             return;
         }
         //This is giving : recursing detected.... ohh well

@@ -34,7 +34,7 @@ function dynamicdata_adminapi_removehook($args)
     if (!isset($objectid) || !is_string($objectid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'object ID (= module name)', 'admin', 'removehook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
@@ -45,7 +45,7 @@ function dynamicdata_adminapi_removehook($args)
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module ID', 'admin', 'removehook', 'dynamicdata');
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
@@ -73,7 +73,7 @@ function dynamicdata_adminapi_removehook($args)
     if ($dbconn->ErrorNo() != 0) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'admin', 'removehook', 'dynamicdata');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
@@ -102,7 +102,7 @@ function dynamicdata_adminapi_removehook($args)
     if ($dbconn->ErrorNo() != 0) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'admin', 'removehook', 'dynamicdata');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;
@@ -117,7 +117,7 @@ function dynamicdata_adminapi_removehook($args)
     if ($dbconn->ErrorNo() != 0) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)',
                     'admin', 'removehook', 'dynamicdata');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
         //return false;

@@ -33,7 +33,7 @@ function modules_adminapi_deactivatewithdependents ($args)
 	// Argument check
 	if (!isset($mainId)) {
 		$msg = xarML('Missing module regid (#(1)).', $mainId);
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
 		return;
 	}
 
@@ -50,7 +50,7 @@ function modules_adminapi_deactivatewithdependents ($args)
 	// Get module information
 	$modInfo = xarModGetInfo($mainId);
 	if (!isset($modInfo)) {
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
+		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
 		return;
 	}
 
@@ -59,7 +59,7 @@ function modules_adminapi_deactivatewithdependents ($args)
 		//We shouldnt be here
 		//Throw Exception
 		$msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $modInfo['displayname']);
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;
 	}
 
@@ -68,7 +68,7 @@ function modules_adminapi_deactivatewithdependents ($args)
 	foreach ($dependents['active'] as $active_dependent) {
 	    if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
     	    $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
-			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 			return;
     	}
 	}

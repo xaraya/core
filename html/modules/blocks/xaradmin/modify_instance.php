@@ -68,7 +68,7 @@ function blocks_admin_modify_instance()
             'Block info function for module "#(1)" and type "#(2)"',
             $instance['module'], $instance['type']
         );
-        xarExceptionSet(
+        xarErrorSet(
             XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
             new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
         );

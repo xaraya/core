@@ -26,7 +26,7 @@ function roles_user_changelanguage()
     // Check if requested locale is supported
     if (!in_array($locale, $locales)) {
         $msg = xarML('Unsupported locale.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }

@@ -307,7 +307,7 @@ function xarVarValidate($validation, &$subject, $supress = false)
     if (empty($valType)) {
         // Raise an exception
         $msg = xarML('No validation type present.');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -502,7 +502,7 @@ function xarVar__getAllowedTags($level)
 function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL, $type = 'modvar')
 {
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -718,7 +718,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 {
     assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -902,7 +902,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'modvar')
 {
     if (empty($name)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
         return;
     }
 
@@ -1029,7 +1029,7 @@ function xarVarTransform ($string, $sourceContext, $targetContext)
     //Would it be useful to be able to transform arrays of strings at once?
 
     if (empty($sourceContext) || empty($targetContext)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'sourceContext or targetContext');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'sourceContext or targetContext');
         return;
     }
 
@@ -1067,7 +1067,7 @@ function xarVarLoad ($includes_type, $filename)
     if (!function_exists($function_name)) {
         // Raise an exception
         $msg = xarML('The #(1) type \'#(2)\' could not be found.', $includes_type, $filename);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
@@ -1088,7 +1088,7 @@ function xarVarEscape ($string, $targetContext, $extras = array())
 
     //Would it be useful to be able to transform arrays of strings at once?
     if (empty($targetContext)) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'targetContext');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'targetContext');
         return;
     }
 

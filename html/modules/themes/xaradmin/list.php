@@ -78,7 +78,7 @@ function themes_admin_list()
         // lets regenerate the list on each reload, for now
         if(!xarModAPIFunc('themes', 'admin', 'regenerate')){
             $msg = xarML('Themes list  regeneration failed!');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return;
         }
         $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> array('State' => $data['selfilter'])));

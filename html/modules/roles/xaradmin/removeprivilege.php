@@ -33,7 +33,7 @@ function roles_admin_removeprivilege()
             (($roleid == 2) && ($privid == 6)) ||
             (($roleid == 4) && ($privid == 2))) {
         $msg = xarML('This privilege cannot be removed');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
             new DefaultUserException($msg));
         return;
     } 

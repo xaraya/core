@@ -157,7 +157,7 @@ class xarTreeRenderer
     {
         if ($tree == '') $tree = $this->tree;
         if ($tree == '') {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY', new SystemException('A tree must be defined before attempting to display.'));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'INVALID_ENTITY', new SystemException('A tree must be defined before attempting to display.'));
         }
         $this->html = '<div name="RolesTree" id="RolesTree">';
         $this->nodeindex = 0;

@@ -54,7 +54,7 @@ function roles_user_lostpassword()
 
             if ((empty($uname)) && (empty($email))) {
                 $msg = xarML('You must enter your username or your email to proceed');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
 
@@ -67,7 +67,7 @@ function roles_user_lostpassword()
 
             if (empty($user)) {
                 $msg = xarML('That email address or username is not registered');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
             // Make new password
@@ -77,14 +77,14 @@ function roles_user_lostpassword()
 
             if (empty($user['pass'])) {
                 $msg = xarML('Problem generating new password');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
             //Update user password
             // check for user and grab uid if exists
             if (!xarModAPIFunc('roles','admin','update',$user)) {
             	$msg = xarML('Problem updating the user information');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             }
   			// Send Reminder Email
             if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;

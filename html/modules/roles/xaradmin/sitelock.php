@@ -123,7 +123,7 @@ function roles_admin_sitelock($args)
                 for($i=0; $i < $rolesCount; $i++) $spared[] = $roles[$i]['uid'];
                 if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+                    xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'DATABASE_ERROR',
                      new SystemException($msg));
                      return;

@@ -62,6 +62,8 @@ $ErrorStack = new xarExceptionStack();
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool true
+ * @todo   can we move the stacks above into the init?
+ * @todo   this subsystem screams for a shutdown handler 
  */
 function xarError_init($systemArgs, $whatToLoad)
 {
@@ -139,7 +141,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
     // This can be useful in debugging since EHS is not so perfect as a native
     // EHS could be (read damned PHP language :).
     if (xarCoreIsDebugFlagSet(XARDBG_EXCEPTIONS)) {
-    // TODO: remove again once xarLogException works
+        // TODO: remove again once xarLogException works
         if ($errorID == "ErrorCollection") $obj = $obj->exceptions[0];
         xarLogMessage("Logged error " . $obj->toString(), XARLOG_LEVEL_ERROR);
         //xarLogException();
@@ -178,12 +180,23 @@ function xarCurrentErrorType()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the error identifier
+ * @deprec 2004-04-01
  */
 function xarExceptionId()
 {
     return xarCurrentErrorID();
-}    // deprecated
+} 
 
+/**
+ * Gets the identifier of current error
+ *
+ * Returns the error identifier corresponding to the current error.
+ * If invoked when no error was raised, a void value is returned.
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return string the error identifier
+ */
 function xarCurrentErrorID()
 {
     global $ErrorStack;
@@ -201,12 +214,23 @@ function xarCurrentErrorID()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return mixed error value object
+ * @deprec 2004-04-01
  */
 function xarExceptionValue()
 {
     return xarCurrentError();
 }    // deprecated
 
+/**
+ * Gets the current error object
+ *
+ * Returns the value corresponding to the current error.
+ * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return mixed error value object
+ */
 function xarCurrentError()
 {
     global $ErrorStack;
@@ -224,12 +248,24 @@ function xarCurrentError()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return void
+ * @deprec 2004-04-01
  */
 function xarExceptionFree()
 {
     xarErrorFree();
-}    // deprecated
+}
 
+/**
+ * Resets current error status
+ *
+ * xarErrorFree is a shortcut for xarErrorSet(XAR_NO_EXCEPTION, NULL, NULL).
+ * You must always call this function when you handle a caught error or
+ * equivalently you don't throw the error back to the caller.
+ *
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
+ * @return void
+ */
 function xarErrorFree()
 {
     global $ErrorStack;
@@ -244,12 +280,22 @@ function xarErrorFree()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return void
+ * @deprec 2004-04-01
  */
 function xarExceptionHandled()
 {
     xarErrorHandled();
-}    // deprecated
+}
 
+/**
+ * Handles the current error
+ *
+ * You must always call this function when you handle a caught error.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return void
+ */
 function xarErrorHandled()
 {
 //    if (xarCurrentErrorType() == XAR_NO_EXCEPTION) {
@@ -273,12 +319,26 @@ function xarErrorHandled()
  * @param format string one of template or plain
  * @param stacktype string one of CORE or ERROR
  * @return string the string representing the raised error
+ * @deprec 2004-04-01
  */
 function xarExceptionRender($format)
 {
     return xarErrorRender($format);
 }    // deprecated
 
+/**
+ * Renders the current error
+ *
+ * Returns a string formatted according to the $format parameter that provides all the information
+ * available on current error.
+ * If there is no error currently raised an empty string is returned.
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @param format string one of template or plain
+ * @param stacktype string one of CORE or ERROR
+ * @return string the string representing the raised error
+ */
 function xarErrorRender($format,$stacktype = "ERROR")
 {
     assert('$format == "template" || $format == "rawhtml" || $format == "text"; /* Improper format passed to xarErrorRender */');

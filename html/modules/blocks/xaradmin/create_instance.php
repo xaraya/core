@@ -35,7 +35,7 @@ function blocks_admin_create_instance()
     $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
     if (!empty($checkname)) {
         $msg = xarML('Block name "#(1)" already exists', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

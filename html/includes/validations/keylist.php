@@ -44,7 +44,7 @@ function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc
 
         // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
         if (!($subject === NULL && $supress_soft_exc)) {
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return;
         } else {
             return false;

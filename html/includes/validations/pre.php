@@ -126,7 +126,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     // Raise an error if not.
                     if (!empty($subject) && !preg_match('/^[a-z_]/', $subject)) {
                         $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
-                        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                         $return = false;
                     }
                     break;
@@ -210,7 +210,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
         $errorstack =& xarErrorGet();
         $error = array_shift($errorstack);
         $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
-        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
     }
 
     // Single point of exit.

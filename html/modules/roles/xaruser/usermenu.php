@@ -112,7 +112,7 @@ function roles_user_usermenu($args)
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
                     $msg = xarML('Your password must be #(1) characters long.', $minpasslength);
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
                 }
                 // Check to make sure passwords match
@@ -120,7 +120,7 @@ function roles_user_usermenu($args)
                     $pass = $pass1;
                 } else {
                     $msg = xarML('The passwords do not match');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                     return;
                 }
                 $oldemail = xarUserGetVar('email');
@@ -152,7 +152,7 @@ function roles_user_usermenu($args)
 
             if ($emailcheck == false) {
                     $msg = xarML('There is an error in the supplied email address');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
             }
 
@@ -164,7 +164,7 @@ function roles_user_usermenu($args)
             if ($user != false) {
                 unset($user);
                 $msg = xarML('That email address is already registered.');
-                xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
 
@@ -175,7 +175,7 @@ function roles_user_usermenu($args)
                 $disallowedemails = explode("\r\n", $disallowedemails);
                 if (in_array ($email, $disallowedemails)) {
                     $msg = xarML('That email address is either reserved or not allowed on this website');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     return;
                 }
             }
@@ -217,7 +217,7 @@ function roles_user_usermenu($args)
                                     'senduseremail',
                                     array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
                     $msg = xarML('Problem sending confirmation email');
-                    xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }
             }
         } else {

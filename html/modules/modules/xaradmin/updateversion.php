@@ -26,7 +26,7 @@ function modules_admin_updateversion()
 
     if (!isset($regId)) {
         $msg = xarML('Invalid module id');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                         new SystemException($msg));
         return;
     }

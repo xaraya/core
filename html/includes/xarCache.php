@@ -16,6 +16,7 @@
  * Initialise the caching options
  *
  * @returns true on success, false if trouble is encountered
+ * @todo    consider the use of a shutdownhandler for cache maintenance
  */
 function xarCache_init($args)
 {
@@ -89,7 +90,7 @@ function xarPageIsCached($cacheKey, $name = '')
     // $cacheKey (and $name if necessary) in one page request - e.g. for module and block caching
     $xarPage_cacheCode = md5($page);
 
-// CHECKME: use $name for something someday ?
+    // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
     if (strstr($cacheKey, '-user-') &&
@@ -133,7 +134,13 @@ function xarPageIsCached($cacheKey, $name = '')
     }
 }
 
-//function xarBlockIsCached($cacheKey, $blockDynamics, $blockPermission, $name = '')
+/**
+ * Check wheter a block is cached
+ *
+ * @access public
+ * @param  array $args($cacheKey,$blockDynamics, $blockPermissions, $name = '')
+ * @return bool
+ */
 function xarBlockIsCached($args)
 {
     global $xarOutput_cacheCollection, $xarBlock_cacheCode, $xarBlock_cacheTime, $blockCacheExpireTime, $xarBlock_noCache;
@@ -260,13 +267,20 @@ function xarPageGetCached($cacheKey, $name = '')
 {
     global $xarOutput_cacheCollection, $xarPage_cacheCode;
 
-// CHECKME: use $name for something someday ?
+    // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
     @readfile($cache_file);
 
     xarOutputCleanCached('Page');
 }
 
+/**
+ * Get the output of a cached block
+ *
+ * @access public
+ * @param  string $cacheKey
+ * @param  string $name
+ */
 function xarBlockGetCached($cacheKey, $name = '')
 {
     global $xarOutput_cacheCollection, $xarBlock_cacheCode;
@@ -290,9 +304,9 @@ function xarBlockGetCached($cacheKey, $name = '')
  * set the content of a cached page
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
- * @param value the new content for that page
+ * @param string $cacheKey the key identifying the particular cache you want to access
+ * @param string $name     the name of the page in that particular cache
+ * @param string $value    value the new content for that page
  * @returns void
  */
 function xarPageSetCached($cacheKey, $name, $value)
@@ -301,7 +315,7 @@ function xarPageSetCached($cacheKey, $name, $value)
     
     $xarTpl_themeDir = xarTplGetThemeDir();
 
-// CHECKME: use $name for something someday ?
+    // CHECKME: use $name for something someday ?
     $cache_file = "$xarOutput_cacheCollection/$cacheKey-$xarPage_cacheCode.php";
 
     if (strstr($cacheKey, '-user-') &&
@@ -326,6 +340,15 @@ function xarPageSetCached($cacheKey, $name, $value)
     }
 }
 
+/**
+ * Set the contents of a block in the cache
+ *
+ * @access public
+ * @param  string $cacheKey
+ * @param  string $name
+ * @param  string $value
+ *
+ */
 function xarBlockSetCached($cacheKey, $name, $value)
 {
     global $xarOutput_cacheCollection, $xarOutput_cacheSizeLimit, $xarBlock_cacheCode, $blockCacheExpireTime, $xarBlock_noCache;
@@ -358,8 +381,8 @@ function xarBlockSetCached($cacheKey, $name, $value)
  * delete a cached page
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
+ * @param string $cacheKey the key identifying the particular cache you want to access
+ * @param string $name     the name of the page in that particular cache
  * @returns void
  */
 function xarPageDelCached($cacheKey, $name)
@@ -374,8 +397,8 @@ function xarPageDelCached($cacheKey, $name)
 /**
  * flush a particular cache (e.g. when a new item is created)
  *
- * @access public
- * @param key the key identifying the particular cache you want to wipe out
+ * @access  public
+ * @param   string $cacheKey the key identifying the particular cache you want to wipe out
  * @returns void
  */
 function xarPageFlushCached($cacheKey)
@@ -397,7 +420,9 @@ function xarPageFlushCached($cacheKey)
  * note: for blocks, this only gets called when the cache size limit has been reached,
  *       and when called by blocks, the global cache timeout takes precedents 
  *
- * @access public
+ * @access  public
+ * @param   string $type
+ * @param   string $cacheKey
  * @returns void
  */
 function xarOutputCleanCached($type, $cacheKey = '')
@@ -428,8 +453,15 @@ function xarOutputCleanCached($type, $cacheKey = '')
  * check the size of the cache
  *
  * @access public
- * @returns float
- * @author nospam@jusunlee.com | laurie@oneuponedown.com | jsb
+ * @param  string  $dir
+ * @param  string  $type
+ * @param  string  $cacheKey
+ * @return float
+ * @author nospam@jusunlee.com 
+ * @author laurie@oneuponedown.com 
+ * @author jsb
+ * @todo   $dir changes type
+ * @todo   come up with a good way to determine which cacheKeys are the least important and flush them to make more space.
  */
 function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 {
@@ -453,8 +485,6 @@ function xarCacheDirSize($dir = FALSE, $type, $cacheKey = '')
 
     if($size > $xarOutput_cacheSizeLimit) {
         xarOutputCleanCached($type);
-        // todo: come up with a good way to determine which cacheKeys are the least important
-        // and fush them to make more space.
         //xarPageFlushCached('articles-user-view');
     }
 

@@ -26,7 +26,7 @@ function blocks_adminapi_groupgetinfo($args)
     extract($args);
 
     if ($blockGroupId < 1) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'blockGroupId');
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'blockGroupId');
         return;
     }
 

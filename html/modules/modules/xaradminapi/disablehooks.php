@@ -33,7 +33,7 @@ function modules_adminapi_disablehooks($args)
     // Argument check
     if (empty($callerModName) || empty($hookModName)) {
         $msg = xarML('callerModName or hookModName');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
         return;
     }
     if (empty($callerItemType)) {

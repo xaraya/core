@@ -23,7 +23,7 @@ function blocks_userapi_read_type_info($args)
     if (empty($module) && empty($type)) {
         // No identifier provided.
         $msg = xarML('Invalid parameter: missing module or type');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 

@@ -48,7 +48,7 @@ function themes_admin_updatetpltag()
 	if ($action == 'update') {
 		if(!xarTplUnregisterTag($tagname)) {
 			$msg = xarML('Could not unregister (#(1)).', $tagname);
-			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+			xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
 			                new SystemException($msg));
         return;
 			}
@@ -56,7 +56,7 @@ function themes_admin_updatetpltag()
 	
 	if(!xarTplRegisterTag($module, $tagname, $aAttributes, $handler)) {
 		$msg = xarML('Could not register (#(1)).', $tagname);
-		xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+		xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
 		                new SystemException($msg));
 		return;
 	}

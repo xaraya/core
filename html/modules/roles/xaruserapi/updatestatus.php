@@ -25,7 +25,7 @@ function roles_userapi_updatestatus($args)
         (!isset($state))) {
         $msg = xarML('Invalid Parameter Count',
                       join (', ',$invalid), 'user', 'updatestatus', 'roles');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                         new SystemException($msg));
         return;
     }

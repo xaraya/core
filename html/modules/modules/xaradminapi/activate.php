@@ -28,7 +28,7 @@ function modules_adminapi_activate ($args)
     // Argument check
     if (!isset($regid)) {
         $msg = xarML('Empty regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }
@@ -40,7 +40,7 @@ function modules_adminapi_activate ($args)
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
 		$msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']); 
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;
 	}
 

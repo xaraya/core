@@ -250,7 +250,7 @@ class xarMasks
     {
         if (!is_array($privs1) || !is_array($privs1)) {
             $msg = xarML('Parameters to winnow need to be arrays');
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                            new SystemException($msg));
             return;
         }
@@ -366,7 +366,7 @@ class xarMasks
             else {
                 $msg = xarML('No masks registered for component #(1) in module #(2)', $component, $module);
             }
-            xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
+            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA',
                            new DefaultUserException($msg));
             return;
         }
@@ -426,7 +426,7 @@ class xarMasks
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             $msg = xarML('No privilege for #(1)',$mask->getName());
-            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA',
+            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
                            new DefaultUserException($msg));
         }
 
@@ -1176,7 +1176,7 @@ class xarPrivileges extends xarMasks
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
 
-                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA',
+                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
                                new DefaultUserException($msg));
                 return;
             }
@@ -1735,7 +1735,7 @@ class xarPrivileges extends xarMasks
             }
             if (count($p) != 5) {
                 $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                new SystemException($msg));
             }
         }
@@ -1933,7 +1933,7 @@ class xarPrivilege extends xarMask
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.',
                         'privileges');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                         'DUPLICATE_DATA',
                          new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _MODARGSERROR);
@@ -1953,7 +1953,7 @@ class xarPrivilege extends xarMask
         if ($count == 1) {
             $msg = xarML('This entry already exists.',
                         'privileges');
-            xarExceptionSet(XAR_USER_EXCEPTION,
+            xarErrorSet(XAR_USER_EXCEPTION,
                         'DUPLICATE_DATA',
                          new DefaultUserException($msg));
             xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);

@@ -27,7 +27,7 @@ function modules_adminapi_update($args)
     // Argument check
     if (!isset($regid)) {
         $msg = xarML('Empty regid (#(1)).', $regid);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
         return;
     }

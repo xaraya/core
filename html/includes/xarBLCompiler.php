@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id$
+ * File: $Id: xarBLCompiler.php 1.169 04/03/25 18:47:58+01:00 marcel@hsdev.com $
  *
  * BlockLayout Template Engine Compiler
  *
@@ -73,7 +73,7 @@ class xarTpl__CompilerError extends SystemException
     function raiseError($msg)
     {
         // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
     }
 }
 
@@ -97,7 +97,7 @@ class xarTpl__ParserError extends SystemException
         $msg .= str_repeat('-', max(0,$posInfo->column - 1));
         $msg .= '^';
         // FIXME: evaluate whether this needs to be a system exception.
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
     }
 }
 

@@ -64,7 +64,7 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
                 ."/cache/templates', but setting: 'cache templates' is set to On. Either change file/directory permissions or set caching to Off (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
             // Set the exception, but do not return just yet, because we *can* continue.
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
         }
     }
 
@@ -1025,7 +1025,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
         extract($tplData, EXTR_OVERWRITE);
     } else {
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -1077,7 +1077,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     }
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
 
@@ -1130,7 +1130,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     } else {
         // This should actually never be reached.
         $msg = 'Incorrect format for tplData, it must be an associative array of arguments';
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                        new SystemException($msg));
         return;
     }
@@ -1304,7 +1304,7 @@ function xarTpl__loadFromFile($sourceFileName)
     }
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
         return;
     }
 
@@ -1372,14 +1372,14 @@ class xarTemplateAttribute
         // FIXME: Move this expression out of the class and define() it.
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
             $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
 
         if (!is_integer($flags) && $flags != NULL) {
             $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             return;
         }
@@ -1441,7 +1441,7 @@ class xarTemplateTag
         // FIXME: See note at attribute class
         if (!eregi('^[a-z][-_a-z0-9]*$', $name)) {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             $this->_name = NULL;
             return;
@@ -1457,7 +1457,7 @@ class xarTemplateTag
             $this->_func = $matches[3];
         } else {
             $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                            new SystemException($msg));
             $this->_name = NULL;
             return;
@@ -1501,7 +1501,7 @@ class xarTemplateTag
                 $this->_func = $matches[3];
             } else {
                 $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                                new SystemException($msg));
                 $this->_name = NULL;
                 return;
@@ -1528,7 +1528,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     if (xarTplGetTagObjectFromName($tag_name) != NULL) {
         // Already registered
         $msg = xarML('<xar:#(1)> tag is already defined.', $tag_name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return false;
     }
@@ -1607,7 +1607,7 @@ function xarTplCheckTagAttributes($name, $args)
 
     if ($tag_ref == NULL) {
         $msg = xarML('<xar:#(1)> tag is not defined.', $name);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }
@@ -1635,13 +1635,13 @@ function xarTplCheckTagAttributes($name, $args)
 
             // bad type for attribute
             $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                             new SystemException($msg));
             return false;
         } elseif ($attr->isRequired()) {
             // required attribute is missing!
             $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
-            xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                             new SystemException($msg));
             return false;
         }
@@ -1702,7 +1702,7 @@ function xarTplPrint($template_sourcefile, $args = array())
 
     if (!file_exists($template_sourcefile)) {
         $msg = xarML('Template source not found: #(1).', $template_sourcefile);
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
                        new SystemException($msg));
         return;
     }

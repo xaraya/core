@@ -37,7 +37,7 @@ function privileges_admin_removerole()
         (($roleid == 4) && ($pid == 2)))
         {
         $msg = xarML('This privilege cannot be removed');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
+        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
                        new SystemException($msg));
         return;
     }

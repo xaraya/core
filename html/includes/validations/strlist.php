@@ -29,7 +29,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
     if (!is_string($subject)) {
         $msg = xarML('Not a string: "#(1)"', $subject);
         if (!$supress_soft_exc) {
-            xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
         }
         return false;
     }
@@ -42,7 +42,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         if (empty($sep)) {
             $msg = xarML('No separator character(s) provided for validation type "strlist"');
             if (!$supress_soft_exc) {
-                xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
             }
             return false;
         }

@@ -23,7 +23,7 @@ function roles_adminapi_renamegroup($args)
 
     if((!isset($pid)) || (!isset($gname))) {
         $msg = xarML('groups_adminapi_renamegroup');
-        xarExceptionSet(XAR_SYSTEM_EXCEPTION,
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',
                      new SystemException($msg));
         return false;
