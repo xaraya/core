@@ -841,8 +841,8 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
     if (!$found) {
         // if it's loaded but not found, then set the error message to that
-        if (!$isLoaded) {
-            $msg = xarML('Module function #(1) doesn\'t exist.', $modAPIFunc);
+        if (!$isLoaded || empty($msg)) {
+            $msg = xarML('Module function #(1) doesn\'t exist.', $modFunc);
         }
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
         return;
@@ -933,8 +933,9 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
     if (!$found) {
         if ($throwException) {
-//            if (!$isLoaded)
-            $msg = xarML('Module API function #(1) doesn\'t exist or couldn\'t be loaded.', $modAPIFunc);
+            if (!$isLoaded || empty($msg)) {
+                $msg = xarML('Module API function #(1) doesn\'t exist or couldn\'t be loaded.', $modAPIFunc);
+            }
 
             // MrB: When there is a parse error in the api file we sometimes end up
             // here, the error is never shown !!!! (xmlrpc for example)
