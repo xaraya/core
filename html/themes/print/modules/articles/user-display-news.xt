@@ -1,23 +1,23 @@
-<h3>#$title#</h3>
+<h3><xar:var name="title"/></h3>
 <span class="xar-sub">
 <xar:mlstring>Posted by</xar:mlstring>: 
 	<xar:if condition="!empty($profile)">
-		<a href="#$profile#">#$author#</a>
+		<a href="#$profile#"><xar:var name="author"/></a>
 		<xar:else />
-			#$author#
+			<xar:var name="author"/>
 	</xar:if>
 <xar:mlstring>on</xar:mlstring>
-#$date#
+<xar:var name="date"/>
 </span>
 <br />
-#$summary#
+<xar:var name="summary"/>
 <br />
 <br />
-#$body#
+<xar:var name="body"/>
 <br />
 <xar:if condition="!empty($notes)">
 <br />
 <span class="xar-quote">
-	Note : <i>#$notes#</i>
+	<xar:mlstring>Note </xar:mlstring>:<i><xar:var name="notes"/></i>
 </span>
 </xar:if>

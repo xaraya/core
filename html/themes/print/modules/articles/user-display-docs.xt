@@ -1,6 +1,1 @@
-<h3>#$title#</h3>
-#$body#
-<br />
-<span class="xar-quote">
-	#$notes#
-</span>
+<xar:template type="theme" file="user-display-common"/>
