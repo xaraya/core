@@ -317,7 +317,7 @@ class xarLogger_simple extends xarLogger
     */
     function _formatMessage($message, $level)
     {
-        return sprintf("%s [%s] %s\r\n", $this->getTime(), $this->levelToString($level), $message);
+        return $this->getTime() . ' [' . $this->levelToString($level) . '] ' . $message . "\r\n";
     }
 } // End of class
 ?>
