@@ -64,6 +64,26 @@ function roles_admin_asknotification($args)
             if (!xarSecConfirmAuthKey()) return;
             if (!xarVarFetch('subject', 'str:1:', $data['subject'], NULL, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('message', 'str:1:', $data['message'], NULL, XARVAR_NOT_REQUIRED)) return;
+
+			// Need to convert %%var%% to #$var# so that we can compile the template
+			$data['message'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['message'] );
+			$data['subject'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['subject'] );
+
+			// Preserve whitespace by encoding to html (block layout compiler seems to eat whitespace for lunch)
+			$data['message'] = nl2br($data['message']);
+			$data['message'] = str_replace(" ","&nbsp;", $data['message']);
+
+			// Get System/Site vars
+		    $vars  = xarModAPIFunc('roles','admin','getmessageincludestring', array('template' => 'message-vars'));
+
+			// Compile Template before sending it to senduseremail()
+			$data['message'] = xarTplCompileString($vars . $data['message']);
+			$data['subject'] = xarTplCompileString($vars . $data['subject']);
+
+			// Restore whitespace
+			$data['message'] = str_replace('&nbsp;',' ', $data['message']);			
+			$data['message'] = str_replace('<br />',' ', $data['message']);
+
             //Send notification
             $uid = unserialize(base64_decode($uid));
             if (!xarModAPIFunc('roles','admin','senduseremail', array( 'uid' => $uid, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
