@@ -22,18 +22,14 @@ function modules_adminapi_activate ($args)
         return;
     }
 
-    $modInfo = xarModGetInfo($regid);
-    if (!isset($modInfo) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
-
     // Module activate function
 	if (!xarModAPIFunc('modules',
                            'admin',
                            'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
-		//Raise an Exception
+		$msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']); 
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
 		return;
 	}
 
@@ -43,6 +39,7 @@ function modules_adminapi_activate ($args)
                         'setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_ACTIVE));
+
     if (!isset($res) && xarExceptionMajor() != XAR_NO_EXCEPTION) {
         return NULL;
     }

@@ -2,7 +2,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Module Instalation with unmet Dependencies</xar:mlstring></h2>
     <!-- The form for editting the module settings and hooks -->
-    <form action="#xarModURL('modules','admin','initialise')#" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" id="id" value="#$id#" />
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
 

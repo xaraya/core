@@ -41,19 +41,23 @@ function modules_adminapi_setstate($args)
     // Check valid state transition
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:
-            // New Module
-            $module_statesTable = $xartable['system/module_states'];
-            $sql = "INSERT INTO $module_statesTable
-               (xar_regid,
-                xar_state)
-                VALUES
-                ('" . xarVarPrepForStore($regid) . "',
-                 '" . xarVarPrepForStore($state) . "')";
+	
+			if ($oldState != XARMOD_STATE_INACTIVE) {
+	            // New Module
+	            $module_statesTable = $xartable['system/module_states'];
+	            $sql = "INSERT INTO $module_statesTable
+    	           (xar_regid,
+        	        xar_state)
+            	    VALUES
+	                ('" . xarVarPrepForStore($regid) . "',
+    	             '" . xarVarPrepForStore($state) . "')";
+	
+    	        $result =& $dbconn->Execute($sql);
+        	    if (!$result) return;
+	
+	            return true;
+			}
 
-            $result =& $dbconn->Execute($sql);
-            if (!$result) return;
-
-            return true;
             break;
         case XARMOD_STATE_INACTIVE:
             break;
@@ -89,7 +93,7 @@ function modules_adminapi_setstate($args)
             WHERE xar_regid = " . xarVarPrepForStore($regid);
     $result =& $dbconn->Execute($sql);
 
-    if (!$result) return;
+    if (!$result) {return;}
 
     // We're update module state here we must update at least
     // the base info in the cache.

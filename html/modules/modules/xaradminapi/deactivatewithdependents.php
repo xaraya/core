@@ -52,59 +52,16 @@ function modules_adminapi_deactivatewithdependents ($args)
 		return;
 	}
 
-	$dependency = $modInfo['dependency'];
+    $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$mainId));
 
-	if (empty($dependency)) {
-		$dependency = array();
+	foreach ($dependents['active'] as $active_dependent) {
+	    if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+    	    $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
+			xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
+			return;
+    	}
 	}
-
-    // Get all modules in DB
-    // A module is dependent only if it was already initialised at least.
-    // So db modules should be a safe start to go looking for them
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
-    if (!isset($dbModules)) return;
-
-    //Finds out the active/upgraded/inactive modules 
-    foreach ($dbModules as $name => $dbInfo) 
-    {
-	//At least Inactive... XARMOD_STATE are useless.. They should make
-	//us able to use them to reflect that active modules were first initialised
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE ||
-            $dbInfo['state'] == XARMOD_STATE_UPGRADED) 
-        { 
-	    foreach ($dbInfo['dependency'] as $module_id => $conditions) 
-            {
-	        if (is_array($conditions)) {
-		    //The module id is in $modId
-		    $modId = $module_id;
-		} else {
-		    //The module id is in $conditions
-		    $modId = $conditions;
-		}
-
-		//If them match, then it is a dependent module				
-		if ($modId == $mainId) {
-
-		    //Recurse				
-		    //Later on let's add some check for circular dependencies
-		    if (!xarModAPIFunc('modules', 'admin', 'deactivatewithdependents', array('regid'=>$modId))) 
-                    {
-		        $msg = xarML('Unable deactivate dependent module with ID (#(1)).', $modId);
-			    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-			    return;
-		    }
-		}
-	    }
-        }
-    }
-
-    // Finally, now that dependents are dealt with, deactivate the module
-    if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $mainId))) {
-        $msg = xarML('Unable to deactivate module "#(1)".', $modInfo['displayname']);
-	xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-	return;
-    }
-
+	
     return true;
 }
 

@@ -23,30 +23,17 @@ function modules_adminapi_remove($args)
     // Get module information
     $modinfo = xarModGetInfo($regid);
 
-    // Get module database info
-    xarModDBInfoLoad($modinfo['name'], $modinfo['directory']);
-    
     //TODO: Add check if there is any dependents
 
     // Module deletion function
-    //FIXME: add module file not exist exception?
-
-    $xarinitfilename = 'modules/'. $modinfo['osdirectory'] .'/xarinit.php';
-    // pnAPI compatibility
-    if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = 'modules/'. $modinfo['osdirectory'] .'/pninit.php';
-    }
-
-        // FIXME: we shouldn't rely on @ signs in the code, do proper checking.
-    @include $xarinitfilename;
-
-    $func = $modinfo['name'] . '_delete';
-    if (function_exists($func)) {
-        if ($func() != true) {
-            xarSessionSetVar('errormsg',xarML('Unable to remove module, function returned false'));
-            return false;
-        }
-    }
+	if (!xarModAPIFunc('modules',
+	                   'admin',
+					   'executeinitfunction',
+	                   array('regid'    => $regid,
+                             'function' => 'delete'))) {
+		//Raise an Exception
+		return;
+	}
 
     // Delete any module variables that the module cleanup function might
     // have missed
@@ -67,31 +54,12 @@ function modules_adminapi_remove($args)
     $result =& $dbconn->Execute($sql);
     if (!$result) return;
 
-    // Delete the module from the modules table
-    $sql = "DELETE FROM $tables[modules]
-              WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result =& $dbconn->Execute($sql);
-    if (!$result) return;
-
-
-    // Delete the module state from the module states table
-/*
-    //Get current module mode to update the proper table
-    $modMode  = $modinfo['mode'];
-
-    if ($modMode == XARMOD_MODE_SHARED) {
-        $module_statesTable = $tables['system/module_states'];
-    } elseif ($modMode == XARMOD_MODE_PER_SITE) {
-        $module_statesTable = $tables['site/module_states'];
-    }
-*/
-// TODO: what happens if a module state is still there in one of the subsites ?
-    $module_statesTable = $tables['site/module_states'];
-
-    $sql = "DELETE FROM $module_statesTable
-            WHERE xar_regid = " . xarVarPrepForStore($regid);
-    $result =& $dbconn->Execute($sql);
-    if (!$result) return;
+    // Update state of module
+    $res = xarModAPIFunc('modules',
+                        'admin',
+                        'setstate',
+                        array('regid' => $regid,
+                              'state' => XARMOD_STATE_UNINITIALISED));
 
     return true;
 }

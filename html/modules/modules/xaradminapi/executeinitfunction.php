@@ -15,11 +15,11 @@ function modules_adminapi_executeinitfunction ($args)
 	if(!xarSecurityCheck('AdminModules')) return;
 
     // Get module information
-    $modinfo = xarModGetInfo($args['regid']);
+    $modInfo = xarModGetInfo($args['regid']);
 	
     if (empty($modInfo['osdirectory']) || !is_dir('modules/'. $modInfo['osdirectory'])) {
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid - directory: $modInfo[osdirectory]) does not exist."));
+                       new SystemException(__FILE__."(".__LINE__."): Module (regid: $args[regid] - directory: $modInfo[osdirectory]) does not exist."));
         return;
     }
 
