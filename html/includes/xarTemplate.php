@@ -280,7 +280,10 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
  */
 function xarTplGetPageTitle()
 {
-    return $GLOBALS['xarTpl_pageTitle'];
+    if(isset($GLOBALS['xarTpl_pageTitle'])) {
+        return $GLOBALS['xarTpl_pageTitle'];
+    }
+    return '';
 }
 
 /**
