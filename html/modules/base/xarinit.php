@@ -349,6 +349,24 @@ function base_init()
 
     $id_admin = $dbconn->PO_Insert_ID($usersTable,'xar_uid');
 
+    $user_statusTable = $systemPrefix . '_user_status';
+    $idstatus_anonymous = $dbconn->GenId($user_statusTable);
+    $query = "INSERT INTO $user_statusTable VALUES ($idstatus_anonymous,'anonymous','','','0')";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $idstatus_anonymous = $dbconn->PO_Insert_ID($user_statusTable,'xar_uid');
+
+    $idstatus_admin = $dbconn->GenId($user_statusTable);
+    $now = time();
+    $query = "INSERT INTO $user_statusTable VALUES ($idstatus_admin, 'Admin', '$now','','3')";
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $idstatus_admin = $dbconn->PO_Insert_ID($user_statusTable,'xar_uid');
+
     /***************************************************************
     * Install groups module and setup default groups
     ***************************************************************/

@@ -28,6 +28,7 @@ function users_init()
     $tables['users']         = $sitePrefix . '_users';
     $tables['user_data']     = $sitePrefix . '_user_data';
     $tables['user_property'] = $sitePrefix . '_user_property';
+    $tables['user_status']   = $sitePrefix . '_user_status';
     // Create the table
     // *_users
     $query = xarDBCreateTable($tables['users'],
@@ -132,7 +133,42 @@ function users_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    // Initialisation successful
+    $query = xarDBCreateTable($tables['user_status'],
+                             array('xar_uid'         => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '0',
+                                                             'increment'   => true,
+                                                             'primary_key' => true),
+                                   'xar_uname'       => array('type'        => 'varchar',
+                                                             'size'        => 25,
+                                                             'null'        => false,
+                                                             'default'     => ''),
+                                   'xar_date_reg'    => array('type'        => 'varchar',
+                                                             'size'        => 60,
+                                                             'null'        => false,
+                                                             'default'     => ''),
+                                   'xar_valcode'     => array('type'        => 'varchar',
+                                                             'size'        => 25,
+                                                             'null'        => false,
+                                                             'default'     => ''),
+                                   'xar_state'       => array('type'        => 'integer',
+                                                             'null'        => false,
+                                                             'default'     => '0',
+                                                             'increment'   => false,
+                                                             'primary_key' => false)));
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
+    $index = array('name'      => 'i_xar_users_1',
+                   'fields'    => array('xar_uid'),
+                   'unique'    => TRUE);
+
+    $query = xarDBCreateIndex($tables['user_status'],$index);
+
+    $result =& $dbconn->Execute($query);
+    if (!$result) return;
+
     return true;
 }
 
