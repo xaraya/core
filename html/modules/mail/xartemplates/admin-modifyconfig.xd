@@ -31,20 +31,34 @@
 					</tr>
 					<tr align="left" valign="middle">
 						<td>
-							<xar:mlstring>Reply To Name</xar:mlstring>
+							<xar:mlstring>Add a reply to name and address to all emails sent</xar:mlstring>
 						</td>
 						<td>
-							<input type="text" name="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100">
+							<xar:if condition="xarModGetVar('mail', 'replyto')">
+								<input type="checkbox" name="replyto" id="replyto" value="1" checked="checked" tabindex="1" />
+							<xar:else />
+								<input type="checkbox" name="replyto" id="replyto" value="1" tabindex="1" />
+							</xar:if>
 						</td>
 					</tr>
-					<tr align="left" valign="middle">
-						<td>
-							<xar:mlstring>Reply To Address</xar:mlstring>
-						</td>
-						<td>
-							<input type="text" name="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100">
-						</td>
-					</tr>
+					<xar:if condition="xarModGetVar('mail', 'replyto') eq 'smtp'">
+						<tr align="left" valign="middle">
+							<td>
+								<xar:mlstring>Reply To Name</xar:mlstring>
+							</td>
+							<td>
+								<input type="text" name="replytoname" value="#xarModGetVar('mail', 'replytoname')#" size="30" maxlength="100">
+							</td>
+						</tr>
+						<tr align="left" valign="middle">
+							<td>
+								<xar:mlstring>Reply To Address</xar:mlstring>
+							</td>
+							<td>
+								<input type="text" name="replytoemail" value="#xarModGetVar('mail', 'replytoemail')#" size="50" maxlength="100">
+							</td>
+						</tr>
+					</xar:if>
 					<tr align="left" valign="middle">
 						<td>
 							<xar:mlstring>Default Word Wrap Size</xar:mlstring>
