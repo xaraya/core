@@ -107,7 +107,7 @@
                 <span class="help" title="#xarML('Use an alternate default page template.')#"><label for="alternatepagetemplate"><xar:mlstring>Use Alternate Page Template</xar:mlstring></label>:</span>
             </span>
             <span style="float: right; width: 78%; text-align: left;">
-                <xar:if condition="xarModGetVar('base', 'UseAlternatePageTemplate') ne ''">
+                <xar:if condition="xarModGetVar('base', 'UseAlternatePageTemplate')">
                     <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" checked="checked" />
                 <xar:else />
                     <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" />
