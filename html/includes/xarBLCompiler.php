@@ -1835,26 +1835,22 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         // Increment the loopCounter and retrieve its new value
         // NOTE: class method!
         $loopCounter = xarTpl__XarLoopNode::loopCounter('++');
-      
-        $output='';
-        if($loopCounter > 1) {
-            // We are nesting loops without id's, compensate
-            $previousLoop = $loopCounter - 1;
-            $output .= '$loop_'.$previousLoop.'=$loop;';
-        } 
-        // Save the name is a unique variable, if a loop:item from the parentloop is used as a loop array
-        // FIXME: keep an ey on this code it does the following 'weird' things:
-        // - using $loop in both outer part, definition part and inner part of the loop
-        // - adding $loop by reference to a property ( dont even try a var_dump on it )
-        $output .= '$loop_'.$loopCounter.'_name='.$name.'; ';
-        $output .= '$loop->index=-1; $loop->number='.$loopCounter.'; ';
-        $output .= '$loop->item=$loop_'.$loopCounter.'_name;';
-        $output .= 'foreach ($loop->item as $loop->key => $loop->item ) { ';
-        $output .= '$loop->index++; '; 
+        
+        $loopName ='$loop_'.$loopCounter;
+        $idpart ='';
         if(isset($id)) {
             // Make the id property point to the same loop so loop:id:index etc. works too
-            $output .= '$loop->'.$id.'=&$loop; ';
+            $idpart = $loopName.'->'.$id.'='.$loopName.'->item; $loop->'.$id.'=& '.$loopName.'->item;';
         }
+        $output = $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';'.
+                  $loopName.'->items='.$name.';
+                  foreach ('.$loopName.'->items as '.$loopName.'->key => '.$loopName.'->item ) {
+                       '. $loopName.'->index++;
+                       $loop->key   = '.$loopName.'->key; 
+                       $loop->item  =& '.$loopName.'->item; 
+                       $loop->index = '.$loopName.'->index;
+                       $loop->number= '.$loopName.'->number;
+                       '. $idpart;
         return $output;
     }
 
@@ -1862,11 +1858,10 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
     {
         // Decrement the loopCounter and retrieve its new value
         $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
-        $output ='';
+        $output = '} ';
         if($previousLoop >= 1 ) {
-            $output .= '$loop = $loop_'.$previousLoop.'; '; 
+            $output .= '$loop = $loop_'.$previousLoop.';'; 
         } 
-        $output .= '} ';
         return $output;
     }
 
