@@ -390,6 +390,9 @@ class xarMasks
                 break;
             }
         }
+        foreach ($privilegeset['privileges'] as $privilege) {
+            if (($privilege->getLevel() == 0) && ($privilege->includes($mask))) $pass = false;
+        }
         if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass);
         return $pass;
     }
@@ -1698,7 +1701,7 @@ function drawindent() {
     function implies($mask)
     {
         $match = $this->includes($mask);
-        return $match && ($this->getLevel() >= $mask->getLevel());
+        return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
     function getID()              {return $this->sid;}
