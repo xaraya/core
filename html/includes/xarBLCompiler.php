@@ -1842,7 +1842,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
             }
             return "xarThemeGetVar('".$themeName."', '".$name."')";
         case 'local':
-            // Resolve the name, not that this works for both name="test" and name="$test"
+            // Resolve the name, note that this works for both name="test" and name="$test"
             $value = xarTpl__ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
             if (!isset($value)) return; // throw back
 
@@ -2943,6 +2943,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access private
+ * @todo look at supporting xar:set name="$myarray['key']" again
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
@@ -2962,10 +2963,9 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
             return;
         }
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time
-        $name = str_replace(XAR_TOKEN_VAR_START,'',$name);
         $this->_name = str_replace(XAR_TOKEN_VAR_START,'',$name);
 
-        return XAR_TOKEN_VAR_START . $name;
+        return XAR_TOKEN_VAR_START . $this->_name;
     }
 
     function renderEndTag()
@@ -3013,7 +3013,6 @@ class xarTpl__XarBreakNode extends xarTpl__TplTagNode
     {
         $depth = 1;
         extract($this->attributes);
-
         return " break $depth; ";
     }
 
@@ -3040,7 +3039,6 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
     {
         $depth = 1;
         extract($this->attributes);
-
         return  " continue $depth; ";
     }
 
@@ -3063,6 +3061,8 @@ class xarTpl__XarContinueNode extends xarTpl__TplTagNode
  * @access private
  * @todo improve the flexibility for registered tags/foreign tags
  * @todo add the possibility to be 'relaxed', just ignoring unknown tags?
+ * @todo find a way to add renderbegin and renderend methods so custom tags can have open form
+ * @todo should expression resolving for attributes be done here or in the handler?
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
@@ -3075,12 +3075,10 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
         $this->tagobject = xarTplGetTagObjectFromName($tagName);
     }
 
-    // FIXME: Add the renderbegintag and renderendtag methods here, so custom tags can also support this
     function render()
     {
         assert('isset($this->tagobject); /* The tagobject should have been set when constructing */');
         if (!xarTplCheckTagAttributes($this->tagName, $this->attributes)) return;
-        // FIXME: should we process the expressions here for attributes?
         return $this->tagobject->callHandler($this->attributes);
     }
 
@@ -3128,14 +3126,13 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
  *
  * @package blocklayout
  * @access  private
- *
+ * @todo check if we are in a page templat, and whether we already have the root tag
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
     function constructor(&$parser,$tagName)
     {
         parent::constructor($parser, $tagName);
-        // TODO: check if we are in a page template, and whether we already have the root tag
         $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
     }
 
@@ -3160,6 +3157,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         }
 
         // Literally copy the content type, charset is determined by MLS
+        // FIXME: this explicitly limits to one locale per page, do we want that?
         $headercode = '
             $_bl_locale  = xarMLSGetCurrentLocale();
             $_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);
@@ -3185,6 +3183,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
  * This function regards 'space' in the xml sense i.e.:
  * - multiple spaces are equivalent to one
  * - only 'outside space' is considered, not space 'inside' the input
+ * - when multiple whitespace chars are found, the first is returned
  *
  * As the 'whitespace' problem is really unsolvable (by me) isolate it
  * here. If someone finds a solution, here's where it should happen
