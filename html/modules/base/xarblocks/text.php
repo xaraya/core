@@ -55,11 +55,11 @@ function base_textblock_display($blockinfo)
         if ($vars['expire'] != 0){
             return;
         } else {
-            $blockinfo['content'] = xarVarPrepForDisplay($vars['text_content']);
+            $blockinfo['content'] = nl2br($vars['text_content']);
             return $blockinfo;
         }
     } else {
-        $blockinfo['content'] = xarVarPrepForDisplay($vars['text_content']);
+        $blockinfo['content'] = nl2br($vars['text_content']);
         return $blockinfo;
     }
 
