@@ -441,6 +441,7 @@ class Dynamic_Property_Master
 
         // add some property types supported by utility modules
         if (xarModIsAvailable('categories') && xarModAPILoad('categories','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[100] = array(
                                     'id'         => 100,
                                     'name'       => 'categories',
@@ -452,6 +453,7 @@ class Dynamic_Property_Master
                                   );
         }
         if (xarModIsAvailable('hitcount') && xarModAPILoad('hitcount','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[101] = array(
                                     'id'         => 101,
                                     'name'       => 'hitcount',
@@ -463,6 +465,7 @@ class Dynamic_Property_Master
                                    );
         }
         if (xarModIsAvailable('ratings') && xarModAPILoad('ratings','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[102] = array(
                                     'id'         => 102,
                                     'name'       => 'ratings',
@@ -474,6 +477,7 @@ class Dynamic_Property_Master
                                    );
         }
         if (xarModIsAvailable('comments') && xarModAPILoad('comments','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[103] = array(
                                     'id'         => 103,
                                     'name'       => 'comments',
@@ -486,6 +490,7 @@ class Dynamic_Property_Master
         }
     // trick : retrieve the number of comments via a user function here
         if (xarModIsAvailable('comments') && xarModAPILoad('comments','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[104] = array(
                                     'id'         => 104,
                                     'name'       => 'numcomments',
@@ -499,6 +504,7 @@ class Dynamic_Property_Master
     // TODO: replace fileupload above with this one someday ?
     /*
         if (xarModIsAvailable('uploads') && xarModAPILoad('uploads','user')) {
+            // FIXME: what if it fails, an exception will be set!
             $proptypes[105] = array(
                                     'id'         => 105,
                                     'name'       => 'uploads',
@@ -1346,7 +1352,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         if (count($this->options) == 0 && !empty($this->validation)) {
             $basedir = $this->validation;
             $filetype = 'html?';
-            xarModAPILoad('dynamicdata','admin');
+            if (!xarModAPILoad('dynamicdata','admin')) return;
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $basedir,
                                          'filetype' => $filetype));

@@ -1053,6 +1053,7 @@ function dynamicdata_adminapi_handleInputTag($args)
     }
 
     // we'll call a function to do it for us
+    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
     $out = "xarModAPILoad('dynamicdata','admin');
 echo xarModAPIFunc('dynamicdata',
                    'admin',
@@ -1113,7 +1114,7 @@ function dynamicdata_adminapi_handleFormTag($args)
             return 'echo '.$args['object'].'->showForm(); ';
         }
     }
-
+    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
     $out = "xarModAPILoad('dynamicdata','admin');
 echo xarModAPIFunc('dynamicdata',
                    'admin',
@@ -1266,6 +1267,7 @@ function dynamicdata_adminapi_handleListTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
+    // FIXME: MrB: How does the wrapping of xarModAPILoad affect this?
     $out = "xarModAPILoad('dynamicdata','admin');
 echo xarModAPIFunc('dynamicdata',
                    'admin',

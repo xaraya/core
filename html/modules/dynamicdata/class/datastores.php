@@ -1067,7 +1067,8 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
 
         foreach (array_keys($this->fields) as $hook) {
             if (xarModIsAvailable($hook) && xarModAPILoad($hook,'user')) {
-            // TODO: find some more consistent way to do this !
+                // FIXME: If one of the above fails, an exception will be set!
+                // TODO: find some more consistent way to do this !
                 $value = xarModAPIFunc($hook,'user','get',
                                        array('modname' => $modname,
                                              'modid' => $modid,
@@ -1125,6 +1126,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 $ftype = preg_replace('/api$/','',$ftype);
                 // try to load the module API
                 if (!xarModAPILoad($fmod,$ftype)) {
+                    // FIXME: clear the exception?
                     continue;
                 }
                 // try to invoke the function with some common parameters

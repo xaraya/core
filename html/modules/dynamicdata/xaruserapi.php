@@ -1235,6 +1235,7 @@ function dynamicdata_userapi_handleOutputTag($args)
         }
     }
     
+    // FIXME: MrB: How does the wrappiing of xarModAPILoad affect this?
     $out = "xarModAPILoad('dynamicdata','user');
 echo xarModAPIFunc('dynamicdata',
                    'user',
@@ -1446,6 +1447,7 @@ function dynamicdata_userapi_handleViewTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
+    // FIXME: How does the wrapping of xarModAPILoad affect this?
     $out = "xarModAPILoad('dynamicdata','user');
 echo xarModAPIFunc('dynamicdata',
                    'user',
