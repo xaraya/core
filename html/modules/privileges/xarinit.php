@@ -6,7 +6,7 @@
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html} 
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Security Module
@@ -480,6 +480,9 @@ function privileges_init()
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
 */
+    // Set up an initial value for module variables.
+    xarModSetVar('privileges', 'showrealms', 0);
+
     // Initialisation successful
     return true;
 }
