@@ -499,7 +499,7 @@ function drawindent() {
 	}
 
 /**
- * makeMember: makes a role a child of a group
+ * makeMemberByName: makes a role a child of a group
  *
  * Creates an entry in the rolemembers table
  * This is a convenience class for module developers
@@ -512,7 +512,7 @@ function drawindent() {
  * @throws  none
  * @todo    create exceptions for bad input
 */
- 	function makeMember($childname,$parentname)
+ 	function makeMemberByName($childname,$parentname)
 	{
 // retrieve the parent's data from the repository
 		$query = "SELECT *
@@ -543,6 +543,76 @@ function drawindent() {
 		$query = "SELECT *
                   FROM $this->rolestable
                   WHERE xar_name = '$childname'";
+		//Execute the query, bail if an exception was thrown
+		$result = $this->dbconn->Execute($query);
+		if (!$result) return;
+
+// create the child object
+		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		$date_reg,$val_code,$state,$auth_module) = $result->fields;
+		$pargs = array('pid'=>$pid,
+						'name'=>$name,
+						'type'=>$type,
+						'parentid'=>$parentid,
+						'uname'=>$uname,
+						'email'=>$email,
+						'pass'=>$pass,
+						'url'=>$url,
+						'date_reg'=>$date_reg,
+						'val_code'=>$val_code,
+						'state'=>$state,
+						'auth_module'=>$auth_module);
+		$child =  new xarRole($pargs);
+
+// done
+		return $parent->addMember($child);
+	}
+
+/**
+ * makeMemberByUname: makes a role a child of a group
+ *
+ * Creates an entry in the rolemembers table
+ * This is a convenience class for module developers
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   string
+ * @param   string
+ * @return  boolean
+ * @throws  none
+ * @todo    create exceptions for bad input
+*/
+ 	function makeMemberByUname($childname,$parentname)
+	{
+// retrieve the parent's data from the repository
+		$query = "SELECT *
+                  FROM $this->rolestable
+                  WHERE xar_uname = '$parentname'";
+		//Execute the query, bail if an exception was thrown
+		$result = $this->dbconn->Execute($query);
+		if (!$result) return;
+
+// create the parent object
+		list($pid,$name,$type,$parentid,$uname,$email,$pass,$url,
+		$date_reg,$val_code,$state,$auth_module) = $result->fields;
+		$pargs = array('pid'=>$pid,
+						'name'=>$name,
+						'type'=>$type,
+						'parentid'=>$parentid,
+						'uname'=>$uname,
+						'email'=>$email,
+						'pass'=>$pass,
+						'url'=>$url,
+						'date_reg'=>$date_reg,
+						'val_code'=>$val_code,
+						'state'=>$state,
+						'auth_module'=>$auth_module);
+		$parent =  new xarRole($pargs);
+
+// retrieve the child's data from the repository
+		$query = "SELECT *
+                  FROM $this->rolestable
+                  WHERE xar_uname = '$childname'";
 		//Execute the query, bail if an exception was thrown
 		$result = $this->dbconn->Execute($query);
 		if (!$result) return;

@@ -35,14 +35,14 @@ function initializeSetup() {
     *********************************************************************/
 
 	xarMakeRoleRoot('Everybody');
-	xarMakeRoleMember('Administrators','Everybody');
-	xarMakeRoleMember('Admin','Administrators');
-	xarMakeRoleMember('Oversight','Everybody');
-	xarMakeRoleMember('Overseer','Oversight');
-	xarMakeRoleMember('Users','Everybody');
-	xarMakeRoleMember('User','Users');
-	xarMakeRoleMember('Anonymous','Everybody');
-//	xarMakeRoleMember('Current','Everybody');
+	xarMakeRoleMemberByName('Administrators','Everybody');
+	xarMakeRoleMemberByName('Admin','Administrators');
+	xarMakeRoleMemberByName('Oversight','Everybody');
+	xarMakeRoleMemberByName('Overseer','Oversight');
+	xarMakeRoleMemberByName('Users','Everybody');
+	xarMakeRoleMemberByName('User','Users');
+	xarMakeRoleMemberByName('Anonymous','Everybody');
+//	xarMakeRoleMemberByName('Current','Everybody');
 
     /*********************************************************************
     * Enter some default privileges

@@ -135,7 +135,7 @@ $schemas = array();
 	}
 
 /**
- * xarMakeRoleMember: create a parent-child relationship in the database between two roles
+ * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
  *
@@ -148,9 +148,48 @@ $schemas = array();
  * @todo    none
 */
 
-	function xarMakeRoleMember($childname, $parentname) {
+	function xarMakeRoleMemberByName($childname, $parentname) {
+			$roles = new xarRoles();
+			return $roles->makeMemberByName($childname, $parentname);
+	}
+
+/**
+ * xarMakeRoleMemberByUname: create a parent-child relationship in the database between two roles
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   child uname string
+ * @param   parent uname string
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function xarMakeRoleMemberByUname($childname, $parentname) {
 			$roles = new xarRoles();
 			return $roles->makeMember($childname, $parentname);
+	}
+
+/**
+ * xarMakeRoleMemberByID: create a parent-child relationship in the database between two roles
+ *
+ * This is a wrapper function
+ *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @access  public
+ * @param   child ID
+ * @param   parent ID
+ * @return  boolean
+ * @throws  none
+ * @todo    none
+*/
+
+	function xarMakeRoleMemberByID($childid, $parentid) {
+			$roles = new xarRoles();
+			$parent = $roles->getRole($parentid);
+			return $$parent->addMember($childid);
 	}
 
 /**
