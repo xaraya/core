@@ -1,0 +1,184 @@
+XARAYA CSS SUBSYSTEM (corecss scenario)
+--------------------------------------------------------------------------------
+This is an informal style doc, written to inform both users and developers about
+the progress and on-going changes. The doc is FYI only. It should not be used as 
+a basis for user and/or developer documentation. Any part of this doc is subject
+to changes in the future.
+
+GOALS AND OBJECTIVES OF THIS SUBPROJECT:
+
+    - Develop CSS subsystem, which would enable the following features:
+        
+        - easily add css support for a module, theme or any other component
+        - support all known methods of css linking and embedding
+        - support valid xhtml methods of inclusion of css in theme templates
+        - support minimal css administration options
+        - support dynamic method of serving css
+        - support for strict css file checking and verification
+        - support for css oriented error reporting
+        - provisional support for doctype agnostic css (xhtml provided already)
+        - provisional support for dynamic generation of css files
+        - provisional support for parsing css from files
+        - provisional support for online css editing
+        - provisional support for storing css data in db backend
+        - complete encapsulation and abstraction of required css objects
+        
+    - Develop new concept of Core CSS to allow:
+        
+        - eliminate inline styling of templates
+        - delivery of uniform and universal css rules across modules and themes
+        - streamlining of frequently used css patterns and classes
+        - interception of cross-browser's rendering problems and bugs
+        - ease of common css rulesets management via gui
+
+// CSS CLASS LIB - USER
+
+(users will probably not want to know fine details)
+
+General Purpose: comprehensive support for all CSS aspects of Xaraya
+Location: modules/themes/xarclass/
+Files: variable number of files with .class.php suffix + this docfile
+
+// CSS CLASS LIB - DEVELOPER
+
+1.  3 singleton objects created at init phase for core, module and theme
+
+1a. Each object is available throughout and can be accessed via helpers.
+
+1b. Current implementation stores objects in global array, but it may change
+    even before this document is published. Final version may use objects
+    stored in static vars.
+
+2.  Each component is encapsulated in individual subclass of the base class
+
+2a. The base class contains complete set of accessors for all css attributes
+
+2b. The components subclasses contain only relevant functions and class vars
+    to deal with the component-oriented tasks.
+
+2c. The subclasses are polymorphic extensions of the base class
+
+2d. The base class need not be instantiated and currently has no associated
+    object and is never referenced from anywhere directly.
+
+3.  Current class hierarchy is as follows:
+    
+    xarCSS (base) <- -> moduleCSS <- -> themeCSS
+    xarCSS (base) <- -> moduleCSS <- -> coreCSS
+
+4.  Two extra class collections encapsulate ancillary functions:
+
+    xarCSSPath <- -> cssComponentPath <- -> cssFileInspector
+    
+    and
+    
+    htmlCSSTag <- -> linkCSSTag <-> importCSSTag <-> styleCSSTag
+    
+    Strictly speaking these classes are not required, but useful and compact.
+    They also have no class variables and require no creation of objects, 
+    so they can be (and are) used with direct access from main classes.
+
+4a. Should more universal helper classes exist elsewhere in xaraya core, 
+    then the extra classes can easily be detatched and deprecated in
+    favour of the more centralised facilities.
+
+4b. The extra functions only cover (X)HTML language oriented methods out of 
+    the box, but can easily be extended or overriden at the runtime if we 
+    need doctype agnostic (sensitive) solution in the future.
+
+4c. Whole lib has very small dependency on core. Only 2-3 functions depend on 
+    core vars and values and those are part of the extra classes, not main ones.
+
+4d. Description of dependency (chart or runtime diagram) can be made on request.
+
+3+4 A UML diagram can be made on request or upon completion of the subproject.
+
+5.  Inline comments are complete. DocBook style comments are TODO.
+
+5a. Whole lib is coded in php4 style but is also debugged in php5 with xaraya
+
+6.  In plans/development: css parser class and css adminapi class
+
+6a. Class names and descriptions are to follow. 
+
+// THEMES MODULE - USER
+
+in co-operation and with help of css class lib, themes module creates a number
+of custom xaraya tags, which can be used freely by all modules and themes to
+deal with the css tasks at hand:
+
+<link-module-stylesheet />
+<import-module-stylesheet />
+<embed-module-styles />
+
+<link-theme-stylesheet />
+<import-theme-stylesheet />
+<embed-theme-styles />
+
+<additional-styles />
+
+The last one can be used INSTEAD of old #$tpl:additionalStyles# in themes.
+
+Number of parameters is variable for each tag and none for the last one.
+
+Additional tags can be created easily if required and modules may utilise 
+the css class lib to create and configure css tags for individual needs.
+
+Examples have been included in xaraya_classic themes and in some core modules.
+
+Note: you may need to run upgrade.php for tags to start working
+
+// THEMES MODULE - DEVELOPER
+
+New module functions:
+(TODO: many - need to make a list and describe at a later time)
+
+Changes to old functions: none
+Removed module functions: none
+Deprecated functions: none
+
+// CORE CHANGES - USER
+
+(no changes from user perspective)
+
+1.  core function xarTplAddStyleLink has been enhanced to include extra
+configurable at runtime parameter - media, which is required by all xhtml
+linking methods of css
+
+1a. all parameters are now optional
+
+$modname        = null, 
+$filename       = null, 
+$fileext        = null, 
+$themefolder    = null, 
+$media          = null
+
+1b. defaults are determined by css class lib, but typically are as follows:
+
+$modname        : current module name
+$filename       : same as module name 
+$fileext        = css
+$themefolder    = empty 
+$media          = all
+
+so that calling it from say 'mymodule' module template would result in
+a link in any css-aware theme (unless overridden in theme of course):
+
+<link rel="stylesheet" type="text/css" media="all" href="http://localhost/xaraya/modules/mymodule/xarstyles/mymodule.css"/>
+
+// CORE CHANGES - DEVELOPER
+
+New core functions to date:
+
+Provisionally adden a small core css init function to enable including the
+class lib and instantiate subclasses. It is located in xarTemplate.php but 
+can be easily moved elswhere within core or replaced completely. It needs
+no parameters and returns no important data.
+
+Removed core functions: none
+Deprecated: none
+
+NOTE - xarTplAddStyleLink may be a good candidate for deprecation, due to 
+its limited usefulness (only allows to link external css, no other methods)
+
+END OF DOCUMENT
