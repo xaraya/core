@@ -744,18 +744,23 @@ class xarPrivileges extends xarMasks
             if (!$result) return;
 
             $privileges = array();
+            $pids = array();
             while(!$result->EOF) {
                 list($pid, $name, $realm, $module, $component, $instance, $level,
                         $description,$parentid) = $result->fields;
-                $privileges[] = array('pid' => $pid,
-                                   'name' => $name,
-                                   'realm' => $realm,
-                                   'module' => $module,
-                                   'component' => $component,
-                                   'instance' => $instance,
-                                   'level' => $level,
-                                   'description' => $description,
-                                   'parentid' => $parentid);
+                $thisone = $pid;
+                if (!in_array($thisone,$pids)){
+                    $pids[] = $thisone;
+                    $privileges[] = array('pid' => $pid,
+                                       'name' => $name,
+                                       'realm' => $realm,
+                                       'module' => $module,
+                                       'component' => $component,
+                                       'instance' => $instance,
+                                       'level' => $level,
+                                       'description' => $description,
+                                       'parentid' => $parentid);
+                }
                 $result->MoveNext();
             }
             $alltoplevelprivileges = $privileges;
