@@ -306,6 +306,24 @@ function xarExceptionFree()
 }
 
 /**
+ * Handles the current exception
+ *
+ * You must always call this function when you handled a catched exception.
+ *
+ * @author Marco Canini <m.canini@libero.it>
+ * @access public
+ * @return void
+ */
+function xarExceptionHandled()
+{
+    if (xarExceptionMajor() == XAR_NO_EXCEPTION) {
+            xarCore_die('xarExceptionHandled: Invalid major value: XAR_NO_EXCEPTION');
+    }
+
+    array_pop($GLOBALS['xarException_stack']);
+}
+
+/**
  * Renders the current exception
  *
  * Returns a string formatted according to the $format parameter that provides all the information
@@ -336,9 +354,9 @@ function xarExceptionRender($format)
 
         $showParams = xarCoreIsDebugFlagSet(XARDBG_SHOW_PARAMS_IN_BT);
         
-    //This format thing should be dealt some other way...
-    // BL? depending on output type...
-    if ($format == 'html') {
+        //This format thing should be dealt some other way...
+        // BL? depending on output type...
+        if ($format == 'html') {
             $text .= '<span style="color: purple">('.$type.')</span> <b>'.$exception['exceptionId'].'</b>:<br />';
             if (method_exists($exception['value'], 'toHTML')) {
                 $text .= '<span style="color: red">'.$exception['value']->toHTML().'</span>';
