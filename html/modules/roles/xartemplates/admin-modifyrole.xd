@@ -138,7 +138,7 @@ document.forms[0].submit();}
 						<xar:mlstring>Password</xar:mlstring>
 					</td>
 					<td>
-						<input type="password" name="ppass" id="ppass" value="" size="40" maxlength="40" tabindex="5" />
+						<input type="password" name="ppass1" id="ppass1" value="" size="40" maxlength="40" tabindex="5" />
 					</td>
 				</tr>
 				<tr>
