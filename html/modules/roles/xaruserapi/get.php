@@ -45,6 +45,7 @@ function roles_userapi_get($args)
                    xar_uname,
                    xar_name,
                    xar_email,
+                   xar_pass,
                    xar_date_reg,
                    xar_valcode,
                    xar_state
@@ -70,7 +71,7 @@ function roles_userapi_get($args)
     }
 
     // Obtain the item information from the result set
-    list($uid, $uname, $name, $email, $date, $valcode, $state) = $result->fields;
+    list($uid, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
 
     $result->Close();
 
@@ -83,6 +84,7 @@ function roles_userapi_get($args)
                   'uname'       => $uname,
                   'name'        => $name,
                   'email'       => $email,
+                  'pass'        => $pass,
                   'date_reg'    => $date,
                   'valcode'     => $valcode,
                   'state'       => $state);
