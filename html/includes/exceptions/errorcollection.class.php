@@ -27,7 +27,7 @@ class ErrorCollection extends Exception
     var $exceptions = array();
 
     function ErrorCollection() {
-        $this->title = "Exception initialized";
+        $this->title = "PHP Error";
         $this->msg = "Default msg";
     }
 
