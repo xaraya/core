@@ -154,9 +154,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
     pnEvt_registerEvent('PreBodyEnd');
 
     // Start Logging Facilities
-    $systemArgs = array('loggerName' => pnCore_getSiteVar('Log.Logger.Name'),
-                        'loggerArgs' => pnCore_getSiteVar('Log.Logger.Args'),
-                        'level' => pnCore_getSiteVar('Log.Level'));
+    $systemArgs = array('loggerName' => pnCore_getSiteVar('Log.LoggerName'),
+                        'loggerArgs' => pnCore_getSiteVar('Log.LoggerArgs'),
+                        'level' => pnCore_getSiteVar('Log.LogLevel'));
     pnLog_init($systemArgs);
 
     // Start Exception Handling System
@@ -200,6 +200,12 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
                         'allowedLocales' => pnCore_getSiteVar('MLS.AllowedLocales'));
     pnMLS_init($systemArgs);
 
+    // allow theme override in URL first
+    $themeName = pnVarCleanFromInput('theme');
+    if (!empty($themeName)) {
+        $themeName = pnVarPrepForOS($themeName);
+    }
+
     if ((int)$whatToLoad & PNCORE_BIT_CONFIGURATION) {
         include_once 'includes/pnConfig.php';
 
@@ -207,8 +213,12 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         $systemArgs = array();
         pnConfig_init($systemArgs);
 
-    // FIXME: <mikespub> Well, whenever you're sure marco...
         pnVar_init(array());
+
+        // Get theme from config FIXME: make sure this is site specific
+        if (empty($themeName)) {
+            $configTheme = pnConfigGetVar('Site.BL.DefaultTheme');
+        }
     }
 
     if ((int)$whatToLoad & PNCORE_BIT_MODULES) {
@@ -220,13 +230,6 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         $systemArgs = array('enableShortURLsSupport' => pnCore_getSiteVar('Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => false);
         pnMod_init($systemArgs);
-    }
-
-// TODO: move this elsewhere ?
-    // allow theme override in URL first
-    $themeName = pnVarCleanFromInput('theme');
-    if (!empty($themeName)) {
-        $themeName = pnVarPrepForOS($themeName);
     }
 
     if ((int)$whatToLoad & PNCORE_BIT_USER) {
@@ -251,11 +254,16 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         pnBlock_init($systemArgs);
     }
 
-    $systemArgs = array('enableTemplatesCaching' => true);
+    // Might want to reorganize these theme details
+    if(empty($themeName) && isset($configTheme)) {
+        $themeName = $configTheme;
+    }
+
     if (empty($themeName)) {
         // Use the default theme for this site
-        $themeName = pnCore_getSiteVar('BL.Theme.Name');
+        $themeName = pnCore_getSiteVar('BL.DefaultTheme');
     }
+    $systemArgs = array('enableTemplatesCaching' => true);
     $systemArgs['themeDirectory'] = pnCore_getSiteVar('BL.ThemesDirectory') . '/' . $themeName;
     pnTpl_init($systemArgs);
 

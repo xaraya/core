@@ -31,13 +31,13 @@ function pnConfig_init($args)
  */
 function pnConfigGetVar($name)
 {
-    static $aliases = array('sitename' => 'SiteName',
-                            'slogan' => 'SiteSlogan',
-                            'prefix' => 'TablePrefix',
-                            'footer' => 'PageFooter',
-                            'Version_Num' => 'VersionNumber',
-                            'Version_ID' => 'VersionId',
-                            'Version_Sub' => 'VersionSub');
+    static $aliases = array('sitename' => 'Site.Core.SiteName',
+                            'slogan' => 'Site.Core.Site.Slogan',
+                            'prefix' => 'Site.DB.TablePrefix',
+                            'footer' => 'Site.Core.PageFooter',
+                            'Version_Num' => 'System.Core.VersionNumber',
+                            'Version_ID' => 'System.Core.VersionId',
+                            'Version_Sub' => 'System.Core.VersionSub');
 
     if (empty($name)) {
         $msg = pnML('Empty name.');
@@ -54,13 +54,13 @@ function pnConfigGetVar($name)
         return pnVarGetCached('Config.Variables', $name);
     }
 
-    if ($name == 'TablePrefix') {
+    if ($name == 'Site.DB.TablePrefix') {
         return pnCore_getSiteVar('DB.TablePrefix');
-    } elseif ($name == 'VersionNumber') {
+    } elseif ($name == 'System.Core.VersionNumber') {
         return PNCORE_VERSION_NUM;
-    } elseif ($name == 'VersionId') {
+    } elseif ($name == 'System.Core.VersionId') {
         return PNCORE_VERSION_ID;
-    } elseif ($name == 'VersionSub') {
+    } elseif ($name == 'System.Core.VersionSub') {
         return PNCORE_VERSION_SUB;
     }
 
@@ -76,6 +76,7 @@ function pnConfigGetVar($name)
 
     if ($dbconn->ErrorNo() != 0) {
         $msg = pnMLByKey('DATABASE_ERROR', $query);
+        $msg.= $name;
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         return;
