@@ -1,6 +1,6 @@
 <?php
 /**
- * File: $Id: xarTemplate.php 1.203 04/03/27 16:19:22+01:00 marcel@hsdev.com $
+ * File: $Id$
  *
  * BlockLayout Template Engine
  *
@@ -18,7 +18,7 @@
    *
    */
 
-  /// OLD STUFF //////////////////////////////////
+/// OLD STUFF //////////////////////////////////
 define ('XAR_TPL_OPTIONAL', 2);
 define ('XAR_TPL_REQUIRED', 0); // default for attributes
 
@@ -48,13 +48,11 @@ define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
 define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
 
-
-
-
 /**
  * Initializes the BlockLayout Template Engine
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @global bool   xarTpl_cacheTemplates
  * @global string xarTpl_themesBaseDir
@@ -67,9 +65,9 @@ define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
  */
 function xarTpl_init($args, $whatElseIsGoingLoaded)
 {
-    $GLOBALS['xarTpl_themesBaseDir'] = $args['themesBaseDirectory'];
+    $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
-    $GLOBALS['xarTpl_cacheTemplates'] = $args['enableTemplatesCaching'];
+    $GLOBALS['xarTpl_cacheTemplates']  = $args['enableTemplatesCaching'];
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
@@ -84,7 +82,8 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
         if (!is_writeable(xarCoreGetVarDirPath().'/cache/templates')) {
             $msg = "xarTpl_init: Cannot write in cache/templates directory '"
                 . xarCoreGetVarDirPath()
-                ."/cache/templates', but setting: 'cache templates' is set to On. Either change file/directory permissions or set caching to Off (not recommended).";
+                ."/cache/templates', but the setting: 'cache templates' is set to 'On'.\n"
+                ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
             $GLOBALS['xarTpl_cacheTemplates'] = false;
             // Set the exception, but do not return just yet, because we *can* continue.
             xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
@@ -111,16 +110,11 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
  */
 function xarTplGetThemeName()
 {
-    if (function_exists('xarModGetVar')){
+    if (function_exists('xarModGetVar')) {
         $defaultTheme = xarModGetVar('themes', 'default');
-        if (!empty($defaultTheme)){
-            return $defaultTheme;
-        } else {
-            return $GLOBALS['xarTpl_themeName'];
-        }
-    } else {
-        return $GLOBALS['xarTpl_themeName'];
+        if (!empty($defaultTheme)) return $defaultTheme;
     }
+    return $GLOBALS['xarTpl_themeName'];
 }
 
 /**
@@ -226,6 +220,7 @@ function xarTplSetPageTemplateName($templateName)
  * @global string xarTpl_pageTitle
  * @param  string $title
  * @param  string $module
+ * @todo   this needs to be moved into the templating domain somehow
  * @return bool
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
@@ -282,6 +277,7 @@ function xarTplGetPageTitle()
  * @param  string $fileExt
  * @param  string $themeFolder ('' or path no leading or trailing /, )- 
  * used to set specific folder within theme directory only
+ * @todo   rethink this, it's messy
  * @return bool
  */
 function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder='')
@@ -297,15 +293,16 @@ function xarTplAddStyleLink($modName, $styleName, $fileExt = 'css', $themeFolder
 
 	$themePath = (!empty($themeFolder)) ? xarTplGetThemeDir ()."/".$themeFolder."/$styleName.$fileExt" : xarTplGetThemeDir()."/".$modulePath; 
 	
-	if (file_exists($themePath)){
+	if (file_exists($themePath)) {
 		$fileName = $themePath;
-	}else{		
+	} else {		
 		$fileName = $modulePath;
 		if (!file_exists($fileName)) {		
 			return false;
 		}	
 	}	
 	$url = xarServerGetBaseURL().$fileName;
+    // FIXME: this doesn't belong here, it's hardcoded and not output agnostic
     $GLOBALS['xarTpl_additionalStyles'] .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}\" />\n";
 	return true;
 }
@@ -516,7 +513,6 @@ function xarTplGetImage($modImage, $modName = NULL)
     if (file_exists($themeImage)) {
         // image found, return its path in the theme
         return $themeImage;
-
     } elseif (file_exists($moduleImage)) {
         // image found, return it's path in the module
         return $moduleImage;
@@ -537,7 +533,7 @@ function xarTplGetImage($modImage, $modName = NULL)
  * @param integer $itemsPerPage number of links to display (default=10)
  * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
  *
- * @todo  Move this somewhere else
+ * @todo  Move this somewhere else, preferably transparent and a widget (which might be mutually exclusive)
  */
 function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
 {
@@ -906,7 +902,7 @@ function xarTpl__getCompilerInstance()
 }
 
 /**
- * Execute Template ?
+ * Execute Template, i.e. run the compiled php code of a cached template
  *
  * @access private
  * @param  string $templateCode   Templatecode to execute
@@ -919,7 +915,6 @@ function xarTpl__getCompilerInstance()
  */
 function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 {
-    // $tplData should be an array (-even-if- it only has one value in it)
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
     //POINT of ENTRY for cleaning variables
@@ -950,7 +945,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
 }
 
 /**
- * Execute template from  file?
+ * Execute template from file
  *
  * @access private
  * @global bool   xarTpl_cacheTemplates
@@ -964,8 +959,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '')
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
-    // $tplData should be an array (-even-if- it only has one value in it)
-    assert('is_array($tplData)');
+    assert('is_array($tplData); /* Template data should always be passed in an array */');
 
     $needCompilation = true;
 
@@ -1104,7 +1098,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
         $use_internal = true;
     }
-    // Subpart mayb have been empty, 
+    // Subpart may have been empty, 
     $sourceFileName = str_replace('//','/',$sourceFileName);
     // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
 
@@ -1168,20 +1162,19 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
     if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
+        // Default to not show the comments
+        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
         if (function_exists('xarModGetVar')){
             $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
             if (!empty($showphpcbit)) {
                 $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
-            } else {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
             }
-        } else {
-            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         }
     }
     return $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'];
 }
+
 /**
  * Output template filenames
  *
@@ -1195,16 +1188,14 @@ function xarTpl_outputPHPCommentBlockInTemplates()
 function xarTpl_outputTemplateFilenames()
 {
     if (!isset($GLOBALS['xarTpl_showTemplateFilenames'])) {
+        // Default to not showing it
+        $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
         if (function_exists('xarModGetVar')){
             $showtemplates = xarModGetVar('themes', 'ShowTemplates');
             if (!empty($showtemplates)) {
                 $GLOBALS['xarTpl_showTemplateFilenames'] = 1;
-            } else {
-                $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
             }
-        } else {
-            $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         }
     }
     return $GLOBALS['xarTpl_showTemplateFilenames'];
