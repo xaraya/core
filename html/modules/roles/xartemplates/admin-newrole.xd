@@ -7,7 +7,7 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Add Role</xar:mlstring></h2>
 <div style="text-align: center; margin: auto;">
     <p><xar:mlstring>All fields are required to create a new role on the system.</xar:mlstring></p>
-    <form name="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
+    <form id="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
         <div style="text-align: left;">
         <table border="0" cellpadding="2" cellspacing="2">
             <tr>
