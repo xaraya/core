@@ -120,7 +120,7 @@ function roles_user_usermenu($args)
                     xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                     return;
                 }
-                $email = xarUserGetVar('email');
+                $oldemail = xarUserGetVar('email');
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
                                   'admin',
@@ -128,10 +128,11 @@ function roles_user_usermenu($args)
                                    array('uid' => $uid,
                                          'uname' => $uname,
                                          'name' => $name,
-                                         'email' => $email,
+                                         'email' => $oldemail,
                                          'state' => 3,
                                          'pass' => $pass))) return;
-            } elseif (!empty($email)){
+            }
+            if (!empty($email)){
 
             // Steps for changing email address.
             // 1) Validate the new email address for errors.
@@ -177,7 +178,7 @@ function roles_user_usermenu($args)
             }
             // Step 3
             $requireValidation = xarModGetVar('roles', 'requirevalidation');
-            if (($requireValidation == false) || (xarUserGetVar('uname') != 'admin')){
+            if ((!xarModGetVar('roles', 'requirevalidation')) || (xarUserGetVar('uname') == 'admin')){
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
                                   'admin',
@@ -188,7 +189,6 @@ function roles_user_usermenu($args)
                                          'email' => $email,
                                          'state' => 3))) return;
             } else {
-
                 // Step 2
                 xarUserLogOut();
 
@@ -212,12 +212,12 @@ function roles_user_usermenu($args)
                 if (!xarModAPIFunc( 'roles',
                                     'admin',
                                     'senduseremail',
-                                    array('uid' => array($uid => '1'), 'mailtype' => 'confirmation'))) {
+                                    array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
                     $msg = xarML('Problem sending confirmation email');
                     xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }
-                }
-            } else {
+            }
+        } else {
                 $email = xarUserGetVar('email');
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
