@@ -1,6 +1,9 @@
 <xar:if condition="isset($menustyle)">
 <!--    #$menustyle# -->
 </xar:if>
+<xar:if condition="empty($catmods) or !is_array($catmods)">
+<xar:mlstring>to be completed by Dracos</xar:mlstring>
+<xar:else/>
 <!-- NEW WAY - MORE ROBUST LOGIC - MARKING TRULY ACTIVE LINKS NOW -->
 <xar:foreach in="$catmods" key="$catname" value="$cats">
 <ul class="xar-menu-section">
@@ -20,5 +23,6 @@
     </li>
 </ul>
 </xar:foreach>
+</xar:if>
 <!-- Logout -->
 [<a href="#$logouturl#">#$logoutlabel#</a>]
