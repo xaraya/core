@@ -543,6 +543,15 @@ div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
 since topnav group is available by default, we must be able to lay it out
 -------------------------------------------------------------------------[comment] */
 
+div.xar-block-body-topnav .xar-menu-section h4 {
+	display:none;
+} /* hide section heading [gen_heading] */
+
+div.xar-block-body-topnav .xar-menu-section ul li a {
+	display:inline;
+	padding-right:.5em;
+	padding-left:.5em;
+} /* all links should display horizontally in topnav block in this theme */
 
 div.xar-block-body-topnav {
 	min-width: 710px;
