@@ -3,7 +3,10 @@
     <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" catid="$catid" />
 </xar:if>
 
-<i>This is a test...</i>
+<xar:if condition="!empty($submitlink)">
+<a href="#$submitlink#" title="New Topic"><xar:mlstring>Post New Topic</xar:mlstring></a>
+<br />
+</xar:if>
 
 <xar:if condition="!empty($numcols) and $number gt 0">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -33,7 +36,7 @@
     </xar:foreach>
 </table>
 </xar:if>
-#$output#
+<!-- #$output# -->
 <xar:if condition="!empty($showcols)">
     <xar:if condition="$showcols eq 1">
         <a href="#xarModURL('articles','user','view',array('numcols' => 1))#"><xar:mlstring>single-column display</xar:mlstring></a>
@@ -55,11 +58,6 @@
     <xar:if condition="!empty($maplink)">
     <td align="left">
         <a href="#$maplink#">#$maplabel#</a>
-    </td>
-    </xar:if>
-    <xar:if condition="!empty($submitlink)">
-    <td align="center">
-        <a href="#$submitlink#" title="Submit Article"><xar:mlstring>Contribute</xar:mlstring></a>
     </td>
     </xar:if>
     <xar:if condition="!empty($archivelink)">

@@ -1,7 +1,7 @@
     <tr>
         <td><a href="#$link#">#$title#</a></td>
-        <xar:if condition="!empty($comments)">
-            <td>#$comments#</td>
+        <xar:if condition="isset($numcomments)">
+            <td align="center">#$numcomments#</td>
         <xar:else />
             <td>&nbsp;</td>
         </xar:if>
@@ -13,7 +13,7 @@
             <td>#$author#</td>
         </xar:if>
         <xar:if condition="!empty($counter)">
-            <td>#$counter#</td>
+            <td align="center">#$counter#</td>
         <xar:else />
             <td>&nbsp;</td>
         </xar:if>
