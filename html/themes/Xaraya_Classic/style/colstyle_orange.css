@@ -9,9 +9,9 @@ a:link:hover, a:visited:hover { color: #E54000; }
 h1, h2, h3, h4 { color: #996600; }
 
 .xar-mod-head {
-    color: #7F5300;
-    background-color: #FFD37F;
-    border-color: #7F5300;
+	color: #7F5300;
+	background-color: #E7E2C6;
+	border-color: #7F5300;
 }
 
 th {
@@ -19,8 +19,8 @@ th {
     background-color: #F2EADD;
 }
 
-.xar-alt { background-color: #FFDE80; }
-.xar-accent { background-color: #E5CF00; }
+.xar-alt { background-color: #F8E8B8; }
+.xar-accent { background-color: #EDEBD5; }
 .xar-alt-outline { border-color: #996C40; }
 .xar-accent-outline { border-color: #994040; }
 .xar-norm-outline { border-color: #7F5300; }

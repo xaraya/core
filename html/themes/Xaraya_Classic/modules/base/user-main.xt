@@ -3,7 +3,7 @@
         Thank you for installing and trying Xaraya! 
     </xar:mlstring>
 </h1>
-<div class="xar-mod-body xar-norm-outline">
+<div class="xar-mod-body xar-norm-outline xar-standard-box-padding">
     <h2>
         <xar:mlstring>
             Xaraya is currently in Beta Production. 

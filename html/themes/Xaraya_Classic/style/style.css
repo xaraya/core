@@ -525,3 +525,5 @@ abbr, acronym, .help {
 .xar-aligncenter { text-align: center; }
 .xar-alignleft { text-align: left; }
 .xar-alignright { text-align: right; }
+
+.xar-standard-box-padding { padding: 0 1em 1em 1em; }
