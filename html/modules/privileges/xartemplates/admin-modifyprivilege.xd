@@ -292,7 +292,7 @@ document.forms[0].submit();}
 			<tr>
 			<td colspan="2" align="center">
 				<xar:mlstring>Add a Privilege to Privilege</xar:mlstring>
-				 <b>'#$pname#'</b>  
+				 <b> '#$pname#'</b>  
 				 </td>
 				 </tr>
 
@@ -322,7 +322,7 @@ document.forms[0].submit();}
 		<tr>
 			<td colspan="5">			
 				<xar:mlstring>Privilege</xar:mlstring>
-				<b>'#$pname#'</b>
+				<b> '#$pname#' </b>
 				<xar:mlstring>is a component of:</xar:mlstring>			
 			</td>
 		</tr>
