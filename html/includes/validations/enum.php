@@ -16,6 +16,15 @@ function variable_validations_enum (&$subject, $parameters) {
     if ($found) {
         return true;
     } else {
+        $msg = xarML('Input "#(1)" was not one of the possibilities: "', $subject);
+        $first = true;
+        foreach ($parameters as $param) {
+            if ($first) $first = false;
+            else $msg .= ' or ';
+
+            $msg .= $param;
+        }
+        xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return false;
     }
 }
