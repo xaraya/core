@@ -16,6 +16,7 @@ class ExceptionRendering
     var $exception;
     var $id;
     var $major;
+    var $type;
     var $defaults;
     var $title;
     var $short;
@@ -24,17 +25,18 @@ class ExceptionRendering
     var $stack;
     var $linebreak = "<br/>";
 
-
     function ExceptionRendering($exception = NULL){
         $this->exception = $exception;
         $this->id = $exception->getID();
-        switch ($exception->getMajor()) {
+        $this->major = $exception->getMajor();
+        switch ($this->major) {
             case XAR_SYSTEM_EXCEPTION:
                 include "includes/exceptions/systemexception.defaults.php";
                 if (!array_key_exists($this->id, $this->defaults)) {
                     $this->id = "EXCEPTION_FAILURE";
                 }
                 $this->load();
+                $this->type = 'System Error';
                 break;
             case XAR_USER_EXCEPTION:
                 include "includes/exceptions/defaultuserexception.defaults.php";
@@ -47,6 +49,7 @@ class ExceptionRendering
                     $this->long = "";
                     $this->hint = "";
                 }
+                $this->type = 'User Error';
                 break;
             case XAR_SYSTEM_MESSAGE:
                 include "includes/exceptions/systemmessage.defaults.php";
@@ -59,11 +62,13 @@ class ExceptionRendering
                     $this->long = "";
                     $this->hint = "";
                 }
+                $this->type = 'System Message';
                 break;
             default:
                 include "includes/exceptions/systemexception.defaults.php";
                 break;
         }
+        $this->defaults = '';
     }
 
     function load() {
@@ -74,6 +79,8 @@ class ExceptionRendering
         $this->hint = array_key_exists("hint", $this->defaults[$id]) ? $this->defaults[$id]['hint'] : '';
     }
 
+    function getMajor() { return $this->major; }
+    function getType() { return $this->type; }
     function getTitle() { return $this->exception->getTitle() == '' ? $this->title : $this->exception->getTitle(); }
     function getLong() { return $this->exception->getLong() == '' ? $this->long : $this->exception->getLong(); }
     function getHint() { return $this->exception->getHint() == '' ? $this->hint : $this->exception->getHint(); }

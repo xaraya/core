@@ -50,7 +50,7 @@ function base_user_systemexit()
     }
     else {
         $spinning = true;
-        $text = xarErrorRender('html', "CORE");
+        $text = xarErrorRender('template', "CORE");
         $pageOutput = xarTpl_renderPage($text);
         echo $pageOutput;
     }

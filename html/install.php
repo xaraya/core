@@ -210,7 +210,7 @@ if (!isset($phase)) {
 if (!xarInstallMain($phase)) {
 
     // If we're here there must be surely an uncaught exception
-    $text = xarExceptionRender('html');
+    $text = xarExceptionRender('template');
 
     // TODO: #2
     if (xarExceptionId() == 'TEMPLATE_NOT_EXIST') {
@@ -225,7 +225,7 @@ if (!xarInstallMain($phase)) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';
-            $msg .= xarExceptionRender('html');
+            $msg .= xarExceptionRender('plain');
             $msg .= '<br />';
             $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
             $msg .= '<br /><br />';
