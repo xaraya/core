@@ -1140,7 +1140,7 @@ function xarVarCleanUntrusted($var)
  * @access public
  * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
  * @todo <marco> FIXME: This function will not work if the security system is not loaded!
- * @deprecated
+ * @deprec
  */
 function xarVarCleanFromInput()
 {
