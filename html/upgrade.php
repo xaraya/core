@@ -463,65 +463,6 @@ if (empty($step)) {
         echo "$table_name[security_levels] already exists, moving to next check. <br />";
     }
 
-    // Set indexes on roles table.
-    $table_name['roles'] = $sitePrefix . '_roles';
-
-    $index = array(
-       'name'      => 'i_xar_roles_type',
-       'fields'    => array('xar_type')
-      );
-
-    $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result = @$dbconn->Execute($query);
-
-    if (!$result) {
-        echo "$table_name[roles] table already has index set for xar_type, moving to next check. <br /> ";
-    } else {
-        echo "Setting index on $table_name[roles]... done! <br />";
-    }
-
-    $index = array(
-                   'name'      => 'i_xar_roles_uname',
-                   'fields'    => array('xar_uname'),
-                   'unique'    => true
-                  );
-    $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result = @$dbconn->Execute($query);
-
-    if (!$result) {
-        echo "$table_name[roles] table already has index set for xar_uname, moving to next check. <br /> ";
-    } else {
-        echo "Setting index on $table_name[roles]... done! <br />";
-    }
-
-    $index = array(
-                   'name'      => 'i_xar_roles_name',
-                   'fields'    => array('xar_name'),
-                   'unique'    => false
-                  );
-    $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result = @$dbconn->Execute($query);
-
-    if (!$result) {
-        echo "$table_name[roles] table already has index set for xar_name, moving to next check. <br /> ";
-    } else {
-        echo "Setting index on $table_name[roles]... done! <br />";
-    }
-
-    $index = array(
-                   'name'      => 'i_xar_roles_email',
-                   'fields'    => array('xar_email'),
-                   'unique'    => false
-                  );
-    $query = xarDBCreateIndex($table_name['roles'],$index);
-    $result = @$dbconn->Execute($query);
-
-    if (!$result) {
-        echo "$table_name[roles] table already has index set for xar_email, moving to next check. <br /> ";
-    } else {
-        echo "Setting index on $table_name[roles]... done! <br />";
-    }
-
     // Drop the admin_wc table and the hooks for the admin panels.
     $table_name['admin_wc'] = $sitePrefix . '_admin_wc';
 
@@ -727,7 +668,7 @@ if (empty($step)) {
                              'set'     =>  1),
                        array('name'    =>  'askpasswordemail',
                              'module'  =>  'roles',
-                             'set'     =>  1),   
+                             'set'     =>  1),
                        array('name'    =>  'rolesdisplay',
                              'module'  =>  'roles',
                              'set'     =>  'tabbed'),
@@ -750,12 +691,12 @@ inactive after a period of time and deleted from our records.  You will recieve
 no further emails from us.Thank you,
 
 %%siteadmin%%',
-                             'override'  =>  1),          
+                             'override'  =>  1),
                      array('name'    =>  'remindertitle',
                              'module'  =>  'roles',
                              'set'     =>  'Replacement login information for %%name%% at
 %%sitename%%',
-                             'override'  =>  1),       
+                             'override'  =>  1),
                     array('name'    =>  'reminderemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -766,11 +707,11 @@ username: %%username%%
 password: %%password%%
 
 -- %%siteadmin%%',
-                             'override'  =>  1),      
+                             'override'  =>  1),
                     array('name'    =>  'validationtitle',
                              'module'  =>  'roles',
                              'set'     =>  'Validate your account %%name%% at %%sitename%%',
-                             'override'  =>  1),                          
+                             'override'  =>  1),
                     array('name'    =>  'validationemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -798,7 +739,7 @@ If you want to know the reason, contact %%adminmail%%
 You will receive an email as soon as your account is activated again.
 
 %%siteadmin%%%',
-                             'override'  =>  1),             
+                             'override'  =>  1),
                     array('name'    =>  'pendingtitle',
                              'module'  =>  'roles',
                              'set'     =>  'Pending state of %%name%% at %%sitename%%',
@@ -829,17 +770,17 @@ Login : %%username%%
 Password : %%password%%
 
 %%siteadmin%%',
-                             'override'  =>  1),                          
+                             'override'  =>  1),
                           );
 
     foreach($modvars as $modvar){
         foreach($modvar as $var){
             $currentvar = xarModGetVar("$var[module]", "$var[name]");
             if (isset($currentvar)){
-            	if (isset($var['override'])) {
-            		xarModSetVar($var['module'], $var['name'], $var['set']);
-            		echo "$var[module] -> $var[name] has been overriden, proceeding to next check<br />";
-            	}
+                if (isset($var['override'])) {
+                    xarModSetVar($var['module'], $var['name'], $var['set']);
+                    echo "$var[module] -> $var[name] has been overriden, proceeding to next check<br />";
+                }
                 else echo "$var[module] -> $var[name] is set, proceeding to next check<br />";
             } else {
                 xarModSetVar($var['module'], $var['name'], $var['set']);
