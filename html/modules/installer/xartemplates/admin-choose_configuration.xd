@@ -1,74 +1,48 @@
+<xar:set name="active_step">
+    7 
+</xar:set>
 <div id="install">
-  <div style="padding:10px;">
-    <div style="text-align:center;">
-      <span class="xar-pagetitle">
+    <xar:template file="status" />
+    <h1>
         <xar:mlstring>
-          Choose a Configuration
+            Choose a Configuration 
         </xar:mlstring>
-      </span>
-    </div>
-    <br />
+    </h1>
     <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
-      <div style="text-align:center;">
-        <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-        <br />
-        <div style="text-align:justify;">
-          <table cellspacing="0" border="0" summary="For choosing a configuration">
-            <thead>
-              <tr>
-                <th>
-                  <xar:mlstring>
-                    Available configurations
-                  </xar:mlstring> 
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="xar-normal">
-                  <xar:if condition="isset($warning)">
-                    #$warning# 
-                    <xar:else />
-                    <select name="configuration" size="5" style="width:250px;">
-                      <xar:loop name="$names">
+        <div>
+            <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+            <h3>
+                <xar:mlstring>
+                    Available configurations 
+                </xar:mlstring>
+            </h3>
+            <xar:if condition="isset($warning)">
+                #$warning# 
+                <xar:else />
+                <select id="configuration" name="configuration" size="5">
+                    <xar:loop name="$names">
                         <xar:if condition="$loop:item['display'] eq 'Community Site'">
-                          <option value="#$loop:item['value']#" selected="selected">
-                            #$loop:item['display']# 
-                          </option>
+                          <xar:else />
                         <xar:elseif condition="$loop:item['selected']"/>
                           <option value="#$loop:item['value']#" selected="selected">
                             #$loop:item['display']# 
                           </option>
                         <xar:else/>
-                          <option value="#$loop:item['value']#">
-                            #$loop:item['display']# 
-                          </option>
                         </xar:if>
-                      </xar:loop>
-                    </select>
-                  </xar:if>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    </xar:loop>
+                </select>
+            </xar:if>
+            <p>
+                <xar:mlstring>
+                    Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration. 
+                </xar:mlstring>
+            </p>
+            <xar:set name="buttonnext">
+                <xar:mlstring>
+                    Continue &gt; 
+                </xar:mlstring>
+            </xar:set>
+            <input type="submit" name="create" id="create" value="#$buttonnext#" />
         </div>
-        <br />
-        <div style="text-align:justify;">
-          <p>
-            <span class="xar-normal">
-              <xar:mlstring>
-                Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration.
-              </xar:mlstring>
-            </span>
-          </p>
-        </div>
-        <div style="text-align:center;">
-          <xar:set name="buttonnext"><xar:mlstring>Continue &gt;</xar:mlstring></xar:set>
-          <input type="submit" name="create" id="create" value="#$buttonnext#" />
-        </div>
-      </div>
     </form>
-  </div>
 </div>
-<xar:set name="active_step">7</xar:set>
-<xar:template file="status"/>
