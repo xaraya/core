@@ -2,18 +2,14 @@
      <xar:if condition="!empty($test1)">
          <tr>
              <td style="width:80%;">
-                 <xar:mlstring>
-                     Users
-                 </xar:mlstring>
+                 <xar:mlstring>Users</xar:mlstring>
              </td>
              <td style="width:10%;">
                  &nbsp;
              </td>
              <td colspan="2">
                  <xar:if condition="xarModIsAvailable('messages')">
-                     <xar:mlstring>
-                         Messages
-                     </xar:mlstring>
+                     <xar:mlstring>Messages</xar:mlstring>
                      <xar:else />
                      &nbsp;
                  </xar:if>
@@ -71,9 +67,7 @@
      <tr>
          <td>
              <img src="modules/roles/xarimages/ob_users.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
-             <xar:mlstring>
-                 Total users
-             </xar:mlstring>
+             <xar:mlstring>Total users</xar:mlstring>
          </td>
          <td>
          </td>
@@ -84,9 +78,7 @@
      <tr>
          <td>
              <img src="modules/roles/xarimages/ob_users_an.gif" alt="" style="width:16px; height:16px; vertical-align: middle;" />
-             <xar:mlstring>
-                 Total guests
-             </xar:mlstring>
+             <xar:mlstring>Total guests</xar:mlstring>
          </td>
          <td>
          </td>
@@ -97,10 +89,8 @@
 </table>
 <xar:if condition="isset($lastuser)">
      <p>
-         <xar:mlstring>
-             Welcome to our latest member,
-         </xar:mlstring>
-         <a href="&xar-modurl-roles-user-display;#&amp;uid=#$lastuser['uid']#">
+         <xar:mlstring>Welcome to our latest member,</xar:mlstring>
+         <a href="&xar-modurl-roles-user-display;&amp;uid=#$lastuser['uid']#">
              #xarVarPrepForDisplay($lastuser['name'])#
          </a>
      </p>

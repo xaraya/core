@@ -1,32 +1,40 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring><xar:mlvar>#$object:itemid#</xar:mlvar><xar:mlvar>#$object:label#</xar:mlvar></xar:ml></h2><br />
-<div style="margin: auto;">
-
-<div align="center"><p><b><xar:mlstring>Confirm deleting this item ?</xar:mlstring></b></p></div>
-
-<xar:data-display object="$object" />
-
-<xar:if condition="!empty($related)">
-<p><b>#$related#</b></p>
-</xar:if>
-
-<div align="center">
-<form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
-    <div>
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
-    <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
-    <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
-    <input type="hidden" name="join" id="join" value="#$object:join#" />
-    <input type="hidden" name="table" id="table" value="#$object:table#" />
-    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
-
-    <input type="submit" name="confirm" id="confirm" value=" #xarML('Yes')# " />
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="submit" name="noconfirm" id="noconfirm" value="  #xarML('No')#  " />
-    </div>
-</form>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
-</div>
+<div class="xar-mod-body">
+	<h2>
+		<xar:ml>
+			<xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring>
+			<xar:mlvar>#$object:itemid#</xar:mlvar>
+			<xar:mlvar>#$object:label#</xar:mlvar>
+		</xar:ml>
+	</h2>
+
+	<h3 class="xar-align-center">
+		<xar:mlstring>Confirm Deleting This Item?</xar:mlstring>
+	</h3>
+
+	<xar:data-display object="$object" />
+
+	<xar:if condition="!empty($related)">
+		<p>
+			#$related#
+		</p>
+	</xar:if>
+
+	<form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
+	    <div class="xar-align-center">
+		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+		    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
+		    <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
+		    <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+		    <input type="hidden" name="join" id="join" value="#$object:join#" />
+		    <input type="hidden" name="table" id="table" value="#$object:table#" />
+		    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+
+			<input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickright" />
+			<input type="submit" name="noconfirm" id="noconfirm" value="#xarML('Cancel')#" class="xar-margin-thickleft" />
+		</div>
+	</form>
 </div>

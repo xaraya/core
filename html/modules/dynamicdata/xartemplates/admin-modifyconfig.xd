@@ -1,133 +1,115 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
-<xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
-    <xar:comment>
-        no action required if external file was not added 
-    </xar:comment>
-</xar:if>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Dynamic Data Administration 
-        </xar:mlstring>
-    </span>
+    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            Configure Property Types 
-        </xar:mlstring>
+        <xar:mlstring>Configure Property Types</xar:mlstring>
     </h2>
+
     <p>
-        <xar:mlstring>
-            Click 
-        </xar:mlstring>
-        <strong>
-            Flush Property Cache 
-        </strong>
-        <xar:mlstring>
-            to clear the DynamicData Property Definitions cache and to reload the properties definitions from the file system. 
-        </xar:mlstring>
+        <xar:mlstring>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to reload the properties definitions from the file system.</xar:mlstring>
     </p>
+
     <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="flushPropertyCache" value="true" />
-        <input type="submit" value="Flush Property Cache" />
+		<div class="xar-align-center">
+	        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+	        <input type="hidden" name="flushPropertyCache" value="true" />
+	        <input type="submit" value="Flush Property Cache" />
+	    </div>
     </form>
-    // TODO: very much under construction, obviously :-) 
-    <form class="dd-modifyprop-form" method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
-        <fieldset class="xar-norm">
-            <legend>
-                <xar:mlstring>
-                    The following property types are predefined in Xaraya and may be used in your own dynamic properties 
-                </xar:mlstring>
-            </legend>
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <table>
+
+    <xar:comment>
+    TODO: very much under construction, obviously :-)
+    </xar:comment>
+
+    <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+        <p>
+            <xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties.</xar:mlstring>
+        </p>
+
+        <table class="xar-fullwidth">
+            <tr>
+                <th>
+                    #$labels['id']# 
+                </th>
+                <th>
+                    #$labels['name']# 
+                </th>
+                <th>
+                    #$labels['label']# 
+                </th>
+                <th>
+                    #$labels['informat']# 
+                </th>
+                <th>
+                    #$labels['validation']# 
+                </th>
+            </tr>
+            <xar:foreach in="$fields" value="$field">
                 <tr>
-                    <th>
-                        #$labels['id']# 
-                    </th>
-                    <th>
-                        #$labels['name']# 
-                    </th>
-                    <th>
-                        #$labels['label']# 
-                    </th>
-                    <th>
-                        #$labels['informat']# 
-                    </th>
-                    <th>
-                        #$labels['outformat']# 
-                    </th>
-                    <th>
-                        #$labels['validation']# 
-                    </th>
-                    <th>
-                        ... 
-                    </th>
-                </tr>
-                <xar:foreach in="$fields" value="$field">
-                    <tr class="xar-accent">
-                        <td>
-                            #$field['id']# 
-                        </td>
-                        <td>
-                            <input type="text" name="name[#$field['id']#]" id="name_#$field['id']#" size="15" value="#$field['name']#" />
-                        </td>
-                        <td>
-                            <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" size="20" value="#$field['label']#" />
-                        </td>
-                        <td>
-                            <xar:data-input property="$fieldtypeprop" name="format['.$field['id'].']" value="$field['format']" />
-                        </td>
-                        <td>
-                            &lt;-- see input 
-                        </td>
-                        <td>
-                            <input type="text" name="validation[#$field['id']#]" id="validation_#$field['id']#" size="20" value="#$field['validation']#" />
-                        </td>
-                        <td>
-                            ... 
-                        </td>
-                    </tr>
-                </xar:foreach>
-                <tr align="left" valign="middle">
-                    <td>
-                        #$labels['new']# 
+                    <td class="xar-align-right">
+                        #$field['id']# 
                     </td>
                     <td>
-                        <input type="text" name="name[0]" id="name_0" size="15" />
+                        <input type="text" name="name[#$field['id']#]" id="name_#$field['id']#" value="#$field['name']#" class="xar-form-textmedium" />
                     </td>
                     <td>
-                        <input type="text" name="label[0]" id="label_0" size="20" />
+                        <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
                     </td>
                     <td>
-                        <xar:data-input type="fieldtype" name="format[0]" value="" />
+                        <xar:data-input property="$fieldtypeprop" name="format['.$field['id'].']" value="$field['format']" />
                     </td>
                     <td>
-                        &lt;-- see input 
-                    </td>
-                    <td>
-                        <input type="text" name="validation[0]" id="validation_0" size="20" value="" />
-                    </td>
-                    <td>
-                        ... 
+                        <input type="text" name="validation[#$field['id']#]" id="validation_#$field['id']#" value="#$field['validation']#" class="xar-form-textmedium" />
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        &nbsp; 
-                    </td>
-                    <td colspan="2">
-                        <input type="submit" value="#$updatebutton#" />
-                    </td>
-                    <td colspan="4">
-                        &nbsp; 
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
+            </xar:foreach>
+        </table>
+        <p>
+        	<xar:mlstring>Add a new Property Type using the fields below.</xar:mlstring>
+        </p>
+
+		<table class="xar-fullwidth">
+            <tr>
+                <th>
+                    #$labels['id']# 
+                </th>
+                <th>
+                    #$labels['name']# 
+                </th>
+                <th>
+                    #$labels['label']# 
+                </th>
+                <th>
+                    #$labels['informat']# 
+                </th>
+                <th>
+                    #$labels['validation']# 
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    #$labels['new']# 
+                </td>
+                <td>
+                    <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium" />
+                </td>
+                <td>
+                    <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium" />
+                </td>
+                <td>
+                    <xar:data-input type="fieldtype" name="format[0]" value="" />
+                </td>
+                <td>
+                    <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
+                </td>
+            </tr>
+        </table>
+
+		<div class="xar-align-center">
+		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+		    <input type="submit" value="#xarML('Update Property Types')#" />
+		</div>
     </form>
 </div>

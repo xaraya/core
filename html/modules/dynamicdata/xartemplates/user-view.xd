@@ -1,17 +1,30 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="!empty($object)">
-<!-- here we retrieve the complete object list in the function, and we only pass a reference of it to the data-view tag -->
-<h2><xar:mlstring>View</xar:mlstring> <xar:data-label object="$object" /></h2>
-    <xar:data-view object="$object" />
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <xar:if condition="!empty($object)">
+        <!-- here we retrieve the complete object list in the function, and we only pass a reference of it to the data-view tag -->
+        <h2>
+            <xar:mlstring>View</xar:mlstring> <xar:data-label object="$object" />
+        </h2>
+    
+        <xar:data-view object="$object" />
+    
+    <xar:elseif condition="!empty($modid)" />
+        <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
+        <h2>
+            <xar:mlstring>View</xar:mlstring> #$label#
+        </h2>
 
-<xar:elseif condition="!empty($modid)" />
-<!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
-<h2><xar:mlstring>View</xar:mlstring> #$label#</h2>
-    <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" />
+        <xar:data-view module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="30" startnum="$startnum" catid="$catid" />
 
-<xar:else />
-    <div align="center">
-        <a href="&xar-modurl-dynamicdata-user-main;"><xar:mlstring>Please select one of the available objects</xar:mlstring></a>
-    </div>
-</xar:if>
+    <xar:else />
+        <div class="xar-align-center">
+            <a href="&xar-modurl-dynamicdata-user-main;">
+                <xar:mlstring>Please select one of the available objects</xar:mlstring>
+            </a>
+        </div>
+    </xar:if>
 
+</div>

@@ -1,9 +1,7 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
     <xar:comment>
-        no action required if external file was not added 
+    no action required if external file was not added 
     </xar:comment>
 </xar:if>
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
@@ -12,54 +10,58 @@
 <xar:if condition="empty($layout) or $layout eq 'list' or $layout eq 'default'">
     <div class="xar-fullwidth">
         <xar:if condition="!empty($newlink)">
-            <a href="#$newlink#">
-                <strong>
-                    <xar:mlstring>
-                        Create New 
-                    </xar:mlstring>
-                </strong>
-             </a>
+        	</p>
+	            <a href="#$newlink#">
+	                <xar:mlstring>Create New</xar:mlstring>
+	             </a>
+	         </p>
         </xar:if>
-<!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
-        <xar:foreach in="$items" key="$itemid" value="$fields">
-            <table class="xar-norm xar-norm-outline xar-fullwidth">
-                <tr>
+		<xar:comment>
+		we don't use xar:data-form or xar:data-input here, because this is typically not an input form
+		</xar:comment>
+		<p>
+			<xar:mlstring>(Click column headers to sort)</xar:mlstring>
+		</p>
+
+        <table class="xar-fullwidth">
+            <tr>
+                <xar:foreach in="$properties" key="$name">
                     <th>
-                        <xar:mlstring>
-                            Sort by 
-                        </xar:mlstring>
+                        <a href="#$sorturl#=#$name#">
+                            <xar:data-label property="$properties[$name]" />
+                        </a>
                     </th>
-                    <th colspan="2">
+                </xar:foreach>
+            	<th>
+            		<xar:mlstring>Actions</xar:mlstring>
+            	</th>
+            </tr>
+	        <xar:foreach in="$items" key="$itemid" value="$fields">
+                <tr>
+	                <xar:foreach in="$properties" key="$name">
+                        <td class="xar-nowrap">
+                            <xar:if condition="!empty($fields[$name])">
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                            <xar:else />
+                                &nbsp; 
+                            </xar:if>
+                        </td>
+                    </xar:foreach>
+					<td class="xar-align-center xar-nowrap">
                         <xar:foreach in="$links[$itemid]" value="$option">
                             <xar:if condition="!empty($option['olink'])">
                                 #$option['ojoin']# 
                                 <a href="#$option['olink']#">
                                     #$option['otitle']# 
                                 </a>
-                                <xar:else />
+                            <xar:else />
                                 #$option['ojoin']# #$option['otitle']# 
                             </xar:if>
-                        </xar:foreach>
-                    </th>
-                </tr>
-                <xar:foreach in="$properties" key="$name">
-                    <tr>
-                        <th style="text-align:right;width:14em;">
-                            <a href="#$sorturl#=#$name#">
-                                <xar:data-label property="$properties[$name]" />
-                            </a>
-                        </th>
-                        <td>
-                            <xar:if condition="!empty($fields[$name])">
-                                <xar:data-output property="$properties[$name]" value="$fields[$name]" />
-                                <xar:else />
-                                &nbsp; 
-                            </xar:if>
-                        </td>
-                    </tr>
-                </xar:foreach>
-            </table>
-        </xar:foreach>
+						</xar:foreach>
+                     </td>
+				</tr>
+	        </xar:foreach>
+        </table>
     </div>
     <xar:if condition="!empty($prevurl) or !empty($nexturl)">
         <p>
@@ -68,19 +70,19 @@
                     &lt;&lt; 
                 </a>
                 <xar:else />
-                --- 
+                &lt;&lt; 
             </xar:if>
             <xar:if condition="!empty($nexturl)">
                 <a href="#$nexturl#">
                     &gt;&gt; 
                 </a>
                 <xar:else />
-                --- 
+                &gt;&gt; 
             </xar:if>
         </p>
     </xar:if>
-    <xar:elseif condition="$layout eq 'cells'" />
-    <table>
+<xar:elseif condition="$layout eq 'cells'" />
+    <table border="2" class="xar-fullwidth">
         <tr>
             <td>
                 <xar:foreach in="$properties" key="$name">
@@ -90,7 +92,9 @@
                 </xar:foreach>
             </td>
         </tr>
-<!-- for this layout, we'll use xar:data-input here -->
+		<xar:comment>
+		for this layout, we'll use xar:data-input here
+		</xar:comment>
         <xar:foreach in="$items" key="$itemid" value="$fields">
             <tr>
                 <td>
@@ -118,107 +122,113 @@
                 <a href="#$prevurl#">
                     &lt;&lt; 
                 </a>
-                <xar:else />
-                --- 
+            <xar:else />
+                &lt;&lt; 
             </xar:if>
             &nbsp;&nbsp;&nbsp; 
             <xar:if condition="!empty($nexturl)">
                 <a href="#$nexturl#">
                     &gt;&gt; 
                 </a>
-                <xar:else />
-                --- 
+            <xar:else />
+                &gt;&gt; 
             </xar:if>
         </p>
     </xar:if>
-<!-- TODO: multi-column output -->
-    <xar:elseif condition="$layout eq 'table'"/>
-        <div class="xar-fullwidth">
-            <h4>
-                <xar:mlstring>
-                    Properties and Options 
-                </xar:mlstring>
-            </h4>
-            <!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
-            <table class="xar-norm xar-norm-outline xar-fullwidth">
-                <!-- Show the create new link only once, if at all -->
-                <xar:if condition="!empty($newlink)">
-                    <tr>
-                        <xar:set name="colspan">count($properties)+2</xar:set>
-                        <th style="text-align: left;" colspan="#$colspan#">
-                            <a href="#$newlink#"><strong><xar:mlstring>Create New</xar:mlstring></strong></a>
-                        </th>
-                    </tr>
-                </xar:if>
+	<xar:comment>
+	TODO: multi-column output
+	</xar:comment>
+<xar:elseif condition="$layout eq 'table'"/>
+    <div class="xar-fullwidth">
+        <h4>
+            <xar:mlstring>Properties and Options</xar:mlstring>
+        </h4>
+
+        <xar:comment>
+        we don't use xar:data-form or xar:data-input here, because this is typically not an input form
+        </xar:comment>
+        <table class="xar-fullwidth" border="2">
+            <xar:comment>
+            Show the create new link only once, if at all
+            </xar:comment>
+            <xar:if condition="!empty($newlink)">
+                <tr>
+                    <xar:set name="colspan">count($properties)+2</xar:set>
+                    <th style="text-align: left;" colspan="#$colspan#">
+                        <a href="#$newlink#">
+                        	<xar:mlstring>Create New</xar:mlstring>
+                        </a>
+                    </th>
+                </tr>
+            </xar:if>
                 
-                <xar:set name="item_no">0</xar:set>
-                <xar:foreach in="$items" key="$itemid" value="$fields">
-                    <xar:if condition="$item_no eq 0">
-                        <tr>                        
-                            <xar:foreach in="$properties" key="$name">
-                                <th style="text-align:left;width:14em;">
-                                    <a href="#$sorturl#=#$name#">
-                                        <xar:data-label property="$properties[$name]" />
-                                    </a>
-                                </th>
-                            </xar:foreach>
-                        </tr>
-                    </xar:if>
-                    <xar:set name="item_no">$item_no+1</xar:set>
-                    <xar:set name="rowclass">'xar-norm'</xar:set>
-                    <xar:if condition="$item_no % 2 eq 0">
-                        <xar:set name="rowclass">'xar-alt'</xar:set>
-                    </xar:if>
-                    <tr class="#$rowclass#">
+            <xar:set name="item_no">0</xar:set>
+            <xar:foreach in="$items" key="$itemid" value="$fields">
+                <xar:if condition="$item_no eq 0">
+                    <tr>                        
                         <xar:foreach in="$properties" key="$name">
-                            <td>
-                                <xar:if condition="!empty($fields[$name])">
-                                    <xar:data-output property="$properties[$name]" value="$fields[$name]" />
-                                    <xar:else />
-                                    &nbsp; 
-                                </xar:if>
-                            </td>
+                            <th style="text-align:left;width:14em;">
+                                <a href="#$sorturl#=#$name#">
+                                    <xar:data-label property="$properties[$name]" />
+                                </a>
+                            </th>
                         </xar:foreach>
                     </tr>
-                    <tr class="#$rowclass#">
-                        <xar:set name="colspan">count($properties)+2</xar:set>
-                        <td style="text-align: right;" colspan="#$colspan#">
-                                <xar:foreach in="$links[$itemid]" value="$option">
-                                <xar:if condition="!empty($option['olink'])">
-                                    #$option['ojoin']# 
-                                    <a href="#$option['olink']#">
-                                        #$option['otitle']# 
-                                    </a>
+                </xar:if>
+                <xar:set name="item_no">$item_no+1</xar:set>
+                <xar:set name="rowclass">'xar-norm'</xar:set>
+                <xar:if condition="$item_no % 2 eq 0">
+                    <xar:set name="rowclass">'xar-alt'</xar:set>
+                </xar:if>
+                <tr class="#$rowclass#">
+                    <xar:foreach in="$properties" key="$name">
+                        <td>
+                            <xar:if condition="!empty($fields[$name])">
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]" />
                                 <xar:else />
-                                    #$option['ojoin']# #$option['otitle']# 
-                                </xar:if>
-                            </xar:foreach>
+                                &nbsp; 
+                            </xar:if>
                         </td>
-                    </tr>
-                </xar:foreach>
-            </table>
-        </div>
-        <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-            <p>
-                <xar:if condition="!empty($prevurl)">
-                    <a href="#$prevurl#">
-                        &lt;&lt; 
-                    </a>
-                    <xar:else />
-                    --- 
-                </xar:if>
-                <xar:if condition="!empty($nexturl)">
-                    <a href="#$nexturl#">
-                        &gt;&gt; 
-                    </a>
-                    <xar:else />
-                    --- 
-                </xar:if>
-            </p>
-        </xar:if>
-
-    <xar:elseif condition="$layout eq 'subform'" />
-    <table class="xar-norm">
+                    </xar:foreach>
+                </tr>
+                <tr class="#$rowclass#">
+                    <xar:set name="colspan">count($properties)+2</xar:set>
+                    <td class="xar-align-right" colspan="#$colspan#">
+                        <xar:foreach in="$links[$itemid]" value="$option">
+                            <xar:if condition="!empty($option['olink'])">
+                                #$option['ojoin']# 
+                                <a href="#$option['olink']#">
+                                    #$option['otitle']# 
+                                </a>
+                            <xar:else />
+                                #$option['ojoin']# #$option['otitle']# 
+                            </xar:if>
+                        </xar:foreach>
+                    </td>
+                </tr>
+            </xar:foreach>
+        </table>
+    </div>
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <p>
+            <xar:if condition="!empty($prevurl)">
+                <a href="#$prevurl#">
+                    &lt;&lt; 
+                </a>
+            <xar:else />
+                &lt;&lt; 
+            </xar:if>
+            <xar:if condition="!empty($nexturl)">
+                <a href="#$nexturl#">
+                    &gt;&gt; 
+                </a>
+            <xar:else />
+                &gt;&gt; 
+            </xar:if>
+        </p>
+    </xar:if>
+<xar:elseif condition="$layout eq 'subform'" />
+    <table class="xar-fullwidth">
         <tr>
             <xar:foreach in="$properties" key="$name">
                 <th>
@@ -233,7 +243,7 @@
                         <xar:set name="propid">#$properties.$name:id#</xar:set>
                         <xar:if condition="!empty($fields[$name])">
                             <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" value="$fields[$name]" />
-                            <xar:else />
+                        <xar:else />
                             <xar:data-input property="$properties[$name]" name="dd_'.$propid.'['.$itemid.']" size="10" />
                         </xar:if>
                     </td>
@@ -256,7 +266,7 @@
                     &lt;&lt; 
                 </a>
                 <xar:else />
-                --- 
+                &lt;&lt; 
             </xar:if>
             &nbsp;&nbsp;&nbsp; 
             <xar:if condition="!empty($nexturl)">
@@ -264,15 +274,15 @@
                     &gt;&gt; 
                 </a>
                 <xar:else />
-                --- 
+                &gt;&gt; 
             </xar:if>
         </p>
     </xar:if>
-    <xar:else />
-    <xar:mlstring>
-        Specify your own layout here... 
-    </xar:mlstring>
-    <xar:mlstring>
-        You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype 
-    </xar:mlstring>
+<xar:else />
+	<p>
+	    <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    </p>
+    <p>
+	    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    </p>
 </xar:if>

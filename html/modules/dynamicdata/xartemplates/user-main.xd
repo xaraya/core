@@ -1,9 +1,15 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<h2><xar:mlstring>Welcome to Dynamic Data</xar:mlstring></h2>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>Welcome to Dynamic Data</xar:mlstring>
+    </h2>
 
-<ul>
-<xar:foreach in="$items" value="$item">
-    <li><a href="#$item['link']#">#$item['label']#</a> </li>
-</xar:foreach>
-</ul>
-
+    <ul>
+        <xar:foreach in="$items" value="$item">
+            <li><a href="#$item['link']#">#$item['label']#</a></li>
+        </xar:foreach>
+    </ul>
+</div>

@@ -1,53 +1,53 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:ml><xar:mlstring>Create New Item in #(1)</xar:mlstring><xar:mlvar>#$object:label#</xar:mlvar></xar:ml></h2><br />
-<div style="margin: auto;">
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+	<h2>
+		<xar:ml>
+			<xar:mlstring>Create New Item in #(1)</xar:mlstring>
+			<xar:mlvar>#$object:label#</xar:mlvar>
+		</xar:ml>
+	</h2>
 
-<xar:if condition="!empty($preview)">
-<table width="100%" border="1" cellspacing="0" cellpadding="4">
-    <tr>
-        <td align="center">
+	<xar:if condition="!empty($preview)">
+        <h3>
             <xar:mlstring>Preview</xar:mlstring>
-        </td>
-    </tr>
-    <tr>
-        <td align="center">
-            <xar:data-display object="$object" />
-        </td>
-    </tr>
-</table>
-</xar:if>
+        </h3>
 
-<xar:set name="isupload">#$object:upload#</xar:set>
-<xar:if condition="!empty($isupload)">
-    <xar:set name="enc_type">'multipart/form-data'</xar:set>
-<xar:else/> 
-    <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-</xar:if>
-<form method="POST" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
-<div>
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
-    <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
-    <input type="hidden" name="join" id="join" value="#$object:join#" />
-    <input type="hidden" name="table" id="table" value="#$object:table#" />
-    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+        <xar:data-display object="$object" />
+	</xar:if>
 
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-        <xar:data-form object="$object" />
-        <tr><td colspan="2">
-        #$hooks#
-        </td></tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" name="preview" value="#xarML('Preview')#" />
-                &nbsp;&nbsp;&nbsp;
-                <input type="submit" value="#xarML('Create')#" />
-            </td>
-        </tr>
-    </table>
+	<xar:set name="isupload">#$object:upload#</xar:set>
 
-</div>
-</form>
-</div>
+	<xar:if condition="!empty($isupload)">
+	    <xar:set name="enc_type">'multipart/form-data'</xar:set>
+	<xar:else/> 
+	    <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+	</xar:if>
+
+	<form method="post" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
+	    <table border="2" class="xar-fullwidth">
+	        <xar:data-form object="$object" />
+	    </table>
+
+		<xar:if condition="!empty($hooks)">
+			<div>
+		        #$hooks#
+		    </div>
+		</xar:if>
+
+		<div class="xar-align-center">
+		    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+		    <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
+		    <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+		    <input type="hidden" name="join" id="join" value="#$object:join#" />
+		    <input type="hidden" name="table" id="table" value="#$object:table#" />
+		    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+
+            <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
+            <input type="submit" value="#xarML('Create')#" class="xar-amrgin-thickleft" />
+
+		</div>
+	</form>
 </div>
