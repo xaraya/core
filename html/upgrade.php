@@ -749,11 +749,13 @@ If you did not create this account, then do nothing.  The account will be deemed
 inactive after a period of time and deleted from our records.  You will recieve
 no further emails from us.Thank you,
 
-%%siteadmin%%'),          
+%%siteadmin%%',
+                             'override'  =>  1),          
                      array('name'    =>  'remindertitle',
                              'module'  =>  'roles',
                              'set'     =>  'Replacement login information for %%name%% at
-%%sitename%%'),       
+%%sitename%%',
+                             'override'  =>  1),       
                     array('name'    =>  'reminderemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -763,10 +765,12 @@ using the following username and password:
 username: %%username%%
 password: %%password%%
 
--- %%siteadmin%%'),      
+-- %%siteadmin%%',
+                             'override'  =>  1),      
                     array('name'    =>  'validationtitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Validate your account %%name%% at %%sitename%%'),                          
+                             'set'     =>  'Validate your account %%name%% at %%sitename%%',
+                             'override'  =>  1),                          
                     array('name'    =>  'validationemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -779,10 +783,12 @@ Validation Code to activate your account:  %%valcode%%
 
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%'),
+%%siteadmin%%%',
+                             'override'  =>  1),
                     array('name'    =>  'deactivationtitle',
                              'module'  =>  'roles',
-                             'set'     =>  '%%name%% deactivated at %%sitename%%'),
+                             'set'     =>  '%%name%% deactivated at %%sitename%%',
+                             'override'  =>  1),
                     array('name'    =>  'deactivationemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -791,10 +797,12 @@ Your account was deactivated by the administrator.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email as soon as your account is activated again.
 
-%%siteadmin%%%'),             
+%%siteadmin%%%',
+                             'override'  =>  1),             
                     array('name'    =>  'pendingtitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Pending state of %%name%% at %%sitename%%'),
+                             'set'     =>  'Pending state of %%name%% at %%sitename%%',
+                             'override'  =>  1),
                     array('name'    =>  'pendingemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
@@ -805,27 +813,34 @@ again.
 If you want to know the reason, contact %%adminmail%%
 You will receive an email has soon as your account is activated again.
 
-%%siteadmin%%%'),
+%%siteadmin%%%',
+                             'override'  =>  1),
                     array('name'    =>  'passwordtitle',
                              'module'  =>  'roles',
-                             'set'     =>  'Your password at %%sitename%% has been changed'),
+                             'set'     =>  'Your password at %%sitename%% has been changed',
+                             'override'  =>  1),
                     array('name'    =>  'passwordemail',
                              'module'  =>  'roles',
                              'set'     =>  '%%name%%,
 
 Your password has been changed by an administrator.
-You can now login at %%link%% with those information :
+You can now login at %%siteurl%% with those information :
 Login : %%username%%
-Password : %%pass%%
+Password : %%password%%
 
-%%siteadmin%%'),                          
+%%siteadmin%%',
+                             'override'  =>  1),                          
                           );
 
     foreach($modvars as $modvar){
         foreach($modvar as $var){
             $currentvar = xarModGetVar("$var[module]", "$var[name]");
             if (isset($currentvar)){
-                echo "$var[module] -> $var[name] is set, proceeding to next check<br />";
+            	if (isset($var['override'])) {
+            		xarModSetVar($var['module'], $var['name'], $var['set']);
+            		echo "$var[module] -> $var[name] has been overriden, proceeding to next check<br />";
+            	}
+                else echo "$var[module] -> $var[name] is set, proceeding to next check<br />";
             } else {
                 xarModSetVar($var['module'], $var['name'], $var['set']);
                 echo "$var[module] -> $var[name] empty, attempting to set.... done!<br />";

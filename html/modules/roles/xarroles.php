@@ -902,16 +902,20 @@ class xarRole {
     }
 
     /**
-     * getUsers: get the members of a group that are users
+     * getUsers: get the members of a group that are users 
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
-     * @param none $
+     * @param integer state get users in this state
+     * @param integer startnum get users beyond this number
+     * @param integer numitems get a defined number of users
+     * @param string order order the result (name, uname, type, email, date_reg, state...)
+     * @param string selection get users within this selection criteria
      * @return boolean
      * @throws none
      * @todo none
      */
-    function getUsers($state = 0, $startnum = 0, $numitems = 0)
+    function getUsers($state = 0, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
         // set up the query and get the data
         if ($state == 0) {
@@ -945,6 +949,8 @@ class xarRole {
                         AND r.xar_type = 0 AND r.xar_state = $state
                         AND rm.xar_parentid = $this->uid";
         }
+        if (isset($selection)) $query .= $selection;
+        $query .= " ORDER BY xar_" . $order;       
         if ($startnum != 0) {
             $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1);
         } else {
@@ -981,12 +987,13 @@ class xarRole {
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
-     * @param none $
+     * @param integer state count user in this state
+     * @param string selection count user within this selection criteria
      * @return boolean
      * @throws none
      * @todo none
      */
-    function countUsers($state = 0)
+    function countUsers($state = 0, $selection = NULL)
     {
         // set up the query and get the data
         if ($state == 0) {
@@ -1002,6 +1009,7 @@ class xarRole {
                         AND r.xar_type = 0 AND r.xar_state = $state
                         AND rm.xar_parentid = $this->uid";
         }
+        if (isset($selection)) $query .= $selection;
         $result = $this->dbconn->Execute($query);
         if (!$result) return;
         list($numusers) = $result->fields;

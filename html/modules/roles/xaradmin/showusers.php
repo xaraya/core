@@ -23,7 +23,9 @@ function roles_admin_showusers()
     if (!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('display', 'isset', $data['display'], NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED)) return;
-
+    if (!xarVarFetch('order', 'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED)) return;
+    
     $userdisplay = xarSessionGetVar('rolesdisplay');
     if (!isset($data['display'])) {
         if (isset($userdisplay)) {
@@ -39,6 +41,15 @@ function roles_admin_showusers()
         include_once 'modules/roles/xartreerenderer.php';
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
+    }
+    $selection = NULL;
+    //Create the selection
+    if (!empty($data['search'])) {
+    	$selection = " AND (";
+        $selection .= "(xar_name LIKE '%" . $data['search'] . "%')";
+        $selection .= " OR (xar_uname LIKE '%" . $data['search'] . "%')";
+        $selection .= " OR (xar_email LIKE '%" . $data['search'] . "%')";
+        $selection .= ")";
     }
 
     // Load Template
@@ -74,11 +85,11 @@ function roles_admin_showusers()
         case 0 :
         default:
             if ($uid != 0) {
-                $usrs = $role->getUsers(0, $startnum, $numitems);
-                $data['totalstate'] = $role->countUsers(0);
+                $usrs = $role->getUsers(0, $startnum, $numitems, $data['order'], $selection);
+                $data['totalstate'] = $role->countUsers(0, $selection);
             } else {
-                $usrs = xarModAPIFunc('roles','user','getall', array('startat' => $startnum, 'numitems' => $numitems));
-                $data['totalstate'] = xarModAPIFunc('roles','user','countall');
+                $usrs = xarModAPIFunc('roles','user','getall', array('startat' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
+                $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('selection' => $selection));
             }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no users');
@@ -88,10 +99,10 @@ function roles_admin_showusers()
 
         case 1:
             if ($uid != 0) {
-                $data['totalstate'] = $role->countUsers(1);
-                $usrs = $role->getUsers(1, $startnum, $numitems);
+                $data['totalstate'] = $role->countUsers(1, $selection);
+                $usrs = $role->getUsers(1, $startnum, $numitems, $data['order'], $selection);
             } else {
-                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 1, 'startat' => $startnum, 'numitems' => $numitems));
+                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 1, 'startat' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
                 $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 1));
             }
             if ($data['totalstate'] == 0) {
@@ -102,11 +113,11 @@ function roles_admin_showusers()
 
         case 2:
              if ($uid != 0) {
-                $data['totalstate'] = $role->countUsers(2);
-                $usrs = $role->getUsers(2, $startnum, $numitems);
+                $data['totalstate'] = $role->countUsers(2, $selection);
+                $usrs = $role->getUsers(2, $startnum, $numitems, $data['order'], $selection);
              } else {
                 $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 2));
-                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 2, 'startat' => $startnum, 'numitems' => $numitems));
+                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 2, 'startat' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
              }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no users waiting for validation');
@@ -116,11 +127,11 @@ function roles_admin_showusers()
 
         case 3:
             if ($uid != 0) {
-                $data['totalstate'] = $role->countUsers(3);
-                $usrs = $role->getUsers(3, $startnum, $numitems);
+                $data['totalstate'] = $role->countUsers(3, $selection);
+                $usrs = $role->getUsers(3, $startnum, $numitems, $data['order'], $selection);
             } else {
                 $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 3));
-                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 3, 'startat' => $startnum, 'numitems' => $numitems));
+                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 3, 'startat' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
              }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no active users');
@@ -130,11 +141,11 @@ function roles_admin_showusers()
 
         case 4:
             if ($uid != 0) {
-                $data['totalstate'] = $role->countUsers(4);
-                $usrs = $role->getUsers(4, $startnum, $numitems);
+                $data['totalstate'] = $role->countUsers(4, $selection);
+                $usrs = $role->getUsers(4, $startnum, $numitems, $data['order'], $selection);
             } else {
                 $data['totalstate'] = xarModAPIFunc('roles','user','countall', array('state' => 4));
-                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 4, 'startat' => $startnum, 'numitems' => $numitems));
+                $usrs = xarModAPIFunc('roles','user','getall', array('state' => 4, 'startat' => $startnum, 'numitems' => $numitems, 'order' => $data['order'], 'selection' => $selection));
              }
             if ($data['totalstate'] == 0) {
                 $data['message'] = xarML('There are no pending users');

@@ -11,7 +11,7 @@ function roles_admin_main()
     if (xarModGetVar('adminpanels', 'overview') == 0) {
         return array();
     } else {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'viewroles'));
+        xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
     }
     // success
     return true;

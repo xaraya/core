@@ -63,6 +63,12 @@ function roles_admin_updaterole()
             xarExceptionSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             return;
         }
+        //Save the old state
+        $user = xarModAPIFunc('roles',
+            'user',
+            'get',
+            array('uid' => $uid));
+        $oldstate = $user['state'];
     }
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
@@ -78,7 +84,16 @@ function roles_admin_updaterole()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {
         return;
-    }
+    }  
+    
+    
+    // call item update hooks (for DD etc.)
+// TODO: move to update() function
+    $pargs['module'] = 'roles';
+    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
+    $pargs['itemid'] = $uid;
+    xarModCallHooks('item', 'update', $uid, $pargs);
+    
     //Change the defaultgroup var values if the name is changed
     if ($ptype == 1) {
 	    $defaultgroup = xarModGetVar('roles', 'defaultgroup');
@@ -87,13 +102,40 @@ function roles_admin_updaterole()
 	                                                       'type'   => 1));
 	    if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname); 
     }
-    
-    // call item update hooks (for DD etc.)
-// TODO: move to update() function
-    $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
-    $pargs['itemid'] = $uid;
-    xarModCallHooks('item', 'update', $uid, $pargs);
+    else {
+    	//TODO : Be able to send 2 email if both password and type has changed... (or an single email with a overall msg...)
+	    //Ask to send email if the password has changed
+	    if ($ppass1 != '') {
+	    	if (xarModGetVar('roles', 'askpasswordemail')) {
+	    		xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
+	                          array('uid' => array($uid => '1'), 'mailtype' => 'password', $pass => $ppass1)));
+	    	}
+	    	//TODO : If askpasswordemail is false, the user won't know his new password...
+	    }
+	    //Ask to send email if the state has changed
+	    if ($user['state'] != $pstate) {
+	    	//Get the notice message
+		    switch ($pstate) {
+		        case 1 :
+		        	$mailtype = 'deactivation';
+		        break;
+		        case 2 :
+		        	$mailtype = 'validation';
+		        break;
+		        case 3 :
+		        	$mailtype = 'welcome';
+		        break;
+		        case 4 :
+		        	$mailtype = 'pending';
+		        break;
+		    }
+	    	if (xarModGetVar('roles', 'ask'.$mailtype.'email')) {
+	    		xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
+	                          array('uid' => array($uid => '1'), 'mailtype' => $mailtype)));
+	    	}
+	    	//TOTHINK : If ask$mailtypeemail is false, the user won't know his new state...
+	    }
+    }
 
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
