@@ -1,6 +1,4 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
 <!--
@@ -17,45 +15,33 @@
 </xar:if>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            Blocks Administration 
-        </xar:mlstring>
+        <xar:mlstring>Blocks Administration</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>
-            New Group 
-        </xar:mlstring>
+        <xar:mlstring>Add Group</xar:mlstring>
     </h2>
-    <form class="xar-blocks-admin" action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
-        <fieldset class="formelements xar-norm">
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-            <p class="param">
-                <label for="group_name" class="required">
-                    <span class="help" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#">
-                        <xar:mlstring>
-                            Name 
-                        </xar:mlstring>
-                        : 
-                    </span>
-                </label>
-                <input type="text" name="group_name" id="group_name" value="" size="40" maxlength="255" />
-            </p>
-            <p class="param">
-                <label for="group_template">
-                    <span class="help" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#">
-                        <xar:mlstring>
-                            Default template (optional) 
-                        </xar:mlstring>
-                        : 
-                    </span>
-                </label>
-                <input type="text" name="group_template" id="group_template" value="" size="40" maxlength="255" />
-            </p>
-            <p>
-                <input type="submit" value="#$createlabel#" />
-            </p>
-        </fieldset>
+    <form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
+
+        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+
+        <div class="xar-form-input-wrapper">
+            <label for="group_name" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#" class="xar-form-label">
+                <xar:mlstring>Group Name:</xar:mlstring>
+            </label>
+            <input type="text" name="group_name" id="group_name" value="" maxlength="255" class="xar-form-textlong" />
+        </div>
+
+        <div class="xar-form-input-wrapper">
+            <label for="group_template" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#" class="xar-form-label">
+                <xar:mlstring>Default Template (optional):</xar:mlstring>
+            </label>
+                <input type="text" name="group_template" id="group_template" value="" maxlength="255" class="xar-form-textlong" />
+        </div>
+
+        <div class="xar-clear-both xar-align-center">
+            <input type="submit" value="#xarML('Add Group')#" class="xar-margin-thick" />
+        </div>
     </form>
 </div>

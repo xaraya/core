@@ -1,112 +1,136 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span></div>
-<div class="xar-mod-body" style="width: 99%"><h2><xar:mlstring>View Block Types</xar:mlstring></h2>
+<div class="xar-mod-head">
+	<span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
 
     <xar:if condition="!empty($tid)">
-        <table cellpadding="4" cellspacing="1" class="xar-norm-outline">
-            <caption style="vertical-align:top;">
-                <xar:mlstring>Selected block details</xar:mlstring>
-            </caption>
-            <tr>
-                <td><xar:mlstring>Block Type:</xar:mlstring></td>
-                <td>#xarVarPrepForDisplay($detail['type'])#</td>
-            </tr>
-            <tr>
-                <td><xar:mlstring>Module:</xar:mlstring></td>
-                <td>#xarVarPrepForDisplay($detail['module'])#</td>
-            </tr>
-            <xar:if condition="!empty($info['text_type'])">
-                <tr>
-                    <td><xar:mlstring>Short title:</xar:mlstring></td>
-                    <td>#xarVarPrepForDisplay($info['text_type'])#</td>
-                </tr>
-            </xar:if>
-            <xar:if condition="!empty($info['text_type_long'])">
-                <tr>
-                    <td><xar:mlstring>Long title:</xar:mlstring></td>
-                    <td>#xarVarPrepForDisplay($info['text_type_long'])#</td>
-                </tr>
-            </xar:if>
-            <xar:if condition="!empty($info['notes'])">
-                <tr>
-                    <td><xar:mlstring>Notes:</xar:mlstring></td>
-                    <td>#xarVarPrepForDisplay($info['notes'])#</td>
-                </tr>
-            </xar:if>
-            <xar:if condition="isset($info['allow_multiple'])">
-                <tr>
-                    <td><xar:mlstring>Allow multiple:</xar:mlstring></td>
-                    <td>
-                        <xar:if condition="!empty($info['allow_multiple'])">
-                            <xar:mlstring>True</xar:mlstring>
-                        <xar:else/>
-                            <xar:mlstring>False</xar:mlstring>
-                        </xar:if>
-                    </td>
-                </tr>
-            </xar:if>
-        </table>
+		<h2>
+			<xar:mlstring>View Block Type</xar:mlstring>
+		</h2>
+
+    	<fieldset>
+	        <legend>
+	            <xar:mlstring>Selected Block Details</xar:mlstring>
+	        </legend>
+
+	        <div class="xar-form-input-wrapper">
+	            <label class="xar-form-label">
+	                <xar:mlstring>Block Type:</xar:mlstring>
+	            </label>
+	        	#xarVarPrepForDisplay($detail['type'])#
+	        </div>
+
+	        <div class="xar-form-input-wrapper">
+	            <label class="xar-form-label">
+	                <xar:mlstring>Module:</xar:mlstring>
+	            </label>
+	        	#xarVarPrepForDisplay($detail['module'])#
+	        </div>
+
+		    <xar:if condition="!empty($info['text_type'])">
+		        <div class="xar-form-input-wrapper">
+		            <label class="xar-form-label">
+		                <xar:mlstring>Short Title:</xar:mlstring>
+		            </label>
+		        	#xarVarPrepForDisplay($info['text_type'])#
+		        </div>
+			</xar:if>
+
+		    <xar:if condition="!empty($info['text_type_long'])">
+		        <div class="xar-form-input-wrapper">
+		            <label class="xar-form-label">
+		                <xar:mlstring>Long Title:</xar:mlstring>
+		            </label>
+		        	#xarVarPrepForDisplay($info['text_type_long'])#
+		        </div>
+			</xar:if>
+
+		    <xar:if condition="isset($info['allow_multiple'])">
+		        <div class="xar-form-input-wrapper">
+		            <label class="xar-form-label">
+		                <xar:mlstring>Allow Multiple:</xar:mlstring>
+		            </label>
+	                <xar:if condition="!empty($info['allow_multiple'])">
+	                    <xar:mlstring>True</xar:mlstring>
+	                <xar:else/>
+	                    <xar:mlstring>False</xar:mlstring>
+	                </xar:if>
+		        </div>
+			</xar:if>
+
+		    <xar:if condition="!empty($info['notes'])">
+		        <div class="xar-form-input-wrapper">
+		            <label class="xar-form-label">
+		                <xar:mlstring>Notes:</xar:mlstring>
+		            </label>
+		        	#xarVarPrepForDisplay($info['notes'])#
+		        </div>
+			</xar:if>
+
+		</fieldset>
 
         <xar:comment>Table of overrideable parameters (see xar:block tag)</xar:comment>
-            <xar:if condition="!empty($params)">
-                <table cellpadding="4" cellspacing="1" class="xar-norm-outline">
-                    <caption style="vertical-align:top;">
-                        <xar:mlstring>Block parameters customisable through &lt;xar:block&gt; tag</xar:mlstring>
-                    </caption>
-                    <tr>
-                        <th><xar:mlstring>Name</xar:mlstring></th>
-                        <th><xar:mlstring>Default</xar:mlstring></th>
-                        <th><xar:mlstring>Datatype</xar:mlstring></th>
-                        <th><xar:mlstring>Properties</xar:mlstring></th>
-                    </tr>
-                    <xar:loop name="$params">
-                        <tr>
-                            <td>#xarVarPrepForDisplay($loop:item.name)#</td>
-                            <td>
-                                <xar:if condition="$loop:item.overrideable">
-                                    #xarVarPrepForDisplay($loop:item.value)#
-                                <xar:else/>
-                                    <xar:mlstring>n/a</xar:mlstring>
-                                </xar:if>
-                            </td>
-                            <td>#xarVarPrepForDisplay($loop:item.type)#</td>
-                            <td>
-                                <xar:if condition="$loop:item.overrideable">
-                                    <xar:mlstring>customisable</xar:mlstring>
-                                <xar:else/>
-                                    <xar:mlstring>not_customisable</xar:mlstring>
-                                </xar:if>
-                            </td>
-                        </tr>
-                    </xar:loop>
-                </table>
-            </xar:if>
-            <hr />
+        <xar:if condition="!empty($params)">
+        	<fieldset>
+	            <legend>
+	                <xar:mlstring>Block Parameters Customisable Through &lt;xar:block&gt; Tag</xar:mlstring>
+	            </legend>
+	            <table>
+	                <tr>
+	                    <th><xar:mlstring>Name</xar:mlstring></th>
+	                    <th><xar:mlstring>Default</xar:mlstring></th>
+	                    <th><xar:mlstring>Datatype</xar:mlstring></th>
+	                    <th><xar:mlstring>Properties</xar:mlstring></th>
+	                </tr>
+	                <xar:loop name="$params">
+	                    <tr>
+	                        <td>#xarVarPrepForDisplay($loop:item.name)#</td>
+	                        <td>
+	                            <xar:if condition="$loop:item.overrideable">
+	                                #xarVarPrepForDisplay($loop:item.value)#
+	                            <xar:else/>
+	                                <xar:mlstring>n/a</xar:mlstring>
+	                            </xar:if>
+	                        </td>
+	                        <td>#xarVarPrepForDisplay($loop:item.type)#</td>
+	                        <td>
+	                            <xar:if condition="$loop:item.overrideable">
+	                                <xar:mlstring>customisable</xar:mlstring>
+	                            <xar:else/>
+	                                <xar:mlstring>not_customisable</xar:mlstring>
+	                            </xar:if>
+	                        </td>
+	                    </tr>
+	                </xar:loop>
+	            </table>
+            </fieldset>
+        </xar:if>
+	<xar:else />
+		<h2>
+			<xar:mlstring>View Block Types</xar:mlstring>
+		</h2>
+	    <table class="xar-fullwidth">
+	        <tr>
+	            <th title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></th>
+	            <th title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></th>
+	            <th title="#xarML('A short description of what the block does.')#"><xar:mlstring>Description</xar:mlstring></th>
+	            <th><xar:mlstring>Actions</xar:mlstring></th>
+	        </tr>
+	        <xar:loop name="$block_types" id="foo2">
+	            <tr>
+	                <td><a href="#$loop:item['modurl']#" title="#xarML('Administer module')#">#$loop:item['module']#</a></td>
+	                <td><a href="#$loop:item['detailurl']#" title="#xarML('Display further details')#">#$loop:item['type']#</a></td>
+	                <td>
+	                    <xar:if condition="!empty($loop:item['info']['text_type_long'])">
+	                        #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
+	                    </xar:if>
+	                </td>
+	                <td class="xar-align-center">
+	                    <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
+	                </td>
+	            </tr>
+	        </xar:loop>
+	    </table>
     </xar:if>
-
-    <table cellpadding="4" cellspacing="1" class="xar-norm-outline xar-fullwidth xar-noborder">
-        <caption style="vertical-align:top;">
-            <xar:mlstring>All available block types</xar:mlstring>
-        </caption>
-        <tr>
-            <th><span class="help" title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></span></th>
-            <th><span class="help" title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></span></th>
-            <th><span class="help" title="#xarML('A short description of what the block does.')#"><xar:mlstring>Description</xar:mlstring></span></th>
-            <th><xar:mlstring>Actions</xar:mlstring></th>
-        </tr>
-        <xar:loop name="$block_types" id="foo2">
-            <tr>
-                <td><a href="#$loop:item['modurl']#" title="#xarML('Administer module')#">#$loop:item['module']#</a></td>
-                <td><a href="#$loop:item['detailurl']#" title="#xarML('Display further details')#">#$loop:item['type']#</a></td>
-                <td>
-                    <xar:if condition="!empty($loop:item['info']['text_type_long'])">
-                        #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
-                    </xar:if>
-                </td>
-                <td>
-                    <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
-                </td>
-            </tr>
-        </xar:loop>
-    </table>
 </div>
