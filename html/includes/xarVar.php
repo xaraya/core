@@ -29,6 +29,7 @@ define('XARVAR_PREP_FOR_NOTHING', 0);
 define('XARVAR_PREP_FOR_DISPLAY', 1);
 define('XARVAR_PREP_FOR_HTML',    2);
 define('XARVAR_PREP_FOR_STORE',   4);
+define('XARVAR_PREP_TRIM',        8);
 
 /**
  * Initialise the variable handling options
@@ -162,6 +163,7 @@ function xarVarBatchFetch() {
  *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
  *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
  *   XARVAR_PREP_FOR_STORE:      xarVarPrepForStore($value)
+ *   XARVAR_PREP_TRIM:           trim($value)
  *
  * @author Marco Canini
  * @access public
@@ -210,6 +212,10 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
     if ($prep & XARVAR_PREP_FOR_STORE) {
         $value = xarVarPrepForStore($value);
+    }
+
+    if ($prep & XARVAR_PREP_TRIM) {
+        $value = trim($value);
     }
 
     if ((!$result) &&
