@@ -197,14 +197,25 @@ function base_menublock_display($blockinfo)
                 if (empty($indlinks)){
                     $indlinks = '';
                 }
-
+                
+                // we dont want to show logout link if the user is anonymous or admin
+                // admins have their own logout method, which is more robust
+                if (xarSecAuthAction(0, 'base:Menublock', 
+                                        "$blockinfo[title]::",
+                                        ACCESS_ADMIN) or !xarUserIsLoggedIn()){
+                    $showlogout = false;
+                }else{
+                    $showlogout = true;
+                }
+                
                 $data = xarTplBlock('base','sidemenu', array('usermods'         => $usermods, 
                                                              'indlinks'         => $indlinks,
                                                              'logouturl'        => $logouturl,
                                                              'logoutlabel'      => $logoutlabel,
                                                              'loggedin'         => $loggedin,
                                                              'usercontent'      => $usercontent,
-                                                             'marker'           => $marker
+                                                             'marker'           => $marker,
+                                                             'showlogout'       => $showlogout
                                                              ));
                 // this should do for now
                 break;

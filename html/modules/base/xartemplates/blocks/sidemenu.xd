@@ -32,6 +32,8 @@
     </xar:if>
 </xar:loop>
 </xar:if>
-<br />
-<!-- Logout -->
-[<a href="#$logouturl#">#$logoutlabel#</a>]
+<!-- Logout only if not admin or anomymous -->
+<xar:if condition="$showlogout">
+    <br />
+    [<a href="#$logouturl#">#$logoutlabel#</a>]
+</xar:if>
