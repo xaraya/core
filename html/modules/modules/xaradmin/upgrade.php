@@ -35,6 +35,11 @@ function modules_admin_upgrade()
         return;
     }
 
+    if (!xarModAPIFunc('modules', 'admin', 'verifydependency', array('regid'=>$id))) {
+        // Bail out if the dependancy check fails.
+        return;
+    }
+
     $minfo=xarModGetInfo($id);
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {
