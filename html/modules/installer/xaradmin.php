@@ -506,7 +506,7 @@ function installer_admin_choose_configuration()
     // Make sure all the core modules are here
     // Remove them from the list if name and regid coincide
     $awol = array();
-    include 'xarconfigurations/coremoduleslist.php';
+    include 'modules/installer/xarconfigurations/coremoduleslist.php';
     foreach ($coremodules as $coremodule) {
         if (in_array($coremodule['name'],array_keys($fileModules))) {
             if ($coremodule['regid'] == $fileModules[$coremodule['name']]['regid'])
@@ -589,7 +589,7 @@ function installer_admin_confirm_configuration()
 
         include $configuration;
         $fileModules = unserialize(xarModGetVar('installer','modulelist'));
-        $func = "installer_" . basename($configuration,'.conf.php') . "_moduleoptions";
+        $func = "installer_" . basename("$configuration",'.conf.php') . "_moduleoptions";
         $modules = $func();
         $availablemodules = $awolmodules = array();
         foreach ($modules as $module) {
@@ -625,7 +625,7 @@ function installer_admin_confirm_configuration()
 
     if (!$confirmed) {
 
-        $func = "installer_" . basename($configuration,'.conf.php') . "_privilegeoptions";
+        $func = "installer_" . basename("$configuration",'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
         $data['options3'] = $options3;
@@ -669,7 +669,7 @@ function installer_admin_confirm_configuration()
 //                    xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
                 }
             }
-        $func = "installer_" . basename($configuration,'.conf.php') . "_configuration_load";
+        $func = "installer_" . basename("$configuration",'.conf.php') . "_configuration_load";
         $func($chosen);
         $content['marker'] = '[x]';                                           // create the user menu
         $content['displaymodules'] = 1;
