@@ -11,25 +11,17 @@
 		<td align="center">
 			<table border="0" width="100%" cellpadding="2" cellspacing="1">
 				<tr valign="top">
-<!-- 					<th> -->
-<!-- 						#$modnamelabel# -->
-<!-- 					</th> -->
+
 					<th align="left">
 						#$disnamelabel#
 					</th>
-<!-- 					<th> -->
-<!-- 						#$moddirlabel# -->
-<!-- 					</th> -->
+
 					<th align="left">
 						#$versionlabel#
 					</th>
-<!-- 					<th> -->
-<!-- 						#$classlabel# -->
-<!-- 					</th> -->
+
 					<th align="left">
 						#$statelabel# | #$actionlabel#
-<!-- 					</th> -->
-<!-- 					<th align="left"> -->
 					</th>
 					<th align="left">
 						#$optionslabel#
@@ -37,69 +29,47 @@
 				</tr>
 				<xar:loop name="$items">
 				<tr valign="top">
-<!-- 					<td> -->
-<!-- 						#$name# -->
-<!-- 					</td> -->
 					<td>
 						#$displayname#
 					</td>
-<!-- 					<td> -->
-<!-- 						#$directory# -->
-<!-- 					</td> -->
 					<td>
 						#$version#
 					</td>
-<!-- 					<td nowrap> -->
-<!-- 						#$class# -->
-<!-- 					</td> -->
 					<td nowrap>
-					<table width="100%">
-						<tr>
-							<td width="30%">
-								<xar:if condition="$state eq 4">
-									#$state4label#
-								</xar:if>
+                        <xar:if condition="$state eq 4">
+                            #$state4label#
+                        </xar:if>
 
-								<xar:if condition="$state eq 3">
-									#$state3label#
-								</xar:if>
-								<xar:if condition="$state eq 2">
-									#$state2label#
-								</xar:if>
-								<xar:if condition="$state eq 1">
-									#$state1label#
-								</xar:if>
-								<xar:if condition="$state eq 5">
-									#$state5label#
-								</xar:if>
-							</td>
-							<td>
-<!-- 					</td> -->
-<!-- 					<td nowrap> -->
-					    <!-- due to popular demand we dont show remove link for core mods atm -->
-					    
-								<xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-									<a href="#$removeurl#">#$remove#</a>
-								</xar:if>
-								<xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-									<a href="#$deactivateurl#">#$deactivate#</a>
-								</xar:if>
-								<xar:if condition="$state eq 2">
-									<a href="#$activateurl#">#$activate#</a>
-									<xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
-										|
-										<a href="#$removeurl#">#$remove#</a>
-									</xar:if>
-								</xar:if>
-								<xar:if condition="$state eq 1">
-									<a href="#$initialiseurl#">#$initialise#</a>
-								</xar:if>
-								<xar:if condition="$state eq 5">
-									<a href="#$upgradeurl#">#$upgrade#</a>
-								</xar:if>
-							</td>
-						</tr>
-					</table>
+                        <xar:if condition="$state eq 3">
+                            #$state3label#
+                        </xar:if>
+                        <xar:if condition="$state eq 2">
+                            #$state2label#
+                        </xar:if>
+                        <xar:if condition="$state eq 1">
+                            #$state1label#
+                        </xar:if>
+                        <xar:if condition="$state eq 5">
+                            #$state5label#
+                        </xar:if>
+                        <xar:if condition="($state eq 4) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
+                            | <a href="#$removeurl#">#$remove#</a>
+                        </xar:if>
+                        <xar:if condition="($state eq 3) and ($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
+                            | <a href="#$deactivateurl#">#$deactivate#</a>
+                        </xar:if>
+                        <xar:if condition="$state eq 2">
+                            | <a href="#$activateurl#">#$activate#</a>
+                            <xar:if condition="($class ne 'Core Admin') and ($class ne 'Core Utility') and ($class ne 'Core Complete') and ($class ne 'Core Other')">
+                                | <a href="#$removeurl#">#$remove#</a>
+                            </xar:if>
+                        </xar:if>
+                        <xar:if condition="$state eq 1">
+                            | <a href="#$initialiseurl#">#$initialise#</a>
+                        </xar:if>
+                        <xar:if condition="$state eq 5">
+                            | <a href="#$upgradeurl#">#$upgrade#</a>
+                        </xar:if>
 					</td>
 					<td nowrap>
 					    [
