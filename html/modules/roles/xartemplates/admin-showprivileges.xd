@@ -1,8 +1,20 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="xarTplAddStyleLink('roles', 'tabs')">
+</xar:if>
 <xar:if condition="xarTplAddStyleLink('roles', 'privileges')">
 </xar:if>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Show Privileges</xar:mlstring></h2>
+<div class="xar-mod-body"><h2>
+<xar:if condition="$ptype eq 0"><xar:mlstring>Manage the user</xar:mlstring>
+<xar:else/><xar:mlstring>Manage the group</xar:mlstring></xar:if>
+: #$pname#</h2>
+<div id="tabnav">
+	<div class="help" title="Choose an action to perform on the selected user"><xar:mlstring>Actions</xar:mlstring> :</div>
+	<div><a href="#xarModURL('roles', 'admin', 'displayrole', array('uid' => $roleid))#"><xar:mlstring>Display</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $roleid))#"><xar:mlstring>Modify</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $roleid))#"><xar:mlstring>Delete</xar:mlstring></a></div>	
+	<div><a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $roleid))#" class="active"><xar:mlstring>Privileges</xar:mlstring></a></div>	
+</div>
 <div style="margin: auto;">
 <h3><xar:mlstring>Privileges of</xar:mlstring>&nbsp;
 			<xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
