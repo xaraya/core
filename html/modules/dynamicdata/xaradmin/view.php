@@ -97,7 +97,7 @@ function dynamicdata_admin_view($args)
                 continue;
             }
             if ($oldcat != $modList[$i]['category']) {
-                $modList[$i]['header'] = $modList[$i]['category'];
+                $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
                 $oldcat = $modList[$i]['category'];
             } else {
                 $modList[$i]['header'] = '';

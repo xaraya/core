@@ -442,15 +442,15 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 }    
                         
                 // We do the exception check after parsing it, so we get usefull info in the error
-                if($this->line != 1 && !$this->tagRootSeen) {
-                    $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML header can only be on the first line of the document',$this);
+                if($this->tagRootSeen) {
+                    $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML headers must occur before the root tag',$this);
                     return;
                 }
-                        
+                
                 // Copy the header to the output
-                if($this->tagRootSeen) {
+                if(!$this->tagRootSeen) {
                     if(ini_get('short_open_tag')) {
-                        $result = "<?php echo $output; ?>";
+                        $result = "<?php echo '$output'; ?>";
                     }
                     $result .= "\n";
                 }
