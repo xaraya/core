@@ -147,11 +147,16 @@ function xarExceptionMajor() { return xarCurrentErrorType(); }    // deprecated
 function xarCurrentErrorType()
 {
     global $ErrorStack;
-    if ($ErrorStack->isempty()) return '';
+    if ($ErrorStack->isempty()) return false;
     $err = $ErrorStack->peek();
     return $err->getMajor();
 }
 
+function isCoreException()
+{
+    global $CoreStack;
+    return $CoreStack->size() > 1;
+}
 /**
  * Gets the identifier of current error
  *
@@ -246,13 +251,18 @@ function xarErrorHandled()
  */
 function xarExceptionRender($format) { return xarErrorRender($format); }    // deprecated
 
-function xarErrorRender($format)
+function xarErrorRender($format,$thisstack = "ERROR")
 {
     global $ErrorStack;
+    global $CoreStack;
 
-    while (!$ErrorStack->isempty()) {
+    if ($thisstack == "ERROR") $stack = $ErrorStack;
+    else $stack = $CoreStack;
 
-        $error = $ErrorStack->pop();
+    while (!$stack->isempty()) {
+
+        $error = $stack->pop();
+//echo $error->getMajor();exit;
 
         switch ($error->getMajor()) {
             case XAR_SYSTEM_EXCEPTION:
@@ -343,10 +353,14 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
             $msg = $file.'('.$line."):\n". $errorString ;
             if(isset($sourcetmpl)) $msg .= "\n[".$sourcetmpl."]";
 
-            if($CoreStack->isempty()) {
-                $CoreStack->initialize();
-            }
-            else {
+            if($CoreStack->isempty()) $CoreStack->initialize();
+            $exception = new SystemException($msg);
+            $exception->setID('PHP_ERROR');
+            $exception->setMajor(XAR_SYSTEM_EXCEPTION);
+            $CoreStack->push($exception);
+            // render this now! go!
+            return;
+/*            else {
                 $exception =& $CoreStack->peek();
                 if ($exception->getMajor() != XAR_NO_EXCEPTION) {
                     $id = xarExceptionId();
@@ -375,6 +389,7 @@ function xarException__phpErrorHandler($errorType, $errorString, $file, $line)
                     xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'ErrorCollection', $exc);
                 }
             }
+            */
             break;
         default:
             echo "<b>FATAL</b> $errorString<br />\n";
@@ -441,7 +456,7 @@ function xarException__xdebugBackTrace()
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access private
  */
-function xarCES_init($args)
+function xarCES_init($args, $whatToLoad)
 {
     global $CoreStack;
 

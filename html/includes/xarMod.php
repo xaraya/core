@@ -1137,15 +1137,8 @@ function xarModIsAvailable($modName, $type = 'module')
     }
 
     if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modName])) {
-        switch(strtolower($type)) {
-            case 'module':
-                default:
-                $modBaseInfo = xarMod_getBaseInfo($modName);
-                break;
-            case 'theme':
-                $modBaseInfo = xarMod_getBaseInfo($modName, $type = 'theme');
-                break;
-        }
+        $modBaseInfo = xarMod_getBaseInfo($modName, $type);
+
 /*        // Catch the MODULE_NOT_EXIST exception first,
         // because that is what we're testing
         // here, we don't want to except on that.
@@ -1865,7 +1858,7 @@ function xarMod__loadDbInfo($modName, $modDir)
  * Get the module's current state
  *
  * @access public
- * @param modRegId integer the module's registered id
+ * @param  integer the module's registered id
  * @param modMode integer the module's site mode
  * @param type determines theme or module
  * @return mixed the module's current state

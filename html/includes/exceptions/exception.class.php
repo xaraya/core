@@ -49,6 +49,7 @@ class Exception
     function getStack() { return $this->stack; }
 
     function setID($id) { $this->id = $id; }
+    function setMajor($id) { $this->major = $id; }
     function setTitle($id) { $this->title = $id; }
     function setShort($id) { $this->short = $id; }
     function setLong($id) { $this->long = $id; }
