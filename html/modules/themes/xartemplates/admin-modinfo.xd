@@ -1,15 +1,9 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Xaraya Themes System</xar:mlstring></span></div>
 <div class="xar-mod-body">
     <h2><xar:mlstring>Detailed Theme Information</xar:mlstring></h2>
-    <div style="margin: auto; 
-                border: #B3B3B3 1px solid; 
-                width: 98%;
-                display: block;
-                background-color: #ffffff;
-                text-align: center;
-                padding: 1em;">
+    <div class="xar-norm-outline" style="margin: auto;text-align: center;">
         <!-- Module Name -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Registered Name</xar:mlstring>:</span></p>
             </div>
@@ -19,7 +13,7 @@
         </div>
         <br clear="all" />
         <!-- Description -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Description</xar:mlstring>:</span></p>
             </div>
@@ -29,7 +23,7 @@
         </div>
         <br clear="all" />
         <!-- Module Directory -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Directory</xar:mlstring>:</span></p>
             </div>
@@ -39,7 +33,7 @@
         </div>
         <br clear="all" />
         <!-- Module ID -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Registered ID</xar:mlstring>:</span></p>
             </div>
@@ -49,7 +43,7 @@
         </div>
         <br clear="all" />
         <!-- Module Class -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Class</xar:mlstring>:</span></p>
             </div>
@@ -59,7 +53,7 @@
         </div>
         <br clear="all" />
         <!-- Module Version -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Version</xar:mlstring>:</span></p>
             </div>
@@ -69,7 +63,7 @@
         </div>
         <br clear="all" />
         <!-- Module Author -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Author(s)</xar:mlstring>:</span></p>
             </div>
@@ -79,7 +73,7 @@
         </div>
         <br clear="all" />
         <!-- Module Dependency -->
-        <div style="margin: auto; width: 90%; border-top: 1px dotted; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Dependency</xar:mlstring>:</span></p>
             </div>
@@ -89,7 +83,7 @@
         </div>
         <br clear="all" />
         <!-- Module Navigation -->
-        <div style="margin: auto; width: 90%; border-top: 4px double; border-color: #B3B3B3;">
+        <div class="xar-norm-outline" style="margin: auto; width: 90%; border-width: 1px 0px 0px 0px;border-style: dotted;">
             <div style="float: left; width: 30%; text-align: left; display: inline;">
                 <p><span class="xar-mod-title"><xar:mlstring>Other Modules</xar:mlstring>:</span></p>
             </div>
