@@ -236,7 +236,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
 
 function xarSession_close()
 {
-    //session_write_close();
+    session_write_close();
 }
 
 // PRIVATE FUNCTIONS

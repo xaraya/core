@@ -191,7 +191,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'duration' => xarCore_getSiteVar('Session.Duration'),
                             'enableIntranetMode' => xarCore_getSiteVar('Session.EnableIntranetMode'),
                             'inactivityTimeout' => xarCore_getSiteVar('Session.InactivityTimeout'),
-                            'useOldPHPSessions' => true);
+                            'useOldPHPSessions' => false);
         xarSession_init($systemArgs);
     }
 
