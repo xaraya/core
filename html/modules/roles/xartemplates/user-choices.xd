@@ -2,7 +2,6 @@
 <div class="xar-mod-body"><h2><xar:mlstring>Registration / Login</xar:mlstring></h2>
 <div style="margin: auto;">
 <form action="#xarModURL('roles', 'user', 'login')#" method="post" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
 <table border="0" cellpadding="2" cellspacing="0">
     <tr>
         <td>
@@ -37,7 +36,8 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">
-            <input type="submit" value="#$loginlabel#" align="middle" />
+			<input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
+            <input type="submit" value="#$loginlabel#" />
         </td>
     </tr>
 </table>
