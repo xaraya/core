@@ -118,8 +118,8 @@ class xarTpl__Compiler extends xarTpl__CompilerError
 
     function xarTpl__Compiler()
     {
-        $this->parser = new xarTpl__Parser();
-        $this->codeGenerator = new xarTpl__CodeGenerator();
+        $this->parser =& new xarTpl__Parser();
+        $this->codeGenerator =& new xarTpl__CodeGenerator();
     }
 
     function compileFile($fileName)
@@ -331,7 +331,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function xarTpl__Parser()
     {
-        $this->nodesFactory = new xarTpl__NodesFactory();
+        $this->nodesFactory =& new xarTpl__NodesFactory();
     }
 
     function setFileName($fileName)
@@ -356,7 +356,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->tagNamesStack = array();
         $this->tagIds = array();
 
-        $this->tplVars = new xarTpl__TemplateVariables();
+        $this->tplVars =& new xarTpl__TemplateVariables();
 
         $documentTree = $this->nodesFactory->createDocumentNode($this);
 
@@ -1072,80 +1072,80 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         // Core tags
         switch ($tagName) {
             case 'var':
-                $node = new xarTpl__XarVarNode();
+                $node =& new xarTpl__XarVarNode();
                 break;
             case 'loop':
-                $node = new xarTpl__XarLoopNode();
+                $node =& new xarTpl__XarLoopNode();
                 break;
             case 'sec':
-                $node = new xarTpl__XarSecNode();
+                $node =& new xarTpl__XarSecNode();
                 break;
             // marco: this should be deleted right, it's not in spec
             case 'ternary':
-                $node = new xarTpl__XarTernaryNode();
+                $node =& new xarTpl__XarTernaryNode();
                 break;
             case 'if':
-                $node = new xarTpl__XarIfNode();
+                $node =& new xarTpl__XarIfNode();
                 break;
             case 'elseif':
-                $node = new xarTpl__XarElseifNode();
+                $node =& new xarTpl__XarElseifNode();
                 break;
             case 'else':
-                $node = new xarTpl__XarElseNode();
+                $node =& new xarTpl__XarElseNode();
                 break;
             case 'while':
-                $node = new xarTpl__XarWhileNode();
+                $node =& new xarTpl__XarWhileNode();
                 break;
             case 'for':
-                $node = new xarTpl__XarForNode();
+                $node =& new xarTpl__XarForNode();
                 break;
             case 'foreach':
-                $node = new xarTpl__XarForEachNode();
+                $node =& new xarTpl__XarForEachNode();
                 break;
             case 'block':
-                $node = new xarTpl__XarBlockNode();
+                $node =& new xarTpl__XarBlockNode();
                 break;
             case 'blockgroup':
-                $node = new xarTpl__XarBlockGroupNode();
+                $node =& new xarTpl__XarBlockGroupNode();
                 break;
             case 'ml':
-                $node = new xarTpl__XarMlNode();
+                $node =& new xarTpl__XarMlNode();
                 break;
             case 'mlkey':
-                $node = new xarTpl__XarMlkeyNode();
+                $node =& new xarTpl__XarMlkeyNode();
                 break;
             case 'mlstring':
-                $node = new xarTpl__XarMlstringNode();
+                $node =& new xarTpl__XarMlstringNode();
                 break;
             case 'mlvar':
-                $node = new xarTpl__XarMlvarNode();
+                $node =& new xarTpl__XarMlvarNode();
                 break;
             case 'comment':
-                $node = new xarTpl__XarCommentNode();
+                $node =& new xarTpl__XarCommentNode();
                 break;
             case 'module':
-                $node = new xarTpl__XarModuleNode();
+                $node =& new xarTpl__XarModuleNode();
                 break;
             case 'event':
-                $node = new xarTpl__XarEventNode();
+                $node =& new xarTpl__XarEventNode();
                 break;
             case 'template':
-                $node = new xarTpl__XarTemplateNode();
+                $node =& new xarTpl__XarTemplateNode();
                 break;
             case 'set':
-                $node = new xarTpl__XarSetNode();
+                $node =& new xarTpl__XarSetNode();
                 break;
             case 'break':
-                $node = new xarTpl__XarBreakNode();
+                $node =& new xarTpl__XarBreakNode();
                 break;
             case 'continue':
-                $node = new xarTpl__XarContinueNode();
+                $node =& new xarTpl__XarContinueNode();
                 break;
           // <Dracos>  Widgets begin here
 
             default:
                 // FIXME: check if this is how you want to support module-registered tags
-                $node = new xarTpl__XarOtherNode($tagName);
+                $node =& new xarTpl__XarOtherNode($tagName);
                 break;
         }
         if (isset($node)) {
@@ -1169,25 +1169,25 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     {
         switch ($entityType) {
             case 'var':
-                $node = new xarTpl__XarVarEntityNode();
+                $node =& new xarTpl__XarVarEntityNode();
                 break;
             case 'config':
-                $node = new xarTpl__XarConfigEntityNode();
+                $node =& new xarTpl__XarConfigEntityNode();
                 break;
             case 'mod':
-                $node = new xarTpl__XarModEntityNode();
+                $node =& new xarTpl__XarModEntityNode();
                 break;
             case 'session':
-                $node = new xarTpl__XarSessionEntityNode();
+                $node =& new xarTpl__XarSessionEntityNode();
                 break;
             case 'modurl':
-                $node = new xarTpl__XarModurlEntityNode();
+                $node =& new xarTpl__XarModurlEntityNode();
                 break;
             case 'url':
-                $node = new xarTpl__XarUrlEntityNode();
+                $node =& new xarTpl__XarUrlEntityNode();
                 break;
             case 'baseurl':
-                $node = new xarTpl__XarBaseurlEntityNode();
+                $node =& new xarTpl__XarBaseurlEntityNode();
                 break;
         }
         if (isset($node)) {
@@ -1209,9 +1209,9 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     function createTplInstructionNode($instruction, $parser)
     {
         if ($instruction[0] == '$') {
-            $node = new xarTpl__XarVarInstructionNode();
+            $node =& new xarTpl__XarVarInstructionNode();
         } else {
-            $node = new xarTpl__XarApiInstructionNode();
+            $node =& new xarTpl__XarApiInstructionNode();
         }
 
         if (isset($node)) {
@@ -1230,7 +1230,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createTextNode($content, $parser)
     {
-        $node = new xarTpl__TextNode();
+        $node =& new xarTpl__TextNode();
         $node->tagName = 'TextNode';
         $node->content = $content;
         $node->fileName = $parser->fileName;
@@ -1242,7 +1242,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     function createDocumentNode($parser)
     {
-        $node = new xarTpl__DocumentNode();
+        $node =& new xarTpl__DocumentNode();
         $node->tagName = 'DocumentNode';
         $node->fileName = $parser->fileName;
         return $node;
@@ -1266,6 +1266,7 @@ class xarTpl__SpecialVariableNamesResolver extends xarTpl__PositionInfo
     function &instance() {
         static $instance = NULL;
         if (!isset($instance)) {
+            // This can NOT be assigned by reference
             $instance = new xarTpl__SpecialVariableNamesResolver();
         }
         return $instance;
@@ -2808,7 +2809,7 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
             return;
         }
 
-        $codeGenerator = new xarTpl__CodeGenerator();
+        $codeGenerator =& new xarTpl__CodeGenerator();
         $codeGenerator->setPHPBlock(true);
 
         $output = ', ';
