@@ -182,6 +182,9 @@ function xarServerGetProtocol()
 {
     if (function_exists('xarConfigGetVar')){
         if (xarConfigGetVar('Site.Core.EnableSecureServer') == true){
+            if (preg_match('/^http:/', $_SERVER['REQUEST_URI'])) {
+                return 'http';
+            }
             $HTTPS = xarServerGetVar('HTTPS');
             // IIS seems to set HTTPS = off for some reason
             return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
