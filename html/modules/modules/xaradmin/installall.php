@@ -31,7 +31,7 @@ function modules_admin_installall()
 //    if (!xarSecConfirmAuthKey()) return;
 
     //This is a very lenghty process
-    set_time_limit(600);
+   @set_time_limit(600);
 
     // Get all modules in DB
     $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
