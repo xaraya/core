@@ -210,10 +210,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                 }
 
                 $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
-//var_dump($catmods);exit;
+				//var_dump($catmods);exit;
                 foreach($catmods as $cat=>$mods){
                     $label = $cat;
-		foreach($mods as $modname=>$mod){
+					foreach($mods as $modname=>$mod){
                     // depending on which module is currently loaded we display accordingly
                     // also we are treating category lables in ML fasion
                     if($modname == $thismodname && $thismodtype == 'admin'){
@@ -321,7 +321,6 @@ function adminpanels_adminmenublock_display($blockinfo){
                                             'logouturl'     => $logouturl,
                                             'logoutlabel'   => $logoutlabel,
                                             'marker'        => $marker);
-//var_dump($tpldata);
                 $data = xarTplBlock('adminpanels',
                                     $template,
                                     $tpldata);

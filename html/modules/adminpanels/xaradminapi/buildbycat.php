@@ -40,11 +40,10 @@ function adminpanels_adminapi_buildbycat($args){
         // the category label
         if($cat == 'Users & Groups') {
             // need xhtml compliant label for display
-            $catdata['Users &amp; Groups'] = array();
-        }else{
-            $catdata[$cat] = array();
+            $cat = 'Users &amp; Groups';
         }
-
+        
+        $catdata[$cat] = array();
         // module urls
         while(!$result->EOF){
             list($mname) = $result->fields;
