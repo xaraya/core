@@ -224,7 +224,7 @@ function modules_admin_list()
 
         }elseif($mod['state'] == 5){
             // this module is 'Upgraded'        - set labels and links
-            $statelabel = xarML('Upgraded');
+            $statelabel = xarML('New version');
             $listrows[$i]['state'] = 5;
 
             $listrows[$i]['actionlabel']        = xarML('Upgrade');
