@@ -947,41 +947,22 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
-			// using a tmp cached file template which is renamed further on.
-			// this is to avoid potential file race lock problems.
-			$tmpCachedFileName = $varDir . '/cache/templates/' . uniqid('') . '.tmp.php';
-			if(!($fd = @fopen($tmpCachedFileName, 'w'))) {
-				// FIXME: if an exception here is viable I do not know what to set it to
-				// so have used SYSTEM_ERROR
-		        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'SYSTEM_ERROR', $tmpCachedFileName);
-        		return;
-		    }
+            $fd = fopen($cachedFileName, 'w');
 			if(xarTpl_outputPHPCommentBlockInTemplates()) {
                 $commentBlock = "<?php\n/*"
                               . "\n * Source:     " . $sourceFileName
                               . "\n * Theme:      " . xarTplGetThemeName()
-                              . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($tmpCachedFileName))
+                              . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
                               . "\n */\n?>\n";
                 fwrite($fd, $commentBlock);
             }
             fwrite($fd, $templateCode);
             fclose($fd);
-			// only write the cached template file if it doesnt already exist.
-		    if(!(file_exists($cachedFileName))) {
-				@rename($tmpCachedFileName, $cachedFileName);
-				// CHECKME: is there a constant for xaraya default file modes?
-				@chmod($cachedFileName, 0755);
-	            // Add an entry into CACHEKEYS
-                // CHECKME: removed as wasted call. Already set above.
-	            //$varDir = xarCoreGetVarDirPath();
-	            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
-	            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
-            	fclose($fd);
-            } else {
-				// if we got here the cached template file already exists.
-				// all thats needed is to remove the tmp cached file.
-				@unlink($tmpCachedFileName);
-			}
+            // Add an entry into CACHEKEYS
+            $varDir = xarCoreGetVarDirPath();
+            $fd = fopen($varDir . '/cache/templates/CACHEKEYS', 'a');
+            fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
+            fclose($fd);
         } else {
             return xarTpl__execute($templateCode, $tplData, $sourceFileName);
         }
