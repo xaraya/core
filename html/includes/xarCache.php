@@ -22,6 +22,8 @@ function xarCache_init($args)
 {
     extract($args);
 
+// TODO: clean up all these globals and put them e.g. into a single array
+
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
@@ -31,6 +33,7 @@ function xarCache_init($args)
     global $xarPage_cacheExpireHeader;
     global $xarPage_cacheGroups;
     global $xarBlock_cacheTime;
+    global $xarPage_autoCachePeriod;
 
     if (!@include_once('var/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
@@ -55,6 +58,8 @@ function xarCache_init($args)
         $cachingConfiguration['Page.CacheGroups'] : '';
     $xarBlock_cacheTime = isset($cachingConfiguration['Block.TimeExpiration']) ?
         $cachingConfiguration['Block.TimeExpiration'] : 7200;
+    $xarPage_autoCachePeriod = isset($cachingConfiguration['AutoCache.Period']) ?
+        $cachingConfiguration['AutoCache.Period'] : 0;
 
     // Session-less page caching (TODO: extend and place in separate function)
     if (!empty($cachingConfiguration['Page.SessionLess']) &&
@@ -84,6 +89,10 @@ function xarCache_init($args)
         // TODO: send some headers too
         // TODO: check ETag here too
 
+            if (file_exists('var/cache/output/autocache.start')) {
+                xarPage_autoCacheLogStatus('HIT');
+            }
+
             xarPageGetCached($cacheKey);
             // we're done here !
             exit;
@@ -91,6 +100,7 @@ function xarCache_init($args)
         } else {
             // tell xarPageSetCached() that we want to save another copy here
             $GLOBALS['xarPage_cacheNoSession'] = 1;
+            // we'll continue with the core loading etc. here
         }
     }
 
@@ -709,6 +719,46 @@ function xarCache_getParents()
     $result->Close();
     xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
+}
+
+/**
+ * Log the HIT / MISS status of URLs requested by first-time visitors
+ *
+ * @access private
+ * @return void
+ */
+function xarPage_autoCacheLogStatus($status = 'MISS')
+{
+    if (!empty($_SERVER['REQUEST_METHOD']) &&
+        $_SERVER['REQUEST_METHOD'] == 'GET' &&
+    // the URL is one of the candidates for session-less caching
+    // TODO: make compatible with IIS and https (cfr. xarServer.php)
+        !empty($_SERVER['HTTP_HOST']) &&
+        !empty($_SERVER['REQUEST_URI'])) {
+
+        $time = time();
+        $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $addr = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-';
+        //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
+
+        // cfr. xarCache_init()
+        global $xarPage_autoCachePeriod;
+
+        if (!empty($xarPage_autoCachePeriod) &&
+            filemtime('var/cache/output/autocache.start') < time() - $xarPage_autoCachePeriod) {
+            @touch('var/cache/output/autocache.start');
+
+// TODO: re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
+
+            $fp = @fopen('var/cache/output/autocache.log', 'w');
+        } else {
+            $fp = @fopen('var/cache/output/autocache.log', 'a');
+        }
+        if ($fp) {
+            @fwrite($fp, "$time $status $addr $url\n");
+            @fclose($fp);
+        }
+   }
 }
 
 ?>
