@@ -18,18 +18,18 @@
 			</h3>
 			<xar:if condition="isset($warning)">
 				#$warning# 
-				<xar:else />
+            <xar:else />
 				<select id="configuration" name="configuration" size="5">
 					<xar:loop name="$names">
-						<xar:if condition="$loop:item['display'] eq 'Community Site'">
-							<option value="#$loop:item['value']#">
-								#$loop:item['display']# 
-							</option>
-							<xar:elseif condition="$loop:item['selected']" />
+						<xar:if condition="$loop:item['selected']">
 							<option value="#$loop:item['value']#" selected="selected">
 								#$loop:item['display']# 
 							</option>
-						</xar:if>
+                        <xar:else/>
+                        	<option value="#$loop:item['value']#">
+								#$loop:item['display']# 
+							</option>
+						</xar:if> 
 					</xar:loop>
 				</select>
 			</xar:if>

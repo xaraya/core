@@ -375,7 +375,7 @@ function installer_admin_bootstrap()
     }
 
     // Set the state and activate the following themes
-    $themelist=array('print','rss','Xaraya_Classic', 'installer');
+    $themelist=array('print','rss','Xaraya_Classic');
     foreach ($themelist as $theme) {
         // Set state to inactive
         $regid=xarThemeGetIDFromName($theme);
@@ -672,7 +672,7 @@ function installer_admin_choose_configuration()
                 include $basedir . '/' . $file;
                 $names[] = array('value' => $basedir . '/' . $file,
                                  'display' => $configuration_name,
-                                 'selected' => false);
+                                 'selected' => count($names)==0);
             }
         }
     }
@@ -694,10 +694,14 @@ function installer_admin_confirm_configuration()
 
     xarVarSetCached('installer','installing', true);
     xarTplSetPageTemplateName('installer');
-
-    //We should probably break here if $configuration is not set.
+    
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
-
+    if(!isset($configuration)) {
+        $msg = xarML("Please go back and select one of the avialable configurations.");
+        xarErrorSet(XAR_USER_EXCEPTION, 'Please select a configuration', $msg);
+        return;
+    }
+                
     //I am not sure if these should these break
     if(!xarVarFetch('confirmed',     'isset', $confirmed,     NULL, XARVAR_DONT_SET))   return;
     if(!xarVarFetch('chosen',        'isset', $chosen,        array(),  XARVAR_NOT_REQUIRED))  return;

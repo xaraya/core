@@ -60,7 +60,7 @@
 					<input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#" />
 					<input type="hidden" name="install_database_type" id="dbType" value="#$dbType#" />
 					<input type="hidden" name="confirmDB" id="confirmDB" value="true" />
-					<input type="hidden" name="newDB" id="newDB" value="#$newDB#" />
+					<!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#" /> -->
 					<input type="hidden" name="install_language" id="install_language" value="#$language#" />
 					<xar:set name="buttonnext">
 						<xar:mlstring>
