@@ -423,10 +423,7 @@ function base_activate()
     // Set up default user properties, etc.
 
     // load modules admin API
-    $res = pnModAPILoad('modules', 'admin');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
+    pnModAPILoad('modules', 'admin');
 
     // load modules into *_modules table
     $res = pnModAPIFunc('modules', 'admin', 'regenerate');
@@ -436,16 +433,17 @@ function base_activate()
 
     // initialize blocks module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('blocks')));
+
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
 
-    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('blocks')));
+    $res1 = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('blocks')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
-    }
+    }   
 
-     // initialize & activate adminpanels module
+    // initialize & activate adminpanels module
     $res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('adminpanels')));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
@@ -456,25 +454,75 @@ function base_activate()
         return;
     }
 
-    // initialize users module
-    /*$res = pnModAPIFunc('modules', 'admin', 'initialise', array('regid' => pnModGetIDFromName('users')));
+    // Activate the user's module
+    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('users'),
+                                                              'state' => PNMOD_STATE_INACTIVE));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
-    }*/
+    }
+    $res = pnModAPIFunc('modules', 'admin', 'activate', array('regid' => pnModGetIDFromName('users')));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
 
-
+    //initialise and activate base module by setting the states
+    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('base'),                                                          'state' => PNMOD_STATE_INACTIVE));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    $res = pnModAPIFunc('modules', 'admin', 'setstate', array('regid' => pnModGetIDFromName('base'),
+                                                              'state' => PNMOD_STATE_ACTIVE));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
     // initialize installer module
 
     // Register Block types
+    $res = pnBlockTypeRegister('base', 'finclude');
 
-    // Set up blocks
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+    $res = pnBlockTypeRegister('base', 'html');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
 
-    pnBlockTypeRegister('base', 'finclude');
-    pnBlockTypeRegister('base', 'html');
-    pnBlockTypeRegister('base', 'menu');
-    pnBlockTypeRegister('base', 'php');
-    pnBlockTypeRegister('base', 'text');
+    $res = pnBlockTypeRegister('base', 'menu');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnBlockTypeRegister('base', 'php');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnBlockTypeRegister('base', 'text');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
     $res = pnBlockTypeRegister('base', 'thelang'); // FIXME <paul> should this be here???
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    if (pnVarIsCached('Mod.BaseInfos', 'blocks')) {
+        pnVarDelCached('Mod.BaseInfos', 'blocks');
+    }
+    // Create default block groups/instances
+    $res = pnModAPILoad('blocks', 'admin');
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'));
+    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
+        return;
+    }
+
+    $res = pnModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
+                                                                 'template' => 'right'));
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }

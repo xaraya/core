@@ -250,12 +250,7 @@ function installer_admin_bootstrap()
     if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
         return;
     }
- 
-    // Create default block groups/instances
-    pnModAPILoad('blocks', 'admin');
-    pnModAPIFunc('blocks', 'admin', 'create_group', array('name' => 'left'));
-    pnModAPIFunc('blocks', 'admin', 'create_group', array('name'     => 'right',
-                                                          'template' => 'right'));
+
     pnResponseRedirect(pnModURL('installer', 'admin', 'create_administrator'));
 
 }
@@ -288,10 +283,9 @@ function installer_admin_create_administrator()
                                        'install_admin_email',
                                        'install_admin_url');
 
-    $res = pnModAPILoad('users', 'admin');
-    if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
-        return;
-    }
+    pnModAPILoad('users', 'admin');
+
+    $password = md5($password);
 
     $res = pnModAPIFunc('users', 'admin', 'update', array('uid'   => 2,
                                                           'name'  => $name,
