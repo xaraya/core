@@ -35,6 +35,7 @@ $test_array = array(
    array('ver1'=>' .-1.2.sdf.3.  f6', 'ver2'=>'0.1.2.0.3.7', 'levels'=>5, 'strict'=>null, 'result'=>0, 'sep'=>null,
       'notes'=>'" .-1.2.sdf.3.  f6" is cleaned up to become 0.1.2.0.3.6'),
    array('ver1'=>'1.2', 'ver2'=>'1.3', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>null),
+   array('ver1'=>'1.2.3', 'ver2'=>'1.2.3.4', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>null),
    array('ver1'=>'1/2', 'ver2'=>'1/3', 'levels'=>null, 'strict'=>null, 'result'=>1, 'sep'=>'/',
       'notes' => 'Use special preg character as the separator.'),
    array('ver1'=>'1.3', 'ver2'=>'1.2', 'levels'=>null, 'strict'=>null, 'result'=>-1, 'sep'=>null),
@@ -81,7 +82,7 @@ $test_array = array(
       <th>Version 1</th>
       <th>Version 2</th>
       <th>Levels</th>
-      <th>Strict Numeric</th>
+      <th>Normalize</th>
       <th>Separator</th>
       <th>Expected Result</th>
       <th>Actual Result</th>
@@ -90,9 +91,9 @@ $test_array = array(
    </tr>
    <?
       foreach($test_array as $test) {
-         $params = array('ver1'=>$test['ver1'], 'ver2'=>$test['ver2']);
+         $params = array('ver1'=>$test['ver1'], 'ver2'=>$test['ver2'], 'normalize'=>'strict', 'order'=>1);
          if (isset($test['levels'])) {$params['levels'] = $test['levels'];}
-         if (isset($test['strict'])) {$params['strict'] = $test['strict'];}
+         if (isset($test['strict'])) {$params['normalize'] = $test['strict'] ? 'strict' : 'loose';}
          if (isset($test['sep'])) {$params['sep'] = $test['sep'];}
          $actual = xarModAPIFunc('base', 'versions', 'compare', $params);
          if ($actual == $test['result']) {$status = 'Pass';} else {$status = '<b>Fail</b>';}
@@ -105,7 +106,7 @@ $test_array = array(
       <td><?echo $ver1;?></td>
       <td><?echo $ver2;?></td>
       <td><?echo $test['levels'];?></td>
-      <td><?if (isset($test['strict'])) echo $test['strict'] ? 'True' : 'False';?></td>
+      <td><?if (isset($test['strict'])) echo $test['strict'] ? 'strict' : 'loose';?></td>
       <td><?echo $test['sep'];?></td>
       <td><?echo $test['result'];?></td>
       <td><?echo $actual;?></td>

@@ -22,12 +22,15 @@
  * @author Jason Judge
  * @param $args['ver1'] or $args[0] version number 1 (string or array)
  * @param $args['ver2'] or $args[1] version number 2 (string or array)
- * @param $args['levels'] maxiumum levels to compare (default: all levels)
- * @param $args['strict'] indicates strict numeric-only comparisons (default: true)
- * @param $args['sep'] level separator character (default: .)
- * @param $args['reverse'] reverse the comparison order if true (default: false)
+ * @param $args['levels'] maxiumum levels to compare (default: 0/all levels)
+ * @param $args['strict'] *removed* - see 'normalize'
+ * @param $args['sep'] level separator character (default: '.')
+ * @param $args['normalize'] parse the versions into a standard format 'strict'/'loose'/false (default: false/none)
+ * @param $args['validate'] validation rule to apply (default: false/none)
+ * @param $args['reverse'] *removed* see 'order'
+ * @param $args['order'] the order in which to compare (number or array)
  * @returns number
- * @return number indicating which parameter is the latest version
+ * @return number indicating which version number is the latest
  */
 function base_versionsapi_compare($args)
 {
@@ -40,17 +43,22 @@ function base_versionsapi_compare($args)
     // Extract the arguments. Prefix unnamed parameters with 'p_'.
     extract($args, EXTR_PREFIX_INVALID, 'p');
 
-    // Set this flag if checking should be strictly numeric.
-    // With strict set (true), non-numeric characters will be stripped prior to
-    // the comparison.
-    // With strict reset (false), then string comparisons will be
-    // performed where one or both version levels are not numeric.
-    if (!isset($strict)) {
-        $strict = true;
+    // Flag to enable normalization of version strings.
+    if (isset($normalize)) {
+        $strict = ($normalize == 'strict') ? true : false;
+    } else {
+        $normalize = false;
     }
 
-    if (!isset($reverse)) {
-        $reverse = false;
+    // Set the order parameter to be an array.
+    // The order is optional and allows complex ordering to be achieved.
+    // Examples:
+    // $order =  1 - standard ordering
+    // $order = -1 - reverse ordering
+    // $order = array(-1,1) - reverse order the first level and normal order remaining levels
+    // zero will allow any order for a level.
+    if (isset($order) && !is_array($order)) {
+        $order = array($order);
     }
 
     // Default the version numbers to either a positional
@@ -76,44 +84,23 @@ function base_versionsapi_compare($args)
         $levels = 0;
     }
 
-    // If arrays have been passed in, convert them to a legal-format string.
-    if (is_array($ver1)) {
-        $ver1 = implode($sep, $ver1);
+    if (isset($validate)) {
+        if (!xarModAPIfunc('base', 'versions', 'validate', array('ver'=>$ver1, 'rule'=>$validate))
+            || !xarModAPIfunc('base', 'versions', 'validate', array('ver'=>$ver2, 'rule'=>$validate))
+        ) {
+            return false;
+        }
     }
 
-    if (is_array($ver2)) {
-        $ver2 = implode($sep, $ver2);
+    if ($normalize) {
+        list($ver1, $ver2) = xarModAPIfunc('base', 'versions', 'normalize',
+            array('sep'=>$sep, 'strict'=>$strict, 'vers'=>array($ver1, $ver2))
+        );
     }
 
-    // Clean up the input strings.
-    // JDJ: I would like to move these pregs out to a support function as it is useful
-    // in its own right to normalise version numbers for display or other purposes.
-    // The cleanup could be optional, based on a system setting or argument.
-    list($ver1, $ver2) = preg_replace(
-        array(
-           ($strict ? '/(?<=\d)[^\d'.$sep2.']+(?=\d)/' : '//'), // '1x2' => '1.2' if strict
-           ($strict ? '/[^\d'.$sep2.']*/' : '//'),              // 'x' => '' if strict
-           '/(\s)+/',                                           // ' ' => ''
-           '/^'.$sep2.'/',                                      // '.1' => '0.1'
-           '/'.$sep2.'$/',                                      // '1.' => '1.0'
-           '/'.$sep2.$sep2.'/',                                 // '1..2' => '1.0.2'
-           '/^$/'                                               // '' => '0'
-        ),
-        array(
-            ($strict ? $sep : ''),
-            '',
-            '',
-            '0'.$sep,
-            $sep.'0',
-            $sep.'0'.$sep,
-            '0'
-        ),
-        array($ver1, $ver2)
-    );
-
-    // Explode the strings into arrays for comparing.
-    $ver1 = explode($sep, $ver1);
-    $ver2 = explode($sep, $ver2);
+    // Explode the strings into arrays for comparing, if not already done.
+    if (!is_array($verl)) {$ver1 = explode($sep, $ver1);}
+    if (!is_array($ver2)) {$ver2 = explode($sep, $ver2);}
 
     // Get the highest number of levels in a version.
     $limitlevels = max(count($ver1), count($ver2));
@@ -125,23 +112,34 @@ function base_versionsapi_compare($args)
 
     // Default return if no differences are found.
     $latest = 0;
+    $levelorder = 1;
 
     // Loop through each level to find out which is the latest.
+    // It's all validation up to this point;)
     for ($i=0; $i<$limitlevels; $i++)
     {
-        // If either array has run out of elements, then it is
-        // the shorter and therefore the lower version.
-        if (!isset($ver2[$i])) {$latest = (-1); break;}
-        if (!isset($ver1[$i])) {$latest = (+1); break;}
+        // Get the ordering for this level.
+        $levelorder = (isset($order[$i]) && is_numeric($order[$i])) ? gmp_sign($order[$i]) : $levelorder;
 
-        // Note, we are comparing strings, BUT if both values happen
-        // to be numeric, then PHP will do a numeric comparison.
-        // PHP's behaviour saves us some work type-casting.
-        if ($ver1[$i] > $ver2[$i]) {$latest = (-1); break; }
-        if ($ver1[$i] < $ver2[$i]) {$latest = (+1); break; }
+        if ($levelorder <> 0)
+        {
+            // If either array has run out of elements, then it is
+            // the shorter and therefore the lower version.
+            if (!isset($ver2[$i])) {$latest = (-1); break;}
+            if (!isset($ver1[$i])) {$latest = (+1); break;}
+
+            // Note, we are comparing strings, BUT if both values happen
+            // to be numeric, then PHP will do a numeric comparison.
+            // PHP's behaviour saves us some work type-casting.
+            if ($ver1[$i] > $ver2[$i]) {$latest = (-1); break;}
+            if ($ver1[$i] < $ver2[$i]) {$latest = (+1); break;}
+        }
     }
     
-    return $reverse ? $latest * (-1) : $latest;
+    // Set the order.
+    $latest = $latest * $levelorder;
+
+    return $latest;
 }
 
 ?>
