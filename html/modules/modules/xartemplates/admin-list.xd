@@ -217,26 +217,26 @@
                                 </xar:if>
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 65px;border-width: 0px 0px 1px 0px;border-style: solid;">
-                            	<xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
-									<xar:if condition="$selstyle eq 'pro'">
-										<input type="submit" name="prop" id="prop" value="Set" />
-									<xar:elseif condition="$selstyle eq 'icons'"/>
-										<a href="#$modinfo['propurl']#"><img src="#$propimg#" alt="#$modinfo['prop']#" /></a>
-									<xar:else />
-										<a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
-									</xar:if>
-								<xar:else />
-									&nbsp;
-								</xar:if>									
+                                <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
+                                    <xar:if condition="$selstyle eq 'pro'">
+                                        <input type="submit" name="prop" id="prop" value="Set" />
+                                    <xar:elseif condition="$selstyle eq 'icons'"/>
+                                        <a href="#$modinfo['propurl']#"><img src="#$propimg#" alt="#$modinfo['prop']#" /></a>
+                                    <xar:else />
+                                        <a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
+                                    </xar:if>
+                                <xar:else />
+                                    &nbsp;
+                                </xar:if>                                    
                             </td>
                             <td class="xar-norm-outline" style="text-align: center;width: 65px;border-width: 0px 0px 1px 0px;border-style: solid;">
-								<xar:if condition="$selstyle eq 'pro'">
-									<input type="submit" name="edit" id="edit" value="Edit" />
-								<xar:elseif condition="$selstyle eq 'icons'"/>
-									<a href="#$modinfo['editurl']#"><img src="#$editimg#" alt="#$modinfo['edit']#" /></a>
-								<xar:else />
-									<a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
-								</xar:if>
+                                <xar:if condition="$selstyle eq 'pro'">
+                                    <input type="submit" name="edit" id="edit" value="Edit" />
+                                <xar:elseif condition="$selstyle eq 'icons'"/>
+                                    <a href="#$modinfo['editurl']#"><img src="#$editimg#" alt="#$modinfo['edit']#" /></a>
+                                <xar:else />
+                                    <a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
+                                </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
