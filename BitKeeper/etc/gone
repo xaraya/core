@@ -1,4 +1,3 @@
-
 Andrew.Vogel@drewbox.|docs/userguide-dbk/Makefile|20030220201929|46516|d393d599
 Andrew.Vogel@drewbox.|docs/userguide-dbk/X-i-gsg.css|20030220201929|31113|d39afaaa
 Andrew.Vogel@drewbox.|docs/userguide-dbk/X-i-gsg.dsl|20030220201929|03257|d3a23172
@@ -3733,8 +3732,6 @@ BK|tests/xuser/pnuser.php|19700101030959|03887|2e1cefb2c872250f
 BK|tests/xuser/pnuserapi.php|19700101030959|03888|d1eaca984d23e365
 BK|tests/xuser/pnversion.php|19700101030959|03889|a1c09e7d783b9be
 BK|tests/xuser/readmefirst.txt|19700101030959|03881|41e7e14a4602a61
-BitKeeper/custom/phpDocumentor/Smarty/Smarty.class.php~
-BitKeeper/custom/phpdoc/Smarty/Smarty.class.php~
 John.Cox@d38yrl11.|html/modules/autolinks/pntemplates/admin-create.pnd|20021101120307|30792|74a6a374
 John.Cox@d38yrl11.|html/modules/base/init.txt|20021108010824|34847|e979bd54
 John.Cox@d38yrl11.|html/modules/base/pnadminapi.php|20021116165342|11812|a99dac91
@@ -3873,7 +3870,6 @@ marc@marclaptop.|html/modules/participants/xartemplates/index.html|2003012111260
 marc@marclaptop.|html/modules/participants/xartemplates/xarTree.js|20030205120409|31789|b6d6624e
 marc@marclaptop.|html/modules/participants/xarversion.php|20030121112601|53173|edf337c1
 marc@marclaptop.|html/modules/roles/xartemplates/admin-viewroles.xd|20030215220833|01886|e14f9a6c
-marcel@hsdev.com
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/HTMLSmartyConverter.inc|20030102003718|05721|bba999cd34ee86de
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/templates/default/templates/basicindex.tpl|20030102003718|09725|ee42917d78dcf1a9
 marcel@hsdev.com|BitKeeper/custom/phpdoc/Converters/HTML/Smarty/templates/default/templates/blank.tpl|20030102003718|12653|caf8125d54f0dd8
