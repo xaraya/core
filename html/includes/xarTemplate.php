@@ -391,7 +391,9 @@ function xarTplBlock($modName, $blockName, $tplData = array(), $templateName = N
     $sourceFileName = $GLOBALS['xarTpl_themeDir']."/modules/$modOsDir/blocks/$blockName" . (empty($templateName) ? '.xt' : "-$templateName.xt");
     if (!file_exists($sourceFileName)) {
         // Use internal template
-        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$blockName" . (empty($templateName) ? '.xd' : "-$templateName.xd");
+        $blockFileName = $blockName . (empty($templateName) ? '' : "-$templateName");
+        $sourceFileName = "modules/$modOsDir/xartemplates/blocks/$blockFileName" . '.xd';
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/blocks', $blockFileName) === NULL) return;
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
