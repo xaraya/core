@@ -15,8 +15,8 @@
 
 /**
  * Implements a concrete translations backend based on the XML language.
- * All xml files are encoded in UTF-8. This backend is useful only when
- * running Xaraya in the multi-language mode (UTF-8).
+ * All xml files are encoded in utf-8. This backend is useful only when
+ * running Xaraya in the multi-language mode (utf-8).
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
 {
@@ -113,7 +113,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
     {
         $this->curData = '';
 
-        $this->parser = xml_parser_create('UTF-8');
+        $this->parser = xml_parser_create('utf-8');
         xml_set_object($this->parser, $this);
         xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
         xml_set_element_handler($this->parser, "beginElement", "endElement");

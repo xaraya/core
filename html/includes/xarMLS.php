@@ -706,7 +706,7 @@ class xarMLS__LocaleDataLoader
         $this->curPath = '';
         $this->localeData = array();
 
-        // TRICK: <marco> Since this xml parser sucks, we obviously use UTF-8 for utf-8 charset
+        // TRICK: <marco> Since this xml parser sucks, we obviously use utf-8 for utf-8 charset
         // and iso-8859-1 for other charsets, even if they're not single byte.
         // The only important thing here is to split utf-8 from other charsets.
         $charset = xarMLSGetCharsetFromLocale($locale);
