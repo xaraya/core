@@ -131,15 +131,15 @@ class xarTpl__ParserError extends SystemException
 {
     function raiseError($type, $msg, $posInfo)
     {
-        $msg = 'Template error in file '.$posInfo->fileName.
-            ' at line '.$posInfo->line.
-            ', column '.$posInfo->column.
-            ":\n\n".$msg;
-        $msg .= "\n\n" . $posInfo->lineText . "\n";
-        $msg .= str_repeat('-', max(0,$posInfo->column - 1));
-        $msg .= '^';
+        $out  = 'Template error in file '.$posInfo->fileName.' at line '.$posInfo->line. ', column '.$posInfo->column.":\n\n";
+        $out .= $msg."\n\n";
+        $out .= "Line contents before the parsing error occurred:\n";
+        $out .= $posInfo->lineText . " <== Error position\n";
+        // Next lines assume monospaced rendering
+        //$out .= str_repeat('-', max(0,$posInfo->column - 1));
+        //$out .= '^';
         // FIXME: evaluate whether this needs to be a system exception.
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$msg);
+        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$out);
     }
 }
 
@@ -737,14 +737,14 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         break;
                     }
                     // No XAR entity, but might be another one (we do this here for &#xBA type entities, which would other wise get caught in an instruction)
-                    $between = $this->windTo(XAR_TOKEN_ENTITY_END);
+                    $between = $this->peekTo(XAR_TOKEN_ENTITY_END);
                     if(!isset($between) or strpos($between,XAR_TOKEN_TAG_START)) {
                         // set an exception and return
                         $this->raiseError(XAR_BL_INVALID_SYNTAX,"Entity isn't closed properly.", $this);
                         return; // throw back
                     }
                     // Otherwise just pass the entity to the outputtext and clear the token to start over 
-                    $text.=XAR_TOKEN_ENTITY_START.$between.$this->getNextToken();$token=''; 
+                    $text.=XAR_TOKEN_ENTITY_START.$this->windTo(XAR_TOKEN_ENTITY_END).$this->getNextToken();$token=''; 
                     break;
                 case XAR_TOKEN_CI_DELIM:
                     $nextToken = $this->getNextToken();
@@ -1068,35 +1068,56 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         return $result;
     }
     
-    // move the pointer to the position of the needle
-    // returns the content wound over if successfull
-    // returns '' if not found, pointer not changed
-    // returns null when $token is null
-    // FIXME: this is a temporary quick implementation for bug #3111
-    // FIXME: this does a literal search on the needle, no smart finding of end tags
+    /**
+     * Seek a certain marker and move the parse pointer
+     * to just before it.
+     * If the marker isn't found, the pointer isnt updated
+     * and null is returned
+     *
+     * @todo this does a literal search on the needle, no smart finding of end tags
+     * @todo investigate border situation when needle is found but between text is empty
+     */
     function windTo($needle)
     {
         assert('strlen($needle) > 0; /* The search needle in parser->windTo has zero length */');
-        $wound = '';
-        $buffer = $this->getNextToken(strlen($needle));
-        if(!isset($buffer)) return; // throw back
-        $wound = $buffer;
-        while($buffer!= $needle) {
-            $next = $this->getNextToken();
-            if(!isset($next)) {
-                $this->stepBack(strlen($wound));
-                return; // throw back
-            }
-            $buffer = substr($buffer, 1) . $next;
-            $wound.= $next;
+        
+        // Take a peek first
+        $peek = $this->peekTo($needle);
+        if(!isset($peek)) return;
+           
+        // We found sumtin, advance the pointer
+        $this->getNextToken(strlen($peek));
+        return $peek;
+    }
+    
+    /**
+     * Peek ahead in search for a certain marker
+     * return what was in between if we found it, but
+     * do not advance the parse pointer. If the marker
+     * is not found, or the end of the file was reached, return null
+     * 
+     * @todo see windTo method
+     */
+    function peekTo($needle)
+    {
+        assert('strlen($needle) > 0; /* The search needle in parser->peekTo has zero length */');
+        
+        // Get a buffer of the size of what we are searching
+        $offset = $this->pos; $needleSize = strlen($needle);
+        $buffer = ''; $wound='';
+                
+        // fifo the buffer in each iteration and check for the needle
+        while($buffer != $needle) {
+            $buffer = $this->peek($needleSize,$offset);
+            if(!isset($buffer)) return; // throw back
+            $wound.= substr($buffer,-1);
+            $offset++;
         }
-        // We found the needle and we are are at the end of it
-        // place the pointer right before it
-        $this->stepBack(strlen($needle));
+        // We found the needle, but we dont want to return it inclusive
         $wound = substr($wound,0,-1*strlen($needle));
         return $wound;
     }
-
+    
     function stepBack($len = 1)
     {
         // FIXME: do we need to take line numbers into account here when we
