@@ -579,8 +579,8 @@ function pnConfigDelVar($name)
 
 function pnBlockGetInfo($bid)
 {
-    $blockinfo = xarModAPIFunc('blocks', 
-                               'admin', 
+    $blockinfo = xarModAPIFunc('blocks',
+                               'admin',
                                'getinfo', array('blockId' => $bid));
     return $blockinfo;
 }
@@ -728,9 +728,19 @@ function pnSecAddSchema($component, $schema)
     return xarSecAddSchema($component, $schema);
 }
 
-function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
+define("ACCESS_NONE","ACCESS_NONE");
+define("ACCESS_OVERVIW","ACCESS_OVERVIW");
+define("ACCESS_READ","ACCESS_READ");
+define("ACCESS_COMMENT","ACCESS_COMMENT");
+define("ACCESS_MODERATE","ACCESS_MODERATE");
+define("ACCESS_EDIT","ACCESS_EDIT");
+define("ACCESS_ADD","ACCESS_ADD");
+define("ACCESS_DELETE","ACCESS_DELETE");
+define("ACCESS_ADMIN","ACCESS_ADMIN");
+
+function pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel)
 {
-    return xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
+    return xarSecurityCheck("pnLegacyMask",0,$testComponent, $testInstance,'','',$testRealm,$testLevel);
 }
 
 function pnSecConfirmAuthKey()
