@@ -83,15 +83,6 @@ function roles_adminapi_getmenulinks()
                               'label' => xarML('Modify Config'));
     }
 
-    if (xarSecurityCheck('AdminRole',0)) {
-        $menulinks[] = Array('url'   => xarModURL('base',
-                                                  'admin',
-                                                  'listwizards',
-                                                  array('info' => xarRequestGetInfo())),
-                              'title' => xarML('Display the wizards available to this module'),
-                              'label' => xarML('Wizards'));
-    }
-
     if (empty($menulinks)){
         $menulinks = '';
     }
