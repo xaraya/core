@@ -380,6 +380,7 @@ class xarMasks
 
 // get the assigned privileges and winnow them
 			$roleprivileges = $role->getAssignedPrivileges();
+echo "hi".$role->getName();
 			$roleprivileges = $this->winnow($roleprivileges,$roleprivileges);
 // trump them against the accumulated privileges from higher levels
 		$irreducibleset = $this->trump($irreducibleset,$roleprivileges);
