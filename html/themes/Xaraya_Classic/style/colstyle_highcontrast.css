@@ -44,6 +44,8 @@ div#xc-footer {
     background-position: 0% 20%;
 }
 
+p#footermsg { background-position: -306px 0px; }
+
 /* MENUS (in sideblocks) */
 .xar-block-body ul li.xar-menu-section, 
 .xar-block-body-right ul li.xar-menu-section { border-color: #D9D9D9; }

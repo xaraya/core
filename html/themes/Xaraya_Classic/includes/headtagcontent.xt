@@ -1,0 +1,22 @@
+<title>#$tpl:pageTitle#</title>
+<xar:blockgroup name="header" id="header" />
+<base href="&xar-baseurl;index.php" />
+<xar:comment>Main CSS rules (note: all default parameters in the tag can be omitted)</xar:comment>
+<xar:link-theme-stylesheet />
+<xar:comment>Styleswitcher CSS files to link to</xar:comment>
+<xar:template file="styleswitchercsslinks" type="theme" />
+<xar:comment>
+Additional CSS rules from Xaraya components (and from this theme via xar:import.. and xar:link.. tags) 
+Now required for all css-aware themes. 
+OLD WAY: #$tpl:additionalStyles# 
+NEW WAY: (starting from core 0.9.11+) with the following attribute-less tag
+</xar:comment>
+<xar:additional-styles />
+<xar:comment>the CSS rules for ie-win type browsers, we include it via the conditional comment so that other browers ignore it completely</xar:comment>
+<!--[if IE]><link href="themes/xaraya_classic/style/ie_win.css" rel="stylesheet" type="text/css" /><![endif]-->
+<xar:if condition="$styleswitchertype eq 'javascript'">
+    <xar:comment>Styleswitcher JavaScript</xar:comment>
+    <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
+</xar:if>
+<xar:comment>Head JavaScript - required for all themes</xar:comment>
+<xar:base-render-javascript position="head" />

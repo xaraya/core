@@ -1,3 +1,10 @@
+<xar:set name="changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
+<xar:set name="changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
+<xar:set name="changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
+<xar:set name="changecoltocontrast"><xar:mlstring>High contrast</xar:mlstring></xar:set>
+<xar:set name="changecoltoblue"><xar:mlstring>Blue hues (default)</xar:mlstring></xar:set>
+<xar:set name="changecoltogreen"><xar:mlstring>Green hues</xar:mlstring></xar:set>
+<xar:set name="changecoltoorange"><xar:mlstring>Orange hues</xar:mlstring></xar:set>
 <div id="classicthemecontrols">
     <a href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
         <img src="#$classicthemedir#/images/txt_large.gif" id="butlg" alt="#$changetexttolarge#" />

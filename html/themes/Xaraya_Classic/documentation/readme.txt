@@ -1,5 +1,5 @@
 XARAYA_CLASSIC - DEFAULT THEME.. 
-[revision 3 by andyv_at_xaraya.com]
+[revision 4 by andyv_at_xaraya.com]
 
 The CSS a bit more interesting and a lot better organised than in the old original;
 

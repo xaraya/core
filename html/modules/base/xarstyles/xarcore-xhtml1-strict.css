@@ -288,27 +288,30 @@ miscellaneous utility clases
     float: right;
     padding: 10px;
 }
+
 .xar-form-label {
     width: 15em;
     display: block;
     float: left;
 }
+
 .xar-form-labelshort {
     width: 7em;
     display: block;
     float: left;
 }
+
 .xar-form-labellong {
     width: 25em;
     display: block;
     float: left;
 }
+
 .xar-form-input-wrapper {
-    float: left;
-    width: 100%;
     margin-bottom: 4px;
-    clear: both;
+    overflow:auto;
 }
+
 .xar-form-input-wrapper-after {
     width: auto;
     padding-left: 15em;

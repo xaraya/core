@@ -349,16 +349,27 @@ div#xc-footer {
 }
 
 /*
-footer container itself - watch for the explicit height limitations
+footer container itself - watch for the explicit height and width limitations
 -------------------------------------------------------------------------[comment] */
+p#footermsg,
+p#footermsg a {
+    display:block;
+    width: 102px;
+	height: 47px;
+}
 
 p#footermsg {
-    float: right;
-    padding: 1px 2px;
-    width: 250px;
-    text-align: right;
-    margin: 0;
+	float: right;
+	padding: 0;
+	margin: 1px 1px 0 0;
+	text-align: right;
+	background-image: url(../images/xar_badge.gif);
+	background-color: transparent;
+	background-position: 0px 0px;
 }
+
+/* hide logo image in case when css is enabled - we display nicer multicoloured version as per rule above */
+p#footermsg img { display:none; }
 
 /*
 standard content of the footer, limited by explicit width and height 

@@ -1,0 +1,33 @@
+<xar:comment>get data for the the topnav blockgroup and set local variables to hold the data</xar:comment>
+<xar:set name="topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
+<xar:if condition="!empty($topnavblocksgroup)">
+    <div id="classictopnavigation">
+        <xar:var name="topnavblocksgroup" />
+    </div>
+</xar:if>
+<xar:comment>get data for the other default blockgroups and set local variables to hold the data</xar:comment>
+<xar:set name="rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
+<xar:set name="leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
+<xar:set name="centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
+<xar:comment>Compose the layout structure based on the available blockgroups</xar:comment>
+<xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
+    <xar:comment>
+        All three columns layout 
+    </xar:comment>
+    <xar:template file="content_3col" type="theme" />
+    <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
+    <xar:comment>
+        Two columns layout - left and center blocksgroups 
+    </xar:comment>
+    <xar:template file="content_2col_lc" type="theme" />
+    <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
+    <xar:comment>
+        Two columns layout - center and right blocksgroups 
+    </xar:comment>
+    <xar:template file="content_2col_cr" type="theme" />
+    <xar:else />
+    <xar:comment>
+        One column layout - just center blocksgroup 
+    </xar:comment>
+    <xar:template file="content_1col" type="theme" />
+</xar:if>

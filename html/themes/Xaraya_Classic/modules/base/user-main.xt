@@ -35,9 +35,9 @@
     <p>
         <xar:ml>
             <xar:mlstring>
-                This message can be edited by creating an override template (#(1)/themename/modules/base/user-main.xt) for the base module.
+                This message can be edited by creating an override template (#(1)/modules/base/user-main.xt) for the base module.
             </xar:mlstring>
-            <xar:mlvar><xar:var scope="config" name="Site.BL.ThemesDirectory" /></xar:mlvar>
+            <xar:mlvar>#xarTplGetThemeDir()#</xar:mlvar>
         </xar:ml>
     </p>
     <h4>

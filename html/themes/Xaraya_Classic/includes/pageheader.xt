@@ -1,0 +1,10 @@
+<div id="xc-header">
+    <xar:if condition="$styleswitchertype ne 'none'">
+        <xar:template file="styleswitchercontrols" type="theme" />
+    </xar:if>
+    <h1>
+        <a href="&xar-baseurl;" title="#$sitename#">
+            <span>#$sitename#</span>
+        </a>
+    </h1>
+</div>
