@@ -42,7 +42,7 @@
 									<span class="xar-normal">
 										<label for="install_database_host">
 											<xar:mlstring>
-												Host< 
+												Host 
 											</xar:mlstring>
 											/label> 
 										</span>
