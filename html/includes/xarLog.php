@@ -169,7 +169,7 @@ function xarLog__shutdown_handler()
 
 function xarLog__add_logger($type, $config_args)
 {
-    if (!xarInclude ('./includes/log/loggers/'.$type.'.php')) {
+    if (!xarInclude ('includes/log/loggers/'.$type.'.php')) {
         xarCore_die('xarLog_init: Unable to load driver for logging: '.$type);
     }
 

@@ -51,7 +51,7 @@
 /**
  * Include the base file
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+include_once ('includes/log/loggers/xarLogger.php');
 
 /**
  * Simple logging class
