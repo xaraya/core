@@ -1,0 +1,16 @@
+    <table border="0" width="100%">
+        <tr>
+<form action="index.php">
+<input type="hidden" name="module" value="search" />
+            <td>
+                <a href="&pnt-modurl-search-user-main;">Search</a> <input type="text" name="q" size="15" align="middle" />
+            </td>
+</form>
+        </tr>
+        <tr>
+            <td>
+                Welcome <strong>&pnt-var-name;</strong>&nbsp;-&nbsp;<a href="&pnt-modurl-users-user-logout;">Logout</a>
+            </td>
+        </tr>
+    </table>
+

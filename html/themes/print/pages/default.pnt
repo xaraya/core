@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title><pnt:var id="titlebar_sitename" name="sitename" scope="config" /> :: <pnt:var id="titlebar_slogan" name="slogan" scope="config" /></title>
-        <base href="<pnt:baseurl id="dummy1" />index.php">
+        <title>&pnt-config-sitename; :: &pnt-config-slogan;</title>
+        <base href="&pnt-baseurl;index.php">
         <link rel="StyleSheet" href="themes/print/style/styleNN.css" type="text/css">
-        <style type="text/css">@import url(<pnt:baseurl id="dummy2" />themes/print/style/style.css); </style>
+        <style type="text/css">@import url(&pnt-baseurl;themes/print/style/style.css); </style>
     </head>
     <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-<pnt:module id="modulespace" main="true" />
+<pnt:module main="true" />
 
 </body>
 </html>

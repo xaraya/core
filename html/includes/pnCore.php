@@ -89,7 +89,8 @@ define('PNDBG_EXCEPTIONS', 4);
 function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
 {
     //Comment this line to disable debugging
-    pnCoreActivateDebugger(PNDBG_EXCEPTIONS /*| PNDBG_SQL*/);
+//    pnCoreActivateDebugger(PNDBG_EXCEPTIONS /*| PNDBG_SQL*/);
+    pnCoreActivateDebugger(PNDBG_SQL);
 
     // Hack for some weird PHP systems that should have the
     // LC_* constants defined, but don't
@@ -215,6 +216,13 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         pnMod_init($systemArgs);
     }
 
+// TODO: move this elsewhere ?
+    // allow theme override in URL first
+    $themeName = pnVarCleanFromInput('theme');
+    if (!empty($themeName)) {
+        $themeName = pnVarPrepForOS($themeName);
+    }
+
     if ($whatToLoad & PNCORE_SYSTEM_USER) {
         include_once 'includes/pnUser.php';
         // {ML_dont_parse 'includes/pnSecurity.php'}
@@ -225,7 +233,9 @@ function pnCoreInit($whatToLoad = PNCORE_SYSTEM_ALL)
         pnUser_init($systemArgs);
 
         // Retrive user theme name
-        $themeName = pnUser_getThemeName();
+        if (empty($themeName)) {
+            $themeName = pnUser_getThemeName();
+        }
     }
 
     if ($whatToLoad & PNCORE_SYSTEM_BLOCKS) {
