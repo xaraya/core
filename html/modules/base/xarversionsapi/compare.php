@@ -17,10 +17,11 @@
 /**
  * Compare two legal-style versions supplied as strings or arrays, to an arbitrary number of levels
  * Usage : $which = xarModAPIFunc('base', 'versions', 'compare', array('ver1'=>$version1, 'ver2'=>$version2));
+ * or shortcut $which = xarModAPIFunc('base', 'versions', 'compare', array($version1, $version2));
  *
  * @author Jason Judge
- * @param $args['ver1'] version number 1 (string or array)
- * @param $args['ver2'] version number 2 (string or array)
+ * @param $args['ver1'] or $args[0] version number 1 (string or array)
+ * @param $args['ver2'] or $args[1] version number 2 (string or array)
  * @param $args['levels'] maxiumum levels to compare (default: all levels)
  * @param $args['strict'] indicates strict numeric-only comparisons (default: true)
  * @param $args['sep'] level separator character (default: .)
@@ -35,8 +36,8 @@ function base_versionsapi_compare($args)
     // Versions can be strings ('1.2.3') or arrays (array(1, 2, 3)).
     // See test script for examples: tests/base/version_compare.php
 
-    // Extract the arguments.
-    extract($args);
+    // Extract the arguments. Allow for positional parameters.
+    extract($args, EXTR_PREFIX_INVALID, 'p');
 
     // Set this flag if checking should be strictly numeric.
     // With strict set (true), non-numeric characters will be stripped prior to
@@ -49,11 +50,11 @@ function base_versionsapi_compare($args)
 
     // Default either version to '0' if not pass in at all.
     if (!isset($ver1)) {
-        $ver1 = '0';
+        $ver1 = (isset($p_0) ? $p_0 : '0');
     }
 
     if (!isset($ver2)) {
-        $ver2 = '0';
+        $ver2 = (isset($p_1) ? $p_1 : '0');
     }
 
     // Default the level separator to '.' if none valid passed in.
