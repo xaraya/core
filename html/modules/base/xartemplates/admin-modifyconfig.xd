@@ -19,6 +19,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 
 
 <form method="post" action="&xar-modurl-base-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded" />
+    <div>
     <h4><xar:mlstring>Website Display Configuration</xar:mlstring></h4>
 
 	<div style="clear: both; padding-top: 10px;">
@@ -189,6 +190,7 @@ Xaraya itself is completely legacy free, but other modules may still yet use the
 	</xar:if></p>
 
 	<p><input type="submit" value="#$updatelabel#" align="middle" /></p>
+      </div>
 </form>
 </div>
 </div>
