@@ -1,0 +1,21 @@
+White box testing
+^^^^^^^^^^^^^^^^^
+Bug 1956: 'external' entry in xar_security_instances
+
+   1. Install xaraya and articles modules.
+   2. Create a privilege for the articles module.
+   3. Change the url of your site by either:
+        * changing the base directory, or
+        * if you can, change the domain or server
+   4. Go back to modify the privilege you created.
+   5. Click on the wizard link.
+   6. Confirm that the link takes you to the correct URL which should match
+      the new url of your site.
+
+Bug 1870: Setting category id on new category privilege is ignored.
+
+   1. Install xaraya with categories module.
+   2. Create a categories privilege with a valid CID.
+   3. Save the privilege and go back to modify it.
+   4. Confirm that the CID is still the same value you entered.
+   
