@@ -18,7 +18,7 @@ function modules_admin_deactivate ()
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id)) return;
 
 
     //First check the modules dependencies
@@ -41,18 +41,24 @@ function modules_admin_deactivate ()
         $data['dependencies'] = $dependents;
         return $data;
     }
-           
-    //Deactivate with dependents, first dependents
-    //then the module itself
-    if (!xarModAPIFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
-        //Call exception
-        return;
-    } // Else
 
+    // See if we have lost any modules since last generation
+    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+        return;
+    }
 
     $minfo=xarModGetInfo($id);
+    //Bail if we've lost our module
+    if ($minfo['state'] != XARMOD_STATE_MISSING) {
+        //Deactivate with dependents, first dependents
+        //then the module itself
+        if (!xarModAPIFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
+            //Call exception
+            return;
+        } // Else
+    }
 
-    // set the target location (anchor) to go to within the page 
+    // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
 
     // Hmmm, I wonder if the target adding is considered a hack
