@@ -246,7 +246,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $typeCheck .= ':';
         
 
-        if (!xarVarFetch('attach_type', $typeCheck, $action, NULL)) return;
+        if (!xarVarFetch($this->id . '_attach_type', $typeCheck, $action, NULL)) return;
         
 
         $args['action']    = $action;
@@ -261,20 +261,20 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
                 if (!xarVarFetch('MAX_FILE_SIZE', "int::$file_maxsize", $maxSize)) return;
 
-                if (!xarVarFetch('', 'array:1:', $_FILES['attach_upload'])) return;
+                if (!xarVarFetch('', 'array:1:', $_FILES[$this->id . '_attach_upload'])) return;
 
                 $upload =& $_FILES['attach_upload'];
                 $args['upload'] = &$_FILES['attach_upload'];
             case _UPLOADS_GET_EXTERNAL:
                 // minimum external import link must be: ftp://a.ws  <-- 10 characters total
 
-                if (!xarVarFetch('attach_external', 'regexp:/^([a-z]*).\/\/(.{7,})/', $import, '', XARVAR_NOT_REQUIRED)) return;
+                if (!xarVarFetch($this->id . '_attach_external', 'regexp:/^([a-z]*).\/\/(.{7,})/', $import, '', XARVAR_NOT_REQUIRED)) return;
 
                 $args['import'] = $import;
                 break;
             case _UPLOADS_GET_LOCAL:
 
-                if (!xarVarFetch('attach_trusted', 'list:regexp:/(?<!\.{2,2}\/)[\w\d]*/', $fileList)) return;
+                if (!xarVarFetch($this->id . '_attach_trusted', 'list:regexp:/(?<!\.{2,2}\/)[\w\d]*/', $fileList)) return;
 
                 $importDir = xarmodGetVar('uploads', 'path.imports-directory');
                 foreach ($fileList as $file) {
@@ -286,7 +286,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 break;
             case _UPLOADS_GET_STORED:
 
-                if (!xarVarFetch('attach_stored', 'list:str:1:', $fileList)) return;
+                if (!xarVarFetch($this->id . '_attach_stored', 'list:str:1:', $fileList)) return;
 
                 // We prepend a semicolon onto the list of fileId's so that
                 // we can tell, in the future, that this is a list of fileIds 
@@ -354,7 +354,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['getAction']['UPLOAD']      = _UPLOADS_GET_UPLOAD;
         $data['getAction']['STORED']      = _UPLOADS_GET_STORED;
         $data['getAction']['REFRESH']     = _UPLOADS_GET_REFRESH_LOCAL;
-
+        $data['id']                       = $this->id;
         $data['file_maxsize'] = xarModGetVar('uploads', 'file.maxsize');;
         $data['fileList']     = xarModAPIFunc('uploads', 'user', 'import_get_filelist', 
                                                array('descend' => $descend, 'fileLocation' => $trusted_dir));
