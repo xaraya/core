@@ -161,10 +161,17 @@ class ADODB_sqlite extends ADOConnection {
 	function _query($sql,$inputarr=false)
 	{
 		$rez = sqlite_query($sql,$this->_connectionID);
+
 		if (!$rez) {
-			$this->_errorNo = sqlite_last_error($this->_connectionID);
+            // The result was either false or zero, zero could still be good
+            $error = sqlite_last_error($this->_connectionID);
+            if($error != 0) {
+                $this->_errorNo = $error;
+                return false;
+            }
+            // Error is zero, which is good
+            $rez = true;
 		}
-		
 		return $rez;
 	}
     

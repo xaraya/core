@@ -841,7 +841,7 @@
 		} else {
 			// non-debug version of query
 			
-			$this->_queryID =@$this->_query($sql,$inputarr);
+			$this->_queryID =$this->_query($sql,$inputarr);
 		}
 		
 		/************************
