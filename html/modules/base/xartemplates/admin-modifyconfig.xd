@@ -9,81 +9,81 @@
 //-->
 </script>
 <div class="xar-mod-head">
-	<span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
+    <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-	<h2>
-		<xar:mlstring>Modify System Configuration</xar:mlstring>
-	</h2>
-	<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-	</xar:if>
-	<dl class="xar-tabs">
-	    <dt class="help" title="Choose a set of configuration options">
-	        <xar:mlstring>
-	            Actions
-	        </xar:mlstring>
-	        : 
-	    </dt>
-	    <xar:if condition="$tab eq 'display'">
-	        <dd class="active">
-	            <a href="#xarServerGetCurrentURL()#">
-	                <xar:mlstring>Site Display</xar:mlstring>
-	            </a>
-	        </dd>    
-	    <xar:else />
-	        <dd>
-	            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">    
-	                <xar:mlstring>Site Display</xar:mlstring>
-	            </a>
-	        </dd>    
-	    </xar:if>
-	    <xar:if condition="$tab eq 'security'">
-	        <dd class="active">
-	            <a href="#xarServerGetCurrentURL()#">
-	                <xar:mlstring>Sessions/Security</xar:mlstring>
-	            </a>
-	        </dd>    
-	    <xar:else />
-	        <dd>
-	            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">    
-	                <xar:mlstring>Sessions and Security</xar:mlstring>
-	            </a>
-	        </dd>    
-	    </xar:if>
-	    <xar:if condition="$tab eq 'locales'">
-	        <dd class="active">
-	            <a href="#xarServerGetCurrentURL()#">
-	                <xar:mlstring>Languages and Locales</xar:mlstring>
-	            </a>
-	        </dd>    
-	    <xar:else />
-	        <dd>
-	            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">    
-	                <xar:mlstring>Languages and Locales</xar:mlstring>
-	            </a>
-	        </dd>    
-	    </xar:if>
-	    <xar:if condition="$tab eq 'other'">
-	        <dd class="active">
-	            <a href="#xarServerGetCurrentURL()#">
-	                <xar:mlstring>Other</xar:mlstring>
-	            </a>
-	        </dd>    
-	    <xar:else />
-	        <dd>
-	            <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">    
-	                <xar:mlstring>Other</xar:mlstring>
-	            </a>
-	        </dd>
-	    </xar:if>
-	</dl>
+    <h2>
+        <xar:mlstring>Modify System Configuration</xar:mlstring>
+    </h2>
+    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+    </xar:if>
+    <dl class="xar-tabs">
+        <dt class="help" title="Choose a set of configuration options">
+            <xar:mlstring>
+                Actions
+            </xar:mlstring>
+            : 
+        </dt>
+        <xar:if condition="$tab eq 'display'">
+            <dd class="active">
+                <a href="#xarServerGetCurrentURL()#">
+                    <xar:mlstring>Site Display</xar:mlstring>
+                </a>
+            </dd>    
+        <xar:else />
+            <dd>
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">    
+                    <xar:mlstring>Site Display</xar:mlstring>
+                </a>
+            </dd>    
+        </xar:if>
+        <xar:if condition="$tab eq 'security'">
+            <dd class="active">
+                <a href="#xarServerGetCurrentURL()#">
+                    <xar:mlstring>Sessions/Security</xar:mlstring>
+                </a>
+            </dd>    
+        <xar:else />
+            <dd>
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">    
+                    <xar:mlstring>Sessions and Security</xar:mlstring>
+                </a>
+            </dd>    
+        </xar:if>
+        <xar:if condition="$tab eq 'locales'">
+            <dd class="active">
+                <a href="#xarServerGetCurrentURL()#">
+                    <xar:mlstring>Languages and Locales</xar:mlstring>
+                </a>
+            </dd>    
+        <xar:else />
+            <dd>
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">    
+                    <xar:mlstring>Languages and Locales</xar:mlstring>
+                </a>
+            </dd>    
+        </xar:if>
+        <xar:if condition="$tab eq 'other'">
+            <dd class="active">
+                <a href="#xarServerGetCurrentURL()#">
+                    <xar:mlstring>Other</xar:mlstring>
+                </a>
+            </dd>    
+        <xar:else />
+            <dd>
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">    
+                    <xar:mlstring>Other</xar:mlstring>
+                </a>
+            </dd>
+        </xar:if>
+    </dl>
     
-	<xar:comment> ------------------- Begin Site Display Options --------------------- </xar:comment>
+    <xar:comment> ------------------- Begin Site Display Options --------------------- </xar:comment>
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 
             <h3>
-            	<xar:mlstring>Website Display Configuration</xar:mlstring>
+                <xar:mlstring>Website Display Configuration</xar:mlstring>
             </h3>
 
            <p><xar:mlstring>Please note that the default theme variable has moved to the themes module.</xar:mlstring></p>
@@ -105,31 +105,31 @@
 
             <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq 'base'">
 
-	            <div class="xar-form-input-wrapper-after">
-	                <xar:if condition="xarModGetVar('base', 'UseAlternatePageTemplate')">
-	                    <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" checked="checked" />
-	                <xar:else />
-	                    <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" />
-	                </xar:if>
-	                <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
-	                    <xar:mlstring>Use Alternate Page Template</xar:mlstring>
-	                </label>
-	            </div>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('base', 'UseAlternatePageTemplate')">
+                        <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" />
+                    </xar:if>
+                    <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
+                        <xar:mlstring>Use Alternate Page Template</xar:mlstring>
+                    </label>
+                </div>
 
 
-		        <div class="xar-form-input-wrapper">
-		            <label for="alternatepagetemplatename" title="#xarML('The name of the alternate page template to use.')#" class="xar-form-label">
-		                <xar:mlstring>Alternate Page Template Name:</xar:mlstring>
-		            </label>
-	                <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-from-textlong" />
-		        </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="alternatepagetemplatename" title="#xarML('The name of the alternate page template to use.')#" class="xar-form-label">
+                        <xar:mlstring>Alternate Page Template Name:</xar:mlstring>
+                    </label>
+                    <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-from-textlong" />
+                </div>
 
             </xar:if>
             
-	        <div class="xar-form-input-wrapper">
-	            <label for="defaulttype" title="#xarML('The default type of module to be loaded.')#" class="xar-form-label">
-	                <xar:mlstring>Default Module Type:</xar:mlstring>
-	            </label>
+            <div class="xar-form-input-wrapper">
+                <label for="defaulttype" title="#xarML('The default type of module to be loaded.')#" class="xar-form-label">
+                    <xar:mlstring>Default Module Type:</xar:mlstring>
+                </label>
                 <select name="defaulttype" id="defaulttype" size="1">
                     <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
                         <option value="admin" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
@@ -139,24 +139,24 @@
                         <option value="user" selected="selected"><xar:mlstring>User</xar:mlstring></option>
                     </xar:if>
                 </select>
-	        </div>
+            </div>
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="defaultfunction" title="#xarML('The default function of module to be loaded.')#" class="xar-form-label">
-	                <xar:mlstring>Default Module Function:</xar:mlstring>
-	            </label>
-				<input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textmedium" />
-	        </div>
+            <div class="xar-form-input-wrapper">
+                <label for="defaultfunction" title="#xarML('The default function of module to be loaded.')#" class="xar-form-label">
+                    <xar:mlstring>Default Module Function:</xar:mlstring>
+                </label>
+                <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textmedium" />
+            </div>
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
-	                <xar:mlstring>Default Theme Directory:</xar:mlstring>
-	            </label>
+            <div class="xar-form-input-wrapper">
+                <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
+                    <xar:mlstring>Default Theme Directory:</xar:mlstring>
+                </label>
                 <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textmedium" />
-	        </div>
+            </div>
 
 
-	        <div class="xar-form-input-wrapper-after">
+            <div class="xar-form-input-wrapper-after">
                 <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
                     <input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
                 <xar:else />
@@ -165,9 +165,9 @@
                 <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#">
                     <xar:mlstring>Enable Short URL Support</xar:mlstring>
                 </label>
-	        </div>
+            </div>
 
-	        <div class="xar-form-input-wrapper-after">
+            <div class="xar-form-input-wrapper-after">
                 <xar:if condition="xarModGetVar('base', 'SupportShortURLs')">
                     <input type="checkbox" name="baseshorturl" id="baseshorturl" value="1" checked="checked" />
                 <xar:else />
@@ -176,9 +176,9 @@
                 <label for="baseshorturl" title="#xarML('Enable short URL support in the base module.')#">
                     <xar:mlstring>Enable Base Module Short URLs</xar:mlstring>
                 </label>
-	        </div>
+            </div>
 
-	        <div class="xar-form-input-wrapper-after">
+            <div class="xar-form-input-wrapper-after">
                 <xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
                     <input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
                 <xar:else />
@@ -187,14 +187,14 @@
                 <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#">
                     <xar:mlstring>Fix HTML Entities</xar:mlstring>
                 </label>
-	        </div>
+            </div>
 
-	        <div class="xar-clear-both xar-align-center">
-	            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	            <input type="hidden" name="tab" id="tab" value="#$tab#" />
-	            <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-	            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-	        </div>
+            <div class="xar-clear-both xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
+            </div>
 
         </form>
 
@@ -213,7 +213,7 @@
 
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 
-	        <div class="xar-form-input-wrapper-after">
+            <div class="xar-form-input-wrapper-after">
                 <xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
                     <input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
                 <xar:else />
@@ -222,12 +222,12 @@
                 <label for="secureserver" title="#xarML('Configure to run on a secure server.')#">
                     <xar:mlstring>Configure to run on Secure Server</xar:mlstring>
                 </label>
-	        </div>
+            </div>
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="securitylevel" title="#xarML('Security options for sessions')#" class="xar-form-label">
-	                <xar:mlstring>Security Level:</xar:mlstring>
-	            </label>
+            <div class="xar-form-input-wrapper">
+                <label for="securitylevel" title="#xarML('Security options for sessions')#" class="xar-form-label">
+                    <xar:mlstring>Security Level:</xar:mlstring>
+                </label>
                 <select name="securitylevel" id="securitylevel" size="1">
                 <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
                     <option value="High" selected="selected">High</option>
@@ -243,62 +243,62 @@
                     <option value="Low" selected="selected">Low</option>
                 </xar:if>
                 </select>
-	        </div>
+            </div>
 
-	        <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
+            <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
 
-		        <div class="xar-form-input-wrapper">
-		            <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
-		                <xar:mlstring>Session Duration (In Days):</xar:mlstring>
-		            </label>
-	                <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
-		        </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
+                        <xar:mlstring>Session Duration (In Days):</xar:mlstring>
+                    </label>
+                    <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
+                </div>
 
-	        </xar:if>
+            </xar:if>
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="sessiontimeout" title="#xarML('Session times out in minutes')#" class="xar-form-label">
-	                <xar:mlstring>Session Inactivity Time Out:</xar:mlstring>
-	            </label>
+            <div class="xar-form-input-wrapper">
+                <label for="sessiontimeout" title="#xarML('Session times out in minutes')#" class="xar-form-label">
+                    <xar:mlstring>Session Inactivity Time Out:</xar:mlstring>
+                </label>
                 <input type="text" id="sessiontimeout" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" maxlength="3" class="xar-form-textshort" />
-	        </div>
+            </div>
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">
-	                <xar:mlstring>Authentication Modules:</xar:mlstring>
-	            </label>
-	            <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-	                <div class="xar-floatleft">
-	                    <div class="xar-floatleft">
-	                        <button onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
-	                            <img src="#xarTplGetImage('up.gif','blocks')#" alt="#xarML('Up Arrow')#" />
-	                        </button>
-	                        <button onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
-	                            <img src="#xarTplGetImage('down.gif','blocks')#" alt="#xarML('Down Arrow')#" />
-	                        </button>
-	                    </div>
-	                    <div class="xar-floatleft xar-margin-thickleft">
-		                    <xar:set name="size">count($authmodules)</xar:set>
-		                    <select name="authmodules" id="authmodules" size="#$size#">
-		                       <xar:foreach in="$authmodules" value="$authmodule">
-		                           <option value="#$authmodule#">#$authmodule#</option>
-		                       </xar:foreach>
-		                    </select>
-		                    <input type="hidden" name="authmodule_order" id="authmodule_order" value="" />
-	                    </div>
-	                </div>
-	            <xar:else />
-		            #$authmodules[0]#
-	            </xar:if>
+            <div class="xar-form-input-wrapper">
+                <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">
+                    <xar:mlstring>Authentication Modules:</xar:mlstring>
+                </label>
+                <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+                    <div class="xar-floatleft">
+                        <div class="xar-floatleft">
+                            <button onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
+                                <img src="#xarTplGetImage('up.gif','blocks')#" alt="#xarML('Up Arrow')#" />
+                            </button>
+                            <button onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
+                                <img src="#xarTplGetImage('down.gif','blocks')#" alt="#xarML('Down Arrow')#" />
+                            </button>
+                        </div>
+                        <div class="xar-floatleft xar-margin-thickleft">
+                            <xar:set name="size">count($authmodules)</xar:set>
+                            <select name="authmodules" id="authmodules" size="#$size#">
+                               <xar:foreach in="$authmodules" value="$authmodule">
+                                   <option value="#$authmodule#">#$authmodule#</option>
+                               </xar:foreach>
+                            </select>
+                            <input type="hidden" name="authmodule_order" id="authmodule_order" value="" />
+                        </div>
+                    </div>
+                <xar:else />
+                    #$authmodules[0]#
+                </xar:if>
 
-	        </div>
+            </div>
 
-	        <div class="xar-clear-both xar-align-center">
-	            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-    	        <input type="hidden" name="tab" id="tab" value="#$tab#" />
-	            <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-	            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-	        </div>
+            <div class="xar-clear-both xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
+            </div>
 
         </form>
     
@@ -309,25 +309,25 @@
 
              <xar:template file="modifyconfig-locales" module="base" type="module"/>
 
-	        <div class="xar-clear-both xar-align-center">
-	            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-	            <input type="hidden" name="tab" id="tab" value="#$tab#" />
-	            <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
-	            <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
-	        </div>
+            <div class="xar-clear-both xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                <input type="submit" value="#xarML('Update Base Configuration')#" class="xar-margin-thickright" />
+                <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft"  />
+            </div>
         </form>
     
 <xar:comment> ----------------- Begin Other Options ------------------- </xar:comment>
     <xar:elseif condition="$tab eq 'other'" />
 
-		<h3><xar:mlstring>Other</xar:mlstring></h3>
+        <h3><xar:mlstring>Other</xar:mlstring></h3>
 
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded" >
 
-	        <div class="xar-form-input-wrapper">
-	            <label for="editor" title="#xarML('WYSIWYG Editors')#" class="xar-form-label">
-	                <xar:mlstring>WYSIWYG Editors:</xar:mlstring>
-	            </label>
+            <div class="xar-form-input-wrapper">
+                <label for="editor" title="#xarML('WYSIWYG Editors')#" class="xar-form-label">
+                    <xar:mlstring>WYSIWYG Editors:</xar:mlstring>
+                </label>
                 <select name="editor" id="editor" size="1">
                     <xar:loop name="$editors">
                         <xar:if condition="$editor eq $loop:item['displayname']">

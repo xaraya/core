@@ -21,12 +21,12 @@
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
     <p><xar:mlstring>From the menu, you have three choices.</xar:mlstring></p>
+
     <ul>
         <li><xar:mlstring>View System Information: Allows you to print your server and php set-up for trouble shooting.</xar:mlstring></li>
         <li><xar:mlstring>Extension Releases: Allows you to view recently released extensions.</xar:mlstring></li>
         <li><xar:mlstring>Modify Config: Allows you to change some of the settings controlling the core behaviour of the site.</xar:mlstring></li>
     </ul>
-    </div>
 
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
@@ -45,6 +45,7 @@
     <h3><xar:mlstring>Other Information</xar:mlstring></h3>
 
     <h4><xar:mlstring>RSS Class</xar:mlstring></h4>
+
     <p>
         <xar:mlstring>The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> as their backend.   The notes for the feedParser by Reverend Jim are as follows:</xar:mlstring>
     </p>
