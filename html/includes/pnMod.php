@@ -975,10 +975,14 @@ function pnModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerMo
     }
 
     $output = '';
+    $isGUI = false;
+
+// TODO: re-evaluate how GUI / API hooks are handled
 
     // Call each hook
     foreach ($hooklist as $hook) {
         if ($hook['area'] == 'GUI') {
+            $isGUI = true;
             $res = pnModAvailable($hook['module'], $hook['type']);
             if (!isset($res) && pnExceptionMajor() != PN_NO_EXCEPTION) {
                 return;
@@ -1017,7 +1021,7 @@ function pnModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerMo
         }
     }
 
-    if ($hookAction == 'display' || $hookAction == 'search') {
+    if ($isGUI || $hookAction == 'display') {
         return $output;
     } else {
         return $extraInfo;
