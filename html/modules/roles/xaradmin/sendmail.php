@@ -85,6 +85,7 @@ function roles_admin_sendmail()
         $data['recipientname'] = $user['name'];
         $data['recipientusername'] = $user['username'];
         $data['recipientemail'] = $user['email'];
+
         $mailsubject = xarTplString($subject, $data);
         $mailmessage = xarTplString($message, $data);
 
@@ -96,8 +97,9 @@ function roles_admin_sendmail()
                 'subject' => $mailsubject,
                 'message' => $mailmessage))) return;
     }
-    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail', array('uid' => $uid)));
+
     // Return
+    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     return true;
 }
 
