@@ -95,15 +95,16 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // no need to get this more overhead from include_once
     
     //Comment this line to disable debugging
-//    xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
+    //xarCoreActivateDebugger(XARDBG_EXCEPTIONS /*| XARDBG_SQL*/);
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS);
     //xarCoreActivateDebugger(0);
 
+    //Johnny: POSSIBLY LEGACY????? i guess we'll test it now
     // Hack for some weird PHP systems that should have the
     // LC_* constants defined, but don't
-    if (!defined('LC_TIME')) {
+    /*if (!defined('LC_TIME')) {
         define('LC_TIME', 'LC_TIME');
-    }
+    }*/
 
     // Basic systems alway loaded
     // {ML_dont_parse 'includes/xarLog.php'}

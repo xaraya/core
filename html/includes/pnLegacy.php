@@ -9,51 +9,21 @@
 // Purpose of file: Legacy functions
 // ----------------------------------------------------------------------
 
+/***********************************************************************
+* This file is for legacy functions and constants needed to make it
+* easier to use pn modules in Xaraya. Please don't fill it with useless
+* stuff or deprecated API funcs except as wrappers, and also.. please
+* do not duplicated constants that already exist in xaraya core
+* If a function did not exist in pn before...don't prefix it with pn
+***********************************************************************/
+
 // LEGACY CONSTANTS
 
-// Old constants
-
-define('_PNYES', 1);
-define('_PNNO', 0);
-// Prefix Changes
-define('_XARYES', 1);
-define('_XARNO', 0);
-//'All' and 'unregistered' for user and group permissions
-define('_PNPERMS_ALL', '-1');
-define('_PNPERMS_UNREGISTERED', '0');
-//Prefix Changes
-define('_XARPERMS_ALL', '-1');
-define('_XARPERMS_UNREGISTERED', '0');
-
 define('_PN_VERSION_NUM', '0.8');
-define('_PN_VERSION_ID',  'PostNuke');
+define('_PN_VERSION_ID',  'Xaraya');
 define('_PN_VERSION_SUB', 'adam_baum');
-// Prefix Changes
-define('_XAR_VERSION_NUM', '0.8');
-define('_XAR_VERSION_ID',  'PostNuke');
-define('_XAR_VERSION_SUB', 'adam_baum');
 
-
-define('_PNMODULE_STATE_UNINITIALISED', 1);
-define('_PNMODULE_STATE_INACTIVE', 2);
-define('_PNMODULE_STATE_ACTIVE', 3);
-// FIXME: <marco> What're these two for?
-define('_PNMODULE_STATE_MISSING', 4);
-define('_PNMODULE_STATE_UPGRADED', 5);
-
-// Prefix Changes
-define('_XARMODULE_STATE_UNINITIALISED', 1);
-define('_XARMODULE_STATE_INACTIVE', 2);
-define('_XARMODULE_STATE_ACTIVE', 3);
-// FIXME: <marco> What're these two for?
-define('_XARMODULE_STATE_MISSING', 4);
-define('_XARMODULE_STATE_UPGRADED', 5);
-
-// This isn't a module state, but only a convenient definition to indicates,
-// where it's used, that we don't care about state, any state is good
-define('_PNMODULE_STATE_ANY', 0);
-define('_XARMODULE_STATE_ANY', 0);
- // FIXME: <marco> i think we could remove it, now validation does this job
+// FIXME: <marco> i think we could remove it, now validation does this job
 define('_UDCONST_MANDATORY',1024); // indicates a cord field that can't be removed'
 
 define('_UDCONST_CORE', 0); // indicates a core field
@@ -86,20 +56,6 @@ define('_XARAUTH_FAILED', -1);
 
 // LEGACY FUNCTIONS
 
-/**
- * allow a function to raise an exception
- *
- * @deprec
- * The caller must supply a value for the major parameter.
- * @param major can have one of the values XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, or XAR_SYSTEM_EXCEPTION
- * @param exceptionId identifier representing the exception type
- * @param value PHP class containing exception value
- * @returns void
- */
-function pnExceptionSet($major, $exceptionId, $value = NULL)
-{
-    return xarExceptionSet($major, $exceptionId, $value);
-}
 
 /**
  * get request info for current page
@@ -204,7 +160,7 @@ function pnUserGetVars($userId)
 {
     xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
-    return;
+    return NULL;
 }
 
 /**
@@ -220,7 +176,7 @@ function pnUserDelVar($name)
 {
     xarExceptionSet(PN_SYSTEM_EXCEPTION, 'DEPRECATED_API',
                        new SystemException(__FILE__.'('.__LINE__.')'));
-    return;
+    return NULL;
 }
 
 
@@ -248,9 +204,9 @@ function pnUserGetAll($startnum = 1, $numitems = -1)
  * @access public
  * @return string the name of the current top-level module, false if not in a module
  */
-function pnModGetName() {
+function pnModGetName()
+{
     list($modName) = xarRequestGetInfo();
-
     return $modName;
 }
 
@@ -261,7 +217,8 @@ function pnModGetName() {
  * @access public
  * @return string the name of the current top-level module, false if not in a module
  */
-function xarModGetName() {
+function xarModGetName()
+{
     //TODO Work around for the prefix.
     list($modName) = xarRequestGetInfo();
 
@@ -507,16 +464,7 @@ function xarModUnregisterHook($hookObject,
  */
 function pnGetStatusMsg()
 {
-    $msg = xarSessionGetVar('statusmsg');
-    xarSessionDelVar('statusmsg');
-    $errmsg = xarSessionGetVar('errormsg');
-    xarSessionDelVar('errormsg');
-
-    // Error message overrides status message
-    if (!empty($errmsg)) {
-        return $errmsg;
-    }
-    return $msg;
+	return xarGetStatusMsg();
 }
 
 // Prefix Add
@@ -565,7 +513,8 @@ function pnBlock_groupShow($groupName)
 
 // FIXME: <marco> Who use this?
 // Translate level -> name
-function accesslevelname($level) {
+function accesslevelname($level)
+{
     $accessnames = accesslevelnames();
     return $accessnames[$level];
 }
@@ -618,7 +567,7 @@ function pnMail($to, $subject, $message, $headers)
 /**
  * validate a user variable
  *
- * @deprec 
+ * @deprec
  * @author Damien Bonvillain
  * @author Gregor J. Rothfuss
  * @since 1.23 - 2002/02/01
@@ -737,7 +686,7 @@ function pnConfigDelVar($name)
  * @returns string
  * @return the name of the user's theme
  * @raise DATABASE_ERROR
- * modified May the 15th, 
+ * modified May the 15th,
  * return the name of the folder where themes are stored, defined in
  * modules_vars, themesfolder ("themes/" by default).
  */
@@ -778,7 +727,7 @@ function pnUserGetTheme()
             }
             // Ingnore other exceptions
             pnExceptionFree();
-        }		
+        }
         if (!empty($usertheme)) {
 	    $usertheme = pnConfigGetVar('themesfolder').pnVarPrepForOS($usertheme);
 	    if (file_exists($usertheme)) {
@@ -794,7 +743,7 @@ function pnUserGetTheme()
         // Ingnore other exceptions
         pnExceptionFree();
     }
-    if (!empty($defaulttheme)) { 
+    if (!empty($defaulttheme)) {
 	$defaulttheme = pnConfigGetVar('themesfolder').pnVarPrepForOS($defaulttheme);
 	if (file_exists($defaulttheme)) {
 	    return $defaulttheme;
@@ -811,16 +760,6 @@ function pnUserGetTheme()
 }
 
 // Stubs for pnAPI compatibility testing
-
-function pnAssert($assertion, $file='Unknown', $line='Unknown', $msg='')
-{
-    return xarAssert($assertion, $file, $line, $msg);
-}
-
-function pnBannerDisplay($type=0)
-{
-    return xarAssert($assertion, $file, $line, $msg);
-}
 
 function pnBlockGetInfo($bid)
 {
@@ -855,11 +794,6 @@ function pnBlockVarsToContent($vars)
 function pnConfigGetVar($name)
 {
     return xarConfigGetVar($name);
-}
-
-function pnConfigInit()
-{
-    return xarConfigInit();
 }
 
 function pnConfigSetVar($name, $value)
@@ -898,7 +832,7 @@ function pnDBInit()
 
 function pnInit()
 {
-    return xarInit();
+    return xarCoreInit();
 }
 
 function pnModAPIFunc($modName, $modType, $funcName, $args = NULL)
@@ -906,7 +840,7 @@ function pnModAPIFunc($modName, $modType, $funcName, $args = NULL)
     return xarModAPIFunc($modName, $modType, $funcName, $args);
 }
 
-function pnModAPILoad($modName, $modType) 
+function pnModAPILoad($modName, $modType)
 {
     return xarModAPILoad($modName, $modType);
 }
@@ -921,7 +855,7 @@ function pnModDBInfoLoad($modname, $directory='')
     return xarModDBInfoLoad($modname, $directory);
 }
 
-function pnModDelVar($modName, $name) 
+function pnModDelVar($modName, $name)
 {
     return xarModDelVar($modName, $name);
 }
@@ -961,11 +895,6 @@ function pnModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args 
     return xarModURL($modName, $modType, $funcName, $args, $generateXMLURL);
 }
 
-function pnPhpVersionCheck($vercheck)
-{
-    return xarPhpVersionCheck($vercheck);
-}
-
 function pnSecAddSchema($component, $schema)
 {
     return xarSecAddSchema($component, $schema);
@@ -1001,16 +930,6 @@ function pnSecureInput()
     return xarSecureInput();
 }
 
-function pnSessionClose()
-{
-    return xarSessionClose();
-}
-
-function pnSessionCurrent($sessid)
-{
-    return xarSessionCurrent($sessid);
-}
-
 /**
  * Delete a session variable
  * @deprec
@@ -1019,191 +938,6 @@ function pnSessionCurrent($sessid)
 function pnSessionDelVar($name)
 {
     return xarSessionDelVar($name);
-}
-
-function pnSessionDestroy($sessid)
-{
-    return xarSessionDestroy($sessid);
-}
-
-function pnSessionGC($maxlifetime)
-{
-    return xarSessionGC($maxlifetime);
-}
-
-/**
- * Load the Table Maintenance API
- *
- * @deprec
- * @access public
- * @return true
- */
-function pnDBLoadTableMaintenanceAPI()
-{
-    return xarDBLoadTableMaintenanceAPI();
-}
-
-/**
- * Get the database host
- *
- * @deprec
- * @access public
- * @returns string
- * @return database host
- */
-function pnDBGetHost()
-{
-    return xarDBGetHost();
-}
-
-/**
- * Get the database type
- *
- * @deprec
- * @access public
- * @return string database type
- */
-function pnDBGetType()
-{
-    return xarDBGetType();
-}
-
-/**
- * Get the database name
- *
- * @deprec
- * @access public
- * @return string database name
- */
-function pnDBGetName()
-{
-    return xarDBGetName();
-}
-
-/**
- * Get the system table prefix
- *
- * @deprec
- * @access public
- * @return string database name
- */
-function pnDBGetSystemTablePrefix()
-{
-    return xarDBGetSystemTablePrefix();
-}
-
-/**
- * Get the site table prefix
- *
- * @deprec
- * @access public
- * @return string database name
- */
-function pnDBGetSiteTablePrefix()
-{
-    return xarDBGetSiteTablePrefix();
-}
-
-/**
- * Generate the SQL to create a database
- *
- * @deprec
- * @access public
- * @param databaseName name of the session variable to set
- * @param databaseType name of the session variable to set
- * @returns string
- * @return sql statement for database creation
- */
-function pnDBCreateDatabase($databaseName, $databaseType = NULL)
-{
-    return xarDBCreateDatabase($databaseName, $databaseType);
-}
-
-/**
- * Alter database table
- *
- * @deprec
- * @access public
- * @param tableName the table to alter
- * @param args['command'] command to perform on table(add,modify,drop,rename)
- * @param args['field_name'] field to alter
- * @param args['new_field_name'] new field name
- * @param args['type'] field type
- * @param args['null'] null or not
- * @param args['increment'] auto incrementing files
- * @param args['primary_key'] primary key
- * @param databaseType the database type (optional)
- * @returns string
- * @return generated sql
- */
-function pnDBAlterTable($tableName, $args, $databaseType = NULL)
-{
-    return xarDBAlterTable($tableName, $args, $databaseType);
-}
-
-/**
-/**
- * Generate the SQL to create a table
- *
- * @deprec
- * @access public
- * @param tableName the physical table name
- * @param fields an array containing the fields to create
- * @param databaseType database type (optional)
- * @returns string|false
- * @return the generated SQL statement, or false on failure
- */
-function pnDBCreateTable($databaseName, $databaseType = NULL)
-{
-    return xarDBCreateTable($databaseName, $databaseType);
-}
-
-
-/**
- * Generate the SQL to delete a table
- *
- * @deprec
- * @access public
- * @param tableName the physical table name
- * @param index an array containing the index name, type and fields array
- * @returns data|false
- * @return the generated SQL statement, or false on failure
- */
-function pnDBDropTable($tableName, $databaseType = NULL)
-{
-    return xarDBDropTable($tableName, $databaseType);
-}
-
-
-/**
- * Generate the SQL to create a table index
- *
- * @deprec
- * @param tableName the physical table name
- * @param index an array containing the index name, type and fields array
- * @param databaseType is an optional parameter to specify the database type
- * @returns string|false
- * @return the generated SQL statement, or false on failure
- */
-function pnDBCreateIndex($tableName, $index, $databaseType = NULL) 
-{
-    return xarDBCreateIndex($tableName, $index, $databaseType);
-}
-
-/**
- * Generate the SQL to drop an index
- *
- * @deprec
- * @access public
- * @param tableName
- * @param fields array of database index fields?
- * @param databaseType
- * @returns string|false
- * @return generated sql to drop an index
- */
-function pnDBDropIndex($tableName, $fields, $databaseType = NULL)
-{
-    return xarDBDropIndex($tableName, $fields, $databaseType);
 }
 
 /**
@@ -1216,32 +950,7 @@ function pnSessionGetVar($name)
     return xarSessionGetVar($name);
 }
 
-function pnSessionInit()
-{
-    return xarSessionInit();
-}
-
-function pnSessionNew($sessid, $ipaddr)
-{
-    return xarSessionNew($sessid, $ipaddr);
-}
-
-function pnSessionOpen($path, $name)
-{
-    return xarSessionOpen($path, $name);
-}
-
-function pnSessionRead($sessid)
-{
-    return xarSessionRead($sessid);
-}
-
-function pnSessionSetup()
-{
-    return xarSessionSetup();
-}
-
-/** 
+/**
  * Set a session variable
  * @deprec
  * @param name name of the session variable to set
@@ -1252,11 +961,6 @@ function pnSessionSetVar($name, $value)
     return xarSessionSetVar($name, $value);
 }
 
-function pnSessionWrite($sessid, $vars)
-{
-    return xarSessionWrite($sessid, $vars);
-}
-
 function pnThemeGetVar($name)
 {
     return xarThemeGetVar($name);
@@ -1265,16 +969,6 @@ function pnThemeGetVar($name)
 function pnThemeLoad($thistheme)
 {
     return xarThemeLoad($thistheme);
-}
-
-function pnUserGetCommentOptions()
-{
-    return xarUserGetCommentOptions();
-}
-
-function pnUserGetCommentOptionsArray()
-{
-    return xarUserGetCommentOptionsArray();
 }
 
 function pnUserGetLang()
@@ -1331,45 +1025,4 @@ function pnVarPrepHTMLDisplay($var)
 {
     return xarVarPrepHTMLDisplay($var);
 }
-
-/**
- * Gets Locale Mode
- *
- * @deprec
- * @access public
- * @returns string
- * @return MLS Mode
- */
-function pnMLSGetMode()
-{
-    return xarMLSGetMode();
-}
-
-/**
- * Translate a string
- *
- * @deprec
- * @access public
- * @returns string
- * @return the translated string, or the original string if no translation is available
- */
-function pnML($string)
-{
-    return xarML($string);
-}
-
-/**
- * Return the translation associated to passed key
- *
- * @deprec
- * @access public
- * @returns string
- * @return the translation string, or the key if no translation is available
- */
-function pnMLByKey($key)
-{
-    return xarMLByKey($key);
-}
-
-
 ?>
