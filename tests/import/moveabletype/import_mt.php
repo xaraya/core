@@ -9,77 +9,45 @@
  * @link http://www.xaraya.com
  *
  * @subpackage import
- * @author mikespub <mikespub@xaraya.com>
+ * @author Carl P. Corliss <rabbitt@xaraya.com>
  * @author apakuni <apakuni@xaraya.com>
+ * @author mikespub <mikespub@xaraya.com>
  */
 
-// initialize the Xaraya core
-include 'includes/xarCore.php';
-xarCoreInit(XARCORE_SYSTEM_ALL);
+    // initialize the Xaraya core
+    include 'includes/xarCore.php';
+    xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    // pre-fill the module name (if any) for hooks
+    xarRequestGetInfo();
 
-
-// pre-fill the module name (if any) for hooks
-xarRequestGetInfo();
-
-if (!isset($step)) {
-// start the output buffer
-ob_start();
-}
-?>
-
-<h3>Quick and dirty import of test data from an existing MoveableType site</h3>
-
-<?php
-$prefix = xarDBGetSystemTablePrefix();
-if (isset($step)) {
-    if ($step == 1 && !isset($startnum)) {
-    if(!xarVarFetch('oldprefix', 'isset', $oldprefix,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('reset',     'isset', $reset,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('resetcat',  'isset', $resetcat,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('imgurl',    'isset', $imgurl,     NULL, XARVAR_NOT_REQUIRED)) {return;}
-
-    } elseif ($step > 1 || isset($startnum)) {
-        $oldprefix = xarModGetVar('installer','oldprefix');
-        $reset = xarModGetVar('installer','reset');
-        $resetcat = xarModGetVar('installer','resetcat');
-        $imgurl = xarModGetVar('installer','imgurl');
+    if (!isset($step)) {
+        // start the output buffer
+        ob_start();
     }
-}
-if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i',$oldprefix)) {
+    if (!isset($_POST['doit'])) {
+
 ?>
-    Requirement : you must be using the same database, but a different prefix...
-    <br />
-    <form method="POST" action="import_mt.php">
-        <table border="0" cellpadding="4">
-            <tr>
-                <td align="right">Prefix used in your PN .71+ site</td>
-                <td><input type="text" name="oldprefix" value="mt"></td>
-            </tr>
-            <tr>
-                <td align="right">URL of the /images directory on your PN .71+ site</td>
-                <td><input type="text" name="imgurl" value="/images"></td>
-            </tr>
-            <tr>
-                <td align="right">Reset corresponding Xaraya data ?</td>
-                <td><input type="checkbox" name="reset" checked></td>
-            </tr>
-            <tr>
-                <td align="right">Reset existing Xaraya categories ?</td>
-                <td><input type="checkbox" name="resetcat" checked></td>
-            </tr>
-            <tr>
-                <td colspan=2 align="middle"><input type="submit" value=" Import Data "></td>
-            </tr>
-        </table>
-        <input type="hidden" name="step" value="1">
-        <input type="hidden" name="module" value="roles">
-    </form>
-    Recommended usage :<br />
+<h3>Quick and dirty import of test data from an existing MoveableType site</h3>
+    Requirement: you <b>must</b> be using the same database.
+    <br /><br />
+    What this imports:<br />
+    <pre style="font-family: Courier;">
+        1. authors     -- authors --> roles
+        2. blogs       -- blogs --> root categories
+        3. categories  -- categories --> sub-categories of their owning blog
+        4. entries     -- entries --> articles with user/category retention
+        5. comments    -- comments --> comments with user/article retention
+
+                          This script also tries to make a guess at who the author
+                          might be for each comment - ie., if you have a role with the
+                          username of 'joeyb' and realname of 'Joey Butta', and a comment
+                          has the author name of either 'joeyb' or 'Joey Butta', then that
+                          comment will be associated with that particular user.
+    </pre>
+    Recommended usage:<br />
     <ol>
-        <li>install Xaraya with the 'Community Site' option</li>
+        <li>install Xaraya with the 'Community Site' option</li><br />
         <li>initialize and activate the following modules :
             <ul>
                 <li>categories</li>
@@ -87,115 +55,73 @@ if (!isset($oldprefix) || $oldprefix == $prefix || !preg_match('/^[a-z0-9_-]+$/i
                 <li>articles</li>
             </ul>
             [do not modify the default privileges, hooks etc. yet]
-        </li>
-        <li>copy the import_mt.php file to your Xaraya html directory and run it. Adapt the prefix and images directory of your old PN site if necessary, and leave both Reset options checked.</li>
-        <li>???</li>
-        <li>profit ;-)</li>
+        </li><br />
+        <li>copy the import_mt.php file to your Xaraya html directory and run it.</li><br />
+        <li>COPY <strong>modules/articles/xartemplates/user-summary-news.xd</strong><br />TO <strong>modules/articles/xartemplates/user-summary-blog.xd</strong></li><br />
+        <li>COPY <strong>modules/articles/xartemplates/user-display-news.xd</strong><br />TO <strong>modules/articles/xartemplates/user-display-blog.xd</strong></li><br />
+        <li>Have PHUN :)</li>
     </ol>
+    <form method="POST" action="import_mt.php">
+        <input type="submit" name="doit" value="Let's Do it!">
+    </form>
+
+    <strong style="color: red;">Note</strong>: This can take a while depending on the amount of data being
+    imported - please be patient and <strong><em>please</em></strong> avoid clicking on the "Let's Do It!" button more than once!
 
 <?php
-} else {
-    if ($step == 1 && !isset($startnum)) {
-        xarModSetVar('installer','oldprefix',$oldprefix);
-        if (!isset($reset)) { $reset = 0; }
-        xarModSetVar('installer','reset',$reset);
-        if (!isset($resetcat)) { $resetcat = 0; }
-        xarModSetVar('installer','resetcat',$resetcat);
-        if (!isset($imgurl)) { $imgurl = 0; }
-        xarModSetVar('installer','imgurl',$imgurl);
-    }
+    } else {
+        list($dbconn) = xarDBGetConn();
 
-    list($dbconn) = xarDBGetConn();
-
-    if (!xarModAPILoad('roles','admin')) {
-        die("Unable to load the users admin API");
-    }
-    if (!xarModAPILoad('categories','user')) {
-        die("Unable to load the categories user API");
-    }
-    if (!xarModAPILoad('categories','admin')) {
-        die("Unable to load the categories admin API");
-    }
-    if (!xarModAPILoad('articles','admin')) {
-        die("Unable to load the articles admin API");
-    }
-    if (!xarModAPILoad('comments','user')) {
-        die("Unable to load the comments user API");
-    }
-    if (!xarModAPILoad('dynamicdata','util')) {
-        die("Unable to load the dynamicdata util API");
-    }
-    $tables = xarDBGetTables();
-
-    if (!isset($reset)) {
-        $reset = 0;
-    }
-    if (!isset($resetcat)) {
-        $resetcat = 0;
-    }
-
-
-    $importfiles = array(
-                         1 => array('import_mt_mysql.php'));
-/*
-                         //2 => array('import_mt_topics.php','import_mt_stories_cat.php'),
-                         2 => array('import_mt_topicscat.php'),
-                         3 => array('import_mt_stories.php'),
-                         4 => array('import_mt_queue.php'),
-                         5 => array('import_mt_sections.php'),
-                         6 => array('import_mt_seccont.php'),
-                         7 => array('import_mt_faqcategories.php'),
-                         8 => array('import_mt_faqanswer.php'),
-                         9 => array('import_mt_comments.php'),
-                         10 => array('import_mt_links_categories.php'),
-                         11 => array('import_mt_links_links.php'),
-                    // TODO: split into separate steps if you have many of those :)
-                         12 => array('import_mt_poll_desc.php',
-                                     'import_mt_poll_data.php',
-                                     'import_mt_pollcomments.php'),
-// TODO: add the rest :-)
-                         13 => array('import_mt_cleanup.php'),
-                        );
-*/
-    if (isset($importfiles[$step]) && count($importfiles[$step]) > 0) {
-        foreach ($importfiles[$step] as $file) {
-            if (!is_file($file)) {
-                echo "File $file not found - skipping step $step.<br/>\n";
-                $step++;
-                break;
-            }
-            include($file);
+        if (!xarModAPILoad('roles','admin')) {
         }
+        if (!xarModAPILoad('categories','user')) {
+            die("Unable to load the categories user API");
+        }
+        if (!xarModAPILoad('categories','admin')) {
+            die("Unable to load the categories admin API");
+        }
+        if (!xarModAPILoad('articles','admin')) {
+            die("Unable to load the articles admin API");
+        }
+        if (!xarModAPILoad('comments','user')) {
+            die("Unable to load the comments user API");
+        }
+        $tables = xarDBGetTables();
+
+        if (!isset($reset)) {
+            $reset = 0;
+        }
+        if (!isset($resetcat)) {
+            $resetcat = 0;
+        }
+
+        include_once('import_mt_mysql.php');
+
     }
 
-}
+    // catch the output
+    $return = ob_get_contents();
+    ob_end_clean();
 
-if (!isset($step)) {
+    xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Import Site'));
 
-// catch the output
-$return = ob_get_contents();
-ob_end_clean();
+    //xarTplSetThemeName('Xaraya_Classic');
+    //xarTplSetPageTemplateName('admin');
 
-xarTplSetPageTitle(xarConfigGetVar('Site.Core.SiteName').' :: '.xarML('Import Site'));
+    // render the page
+    echo xarTpl_renderPage($return);
 
-//xarTplSetThemeName('Xaraya_Classic');
-//xarTplSetPageTemplateName('admin');
+    // Close the session
+    xarSession_close();
 
-// render the page
-echo xarTpl_renderPage($return);
-}
+    //$dbconn->Close();
 
-// Close the session
-xarSession_close();
+    flush();
 
-//$dbconn->Close();
+    // Kill the debugger
+    xarCore_disposeDebugger();
 
-flush();
-
-// Kill the debugger
-xarCore_disposeDebugger();
-
-// done
-exit;
+    // done
+    exit;
 
 ?>
