@@ -16,20 +16,20 @@
            			</tr>
            		</thead>
            		<tbody>
+               	<tr>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_name">Full name</label></span></td>
+                 	<td align="left"><input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" /></td>
+               	</tr>
              	  <tr>
-               	  <td align="left"><span class="xar-normal"><label for="install_admin_username">Administrator Username</label></span></td>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_username">Username</label></span></td>
                  	<td align="left"><input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="Admin" /></td>
                	</tr>
                	<tr>
-               	  <td align="left"><span class="xar-normal"><label for="install_admin_name">Administrator Name</label></span></td>
-                 	<td align="left"><input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="Admin" /></td>
-               	</tr>
-               	<tr>
-               	  <td align="left"><span class="xar-normal"><label for="install_admin_password">Administrator Password</label></span></td>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_password">Password</label></span></td>
                  	<td align="left"><input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" /></td>
                	</tr>
                	<tr>
-               	  <td align="left"><span class="xar-normal"><label for="install_admin_email">Administrator Email</label></span></td>
+               	  <td align="left"><span class="xar-normal"><label for="install_admin_email">Email</label></span></td>
                  	<td align="left"><input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" /></td>
                	</tr>
            		</tbody>

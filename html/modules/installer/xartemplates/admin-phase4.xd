@@ -12,7 +12,7 @@
       			</span>
 					</div>
 					<br /><br />
-					<div style="text-align:center;">
+					<div style="text-align:justify;">
       		  <table cellspacing="0" border="0" summary="For entering required database information">
 						  <thead>
         			  <tr>
@@ -21,15 +21,15 @@
 							</thead>
 							<tbody>
 			    		  <tr>
-			    			  <td align="left"><span class="xar-normal"><label for="install_database_host">Database Host</label></span></td>
+			    			  <td align="left"><span class="xar-normal"><label for="install_database_host">Host</label></span></td>
             			<td align="left"><input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" /></td>
           			</tr>
           			<tr>
-          			  <td align="left"><span class="xar-normal"><label for="install_database_username">Database Username</label></span></td>
+          			  <td align="left"><span class="xar-normal"><label for="install_database_username">Username</label></span></td>
 									<td align="left"><input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" /></td>
           			</tr>
           			<tr>
-          			  <td align="left"><span class="xar-normal"><label for="install_database_password">Database Password</label></span></td>
+          			  <td align="left"><span class="xar-normal"><label for="install_database_password">Password</label></span></td>
 									<td align="left"><input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" /></td>
 								</tr>
 								<tr>
@@ -37,8 +37,8 @@
 									<td align="left"><input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" /></td>
 								</tr>
 								<tr>
-								  <td align="left"><span class="xar-normal"><label for="install_database_prefix">Table Prefix (for Table Sharing)</label></span></td>
-									<td align="left"><input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" /></td>
+								  <td align="left"><span class="xar-normal"><label for="install_database_prefix">Table Prefix</label></span></td>
+									<td align="left"><input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />(for Table Sharing)</td>
 								</tr>
 								<tr>
 								  <td align="left"><span class="xar-normal"><label for="install_database_type">Database Type</label></span></td>
