@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Remove Privilege</xar:mlstring></h2>
 <xar:if condition="count($parents) ne 0">
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+    <xar:link-module-stylesheet name="base" file="navtabs" />
     <div>
         <dl class="xar-tabs">
             <dt class="help" title="These are the groups that #$rolename# is a member of">
@@ -24,9 +24,8 @@
             </xar:for>
         </dl>
     </div>
-    </xar:if>
 </xar:if>
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
+    <xar:link-module-stylesheet name="base" file="navtabs" />
     <div>
         <dl class="xar-tabs">
             <dt class="help" title="These are the groups that #$rolename# is a member of">
@@ -64,7 +63,6 @@
             </xar:if>
         </dl>
     </div>
-    </xar:if>
 <div>&nbsp;</div>
 <div style="border: 1px solid #ccc;  text-align: center; border-top : none; padding-left: 5px;">
 <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" enctype="application/x-www-form-urlencoded" >

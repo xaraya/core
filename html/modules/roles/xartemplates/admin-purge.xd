@@ -6,8 +6,7 @@
 <xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:link-module-stylesheet name="base" file="navtabs" />
-<xar:if condition="xarTplAddStyleLink('roles', 'privileges')">
-</xar:if>
+<xar:link-module-stylesheet name="roles" file="privileges" />
 <div class="xar-mod-head">
      <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring>
      </span>

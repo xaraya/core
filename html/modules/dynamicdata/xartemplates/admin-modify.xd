@@ -12,8 +12,7 @@
     </h2>
 
     <xar:if condition="!empty($objectid) and $objectid eq 1">
-        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-        </xar:if>
+        <xar:link-module-stylesheet name="base" file="navtabs" />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">

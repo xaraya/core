@@ -5,9 +5,7 @@
 <div class="xar-mod-body">
     <h2><xar:mlstring>Member List</xar:mlstring></h2>
     <div style="margin: auto;">
-
-        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-        </xar:if>
+        <xar:link-module-stylesheet name="base" file="navtabs" />
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>

@@ -1,8 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
-<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    <xar:comment>No action needed if successful</xar:comment>
-</xar:if>
+<xar:link-module-stylesheet name="base" file="navtabs" />
 <script type="javascript">
 <!--
     var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 

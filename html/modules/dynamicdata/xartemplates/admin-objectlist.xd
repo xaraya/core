@@ -1,9 +1,5 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:if condition="xarTplAddStyleLink('dynamicdata', 'dd')">
-    <xar:comment>
-    no action required if external file was not added 
-    </xar:comment>
-</xar:if>
+<xar:link-module-stylesheet name="dynamicdata" file="dd" />
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />
 </xar:if>

@@ -1,10 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    <xar:comment>No action needed if successful</xar:comment>
-</xar:if>
-<xar:if condition="xarTplAddStyleLink('privileges', 'privtree')">
-    <xar:comment>No action needed if successful</xar:comment>
-</xar:if>
+<xar:link-module-stylesheet name="base" file="navtabs" />
+<xar:link-module-stylesheet name="privileges" file="privtree" />
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="javascript">
 <!--
