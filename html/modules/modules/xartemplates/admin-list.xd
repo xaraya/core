@@ -2,7 +2,7 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Modules System</xar:mlstring></span></div>
 <div class="xar-mod-body">
 	<h2 style="width:100%">
-		<span style="width:49%">
+		<span style="width:49%;float:left;text-align:left;">
 			<xar:mlstring>
 				View Modules (list mode)
 			</xar:mlstring>
@@ -16,7 +16,7 @@
 		</span>
 	</h2>
     <form method="post" action="#xarModUrl('modules', 'admin', 'settings')#">
-        <div class="xar-norm-outline" style="padding: 0px;">
+        <div class="xar-norm-outline" style="padding: 0px;clear:both">
             <!--- Module List Sort and Filter Controls table --->
             <table width="100%" border="0" cellspacing="1" cellpadding="1">
               <tr>
