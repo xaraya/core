@@ -234,30 +234,32 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         }
     }
         
-    function _UploadModule_validateValue($value) 
+    function _UploadModule_validateValue($value = NULL) 
     {
         
         // If we've just been previewed, then use the value that was passed in :)
         if (!empty($value)) {
-            if (stristr($value, ';') && ';' == $value{0}) {
+            if (strlen($value) && stristr($value, ';') && ';' == $value{0}) {
                 $this->value = $value;
                 return true;
             }                 
-        } elseif (!isset($value)) {
-        	$value = $this->value;
-        }  
-        
-        xarModAPILoad('uploads', 'user');
-        
-        $typeCheck = 'enum:0:' . _UPLOADS_GET_STORED;
-        $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.external') == TRUE) ? ':' . _UPLOADS_GET_EXTERNAL : '';
-        $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.trusted') == TRUE) ? ':' . _UPLOADS_GET_LOCAL : '';
-        $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.upload') == TRUE) ? ':' . _UPLOADS_GET_UPLOAD : '';
-        $typeCheck .= ':';
-        
+        } elseif (!isset($value) || empty($value)) {
+            xarModAPILoad('uploads', 'user');
 
-        if (!xarVarFetch($this->id . '_attach_type', $typeCheck, $action, NULL)) return;
-        
+            $typeCheck = 'enum:0:' . _UPLOADS_GET_STORED;
+            $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.external') == TRUE) ? ':' . _UPLOADS_GET_EXTERNAL : '';
+            $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.trusted') == TRUE) ? ':' . _UPLOADS_GET_LOCAL : '';
+            $typeCheck .= (xarModGetVar('uploads', 'dd.fileupload.upload') == TRUE) ? ':' . _UPLOADS_GET_UPLOAD : '';
+            $typeCheck .= ':';
+
+
+            if (!xarVarFetch($this->id . '_attach_type', $typeCheck, $action, NULL, XARVAR_NOT_REQUIRED)) return;
+            
+            if (!isset($action)) {
+                $value = $this->value;
+                $action = -2;
+            }
+        }  
 
         $args['action']    = $action;
 
@@ -272,8 +274,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
 
                 if (!xarVarFetch('', 'array:1:', $_FILES[$this->id . '_attach_upload'])) return;
 
-                $upload =& $_FILES['attach_upload'];
-                $args['upload'] = &$_FILES['attach_upload'];
+                $upload         =& $_FILES[$this->id . '_attach_upload'];
+                $args['upload'] =& $_FILES[$this->id . '_attach_upload'];
+                break;
             case _UPLOADS_GET_EXTERNAL:
                 // minimum external import link must be: ftp://a.ws  <-- 10 characters total
 
@@ -314,9 +317,18 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 $this->value = NULL;
                 return true;
             default: 
-            	if (isset($this->value) && $this->value) {
-            		return true;
-            	}
+                if (isset($this->value)) {
+                    if (strlen($this->value) && $this->value{0} == ';') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    // If we have managed to get here then we have a NULL value
+                    // and $action was most likely either null or something unexpected
+                    // So let's keep things that way :-)
+                    return true;
+                }
                 break;
         }
 
@@ -349,7 +361,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 return false;
             }
         } else {
-
             return false;
         }
 
