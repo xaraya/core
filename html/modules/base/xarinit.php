@@ -28,7 +28,7 @@ function base_init()
 {
     // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $systemPrefix = xarDBGetSystemTablePrefix();
 

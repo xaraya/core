@@ -62,7 +62,7 @@ function base_menublock_display($blockinfo)
 {
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
 // Security Check
     if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) return;
@@ -320,7 +320,7 @@ function base_menublock_display($blockinfo)
 function base_menublock_modify($blockinfo)
 {
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // Break out options from our content field
     $vars = unserialize($blockinfo['content']);

@@ -26,7 +26,7 @@ function themes_init()
 { 
     // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();

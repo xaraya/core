@@ -25,7 +25,7 @@ function modules_init()
 { 
     // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();
@@ -305,7 +305,7 @@ function modules_upgrade($oldVersion)
 {
     // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
     $systemPrefix = xarDBGetSystemTablePrefix();

@@ -40,7 +40,7 @@ function roles_userapi_getactive($args)
 
     // Get database setup
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];
 

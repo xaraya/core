@@ -76,7 +76,7 @@ function themes_adminapi_regenerate()
     }
     //Setup database object for theme insertion
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     // See if we have gained any themes since last generation,
     // or if any current themes have been upgraded
     foreach ($fileThemes as $name => $themeInfo) {

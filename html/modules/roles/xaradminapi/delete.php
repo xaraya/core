@@ -54,7 +54,7 @@ function roles_adminapi_delete($args)
 
     // Get datbase setup
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
     // Delete the item

@@ -37,7 +37,7 @@ function modules_adminapi_update($args)
 
     // Rename operation
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // Hooks
 

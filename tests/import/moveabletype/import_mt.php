@@ -86,7 +86,7 @@
         if (!xarModAPILoad('comments','user')) {
             die("Unable to load the comments user API");
         }
-        $tables = xarDBGetTables();
+        $tables =& xarDBGetTables();
 
         if (!isset($reset)) {
             $reset = 0;

@@ -19,7 +19,7 @@
 function roles_userapi_getallgroups()
 {
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $groupstable = $xartable['roles'];
 

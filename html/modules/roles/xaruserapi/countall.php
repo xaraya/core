@@ -25,7 +25,7 @@ function roles_userapi_countall($args)
 
     // Get database setup
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];
 

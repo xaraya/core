@@ -91,7 +91,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     }
 
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $themestable = $tables['themes'];
 

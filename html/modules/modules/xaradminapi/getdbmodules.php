@@ -21,7 +21,7 @@
 function modules_adminapi_getdbmodules()
 {
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $dbModules = array();
 

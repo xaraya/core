@@ -32,7 +32,7 @@ function modules_adminapi_removemissing($args)
     // Get module information
 //    $modinfo = xarModGetInfo($regid);
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
 
     $query = "DELETE FROM " . $tables['modules'] . " WHERE xar_regid = $regid";
     $result =& $dbconn->Execute($query);

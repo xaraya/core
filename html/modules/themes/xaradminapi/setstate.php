@@ -47,7 +47,7 @@ function themes_adminapi_setstate($args)
 
     //Set up database object
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $oldState = $themeInfo['state'];
 

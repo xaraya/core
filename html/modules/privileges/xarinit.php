@@ -33,7 +33,7 @@ function privileges_init()
 */
  // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -517,7 +517,7 @@ function privileges_delete()
 
  // Get database information
     list($dbconn) = xarDBGetConn();
-    $tables = xarDBGetTables();
+    $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();
 
     $query = xarDBDropTable($tables['privileges']);

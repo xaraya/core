@@ -289,7 +289,7 @@ function pnModRegisterHook($hookObject,
 
     // Get database info
     list($dbconn) = xarDBGetConn();
-    $pntable = xarDBGetTables();
+    $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Insert hook
@@ -339,7 +339,7 @@ function pnModUnregisterHook($hookObject,
 
     // Get database info
     list($dbconn) = xarDBGetConn();
-    $pntable = xarDBGetTables();
+    $pntable =& xarDBGetTables();
     $hookstable = $pntable['hooks'];
 
     // Remove hook

@@ -209,7 +209,7 @@ function installer_adminapi_CheckForField($args)
     }
 
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);

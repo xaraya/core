@@ -38,7 +38,7 @@ function modules_adminapi_regenerate()
 
     //Setup database object for module insertion
     list($dbconn) = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $xartable =& xarDBGetTables();
 
     // See if we have gained any modules since last generation,
     // or if any current modules have been upgraded
