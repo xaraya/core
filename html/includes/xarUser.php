@@ -113,9 +113,9 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
-    // FIXME: <rabbitt> Do we want to actually put this here or do this 
-    //        another way? Maybe record the exception stack before we go 
-    //        into the foreach loop below (which can kill any exceptions 
+    // FIXME: <rabbitt> Do we want to actually put this here or do this
+    //        another way? Maybe record the exception stack before we go
+    //        into the foreach loop below (which can kill any exceptions
     //        that are set prior to entering this function)....
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
@@ -263,26 +263,31 @@ function xarUserSetNavigationThemeName($themeName)
  * @access public
  * @return locale string
  */
+
 function xarUserGetNavigationLocale()
 {
+    if(xarUserIsLoggedIn())    {
+        $locale = xarUserGetVar('locale');
+        if( isset($locale) )
+        {
+            xarSessionSetVar('navigationLocale',$locale);
+            return $locale;
+        }
+    }
+
     $locale = xarSessionGetVar('navigationLocale');
     if (!isset($locale)) {
-        if (xarUserIsLoggedIn()) {
-            $locale = xarUserGetVar('locale');
+        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+            // Here we need to return always a meaningfull result,
+            // so what we can do here is only to log the exception
+            // and call xarExceptionFree
+            // xarLogException(XARLOG_LEVEL_ERROR);
+            // This will Free all exceptions, including the ones pending
+            // as these are still unhandled if they are here i commented it out
+            // for now, as we had lots of exceptions hiding on us (MrB)
+            //xarExceptionFree();
         }
-        if (!isset($locale)) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                // Here we need to return always a meaningfull result,
-                // so what we can do here is only to log the exception
-                // and call xarExceptionFree
-                // xarLogException(XARLOG_LEVEL_ERROR);
-                // This will Free all exceptions, including the ones pending
-                // as these are still unhandled if they are here i commented it out
-                // for now, as we had lots of exceptions hiding on us (MrB)
-                //xarExceptionFree();
-            }
-            $locale = xarMLSGetSiteLocale();
-        }
+        $locale = xarMLSGetSiteLocale();
         xarSessionSetVar('navigationLocale', $locale);
     }
     return $locale;
@@ -300,6 +305,7 @@ function xarUserSetNavigationLocale($locale)
     // if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
     if (xarMLSGetMode() != XARMLS_SINGLE_LANGUAGE_MODE) {
         xarSessionSetVar('navigationLocale', $locale);
+        return true;
     }
 }
 
@@ -361,7 +367,7 @@ function xarUserGetVar($name, $userId = NULL)
 
     if (!xarCore_IsCached('User.Variables.'.$userId, $name)) {
 
-        if ($name == 'name' || $name == 'uname' || $name == 'email') {
+        if ($name == 'name' || $name == 'uname' || $name == 'email' || $name == 'locale' ) {
             // retrieve the item from the roles module
             $userRole = xarModAPIFunc('roles',
                                       'user',
@@ -378,6 +384,7 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore_SetCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
             xarCore_SetCached('User.Variables.'.$userId, 'name', $userRole['name']);
             xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
+            xarCore_SetCached('User.Variables.'.$userId, 'locale', $userRole['locale']);
 
         } elseif (!xarUser__isVarDefined($name)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
@@ -727,6 +734,10 @@ function xarUser__syncUsersTableFields()
     $email = xarUserGetVar('email');
     if (!isset($email)) return; // throw back
     $res = xarUser__setUsersTableUserVar('email', $email, $userId);
+    if (!isset($res)) return; // throw back
+    $locale = xarUserGetVar('locale');
+    if (!isset($locale)) return; // throw back
+    $res = xarUser__setUsersTableUserVar('locale', $locale, $userId);
     if (!isset($res)) return; // throw back
 
     return true;
