@@ -156,6 +156,11 @@
 		</tr>
 	<xar:else />
 		<tr>
+			<td colspan="7">
+				<b><xar:mlstring>Click on the mask you want to test privileges against:</xar:mlstring></b>            
+			</td>
+		</tr>
+		<tr>
 			<td>
 				<xar:mlstring>Name</xar:mlstring>    
 			</td>

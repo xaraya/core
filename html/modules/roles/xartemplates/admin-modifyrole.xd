@@ -200,6 +200,8 @@ document.forms[0].submit();}
 				</table>
 				<div align="center">
 				<form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+					<input type="hidden" name="uid" id="uid" value="#$uid#" />
+					<input type="hidden" name="authid" id="authid" value="#$authid#" />
 
 					<table border="0" cellpadding="5">
 
@@ -210,7 +212,7 @@ document.forms[0].submit();}
 							<td>
 								<select name="roleid" id="roleid">
 									<xar:loop name="$groups">
-										<option value="#$uid#">#$name#
+										<option value="#$duid#">#$dname#
 									</xar:loop>
 								</select>
 							</td>
@@ -218,8 +220,6 @@ document.forms[0].submit();}
 					</table>
 					<br />
 					<input type="submit" value="Add" align="middle" tabindex="2" />
-					<input type="hidden" name="authid" id="authid" value="#$authid#" />
-					<input type="hidden" name="uid" id="uid" value="#$uid#" />
 				</form>
 				</div>
 			</td>
@@ -257,7 +257,7 @@ document.forms[0].submit();}
 						</td>
 						<td width="50" align="right">
 							<xar:if condition="count($parents) ne 1">
-								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
+								<a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$parentid#&amp;authid=#$authid#"><img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" /></a>
 							<xar:else />
 								&nbsp;
 							</xar:if>

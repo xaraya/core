@@ -1755,11 +1755,14 @@ class xarPrivilege extends xarMask
 // use the index to get the privileges object created from the repository
         list($pid) = $result->fields;
         $this->pid = $pid;
-        $perms = new xarPrivileges();
-        $parentperm = $perms->getprivilege($this->parentid);
 
 // make this privilege a child of its parent
-        $parentperm->addMember($this);
+        If($this->parentid !=0) {
+            $perms = new xarPrivileges();
+            $parentperm = $perms->getprivilege($this->parentid);
+            $parentperm->addMember($this);
+        }
+// create this privilege as an entry in the repository
         return $this->makeEntry();
     }
 
