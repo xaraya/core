@@ -68,7 +68,7 @@ function xarLog_init($args, $whatElseIsGoingLoaded)
         //Fallback mechanism to allow some logging in important cases when
         //the user might now have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
-        $logFile = xarCoreGetVarDirPath() . '/logs/log.txtl';
+        $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
         if (file_exists($logFile) && is_writeable($logFile)) {
             $xarLogConfig[] = array('type' => 'simple',
                                                      'config' =>array('fileName' => $logFile,
