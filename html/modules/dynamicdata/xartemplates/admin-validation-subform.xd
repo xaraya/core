@@ -91,7 +91,7 @@
       <xar:mlstring>Field List</xar:mlstring>
     </td>
     <td>
-      <select name="#$name#[fieldlist][]" id="#$name#_fieldlist" multiple="multiple" />
+      <select name="#$name#[fieldlist][]" id="#$name#_fieldlist" multiple="multiple">
       <xar:foreach in="$properties" key="$propname" value="$propinfo">
         <xar:if condition="!empty($fieldlist) and in_array($propname,$fieldlist)">
           <option value="#$propname#" selected="selected">#$propinfo.label#</option>
