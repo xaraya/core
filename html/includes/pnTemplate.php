@@ -178,18 +178,9 @@ function pnTpl__getCompilerInstance()
     return new pnTpl__Compiler();
 }
 
+// Now featuring *eval()* for your anti-caching pleasure :-)
 function pnTpl__execute($templateCode, $tplData)
 {
-    // TODO: <marco> Here we can do it in 2 ways, by using eval or by saving $template in a tmp file
-    // and including it.
-    // Now for simplicity I choose the second option, but maybe it should be better to do the first.
-    // Paul, can you basing on the dumpVariable function in pnLog__Logger do a function that can
-    // create the PHP code necessary to recreate the $tplData array?
-    $tmpFileName = tempnam('/tmp', 'bl-template-');
-    $fd = fopen($tmpFileName);
-    fwrite($fd, $templateCode);
-    fclose($fd);
-
     // $__tplData should be an array (-even-if- it only has one value in it), 
     // if it's not throw an exception.
     if (is_array($tplData)) {
@@ -200,14 +191,18 @@ function pnTpl__execute($templateCode, $tplData)
                        new SystemException($msg));
         return;
     }
+    
+    // Start output buffering
     ob_start();
-    $res = include $tmpFileName;
+    
+    // Kick it
+    eval('?>'.$templateCode);
+    
+    // Grab output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
-    unlink($tmpFileName);
-    if ($res === false) {
-        return; // throw back
-    }
+    
+    // Return output
     return $output;
 }
 
@@ -217,30 +212,29 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
 
     $needCompilation = true;
 
-    if (!file_exists($sourceFileName)) {
+    if ($pnTpl_cacheTemplates) {
+        $varDir = pnCoreGetVarDirPath();
+        $cacheKey = md5($sourceFileName);
+        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
+        if (file_exists($cachedFileName) && !file_exists($sourceFileName)
+            || (filemtime($sourceFileName) < filemtime($cachedFileName))) {
+            $needCompilation = false;
+        }
+    }
+    
+    if (!file_exists($sourceFileName) && $needCompilation == true) {
         $msg = pnML('Could not locate template source, missing file path is: \'#(1)\'.', $sourceFileName);
         pnExceptionSet(PN_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST',
                        new SystemException($msg));
         return;
     }
-    if ($pnTpl_cacheTemplates) {
-        $varDir = pnCoreGetVarDirPath();
-        $cacheKey = md5($sourceFileName);
-        $cachedFileName = $varDir . '/cache/templates/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName) && filemtime($sourceFileName) < filemtime($cachedFileName)) {
-            $needCompilation = false;
-        }
-    }
-    // FIXME: <marco> Paul, can we remove this now?
-    if (pnVarCleanFromInput('regenerate') == 'true') {
-        $needCompilation = true;
-    }
+    
     //pnLogVariable('needCompilation', $needCompilation, PNLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = pnTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
         if (!isset($templateCode)) {
-            return; // throw back
+            return; // exception! throw back
         }
         if ($pnTpl_cacheTemplates) {
             $fd = fopen($cachedFileName, 'w');
@@ -261,7 +255,11 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
                        new SystemException($msg));
         return;
     }
+    
+    // Start output buffering
     ob_start();
+    
+    // Load cached template file
     if (pnCoreIsDebuggerActive()) {
         $res = include $cachedFileName;
     } else {
@@ -269,12 +267,12 @@ function pnTpl__executeFromFile($sourceFileName, $tplData)
         // that the var dir hash key could be stolen
         $res = @include $cachedFileName;
     }
-    //var_dump($res);
+    
+    // Fetch output and clean buffer
     $output = ob_get_contents();
     ob_end_clean();
-    /*if ($res === false) {
-        return; // throw back
-    }*/
+
+    // Return output
     return $output;
 }
 
@@ -285,7 +283,6 @@ define ('PN_TPL_STRING', 64);
 define ('PN_TPL_BOOLEAN', 128);
 define ('PN_TPL_INTEGER', 256);
 define ('PN_TPL_FLOAT', 512);
-//define ('PN_TPL_ANY', 992); // default for attributes
 define ('PN_TPL_ANY', PN_TPL_STRING|PN_TPL_BOOLEAN|PN_TPL_INTEGER|PN_TPL_FLOAT);
 
 class pnTemplateAttribute {
@@ -334,7 +331,6 @@ class pnTemplateAttribute {
         return $this->_name;
     }
     
-    // FIXME: <marco> Also here isRequired = ~isOptional, do we need both?
     function isRequired()
     {
         return !$this->isOptional();
@@ -370,7 +366,6 @@ class pnTemplateTag {
         $this->_module = $module;
         
         $this->_attributes = array();
-        //$this->_attributes[0] = new pnTemplateAttribute('id', PN_TPL_STRING|PN_TPL_REQUIRED);
         
         if (is_array($attributes)) {
             $this->_attributes = $attributes;
