@@ -834,7 +834,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (isset($args['itemid'])) {
             $this->itemid = $args['itemid'];
         }
-
+        
         // see if we can access this object, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
 
@@ -1860,6 +1860,10 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         list($args['prevurl'],
              $args['nexturl'],
              $args['sorturl']) = $this->getPager();
+        
+        // Pass the objectid too, comfy for customizing the templates
+        // with custom tags.
+        $args['objectid'] = $this->objectid;
 
         return xarTplModule($args['tplmodule'],'admin','objectlist',
                             $args,
