@@ -71,7 +71,7 @@ function xarTree_buildTree(tree) {
 				j++;    
 			}
 		}
-	i++;
+		i++;
 	}
 }
 

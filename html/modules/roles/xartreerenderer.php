@@ -19,6 +19,7 @@ class xarTreeRenderer {
     var $treenode;
     var $treeitems;
     var $drawchildren;
+    var $isbranch;
     // some variables we'll need to hold drawing info
     var $html;
     var $nodeindex;
@@ -49,6 +50,8 @@ class xarTreeRenderer {
         $this->setitem(3, "emailitem");
         $this->setitem(4, "privilegesitem");
         $this->setitem(5, "testitem");
+        $this->setitem(6, "treeitem");
+        $this->setitem(7, "descriptionitem");
     }
 
     /**
@@ -163,55 +166,16 @@ class xarTreeRenderer {
             $this->alreadydone[] = $object['uid'];
         }
         // is this a branch?
-        $isbranch = count($node['children']) > 0 ? true : false;
+        $this->isbranch = count($node['children']) > 0 ? true : false;
         // now begin adding rows to the string
         $this->html .= '<div class="xar-roletree-branch" id="branch' . $this->nodeindex . '">';
 
-        for ($i=1;$i<=count($this->treeitems);$i++) {
-            $func = $this->treeitems[$i];
-            $this->html .= $this->{$func}();
+        foreach ($this->treeitems as $item) {
+            $this->html .= $this->{$item}();
         }
-        // this next table holds the Delete, Users and Privileges links
-        // don't allow deletion of certain roles
-        // offer to modify the group
-        //offer to show users of a group if there are some
-        // link to group email
-        // offer to show the privileges of this group
-        // offer to test the privileges of this group
-        $this->html .= $this->smallblank;
-        // this table holds the index, the tree drawing gifs and the info about the role
-        $this->html .= $this->drawindent();
-        if ($isbranch) {
-            if ($this->nodeindex != 1) {
-                $lastindent = array_pop($this->indent);
-                if ($lastindent == $this->el) {
-                    array_push($this->indent, $this->blank . $this->blank);
-                } else {
-                    array_push($this->indent, $this->aye . $this->blank);
-                }
-                $this->html .= $this->bar;
-            }
-            $this->html .= $this->expandedbox;
-        } else {
-            $this->html .= $this->bar;
-            $this->html .= $this->emptybox;
-        }
-        $this->html .= '<span style="padding-left: 1em">';
-        // if we've already done this entry skip the links and just tell the user
-        if (!$this->drawchildren) {
-            $this->html .= '<b>' . $object['name'] . '</b>: ';
-            $this->html .= ' see the entry above';
-        } else {
-            $this->html .= '<a href="' .
-            xarModURL('roles',
-                'admin',
-                'modifyrole',
-                array('uid' => $object['uid'])) . ' " title="Modify this Group">' . $object['name'] . '</a>: &nbsp;';
-            $this->html .= count($this->roles->getsubgroups($object['uid'])) .xarML(' subgroups');
-            $this->html .= ' | ' . $object['users'] . xarML(' users').'</span>';
-        }
+
         // we've finished this row; now do the children of this role
-        $this->html .= $isbranch ? '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >' : '';
+        $this->html .= $this->isbranch ? '<div class="xar-roletree-leaf" id="leaf' . $this->nodeindex . '" >' : '';
         $ind = 0;
         foreach($node['children'] as $subnode) {
             $ind = $ind + 1;
@@ -228,7 +192,7 @@ class xarTreeRenderer {
         }
         $this->level = $this->level - 1;
         // write the closing tags
-        $this->html .= $isbranch ? '</div>' : '';
+        $this->html .= $this->isbranch ? '</div>' : '';
         // close the html row
         $this->html .= '</div>';
     }
@@ -332,6 +296,46 @@ class xarTreeRenderer {
         return $html;
     }
 
+    function treeitem()
+    {
+        $html = $this->smallblank;
+        // this table holds the index, the tree drawing gifs and the info about the role
+        $html .= $this->drawindent();
+        if ($this->isbranch) {
+            if ($this->nodeindex != 1) {
+                $lastindent = array_pop($this->indent);
+                if ($lastindent == $this->el) {
+                    array_push($this->indent, $this->blank . $this->blank);
+                } else {
+                    array_push($this->indent, $this->aye . $this->blank);
+                }
+                $html .= $this->bar;
+            }
+            $html .= $this->expandedbox;
+        } else {
+            $html .= $this->bar;
+            $html .= $this->emptybox;
+        }
+        return $html;
+    }
+    function descriptionitem()
+    {
+        $html = '<span style="padding-left: 1em">';
+        // if we've already done this entry skip the links and just tell the user
+        if (!$this->drawchildren) {
+            $html .= '<b>' . $this->treenode['name'] . '</b>: ';
+            $html .= ' see the entry above';
+        } else {
+            $html .= '<a href="' .
+            xarModURL('roles',
+                'admin',
+                'modifyrole',
+                array('uid' => $this->treenode['uid'])) . ' " title="Modify this Group">' . $this->treenode['name'] . '</a>: &nbsp;';
+            $html .= count($this->roles->getsubgroups($this->treenode['uid'])) .xarML(' subgroups');
+            $html .= ' | ' . $this->treenode['users'] . xarML(' users').'</span>';
+        }
+        return $html;
+    }
     function setitem($pos=1,$item ='')
     {
         $this->treeitems[$pos] =& $item;

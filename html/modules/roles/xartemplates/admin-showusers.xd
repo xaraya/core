@@ -15,7 +15,27 @@
 						</a>
 					</div>
 				</div>
-				<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">#$roletree#
+				<div style="border: 1px solid #ccc; border-top : none; padding-left: 5px;">
+				<style type="text/css">@import url(modules/roles/xartemplates/includes/roletree.css);</style>
+				<script type="text/javascript" src="modules/roles/xartemplates/xarTree.js"></script>
+				<script language="JavaScript">
+				<!--
+				 var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+				 function doOnLoad() {
+					  oldOnLoadFunction();      
+					  xarTree_init('RolesTree');
+					  }
+				 var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+				 function doOnUnload() {
+					  oldOnUnloadFunction();      
+					  }
+
+				 window.onload = doOnLoad;
+				 window.onunload = doOnUnload;
+				//-->
+				</script>
+				#$roletree#
+				</div>
 			<xar:else/>
 				<div id="tabnav">
 					<div class="help" title="#xarML('Click on a group tab to display users from that group')#"><xar:mlstring>Groups</xar:mlstring> :</div>
