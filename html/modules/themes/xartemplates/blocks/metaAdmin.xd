@@ -56,3 +56,27 @@
 		</xar:if>
 	</td>
 </tr>
+<tr align="left" valign="middle">
+	<td>
+		<label for="copyrightpage#$blockid#"><xar:mlstring>Copy Right Page</xar:mlstring></label>
+	</td>
+	<td>
+		<input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" size="30" maxlength="100" />
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<label for="helppage#$blockid#"><xar:mlstring>Help Page</xar:mlstring></label>
+	</td>
+	<td>
+		<input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" size="30" maxlength="100" />
+	</td>
+</tr>
+<tr align="left" valign="middle">
+	<td>
+		<label for="glossary#$blockid#"><xar:mlstring>Glossary</xar:mlstring></label>
+	</td>
+	<td>
+		<input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" size="30" maxlength="100" />
+	</td>
+</tr>

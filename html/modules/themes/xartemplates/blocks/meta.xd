@@ -1,35 +1,31 @@
-
 	<meta http-equiv="Content-Type" content="text/html; charset=#$charset#" />
 	<meta name="Generator" content="#$generator#" />
 	<meta name="Keywords" content="#$keywords#" />
 	<meta name="Description" content="#$description#" />
 	<meta name="rating" content="General" />
 
-	<xar:if condition="!empty($geourl)">
+	<xar:if condition="!empty($latitude)">
 	<meta name="ICBM" content="#$latitude#, #$longitude#">
-	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName')#">
+	<meta name="DC.title" content="#xarModGetVar('themes', 'SiteName', 1)#">
 	</xar:if>
 
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepage#&amp;theme=rss" />
-	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="&xar-baseurl;var/rsd.xml" />
+	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#$baseurl#var/rsd.xml" />
 	<link rel="pingback" href="&xar-baseurl;ws.php" />
 
-	<!--
-	<rdf:RDF xmlns="http://web.resource.org/cc/"
-			 xmlns:dc="http://purl.org/dc/elements/1.1/"
-			 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns##">
-	<Work rdf:about="&xar-baseurl;">
-	<dc:title>#xarModGetVar('themes', 'SiteName')#</dc:title>
-	<dc:description>#$description#</dc:description>
-	<license rdf:resource="http://creativecommons.org/licenses/by-sa/1.0" />
-	</Work>
-	<License rdf:about="http://creativecommons.org/licenses/by-sa/1.0">
-	<requires rdf:resource="http://web.resource.org/cc/Attribution" />
-	<requires rdf:resource="http://web.resource.org/cc/Notice" />
-	<requires rdf:resource="http://web.resource.org/cc/ShareAlike" />
-	<permits rdf:resource="http://web.resource.org/cc/Reproduction" />
-	<permits rdf:resource="http://web.resource.org/cc/Distribution" />
-	<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-	</License>
-	-->
+	<!-- Linking for Mozilla and related browser site tab -->
+	<link rel="Top" href="#$baseurl#" />
+	<link rel="Parent" href="#$baseurl#" />
+	<link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
+	<link rel="copyright" href="#$copyrightpage#" />
+	<link rel="help" href="#$helppage#" />
+	<link rel="glossary" href="#$glossary#" />
+	<xar:if condition="xarModIsAvailable('articles')">
+	<link rel="contents" href="#xarModUrl('articles', 'user', 'viewmap')#" />
+	</xar:if>
+	<xar:if condition="xarModIsAvailable('search')">
+	<link rel="search" href="#xarModUrl('search', 'user', 'main')#" />
+	</xar:if>
+
+
 

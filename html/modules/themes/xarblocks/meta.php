@@ -62,14 +62,12 @@ function themes_metablock_info()
 */
 function themes_metablock_display($blockinfo)
 {
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('ViewThemes',0,'metablock',"$blockinfo[title]:All:All",'All')) return;
-
     // Get current content
     $vars = @unserialize($blockinfo['content']);
-
+    // Description
     $incomingdesc = xarVarGetCached('Blocks.articles','summary');
-
     if ((!empty($incomingdesc)) and ($vars['usedk'] == 1)){
         // Strip -all- html
         $htmlless = strip_tags($incomingdesc);
@@ -77,32 +75,41 @@ function themes_metablock_display($blockinfo)
     } else {
         $meta['description'] = $vars['metadescription'];
     }
-
+    // Dynamic Keywords
     $incomingkey = xarVarGetCached('Blocks.articles','body');
-
     if ((!empty($incomingkey)) and ($vars['usedk'] == 1)){
-
         // Keywords generated from articles module
         $meta['keywords'] = xarVarGetCached('Blocks.articles','body');
-
     } else {
         $meta['keywords'] = $vars['metakeywords'];
     }
-
+    // Character Set
     $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
-
     $meta['generator'] = xarConfigGetVar('System.Core.VersionId');
     $meta['generator'] .= ' :: ';
     $meta['generator'] .= xarConfigGetVar('System.Core.VersionNum');
-
-    if (!empty($vars['usegeo'])){
-        $meta['longitude'] = $vars['longitude'];
-        $meta['latitude'] = $vars['latitude'];
-    }
-
-    $meta['geourl'] = $vars['usegeo'];
-
+    // Geo Url    
+    $meta['longitude'] = $vars['longitude'];
+    $meta['latitude'] = $vars['latitude'];
+    // Active Page
     $meta['activepage'] = preg_replace('/&[^amp;]/', '&amp;', xarServerGetCurrentURL());
+    
+    $meta['baseurl'] = xarServerGetBaseUrl();
+    if (isset($vars['copyrightpage'])){
+        $meta['copyrightpage'] = $vars['copyrightpage'];
+    } else {
+        $meta['copyrightpage'] = '';
+    }
+    if (isset($vars['helppage'])){
+            $meta['helppage'] = $vars['helppage'];
+    } else {
+        $meta['helppage'] = '';
+    }
+    if (isset($vars['glossary'])){
+            $meta['glossary'] = $vars['glossary'];
+    } else {
+        $meta['glossary'] = '';
+    }
 
     $blockinfo['content'] = $meta;
     return $blockinfo;
@@ -148,6 +155,18 @@ function themes_metablock_modify($blockinfo)
     if (empty($vars['latitude'])) {
         $vars['latitude'] = '';
     }
+    // Defaults
+    if (empty($vars['copyrightpage'])) {
+        $vars['copyrightpage'] = '';
+    }
+    // Defaults
+    if (empty($vars['helppage'])) {
+        $vars['helppage'] = '';
+    }
+    // Defaults
+    if (empty($vars['glossary'])) {
+        $vars['glossary'] = '';
+    }
 
     $vars['blockid'] = $blockinfo['bid'];
     $content = xarTplBlock('themes', 'metaAdmin', $vars);
@@ -167,13 +186,15 @@ function themes_metablock_modify($blockinfo)
 */
 function themes_metablock_update($blockinfo)
 {
-    if(!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('usegeo',          'notempty', $vars['usegeo'],          '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('usedk',           'notempty', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('longitude',       'notempty', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('latitude',        'notempty', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) {return;}
-
+    if(!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('usegeo',          'notempty', $vars['usegeo'],          '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('usedk',           'notempty', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('longitude',       'notempty', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('latitude',        'notempty', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('helppage',        'notempty', $vars['helppage'],        '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('glossary',        'notempty', $vars['glossary'],        '', XARVAR_NOT_REQUIRED)) return;
     $blockinfo['content'] = serialize($vars);
 
     return $blockinfo;
