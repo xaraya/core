@@ -28,7 +28,7 @@
 			<input type="text" name="group_template" id="group_template" value="" size="40" maxlength="255" />
 		</span>
 		</div>
-		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$createlabel#" /></span>
+		<span style="float: left; width: 30%; text-align: right;"><p><input type="submit" value="#$createlabel#" /></p></span>
 	</form>
 	</div>
 </div>

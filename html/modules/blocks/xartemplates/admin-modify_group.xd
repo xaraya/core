@@ -51,7 +51,7 @@ warningmsg = '#xarML('You must select the block to move.')#';
 			<input type="text" name="group_template" id="group_template" value="#$group['template']#" size="40" maxlength="255" />
 		</span>
 		</div>
-		<br /><br /><span style="float: left; width: 30%; text-align: right;"><input type="submit" value="#$updatelabel#" /></span>
+		<span style="float: left; width: 30%; text-align: right;"><p><input type="submit" value="#$updatelabel#" /></p></span>
               </div>
 	</form>
 	</div>
