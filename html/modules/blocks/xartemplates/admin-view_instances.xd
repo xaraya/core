@@ -1,36 +1,42 @@
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - Blocks System</xar:mlstring></span></div>
+<div class="xar-mod-head">
+	<span class="xar-mod-title">
+		<xar:mlstring>
+			Administration - Blocks System 
+		</xar:mlstring>
+	</span>
+</div>
 <div class="xar-mod-body">
-	<h2><xar:mlstring>View Blocks</xar:mlstring></h2>
-    <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
-        <div>
-        <div class="xar-norm-outline" style="padding: 0px;">
-            <!--- Module List Sort and Filter Controls table --->
-            <table width="100%" border="0" cellspacing="1" cellpadding="1">
-              <tr>
-                <th nowrap="nowrap">
-                    <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>
-                </th>
-              </tr>
-              <tr>
-                <td style="text-align: center;">
-                  <select name="selstyle" id="selstyle" onchange="this.form.submit()">
-                    <xar:foreach in="$style" key="$key" value="$value">
-                      <xar:if condition="$key eq $selstyle">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                      <xar:else />
-                        <option value="#$key#">#$value#</option>
-                      </xar:if>
-                    </xar:foreach>
-                  </select>
-                </td>
-              </tr>
-            </table>
-        </div>
-        <xar:if condition="$selstyle eq 'compact'">
-            <xar:template file="compact" type="module" />
-        <xar:else />
-			<xar:template file="plain" type="module" />
-		</xar:if>
-        </div>
-    </form>
+	<h2>
+		<xar:mlstring>
+			View Blocks 
+		</xar:mlstring>
+	</h2>
+	<form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
+		<p class="xar-norm-outline" style="padding: .5em;">
+<!--- Module List Sort and Filter Controls --->
+			<label class="xar-mod-title" for="filter">
+				<xar:mlstring>
+					Style 
+				</xar:mlstring>
+			</label>
+			<select name="selstyle" id="selstyle" onchange="this.form.submit()">
+				<xar:foreach in="$style" key="$key" value="$value">
+					<xar:if condition="$key eq $selstyle">
+						<option value="#$key#" selected="selected">
+							#$value# 
+						</option>
+						<xar:else />
+						<option value="#$key#">
+							#$value# 
+						</option>
+					</xar:if>
+				</xar:foreach>
+			</select>
+		</p>
+	</form>
+	<xar:if condition="$selstyle eq 'compact'">
+		<xar:template file="compact" type="module" />
+		<xar:else />
+		<xar:template file="plain" type="module" />
+	</xar:if>
 </div>
