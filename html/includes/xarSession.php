@@ -171,6 +171,7 @@ function xarSessionSetVar($name, $value)
     // + HTTP_SESSION_VARS is buggy on Windows for PHP 4.1.2
     //    $HTTP_SESSION_VARS[$var] = $value;
     $GLOBALS[$var] = $value;
+    $GLOBALS['HTTP_SESSION_VARS'][$var] = $value;
     if (!session_is_registered($var)) {
         session_register($var);
     }
