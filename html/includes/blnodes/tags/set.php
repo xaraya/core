@@ -9,7 +9,10 @@
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
-    var $_name;
+    var $_name;             // What are we setting?
+    var $_nonmarkup = true; // Do we accept non markup?
+    
+    var $_showTemplates;    // The ShowTemplates setting we may need to save
     
     function render()
    {
@@ -18,6 +21,8 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
     
     function renderBeginTag()
    {
+        $code ='';
+        $nonmarkup = 'yes'; // Default is to just use what is produced. 
         extract($this->attributes);
         
         if (!isset($name)) {
@@ -27,17 +32,30 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time
         $this->_name = str_replace(XAR_TOKEN_VAR_START,'',$name);
         
-        return XAR_TOKEN_VAR_START . $this->_name;
+        // Allow suppression of template comments (important when using a tag as a child tag)
+        if(isset($nonmarkup) && strtolower($nonmarkup) == 'no') {
+            $this->_nonmarkup = false;
+            $this->_showTemplates = xarModGetVar('themes','ShowTemplates');
+            $code.= 'xarModSetVar(\'themes\',\'ShowTemplates\',0);';
+        }
+        $code.= XAR_TOKEN_VAR_START . $this->_name;
+        return $code;
    }
     
     function renderEndTag()
    {
+        $code ='';
+        
+        if(!$this->_nonmarkup) {
+            // Restore the setting from just before the set tag
+            $code.='xarModSetVar(\'themes\',\'ShowTemplates\','.$this->_showTemplates.');';
+        }
         /**
         *  Register the variable in the bl_data array so it's passed to included templates
          *  see the xar:template tag how this will work and bug 1120 for all the details
          */
         // FIXME: add some checking whether $name already is a template variable
-        return ' $_bl_data[\''.$this->_name.'\'] =& '. XAR_TOKEN_VAR_START . $this->_name.';';
+        return $code .' $_bl_data[\''.$this->_name.'\'] =& '. XAR_TOKEN_VAR_START . $this->_name.';';
    }
     
     function isAssignable()
