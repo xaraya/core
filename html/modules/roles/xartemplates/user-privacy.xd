@@ -69,8 +69,8 @@
 	    <h3 id="children">#$curnum#.&nbsp;<xar:mlstring>Children</xar:mlstring></h3>
 	        <p><xar:mlstring>We do not allow persons who are aged</xar:mlstring>&nbsp;#$minagewords[$mina-1]#
             (#$mina-1#)&nbsp;<xar:mlstring>or younger to become members of this site. For more information, please contact </xar:mlstring>
-                <a href="mailto:#$contmail#">our webmaster</a>.</p>
-	         <!-- **NOTE: Feel free to provide other information -->
+            <a href="mailto:#$contmail#">our webmaster</a>.</p>
+	        <!-- **NOTE: Feel free to provide other information -->
 	</xar:if>
 
     <xar:set name="$curnum">++$curnum</xar:set>
@@ -97,7 +97,7 @@
     <xar:set name="$curnum">++$curnum</xar:set>
 	<h3 id="contact">#$curnum#.&nbsp;
         <xar:mlstring>Contact Information</xar:mlstring></h3>
-	    <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring>.&nbsp;<a href="mailto:#$contmail#">our Webmaster.</a></p>
+	    <p><xar:mlstring>If you have any questions about this Policy or our web site, please feel free to contact</xar:mlstring> <a href="mailto:#$contmail#">our Webmaster.</a></p>
 
     <xar:else />
 	    <xar:mlstring>Privay Policy Not Active</xar:mlstring>
