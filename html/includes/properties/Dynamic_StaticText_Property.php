@@ -1,11 +1,15 @@
 <?php
 /**
- * Dynamic Static Text Property
+ * Dynamic Data Static Text Property
  *
- * @package dynamicdata
- * @subpackage properties
- */
-
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 /**
  * handle static text property
  *
@@ -28,11 +32,36 @@ class Dynamic_StaticText_Property extends Dynamic_Property
     function showInput($args = array())
     {
         extract($args);
-        return (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-    }
 
-    // default showOutput() from Dynamic_Property
+/*        return (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) .
+               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+*/      $data=array();
+
+
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        $template="static";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+    }
+     // default showOutput() from Dynamic_Property
+    function showOutput($args = array())
+    {
+        extract($args);
+        if (isset($value)) {
+            return xarVarPrepForDisplay($value);
+        } else {
+            return xarVarPrepForDisplay($this->value);
+        }
+
+        $data=array();
+
+        $data['value'] = $value;
+        
+        $template="static";
+        return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
+
+    }
 }
 
 ?>

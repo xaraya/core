@@ -1,10 +1,15 @@
 <?php
 /**
- * Dynamic Text Area Property
+  * Dynamic Data Text Area Property
  *
- * @package dynamicdata
- * @subpackage properties
- */
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2003 by the Xaraya Development Team.
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata properties
+ * @author mikespub <mikespub@xaraya.com>
+*/
 
 /**
  * handle textarea property
@@ -37,7 +42,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-        return '<textarea' .
+/*        return '<textarea' .
                ' name="' . $name . '"' .
                ' rows="'. (!empty($rows) ? $rows : $this->rows) . '"' .
                ' cols="'. (!empty($cols) ? $cols : $this->cols) . '"' .
@@ -46,18 +51,36 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
                '>' . (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '</textarea>' .
                (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
+*/
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['tabindex'] = !empty($tabindex) ? $tabindex=$tabindex : '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['rows']     = !empty($rows) ? $rows : $this->rows;
+        $data['cols']     = !empty($cols) ? $size : $this->cols; 
+        $data['wrap']     = !empty($wrap) ? $wrap : $this->wrap;
+
+        $template="textarea";
+        return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
+
     }
 
     function showOutput($args = array())
     {
          extract($args);
-        if (isset($value)) {
-            return xarVarPrepHTMLDisplay($value);
-        } else {
-            return xarVarPrepHTMLDisplay($this->value);
-        }
+         $data=array();
+         
+         if (isset($value)) {
+            //return xarVarPrepHTMLDisplay($value);
+            $data['value'] = xarVarPrepHTMLDisplay($value);
+         } else {
+            //return xarVarPrepHTMLDisplay($this->value);
+            $data['value'] = xarVarPrepHTMLDisplay($this->value);
+         }
+         $template="textarea";
+         return xarTplModule('dynamicdata', 'user', 'showoutput', $data ,$template);
     }
-
 }
 
 
