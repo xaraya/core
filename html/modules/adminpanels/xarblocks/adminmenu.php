@@ -115,6 +115,10 @@ function adminpanels_adminmenublock_display($blockinfo){
                     }
                 }
                 // prepare the data for template(s)
+                if (empty($indlinks)){
+                    $indlinks = '';
+                }
+
                 $menustyle = xarVarPrepForDisplay(xarML('[by name]'));
                 $data = xarTplBlock('adminpanels','sidemenu', array('adminmods'     => $adminmods,
                                                                     'indlinks'     => $indlinks,
