@@ -79,19 +79,9 @@
 			<hr>
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<xar:loop name="$trees">
-				<table border="0" cellspacing="2" cellpadding = "0" width="100%">
-					<tr>
-						<td>
-							&xar-var-tree;
-						</td>
-					</tr>
-				</table>			
-			</xar:loop>
-		</td>
-	</tr>
 </table>			
+	<xar:loop name="$trees">
+		#$tree#
+	</xar:loop>
 </div>
 </div>
