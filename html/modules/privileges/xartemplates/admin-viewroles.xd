@@ -18,8 +18,8 @@
 <script language="JavaScript">
 <!--
 function setaction(target){
-document.forms[0].action = target;
-document.forms[0].submit();}
+document.forms['privilegeform'].action = target;
+document.forms['privilegeform'].submit();}
 //-->
 </script>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span></div>
@@ -80,7 +80,7 @@ document.forms[0].submit();}
 			</a>
 		</td>
 	</tr>
-	<form action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
+	<form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
 		<input type="hidden" name="pid" id="pid" value="#$pid#" />
 	<tr>
 		<td align="left">Show Privileges that are: 
