@@ -463,11 +463,11 @@ function walk_ce_articletree ($parent, $latest_ok_category, $cat_string) {
             if (($layout_id == 5) || ($layout_id == 6)) { $imgtags .= ' align="center"'; }
             // Add to top
             if (($layout_id == 1) || ($layout_id == 2) || ($layout_id == 5)) {
-                $text = '<img src=var/'.$media_url.' '.$imgtags.'>'.$text;
+                $text = '<img src=var/'.$media_url.' '.$imgtags.'/>'.$text;
 
             // Add to bottom
             } elseif (($layout_id == 3) || ($layout_id == 4) || ($layout_id == 6)) {
-                $text .= '<img src=var/'.$media_url.' '.$imgtags.'>';
+                $text .= '<img src=var/'.$media_url.' '.$imgtags.'/>';
             }
         }
         
