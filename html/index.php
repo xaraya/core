@@ -46,7 +46,7 @@ function xarMain()
     }
 
     $caching = 0;
-    
+
     // Set up caching if enabled
     if (file_exists('var/cache/output/cache.touch')) {
         $caching = 1;
@@ -56,7 +56,7 @@ function xarMain()
         }
         $cacheKey = "$modName-$modType-$funcName";
     }
-    
+
     if ($caching == 1 && xarPageIsCached($cacheKey,'page')) {
         // output the cached page *or* a 304 Not Modified status
         xarPageGetCached($cacheKey,'page');
@@ -155,7 +155,7 @@ if (!xarMain()) {
             // Fallback to raw html
             $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
             $msg .= '<br /><br />';
-            $msg .= xarExceptionRender('html');
+            $msg .= xarExceptionRender('rawhtml');
             $msg .= '<br />';
             $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
             $msg .= '<br /><br />';

@@ -287,7 +287,7 @@ function xarErrorRender($format,$thisstack = "ERROR")
                 continue 2;
         }
 
-        if ($format == 'html') {
+        if ($format == 'html' || $format == 'rawhtml') {
             include_once "includes/exceptions/htmlexceptionrendering.class.php";
             $rendering = new HTMLExceptionRendering($error);
         }
@@ -307,6 +307,16 @@ function xarErrorRender($format,$thisstack = "ERROR")
     }
     if ($format == 'html') {
         return  xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+    }
+    elseif ($format == 'rawhtml') {
+        $msg = "<b><u>" . $data['title'] . "</u></b><br /><br />";
+        $msg .= "<b>Description:</b> " . $data['short'] . "<br /><br />";
+        $msg .= "<b>Explanation:</b> " . $data['long'] . "<br /><br/>";
+        if ($data['hint'] != '') $msg .= "<b>Hint:</b> " . $data['hint'] . "<br /><br/>";
+        if ($data['stack'] != '') $msg .= "<b>Stack:</b><br />" . $data['stack'] . "<br /><br />";
+        if ($data['product'] != '') $msg .= "<b>Product:</b> " . $data['product'] . "<br /><br />";
+        if ($data['component'] != '') $msg .= "<b>Component:</b> " . $data['component'] . "<br /><br />";
+        return $msg;
     }
     else {
         return $data;
