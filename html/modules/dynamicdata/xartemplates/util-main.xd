@@ -1,8 +1,9 @@
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Objects</xar:mlstring></h2><br />
+<div class="xar-mod-body"><h2><xar:mlstring>Utilities</xar:mlstring></h2><br />
 <div style="margin: auto;">
 
 <ul>
+    <li><a href="#xarModURL('dynamicdata','admin','query')#"><xar:mlstring>Query Dynamic Objects or Database Tables</xar:mlstring></a></li>
     <li><a href="#xarModURL('dynamicdata','util','import')#"><xar:mlstring>Import Object Definitions and Data</xar:mlstring></a></li>
     <li><a href="#xarModURL('dynamicdata','util','export')#"><xar:mlstring>Export Object Definitions and Data</xar:mlstring></a> : <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring></li>
     <li><a href="#xarModURL('dynamicdata','util','static')#"><xar:mlstring>Static Table Definition</xar:mlstring></a> : <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring></li>

@@ -43,6 +43,29 @@
     <input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" />
   </td>
 </tr>
+<xar:if condition="!empty($jointables)">
+<tr>
+  <td>
+    <label for="join"><xar:mlstring>Join:</xar:mlstring></label>
+  </td>
+  <td>
+    <input type="hidden" name="oldjoin" value="#$oldjoin#"/>
+    <select name="join" id="join" onchange="submit()">
+      <option value=""></option>
+    <xar:foreach in="$jointables" value="$item">
+      <xar:if condition="!empty($join) and $join eq $item">
+        <option value="#$item#" selected="selected">#$item#</option>
+      <xar:else/>
+        <option value="#$item#">#$item#</option>
+      </xar:if>
+    </xar:foreach>
+    </select>
+  </td>
+  <td colspan="4">
+    &nbsp;
+  </td>
+</tr>
+</xar:if>
 <tr>
   <td>
     <label for="table"><xar:mlstring>Table:</xar:mlstring></label>
@@ -145,7 +168,7 @@
 </xar:if>
 <tr>
   <td>&nbsp;</td>
-  <td colspan="#$numfields#" align="center"><input type="submit" value="#$submit#" /></td>
+  <td colspan="#$numfields#"><input type="submit" value="#$submit#" /></td>
 </tr>
 </table>
 </form>
