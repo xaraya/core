@@ -243,7 +243,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 $this->value = $value;
                 return true;
             }                 
-        }        
+        } elseif (!isset($value)) {
+        	$value = $this->value;
+        }  
         
         xarModAPILoad('uploads', 'user');
         
@@ -258,7 +260,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         
 
         $args['action']    = $action;
-        
 
         switch ($action) {
             case _UPLOADS_GET_UPLOAD:
@@ -310,10 +311,12 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 return true;
                 break;
             case '-1':
-            case 0: 
                 $this->value = NULL;
                 return true;
             default: 
+            	if (isset($this->value) && $this->value) {
+            		return true;
+            	}
                 break;
         }
 
