@@ -10,3 +10,13 @@
         </td>
     </tr>
 </table>
+
+<br />
+<br />
+<br />
+
+<center>
+
+<b><pnt:var scope="session" name="base_statusmsg" /></b>
+
+</center>
