@@ -2,10 +2,10 @@
 /**
  * File: $Id
  *
- * Build adminmenu items sorted by category
+ * Build adminmenu items sorted in different ways
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2004 The Digital Development Foundation Inc.
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -13,27 +13,37 @@
  * @author Andy Varganov <andyv@xaraya.com>
 */
 /**
- * build adminmenu items sorted by category
+ * build adminmenu items 
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   none
+ * @param   string menustyle  'bycat'
  * @return  $catdata array on success or void on failure
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminapi_buildbycat($args)
+function adminpanels_adminapi_buildmenu($args)
 {
-
-    // extract($args);
-    // we pass no args atm
+    extract($args);
+    if(!isset($menustyle)) $menustyle='bycat';
 
     // categories according RFC11 & RFC13
     // TODO: store our categories in module variable to be able add/remove them via interface
-    $cats = array(  '1'=>'Global',
+    switch($menustyle) {
+        default:
+        case 'bycat':
+            $cats = array(  '1'=>'Global',
                     '2'=>'Content',
                     '3'=>'Users & Groups',
                     '4'=>'Miscellaneous');
+            break;
+        case 'bygroup':
+             // sample groups since there are none defined in the module var
+            $cats = array(  '1'=>'Essential',
+                            '2'=>'Useful',
+                            '3'=>'Testing');
+            break;
+    }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -53,6 +63,7 @@ function adminpanels_adminapi_buildbycat($args)
         // the category label
         if($cat == 'Users & Groups') {
             // need xhtml compliant label for display
+            // FIXME: this doesnt belong here
             $cat = 'Users &amp; Groups';
         }
 

@@ -65,22 +65,27 @@ function adminpanels_adminmenublock_display($blockinfo)
     // Security Check
     if (!xarSecurityCheck('AdminPanel', 0, 'adminmenu', "$blockinfo[title]:All:All")) {return;}
 
-    // are there any admin modules, then get the whole list sorted by names
-    // checking this as early as possible
-    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
-    
-    if (empty($mods)) {
-        // there aren't any admin modules, dont display adminmenu
-        return;
-    }
-
     // due to shortcomings of modules module, we need this workaround
     // if our module deactivated intentionally or by accident
     // we just switch to the block mode that is not dependent on the module's api
     // the only such mode at the moment is sort by name
     // TODO: eradicate dependency on module api for other sort orders too
     if (!xarModIsAvailable('adminpanels')) {
-         xarModSetVar('adminpanels', 'menustyle', 'byname');
+        xarModSetVar('adminpanels', 'menustyle', 'byname');
+    }
+    
+    // Sort Order, Status, Common Labels and Links Display preparation
+    // TODO: pick these up from block settings.
+    $menustyle = xarModGetVar('adminpanels', 'menustyle');
+    
+    // are there any admin modules, then get the whole list sorted by names
+    // checking this as early as possible
+    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
+    
+    if (empty($mods)) {
+        // there aren't any admin modules, dont display adminmenu
+        // <mrb> This does never happen, adminpanels is here :-)
+        return;
     }
 
     // this is how we are marking the currently loaded module
@@ -96,9 +101,6 @@ function adminpanels_adminmenublock_display($blockinfo)
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
-    // Sort Order, Status, Common Labels and Links Display preparation
-    // TODO: pick these up from block settings.
-    $menustyle = xarModGetVar('adminpanels', 'menustyle');
     // TODO: prep for display in the template, not here.
     $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
     $logouturl = xarModURL('adminpanels' ,'admin', 'confirmlogout', array());
@@ -206,7 +208,7 @@ function adminpanels_adminmenublock_display($blockinfo)
             if (!xarModAPIFunc('adminpanels', 'admin', 'updatemenudb')) {return;}
 
             // get an array of modules sorted by categories from db
-            $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildbycat');
+            $catmods = xarModAPIFunc('adminpanels', 'admin', 'buildmenu',array('menustyle' => 'bycat'));
 
             // scan the array and set labels and states
             foreach ($catmods as $cat => $mods) {
@@ -310,7 +312,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 
         case 'byweight':
                 // sort by weight
-                // $data = xarModAPIFunc('adminpanels', 'admin', 'buildbyweight');
+                // $data = xarModAPIFunc('adminpanels', 'admin', 'buildmenu', array('menustyle' => 'byweight');
 
                 $adminmods = xarML('not implemented');
 
@@ -331,7 +333,7 @@ function adminpanels_adminmenublock_display($blockinfo)
 
         case 'bygroup':
                 // sort by group
-                $data = xarModAPIFunc('adminpanels', 'admin', 'buildbygroup');
+                $data = xarModAPIFunc('adminpanels', 'admin', 'buildmenu', array('menustyle' => 'bygroup'));
 
                 $adminmods = xarML('not implemented');
 
