@@ -1167,7 +1167,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     }
     if (!$found) {
         // if it's loaded but not found, then set the error message to that
-        if (isLoaded) {
+        if (!isLoaded) {
             $msg = xarML('Module function #(1) doesn\'t exist.', $modAPIFunc);
         }
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST', new SystemException($msg));
@@ -1259,7 +1259,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
     if (!$found) {
         if ($throwException) {
-            if (isLoaded) {
+            if (!isLoaded) {
                 $msg = xarML('Module API function #(1) doesn\'t exist.', $modAPIFunc);
             }
             // MrB: When there is a parse error in the api file we sometimes end up
