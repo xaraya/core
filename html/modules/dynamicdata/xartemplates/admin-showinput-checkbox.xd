@@ -1,6 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<xar:if condtion="$checked">
+<xar:if condition="$checked">
   <input type="checkbox"  name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" />
 <xar:else/>
   <input type="checkbox"  name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" />

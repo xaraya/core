@@ -18,7 +18,7 @@
   <span style="float: right; width: 90%; text-align: left;">
     <dl>
       <dt>
-        <xar:if condtion="$single_checked">
+        <xar:if condition="$single_checked">
           <input type="radio" name="mlsmode" value="SINGLE" checked="checked" />
         <xar:else/>
           <input type="radio" name="mlsmode" value="SINGLE" />
