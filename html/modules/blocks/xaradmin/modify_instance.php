@@ -61,10 +61,32 @@ function blocks_admin_modify_instance()
     } else {
         // TODO: adam_baum - add some error checking for non-existant func, methinks.
         $extra = '';
+
+        // RHC - Possible error checking but may not be necessary for $extra
+        // $msg = xarMLByKey('MODULE_FUNCTION_NOT_EXIST', $extra);
+        // xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+        //                new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        // return NULL;
     }
     // check to see if block has form content
     $infofunc = $usname.'_'.$instance['type'] . 'block_info';
-    $block_edit = $infofunc();
+
+    // make sure the corresponding block function exists
+    if (function_exists($infofunc)) {
+        $block_edit = $infofunc();
+    } else {
+        // RHC - Should this return MODULE_FUNCTION_NOT_EXIST?
+        $msg = xarMLByKey('MODULE_FUNCTION_NOT_EXIST', $infofunc);
+        xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
+                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
+        return NULL;
+
+        // RHC - Could also set $block_edit to empty string.  This will
+        // eventually throw MODULE_FILE_NOT_EXIST
+        // $block_edit = '';
+
+    }
+    
 
     // build refresh times array
     $refreshtimes = array(array('id' => 1800,
