@@ -8,7 +8,7 @@
  * @return true on dependencies activated, false for not
  * @raise NO_PERMISSION
  */
-function modules_adminapi_installwithdependencies($args) 
+function modules_adminapi_installwithdependencies ($args) 
 {
 	
 	$mainId = $args['regid'];

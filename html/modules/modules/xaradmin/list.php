@@ -113,16 +113,20 @@ function modules_admin_list()
         if($coremod && $data['hidecore']) continue;
         
         // for the sake of clarity, lets prepare all our links in advance
-        $installur   l              = xarModURL('modules',
+        $installurl                = xarModURL('modules',
                                     'admin',
                                     'install',
                                      array( 'id'        => $thismodid,
                                             'authid'    => $authid));
+	//Not necessary anymore..
+	//Install does it all
+	/*
         $activateurl                = xarModURL('modules',
                                     'admin',
                                     'activate',
                                      array( 'id'        => $thismodid,
                                             'authid'    => $authid));
+	*/
         $deactivateurl              = xarModURL('modules',
                                     'admin',
                                     'deactivate',
@@ -196,7 +200,7 @@ function modules_admin_list()
             
             $listrows[$i]['actionlabel']        = xarML('Activate');
             $listrows[$i]['actionlabel2']       = xarML('Remove');
-            $listrows[$i]['actionurl']          = $activateurl;
+            $listrows[$i]['actionurl']          = $installurl;
             
             $listrows[$i]['actionimg1']         = $img_activate;
             $listrows[$i]['actionimg2']         = $img_remove;

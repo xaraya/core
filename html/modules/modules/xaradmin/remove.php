@@ -12,7 +12,7 @@
  * @returns mixed
  * @return true on success
  */
-function modules_admin_remove()
+function modules_admin_remove ()
 {
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) return;
