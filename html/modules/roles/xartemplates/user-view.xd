@@ -39,7 +39,7 @@
 <xar:else />
 
 <xar:if condition="xarModIsAvailable('dynamicdata')">
-    <xar:data-getitems name="$properties" value="$values" module="users" itemids="$uidlist" />
+    <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
 </xar:if>
 
 	<table width="80%" border="0" cellspacing="0" cellpadding="4">
