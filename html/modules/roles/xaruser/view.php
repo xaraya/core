@@ -9,12 +9,13 @@ function roles_user_view()
     if(!xarVarFetch('startnum', 'isset',    $startnum, NULL,     XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('phase',    'notempty', $phase,    'active', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('name',    'notempty', $data['name'],'', XARVAR_NOT_REQUIRED)) {return;}
-    //This $filter variables isnt being used for anything...
+    //This $filter variable isnt being used for anything...
     //It is set later on.
     if(!xarVarFetch('filter',   'str',   $filter,   NULL,     XARVAR_DONT_SET)) {return;}
 
-    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('letter',   'str',   $letter,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('search',   'str',   $search,   NULL,     XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('order',    'str',   $order,    "name",   XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('selection','str',   $selection,  "",     XARVAR_DONT_SET)) {return;}
 
     $data['items'] = array();
@@ -22,18 +23,14 @@ function roles_user_view()
     // Specify some labels for display
     $data['pager'] = '';
 
-    $perpage = xarModGetVar('roles','rolesperpage');
-    if (empty($perpage)) {
-        $perpage = 20;
-        xarModSetVar('roles','rolesperpage',$perpage);
-    }
+    $perpage = xarModGetVar('roles','itemsperpage');
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
     if ($letter) {
         $selection = " AND xar_name LIKE '" . $letter . "%'";
-        $data['msg'] = "Members starting with '" . $letter . "'";
+        $data['msg'] = xarML("Members starting with '" . $letter . "'");
     }
     elseif ($search) {
         $selection = " AND (";
@@ -41,12 +38,15 @@ function roles_user_view()
         $selection .= " OR (xar_uname LIKE '%" . $search . "%')";
         $selection .= " OR (xar_email LIKE '%" . $search . "%')";
         $selection .= ")";
-        $data['msg'] = "Members containing '" . $search . "'";
+        $data['msg'] = xarML("Members containing '" . $search . "'");
     }
     else {
-        $data['msg'] = "";
+        $data['msg'] = xarML("All members");
     }
 
+    $data['order'] = $order;
+    $data['letter'] = $letter;
+    $data['search'] = $search;
     $data['searchlabel'] = xarML('Go');
     $data['alphabet'] = array ("A","B","C","D","E","F","G","H","I","J","K","L","M",
                             "N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
@@ -65,6 +65,7 @@ function roles_user_view()
                                    'getallactive',
                                     array('startnum' => $startnum,
                                           'filter'   => $filter,
+                                          'order'   => $order,
                                           'selection'   => $selection,
                                           'include_anonymous' => false,
                                           'include_myself' => false,
@@ -73,8 +74,8 @@ function roles_user_view()
 
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Users')));
 
-            if ($items == false){
-                $data['message'] = xarML('There are no registered users online');
+            if (!$items){
+                $data['message'] = xarML('There are no active users selected');
                 return $data;
             }
 
@@ -88,14 +89,17 @@ function roles_user_view()
                                    'user',
                                    'getall',
                                     array('startnum' => $startnum,
-                                          'state'   => 3,
+                                          'order'   => $order,
                                           'selection'   => $selection,
                                           'include_anonymous' => false,
                                           'include_myself' => false,
                                           'numitems' => xarModGetVar('roles',
                                                                      'itemsperpage')));
 
-            if ($items == false) return;
+            if (!$items){
+                $data['message'] = xarML('There are no users selected');
+                return $data;
+            }
 
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Users')));
 

@@ -3,14 +3,16 @@
 <div style="margin: auto;">
 
 <center>
-[&nbsp;<a href="#xarModURL('roles','user','view')#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|&nbsp
-<xar:foreach in="$alphabet" value="$letter">
-	<a href="#xarModURL('roles','user','view')#&letter=#$letter#">#$letter#</a>&nbsp;|&nbsp
+[&nbsp;<a href="#xarModURL('roles','user','view')#&letter=&phase=#$phase#&order=#$order#"><xar:mlstring>All</xar:mlstring></a>&nbsp;|&nbsp
+<xar:foreach in="$alphabet" value="$ltr">
+	<a href="#xarModURL('roles','user','view')#&letter=#$ltr#&phase=#$phase#&order=#$order#">#$ltr#</a>&nbsp;|&nbsp
 </xar:foreach>
-<a href="#xarModURL('roles','user','view')#"><xar:mlstring>Other</xar:mlstring></a>&nbsp]
+<a href="#xarModURL('roles','user','view')#&letter=&phase=#$phase#&order=#$order#"><xar:mlstring>Other</xar:mlstring></a>&nbsp]
 </center>
 
 <form method="POST" action="#xarModURL('roles','user','view')#">
+<input type="hidden" name="phase" id="phase" value="#$phase#" />
+<input type="hidden" name="order" id="order" value="#$order#" />
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
 <tr>
 <td>
@@ -25,10 +27,15 @@
 </table>
 </form>
 	
-<b><xar:mlstring>Sort Options</xar:mlstring>:</b>
+<b><xar:mlstring>Show</xar:mlstring>: </b>
 
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
-<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall"><xar:mlstring>All Users</xar:mlstring></a>
+<xar:if condition="$phase eq 'active'">
+<b><xar:mlstring>Active Users</xar:mlstring></b>&nbsp;|
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=viewall&letter=#$letter#&search=#$search#&order=#$order#"><xar:mlstring>All Users</xar:mlstring></a>
+<xar:else />
+<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=active&letter=#$letter#&search=#$search#&order=#$order#"><xar:mlstring>Active Users</xar:mlstring></a>&nbsp;|
+<b><xar:mlstring>All Users</xar:mlstring></b>
+</xar:if>
 </p>
 <xar:if condition="!empty($message)">
 	<p>#$message#</p>
@@ -42,14 +49,20 @@
 		<tr>
 			<xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
 				<th width="30%" align="left">
-					<xar:mlstring>Name</xar:mlstring>
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=name">
+						<xar:mlstring>Name</xar:mlstring>
+					</a>
 				</th>
 				<th width="40%">
-					<xar:mlstring>IP Address</xar:mlstring>
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=uname">
+						<xar:mlstring>IP Address</xar:mlstring>
+					</a>
 				</th>
 			<xar:else />
 				<th width="70%" align="left">
-					<xar:mlstring>Name</xar:mlstring>
+					<a href="#xarModURL('roles', 'user', 'view')#&amp;phase=#$phase#&letter=#$letter#&search=#$search#&order=name">
+						<xar:mlstring>Name</xar:mlstring>
+					</a>
 				</th>
 			</xar:if>
 			<th width="10%">

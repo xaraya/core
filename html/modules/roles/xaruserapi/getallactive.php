@@ -43,7 +43,7 @@ function roles_userapi_getallactive($args)
     $query = "SELECT a.*,
                      b.xar_ipaddr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE b.xar_lastused > $filter AND a.xar_uid > 1 AND a.xar_type = 0";
+              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > $filter AND a.xar_uid > 1";
 
     if (isset($selection)) $query .= $selection;
 
@@ -59,6 +59,7 @@ function roles_userapi_getallactive($args)
         $query .= " AND a.xar_uid != $thisrole[uid]";
     }
 
+    $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
 //    echo $query; exit;
     $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
     if (!$result) return;
@@ -72,8 +73,6 @@ function roles_userapi_getallactive($args)
                                 'ipaddr'    => $ipaddr);
         }
     }
-
-    $result->Close();
 
     // Return the users
 
