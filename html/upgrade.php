@@ -622,6 +622,26 @@ if (empty($step)) {
         echo "Table $blockgroupinstancestable is up-to-date<br/>";
     }
 
+    // Upgrade the xar_block_types table.
+    $blocktypestable = xarDBGetSiteTablePrefix() . '_block_types';
+    // Get column definitions for block instances table.
+    $columns = $datadict->getColumns($blocktypestable);
+    // Do we have a xar_template column?
+    $blocks_column_found = false;
+    foreach($columns as $column) {
+        if ($column->name == 'xar_info') {
+            $blocks_column_found = true;
+            break;
+        }
+    }
+    if (!$blocks_column_found) {
+        // Create the column.
+        $result = $datadict->addColumn($blocktypestable, 'xar_info X(2000) Null');
+        echo "Added column xar_info to table $blocktypestable<br/>";
+    } else {
+        echo "Table $blocktypestable is up-to-date<br/>";
+    }
+
 
     // Add the syndicate block type and syndicate block for RSS display.
     echo "<h5>Checking Installed Blocks</h5>";
