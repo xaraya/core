@@ -590,6 +590,7 @@ class xarMasks
                 }
             }
         }
+// CHECKME: why loop over the privileges again here ? Can't this be combined in the previous loop ?
         foreach ($privilegeset['privileges'] as $privilege) {
             if(XARDBG_TESTDENY && (XARDBG_MASK == $mask->getName() || XARDBG_MASK == "All")) {
                 echo "<br />Comparing " . $privilege->present() . " against " . $mask->present() . " <b>for deny</b>. ";
@@ -1652,33 +1653,38 @@ class xarPrivileges extends xarMasks
 
     function includes($mask)
     {
-        list($p1,$p2) = $this->canonical($mask);
-        $match = true;
+        $p1 = $this->normalize();
+        $p2 = $mask->normalize();
 
-// match realm, module and component. bail if no match.
-        for ($i=1;$i<4;$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
-
-        if($match) {
-// now match the instances
-            if(count($p1) != count($p2)) {
-                if(count($p1) > count($p2)) {
-                    $p = $p2;
-                    $p2 = $mask->normalize(count($p1) - count($p2));
-                }
-                else {
-                    $p = $p1;
-                    $p1 = $this->normalize(count($p2) - count($p1));
-                }
-                if (count($p) != 5) {
-                    $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
-                    xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                   new SystemException($msg));
-                }
+        // match realm, module and component. bail if no match.
+        for ($i=1;$i<4;$i++) {
+            if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
+                return false;
             }
-
-        for ($i=4;$i<count($p1);$i++) $match = $match && (($p1[$i]==$p2[$i]) || ($p1[$i] == 'all'));
         }
-        return $match;
+
+        // now match the instances
+        if(count($p1) != count($p2)) {
+            if(count($p1) > count($p2)) {
+                $p = $p2;
+                $p2 = $mask->normalize(count($p1) - count($p2));
+            }
+            else {
+                $p = $p1;
+                $p1 = $this->normalize(count($p2) - count($p1));
+            }
+            if (count($p) != 5) {
+                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask->getName(),$this->getName(),implode(',',$p2),implode(',',$p1),$this->present() . "|" . $mask->present());
+                xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
+                               new SystemException($msg));
+            }
+        }
+        for ($i=4;$i<count($p1);$i++) {
+            if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
 /**

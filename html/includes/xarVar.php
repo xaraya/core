@@ -458,7 +458,7 @@ function xarVarPrepHTMLDisplay()
 */
     static $allowedtags = NULL;
 
-    if (!isset($allowedHTML)) {
+    if (!isset($allowedtags)) {
         $allowedHTML = array();
         foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
             if ($k == '!--') {

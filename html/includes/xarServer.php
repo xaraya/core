@@ -183,11 +183,16 @@ function xarServerGetProtocol()
  */
 function xarServerGetBaseURL()
 {
+    static $baseurl = null;
+
+    if (isset($baseurl))  return $baseurl;
+
     $server = xarServerGetHost();
     $protocol = xarServerGetProtocol();
     $path = xarServerGetBaseURI();
 
-    return "$protocol://$server$path/";
+    $baseurl = "$protocol://$server$path/";
+    return $baseurl;
 }
 
 /**
