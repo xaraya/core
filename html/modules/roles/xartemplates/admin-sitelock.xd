@@ -111,7 +111,7 @@
 		</tr>
 		<tr>
 			<td>
-				<textarea name="notifymsg" id="notifymsg" wrap="soft" rows="5" cols="80" tabindex="1">#$notifymsg#</textarea>
+				<textarea name="notifymsg" id="notifymsg" rows="5" cols="80" tabindex="1">#$notifymsg#</textarea>
 			</td>
 		</tr>
 		<tr>
@@ -125,7 +125,7 @@
 		</tr>
 		<tr>
 			<td>
-				<textarea name="lockedoutmsg" id="lockedoutmsg" wrap="soft" rows="5" cols="80" tabindex="1">#$lockedoutmsg#</textarea>
+				<textarea name="lockedoutmsg" id="lockedoutmsg" rows="5" cols="80" tabindex="1">#$lockedoutmsg#</textarea>
 			</td>
 		</tr>
 		<tr>

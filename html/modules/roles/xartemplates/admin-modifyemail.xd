@@ -64,7 +64,7 @@
 	<table>
 		<tr><th colspan="2">#$explanation#.</th></tr>
 		<tr><th><label for="subject"><xar:mlstring>Subject</xar:mlstring> :</label></th><td><input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" /></td></tr>
-		<tr><th><label for="message"><xar:mlstring>Message</xar:mlstring> :</label></th><td><textarea name="message" id="message" wrap="soft" rows="20" cols="80" tabindex="1">#$message#</textarea></td></tr>
+		<tr><th><label for="message"><xar:mlstring>Message</xar:mlstring> :</label></th><td><textarea name="message" id="message" rows="20" cols="80" tabindex="1">#$message#</textarea></td></tr>
         <tr><th colspan="2"><input type="submit" value="Update" align="middle" tabindex="2" /></th></tr>
         <tr><th colspan="2"><xar:mlstring>The following variables will be replaced in the text with specific information</xar:mlstring> :</th></tr>
         <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
