@@ -1,25 +1,44 @@
 <META http-equiv="refresh" content="1;URL=#xarModURL('installer', 'admin','bootstrap')#">
-	<div id="install">
-	  <div style="padding:10px;">
-      <div style="text-align:center;"><span class="xar-pagetitle">Beginning Initialization</span></div><br />
-			<div style="text-align:center;">
-  		  <form action="install.php" method="post">
-					<div style="text-align:center;">
-					  <input type="hidden" name="install_phase" id="install_phase" value="6" />
-		  			This may take a moment. Thank you for your patience.
-    			</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div id="status">
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Selecting Language</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Agreeing to License</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Checking System Settings</span><br />
-	  <span class="completed"><img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />Collecting Database Settings</span><br />
-	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Beginning Initialization</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Creating an Administrator</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing a Configuration</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Options</span><br />
-	</div>
-
+<div id="install">
+    <div style="padding:10px;">
+        <div style="text-align:center;">
+            <span class="xar-pagetitle">
+                Beginning Initialization</span>
+        </div>
+        <br />
+        <div style="text-align:center;">
+            <form action="install.php" method="post">
+                <div style="text-align:center;">
+                    <input type="hidden" name="install_phase" id="install_phase" value="6" />
+                    This may take a moment. Thank you for your patience. 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="status">
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        Selecting Language</p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        Agreeing to License</p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        Checking System Settings</p>
+    <p class="completed">
+        <img src="themes/installer/images/completed.gif" style="height:20px;width:20px;border:0px;" alt="completed step" />
+        Collecting Database Settings</p>
+    <p class="active">
+        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+        Beginning Initialization</p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        Creating an Administrator</p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        Choosing a Configuration</p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        Choosing Options</p>
+</div>

@@ -1,27 +1,91 @@
-	<div id="install">
-	  <div style="padding:10px;">
-      <div style="text-align:center;"><span class="xar-pagetitle">Select your Language</span></div><br /><br />
-      <div style="text-align:justify;">
-			  <span class="xar-normal"><p>This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help.</p></span>
-      </div>
-			<div style="text-align:center;">
-			  <form action="install.php" method="post">
- 				  <p class="xar-normal">Language: 
-					<select name="install_language" class="xar-text"><xar:foreach in="$languages" key="$key" value="$value"><option value="#$key#">#$value#</option></xar:foreach></select>
- 					<input type="hidden" name="install_phase" id="install_phase" value="2" />
- 					<input type="submit" value="Continue &gt;" />
-					</p>
-				</form>
-      </div>
-	  </div>			
-	</div>
-	<div id="status">
-	  <span class="active"><img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />Selecting Language</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Agreeing to License</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Checking System Settings</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Collecting Database Settings</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Beginning Initialization</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Creating an Administrator</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing a Configuration</span><br />
-	  <span class="greyed"><img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />Choosing Options</span><br />
-	</div>
+<div id="install">
+    <div style="padding:10px;">
+        <div style="text-align:center;">
+            <span class="xar-pagetitle">
+                <xar:mlstring>
+                    Select your Language 
+                </xar:mlstring>
+            </span>
+        </div>
+        <br />
+        <br />
+        <div style="text-align:justify;">
+            <span class="xar-normal">
+                <p>
+                    <xar:mlstring>
+                        This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the support forums or live IRC support for help. 
+                    </xar:mlstring>
+                </p>
+            </span>
+        </div>
+        <div style="text-align:center;">
+            <form action="install.php" method="post">
+                <p class="xar-normal">
+                    <xar:mlstring>
+                        Language 
+                    </xar:mlstring>
+                    : 
+                    <select name="install_language" class="xar-text">
+                        <xar:foreach in="$languages" key="$key" value="$value">
+                            <option value="#$key#">
+                                #$value# 
+                            </option>
+                        </xar:foreach>
+                    </select>
+                    <input type="hidden" name="install_phase" id="install_phase" value="2" />
+                    <input type="submit" value="Continue &gt;" />
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="status">
+    <p class="active">
+        <img src="themes/installer/images/active.gif" style="height:20px;width:20px;border:0px;" alt="active step" />
+        <xar:mlstring>
+            Selecting Language 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Agreeing to License 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Checking System Settings 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Collecting Database Settings 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Beginning Initialization 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Creating an Administrator 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Choosing a Configuration 
+        </xar:mlstring>
+    </p>
+    <p class="greyed">
+        <img src="themes/installer/images/greyed.gif" style="height:20px;width:20px;border:0px;" alt="upcoming step" />
+        <xar:mlstring>
+            Choosing Options 
+        </xar:mlstring>
+    </p>
+</div>
