@@ -53,8 +53,8 @@ function xarMain()
     // Set up output caching if enabled
     if (file_exists('var/cache/output/cache.touch')) {
         $caching = 1;
-        include 'includes/xarCache.php';
-        if (xarCache_init(array('cacheDir' => 'var/cache/output')) == false) {
+        include_once('includes/xarCache.php');
+        if (!xarCache_init(array('cacheDir' => 'var/cache/output'))) {
             $caching = 0;
         }
     }

@@ -31,10 +31,10 @@ function xarCache_init($args)
     global $xarPage_cacheGroups;
     global $xarBlock_cacheTime;
 
-    if ((@include('var/cache/config.caching.php')) == false) {
-        // if there's a parse problem with the config file, turn caching off
+    if (!@include_once('var/cache/config.caching.php')) {
+        // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
-        return false;
+        return FALSE;
     }
 
     $xarOutput_cacheCollection = $cacheDir;
