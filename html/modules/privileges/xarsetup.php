@@ -23,10 +23,10 @@ function initializeSetup() {
 	xarMakeUser('Admin','Admin','admin@xaraya.com','password');
     xarMakeGroup('Administrators');
     xarMakeGroup('Oversight');
-	xarMakeUser('Overseer','overseer','overseer@xaraya.com');
+	xarMakeUser('Overseer','overseer','overseer@xaraya.com','password');
     xarMakeGroup('Users');
-	xarMakeUser('User','user','user@xaraya.com');
-//	xarMakeUser('Current','current','current@xaraya.com');
+	xarMakeUser('User','user','user@xaraya.com','password');
+//	xarMakeUser('Current','current','current@xaraya.com','password');
 
     /*********************************************************************
     * Arrange the roles in a hierarchy
